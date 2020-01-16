@@ -39,8 +39,8 @@ namespace Script.ColoredStyle
         public override string GetTextForReplace()
         {
             //extend range
-            Range r = Parent.Fragment;
-            Place end = r.End;
+            var r = Parent.Fragment;
+            var end = r.End;
             r.Start = enterPlace;
             r.End = r.End;
             //insert line break

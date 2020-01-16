@@ -26,20 +26,20 @@ namespace Script.Control.Handlers
             if (string.IsNullOrEmpty(Replacement))
                 throw new HandlerInitializationException(GetIdentifier(nameof(PatternMatches)), true);
 
-            FindBase parentSysObj = Parent as FindBase;
+            var parentSysObj = Parent as FindBase;
             if (parentSysObj == null)
                 throw new HandlerInitializationException(this);
         }
 
         public override void Execute()
         {
-            foreach (SystemObjectMatch match in ((FindBase)Parent).Matches.OrderByDescending(x => x.FullPath))
+            foreach (var match in ((FindBase)Parent).Matches.OrderByDescending(x => x.FullPath))
             {
                 int d;
                 if (Regex.IsMatch(match.Name, "ICSharpCode", RegexOptions.IgnoreCase) && PatternMatches== "ICSharpCode" && SysObjType == FindType.Directories)
                     d = 0;
                 //замена имени файла
-                string newSysObjName = Regex.Replace(match.Name, PatternMatches, Replacement, RegexOptions.IgnoreCase);
+                var newSysObjName = Regex.Replace(match.Name, PatternMatches, Replacement, RegexOptions.IgnoreCase);
 
                 //если имя результирующего файла или папки не изменилось то ищем следующий файл
                 if (newSysObjName.Equals(match.Name, StringComparison.CurrentCultureIgnoreCase))

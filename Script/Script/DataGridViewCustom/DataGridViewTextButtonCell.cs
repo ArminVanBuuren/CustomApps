@@ -23,7 +23,7 @@ namespace Script.DataGridViewCustom
 
         public override object Clone()
         {
-            DataGridViewTextButtonCell cell = base.Clone() as DataGridViewTextButtonCell;
+            var cell = base.Clone() as DataGridViewTextButtonCell;
             if (cell != null)
             {
                 cell.ButtonClickHandler = ButtonClickHandler;
@@ -41,7 +41,7 @@ namespace Script.DataGridViewCustom
             editingControlBounds.Width = Math.Max(0, editingControlBounds.Width - 2);
 
             // Adjust the vertical location of the editing control:
-            int preferredHeight = cellStyle.Font.Height + 3;
+            var preferredHeight = cellStyle.Font.Height + 3;
             if (preferredHeight < editingControlBounds.Height)
             {
                 switch (cellStyle.Alignment)
@@ -65,11 +65,11 @@ namespace Script.DataGridViewCustom
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-            TextButton textButton = DataGridView.EditingControl as TextButton;
+            var textButton = DataGridView.EditingControl as TextButton;
             if (textButton != null)
             {
                 //textButton.BorderStyle = BorderStyle.None;
-                string initialFormattedValueStr = initialFormattedValue as string;
+                var initialFormattedValueStr = initialFormattedValue as string;
                 textButton.Text = initialFormattedValueStr;
                 if (ButtonClickHandler != null)
                     textButton.ButtonClick += ButtonClickHandler;
@@ -79,7 +79,7 @@ namespace Script.DataGridViewCustom
         public override void DetachEditingControl()
         {
             base.DetachEditingControl();
-            TextButton textButton = DataGridView.EditingControl as TextButton;
+            var textButton = DataGridView.EditingControl as TextButton;
             if (textButton != null)
             {
                 textButton.ClearUndo();
@@ -90,7 +90,7 @@ namespace Script.DataGridViewCustom
 
         public override void PositionEditingControl(bool setLocation, bool setSize, Rectangle cellBounds, Rectangle cellClip, DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow)
         {
-            Rectangle editingControlBounds = PositionEditingPanel(cellBounds,
+            var editingControlBounds = PositionEditingPanel(cellBounds,
                                                         cellClip,
                                                         cellStyle,
                                                         singleVerticalBorderAdded,
@@ -136,9 +136,9 @@ namespace Script.DataGridViewCustom
             //if (PartPainted(paintParts, DataGridViewPaintParts.Border))
             //    PaintBorder(graphics, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
 
-            Point ptCurrentCell = DataGridView.CurrentCellAddress;
-            bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
-            bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
+            var ptCurrentCell = DataGridView.CurrentCellAddress;
+            var cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
+            var cellEdited = cellCurrent && DataGridView.EditingControl != null;
 
             // If the cell is in editing mode, there is nothing else to paint
             if (cellEdited)
@@ -154,8 +154,8 @@ namespace Script.DataGridViewCustom
                 if (PartPainted(paintParts, DataGridViewPaintParts.ContentForeground))
                 {
                     // Take the borders into account
-                    Rectangle borderWidths = BorderWidths(advancedBorderStyle);
-                    Rectangle valBounds = cellBounds;
+                    var borderWidths = BorderWidths(advancedBorderStyle);
+                    var valBounds = cellBounds;
                     valBounds.Offset(borderWidths.X, borderWidths.Y);
                     valBounds.Width -= borderWidths.Right;
                     valBounds.Height -= borderWidths.Bottom;
@@ -175,7 +175,7 @@ namespace Script.DataGridViewCustom
                     }
                     valBounds = GetAdjustedEditingControlBounds(valBounds, cellStyle);
 
-                    TextFormatFlags horAlign = TextFormatFlags.Left;
+                    var horAlign = TextFormatFlags.Left;
                     switch (cellStyle.Alignment)
                     {
                         case DataGridViewContentAlignment.BottomLeft:
@@ -195,9 +195,9 @@ namespace Script.DataGridViewCustom
                             break;
                     }
 
-                    bool cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
+                    var cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
 
-                    SolidBrush br = new SolidBrush(cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor);
+                    var br = new SolidBrush(cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor);
 
                     if (PartPainted(paintParts, DataGridViewPaintParts.Background))
                     {

@@ -44,13 +44,13 @@ namespace Script.Control.Handlers.Timesheet.Stats
                 return;
             }
 
-            foreach (string item in groupBy)
+            foreach (var item in groupBy)
             {
                 try
                 {
-                    string groupName = item.Substring(0, item.IndexOf('['));
-                    string projects = item.Substring(item.IndexOf('[') + 1, item.IndexOf(']') - item.IndexOf('[') - 1);
-                    string[] projects_collection = projects.Split(',');
+                    var groupName = item.Substring(0, item.IndexOf('['));
+                    var projects = item.Substring(item.IndexOf('[') + 1, item.IndexOf(']') - item.IndexOf('[') - 1);
+                    var projects_collection = projects.Split(',');
                     if (!string.IsNullOrEmpty(projects.Trim()))
                         parentGroups.Add(groupName, projects_collection);
                     else
@@ -71,9 +71,9 @@ namespace Script.Control.Handlers.Timesheet.Stats
             if (parentGroups != null)
             {
                 Statistic getGroupStat;
-                foreach (KeyValuePair<string, string[]> stats in parentGroups)
+                foreach (var stats in parentGroups)
                 {
-                    string[] strs = stats.Value.Where(projectName => item.Name.StartsWith(projectName, StringComparison.CurrentCultureIgnoreCase)).ToArray();
+                    var strs = stats.Value.Where(projectName => item.Name.StartsWith(projectName, StringComparison.CurrentCultureIgnoreCase)).ToArray();
                     if (strs.Length > 0)
                     {
                         if (!TryGetValue(stats.Key, out getGroupStat))
@@ -97,7 +97,7 @@ namespace Script.Control.Handlers.Timesheet.Stats
 
         public Statistic CreateChildItem(string groupName)
         {
-            Statistic getGroupStat = new Statistic(groupName);
+            var getGroupStat = new Statistic(groupName);
             ChildItems.Add(getGroupStat);
             return getGroupStat;
         }
@@ -109,7 +109,7 @@ namespace Script.Control.Handlers.Timesheet.Stats
         public bool TryGetValue(string name, out Statistic stat)
         {
             stat = null;
-            foreach (Statistic st in ChildItems)
+            foreach (var st in ChildItems)
             {
                 if (st.Name != null && st.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -133,7 +133,7 @@ namespace Script.Control.Handlers.Timesheet.Stats
         }
         public override string ToString()
         {
-            string result = string.Empty;
+            var result = string.Empty;
             if (!string.IsNullOrEmpty(Name))
                 result = string.Format("[{0}];", Name);
             if (ChildItems.Count > 0)

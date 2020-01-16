@@ -22,7 +22,7 @@ namespace Script.Control.Handlers.Timesheet.Project
 
         public UserAutorization(string userName, string password)
         {
-            string[] temp_userName = userName.Split('\\');
+            var temp_userName = userName.Split('\\');
             if (temp_userName.Length > 1)
             {
                 _userName = Crypto.EncryptStringAES(temp_userName[1], TimesheetHandler.TIMESHEET_NAME);

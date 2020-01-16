@@ -65,7 +65,7 @@ namespace Script.Control.Handlers
         public GetValueHandler(XPack parentPack, XmlNode node, LogFill logFill) : base(parentPack, node, logFill)
         {
             StringOption = Functions.GetStringOptions(Attributes[GetXMLAttributeName(nameof(StringOption))]);
-            string capture_length = Attributes[GetXMLAttributeName(nameof(CaptureLenghtLeft))];
+            var capture_length = Attributes[GetXMLAttributeName(nameof(CaptureLenghtLeft))];
             int temp_capture_length;
             if (int.TryParse(capture_length, out temp_capture_length))
             {
@@ -74,7 +74,7 @@ namespace Script.Control.Handlers
             }
             else
             {
-                string[] cup_left_right = capture_length?.Split(';');
+                var cup_left_right = capture_length?.Split(';');
                 if (cup_left_right?.Length > 1)
                 {
                     if (int.TryParse(cup_left_right[0], out temp_capture_length))
@@ -95,8 +95,8 @@ namespace Script.Control.Handlers
 
             Replacement = Attributes[GetXMLAttributeName(nameof(Replacement))];
             
-            string reverse_read = Attributes[GetXMLAttributeName(nameof(ReverseRead))];
-            string max_count_match = Attributes[GetXMLAttributeName(nameof(MaxCountMatch))];
+            var reverse_read = Attributes[GetXMLAttributeName(nameof(ReverseRead))];
+            var max_count_match = Attributes[GetXMLAttributeName(nameof(MaxCountMatch))];
             
 
             if (Replacement != null)
@@ -119,14 +119,14 @@ namespace Script.Control.Handlers
 
 
 
-            string reserve_lines = Attributes[GetXMLAttributeName(nameof(ReserveLines))];
+            var reserve_lines = Attributes[GetXMLAttributeName(nameof(ReserveLines))];
             int temp_reserve_lines;
             if (int.TryParse(reserve_lines, out temp_reserve_lines))
                 ReserveLines = temp_reserve_lines;
             if (ReserveLines > _maxLines)
                 throw new HandlerInitializationException("[{0}]='{1}' Must Be Less Than '{2}'", GetXMLAttributeName(nameof(ReserveLines)), ReserveLines, _maxLines);
 
-            FindBase parentSysObj = Parent as FindBase;
+            var parentSysObj = Parent as FindBase;
             if (parentSysObj == null)
                 throw new HandlerInitializationException(this);
 
@@ -146,7 +146,7 @@ namespace Script.Control.Handlers
         DLClearLinesList _clearLinesList;
         public void ExecSysObjects()
         {
-            FindBase _parent = (FindBase)Parent;
+            var _parent = (FindBase)Parent;
             if(_parent.Matches.Count <= 0)
                 return;
 
@@ -174,9 +174,9 @@ namespace Script.Control.Handlers
 
 
             
-            foreach (SystemObjectMatch match in _parent.Matches.Where(x => x.SysObjType == FindType.Files))
+            foreach (var match in _parent.Matches.Where(x => x.SysObjType == FindType.Files))
             {
-                InnerTextMatch innerMatch = new InnerTextMatch(match);
+                var innerMatch = new InnerTextMatch(match);
                 _GetOrReplaceContent(innerMatch, dirBakPath);
 
                 if (innerMatch.Count > 0)
@@ -192,10 +192,10 @@ namespace Script.Control.Handlers
 
         void GetTextInFile(InnerTextMatch innerMatch, string dirBakPath)
         {
-            List<string> tempStringContent = new List<string>();
-            using (FileStream inputStream = File.OpenRead(innerMatch.FullPath))
+            var tempStringContent = new List<string>();
+            using (var inputStream = File.OpenRead(innerMatch.FullPath))
             {
-                using (StreamReader inputReader = new StreamReader(inputStream))
+                using (var inputReader = new StreamReader(inputStream))
                 {
                     while (true)
                     {
@@ -230,8 +230,8 @@ namespace Script.Control.Handlers
         }
         void SearchContent(List<string> tempStringContent, InnerTextMatch innerMatch)
         {
-            string contentStr = string.Join(Environment.NewLine, tempStringContent);
-            int maxMatch = MaxCountMatch - innerMatch.Count;
+            var contentStr = string.Join(Environment.NewLine, tempStringContent);
+            var maxMatch = MaxCountMatch - innerMatch.Count;
             List<string> _matches;
             if (GetListMatches(contentStr, maxMatch, out _matches))
             {
@@ -241,13 +241,13 @@ namespace Script.Control.Handlers
         public virtual bool GetListMatches(string input, int maxMatch, out List<string> matches)
         {
             matches = new List<string>();
-            int startIndex = 0;
-            int index = input.IndexOf(Pattern, StringOption);
+            var startIndex = 0;
+            var index = input.IndexOf(Pattern, StringOption);
             while (index != -1)
             {
-                int captureStartIndex = index - CaptureLenghtLeft <= 0 ? 0 : index - CaptureLenghtLeft;
-                int captureLengthEndIndex = index + Pattern.Length + CaptureLenghtRight > input.Length ? input.Length - captureStartIndex : CaptureLenghtLeft + Pattern.Length + CaptureLenghtRight;
-                string finded = input.Substring(captureStartIndex, captureLengthEndIndex);
+                var captureStartIndex = index - CaptureLenghtLeft <= 0 ? 0 : index - CaptureLenghtLeft;
+                var captureLengthEndIndex = index + Pattern.Length + CaptureLenghtRight > input.Length ? input.Length - captureStartIndex : CaptureLenghtLeft + Pattern.Length + CaptureLenghtRight;
+                var finded = input.Substring(captureStartIndex, captureLengthEndIndex);
                 matches.Add(finded);
 
                 startIndex = index + Pattern.Length;
@@ -276,17 +276,17 @@ namespace Script.Control.Handlers
 
             DLWriteContent _wrtContentBakFile = delegate(string content)
                                                 {
-                                                    using (StreamWriter outputWriter = File.AppendText(filePathBak))
+                                                    using (var outputWriter = File.AppendText(filePathBak))
                                                     {
                                                         outputWriter.WriteLine(content);
                                                     }
                                                 };
 
 
-            List<string> tempStringContent = new List<string>();
-            using (FileStream inputStream = File.OpenRead(innerMatch.FullPath))
+            var tempStringContent = new List<string>();
+            using (var inputStream = File.OpenRead(innerMatch.FullPath))
             {
-                using (StreamReader inputReader = new StreamReader(inputStream))
+                using (var inputReader = new StreamReader(inputStream))
                 {
                     while (true)
                     {
@@ -329,10 +329,10 @@ namespace Script.Control.Handlers
 
         void ReplaceContent(List<string> tempStringContent, InnerTextMatch innerMatch, DLWriteContent _wrtContentBakFile)
         {
-            string contentStr = string.Join(Environment.NewLine, tempStringContent);
-            int maxMatch = MaxCountMatch - innerMatch.Count;
+            var contentStr = string.Join(Environment.NewLine, tempStringContent);
+            var maxMatch = MaxCountMatch - innerMatch.Count;
             List<string> _matches;
-            string result = ReplaceContentMatches(contentStr, maxMatch, out _matches);
+            var result = ReplaceContentMatches(contentStr, maxMatch, out _matches);
             if (result != null && !result.Equals(contentStr))
             {
                 innerMatch.AddRange(_matches);
@@ -348,13 +348,13 @@ namespace Script.Control.Handlers
         {
             matches = new List<string>();
             string result = null;
-            int startIndex = 0;
-            int index = input.IndexOf(Pattern, StringOption);
+            var startIndex = 0;
+            var index = input.IndexOf(Pattern, StringOption);
             while (index != -1)
             {
-                int captureStartIndex = index - CaptureLenghtLeft <= 0 ? 0 : index - CaptureLenghtLeft;
-                int captureLengthEndIndex = index + Pattern.Length + CaptureLenghtRight > input.Length ? input.Length - captureStartIndex : CaptureLenghtLeft + Pattern.Length + CaptureLenghtRight;
-                string finded = input.Substring(captureStartIndex, captureLengthEndIndex);
+                var captureStartIndex = index - CaptureLenghtLeft <= 0 ? 0 : index - CaptureLenghtLeft;
+                var captureLengthEndIndex = index + Pattern.Length + CaptureLenghtRight > input.Length ? input.Length - captureStartIndex : CaptureLenghtLeft + Pattern.Length + CaptureLenghtRight;
+                var finded = input.Substring(captureStartIndex, captureLengthEndIndex);
                 matches.Add(finded);
 
                 result = result + input.Substring(startIndex, index - startIndex) + Replacement;

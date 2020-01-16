@@ -63,7 +63,7 @@ namespace Script.Control.Handlers
                 throw new HandlerInitializationException("FidStart=[{0}] Most Lage Then FidEnd=[{1}]", FidStart, FidEnd);
             GroupBy = Attributes[GetXMLAttributeName(nameof(GroupBy))] ?? _groupBYconst;
             ExportMode = Attributes[GetXMLAttributeName(nameof(ExportMode))] ?? _exportConst;
-            string src_path = Attributes[GetXMLAttributeName(nameof(Src))];
+            var src_path = Attributes[GetXMLAttributeName(nameof(Src))];
 
 
             if (src_path == null)
@@ -79,7 +79,7 @@ namespace Script.Control.Handlers
             }
 
             Src = new Uri(src_path);
-            bool temp_serialization = false;
+            var temp_serialization = false;
             if (bool.TryParse(Attributes[GetXMLAttributeName(nameof(SerializationResult))], out temp_serialization) && temp_serialization)
                 SerializationResult = true;
             TFSProjects = new TFSProjectCollection(Attributes[GetXMLAttributeName(nameof(UserAutorization.UserName))], Attributes[GetXMLAttributeName(nameof(UserAutorization.Password))], GroupBy);
@@ -109,9 +109,9 @@ namespace Script.Control.Handlers
         /// </summary>
         void GetHTMLBodySource()
         {
-            for (int i = FidStart; i <= FidEnd; i++)
+            for (var i = FidStart; i <= FidEnd; i++)
             {
-                string htmlBody = GetSiteData(string.Format("{0}{1}{2}", Src.AbsoluteUri, DEFAULT_FID, i), TFSProjects.Autorization.GetNetworkCredential());
+                var htmlBody = GetSiteData(string.Format("{0}{1}{2}", Src.AbsoluteUri, DEFAULT_FID, i), TFSProjects.Autorization.GetNetworkCredential());
                 if (string.IsNullOrEmpty(htmlBody))
                     continue;
                 TFSProjects.Load(htmlBody, i);
@@ -132,19 +132,19 @@ namespace Script.Control.Handlers
         void DeSerializeExists()
         {
             Matches = new Statistic("Collection");
-            foreach (string file in _deserializeFilesPath)
+            foreach (var file in _deserializeFilesPath)
             {
                 using (Stream stream = File.Open(file, FileMode.Open))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    TFSProjectCollection projects = (TFSProjectCollection)bformatter.Deserialize(stream);
+                    var projects = (TFSProjectCollection)bformatter.Deserialize(stream);
                     Matches.AddChild(ExportData(projects, GroupBy ?? projects.GroupBy, ExportMode));
                 }
             }
         }
         static string GetSiteData(string src, NetworkCredential autorization)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(src);
+            var request = (HttpWebRequest)WebRequest.Create(src);
             request.Headers.Add("AUTHORIZATION", "Basic YTph");
             request.ContentType = "text/html";
             request.Credentials = autorization;
@@ -152,11 +152,11 @@ namespace Script.Control.Handlers
             request.PreAuthenticate = true;
             request.Method = "GET";
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            var response = (HttpWebResponse)request.GetResponse();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Stream receiveStream = response.GetResponseStream();
+                var receiveStream = response.GetResponseStream();
                 StreamReader readStream;
 
                 if (response.CharacterSet == null)
@@ -164,7 +164,7 @@ namespace Script.Control.Handlers
                 else
                     readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
 
-                string data = readStream.ReadToEnd();
+                var data = readStream.ReadToEnd();
                 response.Close();
                 readStream.Close();
 
@@ -181,37 +181,37 @@ namespace Script.Control.Handlers
         /// <param name="exportPathOrType"></param>
         Statistic ExportData(TFSProjectCollection projects, string groupByString, string exportPathOrType)
         {
-            string[] groupBy = new string[] { };
+            var groupBy = new string[] { };
             if (!string.IsNullOrEmpty(groupByString))
                 groupBy = groupByString.Split(';');
 
-            List<TFSProject> prjs = new List<TFSProject>();
-            foreach (TFSProject project in projects.Items)
+            var prjs = new List<TFSProject>();
+            foreach (var project in projects.Items)
             {
-                List<TFS> tfss = project.Where(tfs => tfs.Fid >= FidStart && tfs.Fid <= FidEnd).ToList();
+                var tfss = project.Where(tfs => tfs.Fid >= FidStart && tfs.Fid <= FidEnd).ToList();
                 if (tfss.Any())
                 {
-                    TFSProject prj = new TFSProject(project.Name, project.PM, project.PM_Mail);
+                    var prj = new TFSProject(project.Name, project.PM, project.PM_Mail);
                     prj.AddRange(tfss);
                     prjs.Add(prj);
                 }
             }
 
-            Statistic stats = new Statistic(projects.Autorization.FullName, groupBy);
-            foreach (TFSProject proj in prjs)
+            var stats = new Statistic(projects.Autorization.FullName, groupBy);
+            foreach (var proj in prjs)
             {
-                Statistic childProject = new Statistic(proj.Name, proj.PM, proj.PM_Mail);
+                var childProject = new Statistic(proj.Name, proj.PM, proj.PM_Mail);
                 var ff = proj.GroupBy(s => s.Id).Select(grp => grp.ToList()).ToList();
-                foreach (List<TFS> tf in ff)
+                foreach (var tf in ff)
                 {
-                    StatTFS childTFS = new StatTFS(tf[0].Id, tf[0].Title, tf.Sum(x => x.TotalTimeByAnyDay), tf.Min(m => m.PeriodStart), tf.Max(m => m.PeriodEnd));
+                    var childTFS = new StatTFS(tf[0].Id, tf[0].Title, tf.Sum(x => x.TotalTimeByAnyDay), tf.Min(m => m.PeriodStart), tf.Max(m => m.PeriodEnd));
                     childProject.Add(childTFS);
                 }
                 stats.Add(childProject);
             }
             stats.OrderByGroups();
 
-            WriteDataPerformer wdp = new WriteDataPerformer(exportPathOrType, projects.Autorization.UserName);
+            var wdp = new WriteDataPerformer(exportPathOrType, projects.Autorization.UserName);
             wdp.Export(stats);
             return stats;
         }

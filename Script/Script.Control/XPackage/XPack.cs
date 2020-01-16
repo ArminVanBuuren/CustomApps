@@ -66,7 +66,7 @@ namespace XPackage
 
                 if (node2.NodeType == XmlNodeType.Element)
                 {
-                    XPack childObj = GetNewXPack(this, node2);
+                    var childObj = GetNewXPack(this, node2);
                     if(childObj == null)
                         continue;
                     ChildPacks.Add(childObj);
@@ -102,10 +102,10 @@ namespace XPackage
         {
             get
             {
-                int myIndex = -1;
+                var myIndex = -1;
                 if (Parent != null)
                 {
-                    foreach (XPack xp in Parent.ChildPacks)
+                    foreach (var xp in Parent.ChildPacks)
                     {
                         if (string.Equals(xp.Name, Name, StringComparison.CurrentCultureIgnoreCase))
                         {
@@ -143,7 +143,7 @@ namespace XPackage
 
         public bool TryGetPacks(string path, out List<XPack> result)
         {
-            bool finded = false;
+            var finded = false;
             finded = GetXPacksByExpression(path, FindMode.Down, out result);
             if (result.Count == 0)
                 finded = GetXPacksByExpression(path, FindMode.Up, out result);
@@ -180,15 +180,15 @@ namespace XPackage
                 path = string.Format("/{0}", path);
             }
 
-            List<XPackPath> xpathCond = new List<XPackPath>();
-            foreach (string node in path.Split('/'))
+            var xpathCond = new List<XPackPath>();
+            foreach (var node in path.Split('/'))
             {
                 if (node.IndexOf(DEFAULT_MAIN_NAME, StringComparison.CurrentCultureIgnoreCase) != -1)
                     continue;
                 xpathCond.Add(new XPackPath(node));
             }
             FindByXPack(-1, result, mode, this, xpathCond);
-            string strResult = string.Join<XPack>(";", result.ToArray());
+            var strResult = string.Join<XPack>(";", result.ToArray());
             return (result.Count > 0);
         }
 
@@ -197,7 +197,7 @@ namespace XPackage
         {
             id++;
             List<XPack> result;
-            bool getAnySatisfying = false;
+            var getAnySatisfying = false;
             while (xPath[id].XType == XPackPathType.EmptyFindNext)
             {
                 getAnySatisfying = true;
@@ -224,7 +224,7 @@ namespace XPackage
 
             if (result.Any())
             {
-                foreach (XPack childPck in result)
+                foreach (var childPck in result)
                 {
                     FindByXPack(id, mainResult, mode, childPck, xPath);
                 }
@@ -235,8 +235,8 @@ namespace XPackage
 
         string GetSysPath()
         {
-            string path = string.Empty;
-            XPack sys = this;
+            var path = string.Empty;
+            var sys = this;
 
             while (sys != null)
             {
@@ -284,15 +284,15 @@ namespace XPackage
 
         string ShapeToString()
         {
-            string _out = string.Empty;
+            var _out = string.Empty;
             if (Name.IndexOf('#') == -1)
                 _out = Name;
             _out = string.Format("{0}{1}", _out, Value);
-            foreach (XPackAttribute a in Attributes)
+            foreach (var a in Attributes)
             {
                 _out = string.Format("{0}{1}{2}", _out, a.Key, a.Value);
             }
-            foreach (XPack n in ChildPacks)
+            foreach (var n in ChildPacks)
             {
                 _out = string.Format("{0}{1}", _out, n.ShapeToString());
             }
@@ -301,9 +301,9 @@ namespace XPackage
 
         string ShapeToVXml(int numSubGroup, ShapeText texttype)
         {
-            string separators = new string(' ', numSubGroup);
-            string _out = string.Empty;
-            string nodeName = string.Empty;
+            var separators = new string(' ', numSubGroup);
+            var _out = string.Empty;
+            var nodeName = string.Empty;
             if (Name.IndexOf('#') == -1)
             {
                 nodeName = (texttype != ShapeText.Original) ? (texttype == ShapeText.LowerXName) ? Name.ToLower() : Name.ToUpper() : Name;
@@ -311,7 +311,7 @@ namespace XPackage
             }
             if (Attributes != null && !string.IsNullOrEmpty(nodeName))
             {
-                foreach (XPackAttribute att in Attributes)
+                foreach (var att in Attributes)
                 {
                     _out = string.Format("{0} {1}={2}", _out, (texttype != ShapeText.Original) ? (texttype == ShapeText.LowerXName) ? att.Key.ToLower() : att.Key.ToUpper() : att.Key, att.Value);
                 }
@@ -333,9 +333,9 @@ namespace XPackage
                     _out = string.Format("{0}[{1}]", _out, Value);
                 else
                     _out = string.Format("{0}", _out);
-                int childGroupNum = numSubGroup + 1;
-                int i = 0;
-                foreach (XPack n in ChildPacks)
+                var childGroupNum = numSubGroup + 1;
+                var i = 0;
+                foreach (var n in ChildPacks)
                 {
                     if (n.Name.IndexOf('#') == -1)
                     {
@@ -352,9 +352,9 @@ namespace XPackage
 
         string ShapeToXml(int numSubGroup, ShapeText texttype)
         {
-            string separators = new string('	', numSubGroup);
-            string _out = string.Empty;
-            string nodeName = string.Empty;
+            var separators = new string('	', numSubGroup);
+            var _out = string.Empty;
+            var nodeName = string.Empty;
             if (Name.IndexOf('#') == -1)
             {
                 nodeName = (texttype != ShapeText.Original) ? (texttype == ShapeText.LowerXName) ? Name.ToLower() : Name.ToUpper() : Name;
@@ -362,7 +362,7 @@ namespace XPackage
             }
             if (Attributes != null && !string.IsNullOrEmpty(nodeName))
             {
-                foreach (XPackAttribute att in Attributes)
+                foreach (var att in Attributes)
                 {
                     _out = string.Format("{0} {1}=\"{2}\"", _out, (texttype != ShapeText.Original) ? (texttype == ShapeText.LowerXName) ? att.Key.ToLower() : att.Key.ToUpper() : att.Key, att.Value);
                 }
@@ -382,8 +382,8 @@ namespace XPackage
                     _out = string.Format("{0}><![CDATA[{1}]]>{2}", _out, Value, Environment.NewLine);
                 else
                     _out = string.Format("{0}>{1}", _out, Environment.NewLine);
-                int childGroupNum = numSubGroup + 1;
-                foreach (XPack n in ChildPacks)
+                var childGroupNum = numSubGroup + 1;
+                foreach (var n in ChildPacks)
                 {
                     _out = string.Format("{0}{1}", _out, n.ShapeToXml(childGroupNum, texttype));
                 }
@@ -410,7 +410,7 @@ namespace XPackage
                 return false;
             if (ChildPacks?.Count > 0)
             {
-                for (int i = 0; i < ChildPacks.Count; i++)
+                for (var i = 0; i < ChildPacks.Count; i++)
                 {
                     if (!ChildPacks[i].CompareXPack(input.ChildPacks[i]))
                         return false;
@@ -420,7 +420,7 @@ namespace XPackage
                 return false;
             if (Attributes?.Count == 0)
                 return true;
-            foreach(XPackAttribute attr in Attributes)
+            foreach(var attr in Attributes)
             {
                 if (attr.Value != input.Attributes[attr.Key])
                     return false;
@@ -483,13 +483,13 @@ namespace XPackage
         {
             if (original == null)
                 return;
-            foreach (XPack childOriginal in original.ChildPacks)
+            foreach (var childOriginal in original.ChildPacks)
             {
                 XPack childCopy;
                 UsurpProtectedReadyPack(out childCopy, childOriginal);
                 copy.ChildPacks.Add(childCopy);
             }
-            foreach (XPackAttribute attr in original.Attributes)
+            foreach (var attr in original.Attributes)
             {
                 copy.Attributes.Add(attr.Key, attr.Value);
             }
@@ -505,8 +505,8 @@ namespace XPackage
         {
             if (childsCollectionOriginal == null)
                 return null;
-            List<XPack> childsCollectionCopy = new List<XPack>();
-            foreach (XPack childOriginal in childsCollectionOriginal)
+            var childsCollectionCopy = new List<XPack>();
+            foreach (var childOriginal in childsCollectionOriginal)
             {
                 XPack childCopy;
                 UsurpProtectedReadyPack(out childCopy, childOriginal);

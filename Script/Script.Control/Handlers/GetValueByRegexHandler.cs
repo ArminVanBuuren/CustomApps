@@ -23,7 +23,7 @@ namespace Script.Control.Handlers
             _getMatches = new Regex(Pattern, RegexOption);
 
 
-            string needReplace = Attributes[GetXMLAttributeName(nameof(NeedReplace))];
+            var needReplace = Attributes[GetXMLAttributeName(nameof(NeedReplace))];
             if (Replacement != null)
             {
                 bool _needReplace;

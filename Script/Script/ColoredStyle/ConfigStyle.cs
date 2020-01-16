@@ -41,7 +41,7 @@ namespace Script.ColoredStyle
 
         private void BuildAutocompleteMenu()
         {
-            List<AutocompleteItem> items = new List<AutocompleteItem>();
+            var items = new List<AutocompleteItem>();
 
             foreach (var item in snippets)
                 items.Add(new SnippetAutocompleteItem(item) { ImageIndex = 1 });
@@ -72,7 +72,7 @@ namespace Script.ColoredStyle
             //highlight keywords of LISP
             fctb.Range.SetStyle(KeywordsStyle, @"\b(and|eval|else|if|lambda|or|set|defun)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             //find function declarations, highlight all of their entry into the code
-            foreach (Range found in fctb.GetRanges(@"\b(defun|DEFUN)\s+(?<range>\w+)\b"))
+            foreach (var found in fctb.GetRanges(@"\b(defun|DEFUN)\s+(?<range>\w+)\b"))
                 fctb.Range.SetStyle(FunctionNameStyle, @"\b" + found.Text + @"\b");
         }
     }

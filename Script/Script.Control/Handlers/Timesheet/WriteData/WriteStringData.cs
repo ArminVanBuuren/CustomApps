@@ -20,7 +20,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         /// <param name="lines"></param>
         public void AddDocHeader(string[] lines)
         {
-            string[] strNew = GetEmptyArray(lines.Length + 2);
+            var strNew = GetEmptyArray(lines.Length + 2);
             Array.Copy(lines, 0, strNew, 1, lines.Length);
             WriteLines(strNew);
         }
@@ -31,7 +31,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         /// <param name="maxLengthSplitter"></param>
         public void AddTableHeader(string lines, int maxLengthSplitter)
         {
-            string[] strNew = GetEmptyArray(5);
+            var strNew = GetEmptyArray(5);
             strNew[2] = string.Join("", new string('=', maxLengthSplitter));
             strNew[3] = string.Format("{1,-%STEPS%}|{0}|".Replace("%STEPS%", ((maxLengthSplitter - lines.Length) / 2 - 1).ToString()), lines, " "); // string.Join("", new string('/', 70))
             strNew[4] = string.Join("", new string('=', maxLengthSplitter));
@@ -44,11 +44,11 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         /// <param name="maxLenghSplitterByColumns"></param>
         public void AddColumnsName(string[] columnsName, int[] maxLenghSplitterByColumns)
         {
-            string result = string.Empty;
-            for (int i = 0; i < columnsName.Length; i++)
+            var result = string.Empty;
+            for (var i = 0; i < columnsName.Length; i++)
             {
-                int startSteps = 0;
-                int endSteps = 0;
+                var startSteps = 0;
+                var endSteps = 0;
                 if (maxLenghSplitterByColumns[i] > columnsName[i].Length)
                 {
                     startSteps = (maxLenghSplitterByColumns[i] - columnsName[i].Length) / 2;
@@ -66,7 +66,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         /// <param name="maxLengthSplitter"></param>
         public void AddTableFooter(string[] lines, int maxLengthSplitter)
         {
-            string[] strNew = GetEmptyArray(lines.Length + 2);
+            var strNew = GetEmptyArray(lines.Length + 2);
             Array.Copy(lines, 0, strNew, 1, lines.Length);
             strNew[0] = string.Join("", new string('=', maxLengthSplitter));
             strNew[strNew.Length - 1] = string.Join("", new string('=', maxLengthSplitter));
@@ -82,9 +82,9 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         public string GetRows(string[] input, int maxLengthSplitter)
         {
             //int maxLength = input.Max(x => x.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Max(y => y.Length));
-            string result = string.Empty;
-            int i = 0;
-            foreach (string row in input)
+            var result = string.Empty;
+            var i = 0;
+            foreach (var row in input)
             {
                 i++;
                 if (input.Length > i)
@@ -102,12 +102,12 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         /// <returns></returns>
         public string GetColumns(string[] input, int[] maxLenghSplitterByColumns)
         {
-            int maxLines = 0;
-            List<List<string>> table = new List<List<string>>();
-            foreach (string cell in input)
+            var maxLines = 0;
+            var table = new List<List<string>>();
+            foreach (var cell in input)
             {
-                List<string> cellNew = new List<string>();
-                foreach (string line in cell.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
+                var cellNew = new List<string>();
+                foreach (var line in cell.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
                 {
                     cellNew.Add(line);
                 }
@@ -116,14 +116,14 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 table.Add(cellNew);
             }
 
-            string result = string.Format("{0}{1}", new string('-', maxLenghSplitterByColumns.Sum() + maxLenghSplitterByColumns.Length), Environment.NewLine);
-            for (int i = 0; i < maxLines; i++)
+            var result = string.Format("{0}{1}", new string('-', maxLenghSplitterByColumns.Sum() + maxLenghSplitterByColumns.Length), Environment.NewLine);
+            for (var i = 0; i < maxLines; i++)
             {
                 //table.Max(x => x[i].Length);
-                int indexOfColumn = 0;
-                foreach (List<string> columnLines in table)
+                var indexOfColumn = 0;
+                foreach (var columnLines in table)
                 {
-                    string colimnLine = string.Empty;
+                    var colimnLine = string.Empty;
                     if (columnLines.Count > i)
                         colimnLine = columnLines[i];
                     result = result + string.Format(("{0,-%STEPS%}|".Replace("%STEPS%", maxLenghSplitterByColumns[indexOfColumn].ToString())), colimnLine);
@@ -137,8 +137,8 @@ namespace Script.Control.Handlers.Timesheet.WriteData
 
         static string[] GetEmptyArray(int length)
         {
-            string[] strNew = new string[length];
-            for (int i = 0; i < strNew.Length; i++)
+            var strNew = new string[length];
+            for (var i = 0; i < strNew.Length; i++)
             {
                 strNew[i] = string.Empty;
             }
@@ -148,9 +148,9 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         public void WriteLines(string[] lines)
         {
             countWrites++;
-            using (StreamWriter outputWriter = new StreamWriter(Path, countWrites > 0, Functions.Enc))
+            using (var outputWriter = new StreamWriter(Path, countWrites > 0, Functions.Enc))
             {
-                foreach (string str in lines)
+                foreach (var str in lines)
                 {
                     outputWriter.WriteLine(str);
                 }

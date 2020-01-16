@@ -12,7 +12,7 @@ namespace XPackage
     {
         public List<XPack> FindAllByName(string name)
         {
-            List<XPack> result = new List<XPack>();
+            var result = new List<XPack>();
             result.AddRange(this.Where(c => string.Equals(c.Name, name, StringComparison.CurrentCultureIgnoreCase)).ToList());
             return result;
         }
@@ -27,8 +27,8 @@ namespace XPackage
         {
             get
             {
-                List<XPack> result = new List<XPack>();
-                foreach(XPack xpck in this)
+                var result = new List<XPack>();
+                foreach(var xpck in this)
                 {
                     if (string.Equals(xpck.Attributes[key], value, StringComparison.CurrentCultureIgnoreCase))
                         result.Add(xpck);
@@ -39,10 +39,10 @@ namespace XPackage
 
         public bool IsUniqueAttributeValueByKey(string attributeName)
         {
-            List<string> lst = new List<string>();
-            foreach (XPack xp in this)
+            var lst = new List<string>();
+            foreach (var xp in this)
             {
-                string value = xp.Attributes[attributeName];
+                var value = xp.Attributes[attributeName];
                 if (string.IsNullOrEmpty(value))
                     return false;
                 lst.Add(value);
@@ -83,7 +83,7 @@ namespace XPackage
 
         public void AddRangeWithParentBinding(IEnumerable<XPack> collection)
         {
-            foreach(XPack pack in collection)
+            foreach(var pack in collection)
             {
                 Add(pack);
             }
@@ -96,7 +96,7 @@ namespace XPackage
 
         public void Dispose()
         {
-            foreach (XPack pck in this)
+            foreach (var pck in this)
                 pck?.Dispose();
         }
         //public string GetNotNodeValue

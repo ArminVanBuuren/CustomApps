@@ -16,7 +16,7 @@ namespace Script.DataGridViewCustom
             Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)
             {
-                Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
+                var opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
                 EditingControlDataGridView.EditingPanel.BackColor = opaqueBackColor;
             }
@@ -29,7 +29,7 @@ namespace Script.DataGridViewCustom
 
         public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
-            TextBox textBox = InnerTextBox;
+            var textBox = InnerTextBox;
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.Right:

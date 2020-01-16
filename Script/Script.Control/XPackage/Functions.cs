@@ -19,8 +19,8 @@ namespace XPackage
         {
             get
             {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
+                var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                var uri = new UriBuilder(codeBase);
                 return Uri.UnescapeDataString(uri.Path);
                 //return Path.GetDirectoryName(path);
             }
@@ -67,13 +67,13 @@ namespace XPackage
         public static string LocalPath => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static RegexOptions GetRegexOptions(string option)
         {
-            RegexOptions defaultOption = RegexOptions.None;
+            var defaultOption = RegexOptions.None;
             if (option == null)
                 return defaultOption;
 
-            foreach (string opt in option.Split('|'))
+            foreach (var opt in option.Split('|'))
             {
-                RegexOptions retrnOpt = GetRegexOptionsSeparatly(opt);
+                var retrnOpt = GetRegexOptionsSeparatly(opt);
                 if(retrnOpt == RegexOptions.None)
                     continue;
 
@@ -84,8 +84,8 @@ namespace XPackage
 
         static RegexOptions GetRegexOptionsSeparatly(string option)
         {
-            StringComparison comparer = StringComparison.InvariantCultureIgnoreCase;
-            string newOption = option.Trim();
+            var comparer = StringComparison.InvariantCultureIgnoreCase;
+            var newOption = option.Trim();
 
             if (newOption.Equals("Compiled", comparer))
                 return RegexOptions.Compiled;
@@ -111,11 +111,11 @@ namespace XPackage
 
         public static StringComparison GetStringOptions(string option)
         {
-            StringComparison comparer = StringComparison.InvariantCultureIgnoreCase;
+            var comparer = StringComparison.InvariantCultureIgnoreCase;
             if (option == null)
                 return StringComparison.InvariantCulture;
 
-            string newOption = option.Trim();
+            var newOption = option.Trim();
 
             if (newOption.Equals("InvariantCultureIgnoreCase", comparer))
                 return comparer;
@@ -132,15 +132,15 @@ namespace XPackage
         }
         public static string Evaluate(string filepath, string xpath)
         {
-            StreamReader stream = new StreamReader(filepath, Enc);
+            var stream = new StreamReader(filepath, Enc);
             var source = ReplaceXmlVersion(stream.ReadToEnd());
-            XmlDocument xmlSetting = new XmlDocument();
+            var xmlSetting = new XmlDocument();
             xmlSetting.LoadXml(source);
             return Evaluate(xmlSetting.CreateNavigator(), xpath);
         }
         public static string ReplaceXmlVersion(string source)
         {
-            string sourcexml2 = new Regex(@"\<\?xml(.+?)\?\>").Replace(source, "");
+            var sourcexml2 = new Regex(@"\<\?xml(.+?)\?\>").Replace(source, "");
 
             if (!new Regex(@"\<\?xml(.+?)\?\>").IsMatch(sourcexml2))
             {
@@ -150,15 +150,15 @@ namespace XPackage
         }
         static string Evaluate(XPathNavigator navigator, string xPath)
         {
-            XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);
-            XPathExpression expression = XPathExpression.Compile(xPath);
+            var manager = new XmlNamespaceManager(navigator.NameTable);
+            var expression = XPathExpression.Compile(xPath);
             manager.AddNamespace("bk", "http://www.contoso.com/books");
             expression.SetContext(manager);
-            string Out = string.Empty;
+            var Out = string.Empty;
             switch (expression.ReturnType)
             {
                 case XPathResultType.NodeSet:
-                    XPathNodeIterator nodes = navigator.Select(expression);
+                    var nodes = navigator.Select(expression);
                     while (nodes.MoveNext())
                     {
                         Out = Out + nodes.Current;
@@ -184,7 +184,7 @@ namespace XPackage
                 xf = new XmlFunc(direction);
             }
             MatchEvaluator evaluator = (xf.Replace);
-            string strOut = reg.Replace(str, evaluator);
+            var strOut = reg.Replace(str, evaluator);
             return strOut;
         }
         internal class XmlFunc : IDisposable
@@ -219,10 +219,10 @@ namespace XPackage
 
             public string Replace(Match m)
             {
-                string find = m.Groups[1].ToString();
+                var find = m.Groups[1].ToString();
                 if (_direction == 0)
                 {
-                    foreach (Simbol sm in _xmlSimbl)
+                    foreach (var sm in _xmlSimbl)
                     {
                         if (sm.Param == find)
                             return sm.Value;
@@ -230,7 +230,7 @@ namespace XPackage
                 }
                 else if (_direction == 2)
                 {
-                    foreach (Simbol sm in _xmlSimbl)
+                    foreach (var sm in _xmlSimbl)
                     {
                         if (sm.Value == find && sm.Value != "\'")
                             return "&" + sm.Param + ";";
@@ -238,7 +238,7 @@ namespace XPackage
                 }
                 else
                 {
-                    foreach (Simbol sm in _xmlSimbl)
+                    foreach (var sm in _xmlSimbl)
                     {
                         if (sm.Value == find)
                             return "&" + sm.Param + ";";

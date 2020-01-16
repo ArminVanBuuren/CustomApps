@@ -41,10 +41,10 @@ namespace Script.Control.Handlers
 
         public FindHandler(XPack parentPack, XmlNode node, LogFill logFill) : base(parentPack, node, logFill)
         {
-            SearchOption Option = SearchOption.TopDirectoryOnly;
+            var Option = SearchOption.TopDirectoryOnly;
 
-            string subDirs = Attributes[GetXMLAttributeName(nameof(SearchInSubDirs))];
-            bool _allowSubDir = false;
+            var subDirs = Attributes[GetXMLAttributeName(nameof(SearchInSubDirs))];
+            var _allowSubDir = false;
             if (bool.TryParse(subDirs, out _allowSubDir) && _allowSubDir)
             {
                 Option = SearchOption.AllDirectories;
@@ -54,11 +54,11 @@ namespace Script.Control.Handlers
             PatternMatches = Attributes[GetXMLAttributeName(nameof(PatternMatches))];
 
             double _max_size = 5000, _min_size = 0;
-            string maxSize = Attributes[GetXMLAttributeName(nameof(MaxSizeMB))];
+            var maxSize = Attributes[GetXMLAttributeName(nameof(MaxSizeMB))];
             if (maxSize != null && double.TryParse(maxSize, out _max_size))
                 MaxSizeMB = _max_size.ToString(CultureInfo.InvariantCulture);
 
-            string minSize = Attributes[GetXMLAttributeName(nameof(MinSizeMB))];
+            var minSize = Attributes[GetXMLAttributeName(nameof(MinSizeMB))];
             if (minSize != null && double.TryParse(minSize, out _min_size))
                 MinSizeMB = _min_size.ToString(CultureInfo.InvariantCulture);
 
@@ -87,7 +87,7 @@ namespace Script.Control.Handlers
             }
             else
             {
-                FindBase parentSysObj = Parent as FindBase;
+                var parentSysObj = Parent as FindBase;
                 logMatchFrom = "Parent Function Match Collection";
 
                 if (SysObjType == FindType.Files && parentSysObj.SysObjType == FindType.Files)
@@ -112,8 +112,8 @@ namespace Script.Control.Handlers
                 {
                     getSysObj = delegate
                                 {
-                                    List<string> temp = new List<string>();
-                                    foreach (SystemObjectMatch match in parentSysObj.Matches)
+                                    var temp = new List<string>();
+                                    foreach (var match in parentSysObj.Matches)
                                     {
                                         temp.AddRange(Directory.GetFiles(match.FullPath, "*", Option));
                                     }
@@ -138,7 +138,7 @@ namespace Script.Control.Handlers
                                  //проверяем регуляркой совпадение по названию
                                  if (Regex.IsMatch(subAndSysObjName, PatternMatches, RegexOptions.IgnoreCase))
                                  {
-                                     SystemObjectMatch sysObj = new SystemObjectMatch(this, subAndSysObjName, SysObjType);
+                                     var sysObj = new SystemObjectMatch(this, subAndSysObjName, SysObjType);
                                      Matches.Add(sysObj);
                                  }
                              };
@@ -147,7 +147,7 @@ namespace Script.Control.Handlers
             {
                 readSysObj = delegate (string subAndSysObjName)
                              {
-                                 SystemObjectMatch sysObj = new SystemObjectMatch(this, subAndSysObjName, SysObjType);
+                                 var sysObj = new SystemObjectMatch(this, subAndSysObjName, SysObjType);
                                  Matches.Add(sysObj);
                              };
             }
@@ -171,7 +171,7 @@ namespace Script.Control.Handlers
                 {
                     checkSizeOfSysObj = delegate (string filePath)
                                         {
-                                            double size = Math.Round(double.Parse((new FileInfo(filePath).Length / 1024 / 1024).ToString()));
+                                            var size = Math.Round(double.Parse((new FileInfo(filePath).Length / 1024 / 1024).ToString()));
                                             return GetSizeResult(filePath, size);
                                         };
                 }
@@ -179,7 +179,7 @@ namespace Script.Control.Handlers
                 {
                     checkSizeOfSysObj = delegate (string dirPath)
                                         {
-                                            double size = Math.Round(double.Parse((DirSize(new DirectoryInfo(dirPath)) / 1024 / 1024).ToString()));
+                                            var size = Math.Round(double.Parse((DirSize(new DirectoryInfo(dirPath)) / 1024 / 1024).ToString()));
                                             return GetSizeResult(dirPath, size);
                                         };
                 }
@@ -189,7 +189,7 @@ namespace Script.Control.Handlers
 
         List<SystemObjectMatch> SearchFilesDirs(string dirPath, bool subDirs, FindType type)
         {
-            List<SystemObjectMatch> list = new List<SystemObjectMatch>();
+            var list = new List<SystemObjectMatch>();
 
             Directory.GetFiles(dirPath, "*");
 
@@ -198,7 +198,7 @@ namespace Script.Control.Handlers
 
         public override void Execute()
         {
-            foreach (string fullSysObjPath in getSysObj())
+            foreach (var fullSysObjPath in getSysObj())
             {
                 if (checkSizeOfSysObj != null)
                 {
@@ -208,7 +208,7 @@ namespace Script.Control.Handlers
                 }
 
                 //удаляем полный путь к файлу или папке, т.к. он будет хранится в базовом классе с коллекцией на него
-                string subAndSysObjName = fullSysObjPath.Replace(MainDirectoryPath, "").Trim('\\');
+                var subAndSysObjName = fullSysObjPath.Replace(MainDirectoryPath, "").Trim('\\');
                 readSysObj(subAndSysObjName);
             }
         }
@@ -217,14 +217,14 @@ namespace Script.Control.Handlers
         {
             long size = 0;
             // Add file sizes.
-            FileInfo[] fis = d.GetFiles();
-            foreach (FileInfo fi in fis)
+            var fis = d.GetFiles();
+            foreach (var fi in fis)
             {
                 size += fi.Length;
             }
             // Add subdirectory sizes.
-            DirectoryInfo[] dis = d.GetDirectories();
-            foreach (DirectoryInfo di in dis)
+            var dis = d.GetDirectories();
+            foreach (var di in dis)
             {
                 size += DirSize(di);
             }

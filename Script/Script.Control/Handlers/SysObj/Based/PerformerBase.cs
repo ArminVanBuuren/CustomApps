@@ -32,7 +32,7 @@ namespace Script.Control.Handlers.SysObj.Based
         protected PerformerBase(XPack parentPack, XmlNode node, LogFill logFill) : base(parentPack, node, logFill)
         {
             //поиск типа для выполнения операции с файлами или папками
-            IdentifierAttribute attr = GetIdentifier(nameof(Options));
+            var attr = GetIdentifier(nameof(Options));
             Options = GetProcessOption(Attributes[attr.Name]);
             if (Options == ProcessingOptions.None)
                 throw new HandlerInitializationException(attr, true);
@@ -41,7 +41,7 @@ namespace Script.Control.Handlers.SysObj.Based
         }
         static ProcessingOptions GetProcessOption(string type)
         {
-            ProcessingOptions processingOption = ProcessingOptions.None;
+            var processingOption = ProcessingOptions.None;
 
             if (string.IsNullOrEmpty(type))
                 return ProcessingOptions.None;
@@ -193,18 +193,18 @@ namespace Script.Control.Handlers.SysObj.Based
             if (!Directory.Exists(destPath))
                 Directory.CreateDirectory(destPath);
 
-            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            foreach (var dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
             {
                 //создаем все папки в подпапке
-                string destSubDirPath = dirPath.Replace(sourcePath, destPath);
+                var destSubDirPath = dirPath.Replace(sourcePath, destPath);
                 if (!Directory.Exists(destSubDirPath))
                     Directory.CreateDirectory(destSubDirPath);
             }
 
-            foreach (string filePath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
+            foreach (var filePath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
             {
                 //копируем все файлы папки включая подпапки
-                string destFilePath = filePath.Replace(sourcePath, destPath);
+                var destFilePath = filePath.Replace(sourcePath, destPath);
                 CopyFile(filePath, destFilePath, overWrite);
             }
         }
@@ -217,12 +217,12 @@ namespace Script.Control.Handlers.SysObj.Based
         /// <returns></returns>
         public static void CopyFile(string sourcePath, string destPath, bool overWrite)
         {
-            bool isFileExist = File.Exists(destPath);
+            var isFileExist = File.Exists(destPath);
             if (isFileExist && !overWrite)
                 throw new Exception(string.Format("File Destination Was Exist. Copy File From Source=[{0}] To Destination=[{1}] Is Impossible.", sourcePath, destPath));
 
             //если папка назначения не найдена то создаем папку
-            string directoryPath = Path.GetDirectoryName(destPath);
+            var directoryPath = Path.GetDirectoryName(destPath);
             if (!Directory.Exists(directoryPath))
                 Directory.CreateDirectory(directoryPath);
 
@@ -234,13 +234,13 @@ namespace Script.Control.Handlers.SysObj.Based
 
         public static void AddAllAccessPermissions(string filePath)
         {
-	        DirectoryInfo dInfo = new DirectoryInfo(filePath);
-	        DirectorySecurity dSecurity = dInfo.GetAccessControl();
+	        var dInfo = new DirectoryInfo(filePath);
+	        var dSecurity = dInfo.GetAccessControl();
 	        dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
 	        dInfo.SetAccessControl(dSecurity);
 
-			FileSecurity access = File.GetAccessControl(filePath);
-            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+			var access = File.GetAccessControl(filePath);
+            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             access.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.ReadAndExecute, AccessControlType.Allow));
             //access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
             File.SetAccessControl(filePath, access);

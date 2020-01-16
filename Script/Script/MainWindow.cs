@@ -52,7 +52,7 @@ namespace Script
         {
             InitializeComponent();
             ProcessGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(ProcessGrid, true, null);
-            DataGridViewTextButtonColumn GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn {
+            var GridColumnPath = new DataGridViewCustom.DataGridViewTextButtonColumn {
                                                                                                                   AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                                                                                                                   ValueType = typeof(string),
                                                                                                                   HeaderText = @"Path",
@@ -66,7 +66,7 @@ namespace Script
                 AppSettings = new ScriptSettings();
 
             uint i = 0;
-            foreach (ConfigurationProcess proc in AppSettings.ProcessList)
+            foreach (var proc in AppSettings.ProcessList)
             {
                 ProcessGrid.Rows.Add(new object[] {
                                                i, proc.ConfiguraionName, proc.Description, "None", "Start", proc.Path
@@ -78,7 +78,7 @@ namespace Script
 
 
 
-            ConfigStyle colored = new ConfigStyle(SXML_Config);
+            var colored = new ConfigStyle(SXML_Config);
             asyncPerforming.DoWork += AsyncPerforming_DoWork;
             asyncPerforming.RunWorkerCompleted += AsyncPerforming_RunWorkerCompleted;
 
@@ -88,7 +88,7 @@ namespace Script
                 _configPath = Path.Combine(LocalPath, "Script.Config.sxml");
                 if (!File.Exists(_configPath))
                 {
-                    using (StreamWriter writer = new StreamWriter(_configPath, false, Functions.Enc))
+                    using (var writer = new StreamWriter(_configPath, false, Functions.Enc))
                     {
                         //writer.Write(Properties.Resources.Script_Config);
                         writer.Write(ScriptTemplate.GetExampleOfConfig());
@@ -183,10 +183,10 @@ namespace Script
             {
                 InProgress = true;
                 //Invoke(new Action(() => buttonStartStop.Text = @"Stop"));
-                string sourceControl = string.Empty;
+                var sourceControl = string.Empty;
                 Invoke(new Action(() => sourceControl = SXML_Config.Text.SaveStreamToFile(_configPath)));
 
-                XmlDocument xdoc = new XmlDocument();
+                var xdoc = new XmlDocument();
                 xdoc.LoadXml(sourceControl);
                 st = new ScriptTemplate(xdoc);
                 InProgress = false;
@@ -230,7 +230,7 @@ namespace Script
 
             try
             {
-                using (FileStream stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(settPath, FileMode.Open, FileAccess.Read))
                 {
                     return new XmlSerializer(typeof(ScriptSettings)).Deserialize(stream) as ScriptSettings;
                 }
@@ -247,7 +247,7 @@ namespace Script
         {
             try
             {
-                using (FileStream stream = new FileStream(Path.Combine(LocalPath, ApplicationName + ".xml"), FileMode.Create, FileAccess.ReadWrite))
+                using (var stream = new FileStream(Path.Combine(LocalPath, ApplicationName + ".xml"), FileMode.Create, FileAccess.ReadWrite))
                 {
                     new XmlSerializer(typeof(ScriptSettings)).Serialize(stream, AppSettings);
                 }

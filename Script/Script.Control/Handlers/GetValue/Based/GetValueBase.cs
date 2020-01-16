@@ -24,7 +24,7 @@ namespace Script.Control.Handlers.GetValue.Based
         }
         public override string GetOfWriteValue()
         {
-            string result = string.Empty;
+            var result = string.Empty;
             foreach (InnerTextMatch match in Matches)
             {
                 if (match.Values != null)

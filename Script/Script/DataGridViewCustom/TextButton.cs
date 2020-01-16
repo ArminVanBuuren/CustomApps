@@ -33,7 +33,7 @@ namespace Script.DataGridViewCustom
         {
             if (ButtonClick != null)
             {
-                TextButtonEventArgs args = new TextButtonEventArgs(InnerTextBox.Text);
+                var args = new TextButtonEventArgs(InnerTextBox.Text);
                 ButtonClick(this, args);
                 if (args.Handled)
                     InnerTextBox.Text = args.Text;

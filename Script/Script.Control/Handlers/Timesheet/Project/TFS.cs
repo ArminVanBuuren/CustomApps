@@ -15,7 +15,7 @@ namespace Script.Control.Handlers.Timesheet.Project
         {
             Fid = fid;
             PeriodInterval = monthPeriod;
-            string[] pers = monthPeriod.Split('-');
+            var pers = monthPeriod.Split('-');
             if (pers.Count() > 1)
             {
                 PeriodStart = DateTime.Parse(pers[0].Trim());
@@ -31,8 +31,8 @@ namespace Script.Control.Handlers.Timesheet.Project
             var obj_tfsData = xm.SelectSingleNode("//td[@class='SIT_TAB_tblceltsk']") ?? xm.SelectSingleNode("//td[@class='SIT_TAB_tblceltsk SIT_TAB_tblcel_filling']");
             if (obj_tfsData != null)
             {
-                string temp_tfsData = obj_tfsData.OuterXml;
-                Regex r = new Regex("(Requirement|LeadTask|Type|Title).+?</span>(.+?)<", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                var temp_tfsData = obj_tfsData.OuterXml;
+                var r = new Regex("(Requirement|LeadTask|Type|Title).+?</span>(.+?)<", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 foreach (Match mch in r.Matches(temp_tfsData))
                 {
                     if (mch.Groups[1].Value.Equals("Requirement", StringComparison.CurrentCultureIgnoreCase))
@@ -57,12 +57,12 @@ namespace Script.Control.Handlers.Timesheet.Project
 
         static TimeSpan GetSumTime(XmlNode xm, string xpath)
         {
-            TimeSpan ts = new TimeSpan(0, 0, 0);
+            var ts = new TimeSpan(0, 0, 0);
             foreach (XmlNode timeofday in xm.SelectNodes(xpath))
             {
                 if (timeofday.Value != null)
                 {
-                    string[] temp_timeofDay = timeofday.Value.Split(':');
+                    var temp_timeofDay = timeofday.Value.Split(':');
                     TimeSpan appendTime;
                     if (temp_timeofDay.Count() > 1)
                         appendTime = new TimeSpan(int.Parse(temp_timeofDay[0]), int.Parse(temp_timeofDay[1]), 0);

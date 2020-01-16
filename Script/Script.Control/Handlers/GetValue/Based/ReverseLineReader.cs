@@ -120,7 +120,7 @@ namespace Script.Handlers.GetValue.Based
         /// </summary>
         public IEnumerator<string> GetEnumerator()
         {
-            Stream stream = streamSource();
+            var stream = streamSource();
             if (!stream.CanSeek)
             {
                 stream.Dispose();
@@ -138,7 +138,7 @@ namespace Script.Handlers.GetValue.Based
         {
             try
             {
-                long position = stream.Length;
+                var position = stream.Length;
 
                 if (encoding is UnicodeEncoding && (position & 1) != 0)
                 {
@@ -147,23 +147,23 @@ namespace Script.Handlers.GetValue.Based
 
                 // Allow up to two bytes for data from the start of the previous
                 // read which didn't quite make it as full characters
-                byte[] buffer = new byte[bufferSize + 2];
-                char[] charBuffer = new char[encoding.GetMaxCharCount(buffer.Length)];
-                int leftOverData = 0;
+                var buffer = new byte[bufferSize + 2];
+                var charBuffer = new char[encoding.GetMaxCharCount(buffer.Length)];
+                var leftOverData = 0;
                 String previousEnd = null;
                 // TextReader doesn't return an empty string if there's line break at the end
                 // of the data. Therefore we don't return an empty string if it's our *first*
                 // return.
-                bool firstYield = true;
+                var firstYield = true;
 
                 // A line-feed at the start of the previous buffer means we need to swallow
                 // the carriage-return at the end of this buffer - hence this needs declaring
                 // way up here!
-                bool swallowCarriageReturn = false;
+                var swallowCarriageReturn = false;
 
                 while (position > 0)
                 {
-                    int bytesToRead = Math.Min(position > int.MaxValue ? bufferSize : (int)position, bufferSize);
+                    var bytesToRead = Math.Min(position > int.MaxValue ? bufferSize : (int)position, bufferSize);
 
                     position -= bytesToRead;
                     stream.Position = position;
@@ -180,7 +180,7 @@ namespace Script.Handlers.GetValue.Based
                     // We've now *effectively* read this much data.
                     bytesToRead += leftOverData;
 
-                    int firstCharPosition = 0;
+                    var firstCharPosition = 0;
                     while (!characterStartDetector(position + firstCharPosition, buffer[firstCharPosition]))
                     {
                         firstCharPosition++;
@@ -195,12 +195,12 @@ namespace Script.Handlers.GetValue.Based
                     }
                     leftOverData = firstCharPosition;
 
-                    int charsRead = encoding.GetChars(buffer, firstCharPosition, bytesToRead - firstCharPosition, charBuffer, 0);
-                    int endExclusive = charsRead;
+                    var charsRead = encoding.GetChars(buffer, firstCharPosition, bytesToRead - firstCharPosition, charBuffer, 0);
+                    var endExclusive = charsRead;
 
-                    for (int i = charsRead - 1; i >= 0; i--)
+                    for (var i = charsRead - 1; i >= 0; i--)
                     {
-                        char lookingAt = charBuffer[i];
+                        var lookingAt = charBuffer[i];
                         if (swallowCarriageReturn)
                         {
                             swallowCarriageReturn = false;
@@ -220,10 +220,10 @@ namespace Script.Handlers.GetValue.Based
                         {
                             swallowCarriageReturn = true;
                         }
-                        int start = i + 1;
-                        string bufferContents = new string(charBuffer, start, endExclusive - start);
+                        var start = i + 1;
+                        var bufferContents = new string(charBuffer, start, endExclusive - start);
                         endExclusive = i;
-                        string stringToYield = previousEnd == null ? bufferContents : bufferContents + previousEnd;
+                        var stringToYield = previousEnd == null ? bufferContents : bufferContents + previousEnd;
                         if (!firstYield || stringToYield.Length != 0)
                         {
                             yield return stringToYield;
@@ -270,10 +270,10 @@ public static class StreamUtil
 {
     public static void ReadExactly(Stream input, byte[] buffer, int bytesToRead)
     {
-        int index = 0;
+        var index = 0;
         while (index < bytesToRead)
         {
-            int read = input.Read(buffer, index, bytesToRead - index);
+            var read = input.Read(buffer, index, bytesToRead - index);
             if (read == 0)
             {
                 throw new EndOfStreamException

@@ -51,7 +51,7 @@ namespace Script.Control
         public string LogPath { get; set; }
         public override string ToString()
         {
-            return string.Format("ScriptName='{0}'; Severity='{1}'; LogPath='{2}'", ScriptName, Severity, LogPath);
+            return $"ScriptName='{ScriptName}'; Severity='{Severity}'; LogPath='{LogPath}'";
         }
     }
 
@@ -59,7 +59,7 @@ namespace Script.Control
     public class ScriptTemplate : XPack
     {
         private const string CONFIG_NODE = "Config";
-        private static string NAMESPACE_OF_HANDLERS = string.Format("{0}.Handlers", typeof(ScriptTemplate).Namespace);
+        private static readonly string NAMESPACE_OF_HANDLERS = $"{typeof(ScriptTemplate).Namespace}.Handlers";
 
         internal LogFill LogShell { get; set; }
 
@@ -74,7 +74,7 @@ namespace Script.Control
         {
             get
             {
-                string logDir = Regex.Match(LogShell.LogPath, @"^.+\\").Value.Trim('\\');
+                var logDir = Regex.Match(LogShell.LogPath, @"^.+\\").Value.Trim('\\');
                 if (!Directory.Exists(logDir))
                 {
                     LogShell.NumOfLogRecord = 0;
@@ -104,7 +104,7 @@ namespace Script.Control
         ScriptTemplate(string filePath)
         {
             DynamicFunction = GetResources;
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             xmlDoc.Load(filePath);
             PerformChild(xmlDoc);
             Initializator();
@@ -137,11 +137,11 @@ namespace Script.Control
                 return;
 
 
-            string scriptName = Attributes[GetXMLAttributeName(nameof(ScriptName))];
+            var scriptName = Attributes[GetXMLAttributeName(nameof(ScriptName))];
             if (string.IsNullOrEmpty(scriptName))
-                scriptName = string.Format("{0}_{1}", GetType().Name,  CurrentUniqueIndex);
-            string severity = Attributes[GetXMLAttributeName(nameof(Severity))];
-            LogType _severity = GetSeverity(severity);
+                scriptName = $"{GetType().Name}_{CurrentUniqueIndex}";
+            var severity = Attributes[GetXMLAttributeName(nameof(Severity))];
+            var _severity = GetSeverity(severity);
 
             if (_severity == LogType.None)
             {
@@ -151,11 +151,11 @@ namespace Script.Control
             {
                 DelegAddLog addlog = TemplateAddLog;
                 LogShell = new LogFill(scriptName, _severity, addlog);
-                string logPath = Attributes[GetXMLAttributeName(nameof(LogPath))];
+                var logPath = Attributes[GetXMLAttributeName(nameof(LogPath))];
                 if (!string.IsNullOrEmpty(logPath))
                     LogPath = logPath;
                 else
-                    LogPath = Path.Combine(BaseArguments.LocalPath, "LOG", string.Format("{0}_{1:yyyyMMddHHmm}.log", scriptName, DateTime.Now));
+                    LogPath = Path.Combine(BaseArguments.LocalPath, "LOG", $"{scriptName}_{DateTime.Now:yyyyMMddHHmm}.log");
             }
         }
 
@@ -175,7 +175,7 @@ namespace Script.Control
         {
             if (node.Name.Equals(GetType().Name, StringComparison.CurrentCultureIgnoreCase))
             {
-                ScriptTemplate scriptTemplate = new ScriptTemplate(parentPack, node);
+                var scriptTemplate = new ScriptTemplate(parentPack, node);
                 //if (Parent != null && Parent.Name.Equals(DEFAULT_MAIN_NAME))
                 //    ((ScriptTemplate)Parent).LogShell = scriptTemplate.LogShell;
                 //if (Name.Equals(CONFIG_NODE, StringComparison.CurrentCultureIgnoreCase))
@@ -189,7 +189,7 @@ namespace Script.Control
             if (node.Attributes?["assembly"] != null)
             {
                 var nodeAttribute = node.Attributes["assembly"];
-                string[] asseblyAttr = nodeAttribute?.Value.Split(',');
+                var asseblyAttr = nodeAttribute?.Value.Split(',');
                 if (asseblyAttr?.Length == 2)
                 {
                     assebmly = asseblyAttr[0].Trim();
@@ -200,7 +200,7 @@ namespace Script.Control
             if (string.IsNullOrEmpty(assebmly) && string.IsNullOrEmpty(className))
             {
                 assebmly = Functions.AssemblyFile;
-                className = string.Format("{0}.{1}Handler", NAMESPACE_OF_HANDLERS, node.Name);
+                className = $"{NAMESPACE_OF_HANDLERS}.{node.Name}Handler";
             }
 
             return CreateNewHandler(assebmly, className, parentPack, node);
@@ -209,16 +209,16 @@ namespace Script.Control
 
         XPack CreateNewHandler(string assembly, string className, XPack parentPack, XmlNode node)
         {
-            string verifyAssembly = assembly;
+            var verifyAssembly = assembly;
             if (!File.Exists(verifyAssembly))
                 throw new HandlerInitializationException("Assembly=[{0}] Not Found!", verifyAssembly);
 
-            Assembly pluginAssembly = Assembly.LoadFrom(verifyAssembly);
-            Type classType = pluginAssembly.GetType(className);
+            var pluginAssembly = Assembly.LoadFrom(verifyAssembly);
+            var classType = pluginAssembly.GetType(className);
             if (classType == null)
             {
-                string nameSpace = className.IndexOf(".", StringComparison.Ordinal) != -1 ? className.Substring(0, className.LastIndexOf(".", StringComparison.Ordinal)) : className;
-                if (!GetTypeByNameSpace(pluginAssembly, nameSpace, className, out classType))
+                var @namespace = className.IndexOf(".", StringComparison.Ordinal) != -1 ? className.Substring(0, className.LastIndexOf(".", StringComparison.Ordinal)) : className;
+                if (!GetTypeByNameSpace(pluginAssembly, @namespace, className, out classType))
                 {
                     //если не найден ни один объект то создаем дефолтный скрипт темплейт
                     if(LogShell == null)
@@ -228,13 +228,12 @@ namespace Script.Control
                 }
             }
 
-            object potentialContext = Activator.CreateInstance(classType, parentPack, node, LogShell);
+            var potentialContext = Activator.CreateInstance(classType, parentPack, node, LogShell);
 
             if (potentialContext == null)
                 throw new HandlerInitializationException("Assembly=[{0}]; Class=[{1}] Not Initialized!", pluginAssembly.ManifestModule.Name, className);
 
-            ScriptTemplate context = potentialContext as ScriptTemplate;
-            if (context == null)
+            if (!(potentialContext is ScriptTemplate context))
                 throw new HandlerInitializationException("Assembly=[{0}]; Type Of Class=[{1}] Must Be Inherited From ScriptTemplate, Current=[{2}]", pluginAssembly.ManifestModule.Name, className, potentialContext.GetType());
 
             return context;
@@ -243,8 +242,8 @@ namespace Script.Control
         bool GetTypeByNameSpace(Assembly pluginAssembly, string nameSpace, string className, out Type tp)
         {
             tp = null;
-            List<Type> listTypesByNamespace = GetListTypesByNameSpace(pluginAssembly, nameSpace);
-            List<Type> findedType = listTypesByNamespace.Where(x => x.FullName.Equals(className, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            var listTypesByNamespace = GetListTypesByNameSpace(pluginAssembly, nameSpace);
+            var findedType = listTypesByNamespace.Where(x => x.FullName.Equals(className, StringComparison.InvariantCultureIgnoreCase)).ToList();
             if (findedType.Count == 0)
             {
                 return false;
@@ -270,11 +269,11 @@ namespace Script.Control
                                     "{[Имя ноды].[Имя аттрибута]} - Получить значения аттрибутов из текущего конфига. Например:{ScriptTemplate.Name} - из ноды ScriptTemplate получить значение аттрибута Name. Поиск происходит только в родительских нодах." })]
         protected string GetResources(string source, XPack parent)
         {
-            string result = source;
-            Regex resours = new Regex("{(.+?)}", RegexOptions.IgnoreCase);
+            var result = source;
+            var resours = new Regex("{(.+?)}", RegexOptions.IgnoreCase);
             foreach (Match match in resours.Matches(result))
             {
-                string tempValue = match.Value.Trim('{', '}', ' ');
+                var tempValue = match.Value.Trim('{', '}', ' ');
                 if (tempValue.Equals("localpath", StringComparison.CurrentCultureIgnoreCase))
                 {
                     result = new Regex(match.Value, RegexOptions.IgnoreCase).Replace(result, BaseArguments.LocalPath, 1);
@@ -282,7 +281,7 @@ namespace Script.Control
                 }
                 if (tempValue.StartsWith("datetime", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    string formatDate = Regex.Replace(tempValue, @"datetime\s*\,\s*\'(.+?)\'", "$1", RegexOptions.IgnoreCase);
+                    var formatDate = Regex.Replace(tempValue, @"datetime\s*\,\s*\'(.+?)\'", "$1", RegexOptions.IgnoreCase);
                     if (string.IsNullOrEmpty(formatDate) || formatDate.Length == tempValue.Length)
                         formatDate = "yyyy.MM.dd hh:mm:ss";
                     result = new Regex(match.Value, RegexOptions.IgnoreCase).Replace(result, DateTime.Now.ToString(formatDate), 1);
@@ -291,14 +290,14 @@ namespace Script.Control
 
                 if (tempValue.Split('.').Length > 1)
                 {
-                    string[] path_list = tempValue.Split('.');
-                    string find_by_path = string.Join("/", path_list.Take(path_list.Length - 1));
-                    string find_by_attr_name = path_list[path_list.Length - 1];
+                    var path_list = tempValue.Split('.');
+                    var find_by_path = string.Join("/", path_list.Take(path_list.Length - 1));
+                    var find_by_attr_name = path_list[path_list.Length - 1];
 
-                    List<XPack> listmatches = parent[find_by_path, FindMode.Up];
+                    var listmatches = parent[find_by_path, FindMode.Up];
                     if (listmatches != null && listmatches.Count > 0)
                     {
-                        XPackAttributeCollection findedAttr = listmatches[0].Attributes;
+                        var findedAttr = listmatches[0].Attributes;
                         result = new Regex(match.Value, RegexOptions.IgnoreCase).Replace(result, findedAttr[find_by_attr_name], 1);
                         continue;
                     }
@@ -357,16 +356,16 @@ namespace Script.Control
                 string log_input;
                 if (type == LogType.Exception)
                 {
-                    log_input = string.Format("{0}:{1}; {2}", type, stringformat, objects.Length > 0 ? objects[0] : string.Empty);
+                    log_input = $"{type}:{stringformat}; {(objects.Length > 0 ? objects[0] : string.Empty)}";
                     LogShell.ScriptExceptionsCount++;
                 }
                 else
-                    log_input = string.Format("{0}:{1}", type, string.Format(stringformat, objects));
+                    log_input = $"{type}:{string.Format(stringformat, objects)}";
 
-                string mBaseParent = new StackTrace().GetFrame(3).GetMethod().Name.Replace(".ctor", "").Replace("<", "").Replace(">", "");
-                string mBase = new StackTrace().GetFrame(2).GetMethod().Name;
+                var mBaseParent = new StackTrace().GetFrame(3).GetMethod().Name.Replace(".ctor", "").Replace("<", "").Replace(">", "");
+                var mBase = new StackTrace().GetFrame(2).GetMethod().Name;
                 //string overridedObj = GetAllProperties(sourceObj);
-                string strLog = string.Format("[{1:dd.MM.yyyy HH:mm:ss.ffffff}]; {2}=[{3}.{4}];{0}{5}{0}{6}", 
+                var strLog = string.Format("[{1:dd.MM.yyyy HH:mm:ss.ffffff}]; {2}=[{3}.{4}];{0}{5}{0}{6}", 
                     Environment.NewLine, DateTime.Now, ScriptName, mBaseParent, mBase, log_input, sourceObj);
 
                 AddJustLog(this, strLog);
@@ -384,30 +383,30 @@ namespace Script.Control
         static int _separationCount = 250;
         public static void AddJustLog(ScriptTemplate scriptTemplate, string strLog)
         {
-            using (StreamWriter file = new StreamWriter(scriptTemplate.LogPath, scriptTemplate.NumOfLogRecord > 0, Functions.Enc))
+            using (var file = new StreamWriter(scriptTemplate.LogPath, scriptTemplate.NumOfLogRecord > 0, Functions.Enc))
             {
-                string log = string.Format("[#{0}]", scriptTemplate.NumOfLogRecord++);
-                log = string.Format("{0}{1}{2}{3}", log, string.Join("=", new string('=', _separationCount - log.Length)), Environment.NewLine, strLog);
+                var log = $"[#{scriptTemplate.NumOfLogRecord++}]";
+                log = $"{log}{string.Join("=", new string('=', _separationCount - log.Length))}{Environment.NewLine}{strLog}";
                 file.WriteLine(log);
             }
         }
         static LogType GetSeverity(string severity)
         {
-            LogType defaultOption = LogType.Console;
+            var defaultOption = LogType.Console;
 
             if (string.IsNullOrEmpty(severity))
                 return defaultOption;
             if (severity.Equals("None", StringComparison.CurrentCultureIgnoreCase) || severity.Equals("Disable", StringComparison.CurrentCultureIgnoreCase))
                 return LogType.None;
 
-            LogType selectOption = LogType.None;
-            int i = 0;
-            foreach (string strType in severity.Split('|'))
+            var selectOption = LogType.None;
+            var i = 0;
+            foreach (var strType in severity.Split('|'))
             {
                 foreach (LogType lgType in Enum.GetValues(typeof(LogType)))
                 {
-                    string ss1 = strType.Trim();
-                    string ss2 = lgType.ToString("g");
+                    var ss1 = strType.Trim();
+                    var ss2 = lgType.ToString("g");
 
                     if (ss1.Equals(ss2, StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -432,14 +431,13 @@ namespace Script.Control
         }
         public IdentifierAttribute GetIdentifier(string propName)
         {
-            Type inheritType = GetType().UnderlyingSystemType;
-            PropertyInfo prop = inheritType.GetProperty(propName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            var inheritType = GetType().UnderlyingSystemType;
+            var prop = inheritType.GetProperty(propName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
             if (prop == null)
                 throw new HandlerInitializationException("Not Found Mandatory Propery [{0}]", propName);
-            foreach (object obj in prop.GetCustomAttributes(false))
+            foreach (var obj in prop.GetCustomAttributes(false))
             {
-                IdentifierAttribute attrVoid = obj as IdentifierAttribute;
-                if (attrVoid != null)
+                if (obj is IdentifierAttribute attrVoid)
                     return attrVoid;
             }
             throw new HandlerInitializationException("Property {0} Is Not {1}", propName, typeof(IdentifierAttribute).Name);
@@ -447,8 +445,8 @@ namespace Script.Control
         }
         public static IdentifierAttribute GetVoidIdentifier(Type tp, string propName)
         {
-            Type inheritType = tp.UnderlyingSystemType;
-            MethodInfo methodInfos = tp.GetMethod(propName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            var inheritType = tp.UnderlyingSystemType;
+            var methodInfos = tp.GetMethod(propName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
             //MethodInfo mInfoMethod =
             //    typeof(ScriptTemplate).GetMethod(
@@ -459,10 +457,9 @@ namespace Script.Control
             //        null);
             //mInfoMethod.Invoke(new ScriptTemplate(), new object[] { null, null });
 
-            foreach(object obj in methodInfos.GetCustomAttributes(false))
+            foreach(var obj in methodInfos.GetCustomAttributes(false))
             {
-                IdentifierAttribute attrVoid = obj as IdentifierAttribute;
-                if (attrVoid != null)
+                if (obj is IdentifierAttribute attrVoid)
                     return attrVoid;
             }
 
@@ -471,8 +468,8 @@ namespace Script.Control
 
         public static string GetExampleOfConfig()
         {
-            string result = string.Format("<{0}>{1}", CONFIG_NODE, Environment.NewLine);
-            int i = 0;
+            var result = $"<{CONFIG_NODE}>{Environment.NewLine}";
+            var i = 0;
             result = result + string.Format("<!--{1}{0}{1}-->{1}", GetVoidIdentifier(typeof(ScriptTemplate), nameof(GetResources)).Description, Environment.NewLine);
 
             result = result + OpenNode(typeof(ScriptTemplate), ref i);
@@ -484,7 +481,7 @@ namespace Script.Control
             result = result + CloseNode(typeof(FindHandler), ref i);
             result = result + CloseNode(typeof(ScriptTemplate), ref i);
 
-            result = string.Format("{0}{1}", result, Environment.NewLine);
+            result = $"{result}{Environment.NewLine}";
             result = result + OpenNode(typeof(ScriptTemplate), ref i);
             result = result + OpenNode(typeof(FindHandler), ref i);
             result = result + OpenNode(typeof(GetValueByRegexHandler), ref i);
@@ -494,59 +491,57 @@ namespace Script.Control
             result = result + CloseNode(typeof(FindHandler), ref i);
             result = result + CloseNode(typeof(ScriptTemplate), ref i);
 
-            result = string.Format("{0}{1}", result, Environment.NewLine);
+            result = $"{result}{Environment.NewLine}";
             result = result + OpenNode(typeof(ScriptTemplate), ref i);
             result = result + OpenNode(typeof(TimesheetHandler), ref i);
             result = result + CloseNode(typeof(TimesheetHandler), ref i);
             result = result + CloseNode(typeof(ScriptTemplate), ref i);
 
 
-            result = string.Format("{0}</{1}>", result, CONFIG_NODE);
+            result = $"{result}</{CONFIG_NODE}>";
             return result;
         }
 
         static string OpenNode(Type tp, ref int numSubGroup)
         {
             //создать отступы
-            string separators = string.Empty;
+            var separators = string.Empty;
             numSubGroup = numSubGroup + 4;
             if (numSubGroup > 0)
                 separators = new string(' ', numSubGroup);
 
             //получаем описание класса
             string classDescription = null;
-            object[] attrsClass = tp.GetCustomAttributes(true);
-            foreach (object attr in attrsClass)
+            var attrsClass = tp.GetCustomAttributes(true);
+            foreach (var attr in attrsClass)
             {
-                IdentifierAttribute identAttr = attr as IdentifierAttribute;
-                if (identAttr != null)
+                if (attr is IdentifierAttribute identAttr)
                 {
                     classDescription = identAttr.Description.Trim();
                     break;
                 }
             }
 
-            string _out = string.Empty;
+            var _out = string.Empty;
             if (classDescription != null)
-                _out = string.Format("{0}<!-- {1} -->{2}", separators, classDescription, Environment.NewLine);
+                _out = $"{separators}<!-- {classDescription} -->{Environment.NewLine}";
 
-            string _node = string.Format("{0}<{1} ", separators, tp.Name.Replace("Handler", ""));
+            var _node = $"{separators}<{tp.Name.Replace("Handler", "")} ";
             //просчитывается для корректного форматирования описания свойств в CDATA
-            int ident = _node.Length;
+            var ident = _node.Length;
 
-            _out = string.Format("{0}{1}", _out, _node);
+            _out = $"{_out}{_node}";
             
             //получаем все свойства класса
-            PropertyInfo[] props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            var props = tp.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
-            string cdata = string.Empty;
-            foreach (PropertyInfo prop in props)
+            var cdata = string.Empty;
+            foreach (var prop in props)
             {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
+                var attrs = prop.GetCustomAttributes(true);
+                foreach (var attr in attrs)
                 {
-                    IdentifierAttribute identAttr = attr as IdentifierAttribute;
-                    if (identAttr != null)
+                    if (attr is IdentifierAttribute identAttr)
                     {
                         CreateAttribute(ref _out, ref cdata, identAttr, ident);
                     }
@@ -561,19 +556,19 @@ namespace Script.Control
             if(string.IsNullOrEmpty(identAttr.Name))
                 return;
 
-            _out = string.Format("{0}{1}=\"{2}\" ", _out, identAttr.Name, identAttr.DefaultValue);
+            _out = $"{_out}{identAttr.Name}=\"{identAttr.DefaultValue}\" ";
             if (string.IsNullOrEmpty(cdata))
-                cdata = string.Format("{0}={1}", identAttr.Name, identAttr.Description);
+                cdata = $"{identAttr.Name}={identAttr.Description}";
             else
-                cdata = string.Format("{0}{1}{2}{3}={4}", cdata, Environment.NewLine, new string(' ', ident + 9), identAttr.Name, identAttr.Description);
+                cdata = $"{cdata}{Environment.NewLine}{new string(' ', ident + 9)}{identAttr.Name}={identAttr.Description}";
         }
 
         static string CloseNode(Type tp, ref int numSubGroup)
         {
-            string separators = string.Empty;
+            var separators = string.Empty;
             if (numSubGroup > 0)
                 separators = new string(' ', numSubGroup);
-            string result = string.Format("{0}</{1}>{2}", separators, tp.Name.Replace("Handler", ""), Environment.NewLine);
+            var result = $"{separators}</{tp.Name.Replace("Handler", "")}>{Environment.NewLine}";
             numSubGroup = numSubGroup - 4;
             return result;
         }

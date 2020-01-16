@@ -20,7 +20,7 @@ namespace Script.DataGridViewCustom
             }
             set
             {
-                DataGridViewTextButtonCell cell = CellTemplate as DataGridViewTextButtonCell;
+                var cell = CellTemplate as DataGridViewTextButtonCell;
                 if (cell != null)
                 {
                     if (value != null)
@@ -41,7 +41,7 @@ namespace Script.DataGridViewCustom
             set
             {
                 base.CellTemplate = value;
-                DataGridViewTextButtonCell cell = CellTemplate as DataGridViewTextButtonCell;
+                var cell = CellTemplate as DataGridViewTextButtonCell;
                 if (cell != null)
                     cell.ButtonClickHandler = ButtonClickHandler;
             }

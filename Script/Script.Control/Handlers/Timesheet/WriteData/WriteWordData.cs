@@ -33,7 +33,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         {
             wrdRng = objDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             
-            Paragraph objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
+            var objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
             objPara.Range.InsertParagraphAfter();
             objPara.Range.Text = fullUserName + "\v" + ReplaceWordText(header) + "\v";
             objPara.Range.Font.Size = 16;
@@ -45,7 +45,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             foreach (Section section in objDoc.Sections)
             {
                 //Get the header range and add the header details.
-                Range headerRange = section.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                var headerRange = section.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
                 headerRange.Fields.Add(headerRange, WdFieldType.wdFieldPage);
                 headerRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
                 headerRange.Font.ColorIndex = WdColorIndex.wdRed;
@@ -60,7 +60,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         {
             row = 1;
             wrdRng = objDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            Paragraph objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
+            var objPara = objDoc.Content.Paragraphs.Add(ref wrdRng);
             objPara.Range.InsertParagraphAfter();
             objPara.LeftIndent = -45;
             objPara.RightIndent = -45;
@@ -96,8 +96,8 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         public void AddColumnsName(params string[] nameColumn)
         {
             row++;
-            int columnNum = 0;
-            foreach(string columnName in nameColumn)
+            var columnNum = 0;
+            foreach(var columnName in nameColumn)
             {
                 columnNum++;
                 WordTable.Rows[row].Range.Font.Bold = 1;
@@ -120,10 +120,10 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             WordTable.Cell(row, 1).Range.Font.Bold = 0;
 
             // оттетинть Проект от PM
-            string project = ReplaceWordText(projectName);
+            var project = ReplaceWordText(projectName);
             WordTable.Cell(row, 1).Range.Text = project + "\v" + "PM: " + pm;
-            Microsoft.Office.Interop.Word.Range boldrange_1 = WordTable.Cell(row, 1).Range;
-            int prjStart = WordTable.Cell(row, 1).Range.Start;
+            var boldrange_1 = WordTable.Cell(row, 1).Range;
+            var prjStart = WordTable.Cell(row, 1).Range.Start;
             boldrange_1.SetRange(prjStart, prjStart + project.Length);
             boldrange_1.Bold = 1;
 
@@ -192,7 +192,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             try
             {
                 //Create an instance for word app
-                Application winword = new Application();
+                var winword = new Application();
 
                 //Set animation status for word application
                 winword.ShowAnimation = false;
@@ -204,13 +204,13 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 object missing = System.Reflection.Missing.Value;
 
                 //Create a new document
-                Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                var document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
 
                 //Add header into the document
                 foreach (Section section in document.Sections)
                 {
                     //Get the header range and add the header details.
-                    Range headerRange = section.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                    var headerRange = section.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
                     headerRange.Fields.Add(headerRange, WdFieldType.wdFieldPage);
                     headerRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
                     headerRange.Font.ColorIndex = WdColorIndex.wdDarkRed;
@@ -223,7 +223,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 foreach (Section wordSection in document.Sections)
                 {
                     //Get the footer range and add the footer details.
-                    Range footerRange = wordSection.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                    var footerRange = wordSection.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
                     footerRange.Font.ColorIndex = WdColorIndex.wdDarkRed;
                     footerRange.Font.Size = 10;
                     footerRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
@@ -235,21 +235,21 @@ namespace Script.Control.Handlers.Timesheet.WriteData
                 document.Content.Text = "This is test document " + Environment.NewLine;
 
                 //Add paragraph with Heading 1 style
-                Paragraph para1 = document.Content.Paragraphs.Add(ref missing);
+                var para1 = document.Content.Paragraphs.Add(ref missing);
                 //object styleHeading1 = "Heading 1";
                 //para1.Range.set_Style(ref styleHeading1);
                 para1.Range.Text = "Para 1 text";
                 para1.Range.InsertParagraphAfter();
 
                 //Add paragraph with Heading 2 style
-                Paragraph para2 = document.Content.Paragraphs.Add(ref missing);
+                var para2 = document.Content.Paragraphs.Add(ref missing);
                 //object styleHeading2 = "Heading 2";
                 //para2.Range.set_Style(ref styleHeading2);
                 para2.Range.Text = "Para 2 text";
                 para2.Range.InsertParagraphAfter();
 
                 //Create a 5X5 table and insert some dummy record
-                Table firstTable = document.Tables.Add(para1.Range, 5, 5, ref missing, ref missing);
+                var firstTable = document.Tables.Add(para1.Range, 5, 5, ref missing, ref missing);
 
                 firstTable.Borders.Enable = 1;
                 foreach (Row row in firstTable.Rows)
@@ -303,7 +303,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             object styleTypeTable = WdStyleType.wdStyleTypeTable;
             _Application WordApp = new Application();
             WordApp.Visible = true;
-            Document adoc = WordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+            var adoc = WordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
 
 
             Paragraph objPara3;
@@ -313,13 +313,13 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             objPara3.Format.SpaceAfter = 10; //defind some style
             objPara3.Range.InsertParagraphAfter(); //insert paragraph
 
-            Tables tb = adoc.Tables;
-            Object defaultTableBehavior = Type.Missing;
-            Object autoFitBehavior = Type.Missing;
+            var tb = adoc.Tables;
+            var defaultTableBehavior = Type.Missing;
+            var autoFitBehavior = Type.Missing;
             //Range rng1 = adoc.Range(ref start1, ref missing);
             tb.Add((Range)oRng, 2, 2, ref missing, ref missing);
 
-            Table tbl1 = adoc.Tables[1];
+            var tbl1 = adoc.Tables[1];
             tbl1.Borders.Enable = 1;
             tbl1.Cell(1, 1).Range.Text = "Hi";
             tbl1.Cell(1, 2).Range.Text = "Hi";
@@ -337,7 +337,7 @@ namespace Script.Control.Handlers.Timesheet.WriteData
             object strt = tbl1.Range.End;
             //Range rng2 = adoc.Range(ref strt, ref strt);
             //rng1.Copy();
-            Table tbl2 = tb.Add((Range)oRng2, 2, 2, ref missing, ref missing);
+            var tbl2 = tb.Add((Range)oRng2, 2, 2, ref missing, ref missing);
             tbl2.Borders.Enable = 1;
             tbl2.Cell(1, 1).Range.Text = "Second table";
             tbl2.Cell(1, 2).Range.Text = "Second table";

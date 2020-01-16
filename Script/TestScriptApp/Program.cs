@@ -19,10 +19,10 @@ namespace TestScriptApp
             try
             {
                 Console.WriteLine("Processing...");
-                XmlDocument xdoc = new XmlDocument();
-                string _configPath = Path.Combine(LocalPath, "Script.Config.xml");
+                var xdoc = new XmlDocument();
+                var _configPath = Path.Combine(LocalPath, "Script.Config.xml");
                 xdoc.Load(_configPath);
-                ScriptTemplate st = new ScriptTemplate(xdoc);
+                var st = new ScriptTemplate(xdoc);
                 Console.WriteLine("Complete!");
             }
             catch (Exception e)

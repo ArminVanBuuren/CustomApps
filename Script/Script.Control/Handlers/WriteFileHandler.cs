@@ -19,20 +19,20 @@ namespace Script.Control.Handlers
             if (bool.TryParse(Attributes[GetXMLAttributeName(nameof(Append))], out _tempAppend) && _tempAppend)
                 Append = true;
 
-            IWriteValue _parent = Parent as IWriteValue;
+            var _parent = Parent as IWriteValue;
             if (_parent == null)
                 throw new HandlerInitializationException(this);
         }
 
         public override void Execute()
         {
-            string writeContent = ((IWriteValue) Parent).GetOfWriteValue();
+            var writeContent = ((IWriteValue) Parent).GetOfWriteValue();
             if (!string.IsNullOrEmpty(writeContent))
             {
                 if (Append)
                     File.Delete(FilePath);
 
-                using (StreamWriter outputWriter = File.AppendText(FilePath))
+                using (var outputWriter = File.AppendText(FilePath))
                 {
                     outputWriter.Write(writeContent);
                 }

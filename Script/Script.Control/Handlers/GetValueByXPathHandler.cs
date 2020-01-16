@@ -41,8 +41,8 @@ namespace Script.Control.Handlers
             {
                 _getOrSetXmlNode = delegate (XmlNode nodeGet, ref string logContent)
                 {
-                    XmlAttribute attribute = (XmlAttribute)nodeGet;
-                    string oldAttribute = attribute.OuterXml;
+                    var attribute = (XmlAttribute)nodeGet;
+                    var oldAttribute = attribute.OuterXml;
                     attribute.Value = string.Format(XPathReplace, attribute.Value);
                     logContent = logContent + string.Format("Set [XmlAttribute] NewAttribute=[{1}]; OldAttribute=[{0}];\r\n", oldAttribute, attribute.OuterXml);
                     return true;
@@ -57,7 +57,7 @@ namespace Script.Control.Handlers
                 };
             }
 
-            FindBase _parent = Parent as FindBase;
+            var _parent = Parent as FindBase;
             if (_parent == null)
                 throw new HandlerInitializationException(this);
 
@@ -70,19 +70,19 @@ namespace Script.Control.Handlers
         }
         void ExecutionBySysObj()
         {
-            FindBase _parent = (FindBase)Parent;
-            foreach (SystemObjectMatch match in _parent.Matches.Where(x => x.SysObjType == FindType.Files))
+            var _parent = (FindBase)Parent;
+            foreach (var match in _parent.Matches.Where(x => x.SysObjType == FindType.Files))
             {
                 //string logContent = string.Format("XPath=[{0}]; XPathExpression.Type=[{1}]\r\n", xpathMatches, expression.ReturnType);
-                string logContent = string.Empty;
+                var logContent = string.Empty;
                 try
                 {
-                    XmlDocument xmlSetting = new XmlDocument();
+                    var xmlSetting = new XmlDocument();
                     xmlSetting.Load(match.FullPath);
-                    List<string> _values = new List<string>();
+                    var _values = new List<string>();
 
-                    int matchesCount = 0;
-                    bool isAttrChanged = false;
+                    var matchesCount = 0;
+                    var isAttrChanged = false;
                     if (Expression.ReturnType == XPathResultType.NodeSet)
                     {
                         foreach (XmlNode xm in xmlSetting.SelectNodes(XPathMatches))
@@ -99,7 +99,7 @@ namespace Script.Control.Handlers
                     //если xpath выражение имеет булевое значение то просто добавляем его в коллекцию найденных
                     else if (Expression.ReturnType == XPathResultType.Boolean)
                     {
-                        bool temp_isMatched = false;
+                        var temp_isMatched = false;
                         if (bool.TryParse(xmlSetting.CreateNavigator().Evaluate(Expression).ToString(), out temp_isMatched) && temp_isMatched)
                         {
                             //добавляем в коллекцию найденное значение согласно XPath
@@ -111,7 +111,7 @@ namespace Script.Control.Handlers
                     //все что совпао по xpath выражению то добавляется в список коллекции найденных
                     if (matchesCount > 0)
                     {
-                        InnerTextMatch newInnerMatch = new InnerTextMatch(_parent, match.SubDirectoryPathWithCurrentName, match.SysObjType);
+                        var newInnerMatch = new InnerTextMatch(_parent, match.SubDirectoryPathWithCurrentName, match.SysObjType);
                         newInnerMatch.Values.AddRange(_values);
                         Matches.Add(newInnerMatch);
                         AddLog(LogType.Success, this, "{1}; Source=[{0}]", match.FullPath, logContent.Trim());

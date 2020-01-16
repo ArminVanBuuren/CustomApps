@@ -35,7 +35,7 @@ namespace Script.Control.Handlers.SysObj.Based
         }
         protected FindBase(XPack parentPack, XmlNode node, LogFill logFill) : base(parentPack, node, logFill)
         {
-            string sysObjPath = Attributes[GetXMLAttributeName(nameof(MainDirectoryPath))];
+            var sysObjPath = Attributes[GetXMLAttributeName(nameof(MainDirectoryPath))];
             if (sysObjPath != null)
                 MainDirectoryPath = Path.GetFullPath(sysObjPath);
             else
@@ -44,7 +44,7 @@ namespace Script.Control.Handlers.SysObj.Based
                 MainDirectoryPath = ((FindBase) Parent).MainDirectoryPath;
             }
 
-            string sysObjType = Attributes[GetXMLAttributeName(nameof(SysObjType))];
+            var sysObjType = Attributes[GetXMLAttributeName(nameof(SysObjType))];
             SysObjType = sysObjType != null ? GetType(sysObjType) : FindType.All;
 
             Matches = new List<SystemObjectMatch>();
@@ -53,15 +53,15 @@ namespace Script.Control.Handlers.SysObj.Based
         void CheckParentObject()
         {
             GetDirFromParent = true;
-            FindBase parentSysObj = Parent as FindBase;
+            var parentSysObj = Parent as FindBase;
             if (parentSysObj == null)
                 throw new HandlerInitializationException(this);
         }
 
         static FindType GetType(string option)
         {
-            StringComparison comprarer = StringComparison.InvariantCultureIgnoreCase;
-            string newOption = option.Trim();
+            var comprarer = StringComparison.InvariantCultureIgnoreCase;
+            var newOption = option.Trim();
 
             if (newOption.Equals("Files", comprarer) || newOption.Equals("File", comprarer))
                 return FindType.Files;

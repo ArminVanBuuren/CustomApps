@@ -17,13 +17,13 @@ namespace Script.Control.Auxiliary
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            string finalName = name;
-            AssemblyInfo aInfo = new AssemblyInfo();
+            var finalName = name;
+            var aInfo = new AssemblyInfo();
             aInfo.cchBuf = 1024; // should be fine...
             aInfo.currentAssemblyPath = new string('\0', aInfo.cchBuf);
 
             IAssemblyCache ac;
-            int hr = CreateAssemblyCache(out ac, 0);
+            var hr = CreateAssemblyCache(out ac, 0);
             if (hr >= 0)
             {
                 hr = ac.QueryAssemblyInfo(0, finalName, ref aInfo);

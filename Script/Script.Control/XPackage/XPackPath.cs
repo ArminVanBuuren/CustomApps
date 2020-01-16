@@ -53,7 +53,7 @@ namespace XPackage
 
         bool GetAnyChildSatisfying2(XPack pack, List<XPack> result)
         {
-            foreach (XPack po in pack.ChildPacks)
+            foreach (var po in pack.ChildPacks)
             {
                 if (string.Equals(po.Name, Parameter, StringComparison.CurrentCultureIgnoreCase))
                     result.Add(po);
@@ -76,7 +76,7 @@ namespace XPackage
             if (string.Equals(pack.Name, Parameter, StringComparison.CurrentCultureIgnoreCase))
                 result.Add(pack);
             else
-                foreach (XPack po in pack.ChildPacks)
+                foreach (var po in pack.ChildPacks)
                 {
                     if (string.Equals(po.Name, Parameter, StringComparison.CurrentCultureIgnoreCase))
                         result.Add(po);
@@ -101,7 +101,7 @@ namespace XPackage
         bool GetEqualsChildParamsName(XPack pack, out List<XPack> result)
         {
             result = new List<XPack>();
-            foreach (XPack po in pack.ChildPacks)
+            foreach (var po in pack.ChildPacks)
             {
                 if (string.Equals(po.Name, Parameter, StringComparison.CurrentCultureIgnoreCase))
                     result.Add(po);
@@ -111,10 +111,10 @@ namespace XPackage
         bool GetByIfCommander(XPack pack, out List<XPack> result)
         {
             result = new List<XPack>();
-            foreach (XPack xpck in pack.ChildPacks)
+            foreach (var xpck in pack.ChildPacks)
             {
-                string paramResult = Parameter;
-                foreach (XPackAttribute attr in xpck.Attributes)
+                var paramResult = Parameter;
+                foreach (var attr in xpck.Attributes)
                 {
                     paramResult = paramResult.Replace(string.Format("@{0}", attr.Key), attr.Value);
                 }
@@ -131,10 +131,10 @@ namespace XPackage
         bool GetAttributeValue(XPack pack, out List<XPack> result)
         {
             result = new List<XPack>();
-            foreach (XPack xpck in pack.ChildPacks)
+            foreach (var xpck in pack.ChildPacks)
             {
-                string paramResult = Parameter;
-                foreach (XPackAttribute attr in xpck.Attributes)
+                var paramResult = Parameter;
+                foreach (var attr in xpck.Attributes)
                 {
                     paramResult = paramResult.Replace(string.Format("@{0}", attr.Key), attr.Value);
                 }

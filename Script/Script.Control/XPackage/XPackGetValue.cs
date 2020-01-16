@@ -53,7 +53,7 @@ namespace XPackage
                 {
                     //чтобы получить ресурсы в этом аттрибуте и избежать бесконечного цикла то делаем данный аттрибут непоределенным
                     IsDetermined = false;
-                    string result = DynamicFunction != null ? DynamicFunction(SourceValue, Parent) : SourceValue;
+                    var result = DynamicFunction != null ? DynamicFunction(SourceValue, Parent) : SourceValue;
                     return result;
                 }
                 finally

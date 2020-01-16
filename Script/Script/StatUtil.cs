@@ -19,7 +19,7 @@ namespace Script
         public static string LoadFileByPath(this string path)
         {
             string result;
-            using (StreamReader stream = new StreamReader(path))
+            using (var stream = new StreamReader(path))
             {
                 result = stream.ReadToEnd();
                 stream.Close();
@@ -29,7 +29,7 @@ namespace Script
 
         public static string SaveStreamToFile(this string value, string path)
         {
-            using (StreamWriter tw = new StreamWriter(path, false))
+            using (var tw = new StreamWriter(path, false))
             {
                 // var thisExe = System.Reflection.Assembly.GetExecutingAssembly();
                 tw.Write(value);

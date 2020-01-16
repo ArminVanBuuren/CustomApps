@@ -37,33 +37,33 @@ namespace Script.Control.Handlers.Timesheet.Project
 
         public void Load(string htmlBody, int fid)
         {
-            string monthPeriod = new Regex(@"My Timesheet.+?\((.+?)\)", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
+            var monthPeriod = new Regex(@"My Timesheet.+?\((.+?)\)", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
             Autorization.FullName = new Regex(@"<u.+" + Regex.Escape(Autorization.DomainUserName) + ".+?>(.+?)<", RegexOptions.IgnoreCase).Match(htmlBody).Groups[1].Value;
             htmlBody = ReplaceByRegex(htmlBody);
             LoadXml(htmlBody, fid, monthPeriod);
         }
         string ReplaceByRegex(string str)
         {
-            string _pattern1 = ".*(<div class=\"SIT_TAB_tbldivsrl\".+?</div>).*";
-            string _pattern2 = "<img.+?>";
-            string result = Regex.Replace(str, _pattern1, "$1", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            var _pattern1 = ".*(<div class=\"SIT_TAB_tbldivsrl\".+?</div>).*";
+            var _pattern2 = "<img.+?>";
+            var result = Regex.Replace(str, _pattern1, "$1", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             result = Regex.Replace(result, _pattern2, "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             result = result.Replace("<br>", "").Replace("&", "&amp;");
             return result;
         }
         void LoadXml(string strXml, int fid, string monthPeriod)
         {
-            XmlDocument xmlSetting = new XmlDocument();
+            var xmlSetting = new XmlDocument();
             xmlSetting.LoadXml(strXml);
             foreach (XmlNode findedNode in xmlSetting.SelectNodes("//tr[td/@class='SIT_TAB_tblcelid']"))
             {
-                XmlNode newNode = findedNode.Clone();
+                var newNode = findedNode.Clone();
                 var temp_prjName = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/text()") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/text()");
                 var temp_PM = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/a/text()") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/a/text()");
                 var temp_PM_Mail = newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj']/a/@href") ?? newNode.SelectSingleNode("//td[@class='SIT_TAB_tblcelprj SIT_TAB_tblcel_filling']/a/@href");
                 if (temp_prjName != null)
                 {
-                    string prjName = temp_prjName.Value.Trim();
+                    var prjName = temp_prjName.Value.Trim();
                     TFSProject tfsList;
                     if (TryGetValue(prjName, out tfsList))
                     {
@@ -82,7 +82,7 @@ namespace Script.Control.Handlers.Timesheet.Project
         public bool TryGetValue(string name, out TFSProject stat)
         {
             stat = null;
-            foreach (TFSProject st in Items)
+            foreach (var st in Items)
             {
                 if (st.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
                 {

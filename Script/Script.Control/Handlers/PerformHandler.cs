@@ -12,8 +12,8 @@ namespace Script.Control.Handlers
 
         public PerformHandler(XPack parentPack, XmlNode node, LogFill logFill) : base(parentPack, node, logFill)
         {
-            string appendSubDirectories = Attributes[GetXMLAttributeName(nameof(AppendSubDirectories))];
-            bool _appendSubDirectories = false;
+            var appendSubDirectories = Attributes[GetXMLAttributeName(nameof(AppendSubDirectories))];
+            var _appendSubDirectories = false;
             if (bool.TryParse(appendSubDirectories, out _appendSubDirectories) && _appendSubDirectories)
                 AppendSubDirectories = true;
 
@@ -24,7 +24,7 @@ namespace Script.Control.Handlers
 
         public override void Execute()
         {
-            foreach (SystemObjectMatch match in ((FindBase)Parent).Matches)
+            foreach (var match in ((FindBase)Parent).Matches)
             {
                 string subPathAndSysObjName;
                 //если не будет выполняться процесс удаления, то при других операциях нужно учитывать подпапки в результате, если они свойством AppendSubDirectories должны учитываться
@@ -33,7 +33,7 @@ namespace Script.Control.Handlers
                 else
                     subPathAndSysObjName = match.Name;
 
-                SystemObjectMatch newSysObj = new SystemObjectMatch(this, subPathAndSysObjName, match.SysObjType);
+                var newSysObj = new SystemObjectMatch(this, subPathAndSysObjName, match.SysObjType);
 
                 if (ProcessingWithDirectoryOrFile(match, newSysObj))
                 {

@@ -45,16 +45,16 @@ namespace Script.Control.Handlers.Timesheet.WriteData
 
         void ExportWordDocFile(Statistic stats)
         {
-            WriteWordData wd = new WriteWordData(WriteDataPath);
+            var wd = new WriteWordData(WriteDataPath);
             wd.AddDocHeader(stats.Name, stats.GetStat());
-            foreach (Statistic statByGroup in stats.ChildItems)
+            foreach (var statByGroup in stats.ChildItems)
             {
                 var sortedCollection = statByGroup.ChildItems.OrderBy(x => x.TotalTimeByAnyDay, new SemiNumericComparer()).ToList();
 
                 wd.AddTableHeader(statByGroup.Name, 2);
                 wd.AddColumnsName("Проекты", "Задачи");
 
-                foreach (Statistic statTfsPrj in sortedCollection)
+                foreach (var statTfsPrj in sortedCollection)
                 {
                     wd.AddCellsData(statTfsPrj.Name, statTfsPrj.PM, statTfsPrj.PM_Mail, statTfsPrj.GetStat(), string.Join(Environment.NewLine, statTfsPrj.ChildItems.Select(x => x.GetStat())));
                 }
@@ -66,26 +66,26 @@ namespace Script.Control.Handlers.Timesheet.WriteData
         }
         void ExportTxtFile(Statistic stats)
         {
-            WriteStringData wd = new WriteStringData(WriteDataPath);
+            var wd = new WriteStringData(WriteDataPath);
             wd.AddDocHeader(new[] { stats.GetStat() });
-            foreach (Statistic statByGroup in stats.ChildItems)
+            foreach (var statByGroup in stats.ChildItems)
             {
                 //.ThenBy(x => string.Join("_", stats.collection[0].ProjectName.Split('_').Skip(1).ToArray()))
                 var sortedCollection = statByGroup.ChildItems.OrderBy(x => x.TotalTimeByAnyDay, new SemiNumericComparer()).ToList();
-                int maxLengthColumn1 = sortedCollection.Max(x => x.Name.Length);
-                int maxLengthColumn2 = sortedCollection.Max(x => x.ChildItems.Max(p => p.GetStat().Length));
+                var maxLengthColumn1 = sortedCollection.Max(x => x.Name.Length);
+                var maxLengthColumn2 = sortedCollection.Max(x => x.ChildItems.Max(p => p.GetStat().Length));
 
                 wd.AddTableHeader(statByGroup.Name, maxLengthColumn1 + maxLengthColumn2 + 2);
                 wd.AddColumnsName(new[] { "Проекты", "Задачи" }, new[] { maxLengthColumn1, maxLengthColumn2 });
 
-                foreach (Statistic statTfsPrj in sortedCollection)
+                foreach (var statTfsPrj in sortedCollection)
                 {
-                    string cell_second = wd.GetRows(new[]
+                    var cell_second = wd.GetRows(new[]
                     {
                         statTfsPrj.GetStat(),
                         string.Join(Environment.NewLine, statTfsPrj.ChildItems.Select(x => x.GetStat()))
                     }, maxLengthColumn2);
-                    string getRow = wd.GetColumns(new[] { statTfsPrj.Name, cell_second }, new[] { maxLengthColumn1, maxLengthColumn2 });
+                    var getRow = wd.GetColumns(new[] { statTfsPrj.Name, cell_second }, new[] { maxLengthColumn1, maxLengthColumn2 });
 
                     wd.WriteLines(new[] { getRow });
 
