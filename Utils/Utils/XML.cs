@@ -146,7 +146,7 @@ namespace Utils
 
         public static string NormalizeXmlValueFast(string xmlStingValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
-            var builder = new StringBuilder();
+            var builder = new StringBuilder(xmlStingValue.Length + 100);
 
             switch (type)
             {
@@ -907,7 +907,7 @@ namespace Utils
 
         public static string PrintXml(this XmlDocument xml)
         {
-            var source = new StringBuilder();
+            var source = new StringBuilder(xml.OuterXml.Length + 100);
             ProcessXmlInnerText(xml.DocumentElement, source, 0);
             return source.ToString();
         }
@@ -1023,7 +1023,7 @@ namespace Utils
         /// <returns></returns>
         public static XmlNodeResult GetPositionByXmlNode(string sourceXmlText, XmlDocument xmlDocument, XmlNode find)
         {
-            var formattedXML = new StringBuilder();
+            var formattedXML = new StringBuilder(xmlDocument.OuterXml.Length + 100);
             var targetText = string.Empty;
             var type = XMlType.Unknown;
 
@@ -1135,9 +1135,6 @@ namespace Utils
         /// </summary>
         static XmlNodeResult GetPositionInSourceText(string innerText, string targetText, XMlType type, string sourceText)
         {
-            //StringBuilder xmlTextBld = new StringBuilder();
-            //StringBuilder sourceTextBld = new StringBuilder();
-
             var indexStartEscapeWhiteSpace = -1;
             var indexEndEscapeWhiteSpace = -1;
 
@@ -1155,7 +1152,6 @@ namespace Utils
                     continue;
 
                 j++;
-                //xmlTextBld.Append(ch);
             }
 
 

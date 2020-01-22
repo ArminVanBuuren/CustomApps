@@ -103,7 +103,7 @@ namespace Utils.XmlRtfStyle
         static string GetRtfString(string source, RtfFromXml settings)
         {
             var rtf = new RtfBuilder();
-            var temp = new StringBuilder();
+            var temp = new StringBuilder(50);
             rtf.SetFont(settings.FontName, settings.FontSize);
 
             var state = 0;
