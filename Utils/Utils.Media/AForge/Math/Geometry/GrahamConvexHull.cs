@@ -60,17 +60,17 @@ namespace AForge.AMath.Geometry
                 return new List<IntPoint>( points );
             }
 
-            List<PointToProcess> pointsToProcess = new List<PointToProcess>( );
+            var pointsToProcess = new List<PointToProcess>( );
 
             // convert input points to points we can process
-            foreach ( IntPoint point in points )
+            foreach ( var point in points )
             {
                 pointsToProcess.Add( new PointToProcess( point ) );
             }
 
             // find a point, with lowest X and lowest Y
-            int firstCornerIndex = 0;
-            PointToProcess firstCorner = pointsToProcess[0];
+            var firstCornerIndex = 0;
+            var firstCorner = pointsToProcess[0];
 
             for ( int i = 1, n = pointsToProcess.Count; i < n; i++ )
             {
@@ -88,8 +88,8 @@ namespace AForge.AMath.Geometry
             // find K (tangent of line's angle) and distance to the first corner
             for ( int i = 0, n = pointsToProcess.Count; i < n; i++ )
             {
-                int dx = pointsToProcess[i].X - firstCorner.X;
-                int dy = pointsToProcess[i].Y - firstCorner.Y;
+                var dx = pointsToProcess[i].X - firstCorner.X;
+                var dy = pointsToProcess[i].Y - firstCorner.Y;
 
                 // don't need square root, since it is not important in our case
                 pointsToProcess[i].Distance = dx * dx + dy * dy;
@@ -100,7 +100,7 @@ namespace AForge.AMath.Geometry
             // sort points by angle and distance
             pointsToProcess.Sort( );
 
-            List<PointToProcess> convexHullTemp = new List<PointToProcess>( );
+            var convexHullTemp = new List<PointToProcess>( );
 
             // add first corner, which is always on the hull
             convexHullTemp.Add( firstCorner );
@@ -108,12 +108,12 @@ namespace AForge.AMath.Geometry
             convexHullTemp.Add( pointsToProcess[0] );
             pointsToProcess.RemoveAt( 0 );
 
-            PointToProcess lastPoint = convexHullTemp[1];
-            PointToProcess prevPoint = convexHullTemp[0];
+            var lastPoint = convexHullTemp[1];
+            var prevPoint = convexHullTemp[0];
 
             while ( pointsToProcess.Count != 0 )
             {
-                PointToProcess newPoint = pointsToProcess[0];
+                var newPoint = pointsToProcess[0];
 
                 // skip any point, which has the same slope as the last one or
                 // has 0 distance to the first point
@@ -145,9 +145,9 @@ namespace AForge.AMath.Geometry
             }
 
             // convert points back
-            List<IntPoint> convexHull = new List<IntPoint>( );
+            var convexHull = new List<IntPoint>( );
 
-            foreach ( PointToProcess pt in convexHullTemp )
+            foreach ( var pt in convexHullTemp )
             {
                 convexHull.Add( pt.ToPoint( ) );
             }
@@ -174,7 +174,7 @@ namespace AForge.AMath.Geometry
 
             public int CompareTo( object obj )
             {
-                PointToProcess another = (PointToProcess) obj;
+                var another = (PointToProcess) obj;
 
                 return ( K < another.K ) ? -1 : ( K > another.K ) ? 1 :
                     ( ( Distance > another.Distance ) ? -1 : ( Distance < another.Distance ) ? 1 : 0 );

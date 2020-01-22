@@ -119,10 +119,10 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, UnmanagedImage overlay )
         {
-            PixelFormat pixelFormat = image.PixelFormat;
+            var pixelFormat = image.PixelFormat;
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
             // pixel value
             int v;
 
@@ -133,21 +133,21 @@ namespace AForge.Imaging.Filters
                 ( pixelFormat == PixelFormat.Format32bppArgb ) )
             {
                 // initialize other variables
-                int pixelSize = ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 :
+                var pixelSize = ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 :
                     ( pixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
-                int lineSize  = width * pixelSize;
-                int srcOffset = image.Stride - lineSize;
-                int ovrOffset = overlay.Stride - lineSize;
+                var lineSize  = width * pixelSize;
+                var srcOffset = image.Stride - lineSize;
+                var ovrOffset = overlay.Stride - lineSize;
 
                 // do the job
-                byte * ptr = (byte*) image.ImageData.ToPointer( );
-                byte * ovr = (byte*) overlay.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
+                var ovr = (byte*) overlay.ImageData.ToPointer( );
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < lineSize; x++, ptr++, ovr++ )
+                    for ( var x = 0; x < lineSize; x++, ptr++, ovr++ )
                     {
                         // abs(sub)
                         v = (int) *ptr - (int) *ovr;
@@ -160,24 +160,24 @@ namespace AForge.Imaging.Filters
             else
             {
                 // initialize other variables
-                int pixelSize = ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 :
+                var pixelSize = ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 :
                     ( pixelFormat == PixelFormat.Format48bppRgb ) ? 3 : 4;
-                int lineSize  = width * pixelSize;
-                int srcStride = image.Stride;
-                int ovrStride = overlay.Stride;
+                var lineSize  = width * pixelSize;
+                var srcStride = image.Stride;
+                var ovrStride = overlay.Stride;
 
                 // do the job
-                byte* basePtr = (byte*) image.ImageData.ToPointer( );
-                byte* baseOvr = (byte*) overlay.ImageData.ToPointer( );
+                var basePtr = (byte*) image.ImageData.ToPointer( );
+                var baseOvr = (byte*) overlay.ImageData.ToPointer( );
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    ushort * ptr = (ushort*) ( basePtr + y * srcStride );
-                    ushort * ovr = (ushort*) ( baseOvr + y * ovrStride );
+                    var ptr = (ushort*) ( basePtr + y * srcStride );
+                    var ovr = (ushort*) ( baseOvr + y * ovrStride );
 
                     // for each pixel
-                    for ( int x = 0; x < lineSize; x++, ptr++, ovr++ )
+                    for ( var x = 0; x < lineSize; x++, ptr++, ovr++ )
                     {
                         // abs(sub)
                         v = (int) *ptr - (int) *ovr;

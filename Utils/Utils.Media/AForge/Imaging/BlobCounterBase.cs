@@ -361,7 +361,7 @@ namespace AForge.Imaging
         public void ProcessImage( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -420,21 +420,21 @@ namespace AForge.Imaging
             if ( filterBlobs )
             {
                 // labels remapping array
-                int[] labelsMap = new int[objectsCount + 1];
-                for ( int i = 1; i <= objectsCount; i++ )
+                var labelsMap = new int[objectsCount + 1];
+                for ( var i = 1; i <= objectsCount; i++ )
                 {
                     labelsMap[i] = i;
                 }
 
                 // check dimension of all objects and filter them
-                int objectsToRemove = 0;
+                var objectsToRemove = 0;
 
                 if ( filter == null )
                 {
-                    for ( int i = objectsCount - 1; i >= 0; i-- )
+                    for ( var i = objectsCount - 1; i >= 0; i-- )
                     {
-                        int blobWidth  = blobs[i].Rectangle.Width;
-                        int blobHeight = blobs[i].Rectangle.Height;
+                        var blobWidth  = blobs[i].Rectangle.Width;
+                        var blobHeight = blobs[i].Rectangle.Height;
 
                         if ( coupledSizeFiltering == false )
                         {
@@ -464,7 +464,7 @@ namespace AForge.Imaging
                 }
                 else
                 {
-                    for ( int i = objectsCount - 1; i >= 0; i-- )
+                    for ( var i = objectsCount - 1; i >= 0; i-- )
                     {
                         if ( !filter.Check( blobs[i] ) )
                         {
@@ -476,8 +476,8 @@ namespace AForge.Imaging
                 }
 
                 // update labels remapping array
-                int label = 0;
-                for ( int i = 1; i <= objectsCount; i++ )
+                var label = 0;
+                for ( var i = 1; i <= objectsCount; i++ )
                 {
                     if ( labelsMap[i] != 0 )
                     {
@@ -529,9 +529,9 @@ namespace AForge.Imaging
             if ( objectLabels == null )
                 throw new ApplicationException( "Image should be processed before to collect objects map." );
 
-            Rectangle[] rects = new Rectangle[objectsCount];
+            var rects = new Rectangle[objectsCount];
 
-            for ( int i = 0; i < objectsCount; i++ )
+            for ( var i = 0; i < objectsCount; i++ )
             {
                 rects[i] = blobs[i].Rectangle;
             }
@@ -581,10 +581,10 @@ namespace AForge.Imaging
             if ( objectLabels == null )
                 throw new ApplicationException( "Image should be processed before to collect objects map." );
 
-            Blob[] blobsToReturn = new Blob[objectsCount];
+            var blobsToReturn = new Blob[objectsCount];
 
             // create each blob
-            for ( int k = 0; k < objectsCount; k++ )
+            for ( var k = 0; k < objectsCount; k++ )
             {
                 blobsToReturn[k] = new Blob( blobs[k] );
             }
@@ -620,7 +620,7 @@ namespace AForge.Imaging
         {
             Blob[] blobs = null;
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -677,38 +677,38 @@ namespace AForge.Imaging
                 throw new UnsupportedImageFormatException( "Unsupported pixel format of the provided image." );
 
             // image size
-            int width  = image.Width;
-            int height = image.Height;
-            int srcStride = image.Stride;
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var width  = image.Width;
+            var height = image.Height;
+            var srcStride = image.Stride;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            Blob[] objects = new Blob[objectsCount];
+            var objects = new Blob[objectsCount];
 
             // create each image
-            for ( int k = 0; k < objectsCount; k++ )
+            for ( var k = 0; k < objectsCount; k++ )
             {
-                int objectWidth  = blobs[k].Rectangle.Width;
-                int objectHeight = blobs[k].Rectangle.Height;
+                var objectWidth  = blobs[k].Rectangle.Width;
+                var objectHeight = blobs[k].Rectangle.Height;
 
-                int blobImageWidth  = ( extractInOriginalSize ) ? width : objectWidth;
-                int blobImageHeight = ( extractInOriginalSize ) ? height : objectHeight;
+                var blobImageWidth  = ( extractInOriginalSize ) ? width : objectWidth;
+                var blobImageHeight = ( extractInOriginalSize ) ? height : objectHeight;
 
-                int xmin = blobs[k].Rectangle.X;
-                int xmax = xmin + objectWidth - 1;
-                int ymin = blobs[k].Rectangle.Y;
-                int ymax = ymin + objectHeight - 1;
+                var xmin = blobs[k].Rectangle.X;
+                var xmax = xmin + objectWidth - 1;
+                var ymin = blobs[k].Rectangle.Y;
+                var ymax = ymin + objectHeight - 1;
 
-                int label = blobs[k].ID;
+                var label = blobs[k].ID;
 
                 // create new image
-                UnmanagedImage dstImage = UnmanagedImage.Create( blobImageWidth, blobImageHeight, image.PixelFormat );
+                var dstImage = UnmanagedImage.Create( blobImageWidth, blobImageHeight, image.PixelFormat );
 
                 // copy image
                 unsafe
                 {
-                    byte* src = (byte*) image.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
-                    byte* dst = (byte*) dstImage.ImageData.ToPointer( );
-                    int p = ymin * width + xmin;
+                    var src = (byte*) image.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
+                    var dst = (byte*) dstImage.ImageData.ToPointer( );
+                    var p = ymin * width + xmin;
 
                     if ( extractInOriginalSize )
                     {
@@ -716,15 +716,15 @@ namespace AForge.Imaging
                         dst += ymin * dstImage.Stride + xmin * pixelSize;
                     }
 
-                    int srcOffset = srcStride - objectWidth * pixelSize;
-                    int dstOffset = dstImage.Stride - objectWidth * pixelSize;
-                    int labelsOffset = width - objectWidth;
+                    var srcOffset = srcStride - objectWidth * pixelSize;
+                    var dstOffset = dstImage.Stride - objectWidth * pixelSize;
+                    var labelsOffset = width - objectWidth;
 
                     // for each line
-                    for ( int y = ymin; y <= ymax; y++ )
+                    for ( var y = ymin; y <= ymax; y++ )
                     {
                         // copy each pixel
-                        for ( int x = xmin; x <= xmax; x++, p++, dst += pixelSize, src += pixelSize )
+                        for ( var x = xmin; x <= xmax; x++, p++, dst += pixelSize, src += pixelSize )
                         {
                             if ( objectLabels[p] == label )
                             {
@@ -784,7 +784,7 @@ namespace AForge.Imaging
         public void ExtractBlobsImage( Bitmap image, Blob blob, bool extractInOriginalSize )
         {
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -841,23 +841,23 @@ namespace AForge.Imaging
                 throw new UnsupportedImageFormatException( "Unsupported pixel format of the provided image." );
 
             // image size
-            int width  = image.Width;
-            int height = image.Height;
-            int srcStride = image.Stride;
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var width  = image.Width;
+            var height = image.Height;
+            var srcStride = image.Stride;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int objectWidth  = blob.Rectangle.Width;
-            int objectHeight = blob.Rectangle.Height;
+            var objectWidth  = blob.Rectangle.Width;
+            var objectHeight = blob.Rectangle.Height;
 
-            int blobImageWidth  = ( extractInOriginalSize ) ? width : objectWidth;
-            int blobImageHeight = ( extractInOriginalSize ) ? height : objectHeight;
+            var blobImageWidth  = ( extractInOriginalSize ) ? width : objectWidth;
+            var blobImageHeight = ( extractInOriginalSize ) ? height : objectHeight;
 
-            int xmin = blob.Rectangle.Left;
-            int xmax = xmin + objectWidth - 1;
-            int ymin = blob.Rectangle.Top;
-            int ymax = ymin + objectHeight - 1;
+            var xmin = blob.Rectangle.Left;
+            var xmax = xmin + objectWidth - 1;
+            var ymin = blob.Rectangle.Top;
+            var ymax = ymin + objectHeight - 1;
 
-            int label = blob.ID;
+            var label = blob.ID;
 
             // create new image
             blob.Image = UnmanagedImage.Create( blobImageWidth, blobImageHeight, image.PixelFormat );
@@ -866,9 +866,9 @@ namespace AForge.Imaging
             // copy image
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
-                byte* dst = (byte*) blob.Image.ImageData.ToPointer( );
-                int p = ymin * width + xmin;
+                var src = (byte*) image.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
+                var dst = (byte*) blob.Image.ImageData.ToPointer( );
+                var p = ymin * width + xmin;
 
                 if ( extractInOriginalSize )
                 {
@@ -876,15 +876,15 @@ namespace AForge.Imaging
                     dst += ymin * blob.Image.Stride + xmin * pixelSize;
                 }
 
-                int srcOffset = srcStride - objectWidth * pixelSize;
-                int dstOffset = blob.Image.Stride - objectWidth * pixelSize;
-                int labelsOffset = width - objectWidth;
+                var srcOffset = srcStride - objectWidth * pixelSize;
+                var dstOffset = blob.Image.Stride - objectWidth * pixelSize;
+                var labelsOffset = width - objectWidth;
 
                 // for each line
-                for ( int y = ymin; y <= ymax; y++ )
+                for ( var y = ymin; y <= ymax; y++ )
                 {
                     // copy each pixel
-                    for ( int x = xmin; x <= xmax; x++, p++, dst += pixelSize, src += pixelSize )
+                    for ( var x = xmin; x <= xmax; x++, p++, dst += pixelSize, src += pixelSize )
                     {
                         if ( objectLabels[p] == label )
                         {
@@ -939,19 +939,19 @@ namespace AForge.Imaging
             leftEdge  = new List<IntPoint>( );
             rightEdge = new List<IntPoint>( );
 
-            int xmin = blob.Rectangle.Left;
-            int xmax = xmin + blob.Rectangle.Width - 1;
-            int ymin = blob.Rectangle.Top;
-            int ymax = ymin + blob.Rectangle.Height - 1;
+            var xmin = blob.Rectangle.Left;
+            var xmax = xmin + blob.Rectangle.Width - 1;
+            var ymin = blob.Rectangle.Top;
+            var ymax = ymin + blob.Rectangle.Height - 1;
 
-            int label = blob.ID;
+            var label = blob.ID;
             
             // for each line
-            for ( int y = ymin; y <= ymax; y++ )
+            for ( var y = ymin; y <= ymax; y++ )
             {
                 // scan from left to right
-                int p = y * imageWidth + xmin;
-                for ( int x = xmin; x <= xmax; x++, p++ )
+                var p = y * imageWidth + xmin;
+                for ( var x = xmin; x <= xmax; x++, p++ )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -962,7 +962,7 @@ namespace AForge.Imaging
 
                 // scan from right to left
                 p = y * imageWidth + xmax;
-                for ( int x = xmax; x >= xmin; x--, p-- )
+                for ( var x = xmax; x >= xmin; x--, p-- )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -1002,19 +1002,19 @@ namespace AForge.Imaging
             topEdge    = new List<IntPoint>( );
             bottomEdge = new List<IntPoint>( );
 
-            int xmin = blob.Rectangle.Left;
-            int xmax = xmin + blob.Rectangle.Width - 1;
-            int ymin = blob.Rectangle.Top;
-            int ymax = ymin + blob.Rectangle.Height - 1;
+            var xmin = blob.Rectangle.Left;
+            var xmax = xmin + blob.Rectangle.Width - 1;
+            var ymin = blob.Rectangle.Top;
+            var ymax = ymin + blob.Rectangle.Height - 1;
 
-            int label = blob.ID;
+            var label = blob.ID;
 
             // for each column
-            for ( int x = xmin; x <= xmax; x++ )
+            for ( var x = xmin; x <= xmax; x++ )
             {
                 // scan from top to bottom
-                int p = ymin * imageWidth + x;
-                for ( int y = ymin; y <= ymax; y++, p += imageWidth )
+                var p = ymin * imageWidth + x;
+                for ( var y = ymin; y <= ymax; y++, p += imageWidth )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -1025,7 +1025,7 @@ namespace AForge.Imaging
 
                 // scan from bottom to top
                 p = ymax * imageWidth + x;
-                for ( int y = ymax; y >= ymin; y--, p -= imageWidth )
+                for ( var y = ymax; y >= ymin; y--, p -= imageWidth )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -1063,26 +1063,26 @@ namespace AForge.Imaging
             if ( objectLabels == null )
                 throw new ApplicationException( "Image should be processed before to collect objects map." );
 
-            List<IntPoint> edgePoints = new List<IntPoint>( );
+            var edgePoints = new List<IntPoint>( );
 
-            int xmin = blob.Rectangle.Left;
-            int xmax = xmin + blob.Rectangle.Width - 1;
-            int ymin = blob.Rectangle.Top;
-            int ymax = ymin + blob.Rectangle.Height - 1;
+            var xmin = blob.Rectangle.Left;
+            var xmax = xmin + blob.Rectangle.Width - 1;
+            var ymin = blob.Rectangle.Top;
+            var ymax = ymin + blob.Rectangle.Height - 1;
 
-            int label = blob.ID;
+            var label = blob.ID;
 
             // array of already processed points on left/right edges
             // (index in these arrays represent Y coordinate, but value - X coordinate)
-            int[] leftProcessedPoints  = new int[blob.Rectangle.Height];
-            int[] rightProcessedPoints = new int[blob.Rectangle.Height];
+            var leftProcessedPoints  = new int[blob.Rectangle.Height];
+            var rightProcessedPoints = new int[blob.Rectangle.Height];
 
             // for each line
-            for ( int y = ymin; y <= ymax; y++ )
+            for ( var y = ymin; y <= ymax; y++ )
             {
                 // scan from left to right
-                int p = y * imageWidth + xmin;
-                for ( int x = xmin; x <= xmax; x++, p++ )
+                var p = y * imageWidth + xmin;
+                for ( var x = xmin; x <= xmax; x++, p++ )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -1094,7 +1094,7 @@ namespace AForge.Imaging
 
                 // scan from right to left
                 p = y * imageWidth + xmax;
-                for ( int x = xmax; x >= xmin; x--, p-- )
+                for ( var x = xmax; x >= xmin; x--, p-- )
                 {
                     if ( objectLabels[p] == label )
                     {
@@ -1110,10 +1110,10 @@ namespace AForge.Imaging
             }
 
             // for each column
-            for ( int x = xmin; x <= xmax; x++ )
+            for ( var x = xmin; x <= xmax; x++ )
             {
                 // scan from top to bottom
-                int p = ymin * imageWidth + x;
+                var p = ymin * imageWidth + x;
                 for ( int y = ymin, y0 = 0; y <= ymax; y++, y0++, p += imageWidth )
                 {
                     if ( objectLabels[p] == label )
@@ -1170,40 +1170,40 @@ namespace AForge.Imaging
             int i = 0, label;
 
             // create object coordinates arrays
-            int[] x1 = new int[objectsCount + 1];
-            int[] y1 = new int[objectsCount + 1];
-            int[] x2 = new int[objectsCount + 1];
-            int[] y2 = new int[objectsCount + 1];
+            var x1 = new int[objectsCount + 1];
+            var y1 = new int[objectsCount + 1];
+            var x2 = new int[objectsCount + 1];
+            var y2 = new int[objectsCount + 1];
 
-            int[] area = new int[objectsCount + 1];
-            long[] xc = new long[objectsCount + 1];
-            long[] yc = new long[objectsCount + 1];
+            var area = new int[objectsCount + 1];
+            var xc = new long[objectsCount + 1];
+            var yc = new long[objectsCount + 1];
 
-            long[] meanR = new long[objectsCount + 1];
-            long[] meanG = new long[objectsCount + 1];
-            long[] meanB = new long[objectsCount + 1];
+            var meanR = new long[objectsCount + 1];
+            var meanG = new long[objectsCount + 1];
+            var meanB = new long[objectsCount + 1];
 
-            long[] stdDevR = new long[objectsCount + 1];
-            long[] stdDevG = new long[objectsCount + 1];
-            long[] stdDevB = new long[objectsCount + 1];
+            var stdDevR = new long[objectsCount + 1];
+            var stdDevG = new long[objectsCount + 1];
+            var stdDevB = new long[objectsCount + 1];
 
-            for ( int j = 1; j <= objectsCount; j++ )
+            for ( var j = 1; j <= objectsCount; j++ )
             {
                 x1[j] = imageWidth;
                 y1[j] = imageHeight;
             }
 
-            byte* src = (byte*) image.ImageData.ToPointer( );
+            var src = (byte*) image.ImageData.ToPointer( );
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
-                int offset = image.Stride - imageWidth;
+                var offset = image.Stride - imageWidth;
                 byte g; // pixel's grey value
 
                 // walk through labels array
-                for ( int y = 0; y < imageHeight; y++ )
+                for ( var y = 0; y < imageHeight; y++ )
                 {
-                    for ( int x = 0; x < imageWidth; x++, i++, src++ )
+                    for ( var x = 0; x < imageWidth; x++, i++, src++ )
                     {
                         // get current label
                         label = objectLabels[i];
@@ -1243,7 +1243,7 @@ namespace AForge.Imaging
                     src += offset;
                 }
 
-                for ( int j = 1; j <= objectsCount; j++ )
+                for ( var j = 1; j <= objectsCount; j++ )
                 {
                     meanR[j] = meanB[j] = meanG[j];
                     stdDevR[j] = stdDevB[j] = stdDevG[j];
@@ -1252,14 +1252,14 @@ namespace AForge.Imaging
             else
             {
                 // color images
-                int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
-                int offset = image.Stride - imageWidth * pixelSize;
+                var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+                var offset = image.Stride - imageWidth * pixelSize;
                 byte r, g, b; // RGB value
 
                 // walk through labels array
-                for ( int y = 0; y < imageHeight; y++ )
+                for ( var y = 0; y < imageHeight; y++ )
                 {
-                    for ( int x = 0; x < imageWidth; x++, i++, src += pixelSize )
+                    for ( var x = 0; x < imageWidth; x++, i++, src += pixelSize )
                     {
                         // get current label
                         label = objectLabels[i];
@@ -1311,11 +1311,11 @@ namespace AForge.Imaging
             // create blobs
             blobs.Clear( );
 
-            for ( int j = 1; j <= objectsCount; j++ )
+            for ( var j = 1; j <= objectsCount; j++ )
             {
-                int blobArea = area[j];
+                var blobArea = area[j];
 
-                Blob blob = new Blob( j, new Rectangle( x1[j], y1[j], x2[j] - x1[j] + 1, y2[j] - y1[j] + 1 ) );
+                var blob = new Blob( j, new Rectangle( x1[j], y1[j], x2[j] - x1[j] + 1, y2[j] - y1[j] + 1 ) );
                 blob.Area = blobArea;
                 blob.Fullness = (double) blobArea / ( ( x2[j] - x1[j] + 1 ) * ( y2[j] - y1[j] + 1 ) );
                 blob.CenterOfGravity = new AForge.Point( (float) xc[j] / blobArea, (float) yc[j] / blobArea );
@@ -1341,8 +1341,8 @@ namespace AForge.Imaging
 
             public int Compare( Blob a, Blob b )
             {
-                Rectangle aRect = a.Rectangle;
-                Rectangle bRect = b.Rectangle;
+                var aRect = a.Rectangle;
+                var bRect = b.Rectangle;
 
                 switch ( order )
                 {

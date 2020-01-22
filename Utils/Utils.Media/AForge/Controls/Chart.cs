@@ -171,9 +171,9 @@ namespace AForge.Controls
         // Paint the control.
         private void Chart_Paint( object sender, PaintEventArgs e )
         {
-            Graphics    g = e.Graphics;
-            int			clientWidth = ClientRectangle.Width;
-            int			clientHeight = ClientRectangle.Height;
+            var    g = e.Graphics;
+            var			clientWidth = ClientRectangle.Width;
+            var			clientHeight = ClientRectangle.Height;
 
             // fill with white background
             Brush backgroundBrush = new SolidBrush( BackColor );
@@ -189,15 +189,15 @@ namespace AForge.Controls
             // check if there are any data series
             if ( rangeX.Length != 0 )
             {
-                double xFactor = (double) ( clientWidth - 10 ) / ( rangeX.Length );
-                double yFactor = (double) ( clientHeight - 10 ) / ( ( rangeY.Length != 0 ) ? rangeY.Length : 1 );
+                var xFactor = (double) ( clientWidth - 10 ) / ( rangeX.Length );
+                var yFactor = (double) ( clientHeight - 10 ) / ( ( rangeY.Length != 0 ) ? rangeY.Length : 1 );
 
                 // walk through all data series
-                foreach ( KeyValuePair<string, DataSeries> kvp in seriesTable )
+                foreach ( var kvp in seriesTable )
                 {
-                    DataSeries series = kvp.Value;
+                    var series = kvp.Value;
                     // get data of the series
-                    double[,] data = series.data;
+                    var data = series.data;
 
                     // check for available data
                     if ( data == null )
@@ -208,14 +208,14 @@ namespace AForge.Controls
                     {
                         // draw dots
                         Brush	brush = new SolidBrush( series.color );
-                        int		width = series.width;
-                        int		r = width >> 1;
+                        var		width = series.width;
+                        var		r = width >> 1;
 
                         // draw all points
                         for ( int i = 0, n = data.GetLength( 0 ); i < n; i++ )
                         {
-                            int x = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
-                            int y = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
+                            var x = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
+                            var y = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
 
                             x += 5;
                             y = clientHeight - 6 - y;
@@ -228,12 +228,12 @@ namespace AForge.Controls
                     {
                         // draw dots connected with 1-pixel width line
                         Brush	brush = new SolidBrush( series.color );
-                        Pen		pen = new Pen( series.color, 1 );
-                        int		width = series.width;
-                        int		r = width >> 1;
+                        var		pen = new Pen( series.color, 1 );
+                        var		width = series.width;
+                        var		r = width >> 1;
 
-                        int x1 = (int) ( ( data[0, 0] - rangeX.Min ) * xFactor );
-                        int y1 = (int) ( ( data[0, 1] - rangeY.Min ) * yFactor );
+                        var x1 = (int) ( ( data[0, 0] - rangeX.Min ) * xFactor );
+                        var y1 = (int) ( ( data[0, 1] - rangeY.Min ) * yFactor );
 
                         x1 += 5;
                         y1 = clientHeight - 6 - y1;
@@ -242,8 +242,8 @@ namespace AForge.Controls
                         // draw all lines
                         for ( int i = 1, n = data.GetLength( 0 ); i < n; i++ )
                         {
-                            int x2 = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
-                            int y2 = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
+                            var x2 = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
+                            var y2 = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
 
                             x2 += 5;
                             y2 = clientHeight - 6 - y2;
@@ -261,10 +261,10 @@ namespace AForge.Controls
                     else if ( series.type == SeriesType.Line )
                     {
                         // draw line
-                        Pen pen = new Pen( series.color, series.width );
+                        var pen = new Pen( series.color, series.width );
 
-                        int x1 = (int) ( ( data[0, 0] - rangeX.Min ) * xFactor );
-                        int y1 = (int) ( ( data[0, 1] - rangeY.Min ) * yFactor );
+                        var x1 = (int) ( ( data[0, 0] - rangeX.Min ) * xFactor );
+                        var y1 = (int) ( ( data[0, 1] - rangeY.Min ) * yFactor );
 
                         x1 += 5;
                         y1 = clientHeight - 6 - y1;
@@ -272,8 +272,8 @@ namespace AForge.Controls
                         // draw all lines
                         for ( int i = 1, n = data.GetLength( 0 ); i < n; i++ )
                         {
-                            int x2 = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
-                            int y2 = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
+                            var x2 = (int) ( ( data[i, 0] - rangeX.Min ) * xFactor );
+                            var y2 = (int) ( ( data[i, 1] - rangeY.Min ) * yFactor );
 
                             x2 += 5;
                             y2 = clientHeight - 6 - y2;
@@ -337,7 +337,7 @@ namespace AForge.Controls
         public void AddDataSeries( string name, Color color, SeriesType type, int width, bool updateYRange )
         {
             // create new series definition ...
-            DataSeries	series = new DataSeries( );
+            var	series = new DataSeries( );
             // ... add fill it
             series.color = color;
             series.type = type;
@@ -360,7 +360,7 @@ namespace AForge.Controls
                 throw new ArgumentException( "The chart does not contain data series with name: " + name );
 
             // get data series
-            DataSeries	series = seriesTable[name];
+            var	series = seriesTable[name];
             // update data
             series.data = ( data != null ) ? (double[,]) data.Clone( ) : null;
 
@@ -401,15 +401,15 @@ namespace AForge.Controls
         /// </summary>
         private void UpdateYRange( )
         {
-            float minY = float.MaxValue;
-            float maxY = float.MinValue;
+            var minY = float.MaxValue;
+            var maxY = float.MinValue;
 
             // walk through all data series
-            foreach ( KeyValuePair<string, DataSeries> kvp in seriesTable )
+            foreach ( var kvp in seriesTable )
             {
-                DataSeries series = kvp.Value;
+                var series = kvp.Value;
                 // get data of the series
-                double[,] data = series.data;
+                var data = series.data;
 
                 if ( ( series.updateYRange ) && ( data != null ) )
                 {
@@ -417,7 +417,7 @@ namespace AForge.Controls
                     {
                         if ( rangeX.IsInside( (float) data[i, 0] ) )
                         {
-                            float v = (float) data[i, 1];
+                            var v = (float) data[i, 1];
 
                             // check for max
                             if ( v > maxY )

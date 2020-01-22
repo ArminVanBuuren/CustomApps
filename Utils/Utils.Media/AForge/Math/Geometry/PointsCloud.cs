@@ -66,15 +66,15 @@ namespace AForge.AMath.Geometry
         /// 
         public static void GetBoundingRectangle( IEnumerable<IntPoint> cloud, out IntPoint minXY, out IntPoint maxXY )
         {
-            int minX = int.MaxValue;
-            int maxX = int.MinValue;
-            int minY = int.MaxValue;
-            int maxY = int.MinValue;
+            var minX = int.MaxValue;
+            var maxX = int.MinValue;
+            var minY = int.MaxValue;
+            var maxY = int.MinValue;
 
-            foreach ( IntPoint pt in cloud )
+            foreach ( var pt in cloud )
             {
-                int x = pt.X;
-                int y = pt.Y;
+                var x = pt.X;
+                var y = pt.Y;
 
                 // check X coordinate
                 if ( x < minX )
@@ -106,10 +106,10 @@ namespace AForge.AMath.Geometry
         /// 
         public static Point GetCenterOfGravity( IEnumerable<IntPoint> cloud )
         {
-            int numberOfPoints = 0;
+            var numberOfPoints = 0;
             float xSum = 0, ySum = 0;
 
-            foreach ( IntPoint pt in cloud )
+            foreach ( var pt in cloud )
             {
                 xSum += pt.X;
                 ySum += pt.Y;
@@ -133,16 +133,16 @@ namespace AForge.AMath.Geometry
         /// 
         public static IntPoint GetFurthestPoint( IEnumerable<IntPoint> cloud, IntPoint referencePoint )
         {
-            IntPoint furthestPoint = referencePoint;
+            var furthestPoint = referencePoint;
             float maxDistance = -1;
 
-            int rx = referencePoint.X;
-            int ry = referencePoint.Y;
+            var rx = referencePoint.X;
+            var ry = referencePoint.Y;
 
-            foreach ( IntPoint point in cloud )
+            foreach ( var point in cloud )
             {
-                int dx = rx - point.X;
-                int dy = ry - point.Y;
+                var dx = rx - point.X;
+                var dy = ry - point.Y;
                 // we are not calculating square root for finding "real" distance,
                 // since it is really not important for finding furthest point
                 float distance = dx * dx + dy * dy;
@@ -210,13 +210,13 @@ namespace AForge.AMath.Geometry
             if ( linePoint2.X != linePoint1.X )
             {
                 // line's equation y(x) = k * x + b
-                float k = (float) ( linePoint2.Y - linePoint1.Y ) / ( linePoint2.X - linePoint1.X );
-                float b = linePoint1.Y - k * linePoint1.X;
+                var k = (float) ( linePoint2.Y - linePoint1.Y ) / ( linePoint2.X - linePoint1.X );
+                var b = linePoint1.Y - k * linePoint1.X;
 
-                float div = (float) Math.Sqrt( k * k + 1 );
+                var div = (float) Math.Sqrt( k * k + 1 );
                 float distance = 0;
 
-                foreach ( IntPoint point in cloud )
+                foreach ( var point in cloud )
                 {
                     distance = ( k * point.X + b - point.Y ) / div;
 
@@ -234,10 +234,10 @@ namespace AForge.AMath.Geometry
             }
             else
             {
-                int lineX = linePoint1.X;
+                var lineX = linePoint1.X;
                 float distance = 0;
 
-                foreach ( IntPoint point in cloud )
+                foreach ( var point in cloud )
                 {
                     distance = lineX - point.X;
 
@@ -299,19 +299,19 @@ namespace AForge.AMath.Geometry
         ///
         public static IntPoint GetFurthestPointFromLine( IEnumerable<IntPoint> cloud, IntPoint linePoint1, IntPoint linePoint2, out float distance )
         {
-            IntPoint furthestPoint = linePoint1;
+            var furthestPoint = linePoint1;
             distance = 0;
 
             if ( linePoint2.X != linePoint1.X )
             {
                 // line's equation y(x) = k * x + b
-                float k = (float) ( linePoint2.Y - linePoint1.Y ) / ( linePoint2.X - linePoint1.X );
-                float b = linePoint1.Y - k * linePoint1.X;
+                var k = (float) ( linePoint2.Y - linePoint1.Y ) / ( linePoint2.X - linePoint1.X );
+                var b = linePoint1.Y - k * linePoint1.X;
 
-                float div = (float) Math.Sqrt( k * k + 1 );
+                var div = (float) Math.Sqrt( k * k + 1 );
                 float pointDistance = 0;
 
-                foreach ( IntPoint point in cloud )
+                foreach ( var point in cloud )
                 {
                     pointDistance = Math.Abs( ( k * point.X + b - point.Y ) / div );
 
@@ -324,10 +324,10 @@ namespace AForge.AMath.Geometry
             }
             else
             {
-                int lineX = linePoint1.X;
+                var lineX = linePoint1.X;
                 float pointDistance = 0;
 
-                foreach ( IntPoint point in cloud )
+                foreach ( var point in cloud )
                 {
                     distance = Math.Abs( lineX - point.X );
 
@@ -411,22 +411,22 @@ namespace AForge.AMath.Geometry
         public static List<IntPoint> FindQuadrilateralCorners( IEnumerable<IntPoint> cloud )
         {
             // quadrilateral's corners
-            List<IntPoint> corners = new List<IntPoint>( );
+            var corners = new List<IntPoint>( );
 
             // get bounding rectangle of the points list
             IntPoint minXY, maxXY;
             PointsCloud.GetBoundingRectangle( cloud, out minXY, out maxXY );
             // get cloud's size
-            IntPoint cloudSize = maxXY - minXY;
+            var cloudSize = maxXY - minXY;
             // calculate center point
-            IntPoint center = minXY + cloudSize / 2;
+            var center = minXY + cloudSize / 2;
             // acceptable deviation limit
-            float distortionLimit = quadrilateralRelativeDistortionLimit * ( cloudSize.X + cloudSize.Y ) / 2;
+            var distortionLimit = quadrilateralRelativeDistortionLimit * ( cloudSize.X + cloudSize.Y ) / 2;
 
             // get the furthest point from (0,0)
-            IntPoint point1 = PointsCloud.GetFurthestPoint( cloud, center );
+            var point1 = PointsCloud.GetFurthestPoint( cloud, center );
             // get the furthest point from the first point
-            IntPoint point2 = PointsCloud.GetFurthestPoint( cloud, point1 );
+            var point2 = PointsCloud.GetFurthestPoint( cloud, point1 );
 
             corners.Add( point1 );
             corners.Add( point2 );
@@ -474,13 +474,13 @@ namespace AForge.AMath.Geometry
                 // it seems that we deal with kind of trapezoid,
                 // where point 1 and 2 are on the same edge
 
-                IntPoint tempPoint = ( distance3 > distance4 ) ? point3 : point4;
+                var tempPoint = ( distance3 > distance4 ) ? point3 : point4;
 
                 // try to find 3rd point
                 PointsCloud.GetFurthestPointsFromLine( cloud, point1, tempPoint,
                     out point3, out distance3, out point4, out distance4 );
 
-                bool thirdPointIsFound = false;
+                var thirdPointIsFound = false;
 
                 if ( ( distance3 >= distortionLimit ) && ( distance4 >= distortionLimit ) )
                 {
@@ -547,7 +547,7 @@ namespace AForge.AMath.Geometry
                 if ( ( corners[i].X < corners[0].X ) ||
                      ( ( corners[i].X == corners[0].X ) && ( corners[i].Y < corners[0].Y ) ) )
                 {
-                    IntPoint temp = corners[i];
+                    var temp = corners[i];
                     corners[i] = corners[0];
                     corners[0] = temp;
                 }
@@ -555,48 +555,48 @@ namespace AForge.AMath.Geometry
 
 
             // sort other points in counter clockwise order
-            float k1 = ( corners[1].X != corners[0].X ) ?
+            var k1 = ( corners[1].X != corners[0].X ) ?
                 ( (float) ( corners[1].Y - corners[0].Y ) / ( corners[1].X - corners[0].X ) ) :
                 ( ( corners[1].Y > corners[0].Y ) ? float.PositiveInfinity : float.NegativeInfinity );
 
-            float k2 = ( corners[2].X != corners[0].X ) ?
+            var k2 = ( corners[2].X != corners[0].X ) ?
                 ( (float) ( corners[2].Y - corners[0].Y ) / ( corners[2].X - corners[0].X ) ) :
                 ( ( corners[2].Y > corners[0].Y ) ? float.PositiveInfinity : float.NegativeInfinity );
 
             if ( k2 < k1 )
             {
-                IntPoint temp = corners[1];
+                var temp = corners[1];
                 corners[1] = corners[2];
                 corners[2] = temp;
 
-                float tk = k1;
+                var tk = k1;
                 k1 = k2;
                 k2 = tk;
             }
 
             if ( corners.Count == 4 )
             {
-                float k3 = ( corners[3].X != corners[0].X ) ?
+                var k3 = ( corners[3].X != corners[0].X ) ?
                     ( (float) ( corners[3].Y - corners[0].Y ) / ( corners[3].X - corners[0].X ) ) :
                     ( ( corners[3].Y > corners[0].Y ) ? float.PositiveInfinity : float.NegativeInfinity );
 
                 if ( k3 < k1 )
                 {
-                    IntPoint temp = corners[1];
+                    var temp = corners[1];
                     corners[1] = corners[3];
                     corners[3] = temp;
 
-                    float tk = k1;
+                    var tk = k1;
                     k1 = k3;
                     k3 = tk;
                 }
                 if ( k3 < k2 )
                 {
-                    IntPoint temp = corners[2];
+                    var temp = corners[2];
                     corners[2] = corners[3];
                     corners[3] = temp;
 
-                    float tk = k2;
+                    var tk = k2;
                     k2 = k3;
                     k3 = tk;
                 }

@@ -43,16 +43,16 @@ namespace TLSharp.Core.Network
             var packetLengthBytes = new byte[4];
             if (await stream.ReadAsync(packetLengthBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
-            int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
+            var packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
             var seqBytes = new byte[4];
             if (await stream.ReadAsync(seqBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the sequence");
-            int seq = BitConverter.ToInt32(seqBytes, 0);
+            var seq = BitConverter.ToInt32(seqBytes, 0);
 
-            int readBytes = 0;
+            var readBytes = 0;
             var body = new byte[packetLength - 12];
-            int neededToRead = packetLength - 12;
+            var neededToRead = packetLength - 12;
 
             do
             {
@@ -67,9 +67,9 @@ namespace TLSharp.Core.Network
             var crcBytes = new byte[4];
             if (await stream.ReadAsync(crcBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the crc");
-            int checksum = BitConverter.ToInt32(crcBytes, 0);
+            var checksum = BitConverter.ToInt32(crcBytes, 0);
 
-            byte[] rv = new byte[packetLengthBytes.Length + seqBytes.Length + body.Length];
+            var rv = new byte[packetLengthBytes.Length + seqBytes.Length + body.Length];
 
             Buffer.BlockCopy(packetLengthBytes, 0, rv, 0, packetLengthBytes.Length);
             Buffer.BlockCopy(seqBytes, 0, rv, packetLengthBytes.Length, seqBytes.Length);

@@ -95,7 +95,7 @@ namespace AForge.Imaging.Filters
             get { return kernel; }
             set
             {
-                int s = value.GetLength( 0 );
+                var s = value.GetLength( 0 );
 
                 // check kernel size
                 if ( ( s != value.GetLength( 1 ) ) || ( s < 3 ) || ( s > 99 ) || ( s % 2 == 0 ) )
@@ -259,25 +259,25 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
             // check pixel size to find if we deal with 8 or 16 bpp channels
             if ( ( pixelSize <= 4 ) && ( pixelSize != 2 ) )
             {
-                int srcStride = source.Stride;
-                int dstStride = destination.Stride;
+                var srcStride = source.Stride;
+                var dstStride = destination.Stride;
 
-                int srcOffset = srcStride - rect.Width * pixelSize;
-                int dstOffset = dstStride - rect.Width * pixelSize;
+                var srcOffset = srcStride - rect.Width * pixelSize;
+                var dstOffset = dstStride - rect.Width * pixelSize;
 
-                byte* src = (byte*) source.ImageData.ToPointer( );
-                byte* dst = (byte*) destination.ImageData.ToPointer( );
+                var src = (byte*) source.ImageData.ToPointer( );
+                var dst = (byte*) destination.ImageData.ToPointer( );
 
                 // allign pointers to the first pixel to process
                 src += ( startY * srcStride + startX * pixelSize );
@@ -306,12 +306,12 @@ namespace AForge.Imaging.Filters
             {
                 pixelSize /= 2;
 
-                int dstStride = destination.Stride / 2;
-                int srcStride = source.Stride / 2;
+                var dstStride = destination.Stride / 2;
+                var srcStride = source.Stride / 2;
 
                 // base pointers
-                ushort* baseSrc = (ushort*) source.ImageData.ToPointer( );
-                ushort* baseDst = (ushort*) destination.ImageData.ToPointer( );
+                var baseSrc = (ushort*) source.ImageData.ToPointer( );
+                var baseDst = (ushort*) destination.ImageData.ToPointer( );
 
                 // allign pointers by X
                 baseSrc += ( startX * pixelSize );
@@ -345,20 +345,20 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long g, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, dst++ )
+                for ( var x = startX; x < stopX; x++, src++, dst++ )
                 {
                     g = div = processedKernelSize = 0;
 
@@ -433,22 +433,22 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long r, g, b, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             byte* p;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                 {
                     r = g = b = div = processedKernelSize = 0;
 
@@ -539,22 +539,22 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long r, g, b, a, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             byte* p;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src += 4, dst += 4 )
+                for ( var x = startX; x < stopX; x++, src += 4, dst += 4 )
                 {
                     r = g = b = a = div = processedKernelSize = 0;
 
@@ -644,23 +644,23 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long g, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
-                ushort* src = baseSrc + y * srcStride;
-                ushort* dst = baseDst + y * dstStride;
+                var src = baseSrc + y * srcStride;
+                var dst = baseDst + y * dstStride;
 
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, dst++ )
+                for ( var x = startX; x < stopX; x++, src++, dst++ )
                 {
                     g = div = processedKernelSize = 0;
 
@@ -732,25 +732,25 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long r, g, b, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             ushort* p;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
-                ushort* src = baseSrc + y * srcStride;
-                ushort* dst = baseDst + y * dstStride;
+                var src = baseSrc + y * srcStride;
+                var dst = baseDst + y * dstStride;
 
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                 {
                     r = g = b = div = processedKernelSize = 0;
 
@@ -838,25 +838,25 @@ namespace AForge.Imaging.Filters
             // loop and array indexes
             int i, j, t, k, ir, jr;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // color sums
             long r, g, b, a, div;
 
             // kernel size
-            int kernelSize = size * size;
+            var kernelSize = size * size;
             // number of kernel elements taken into account
             int processedKernelSize;
 
             ushort* p;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
-                ushort* src = baseSrc + y * srcStride;
-                ushort* dst = baseDst + y * dstStride;
+                var src = baseSrc + y * srcStride;
+                var dst = baseDst + y * dstStride;
 
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src += 4, dst += 4 )
+                for ( var x = startX; x < stopX; x++, src += 4, dst += 4 )
                 {
                     r = g = b = a = div = processedKernelSize = 0;
 

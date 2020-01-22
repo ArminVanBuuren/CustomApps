@@ -133,28 +133,28 @@ namespace AForge.Imaging.Filters
             whitePixelsCount = 0;
 
             // get source image size
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
-            int pixelSize = Bitmap.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
+            var pixelSize = Bitmap.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
 
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* ovr = (byte*) overlay.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var ovr = (byte*) overlay.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             if ( pixelSize == 1 )
             {
                 // grayscale image
-                int srcOffset = sourceData.Stride - width;
-                int ovrOffset = overlay.Stride - width;
-                int dstOffset = destinationData.Stride - width;
+                var srcOffset = sourceData.Stride - width;
+                var ovrOffset = overlay.Stride - width;
+                var dstOffset = destinationData.Stride - width;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++, ovr++, dst++ )
+                    for ( var x = 0; x < width; x++, src++, ovr++, dst++ )
                     {
-                        int diff = *src - *ovr;
+                        var diff = *src - *ovr;
 
                         if ( diff < 0 )
                             diff = -diff;
@@ -177,19 +177,19 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                int srcOffset = sourceData.Stride - pixelSize * width;
-                int ovrOffset = overlay.Stride - pixelSize * width;
-                int dstOffset = destinationData.Stride - width;
+                var srcOffset = sourceData.Stride - pixelSize * width;
+                var ovrOffset = overlay.Stride - pixelSize * width;
+                var dstOffset = destinationData.Stride - width;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src += pixelSize, ovr += pixelSize, dst++ )
+                    for ( var x = 0; x < width; x++, src += pixelSize, ovr += pixelSize, dst++ )
                     {
-                        int diffR = src[RGB.R] - ovr[RGB.R];
-                        int diffG = src[RGB.G] - ovr[RGB.G];
-                        int diffB = src[RGB.B] - ovr[RGB.B];
+                        var diffR = src[RGB.R] - ovr[RGB.R];
+                        var diffG = src[RGB.G] - ovr[RGB.G];
+                        var diffB = src[RGB.B] - ovr[RGB.B];
 
                         if ( diffR < 0 )
                             diffR = -diffR;

@@ -104,21 +104,21 @@ namespace AForge
             lock ( sync )
             {
                 // get instance of parallel computation manager
-                Parallel instance = Instance;
+                var instance = Instance;
 
                 instance.currentIndex   = start - 1;
                 instance.stopIndex      = stop;
                 instance.loopBody       = loopBody;
 
                 // signal about available job for all threads and mark them busy
-                for ( int i = 0; i < threadsCount; i++ )
+                for ( var i = 0; i < threadsCount; i++ )
                 {
                     instance.threadIdle[i].Reset( );
                     instance.jobAvailable[i].Set( );
                 }
 
                 // wait until all threads become idle
-                for ( int i = 0; i < threadsCount; i++ )
+                for ( var i = 0; i < threadsCount; i++ )
                 {
                     instance.threadIdle[i].WaitOne( );
                 }
@@ -167,7 +167,7 @@ namespace AForge
             // array of threads
             threads = new Thread[threadsCount];
 
-            for ( int i = 0; i < threadsCount; i++ )
+            for ( var i = 0; i < threadsCount; i++ )
             {
                 jobAvailable[i] = new AutoResetEvent( false );
                 threadIdle[i]   = new ManualResetEvent( true );
@@ -205,8 +205,8 @@ namespace AForge
         // Worker thread performing parallel computations in loop
         private void WorkerThread( object index )
         {
-            int threadIndex = (int) index;
-            int localIndex = 0;
+            var threadIndex = (int) index;
+            var localIndex = 0;
 
             while ( true )
             {

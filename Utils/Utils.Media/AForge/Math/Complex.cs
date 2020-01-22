@@ -343,14 +343,14 @@ namespace AForge.AMath
         {
             double aRe = a.Re, aIm = a.Im;
             double bRe = b.Re, bIm = b.Im;
-            double modulusSquared = bRe * bRe + bIm * bIm;
+            var modulusSquared = bRe * bRe + bIm * bIm;
 
             if ( modulusSquared == 0 )
             {
                 throw new DivideByZeroException( "Can not divide by zero." );
             }
 
-            double invModulusSquared = 1 / modulusSquared;
+            var invModulusSquared = 1 / modulusSquared;
 
             return new Complex(
                 ( aRe * bRe + aIm * bIm ) * invModulusSquared,
@@ -412,14 +412,14 @@ namespace AForge.AMath
         {
             double aRe = a.Re, aIm = a.Im;
             double bRe = b.Re, bIm = b.Im;
-            double modulusSquared = bRe * bRe + bIm * bIm;
+            var modulusSquared = bRe * bRe + bIm * bIm;
 
             if ( modulusSquared == 0 )
             {
                 throw new DivideByZeroException( "Can not divide by zero." );
             }
 
-            double invModulusSquared = 1 / modulusSquared;
+            var invModulusSquared = 1 / modulusSquared;
 
             result.Re = ( aRe * bRe + aIm * bIm ) * invModulusSquared;
             result.Im = ( aIm * bRe - aRe * bIm ) * invModulusSquared;
@@ -530,8 +530,8 @@ namespace AForge.AMath
         /// 
         public static Complex Parse( string s )
         {
-            Regex r = new Regex( @"\((?<real>.*),(?<imaginary>.*)\)", RegexOptions.None );
-            Match m = r.Match( s );
+            var r = new Regex( @"\((?<real>.*),(?<imaginary>.*)\)", RegexOptions.None );
+            var m = r.Match( s );
 
             if ( m.Success )
             {
@@ -560,7 +560,7 @@ namespace AForge.AMath
         {
             try
             {
-                Complex newComplex = Complex.Parse( s );
+                var newComplex = Complex.Parse( s );
                 result = newComplex;
                 return true;
 
@@ -588,7 +588,7 @@ namespace AForge.AMath
         /// 
         public static Complex Sqrt( Complex a )
         {
-            Complex result = Complex.Zero;
+            var result = Complex.Zero;
 
             if ( ( a.Re == 0.0 ) && ( a.Im == 0.0 ) )
             {
@@ -601,7 +601,7 @@ namespace AForge.AMath
             }
             else
             {
-                double modulus = a.Magnitude;
+                var modulus = a.Magnitude;
 
                 result.Re = System.Math.Sqrt( 0.5 * ( modulus + a.Re ) );
                 result.Im = System.Math.Sqrt( 0.5 * ( modulus - a.Re ) );
@@ -623,7 +623,7 @@ namespace AForge.AMath
         /// 
         public static Complex Log( Complex a )
         {
-            Complex result = Complex.Zero;
+            var result = Complex.Zero;
 
             if ( ( a.Re > 0.0 ) && ( a.Im == 0.0 ) )
             {
@@ -663,8 +663,8 @@ namespace AForge.AMath
         /// 
         public static Complex Exp( Complex a )
         {
-            Complex result = Complex.Zero;
-            double r = System.Math.Exp( a.Re );
+            var result = Complex.Zero;
+            var r = System.Math.Exp( a.Re );
             result.Re = r * System.Math.Cos( a.Im );
             result.Im = r * System.Math.Sin( a.Im );
 
@@ -685,7 +685,7 @@ namespace AForge.AMath
         /// 
         public static Complex Sin( Complex a )
         {
-            Complex result = Complex.Zero;
+            var result = Complex.Zero;
 
             if ( a.Im == 0.0 )
             {
@@ -712,7 +712,7 @@ namespace AForge.AMath
         /// 
         public static Complex Cos( Complex a )
         {
-            Complex result = Complex.Zero;
+            var result = Complex.Zero;
 
             if ( a.Im == 0.0 )
             {
@@ -739,7 +739,7 @@ namespace AForge.AMath
         /// 
         public static Complex Tan( Complex a )
         {
-            Complex result = Complex.Zero;
+            var result = Complex.Zero;
 
             if ( a.Im == 0.0 )
             {
@@ -748,9 +748,9 @@ namespace AForge.AMath
             }
             else
             {
-                double real2 = 2 * a.Re;
-                double imag2 = 2 * a.Im;
-                double denom = System.Math.Cos( real2 ) + System.Math.Cosh( real2 );
+                var real2 = 2 * a.Re;
+                var imag2 = 2 * a.Im;
+                var denom = System.Math.Cos( real2 ) + System.Math.Cosh( real2 );
 
                 result.Re = System.Math.Sin( real2 ) / denom;
                 result.Im = System.Math.Sinh( imag2 ) / denom;

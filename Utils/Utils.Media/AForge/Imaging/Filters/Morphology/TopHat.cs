@@ -92,7 +92,7 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
             // perform opening on the source image
-            UnmanagedImage openedImage = opening.Apply( image );
+            var openedImage = opening.Apply( image );
             // subtract opened image from source image
             subtract.UnmanagedOverlayImage = openedImage;
             subtract.ApplyInPlace( image );

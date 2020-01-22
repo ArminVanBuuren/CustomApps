@@ -153,7 +153,7 @@ namespace AForge.Video
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -317,14 +317,14 @@ namespace AForge.Video
         // Worker thread
         private void WorkerThread( )
         {
-            int width = region.Width;
-            int height = region.Height;
-            int x = region.Location.X;
-            int y = region.Location.Y;
-            Size size = region.Size;
+            var width = region.Width;
+            var height = region.Height;
+            var x = region.Location.X;
+            var y = region.Location.Y;
+            var size = region.Size;
 
-            Bitmap bitmap = new Bitmap( width, height, PixelFormat.Format32bppArgb );
-            Graphics graphics = Graphics.FromImage( bitmap );
+            var bitmap = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+            var graphics = Graphics.FromImage( bitmap );
 
             // download start time and duration
             DateTime start;
@@ -357,7 +357,7 @@ namespace AForge.Video
                         span = DateTime.Now.Subtract( start );
 
                         // miliseconds to sleep
-                        int msec = frameInterval - (int) span.TotalMilliseconds;
+                        var msec = frameInterval - (int) span.TotalMilliseconds;
 
                         if ( ( msec > 0 ) && ( stopEvent.WaitOne( msec, false ) ) )
                             break;

@@ -213,15 +213,15 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // processing width and height
-            int width  = rect.Width;
-            int height = rect.Height;
+            var width  = rect.Width;
+            var height = rect.Height;
 
             // processing region's dimension
-            int widthToProcess  = width;
-            int heightToProcess = height;
+            var widthToProcess  = width;
+            var heightToProcess = height;
 
             // if generator was specified, then generate a texture
             // otherwise use provided texture
@@ -235,22 +235,22 @@ namespace AForge.Imaging.Filters
                 heightToProcess = Math.Min( height, texture.GetLength( 0 ) );
             }
 
-            int offset = image.Stride - widthToProcess * pixelSize;
+            var offset = image.Stride - widthToProcess * pixelSize;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( rect.Top * image.Stride + rect.Left * pixelSize );
 
             // texture
-            for ( int y = 0; y < heightToProcess; y++ )
+            for ( var y = 0; y < heightToProcess; y++ )
             {
-                for ( int x = 0; x < widthToProcess; x++ )
+                for ( var x = 0; x < widthToProcess; x++ )
                 {
                     double t = texture[y, x];
                     // process each pixel
-                    for ( int i = 0; i < pixelSize; i++, ptr++ )
+                    for ( var i = 0; i < pixelSize; i++, ptr++ )
                     {
                         *ptr = (byte) Math.Min( 255.0f, ( preserveLevel * ( *ptr ) ) + ( filterLevel * ( *ptr ) ) * t );
                     }

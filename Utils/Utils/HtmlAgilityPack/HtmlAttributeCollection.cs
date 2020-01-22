@@ -205,7 +205,7 @@ namespace HtmlAgilityPack
         /// <param name="index">The index of the attribute to remove.</param>
         public void RemoveAt(int index)
         {
-            HtmlAttribute att = items[index];
+            var att = items[index];
             Hashitems.Remove(att.Name);
             items.RemoveAt(index);
 
@@ -258,7 +258,7 @@ namespace HtmlAgilityPack
         /// <returns>The appended attribute.</returns>
         public HtmlAttribute Append(string name)
         {
-            HtmlAttribute att = _ownernode._ownerdocument.CreateAttribute(name);
+            var att = _ownernode._ownerdocument.CreateAttribute(name);
             return Append(att);
         }
 
@@ -270,7 +270,7 @@ namespace HtmlAgilityPack
         /// <returns>The appended attribute.</returns>
         public HtmlAttribute Append(string name, string value)
         {
-            HtmlAttribute att = _ownernode._ownerdocument.CreateAttribute(name, value);
+            var att = _ownernode._ownerdocument.CreateAttribute(name, value);
             return Append(att);
         }
 
@@ -281,7 +281,7 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public bool Contains(string name)
         {
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if (String.Equals(items[i].Name, name, StringComparison.OrdinalIgnoreCase))
                     return true;
@@ -312,7 +312,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("attribute");
             }
 
-            int index = GetAttributeIndex(attribute);
+            var index = GetAttributeIndex(attribute);
             if (index == -1)
             {
                 throw new IndexOutOfRangeException();
@@ -332,9 +332,9 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("name");
             }
 
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
-                HtmlAttribute att = items[i];
+                var att = items[i];
                 if (String.Equals(att.Name, name, StringComparison.OrdinalIgnoreCase))
                 {
                     RemoveAt(i);
@@ -364,7 +364,7 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlAttribute> AttributesWithName(string attributeName)
         {
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if (String.Equals(items[i].Name, attributeName, StringComparison.OrdinalIgnoreCase))
                     yield return items[i];
@@ -399,7 +399,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("attribute");
             }
 
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if ((items[i]) == attribute)
                     return i;
@@ -415,7 +415,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("name");
             }
 
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if (String.Equals((items[i]).Name, name, StringComparison.OrdinalIgnoreCase))
                     return i;

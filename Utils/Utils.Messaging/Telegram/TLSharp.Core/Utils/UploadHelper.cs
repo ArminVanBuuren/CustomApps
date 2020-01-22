@@ -20,7 +20,7 @@ namespace TLSharp.Core.Utils
                 var hash = md5.ComputeHash(data);
                 var hashResult = new StringBuilder(hash.Length * 2);
 
-                foreach (byte t in hash)
+                foreach (var t in hash)
                     hashResult.Append(t.ToString("x2"));
 
                 md5_checksum = hashResult.ToString();
@@ -82,9 +82,9 @@ namespace TLSharp.Core.Utils
             var file = GetFile(reader);
             var fileParts = GetFileParts(file);
 
-            int partNumber = 0;
-            int partsCount = fileParts.Count;
-            long file_id = BitConverter.ToInt64(Helpers.GenerateRandomBytes(8), 0);
+            var partNumber = 0;
+            var partsCount = fileParts.Count;
+            var file_id = BitConverter.ToInt64(Helpers.GenerateRandomBytes(8), 0);
             while (fileParts.Count != 0)
             {
                 var part = fileParts.Dequeue();

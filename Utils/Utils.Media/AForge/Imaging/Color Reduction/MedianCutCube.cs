@@ -51,14 +51,14 @@ namespace AForge.Imaging.ColorReduction
                 {
                     int red = 0, green = 0, blue = 0;
 
-                    foreach ( Color color in colors )
+                    foreach ( var color in colors )
                     {
                         red   += color.R;
                         green += color.G;
                         blue  += color.B;
                     }
 
-                    int colorsCount = colors.Count;
+                    var colorsCount = colors.Count;
 
                     if ( colorsCount != 0 )
                     {
@@ -82,7 +82,7 @@ namespace AForge.Imaging.ColorReduction
             minR = minG = minB = 255;
             maxR = maxG = maxB = 0;
 
-            foreach ( Color color in colors )
+            foreach ( var color in colors )
             {
                 if ( color.R < minR )
                     minR = color.R;
@@ -117,7 +117,7 @@ namespace AForge.Imaging.ColorReduction
                     break;
             }
 
-            int median = colors.Count / 2;
+            var median = colors.Count / 2;
 
             cube1 = new MedianCutCube( colors.GetRange( 0, median ) );
             cube2 = new MedianCutCube( colors.GetRange( median, colors.Count - median ) );

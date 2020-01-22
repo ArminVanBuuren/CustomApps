@@ -123,46 +123,46 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int pixelSize  = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
-            int pixelSize2 = pixelSize * 2;
+            var pixelSize  = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize2 = pixelSize * 2;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
-            int startXP2    = startX + 2;
-            int startYP2    = startY + 2;
-            int stopXM2     = stopX - 2;
-            int stopYM2     = stopY - 2;
+            var startXP2    = startX + 2;
+            var startYP2    = startY + 2;
+            var stopXM2     = stopX - 2;
+            var stopYM2     = stopY - 2;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int srcOffset = srcStride - rect.Width * pixelSize;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var srcOffset = srcStride - rect.Width * pixelSize;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // gradient and weights
             double gx, gy, weight, weightTotal, total;
             // precalculated factor value
-            double f = -8 * factor * factor;
+            var f = -8 * factor * factor;
 
             // do the job
-            byte* src = (byte*) source.ImageData.ToPointer( ) + srcStride * 2;
-            byte* dst = (byte*) destination.ImageData.ToPointer( ) + dstStride * 2;
+            var src = (byte*) source.ImageData.ToPointer( ) + srcStride * 2;
+            var dst = (byte*) destination.ImageData.ToPointer( ) + dstStride * 2;
 
             // allign pointers to the first pixel to process
             src += ( startY * srcStride + startX * pixelSize );
             dst += ( startY * dstStride + startX * pixelSize );
 
-            for ( int y = startYP2; y < stopYM2; y++ )
+            for ( var y = startYP2; y < stopYM2; y++ )
             {
                 src += pixelSize2;
                 dst += pixelSize2;
 
-                for ( int x = startXP2; x < stopXM2; x++ )
+                for ( var x = startXP2; x < stopXM2; x++ )
                 {
-                    for ( int i = 0; i < pixelSize; i++, src++, dst++ )
+                    for ( var i = 0; i < pixelSize; i++, src++, dst++ )
                     {
                         weightTotal = 0;
                         total = 0;

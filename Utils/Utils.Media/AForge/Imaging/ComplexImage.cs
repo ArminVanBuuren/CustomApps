@@ -114,12 +114,12 @@ namespace AForge.Imaging
         public object Clone( )
         {
             // create new complex image
-            ComplexImage dstImage = new ComplexImage( width, height );
-            Complex[,] data = dstImage.data;
+            var dstImage = new ComplexImage( width, height );
+            var data = dstImage.data;
 
-            for ( int i = 0; i < height; i++ )
+            for ( var i = 0; i < height; i++ )
             {
-                for ( int j = 0; j < width; j++ )
+                for ( var j = 0; j < width; j++ )
                 {
                     data[i, j] = this.data[i, j];
                 }
@@ -151,7 +151,7 @@ namespace AForge.Imaging
             }
 
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed );
 
@@ -190,9 +190,9 @@ namespace AForge.Imaging
             }
 
             // get source image size
-            int width  = imageData.Width;
-            int height = imageData.Height;
-            int offset = imageData.Stride - width;
+            var width  = imageData.Width;
+            var height = imageData.Height;
+            var offset = imageData.Stride - width;
 
             // check image size
             if ( ( !Tools.IsPowerOf2( width ) ) || ( !Tools.IsPowerOf2( height ) ) )
@@ -201,19 +201,19 @@ namespace AForge.Imaging
             }
 
             // create new complex image
-            ComplexImage complexImage = new ComplexImage( width, height );
-            Complex[,] data = complexImage.data;
+            var complexImage = new ComplexImage( width, height );
+            var data = complexImage.data;
 
             // do the job
             unsafe
             {
-                byte* src = (byte*) imageData.Scan0.ToPointer( );
+                var src = (byte*) imageData.Scan0.ToPointer( );
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++ )
+                    for ( var x = 0; x < width; x++, src++ )
                     {
                         data[y, x].Re = (float) *src / 255;
                     }
@@ -233,24 +233,24 @@ namespace AForge.Imaging
         public Bitmap ToBitmap( )
         {
             // create new image
-            Bitmap dstImage = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
+            var dstImage = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
 
             // lock destination bitmap data
-            BitmapData dstData = dstImage.LockBits(
+            var dstData = dstImage.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed );
 
-            int offset = dstData.Stride - width;
-            double scale = ( fourierTransformed ) ? Math.Sqrt( width * height ) : 1;
+            var offset = dstData.Stride - width;
+            var scale = ( fourierTransformed ) ? Math.Sqrt( width * height ) : 1;
 
             // do the job
             unsafe
             {
-                byte* dst = (byte*) dstData.Scan0.ToPointer( );
+                var dst = (byte*) dstData.Scan0.ToPointer( );
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, dst++ )
+                    for ( var x = 0; x < width; x++, dst++ )
                     {
                         *dst = (byte) System.Math.Max( 0, System.Math.Min( 255, data[y, x].Magnitude * scale * 255 ) );
                     }
@@ -271,9 +271,9 @@ namespace AForge.Imaging
         {
             if ( !fourierTransformed )
             {
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++ )
+                    for ( var x = 0; x < width; x++ )
                     {
                         if ( ( ( x + y ) & 0x1 ) != 0 )
                         {
@@ -299,9 +299,9 @@ namespace AForge.Imaging
                 FourierTransform.FFT2( data, FourierTransform.Direction.Backward );
                 fourierTransformed = false;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++ )
+                    for ( var x = 0; x < width; x++ )
                     {
                         if ( ( ( x + y ) & 0x1 ) != 0 )
                         {

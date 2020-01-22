@@ -215,7 +215,7 @@ namespace AForge.Video
 		{
 			get
 			{
-				int frames = framesReceived;
+				var frames = framesReceived;
 				framesReceived = 0;
 				return frames;
 			}
@@ -233,7 +233,7 @@ namespace AForge.Video
 		{
 			get
 			{
-				long bytes = bytesReceived;
+				var bytes = bytesReceived;
 				bytesReceived = 0;
 				return bytes;
 			}
@@ -418,12 +418,12 @@ namespace AForge.Video
         private void WorkerThread( )
 		{
             // buffer to read stream
-            byte[] buffer = new byte[bufSize];
+            var buffer = new byte[bufSize];
             // JPEG magic number
-            byte[] jpegMagic = new byte[] { 0xFF, 0xD8, 0xFF };
-            int jpegMagicLength = 3;
+            var jpegMagic = new byte[] { 0xFF, 0xD8, 0xFF };
+            var jpegMagicLength = 3;
 
-            ASCIIEncoding encoding = new ASCIIEncoding( );
+            var encoding = new ASCIIEncoding( );
 
             while ( !stopEvent.WaitOne( 0, false ) )
 			{
@@ -442,7 +442,7 @@ namespace AForge.Video
                 // length of boundary
 				int boundaryLen;
                 // flag signaling if boundary was checked or not
-                bool boundaryIsChecked = false;
+                var boundaryIsChecked = false;
                 // read amounts and positions
 				int read, todo = 0, total = 0, pos = 0, align = 1;
 				int start = 0, stop = 0;
@@ -478,7 +478,7 @@ namespace AForge.Video
                     // force basic authentication through extra headers if required
                     if ( forceBasicAuthentication )
                     {
-                        string authInfo = string.Format( "{0}:{1}", login, password );
+                        var authInfo = string.Format( "{0}:{1}", login, password );
                         authInfo = Convert.ToBase64String( Encoding.Default.GetBytes( authInfo ) );
                         request.Headers["Authorization"] = "Basic " + authInfo;
                     }
@@ -486,8 +486,8 @@ namespace AForge.Video
                     response = request.GetResponse( );
 
 					// check content type
-                    string contentType = response.ContentType;
-                    string[] contentTypeArray = contentType.Split( '/' );
+                    var contentType = response.ContentType;
+                    var contentTypeArray = contentType.Split( '/' );
 
                     // "application/octet-stream"
                     if ( ( contentTypeArray[0] == "application" ) && ( contentTypeArray[1] == "octet-stream" ) )
@@ -498,7 +498,7 @@ namespace AForge.Video
                     else if ( ( contentTypeArray[0] == "multipart" ) && ( contentType.Contains( "mixed" ) ) )
                     {
                         // get boundary
-                        int boundaryIndex = contentType.IndexOf( "boundary", 0 );
+                        var boundaryIndex = contentType.IndexOf( "boundary", 0 );
                         if ( boundaryIndex != -1 )
                         {
                             boundaryIndex = contentType.IndexOf( "=", boundaryIndex + 8 );
@@ -560,9 +560,9 @@ namespace AForge.Video
                             if ( pos == -1 )
                                 continue;
 
-                            for ( int i = pos - 1; i >= 0; i-- )
+                            for ( var i = pos - 1; i >= 0; i-- )
                             {
-                                byte ch = buffer[i];
+                                var ch = buffer[i];
 
                                 if ( ( ch == (byte) '\n' ) || ( ch == (byte) '\r' ) )
                                 {
@@ -614,7 +614,7 @@ namespace AForge.Video
 								// image at stop
 								if ( ( NewFrame != null ) && ( !stopEvent.WaitOne( 0, false ) ) )
 								{
-									Bitmap bitmap = (Bitmap) Bitmap.FromStream ( new MemoryStream( buffer, start, stop - start ) );
+									var bitmap = (Bitmap) Bitmap.FromStream ( new MemoryStream( buffer, start, stop - start ) );
 									// notify client
                                     NewFrame( this, new NewFrameEventArgs( bitmap ) );
 									// release the image

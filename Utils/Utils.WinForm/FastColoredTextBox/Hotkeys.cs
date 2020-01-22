@@ -98,7 +98,7 @@ namespace FastColoredTextBoxNS
         {
             var cult = Thread.CurrentThread.CurrentUICulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             var kc = new KeysConverter();
             foreach (var pair in this)
             {

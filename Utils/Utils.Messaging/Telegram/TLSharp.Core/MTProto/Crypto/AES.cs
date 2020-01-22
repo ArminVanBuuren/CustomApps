@@ -36,16 +36,16 @@ namespace TLSharp.Core.MTProto.Crypto
 
                 newNonce.CopyTo(nonces, 0);
                 serverNonce.CopyTo(nonces, 32);
-                byte[] hash1 = hash.ComputeHash(nonces);
+                var hash1 = hash.ComputeHash(nonces);
 
                 serverNonce.CopyTo(nonces, 0);
                 newNonce.CopyTo(nonces, 16);
-                byte[] hash2 = hash.ComputeHash(nonces);
+                var hash2 = hash.ComputeHash(nonces);
 
                 nonces = new byte[64];
                 newNonce.CopyTo(nonces, 0);
                 newNonce.CopyTo(nonces, 32);
-                byte[] hash3 = hash.ComputeHash(nonces);
+                var hash3 = hash.ComputeHash(nonces);
 
                 using (var keyBuffer = new MemoryStream(32))
                 using (var ivBuffer = new MemoryStream(32))
@@ -70,16 +70,16 @@ namespace TLSharp.Core.MTProto.Crypto
 
                 newNonce.CopyTo(nonces, 0);
                 serverNonce.CopyTo(nonces, 32);
-                byte[] hash1 = hash.ComputeHash(nonces);
+                var hash1 = hash.ComputeHash(nonces);
 
                 serverNonce.CopyTo(nonces, 0);
                 newNonce.CopyTo(nonces, 16);
-                byte[] hash2 = hash.ComputeHash(nonces);
+                var hash2 = hash.ComputeHash(nonces);
 
                 nonces = new byte[64];
                 newNonce.CopyTo(nonces, 0);
                 newNonce.CopyTo(nonces, 32);
-                byte[] hash3 = hash.ComputeHash(nonces);
+                var hash3 = hash.ComputeHash(nonces);
 
                 using (var keyBuffer = new MemoryStream(32))
                 using (var ivBuffer = new MemoryStream(32))
@@ -114,24 +114,24 @@ namespace TLSharp.Core.MTProto.Crypto
             Array.Copy(iv, 0, iv1, 0, iv1.Length);
             Array.Copy(iv, iv1.Length, iv2, 0, iv2.Length);
 
-            AesEngine aes = new AesEngine();
+            var aes = new AesEngine();
             aes.Init(false, key);
 
-            byte[] plaintext = new byte[ciphertext.Length];
-            int blocksCount = ciphertext.Length / 16;
+            var plaintext = new byte[ciphertext.Length];
+            var blocksCount = ciphertext.Length / 16;
 
-            byte[] ciphertextBlock = new byte[16];
-            byte[] plaintextBlock = new byte[16];
-            for (int blockIndex = 0; blockIndex < blocksCount; blockIndex++)
+            var ciphertextBlock = new byte[16];
+            var plaintextBlock = new byte[16];
+            for (var blockIndex = 0; blockIndex < blocksCount; blockIndex++)
             {
-                for (int i = 0; i < 16; i++)
+                for (var i = 0; i < 16; i++)
                 {
                     ciphertextBlock[i] = (byte)(ciphertext[blockIndex * 16 + i] ^ iv2[i]);
                 }
 
                 aes.ProcessBlock(ciphertextBlock, 0, plaintextBlock, 0);
 
-                for (int i = 0; i < 16; i++)
+                for (var i = 0; i < 16; i++)
                 {
                     plaintextBlock[i] ^= iv1[i];
                 }
@@ -149,7 +149,7 @@ namespace TLSharp.Core.MTProto.Crypto
         {
 
             byte[] plaintext;
-            using (MemoryStream plaintextBuffer = new MemoryStream(originPlaintext.Length + 40))
+            using (var plaintextBuffer = new MemoryStream(originPlaintext.Length + 40))
             {
                 //using(SHA1 hash = new SHA1Managed()) {
                 //byte[] hashsum = hash.ComputeHash(originPlaintext);
@@ -168,21 +168,21 @@ namespace TLSharp.Core.MTProto.Crypto
             Array.Copy(iv, 0, iv1, 0, iv1.Length);
             Array.Copy(iv, iv1.Length, iv2, 0, iv2.Length);
 
-            AesEngine aes = new AesEngine();
+            var aes = new AesEngine();
             aes.Init(true, key);
 
-            int blocksCount = plaintext.Length / 16;
-            byte[] ciphertext = new byte[plaintext.Length];
+            var blocksCount = plaintext.Length / 16;
+            var ciphertext = new byte[plaintext.Length];
 
-            byte[] ciphertextBlock = new byte[16];
-            byte[] plaintextBlock = new byte[16];
-            for (int blockIndex = 0; blockIndex < blocksCount; blockIndex++)
+            var ciphertextBlock = new byte[16];
+            var plaintextBlock = new byte[16];
+            for (var blockIndex = 0; blockIndex < blocksCount; blockIndex++)
             {
                 Array.Copy(plaintext, 16 * blockIndex, plaintextBlock, 0, 16);
 
                 //logger.info("plaintext block: {0} xor {1}", BitConverter.ToString(plaintextBlock).Replace("-", ""), BitConverter.ToString(iv1).Replace("-", ""));
 
-                for (int i = 0; i < 16; i++)
+                for (var i = 0; i < 16; i++)
                 {
                     plaintextBlock[i] ^= iv1[i];
                 }
@@ -193,7 +193,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
                 //logger.info("encrypted plaintext: {0} xor {1}", BitConverter.ToString(ciphertextBlock).Replace("-", ""), BitConverter.ToString(iv2).Replace("-", ""));
 
-                for (int i = 0; i < 16; i++)
+                for (var i = 0; i < 16; i++)
                 {
                     ciphertextBlock[i] ^= iv2[i];
                 }
@@ -212,7 +212,7 @@ namespace TLSharp.Core.MTProto.Crypto
         public static byte[] XOR(byte[] buffer1, byte[] buffer2)
         {
             var result = new byte[buffer1.Length];
-            for (int i = 0; i < buffer1.Length; i++)
+            for (var i = 0; i < buffer1.Length; i++)
                 result[i] = (byte)(buffer1[i] ^ buffer2[i]);
             return result;
         }
@@ -460,10 +460,10 @@ namespace TLSharp.Core.MTProto.Crypto
         private uint Inv_Mcol(
             uint x)
         {
-            uint f2 = FFmulX(x);
-            uint f4 = FFmulX(f2);
-            uint f8 = FFmulX(f4);
-            uint f9 = x ^ f8;
+            var f2 = FFmulX(x);
+            var f4 = FFmulX(f2);
+            var f8 = FFmulX(f4);
+            var f9 = x ^ f8;
 
             return f2 ^ f4 ^ f8 ^ Shift(f2 ^ f9, 8) ^ Shift(f4 ^ f9, 16) ^ Shift(f9, 24);
         }
@@ -488,7 +488,7 @@ namespace TLSharp.Core.MTProto.Crypto
             byte[] key,
             bool forEncryption)
         {
-            int KC = key.Length / 4; // key length in words
+            var KC = key.Length / 4; // key length in words
             int t;
 
             if ((KC != 4) && (KC != 6) && (KC != 8))
@@ -502,7 +502,7 @@ namespace TLSharp.Core.MTProto.Crypto
             //
 
             t = 0;
-            for (int i = 0; i < key.Length; t++)
+            for (var i = 0; i < key.Length; t++)
             {
                 W[t >> 2, t & 3] = Pack.LE_To_UInt32(key, i);
                 i += 4;
@@ -512,10 +512,10 @@ namespace TLSharp.Core.MTProto.Crypto
             // while not enough round key material calculated
             // calculate new values
             //
-            int k = (ROUNDS + 1) << 2;
-            for (int i = KC; (i < k); i++)
+            var k = (ROUNDS + 1) << 2;
+            for (var i = KC; (i < k); i++)
             {
-                uint temp = W[(i - 1) >> 2, (i - 1) & 3];
+                var temp = W[(i - 1) >> 2, (i - 1) & 3];
                 if ((i % KC) == 0)
                 {
                     temp = SubWord(Shift(temp, 8)) ^ rcon[(i / KC) - 1];
@@ -530,9 +530,9 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (!forEncryption)
             {
-                for (int j = 1; j < ROUNDS; j++)
+                for (var j = 1; j < ROUNDS; j++)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                     {
                         W[j, i] = Inv_Mcol(W[j, i]);
                     }
@@ -738,7 +738,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
         internal static uint BE_To_UInt32(byte[] bs)
         {
-            uint n = (uint)bs[0] << 24;
+            var n = (uint)bs[0] << 24;
             n |= (uint)bs[1] << 16;
             n |= (uint)bs[2] << 8;
             n |= bs[3];
@@ -747,7 +747,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
         internal static uint BE_To_UInt32(byte[] bs, int off)
         {
-            uint n = (uint)bs[off] << 24;
+            var n = (uint)bs[off] << 24;
             n |= (uint)bs[++off] << 16;
             n |= (uint)bs[++off] << 8;
             n |= bs[++off];
@@ -756,15 +756,15 @@ namespace TLSharp.Core.MTProto.Crypto
 
         internal static ulong BE_To_UInt64(byte[] bs)
         {
-            uint hi = BE_To_UInt32(bs);
-            uint lo = BE_To_UInt32(bs, 4);
+            var hi = BE_To_UInt32(bs);
+            var lo = BE_To_UInt32(bs, 4);
             return ((ulong)hi << 32) | lo;
         }
 
         internal static ulong BE_To_UInt64(byte[] bs, int off)
         {
-            uint hi = BE_To_UInt32(bs, off);
-            uint lo = BE_To_UInt32(bs, off + 4);
+            var hi = BE_To_UInt32(bs, off);
+            var lo = BE_To_UInt32(bs, off + 4);
             return ((ulong)hi << 32) | lo;
         }
 
@@ -816,15 +816,15 @@ namespace TLSharp.Core.MTProto.Crypto
 
         internal static ulong LE_To_UInt64(byte[] bs)
         {
-            uint lo = LE_To_UInt32(bs);
-            uint hi = LE_To_UInt32(bs, 4);
+            var lo = LE_To_UInt32(bs);
+            var hi = LE_To_UInt32(bs, 4);
             return ((ulong)hi << 32) | lo;
         }
 
         internal static ulong LE_To_UInt64(byte[] bs, int off)
         {
-            uint lo = LE_To_UInt32(bs, off);
-            uint hi = LE_To_UInt32(bs, off + 4);
+            var lo = LE_To_UInt32(bs, off);
+            var hi = LE_To_UInt32(bs, off + 4);
             return ((ulong)hi << 32) | lo;
         }
 

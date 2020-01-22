@@ -133,12 +133,12 @@ namespace AForge.Imaging
             }
 
             // lock source image
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed );
 
             // process the image
-            IntegralImage im = FromBitmap( imageData );
+            var im = FromBitmap( imageData );
 
             // unlock image
             image.UnlockBits( imageData );
@@ -180,26 +180,26 @@ namespace AForge.Imaging
             }
 
             // get source image size
-            int width  = image.Width;
-            int height = image.Height;
-            int offset = image.Stride - width;
+            var width  = image.Width;
+            var height = image.Height;
+            var offset = image.Stride - width;
 
             // create integral image
-            IntegralImage im = new IntegralImage( width, height );
-            uint[,] integralImage = im.integralImage;
+            var im = new IntegralImage( width, height );
+            var integralImage = im.integralImage;
 
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( );
+                var src = (byte*) image.ImageData.ToPointer( );
 
                 // for each line
-                for ( int y = 1; y <= height; y++ )
+                for ( var y = 1; y <= height; y++ )
                 {
                     uint rowSum = 0;
 
                     // for each pixel
-                    for ( int x = 1; x <= width; x++, src++ )
+                    for ( var x = 1; x <= width; x++, src++ )
                     {
                         rowSum += *src;
 
@@ -260,11 +260,11 @@ namespace AForge.Imaging
         ///
         public int GetHaarXWavelet( int x, int y, int radius )
         {
-            int y1 = y - radius;
-            int y2 = y + radius - 1;
+            var y1 = y - radius;
+            var y2 = y + radius - 1;
 
-            uint a = GetRectangleSum( x, y1, x + radius - 1, y2 );
-            uint b = GetRectangleSum( x - radius, y1, x - 1, y2 );
+            var a = GetRectangleSum( x, y1, x + radius - 1, y2 );
+            var b = GetRectangleSum( x - radius, y1, x - 1, y2 );
 
             return (int) ( a - b );
         }
@@ -286,8 +286,8 @@ namespace AForge.Imaging
         ///
         public int GetHaarYWavelet( int x, int y, int radius )
         {
-            int x1 = x - radius;
-            int x2 = x + radius - 1;
+            var x1 = x - radius;
+            var x2 = x + radius - 1;
 
             float a = GetRectangleSum( x1, y, x2, y + radius - 1 );
             float b = GetRectangleSum( x1, y - radius, x2, y - 1 );

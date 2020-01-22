@@ -154,7 +154,7 @@ namespace AForge.Video.Ximea
         {
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -172,7 +172,7 @@ namespace AForge.Video.Ximea
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -416,7 +416,7 @@ namespace AForge.Video.Ximea
         // Worker thread
         private void WorkerThread( )
         {
-            ReasonToFinishPlaying reasonToStop = ReasonToFinishPlaying.StoppedByUser;
+            var reasonToStop = ReasonToFinishPlaying.StoppedByUser;
 
             try
             {
@@ -426,10 +426,10 @@ namespace AForge.Video.Ximea
                 while ( !stopEvent.WaitOne( 0, false ) )
                 {
                     // start time
-                    DateTime start = DateTime.Now;
+                    var start = DateTime.Now;
 
                     // get next frame
-                    Bitmap bitmap = camera.GetImage( 15000, false );
+                    var bitmap = camera.GetImage( 15000, false );
 
                     framesReceived++;
                     bytesReceived += bitmap.Width * bitmap.Height * ( Bitmap.GetPixelFormatSize( bitmap.PixelFormat ) >> 3 );
@@ -444,10 +444,10 @@ namespace AForge.Video.Ximea
                     if ( frameInterval > 0 )
                     {
                         // get frame duration
-                        TimeSpan span = DateTime.Now.Subtract( start );
+                        var span = DateTime.Now.Subtract( start );
 
                         // miliseconds to sleep
-                        int msec = frameInterval - (int) span.TotalMilliseconds;
+                        var msec = frameInterval - (int) span.TotalMilliseconds;
 
                         if ( ( msec > 0 ) && ( stopEvent.WaitOne( msec, false ) ) )
                             break;

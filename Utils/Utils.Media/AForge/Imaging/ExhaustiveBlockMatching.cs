@@ -174,11 +174,11 @@ namespace AForge.Imaging
         public List<BlockMatch> ProcessImage( Bitmap sourceImage, List<IntPoint> coordinates, Bitmap searchImage )
         {
             // lock source image
-            BitmapData sourceImageData = sourceImage.LockBits(
+            var sourceImageData = sourceImage.LockBits(
                 new Rectangle( 0, 0, sourceImage.Width, sourceImage.Height ),
                 ImageLockMode.ReadOnly, sourceImage.PixelFormat );
 
-            BitmapData searchImageData = searchImage.LockBits(
+            var searchImageData = searchImage.LockBits(
                 new Rectangle( 0, 0, searchImage.Width, searchImage.Height ),
                 ImageLockMode.ReadOnly, searchImage.PixelFormat );
 
@@ -249,40 +249,40 @@ namespace AForge.Imaging
             if ( sourceImage.PixelFormat != searchImage.PixelFormat )
                 throw new InvalidImagePropertiesException( "Source and search images must have same pixel format" );
 
-            int pointsCount = coordinates.Count;
+            var pointsCount = coordinates.Count;
 
             // found matches
-            List<BlockMatch> matchingsList = new List<BlockMatch>( );
+            var matchingsList = new List<BlockMatch>( );
 
             // get source image size
-            int width  = sourceImage.Width;
-            int height = sourceImage.Height;
-            int stride = sourceImage.Stride;
-            int pixelSize = ( sourceImage.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var width  = sourceImage.Width;
+            var height = sourceImage.Height;
+            var stride = sourceImage.Stride;
+            var pixelSize = ( sourceImage.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
 
             // pre-compute some values to avoid doing it in the loops.
-            int blockRadius = blockSize / 2;
-            int searchWindowSize = 2 * searchRadius;
-            int blockLineSize = blockSize * pixelSize;
-            int blockOffset = stride - ( blockSize * pixelSize );
+            var blockRadius = blockSize / 2;
+            var searchWindowSize = 2 * searchRadius;
+            var blockLineSize = blockSize * pixelSize;
+            var blockOffset = stride - ( blockSize * pixelSize );
 
             // maximum possible difference of blocks
-            int maxDiff = blockSize * blockSize * pixelSize * 255;
+            var maxDiff = blockSize * blockSize * pixelSize * 255;
 
             // integer similarity threshold
-            int threshold = (int) ( similarityThreshold * maxDiff );
+            var threshold = (int) ( similarityThreshold * maxDiff );
 
             // do the job
             unsafe
             {
-                byte* ptrSource = (byte*) sourceImage.ImageData.ToPointer( );
-                byte* ptrSearch = (byte*) searchImage.ImageData.ToPointer( );
+                var ptrSource = (byte*) sourceImage.ImageData.ToPointer( );
+                var ptrSearch = (byte*) searchImage.ImageData.ToPointer( );
 
                 // for each point fed
-                for ( int iPoint = 0; iPoint < pointsCount; iPoint++ )
+                for ( var iPoint = 0; iPoint < pointsCount; iPoint++ )
                 {
-                    int refPointX = coordinates[iPoint].X;
-                    int refPointY = coordinates[iPoint].Y;
+                    var refPointX = coordinates[iPoint].X;
+                    var refPointY = coordinates[iPoint].Y;
 
                     // make sure the source block is inside the image
                     if (
@@ -295,18 +295,18 @@ namespace AForge.Imaging
                     }
 
                     // startting seatch point
-                    int searchStartX = refPointX - blockRadius - searchRadius;
-                    int searchStartY = refPointY - blockRadius - searchRadius;
+                    var searchStartX = refPointX - blockRadius - searchRadius;
+                    var searchStartY = refPointY - blockRadius - searchRadius;
 
                     // output match 
-                    int bestMatchX = refPointX;
-                    int bestMatchY = refPointY;
+                    var bestMatchX = refPointX;
+                    var bestMatchY = refPointY;
 
                     // Exhaustive Search Algorithm - we test each location within the search window
-                    int minError = int.MaxValue;
+                    var minError = int.MaxValue;
 
                     // for each search window's row
-                    for ( int searchWindowRow = 0; searchWindowRow < searchWindowSize; searchWindowRow++ )
+                    for ( var searchWindowRow = 0; searchWindowRow < searchWindowSize; searchWindowRow++ )
                     {
                         if ( ( searchStartY + searchWindowRow < 0 ) || ( searchStartY + searchWindowRow + blockSize >= height ) )
                         {
@@ -315,11 +315,11 @@ namespace AForge.Imaging
                         }
 
                         // for each search window's column
-                        for ( int searchWindowCol = 0; searchWindowCol < searchWindowSize; searchWindowCol++ )
+                        for ( var searchWindowCol = 0; searchWindowCol < searchWindowSize; searchWindowCol++ )
                         {
                             // tested block location in search image
-                            int blockSearchX = searchStartX + searchWindowCol;
-                            int blockSearchY = searchStartY + searchWindowRow;
+                            var blockSearchX = searchStartX + searchWindowCol;
+                            var blockSearchY = searchStartY + searchWindowRow;
 
                             if ( ( blockSearchX < 0 ) || ( blockSearchY + blockSize >= width ) )
                             {
@@ -328,16 +328,16 @@ namespace AForge.Imaging
                             }
 
                             // get memory location of the block's upper left point in source and search images
-                            byte* ptrSourceBlock = ptrSource + ( ( refPointY - blockRadius ) * stride ) + ( ( refPointX - blockRadius ) * pixelSize );
-                            byte* ptrSearchBlock = ptrSearch + ( blockSearchY * stride ) + ( blockSearchX * pixelSize );
+                            var ptrSourceBlock = ptrSource + ( ( refPointY - blockRadius ) * stride ) + ( ( refPointX - blockRadius ) * pixelSize );
+                            var ptrSearchBlock = ptrSearch + ( blockSearchY * stride ) + ( blockSearchX * pixelSize );
 
                             // navigate this block, accumulating the error
-                            int error = 0;
-                            for ( int blockRow = 0; blockRow < blockSize; blockRow++ )
+                            var error = 0;
+                            for ( var blockRow = 0; blockRow < blockSize; blockRow++ )
                             {
-                                for ( int blockCol = 0; blockCol < blockLineSize; blockCol++, ptrSourceBlock++, ptrSearchBlock++ )
+                                for ( var blockCol = 0; blockCol < blockLineSize; blockCol++, ptrSourceBlock++, ptrSearchBlock++ )
                                 {
-                                    int diff = *ptrSourceBlock - *ptrSearchBlock;
+                                    var diff = *ptrSourceBlock - *ptrSearchBlock;
                                     if ( diff > 0 )
                                     {
                                         error += diff;
@@ -366,7 +366,7 @@ namespace AForge.Imaging
                     }
 
                     // calculate blocks' similarity and compare it with threshold
-                    int blockSimilarity = maxDiff - minError;
+                    var blockSimilarity = maxDiff - minError;
 
                     if ( blockSimilarity >= threshold )
                     {
@@ -388,7 +388,7 @@ namespace AForge.Imaging
         {
             public int Compare( BlockMatch x, BlockMatch y )
             {
-                float diff = y.Similarity - x.Similarity;
+                var diff = y.Similarity - x.Similarity;
 
                 return ( diff > 0 ) ? 1 : ( diff < 0 ) ? -1 : 0;
             }

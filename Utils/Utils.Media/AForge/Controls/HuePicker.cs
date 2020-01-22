@@ -210,12 +210,12 @@ namespace AForge.Controls
         /// 
         protected override void OnPaint( PaintEventArgs pe )
         {
-            Graphics g = pe.Graphics;
-            Rectangle rc = this.ClientRectangle;
+            var g = pe.Graphics;
+            var rc = this.ClientRectangle;
             Rectangle rcPie;
             Brush brush;
-            RGB rgb = new RGB( );
-            HSL hsl = new HSL( );
+            var rgb = new RGB( );
+            var hsl = new HSL( );
 
             // get pie rectangle
             rcPie = new Rectangle( 4, 4, Math.Min( rc.Right, rc.Bottom ) - 8, Math.Min( rc.Right, rc.Bottom ) - 8 );
@@ -227,7 +227,7 @@ namespace AForge.Controls
             if ( type == HuePickerType.Value )
             {
                 // draw HSL pie
-                for ( int i = 0; i < 360; i++ )
+                for ( var i = 0; i < 360; i++ )
                 {
                     hsl.Hue = i;
                     // convert from HSL to RGB
@@ -243,7 +243,7 @@ namespace AForge.Controls
             else
             {
                 // draw HSL pie
-                for ( int i = 0; i < 360; i++ )
+                for ( var i = 0; i < 360; i++ )
                 {
                     if (
                         ( ( min < max ) && ( i >= min ) && ( i <= max ) ) ||
@@ -268,13 +268,13 @@ namespace AForge.Controls
             }
 
             //
-            double halfWidth = (double) rcPie.Width / 2;
-            double angleRad = -min * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            var halfWidth = (double) rcPie.Width / 2;
+            var angleRad = -min * Math.PI / 180;
+            var angleCos = Math.Cos( angleRad );
+            var angleSin = Math.Sin( angleRad );
 
-            double x = halfWidth * angleCos;
-            double y = halfWidth * angleSin;
+            var x = halfWidth * angleCos;
+            var y = halfWidth * angleSin;
 
             ptCenter.X = rcPie.Left + (int) ( halfWidth );
             ptCenter.Y = rcPie.Top  + (int) ( halfWidth );
@@ -353,14 +353,14 @@ namespace AForge.Controls
         // On mouse move
         private void HSLPicker_MouseMove( object sender, System.Windows.Forms.MouseEventArgs e )
         {
-            Cursor cursor = Cursors.Default;
+            var cursor = Cursors.Default;
 
             if ( trackMode != 0 )
             {
                 cursor = Cursors.Hand;
 
-                int dy = e.Y - ptCenter.Y;
-                int dx = e.X - ptCenter.X;
+                var dy = e.Y - ptCenter.Y;
+                var dx = e.X - ptCenter.X;
 
                 if ( trackMode == 1 )
                 {

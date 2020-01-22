@@ -46,28 +46,28 @@ namespace AForge.Imaging.Textures
         public static Bitmap ToBitmap( float[,] texture )
         {
             // get texture dimension
-            int width  = texture.GetLength( 1 );
-            int height = texture.GetLength( 0 );
+            var width  = texture.GetLength( 1 );
+            var height = texture.GetLength( 0 );
 
             // create new grawscale image
-            Bitmap dstImage = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
+            var dstImage = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
 
             // lock destination bitmap data
-            BitmapData dstData = dstImage.LockBits(
+            var dstData = dstImage.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed );
 
             // do the job
             unsafe
             {
-                byte* dst = (byte*) dstData.Scan0.ToPointer( );
-                int offset = dstData.Stride - width;
+                var dst = (byte*) dstData.Scan0.ToPointer( );
+                var offset = dstData.Stride - width;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, dst++ )
+                    for ( var x = 0; x < width; x++, dst++ )
                     {
                         *dst = (byte) ( texture[y, x] * 255.0f );
                     }
@@ -94,12 +94,12 @@ namespace AForge.Imaging.Textures
         public static float[,] FromBitmap( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             // process the image
-            float[,] texture = FromBitmap( imageData );
+            var texture = FromBitmap( imageData );
 
             // unlock source image
             image.UnlockBits( imageData );
@@ -139,23 +139,23 @@ namespace AForge.Imaging.Textures
                 throw new UnsupportedImageFormatException( "Only grayscale (8 bpp indexed images) are supported." );
 
             // get source image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // create texture array
-            float[,] texture = new float[height, width];
+            var texture = new float[height, width];
 
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( );
-                int offset = image.Stride - width;
+                var src = (byte*) image.ImageData.ToPointer( );
+                var offset = image.Stride - width;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++ )
+                    for ( var x = 0; x < width; x++, src++ )
                     {
                         texture[y, x] = (float) *src / 255.0f;
                     }

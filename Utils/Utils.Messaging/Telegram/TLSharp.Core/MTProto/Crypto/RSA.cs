@@ -23,33 +23,33 @@ namespace TLSharp.Core.MTProto.Crypto
         public byte[] Encrypt(byte[] data, int offset, int length)
         {
 
-            using (MemoryStream buffer = new MemoryStream(255))
-            using (BinaryWriter writer = new BinaryWriter(buffer))
+            using (var buffer = new MemoryStream(255))
+            using (var writer = new BinaryWriter(buffer))
             {
                 using (SHA1 sha1 = new SHA1Managed())
                 {
-                    byte[] hashsum = sha1.ComputeHash(data, offset, length);
+                    var hashsum = sha1.ComputeHash(data, offset, length);
                     writer.Write(hashsum);
                 }
 
                 buffer.Write(data, offset, length);
                 if (length < 235)
                 {
-                    byte[] padding = new byte[235 - length];
+                    var padding = new byte[235 - length];
                     new Random().NextBytes(padding);
                     buffer.Write(padding, 0, padding.Length);
                 }
 
-                byte[] ciphertext = new BigInteger(1, buffer.ToArray()).ModPow(e, m).ToByteArrayUnsigned();
+                var ciphertext = new BigInteger(1, buffer.ToArray()).ModPow(e, m).ToByteArrayUnsigned();
 
                 if (ciphertext.Length == 256)
                 {
                     return ciphertext;
                 }
                 else {
-                    byte[] paddedCiphertext = new byte[256];
-                    int padding = 256 - ciphertext.Length;
-                    for (int i = 0; i < padding; i++)
+                    var paddedCiphertext = new byte[256];
+                    var padding = 256 - ciphertext.Length;
+                    for (var i = 0; i < padding; i++)
                     {
                         paddedCiphertext[i] = 0;
                     }
@@ -68,13 +68,13 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public static byte[] Encrypt(string fingerprint, byte[] data, int offset, int length)
         {
-            string fingerprintLower = fingerprint.ToLower();
+            var fingerprintLower = fingerprint.ToLower();
             if (!serverKeys.ContainsKey(fingerprintLower))
             {
                 return null;
             }
 
-            RSAServerKey key = serverKeys[fingerprintLower];
+            var key = serverKeys[fingerprintLower];
 
             return key.Encrypt(data, offset, length);
         }

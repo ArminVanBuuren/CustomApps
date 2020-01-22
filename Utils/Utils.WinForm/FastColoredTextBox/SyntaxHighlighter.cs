@@ -135,7 +135,7 @@ namespace FastColoredTextBoxNS
 
         public void Dispose()
         {
-            foreach (SyntaxDescriptor desc in descByXMLfileNames.Values)
+            foreach (var desc in descByXMLfileNames.Values)
                 desc.Dispose();
         }
 
@@ -186,7 +186,7 @@ namespace FastColoredTextBoxNS
             if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
             {
                 var doc = new XmlDocument();
-                string file = XMLdescriptionFile;
+                var file = XMLdescriptionFile;
                 if (!File.Exists(file))
                     file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
 
@@ -201,7 +201,7 @@ namespace FastColoredTextBoxNS
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = (sender as FastColoredTextBox);
-            Language language = tb.Language;
+            var language = tb.Language;
             switch (language)
             {
                 case Language.CSharp:
@@ -375,7 +375,7 @@ namespace FastColoredTextBoxNS
         /// <param name="doc">XmlDocument to parse</param>
         public virtual void AddXmlDescription(string descriptionFileName, XmlDocument doc)
         {
-            SyntaxDescriptor desc = ParseXmlDescription(doc);
+            var desc = ParseXmlDescription(doc);
             descByXMLfileNames[descriptionFileName] = desc;
         }
 
@@ -396,7 +396,7 @@ namespace FastColoredTextBoxNS
         public static SyntaxDescriptor ParseXmlDescription(XmlDocument doc)
         {
             var desc = new SyntaxDescriptor();
-            XmlNode brackets = doc.SelectSingleNode("doc/brackets");
+            var brackets = doc.SelectSingleNode("doc/brackets");
             if (brackets != null)
             {
                 if (brackets.Attributes["left"] == null || brackets.Attributes["right"] == null ||
@@ -433,7 +433,7 @@ namespace FastColoredTextBoxNS
 
             foreach (XmlNode style in doc.SelectNodes("doc/style"))
             {
-                Style s = ParseStyle(style);
+                var s = ParseStyle(style);
                 styleByName[style.Attributes["name"].Value] = s;
                 desc.styles.Add(s);
             }
@@ -452,7 +452,7 @@ namespace FastColoredTextBoxNS
             folding.startMarkerRegex = foldingNode.Attributes["start"].Value;
             folding.finishMarkerRegex = foldingNode.Attributes["finish"].Value;
             //options
-            XmlAttribute optionsA = foldingNode.Attributes["options"];
+            var optionsA = foldingNode.Attributes["options"];
             if (optionsA != null)
                 folding.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
 
@@ -464,8 +464,8 @@ namespace FastColoredTextBoxNS
             var rule = new RuleDesc();
             rule.pattern = ruleNode.InnerText;
             //
-            XmlAttribute styleA = ruleNode.Attributes["style"];
-            XmlAttribute optionsA = ruleNode.Attributes["options"];
+            var styleA = ruleNode.Attributes["style"];
+            var optionsA = ruleNode.Attributes["options"];
             //Style
             if (styleA == null)
                 throw new Exception("Rule must contain style name.");
@@ -481,11 +481,11 @@ namespace FastColoredTextBoxNS
 
         protected static Style ParseStyle(XmlNode styleNode)
         {
-            XmlAttribute typeA = styleNode.Attributes["type"];
-            XmlAttribute colorA = styleNode.Attributes["color"];
-            XmlAttribute backColorA = styleNode.Attributes["backColor"];
-            XmlAttribute fontStyleA = styleNode.Attributes["fontStyle"];
-            XmlAttribute nameA = styleNode.Attributes["name"];
+            var typeA = styleNode.Attributes["type"];
+            var colorA = styleNode.Attributes["color"];
+            var backColorA = styleNode.Attributes["backColor"];
+            var fontStyleA = styleNode.Attributes["fontStyle"];
+            var nameA = styleNode.Attributes["name"];
             //colors
             SolidBrush foreBrush = null;
             if (colorA != null)
@@ -494,7 +494,7 @@ namespace FastColoredTextBoxNS
             if (backColorA != null)
                 backBrush = new SolidBrush(ParseColor(backColorA.Value));
             //fontStyle
-            FontStyle fontStyle = FontStyle.Regular;
+            var fontStyle = FontStyle.Regular;
             if (fontStyleA != null)
                 fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), fontStyleA.Value);
 
@@ -519,14 +519,14 @@ namespace FastColoredTextBoxNS
         {
             //set style order
             range.tb.ClearStylesBuffer();
-            for (int i = 0; i < desc.styles.Count; i++)
+            for (var i = 0; i < desc.styles.Count; i++)
                 range.tb.Styles[i] = desc.styles[i];
             // add resilient styles
-            int l = desc.styles.Count;
-            for (int i = 0; i < resilientStyles.Count; i++)
+            var l = desc.styles.Count;
+            for (var i = 0; i < resilientStyles.Count; i++)
                 range.tb.Styles[l + i] = resilientStyles[i];
             //brackets
-            char[] oldBrackets = RememberBrackets(range.tb);
+            var oldBrackets = RememberBrackets(range.tb);
             range.tb.LeftBracket = desc.leftBracket;
             range.tb.RightBracket = desc.rightBracket;
             range.tb.LeftBracket2 = desc.leftBracket2;
@@ -534,12 +534,12 @@ namespace FastColoredTextBoxNS
             //clear styles of range
             range.ClearStyle(desc.styles.ToArray());
             //highlight syntax
-            foreach (RuleDesc rule in desc.rules)
+            foreach (var rule in desc.rules)
                 range.SetStyle(rule.style, rule.Regex);
             //clear folding
             range.ClearFoldingMarkers();
             //folding markers
-            foreach (FoldingDesc folding in desc.foldings)
+            foreach (var folding in desc.foldings)
                 range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
 
             //
@@ -723,7 +723,7 @@ namespace FastColoredTextBoxNS
             range.SetStyle(KeywordStyle, CSharpKeywordRegex);
 
             //find document comments
-            foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
+            foreach (var r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
             {
                 //remove C# highlighting from this fragment
                 r.ClearStyle(StyleIndex.All);
@@ -733,13 +733,13 @@ namespace FastColoredTextBoxNS
                 //
                 r.SetStyle(CommentStyle);
                 //tags
-                foreach (Range rr in r.GetRanges(HTMLTagContentRegex))
+                foreach (var rr in r.GetRanges(HTMLTagContentRegex))
                 {
                     rr.ClearStyle(StyleIndex.All);
                     rr.SetStyle(CommentTagStyle);
                 }
                 //prefix '///'
-                foreach (Range rr in r.GetRanges(@"^\s*///", RegexOptions.Multiline))
+                foreach (var rr in r.GetRanges(@"^\s*///", RegexOptions.Multiline))
                 {
                     rr.ClearStyle(StyleIndex.All);
                     rr.SetStyle(CommentTagStyle);

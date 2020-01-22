@@ -135,38 +135,38 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination )
         {
-            int pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
 
             // processing start and stop X,Y positions
-            int width  = source.Width;
-            int height = source.Height;
+            var width  = source.Width;
+            var height = source.Height;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int dstOffset = dstStride - width * pixelSize;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var dstOffset = dstStride - width * pixelSize;
 
             // coordinates of source points
             double  ox, oy, dx1, dy1, dx2, dy2;
             int     ox1, oy1, ox2, oy2;
 
             // width and height decreased by 1
-            int ymax = height - 1;
-            int xmax = width - 1;
+            var ymax = height - 1;
+            var xmax = width - 1;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
             byte* p1, p2, p3, p4;
 
-            double xFactor = 2 * Math.PI * xWavesCount / width;
-            double yFactor = 2 * Math.PI * yWavesCount / height;
+            var xFactor = 2 * Math.PI * xWavesCount / width;
+            var yFactor = 2 * Math.PI * yWavesCount / height;
 
             // for each line
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
-                double yPart = Math.Sin( yFactor * y ) * yWavesAmplitude;
+                var yPart = Math.Sin( yFactor * y ) * yWavesAmplitude;
 
                 // for each pixel
-                for ( int x = 0; x < width; x++ )
+                for ( var x = 0; x < width; x++ )
                 {
                     ox = x + yPart;
                     oy = y + Math.Cos( xFactor * x ) * xWavesAmplitude;
@@ -190,7 +190,7 @@ namespace AForge.Imaging.Filters
                         p3 = src + oy2 * srcStride + ox1 * pixelSize;
                         p4 = src + oy2 * srcStride + ox2 * pixelSize;
 
-                        for ( int i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
                         {
                             *dst = (byte) (
                                 dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +
@@ -199,7 +199,7 @@ namespace AForge.Imaging.Filters
                     }
                     else
                     {
-                        for ( int i = 0; i < pixelSize; i++, dst++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++ )
                         {
                             *dst = 0;
                         }

@@ -48,7 +48,7 @@ namespace AForge.AMath.Metrics
         {
             double distance = 0;
 
-            EuclideanDistance dist = new EuclideanDistance( );
+            var dist = new EuclideanDistance( );
             distance = 1.0 / ( 1.0 + dist.GetDistance( p, q ) );
 
             return distance;

@@ -53,7 +53,7 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            int count = br.ReadInt32();
+            var count = br.ReadInt32();
             for (var i = 0; i < count; i++)
             {
                 if (typeof(T) == typeof(int))
@@ -74,9 +74,9 @@ namespace TeleSharp.TL
                 }
                 else if (typeof(T).BaseType == typeof(TLObject))
                 {
-                    int constructor = br.ReadInt32();
-                    Type type = TLContext.getType(constructor);
-                    object obj = Activator.CreateInstance(type);
+                    var constructor = br.ReadInt32();
+                    var type = TLContext.getType(constructor);
+                    var obj = Activator.CreateInstance(type);
                     type.GetMethod("DeserializeBody").Invoke(obj, new object[] { br });
                     lists.Add((T)Convert.ChangeType(obj, type));
                 }

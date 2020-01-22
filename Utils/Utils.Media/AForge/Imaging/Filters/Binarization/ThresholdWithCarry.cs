@@ -99,28 +99,28 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width;
 
             // value which is caried from pixel to pixel
             short carry = 0;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( startY * image.Stride + startX );
 
             // for each line	
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 carry = 0;
 
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, ptr++ )
+                for ( var x = startX; x < stopX; x++, ptr++ )
                 {
                     carry += *ptr;
 

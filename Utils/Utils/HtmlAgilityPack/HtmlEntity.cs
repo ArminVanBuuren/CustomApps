@@ -594,11 +594,11 @@ namespace HtmlAgilityPack
             if (text.Length == 0)
                 return text;
 
-            StringBuilder sb = new StringBuilder(text.Length);
-            ParseState state = ParseState.Text;
-            StringBuilder entity = new StringBuilder(10);
+            var sb = new StringBuilder(text.Length);
+            var state = ParseState.Text;
+            var entity = new StringBuilder(10);
 
-            for (int i = 0; i < text.Length; i++)
+            for (var i = 0; i < text.Length; i++)
             {
                 switch (state)
                 {
@@ -628,10 +628,10 @@ namespace HtmlAgilityPack
                                 {
                                     if (entity[0] == '#')
                                     {
-                                        string e = entity.ToString();
+                                        var e = entity.ToString();
                                         try
                                         {
-                                            string codeStr = e.Substring(1).Trim();
+                                            var codeStr = e.Substring(1).Trim();
                                             int fromBase;
                                             if (codeStr.StartsWith("x", StringComparison.OrdinalIgnoreCase))
                                             {
@@ -643,7 +643,7 @@ namespace HtmlAgilityPack
                                                 fromBase = 10;
                                             }
 
-                                            int code = Convert.ToInt32(codeStr, fromBase);
+                                            var code = Convert.ToInt32(codeStr, fromBase);
                                             sb.Append(Convert.ToChar(code));
                                         }
                                         catch
@@ -717,7 +717,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("node");
             }
 
-            HtmlNode result = node.CloneNode(true);
+            var result = node.CloneNode(true);
             if (result.HasAttributes)
                 Entitize(result.Attributes);
 
@@ -781,8 +781,8 @@ namespace HtmlAgilityPack
             if (text.Length == 0)
                 return text;
 
-            StringBuilder sb = new StringBuilder(text.Length);
-            for (int i = 0; i < text.Length; i++)
+            var sb = new StringBuilder(text.Length);
+            for (var i = 0; i < text.Length; i++)
             {
                 int code = text[i];
                 if ((code > 127) ||
@@ -815,7 +815,7 @@ namespace HtmlAgilityPack
 
         private static void Entitize(HtmlAttributeCollection collection)
         {
-            foreach (HtmlAttribute at in collection)
+            foreach (var at in collection)
             {
                 if (at.Value == null)
                 {
@@ -828,7 +828,7 @@ namespace HtmlAgilityPack
 
         private static void Entitize(HtmlNodeCollection collection)
         {
-            foreach (HtmlNode node in collection)
+            foreach (var node in collection)
             {
                 if (node.HasAttributes)
                     Entitize(node.Attributes);

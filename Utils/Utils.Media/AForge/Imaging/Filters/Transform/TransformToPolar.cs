@@ -243,32 +243,32 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( destinationData.PixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( destinationData.PixelFormat ) / 8;
 
             // get source image size
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
-            int widthM1  = width - 1;
-            int heightM1 = height - 1;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
+            var widthM1  = width - 1;
+            var heightM1 = height - 1;
 
             // get destination image size
-            int newWidth  = destinationData.Width;
-            int newHeight = destinationData.Height;
+            var newWidth  = destinationData.Width;
+            var newHeight = destinationData.Height;
 
             // invert cirlce depth
-            double circleDisform = 1 - circleDepth;
+            var circleDisform = 1 - circleDepth;
 
             // get position of center pixel
-            double cx = (double) ( newWidth - 1 ) / 2;
-            double cy = (double) ( newHeight - 1 ) / 2;
-            double radius = ( cx < cy ) ? cx : cy;
+            var cx = (double) ( newWidth - 1 ) / 2;
+            var cy = (double) ( newHeight - 1 ) / 2;
+            var radius = ( cx < cy ) ? cx : cy;
             radius -= radius * circleDisform;
 
             // angle of the diagonal
-            double diagonalAngle = Math.Atan2( cy, cx );
+            var diagonalAngle = Math.Atan2( cy, cx );
 
             // offset angle in radians
-            double offsetAngleR = offsetAngle / 180 * Math.PI;
+            var offsetAngleR = offsetAngle / 180 * Math.PI;
             if ( offsetAngleR < 0 )
             {
                 offsetAngleR = Pi2 - offsetAngleR;
@@ -278,11 +278,11 @@ namespace AForge.Imaging.Filters
             offsetAngleR += PiHalf + Pi2;
 
             // do the job
-            byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride - newWidth * pixelSize;
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride - newWidth * pixelSize;
 
             // coordinates of source points
             int sx1, sy1, sx2, sy2;
@@ -291,38 +291,38 @@ namespace AForge.Imaging.Filters
             // temporary pointers
             byte* p1, p2, p3, p4;
 
-            byte fillR = fillColor.R;
-            byte fillB = fillColor.B;
-            byte fillG = fillColor.G;
-            byte fillA = fillColor.A;
-            byte fillGrey = (byte) ( 0.2125 * fillR + 0.7154 * fillG + 0.0721 * fillB );
+            var fillR = fillColor.R;
+            var fillB = fillColor.B;
+            var fillG = fillColor.G;
+            var fillA = fillColor.A;
+            var fillGrey = (byte) ( 0.2125 * fillR + 0.7154 * fillG + 0.0721 * fillB );
 
-            for ( int y = 0; y < newHeight; y++ )
+            for ( var y = 0; y < newHeight; y++ )
             {
-                double dy = y - cy;
-                double dydy = dy * dy;
+                var dy = y - cy;
+                var dydy = dy * dy;
 
-                for ( int x = 0; x < newWidth; x++ )
+                for ( var x = 0; x < newWidth; x++ )
                 {
-                    double dx = x - cx;
+                    var dx = x - cx;
                     // distance from the center
-                    double distance = Math.Sqrt( dx * dx + dydy );
+                    var distance = Math.Sqrt( dx * dx + dydy );
                     // angle of the line connecting center and the current pixel
-                    double angle = Math.Atan2( dy, dx );
+                    var angle = Math.Atan2( dy, dx );
 
                     // calculate minimum angle between X axis and the
                     // line connecting center and the current pixel
-                    double oxAngle = ( angle > 0 ) ? angle : -angle;
+                    var oxAngle = ( angle > 0 ) ? angle : -angle;
                     if ( oxAngle > PiHalf )
                     {
                         oxAngle = Math.PI - oxAngle;
                     }
 
                     // calculate maximm distance from center for this angle - distance to image's edge
-                    double maxDistance = ( oxAngle > diagonalAngle ) ? ( cy / Math.Sin( oxAngle ) ) : ( cx / Math.Cos( oxAngle ) );
+                    var maxDistance = ( oxAngle > diagonalAngle ) ? ( cy / Math.Sin( oxAngle ) ) : ( cx / Math.Cos( oxAngle ) );
 
                     // calculate maximum allowed distance within wich we need to map Y axis of the source image
-                    double maxAllowedDistance = radius + maxDistance * circleDisform;
+                    var maxAllowedDistance = radius + maxDistance * circleDisform;
 
                     if ( distance < maxAllowedDistance + 1 )
                     {
@@ -331,7 +331,7 @@ namespace AForge.Imaging.Filters
                         angle = angle % Pi2;
 
                         // calculate pixel coordinates in the source image
-                        double sy = ( distance / maxAllowedDistance ) * heightM1;
+                        var sy = ( distance / maxAllowedDistance ) * heightM1;
 
                         if ( sy > heightM1 )
                         {
@@ -343,7 +343,7 @@ namespace AForge.Imaging.Filters
                             sy = heightM1 - sy;
                         }
 
-                        double sx = ( angle / Pi2 ) * widthM1;
+                        var sx = ( angle / Pi2 ) * widthM1;
 
                         if ( mapBackwards )
                         {
@@ -370,7 +370,7 @@ namespace AForge.Imaging.Filters
                         p4 += sx2 * pixelSize;
 
                         // interpolate using 4 points
-                        for ( int i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
                         {
                             *dst = (byte) (
                                 dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +

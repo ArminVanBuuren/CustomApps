@@ -95,7 +95,7 @@ namespace AForge.AMath
         {
             get
             {
-                Matrix4x4 m = new Matrix4x4( );
+                var m = new Matrix4x4( );
                 m.V00 = m.V11 = m.V22 = m.V33 = 1;
                 return m;
             }
@@ -125,10 +125,10 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateRotationY( float radians )
         {
-            Matrix4x4 m = Matrix4x4.Identity;
+            var m = Matrix4x4.Identity;
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V00 = m.V22 = cos;
             m.V02 = sin;
@@ -147,10 +147,10 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateRotationX( float radians )
         {
-            Matrix4x4 m = Matrix4x4.Identity;
+            var m = Matrix4x4.Identity;
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V11 = m.V22 = cos;
             m.V12 = -sin;
@@ -169,10 +169,10 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateRotationZ( float radians )
         {
-            Matrix4x4 m = Matrix4x4.Identity;
+            var m = Matrix4x4.Identity;
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V00 = m.V11 = cos;
             m.V01 = -sin;
@@ -257,7 +257,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateFromRotation( Matrix3x3 rotationMatrix )
         {
-            Matrix4x4 m = Matrix4x4.Identity;
+            var m = Matrix4x4.Identity;
 
             m.V00 = rotationMatrix.V00;
             m.V01 = rotationMatrix.V01;
@@ -287,7 +287,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateTranslation( Vector3 position )
         {
-            Matrix4x4 m = Matrix4x4.Identity;
+            var m = Matrix4x4.Identity;
 
             m.V03 = position.X;
             m.V13 = position.Y;
@@ -309,15 +309,15 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateLookAt( Vector3 cameraPosition, Vector3 cameraTarget )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
-            Vector3 vector = cameraPosition - cameraTarget;
+            var vector = cameraPosition - cameraTarget;
             vector.Normalize( );
 
-            Vector3 vector2 = Vector3.Cross( new Vector3( 0, 1, 0 ), vector );
+            var vector2 = Vector3.Cross( new Vector3( 0, 1, 0 ), vector );
             vector2.Normalize( );
 
-            Vector3 vector3 = Vector3.Cross( vector, vector2 );
+            var vector3 = Vector3.Cross( vector, vector2 );
 
             m.V00 = vector2.X;
             m.V01 = vector2.Y;
@@ -365,7 +365,7 @@ namespace AForge.AMath
                 throw new ArgumentException( "Near plane must be closer than the far plane." );
             }
 
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = 2.0f * nearPlaneDistance / width;
             m.V11 = 2.0f * nearPlaneDistance / height;
@@ -390,7 +390,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateFromRows( Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3 )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = row0.X;
             m.V01 = row0.Y;
@@ -428,7 +428,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateFromColumns( Vector4 column0, Vector4 column1, Vector4 column2, Vector4 column3 )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = column0.X;
             m.V10 = column0.Y;
@@ -463,7 +463,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 CreateDiagonal( Vector4 vector )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = vector.X;
             m.V11 = vector.Y;
@@ -524,7 +524,7 @@ namespace AForge.AMath
         /// 
         public static Matrix4x4 operator *( Matrix4x4 matrix1, Matrix4x4 matrix2 )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = matrix1.V00 * matrix2.V00 + matrix1.V01 * matrix2.V10 + matrix1.V02 * matrix2.V20 + matrix1.V03 * matrix2.V30;
             m.V01 = matrix1.V00 * matrix2.V01 + matrix1.V01 * matrix2.V11 + matrix1.V02 * matrix2.V21 + matrix1.V03 * matrix2.V31;
@@ -575,7 +575,7 @@ namespace AForge.AMath
         ///
         public static Matrix4x4 operator +( Matrix4x4 matrix1, Matrix4x4 matrix2 )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = matrix1.V00 + matrix2.V00;
             m.V01 = matrix1.V01 + matrix2.V01;
@@ -627,7 +627,7 @@ namespace AForge.AMath
         ///
         public static Matrix4x4 operator -( Matrix4x4 matrix1, Matrix4x4 matrix2 )
         {
-            Matrix4x4 m = new Matrix4x4( );
+            var m = new Matrix4x4( );
 
             m.V00 = matrix1.V00 - matrix2.V00;
             m.V01 = matrix1.V01 - matrix2.V01;

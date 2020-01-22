@@ -26,7 +26,7 @@ namespace TeleSharp.TL
     {
         private static byte[] read(BinaryReader binaryReader)
         {
-            byte firstByte = binaryReader.ReadByte();
+            var firstByte = binaryReader.ReadByte();
             int len, padding;
             if (firstByte == 254)
             {
@@ -39,7 +39,7 @@ namespace TeleSharp.TL
                 padding = (len + 1) % 4;
             }
 
-            byte[] data = binaryReader.ReadBytes(len);
+            var data = binaryReader.ReadBytes(len);
             if (padding > 0)
             {
                 padding = 4 - padding;
@@ -79,7 +79,7 @@ namespace TeleSharp.TL
             }
 
 
-            for (int i = 0; i < padding; i++)
+            for (var i = 0; i < padding; i++)
             {
                 binaryWriter.Write((byte)0);
             }
@@ -100,7 +100,7 @@ namespace TeleSharp.TL
     {
         public static string Deserialize(BinaryReader reader)
         {
-            byte[] data = BytesUtil.Deserialize(reader);
+            var data = BytesUtil.Deserialize(reader);
             return Encoding.UTF8.GetString(data, 0, data.Length);
         }
         public static void Serialize(string src, BinaryWriter writer)

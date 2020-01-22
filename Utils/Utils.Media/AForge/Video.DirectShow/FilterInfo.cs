@@ -63,7 +63,7 @@ namespace AForge.Video.DirectShow
         /// 
         public int CompareTo( object value )
         {
-            FilterInfo f = (FilterInfo) value;
+            var f = (FilterInfo) value;
 
             if ( f == null )
                 return 1;
@@ -89,7 +89,7 @@ namespace AForge.Video.DirectShow
             IBindCtx bindCtx = null;
             IMoniker moniker = null;
 
-            int n = 0;
+            var n = 0;
 
             // create bind context
             if ( Win32.CreateBindCtx( 0, out bindCtx ) == 0 )
@@ -98,7 +98,7 @@ namespace AForge.Video.DirectShow
                 if ( Win32.MkParseDisplayName( bindCtx, filterMoniker, ref n, out moniker ) == 0 )
                 {
                     // get device base filter
-                    Guid filterId = typeof( IBaseFilter ).GUID;
+                    var filterId = typeof( IBaseFilter ).GUID;
                     moniker.BindToObject( null, null, ref filterId, out filterObject );
 
                     Marshal.ReleaseComObject( moniker );
@@ -128,19 +128,19 @@ namespace AForge.Video.DirectShow
 
             try
             {
-                Guid bagId = typeof( IPropertyBag ).GUID;
+                var bagId = typeof( IPropertyBag ).GUID;
                 // get property bag of the moniker
                 moniker.BindToStorage( null, null, ref bagId, out bagObj );
                 bag = (IPropertyBag) bagObj;
 
                 // read FriendlyName
                 object val = "";
-                int hr = bag.Read( "FriendlyName", ref val, IntPtr.Zero );
+                var hr = bag.Read( "FriendlyName", ref val, IntPtr.Zero );
                 if ( hr != 0 )
                     Marshal.ThrowExceptionForHR( hr );
 
                 // get it as string
-                string ret = (string) val;
+                var ret = (string) val;
                 if ( ( ret == null ) || ( ret.Length < 1 ) )
                     throw new ApplicationException( );
 
@@ -169,8 +169,8 @@ namespace AForge.Video.DirectShow
         {
             IBindCtx bindCtx = null;
             IMoniker moniker = null;
-            String name = "";
-            int n = 0;
+            var name = "";
+            var n = 0;
 
             // create bind context
             if ( Win32.CreateBindCtx( 0, out bindCtx ) == 0 )

@@ -287,7 +287,7 @@ namespace AForge.Imaging
                 sinMap = new double[houghHeight];
                 cosMap = new double[houghHeight];
 
-                for ( int i = 0; i < houghHeight; i++ )
+                for ( var i = 0; i < houghHeight; i++ )
                 {
                     sinMap[i] = Math.Sin( i * thetaStep );
                     cosMap[i] = Math.Cos( i * thetaStep );
@@ -388,7 +388,7 @@ namespace AForge.Imaging
             }
 
             // lock source image
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed );
 
@@ -462,45 +462,45 @@ namespace AForge.Imaging
             }
 
             // get source image size
-            int width       = image.Width;
-            int height      = image.Height;
-            int halfWidth   = width / 2;
-            int halfHeight  = height / 2;
+            var width       = image.Width;
+            var height      = image.Height;
+            var halfWidth   = width / 2;
+            var halfHeight  = height / 2;
 
             // make sure the specified rectangle recides with the source image
             rect.Intersect( new Rectangle( 0, 0, width, height ) );
 
-            int startX = -halfWidth  + rect.Left;
-            int startY = -halfHeight + rect.Top;
-            int stopX  = width  - halfWidth  - ( width  - rect.Right );
-            int stopY  = height - halfHeight - ( height - rect.Bottom );
+            var startX = -halfWidth  + rect.Left;
+            var startY = -halfHeight + rect.Top;
+            var stopX  = width  - halfWidth  - ( width  - rect.Right );
+            var stopY  = height - halfHeight - ( height - rect.Bottom );
 
-            int offset = image.Stride - rect.Width;
+            var offset = image.Stride - rect.Width;
 
             // calculate Hough map's width
-            int halfHoughWidth = (int) Math.Sqrt( halfWidth * halfWidth + halfHeight * halfHeight );
-            int houghWidth = halfHoughWidth * 2;
+            var halfHoughWidth = (int) Math.Sqrt( halfWidth * halfWidth + halfHeight * halfHeight );
+            var houghWidth = halfHoughWidth * 2;
 
             houghMap = new short[houghHeight, houghWidth];
 
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( ) +
+                var src = (byte*) image.ImageData.ToPointer( ) +
                     rect.Top * image.Stride + rect.Left;
 
                 // for each row
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, src++ )
+                    for ( var x = startX; x < stopX; x++, src++ )
                     {
                         if ( *src != 0 )
                         {
                             // for each Theta value
-                            for ( int theta = 0; theta < houghHeight; theta++ )
+                            for ( var theta = 0; theta < houghHeight; theta++ )
                             {
-                                int radius = (int) Math.Round( cosMap[theta] * x - sinMap[theta] * y ) + halfHoughWidth;
+                                var radius = (int) Math.Round( cosMap[theta] * x - sinMap[theta] * y ) + halfHoughWidth;
 
                                 if ( ( radius < 0 ) || ( radius >= houghWidth ) )
                                     continue;
@@ -515,9 +515,9 @@ namespace AForge.Imaging
 
             // find max value in Hough map
             maxMapIntensity = 0;
-            for ( int i = 0; i < houghHeight; i++ )
+            for ( var i = 0; i < houghHeight; i++ )
             {
-                for ( int j = 0; j < houghWidth; j++ )
+                for ( var j = 0; j < houghWidth; j++ )
                 {
                     if ( houghMap[i, j] > maxMapIntensity )
                     {
@@ -546,28 +546,28 @@ namespace AForge.Imaging
                 throw new ApplicationException( "Hough transformation was not done yet." );
             }
 
-            int width = houghMap.GetLength( 1 );
-            int height = houghMap.GetLength( 0 );
+            var width = houghMap.GetLength( 1 );
+            var height = houghMap.GetLength( 0 );
 
             // create new image
-            Bitmap image = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
+            var image = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
 
             // lock destination bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed );
 
-            int offset = imageData.Stride - width;
-            float scale = 255.0f / maxMapIntensity;
+            var offset = imageData.Stride - width;
+            var scale = 255.0f / maxMapIntensity;
 
             // do the job
             unsafe
             {
-                byte * dst = (byte*) imageData.Scan0.ToPointer( );
+                var dst = (byte*) imageData.Scan0.ToPointer( );
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, dst++ )
+                    for ( var x = 0; x < width; x++, dst++ )
                     {
                         *dst = (byte) System.Math.Min( 255, (int) ( scale * houghMap[y, x] ) );
                     }
@@ -593,10 +593,10 @@ namespace AForge.Imaging
         public HoughLine[] GetMostIntensiveLines( int count )
         {
             // lines count
-            int n = Math.Min( count, lines.Count );
+            var n = Math.Min( count, lines.Count );
 
             // result array
-            HoughLine[] dst = new HoughLine[n];
+            var dst = new HoughLine[n];
             lines.CopyTo( 0, dst, 0, n );
 
             return dst;
@@ -625,22 +625,22 @@ namespace AForge.Imaging
         // Collect lines with intesities greater or equal then specified
         private void CollectLines( )
         {
-            int		maxTheta = houghMap.GetLength( 0 );
-            int		maxRadius = houghMap.GetLength( 1 );
+            var		maxTheta = houghMap.GetLength( 0 );
+            var		maxRadius = houghMap.GetLength( 1 );
 
             short	intensity;
             bool	foundGreater;
 
-            int     halfHoughWidth = maxRadius >> 1;
+            var     halfHoughWidth = maxRadius >> 1;
 
             // clean lines collection
             lines.Clear( );
 
             // for each Theta value
-            for ( int theta = 0; theta < maxTheta; theta++ )
+            for ( var theta = 0; theta < maxTheta; theta++ )
             {
                 // for each Radius value
-                for ( int radius = 0; radius < maxRadius; radius++ )
+                for ( var radius = 0; radius < maxRadius; radius++ )
                 {
                     // get current value
                     intensity = houghMap[theta, radius];
@@ -657,8 +657,8 @@ namespace AForge.Imaging
                         if ( foundGreater == true )
                             break;
 
-                        int cycledTheta = tt;
-                        int cycledRadius = radius;
+                        var cycledTheta = tt;
+                        var cycledRadius = radius;
 
                         // check limits
                         if ( cycledTheta < 0 )

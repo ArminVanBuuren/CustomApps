@@ -28,16 +28,16 @@ namespace NAudio.Dsp
             // sidechain
 
             // rectify input
-            double rect1 = Math.Abs( in1 );	// n.b. was fabs
-            double rect2 = Math.Abs( in2 ); // n.b. was fabs
+            var rect1 = Math.Abs( in1 );	// n.b. was fabs
+            var rect2 = Math.Abs( in2 ); // n.b. was fabs
 
             // if desired, one could use another EnvelopeDetector to smooth
             // the rectified signal.
 
-            double key = Math.Max( rect1, rect2 );	// link channels with greater of 2
+            var key = Math.Max( rect1, rect2 );	// link channels with greater of 2
 
             // threshold
-            double over = ( key > thresh ) ? 1.0 : 0.0;	// key over threshold ( 0.0 or 1.0 )
+            var over = ( key > thresh ) ? 1.0 : 0.0;	// key over threshold ( 0.0 or 1.0 )
 
             // attack/release
             over += DC_OFFSET;				// add DC offset to avoid denormal

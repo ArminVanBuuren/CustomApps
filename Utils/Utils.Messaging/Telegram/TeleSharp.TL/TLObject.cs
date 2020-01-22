@@ -25,8 +25,8 @@ namespace TeleSharp.TL
         public abstract void DeserializeBody(BinaryReader br);
         public byte[] Serialize()
         {
-            using (MemoryStream m = new MemoryStream())
-            using (BinaryWriter bw = new BinaryWriter(m))
+            using (var m = new MemoryStream())
+            using (var bw = new BinaryWriter(m))
             {
                 Serialize(bw);
                 bw.Close();
@@ -41,7 +41,7 @@ namespace TeleSharp.TL
         }
         public void Deserialize(BinaryReader reader)
         {
-            int constructorId = reader.ReadInt32();
+            var constructorId = reader.ReadInt32();
             if (constructorId != Constructor)
                 throw new InvalidDataException("Constructor Invalid");
             DeserializeBody(reader);

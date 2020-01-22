@@ -174,19 +174,19 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
             // processing start and stop X,Y positions
-            int startX  = rect.Left + 1;
-            int startY  = rect.Top + 1;
-            int stopX   = startX + rect.Width - 2;
-            int stopY   = startY + rect.Height - 2;
+            var startX  = rect.Left + 1;
+            var startY  = rect.Top + 1;
+            var stopX   = startX + rect.Width - 2;
+            var stopY   = startY + rect.Height - 2;
 
-            int width  = rect.Width - 2;
-            int height = rect.Height - 2;
+            var width  = rect.Width - 2;
+            var height = rect.Height - 2;
 
-            int dstStride = destination.Stride;
-            int srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var srcStride = source.Stride;
 
-            int dstOffset = dstStride - rect.Width + 2;
-            int srcOffset = srcStride - rect.Width + 2;
+            var dstOffset = dstStride - rect.Width + 2;
+            var srcOffset = srcStride - rect.Width + 2;
 
             // pixel's value and gradients
             int gx, gy;
@@ -195,27 +195,27 @@ namespace AForge.Imaging.Filters
             float leftPixel = 0, rightPixel = 0;
 
             // STEP 1 - blur image
-            UnmanagedImage blurredImage = gaussianFilter.Apply( source );
+            var blurredImage = gaussianFilter.Apply( source );
 
             // orientation array
-            byte[] orients = new byte[width * height];
+            var orients = new byte[width * height];
             // gradients array
-            float[,] gradients = new float[source.Width, source.Height];
-            float maxGradient = float.NegativeInfinity;
+            var gradients = new float[source.Width, source.Height];
+            var maxGradient = float.NegativeInfinity;
 
             // do the job
-            byte* src = (byte*) blurredImage.ImageData.ToPointer( );
+            var src = (byte*) blurredImage.ImageData.ToPointer( );
             // allign pointer
             src += srcStride * startY + startX;
 
             // STEP 2 - calculate magnitude and edge orientation
-            int p = 0;
+            var p = 0;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, p++ )
+                for ( var x = startX; x < stopX; x++, src++, p++ )
                 {
                     gx = src[-srcStride + 1] + src[srcStride + 1]
                        - src[-srcStride - 1] - src[srcStride - 1]
@@ -238,7 +238,7 @@ namespace AForge.Imaging.Filters
                     }
                     else
                     {
-                        double div = (double) gy / gx;
+                        var div = (double) gy / gx;
 
                         // handle angles of the 2nd and 4th quads
                         if ( div < 0 )
@@ -270,17 +270,17 @@ namespace AForge.Imaging.Filters
             }
 
             // STEP 3 - suppres non maximums
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
             // allign pointer
             dst += dstStride * startY + startX;
 
             p = 0;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, dst++, p++ )
+                for ( var x = startX; x < stopX; x++, dst++, p++ )
                 {
                     // get two adjacent pixels
                     switch ( orients[p] )
@@ -321,10 +321,10 @@ namespace AForge.Imaging.Filters
             dst += dstStride * startY + startX;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, dst++ )
+                for ( var x = startX; x < stopX; x++, dst++ )
                 {
                     if ( *dst < highThreshold )
                     {

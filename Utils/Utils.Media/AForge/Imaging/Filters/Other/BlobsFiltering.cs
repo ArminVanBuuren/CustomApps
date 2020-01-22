@@ -208,22 +208,22 @@ namespace AForge.Imaging.Filters
         {
             // use blob counter to build objects map and filter them
             blobCounter.ProcessImage( image );
-            int[] objectsMap = blobCounter.ObjectLabels;
+            var objectsMap = blobCounter.ObjectLabels;
 
             // get image width and height
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
-                int offset = image.Stride - width;
+                var offset = image.Stride - width;
 
                 for ( int y = 0, p = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, ptr++, p++ )
+                    for ( var x = 0; x < width; x++, ptr++, p++ )
                     {
                         if ( objectsMap[p] == 0 )
                         {
@@ -235,12 +235,12 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
-                int offset = image.Stride - width * pixelSize;
+                var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+                var offset = image.Stride - width * pixelSize;
 
                 for ( int y = 0, p = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, ptr += pixelSize, p++ )
+                    for ( var x = 0; x < width; x++, ptr += pixelSize, p++ )
                     {
                         if ( objectsMap[p] == 0 )
                         {

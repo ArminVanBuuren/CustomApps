@@ -67,7 +67,7 @@ namespace AForge.Video.Ximea
             {
                 int count;
 
-                int errorCode = XimeaAPI.xiGetNumberDevices( out count );
+                var errorCode = XimeaAPI.xiGetNumberDevices( out count );
                 HandleError( errorCode );
 
                 return count;
@@ -128,7 +128,7 @@ namespace AForge.Video.Ximea
             lock ( sync )
             {
                 IntPtr deviceHandle;
-                int errorCode = XimeaAPI.xiOpenDevice( deviceID, out deviceHandle );
+                var errorCode = XimeaAPI.xiOpenDevice( deviceID, out deviceHandle );
                 HandleError( errorCode );
                 // save the device handle is everything is fine
                 this.deviceHandle = deviceHandle;
@@ -166,7 +166,7 @@ namespace AForge.Video.Ximea
 
                     try
                     {
-                        int errorCode = XimeaAPI.xiCloseDevice( deviceHandle );
+                        var errorCode = XimeaAPI.xiCloseDevice( deviceHandle );
                         HandleError( errorCode );
                     }
                     finally
@@ -194,7 +194,7 @@ namespace AForge.Video.Ximea
             {
                 CheckConnection( );
 
-                int errorCode = XimeaAPI.xiStartAcquisition( deviceHandle );
+                var errorCode = XimeaAPI.xiStartAcquisition( deviceHandle );
                 HandleError( errorCode );
 
                 isAcquisitionStarted = true;
@@ -217,7 +217,7 @@ namespace AForge.Video.Ximea
 
                 try
                 {
-                    int errorCode = XimeaAPI.xiStopAcquisition( deviceHandle );
+                    var errorCode = XimeaAPI.xiStopAcquisition( deviceHandle );
                     HandleError( errorCode );
                 }
                 finally
@@ -249,7 +249,7 @@ namespace AForge.Video.Ximea
             {
                 CheckConnection( );
 
-                int errorCode = XimeaAPI.xiSetParam( deviceHandle, parameterName, ref value, 4, ParameterType.Integer );
+                var errorCode = XimeaAPI.xiSetParam( deviceHandle, parameterName, ref value, 4, ParameterType.Integer );
                 HandleError( errorCode );
             }
         }
@@ -276,7 +276,7 @@ namespace AForge.Video.Ximea
             {
                 CheckConnection( );
 
-                int errorCode = XimeaAPI.xiSetParam( deviceHandle, parameterName, ref value, 4, ParameterType.Float );
+                var errorCode = XimeaAPI.xiSetParam( deviceHandle, parameterName, ref value, 4, ParameterType.Float );
                 HandleError( errorCode );
             }
         }
@@ -304,9 +304,9 @@ namespace AForge.Video.Ximea
 
                 int value;
                 int size;
-                ParameterType type = ParameterType.Integer;
+                var type = ParameterType.Integer;
 
-                int errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, out value, out size, ref type );
+                var errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, out value, out size, ref type );
                 HandleError( errorCode );
 
                 return value;
@@ -336,9 +336,9 @@ namespace AForge.Video.Ximea
 
                 float value;
                 int size;
-                ParameterType type = ParameterType.Float;
+                var type = ParameterType.Float;
 
-                int errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, out value, out size, ref type );
+                var errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, out value, out size, ref type );
                 HandleError( errorCode );
 
                 return value;
@@ -366,15 +366,15 @@ namespace AForge.Video.Ximea
             {
                 CheckConnection( );
 
-                byte[] bytes = new byte[260];
-                int size = bytes.Length;
-                ParameterType type = ParameterType.String;
+                var bytes = new byte[260];
+                var size = bytes.Length;
+                var type = ParameterType.String;
 
                 unsafe
                 {
                     fixed ( byte* ptr = bytes )
                     {
-                        int errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, ptr, out size, ref type );
+                        var errorCode = XimeaAPI.xiGetParam( deviceHandle, parameterName, ptr, out size, ref type );
                         HandleError( errorCode );
                     }
                 }
@@ -441,7 +441,7 @@ namespace AForge.Video.Ximea
 
                 int errorCode;
 
-                XimeaImage ximeaImage = new XimeaImage( );
+                var ximeaImage = new XimeaImage( );
                 unsafe
                 {
                     ximeaImage.StructSize = sizeof( XimeaImage );
@@ -461,8 +461,8 @@ namespace AForge.Video.Ximea
                 HandleError( errorCode );
 
                 // create managed bitmap for the unmanaged image provided by camera
-                PixelFormat pixelFormat = PixelFormat.Undefined;
-                int stride = 0;
+                var pixelFormat = PixelFormat.Undefined;
+                var stride = 0;
 
                 switch ( ximeaImage.PixelFormat )
                 {
@@ -496,22 +496,22 @@ namespace AForge.Video.Ximea
                     bitmap = new Bitmap( ximeaImage.Width, ximeaImage.Height, pixelFormat );
 
                     // lock destination bitmap data
-                    BitmapData bitmapData = bitmap.LockBits(
+                    var bitmapData = bitmap.LockBits(
                         new Rectangle( 0, 0, ximeaImage.Width, ximeaImage.Height ),
                         ImageLockMode.ReadWrite, pixelFormat );
 
-                    int dstStride = bitmapData.Stride;
-                    int lineSize  = Math.Min( stride, dstStride );
+                    var dstStride = bitmapData.Stride;
+                    var lineSize  = Math.Min( stride, dstStride );
 
                     unsafe
                     {
-                        byte* dst = (byte*) bitmapData.Scan0.ToPointer( );
-                        byte* src = (byte*) ximeaImage.BitmapData.ToPointer( );
+                        var dst = (byte*) bitmapData.Scan0.ToPointer( );
+                        var src = (byte*) ximeaImage.BitmapData.ToPointer( );
 
                         if ( stride != dstStride )
                         {
                             // copy image
-                            for ( int y = 0; y < ximeaImage.Height; y++ )
+                            for ( var y = 0; y < ximeaImage.Height; y++ )
                             {
                                 AForge.SystemTools.CopyUnmanagedMemory( dst, src, lineSize );
                                 dst += dstStride;
@@ -531,8 +531,8 @@ namespace AForge.Video.Ximea
                 // set palette for grayscale image
                 if ( ximeaImage.PixelFormat == ImageFormat.Grayscale8 )
                 {
-                    ColorPalette palette = bitmap.Palette;
-                    for ( int i = 0; i < 256; i++ )
+                    var palette = bitmap.Palette;
+                    for ( var i = 0; i < 256; i++ )
                     {
                         palette.Entries[i] = Color.FromArgb( i, i, i );
                     }
@@ -554,7 +554,7 @@ namespace AForge.Video.Ximea
                     throw new TimeoutException( "Time out while waiting for camera response." ); 
                 }
 
-                string errorMessage = string.Empty;
+                var errorMessage = string.Empty;
 
                 switch ( errorCode )
                 {

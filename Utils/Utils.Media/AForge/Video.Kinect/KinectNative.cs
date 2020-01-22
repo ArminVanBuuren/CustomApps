@@ -318,7 +318,7 @@ namespace AForge.Video.Kinect
         // Initializes the freenect context
         private static void InitializeContext( )
         {
-            int result = freenect_init( ref KinectNative.freenectContext, IntPtr.Zero );
+            var result = freenect_init( ref KinectNative.freenectContext, IntPtr.Zero );
 
             if ( result != 0 )
             {
@@ -336,7 +336,7 @@ namespace AForge.Video.Kinect
             if ( freenectContext != IntPtr.Zero )
             {
                 // shutdown context
-                int result = KinectNative.freenect_shutdown( freenectContext );
+                var result = KinectNative.freenect_shutdown( freenectContext );
                 if ( result != 0 )
                 {
                     throw new ApplicationException( "Could not shutdown freenect context. Error Code:" + result );

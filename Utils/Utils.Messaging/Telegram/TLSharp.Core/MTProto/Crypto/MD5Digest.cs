@@ -67,9 +67,9 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public static byte[] GetMd5Bytes(byte[] data)
         {
-            MD5Digest digest = new MD5Digest();
+            var digest = new MD5Digest();
             digest.BlockUpdate(data, 0, data.Length);
-            byte[] hash = new byte[16];
+            var hash = new byte[16];
             digest.DoFinal(hash, 0);
 
             return hash;
@@ -89,7 +89,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public string FinalString()
         {
-            byte[] hash = new byte[16];
+            var hash = new byte[16];
             digest.DoFinal(hash, 0);
             return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
@@ -189,7 +189,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public void Finish()
         {
-            long bitLength = (byteCount << 3);
+            var bitLength = (byteCount << 3);
 
             //
             // add the pad bytes.
@@ -345,7 +345,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
             xOff = 0;
 
-            for (int i = 0; i != X.Length; i++)
+            for (var i = 0; i != X.Length; i++)
             {
                 X[i] = 0;
             }
@@ -400,10 +400,10 @@ namespace TLSharp.Core.MTProto.Crypto
 
         internal override void ProcessBlock()
         {
-            int a = H1;
-            int b = H2;
-            int c = H3;
-            int d = H4;
+            var a = H1;
+            var b = H2;
+            var c = H3;
+            var d = H4;
 
             //
             // Round 1 - F cycle, 16 times.
@@ -494,7 +494,7 @@ namespace TLSharp.Core.MTProto.Crypto
             // reset the offset and clean out the word buffer.
             //
             xOff = 0;
-            for (int i = 0; i != X.Length; i++)
+            for (var i = 0; i != X.Length; i++)
             {
                 X[i] = 0;
             }

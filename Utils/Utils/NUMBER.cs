@@ -14,11 +14,11 @@ namespace Utils
 		/// <param name="maxLength"></param>
 		public static void GetOnlyNumberWithCaret(ref string oldValue, ref int caretIndex, int maxLength)
 		{
-			string correctValue = getNotNumber.Replace(oldValue, "");
+			var correctValue = getNotNumber.Replace(oldValue, "");
 			if (correctValue.Length > maxLength)
 				correctValue = correctValue.Substring(0, maxLength);
 
-			int newCoretIndex = 0;
+			var newCoretIndex = 0;
 			if (oldValue.Length > correctValue.Length)
 				newCoretIndex = caretIndex - (oldValue.Length - correctValue.Length);
 			else

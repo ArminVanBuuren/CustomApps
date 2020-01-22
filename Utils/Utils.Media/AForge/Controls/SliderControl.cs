@@ -239,10 +239,10 @@ namespace AForge.Controls
         // Paint the control
         private void TurnControl_Paint( object sender, PaintEventArgs e )
         {
-            Graphics g = e.Graphics;
+            var g = e.Graphics;
 
-            int clientWidth  = ClientRectangle.Width;
-            int clientHeight = ClientRectangle.Height;
+            var clientWidth  = ClientRectangle.Width;
+            var clientHeight = ClientRectangle.Height;
 
             if ( isHorizontal )
             {
@@ -256,7 +256,7 @@ namespace AForge.Controls
                 g.DrawLine( borderPen, clientWidth / 2, topMargin, clientWidth / 2, topMargin + manipulatorHeight / 2 );
 
                 // calculate manipulator's center point
-                int ctrlManipulatorX = (int) ( manipulatatorPosition * ( clientWidth / 2 - leftMargin ) + clientWidth / 2 );
+                var ctrlManipulatorX = (int) ( manipulatatorPosition * ( clientWidth / 2 - leftMargin ) + clientWidth / 2 );
 
                 // draw manipulator
                 g.FillRectangle( ( this.Enabled ) ? manipulatorBrush : disabledBrash, ctrlManipulatorX - manipulatorWidth / 2, 0,
@@ -277,7 +277,7 @@ namespace AForge.Controls
 
 
                 // calculate manipulator's center point
-                int ctrlManipulatorY = (int) ( -manipulatatorPosition * ( clientHeight / 2 - topMargin ) + clientHeight / 2 );
+                var ctrlManipulatorY = (int) ( -manipulatatorPosition * ( clientHeight / 2 - topMargin ) + clientHeight / 2 );
 
                 // draw manipulator
                 g.FillRectangle( ( this.Enabled ) ? manipulatorBrush : disabledBrash, 0, ctrlManipulatorY - manipulatorWidth / 2,
@@ -300,7 +300,7 @@ namespace AForge.Controls
                         ( e.Y >= topMargin ) &&
                         ( e.Y < ClientRectangle.Height - topMargin ) )
                     {
-                        int cx = e.X - ClientRectangle.Width / 2;
+                        var cx = e.X - ClientRectangle.Width / 2;
                         manipulatatorPosition = (float) cx / ( ClientRectangle.Width / 2 - leftMargin );
                         tracking = true;
                     }
@@ -313,7 +313,7 @@ namespace AForge.Controls
                         ( e.Y >= topMargin ) &&
                         ( e.Y < ClientRectangle.Height - topMargin ) )
                     {
-                        int cy = ClientRectangle.Height / 2 - e.Y;
+                        var cy = ClientRectangle.Height / 2 - e.Y;
                         manipulatatorPosition = (float) cy / ( ClientRectangle.Height / 2 - topMargin );
                         tracking = true;
                     }
@@ -361,12 +361,12 @@ namespace AForge.Controls
             {
                 if ( isHorizontal )
                 {
-                    int cx = e.X - ClientRectangle.Width / 2;
+                    var cx = e.X - ClientRectangle.Width / 2;
                     manipulatatorPosition = (float) cx / ( ClientRectangle.Width / 2 - leftMargin );
                 }
                 else
                 {
-                    int cy = ClientRectangle.Height / 2 - e.Y;
+                    var cy = ClientRectangle.Height / 2 - e.Y;
                     manipulatatorPosition = (float) cy / ( ClientRectangle.Height / 2 - topMargin );
                 }
 

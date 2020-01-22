@@ -147,10 +147,10 @@ namespace AForge.Imaging
             }
 
             // lock source and template images
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
-            BitmapData templateData = template.LockBits(
+            var templateData = template.LockBits(
                 new Rectangle( 0, 0, template.Width, template.Height ),
                 ImageLockMode.ReadOnly, template.PixelFormat );
 
@@ -256,18 +256,18 @@ namespace AForge.Imaging
             }
 
             // clip search zone
-            Rectangle zone = searchZone;
+            var zone = searchZone;
             zone.Intersect( new Rectangle( 0, 0, image.Width, image.Height ) );
 
             // search zone's starting point
-            int startX = zone.X;
-            int startY = zone.Y;
+            var startX = zone.X;
+            var startY = zone.Y;
 
             // get source and template image size
-            int sourceWidth    = zone.Width;
-            int sourceHeight   = zone.Height;
-            int templateWidth  = template.Width;
-            int templateHeight = template.Height;
+            var sourceWidth    = zone.Width;
+            var sourceHeight   = zone.Height;
+            var templateWidth  = template.Width;
+            var templateHeight = template.Height;
 
             // check template's size
             if ( ( templateWidth > sourceWidth ) || ( templateHeight > sourceHeight ) )
@@ -275,52 +275,52 @@ namespace AForge.Imaging
                 throw new InvalidImagePropertiesException( "Template's size should be smaller or equal to search zone." );
             }
 
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
-            int sourceStride = image.Stride;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var sourceStride = image.Stride;
 
             // similarity map. its size is increased by 4 from each side to increase
             // performance of non-maximum suppresion
-            int mapWidth  = sourceWidth - templateWidth + 1;
-            int mapHeight = sourceHeight - templateHeight + 1;
-            int[,] map = new int[mapHeight + 4, mapWidth + 4];
+            var mapWidth  = sourceWidth - templateWidth + 1;
+            var mapHeight = sourceHeight - templateHeight + 1;
+            var map = new int[mapHeight + 4, mapWidth + 4];
 
             // maximum possible difference with template
-            int maxDiff = templateWidth * templateHeight * pixelSize * 255;
+            var maxDiff = templateWidth * templateHeight * pixelSize * 255;
 
             // integer similarity threshold
-            int threshold = (int) ( similarityThreshold * maxDiff );
+            var threshold = (int) ( similarityThreshold * maxDiff );
 
             // width of template in bytes
-            int templateWidthInBytes = templateWidth * pixelSize;
+            var templateWidthInBytes = templateWidth * pixelSize;
 
             // do the job
             unsafe
             {
-                byte* baseSrc = (byte*) image.ImageData.ToPointer( );
-                byte* baseTpl = (byte*) template.ImageData.ToPointer( );
+                var baseSrc = (byte*) image.ImageData.ToPointer( );
+                var baseTpl = (byte*) template.ImageData.ToPointer( );
 
-                int sourceOffset = image.Stride - templateWidth * pixelSize;
-                int templateOffset = template.Stride - templateWidth * pixelSize;
+                var sourceOffset = image.Stride - templateWidth * pixelSize;
+                var templateOffset = template.Stride - templateWidth * pixelSize;
 
                 // for each row of the source image
-                for ( int y = 0; y < mapHeight; y++ )
+                for ( var y = 0; y < mapHeight; y++ )
                 {
                     // for each pixel of the source image
-                    for ( int x = 0; x < mapWidth; x++ )
+                    for ( var x = 0; x < mapWidth; x++ )
                     {
-                        byte* src = baseSrc + sourceStride * ( y + startY ) + pixelSize * ( x + startX );
-                        byte* tpl = baseTpl;
+                        var src = baseSrc + sourceStride * ( y + startY ) + pixelSize * ( x + startX );
+                        var tpl = baseTpl;
 
                         // compare template with source image starting from current X,Y
-                        int dif = 0;
+                        var dif = 0;
 
                         // for each row of the template
-                        for ( int i = 0; i < templateHeight; i++ )
+                        for ( var i = 0; i < templateHeight; i++ )
                         {
                             // for each pixel of the template
-                            for ( int j = 0; j < templateWidthInBytes; j++, src++, tpl++ )
+                            for ( var j = 0; j < templateWidthInBytes; j++, src++, tpl++ )
                             {
-                                int d = *src - *tpl;
+                                var d = *src - *tpl;
                                 if ( d > 0 )
                                 {
                                     dif += d;
@@ -335,7 +335,7 @@ namespace AForge.Imaging
                         }
 
                         // templates similarity
-                        int sim = maxDiff - dif;
+                        var sim = maxDiff - dif;
 
                         if ( sim >= threshold )
                             map[y + 2, x + 2] = sim;
@@ -344,7 +344,7 @@ namespace AForge.Imaging
             }
 
             // collect interesting points - only those points, which are local maximums
-            List<TemplateMatch> matchingsList = new List<TemplateMatch>( );
+            var matchingsList = new List<TemplateMatch>( );
 
             // for each row
             for ( int y = 2, maxY = mapHeight + 2; y < maxY; y++ )
@@ -352,13 +352,13 @@ namespace AForge.Imaging
                 // for each pixel
                 for ( int x = 2, maxX = mapWidth + 2; x < maxX; x++ )
                 {
-                    int currentValue = map[y, x];
+                    var currentValue = map[y, x];
 
                     // for each windows' row
-                    for ( int i = -2; ( currentValue != 0 ) && ( i <= 2 ); i++ )
+                    for ( var i = -2; ( currentValue != 0 ) && ( i <= 2 ); i++ )
                     {
                         // for each windows' pixel
-                        for ( int j = -2; j <= 2; j++ )
+                        for ( var j = -2; j <= 2; j++ )
                         {
                             if ( map[y + i, x + j] > currentValue )
                             {
@@ -379,7 +379,7 @@ namespace AForge.Imaging
             }
 
             // convert list to array
-            TemplateMatch[] matchings = new TemplateMatch[matchingsList.Count];
+            var matchings = new TemplateMatch[matchingsList.Count];
             matchingsList.CopyTo( matchings );
             // sort in descending order
             Array.Sort( matchings, new MatchingsSorter( ) );
@@ -392,7 +392,7 @@ namespace AForge.Imaging
         {
             public int Compare( Object x, Object y )
             {
-                float diff = ( (TemplateMatch) y ).Similarity - ( (TemplateMatch) x ).Similarity;
+                var diff = ( (TemplateMatch) y ).Similarity - ( (TemplateMatch) x ).Similarity;
 
                 return ( diff > 0 ) ? 1 : ( diff < 0 ) ? -1 : 0;
             }

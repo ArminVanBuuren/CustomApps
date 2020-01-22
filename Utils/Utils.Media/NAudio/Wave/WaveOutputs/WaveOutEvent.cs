@@ -86,7 +86,7 @@ namespace NAudio.Wave
             callbackEvent = new AutoResetEvent(false);
 
             waveStream = waveProvider;
-            int bufferSize = waveProvider.WaveFormat.ConvertLatencyToByteSize((DesiredLatency + NumberOfBuffers - 1) / NumberOfBuffers);            
+            var bufferSize = waveProvider.WaveFormat.ConvertLatencyToByteSize((DesiredLatency + NumberOfBuffers - 1) / NumberOfBuffers);            
 
             MmResult result;
             lock (waveOutLock)
@@ -160,7 +160,7 @@ namespace NAudio.Wave
                 // requeue any buffers returned to us
                 if (playbackState == PlaybackState.Playing)
                 {
-                    int queued = 0;
+                    var queued = 0;
                     foreach (var buffer in buffers)
                     {
                         if (buffer.InQueue || buffer.OnDone())

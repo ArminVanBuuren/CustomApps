@@ -65,21 +65,21 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get width and height
-            int width = sourceData.Width;
-            int height = sourceData.Height;
+            var width = sourceData.Width;
+            var height = sourceData.Height;
 
-            int srcOffset = sourceData.Stride - width;
-            int dstOffset = destinationData.Stride - width * 3;
+            var srcOffset = sourceData.Stride - width;
+            var dstOffset = destinationData.Stride - width * 3;
 
             // do the job
-            byte * src = (byte*) sourceData.ImageData.ToPointer( );
-            byte * dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // for each line
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
                 // for each pixel
-                for ( int x = 0; x < width; x++, src++, dst += 3 )
+                for ( var x = 0; x < width; x++, src++, dst += 3 )
                 {
                     dst[RGB.R] = dst[RGB.G] = dst[RGB.B] = *src;
                 }

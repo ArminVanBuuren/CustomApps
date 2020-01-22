@@ -164,26 +164,26 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
             // get pixel size
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
 
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
             byte r, g, b;
 
             // allign pointer to the first pixel to process
             ptr += ( startY * image.Stride + startX * pixelSize );
 
             // for each row
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                 {
                     r = ptr[RGB.R];
                     g = ptr[RGB.G];

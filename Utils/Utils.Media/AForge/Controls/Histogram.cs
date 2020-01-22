@@ -225,7 +225,7 @@ namespace AForge.Controls
                 {
                     // check values and find maximum
                     max = 0;
-                    foreach ( int v in values )
+                    foreach ( var v in values )
                     {
                         // value chould non-negative
                         if ( v < 0 )
@@ -314,7 +314,7 @@ namespace AForge.Controls
         /// 
         protected override void OnPaint( PaintEventArgs pe )
         {
-            Graphics g = pe.Graphics;
+            var g = pe.Graphics;
             // drawing area's width and height
             width = ( ( values == null ) || ( vertical == true ) ) ?
                 ClientRectangle.Width - 2 :
@@ -324,8 +324,8 @@ namespace AForge.Controls
                 ClientRectangle.Height - 2 :
                 Math.Min( values.Length, ClientRectangle.Height - 2 );
 
-            int x = 1;
-            int y = 1;
+            var x = 1;
+            var y = 1;
             int value;
 
             // draw rectangle around the image
@@ -333,8 +333,8 @@ namespace AForge.Controls
 
             if ( values != null )
             {
-                int start = Math.Min( this.start, this.stop );
-                int stop  = Math.Max( this.start, this.stop );
+                var start = Math.Min( this.start, this.stop );
+                var stop  = Math.Max( this.start, this.stop );
 
                 if ( tracking )
                 {
@@ -355,7 +355,7 @@ namespace AForge.Controls
                 if ( max != 0 )
                 {
                     // scaling factor
-                    double factor = (double) ( ( vertical ) ? width : height ) /
+                    var factor = (double) ( ( vertical ) ? width : height ) /
                         ( ( logarithmic ) ? maxLogarithmic : max );
 
                     // draw histogram
@@ -400,8 +400,8 @@ namespace AForge.Controls
         {
             if ( ( allowSelection ) && ( values != null ) )
             {
-                int x = 1;
-                int y = 1;
+                var x = 1;
+                var y = 1;
 
                 if ( ( e.X >= x ) && ( e.Y >= y ) && ( e.X < x + width ) && ( e.Y < y + height ) )
                 {
@@ -430,8 +430,8 @@ namespace AForge.Controls
         {
             if ( ( allowSelection ) && ( values != null ) )
             {
-                int x = 1;
-                int y = 1;
+                var x = 1;
+                var y = 1;
 
                 if ( !tracking )
                 {

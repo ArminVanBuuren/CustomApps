@@ -177,11 +177,11 @@ namespace FastColoredTextBoxNS
 
         public virtual void RemoveLine(int index, int count)
         {
-            List<int> removedLineIds = new List<int>();
+            var removedLineIds = new List<int>();
             //
             if (count > 0)
                 if (IsNeedBuildRemovedLineIds)
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                         removedLineIds.Add(this[index + i].UniqueId);
             //
             lines.RemoveRange(index, count);
@@ -264,7 +264,7 @@ namespace FastColoredTextBoxNS
 
         public virtual bool Remove(Line item)
         {
-            int i = IndexOf(item);
+            var i = IndexOf(item);
             if (i >= 0)
             {
                 RemoveLine(i);
@@ -326,9 +326,9 @@ namespace FastColoredTextBoxNS
 
         public virtual void SaveToFile(string fileName, Encoding enc)
         {
-            using (StreamWriter sw = new StreamWriter(fileName, false, enc))
+            using (var sw = new StreamWriter(fileName, false, enc))
             {
-                for (int i = 0; i < Count - 1;i++ )
+                for (var i = 0; i < Count - 1;i++ )
                     sw.WriteLine(lines[i].Text);
 
                 sw.Write(lines[Count-1].Text);

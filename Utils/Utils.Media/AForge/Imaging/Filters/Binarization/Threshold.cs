@@ -103,26 +103,26 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
-                int offset = image.Stride - rect.Width;
+                var offset = image.Stride - rect.Width;
 
                 // do the job
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
 
                 // allign pointer to the first pixel to process
                 ptr += ( startY * image.Stride + startX );
 
                 // for each line	
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         *ptr = (byte) ( ( *ptr >= threshold ) ? 255 : 0 );
                     }
@@ -131,16 +131,16 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                byte* basePtr = (byte*) image.ImageData.ToPointer( ) + startX * 2;
-                int stride = image.Stride;
+                var basePtr = (byte*) image.ImageData.ToPointer( ) + startX * 2;
+                var stride = image.Stride;
 
                 // for each line	
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    ushort* ptr = (ushort*) ( basePtr + stride * y );
+                    var ptr = (ushort*) ( basePtr + stride * y );
 
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         *ptr = (ushort) ( ( *ptr >= threshold ) ? 65535 : 0 );
                     }

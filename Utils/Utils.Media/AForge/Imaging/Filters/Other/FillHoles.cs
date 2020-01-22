@@ -122,25 +122,25 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // 1 - invert the source image
-            Invert invertFilter = new Invert( );
-            UnmanagedImage invertedImage = invertFilter.Apply( image );
+            var invertFilter = new Invert( );
+            var invertedImage = invertFilter.Apply( image );
 
             // 2 - use blob counter to find holes (they are white objects now on the inverted image)
-            BlobCounter blobCounter = new BlobCounter( );
+            var blobCounter = new BlobCounter( );
             blobCounter.ProcessImage( invertedImage );
-            Blob[] blobs = blobCounter.GetObjectsInformation( );
+            var blobs = blobCounter.GetObjectsInformation( );
 
             // 3 - check all blobs and determine which should be filtered
-            byte[] newObjectColors = new byte[blobs.Length + 1];
+            var newObjectColors = new byte[blobs.Length + 1];
             newObjectColors[0] = 255; // don't touch the objects, which have 0 ID
 
             for ( int i = 0, n = blobs.Length; i < n; i++ )
             {
-                Blob blob = blobs[i];
+                var blob = blobs[i];
 
                 if ( ( blob.Rectangle.Left == 0 ) || ( blob.Rectangle.Top == 0 ) ||
                      ( blob.Rectangle.Right == width ) || ( blob.Rectangle.Bottom == height ) )
@@ -162,14 +162,14 @@ namespace AForge.Imaging.Filters
             }
 
             // 4 - process the source image image and fill holes
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
-            int offset = image.Stride - width;
+            var ptr = (byte*) image.ImageData.ToPointer( );
+            var offset = image.Stride - width;
 
-            int[] objectLabels = blobCounter.ObjectLabels;
+            var objectLabels = blobCounter.ObjectLabels;
 
             for ( int y = 0, i = 0; y < height; y++ )
             {
-                for ( int x = 0; x < width; x++, i++, ptr++ )
+                for ( var x = 0; x < width; x++, i++, ptr++ )
                 {
                     *ptr = newObjectColors[objectLabels[i]];
                 }

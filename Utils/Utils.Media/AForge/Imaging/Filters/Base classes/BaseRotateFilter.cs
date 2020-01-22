@@ -116,23 +116,23 @@ namespace AForge.Imaging.Filters
                 return new Size( sourceData.Width, sourceData.Height );
 
             // angle's sine and cosine
-            double angleRad = -angle * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            var angleRad = -angle * Math.PI / 180;
+            var angleCos = Math.Cos( angleRad );
+            var angleSin = Math.Sin( angleRad );
 
             // calculate half size
-            double halfWidth  = (double) sourceData.Width / 2;
-            double halfHeight = (double) sourceData.Height / 2;
+            var halfWidth  = (double) sourceData.Width / 2;
+            var halfHeight = (double) sourceData.Height / 2;
 
             // rotate corners
-            double cx1 = halfWidth * angleCos;
-            double cy1 = halfWidth * angleSin;
+            var cx1 = halfWidth * angleCos;
+            var cy1 = halfWidth * angleSin;
 
-            double cx2 = halfWidth * angleCos - halfHeight * angleSin;
-            double cy2 = halfWidth * angleSin + halfHeight * angleCos;
+            var cx2 = halfWidth * angleCos - halfHeight * angleSin;
+            var cy2 = halfWidth * angleSin + halfHeight * angleCos;
 
-            double cx3 = -halfHeight * angleSin;
-            double cy3 =  halfHeight * angleCos;
+            var cx3 = -halfHeight * angleSin;
+            var cy3 =  halfHeight * angleCos;
 
             double cx4 = 0;
             double cy4 = 0;

@@ -70,13 +70,13 @@ namespace AForge.Video.DirectShow
 			object			comObj = null;
 			ICreateDevEnum	enumDev = null;
 			IEnumMoniker	enumMon = null;
-			IMoniker[]		devMon = new IMoniker[1];
+			var		devMon = new IMoniker[1];
 			int				hr;
 
             try
             {
                 // Get the system device enumerator
-                Type srvType = Type.GetTypeFromCLSID( Clsid.SystemDeviceEnum );
+                var srvType = Type.GetTypeFromCLSID( Clsid.SystemDeviceEnum );
                 if ( srvType == null )
                     throw new ApplicationException( "Failed creating device enumerator" );
 
@@ -90,7 +90,7 @@ namespace AForge.Video.DirectShow
                     throw new ApplicationException( "No devices of the category" );
 
                 // Collect all filters
-                IntPtr n = IntPtr.Zero;
+                var n = IntPtr.Zero;
                 while ( true )
                 {
                     // Get next filter
@@ -99,7 +99,7 @@ namespace AForge.Video.DirectShow
                         break;
 
                     // Add the filter
-                    FilterInfo filter = new FilterInfo( devMon[0] );
+                    var filter = new FilterInfo( devMon[0] );
                     InnerList.Add( filter );
 
                     // Release COM object

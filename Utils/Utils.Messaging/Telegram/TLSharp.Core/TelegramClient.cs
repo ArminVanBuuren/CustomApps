@@ -87,7 +87,7 @@ namespace TLSharp.Core
             TLExportedAuthorization exported = null;
             if (_session.TLUser != null)
             {
-                TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
+                var exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
             }
 
@@ -101,7 +101,7 @@ namespace TLSharp.Core
 
             if (_session.TLUser != null)
             {
-                TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
+                var importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
                 var imported = await SendRequestAsync<TLAuthorization>(importAuthorization);
                 OnUserAuthenticated(((TLUser)imported.User));
             }
@@ -197,10 +197,10 @@ namespace TLSharp.Core
         public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str)
         {
 
-            byte[] password_Bytes = Encoding.UTF8.GetBytes(password_str);
-            IEnumerable<byte> rv = password.CurrentSalt.Concat(password_Bytes).Concat(password.CurrentSalt);
+            var password_Bytes = Encoding.UTF8.GetBytes(password_str);
+            var rv = password.CurrentSalt.Concat(password_Bytes).Concat(password.CurrentSalt);
 
-            SHA256Managed hashstring = new SHA256Managed();
+            var hashstring = new SHA256Managed();
             var password_hash = hashstring.ComputeHash(rv.ToArray());
 
             var request = new TLRequestCheckPassword() { PasswordHash = password_hash };

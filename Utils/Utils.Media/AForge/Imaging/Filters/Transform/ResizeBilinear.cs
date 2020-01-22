@@ -78,31 +78,31 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int width   = sourceData.Width;
-            int height  = sourceData.Height;
+            var width   = sourceData.Width;
+            var height  = sourceData.Height;
 
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride - pixelSize * newWidth;
-            double xFactor = (double) width / newWidth;
-            double yFactor = (double) height / newHeight;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride - pixelSize * newWidth;
+            var xFactor = (double) width / newWidth;
+            var yFactor = (double) height / newHeight;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // coordinates of source points
             double  ox, oy, dx1, dy1, dx2, dy2;
             int     ox1, oy1, ox2, oy2;
             // width and height decreased by 1
-            int ymax = height - 1;
-            int xmax = width - 1;
+            var ymax = height - 1;
+            var xmax = width - 1;
             // temporary pointers
             byte* tp1, tp2;
             byte* p1, p2, p3, p4;
 
             // for each line
-            for ( int y = 0; y < newHeight; y++ )
+            for ( var y = 0; y < newHeight; y++ )
             {
                 // Y coordinates
                 oy  = (double) y * yFactor;
@@ -116,7 +116,7 @@ namespace AForge.Imaging.Filters
                 tp2 = src + oy2 * srcStride;
 
                 // for each pixel
-                for ( int x = 0; x < newWidth; x++ )
+                for ( var x = 0; x < newWidth; x++ )
                 {
                     // X coordinates
                     ox  = (double) x * xFactor;
@@ -132,7 +132,7 @@ namespace AForge.Imaging.Filters
                     p4 = tp2 + ox2 * pixelSize;
 
                     // interpolate using 4 points
-                    for ( int i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
+                    for ( var i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
                     {
                         *dst = (byte) (
                             dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +

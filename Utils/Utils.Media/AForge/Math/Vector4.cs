@@ -47,8 +47,8 @@ namespace AForge.AMath
         {
             get
             {
-                float v1 = ( X > Y ) ? X : Y;
-                float v2 = ( Z > W ) ? Z : W;
+                var v1 = ( X > Y ) ? X : Y;
+                var v2 = ( Z > W ) ? Z : W;
 
                 return ( v1 > v2 ) ? v1 : v2;
             }
@@ -64,8 +64,8 @@ namespace AForge.AMath
         {
             get
             {
-                float v1 = ( X < Y ) ? X : Y;
-                float v2 = ( Z < W ) ? Z : W;
+                var v1 = ( X < Y ) ? X : Y;
+                var v2 = ( Z < W ) ? Z : W;
 
                 return ( v1 < v2 ) ? v1 : v2;
             }
@@ -88,8 +88,8 @@ namespace AForge.AMath
             {
                 float v1 = 0;
                 float v2 = 0;
-                int i1 = 0;
-                int i2 = 0;
+                var i1 = 0;
+                var i2 = 0;
 
                 if ( X >= Y )
                 {
@@ -134,8 +134,8 @@ namespace AForge.AMath
             {
                 float v1 = 0;
                 float v2 = 0;
-                int i1 = 0;
-                int i2 = 0;
+                var i1 = 0;
+                var i2 = 0;
 
                 if ( X <= Y )
                 {
@@ -555,8 +555,8 @@ namespace AForge.AMath
         ///
         public float Normalize( )
         {
-            float norm = (float) System.Math.Sqrt( X * X + Y * Y + Z * Z + W * W );
-            float invNorm = 1.0f / norm;
+            var norm = (float) System.Math.Sqrt( X * X + Y * Y + Z * Z + W * W );
+            var invNorm = 1.0f / norm;
 
             X *= invNorm;
             Y *= invNorm;

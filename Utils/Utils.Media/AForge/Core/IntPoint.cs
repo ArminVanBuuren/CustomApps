@@ -69,8 +69,8 @@ namespace AForge
         /// 
         public float DistanceTo( IntPoint anotherPoint )
         {
-            int dx = X - anotherPoint.X;
-            int dy = Y - anotherPoint.Y;
+            var dx = X - anotherPoint.X;
+            var dy = Y - anotherPoint.Y;
 
             return (float) System.Math.Sqrt( dx * dx + dy * dy );
         }
@@ -86,8 +86,8 @@ namespace AForge
         /// 
         public float SquaredDistanceTo( Point anotherPoint )
         {
-            float dx = X - anotherPoint.X;
-            float dy = Y - anotherPoint.Y;
+            var dx = X - anotherPoint.X;
+            var dy = Y - anotherPoint.Y;
 
             return dx * dx + dy * dy;
         }

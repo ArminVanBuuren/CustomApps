@@ -156,7 +156,7 @@ namespace AForge.Imaging
             }
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -221,10 +221,10 @@ namespace AForge.Imaging
         /// 
         private void ProcessImage( UnmanagedImage image )
         {
-            PixelFormat pixelFormat = image.PixelFormat;
+            var pixelFormat = image.PixelFormat;
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             red = green = blue = gray = null;
 
@@ -235,17 +235,17 @@ namespace AForge.Imaging
                 if ( pixelFormat == PixelFormat.Format8bppIndexed )
                 {
                     // 8 bpp grayscale image
-                    byte* p = (byte*) image.ImageData.ToPointer( );
-                    int offset = image.Stride - width;
+                    var p = (byte*) image.ImageData.ToPointer( );
+                    var offset = image.Stride - width;
 
                     // histogram array
-                    int[] g = new int[width];
+                    var g = new int[width];
 
                     // for each pixel
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p++ )
+                        for ( var x = 0; x < width; x++, p++ )
                         {
                             g[x] += *p;
                         }
@@ -258,19 +258,19 @@ namespace AForge.Imaging
                 else if ( pixelFormat == PixelFormat.Format16bppGrayScale )
                 {
                     // 16 bpp grayscale image
-                    byte* basePtr = (byte*) image.ImageData.ToPointer( );
-                    int stride = image.Stride;
+                    var basePtr = (byte*) image.ImageData.ToPointer( );
+                    var stride = image.Stride;
 
                     // histogram array
-                    int[] g = new int[width];
+                    var g = new int[width];
 
                     // for each pixel
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
-                        ushort* p = (ushort*) ( basePtr + stride * y );
+                        var p = (ushort*) ( basePtr + stride * y );
 
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p++ )
+                        for ( var x = 0; x < width; x++, p++ )
                         {
                             g[x] += *p;
                         }
@@ -285,20 +285,20 @@ namespace AForge.Imaging
                     ( pixelFormat == PixelFormat.Format32bppArgb ) )
                 {
                     // 24/32 bpp color image
-                    byte* p = (byte*) image.ImageData.ToPointer( );
-                    int pixelSize = ( pixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
-                    int offset = image.Stride - width * pixelSize;
+                    var p = (byte*) image.ImageData.ToPointer( );
+                    var pixelSize = ( pixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+                    var offset = image.Stride - width * pixelSize;
 
                     // histogram arrays
-                    int[] r = new int[width];
-                    int[] g = new int[width];
-                    int[] b = new int[width];
+                    var r = new int[width];
+                    var g = new int[width];
+                    var b = new int[width];
 
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p += pixelSize )
+                        for ( var x = 0; x < width; x++, p += pixelSize )
                         {
                             r[x] += p[RGB.R];
                             g[x] += p[RGB.G];
@@ -317,22 +317,22 @@ namespace AForge.Imaging
                     ( pixelFormat == PixelFormat.Format64bppArgb ) )
                 {
                     // 48/64 bpp color image
-                    byte* basePtr = (byte*) image.ImageData.ToPointer( );
-                    int stride = image.Stride;
-                    int pixelSize = ( pixelFormat == PixelFormat.Format48bppRgb ) ? 3 : 4;
+                    var basePtr = (byte*) image.ImageData.ToPointer( );
+                    var stride = image.Stride;
+                    var pixelSize = ( pixelFormat == PixelFormat.Format48bppRgb ) ? 3 : 4;
 
                     // histogram arrays
-                    int[] r = new int[width];
-                    int[] g = new int[width];
-                    int[] b = new int[width];
+                    var r = new int[width];
+                    var g = new int[width];
+                    var b = new int[width];
 
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
-                        ushort* p = (ushort*) ( basePtr + stride * y );
+                        var p = (ushort*) ( basePtr + stride * y );
 
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p += pixelSize )
+                        for ( var x = 0; x < width; x++, p += pixelSize )
                         {
                             r[x] += p[RGB.R];
                             g[x] += p[RGB.G];

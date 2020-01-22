@@ -76,7 +76,7 @@ namespace HtmlAgilityPack
             {
 
                 // Store list of properties that defined xpath attribute
-                IEnumerable<PropertyInfo> validProperties = targetType.GetPropertiesDefinedXPath();
+                var validProperties = targetType.GetPropertiesDefinedXPath();
                 if (validProperties.CountOfIEnumerable() == 0) // if no XPath property exist in type T while T defined HasXpath attribute.
                 {
                     throw new MissingXPathException("Type " + targetType.FullName +
@@ -89,7 +89,7 @@ namespace HtmlAgilityPack
                     {
                         // Get xpath attribute from valid properties
                         // for .Net old versions:
-                        XPathAttribute xPathAttribute = (propertyInfo.GetCustomAttributes(typeof(XPathAttribute), false) as IList)[0] as XPathAttribute;
+                        var xPathAttribute = (propertyInfo.GetCustomAttributes(typeof(XPathAttribute), false) as IList)[0] as XPathAttribute;
 
 
                         #region Property_IsNOT_IEnumerable
@@ -119,11 +119,11 @@ namespace HtmlAgilityPack
                             // Property is None-IEnumerable HasXPath-user-defined class
                             if (propertyInfo.PropertyType.IsDefinedAttribute(typeof(HasXPathAttribute)) == true)
                             {
-                                HtmlDocument innerHtmlDocument = new HtmlDocument();
+                                var innerHtmlDocument = new HtmlDocument();
 
                                 innerHtmlDocument.LoadHtml(htmlNode.InnerHtml);
 
-                                object o = GetEncapsulatedData(propertyInfo.PropertyType, innerHtmlDocument);
+                                var o = GetEncapsulatedData(propertyInfo.PropertyType, innerHtmlDocument);
 
                                 propertyInfo.SetValue(targetObject, o, null);
                             }
@@ -134,7 +134,7 @@ namespace HtmlAgilityPack
                             // AND does not deifned xpath and shouldn't have property that defined xpath.
                             else
                             {
-                                string result = string.Empty;
+                                var result = string.Empty;
 
                                 if (xPathAttribute.AttributeName == null) // It target None-IEnumerable value of HTMLTag 
                                 {
@@ -180,7 +180,7 @@ namespace HtmlAgilityPack
                         #region Property_Is_IEnumerable
                         else // Property is IEnumerable<T>
                         {
-                            IList<Type> T_Types = propertyInfo.GetGenericTypes() as IList<Type>; // Get T type
+                            var T_Types = propertyInfo.GetGenericTypes() as IList<Type>; // Get T type
 
                             if (T_Types == null || T_Types.Count == 0)
                             {
@@ -218,12 +218,12 @@ namespace HtmlAgilityPack
                                 #region Property_Is_IEnumerable<HasXPath-UserDefinedClass>
                                 if (T_Types[0].IsDefinedAttribute(typeof(HasXPathAttribute)) == true) // T is IEnumerable HasXPath-user-defined class (T type Defined XPath properties)
                                 {
-                                    foreach (HtmlNode node in nodeCollection)
+                                    foreach (var node in nodeCollection)
                                     {
-                                        HtmlDocument innerHtmlDocument = new HtmlDocument();
+                                        var innerHtmlDocument = new HtmlDocument();
                                         innerHtmlDocument.LoadHtml(node.InnerHtml);
 
-                                        object o = GetEncapsulatedData(T_Types[0], innerHtmlDocument);
+                                        var o = GetEncapsulatedData(T_Types[0], innerHtmlDocument);
 
                                         result.Add(o);
                                     }
@@ -250,9 +250,9 @@ namespace HtmlAgilityPack
                                     }
                                     else // It target attribute
                                     {
-                                        foreach (HtmlNode node in nodeCollection)
+                                        foreach (var node in nodeCollection)
                                         {
-                                            string nodeAttributeValue = node.GetAttributeValue(xPathAttribute.AttributeName, null);
+                                            var nodeAttributeValue = node.GetAttributeValue(xPathAttribute.AttributeName, null);
                                             if (nodeAttributeValue == null)
                                             {
                                                 throw new NodeAttributeNotFoundException("Can not find " + xPathAttribute.AttributeName + " Attribute in " + node.Name + " related to " +
@@ -499,8 +499,8 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("Parameter type is null while creating List<type>.");
             }
 
-            Type listType = typeof(List<>);
-            Type constructedListType = listType.MakeGenericType(type);
+            var listType = typeof(List<>);
+            var constructedListType = listType.MakeGenericType(type);
             return Activator.CreateInstance(constructedListType) as IList;
         }
 
@@ -527,7 +527,7 @@ namespace HtmlAgilityPack
             }
 
             object result;
-            Type TType = typeof(T);
+            var TType = typeof(T);
 
             switch (xPathAttribute.NodeReturnType)
             {
@@ -584,7 +584,7 @@ namespace HtmlAgilityPack
 
                 case ReturnType.InnerHtml:
                     {
-                        foreach (HtmlNode node in htmlNodeCollection)
+                        foreach (var node in htmlNodeCollection)
                         {
                             result.Add(Convert.ChangeType(node.InnerHtml, listGenericType));
                         }
@@ -594,7 +594,7 @@ namespace HtmlAgilityPack
 
                 case ReturnType.InnerText:
                     {
-                        foreach (HtmlNode node in htmlNodeCollection)
+                        foreach (var node in htmlNodeCollection)
                         {
                             result.Add(Convert.ChangeType(node.InnerText, listGenericType));
                         }
@@ -604,7 +604,7 @@ namespace HtmlAgilityPack
 
                 case ReturnType.OuterHtml:
                     {
-                        foreach (HtmlNode node in htmlNodeCollection)
+                        foreach (var node in htmlNodeCollection)
                         {
                             result.Add(Convert.ChangeType(node.OuterHtml, listGenericType));
                         }
@@ -636,7 +636,7 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         internal static IEnumerable<TSource> HAPWhere<TSource>(this IEnumerable<TSource> source, HAPFunc<TSource, bool> predicate)
         {
-            foreach (TSource item in source)
+            foreach (var item in source)
             {
                 if (predicate(item))
                 {
@@ -703,8 +703,8 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("Parameter source is null while counting the IEnumerable");
             }
 
-            int counter = 0;
-            foreach (T item in source)
+            var counter = 0;
+            foreach (var item in source)
             {
                 counter++;
             }

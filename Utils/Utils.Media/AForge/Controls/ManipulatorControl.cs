@@ -321,7 +321,7 @@ namespace AForge.Controls
                 {
                     if ( x != 0 )
                     {
-                        double t = Math.Atan( y / x );
+                        var t = Math.Atan( y / x );
                         t = t / Math.PI * 180;
 
                         if ( t < 0 )
@@ -383,12 +383,12 @@ namespace AForge.Controls
                 if ( !isSquareLook )
                 {
                     // get distance from center
-                    double cR = Math.Sqrt( manipulatatorX * manipulatatorX + manipulatatorY * manipulatatorY );
+                    var cR = Math.Sqrt( manipulatatorX * manipulatatorX + manipulatatorY * manipulatatorY );
 
                     // correct point if it is too far away
                     if ( cR > 1 )
                     {
-                        double coef = (double) 1 / cR;
+                        var coef = (double) 1 / cR;
                         manipulatatorX = (float) ( coef * manipulatatorX );
                         manipulatatorY = (float) ( coef * manipulatatorY );
                     }
@@ -428,7 +428,7 @@ namespace AForge.Controls
         // Paint the control
         private void ManipulatorControl_Paint( object sender, PaintEventArgs e )
         {
-            Graphics g = e.Graphics;
+            var g = e.Graphics;
 
             // calculate size of the manipulator's ares
             areaSize = Math.Min( ClientRectangle.Width, ClientRectangle.Height ) - areaMargin * 2;
@@ -440,7 +440,7 @@ namespace AForge.Controls
                 if ( isSquareLook )
                 {
                     // square looking control
-                    int halfAreaSize = areaSize / 2;
+                    var halfAreaSize = areaSize / 2;
 
                     g.FillRectangle( ( !this.Enabled ) ? disabledBrash : topLeftBackgroundBrush, areaMargin, areaMargin, halfAreaSize, halfAreaSize );
                     g.FillRectangle( ( !this.Enabled ) ? disabledBrash : topRightBackgroundBrush, areaMargin + halfAreaSize, areaMargin, areaSize - halfAreaSize, halfAreaSize );
@@ -472,8 +472,8 @@ namespace AForge.Controls
             }
 
             // calculate manipulator's center point
-            int ctrlManipulatorX = (int) (  manipulatatorX * areaRadius ) + areaMargin + areaRadius;
-            int ctrlManipulatorY = (int) ( -manipulatatorY * areaRadius ) + areaMargin + areaRadius;
+            var ctrlManipulatorX = (int) (  manipulatatorX * areaRadius ) + areaMargin + areaRadius;
+            var ctrlManipulatorY = (int) ( -manipulatatorY * areaRadius ) + areaMargin + areaRadius;
 
             // draw manipulator
             g.FillEllipse ( ( this.Enabled ) ? manipulatorBrush : disabledBrash,
@@ -490,8 +490,8 @@ namespace AForge.Controls
             if ( e.Button == MouseButtons.Left )
             {
                 // get click point relatively to manipulation area's center
-                int cX = e.X - areaMargin - areaRadius;
-                int cY = e.Y - areaMargin - areaRadius;
+                var cX = e.X - areaMargin - areaRadius;
+                var cY = e.Y - areaMargin - areaRadius;
 
                 if ( isSquareLook )
                 {
@@ -557,8 +557,8 @@ namespace AForge.Controls
             if ( tracking )
             {
                 // get mouse point relatively to manipulation area's center
-                int cX = e.X - areaMargin - areaRadius;
-                int cY = e.Y - areaMargin - areaRadius;
+                var cX = e.X - areaMargin - areaRadius;
+                var cY = e.Y - areaMargin - areaRadius;
 
                 if ( isSquareLook )
                 {
@@ -568,12 +568,12 @@ namespace AForge.Controls
                 else
                 {
                     // get distance from center
-                    int cR = (int) Math.Sqrt( cX * cX + cY * cY );
+                    var cR = (int) Math.Sqrt( cX * cX + cY * cY );
 
                     // correct point if it is too far away
                     if ( cR > areaRadius )
                     {
-                        double coef = (double) areaRadius / cR;
+                        var coef = (double) areaRadius / cR;
                         cX = (int) ( coef * cX );
                         cY = (int) ( coef * cY );
                     }

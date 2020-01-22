@@ -18,9 +18,9 @@ namespace AForge.AMath
         public static void svdcmp( double[,] a, out double[] w, out double[,] v )
         {
             // number of rows in A
-            int m = a.GetLength( 0 );
+            var m = a.GetLength( 0 );
             // number of columns in A
-            int n = a.GetLength( 1 );
+            var n = a.GetLength( 1 );
 
             if ( m < n )
             {
@@ -34,7 +34,7 @@ namespace AForge.AMath
             int flag, i, its, j, jj, k, l = 0, nm = 0;
             double anorm, c, f, g, h, s, scale, x, y, z;
 
-            double[] rv1 = new double[n];
+            var rv1 = new double[n];
 
             // householder reduction to bidiagonal form
             g = scale = anorm = 0.0;

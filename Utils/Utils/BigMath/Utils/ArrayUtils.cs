@@ -36,7 +36,7 @@ namespace BigMath.Utils
         {
             LookupTableLower = new char[256][];
             LookupTableUpper = new char[256][];
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 LookupTableLower[i] = i.ToString("x2").ToCharArray();
                 LookupTableUpper[i] = i.ToString("X2").ToCharArray();
@@ -68,7 +68,7 @@ namespace BigMath.Utils
                 throw new ArgumentNullException("convert");
             }
             var outputArray = new TOutput[array.Length];
-            for (int index = 0; index < array.Length; ++index)
+            for (var index = 0; index < array.Length; ++index)
             {
                 outputArray[index] = convert(array[index]);
             }
@@ -83,11 +83,11 @@ namespace BigMath.Utils
         /// <returns>Length of serial non zero items.</returns>
         public static int GetNonZeroLength(this byte[] bytes, bool? asLittleEndian = null)
         {
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
 
             if (ale)
             {
-                int index = bytes.Length - 1;
+                var index = bytes.Length - 1;
                 while ((index >= 0) && (bytes[index] == 0))
                 {
                     index--;
@@ -97,7 +97,7 @@ namespace BigMath.Utils
             }
             else
             {
-                int index = 0;
+                var index = 0;
                 while ((index < bytes.Length) && (bytes[index] == 0))
                 {
                     index++;
@@ -115,9 +115,9 @@ namespace BigMath.Utils
         /// <returns>Trimmed array of bytes.</returns>
         public static byte[] TrimZeros(this byte[] bytes, bool? asLittleEndian = null)
         {
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
 
-            int length = GetNonZeroLength(bytes, ale);
+            var length = GetNonZeroLength(bytes, ale);
 
             var trimmed = new byte[length];
             Buffer.BlockCopy(bytes, ale ? 0 : bytes.Length - length, trimmed, 0, length);
@@ -144,8 +144,8 @@ namespace BigMath.Utils
         public static byte[] Combine(params byte[][] arrays)
         {
             var ret = new byte[arrays.Sum(x => x.Length)];
-            int offset = 0;
-            foreach (byte[] data in arrays)
+            var offset = 0;
+            foreach (var data in arrays)
             {
                 Buffer.BlockCopy(data, 0, ret, offset, data.Length);
                 offset += data.Length;
@@ -171,7 +171,7 @@ namespace BigMath.Utils
                 throw new InvalidOperationException("Offset + length must be less of equal of the bytes length.");
             }
             var tbytes = (byte[]) bytes.Clone();
-            for (int i = offset; i < offset + length; i++)
+            for (var i = offset; i < offset + length; i++)
             {
                 tbytes[i] = value;
             }
@@ -203,24 +203,24 @@ namespace BigMath.Utils
         /// <returns>Hexadecimal string representation of the bytes array.</returns>
         public static string ToHexString(this ArraySegment<byte> bytes, bool caps = true, int min = 0, bool spaceEveryByte = false, bool trimZeros = false)
         {
-            int count = bytes.Count;
+            var count = bytes.Count;
             if (count == 0)
             {
                 return string.Empty;
             }
 
-            int strLength = min;
+            var strLength = min;
 
-            int bim = 0;
+            var bim = 0;
             if (trimZeros)
             {
                 bim = count - 1;
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     if (bytes.Array[i + bytes.Offset] > 0)
                     {
                         bim = i;
-                        int l = (count - i) * 2;
+                        var l = (count - i) * 2;
                         strLength = (l <= min) ? min : l;
                         break;
                     }
@@ -237,7 +237,7 @@ namespace BigMath.Utils
                 return "0";
             }
 
-            int step = 0;
+            var step = 0;
             if (spaceEveryByte)
             {
                 strLength += (strLength/2 - 1);
@@ -245,36 +245,36 @@ namespace BigMath.Utils
             }
 
             var chars = new char[strLength];
-            for (int i = 0; i < chars.Length; i++)
+            for (var i = 0; i < chars.Length; i++)
             {
                 chars[i] = '0';
             }
 
             if (spaceEveryByte)
             {
-                for (int i = 2; i < chars.Length; i += 3)
+                for (var i = 2; i < chars.Length; i += 3)
                 {
                     chars[i] = ' ';
                 }
             }
 
-            char[][] lookupTable = caps ? LookupTableUpper : LookupTableLower;
-            int bi = count - 1;
-            int ci = strLength - 1;
+            var lookupTable = caps ? LookupTableUpper : LookupTableLower;
+            var bi = count - 1;
+            var ci = strLength - 1;
             while (bi >= bim)
             {
-                char[] chb = lookupTable[bytes.Array[bytes.Offset + bi--]];
+                var chb = lookupTable[bytes.Array[bytes.Offset + bi--]];
                 chars[ci--] = chb[1];
                 chars[ci--] = chb[0];
                 ci -= step;
             }
 
-            int offset = 0;
+            var offset = 0;
             if (trimZeros && strLength > min)
             {
-                for (int i = 0; i < chars.Length; i++)
+                for (var i = 0; i < chars.Length; i++)
                 {
-                    char c = chars[i];
+                    var c = chars[i];
                     if (c != '0' && c != ' ')
                     {
                         offset = i;
@@ -300,12 +300,12 @@ namespace BigMath.Utils
             }
             else
             {
-                int stringLength = hexString.Length;
-                int characterIndex = (hexString.StartsWith("0x", StringComparison.Ordinal)) ? 2 : 0;
+                var stringLength = hexString.Length;
+                var characterIndex = (hexString.StartsWith("0x", StringComparison.Ordinal)) ? 2 : 0;
                 // Does the string define leading HEX indicator '0x'. Adjust starting index accordingly.               
-                int numberOfCharacters = stringLength - characterIndex;
+                var numberOfCharacters = stringLength - characterIndex;
 
-                bool addLeadingZero = false;
+                var addLeadingZero = false;
                 if (0 != (numberOfCharacters%2))
                 {
                     addLeadingZero = true;
@@ -315,7 +315,7 @@ namespace BigMath.Utils
 
                 bytes = new byte[numberOfCharacters/2]; // Initialize our byte array to hold the converted string.
 
-                int writeIndex = 0;
+                var writeIndex = 0;
                 if (addLeadingZero)
                 {
                     bytes[writeIndex++] = CharToByteLookupTable[hexString[characterIndex]];

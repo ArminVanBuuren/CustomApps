@@ -45,7 +45,7 @@ namespace HtmlAgilityPack
 
         internal string GetOrAdd(string array)
         {
-            string s = Get(array);
+            var s = Get(array);
             if (s == null)
             {
                 return Add(array);

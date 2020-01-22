@@ -98,7 +98,7 @@ namespace AForge.Imaging.Filters
 		{
             Bitmap dstImage = null;
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -138,9 +138,9 @@ namespace AForge.Imaging.Filters
             // locks/unlocks are eliminated
 
             // get result as an unmanaged image
-            UnmanagedImage dstUnmanagedImage = Apply( new UnmanagedImage( imageData ) );
+            var dstUnmanagedImage = Apply( new UnmanagedImage( imageData ) );
             // convert unmanaged image to managed
-            Bitmap dstImage = dstUnmanagedImage.ToManagedImage( );
+            var dstImage = dstUnmanagedImage.ToManagedImage( );
             // dispose unmanaged mage
             dstUnmanagedImage.Dispose( );
 
@@ -163,7 +163,7 @@ namespace AForge.Imaging.Filters
         ///
         public UnmanagedImage Apply( UnmanagedImage image )
         {
-            int n = InnerList.Count;
+            var n = InnerList.Count;
 
             // check for empty sequence
             if ( n == 0 )
@@ -176,7 +176,7 @@ namespace AForge.Imaging.Filters
             dstImg = ( (IFilter) InnerList[0] ).Apply( image );
 
             // apply other filters
-            for ( int i = 1; i < n; i++ )
+            for ( var i = 1; i < n; i++ )
             {
                 tmpImg = dstImg;
                 dstImg = ( (IFilter) InnerList[i] ).Apply( tmpImg );
@@ -204,7 +204,7 @@ namespace AForge.Imaging.Filters
         ///
         public void Apply( UnmanagedImage sourceImage, UnmanagedImage destinationImage )
         {
-            int n = InnerList.Count;
+            var n = InnerList.Count;
 
             // check for empty sequence
             if ( n == 0 )
@@ -224,7 +224,7 @@ namespace AForge.Imaging.Filters
 
                 // apply other filters, except the last one
                 n--;
-                for ( int i = 1; i < n; i++ )
+                for ( var i = 1; i < n; i++ )
                 {
                     tmpImg2 = tmpImg1;
                     tmpImg1 = ( (IFilter) InnerList[i] ).Apply( tmpImg2 );

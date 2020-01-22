@@ -78,7 +78,7 @@ namespace Utils.UIControls.Tools
             // Load the XamlObject
             var stringReader = new StringReader(savedObject);
             var xmlReader = System.Xml.XmlReader.Create(stringReader);
-            T target = (T)System.Windows.Markup.XamlReader.Load(xmlReader);
+            var target = (T)System.Windows.Markup.XamlReader.Load(xmlReader);
 
             return target;
         }

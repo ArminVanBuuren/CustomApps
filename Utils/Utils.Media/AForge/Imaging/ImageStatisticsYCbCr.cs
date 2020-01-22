@@ -149,7 +149,7 @@ namespace AForge.Imaging
             CheckSourceFormat( image.PixelFormat );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb );
 
@@ -190,10 +190,10 @@ namespace AForge.Imaging
             CheckMaskProperties( mask.PixelFormat, new Size( mask.Width, mask.Height ), new Size( image.Width, image.Height ) );
 
             // lock bitmap and mask data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
-            BitmapData maskData = mask.LockBits(
+            var maskData = mask.LockBits(
                 new Rectangle( 0, 0, mask.Width, mask.Height ),
                 ImageLockMode.ReadOnly, mask.PixelFormat );
 
@@ -235,7 +235,7 @@ namespace AForge.Imaging
                 new Size( mask.GetLength( 1 ), mask.GetLength( 0 ) ), new Size( image.Width, image.Height ) );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -335,36 +335,36 @@ namespace AForge.Imaging
         private unsafe void ProcessImage( UnmanagedImage image, byte* mask, int maskLineSize )
         {
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             pixels = pixelsWithoutBlack = 0;
 
-            int[] yhisto  = new int[256];
-            int[] cbhisto = new int[256];
-            int[] crhisto = new int[256];
+            var yhisto  = new int[256];
+            var cbhisto = new int[256];
+            var crhisto = new int[256];
 
-            int[] yhistoWB	= new int[256];
-            int[] cbhistoWB	= new int[256];
-            int[] crhistoWB	= new int[256];
+            var yhistoWB	= new int[256];
+            var cbhistoWB	= new int[256];
+            var crhistoWB	= new int[256];
 
-            RGB   rgb   = new RGB( );
-            YCbCr ycbcr = new YCbCr( );
+            var   rgb   = new RGB( );
+            var ycbcr = new YCbCr( );
 
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
-            int offset = image.Stride - width * pixelSize;
-            int maskOffset = maskLineSize - width;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+            var offset = image.Stride - width * pixelSize;
+            var maskOffset = maskLineSize - width;
 
             // do the job
-            byte * p = (byte*) image.ImageData.ToPointer( );
+            var p = (byte*) image.ImageData.ToPointer( );
 
             if ( mask == null )
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, p += pixelSize )
+                    for ( var x = 0; x < width; x++, p += pixelSize )
                     {
                         rgb.Red   = p[RGB.R];
                         rgb.Green = p[RGB.G];
@@ -394,10 +394,10 @@ namespace AForge.Imaging
             else
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, p += pixelSize, mask++ )
+                    for ( var x = 0; x < width; x++, p += pixelSize, mask++ )
                     {
                         if ( *mask == 0 )
                             continue;

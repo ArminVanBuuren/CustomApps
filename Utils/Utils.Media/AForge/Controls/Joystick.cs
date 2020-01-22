@@ -126,15 +126,15 @@ namespace AForge.Controls
         /// 
         public static List<DeviceInfo> GetAvailableDevices( )
         {
-            List<DeviceInfo> devices = new List<DeviceInfo>( );
-            int joyCapsSize = System.Runtime.InteropServices.Marshal.SizeOf( typeof( JoystickAPI.JOYCAPS ) );
+            var devices = new List<DeviceInfo>( );
+            var joyCapsSize = System.Runtime.InteropServices.Marshal.SizeOf( typeof( JoystickAPI.JOYCAPS ) );
 
             // get number of devices
-            int devicesCount = JoystickAPI.joyGetNumDevs( );
+            var devicesCount = JoystickAPI.joyGetNumDevs( );
             // check all devices
-            for ( int i = 0; i < devicesCount; i++ )
+            for ( var i = 0; i < devicesCount; i++ )
             {
-                JoystickAPI.JOYCAPS joyCaps = new JoystickAPI.JOYCAPS( );
+                var joyCaps = new JoystickAPI.JOYCAPS( );
 
                 if ( JoystickAPI.joyGetDevCapsW( i, joyCaps, joyCapsSize ) == JoystickAPI.ResultCode.NoError )
                 {
@@ -188,7 +188,7 @@ namespace AForge.Controls
                 throw new ArgumentException( "Invalid joystick ID was specified." );
             }
 
-            JoystickAPI.JOYCAPS joyCaps = new JoystickAPI.JOYCAPS( ); 
+            var joyCaps = new JoystickAPI.JOYCAPS( ); 
             
             if ( JoystickAPI.joyGetDevCapsW( id, joyCaps,
                 System.Runtime.InteropServices.Marshal.SizeOf( joyCaps ) ) != JoystickAPI.ResultCode.NoError )
@@ -224,7 +224,7 @@ namespace AForge.Controls
         ///
         public Status GetCurrentStatus( )
         {
-            JoystickAPI.JOYINFOEX ji = new JoystickAPI.JOYINFOEX( );
+            var ji = new JoystickAPI.JOYINFOEX( );
 
             ji.size = System.Runtime.InteropServices.Marshal.SizeOf( ji );
             ji.flags = ( Info.capabilities.axesNumber > 5 ) ? JoystickAPI.JoyPosFlags.ReturnAll :

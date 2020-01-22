@@ -66,7 +66,7 @@ namespace TLSharp.Core.Network
                         throw new InvalidOperationException(string.Format("invalid packet length: {0}", packetLength));
 
                     var seq = binaryReader.ReadInt32();
-                    byte[] packet = binaryReader.ReadBytes(packetLength - 12);
+                    var packet = binaryReader.ReadBytes(packetLength - 12);
                     var checksum = (int)binaryReader.ReadInt32();
 
                     var crc32 = new CRC32();

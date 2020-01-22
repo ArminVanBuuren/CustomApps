@@ -114,8 +114,8 @@ namespace AForge.Imaging.Filters
         protected override void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get width and height
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
             if ( ( ( width & 1 ) == 1 ) || ( ( height & 1 ) == 1 ) ||
                  ( width < 2 ) || ( height < 2 ) )
@@ -138,27 +138,27 @@ namespace AForge.Imaging.Filters
         #region GRBG pattern
         private unsafe void ApplyGRBG( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
-            int widthM1  = width - 1;
-            int heightM1 = height - 1;
+            var widthM1  = width - 1;
+            var heightM1 = height - 1;
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
 
-            int srcStrideP1  = srcStride + 1;
-            int srcStrideM1  = srcStride - 1;
-            int srcMStride   = -srcStride;
-            int srcMStrideP1 = srcMStride + 1;
-            int srcMStrideM1 = srcMStride - 1;
+            var srcStrideP1  = srcStride + 1;
+            var srcStrideM1  = srcStride - 1;
+            var srcMStride   = -srcStride;
+            var srcMStrideP1 = srcMStride + 1;
+            var srcMStrideM1 = srcMStride - 1;
 
-            int srcOffset = srcStride - width;
-            int dstOffset = dstStride - width * 3;
+            var srcOffset = srcStride - width;
+            var dstOffset = dstStride - width * 3;
 
             // do the job
-            byte * src = (byte*) sourceData.ImageData.ToPointer( );
-            byte * dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // --- process the first line
 
@@ -172,7 +172,7 @@ namespace AForge.Imaging.Filters
             src++;
             dst += 3;
 
-            for ( int x = 1; x < widthM1; x += 2 )
+            for ( var x = 1; x < widthM1; x += 2 )
             {
                 // . . .
                 // G R G
@@ -208,7 +208,7 @@ namespace AForge.Imaging.Filters
             dst += dstOffset + 3;
 
             // --- process all lines except the first one and the last one
-            for ( int y = 1; y < heightM1; y += 2 )
+            for ( var y = 1; y < heightM1; y += 2 )
             {
                 // . G R
                 // . B G
@@ -234,7 +234,7 @@ namespace AForge.Imaging.Filters
                 src++;
                 dst += 3;
 
-                for ( int x = 1; x < widthM1; x += 2 )
+                for ( var x = 1; x < widthM1; x += 2 )
                 {
                     // G R G
                     // B G B
@@ -322,7 +322,7 @@ namespace AForge.Imaging.Filters
             src++;
             dst += 3;
 
-            for ( int x = 1; x < widthM1; x += 2 )
+            for ( var x = 1; x < widthM1; x += 2 )
             {
                 // G R G
                 // B G B
@@ -357,27 +357,27 @@ namespace AForge.Imaging.Filters
         #region BGGR pattern
         private unsafe void ApplyBGGR( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
-            int widthM1  = width - 1;
-            int heightM1 = height - 1;
+            var widthM1  = width - 1;
+            var heightM1 = height - 1;
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
 
-            int srcStrideP1  = srcStride + 1;
-            int srcStrideM1  = srcStride - 1;
-            int srcMStride   = -srcStride;
-            int srcMStrideP1 = srcMStride + 1;
-            int srcMStrideM1 = srcMStride - 1;
+            var srcStrideP1  = srcStride + 1;
+            var srcStrideM1  = srcStride - 1;
+            var srcMStride   = -srcStride;
+            var srcMStrideP1 = srcMStride + 1;
+            var srcMStrideM1 = srcMStride - 1;
 
-            int srcOffset = srcStride - width;
-            int dstOffset = dstStride - width * 3;
+            var srcOffset = srcStride - width;
+            var dstOffset = dstStride - width * 3;
 
             // do the job
-            byte * src = (byte*) sourceData.ImageData.ToPointer( );
-            byte * dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // --- process the first line
 
@@ -391,7 +391,7 @@ namespace AForge.Imaging.Filters
             src++;
             dst += 3;
 
-            for ( int x = 1; x < widthM1; x += 2 )
+            for ( var x = 1; x < widthM1; x += 2 )
             {
                 // . . .
                 // B G B 
@@ -427,7 +427,7 @@ namespace AForge.Imaging.Filters
             dst += dstOffset + 3;
 
             // --- process all lines except the first one and the last one
-            for ( int y = 1; y < heightM1; y += 2 )
+            for ( var y = 1; y < heightM1; y += 2 )
             {
                 // . B G 
                 // . G R
@@ -453,7 +453,7 @@ namespace AForge.Imaging.Filters
                 src++;
                 dst += 3;
 
-                for ( int x = 1; x < widthM1; x += 2 )
+                for ( var x = 1; x < widthM1; x += 2 )
                 {
                     // B G B
                     // G R G
@@ -533,7 +533,7 @@ namespace AForge.Imaging.Filters
             src++;
             dst += 3;
 
-            for ( int x = 1; x < widthM1; x += 2 )
+            for ( var x = 1; x < widthM1; x += 2 )
             {
                 // B G B 
                 // G R G 

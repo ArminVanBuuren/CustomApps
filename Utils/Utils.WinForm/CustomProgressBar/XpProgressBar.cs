@@ -494,8 +494,8 @@ namespace Utils.WinForm.CustomProgressBar
         {
             var ss = gfx.MeasureString(this.Text, this.Font);
 
-            float left = box.X + (box.Width - ss.Width) / 2;
-            float top = box.Y + (box.Height - ss.Height) / 2;
+            var left = box.X + (box.Width - ss.Width) / 2;
+            var top = box.Y + (box.Height - ss.Height) / 2;
 
             if (mTextShadow)
             {

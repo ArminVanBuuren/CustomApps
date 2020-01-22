@@ -68,7 +68,7 @@ namespace NAudio.Gui
         /// </summary>
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			StringFormat format = new StringFormat();
+			var format = new StringFormat();
 			format.LineAlignment = StringAlignment.Center;
 			format.Alignment = StringAlignment.Center;
 			string panValue;

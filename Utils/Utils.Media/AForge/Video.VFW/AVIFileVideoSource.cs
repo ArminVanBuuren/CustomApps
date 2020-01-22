@@ -153,7 +153,7 @@ namespace AForge.Video.VFW
 		{
 			get
 			{
-				int frames = framesReceived;
+				var frames = framesReceived;
 				framesReceived = 0;
 				return frames;
 			}
@@ -171,7 +171,7 @@ namespace AForge.Video.VFW
 		{
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -323,9 +323,9 @@ namespace AForge.Video.VFW
         /// 
         private void WorkerThread( )
 		{
-            ReasonToFinishPlaying reasonToStop = ReasonToFinishPlaying.StoppedByUser;
+            var reasonToStop = ReasonToFinishPlaying.StoppedByUser;
             // AVI reader
-			AVIReader aviReader = new AVIReader( );
+			var aviReader = new AVIReader( );
 
 			try
 			{
@@ -333,18 +333,18 @@ namespace AForge.Video.VFW
 				aviReader.Open( source );
 
                 // stop positions
-                int stopPosition = aviReader.Start + aviReader.Length;
+                var stopPosition = aviReader.Start + aviReader.Length;
 
                 // frame interval
-                int interval = ( frameIntervalFromSource ) ? (int) ( 1000 / aviReader.FrameRate ) : frameInterval;
+                var interval = ( frameIntervalFromSource ) ? (int) ( 1000 / aviReader.FrameRate ) : frameInterval;
 
                 while ( !stopEvent.WaitOne( 0, false ) )
 				{
 					// start time
-					DateTime start = DateTime.Now;
+					var start = DateTime.Now;
 
 					// get next frame
-					Bitmap bitmap = aviReader.GetNextFrame( );
+					var bitmap = aviReader.GetNextFrame( );
 
 					framesReceived++;
                     bytesReceived += bitmap.Width * bitmap.Height *
@@ -367,10 +367,10 @@ namespace AForge.Video.VFW
                     if ( interval > 0 )
                     {
                         // get frame extract duration
-                        TimeSpan span = DateTime.Now.Subtract( start );
+                        var span = DateTime.Now.Subtract( start );
 
                         // miliseconds to sleep
-                        int msec = interval - (int) span.TotalMilliseconds;
+                        var msec = interval - (int) span.TotalMilliseconds;
 
                         if ( ( msec > 0 ) && ( stopEvent.WaitOne( msec, false ) ) )
                             break;

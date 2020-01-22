@@ -90,10 +90,10 @@ namespace AForge.Imaging.Filters
                 }
 
                 // check that the base filter does not change pixel format of image
-                Dictionary<PixelFormat, PixelFormat> baseFormatTranslations =
+                var baseFormatTranslations =
                     ( (IFilterInformation) value ).FormatTranslations;
 
-                foreach ( KeyValuePair<PixelFormat, PixelFormat> translation in baseFormatTranslations )
+                foreach ( var translation in baseFormatTranslations )
                 {
                     if ( translation.Key != translation.Value )
                     {
@@ -286,7 +286,7 @@ namespace AForge.Imaging.Filters
                     throw new ArgumentException( "Invalid size of mask image. Its size must be the same as the size of the image to mask." );
                 }
 
-                BitmapData maskData = maskImage.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
+                var maskData = maskImage.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
                     ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed );
 
                 try
@@ -308,7 +308,7 @@ namespace AForge.Imaging.Filters
         private unsafe void ProcessImage( UnmanagedImage image, Rectangle rect, byte* mask, int maskLineSize )
         {
             // apply base filter to the specified image
-            UnmanagedImage filteredImage = baseFilter.Apply( image );
+            var filteredImage = baseFilter.Apply( image );
 
             if ( ( image.Width  != filteredImage.Width ) ||
                  ( image.Height != filteredImage.Height ) )
@@ -316,17 +316,17 @@ namespace AForge.Imaging.Filters
                 throw new ArgumentException( "Base filter must not change image size." );
             }
 
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int startY  = rect.Top;
-            int stopY   = startY + rect.Height;
+            var startY  = rect.Top;
+            var stopY   = startY + rect.Height;
 
-            int startX  = rect.Left;
-            int stopX   = startX + rect.Width;
+            var startX  = rect.Left;
+            var stopX   = startX + rect.Width;
 
-            int srcStride = image.Stride;
-            int filteredStride = filteredImage.Stride;
-            int maskOffset = maskLineSize - rect.Width;
+            var srcStride = image.Stride;
+            var filteredStride = filteredImage.Stride;
+            var maskOffset = maskLineSize - rect.Width;
 
             // allign mask to the first pixel
             mask += maskLineSize * startY + startX;
@@ -334,22 +334,22 @@ namespace AForge.Imaging.Filters
             if ( ( pixelSize <= 4 ) && ( pixelSize != 2 ) )
             {
                 // 8 bits per channel
-                byte* imagePtr = (byte*) image.ImageData.ToPointer( ) +
+                var imagePtr = (byte*) image.ImageData.ToPointer( ) +
                                  srcStride * startY + pixelSize * startX;
-                int srcOffset = srcStride - rect.Width * pixelSize;
+                var srcOffset = srcStride - rect.Width * pixelSize;
 
-                byte* filteredPtr = (byte*) filteredImage.ImageData.ToPointer( ) +
+                var filteredPtr = (byte*) filteredImage.ImageData.ToPointer( ) +
                                     filteredStride * startY + pixelSize * startX;
-                int filteredOffset = filteredStride - rect.Width * pixelSize;
+                var filteredOffset = filteredStride - rect.Width * pixelSize;
 
                 #region 8 bit cases
                 switch ( pixelSize )
                 {
                     case 1:
                         // 8 bpp grayscale
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            for ( int x = startX; x < stopX; x++, imagePtr++, filteredPtr++, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr++, filteredPtr++, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {
@@ -364,9 +364,9 @@ namespace AForge.Imaging.Filters
 
                     case 3:
                         // 24 bpp color
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            for ( int x = startX; x < stopX; x++, imagePtr += 3, filteredPtr += 3, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr += 3, filteredPtr += 3, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {
@@ -383,9 +383,9 @@ namespace AForge.Imaging.Filters
 
                     case 4:
                         // 32 bpp color
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            for ( int x = startX; x < stopX; x++, imagePtr += 4, filteredPtr += 4, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr += 4, filteredPtr += 4, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {
@@ -406,9 +406,9 @@ namespace AForge.Imaging.Filters
             else
             {
                 // 16 bits per channel
-                byte* imagePtrBase = (byte*) image.ImageData.ToPointer( ) +
+                var imagePtrBase = (byte*) image.ImageData.ToPointer( ) +
                                      srcStride * startY + pixelSize * startX;
-                byte* filteredPtrBase = (byte*) filteredImage.ImageData.ToPointer( ) +
+                var filteredPtrBase = (byte*) filteredImage.ImageData.ToPointer( ) +
                                         filteredStride * startY + pixelSize * startX;
 
                 #region 16 bit cases
@@ -416,12 +416,12 @@ namespace AForge.Imaging.Filters
                 {
                     case 2:
                         // 16 bpp grayscale
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            ushort* imagePtr = (ushort*) imagePtrBase;
-                            ushort* filteredPtr = (ushort*) filteredPtrBase;
+                            var imagePtr = (ushort*) imagePtrBase;
+                            var filteredPtr = (ushort*) filteredPtrBase;
 
-                            for ( int x = startX; x < stopX; x++, imagePtr++, filteredPtr++, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr++, filteredPtr++, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {
@@ -436,12 +436,12 @@ namespace AForge.Imaging.Filters
 
                     case 6:
                         // 16 bpp grayscale
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            ushort* imagePtr = (ushort*) imagePtrBase;
-                            ushort* filteredPtr = (ushort*) filteredPtrBase;
+                            var imagePtr = (ushort*) imagePtrBase;
+                            var filteredPtr = (ushort*) filteredPtrBase;
 
-                            for ( int x = startX; x < stopX; x++, imagePtr += 3, filteredPtr += 3, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr += 3, filteredPtr += 3, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {
@@ -458,12 +458,12 @@ namespace AForge.Imaging.Filters
 
                     case 8:
                         // 16 bpp grayscale
-                        for ( int y = startY; y < stopY; y++ )
+                        for ( var y = startY; y < stopY; y++ )
                         {
-                            ushort* imagePtr = (ushort*) imagePtrBase;
-                            ushort* filteredPtr = (ushort*) filteredPtrBase;
+                            var imagePtr = (ushort*) imagePtrBase;
+                            var filteredPtr = (ushort*) filteredPtrBase;
 
-                            for ( int x = startX; x < stopX; x++, imagePtr += 4, filteredPtr += 4, mask++ )
+                            for ( var x = startX; x < stopX; x++, imagePtr += 4, filteredPtr += 4, mask++ )
                             {
                                 if ( *mask != 0 )
                                 {

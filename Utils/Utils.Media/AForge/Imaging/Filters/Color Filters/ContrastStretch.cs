@@ -76,20 +76,20 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int startX = rect.Left;
-            int startY = rect.Top;
-            int stopX  = startX + rect.Width;
-            int stopY  = startY + rect.Height;
-            int stride = image.Stride;
-            int offset = stride - rect.Width * pixelSize;
+            var startX = rect.Left;
+            var startY = rect.Top;
+            var stopX  = startX + rect.Width;
+            var stopY  = startY + rect.Height;
+            var stride = image.Stride;
+            var offset = stride - rect.Width * pixelSize;
 
             // levels linear correction filter is going to be used on STEP 2
-            LevelsLinear levelsLinear = new LevelsLinear( );
+            var levelsLinear = new LevelsLinear( );
 
             // STEP 1 - search for min and max pixel values
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // check image format
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
@@ -100,11 +100,11 @@ namespace AForge.Imaging.Filters
                 byte min = 255;
                 byte max = 0;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
-                        byte value = *ptr;
+                        var value = *ptr;
 
                         if ( value < min )
                             min = value;
@@ -125,12 +125,12 @@ namespace AForge.Imaging.Filters
                 byte minR = 255, minG = 255, minB = 255;
                 byte maxR = 0,   maxG = 0,   maxB = 0;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         // red
-                        byte value = ptr[RGB.R];
+                        var value = ptr[RGB.R];
 
                         if ( value < minR )
                             minR = value;

@@ -79,18 +79,18 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int width   = sourceData.Width;
-            int height  = sourceData.Height;
+            var width   = sourceData.Width;
+            var height  = sourceData.Height;
 
-            int pixelSize = ( sourceData.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride - pixelSize * newWidth;
-            double xFactor = (double) width / newWidth;
-            double yFactor = (double) height / newHeight;
+            var pixelSize = ( sourceData.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride - pixelSize * newWidth;
+            var xFactor = (double) width / newWidth;
+            var yFactor = (double) height / newHeight;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // coordinates of source points and cooefficiens
             double  ox, oy, dx, dy, k1, k2;
@@ -98,8 +98,8 @@ namespace AForge.Imaging.Filters
             // destination pixel values
             double r, g, b;
             // width and height decreased by 1
-            int ymax = height - 1;
-            int xmax = width - 1;
+            var ymax = height - 1;
+            var xmax = width - 1;
             // temporary pointer
             byte* p;
 
@@ -107,14 +107,14 @@ namespace AForge.Imaging.Filters
             if ( destinationData.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     // Y coordinates
                     oy  = (double) y * yFactor - 0.5;
                     oy1 = (int) oy;
                     dy  = oy - (double) oy1;
 
-                    for ( int x = 0; x < newWidth; x++, dst++ )
+                    for ( var x = 0; x < newWidth; x++, dst++ )
                     {
                         // X coordinates
                         ox  = (double) x * xFactor - 0.5f;
@@ -124,7 +124,7 @@ namespace AForge.Imaging.Filters
                         // initial pixel value
                         g = 0;
 
-                        for ( int n = -1; n < 3; n++ )
+                        for ( var n = -1; n < 3; n++ )
                         {
                             // get Y cooefficient
                             k1 = Interpolation.BiCubicKernel( dy - (double) n );
@@ -135,7 +135,7 @@ namespace AForge.Imaging.Filters
                             if ( oy2 > ymax )
                                 oy2 = ymax;
 
-                            for ( int m = -1; m < 3; m++ )
+                            for ( var m = -1; m < 3; m++ )
                             {
                                 // get X cooefficient
                                 k2 = k1 * Interpolation.BiCubicKernel( (double) m - dx );
@@ -157,14 +157,14 @@ namespace AForge.Imaging.Filters
             else
             {
                 // RGB
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     // Y coordinates
                     oy  = (double) y * yFactor - 0.5f;
                     oy1 = (int) oy;
                     dy  = oy - (double) oy1;
 
-                    for ( int x = 0; x < newWidth; x++, dst += 3 )
+                    for ( var x = 0; x < newWidth; x++, dst += 3 )
                     {
                         // X coordinates
                         ox  = (double) x * xFactor - 0.5f;
@@ -174,7 +174,7 @@ namespace AForge.Imaging.Filters
                         // initial pixel value
                         r = g = b = 0;
 
-                        for ( int n = -1; n < 3; n++ )
+                        for ( var n = -1; n < 3; n++ )
                         {
                             // get Y cooefficient
                             k1 = Interpolation.BiCubicKernel( dy - (double) n );
@@ -185,7 +185,7 @@ namespace AForge.Imaging.Filters
                             if ( oy2 > ymax )
                                 oy2 = ymax;
 
-                            for ( int m = -1; m < 3; m++ )
+                            for ( var m = -1; m < 3; m++ )
                             {
                                 // get X cooefficient
                                 k2 = k1 * Interpolation.BiCubicKernel( (double) m - dx );

@@ -101,7 +101,7 @@ namespace AForge.Imaging.ColorReduction
         /// 
         public Color[] CalculatePalette( Bitmap image, int paletteSize )
         {
-            BitmapData data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
+            var data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             try
@@ -141,19 +141,19 @@ namespace AForge.Imaging.ColorReduction
 
             quantizer.Clear( );
 
-            int width = image.Width;
-            int height = image.Height;
+            var width = image.Width;
+            var height = image.Height;
 
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             unsafe
             {
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
-                int offset = image.Stride - width * pixelSize;
+                var ptr = (byte*) image.ImageData.ToPointer( );
+                var offset = image.Stride - width * pixelSize;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, ptr += pixelSize )
+                    for ( var x = 0; x < width; x++, ptr += pixelSize )
                     {
                         quantizer.AddColor( Color.FromArgb( ptr[RGB.R], ptr[RGB.G], ptr[RGB.B] ) );
                     }
@@ -178,12 +178,12 @@ namespace AForge.Imaging.ColorReduction
         /// 
         public Bitmap ReduceColors( Bitmap image, int paletteSize )
         {
-            BitmapData data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
+            var data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             try
             {
-                Bitmap result = ReduceColors( new UnmanagedImage( data ), paletteSize );
+                var result = ReduceColors( new UnmanagedImage( data ), paletteSize );
                 if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
                 {
                     result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
@@ -240,12 +240,12 @@ namespace AForge.Imaging.ColorReduction
         /// 
         public Bitmap ReduceColors( Bitmap image, Color[] palette )
         {
-            BitmapData data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
+            var data = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             try
             {
-                Bitmap result = ReduceColors( new UnmanagedImage( data ), palette );
+                var result = ReduceColors( new UnmanagedImage( data ), palette );
                 if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
                 {
                     result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
@@ -297,18 +297,18 @@ namespace AForge.Imaging.ColorReduction
             cache.Clear( );
 
             // get image size
-            int width  = image.Width;
-            int height = image.Height;
-            int stride = image.Stride;
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var width  = image.Width;
+            var height = image.Height;
+            var stride = image.Stride;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int offset = stride - width * pixelSize;
+            var offset = stride - width * pixelSize;
 
             // create destination image
-            Bitmap destImage = new Bitmap( width, height, ( palette.Length > 16 ) ?
+            var destImage = new Bitmap( width, height, ( palette.Length > 16 ) ?
                 PixelFormat.Format8bppIndexed : PixelFormat.Format4bppIndexed );
             // and init its palette
-            ColorPalette cp = destImage.Palette;
+            var cp = destImage.Palette;
             for ( int i = 0, n = palette.Length; i < n; i++ )
             {
                 cp.Entries[i] = palette[i];
@@ -316,27 +316,27 @@ namespace AForge.Imaging.ColorReduction
             destImage.Palette = cp;
 
             // lock destination image
-            BitmapData destData = destImage.LockBits( new Rectangle( 0, 0, width, height ),
+            var destData = destImage.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, destImage.PixelFormat );
 
             // do the job
             unsafe
             {
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
-                byte* dstBase = (byte*) destData.Scan0.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
+                var dstBase = (byte*) destData.Scan0.ToPointer( );
 
-                bool is8bpp = ( palette.Length > 16 );
+                var is8bpp = ( palette.Length > 16 );
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    byte* dst = dstBase + y * destData.Stride;
+                    var dst = dstBase + y * destData.Stride;
 
                     // for each pixels
-                    for ( int x = 0; x < width; x++, ptr += pixelSize )
+                    for ( var x = 0; x < width; x++, ptr += pixelSize )
                     {
                         // get color from palette, which is the closest to current pixel's value
-                        byte colorIndex = (byte) GetClosestColor( ptr[RGB.R], ptr[RGB.G], ptr[RGB.B] );
+                        var colorIndex = (byte) GetClosestColor( ptr[RGB.R], ptr[RGB.G], ptr[RGB.B] );
 
                         // write color index as pixel's value to destination image
                         if ( is8bpp )
@@ -375,23 +375,23 @@ namespace AForge.Imaging.ColorReduction
         // Get closest color from palette to specified color
         private int GetClosestColor( int red, int green, int blue )
         {
-            Color color = Color.FromArgb( red, green, blue );
+            var color = Color.FromArgb( red, green, blue );
 
             if ( ( useCaching ) && ( cache.ContainsKey( color ) ) )
             {
                 return cache[color];
             }
 
-            int colorIndex = 0;
-            int minError = int.MaxValue;
+            var colorIndex = 0;
+            var minError = int.MaxValue;
 
             for ( int i = 0, n = paletteToUse.Length; i < n; i++ )
             {
-                int dr = red - paletteToUse[i].R;
-                int dg = green - paletteToUse[i].G;
-                int db = blue - paletteToUse[i].B;
+                var dr = red - paletteToUse[i].R;
+                var dg = green - paletteToUse[i].G;
+                var db = blue - paletteToUse[i].B;
 
-                int error = dr * dr + dg * dg + db * db;
+                var error = dr * dr + dg * dg + db * db;
 
                 if ( error < minError )
                 {

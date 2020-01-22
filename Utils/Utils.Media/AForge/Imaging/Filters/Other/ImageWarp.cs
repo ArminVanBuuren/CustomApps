@@ -138,31 +138,31 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination )
         {
-            int pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
 
             // image width and height
-            int width  = source.Width;
-            int height = source.Height;
+            var width  = source.Width;
+            var height = source.Height;
 
-            int widthToProcess  = Math.Min( width,  warpMap.GetLength( 1 ) );
-            int heightToProcess = Math.Min( height, warpMap.GetLength( 0 ) );
+            var widthToProcess  = Math.Min( width,  warpMap.GetLength( 1 ) );
+            var heightToProcess = Math.Min( height, warpMap.GetLength( 0 ) );
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int dstOffset = dstStride - widthToProcess * pixelSize;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var dstOffset = dstStride - widthToProcess * pixelSize;
 
             // new pixel's position
             int ox, oy;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
             byte* p;
 
             // for each line
-            for ( int y = 0; y < heightToProcess; y++ )
+            for ( var y = 0; y < heightToProcess; y++ )
             {
                 // for each pixel
-                for ( int x = 0; x < widthToProcess; x++ )
+                for ( var x = 0; x < widthToProcess; x++ )
                 {
                     // get original pixel's coordinates
                     ox = x + warpMap[y, x].X;
@@ -173,14 +173,14 @@ namespace AForge.Imaging.Filters
                     {
                         p = src + oy * srcStride + ox * pixelSize;
 
-                        for ( int i = 0; i < pixelSize; i++, dst++, p++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++, p++ )
                         {
                             *dst = *p;
                         }
                     }
                     else
                     {
-                        for ( int i = 0; i < pixelSize; i++, dst++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++ )
                         {
                             *dst = 0;
                         }
@@ -197,7 +197,7 @@ namespace AForge.Imaging.Filters
             }
 
             // copy remaining rows of pixels
-            for ( int y = heightToProcess; y < height; y++, dst += dstStride )
+            for ( var y = heightToProcess; y < height; y++, dst += dstStride )
             {
                 AForge.SystemTools.CopyUnmanagedMemory( dst, src + y * srcStride, width * pixelSize );
             }

@@ -275,7 +275,7 @@ namespace AForge.Controls
                 ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true );
 
             // load arrow bitmap
-            Assembly assembly = this.GetType( ).Assembly;
+            var assembly = this.GetType( ).Assembly;
             arrow = new Bitmap( assembly.GetManifestResourceStream( "AForge.Controls.Resources.arrow.bmp" ) );
             arrow.MakeTransparent( Color.FromArgb( 255, 255, 255 ) );
         }
@@ -314,11 +314,11 @@ namespace AForge.Controls
         // Paint control
         private void ColorSlider_Paint( object sender, PaintEventArgs e )
         {
-            Graphics g = e.Graphics;
-            Rectangle rc = this.ClientRectangle;
+            var g = e.Graphics;
+            var rc = this.ClientRectangle;
             Brush brush;
-            int x = ( rc.Right - width ) / 2;
-            int y = 2;
+            var x = ( rc.Right - width ) / 2;
+            var y = 2;
 
             // draw rectangle around the control
             g.DrawRectangle( blackPen, x - 1, y - 1, width + 1, height + 1 );
@@ -384,8 +384,8 @@ namespace AForge.Controls
         // On mouse down
         private void ColorSlider_MouseDown( object sender, System.Windows.Forms.MouseEventArgs e )
         {
-            int x = ( ClientRectangle.Right - width ) / 2 - 4;
-            int y = 3 + height;
+            var x = ( ClientRectangle.Right - width ) / 2 - 4;
+            var y = 3 + height;
 
             // check Y coordinate
             if ( ( e.Y >= y ) && ( e.Y < y + 6 ) )

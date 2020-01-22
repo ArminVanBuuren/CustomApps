@@ -61,7 +61,7 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData srcData = image.LockBits(
+            var srcData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -106,18 +106,18 @@ namespace AForge.Imaging.Filters
             CheckSourceFormat( imageData.PixelFormat );
 
             // destination image format
-            PixelFormat dstPixelFormat = FormatTranslations[imageData.PixelFormat];
+            var dstPixelFormat = FormatTranslations[imageData.PixelFormat];
 
             // get new image size
-            Size newSize = CalculateNewImageSize( new UnmanagedImage( imageData ) );
+            var newSize = CalculateNewImageSize( new UnmanagedImage( imageData ) );
 
             // create new image of required format
-            Bitmap dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
+            var dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
                 AForge.Imaging.Image.CreateGrayscaleImage( newSize.Width, newSize.Height ) :
                 new Bitmap( newSize.Width, newSize.Height, dstPixelFormat );
 
             // lock destination bitmap data
-            BitmapData dstData = dstImage.LockBits(
+            var dstData = dstImage.LockBits(
                 new Rectangle( 0, 0, newSize.Width, newSize.Height ),
                 ImageLockMode.ReadWrite, dstPixelFormat );
 
@@ -155,10 +155,10 @@ namespace AForge.Imaging.Filters
             CheckSourceFormat( image.PixelFormat );
 
             // get new image size
-            Size newSize = CalculateNewImageSize( image );
+            var newSize = CalculateNewImageSize( image );
 
             // create new destination image
-            UnmanagedImage dstImage = UnmanagedImage.Create( newSize.Width, newSize.Height, FormatTranslations[image.PixelFormat] );
+            var dstImage = UnmanagedImage.Create( newSize.Width, newSize.Height, FormatTranslations[image.PixelFormat] );
 
             // process the filter
             ProcessFilter( image, dstImage );
@@ -197,7 +197,7 @@ namespace AForge.Imaging.Filters
             }
 
             // get new image size
-            Size newSize = CalculateNewImageSize( sourceImage );
+            var newSize = CalculateNewImageSize( sourceImage );
 
             // ensure destination image has correct size
             if ( ( destinationImage.Width != newSize.Width ) || ( destinationImage.Height != newSize.Height ) )

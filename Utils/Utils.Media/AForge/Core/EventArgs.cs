@@ -63,7 +63,7 @@ namespace AForge
         /// 
         public byte[] GetMessage( )
         {
-            byte[] ret = new byte[length];
+            var ret = new byte[length];
             Array.Copy( message, index, ret, 0, length );
             return ret;
         }

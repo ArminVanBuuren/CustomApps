@@ -96,9 +96,9 @@ namespace HtmlAgilityPack
         {
             uint oldcrc32;
             oldcrc32 = 0xFFFFFFFF;
-            int len = bytes.Length;
+            var len = bytes.Length;
 
-            for (int i = 0; len > 0; i++)
+            for (var i = 0; len > 0; i++)
             {
                 --len;
                 oldcrc32 = UPDC32(bytes[len], oldcrc32);
@@ -116,11 +116,11 @@ namespace HtmlAgilityPack
         {
             uint oldcrc32;
             oldcrc32 = 0xFFFFFFFF;
-            int len = text.Length;
+            var len = text.Length;
             ushort uCharVal;
             byte lowByte, hiByte;
 
-            for (int i = 0; len > 0; i++)
+            for (var i = 0; len > 0; i++)
             {
                 --len;
                 uCharVal = text[len];

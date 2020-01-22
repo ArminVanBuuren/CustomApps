@@ -212,21 +212,21 @@ namespace AForge.Imaging.Filters
                 throw new NullReferenceException( "Channel image was not specified." );
             }
 
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int width   = image.Width;
-            int height  = image.Height;
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var width   = image.Width;
+            var height  = image.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             BitmapData chData = null;
             // pointer to channel's data
             byte* ch;
             // channel's image stride
-            int chStride = 0;
+            var chStride = 0;
 
             // check channel's image type
             if ( channelImage != null )
@@ -253,22 +253,22 @@ namespace AForge.Imaging.Filters
                 chStride = unmanagedChannelImage.Stride;
             }
 
-            int     offsetCh = chStride - rect.Width;
-            RGB     rgb = new RGB( );
-            YCbCr   ycbcr = new YCbCr( );
+            var     offsetCh = chStride - rect.Width;
+            var     rgb = new RGB( );
+            var   ycbcr = new YCbCr( );
 
             // do the job
-            byte* dst = (byte*) image.ImageData.ToPointer( );
+            var dst = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             dst += ( startY * image.Stride + startX * pixelSize );
             ch += ( startY * chStride + startX );
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, dst += pixelSize, ch++ )
+                for ( var x = startX; x < stopX; x++, dst += pixelSize, ch++ )
                 {
                     rgb.Red     = dst[RGB.R];
                     rgb.Green   = dst[RGB.G];

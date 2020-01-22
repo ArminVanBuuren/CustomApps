@@ -109,7 +109,7 @@ namespace AForge.Imaging.Filters
             int ed;	// error diffusion
 
             // do error diffusion to right-standing neighbors
-            int[] coefficientsRow = coefficients[0];
+            var coefficientsRow = coefficients[0];
 
             for ( int jI = 1, jC = 0, k = coefficientsRow.Length; jC < k; jI++, jC++ )
             {
@@ -157,7 +157,7 @@ namespace AForge.Imaging.Filters
 
             for ( int i = 0, n = coefficients.Length; i < n; i++ )
             {
-                int[] coefficientsRow = coefficients[i];
+                var coefficientsRow = coefficients[i];
 
                 for ( int j = 0, k = coefficientsRow.Length; j < k; j++ )
                 {

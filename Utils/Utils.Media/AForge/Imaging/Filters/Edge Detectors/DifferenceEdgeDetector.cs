@@ -85,32 +85,32 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
             // processing start and stop X,Y positions
-            int startX  = rect.Left + 1;
-            int startY  = rect.Top + 1;
-            int stopX   = startX + rect.Width - 2;
-            int stopY   = startY + rect.Height - 2;
+            var startX  = rect.Left + 1;
+            var startY  = rect.Top + 1;
+            var stopX   = startX + rect.Width - 2;
+            var stopY   = startY + rect.Height - 2;
 
-            int dstStride = destination.Stride;
-            int srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var srcStride = source.Stride;
 
-            int dstOffset = dstStride - rect.Width + 2;
-            int srcOffset = srcStride - rect.Width + 2;
+            var dstOffset = dstStride - rect.Width + 2;
+            var srcOffset = srcStride - rect.Width + 2;
 
             int d, max;
 
             // data pointers
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
 
             // allign pointers
             src += srcStride * startY + startX;
             dst += dstStride * startY + startX;
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, dst++ )
+                for ( var x = startX; x < stopX; x++, src++, dst++ )
                 {
                     // left diagonal
                     max = (int) src[-srcStride - 1] - src[srcStride + 1];

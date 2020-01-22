@@ -772,7 +772,7 @@ namespace Ionic.Zlib
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (_disposed) throw new ObjectDisposedException("GZipStream");
-            int n = _baseStream.Read(buffer, offset, count);
+            var n = _baseStream.Read(buffer, offset, count);
 
             // Console.WriteLine("GZipStream::Read(buffer, off({0}), c({1}) = {2}", offset, count, n);
             // Console.WriteLine( Util.FormatByteArray(buffer, offset, n) );
@@ -858,15 +858,15 @@ namespace Ionic.Zlib
 
         private int EmitHeader()
         {
-            byte[] commentBytes = (Comment == null) ? null : iso8859dash1.GetBytes(Comment);
-            byte[] filenameBytes = (FileName == null) ? null : iso8859dash1.GetBytes(FileName);
+            var commentBytes = (Comment == null) ? null : iso8859dash1.GetBytes(Comment);
+            var filenameBytes = (FileName == null) ? null : iso8859dash1.GetBytes(FileName);
 
-            int cbLength = (Comment == null) ? 0 : commentBytes.Length + 1;
-            int fnLength = (FileName == null) ? 0 : filenameBytes.Length + 1;
+            var cbLength = (Comment == null) ? 0 : commentBytes.Length + 1;
+            var fnLength = (FileName == null) ? 0 : filenameBytes.Length + 1;
 
-            int bufferLength = 10 + cbLength + fnLength;
-            byte[] header = new byte[bufferLength];
-            int i = 0;
+            var bufferLength = 10 + cbLength + fnLength;
+            var header = new byte[bufferLength];
+            var i = 0;
             // ID
             header[i++] = 0x1F;
             header[i++] = 0x8B;
@@ -884,8 +884,8 @@ namespace Ionic.Zlib
 
             // mtime
             if (!LastModified.HasValue) LastModified = DateTime.Now;
-            System.TimeSpan delta = LastModified.Value - _unixEpoch;
-            Int32 timet = (Int32)delta.TotalSeconds;
+            var delta = LastModified.Value - _unixEpoch;
+            var timet = (Int32)delta.TotalSeconds;
             Array.Copy(BitConverter.GetBytes(timet), 0, header, i, 4);
             i += 4;
 

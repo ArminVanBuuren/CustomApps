@@ -20,8 +20,8 @@ namespace Tester.WinForm
             }
             catch (Exception e)
             {
-                Exception ex = e;
-                string exMess = ex?.ToString();
+                var ex = e;
+                var exMess = ex?.ToString();
                 while (ex.InnerException != null)
                 {
                     ex = ex.InnerException;

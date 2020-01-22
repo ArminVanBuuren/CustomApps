@@ -483,8 +483,8 @@ namespace AForge.AMath
         ///
         public float Normalize( )
         {
-            float norm = (float) System.Math.Sqrt( X * X + Y * Y + Z * Z );
-            float invNorm = 1.0f / norm;
+            var norm = (float) System.Math.Sqrt( X * X + Y * Y + Z * Z );
+            var invNorm = 1.0f / norm;
 
             X *= invNorm;
             Y *= invNorm;

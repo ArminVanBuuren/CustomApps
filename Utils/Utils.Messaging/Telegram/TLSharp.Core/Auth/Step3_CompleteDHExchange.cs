@@ -23,8 +23,8 @@ namespace TLSharp.Core.Auth
         public byte[] ToBytes(byte[] nonce, byte[] serverNonce, byte[] newNonce, byte[] encryptedAnswer)
         {
             this.newNonce = newNonce;
-            AESKeyData key = AES.GenerateKeyDataFromNonces(serverNonce, newNonce);
-            byte[] plaintextAnswer = AES.DecryptAES(key, encryptedAnswer);
+            var key = AES.GenerateKeyDataFromNonces(serverNonce, newNonce);
+            var plaintextAnswer = AES.DecryptAES(key, encryptedAnswer);
 
             // logger.debug("plaintext answer: {0}", BitConverter.ToString(plaintextAnswer));
 
@@ -32,12 +32,12 @@ namespace TLSharp.Core.Auth
             BigInteger dhPrime;
             BigInteger ga;
 
-            using (MemoryStream dhInnerData = new MemoryStream(plaintextAnswer))
+            using (var dhInnerData = new MemoryStream(plaintextAnswer))
             {
-                using (BinaryReader dhInnerDataReader = new BinaryReader(dhInnerData))
+                using (var dhInnerDataReader = new BinaryReader(dhInnerData))
                 {
-                    byte[] hashsum = dhInnerDataReader.ReadBytes(20);
-                    uint code = dhInnerDataReader.ReadUInt32();
+                    var hashsum = dhInnerDataReader.ReadBytes(20);
+                    var code = dhInnerDataReader.ReadUInt32();
                     if (code != 0xb5890dba)
                     {
                         throw new InvalidOperationException($"invalid dh_inner_data code: {code}");
@@ -45,7 +45,7 @@ namespace TLSharp.Core.Auth
 
                     // logger.debug("valid code");
 
-                    byte[] nonceFromServer1 = dhInnerDataReader.ReadBytes(16);
+                    var nonceFromServer1 = dhInnerDataReader.ReadBytes(16);
                     if (!nonceFromServer1.SequenceEqual(nonce))
                     {
                         throw new InvalidOperationException("invalid nonce in encrypted answer");
@@ -53,7 +53,7 @@ namespace TLSharp.Core.Auth
 
                     // logger.debug("valid nonce");
 
-                    byte[] serverNonceFromServer1 = dhInnerDataReader.ReadBytes(16);
+                    var serverNonceFromServer1 = dhInnerDataReader.ReadBytes(16);
                     if (!serverNonceFromServer1.SequenceEqual(serverNonce))
                     {
                         throw new InvalidOperationException("invalid server nonce in encrypted answer");
@@ -65,24 +65,24 @@ namespace TLSharp.Core.Auth
                     dhPrime = new BigInteger(1, Serializers.Bytes.read(dhInnerDataReader));
                     ga = new BigInteger(1, Serializers.Bytes.read(dhInnerDataReader));
 
-                    int serverTime = dhInnerDataReader.ReadInt32();
+                    var serverTime = dhInnerDataReader.ReadInt32();
                     timeOffset = serverTime - (int)(Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds) / 1000);
 
                     // logger.debug("g: {0}, dhprime: {1}, ga: {2}", g, dhPrime, ga);
                 }
             }
 
-            BigInteger b = new BigInteger(2048, new Random());
-            BigInteger gb = BigInteger.ValueOf(g).ModPow(b, dhPrime);
+            var b = new BigInteger(2048, new Random());
+            var gb = BigInteger.ValueOf(g).ModPow(b, dhPrime);
             _gab = ga.ModPow(b, dhPrime);
 
             // logger.debug("gab: {0}", gab);
 
             // prepare client dh inner data
             byte[] clientDHInnerDataBytes;
-            using (MemoryStream clientDhInnerData = new MemoryStream())
+            using (var clientDhInnerData = new MemoryStream())
             {
-                using (BinaryWriter clientDhInnerDataWriter = new BinaryWriter(clientDhInnerData))
+                using (var clientDhInnerDataWriter = new BinaryWriter(clientDhInnerData))
                 {
                     clientDhInnerDataWriter.Write(0x6643b654); // client_dh_inner_data
                     clientDhInnerDataWriter.Write(nonce);
@@ -90,9 +90,9 @@ namespace TLSharp.Core.Auth
                     clientDhInnerDataWriter.Write((long)0); // TODO: retry_id
                     Serializers.Bytes.write(clientDhInnerDataWriter, gb.ToByteArrayUnsigned());
 
-                    using (MemoryStream clientDhInnerDataWithHash = new MemoryStream())
+                    using (var clientDhInnerDataWithHash = new MemoryStream())
                     {
-                        using (BinaryWriter clientDhInnerDataWithHashWriter = new BinaryWriter(clientDhInnerDataWithHash))
+                        using (var clientDhInnerDataWithHashWriter = new BinaryWriter(clientDhInnerDataWithHash))
                         {
                             using (SHA1 sha1 = new SHA1Managed())
                             {
@@ -108,15 +108,15 @@ namespace TLSharp.Core.Auth
             // logger.debug("client dh inner data papared len {0}: {1}", clientDHInnerDataBytes.Length, BitConverter.ToString(clientDHInnerDataBytes).Replace("-", ""));
 
             // encryption
-            byte[] clientDhInnerDataEncryptedBytes = AES.EncryptAES(key, clientDHInnerDataBytes);
+            var clientDhInnerDataEncryptedBytes = AES.EncryptAES(key, clientDHInnerDataBytes);
 
             // logger.debug("inner data encrypted {0}: {1}", clientDhInnerDataEncryptedBytes.Length, BitConverter.ToString(clientDhInnerDataEncryptedBytes).Replace("-", ""));
 
             // prepare set_client_dh_params
             byte[] setclientDhParamsBytes;
-            using (MemoryStream setClientDhParams = new MemoryStream())
+            using (var setClientDhParams = new MemoryStream())
             {
-                using (BinaryWriter setClientDhParamsWriter = new BinaryWriter(setClientDhParams))
+                using (var setClientDhParamsWriter = new BinaryWriter(setClientDhParams))
                 {
                     setClientDhParamsWriter.Write(0xf5045f1f);
                     setClientDhParamsWriter.Write(nonce);
@@ -134,17 +134,17 @@ namespace TLSharp.Core.Auth
 
         public Step3_Response FromBytes(byte[] response)
         {
-            using (MemoryStream responseStream = new MemoryStream(response))
+            using (var responseStream = new MemoryStream(response))
             {
-                using (BinaryReader responseReader = new BinaryReader(responseStream))
+                using (var responseReader = new BinaryReader(responseStream))
                 {
-                    uint code = responseReader.ReadUInt32();
+                    var code = responseReader.ReadUInt32();
                     if (code == 0x3bcbf734)
                     { // dh_gen_ok
                       //logger.debug("dh_gen_ok");
 
 
-                        byte[] nonceFromServer = responseReader.ReadBytes(16);
+                        var nonceFromServer = responseReader.ReadBytes(16);
                         // TODO
                         /*
 						if (!nonceFromServer.SequenceEqual(nonce))
@@ -154,7 +154,7 @@ namespace TLSharp.Core.Auth
 						}
 						*/
 
-                        byte[] serverNonceFromServer = responseReader.ReadBytes(16);
+                        var serverNonceFromServer = responseReader.ReadBytes(16);
 
                         // TODO:
 
@@ -166,12 +166,12 @@ namespace TLSharp.Core.Auth
 						}
 						*/
 
-                        byte[] newNonceHash1 = responseReader.ReadBytes(16);
+                        var newNonceHash1 = responseReader.ReadBytes(16);
                         //logger.debug("new nonce hash 1: {0}", BitConverter.ToString(newNonceHash1));
 
-                        AuthKey authKey = new AuthKey(_gab);
+                        var authKey = new AuthKey(_gab);
 
-                        byte[] newNonceHashCalculated = authKey.CalcNewNonceHash(newNonce, 1);
+                        var newNonceHashCalculated = authKey.CalcNewNonceHash(newNonce, 1);
 
                         if (!newNonceHash1.SequenceEqual(newNonceHashCalculated))
                         {

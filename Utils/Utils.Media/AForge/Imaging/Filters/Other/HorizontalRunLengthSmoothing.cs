@@ -128,22 +128,22 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int startY = rect.Top;
-            int stopY  = startY + rect.Height;
-            int width  = rect.Width;
-            int offset = image.Stride - rect.Width;
+            var startY = rect.Top;
+            var stopY  = startY + rect.Height;
+            var width  = rect.Width;
+            var offset = image.Stride - rect.Width;
 
-            byte* ptr = (byte*) image.ImageData.ToPointer( ) + startY * image.Stride + rect.Left;
+            var ptr = (byte*) image.ImageData.ToPointer( ) + startY * image.Stride + rect.Left;
 
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
-                byte* lineStart = ptr;
-                byte* lineEndPtr = ptr + width;
+                var lineStart = ptr;
+                var lineEndPtr = ptr + width;
                 
                 // fill gaps between white pixels
                 while ( ptr < lineEndPtr )
                 {
-                    byte* gapStart = ptr;
+                    var gapStart = ptr;
 
                     // look for non black pixel
                     while ( ( ptr < lineEndPtr ) && ( *ptr == 0 ) )

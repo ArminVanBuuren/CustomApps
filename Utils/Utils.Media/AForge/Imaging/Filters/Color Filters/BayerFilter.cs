@@ -134,31 +134,31 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get width and height
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
-            int widthM1  = width - 1;
-            int heightM1 = height - 1;
+            var widthM1  = width - 1;
+            var heightM1 = height - 1;
 
-            int srcStride = sourceData.Stride;
+            var srcStride = sourceData.Stride;
 
-            int srcOffset = srcStride - width;
-            int dstOffset = destinationData.Stride - width * 3;
+            var srcOffset = srcStride - width;
+            var dstOffset = destinationData.Stride - width * 3;
 
             // do the job
-            byte * src = (byte*) sourceData.ImageData.ToPointer( );
-            byte * dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
-            int[] rgbValues = new int[3];
-            int[] rgbCounters = new int[3];
+            var rgbValues = new int[3];
+            var rgbCounters = new int[3];
 
             if ( !performDemosaicing )
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++, dst += 3 )
+                    for ( var x = 0; x < width; x++, src++, dst += 3 )
                     {
                         dst[RGB.R] = dst[RGB.G] = dst[RGB.B] = 0;
                         dst[bayerPattern[y & 1, x & 1]] = *src;
@@ -170,15 +170,15 @@ namespace AForge.Imaging.Filters
             else
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++, dst += 3 )
+                    for ( var x = 0; x < width; x++, src++, dst += 3 )
                     {
                         rgbValues[0] = rgbValues[1] = rgbValues[2] = 0;
                         rgbCounters[0] = rgbCounters[1] = rgbCounters[2] = 0;
 
-                        int bayerIndex = bayerPattern[y & 1, x & 1];
+                        var bayerIndex = bayerPattern[y & 1, x & 1];
 
                         rgbValues[bayerIndex] += *src;
                         rgbCounters[bayerIndex]++;

@@ -28,7 +28,7 @@ namespace AForge.Video
         /// 
         public static bool Compare( byte[] array, byte[] needle, int startIndex )
         {
-            int needleLen = needle.Length;
+            var needleLen = needle.Length;
             // compare
             for ( int i = 0, p = startIndex; i < needleLen; i++, p++ )
             {
@@ -53,7 +53,7 @@ namespace AForge.Video
         /// 
         public static int Find( byte[] array, byte[] needle, int startIndex, int sourceLength )
         {
-            int needleLen = needle.Length;
+            var needleLen = needle.Length;
             int index;
 
             while ( sourceLength >= needleLen )

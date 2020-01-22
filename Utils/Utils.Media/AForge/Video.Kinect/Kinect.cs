@@ -76,7 +76,7 @@ namespace AForge.Video.Kinect
             {
                 lock ( sync )
                 {
-                    foreach ( DeviceFailureHandler handler in failureHanlders )
+                    foreach ( var handler in failureHanlders )
                     {
                         handler( );
                     }
@@ -142,7 +142,7 @@ namespace AForge.Video.Kinect
                 throw new ArgumentException( "There is no Kinect device with specified ID connected to the system." );
             }
 
-            bool needToStartStatusThread = false;
+            var needToStartStatusThread = false;
             Kinect kinect = null;
 
             lock ( openDevices )
@@ -152,7 +152,7 @@ namespace AForge.Video.Kinect
                 // check if the device is open already
                 if ( !openDevices.ContainsKey( deviceID ) )
                 {
-                    IntPtr devicePointer = IntPtr.Zero;
+                    var devicePointer = IntPtr.Zero;
 
                     // connect to Kinect device witht the specified ID
                     if ( KinectNative.freenect_open_device( KinectNative.Context, ref devicePointer, deviceID ) != 0 )
@@ -209,7 +209,7 @@ namespace AForge.Video.Kinect
 
         private void Dispose( bool disposing )
         {
-            bool needToStopStatusThread = false;
+            var needToStopStatusThread = false;
 
             lock ( openDevices )
             {
@@ -257,7 +257,7 @@ namespace AForge.Video.Kinect
             {
                 CheckDevice( );
 
-                int result = KinectNative.freenect_set_led( rawDevice, ledColor );
+                var result = KinectNative.freenect_set_led( rawDevice, ledColor );
 
                 if ( result != 0 )
                 {
@@ -287,7 +287,7 @@ namespace AForge.Video.Kinect
                     throw new ArgumentOutOfRangeException( "angle", "Motor tilt has to be in the [-31, 31] range." );
                 }
 
-                int result = KinectNative.freenect_set_tilt_degs( rawDevice, angle );
+                var result = KinectNative.freenect_set_tilt_degs( rawDevice, angle );
                 if ( result != 0 )
                 {
                     throw new DeviceErrorException( "Failed setting motor tilt. Error code: " + result );
@@ -311,7 +311,7 @@ namespace AForge.Video.Kinect
         /// 
         public void GetAccelerometerValues( out double x, out double y, out double z )
         {
-            KinectNative.TiltState tiltState = new KinectNative.TiltState( );
+            var tiltState = new KinectNative.TiltState( );
 
             lock ( sync )
             {
@@ -397,7 +397,7 @@ namespace AForge.Video.Kinect
                     if ( openDevices.Count != 0 )
                     {
                         // update the status for each open device
-                        foreach ( DeviceContext deviceContext in openDevices.Values )
+                        foreach ( var deviceContext in openDevices.Values )
                         {
                             if ( deviceContext.DeviceFailed )
                             {
@@ -412,7 +412,7 @@ namespace AForge.Video.Kinect
                             else
                             {
                                 // get updated device status
-                                IntPtr ptr = KinectNative.freenect_get_tilt_state( deviceContext.Device );
+                                var ptr = KinectNative.freenect_get_tilt_state( deviceContext.Device );
                                 deviceContext.TiltState = (KinectNative.TiltState)
                                     System.Runtime.InteropServices.Marshal.PtrToStructure( ptr, typeof( KinectNative.TiltState ) );
                             }

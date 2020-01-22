@@ -45,17 +45,17 @@ namespace BigMath.Utils
             }
 
             const int valueLength = sizeof(ulong) * 8;
-            int length = values.Length;
+            var length = values.Length;
 
             shift = shift % (length * valueLength);
 
-            int shiftOffset = shift / valueLength;
-            int bshift = shift % valueLength;
+            var shiftOffset = shift / valueLength;
+            var bshift = shift % valueLength;
 
             var shifted = new ulong[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                int ishift = i - shiftOffset;
+                var ishift = i - shiftOffset;
                 if (ishift < 0)
                 {
                     continue;
@@ -86,7 +86,7 @@ namespace BigMath.Utils
             }
 
             const int valueLength = sizeof(ulong) * 8;
-            int length = values.Length;
+            var length = values.Length;
 
             shift = shift % (length * valueLength);     //This is the defined behavior of shift. Shifting by greater than the number of bits uses a mod
 
@@ -96,7 +96,7 @@ namespace BigMath.Utils
             //
             while (shift >= valueLength)
             {
-                for (int i = 0; i < length - 1; i++)
+                for (var i = 0; i < length - 1; i++)
                 {
                     values[i] = values[i + 1];
                 }
@@ -109,7 +109,7 @@ namespace BigMath.Utils
             //
             if (shift == 0)
                 return (values);
-            int bshift = valueLength - shift;
+            var bshift = valueLength - shift;
 
             //
             //  In right shifting, upper val is a special case because we need to preserve the sign bits, and because we don't need to or in
@@ -117,7 +117,7 @@ namespace BigMath.Utils
             //
             var shifted = new ulong[length];
             shifted[length - 1] = (ulong)((long)values[length - 1] >> shift);    //Preserve sign of upper long
-            for (int i = 0; i < length - 1; i++)
+            for (var i = 0; i < length - 1; i++)
             {
                 shifted[i] = values[i] >> shift;                   //Unsigned, so upper bits stay zero
                 shifted[i] |= (values[i + 1] << bshift);
@@ -139,17 +139,17 @@ namespace BigMath.Utils
             }
 
             const int valueLength = sizeof (ulong)*8;
-            int length = values.Length;
+            var length = values.Length;
 
             shift = shift%(length*valueLength);
 
-            int shiftOffset = shift/valueLength;
-            int bshift = shift%valueLength;
+            var shiftOffset = shift/valueLength;
+            var bshift = shift%valueLength;
 
             var shifted = new ulong[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                int ishift = i + shiftOffset;
+                var ishift = i + shiftOffset;
                 if (ishift >= length)
                 {
                     continue;
@@ -179,7 +179,7 @@ namespace BigMath.Utils
             q = pq/p;
             if (p > q)
             {
-                Int256 t = p;
+                var t = p;
                 p = q;
                 q = t;
             }
@@ -207,7 +207,7 @@ namespace BigMath.Utils
                 {
                     return a;
                 }
-                Int128 a1 = a;
+                var a1 = a;
                 a = b;
                 b = a1%b;
             }
@@ -221,7 +221,7 @@ namespace BigMath.Utils
                 {
                     return a;
                 }
-                Int256 a1 = a;
+                var a1 = a;
                 a = b;
                 b = a1%b;
             }
@@ -229,7 +229,7 @@ namespace BigMath.Utils
 
         private static int GetNormalizeShift(uint value)
         {
-            int shift = 0;
+            var shift = 0;
 
             if ((value & 0xFFFF0000) == 0)
             {
@@ -266,10 +266,10 @@ namespace BigMath.Utils
             int i;
             if (shift > 0)
             {
-                int rshift = 32 - shift;
+                var rshift = 32 - shift;
                 for (i = 0; i < l; i++)
                 {
-                    uint ui = u[i];
+                    var ui = u[i];
                     un[i] = (ui << shift) | carry;
                     carry = ui >> rshift;
                 }
@@ -295,23 +295,23 @@ namespace BigMath.Utils
 
         private static void Unnormalize(uint[] un, out uint[] r, int shift)
         {
-            int length = un.Length;
+            var length = un.Length;
             r = new uint[length];
 
             if (shift > 0)
             {
-                int lshift = 32 - shift;
+                var lshift = 32 - shift;
                 uint carry = 0;
-                for (int i = length - 1; i >= 0; i--)
+                for (var i = length - 1; i >= 0; i--)
                 {
-                    uint uni = un[i];
+                    var uni = un[i];
                     r[i] = (uni >> shift) | carry;
                     carry = (uni << lshift);
                 }
             }
             else
             {
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
                     r[i] = un[i];
                 }
@@ -320,7 +320,7 @@ namespace BigMath.Utils
 
         private static int GetLength(uint[] uints)
         {
-            int index = uints.Length - 1;
+            var index = uints.Length - 1;
             while ((index >= 0) && (uints[index] == 0))
             {
                 index--;
@@ -338,24 +338,24 @@ namespace BigMath.Utils
 
         public static void DivModUnsigned(uint[] u, uint[] v, out uint[] q, out uint[] r)
         {
-            int m = GetLength(u);
-            int n = GetLength(v);
+            var m = GetLength(u);
+            var n = GetLength(v);
 
             if (n <= 1)
             {
                 //  Divide by single digit
                 //
                 ulong rem = 0;
-                uint v0 = v[0];
+                var v0 = v[0];
                 q = new uint[m];
                 r = new uint[1];
 
-                for (int j = m - 1; j >= 0; j--)
+                for (var j = m - 1; j >= 0; j--)
                 {
                     rem *= Base;
                     rem += u[j];
 
-                    ulong div = rem/v0;
+                    var div = rem/v0;
                     rem -= div*v0;
                     q[j] = (uint) div;
                 }
@@ -363,7 +363,7 @@ namespace BigMath.Utils
             }
             else if (m >= n)
             {
-                int shift = GetNormalizeShift(v[n - 1]);
+                var shift = GetNormalizeShift(v[n - 1]);
 
                 var un = new uint[m + 1];
                 var vn = new uint[n];
@@ -376,7 +376,7 @@ namespace BigMath.Utils
 
                 //  Main division loop
                 //
-                for (int j = m - n; j >= 0; j--)
+                for (var j = m - n; j >= 0; j--)
                 {
                     ulong rr, qq;
                     int i;
@@ -408,7 +408,7 @@ namespace BigMath.Utils
                     long t = 0;
                     for (i = 0; i < n; i++)
                     {
-                        ulong p = vn[i]*qq;
+                        var p = vn[i]*qq;
                         t = un[i + j] - (long) (uint) p - b;
                         un[i + j] = (uint) t;
                         p >>= 32;

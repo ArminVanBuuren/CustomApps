@@ -212,7 +212,7 @@ namespace AForge.Video.VFW
             // close previous file
             Close( );
 
-            bool success = false;
+            var success = false;
 
             try
             {
@@ -227,7 +227,7 @@ namespace AForge.Video.VFW
                         throw new VideoException( "Failed getting video stream." );
 
                     // get stream info
-                    Win32.AVISTREAMINFO info = new Win32.AVISTREAMINFO( );
+                    var info = new Win32.AVISTREAMINFO( );
                     Win32.AVIStreamInfo( stream, ref info, Marshal.SizeOf( info ) );
 
                     width    = info.rectFrame.right;
@@ -239,7 +239,7 @@ namespace AForge.Video.VFW
                     codec    = Win32.decode_mmioFOURCC( info.handler );
 
                     // prepare decompressor
-                    Win32.BITMAPINFOHEADER bitmapInfoHeader = new Win32.BITMAPINFOHEADER( );
+                    var bitmapInfoHeader = new Win32.BITMAPINFOHEADER( );
 
                     bitmapInfoHeader.size        = Marshal.SizeOf( bitmapInfoHeader.GetType( ) );
                     bitmapInfoHeader.width       = width;
@@ -322,7 +322,7 @@ namespace AForge.Video.VFW
                 }
 
                 // get frame at specified position
-                IntPtr DIB = Win32.AVIStreamGetFrame( getFrame, position );
+                var DIB = Win32.AVIStreamGetFrame( getFrame, position );
                 if ( DIB == IntPtr.Zero )
                     throw new VideoException( "Failed getting frame." );
 
@@ -332,26 +332,26 @@ namespace AForge.Video.VFW
                 bitmapInfoHeader = (Win32.BITMAPINFOHEADER) Marshal.PtrToStructure( DIB, typeof( Win32.BITMAPINFOHEADER ) );
 
                 // create new bitmap
-                Bitmap image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
+                var image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
 
                 // lock bitmap data
-                BitmapData imageData = image.LockBits(
+                var imageData = image.LockBits(
                     new Rectangle( 0, 0, width, height ),
                     ImageLockMode.ReadWrite,
                     PixelFormat.Format24bppRgb );
 
                 // copy image data
-                int srcStride = imageData.Stride;
-                int dstStride = imageData.Stride;
+                var srcStride = imageData.Stride;
+                var dstStride = imageData.Stride;
 
                 // check image direction
                 if ( bitmapInfoHeader.height > 0 )
                 {
                     // it`s a bottom-top image
-                    int dst = imageData.Scan0.ToInt32( ) + dstStride * ( height - 1 );
-                    int src = DIB.ToInt32( ) + Marshal.SizeOf( typeof( Win32.BITMAPINFOHEADER ) );
+                    var dst = imageData.Scan0.ToInt32( ) + dstStride * ( height - 1 );
+                    var src = DIB.ToInt32( ) + Marshal.SizeOf( typeof( Win32.BITMAPINFOHEADER ) );
 
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         Win32.memcpy( dst, src, srcStride );
                         dst -= dstStride;
@@ -361,8 +361,8 @@ namespace AForge.Video.VFW
                 else
                 {
                     // it`s a top bootom image
-                    int dst = imageData.Scan0.ToInt32( );
-                    int src = DIB.ToInt32( ) + Marshal.SizeOf( typeof( Win32.BITMAPINFOHEADER ) );
+                    var dst = imageData.Scan0.ToInt32( );
+                    var src = DIB.ToInt32( ) + Marshal.SizeOf( typeof( Win32.BITMAPINFOHEADER ) );
 
                     // copy the whole image
                     Win32.memcpy( dst, src, srcStride * height );

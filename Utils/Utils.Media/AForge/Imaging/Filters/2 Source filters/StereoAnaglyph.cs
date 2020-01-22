@@ -169,25 +169,25 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, UnmanagedImage overlay )
         {
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // initialize other variables
-            int offset    = image.Stride - width * 3;
-            int ovrOffset = overlay.Stride - width * 3;
+            var offset    = image.Stride - width * 3;
+            var ovrOffset = overlay.Stride - width * 3;
 
             // do the job
-            byte * ptr = (byte*) image.ImageData.ToPointer( );
-            byte * ovr = (byte*) overlay.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
+            var ovr = (byte*) overlay.ImageData.ToPointer( );
 
             switch ( anaglyphAlgorithm )
             {
                 case Algorithm.TrueAnaglyph:
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, ptr += 3, ovr += 3 )
+                        for ( var x = 0; x < width; x++, ptr += 3, ovr += 3 )
                         {
                             ptr[RGB.R] = (byte) ( ptr[RGB.R] * 0.299 + ptr[RGB.G] * 0.587 + ptr[RGB.B] * 0.114 );
                             ptr[RGB.G] = 0;
@@ -200,10 +200,10 @@ namespace AForge.Imaging.Filters
 
                 case Algorithm.GrayAnaglyph:
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, ptr += 3, ovr += 3 )
+                        for ( var x = 0; x < width; x++, ptr += 3, ovr += 3 )
                         {
                             ptr[RGB.R] = (byte) ( ptr[RGB.R] * 0.299 + ptr[RGB.G] * 0.587 + ptr[RGB.B] * 0.114 );
                             ptr[RGB.G] = (byte) ( ovr[RGB.R] * 0.299 + ovr[RGB.G] * 0.587 + ovr[RGB.B] * 0.114 );
@@ -216,10 +216,10 @@ namespace AForge.Imaging.Filters
                 
                 case Algorithm.ColorAnaglyph:
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, ptr += 3, ovr += 3 )
+                        for ( var x = 0; x < width; x++, ptr += 3, ovr += 3 )
                         {
                             // keep Red as it is and take only Green and Blue from the second image
                             ptr[RGB.G] = ovr[RGB.G];
@@ -232,10 +232,10 @@ namespace AForge.Imaging.Filters
 
                 case Algorithm.HalfColorAnaglyph:
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, ptr += 3, ovr += 3 )
+                        for ( var x = 0; x < width; x++, ptr += 3, ovr += 3 )
                         {
                             ptr[RGB.R] = (byte) ( ptr[RGB.R] * 0.299 + ptr[RGB.G] * 0.587 + ptr[RGB.B] * 0.114 );
                             ptr[RGB.G] = ovr[RGB.G];
@@ -248,10 +248,10 @@ namespace AForge.Imaging.Filters
 
                 case Algorithm.OptimizedAnaglyph:
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, ptr += 3, ovr += 3 )
+                        for ( var x = 0; x < width; x++, ptr += 3, ovr += 3 )
                         {
                             ptr[RGB.R] = (byte) ( ptr[RGB.G] * 0.7 + ptr[RGB.B] * 0.3 );
                             ptr[RGB.G] = ovr[RGB.G];

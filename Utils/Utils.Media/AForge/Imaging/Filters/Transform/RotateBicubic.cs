@@ -96,34 +96,34 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int    width      = sourceData.Width;
-            int    height     = sourceData.Height;
-            double oldXradius = (double) ( width  - 1 ) / 2;
-            double oldYradius = (double) ( height - 1 ) / 2;
+            var    width      = sourceData.Width;
+            var    height     = sourceData.Height;
+            var oldXradius = (double) ( width  - 1 ) / 2;
+            var oldYradius = (double) ( height - 1 ) / 2;
 
             // get destination image size
-            int    newWidth   = destinationData.Width;
-            int    newHeight  = destinationData.Height;
-            double newXradius = (double) ( newWidth  - 1 ) / 2;
-            double newYradius = (double) ( newHeight - 1 ) / 2;
+            var    newWidth   = destinationData.Width;
+            var    newHeight  = destinationData.Height;
+            var newXradius = (double) ( newWidth  - 1 ) / 2;
+            var newYradius = (double) ( newHeight - 1 ) / 2;
 
             // angle's sine and cosine
-            double angleRad = -angle * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            var angleRad = -angle * Math.PI / 180;
+            var angleCos = Math.Cos( angleRad );
+            var angleSin = Math.Sin( angleRad );
 
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride -
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride -
                 ( ( destinationData.PixelFormat == PixelFormat.Format8bppIndexed ) ? newWidth : newWidth * 3 );
 
             // fill values
-            byte fillR = fillColor.R;
-            byte fillG = fillColor.G;
-            byte fillB = fillColor.B;
+            var fillR = fillColor.R;
+            var fillG = fillColor.G;
+            var fillB = fillColor.B;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // destination pixel's coordinate relative to image center
             double cx, cy;
@@ -133,8 +133,8 @@ namespace AForge.Imaging.Filters
             // destination pixel values
             double r, g, b;
             // width and height decreased by 1
-            int ymax = height - 1;
-            int xmax = width - 1;
+            var ymax = height - 1;
+            var xmax = width - 1;
             // temporary pointer
             byte* p;
 
@@ -142,10 +142,10 @@ namespace AForge.Imaging.Filters
             {
                 // grayscale
                 cy = -newYradius;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     cx = -newXradius;
-                    for ( int x = 0; x < newWidth; x++, dst++ )
+                    for ( var x = 0; x < newWidth; x++, dst++ )
                     {
                         // coordinates of source point
                         ox = angleCos * cx + angleSin * cy + oldXradius;
@@ -168,7 +168,7 @@ namespace AForge.Imaging.Filters
                             // initial pixel value
                             g = 0;
 
-                            for ( int n = -1; n < 3; n++ )
+                            for ( var n = -1; n < 3; n++ )
                             {
                                 // get Y cooefficient
                                 k1 = Interpolation.BiCubicKernel( dy - (double) n );
@@ -179,7 +179,7 @@ namespace AForge.Imaging.Filters
                                 if ( oy2 > ymax )
                                     oy2 = ymax;
 
-                                for ( int m = -1; m < 3; m++ )
+                                for ( var m = -1; m < 3; m++ )
                                 {
                                     // get X cooefficient
                                     k2 = k1 * Interpolation.BiCubicKernel( (double) m - dx );
@@ -205,10 +205,10 @@ namespace AForge.Imaging.Filters
             {
                 // RGB
                 cy = -newYradius;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     cx = -newXradius;
-                    for ( int x = 0; x < newWidth; x++, dst += 3 )
+                    for ( var x = 0; x < newWidth; x++, dst += 3 )
                     {
                         // coordinates of source point
                         ox =  angleCos * cx + angleSin * cy + oldXradius;
@@ -233,7 +233,7 @@ namespace AForge.Imaging.Filters
                             // initial pixel value
                             r = g = b = 0;
 
-                            for ( int n = -1; n < 3; n++ )
+                            for ( var n = -1; n < 3; n++ )
                             {
                                 // get Y cooefficient
                                 k1 = Interpolation.BiCubicKernel( dy - (float) n );
@@ -244,7 +244,7 @@ namespace AForge.Imaging.Filters
                                 if ( oy2 > ymax )
                                     oy2 = ymax;
 
-                                for ( int m = -1; m < 3; m++ )
+                                for ( var m = -1; m < 3; m++ )
                                 {
                                     // get X cooefficient
                                     k2 = k1 * Interpolation.BiCubicKernel( (float) m - dx );

@@ -41,8 +41,8 @@ namespace HtmlAgilityPack
         public object CreateInstance(string htmlUrl, string xsltUrl, XsltArgumentList xsltArgs, Type type,
             string xmlPath)
         {
-            StringWriter sw = new StringWriter();
-            XmlTextWriter writer = new XmlTextWriter(sw);
+            var sw = new StringWriter();
+            var writer = new XmlTextWriter(sw);
             if (xsltUrl == null)
             {
                 LoadHtmlAsXml(htmlUrl, writer);
@@ -60,9 +60,9 @@ namespace HtmlAgilityPack
             }
 
             writer.Flush();
-            StringReader sr = new StringReader(sw.ToString());
-            XmlTextReader reader = new XmlTextReader(sr);
-            XmlSerializer serializer = new XmlSerializer(type);
+            var sr = new StringReader(sw.ToString());
+            var reader = new XmlTextReader(sr);
+            var serializer = new XmlSerializer(type);
             object o;
             try
             {
@@ -104,11 +104,11 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("htmlUrl");
             }
 
-            HtmlDocument doc = Load(htmlUrl);
+            var doc = Load(htmlUrl);
 
             if (xmlPath != null)
             {
-                XmlTextWriter w = new XmlTextWriter(xmlPath, doc.Encoding);
+                var w = new XmlTextWriter(xmlPath, doc.Encoding);
                 doc.Save(w);
                 w.Close();
             }
@@ -123,7 +123,7 @@ namespace HtmlAgilityPack
             xsltArgs.AddParam("requestDuration", "", RequestDuration);
             xsltArgs.AddParam("fromCache", "", FromCache);
 
-            XslCompiledTransform xslt = new XslCompiledTransform();
+            var xslt = new XslCompiledTransform();
             xslt.Load(xsltUrl);
             xslt.Transform(doc, xsltArgs, writer);
         }

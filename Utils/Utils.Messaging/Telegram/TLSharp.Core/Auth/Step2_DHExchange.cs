@@ -31,9 +31,9 @@ namespace TLSharp.Core.Auth
 
             byte[] reqDhParamsBytes;
 
-            using (MemoryStream pqInnerData = new MemoryStream(255))
+            using (var pqInnerData = new MemoryStream(255))
             {
-                using (BinaryWriter pqInnerDataWriter = new BinaryWriter(pqInnerData))
+                using (var pqInnerDataWriter = new BinaryWriter(pqInnerData))
                 {
                     pqInnerDataWriter.Write(0x83c95aec); // pq_inner_data
                     Serializers.Bytes.write(pqInnerDataWriter, pq.ToByteArrayUnsigned());
@@ -45,7 +45,7 @@ namespace TLSharp.Core.Auth
 
                     byte[] ciphertext = null;
                     byte[] targetFingerprint = null;
-                    foreach (byte[] fingerprint in fingerprints)
+                    foreach (var fingerprint in fingerprints)
                     {
                         ciphertext = RSA.Encrypt(BitConverter.ToString(fingerprint).Replace("-", string.Empty),
                                                  pqInnerData.GetBuffer(), 0, (int)pqInnerData.Position);
@@ -62,9 +62,9 @@ namespace TLSharp.Core.Auth
                             String.Format("not found valid key for fingerprints: {0}", String.Join(", ", fingerprints)));
                     }
 
-                    using (MemoryStream reqDHParams = new MemoryStream(1024))
+                    using (var reqDHParams = new MemoryStream(1024))
                     {
-                        using (BinaryWriter reqDHParamsWriter = new BinaryWriter(reqDHParams))
+                        using (var reqDHParamsWriter = new BinaryWriter(reqDHParams))
                         {
                             reqDHParamsWriter.Write(0xd712e4be); // req_dh_params
                             reqDHParamsWriter.Write(nonce);
@@ -86,11 +86,11 @@ namespace TLSharp.Core.Auth
         {
             byte[] encryptedAnswer;
 
-            using (MemoryStream responseStream = new MemoryStream(response, false))
+            using (var responseStream = new MemoryStream(response, false))
             {
-                using (BinaryReader responseReader = new BinaryReader(responseStream))
+                using (var responseReader = new BinaryReader(responseStream))
                 {
-                    uint responseCode = responseReader.ReadUInt32();
+                    var responseCode = responseReader.ReadUInt32();
 
                     if (responseCode == 0x79cb045d)
                     {
@@ -103,7 +103,7 @@ namespace TLSharp.Core.Auth
                         throw new InvalidOperationException($"invalid response code: {responseCode}");
                     }
 
-                    byte[] nonceFromServer = responseReader.ReadBytes(16);
+                    var nonceFromServer = responseReader.ReadBytes(16);
 
                     // TODO:!
                     /*
@@ -115,7 +115,7 @@ namespace TLSharp.Core.Auth
 					*/
 
 
-                    byte[] serverNonceFromServer = responseReader.ReadBytes(16);
+                    var serverNonceFromServer = responseReader.ReadBytes(16);
 
                     // TODO: !
                     /*

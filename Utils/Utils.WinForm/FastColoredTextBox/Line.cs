@@ -54,9 +54,9 @@ namespace FastColoredTextBoxNS
         {
             FoldingStartMarker = null;
             FoldingEndMarker = null;
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
-                Char c = this[i];
+                var c = this[i];
                 c.style &= ~styleIndex;
                 this[i] = c;
             }
@@ -68,8 +68,8 @@ namespace FastColoredTextBoxNS
         public virtual string Text
         {
             get{
-                StringBuilder sb = new StringBuilder(Count);
-                foreach(Char c in this)
+                var sb = new StringBuilder(Count);
+                foreach(var c in this)
                     sb.Append(c.c);
                 return sb.ToString();
             }
@@ -91,8 +91,8 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                int spacesCount = 0;
-                for (int i = 0; i < Count; i++)
+                var spacesCount = 0;
+                for (var i = 0; i < Count; i++)
                     if (this[i].c == ' ')
                         spacesCount++;
                     else
@@ -268,7 +268,7 @@ namespace FastColoredTextBoxNS
         public int GetWordWrapStringIndex(int iChar)
         {
             if (cutOffPositions == null || cutOffPositions.Count == 0) return 0;
-            for (int i = 0; i < cutOffPositions.Count; i++)
+            for (var i = 0; i < cutOffPositions.Count; i++)
                 if (cutOffPositions[i] >/*>=*/ iChar)
                     return i;
             return cutOffPositions.Count;

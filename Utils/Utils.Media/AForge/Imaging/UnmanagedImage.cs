@@ -215,10 +215,10 @@ namespace AForge.Imaging
         public UnmanagedImage Clone( )
         {
             // allocate memory for the image
-            IntPtr newImageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( stride * height );
+            var newImageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( stride * height );
             System.GC.AddMemoryPressure( stride * height );
 
-            UnmanagedImage newImage = new UnmanagedImage( newImageData, width, height, stride, pixelFormat );
+            var newImage = new UnmanagedImage( newImageData, width, height, stride, pixelFormat );
             newImage.mustBeDisposed = true;
 
             AForge.SystemTools.CopyUnmanagedMemory( newImageData, imageData, stride * height );
@@ -255,14 +255,14 @@ namespace AForge.Imaging
             {
                 unsafe
                 {
-                    int dstStride = destImage.stride;
-                    int copyLength = ( stride < dstStride ) ? stride : dstStride;
+                    var dstStride = destImage.stride;
+                    var copyLength = ( stride < dstStride ) ? stride : dstStride;
 
-                    byte* src = (byte*) imageData.ToPointer( );
-                    byte* dst = (byte*) destImage.imageData.ToPointer( );
+                    var src = (byte*) imageData.ToPointer( );
+                    var dst = (byte*) destImage.imageData.ToPointer( );
 
                     // copy line by line
-                    for ( int i = 0; i < height; i++ )
+                    for ( var i = 0; i < height; i++ )
                     {
                         AForge.SystemTools.CopyUnmanagedMemory( dst, src, copyLength );
 
@@ -306,7 +306,7 @@ namespace AForge.Imaging
         /// 
         public static UnmanagedImage Create( int width, int height, PixelFormat pixelFormat )
         {
-            int bytesPerPixel = 0 ;
+            var bytesPerPixel = 0 ;
 
             // calculate bytes per pixel
             switch ( pixelFormat )
@@ -343,7 +343,7 @@ namespace AForge.Imaging
             }
 
             // calculate stride
-            int stride = width * bytesPerPixel;
+            var stride = width * bytesPerPixel;
 
             if ( stride % 4 != 0 )
             {
@@ -351,11 +351,11 @@ namespace AForge.Imaging
             }
 
             // allocate memory for the image
-            IntPtr imageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( stride * height );
+            var imageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( stride * height );
             AForge.SystemTools.SetUnmanagedMemory( imageData, 0, stride * height );
             System.GC.AddMemoryPressure( stride * height );
 
-            UnmanagedImage image = new UnmanagedImage( imageData, width, height, stride, pixelFormat );
+            var image = new UnmanagedImage( imageData, width, height, stride, pixelFormat );
             image.mustBeDisposed = true;
 
             return image;
@@ -417,22 +417,22 @@ namespace AForge.Imaging
                         new Bitmap( width, height, pixelFormat );
 
                     // lock destination bitmap data
-                    BitmapData dstData = dstImage.LockBits(
+                    var dstData = dstImage.LockBits(
                         new Rectangle( 0, 0, width, height ),
                         ImageLockMode.ReadWrite, pixelFormat );
 
-                    int dstStride = dstData.Stride;
-                    int lineSize  = Math.Min( stride, dstStride );
+                    var dstStride = dstData.Stride;
+                    var lineSize  = Math.Min( stride, dstStride );
 
                     unsafe
                     {
-                        byte* dst = (byte*) dstData.Scan0.ToPointer( );
-                        byte* src = (byte*) imageData.ToPointer( );
+                        var dst = (byte*) dstData.Scan0.ToPointer( );
+                        var src = (byte*) imageData.ToPointer( );
 
                         if ( stride != dstStride )
                         {
                             // copy image
-                            for ( int y = 0; y < height; y++ )
+                            for ( var y = 0; y < height; y++ )
                             {
                                 AForge.SystemTools.CopyUnmanagedMemory( dst, src, lineSize );
                                 dst += dstStride;
@@ -479,7 +479,7 @@ namespace AForge.Imaging
         {
             UnmanagedImage dstImage = null;
 
-            BitmapData sourceData = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
+            var sourceData = image.LockBits( new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             try
@@ -510,7 +510,7 @@ namespace AForge.Imaging
         /// 
         public static UnmanagedImage FromManagedImage( BitmapData imageData )
         {
-            PixelFormat pixelFormat = imageData.PixelFormat;
+            var pixelFormat = imageData.PixelFormat;
 
             // check source pixel format
             if (
@@ -528,10 +528,10 @@ namespace AForge.Imaging
             }
 
             // allocate memory for the image
-            IntPtr dstImageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( imageData.Stride * imageData.Height );
+            var dstImageData = System.Runtime.InteropServices.Marshal.AllocHGlobal( imageData.Stride * imageData.Height );
             System.GC.AddMemoryPressure( imageData.Stride * imageData.Height );
 
-            UnmanagedImage image = new UnmanagedImage( dstImageData, imageData.Width, imageData.Height, imageData.Stride, pixelFormat );
+            var image = new UnmanagedImage( dstImageData, imageData.Width, imageData.Height, imageData.Stride, pixelFormat );
             AForge.SystemTools.CopyUnmanagedMemory( dstImageData, imageData.Scan0, imageData.Stride * imageData.Height );
             image.mustBeDisposed = true;
 
@@ -566,25 +566,25 @@ namespace AForge.Imaging
         /// 
         public byte[] Collect8bppPixelValues( List<IntPoint> points )
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
 
             if ( ( pixelFormat == PixelFormat.Format16bppGrayScale ) || ( pixelSize > 4 ) )
             {
                 throw new UnsupportedImageFormatException( "Unsupported pixel format of the source image. Use Collect16bppPixelValues() method for it." );
             }
 
-            byte[] pixelValues = new byte[points.Count * ( ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3 )];
+            var pixelValues = new byte[points.Count * ( ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3 )];
 
             unsafe
             {
-                byte* basePtr = (byte*) imageData.ToPointer( );
+                var basePtr = (byte*) imageData.ToPointer( );
                 byte* ptr;
 
                 if ( pixelFormat == PixelFormat.Format8bppIndexed )
                 {
-                    int i = 0;
+                    var i = 0;
 
-                    foreach ( IntPoint point in points )
+                    foreach ( var point in points )
                     {
                         ptr = basePtr + stride * point.Y + point.X;
                         pixelValues[i++] = *ptr;
@@ -592,9 +592,9 @@ namespace AForge.Imaging
                 }
                 else
                 {
-                    int i = 0;
+                    var i = 0;
 
-                    foreach ( IntPoint point in points )
+                    foreach ( var point in points )
                     {
                         ptr = basePtr + stride * point.Y + point.X * pixelSize;
                         pixelValues[i++] = ptr[RGB.R];
@@ -628,34 +628,34 @@ namespace AForge.Imaging
         ///
         public List<IntPoint> CollectActivePixels( Rectangle rect )
         {
-            List<IntPoint> pixels = new List<IntPoint>( );
+            var pixels = new List<IntPoint>( );
 
-            int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
 
             // correct rectangle
             rect.Intersect( new Rectangle( 0, 0, width, height ) );
 
-            int startX = rect.X;
-            int startY = rect.Y;
-            int stopX  = rect.Right;
-            int stopY  = rect.Bottom;
+            var startX = rect.X;
+            var startY = rect.Y;
+            var stopX  = rect.Right;
+            var stopY  = rect.Bottom;
 
             unsafe
             {
-                byte* basePtr = (byte*) imageData.ToPointer( );
+                var basePtr = (byte*) imageData.ToPointer( );
 
                 if ( ( pixelFormat == PixelFormat.Format16bppGrayScale ) || ( pixelSize > 4 ) )
                 {
-                    int pixelWords = pixelSize >> 1;
+                    var pixelWords = pixelSize >> 1;
 
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
-                        ushort* ptr = (ushort*) ( basePtr + y * stride + startX * pixelSize );
+                        var ptr = (ushort*) ( basePtr + y * stride + startX * pixelSize );
 
                         if ( pixelWords == 1 )
                         {
                             // grayscale images
-                            for ( int x = startX; x < stopX; x++, ptr++ )
+                            for ( var x = startX; x < stopX; x++, ptr++ )
                             {
                                 if ( *ptr != 0 )
                                 {
@@ -666,7 +666,7 @@ namespace AForge.Imaging
                         else
                         {
                             // color images
-                            for ( int x = startX; x < stopX; x++, ptr += pixelWords )
+                            for ( var x = startX; x < stopX; x++, ptr += pixelWords )
                             {
                                 if ( ( ptr[RGB.R] != 0 ) || ( ptr[RGB.G] != 0 ) || ( ptr[RGB.B] != 0 ) )
                                 {
@@ -678,14 +678,14 @@ namespace AForge.Imaging
                 }
                 else
                 {
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
-                        byte* ptr = basePtr + y * stride + startX * pixelSize;
+                        var ptr = basePtr + y * stride + startX * pixelSize;
 
                         if ( pixelSize == 1 )
                         {
                             // grayscale images
-                            for ( int x = startX; x < stopX; x++, ptr++ )
+                            for ( var x = startX; x < stopX; x++, ptr++ )
                             {
                                 if ( *ptr != 0 )
                                 {
@@ -696,7 +696,7 @@ namespace AForge.Imaging
                         else
                         {
                             // color images
-                            for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                            for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                             {
                                 if ( ( ptr[RGB.R] != 0 ) || ( ptr[RGB.G] != 0 ) || ( ptr[RGB.B] != 0 ) )
                                 {
@@ -725,25 +725,25 @@ namespace AForge.Imaging
         {
             unsafe
             {
-                int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
-                byte* basePtr = (byte*) imageData.ToPointer( );
+                var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+                var basePtr = (byte*) imageData.ToPointer( );
 
-                byte red   = color.R;
-                byte green = color.G;
-                byte blue  = color.B;
-                byte alpha = color.A;
+                var red   = color.R;
+                var green = color.G;
+                var blue  = color.B;
+                var alpha = color.A;
 
                 switch ( pixelFormat )
                 {
                     case PixelFormat.Format8bppIndexed:
                         {
-                            byte grayValue = (byte) ( 0.2125 * red + 0.7154 * green + 0.0721 * blue );
+                            var grayValue = (byte) ( 0.2125 * red + 0.7154 * green + 0.0721 * blue );
 
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    byte* ptr = basePtr + point.Y * stride + point.X;
+                                    var ptr = basePtr + point.Y * stride + point.X;
                                     *ptr = grayValue;
                                 }
                             }
@@ -755,11 +755,11 @@ namespace AForge.Imaging
                         {
 
 
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    byte* ptr = basePtr + point.Y * stride + point.X * pixelSize;
+                                    var ptr = basePtr + point.Y * stride + point.X * pixelSize;
                                     ptr[RGB.R] = red;
                                     ptr[RGB.G] = green;
                                     ptr[RGB.B] = blue;
@@ -770,11 +770,11 @@ namespace AForge.Imaging
 
                     case PixelFormat.Format32bppArgb:
                         {
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    byte* ptr = basePtr + point.Y * stride + point.X * pixelSize;
+                                    var ptr = basePtr + point.Y * stride + point.X * pixelSize;
                                     ptr[RGB.R] = red;
                                     ptr[RGB.G] = green;
                                     ptr[RGB.B] = blue;
@@ -786,13 +786,13 @@ namespace AForge.Imaging
 
                     case PixelFormat.Format16bppGrayScale:
                         {
-                            ushort grayValue = (ushort) ( (ushort) ( 0.2125 * red + 0.7154 * green + 0.0721 * blue ) << 8 );
+                            var grayValue = (ushort) ( (ushort) ( 0.2125 * red + 0.7154 * green + 0.0721 * blue ) << 8 );
 
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    ushort* ptr = (ushort*) ( basePtr + point.Y * stride ) + point.X;
+                                    var ptr = (ushort*) ( basePtr + point.Y * stride ) + point.X;
                                     *ptr = grayValue;
                                 }
                             }
@@ -801,15 +801,15 @@ namespace AForge.Imaging
 
                     case PixelFormat.Format48bppRgb:
                         {
-                            ushort red16   = (ushort) ( red   << 8 );
-                            ushort green16 = (ushort) ( green << 8 );
-                            ushort blue16  = (ushort) ( blue  << 8 );
+                            var red16   = (ushort) ( red   << 8 );
+                            var green16 = (ushort) ( green << 8 );
+                            var blue16  = (ushort) ( blue  << 8 );
 
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    ushort* ptr = (ushort*) ( basePtr + point.Y * stride + point.X * pixelSize );
+                                    var ptr = (ushort*) ( basePtr + point.Y * stride + point.X * pixelSize );
                                     ptr[RGB.R] = red16;
                                     ptr[RGB.G] = green16;
                                     ptr[RGB.B] = blue16;
@@ -820,16 +820,16 @@ namespace AForge.Imaging
 
                     case PixelFormat.Format64bppArgb:
                         {
-                            ushort red16   = (ushort) ( red   << 8 );
-                            ushort green16 = (ushort) ( green << 8 );
-                            ushort blue16  = (ushort) ( blue  << 8 );
-                            ushort alpha16 = (ushort) ( alpha << 8 );
+                            var red16   = (ushort) ( red   << 8 );
+                            var green16 = (ushort) ( green << 8 );
+                            var blue16  = (ushort) ( blue  << 8 );
+                            var alpha16 = (ushort) ( alpha << 8 );
 
-                            foreach ( IntPoint point in coordinates )
+                            foreach ( var point in coordinates )
                             {
                                 if ( ( point.X >= 0 ) && ( point.Y >= 0 ) && ( point.X < width ) && ( point.Y < height ) )
                                 {
-                                    ushort* ptr = (ushort*) ( basePtr + point.Y * stride + point.X * pixelSize );
+                                    var ptr = (ushort*) ( basePtr + point.Y * stride + point.X * pixelSize );
                                     ptr[RGB.R] = red16;
                                     ptr[RGB.G] = green16;
                                     ptr[RGB.B] = blue16;
@@ -910,9 +910,9 @@ namespace AForge.Imaging
             {
                 unsafe
                 {
-                    int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
-                    byte* ptr = (byte*) imageData.ToPointer( ) + y * stride + x * pixelSize;
-                    ushort* ptr2 = (ushort*) ptr;
+                    var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+                    var ptr = (byte*) imageData.ToPointer( ) + y * stride + x * pixelSize;
+                    var ptr2 = (ushort*) ptr;
 
                     switch ( pixelFormat )
                     {
@@ -1004,12 +1004,12 @@ namespace AForge.Imaging
                 throw new ArgumentOutOfRangeException( "y", "The specified pixel coordinate is out of image's bounds." );
             }
 
-            Color color = new Color( );
+            var color = new Color( );
 
             unsafe
             {
-                int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
-                byte* ptr = (byte*) imageData.ToPointer( ) + y * stride + x * pixelSize;
+                var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+                var ptr = (byte*) imageData.ToPointer( ) + y * stride + x * pixelSize;
 
                 switch ( pixelFormat )
                 {
@@ -1062,25 +1062,25 @@ namespace AForge.Imaging
         ///
         public ushort[] Collect16bppPixelValues( List<IntPoint> points )
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( pixelFormat ) / 8;
 
             if ( ( pixelFormat == PixelFormat.Format8bppIndexed ) || ( pixelSize == 3 ) || ( pixelSize == 4 ) )
             {
                 throw new UnsupportedImageFormatException( "Unsupported pixel format of the source image. Use Collect8bppPixelValues() method for it." );
             }
 
-            ushort[] pixelValues = new ushort[points.Count * ( ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 : 3 )];
+            var pixelValues = new ushort[points.Count * ( ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 : 3 )];
 
             unsafe
             {
-                byte* basePtr = (byte*) imageData.ToPointer( );
+                var basePtr = (byte*) imageData.ToPointer( );
                 ushort* ptr;
 
                 if ( pixelFormat == PixelFormat.Format16bppGrayScale )
                 {
-                    int i = 0;
+                    var i = 0;
 
-                    foreach ( IntPoint point in points )
+                    foreach ( var point in points )
                     {
                         ptr = (ushort*) ( basePtr + stride * point.Y + point.X * pixelSize );
                         pixelValues[i++] = *ptr;
@@ -1088,9 +1088,9 @@ namespace AForge.Imaging
                 }
                 else
                 {
-                    int i = 0;
+                    var i = 0;
 
-                    foreach ( IntPoint point in points )
+                    foreach ( var point in points )
                     {
                         ptr = (ushort*) ( basePtr + stride * point.Y + point.X * pixelSize );
                         pixelValues[i++] = ptr[RGB.R];

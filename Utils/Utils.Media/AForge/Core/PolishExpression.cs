@@ -61,12 +61,12 @@ namespace AForge
         public static double Evaluate( string expression, double[] variables )
         {
             // split expression to separate tokens, which represent functions ans variables
-            string[] tokens = expression.Trim( ).Split( ' ' );
+            var tokens = expression.Trim( ).Split( ' ' );
             // arguments stack
-            Stack arguments = new Stack( );
+            var arguments = new Stack( );
 
             // walk through all tokens
-            foreach ( string token in tokens )
+            foreach ( var token in tokens )
             {
                 // check for token type
                 if ( char.IsDigit( token[0] ) )
@@ -83,7 +83,7 @@ namespace AForge
                 {
                     // each function has at least one argument, so let's get the top one
                     // argument from stack
-                    double v = (double) arguments.Pop( );
+                    var v = (double) arguments.Pop( );
 
                     // check for function
                     switch ( token )

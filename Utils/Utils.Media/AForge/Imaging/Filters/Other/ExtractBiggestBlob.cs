@@ -71,7 +71,7 @@ namespace AForge.Imaging.Filters
         {
             get
             {
-                Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>( );
+                var formatTranslations = new Dictionary<PixelFormat, PixelFormat>( );
 
                 // initialize format translation dictionary
                 if ( originalImage == null )
@@ -125,7 +125,7 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData srcData = image.LockBits(
+            var srcData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -165,16 +165,16 @@ namespace AForge.Imaging.Filters
                 throw new UnsupportedImageFormatException( "Source pixel format is not supported by the filter." );
 
             // locate blobs in the source image
-            BlobCounter blobCounter = new BlobCounter( imageData );
+            var blobCounter = new BlobCounter( imageData );
             // get information about blobs
-            Blob[] blobs = blobCounter.GetObjectsInformation( );
+            var blobs = blobCounter.GetObjectsInformation( );
             // find the biggest blob
-            int  maxSize = 0;
+            var  maxSize = 0;
             Blob biggestBlob = null;
 
             for ( int i = 0, n = blobs.Length; i < n; i++ )
             {
-                int size = blobs[i].Rectangle.Width * blobs[i].Rectangle.Height;
+                var size = blobs[i].Rectangle.Width * blobs[i].Rectangle.Height;
 
                 if ( size > maxSize )
                 {
@@ -219,7 +219,7 @@ namespace AForge.Imaging.Filters
                 blobCounter.ExtractBlobsImage( originalImage, biggestBlob, false );
             }
 
-            Bitmap managedImage = biggestBlob.Image.ToManagedImage( );
+            var managedImage = biggestBlob.Image.ToManagedImage( );
 
             // dispose unmanaged image of the biggest blob
             biggestBlob.Image.Dispose( );

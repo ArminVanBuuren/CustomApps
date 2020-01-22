@@ -45,7 +45,7 @@ namespace HtmlAgilityPack
         {
             get
             {
-                int index = GetNodeIndex(node);
+                var index = GetNodeIndex(node);
                 if (index == -1)
                     throw new ArgumentOutOfRangeException("node",
                         "Node \"" + node.CloneNode(false).OuterHtml +
@@ -63,7 +63,7 @@ namespace HtmlAgilityPack
         {
             get
             {
-                for (int i = 0; i < _items.Count; i++)
+                for (var i = 0; i < _items.Count; i++)
                     if (string.Equals(_items[i].Name, nodeName, StringComparison.OrdinalIgnoreCase))
                         return _items[i];
 
@@ -129,7 +129,7 @@ namespace HtmlAgilityPack
         /// </summary>
         public void Clear()
         {
-            foreach (HtmlNode node in _items)
+            foreach (var node in _items)
             {
                 node.ParentNode = null;
                 node.NextSibling = null;
@@ -231,7 +231,7 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public bool Remove(HtmlNode item)
         {
-            int i = _items.IndexOf(item);
+            var i = _items.IndexOf(item);
             RemoveAt(i);
             return true;
         }
@@ -244,7 +244,7 @@ namespace HtmlAgilityPack
         {
             HtmlNode next = null;
             HtmlNode prev = null;
-            HtmlNode oldnode = _items[index];
+            var oldnode = _items[index];
 
             // KEEP a reference since it will be set to null
             var parentNode = _parentnode ?? oldnode._parentnode;
@@ -289,12 +289,12 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public static HtmlNode FindFirst(HtmlNodeCollection items, string name)
         {
-            foreach (HtmlNode node in items)
+            foreach (var node in items)
             {
                 if (node.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     return node;
                 if (!node.HasChildNodes) continue;
-                HtmlNode returnNode = FindFirst(node.ChildNodes, name);
+                var returnNode = FindFirst(node.ChildNodes, name);
                 if (returnNode != null)
                     return returnNode;
             }
@@ -341,7 +341,7 @@ namespace HtmlAgilityPack
         public int GetNodeIndex(HtmlNode node)
         {
             // TODO: should we rewrite this? what would be the key of a node?
-            for (int i = 0; i < _items.Count; i++)
+            for (var i = 0; i < _items.Count; i++)
                 if (node == _items[i])
                     return i;
             return -1;
@@ -389,7 +389,7 @@ namespace HtmlAgilityPack
         {
             HtmlNode next = null;
             HtmlNode prev = null;
-            HtmlNode oldnode = _items[index];
+            var oldnode = _items[index];
 
             if (index > 0)
                 prev = _items[index - 1];
@@ -432,8 +432,8 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlNode> Descendants()
         {
-            foreach (HtmlNode item in _items)
-            foreach (HtmlNode n in item.Descendants())
+            foreach (var item in _items)
+            foreach (var n in item.Descendants())
                 yield return n;
         }
 
@@ -443,8 +443,8 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlNode> Descendants(string name)
         {
-            foreach (HtmlNode item in _items)
-            foreach (HtmlNode n in item.Descendants(name))
+            foreach (var item in _items)
+            foreach (var n in item.Descendants(name))
                 yield return n;
         }
 
@@ -454,8 +454,8 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlNode> Elements()
         {
-            foreach (HtmlNode item in _items)
-            foreach (HtmlNode n in item.ChildNodes)
+            foreach (var item in _items)
+            foreach (var n in item.ChildNodes)
                 yield return n;
         }
 
@@ -466,8 +466,8 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlNode> Elements(string name)
         {
-            foreach (HtmlNode item in _items)
-            foreach (HtmlNode n in item.Elements(name))
+            foreach (var item in _items)
+            foreach (var n in item.Elements(name))
                 yield return n;
         }
 
@@ -477,8 +477,8 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public IEnumerable<HtmlNode> Nodes()
         {
-            foreach (HtmlNode item in _items)
-            foreach (HtmlNode n in item.ChildNodes)
+            foreach (var item in _items)
+            foreach (var n in item.ChildNodes)
                 yield return n;
         }
 

@@ -112,9 +112,9 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
             // get collection of corners
-            List<IntPoint> corners = detector.ProcessImage( image );
+            var corners = detector.ProcessImage( image );
             // mark all corners
-            foreach ( IntPoint corner in corners )
+            foreach ( var corner in corners )
             {
                 Drawing.FillRectangle( image, new Rectangle( corner.X - 1, corner.Y - 1, 3, 3 ), markerColor );
             }

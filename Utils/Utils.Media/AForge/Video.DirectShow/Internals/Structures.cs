@@ -411,11 +411,11 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         public Guid[] ToGuidArray( )
         {
-            Guid[] retval = new Guid[cElems];
+            var retval = new Guid[cElems];
 
-            for ( int i = 0; i < cElems; i++ )
+            for ( var i = 0; i < cElems; i++ )
             {
-                IntPtr ptr = new IntPtr( pElems.ToInt64( ) + i * Marshal.SizeOf( typeof( Guid ) ) );
+                var ptr = new IntPtr( pElems.ToInt64( ) + i * Marshal.SizeOf( typeof( Guid ) ) );
                 retval[i] = (Guid) Marshal.PtrToStructure( ptr, typeof( Guid ) );
             }
 

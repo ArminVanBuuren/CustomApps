@@ -185,9 +185,9 @@ namespace AForge.Video.DirectShow
         // On form loaded
         private void VideoCaptureDeviceForm_Load( object sender, EventArgs e )
         {
-            int selectedCameraIndex = 0;
+            var selectedCameraIndex = 0;
 
-            for ( int i = 0; i < videoDevices.Count; i++ )
+            for ( var i = 0; i < videoDevices.Count; i++ )
             {
                 if ( videoDeviceMoniker == videoDevices[i].MonikerString )
                 {
@@ -207,7 +207,7 @@ namespace AForge.Video.DirectShow
             // set video size
             if ( videoCapabilitiesDictionary.Count != 0 )
             {
-                VideoCapabilities caps = videoCapabilitiesDictionary[(string) videoResolutionsCombo.SelectedItem];
+                var caps = videoCapabilitiesDictionary[(string) videoResolutionsCombo.SelectedItem];
 
                 videoDevice.VideoResolution = caps;
                 captureSize = caps.FrameSize;
@@ -218,7 +218,7 @@ namespace AForge.Video.DirectShow
                 // set snapshots size
                 if ( snapshotCapabilitiesDictionary.Count != 0 )
                 {
-                    VideoCapabilities caps = snapshotCapabilitiesDictionary[(string) snapshotResolutionsCombo.SelectedItem];
+                    var caps = snapshotCapabilitiesDictionary[(string) snapshotResolutionsCombo.SelectedItem];
 
                     videoDevice.ProvideSnapshots = true;
                     videoDevice.SnapshotResolution = caps;
@@ -259,12 +259,12 @@ namespace AForge.Video.DirectShow
             try
             {
                 // collect video capabilities
-                VideoCapabilities[] videoCapabilities = videoDevice.VideoCapabilities;
-                int videoResolutionIndex = 0;
+                var videoCapabilities = videoDevice.VideoCapabilities;
+                var videoResolutionIndex = 0;
 
-                foreach ( VideoCapabilities capabilty in videoCapabilities )
+                foreach ( var capabilty in videoCapabilities )
                 {
-                    string item = string.Format(
+                    var item = string.Format(
                         "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height );
 
                     if ( !videoResolutionsCombo.Items.Contains( item ) )
@@ -294,12 +294,12 @@ namespace AForge.Video.DirectShow
                 if ( configureSnapshots )
                 {
                     // collect snapshot capabilities
-                    VideoCapabilities[] snapshotCapabilities = videoDevice.SnapshotCapabilities;
-                    int snapshotResolutionIndex = 0;
+                    var snapshotCapabilities = videoDevice.SnapshotCapabilities;
+                    var snapshotResolutionIndex = 0;
 
-                    foreach ( VideoCapabilities capabilty in snapshotCapabilities )
+                    foreach ( var capabilty in snapshotCapabilities )
                     {
-                        string item = string.Format(
+                        var item = string.Format(
                             "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height );
 
                         if ( !snapshotResolutionsCombo.Items.Contains( item ) )
@@ -324,11 +324,11 @@ namespace AForge.Video.DirectShow
 
                 // get video inputs
                 availableVideoInputs = videoDevice.AvailableCrossbarVideoInputs;
-                int videoInputIndex = 0;
+                var videoInputIndex = 0;
 
-                foreach ( VideoInput input in availableVideoInputs )
+                foreach ( var input in availableVideoInputs )
                 {
-                    string item = string.Format( "{0}: {1}", input.Index, input.Type );
+                    var item = string.Format( "{0}: {1}", input.Index, input.Type );
 
                     if ( ( input.Index == videoInput.Index ) && ( input.Type == videoInput.Type ) )
                     {

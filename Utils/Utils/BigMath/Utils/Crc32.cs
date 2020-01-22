@@ -29,8 +29,8 @@ namespace BigMath.Utils
                 uint i;
                 for (i = 0; i < 256; i++)
                 {
-                    uint r = i;
-                    for (int j = 0; j < 8; j++)
+                    var r = i;
+                    for (var j = 0; j < 8; j++)
                     {
                         r = (r >> 1) ^ (KCrcPoly & ~((r & 1) - 1));
                     }
@@ -38,7 +38,7 @@ namespace BigMath.Utils
                 }
                 for (; i < 256*CrcNumTables; i++)
                 {
-                    uint r = Table[i - 256];
+                    var r = Table[i - 256];
                     Table[i] = Table[r & 0xFF] ^ (r >> 8);
                 }
             }
@@ -75,9 +75,9 @@ namespace BigMath.Utils
                 return;
             }
 
-            uint[] table = Table; // important for performance!
+            var table = Table; // important for performance!
 
-            uint crc = _value;
+            var crc = _value;
 
             for (; (offset & 7) != 0 && count != 0; count--)
             {
@@ -90,7 +90,7 @@ namespace BigMath.Utils
                  * Idea from 7-zip project sources (http://7-zip.org/sdk.html)
                  */
 
-                int to = (count - 8) & ~7;
+                var to = (count - 8) & ~7;
                 count -= to;
                 to += offset;
 

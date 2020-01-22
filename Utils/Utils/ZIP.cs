@@ -56,7 +56,7 @@ namespace Utils
             var iNameLen = BitConverter.ToInt32(bytes, 0);
             bytes = new byte[sizeof(char)];
             var sb = new StringBuilder();
-            for (int i = 0; i < iNameLen; i++)
+            for (var i = 0; i < iNameLen; i++)
             {
                 zipStream.Read(bytes, 0, sizeof(char));
                 var c = BitConverter.ToChar(bytes, 0);

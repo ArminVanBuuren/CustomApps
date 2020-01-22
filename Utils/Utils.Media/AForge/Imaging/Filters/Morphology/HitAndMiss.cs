@@ -133,7 +133,7 @@ namespace AForge.Imaging.Filters
         /// 
         public HitAndMiss( short[,] se )
         {
-            int s = se.GetLength( 0 );
+            var s = se.GetLength( 0 );
 
             // check structuring element size
             if ( ( s != se.GetLength( 1 ) ) || ( s < 3 ) || ( s > 99 ) || ( s % 2 == 0 ) )
@@ -170,43 +170,43 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData, Rectangle rect )
         {
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
-            int srcOffset = srcStride - rect.Width;
-            int dstOffset = dstStride - rect.Width;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var srcOffset = srcStride - rect.Width;
+            var dstOffset = dstStride - rect.Width;
 
             // loop and array indexes
             int ir, jr, i, j;
             // structuring element's radius
-            int r = size >> 1;
+            var r = size >> 1;
             // pixel value
             byte dstValue, v;
             // structuring element's value
             short sv;
 
             // mode values
-            byte[] hitValue  = new byte[3] { 255, 0, 255 };
-            byte[] missValue = new byte[3] { 0, 0, 0 };
-            int modeIndex = (int) mode;
+            var hitValue  = new byte[3] { 255, 0, 255 };
+            var missValue = new byte[3] { 0, 0, 0 };
+            var modeIndex = (int) mode;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // allign pointers to the first pixel to process
             src += ( startY * srcStride + startX );
             dst += ( startY * dstStride + startX );
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, dst++ )
+                for ( var x = startX; x < stopX; x++, src++, dst++ )
                 {
                     missValue[1] = missValue[2] = *src;
                     dstValue = 255;

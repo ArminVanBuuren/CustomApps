@@ -224,9 +224,9 @@ namespace AForge.AMath
         public Range GetRange( float percent )
         {
             int min, max, hits;
-            int h = (int) ( total * ( percent + ( 1 - percent ) / 2 ) );
-            int n = values.Length;
-            int nM1 = n - 1;
+            var h = (int) ( total * ( percent + ( 1 - percent ) / 2 ) );
+            var n = values.Length;
+            var nM1 = n - 1;
 
             // skip left portion
             for ( min = 0, hits = total; min < n; min++ )
@@ -261,10 +261,10 @@ namespace AForge.AMath
         {
             int hits;
             int i, n = values.Length;
-            int nM1 = n - 1;
+            var nM1 = n - 1;
 
-            float rangeLength = range.Length;
-            float rangeMin = range.Min;
+            var rangeLength = range.Length;
+            var rangeMin = range.Min;
 
             max    = 0;
             min    = n;

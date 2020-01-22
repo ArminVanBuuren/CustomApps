@@ -49,7 +49,7 @@ namespace Utils
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
-            T ret = default(T);
+            var ret = default(T);
             synch.Post(async _ =>
             {
                 try
@@ -159,7 +159,7 @@ namespace Utils
         public static T Run<T>(TimeSpan timeout, Func<T> operation)
         {
             Exception error = null;
-            T result = default(T);
+            var result = default(T);
 
             var mre = new ManualResetEvent(false);
             ThreadPool.QueueUserWorkItem(

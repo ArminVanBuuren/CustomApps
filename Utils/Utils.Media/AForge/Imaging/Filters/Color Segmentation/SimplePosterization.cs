@@ -153,29 +153,29 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
             // get pixel size
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             // calculate posterization offset
-            int posterizationOffset = ( fillingType == PosterizationFillingType.Min ) ?
+            var posterizationOffset = ( fillingType == PosterizationFillingType.Min ) ?
                 0 : ( ( fillingType == PosterizationFillingType.Max ) ?
                 posterizationInterval - 1 : posterizationInterval / 2 );
 
             // calculate mapping array
-            byte[] map = new byte[256];
+            var map = new byte[256];
 
-            for ( int i = 0; i < 256; i++ )
+            for ( var i = 0; i < 256; i++ )
             {
                 map[i] = (byte) Math.Min( 255, ( i / posterizationInterval ) * posterizationInterval + posterizationOffset );
             }
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( startY * image.Stride + startX * pixelSize );
@@ -184,10 +184,10 @@ namespace AForge.Imaging.Filters
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel in line
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         *ptr = map[*ptr];
                     }
@@ -197,10 +197,10 @@ namespace AForge.Imaging.Filters
             else
             {
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel in line
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         ptr[RGB.R] = map[ptr[RGB.R]];
                         ptr[RGB.G] = map[ptr[RGB.G]];

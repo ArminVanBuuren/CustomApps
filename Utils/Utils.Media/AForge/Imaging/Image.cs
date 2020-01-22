@@ -38,17 +38,17 @@ namespace AForge.Imaging
         /// 
         public static bool IsGrayscale( Bitmap image )
         {
-            bool ret = false;
+            var ret = false;
 
             // check pixel format
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 ret = true;
                 // check palette
-                ColorPalette cp = image.Palette;
+                var cp = image.Palette;
                 Color c;
                 // init palette
-                for ( int i = 0; i < 256; i++ )
+                for ( var i = 0; i < 256; i++ )
                 {
                     c = cp.Entries[i];
                     if ( ( c.R != i ) || ( c.G != i ) || ( c.B != i ) )
@@ -78,7 +78,7 @@ namespace AForge.Imaging
         public static Bitmap CreateGrayscaleImage( int width, int height )
         {
             // create new image
-            Bitmap image = new Bitmap( width, height, PixelFormat.Format8bppIndexed );
+            var image = new Bitmap( width, height, PixelFormat.Format8bppIndexed );
             // set palette to grayscale
             SetGrayscalePalette( image );
             // return new image
@@ -104,9 +104,9 @@ namespace AForge.Imaging
                 throw new UnsupportedImageFormatException( "Source image is not 8 bpp image." );
 
             // get palette
-            ColorPalette cp = image.Palette;
+            var cp = image.Palette;
             // init palette
-            for ( int i = 0; i < 256; i++ )
+            for ( var i = 0; i < 256; i++ )
             {
                 cp.Entries[i] = Color.FromArgb( i, i, i );
             }
@@ -134,14 +134,14 @@ namespace AForge.Imaging
             if ( source.PixelFormat == format )
                 return Clone( source );
 
-            int width = source.Width;
-            int height = source.Height;
+            var width = source.Width;
+            var height = source.Height;
 
             // create new image with desired pixel format
-            Bitmap bitmap = new Bitmap( width, height, format );
+            var bitmap = new Bitmap( width, height, format );
 
             // draw source image on the new one using Graphics
-            Graphics g = Graphics.FromImage( bitmap );
+            var g = Graphics.FromImage( bitmap );
             g.DrawImage( source, 0, 0, width, height );
             g.Dispose( );
 
@@ -163,12 +163,12 @@ namespace AForge.Imaging
         public static Bitmap Clone( Bitmap source )
         {
             // lock source bitmap data
-            BitmapData sourceData = source.LockBits(
+            var sourceData = source.LockBits(
                 new Rectangle( 0, 0, source.Width, source.Height ),
                 ImageLockMode.ReadOnly, source.PixelFormat );
 
             // create new image
-            Bitmap destination = Clone( sourceData );
+            var destination = Clone( sourceData );
 
             // unlock source image
             source.UnlockBits( sourceData );
@@ -180,13 +180,13 @@ namespace AForge.Imaging
                 ( source.PixelFormat == PixelFormat.Format8bppIndexed ) ||
                 ( source.PixelFormat == PixelFormat.Indexed ) )
             {
-                ColorPalette srcPalette = source.Palette;
-                ColorPalette dstPalette = destination.Palette;
+                var srcPalette = source.Palette;
+                var dstPalette = destination.Palette;
 
-                int n = srcPalette.Entries.Length;
+                var n = srcPalette.Entries.Length;
 
                 // copy pallete
-                for ( int i = 0; i < n; i++ )
+                for ( var i = 0; i < n; i++ )
                 {
                     dstPalette.Entries[i] = srcPalette.Entries[i];
                 }
@@ -209,14 +209,14 @@ namespace AForge.Imaging
         public static Bitmap Clone( BitmapData sourceData )
         {
             // get source image size
-            int width = sourceData.Width;
-            int height = sourceData.Height;
+            var width = sourceData.Width;
+            var height = sourceData.Height;
 
             // create new image
-            Bitmap destination = new Bitmap( width, height, sourceData.PixelFormat );
+            var destination = new Bitmap( width, height, sourceData.PixelFormat );
 
             // lock destination bitmap data
-            BitmapData destinationData = destination.LockBits(
+            var destinationData = destination.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, destination.PixelFormat );
 
@@ -263,7 +263,7 @@ namespace AForge.Imaging
                 ( IsGrayscale( image ) == false )
                 )
             {
-                Bitmap tmp = image;
+                var tmp = image;
                 // convert to 24 bits per pixel
                 image = Clone( tmp, PixelFormat.Format24bppRgb );
                 // delete old image
@@ -299,12 +299,12 @@ namespace AForge.Imaging
             {
                 // read image to temporary memory stream
                 stream = File.OpenRead( fileName );
-                MemoryStream memoryStream = new MemoryStream( );
+                var memoryStream = new MemoryStream( );
 
-                byte[] buffer = new byte[10000];
+                var buffer = new byte[10000];
                 while ( true )
                 {
-                    int read = stream.Read( buffer, 0, 10000 );
+                    var read = stream.Read( buffer, 0, 10000 );
 
                     if ( read == 0 )
                         break;
@@ -352,11 +352,11 @@ namespace AForge.Imaging
         public static Bitmap Convert16bppTo8bpp( Bitmap bimap )
         {
             Bitmap newImage = null;
-            int layers = 0;
+            var layers = 0;
 
             // get image size
-            int width  = bimap.Width;
-            int height = bimap.Height;
+            var width  = bimap.Width;
+            var height = bimap.Height;
 
             // create new image depending on source image format
             switch ( bimap.PixelFormat )
@@ -390,24 +390,24 @@ namespace AForge.Imaging
             }
 
             // lock both images
-            BitmapData sourceData = bimap.LockBits( new Rectangle( 0, 0, width, height ),
+            var sourceData = bimap.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadOnly, bimap.PixelFormat );
-            BitmapData newData = newImage.LockBits( new Rectangle( 0, 0, width, height ),
+            var newData = newImage.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, newImage.PixelFormat );
 
             unsafe
             {
                 // base pointers
-                byte* sourceBasePtr = (byte*) sourceData.Scan0.ToPointer( );
-                byte* newBasePtr    = (byte*) newData.Scan0.ToPointer( );
+                var sourceBasePtr = (byte*) sourceData.Scan0.ToPointer( );
+                var newBasePtr    = (byte*) newData.Scan0.ToPointer( );
                 // image strides
-                int sourceStride = sourceData.Stride;
-                int newStride = newData.Stride;
+                var sourceStride = sourceData.Stride;
+                var newStride = newData.Stride;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    ushort* sourcePtr = (ushort*) ( sourceBasePtr + y * sourceStride );
-                    byte* newPtr = (byte*) ( newBasePtr + y * newStride );
+                    var sourcePtr = (ushort*) ( sourceBasePtr + y * sourceStride );
+                    var newPtr = (byte*) ( newBasePtr + y * newStride );
 
                     for ( int x = 0, lineSize = width * layers; x < lineSize; x++, sourcePtr++, newPtr++ )
                     {
@@ -449,11 +449,11 @@ namespace AForge.Imaging
         public static Bitmap Convert8bppTo16bpp( Bitmap bimap )
         {
             Bitmap newImage = null;
-            int layers = 0;
+            var layers = 0;
 
             // get image size
-            int width  = bimap.Width;
-            int height = bimap.Height;
+            var width  = bimap.Width;
+            var height = bimap.Height;
 
             // create new image depending on source image format
             switch ( bimap.PixelFormat )
@@ -487,24 +487,24 @@ namespace AForge.Imaging
             }
 
             // lock both images
-            BitmapData sourceData = bimap.LockBits( new Rectangle( 0, 0, width, height ),
+            var sourceData = bimap.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadOnly, bimap.PixelFormat );
-            BitmapData newData = newImage.LockBits( new Rectangle( 0, 0, width, height ),
+            var newData = newImage.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, newImage.PixelFormat );
 
             unsafe
             {
                 // base pointers
-                byte* sourceBasePtr = (byte*) sourceData.Scan0.ToPointer( );
-                byte* newBasePtr    = (byte*) newData.Scan0.ToPointer( );
+                var sourceBasePtr = (byte*) sourceData.Scan0.ToPointer( );
+                var newBasePtr    = (byte*) newData.Scan0.ToPointer( );
                 // image strides
-                int sourceStride = sourceData.Stride;
-                int newStride = newData.Stride;
+                var sourceStride = sourceData.Stride;
+                var newStride = newData.Stride;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    byte* sourcePtr = (byte*) ( sourceBasePtr + y * sourceStride );
-                    ushort* newPtr  = (ushort*) ( newBasePtr + y * newStride );
+                    var sourcePtr = (byte*) ( sourceBasePtr + y * sourceStride );
+                    var newPtr  = (ushort*) ( newBasePtr + y * newStride );
 
                     for ( int x = 0, lineSize = width * layers; x < lineSize; x++, sourcePtr++, newPtr++ )
                     {

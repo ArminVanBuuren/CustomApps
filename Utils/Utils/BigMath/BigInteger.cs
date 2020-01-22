@@ -131,11 +131,11 @@ namespace BigMath
         {
             PrimeProducts = new int[PrimeLists.Length];
 
-            for (int i = 0; i < PrimeLists.Length; ++i)
+            for (var i = 0; i < PrimeLists.Length; ++i)
             {
-                int[] primeList = PrimeLists[i];
-                int product = 1;
-                for (int j = 0; j < primeList.Length; ++j)
+                var primeList = PrimeLists[i];
+                var product = 1;
+                for (var j = 0; j < primeList.Length; ++j)
                 {
                     product *= primeList[j];
                 }
@@ -151,7 +151,7 @@ namespace BigMath
         {
             if (checkMag)
             {
-                int i = 0;
+                var i = 0;
                 while (i < mag.Length && mag[i] == 0)
                 {
                     ++i;
@@ -234,7 +234,7 @@ namespace BigMath
             }
 
 
-            int index = 0;
+            var index = 0;
             _sign = 1;
 
             if (str.StartsWith(nfi.NegativeSign))
@@ -268,18 +268,18 @@ namespace BigMath
             // storage in one hit?, then Generate the magnitude in one hit too?
             //////
 
-            BigInteger b = Zero;
+            var b = Zero;
 
 
-            int next = index + chunk;
+            var next = index + chunk;
 
             if (next <= str.Length)
             {
                 do
                 {
-                    string s = str.Substring(index, chunk);
-                    ulong i = ulong.Parse(s, style);
-                    BigInteger bi = CreateUValueOf(i);
+                    var s = str.Substring(index, chunk);
+                    var i = ulong.Parse(s, style);
+                    var bi = CreateUValueOf(i);
 
                     switch (radix)
                     {
@@ -310,9 +310,9 @@ namespace BigMath
 
             if (index < str.Length)
             {
-                string s = str.Substring(index);
-                ulong i = ulong.Parse(s, style);
-                BigInteger bi = CreateUValueOf(i);
+                var s = str.Substring(index);
+                var i = ulong.Parse(s, style);
+                var bi = CreateUValueOf(i);
 
                 if (b._sign > 0)
                 {
@@ -371,7 +371,7 @@ namespace BigMath
             {
                 _sign = -1;
 
-                int end = offset + length;
+                var end = offset + length;
 
                 int iBval;
                 // strip leading sign bytes
@@ -385,10 +385,10 @@ namespace BigMath
                 }
                 else
                 {
-                    int numBytes = end - iBval;
+                    var numBytes = end - iBval;
                     var inverse = new byte[numBytes];
 
-                    int index = 0;
+                    var index = 0;
                     while (index < numBytes)
                     {
                         inverse[index++] = (byte) ~bytes[iBval++];
@@ -455,7 +455,7 @@ namespace BigMath
                 return;
             }
 
-            int nBytes = GetByteLength(sizeInBits);
+            var nBytes = GetByteLength(sizeInBits);
             var b = new byte[nBytes];
             random.NextBytes(b);
 
@@ -482,11 +482,11 @@ namespace BigMath
                 return;
             }
 
-            int nBytes = GetByteLength(bitLength);
+            var nBytes = GetByteLength(bitLength);
             var b = new byte[nBytes];
 
-            int xBits = BitsPerByte*nBytes - bitLength;
-            byte mask = RndMask[xBits];
+            var xBits = BitsPerByte*nBytes - bitLength;
+            var mask = RndMask[xBits];
 
             for (;;)
             {
@@ -517,9 +517,9 @@ namespace BigMath
 
                 if (bitLength > 32)
                 {
-                    for (int rep = 0; rep < 10000; ++rep)
+                    for (var rep = 0; rep < 10000; ++rep)
                     {
-                        int n = 33 + random.Next(bitLength - 2);
+                        var n = 33 + random.Next(bitLength - 2);
                         _magnitude[_magnitude.Length - (n >> 5)] ^= (1 << (n & 31));
                         _magnitude[_magnitude.Length - 1] ^= ((random.Next() + 1) << 1);
                         _mQuote = -1L;
@@ -563,9 +563,9 @@ namespace BigMath
         /// <param name="value">The value.</param>
         public BigInteger(decimal value)
         {
-            bool isNegative = value < 0;
-            uint[] bits = decimal.GetBits(value).ConvertAll(i => (uint) i);
-            uint scale = (bits[3] >> 16) & 0x1F;
+            var isNegative = value < 0;
+            var bits = decimal.GetBits(value).ConvertAll(i => (uint) i);
+            var scale = (bits[3] >> 16) & 0x1F;
             if (scale > 0)
             {
                 uint[] quotient;
@@ -689,8 +689,8 @@ namespace BigMath
                     }
                     else
                     {
-                        int sum = 0;
-                        for (int i = 0; i < _magnitude.Length; i++)
+                        var sum = 0;
+                        for (var i = 0; i < _magnitude.Length; i++)
                         {
                             sum += BitCounts[(byte) _magnitude[i]];
                             sum += BitCounts[(byte) (_magnitude[i] >> 8)];
@@ -795,7 +795,7 @@ namespace BigMath
                 return false;
             }
 
-            for (int i = 0; i < _magnitude.Length; i++)
+            for (var i = 0; i < _magnitude.Length; i++)
             {
                 if (other._magnitude[i] != _magnitude[i])
                 {
@@ -827,8 +827,8 @@ namespace BigMath
             {
                 format = "G";
             }
-            char ch = format[0];
-            bool caps = char.IsUpper(ch);
+            var ch = format[0];
+            var caps = char.IsUpper(ch);
             int min;
             if (!int.TryParse(format.Substring(1).Trim(), out min))
             {
@@ -1130,7 +1130,7 @@ namespace BigMath
             }
 
             double d;
-            CultureInfo culture = CultureInfo.InvariantCulture;
+            var culture = CultureInfo.InvariantCulture;
             if (!double.TryParse(value.ToString(null, culture), NumberStyles.Number, culture, out d))
             {
                 throw new OverflowException();
@@ -1154,7 +1154,7 @@ namespace BigMath
             }
 
             float f;
-            CultureInfo culture = CultureInfo.InvariantCulture;
+            var culture = CultureInfo.InvariantCulture;
             if (!float.TryParse(value.ToString(null, culture), NumberStyles.Number, culture, out f))
             {
                 throw new OverflowException();
@@ -1598,7 +1598,7 @@ namespace BigMath
 
         private static int[] MakeMagnitude(byte[] bytes, int offset, int length)
         {
-            int end = offset + length;
+            var end = offset + length;
 
             // strip leading zeros
             int firstSignificant;
@@ -1611,8 +1611,8 @@ namespace BigMath
                 return ZeroMagnitude;
             }
 
-            int nInts = (end - firstSignificant + 3)/BytesPerInt;
-            int bCount = (end - firstSignificant)%BytesPerInt;
+            var nInts = (end - firstSignificant + 3)/BytesPerInt;
+            var bCount = (end - firstSignificant)%BytesPerInt;
             if (bCount == 0)
             {
                 bCount = BytesPerInt;
@@ -1625,9 +1625,9 @@ namespace BigMath
 
             var mag = new int[nInts];
 
-            int v = 0;
-            int magnitudeIndex = 0;
-            for (int i = firstSignificant; i < end; ++i)
+            var v = 0;
+            var magnitudeIndex = 0;
+            for (var i = firstSignificant; i < end; ++i)
             {
                 v <<= 8;
                 v |= bytes[i] & 0xff;
@@ -1660,8 +1660,8 @@ namespace BigMath
 
         private static int[] AddMagnitudes(int[] a, int[] b)
         {
-            int tI = a.Length - 1;
-            int vI = b.Length - 1;
+            var tI = a.Length - 1;
+            var vI = b.Length - 1;
             long m = 0;
 
             while (vI >= 0)
@@ -1721,13 +1721,13 @@ namespace BigMath
             }
 
             // Conservatively avoid over-allocation when no overflow possible
-            uint limit = uint.MaxValue;
+            var limit = uint.MaxValue;
             if (big.Length == small.Length)
             {
                 limit -= (uint) small[0];
             }
 
-            bool possibleOverflow = (uint) big[0] >= limit;
+            var possibleOverflow = (uint) big[0] >= limit;
 
             int[] bigCopy;
             if (possibleOverflow)
@@ -1752,21 +1752,21 @@ namespace BigMath
                 return Zero;
             }
 
-            int[] aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
+            var aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
 
-            int[] bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
+            var bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
 
-            bool resultNeg = _sign < 0 && value._sign < 0;
-            int resultLength = Math.Max(aMag.Length, bMag.Length);
+            var resultNeg = _sign < 0 && value._sign < 0;
+            var resultLength = Math.Max(aMag.Length, bMag.Length);
             var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (_sign < 0)
                 {
@@ -1820,10 +1820,10 @@ namespace BigMath
             }
 
             // bit length for everything after the first int
-            int bitLength = 32*((mag.Length - indx) - 1);
+            var bitLength = 32*((mag.Length - indx) - 1);
 
             // and determine bitlength of first int
-            int firstMag = mag[indx];
+            var firstMag = mag[indx];
             bitLength += BitLen(firstMag);
 
             // Check for negative powers of two
@@ -1898,7 +1898,7 @@ namespace BigMath
 
         private static int CompareNoLeadingZeroes(int xIndx, int[] x, int yIndx, int[] y)
         {
-            int diff = (x.Length - y.Length) - (xIndx - yIndx);
+            var diff = (x.Length - y.Length) - (xIndx - yIndx);
 
             if (diff != 0)
             {
@@ -1928,13 +1928,13 @@ namespace BigMath
 
         private int[] Divide(int[] x, int[] y)
         {
-            int xStart = 0;
+            var xStart = 0;
             while (xStart < x.Length && x[xStart] == 0)
             {
                 ++xStart;
             }
 
-            int yStart = 0;
+            var yStart = 0;
             while (yStart < y.Length && y[yStart] == 0)
             {
                 ++yStart;
@@ -1942,21 +1942,21 @@ namespace BigMath
 
             Debug.Assert(yStart < y.Length);
 
-            int xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
+            var xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
             int[] count;
 
             if (xyCmp > 0)
             {
-                int yBitLength = calcBitLength(yStart, y);
-                int xBitLength = calcBitLength(xStart, x);
-                int shift = xBitLength - yBitLength;
+                var yBitLength = calcBitLength(yStart, y);
+                var xBitLength = calcBitLength(xStart, x);
+                var shift = xBitLength - yBitLength;
 
                 int[] iCount;
-                int iCountStart = 0;
+                var iCountStart = 0;
 
                 int[] c;
-                int cStart = 0;
-                int cBitLength = yBitLength;
+                var cStart = 0;
+                var cBitLength = yBitLength;
                 if (shift > 0)
                 {
                     //					iCount = ShiftLeft(One.magnitude, shift);
@@ -1970,7 +1970,7 @@ namespace BigMath
                 {
                     iCount = new[] {1};
 
-                    int len = y.Length - yStart;
+                    var len = y.Length - yStart;
                     c = new int[len];
                     Array.Copy(y, yStart, c, 0, len);
                 }
@@ -2016,7 +2016,7 @@ namespace BigMath
                     // NB: The case where c[cStart] is 1-bit is harmless
                     if (shift == 1)
                     {
-                        uint firstC = (uint) c[cStart] >> 1;
+                        var firstC = (uint) c[cStart] >> 1;
                         var firstX = (uint) x[xStart];
                         if (firstC > firstX)
                         {
@@ -2077,7 +2077,7 @@ namespace BigMath
 
             if (val.QuickPow2Check()) // val is power of two
             {
-                BigInteger result = Abs().ShiftRight(val.Abs().BitLength - 1);
+                var result = Abs().ShiftRight(val.Abs().BitLength - 1);
                 return val._sign == _sign ? result : result.Negate();
             }
 
@@ -2102,9 +2102,9 @@ namespace BigMath
             }
             else if (val.QuickPow2Check()) // val is power of two
             {
-                int e = val.Abs().BitLength - 1;
-                BigInteger quotient = Abs().ShiftRight(e);
-                int[] remainder = LastNBits(e);
+                var e = val.Abs().BitLength - 1;
+                var quotient = Abs().ShiftRight(e);
+                var remainder = LastNBits(e);
 
                 biggies[0] = val._sign == _sign ? quotient : quotient.Negate();
                 biggies[1] = new BigInteger(_sign, remainder, true);
@@ -2112,7 +2112,7 @@ namespace BigMath
             else
             {
                 var remainder = (int[]) _magnitude.Clone();
-                int[] quotient = Divide(remainder, val._magnitude);
+                var quotient = Divide(remainder, val._magnitude);
 
                 biggies[0] = new BigInteger(_sign*val._sign, quotient, true);
                 biggies[1] = new BigInteger(_sign, remainder, true);
@@ -2151,8 +2151,8 @@ namespace BigMath
             }
 
             BigInteger r;
-            BigInteger u = this;
-            BigInteger v = value;
+            var u = this;
+            var v = value;
 
             while (v._sign != 0)
             {
@@ -2166,7 +2166,7 @@ namespace BigMath
 
         public override int GetHashCode()
         {
-            int hc = _magnitude.Length;
+            var hc = _magnitude.Length;
             if (_magnitude.Length > 0)
             {
                 hc ^= _magnitude[0];
@@ -2209,7 +2209,7 @@ namespace BigMath
                 return true;
             }
 
-            BigInteger n = Abs();
+            var n = Abs();
 
             if (!n.TestBit(0))
             {
@@ -2232,17 +2232,17 @@ namespace BigMath
 
 
             // Try to reduce the penalty for really small numbers
-            int numLists = Math.Min(BitLength - 1, PrimeLists.Length);
+            var numLists = Math.Min(BitLength - 1, PrimeLists.Length);
 
-            for (int i = 0; i < numLists; ++i)
+            for (var i = 0; i < numLists; ++i)
             {
-                int test = Remainder(PrimeProducts[i]);
+                var test = Remainder(PrimeProducts[i]);
 
-                int[] primeList = PrimeLists[i];
-                for (int j = 0; j < primeList.Length; ++j)
+                var primeList = PrimeLists[i];
+                for (var j = 0; j < primeList.Length; ++j)
                 {
-                    int prime = primeList[j];
-                    int qRem = test%prime;
+                    var prime = primeList[j];
+                    var qRem = test%prime;
                     if (qRem == 0)
                     {
                         // We may find small numbers in the list
@@ -2278,10 +2278,10 @@ namespace BigMath
             Debug.Assert(TestBit(0));
 
             // let n = 1 + d . 2^s
-            BigInteger n = this;
-            BigInteger nMinusOne = n.Subtract(One);
-            int s = nMinusOne.GetLowestSetBit();
-            BigInteger r = nMinusOne.ShiftRight(s);
+            var n = this;
+            var nMinusOne = n.Subtract(One);
+            var s = nMinusOne.GetLowestSetBit();
+            var r = nMinusOne.ShiftRight(s);
 
             Debug.Assert(s >= 1);
 
@@ -2295,11 +2295,11 @@ namespace BigMath
                     a = new BigInteger(n.BitLength, random);
                 } while (a.CompareTo(One) <= 0 || a.CompareTo(nMinusOne) >= 0);
 
-                BigInteger y = a.ModPow(r, n);
+                var y = a.ModPow(r, n);
 
                 if (!y.Equals(One))
                 {
-                    int j = 0;
+                    var j = 0;
                     while (!y.Equals(nMinusOne))
                     {
                         if (++j == s)
@@ -2428,7 +2428,7 @@ namespace BigMath
                 throw new ArithmeticException("Modulus must be positive");
             }
 
-            BigInteger biggie = Remainder(m);
+            var biggie = Remainder(m);
 
             return (biggie._sign >= 0 ? biggie : biggie.Add(m));
         }
@@ -2479,7 +2479,7 @@ namespace BigMath
             //			}
 
             var x = new BigInteger();
-            BigInteger gcd = ExtEuclid(Mod(m), m, x, null);
+            var gcd = ExtEuclid(Mod(m), m, x, null);
 
             if (!gcd.Equals(One))
             {
@@ -2516,17 +2516,17 @@ namespace BigMath
 
         private static BigInteger ExtEuclid(BigInteger a, BigInteger b, BigInteger u1Out, BigInteger u2Out)
         {
-            BigInteger u1 = One;
-            BigInteger u3 = a;
-            BigInteger v1 = Zero;
-            BigInteger v3 = b;
+            var u1 = One;
+            var u3 = a;
+            var v1 = Zero;
+            var v3 = b;
 
             while (v3._sign > 0)
             {
-                BigInteger[] q = u3.DivideAndRemainder(v3);
+                var q = u3.DivideAndRemainder(v3);
 
-                BigInteger tmp = v1.Multiply(q[0]);
-                BigInteger tn = u1.Subtract(tmp);
+                var tmp = v1.Multiply(q[0]);
+                var tn = u1.Subtract(tmp);
                 u1 = v1;
                 v1 = tn;
 
@@ -2542,9 +2542,9 @@ namespace BigMath
 
             if (u2Out != null)
             {
-                BigInteger tmp = u1.Multiply(a);
+                var tmp = u1.Multiply(a);
                 tmp = u3.Subtract(tmp);
-                BigInteger res = tmp.Divide(b);
+                var res = tmp.Divide(b);
                 u2Out._sign = res._sign;
                 u2Out._magnitude = res._magnitude;
             }
@@ -2585,14 +2585,14 @@ namespace BigMath
 
             // Montgomery exponentiation is only possible if the modulus is odd,
             // but AFAIK, this is always the case for crypto algo's
-            bool useMonty = ((m._magnitude[m._magnitude.Length - 1] & 1) == 1);
+            var useMonty = ((m._magnitude[m._magnitude.Length - 1] & 1) == 1);
             long mQ = 0;
             if (useMonty)
             {
                 mQ = m.GetMQuote();
 
                 // tmp = this * R mod m
-                BigInteger tmp = ShiftLeft(32*m._magnitude.Length).Mod(m);
+                var tmp = ShiftLeft(32*m._magnitude.Length).Mod(m);
                 zVal = tmp._magnitude;
 
                 useMonty = (zVal.Length <= m._magnitude.Length);
@@ -2622,7 +2622,7 @@ namespace BigMath
                     //
                     // in normal practice we'll never see this...
                     //
-                    BigInteger tmp = Remainder(m);
+                    var tmp = Remainder(m);
 
                     //zAccum = new int[m.magnitude.Length * 2];
                     zVal = new int[m._magnitude.Length];
@@ -2637,10 +2637,10 @@ namespace BigMath
             //
             // from LSW to MSW
             //
-            for (int i = 0; i < exponent._magnitude.Length; i++)
+            for (var i = 0; i < exponent._magnitude.Length; i++)
             {
-                int v = exponent._magnitude[i];
-                int bits = 0;
+                var v = exponent._magnitude[i];
+                var bits = 0;
 
                 if (i == 0)
                 {
@@ -2737,9 +2737,9 @@ namespace BigMath
 
             ulong u1, u2, c;
 
-            int wBase = w.Length - 1;
+            var wBase = w.Length - 1;
 
-            for (int i = x.Length - 1; i != 0; i--)
+            for (var i = x.Length - 1; i != 0; i--)
             {
                 ulong v = (uint) x[i];
 
@@ -2752,7 +2752,7 @@ namespace BigMath
                 w[wBase] = (int) (uint) u1;
                 c = u2 + (u1 >> 32);
 
-                for (int j = i - 1; j >= 0; j--)
+                for (var j = i - 1; j >= 0; j--)
                 {
                     --wBase;
                     u1 = v*(uint) x[j];
@@ -2804,21 +2804,21 @@ namespace BigMath
 
         private static int[] Multiply(int[] x, int[] y, int[] z)
         {
-            int i = z.Length;
+            var i = z.Length;
 
             if (i < 1)
             {
                 return x;
             }
 
-            int xBase = x.Length - y.Length;
+            var xBase = x.Length - y.Length;
 
             for (;;)
             {
-                long a = z[--i] & Mask;
+                var a = z[--i] & Mask;
                 long val = 0;
 
-                for (int j = y.Length - 1; j >= 0; j--)
+                for (var j = y.Length - 1; j >= 0; j--)
                 {
                     val += a*(y[j] & Mask) + (x[xBase + j] & Mask);
 
@@ -2851,9 +2851,9 @@ namespace BigMath
         private static long FastExtEuclid(long a, long b, long[] uOut)
         {
             long u1 = 1;
-            long u3 = a;
+            var u3 = a;
             long v1 = 0;
-            long v3 = b;
+            var v3 = b;
 
             while (v3 > 0)
             {
@@ -2884,7 +2884,7 @@ namespace BigMath
             }
 
             var x = new long[2];
-            long gcd = FastExtEuclid(v, m, x);
+            var gcd = FastExtEuclid(v, m, x);
 
             if (gcd != 1)
             {
@@ -2920,7 +2920,7 @@ namespace BigMath
                 return -1; // not for even numbers
             }
 
-            long v = (((~_magnitude[_magnitude.Length - 1]) | 1) & 0xffffffffL);
+            var v = (((~_magnitude[_magnitude.Length - 1]) | 1) & 0xffffffffL);
             _mQuote = FastModInverse(v, 0x100000000L);
 
             return _mQuote;
@@ -2948,27 +2948,27 @@ namespace BigMath
                 return;
             }
 
-            int n = m.Length;
-            int nMinus1 = n - 1;
-            long y_0 = y[nMinus1] & Mask;
+            var n = m.Length;
+            var nMinus1 = n - 1;
+            var y_0 = y[nMinus1] & Mask;
 
             // 1. a = 0 (Notation: a = (a_{n} a_{n-1} ... a_{0})_{b} )
             Array.Clear(a, 0, n + 1);
 
             // 2. for i from 0 to (n - 1) do the following:
-            for (int i = n; i > 0; i--)
+            for (var i = n; i > 0; i--)
             {
-                long x_i = x[i - 1] & Mask;
+                var x_i = x[i - 1] & Mask;
 
                 // 2.1 u = ((a[0] + (x[i] * y[0]) * mQuote) mod b
-                long u = ((((a[n] & Mask) + ((x_i*y_0) & Mask)) & Mask)*mQuote) & Mask;
+                var u = ((((a[n] & Mask) + ((x_i*y_0) & Mask)) & Mask)*mQuote) & Mask;
 
                 // 2.2 a = (a + x_i * y + u * m) / b
-                long prod1 = x_i*y_0;
-                long prod2 = u*(m[nMinus1] & Mask);
-                long tmp = (a[n] & Mask) + (prod1 & Mask) + (prod2 & Mask);
-                long carry = (long) ((ulong) prod1 >> 32) + (long) ((ulong) prod2 >> 32) + (long) ((ulong) tmp >> 32);
-                for (int j = nMinus1; j > 0; j--)
+                var prod1 = x_i*y_0;
+                var prod2 = u*(m[nMinus1] & Mask);
+                var tmp = (a[n] & Mask) + (prod1 & Mask) + (prod2 & Mask);
+                var carry = (long) ((ulong) prod1 >> 32) + (long) ((ulong) prod2 >> 32) + (long) ((ulong) tmp >> 32);
+                for (var j = nMinus1; j > 0; j--)
                 {
                     prod1 = x_i*(y[j - 1] & Mask);
                     prod2 = u*(m[j - 1] & Mask);
@@ -2994,11 +2994,11 @@ namespace BigMath
         private static uint MultiplyMontyNIsOne(uint x, uint y, uint m, ulong mQuote)
         {
             ulong um = m;
-            ulong prod1 = x*(ulong) y;
-            ulong u = (prod1*mQuote) & Umask;
-            ulong prod2 = u*um;
-            ulong tmp = (prod1 & Umask) + (prod2 & Umask);
-            ulong carry = (prod1 >> 32) + (prod2 >> 32) + (tmp >> 32);
+            var prod1 = x*(ulong) y;
+            var u = (prod1*mQuote) & Umask;
+            var prod2 = u*um;
+            var tmp = (prod1 & Umask) + (prod2 & Umask);
+            var carry = (prod1 >> 32) + (prod2 >> 32) + (tmp >> 32);
 
             if (carry > um)
             {
@@ -3017,17 +3017,17 @@ namespace BigMath
 
             if (val.QuickPow2Check()) // val is power of two
             {
-                BigInteger result = ShiftLeft(val.Abs().BitLength - 1);
+                var result = ShiftLeft(val.Abs().BitLength - 1);
                 return val._sign > 0 ? result : result.Negate();
             }
 
             if (QuickPow2Check()) // this is power of two
             {
-                BigInteger result = val.ShiftLeft(Abs().BitLength - 1);
+                var result = val.ShiftLeft(Abs().BitLength - 1);
                 return _sign > 0 ? result : result.Negate();
             }
 
-            int resLength = (BitLength + val.BitLength)/BitsPerInt + 1;
+            var resLength = (BitLength + val.BitLength)/BitsPerInt + 1;
             var res = new int[resLength];
 
             if (val == this)
@@ -3064,7 +3064,7 @@ namespace BigMath
                 return Two;
             }
 
-            BigInteger n = Inc().SetBit(0);
+            var n = Inc().SetBit(0);
 
             while (!n.CheckProbablePrime(100, RandomSource))
             {
@@ -3096,8 +3096,8 @@ namespace BigMath
                 return this;
             }
 
-            BigInteger y = One;
-            BigInteger z = this;
+            var y = One;
+            var z = this;
 
             for (;;)
             {
@@ -3126,7 +3126,7 @@ namespace BigMath
             Debug.Assert(m > 0);
 
             long acc = 0;
-            for (int pos = 0; pos < _magnitude.Length; ++pos)
+            for (var pos = 0; pos < _magnitude.Length; ++pos)
             {
                 long posVal = (uint) _magnitude[pos];
                 acc = (acc << 32 | posVal)%m;
@@ -3141,13 +3141,13 @@ namespace BigMath
 
         private int[] Remainder(int[] x, int[] y)
         {
-            int xStart = 0;
+            var xStart = 0;
             while (xStart < x.Length && x[xStart] == 0)
             {
                 ++xStart;
             }
 
-            int yStart = 0;
+            var yStart = 0;
             while (yStart < y.Length && y[yStart] == 0)
             {
                 ++yStart;
@@ -3155,17 +3155,17 @@ namespace BigMath
 
             Debug.Assert(yStart < y.Length);
 
-            int xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
+            var xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
 
             if (xyCmp > 0)
             {
-                int yBitLength = calcBitLength(yStart, y);
-                int xBitLength = calcBitLength(xStart, x);
-                int shift = xBitLength - yBitLength;
+                var yBitLength = calcBitLength(yStart, y);
+                var xBitLength = calcBitLength(xStart, x);
+                var shift = xBitLength - yBitLength;
 
                 int[] c;
-                int cStart = 0;
-                int cBitLength = yBitLength;
+                var cStart = 0;
+                var cBitLength = yBitLength;
                 if (shift > 0)
                 {
                     c = ShiftLeft(y, shift);
@@ -3174,7 +3174,7 @@ namespace BigMath
                 }
                 else
                 {
-                    int len = y.Length - yStart;
+                    var len = y.Length - yStart;
                     c = new int[len];
                     Array.Copy(y, yStart, c, 0, len);
                 }
@@ -3217,7 +3217,7 @@ namespace BigMath
                     // NB: The case where c[cStart] is 1-bit is harmless
                     if (shift == 1)
                     {
-                        uint firstC = (uint) c[cStart] >> 1;
+                        var firstC = (uint) c[cStart] >> 1;
                         var firstX = (uint) x[xStart];
                         if (firstC > firstX)
                         {
@@ -3267,7 +3267,7 @@ namespace BigMath
             // For small values, use fast remainder method
             if (n._magnitude.Length == 1)
             {
-                int val = n._magnitude[0];
+                var val = n._magnitude[0];
 
                 if (val > 0)
                 {
@@ -3277,7 +3277,7 @@ namespace BigMath
                     }
 
                     // TODO Make this func work on uint, and handle val == 1?
-                    int rem = Remainder(val);
+                    var rem = Remainder(val);
 
                     return rem == 0 ? Zero : new BigInteger(_sign, new[] {rem}, false);
                 }
@@ -3310,13 +3310,13 @@ namespace BigMath
                 return ZeroMagnitude;
             }
 
-            int numWords = (n + BitsPerInt - 1)/BitsPerInt;
+            var numWords = (n + BitsPerInt - 1)/BitsPerInt;
             numWords = Math.Min(numWords, _magnitude.Length);
             var result = new int[numWords];
 
             Array.Copy(_magnitude, _magnitude.Length - numWords, result, 0, numWords);
 
-            int hiBits = n%32;
+            var hiBits = n%32;
             if (hiBits != 0)
             {
                 result[0] &= ~(-1 << hiBits);
@@ -3332,8 +3332,8 @@ namespace BigMath
         private static int[] ShiftLeft(int[] mag, int n)
         {
             var nInts = (int) ((uint) n >> 5);
-            int nBits = n & 0x1f;
-            int magLen = mag.Length;
+            var nBits = n & 0x1f;
+            var magLen = mag.Length;
             int[] newMag;
 
             if (nBits == 0)
@@ -3343,8 +3343,8 @@ namespace BigMath
             }
             else
             {
-                int i = 0;
-                int nBits2 = 32 - nBits;
+                var i = 0;
+                var nBits2 = 32 - nBits;
                 var highBits = (int) ((uint) mag[0] >> nBits2);
 
                 if (highBits != 0)
@@ -3357,10 +3357,10 @@ namespace BigMath
                     newMag = new int[magLen + nInts];
                 }
 
-                int m = mag[0];
-                for (int j = 0; j < magLen - 1; j++)
+                var m = mag[0];
+                for (var j = 0; j < magLen - 1; j++)
                 {
-                    int next = mag[j + 1];
+                    var next = mag[j + 1];
 
                     newMag[i++] = (m << nBits) | (int) ((uint) next >> nBits2);
                     m = next;
@@ -3410,19 +3410,19 @@ namespace BigMath
 
         private static void ShiftRightInPlace(int start, int[] mag, int n)
         {
-            int nInts = (int) ((uint) n >> 5) + start;
-            int nBits = n & 0x1f;
-            int magEnd = mag.Length - 1;
+            var nInts = (int) ((uint) n >> 5) + start;
+            var nBits = n & 0x1f;
+            var magEnd = mag.Length - 1;
 
             if (nInts != start)
             {
-                int delta = (nInts - start);
+                var delta = (nInts - start);
 
-                for (int i = magEnd; i >= nInts; i--)
+                for (var i = magEnd; i >= nInts; i--)
                 {
                     mag[i] = mag[i - delta];
                 }
-                for (int i = nInts - 1; i >= start; i--)
+                for (var i = nInts - 1; i >= start; i--)
                 {
                     mag[i] = 0;
                 }
@@ -3430,12 +3430,12 @@ namespace BigMath
 
             if (nBits != 0)
             {
-                int nBits2 = 32 - nBits;
-                int m = mag[magEnd];
+                var nBits2 = 32 - nBits;
+                var m = mag[magEnd];
 
-                for (int i = magEnd; i > nInts; --i)
+                for (var i = magEnd; i > nInts; --i)
                 {
-                    int next = mag[i - 1];
+                    var next = mag[i - 1];
 
                     mag[i] = (int) ((uint) m >> nBits) | (next << nBits2);
                     m = next;
@@ -3451,12 +3451,12 @@ namespace BigMath
 
         private static void ShiftRightOneInPlace(int start, int[] mag)
         {
-            int i = mag.Length;
-            int m = mag[i - 1];
+            var i = mag.Length;
+            var m = mag[i - 1];
 
             while (--i > start)
             {
-                int next = mag[i - 1];
+                var next = mag[i - 1];
                 mag[i] = ((int) ((uint) m >> 1)) | (next << 31);
                 m = next;
             }
@@ -3487,11 +3487,11 @@ namespace BigMath
             //
             //			return new BigInteger(this.sign, res, true);
 
-            int resultLength = (BitLength - n + 31) >> 5;
+            var resultLength = (BitLength - n + 31) >> 5;
             var res = new int[resultLength];
 
-            int numInts = n >> 5;
-            int numBits = n & 31;
+            var numInts = n >> 5;
+            var numBits = n & 31;
 
             if (numBits == 0)
             {
@@ -3499,10 +3499,10 @@ namespace BigMath
             }
             else
             {
-                int numBits2 = 32 - numBits;
+                var numBits2 = 32 - numBits;
 
-                int magPos = _magnitude.Length - 1 - numInts;
-                for (int i = resultLength - 1; i >= 0; --i)
+                var magPos = _magnitude.Length - 1 - numInts;
+                for (var i = resultLength - 1; i >= 0; --i)
                 {
                     res[i] = (int) ((uint) _magnitude[magPos--] >> numBits);
 
@@ -3527,10 +3527,10 @@ namespace BigMath
             Debug.Assert(yStart < y.Length);
             Debug.Assert(x.Length - xStart >= y.Length - yStart);
 
-            int iT = x.Length;
-            int iV = y.Length;
+            var iT = x.Length;
+            var iV = y.Length;
             long m;
-            int borrow = 0;
+            var borrow = 0;
 
             do
             {
@@ -3568,7 +3568,7 @@ namespace BigMath
                 return Add(n.Negate());
             }
 
-            int compare = CompareNoLeadingZeroes(0, _magnitude, 0, n._magnitude);
+            var compare = CompareNoLeadingZeroes(0, _magnitude, 0, n._magnitude);
             if (compare == 0)
             {
                 return Zero;
@@ -3613,13 +3613,13 @@ namespace BigMath
                 return unsigned ? ZeroEncoding : new byte[1];
             }
 
-            int nBits = (unsigned && _sign > 0) ? BitLength : BitLength + 1;
+            var nBits = (unsigned && _sign > 0) ? BitLength : BitLength + 1;
 
-            int nBytes = GetByteLength(nBits);
+            var nBytes = GetByteLength(nBits);
             var bytes = new byte[nBytes];
 
-            int magIndex = _magnitude.Length;
-            int bytesIndex = bytes.Length;
+            var magIndex = _magnitude.Length;
+            var bytesIndex = bytes.Length;
 
             if (_sign > 0)
             {
@@ -3643,11 +3643,11 @@ namespace BigMath
             }
             else // sign < 0
             {
-                bool carry = true;
+                var carry = true;
 
                 while (magIndex > 1)
                 {
-                    uint mag = ~((uint) _magnitude[--magIndex]);
+                    var mag = ~((uint) _magnitude[--magIndex]);
 
                     if (carry)
                     {
@@ -3730,7 +3730,7 @@ namespace BigMath
             {
                 sb.Append(_magnitude[0].ToString(caps ? "X" : "x"));
 
-                for (int i = 1; i < _magnitude.Length; i++)
+                for (var i = 1; i < _magnitude.Length; i++)
                 {
                     sb.Append(_magnitude[i].ToString(caps ? "X8" : "x8"));
                 }
@@ -3739,7 +3739,7 @@ namespace BigMath
             {
                 sb.Append('1');
 
-                for (int i = BitLength - 2; i >= 0; --i)
+                for (var i = BitLength - 2; i >= 0; --i)
                 {
                     sb.Append(TestBit(i) ? '1' : '0');
                 }
@@ -3748,40 +3748,40 @@ namespace BigMath
             {
                 // This is algorithm 1a from chapter 4.4 in Seminumerical Algorithms, slow but it works.
                 var strings = new List<string>();
-                BigInteger bs = ValueOf(radix);
+                var bs = ValueOf(radix);
 
                 // The sign is handled separatly.
-                BigInteger u = Abs();
+                var u = Abs();
 
                 while (u._sign != 0)
                 {
-                    BigInteger b = u.Mod(bs);
+                    var b = u.Mod(bs);
                     strings.Add(b._sign == 0 ? "0" : b._magnitude[0].ToString(caps ? "D" : "d"));
                     u = u.Divide(bs);
                 }
 
                 // Then pop the stack
-                for (int i = strings.Count - 1; i >= 0; --i)
+                for (var i = strings.Count - 1; i >= 0; --i)
                 {
                     sb.Append(strings[i]);
                 }
             }
 
-            string str = sb.ToString();
-            int strLength = str.Length;
+            var str = sb.ToString();
+            var strLength = str.Length;
 
             Debug.Assert(strLength > 0);
 
             if (strLength < min)
             {
                 // Prepend with zeros to ensure minimal length.
-                int gap = min - strLength;
+                var gap = min - strLength;
                 str = GetZeroChars(gap) + str;
             }
             else if (strLength > min && str[0] == '0')
             {
                 // Strip leading zeros.
-                int nonZeroPos = 0;
+                var nonZeroPos = 0;
                 while (str[++nonZeroPos] == '0')
                 {
                 }
@@ -3872,7 +3872,7 @@ namespace BigMath
                 return -1;
             }
 
-            int w = _magnitude.Length;
+            var w = _magnitude.Length;
 
             while (--w > 0)
             {
@@ -3882,10 +3882,10 @@ namespace BigMath
                 }
             }
 
-            int word = _magnitude[w];
+            var word = _magnitude[w];
             Debug.Assert(word != 0);
 
-            int b = (word & 0x0000FFFF) == 0 ? (word & 0x00FF0000) == 0 ? 7 : 15 : (word & 0x000000FF) == 0 ? 23 : 31;
+            var b = (word & 0x0000FFFF) == 0 ? (word & 0x00FF0000) == 0 ? 7 : 15 : (word & 0x000000FF) == 0 ? 23 : 31;
 
             while (b > 0)
             {
@@ -3912,13 +3912,13 @@ namespace BigMath
                 return !Not().TestBit(n);
             }
 
-            int wordNum = n/32;
+            var wordNum = n/32;
             if (wordNum >= _magnitude.Length)
             {
                 return false;
             }
 
-            int word = _magnitude[_magnitude.Length - 1 - wordNum];
+            var word = _magnitude[_magnitude.Length - 1 - wordNum];
             return ((word >> (n%32)) & 1) > 0;
         }
 
@@ -3934,21 +3934,21 @@ namespace BigMath
                 return this;
             }
 
-            int[] aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
+            var aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
 
-            int[] bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
+            var bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
 
-            bool resultNeg = _sign < 0 || value._sign < 0;
-            int resultLength = Math.Max(aMag.Length, bMag.Length);
+            var resultNeg = _sign < 0 || value._sign < 0;
+            var resultLength = Math.Max(aMag.Length, bMag.Length);
             var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (_sign < 0)
                 {
@@ -3991,22 +3991,22 @@ namespace BigMath
                 return this;
             }
 
-            int[] aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
+            var aMag = _sign > 0 ? _magnitude : Add(One)._magnitude;
 
-            int[] bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
+            var bMag = value._sign > 0 ? value._magnitude : value.Add(One)._magnitude;
 
             // TODO Can just replace with sign != value.sign?
-            bool resultNeg = (_sign < 0 && value._sign >= 0) || (_sign >= 0 && value._sign < 0);
-            int resultLength = Math.Max(aMag.Length, bMag.Length);
+            var resultNeg = (_sign < 0 && value._sign >= 0) || (_sign >= 0 && value._sign < 0);
+            var resultLength = Math.Max(aMag.Length, bMag.Length);
             var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (_sign < 0)
                 {
@@ -4214,8 +4214,8 @@ namespace BigMath
         /// </returns>
         public static int Compare(BigInteger left, BigInteger right)
         {
-            int leftSign = left.Sign;
-            int rightSign = right.Sign;
+            var leftSign = left.Sign;
+            var rightSign = right.Sign;
 
             if (leftSign == 0 && rightSign == 0)
             {
@@ -4246,7 +4246,7 @@ namespace BigMath
                 if (_zeroCharsBuffer == null || _zeroCharsBuffer.Length < minLength)
                 {
                     _zeroCharsBuffer = new char[minLength];
-                    for (int i = 0; i < minLength; i++)
+                    for (var i = 0; i < minLength; i++)
                     {
                         _zeroCharsBuffer[i] = '0';
                     }

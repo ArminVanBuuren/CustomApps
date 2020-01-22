@@ -83,15 +83,15 @@ namespace NAudio.Gui
             
             pe.Graphics.DrawRectangle(Pens.Black, 0, 0, this.Width - 1, this.Height - 1);
 
-            double db = 20 * Math.Log10(Amplitude);
+            var db = 20 * Math.Log10(Amplitude);
             if (db < MinDb)
                 db = MinDb;
             if (db > MaxDb)
                 db = MaxDb;
-            double percent = (db - MinDb) / (MaxDb - MinDb);
+            var percent = (db - MinDb) / (MaxDb - MinDb);
 
-            int width = this.Width - 2;
-            int height = this.Height - 2;
+            var width = this.Width - 2;
+            var height = this.Height - 2;
             if (Orientation == Orientation.Horizontal)
             {
                 width = (int)(width * percent);

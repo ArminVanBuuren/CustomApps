@@ -81,32 +81,32 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int width   = sourceData.Width;
-            int height  = sourceData.Height;
+            var width   = sourceData.Width;
+            var height  = sourceData.Height;
 
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
-            double xFactor = (double) width / newWidth;
-            double yFactor = (double) height / newHeight;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var xFactor = (double) width / newWidth;
+            var yFactor = (double) height / newHeight;
 
             // do the job
-            byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
-            byte* baseDst = (byte*) destinationData.ImageData.ToPointer( );
+            var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+            var baseDst = (byte*) destinationData.ImageData.ToPointer( );
 
             // for each line
-            for ( int y = 0; y < newHeight; y++ )
+            for ( var y = 0; y < newHeight; y++ )
             {
-                byte* dst = baseDst + dstStride * y;
-                byte* src = baseSrc + srcStride * ( (int) ( y * yFactor ) );
+                var dst = baseDst + dstStride * y;
+                var src = baseSrc + srcStride * ( (int) ( y * yFactor ) );
                 byte* p;
 
                 // for each pixel
-                for ( int x = 0; x < newWidth; x++ )
+                for ( var x = 0; x < newWidth; x++ )
                 {
                     p = src + pixelSize * ( (int) ( x * xFactor ) );
 
-                    for ( int i = 0; i < pixelSize; i++, dst++, p++ )
+                    for ( var i = 0; i < pixelSize; i++, dst++, p++ )
                     {
                         *dst = *p;
                     }

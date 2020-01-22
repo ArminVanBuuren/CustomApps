@@ -61,7 +61,7 @@ namespace Utils.AppUpdater
         /// <returns>Hash as string</returns>
         private static string MakeHashString(byte[] hash)
         {
-            var s = new StringBuilder();
+            var s = new StringBuilder(hash.Length);
 
             foreach (var b in hash)
                 s.Append(b.ToString("x2").ToLower());

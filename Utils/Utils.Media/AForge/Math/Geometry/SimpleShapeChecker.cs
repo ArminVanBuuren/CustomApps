@@ -254,7 +254,7 @@ namespace AForge.AMath.Geometry
             IntPoint minXY, maxXY;
             PointsCloud.GetBoundingRectangle( edgePoints, out minXY, out maxXY );
             // get cloud's size
-            IntPoint cloudSize = maxXY - minXY;
+            var cloudSize = maxXY - minXY;
             // calculate center point
             center = minXY + (Point) cloudSize / 2;
 
@@ -269,7 +269,7 @@ namespace AForge.AMath.Geometry
             }
             meanDistance /= edgePoints.Count;
 
-            float maxDitance = Math.Max( minAcceptableDistortion,
+            var maxDitance = Math.Max( minAcceptableDistortion,
                 ( (float) cloudSize.X + cloudSize.Y ) / 2 * relativeDistortionLimit );
 
             return ( meanDistance <= maxDitance );
@@ -384,22 +384,22 @@ namespace AForge.AMath.Geometry
         /// 
         public PolygonSubType CheckPolygonSubType( List<IntPoint> corners )
         {
-            PolygonSubType subType = PolygonSubType.Unknown;
+            var subType = PolygonSubType.Unknown;
 
             // get bounding rectangle of the points list
             IntPoint minXY, maxXY;
             PointsCloud.GetBoundingRectangle( corners, out minXY, out maxXY );
             // get cloud's size
-            IntPoint cloudSize = maxXY - minXY;
+            var cloudSize = maxXY - minXY;
 
-            float maxLengthDiff = lengthError * ( cloudSize.X + cloudSize.Y ) / 2;
+            var maxLengthDiff = lengthError * ( cloudSize.X + cloudSize.Y ) / 2;
 
             if ( corners.Count == 3 )
             {
                 // get angles of the triangle
-                float angle1 = GeometryTools.GetAngleBetweenVectors( corners[0], corners[1], corners[2] );
-                float angle2 = GeometryTools.GetAngleBetweenVectors( corners[1], corners[2], corners[0] );
-                float angle3 = GeometryTools.GetAngleBetweenVectors( corners[2], corners[0], corners[1] );
+                var angle1 = GeometryTools.GetAngleBetweenVectors( corners[0], corners[1], corners[2] );
+                var angle2 = GeometryTools.GetAngleBetweenVectors( corners[1], corners[2], corners[0] );
+                var angle3 = GeometryTools.GetAngleBetweenVectors( corners[2], corners[0], corners[1] );
 
                 // check for equilateral triangle
                 if ( ( Math.Abs( angle1 - 60 ) <= angleError ) &&
@@ -431,8 +431,8 @@ namespace AForge.AMath.Geometry
             else if ( corners.Count == 4 )
             {
                 // get angles between 2 pairs of opposite sides
-                float angleBetween1stPair = GeometryTools.GetAngleBetweenLines( corners[0], corners[1], corners[2], corners[3] );
-                float angleBetween2ndPair = GeometryTools.GetAngleBetweenLines( corners[1], corners[2], corners[3], corners[0] );
+                var angleBetween1stPair = GeometryTools.GetAngleBetweenLines( corners[0], corners[1], corners[2], corners[3] );
+                var angleBetween2ndPair = GeometryTools.GetAngleBetweenLines( corners[1], corners[2], corners[3], corners[0] );
 
                 // check 1st pair for parallelism
                 if ( angleBetween1stPair <= angleError )
@@ -451,8 +451,8 @@ namespace AForge.AMath.Geometry
                         }
 
                         // get length of 2 adjacent sides
-                        float side1Length = (float) corners[0].DistanceTo( corners[1] );
-                        float side2Length = (float) corners[0].DistanceTo( corners[3] );
+                        var side1Length = (float) corners[0].DistanceTo( corners[1] );
+                        var side2Length = (float) corners[0].DistanceTo( corners[3] );
 
                         if ( Math.Abs( side1Length - side2Length ) <= maxLengthDiff )
                         {
@@ -490,18 +490,18 @@ namespace AForge.AMath.Geometry
         /// 
         public bool CheckIfPointsFitShape( List<IntPoint> edgePoints, List<IntPoint> corners )
         {
-            int cornersCount = corners.Count;
+            var cornersCount = corners.Count;
 
             // lines coefficients (for representation as y(x)=k*x+b)
-            float[] k = new float[cornersCount];
-            float[] b = new float[cornersCount];
-            float[] div = new float[cornersCount]; // precalculated divisor
-            bool[] isVert = new bool[cornersCount];
+            var k = new float[cornersCount];
+            var b = new float[cornersCount];
+            var div = new float[cornersCount]; // precalculated divisor
+            var isVert = new bool[cornersCount];
 
-            for ( int i = 0; i < cornersCount; i++ )
+            for ( var i = 0; i < cornersCount; i++ )
             {
-                IntPoint currentPoint = corners[i];
-                IntPoint nextPoint = ( i + 1 == cornersCount ) ? corners[0] : corners[i + 1];
+                var currentPoint = corners[i];
+                var nextPoint = ( i + 1 == cornersCount ) ? corners[0] : corners[i + 1];
 
                 if ( !( isVert[i] = nextPoint.X == currentPoint.X ) )
                 {
@@ -516,9 +516,9 @@ namespace AForge.AMath.Geometry
 
             for ( int i = 0, n = edgePoints.Count; i < n; i++ )
             {
-                float minDistance = float.MaxValue;
+                var minDistance = float.MaxValue;
 
-                for ( int j = 0; j < cornersCount; j++ )
+                for ( var j = 0; j < cornersCount; j++ )
                 {
                     float distance = 0;
 
@@ -542,9 +542,9 @@ namespace AForge.AMath.Geometry
             // get bounding rectangle of the corners list
             IntPoint minXY, maxXY;
             PointsCloud.GetBoundingRectangle( corners, out minXY, out maxXY );
-            IntPoint rectSize = maxXY - minXY;
+            var rectSize = maxXY - minXY;
 
-            float maxDitance = Math.Max( minAcceptableDistortion,
+            var maxDitance = Math.Max( minAcceptableDistortion,
                 ( (float) rectSize.X + rectSize.Y ) / 2 * relativeDistortionLimit );
 
             return ( meanDistance <= maxDitance );

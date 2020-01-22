@@ -61,7 +61,7 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData srcData = image.LockBits(
+            var srcData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -106,19 +106,19 @@ namespace AForge.Imaging.Filters
             CheckSourceFormat( imageData.PixelFormat );
 
             // get width and height
-            int width  = imageData.Width;
-            int height = imageData.Height;
+            var width  = imageData.Width;
+            var height = imageData.Height;
 
             // destination image format
-            PixelFormat dstPixelFormat = FormatTranslations[imageData.PixelFormat];
+            var dstPixelFormat = FormatTranslations[imageData.PixelFormat];
 
             // create new image of required format
-            Bitmap dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
+            var dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
                 AForge.Imaging.Image.CreateGrayscaleImage( width, height ) :
                 new Bitmap( width, height, dstPixelFormat );
 
             // lock destination bitmap data
-            BitmapData dstData = dstImage.LockBits(
+            var dstData = dstImage.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, dstPixelFormat );
 
@@ -156,7 +156,7 @@ namespace AForge.Imaging.Filters
             CheckSourceFormat( image.PixelFormat );
 
             // create new destination image
-            UnmanagedImage dstImage = UnmanagedImage.Create( image.Width, image.Height, FormatTranslations[image.PixelFormat] );
+            var dstImage = UnmanagedImage.Create( image.Width, image.Height, FormatTranslations[image.PixelFormat] );
 
             // process the filter
             ProcessFilter( image, dstImage );

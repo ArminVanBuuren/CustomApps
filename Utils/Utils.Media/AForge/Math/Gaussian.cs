@@ -133,9 +133,9 @@ namespace AForge.AMath
             }
 
             // raduis
-            int r = size / 2;
+            var r = size / 2;
             // kernel
-            double[] kernel = new double[size];
+            var kernel = new double[size];
 
             // compute kernel
             for ( int x = -r, i = 0; i < size; x++, i++ )
@@ -170,9 +170,9 @@ namespace AForge.AMath
             }
 
             // raduis
-            int r = size / 2;
+            var r = size / 2;
             // kernel
-            double[,] kernel = new double[size, size];
+            var kernel = new double[size, size];
 
             // compute kernel
             for ( int y = -r, i = 0; i < size; y++, i++ )

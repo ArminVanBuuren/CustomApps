@@ -219,27 +219,27 @@ namespace AForge.Imaging.Filters
                 throw new NullReferenceException( "Channel image was not specified." );
             }
 
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             if ( ( channel == RGB.A ) && ( pixelSize != 4 ) && ( pixelSize != 8 ) )
             {
                 throw new InvalidImagePropertiesException( "Can not replace alpha channel of none ARGB image." );
             }
 
-            int width   = image.Width;
-            int height  = image.Height;
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var width   = image.Width;
+            var height  = image.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             BitmapData chData = null;
             // pointer to channel's data
             byte* ch;
             // channel's image stride
-            int chStride = 0;
-            PixelFormat chFormat = PixelFormat.Format16bppGrayScale;
+            var chStride = 0;
+            var chFormat = PixelFormat.Format16bppGrayScale;
 
             // check channel's image type
             if ( channelImage != null )
@@ -274,20 +274,20 @@ namespace AForge.Imaging.Filters
                 if ( chFormat != PixelFormat.Format8bppIndexed )
                     throw new InvalidImagePropertiesException( "Channel image's format does not correspond to format of the source image." );
 
-                int offsetCh = chData.Stride - rect.Width;
+                var offsetCh = chData.Stride - rect.Width;
 
                 // do the job
-                byte* dst = (byte*) image.ImageData.ToPointer( );
+                var dst = (byte*) image.ImageData.ToPointer( );
 
                 // allign pointers to the first pixel to process
                 dst += ( startY * image.Stride + startX * pixelSize );
                 ch  += ( startY * chStride + startX );
 
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, dst += pixelSize, ch++ )
+                    for ( var x = startX; x < stopX; x++, dst += pixelSize, ch++ )
                     {
                         dst[channel] = *ch;
                     }
@@ -301,10 +301,10 @@ namespace AForge.Imaging.Filters
                 if ( chFormat != PixelFormat.Format16bppGrayScale )
                     throw new InvalidImagePropertiesException( "Channel image's format does not correspond to format of the source image." );
 
-                int stride = image.Stride;
+                var stride = image.Stride;
 
                 // do the job
-                byte* baseDst = (byte*) image.ImageData.ToPointer( );
+                var baseDst = (byte*) image.ImageData.ToPointer( );
                 // allign pointers for X coordinate
                 baseDst += startX * pixelSize;
                 ch += startX * 2;
@@ -312,13 +312,13 @@ namespace AForge.Imaging.Filters
                 pixelSize /= 2;
 
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    ushort* dst = (ushort*) ( baseDst + y * stride );
-                    ushort* chPtr = (ushort*) ( ch + y * chStride );
+                    var dst = (ushort*) ( baseDst + y * stride );
+                    var chPtr = (ushort*) ( ch + y * chStride );
 
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, dst += pixelSize, chPtr++ )
+                    for ( var x = startX; x < stopX; x++, dst += pixelSize, chPtr++ )
                     {
                         dst[channel] = *chPtr;
                     }

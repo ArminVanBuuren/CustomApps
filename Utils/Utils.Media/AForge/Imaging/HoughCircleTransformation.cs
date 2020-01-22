@@ -221,7 +221,7 @@ namespace AForge.Imaging
             }
 
             // lock source image
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed );
 
@@ -269,7 +269,7 @@ namespace AForge.Imaging
             width  = image.Width;
             height = image.Height;
 
-            int srcOffset = image.Stride - width;
+            var srcOffset = image.Stride - width;
 
             // allocate Hough map of the same size like image
             houghMap = new short[height, width];
@@ -277,13 +277,13 @@ namespace AForge.Imaging
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( );
+                var src = (byte*) image.ImageData.ToPointer( );
 
                 // for each row
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++ )
+                    for ( var x = 0; x < width; x++, src++ )
                     {
                         if ( *src != 0 )
                         {
@@ -296,9 +296,9 @@ namespace AForge.Imaging
 
             // find max value in Hough map
             maxMapIntensity = 0;
-            for ( int i = 0; i < height; i++ )
+            for ( var i = 0; i < height; i++ )
             {
-                for ( int j = 0; j < width; j++ )
+                for ( var j = 0; j < width; j++ )
                 {
                     if ( houghMap[i, j] > maxMapIntensity )
                     {
@@ -327,28 +327,28 @@ namespace AForge.Imaging
                 throw new ApplicationException( "Hough transformation was not done yet." );
             }
 
-            int width = houghMap.GetLength( 1 );
-            int height = houghMap.GetLength( 0 );
+            var width = houghMap.GetLength( 1 );
+            var height = houghMap.GetLength( 0 );
 
             // create new image
-            Bitmap image = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
+            var image = AForge.Imaging.Image.CreateGrayscaleImage( width, height );
 
             // lock destination bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed );
 
-            int offset = imageData.Stride - width;
-            float scale = 255.0f / maxMapIntensity;
+            var offset = imageData.Stride - width;
+            var scale = 255.0f / maxMapIntensity;
 
             // do the job
             unsafe
             {
-                byte* dst = (byte*) imageData.Scan0.ToPointer( );
+                var dst = (byte*) imageData.Scan0.ToPointer( );
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, dst++ )
+                    for ( var x = 0; x < width; x++, dst++ )
                     {
                         *dst = (byte) System.Math.Min( 255, (int) ( scale * houghMap[y, x] ) );
                     }
@@ -374,10 +374,10 @@ namespace AForge.Imaging
         public HoughCircle[] GetMostIntensiveCircles( int count )
         {
             // lines count
-            int n = Math.Min( count, circles.Count );
+            var n = Math.Min( count, circles.Count );
 
             // result array
-            HoughCircle[] dst = new HoughCircle[n];
+            var dst = new HoughCircle[n];
             circles.CopyTo( 0, dst, 0, n );
 
             return dst;
@@ -413,10 +413,10 @@ namespace AForge.Imaging
             circles.Clear( );
 
 			// for each Y coordinate
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
                 // for each X coordinate
-                for ( int x = 0; x < width; x++ )
+                for ( var x = 0; x < width; x++ )
                 {
                     // get current value
                     intensity = houghMap[y, x];
@@ -472,9 +472,9 @@ namespace AForge.Imaging
         //
         private void DrawHoughCircle( int xCenter, int yCenter )
         {
-            int x = 0;
-            int y = radiusToDetect;
-            int p = ( 5 - radiusToDetect * 4 ) / 4;
+            var x = 0;
+            var y = radiusToDetect;
+            var p = ( 5 - radiusToDetect * 4 ) / 4;
 
             SetHoughCirclePoints( xCenter, yCenter, x, y );
 

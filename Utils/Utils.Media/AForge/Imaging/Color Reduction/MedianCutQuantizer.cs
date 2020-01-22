@@ -70,16 +70,16 @@ namespace AForge.Imaging.ColorReduction
         /// 
         public Color[] GetPalette( int colorCount )
         {
-            List<MedianCutCube> cubes = new List<MedianCutCube>( );
+            var cubes = new List<MedianCutCube>( );
             cubes.Add( new MedianCutCube( colors ) );
 
             // split the cube until we get required amount of colors
             SplitCubes( cubes, colorCount );
 
             // get the final palette
-            Color[] palette = new Color[colorCount];
+            var palette = new Color[colorCount];
 
-            for ( int i = 0; i < colorCount; i++ )
+            for ( var i = 0; i < colorCount; i++ )
             {
                 palette[i] = cubes[i].Color;
             }
@@ -100,11 +100,11 @@ namespace AForge.Imaging.ColorReduction
         // Split specified list of cubes into smaller cubes until the list gets the specified size
         private void SplitCubes( List<MedianCutCube> cubes, int count )
         {
-            int cubeIndexToSplit = cubes.Count - 1;
+            var cubeIndexToSplit = cubes.Count - 1;
 
             while ( cubes.Count < count )
             {
-                MedianCutCube cubeToSplit = cubes[cubeIndexToSplit];
+                var cubeToSplit = cubes[cubeIndexToSplit];
                 MedianCutCube cube1, cube2;
 
                 // find the longest color size to use for splitting

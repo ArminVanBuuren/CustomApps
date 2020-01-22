@@ -216,7 +216,7 @@ namespace HtmlAgilityPack
         {
             get
             {
-                string basePath = (OwnerNode == null) ? "/" : OwnerNode.XPath + "/";
+                var basePath = (OwnerNode == null) ? "/" : OwnerNode.XPath + "/";
                 return basePath + GetRelativeXpath();
             }
         }
@@ -232,7 +232,7 @@ namespace HtmlAgilityPack
         /// <returns>A 32-bit signed integer that indicates the relative order of the names comparison.</returns>
         public int CompareTo(object obj)
         {
-            HtmlAttribute att = obj as HtmlAttribute;
+            var att = obj as HtmlAttribute;
             if (att == null)
             {
                 throw new ArgumentException("obj");
@@ -251,7 +251,7 @@ namespace HtmlAgilityPack
         /// <returns>The cloned attribute.</returns>
         public HtmlAttribute Clone()
         {
-            HtmlAttribute att = new HtmlAttribute(_ownerdocument);
+            var att = new HtmlAttribute(_ownerdocument);
             att.Name = Name;
             att.Value = Value;
             att.QuoteType = QuoteType;
@@ -275,8 +275,8 @@ namespace HtmlAgilityPack
             if (OwnerNode == null)
                 return Name;
 
-            int i = 1;
-            foreach (HtmlAttribute node in OwnerNode.Attributes)
+            var i = 1;
+            foreach (var node in OwnerNode.Attributes)
             {
                 if (node.Name != Name) continue;
 

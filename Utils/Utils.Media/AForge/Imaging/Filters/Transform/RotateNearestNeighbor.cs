@@ -95,7 +95,7 @@ namespace AForge.Imaging.Filters
         /// 
         protected override void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
 
             switch ( pixelSize )
             {
@@ -114,34 +114,34 @@ namespace AForge.Imaging.Filters
         private unsafe void ProcessFilter8bpc( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int    width      = sourceData.Width;
-            int    height     = sourceData.Height;
-            double oldXradius = (double) ( width  - 1 ) / 2;
-            double oldYradius = (double) ( height - 1 ) / 2;
+            var    width      = sourceData.Width;
+            var    height     = sourceData.Height;
+            var oldXradius = (double) ( width  - 1 ) / 2;
+            var oldYradius = (double) ( height - 1 ) / 2;
 
             // get destination image size
-            int    newWidth   = destinationData.Width;
-            int    newHeight  = destinationData.Height;
-            double newXradius = (double) ( newWidth  - 1 ) / 2;
-            double newYradius = (double) ( newHeight - 1 ) / 2;
+            var    newWidth   = destinationData.Width;
+            var    newHeight  = destinationData.Height;
+            var newXradius = (double) ( newWidth  - 1 ) / 2;
+            var newYradius = (double) ( newHeight - 1 ) / 2;
 
             // angle's sine and cosine
-            double angleRad = -angle * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            var angleRad = -angle * Math.PI / 180;
+            var angleCos = Math.Cos( angleRad );
+            var angleSin = Math.Sin( angleRad );
 
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride -
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride -
                 ( ( destinationData.PixelFormat == PixelFormat.Format8bppIndexed ) ? newWidth : newWidth * 3 );
 
             // fill values
-            byte fillR = fillColor.R;
-            byte fillG = fillColor.G;
-            byte fillB = fillColor.B;
+            var fillR = fillColor.R;
+            var fillG = fillColor.G;
+            var fillB = fillColor.B;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             // destination pixel's coordinate relative to image center
             double cx, cy;
@@ -155,10 +155,10 @@ namespace AForge.Imaging.Filters
             {
                 // grayscale
                 cy = -newYradius;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     cx = -newXradius;
-                    for ( int x = 0; x < newWidth; x++, dst++ )
+                    for ( var x = 0; x < newWidth; x++, dst++ )
                     {
                         // coordinate of the nearest point
                         ox = (int) (  angleCos * cx + angleSin * cy + oldXradius );
@@ -185,10 +185,10 @@ namespace AForge.Imaging.Filters
             {
                 // RGB
                 cy = -newYradius;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
                     cx = -newXradius;
-                    for ( int x = 0; x < newWidth; x++, dst += 3 )
+                    for ( var x = 0; x < newWidth; x++, dst += 3 )
                     {
                         // coordinate of the nearest point
                         ox = (int) (  angleCos * cx + angleSin * cy + oldXradius );
@@ -223,33 +223,33 @@ namespace AForge.Imaging.Filters
         private unsafe void ProcessFilter16bpc( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image size
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
-            double halfWidth  = (double) width / 2;
-            double halfHeight = (double) height / 2;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
+            var halfWidth  = (double) width / 2;
+            var halfHeight = (double) height / 2;
 
             // get destination image size
-            int newWidth  = destinationData.Width;
-            int newHeight = destinationData.Height;
-            double halfNewWidth  = (double) newWidth / 2;
-            double halfNewHeight = (double) newHeight / 2;
+            var newWidth  = destinationData.Width;
+            var newHeight = destinationData.Height;
+            var halfNewWidth  = (double) newWidth / 2;
+            var halfNewHeight = (double) newHeight / 2;
 
             // angle's sine and cosine
-            double angleRad = -angle * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            var angleRad = -angle * Math.PI / 180;
+            var angleCos = Math.Cos( angleRad );
+            var angleSin = Math.Sin( angleRad );
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
 
             // fill values
-            ushort fillR = (ushort) ( fillColor.R << 8 );
-            ushort fillG = (ushort) ( fillColor.G << 8 );
-            ushort fillB = (ushort) ( fillColor.B << 8 );
+            var fillR = (ushort) ( fillColor.R << 8 );
+            var fillG = (ushort) ( fillColor.G << 8 );
+            var fillB = (ushort) ( fillColor.B << 8 );
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dstBase = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dstBase = (byte*) destinationData.ImageData.ToPointer( );
 
             // destination pixel's coordinate relative to image center
             double cx, cy;
@@ -263,12 +263,12 @@ namespace AForge.Imaging.Filters
             {
                 // grayscale
                 cy = -halfNewHeight;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
-                    ushort* dst = (ushort*) ( dstBase + y * dstStride );
+                    var dst = (ushort*) ( dstBase + y * dstStride );
 
                     cx = -halfNewWidth;
-                    for ( int x = 0; x < newWidth; x++, dst++ )
+                    for ( var x = 0; x < newWidth; x++, dst++ )
                     {
                         // coordinate of the nearest point
                         ox = (int) (  angleCos * cx + angleSin * cy + halfWidth );
@@ -295,12 +295,12 @@ namespace AForge.Imaging.Filters
             {
                 // RGB
                 cy = -halfNewHeight;
-                for ( int y = 0; y < newHeight; y++ )
+                for ( var y = 0; y < newHeight; y++ )
                 {
-                    ushort* dst = (ushort*) ( dstBase + y * dstStride );
+                    var dst = (ushort*) ( dstBase + y * dstStride );
 
                     cx = -halfNewWidth;
-                    for ( int x = 0; x < newWidth; x++, dst += 3 )
+                    for ( var x = 0; x < newWidth; x++, dst += 3 )
                     {
                         // coordinate of the nearest point
                         ox = (int) (  angleCos * cx + angleSin * cy + halfWidth );

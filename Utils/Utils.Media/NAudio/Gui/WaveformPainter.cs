@@ -81,10 +81,10 @@ namespace NAudio.Gui
         {
             base.OnPaint(pe);
 
-            for (int x = 0; x < this.Width; x++)
+            for (var x = 0; x < this.Width; x++)
             {
-                float lineHeight = this.Height * GetSample(x - this.Width + insertPos);
-                float y1 = (this.Height - lineHeight) / 2;
+                var lineHeight = this.Height * GetSample(x - this.Width + insertPos);
+                var y1 = (this.Height - lineHeight) / 2;
                 pe.Graphics.DrawLine(foregroundPen, x, y1, x, y1 + lineHeight);
             }
         }

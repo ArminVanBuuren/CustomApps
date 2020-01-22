@@ -307,14 +307,14 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source and destination images size
-            int srcWidth  = sourceData.Width;
-            int srcHeight = sourceData.Height;
-            int dstWidth  = destinationData.Width;
-            int dstHeight = destinationData.Height;
+            var srcWidth  = sourceData.Width;
+            var srcHeight = sourceData.Height;
+            var dstWidth  = destinationData.Width;
+            var dstHeight = destinationData.Height;
 
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
 
             // find equations of four quadrilateral's edges ( f(x) = k*x + b )
             double kTop,    bTop;
@@ -375,19 +375,19 @@ namespace AForge.Imaging.Filters
             }
 
             // some precalculated values
-            double leftFactor  = (double) ( sourceQuadrilateral[3].Y - sourceQuadrilateral[0].Y ) / dstHeight;
-            double rightFactor = (double) ( sourceQuadrilateral[2].Y - sourceQuadrilateral[1].Y ) / dstHeight;
+            var leftFactor  = (double) ( sourceQuadrilateral[3].Y - sourceQuadrilateral[0].Y ) / dstHeight;
+            var rightFactor = (double) ( sourceQuadrilateral[2].Y - sourceQuadrilateral[1].Y ) / dstHeight;
 
-            int srcY0 = sourceQuadrilateral[0].Y;
-            int srcY1 = sourceQuadrilateral[1].Y;
+            var srcY0 = sourceQuadrilateral[0].Y;
+            var srcY1 = sourceQuadrilateral[1].Y;
 
             // do the job
-            byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
-            byte* baseDst = (byte*) destinationData.ImageData.ToPointer( );
+            var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+            var baseDst = (byte*) destinationData.ImageData.ToPointer( );
 
             // source width and height decreased by 1
-            int ymax = srcHeight - 1;
-            int xmax = srcWidth - 1;
+            var ymax = srcHeight - 1;
+            var xmax = srcWidth - 1;
 
             // coordinates of source points
             double  dx1, dy1, dx2, dy2;
@@ -397,19 +397,19 @@ namespace AForge.Imaging.Filters
             byte* p1, p2, p3, p4, p;
 
             // for each line
-            for ( int y = 0; y < dstHeight; y++ )
+            for ( var y = 0; y < dstHeight; y++ )
             {
-                byte* dst = baseDst + dstStride * y;
+                var dst = baseDst + dstStride * y;
 
                 // find corresponding Y on the left edge of the quadrilateral
-                double yHorizLeft = leftFactor * y + srcY0;
+                var yHorizLeft = leftFactor * y + srcY0;
                 // find corresponding X on the left edge of the quadrilateral
-                double xHorizLeft = ( kLeft == 0 ) ? bLeft : ( yHorizLeft - bLeft ) / kLeft;
+                var xHorizLeft = ( kLeft == 0 ) ? bLeft : ( yHorizLeft - bLeft ) / kLeft;
 
                 // find corresponding Y on the right edge of the quadrilateral
-                double yHorizRight = rightFactor * y + srcY1;
+                var yHorizRight = rightFactor * y + srcY1;
                 // find corresponding X on the left edge of the quadrilateral
-                double xHorizRight = ( kRight == 0 ) ? bRight : ( yHorizRight - bRight ) / kRight;
+                var xHorizRight = ( kRight == 0 ) ? bRight : ( yHorizRight - bRight ) / kRight;
 
                 // find equation of the line joining points on the left and right edges
                 double kHoriz, bHoriz;
@@ -425,21 +425,21 @@ namespace AForge.Imaging.Filters
                     bHoriz = yHorizLeft - kHoriz * xHorizLeft;
                 }
 
-                double horizFactor = ( xHorizRight - xHorizLeft ) / dstWidth;
+                var horizFactor = ( xHorizRight - xHorizLeft ) / dstWidth;
 
                 if ( !useInterpolation )
                 {
-                    for ( int x = 0; x < dstWidth; x++ )
+                    for ( var x = 0; x < dstWidth; x++ )
                     {
-                        double xs = horizFactor * x + xHorizLeft;
-                        double ys = kHoriz * xs + bHoriz;
+                        var xs = horizFactor * x + xHorizLeft;
+                        var ys = kHoriz * xs + bHoriz;
 
                         if ( ( xs >= 0 ) && ( ys >= 0 ) && ( xs < srcWidth ) && ( ys < srcHeight ) )
                         {
                             // get pointer to the pixel in the source image
                             p = baseSrc + ( (int) ys * srcStride + (int) xs * pixelSize );
                             // copy pixel's values
-                            for ( int i = 0; i < pixelSize; i++, dst++, p++ )
+                            for ( var i = 0; i < pixelSize; i++, dst++, p++ )
                             {
                                 *dst = *p;
                             }
@@ -452,10 +452,10 @@ namespace AForge.Imaging.Filters
                 }
                 else
                 {
-                    for ( int x = 0; x < dstWidth; x++ )
+                    for ( var x = 0; x < dstWidth; x++ )
                     {
-                        double xs = horizFactor * x + xHorizLeft;
-                        double ys = kHoriz * xs + bHoriz;
+                        var xs = horizFactor * x + xHorizLeft;
+                        var ys = kHoriz * xs + bHoriz;
 
                         if ( ( xs >= 0 ) && ( ys >= 0 ) && ( xs < srcWidth ) && ( ys < srcHeight ) )
                         {
@@ -479,7 +479,7 @@ namespace AForge.Imaging.Filters
                             p4 += sx2 * pixelSize;
 
                             // interpolate using 4 points
-                            for ( int i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
+                            for ( var i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
                             {
                                 *dst = (byte) (
                                     dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +

@@ -61,7 +61,7 @@ namespace FastColoredTextBoxNS
 
         public static GraphicsPath GetRoundedRectangle(Rectangle rect, int d)
         {
-            GraphicsPath gp = new GraphicsPath();
+            var gp = new GraphicsPath();
 
             gp.AddArc(rect.X, rect.Y, d, d, 180, 90);
             gp.AddArc(rect.X + rect.Width - d, rect.Y, d, d, 270, 90);
@@ -124,7 +124,7 @@ namespace FastColoredTextBoxNS
             //draw chars
             using(var f = new Font(range.tb.Font, FontStyle))
             {
-                Line line = range.tb[range.Start.iLine];
+                var line = range.tb[range.Start.iLine];
                 float dx = range.tb.CharWidth;
                 float y = position.Y + range.tb.LineInterval/2;
                 float x = position.X - range.tb.CharWidth/3;
@@ -135,12 +135,12 @@ namespace FastColoredTextBoxNS
                 if (range.tb.ImeAllowed)
                 {
                     //IME mode
-                    for (int i = range.Start.iChar; i < range.End.iChar; i++)
+                    for (var i = range.Start.iChar; i < range.End.iChar; i++)
                     {
-                        SizeF size = FastColoredTextBox.GetCharSize(f, line[i].c);
+                        var size = FastColoredTextBox.GetCharSize(f, line[i].c);
 
                         var gs = gr.Save();
-                        float k = size.Width > range.tb.CharWidth + 1 ? range.tb.CharWidth/size.Width : 1;
+                        var k = size.Width > range.tb.CharWidth + 1 ? range.tb.CharWidth/size.Width : 1;
                         gr.TranslateTransform(x, y + (1 - k)*range.tb.CharHeight/2);
                         gr.ScaleTransform(k, (float) Math.Sqrt(k));
                         gr.DrawString(line[i].c.ToString(), f, ForeBrush, 0, 0, stringFormat);
@@ -151,7 +151,7 @@ namespace FastColoredTextBoxNS
                 else
                 {
                     //classic mode 
-                    for (int i = range.Start.iChar; i < range.End.iChar; i++)
+                    for (var i = range.Start.iChar; i < range.End.iChar; i++)
                     {
                         //draw char
                         gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
@@ -163,7 +163,7 @@ namespace FastColoredTextBoxNS
 
         public override string GetCSS()
         {
-            string result = "";
+            var result = "";
 
             if (BackgroundBrush is SolidBrush)
             {
@@ -228,10 +228,10 @@ namespace FastColoredTextBoxNS
             {
                 base.Draw(gr, position, range);
 
-                int firstNonSpaceSymbolX = position.X;
+                var firstNonSpaceSymbolX = position.X;
                 
                 //find first non space symbol
-                for (int i = range.Start.iChar; i < range.End.iChar; i++)
+                for (var i = range.Start.iChar; i < range.End.iChar; i++)
                     if (range.tb[range.Start.iLine][i].c != ' ')
                         break;
                     else
@@ -243,7 +243,7 @@ namespace FastColoredTextBoxNS
             else
             {
                 //draw '...'
-                using(Font f = new Font(range.tb.Font, FontStyle))
+                using(var f = new Font(range.tb.Font, FontStyle))
                     gr.DrawString("...", f, ForeBrush, range.tb.LeftIndent, position.Y - 2);
                 //create marker
                 range.tb.AddVisualMarker(new FoldedAreaMarker(range.Start.iLine, new Rectangle(range.tb.LeftIndent + 2, position.Y, 2 * range.tb.CharHeight, range.tb.CharHeight)));
@@ -314,7 +314,7 @@ namespace FastColoredTextBoxNS
             //draw background
             if (BackgroundBrush != null)
             {
-                Rectangle rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
+                var rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
                 if (rect.Width == 0)
                     return;
                 gr.FillRectangle(BackgroundBrush, rect);
@@ -323,7 +323,7 @@ namespace FastColoredTextBoxNS
 
         public override string GetCSS()
         {
-            string result = "";
+            var result = "";
 
             if (BackgroundBrush is SolidBrush)
             {
@@ -351,9 +351,9 @@ namespace FastColoredTextBoxNS
         public override void Draw(Graphics gr, Point position, Range range)
         {
             //get last char coordinates
-            Point p = range.tb.PlaceToPoint(range.End);
+            var p = range.tb.PlaceToPoint(range.End);
             //draw small square under char
-            Rectangle rect = new Rectangle(p.X - 5, p.Y + range.tb.CharHeight - 2, 4, 3);
+            var rect = new Rectangle(p.X - 5, p.Y + range.tb.CharHeight - 2, 4, 3);
             gr.FillPath(Brushes.White, GetRoundedRectangle(rect, 1));
             gr.DrawPath(borderPen, GetRoundedRectangle(rect, 1));
             //add visual marker for handle mouse events
@@ -393,7 +393,7 @@ namespace FastColoredTextBoxNS
             var offset = -1;
             var points = new List<Point>();
 
-            for (int i = start.X; i <= end.X; i += 2)
+            for (var i = start.X; i <= end.X; i += 2)
             {
                 points.Add(new Point(i, start.Y + offset));
                 offset = -offset;

@@ -179,7 +179,7 @@ namespace AForge.Video.Kinect
         {
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -197,7 +197,7 @@ namespace AForge.Video.Kinect
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -236,9 +236,9 @@ namespace AForge.Video.Kinect
             this.provideOriginalDepthImage = provideOriginalDepthImage;
 
             // initialize gamma values (as shown in the original Kinect samples)
-            for ( int i = 0; i < 2048; i++ )
+            for ( var i = 0; i < 2048; i++ )
             {
-                double value = i / 2048.0;
+                var value = i / 2048.0;
                 value = Math.Pow( value, 3.0 );
                 gamma[i] = (ushort) ( value * 36.0 * 256.0 );
             }
@@ -268,7 +268,7 @@ namespace AForge.Video.Kinect
                 {
                     if ( device == null )
                     {
-                        bool success = false;
+                        var success = false;
 
                         try
                         {
@@ -374,7 +374,7 @@ namespace AForge.Video.Kinect
                 {
                     if ( device != null )
                     {
-                        bool deviceFailed = device.IsDeviceFailed( deviceID );
+                        var deviceFailed = device.IsDeviceFailed( deviceID );
 
                         if ( !deviceFailed )
                         {
@@ -424,21 +424,21 @@ namespace AForge.Video.Kinect
 
                 unsafe
                 {
-                    ushort* src = (ushort*) imageBuffer.ToPointer( );
+                    var src = (ushort*) imageBuffer.ToPointer( );
 
                     if ( !provideOriginalDepthImage )
                     {
                         // color the depth image into white->red->yellow->green->cyan->blue->black gradient
-                        byte* dst = (byte*) data.Scan0.ToPointer( );
-                        int offset = data.Stride - width * 3;
+                        var dst = (byte*) data.Scan0.ToPointer( );
+                        var offset = data.Stride - width * 3;
                         byte red, green, blue;
 
-                        for ( int y = 0; y < height; y++ )
+                        for ( var y = 0; y < height; y++ )
                         {
-                            for ( int x = 0; x < width; x++, src++, dst += 3 )
+                            for ( var x = 0; x < width; x++, src++, dst += 3 )
                             {
-                                ushort pval = gamma[*src];
-                                ushort lb 	= (ushort) ( pval & 0xff );
+                                var pval = gamma[*src];
+                                var lb 	= (ushort) ( pval & 0xff );
 
                                 switch ( pval >> 8 )
                                 {
@@ -487,8 +487,8 @@ namespace AForge.Video.Kinect
                     else
                     {
                         // copy original depth image
-                        ushort* dst = (ushort*) data.Scan0.ToPointer( );
-                        int offset = ( data.Stride >> 1 ) - width;
+                        var dst = (ushort*) data.Scan0.ToPointer( );
+                        var offset = ( data.Stride >> 1 ) - width;
 
                         if ( offset == 0 )
                         {
@@ -496,7 +496,7 @@ namespace AForge.Video.Kinect
                         }
                         else
                         {
-                            for ( int y = 0; y < height; y++ )
+                            for ( var y = 0; y < height; y++ )
                             {
                                 SystemTools.CopyUnmanagedMemory( (byte*) dst, (byte*) src, width * 2 );
 

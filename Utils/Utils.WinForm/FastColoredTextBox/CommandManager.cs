@@ -222,7 +222,7 @@ namespace FastColoredTextBoxNS
 
         protected virtual void OnTextChanged(bool invert)
         {
-            bool b = sel.Start.iLine < lastSel.Start.iLine;
+            var b = sel.Start.iLine < lastSel.Start.iLine;
             if (invert)
             {
                 if (b)

@@ -284,7 +284,7 @@ namespace FastColoredTextBoxNS
             tb.SelectionChanged += new EventHandler(tb_SelectionChanged);
             tb.KeyPressed += new KeyPressEventHandler(tb_KeyPressed);
 
-            Form form = tb.FindForm();
+            var form = tb.FindForm();
             if (form != null)
             {
                 form.LocationChanged += delegate { SafetyClose(); };
@@ -347,7 +347,7 @@ namespace FastColoredTextBoxNS
 
         void tb_KeyPressed(object sender, KeyPressEventArgs e)
         {
-            bool backspaceORdel = e.KeyChar == '\b' || e.KeyChar == 0xff;
+            var backspaceORdel = e.KeyChar == '\b' || e.KeyChar == 0xff;
 
             /*
             if (backspaceORdel)
@@ -391,10 +391,10 @@ namespace FastColoredTextBoxNS
             AutoScrollMinSize -= new Size(1, 0);
             AutoScrollMinSize += new Size(1, 0);
             //get fragment around caret
-            Range fragment = tb.Selection.GetFragment(Menu.SearchPattern);
-            string text = fragment.Text;
+            var fragment = tb.Selection.GetFragment(Menu.SearchPattern);
+            var text = fragment.Text;
             //calc screen point for popup menu
-            Point point = tb.PlaceToPoint(fragment.End);
+            var point = tb.PlaceToPoint(fragment.End);
             point.Offset(2, tb.CharHeight);
             //
             if (forced || (text.Length >= Menu.MinFragmentLength 
@@ -402,12 +402,12 @@ namespace FastColoredTextBoxNS
                 && (tb.Selection.Start > fragment.Start || text.Length == 0/*pops up only if caret is after first letter*/)))
             {
                 Menu.Fragment = fragment;
-                bool foundSelected = false;
+                var foundSelected = false;
                 //build popup menu
                 foreach (var item in sourceItems)
                 {
                     item.Parent = Menu;
-                    CompareResult res = item.Compare(text);
+                    var res = item.Compare(text);
                     if(res != CompareResult.Hidden)
                         visibleItems.Add(item);
                     if (res == CompareResult.VisibleAndSelected && !foundSelected)
@@ -429,7 +429,7 @@ namespace FastColoredTextBoxNS
             {
                 if (!Menu.Visible)
                 {
-                    CancelEventArgs args = new CancelEventArgs();
+                    var args = new CancelEventArgs();
                     Menu.OnOpening(args);
                     if(!args.Cancel)
                         Menu.Show(tb, point);
@@ -453,7 +453,7 @@ namespace FastColoredTextBoxNS
             prevSelection = tb.Selection.Start;*/
             if (Menu.Visible)
             {
-                bool needClose = false;
+                var needClose = false;
 
                 if (!tb.Selection.IsEmpty)
                     needClose = true;
@@ -463,7 +463,7 @@ namespace FastColoredTextBoxNS
                         if (tb.Selection.Start.iLine == Menu.Fragment.End.iLine && tb.Selection.Start.iChar == Menu.Fragment.End.iChar + 1)
                         {
                             //user press key at end of fragment
-                            char c = tb.Selection.CharBeforeStart;
+                            var c = tb.Selection.CharBeforeStart;
                             if (!Regex.IsMatch(c.ToString(), Menu.SearchPattern))//check char
                                 needClose = true;
                         }
@@ -505,7 +505,7 @@ namespace FastColoredTextBoxNS
             if (oldItemCount == visibleItems.Count)
                 return;
 
-            int needHeight = ItemHeight * visibleItems.Count + 1;
+            var needHeight = ItemHeight * visibleItems.Count + 1;
             Height = Math.Min(needHeight, MaximumSize.Height);
             Menu.CalcSize();
 
@@ -518,13 +518,13 @@ namespace FastColoredTextBoxNS
             AdjustScroll();
 
             var itemHeight = ItemHeight;
-            int startI = VerticalScroll.Value / itemHeight - 1;
-            int finishI = (VerticalScroll.Value + ClientSize.Height) / itemHeight + 1;
+            var startI = VerticalScroll.Value / itemHeight - 1;
+            var finishI = (VerticalScroll.Value + ClientSize.Height) / itemHeight + 1;
             startI = Math.Max(startI, 0);
             finishI = Math.Min(finishI, visibleItems.Count);
-            int y = 0;
-            int leftPadding = 18;
-            for (int i = startI; i < finishI; i++)
+            var y = 0;
+            var leftPadding = 18;
+            for (var i = startI; i < finishI; i++)
             {
                 y = i * itemHeight - VerticalScroll.Value;
 
@@ -587,8 +587,8 @@ namespace FastColoredTextBoxNS
             tb.TextSource.Manager.BeginAutoUndoCommands();
             try
             {
-                AutocompleteItem item = FocussedItem;
-                SelectingEventArgs args = new SelectingEventArgs()
+                var item = FocussedItem;
+                var args = new SelectingEventArgs()
                 {
                     Item = item,
                     SelectedIndex = FocussedItemIndex
@@ -611,7 +611,7 @@ namespace FastColoredTextBoxNS
 
                 Menu.Close();
                 //
-                SelectedEventArgs args2 = new SelectedEventArgs()
+                var args2 = new SelectedEventArgs()
                 {
                     Item = item,
                     Tb = Menu.Fragment.tb
@@ -627,7 +627,7 @@ namespace FastColoredTextBoxNS
 
         private void DoAutocomplete(AutocompleteItem item, Range fragment)
         {
-            string newText = item.GetTextForReplace();
+            var newText = item.GetTextForReplace();
 
             //replace text of fragment
             var tb = fragment.tb;
@@ -764,7 +764,7 @@ namespace FastColoredTextBoxNS
 
         public void SetAutocompleteItems(ICollection<string> items)
         {
-            List<AutocompleteItem> list = new List<AutocompleteItem>(items.Count);
+            var list = new List<AutocompleteItem>(items.Count);
             foreach (var item in items)
                 list.Add(new AutocompleteItem(item));
             SetAutocompleteItems(list);

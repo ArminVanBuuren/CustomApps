@@ -145,21 +145,21 @@ namespace AForge.AMath.Geometry
 
             float Z0 = 0, scale = 1;
 
-            Vector3 X0 = new Vector3( points[0].X );
-            Vector3 Y0 = new Vector3( points[0].Y );
+            var X0 = new Vector3( points[0].X );
+            var Y0 = new Vector3( points[0].Y );
 
-            Vector3 XI = new Vector3( points[1].X, points[2].X, points[3].X );
-            Vector3 YI = new Vector3( points[1].Y, points[2].Y, points[3].Y );
+            var XI = new Vector3( points[1].X, points[2].X, points[3].X );
+            var YI = new Vector3( points[1].Y, points[2].Y, points[3].Y );
 
-            int count = 0;
+            var count = 0;
 
-            Vector3 iVector = new Vector3( );
-            Vector3 jVector = new Vector3( );
-            Vector3 kVector = new Vector3( );
-            Vector3 imageXs = new Vector3( );
-            Vector3 imageYs = new Vector3( );
+            var iVector = new Vector3( );
+            var jVector = new Vector3( );
+            var kVector = new Vector3( );
+            var imageXs = new Vector3( );
+            var imageYs = new Vector3( );
 
-            Vector3 eps = new Vector3( 1 );
+            var eps = new Vector3( 1 );
 
             for ( ; count < 100; count++ )
             {
@@ -171,8 +171,8 @@ namespace AForge.AMath.Geometry
                 iVector = modelPseudoInverse * imageXs;
                 jVector = modelPseudoInverse * imageYs;
                 // convert them to unit vectors i and j
-                float iNorm = iVector.Normalize( );
-                float jNorm = jVector.Normalize( );
+                var iNorm = iVector.Normalize( );
+                var jNorm = jVector.Normalize( );
                 // scale of projection
                 scale = ( iNorm + jNorm ) / 2;
                 // calculate n vector k
@@ -181,7 +181,7 @@ namespace AForge.AMath.Geometry
                 Z0 = focalLength / scale;
 
                 // calculate new epsilon values
-                Vector3 oldEps = eps;
+                var oldEps = eps;
                 eps = ( modelVectors * kVector ) / Z0 + 1;
 
                 // check if it is time to stop
@@ -193,7 +193,7 @@ namespace AForge.AMath.Geometry
             rotation = Matrix3x3.CreateFromRows( iVector, jVector, kVector );
 
             // create translation vector
-            Vector3 temp = rotation * modelPoints[0];
+            var temp = rotation * modelPoints[0];
             translation = new Vector3(
                 points[0].X / scale - temp.X,
                 points[0].Y / scale - temp.Y,

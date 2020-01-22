@@ -120,26 +120,26 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, UnmanagedImage overlay )
         {
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // initialize other variables
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
-            int lineSize  = width * pixelSize;
-            int offset    = image.Stride - lineSize;
-            int ovrOffset = overlay.Stride - lineSize;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var lineSize  = width * pixelSize;
+            var offset    = image.Stride - lineSize;
+            var ovrOffset = overlay.Stride - lineSize;
             // percentage of overlay image
-            double q = 1.0 - sourcePercent;
+            var q = 1.0 - sourcePercent;
 
             // do the job
-            byte * ptr = (byte*) image.ImageData.ToPointer( );
-            byte * ovr = (byte*) overlay.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
+            var ovr = (byte*) overlay.ImageData.ToPointer( );
 
             // for each line
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
                 // for each pixel
-                for ( int x = 0; x < lineSize; x++, ptr++, ovr++ )
+                for ( var x = 0; x < lineSize; x++, ptr++, ovr++ )
                 {
                     *ptr = (byte) ( ( sourcePercent * ( *ptr ) ) + ( q * ( *ovr ) ) );
                 }

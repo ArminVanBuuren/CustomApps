@@ -142,33 +142,33 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
 
             // processing start and stop Y positions
-            int startY  = rect.Top;
-            int stopY   = startY + rect.Height;
+            var startY  = rect.Top;
+            var stopY   = startY + rect.Height;
             // processing width and offset
-            int width   = rect.Width;
-            int offset  = image.Stride - width * pixelSize;
+            var width   = rect.Width;
+            var offset  = image.Stride - width * pixelSize;
 
             // loop indexes and temp vars
             int i, j, k, x, t1, t2;
             // line length to process
-            int len = (int) ( ( width - 1 ) / pixelWidth ) + 1;
+            var len = (int) ( ( width - 1 ) / pixelWidth ) + 1;
             // reminder
-            int rem = ( ( width - 1 ) % pixelWidth ) + 1;
+            var rem = ( ( width - 1 ) % pixelWidth ) + 1;
 
             // do the job
-            byte* src = (byte*) image.ImageData.ToPointer( );
+            var src = (byte*) image.ImageData.ToPointer( );
             // allign pointer to the first pixel to process
             src += ( startY * image.Stride + rect.Left * pixelSize );
 
-            byte* dst = src;
+            var dst = src;
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // Grayscale image
-                int[] tmp = new int[len];
+                var tmp = new int[len];
 
                 for ( int y1 = startY, y2 = startY; y1 < stopY; )
                 {
@@ -209,7 +209,7 @@ namespace AForge.Imaging.Filters
             else
             {
                 // RGB image
-                int[] tmp = new int[len * 3];
+                var tmp = new int[len * 3];
 
                 for ( int y1 = startY, y2 = startY; y1 < stopY; )
                 {

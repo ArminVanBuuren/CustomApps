@@ -63,11 +63,11 @@ namespace AForge.Imaging.Textures
         ///  
         public float[,] Generate( int width, int height )
         {
-            float[,] texture = new float[height, width];
+            var texture = new float[height, width];
 
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
-                for ( int x = 0; x < width; x++ )
+                for ( var x = 0; x < width; x++ )
                 {
                     texture[y, x] =
                         Math.Max( 0.0f, Math.Min( 1.0f,

@@ -189,7 +189,7 @@ namespace AForge.AMath.Geometry
             theta *= (float) ( Math.PI / 180 );
 
             float sine = (float) Math.Sin( theta ), cosine = (float) Math.Cos( theta );
-            Point pt1 = new Point( radius * cosine, radius * sine );
+            var pt1 = new Point( radius * cosine, radius * sine );
 
             // -1/tan, to get the slope of the line, and not the slope of the normal
             k = -cosine / sine;
@@ -231,10 +231,10 @@ namespace AForge.AMath.Geometry
         /// 
         public float GetAngleBetweenLines( Line secondLine )
         {
-            float k2 = secondLine.k;
+            var k2 = secondLine.k;
 
-            bool isVertical1 = IsVertical;
-            bool isVertical2 = secondLine.IsVertical;
+            var isVertical1 = IsVertical;
+            var isVertical2 = secondLine.IsVertical;
 
             // check if lines are parallel
             if ( ( k == k2 ) || ( isVertical1 && isVertical2 ) )
@@ -244,7 +244,7 @@ namespace AForge.AMath.Geometry
 
             if ( ( !isVertical1 ) && ( !isVertical2 ) )
             {
-                float tanPhi = ( ( k2 > k ) ? ( k2 - k ) : ( k - k2 ) ) / ( 1 + k * k2 );
+                var tanPhi = ( ( k2 > k ) ? ( k2 - k ) : ( k - k2 ) ) / ( 1 + k * k2 );
                 angle = (float) Math.Atan( tanPhi );
             }
             else
@@ -285,11 +285,11 @@ namespace AForge.AMath.Geometry
         /// 
         public Point? GetIntersectionWith( Line secondLine )
         {
-            float k2 = secondLine.k;
-            float b2 = secondLine.b;
+            var k2 = secondLine.k;
+            var b2 = secondLine.b;
 
-            bool isVertical1 = IsVertical;
-            bool isVertical2 = secondLine.IsVertical;
+            var isVertical1 = IsVertical;
+            var isVertical2 = secondLine.IsVertical;
 
             Point? intersection = null;
 
@@ -313,7 +313,7 @@ namespace AForge.AMath.Geometry
                 else
                 {
                     // the intersection is at x=(b2-b1)/(k1-k2), and y=k1*x+b1
-                    float x = ( b2 - b ) / ( k - k2 );
+                    var x = ( b2 - b ) / ( k - k2 );
                     intersection = new Point( x, k * x + b );
                 }
             }
@@ -358,7 +358,7 @@ namespace AForge.AMath.Geometry
 
             if ( !IsVertical )
             {
-                float div = (float) Math.Sqrt( k * k + 1 );
+                var div = (float) Math.Sqrt( k * k + 1 );
                 distance = Math.Abs( ( k * point.X + b - point.Y ) / div );
             }
             else

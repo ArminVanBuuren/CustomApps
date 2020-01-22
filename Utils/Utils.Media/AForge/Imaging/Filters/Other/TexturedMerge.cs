@@ -161,12 +161,12 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, UnmanagedImage overlay )
         {
             // get image dimension
-            int width	= image.Width;
-            int height	= image.Height;
+            var width	= image.Width;
+            var height	= image.Height;
 
             // width and height to process
-            int widthToProcess  = width;
-            int heightToProcess = height;
+            var widthToProcess  = width;
+            var heightToProcess = height;
 
             // if generator was specified, then generate a texture
             // otherwise use provided texture
@@ -180,24 +180,24 @@ namespace AForge.Imaging.Filters
                 heightToProcess = Math.Min( height, texture.GetLength( 0 ) );
             }
 
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
-            int srcOffset = image.Stride - widthToProcess * pixelSize;
-            int ovrOffset = overlay.Stride - widthToProcess * pixelSize;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var srcOffset = image.Stride - widthToProcess * pixelSize;
+            var ovrOffset = overlay.Stride - widthToProcess * pixelSize;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
-            byte* ovr = (byte*) overlay.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
+            var ovr = (byte*) overlay.ImageData.ToPointer( );
 
             // for each line
-            for ( int y = 0; y < heightToProcess; y++ )
+            for ( var y = 0; y < heightToProcess; y++ )
             {
                 // for each pixel
-                for ( int x = 0; x < widthToProcess; x++ )
+                for ( var x = 0; x < widthToProcess; x++ )
                 {
                     double t1 = texture[y, x];
-                    double t2 = 1 - t1;
+                    var t2 = 1 - t1;
 
-                    for ( int i = 0; i < pixelSize; i++, ptr++, ovr++ )
+                    for ( var i = 0; i < pixelSize; i++, ptr++, ovr++ )
                     {
                         *ptr = (byte) Math.Min( 255.0f, *ptr * t1 + *ovr * t2 );
                     }

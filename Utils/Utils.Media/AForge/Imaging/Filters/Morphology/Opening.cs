@@ -100,8 +100,8 @@ namespace AForge.Imaging.Filters
         ///
         public Bitmap Apply( Bitmap image )
         {
-            Bitmap tempImage = errosion.Apply( image );
-            Bitmap destImage = dilatation.Apply( tempImage );
+            var tempImage = errosion.Apply( image );
+            var destImage = dilatation.Apply( tempImage );
 
             tempImage.Dispose( );
 
@@ -123,8 +123,8 @@ namespace AForge.Imaging.Filters
         /// 
         public Bitmap Apply( BitmapData imageData )
         {
-            Bitmap tempImage = errosion.Apply( imageData );
-            Bitmap destImage = dilatation.Apply( tempImage );
+            var tempImage = errosion.Apply( imageData );
+            var destImage = dilatation.Apply( tempImage );
 
             tempImage.Dispose( );
 
@@ -147,7 +147,7 @@ namespace AForge.Imaging.Filters
         ///
         public UnmanagedImage Apply( UnmanagedImage image )
         {
-            UnmanagedImage destImage = errosion.Apply( image );
+            var destImage = errosion.Apply( image );
             dilatation.ApplyInPlace( destImage );
 
             return destImage;

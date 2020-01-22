@@ -118,7 +118,7 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -136,7 +136,7 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -335,10 +335,10 @@ namespace AForge.Video.DirectShow
         /// 
         private void WorkerThread( )
         {
-            ReasonToFinishPlaying reasonToStop = ReasonToFinishPlaying.StoppedByUser;
+            var reasonToStop = ReasonToFinishPlaying.StoppedByUser;
 
             // grabber
-            Grabber grabber = new Grabber( this );
+            var grabber = new Grabber( this );
 
             // objects
             object graphObject = null;
@@ -356,7 +356,7 @@ namespace AForge.Video.DirectShow
             try
             {
                 // get type for filter graph
-                Type type = Type.GetTypeFromCLSID( Clsid.FilterGraph );
+                var type = Type.GetTypeFromCLSID( Clsid.FilterGraph );
                 if ( type == null )
                     throw new ApplicationException( "Failed creating filter graph" );
 
@@ -383,15 +383,15 @@ namespace AForge.Video.DirectShow
                 graph.AddFilter( grabberBase, "grabber" );
 
                 // set media type
-                AMMediaType mediaType = new AMMediaType( );
+                var mediaType = new AMMediaType( );
                 mediaType.MajorType = MediaType.Video;
                 mediaType.SubType = MediaSubType.RGB24;
                 sampleGrabber.SetMediaType( mediaType );
 
                 // connect pins
-                int pinToTry = 0;
+                var pinToTry = 0;
 
-                IPin inPin = Tools.GetInPin( grabberBase, 0 );
+                var inPin = Tools.GetInPin( grabberBase, 0 );
                 IPin outPin = null;
 
                 // find output pin acceptable by sample grabber
@@ -423,7 +423,7 @@ namespace AForge.Video.DirectShow
                 // get media type
                 if ( sampleGrabber.GetConnectedMediaType( mediaType ) == 0 )
                 {
-                    VideoInfoHeader vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
+                    var vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
 
                     grabber.Width = vih.BmiHeader.Width;
                     grabber.Height = vih.BmiHeader.Height;
@@ -437,7 +437,7 @@ namespace AForge.Video.DirectShow
                     graph.Render( Tools.GetOutPin( grabberBase, 0 ) );
 
                     // configure video window
-                    IVideoWindow window = (IVideoWindow) graphObject;
+                    var window = (IVideoWindow) graphObject;
                     window.put_AutoShow( false );
                     window = null;
                 }
@@ -450,7 +450,7 @@ namespace AForge.Video.DirectShow
                 // disable clock, if someone requested it
                 if ( !referenceClockEnabled )
                 {
-                    IMediaFilter mediaFilter = (IMediaFilter) graphObject;
+                    var mediaFilter = (IMediaFilter) graphObject;
                     mediaFilter.SetSyncSource( null );
                 }
 
@@ -579,24 +579,24 @@ namespace AForge.Video.DirectShow
                 if ( parent.NewFrame != null )
                 {
                     // create new image
-                    System.Drawing.Bitmap image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
+                    var image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
 
                     // lock bitmap data
-                    BitmapData imageData = image.LockBits(
+                    var imageData = image.LockBits(
                         new Rectangle( 0, 0, width, height ),
                         ImageLockMode.ReadWrite,
                         PixelFormat.Format24bppRgb );
 
                     // copy image data
-                    int srcStride = imageData.Stride;
-                    int dstStride = imageData.Stride;
+                    var srcStride = imageData.Stride;
+                    var dstStride = imageData.Stride;
 
                     unsafe
                     {
-                        byte* dst = (byte*) imageData.Scan0.ToPointer( ) + dstStride * ( height - 1 );
-                        byte* src = (byte*) buffer.ToPointer( );
+                        var dst = (byte*) imageData.Scan0.ToPointer( ) + dstStride * ( height - 1 );
+                        var src = (byte*) buffer.ToPointer( );
 
-                        for ( int y = 0; y < height; y++ )
+                        for ( var y = 0; y < height; y++ )
                         {
                             Win32.memcpy( dst, src, srcStride );
                             dst -= dstStride;

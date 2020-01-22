@@ -103,22 +103,22 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // validate rectangle
-            Rectangle srcRect = rect;
+            var srcRect = rect;
             srcRect.Intersect( new Rectangle( 0, 0, sourceData.Width, sourceData.Height ) );
 
-            int xmin = srcRect.Left;
-            int ymin = srcRect.Top;
-            int ymax = srcRect.Bottom - 1;
-            int copyWidth = srcRect.Width;
+            var xmin = srcRect.Left;
+            var ymin = srcRect.Top;
+            var ymax = srcRect.Bottom - 1;
+            var copyWidth = srcRect.Width;
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
-            int copySize  = copyWidth * pixelSize;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var copySize  = copyWidth * pixelSize;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( ) + ymin * srcStride + xmin * pixelSize;
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             if ( rect.Top < 0 )
             {
@@ -130,7 +130,7 @@ namespace AForge.Imaging.Filters
             }
 
             // for each line
-            for ( int y = ymin; y <= ymax; y++ )
+            for ( var y = ymin; y <= ymax; y++ )
             {
                 AForge.SystemTools.CopyUnmanagedMemory( dst, src, copySize );
                 src += srcStride;

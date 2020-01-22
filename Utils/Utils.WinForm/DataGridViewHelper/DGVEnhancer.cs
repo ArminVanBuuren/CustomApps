@@ -126,7 +126,7 @@ namespace Utils.WinForm.DataGridViewHelper
             }
 
             var columnsCount = positionOfColumn.Count;
-            foreach (T instance in data)
+            foreach (var instance in data)
             {
                 var tp = instance.GetType();
                 var props2 = tp.GetProperties(PropertyFlags);

@@ -94,32 +94,32 @@ namespace AForge.Imaging.Filters
         protected override System.Drawing.Size CalculateNewImageSize( UnmanagedImage sourceData )
         {
             // get source image size
-            int width = sourceData.Width;
-            int height = sourceData.Height;
-            int offset = sourceData.Stride -
+            var width = sourceData.Width;
+            var height = sourceData.Height;
+            var offset = sourceData.Stride -
                 ( ( sourceData.PixelFormat == PixelFormat.Format8bppIndexed ) ? width : width * 3 );
 
             // color to remove
-            byte r = colorToRemove.R;
-            byte g = colorToRemove.G;
-            byte b = colorToRemove.B;
+            var r = colorToRemove.R;
+            var g = colorToRemove.G;
+            var b = colorToRemove.B;
 
             minX = width;
             minY = height;
-            int maxX = 0;
-            int maxY = 0;
+            var maxX = 0;
+            var maxY = 0;
 
             // find rectangle which contains something except color to remove
             unsafe
             {
-                byte* src = (byte*) sourceData.ImageData.ToPointer( );
+                var src = (byte*) sourceData.ImageData.ToPointer( );
 
                 if ( sourceData.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
                     // grayscale
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
-                        for ( int x = 0; x < width; x++, src++ )
+                        for ( var x = 0; x < width; x++, src++ )
                         {
                             if ( *src != g )
                             {
@@ -139,9 +139,9 @@ namespace AForge.Imaging.Filters
                 else
                 {
                     // RGB
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
-                        for ( int x = 0; x < width; x++, src += 3 )
+                        for ( var x = 0; x < width; x++, src += 3 )
                         {
                             if (
                                 ( src[RGB.R] != r ) ||
@@ -182,16 +182,16 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get destination image size
-            int newWidth  = destinationData.Width;
-            int newHeight = destinationData.Height;
+            var newWidth  = destinationData.Width;
+            var newHeight = destinationData.Height;
 
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
-            int copySize  = newWidth;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var copySize  = newWidth;
 
             // do the job
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             src += ( minY * srcStride );
 
@@ -206,7 +206,7 @@ namespace AForge.Imaging.Filters
             }
 
             // copy image
-            for ( int y = 0; y < newHeight; y++ )
+            for ( var y = 0; y < newHeight; y++ )
             {
                 AForge.SystemTools.CopyUnmanagedMemory( dst, src, copySize );
                 dst += dstStride;

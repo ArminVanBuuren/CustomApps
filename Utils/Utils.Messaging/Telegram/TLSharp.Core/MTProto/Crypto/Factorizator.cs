@@ -46,12 +46,12 @@ namespace TLSharp.Core.MTProto.Crypto
         public static long findSmallMultiplierLopatin(long what)
         {
             long g = 0;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                int q = (random.Next(128) & 15) + 17;
+                var q = (random.Next(128) & 15) + 17;
                 long x = random.Next(1000000000) + 1, y = x;
-                int lim = 1 << (i + 18);
-                for (int j = 1; j < lim; j++)
+                var lim = 1 << (i + 18);
+                for (var j = 1; j < lim; j++)
                 {
                     long a = x, b = x, c = q;
                     while (b != 0)
@@ -72,7 +72,7 @@ namespace TLSharp.Core.MTProto.Crypto
                         b >>= 1;
                     }
                     x = c;
-                    long z = x < y ? y - x : x - y;
+                    var z = x < y ? y - x : x - y;
                     g = GCD(z, what);
                     if (g != 1)
                     {
@@ -89,7 +89,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
             }
 
-            long p = what / g;
+            var p = what / g;
             return Math.Min(p, g);
         }
 
@@ -120,8 +120,8 @@ namespace TLSharp.Core.MTProto.Crypto
         {
             if (pq.BitLength < 64)
             {
-                long pqlong = pq.LongValue;
-                long divisor = findSmallMultiplierLopatin(pqlong);
+                var pqlong = pq.LongValue;
+                var divisor = findSmallMultiplierLopatin(pqlong);
                 return new FactorizedPair(BigInteger.ValueOf(divisor), BigInteger.ValueOf(pqlong / divisor));
             }
             else {

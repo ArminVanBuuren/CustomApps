@@ -71,10 +71,10 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamReader sr = new StreamReader(File.OpenRead(path), OptionDefaultStreamEncoding))
 #else
-            using (StreamReader sr = new StreamReader(path, OptionDefaultStreamEncoding))
+            using (var sr = new StreamReader(path, OptionDefaultStreamEncoding))
 #endif
             {
-                Encoding encoding = DetectEncoding(sr);
+                var encoding = DetectEncoding(sr);
                 return encoding;
             }
         }
@@ -91,7 +91,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamReader sr = new StreamReader(File.OpenRead(path), OptionDefaultStreamEncoding))
 #else
-            using (StreamReader sr = new StreamReader(path, OptionDefaultStreamEncoding))
+            using (var sr = new StreamReader(path, OptionDefaultStreamEncoding))
 #endif
             {
                 Load(sr);
@@ -111,7 +111,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamReader sr = new StreamReader(File.OpenRead(path), detectEncodingFromByteOrderMarks))
 #else
-            using (StreamReader sr = new StreamReader(path, detectEncodingFromByteOrderMarks))
+            using (var sr = new StreamReader(path, detectEncodingFromByteOrderMarks))
 #endif
             {
                 Load(sr);
@@ -134,7 +134,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamReader sr = new StreamReader(File.OpenRead(path), encoding))
 #else
-            using (StreamReader sr = new StreamReader(path, encoding))
+            using (var sr = new StreamReader(path, encoding))
 #endif
             {
                 Load(sr);
@@ -158,7 +158,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamReader sr = new StreamReader(File.OpenRead(path), encoding, detectEncodingFromByteOrderMarks))
 #else
-            using (StreamReader sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks))
+            using (var sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks))
 #endif
             {
                 Load(sr);
@@ -184,7 +184,7 @@ namespace HtmlAgilityPack
             using (StreamReader sr = new StreamReader(File.OpenRead(path), encoding, detectEncodingFromByteOrderMarks, buffersize))
 
 #else
-            using (StreamReader sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks, buffersize))
+            using (var sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks, buffersize))
 #endif
             {
                 Load(sr);
@@ -200,7 +200,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamWriter sw = new StreamWriter(File.OpenWrite(filename), GetOutEncoding()))
 #else
-            using (StreamWriter sw = new StreamWriter(filename, false, GetOutEncoding()))
+            using (var sw = new StreamWriter(filename, false, GetOutEncoding()))
 #endif
             {
                 Save(sw);
@@ -226,7 +226,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             using (StreamWriter sw = new StreamWriter(File.OpenWrite(filename), encoding))
 #else
-            using (StreamWriter sw = new StreamWriter(filename, false, encoding))
+            using (var sw = new StreamWriter(filename, false, encoding))
 #endif
             {
                 Save(sw);

@@ -79,9 +79,9 @@ namespace HtmlAgilityPack
         {
             get
             {
-                string s = "";
-                int i = 0;
-                foreach (MixedCodeDocumentFragment frag in _fragments)
+                var s = "";
+                var i = 0;
+                foreach (var frag in _fragments)
                 {
                     switch (frag._type)
                     {
@@ -288,7 +288,7 @@ namespace HtmlAgilityPack
             _textfragments.Clear();
 
             // all pseudo constructors get down to this one
-            using (StreamReader sr = reader as StreamReader)
+            using (var sr = reader as StreamReader)
             {
                 if (sr != null)
                 {
@@ -316,7 +316,7 @@ namespace HtmlAgilityPack
         /// <param name="outStream">The stream to which you want to save.</param>
         public void Save(Stream outStream)
         {
-            StreamWriter sw = new StreamWriter(outStream, GetOutEncoding());
+            var sw = new StreamWriter(outStream, GetOutEncoding());
             Save(sw);
         }
 
@@ -327,7 +327,7 @@ namespace HtmlAgilityPack
         /// <param name="encoding">The character encoding to use.</param>
         public void Save(Stream outStream, Encoding encoding)
         {
-            StreamWriter sw = new StreamWriter(outStream, encoding);
+            var sw = new StreamWriter(outStream, encoding);
             Save(sw);
         }
 
@@ -340,7 +340,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             StreamWriter sw = new StreamWriter(File.OpenWrite(filename), GetOutEncoding());
 #else
-            StreamWriter sw = new StreamWriter(filename, false, GetOutEncoding());
+            var sw = new StreamWriter(filename, false, GetOutEncoding());
 #endif
             Save(sw);
         }
@@ -355,7 +355,7 @@ namespace HtmlAgilityPack
 #if NETSTANDARD1_3 || NETSTANDARD1_6
             StreamWriter sw = new StreamWriter(File.OpenWrite(filename), encoding);
 #else
-            StreamWriter sw = new StreamWriter(filename, false, encoding);
+            var sw = new StreamWriter(filename, false, encoding);
 #endif
             Save(sw);
         }

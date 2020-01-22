@@ -65,7 +65,7 @@ namespace NAudio.Wave
         public AsioOut(int driverIndex)
         {
             this.syncContext = SynchronizationContext.Current; 
-            String[] names = GetDriverNames();
+            var names = GetDriverNames();
             if (names.Length == 0)
             {
                 throw new ArgumentException("There is no ASIO Driver installed on your system");
@@ -131,7 +131,7 @@ namespace NAudio.Wave
             this.driverName = driverName;
 
             // Get the basic driver
-            AsioDriver basicDriver = AsioDriver.GetAsioDriverByName(driverName);
+            var basicDriver = AsioDriver.GetAsioDriverByName(driverName);
 
             // Instantiate the extended driver
             driver = new AsioDriverExt(basicDriver);
@@ -201,7 +201,7 @@ namespace NAudio.Wave
                 throw new InvalidOperationException("Already initialised this instance of AsioOut - dispose and create a new one");
             }
             isInitialized = true;
-            int desiredSampleRate = waveProvider != null ? waveProvider.WaveFormat.SampleRate : recordOnlySampleRate;
+            var desiredSampleRate = waveProvider != null ? waveProvider.WaveFormat.SampleRate : recordOnlySampleRate;
 
             if (waveProvider != null)
             {
@@ -264,7 +264,7 @@ namespace NAudio.Wave
 
             if (this.NumberOfOutputChannels > 0)
             {
-                int read = sourceStream.Read(waveBuffer, 0, waveBuffer.Length);
+                var read = sourceStream.Read(waveBuffer, 0, waveBuffer.Length);
                 if (read < waveBuffer.Length)
                 {
                     // we have reached the end of the input data - clear out the end

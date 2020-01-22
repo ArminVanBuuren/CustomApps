@@ -213,7 +213,7 @@ namespace AForge.Video
         {
             get
             {
-                int frames = framesProcessed;
+                var frames = framesProcessed;
                 framesProcessed = 0;
                 return frames;
             }
@@ -229,7 +229,7 @@ namespace AForge.Video
         {
             get
             {
-                bool isRunning = nestedVideoSource.IsRunning;
+                var isRunning = nestedVideoSource.IsRunning;
 
                 if ( !isRunning )
                 {
@@ -415,12 +415,12 @@ namespace AForge.Video
         private static Bitmap CloneImage( Bitmap source )
         {
             // lock source bitmap data
-            BitmapData sourceData = source.LockBits(
+            var sourceData = source.LockBits(
                 new Rectangle( 0, 0, source.Width, source.Height ),
                 ImageLockMode.ReadOnly, source.PixelFormat );
 
             // create new image
-            Bitmap destination = CloneImage( sourceData );
+            var destination = CloneImage( sourceData );
 
             // unlock source image
             source.UnlockBits( sourceData );
@@ -432,13 +432,13 @@ namespace AForge.Video
                 ( source.PixelFormat == PixelFormat.Format8bppIndexed ) ||
                 ( source.PixelFormat == PixelFormat.Indexed ) )
             {
-                ColorPalette srcPalette = source.Palette;
-                ColorPalette dstPalette = destination.Palette;
+                var srcPalette = source.Palette;
+                var dstPalette = destination.Palette;
 
-                int n = srcPalette.Entries.Length;
+                var n = srcPalette.Entries.Length;
 
                 // copy pallete
-                for ( int i = 0; i < n; i++ )
+                for ( var i = 0; i < n; i++ )
                 {
                     dstPalette.Entries[i] = srcPalette.Entries[i];
                 }
@@ -452,14 +452,14 @@ namespace AForge.Video
         private static Bitmap CloneImage( BitmapData sourceData )
         {
             // get source image size
-            int width = sourceData.Width;
-            int height = sourceData.Height;
+            var width = sourceData.Width;
+            var height = sourceData.Height;
 
             // create new image
-            Bitmap destination = new Bitmap( width, height, sourceData.PixelFormat );
+            var destination = new Bitmap( width, height, sourceData.PixelFormat );
 
             // lock destination bitmap data
-            BitmapData destinationData = destination.LockBits(
+            var destinationData = destination.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, destination.PixelFormat );
 

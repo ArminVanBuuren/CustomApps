@@ -125,7 +125,7 @@ namespace AForge.Imaging
             CheckSourceFormat( image.PixelFormat );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb );
 
@@ -166,10 +166,10 @@ namespace AForge.Imaging
             CheckMaskProperties( mask.PixelFormat, new Size( mask.Width, mask.Height ), new Size( image.Width, image.Height ) );
 
             // lock bitmap and mask data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
-            BitmapData maskData = mask.LockBits(
+            var maskData = mask.LockBits(
                 new Rectangle( 0, 0, mask.Width, mask.Height ),
                 ImageLockMode.ReadOnly, mask.PixelFormat );
 
@@ -211,7 +211,7 @@ namespace AForge.Imaging
                 new Size( mask.GetLength( 1 ), mask.GetLength( 0 ) ), new Size( image.Width, image.Height ) );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -311,32 +311,32 @@ namespace AForge.Imaging
         private unsafe void ProcessImage( UnmanagedImage image, byte* mask, int maskLineSize )
         {
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             pixels = pixelsWithoutBlack = 0;
 
-            int[] s   = new int[256];
-            int[] l   = new int[256];
-            int[] swb = new int[256];
-            int[] lwb = new int[256];
-            RGB   rgb = new RGB( );
-            HSL   hsl = new HSL( );
+            var s   = new int[256];
+            var l   = new int[256];
+            var swb = new int[256];
+            var lwb = new int[256];
+            var   rgb = new RGB( );
+            var   hsl = new HSL( );
 
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
-            int offset = image.Stride - width * pixelSize;
-            int maskOffset = maskLineSize - width;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+            var offset = image.Stride - width * pixelSize;
+            var maskOffset = maskLineSize - width;
 
             // do the job
-            byte * p = (byte*) image.ImageData.ToPointer( );
+            var p = (byte*) image.ImageData.ToPointer( );
 
             if ( mask == null )
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, p += pixelSize )
+                    for ( var x = 0; x < width; x++, p += pixelSize )
                     {
                         rgb.Red   = p[RGB.R];
                         rgb.Green = p[RGB.G];
@@ -362,10 +362,10 @@ namespace AForge.Imaging
             else
             {
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, p += pixelSize, mask++ )
+                    for ( var x = 0; x < width; x++, p += pixelSize, mask++ )
                     {
                         if ( *mask == 0 )
                             continue;

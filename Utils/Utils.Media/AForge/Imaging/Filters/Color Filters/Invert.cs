@@ -67,30 +67,30 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = ( ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ||
+            var pixelSize = ( ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ||
                               ( image.PixelFormat == PixelFormat.Format16bppGrayScale ) ) ? 1 : 3;
 
-            int startY  = rect.Top;
-            int stopY   = startY + rect.Height;
+            var startY  = rect.Top;
+            var stopY   = startY + rect.Height;
 
-            int startX  = rect.Left * pixelSize;
-            int stopX   = startX + rect.Width * pixelSize;
+            var startX  = rect.Left * pixelSize;
+            var stopX   = startX + rect.Width * pixelSize;
 
-            byte* basePtr = (byte*) image.ImageData.ToPointer( );
+            var basePtr = (byte*) image.ImageData.ToPointer( );
 
             if (
                 ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ||
                 ( image.PixelFormat == PixelFormat.Format24bppRgb ) )
             {
-                int offset = image.Stride - ( stopX - startX );
+                var offset = image.Stride - ( stopX - startX );
 
                 // allign pointer to the first pixel to process
-                byte* ptr = basePtr + ( startY * image.Stride + rect.Left * pixelSize );
+                var ptr = basePtr + ( startY * image.Stride + rect.Left * pixelSize );
 
                 // invert
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         // ivert each pixel
                         *ptr = (byte) ( 255 - *ptr );
@@ -100,17 +100,17 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                int stride = image.Stride;
+                var stride = image.Stride;
 
                 // allign pointer to the first pixel to process
                 basePtr += ( startY * image.Stride + rect.Left * pixelSize * 2 );
 
                 // invert
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    ushort* ptr = (ushort*) ( basePtr );
+                    var ptr = (ushort*) ( basePtr );
 
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         // ivert each pixel
                         *ptr = (ushort) ( 65535 - *ptr );

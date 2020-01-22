@@ -29,7 +29,7 @@ namespace Utils.Crypto
             var result = new DHValue();
             
             str1 = textBox1;
-            for (int i = 0; i < str1.Length; i++)
+            for (var i = 0; i < str1.Length; i++)
             {
                 k = (int) str1[i];
                 k = k + Sa;
@@ -42,7 +42,7 @@ namespace Utils.Crypto
 
             //дешифровка B
             str2 = result.CryptoValue;
-            for (int i = 0; i < str2.Length; i++)
+            for (var i = 0; i < str2.Length; i++)
             {
                 k = (int) str2[i];
                 k = k - Sb;
@@ -58,8 +58,8 @@ namespace Utils.Crypto
 
         static int fun(int p, int a, int b)
         {
-            int s = 1;
-            for (int i = 1; i <= b; i++)
+            var s = 1;
+            for (var i = 1; i <= b; i++)
             {
                 s = (s * a) % p;
             }

@@ -9,7 +9,7 @@ namespace Utils.ConditionEx
     {
         ConditionBlock _conditionBlock;
         int _parameretId = 0;
-        Expression _base;
+        readonly Expression _base;
         Expression _parent;
 
         internal ExpressionBuilder(DynamicObject dynamicObj)

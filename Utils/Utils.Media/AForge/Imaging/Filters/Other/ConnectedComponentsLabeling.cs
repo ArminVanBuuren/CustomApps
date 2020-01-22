@@ -199,27 +199,27 @@ namespace AForge.Imaging.Filters
             blobCounter.ProcessImage( sourceData );
 
             // get object labels
-            int[] labels = blobCounter.ObjectLabels;
+            var labels = blobCounter.ObjectLabels;
 
             // get width and height
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
-            int dstOffset = destinationData.Stride - width * 3;
+            var dstOffset = destinationData.Stride - width * 3;
 
             // do the job
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
-            int p = 0;
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
+            var p = 0;
 
             // for each row
-            for ( int y = 0; y < height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
                 // for each pixel
-                for ( int x = 0; x < width; x++, dst += 3, p++ )
+                for ( var x = 0; x < width; x++, dst += 3, p++ )
                 {
                     if ( labels[p] != 0 )
                     {
-                        Color c = colorTable[( labels[p] - 1 ) % colorTable.Length];
+                        var c = colorTable[( labels[p] - 1 ) % colorTable.Length];
 
                         dst[RGB.R] = c.R;
                         dst[RGB.G] = c.G;

@@ -137,11 +137,11 @@ namespace TLSharp.Core.MTProto.Crypto
         {
             primeProducts = new int[primeLists.Length];
 
-            for (int i = 0; i < primeLists.Length; ++i)
+            for (var i = 0; i < primeLists.Length; ++i)
             {
-                int[] primeList = primeLists[i];
-                int product = 1;
-                for (int j = 0; j < primeList.Length; ++j)
+                var primeList = primeLists[i];
+                var product = 1;
+                for (var j = 0; j < primeList.Length; ++j)
                 {
                     product *= primeList[j];
                 }
@@ -172,7 +172,7 @@ namespace TLSharp.Core.MTProto.Crypto
         {
             if (checkMag)
             {
-                int i = 0;
+                var i = 0;
                 while (i < mag.Length && mag[i] == 0)
                 {
                     ++i;
@@ -249,7 +249,7 @@ namespace TLSharp.Core.MTProto.Crypto
             }
 
 
-            int index = 0;
+            var index = 0;
             sign = 1;
 
             if (str[0] == '-')
@@ -281,18 +281,18 @@ namespace TLSharp.Core.MTProto.Crypto
             // storage in one hit?, then Generate the magnitude in one hit too?
             //////
 
-            BigInteger b = Zero;
+            var b = Zero;
 
 
-            int next = index + chunk;
+            var next = index + chunk;
 
             if (next <= str.Length)
             {
                 do
                 {
-                    string s = str.Substring(index, chunk);
-                    ulong i = ulong.Parse(s, style);
-                    BigInteger bi = createUValueOf(i);
+                    var s = str.Substring(index, chunk);
+                    var i = ulong.Parse(s, style);
+                    var bi = createUValueOf(i);
 
                     switch (radix)
                     {
@@ -322,9 +322,9 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (index < str.Length)
             {
-                string s = str.Substring(index);
-                ulong i = ulong.Parse(s, style);
-                BigInteger bi = createUValueOf(i);
+                var s = str.Substring(index);
+                var i = ulong.Parse(s, style);
+                var bi = createUValueOf(i);
 
                 if (b.sign > 0)
                 {
@@ -384,7 +384,7 @@ namespace TLSharp.Core.MTProto.Crypto
             {
                 this.sign = -1;
 
-                int end = offset + length;
+                var end = offset + length;
 
                 int iBval;
                 // strip leading sign bytes
@@ -397,10 +397,10 @@ namespace TLSharp.Core.MTProto.Crypto
                     this.magnitude = One.magnitude;
                 }
                 else {
-                    int numBytes = end - iBval;
-                    byte[] inverse = new byte[numBytes];
+                    var numBytes = end - iBval;
+                    var inverse = new byte[numBytes];
 
-                    int index = 0;
+                    var index = 0;
                     while (index < numBytes)
                     {
                         inverse[index++] = (byte)~bytes[iBval++];
@@ -430,7 +430,7 @@ namespace TLSharp.Core.MTProto.Crypto
             int offset,
             int length)
         {
-            int end = offset + length;
+            var end = offset + length;
 
             // strip leading zeros
             int firstSignificant;
@@ -444,8 +444,8 @@ namespace TLSharp.Core.MTProto.Crypto
                 return ZeroMagnitude;
             }
 
-            int nInts = (end - firstSignificant + 3) / BytesPerInt;
-            int bCount = (end - firstSignificant) % BytesPerInt;
+            var nInts = (end - firstSignificant + 3) / BytesPerInt;
+            var bCount = (end - firstSignificant) % BytesPerInt;
             if (bCount == 0)
             {
                 bCount = BytesPerInt;
@@ -456,11 +456,11 @@ namespace TLSharp.Core.MTProto.Crypto
                 return ZeroMagnitude;
             }
 
-            int[] mag = new int[nInts];
+            var mag = new int[nInts];
 
-            int v = 0;
-            int magnitudeIndex = 0;
-            for (int i = firstSignificant; i < end; ++i)
+            var v = 0;
+            var magnitudeIndex = 0;
+            for (var i = firstSignificant; i < end; ++i)
             {
                 v <<= 8;
                 v |= bytes[i] & 0xff;
@@ -527,8 +527,8 @@ namespace TLSharp.Core.MTProto.Crypto
                 return;
             }
 
-            int nBytes = GetByteLength(sizeInBits);
-            byte[] b = new byte[nBytes];
+            var nBytes = GetByteLength(sizeInBits);
+            var b = new byte[nBytes];
             random.NextBytes(b);
 
             // strip off any excess bits in the MSB
@@ -559,11 +559,11 @@ namespace TLSharp.Core.MTProto.Crypto
                 return;
             }
 
-            int nBytes = GetByteLength(bitLength);
-            byte[] b = new byte[nBytes];
+            var nBytes = GetByteLength(bitLength);
+            var b = new byte[nBytes];
 
-            int xBits = BitsPerByte * nBytes - bitLength;
-            byte mask = rndMask[xBits];
+            var xBits = BitsPerByte * nBytes - bitLength;
+            var mask = rndMask[xBits];
 
             for (;;)
             {
@@ -590,9 +590,9 @@ namespace TLSharp.Core.MTProto.Crypto
 
                 if (bitLength > 32)
                 {
-                    for (int rep = 0; rep < 10000; ++rep)
+                    for (var rep = 0; rep < 10000; ++rep)
                     {
-                        int n = 33 + random.Next(bitLength - 2);
+                        var n = 33 + random.Next(bitLength - 2);
                         this.magnitude[this.magnitude.Length - (n >> 5)] ^= (1 << (n & 31));
                         this.magnitude[this.magnitude.Length - 1] ^= ((random.Next() + 1) << 1);
                         this.mQuote = -1L;
@@ -616,8 +616,8 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] a,
             int[] b)
         {
-            int tI = a.Length - 1;
-            int vI = b.Length - 1;
+            var tI = a.Length - 1;
+            var vI = b.Length - 1;
             long m = 0;
 
             while (vI >= 0)
@@ -672,11 +672,11 @@ namespace TLSharp.Core.MTProto.Crypto
             }
 
             // Conservatively avoid over-allocation when no overflow possible
-            uint limit = uint.MaxValue;
+            var limit = uint.MaxValue;
             if (big.Length == small.Length)
                 limit -= (uint)small[0];
 
-            bool possibleOverflow = (uint)big[0] >= limit;
+            var possibleOverflow = (uint)big[0] >= limit;
 
             int[] bigCopy;
             if (possibleOverflow)
@@ -701,25 +701,25 @@ namespace TLSharp.Core.MTProto.Crypto
                 return Zero;
             }
 
-            int[] aMag = this.sign > 0
+            var aMag = this.sign > 0
                 ? this.magnitude
                 : Add(One).magnitude;
 
-            int[] bMag = value.sign > 0
+            var bMag = value.sign > 0
                 ? value.magnitude
                 : value.Add(One).magnitude;
 
-            bool resultNeg = sign < 0 && value.sign < 0;
-            int resultLength = System.Math.Max(aMag.Length, bMag.Length);
-            int[] resultMag = new int[resultLength];
+            var resultNeg = sign < 0 && value.sign < 0;
+            var resultLength = System.Math.Max(aMag.Length, bMag.Length);
+            var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (this.sign < 0)
                 {
@@ -739,7 +739,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
             }
 
-            BigInteger result = new BigInteger(1, resultMag, true);
+            var result = new BigInteger(1, resultMag, true);
 
             // TODO Optimise this case
             if (resultNeg)
@@ -768,8 +768,8 @@ namespace TLSharp.Core.MTProto.Crypto
                         nBits = Not().BitCount;
                     }
                     else {
-                        int sum = 0;
-                        for (int i = 0; i < magnitude.Length; i++)
+                        var sum = 0;
+                        for (var i = 0; i < magnitude.Length; i++)
                         {
                             sum += bitCounts[(byte)magnitude[i]];
                             sum += bitCounts[(byte)(magnitude[i] >> 8)];
@@ -814,10 +814,10 @@ namespace TLSharp.Core.MTProto.Crypto
             }
 
             // bit length for everything after the first int
-            int bitLength = 32 * ((mag.Length - indx) - 1);
+            var bitLength = 32 * ((mag.Length - indx) - 1);
 
             // and determine bitlength of first int
-            int firstMag = mag[indx];
+            var firstMag = mag[indx];
             bitLength += BitLen(firstMag);
 
             // Check for negative powers of two
@@ -928,7 +928,7 @@ namespace TLSharp.Core.MTProto.Crypto
             int yIndx,
             int[] y)
         {
-            int diff = (x.Length - y.Length) - (xIndx - yIndx);
+            var diff = (x.Length - y.Length) - (xIndx - yIndx);
 
             if (diff != 0)
             {
@@ -939,8 +939,8 @@ namespace TLSharp.Core.MTProto.Crypto
 
             while (xIndx < x.Length)
             {
-                uint v1 = (uint)x[xIndx++];
-                uint v2 = (uint)y[yIndx++];
+                var v1 = (uint)x[xIndx++];
+                var v2 = (uint)y[yIndx++];
 
                 if (v1 != v2)
                     return v1 < v2 ? -1 : 1;
@@ -966,13 +966,13 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] x,
             int[] y)
         {
-            int xStart = 0;
+            var xStart = 0;
             while (xStart < x.Length && x[xStart] == 0)
             {
                 ++xStart;
             }
 
-            int yStart = 0;
+            var yStart = 0;
             while (yStart < y.Length && y[yStart] == 0)
             {
                 ++yStart;
@@ -980,21 +980,21 @@ namespace TLSharp.Core.MTProto.Crypto
 
             Debug.Assert(yStart < y.Length);
 
-            int xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
+            var xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
             int[] count;
 
             if (xyCmp > 0)
             {
-                int yBitLength = calcBitLength(yStart, y);
-                int xBitLength = calcBitLength(xStart, x);
-                int shift = xBitLength - yBitLength;
+                var yBitLength = calcBitLength(yStart, y);
+                var xBitLength = calcBitLength(xStart, x);
+                var shift = xBitLength - yBitLength;
 
                 int[] iCount;
-                int iCountStart = 0;
+                var iCountStart = 0;
 
                 int[] c;
-                int cStart = 0;
-                int cBitLength = yBitLength;
+                var cStart = 0;
+                var cBitLength = yBitLength;
                 if (shift > 0)
                 {
                     //					iCount = ShiftLeft(One.magnitude, shift);
@@ -1007,7 +1007,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 else {
                     iCount = new int[] { 1 };
 
-                    int len = y.Length - yStart;
+                    var len = y.Length - yStart;
                     c = new int[len];
                     Array.Copy(y, yStart, c, 0, len);
                 }
@@ -1048,8 +1048,8 @@ namespace TLSharp.Core.MTProto.Crypto
                     // NB: The case where c[cStart] is 1-bit is harmless
                     if (shift == 1)
                     {
-                        uint firstC = (uint)c[cStart] >> 1;
-                        uint firstX = (uint)x[xStart];
+                        var firstC = (uint)c[cStart] >> 1;
+                        var firstX = (uint)x[xStart];
                         if (firstC > firstX)
                             ++shift;
                     }
@@ -1102,11 +1102,11 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (val.QuickPow2Check()) // val is power of two
             {
-                BigInteger result = this.Abs().ShiftRight(val.Abs().BitLength - 1);
+                var result = this.Abs().ShiftRight(val.Abs().BitLength - 1);
                 return val.sign == this.sign ? result : result.Negate();
             }
 
-            int[] mag = (int[])this.magnitude.Clone();
+            var mag = (int[])this.magnitude.Clone();
 
             return new BigInteger(this.sign * val.sign, Divide(mag, val.magnitude), true);
         }
@@ -1117,7 +1117,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (val.sign == 0)
                 throw new ArithmeticException("Division by zero error");
 
-            BigInteger[] biggies = new BigInteger[2];
+            var biggies = new BigInteger[2];
 
             if (sign == 0)
             {
@@ -1126,16 +1126,16 @@ namespace TLSharp.Core.MTProto.Crypto
             }
             else if (val.QuickPow2Check()) // val is power of two
             {
-                int e = val.Abs().BitLength - 1;
-                BigInteger quotient = this.Abs().ShiftRight(e);
-                int[] remainder = this.LastNBits(e);
+                var e = val.Abs().BitLength - 1;
+                var quotient = this.Abs().ShiftRight(e);
+                var remainder = this.LastNBits(e);
 
                 biggies[0] = val.sign == this.sign ? quotient : quotient.Negate();
                 biggies[1] = new BigInteger(this.sign, remainder, true);
             }
             else {
-                int[] remainder = (int[])this.magnitude.Clone();
-                int[] quotient = Divide(remainder, val.magnitude);
+                var remainder = (int[])this.magnitude.Clone();
+                var quotient = Divide(remainder, val.magnitude);
 
                 biggies[0] = new BigInteger(this.sign * val.sign, quotient, true);
                 biggies[1] = new BigInteger(this.sign, remainder, true);
@@ -1150,14 +1150,14 @@ namespace TLSharp.Core.MTProto.Crypto
             if (obj == this)
                 return true;
 
-            BigInteger biggie = obj as BigInteger;
+            var biggie = obj as BigInteger;
             if (biggie == null)
                 return false;
 
             if (biggie.sign != sign || biggie.magnitude.Length != magnitude.Length)
                 return false;
 
-            for (int i = 0; i < magnitude.Length; i++)
+            for (var i = 0; i < magnitude.Length; i++)
             {
                 if (biggie.magnitude[i] != magnitude[i])
                 {
@@ -1178,8 +1178,8 @@ namespace TLSharp.Core.MTProto.Crypto
                 return value.Abs();
 
             BigInteger r;
-            BigInteger u = this;
-            BigInteger v = value;
+            var u = this;
+            var v = value;
 
             while (v.sign != 0)
             {
@@ -1193,7 +1193,7 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public override int GetHashCode()
         {
-            int hc = magnitude.Length;
+            var hc = magnitude.Length;
             if (magnitude.Length > 0)
             {
                 hc ^= magnitude[0];
@@ -1240,7 +1240,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (certainty <= 0)
                 return true;
 
-            BigInteger n = Abs();
+            var n = Abs();
 
             if (!n.TestBit(0))
                 return n.Equals(Two);
@@ -1261,17 +1261,17 @@ namespace TLSharp.Core.MTProto.Crypto
 
 
             // Try to reduce the penalty for really small numbers
-            int numLists = System.Math.Min(BitLength - 1, primeLists.Length);
+            var numLists = System.Math.Min(BitLength - 1, primeLists.Length);
 
-            for (int i = 0; i < numLists; ++i)
+            for (var i = 0; i < numLists; ++i)
             {
-                int test = Remainder(primeProducts[i]);
+                var test = Remainder(primeProducts[i]);
 
-                int[] primeList = primeLists[i];
-                for (int j = 0; j < primeList.Length; ++j)
+                var primeList = primeLists[i];
+                for (var j = 0; j < primeList.Length; ++j)
                 {
-                    int prime = primeList[j];
-                    int qRem = test % prime;
+                    var prime = primeList[j];
+                    var qRem = test % prime;
                     if (qRem == 0)
                     {
                         // We may find small numbers in the list
@@ -1309,10 +1309,10 @@ namespace TLSharp.Core.MTProto.Crypto
             Debug.Assert(TestBit(0));
 
             // let n = 1 + d . 2^s
-            BigInteger n = this;
-            BigInteger nMinusOne = n.Subtract(One);
-            int s = nMinusOne.GetLowestSetBit();
-            BigInteger r = nMinusOne.ShiftRight(s);
+            var n = this;
+            var nMinusOne = n.Subtract(One);
+            var s = nMinusOne.GetLowestSetBit();
+            var r = nMinusOne.ShiftRight(s);
 
             Debug.Assert(s >= 1);
 
@@ -1327,11 +1327,11 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
                 while (a.CompareTo(One) <= 0 || a.CompareTo(nMinusOne) >= 0);
 
-                BigInteger y = a.ModPow(r, n);
+                var y = a.ModPow(r, n);
 
                 if (!y.Equals(One))
                 {
-                    int j = 0;
+                    var j = 0;
                     while (!y.Equals(nMinusOne))
                     {
                         if (++j == s)
@@ -1479,7 +1479,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (m.sign < 1)
                 throw new ArithmeticException("Modulus must be positive");
 
-            BigInteger biggie = Remainder(m);
+            var biggie = Remainder(m);
 
             return (biggie.sign >= 0 ? biggie : biggie.Add(m));
         }
@@ -1528,8 +1528,8 @@ namespace TLSharp.Core.MTProto.Crypto
             //				}
             //			}
 
-            BigInteger x = new BigInteger();
-            BigInteger gcd = ExtEuclid(this.Mod(m), m, x, null);
+            var x = new BigInteger();
+            var gcd = ExtEuclid(this.Mod(m), m, x, null);
 
             if (!gcd.Equals(One))
                 throw new ArithmeticException("Numbers not relatively prime.");
@@ -1567,17 +1567,17 @@ namespace TLSharp.Core.MTProto.Crypto
             BigInteger u1Out,
             BigInteger u2Out)
         {
-            BigInteger u1 = One;
-            BigInteger u3 = a;
-            BigInteger v1 = Zero;
-            BigInteger v3 = b;
+            var u1 = One;
+            var u3 = a;
+            var v1 = Zero;
+            var v3 = b;
 
             while (v3.sign > 0)
             {
-                BigInteger[] q = u3.DivideAndRemainder(v3);
+                var q = u3.DivideAndRemainder(v3);
 
-                BigInteger tmp = v1.Multiply(q[0]);
-                BigInteger tn = u1.Subtract(tmp);
+                var tmp = v1.Multiply(q[0]);
+                var tn = u1.Subtract(tmp);
                 u1 = v1;
                 v1 = tn;
 
@@ -1593,9 +1593,9 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (u2Out != null)
             {
-                BigInteger tmp = u1.Multiply(a);
+                var tmp = u1.Multiply(a);
                 tmp = u3.Subtract(tmp);
-                BigInteger res = tmp.Divide(b);
+                var res = tmp.Divide(b);
                 u2Out.sign = res.sign;
                 u2Out.magnitude = res.magnitude;
             }
@@ -1631,14 +1631,14 @@ namespace TLSharp.Core.MTProto.Crypto
 
             // Montgomery exponentiation is only possible if the modulus is odd,
             // but AFAIK, this is always the case for crypto algo's
-            bool useMonty = ((m.magnitude[m.magnitude.Length - 1] & 1) == 1);
+            var useMonty = ((m.magnitude[m.magnitude.Length - 1] & 1) == 1);
             long mQ = 0;
             if (useMonty)
             {
                 mQ = m.GetMQuote();
 
                 // tmp = this * R mod m
-                BigInteger tmp = ShiftLeft(32 * m.magnitude.Length).Mod(m);
+                var tmp = ShiftLeft(32 * m.magnitude.Length).Mod(m);
                 zVal = tmp.magnitude;
 
                 useMonty = (zVal.Length <= m.magnitude.Length);
@@ -1648,7 +1648,7 @@ namespace TLSharp.Core.MTProto.Crypto
                     yAccum = new int[m.magnitude.Length + 1];
                     if (zVal.Length < m.magnitude.Length)
                     {
-                        int[] longZ = new int[m.magnitude.Length];
+                        var longZ = new int[m.magnitude.Length];
                         zVal.CopyTo(longZ, longZ.Length - zVal.Length);
                         zVal = longZ;
                     }
@@ -1667,7 +1667,7 @@ namespace TLSharp.Core.MTProto.Crypto
                     //
                     // in normal practice we'll never see this...
                     //
-                    BigInteger tmp = Remainder(m);
+                    var tmp = Remainder(m);
 
                     //zAccum = new int[m.magnitude.Length * 2];
                     zVal = new int[m.magnitude.Length];
@@ -1682,10 +1682,10 @@ namespace TLSharp.Core.MTProto.Crypto
             //
             // from LSW to MSW
             //
-            for (int i = 0; i < exponent.magnitude.Length; i++)
+            for (var i = 0; i < exponent.magnitude.Length; i++)
             {
-                int v = exponent.magnitude[i];
-                int bits = 0;
+                var v = exponent.magnitude[i];
+                var bits = 0;
 
                 if (i == 0)
                 {
@@ -1763,7 +1763,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 MultiplyMonty(yAccum, yVal, zVal, m.magnitude, mQ);
             }
 
-            BigInteger result = new BigInteger(1, yVal, true);
+            var result = new BigInteger(1, yVal, true);
 
             return exponent.sign > 0
                 ? result
@@ -1783,11 +1783,11 @@ namespace TLSharp.Core.MTProto.Crypto
 
             ulong u1, u2, c;
 
-            int wBase = w.Length - 1;
+            var wBase = w.Length - 1;
 
-            for (int i = x.Length - 1; i != 0; i--)
+            for (var i = x.Length - 1; i != 0; i--)
             {
-                ulong v = (ulong)(uint)x[i];
+                var v = (ulong)(uint)x[i];
 
                 u1 = v * v;
                 u2 = u1 >> 32;
@@ -1798,7 +1798,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 w[wBase] = (int)(uint)u1;
                 c = u2 + (u1 >> 32);
 
-                for (int j = i - 1; j >= 0; j--)
+                for (var j = i - 1; j >= 0; j--)
                 {
                     --wBase;
                     u1 = v * (ulong)(uint)x[j];
@@ -1850,19 +1850,19 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] y,
             int[] z)
         {
-            int i = z.Length;
+            var i = z.Length;
 
             if (i < 1)
                 return x;
 
-            int xBase = x.Length - y.Length;
+            var xBase = x.Length - y.Length;
 
             for (;;)
             {
-                long a = z[--i] & IMASK;
+                var a = z[--i] & IMASK;
                 long val = 0;
 
-                for (int j = y.Length - 1; j >= 0; j--)
+                for (var j = y.Length - 1; j >= 0; j--)
                 {
                     val += a * (y[j] & IMASK) + (x[xBase + j] & IMASK);
 
@@ -1897,9 +1897,9 @@ namespace TLSharp.Core.MTProto.Crypto
             long[] uOut)
         {
             long u1 = 1;
-            long u3 = a;
+            var u3 = a;
             long v1 = 0;
-            long v3 = b;
+            var v3 = b;
 
             while (v3 > 0)
             {
@@ -1929,8 +1929,8 @@ namespace TLSharp.Core.MTProto.Crypto
             if (m < 1)
                 throw new ArithmeticException("Modulus must be positive");
 
-            long[] x = new long[2];
-            long gcd = FastExtEuclid(v, m, x);
+            var x = new long[2];
+            var gcd = FastExtEuclid(v, m, x);
 
             if (gcd != 1)
                 throw new ArithmeticException("Numbers not relatively prime.");
@@ -1963,7 +1963,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 return -1; // not for even numbers
             }
 
-            long v = (((~this.magnitude[this.magnitude.Length - 1]) | 1) & 0xffffffffL);
+            var v = (((~this.magnitude[this.magnitude.Length - 1]) | 1) & 0xffffffffL);
             mQuote = FastModInverse(v, 0x100000000L);
 
             return mQuote;
@@ -1996,27 +1996,27 @@ namespace TLSharp.Core.MTProto.Crypto
                 return;
             }
 
-            int n = m.Length;
-            int nMinus1 = n - 1;
-            long y_0 = y[nMinus1] & IMASK;
+            var n = m.Length;
+            var nMinus1 = n - 1;
+            var y_0 = y[nMinus1] & IMASK;
 
             // 1. a = 0 (Notation: a = (a_{n} a_{n-1} ... a_{0})_{b} )
             Array.Clear(a, 0, n + 1);
 
             // 2. for i from 0 to (n - 1) do the following:
-            for (int i = n; i > 0; i--)
+            for (var i = n; i > 0; i--)
             {
-                long x_i = x[i - 1] & IMASK;
+                var x_i = x[i - 1] & IMASK;
 
                 // 2.1 u = ((a[0] + (x[i] * y[0]) * mQuote) mod b
-                long u = ((((a[n] & IMASK) + ((x_i * y_0) & IMASK)) & IMASK) * mQuote) & IMASK;
+                var u = ((((a[n] & IMASK) + ((x_i * y_0) & IMASK)) & IMASK) * mQuote) & IMASK;
 
                 // 2.2 a = (a + x_i * y + u * m) / b
-                long prod1 = x_i * y_0;
-                long prod2 = u * (m[nMinus1] & IMASK);
-                long tmp = (a[n] & IMASK) + (prod1 & IMASK) + (prod2 & IMASK);
-                long carry = (long)((ulong)prod1 >> 32) + (long)((ulong)prod2 >> 32) + (long)((ulong)tmp >> 32);
-                for (int j = nMinus1; j > 0; j--)
+                var prod1 = x_i * y_0;
+                var prod2 = u * (m[nMinus1] & IMASK);
+                var tmp = (a[n] & IMASK) + (prod1 & IMASK) + (prod2 & IMASK);
+                var carry = (long)((ulong)prod1 >> 32) + (long)((ulong)prod2 >> 32) + (long)((ulong)tmp >> 32);
+                for (var j = nMinus1; j > 0; j--)
                 {
                     prod1 = x_i * (y[j - 1] & IMASK);
                     prod2 = u * (m[j - 1] & IMASK);
@@ -2047,11 +2047,11 @@ namespace TLSharp.Core.MTProto.Crypto
             ulong mQuote)
         {
             ulong um = m;
-            ulong prod1 = (ulong)x * (ulong)y;
-            ulong u = (prod1 * mQuote) & UIMASK;
-            ulong prod2 = u * um;
-            ulong tmp = (prod1 & UIMASK) + (prod2 & UIMASK);
-            ulong carry = (prod1 >> 32) + (prod2 >> 32) + (tmp >> 32);
+            var prod1 = (ulong)x * (ulong)y;
+            var u = (prod1 * mQuote) & UIMASK;
+            var prod2 = u * um;
+            var tmp = (prod1 & UIMASK) + (prod2 & UIMASK);
+            var carry = (prod1 >> 32) + (prod2 >> 32) + (tmp >> 32);
 
             if (carry > um)
             {
@@ -2069,18 +2069,18 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (val.QuickPow2Check()) // val is power of two
             {
-                BigInteger result = this.ShiftLeft(val.Abs().BitLength - 1);
+                var result = this.ShiftLeft(val.Abs().BitLength - 1);
                 return val.sign > 0 ? result : result.Negate();
             }
 
             if (this.QuickPow2Check()) // this is power of two
             {
-                BigInteger result = val.ShiftLeft(this.Abs().BitLength - 1);
+                var result = val.ShiftLeft(this.Abs().BitLength - 1);
                 return this.sign > 0 ? result : result.Negate();
             }
 
-            int resLength = (this.BitLength + val.BitLength) / BitsPerInt + 1;
-            int[] res = new int[resLength];
+            var resLength = (this.BitLength + val.BitLength) / BitsPerInt + 1;
+            var res = new int[resLength];
 
             if (val == this)
             {
@@ -2109,7 +2109,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (CompareTo(Two) < 0)
                 return Two;
 
-            BigInteger n = Inc().SetBit(0);
+            var n = Inc().SetBit(0);
 
             while (!n.CheckProbablePrime(100, RandomSource))
             {
@@ -2141,8 +2141,8 @@ namespace TLSharp.Core.MTProto.Crypto
                 return this;
             }
 
-            BigInteger y = One;
-            BigInteger z = this;
+            var y = One;
+            var z = this;
 
             for (;;)
             {
@@ -2171,7 +2171,7 @@ namespace TLSharp.Core.MTProto.Crypto
             Debug.Assert(m > 0);
 
             long acc = 0;
-            for (int pos = 0; pos < magnitude.Length; ++pos)
+            for (var pos = 0; pos < magnitude.Length; ++pos)
             {
                 long posVal = (uint)magnitude[pos];
                 acc = (acc << 32 | posVal) % m;
@@ -2187,13 +2187,13 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] x,
             int[] y)
         {
-            int xStart = 0;
+            var xStart = 0;
             while (xStart < x.Length && x[xStart] == 0)
             {
                 ++xStart;
             }
 
-            int yStart = 0;
+            var yStart = 0;
             while (yStart < y.Length && y[yStart] == 0)
             {
                 ++yStart;
@@ -2201,17 +2201,17 @@ namespace TLSharp.Core.MTProto.Crypto
 
             Debug.Assert(yStart < y.Length);
 
-            int xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
+            var xyCmp = CompareNoLeadingZeroes(xStart, x, yStart, y);
 
             if (xyCmp > 0)
             {
-                int yBitLength = calcBitLength(yStart, y);
-                int xBitLength = calcBitLength(xStart, x);
-                int shift = xBitLength - yBitLength;
+                var yBitLength = calcBitLength(yStart, y);
+                var xBitLength = calcBitLength(xStart, x);
+                var shift = xBitLength - yBitLength;
 
                 int[] c;
-                int cStart = 0;
-                int cBitLength = yBitLength;
+                var cStart = 0;
+                var cBitLength = yBitLength;
                 if (shift > 0)
                 {
                     c = ShiftLeft(y, shift);
@@ -2219,7 +2219,7 @@ namespace TLSharp.Core.MTProto.Crypto
                     Debug.Assert(c[0] != 0);
                 }
                 else {
-                    int len = y.Length - yStart;
+                    var len = y.Length - yStart;
                     c = new int[len];
                     Array.Copy(y, yStart, c, 0, len);
                 }
@@ -2257,8 +2257,8 @@ namespace TLSharp.Core.MTProto.Crypto
                     // NB: The case where c[cStart] is 1-bit is harmless
                     if (shift == 1)
                     {
-                        uint firstC = (uint)c[cStart] >> 1;
-                        uint firstX = (uint)x[xStart];
+                        var firstC = (uint)c[cStart] >> 1;
+                        var firstX = (uint)x[xStart];
                         if (firstC > firstX)
                             ++shift;
                     }
@@ -2301,7 +2301,7 @@ namespace TLSharp.Core.MTProto.Crypto
             // For small values, use fast remainder method
             if (n.magnitude.Length == 1)
             {
-                int val = n.magnitude[0];
+                var val = n.magnitude[0];
 
                 if (val > 0)
                 {
@@ -2309,7 +2309,7 @@ namespace TLSharp.Core.MTProto.Crypto
                         return Zero;
 
                     // TODO Make this func work on uint, and handle val == 1?
-                    int rem = Remainder(val);
+                    var rem = Remainder(val);
 
                     return rem == 0
                         ? Zero
@@ -2340,13 +2340,13 @@ namespace TLSharp.Core.MTProto.Crypto
             if (n < 1)
                 return ZeroMagnitude;
 
-            int numWords = (n + BitsPerInt - 1) / BitsPerInt;
+            var numWords = (n + BitsPerInt - 1) / BitsPerInt;
             numWords = System.Math.Min(numWords, this.magnitude.Length);
-            int[] result = new int[numWords];
+            var result = new int[numWords];
 
             Array.Copy(this.magnitude, this.magnitude.Length - numWords, result, 0, numWords);
 
-            int hiBits = n % 32;
+            var hiBits = n % 32;
             if (hiBits != 0)
             {
                 result[0] &= ~(-1 << hiBits);
@@ -2362,9 +2362,9 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] mag,
             int n)
         {
-            int nInts = (int)((uint)n >> 5);
-            int nBits = n & 0x1f;
-            int magLen = mag.Length;
+            var nInts = (int)((uint)n >> 5);
+            var nBits = n & 0x1f;
+            var magLen = mag.Length;
             int[] newMag;
 
             if (nBits == 0)
@@ -2373,9 +2373,9 @@ namespace TLSharp.Core.MTProto.Crypto
                 mag.CopyTo(newMag, 0);
             }
             else {
-                int i = 0;
-                int nBits2 = 32 - nBits;
-                int highBits = (int)((uint)mag[0] >> nBits2);
+                var i = 0;
+                var nBits2 = 32 - nBits;
+                var highBits = (int)((uint)mag[0] >> nBits2);
 
                 if (highBits != 0)
                 {
@@ -2386,10 +2386,10 @@ namespace TLSharp.Core.MTProto.Crypto
                     newMag = new int[magLen + nInts];
                 }
 
-                int m = mag[0];
-                for (int j = 0; j < magLen - 1; j++)
+                var m = mag[0];
+                for (var j = 0; j < magLen - 1; j++)
                 {
-                    int next = mag[j + 1];
+                    var next = mag[j + 1];
 
                     newMag[i++] = (m << nBits) | (int)((uint)next >> nBits2);
                     m = next;
@@ -2413,7 +2413,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (n < 0)
                 return ShiftRight(-n);
 
-            BigInteger result = new BigInteger(sign, ShiftLeft(magnitude, n), true);
+            var result = new BigInteger(sign, ShiftLeft(magnitude, n), true);
 
             if (this.nBits != -1)
             {
@@ -2438,19 +2438,19 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] mag,
             int n)
         {
-            int nInts = (int)((uint)n >> 5) + start;
-            int nBits = n & 0x1f;
-            int magEnd = mag.Length - 1;
+            var nInts = (int)((uint)n >> 5) + start;
+            var nBits = n & 0x1f;
+            var magEnd = mag.Length - 1;
 
             if (nInts != start)
             {
-                int delta = (nInts - start);
+                var delta = (nInts - start);
 
-                for (int i = magEnd; i >= nInts; i--)
+                for (var i = magEnd; i >= nInts; i--)
                 {
                     mag[i] = mag[i - delta];
                 }
-                for (int i = nInts - 1; i >= start; i--)
+                for (var i = nInts - 1; i >= start; i--)
                 {
                     mag[i] = 0;
                 }
@@ -2458,12 +2458,12 @@ namespace TLSharp.Core.MTProto.Crypto
 
             if (nBits != 0)
             {
-                int nBits2 = 32 - nBits;
-                int m = mag[magEnd];
+                var nBits2 = 32 - nBits;
+                var m = mag[magEnd];
 
-                for (int i = magEnd; i > nInts; --i)
+                for (var i = magEnd; i > nInts; --i)
                 {
-                    int next = mag[i - 1];
+                    var next = mag[i - 1];
 
                     mag[i] = (int)((uint)m >> nBits) | (next << nBits2);
                     m = next;
@@ -2480,12 +2480,12 @@ namespace TLSharp.Core.MTProto.Crypto
             int start,
             int[] mag)
         {
-            int i = mag.Length;
-            int m = mag[i - 1];
+            var i = mag.Length;
+            var m = mag[i - 1];
 
             while (--i > start)
             {
-                int next = mag[i - 1];
+                var next = mag[i - 1];
                 mag[i] = ((int)((uint)m >> 1)) | (next << 31);
                 m = next;
             }
@@ -2511,21 +2511,21 @@ namespace TLSharp.Core.MTProto.Crypto
             //
             //			return new BigInteger(this.sign, res, true);
 
-            int resultLength = (BitLength - n + 31) >> 5;
-            int[] res = new int[resultLength];
+            var resultLength = (BitLength - n + 31) >> 5;
+            var res = new int[resultLength];
 
-            int numInts = n >> 5;
-            int numBits = n & 31;
+            var numInts = n >> 5;
+            var numBits = n & 31;
 
             if (numBits == 0)
             {
                 Array.Copy(this.magnitude, 0, res, 0, res.Length);
             }
             else {
-                int numBits2 = 32 - numBits;
+                var numBits2 = 32 - numBits;
 
-                int magPos = this.magnitude.Length - 1 - numInts;
-                for (int i = resultLength - 1; i >= 0; --i)
+                var magPos = this.magnitude.Length - 1 - numInts;
+                for (var i = resultLength - 1; i >= 0; --i)
                 {
                     res[i] = (int)((uint)this.magnitude[magPos--] >> numBits);
 
@@ -2558,10 +2558,10 @@ namespace TLSharp.Core.MTProto.Crypto
             Debug.Assert(yStart < y.Length);
             Debug.Assert(x.Length - xStart >= y.Length - yStart);
 
-            int iT = x.Length;
-            int iV = y.Length;
+            var iT = x.Length;
+            var iV = y.Length;
             long m;
-            int borrow = 0;
+            var borrow = 0;
 
             do
             {
@@ -2595,7 +2595,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (this.sign != n.sign)
                 return Add(n.Negate());
 
-            int compare = CompareNoLeadingZeroes(0, magnitude, 0, n.magnitude);
+            var compare = CompareNoLeadingZeroes(0, magnitude, 0, n.magnitude);
             if (compare == 0)
                 return Zero;
 
@@ -2617,7 +2617,7 @@ namespace TLSharp.Core.MTProto.Crypto
             int[] bigMag,
             int[] lilMag)
         {
-            int[] res = (int[])bigMag.Clone();
+            var res = (int[])bigMag.Clone();
 
             return Subtract(0, res, 0, lilMag);
         }
@@ -2638,28 +2638,28 @@ namespace TLSharp.Core.MTProto.Crypto
             if (sign == 0)
                 return unsigned ? ZeroEncoding : new byte[1];
 
-            int nBits = (unsigned && sign > 0)
+            var nBits = (unsigned && sign > 0)
                 ? BitLength
                 : BitLength + 1;
 
-            int nBytes = GetByteLength(nBits);
-            byte[] bytes = new byte[nBytes];
+            var nBytes = GetByteLength(nBits);
+            var bytes = new byte[nBytes];
 
-            int magIndex = magnitude.Length;
-            int bytesIndex = bytes.Length;
+            var magIndex = magnitude.Length;
+            var bytesIndex = bytes.Length;
 
             if (sign > 0)
             {
                 while (magIndex > 1)
                 {
-                    uint mag = (uint)magnitude[--magIndex];
+                    var mag = (uint)magnitude[--magIndex];
                     bytes[--bytesIndex] = (byte)mag;
                     bytes[--bytesIndex] = (byte)(mag >> 8);
                     bytes[--bytesIndex] = (byte)(mag >> 16);
                     bytes[--bytesIndex] = (byte)(mag >> 24);
                 }
 
-                uint lastMag = (uint)magnitude[0];
+                var lastMag = (uint)magnitude[0];
                 while (lastMag > byte.MaxValue)
                 {
                     bytes[--bytesIndex] = (byte)lastMag;
@@ -2670,11 +2670,11 @@ namespace TLSharp.Core.MTProto.Crypto
             }
             else // sign < 0
             {
-                bool carry = true;
+                var carry = true;
 
                 while (magIndex > 1)
                 {
-                    uint mag = ~((uint)magnitude[--magIndex]);
+                    var mag = ~((uint)magnitude[--magIndex]);
 
                     if (carry)
                     {
@@ -2687,7 +2687,7 @@ namespace TLSharp.Core.MTProto.Crypto
                     bytes[--bytesIndex] = (byte)(mag >> 24);
                 }
 
-                uint lastMag = (uint)magnitude[0];
+                var lastMag = (uint)magnitude[0];
 
                 if (carry)
                 {
@@ -2741,13 +2741,13 @@ namespace TLSharp.Core.MTProto.Crypto
 
             Debug.Assert(magnitude.Length > 0);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (radix == 16)
             {
                 sb.Append(magnitude[0].ToString("x"));
 
-                for (int i = 1; i < magnitude.Length; i++)
+                for (var i = 1; i < magnitude.Length; i++)
                 {
                     sb.Append(magnitude[i].ToString("x8"));
                 }
@@ -2756,7 +2756,7 @@ namespace TLSharp.Core.MTProto.Crypto
             {
                 sb.Append('1');
 
-                for (int i = BitLength - 2; i >= 0; --i)
+                for (var i = BitLength - 2; i >= 0; --i)
                 {
                     sb.Append(TestBit(i) ? '1' : '0');
                 }
@@ -2764,7 +2764,7 @@ namespace TLSharp.Core.MTProto.Crypto
             else {
                 // This is algorithm 1a from chapter 4.4 in Seminumerical Algorithms, slow but it works
                 IList S = new List<object>();
-                BigInteger bs = ValueOf(radix);
+                var bs = ValueOf(radix);
 
                 // The sign is handled separatly.
                 // Notice however that for this to work, radix 16 _MUST_ be a special case,
@@ -2772,7 +2772,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 // the Sun engineers made a c'tor for BigIntegers taking a BigInteger as parameter?
                 // (Answer: Becuase Sun's BigIntger is clonable, something bouncycastle's isn't.)
                 //				BigInteger u = new BigInteger(Abs().ToString(16), 16);
-                BigInteger u = this.Abs();
+                var u = this.Abs();
                 BigInteger b;
 
                 while (u.sign != 0)
@@ -2790,20 +2790,20 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
 
                 // Then pop the stack
-                for (int i = S.Count - 1; i >= 0; --i)
+                for (var i = S.Count - 1; i >= 0; --i)
                 {
                     sb.Append((string)S[i]);
                 }
             }
 
-            string s = sb.ToString();
+            var s = sb.ToString();
 
             Debug.Assert(s.Length > 0);
 
             // Strip leading zeros. (We know this number is not all zeroes though)
             if (s[0] == '0')
             {
-                int nonZeroPos = 0;
+                var nonZeroPos = 0;
                 while (s[++nonZeroPos] == '0') { }
 
                 s = s.Substring(nonZeroPos);
@@ -2820,15 +2820,15 @@ namespace TLSharp.Core.MTProto.Crypto
         private static BigInteger createUValueOf(
             ulong value)
         {
-            int msw = (int)(value >> 32);
-            int lsw = (int)value;
+            var msw = (int)(value >> 32);
+            var lsw = (int)value;
 
             if (msw != 0)
                 return new BigInteger(1, new int[] { msw, lsw }, false);
 
             if (lsw != 0)
             {
-                BigInteger n = new BigInteger(1, new int[] { lsw }, false);
+                var n = new BigInteger(1, new int[] { lsw }, false);
                 // Check for a power of two
                 if ((lsw & -lsw) == lsw)
                 {
@@ -2889,7 +2889,7 @@ namespace TLSharp.Core.MTProto.Crypto
             if (this.sign == 0)
                 return -1;
 
-            int w = magnitude.Length;
+            var w = magnitude.Length;
 
             while (--w > 0)
             {
@@ -2897,10 +2897,10 @@ namespace TLSharp.Core.MTProto.Crypto
                     break;
             }
 
-            int word = (int)magnitude[w];
+            var word = (int)magnitude[w];
             Debug.Assert(word != 0);
 
-            int b = (word & 0x0000FFFF) == 0
+            var b = (word & 0x0000FFFF) == 0
                 ? (word & 0x00FF0000) == 0
                     ? 7
                     : 15
@@ -2928,11 +2928,11 @@ namespace TLSharp.Core.MTProto.Crypto
             if (sign < 0)
                 return !Not().TestBit(n);
 
-            int wordNum = n / 32;
+            var wordNum = n / 32;
             if (wordNum >= magnitude.Length)
                 return false;
 
-            int word = magnitude[magnitude.Length - 1 - wordNum];
+            var word = magnitude[magnitude.Length - 1 - wordNum];
             return ((word >> (n % 32)) & 1) > 0;
         }
 
@@ -2945,25 +2945,25 @@ namespace TLSharp.Core.MTProto.Crypto
             if (value.sign == 0)
                 return this;
 
-            int[] aMag = this.sign > 0
+            var aMag = this.sign > 0
                 ? this.magnitude
                 : Add(One).magnitude;
 
-            int[] bMag = value.sign > 0
+            var bMag = value.sign > 0
                 ? value.magnitude
                 : value.Add(One).magnitude;
 
-            bool resultNeg = sign < 0 || value.sign < 0;
-            int resultLength = System.Math.Max(aMag.Length, bMag.Length);
-            int[] resultMag = new int[resultLength];
+            var resultNeg = sign < 0 || value.sign < 0;
+            var resultLength = System.Math.Max(aMag.Length, bMag.Length);
+            var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (this.sign < 0)
                 {
@@ -2983,7 +2983,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
             }
 
-            BigInteger result = new BigInteger(1, resultMag, true);
+            var result = new BigInteger(1, resultMag, true);
 
             // TODO Optimise this case
             if (resultNeg)
@@ -3003,26 +3003,26 @@ namespace TLSharp.Core.MTProto.Crypto
             if (value.sign == 0)
                 return this;
 
-            int[] aMag = this.sign > 0
+            var aMag = this.sign > 0
                 ? this.magnitude
                 : Add(One).magnitude;
 
-            int[] bMag = value.sign > 0
+            var bMag = value.sign > 0
                 ? value.magnitude
                 : value.Add(One).magnitude;
 
             // TODO Can just replace with sign != value.sign?
-            bool resultNeg = (sign < 0 && value.sign >= 0) || (sign >= 0 && value.sign < 0);
-            int resultLength = System.Math.Max(aMag.Length, bMag.Length);
-            int[] resultMag = new int[resultLength];
+            var resultNeg = (sign < 0 && value.sign >= 0) || (sign >= 0 && value.sign < 0);
+            var resultLength = System.Math.Max(aMag.Length, bMag.Length);
+            var resultMag = new int[resultLength];
 
-            int aStart = resultMag.Length - aMag.Length;
-            int bStart = resultMag.Length - bMag.Length;
+            var aStart = resultMag.Length - aMag.Length;
+            var bStart = resultMag.Length - bMag.Length;
 
-            for (int i = 0; i < resultMag.Length; ++i)
+            for (var i = 0; i < resultMag.Length; ++i)
             {
-                int aWord = i >= aStart ? aMag[i - aStart] : 0;
-                int bWord = i >= bStart ? bMag[i - bStart] : 0;
+                var aWord = i >= aStart ? aMag[i - aStart] : 0;
+                var bWord = i >= bStart ? bMag[i - bStart] : 0;
 
                 if (this.sign < 0)
                 {
@@ -3042,7 +3042,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 }
             }
 
-            BigInteger result = new BigInteger(1, resultMag, true);
+            var result = new BigInteger(1, resultMag, true);
 
             // TODO Optimise this case
             if (resultNeg)
@@ -3105,7 +3105,7 @@ namespace TLSharp.Core.MTProto.Crypto
             Debug.Assert(n >= 0);
             Debug.Assert(n < BitLength - 1);
 
-            int[] mag = (int[])this.magnitude.Clone();
+            var mag = (int[])this.magnitude.Clone();
             mag[mag.Length - 1 - (n >> 5)] ^= (1 << (n & 31)); // Flip bit
             //mag[mag.Length - 1 - (n / 32)] ^= (1 << (n % 32));
             return new BigInteger(this.sign, mag, false);

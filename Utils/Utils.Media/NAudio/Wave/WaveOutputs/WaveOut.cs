@@ -107,7 +107,7 @@ namespace NAudio.Wave
         public void Init(IWaveProvider waveProvider)
         {
             waveStream = waveProvider;
-            int bufferSize = waveProvider.WaveFormat.ConvertLatencyToByteSize((DesiredLatency + NumberOfBuffers - 1) / NumberOfBuffers);            
+            var bufferSize = waveProvider.WaveFormat.ConvertLatencyToByteSize((DesiredLatency + NumberOfBuffers - 1) / NumberOfBuffers);            
 
             MmResult result;
             lock (waveOutLock)
@@ -118,7 +118,7 @@ namespace NAudio.Wave
 
             buffers = new WaveOutBuffer[NumberOfBuffers];
             playbackState = PlaybackState.Stopped;
-            for (int n = 0; n < NumberOfBuffers; n++)
+            for (var n = 0; n < NumberOfBuffers; n++)
             {
                 buffers[n] = new WaveOutBuffer(hWaveOut, bufferSize, waveStream, waveOutLock);
             }
@@ -145,7 +145,7 @@ namespace NAudio.Wave
 
         private void EnqueueBuffers()
         {
-            for (int n = 0; n < NumberOfBuffers; n++)
+            for (var n = 0; n < NumberOfBuffers; n++)
             {
                 if (!buffers[n].InQueue)
                 {
@@ -249,7 +249,7 @@ namespace NAudio.Wave
         {
             lock (waveOutLock)
             {
-                MmTime mmTime = new MmTime();
+                var mmTime = new MmTime();
                 mmTime.wType = MmTime.TIME_BYTES; // request results in bytes, TODO: perhaps make this a little more flexible and support the other types?
                 MmException.Try(WaveInterop.waveOutGetPosition(hWaveOut, out mmTime, Marshal.SizeOf(mmTime)), "waveOutGetPosition");
 
@@ -301,10 +301,10 @@ namespace NAudio.Wave
         {
             if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Volume must be between 0.0 and 1.0");
             if (value > 1) throw new ArgumentOutOfRangeException(nameof(value), "Volume must be between 0.0 and 1.0");
-            float left = value;
-            float right = value;
+            var left = value;
+            var right = value;
 
-            int stereoVolume = (int) (left*0xFFFF) + ((int) (right*0xFFFF) << 16);
+            var stereoVolume = (int) (left*0xFFFF) + ((int) (right*0xFFFF) << 16);
             MmResult result;
             lock (lockObject)
             {
@@ -336,7 +336,7 @@ namespace NAudio.Wave
             {
                 if (buffers != null)
                 {
-                    for (int n = 0; n < buffers.Length; n++)
+                    for (var n = 0; n < buffers.Length; n++)
                     {
                         if (buffers[n] != null)
                         {
@@ -373,8 +373,8 @@ namespace NAudio.Wave
         {
             if (uMsg == WaveInterop.WaveMessage.WaveOutDone)
             {
-                GCHandle hBuffer = (GCHandle)wavhdr.userData;
-                WaveOutBuffer buffer = (WaveOutBuffer)hBuffer.Target;
+                var hBuffer = (GCHandle)wavhdr.userData;
+                var buffer = (WaveOutBuffer)hBuffer.Target;
                 Interlocked.Decrement(ref queuedBuffers);
                 Exception exception = null;
                 // check that we're not here through pressing stop

@@ -55,7 +55,7 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData srcData = image.LockBits(
+            var srcData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -97,22 +97,22 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( BitmapData imageData )
         {
             // destination image format
-            PixelFormat dstPixelFormat = imageData.PixelFormat;
+            var dstPixelFormat = imageData.PixelFormat;
 
             // check pixel format of the source image
             CheckSourceFormat( dstPixelFormat );
 
             // get image dimension
-            int width  = imageData.Width;
-            int height = imageData.Height;
+            var width  = imageData.Width;
+            var height = imageData.Height;
 
             // create new image of required format
-            Bitmap dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
+            var dstImage = ( dstPixelFormat == PixelFormat.Format8bppIndexed ) ?
                 AForge.Imaging.Image.CreateGrayscaleImage( width, height ) :
                 new Bitmap( width, height, dstPixelFormat );
 
             // lock destination bitmap data
-            BitmapData dstData = dstImage.LockBits(
+            var dstData = dstImage.LockBits(
                 new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, dstPixelFormat );
 
@@ -153,7 +153,7 @@ namespace AForge.Imaging.Filters
             CheckSourceFormat( image.PixelFormat );
 
             // create new destination image
-            UnmanagedImage dstImage = UnmanagedImage.Create( image.Width, image.Height, image.PixelFormat );
+            var dstImage = UnmanagedImage.Create( image.Width, image.Height, image.PixelFormat );
 
             Apply( image, dstImage );
 
@@ -198,14 +198,14 @@ namespace AForge.Imaging.Filters
 
             // usually stride will be the same for 2 images of the size size/format,
             // but since this a public a method and users may provide any evil, we to need check it
-            int dstStride = destinationImage.Stride;
-            int srcStride = sourceImage.Stride;
-            int lineSize  = Math.Min( srcStride, dstStride );
+            var dstStride = destinationImage.Stride;
+            var srcStride = sourceImage.Stride;
+            var lineSize  = Math.Min( srcStride, dstStride );
 
             unsafe
             {
-                byte* dst = (byte*) destinationImage.ImageData.ToPointer( );
-                byte* src = (byte*) sourceImage.ImageData.ToPointer( );
+                var dst = (byte*) destinationImage.ImageData.ToPointer( );
+                var src = (byte*) sourceImage.ImageData.ToPointer( );
 
                 // copy image
                 for ( int y = 0, height = sourceImage.Height; y < height; y++ )
@@ -288,7 +288,7 @@ namespace AForge.Imaging.Filters
         public void ApplyInPlace( Bitmap image, Rectangle rect )
         {
             // lock source bitmap data
-            BitmapData data = image.LockBits(
+            var data = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadWrite, image.PixelFormat );
 

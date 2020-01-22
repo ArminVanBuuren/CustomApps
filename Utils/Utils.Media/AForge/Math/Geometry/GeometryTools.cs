@@ -28,11 +28,11 @@ namespace AForge.AMath.Geometry
         /// 
         public static float GetAngleBetweenVectors( Point startPoint, Point vector1end, Point vector2end )
         {
-            float x1 = vector1end.X - startPoint.X;
-            float y1 = vector1end.Y - startPoint.Y;
+            var x1 = vector1end.X - startPoint.X;
+            var y1 = vector1end.Y - startPoint.Y;
 
-            float x2 = vector2end.X - startPoint.X;
-            float y2 = vector2end.Y - startPoint.Y;
+            var x2 = vector2end.X - startPoint.X;
+            var y2 = vector2end.Y - startPoint.Y;
 
             return (float) ( Math.Acos( ( x1 * x2 + y1 * y2 ) / ( Math.Sqrt( x1 * x1 + y1 * y1 ) * Math.Sqrt( x2 * x2 + y2 * y2 ) ) ) * 180.0 / Math.PI );
         }
@@ -56,7 +56,7 @@ namespace AForge.AMath.Geometry
         /// 
         public static float GetAngleBetweenLines( Point a1, Point a2, Point b1, Point b2 )
         {
-            Line line1 = Line.FromPoints( a1, a2 );
+            var line1 = Line.FromPoints( a1, a2 );
             return line1.GetAngleBetweenLines( Line.FromPoints( b1, b2 ) );
         }
     }

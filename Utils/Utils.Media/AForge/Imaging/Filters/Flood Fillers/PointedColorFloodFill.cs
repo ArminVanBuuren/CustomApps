@@ -198,7 +198,7 @@ namespace AForge.Imaging.Filters
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
-                byte startColor = *( (byte*) CoordsToPointerGray( startingPoint.X, startingPoint.Y ) );
+                var startColor = *( (byte*) CoordsToPointerGray( startingPoint.X, startingPoint.Y ) );
                 minG = (byte) ( Math.Max(   0, startColor - tolerance.G ) );
                 maxG = (byte) ( Math.Min( 255, startColor + tolerance.G ) );
 
@@ -206,7 +206,7 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                byte* startColor = (byte*) CoordsToPointerRGB( startingPoint.X, startingPoint.Y );
+                var startColor = (byte*) CoordsToPointerRGB( startingPoint.X, startingPoint.Y );
 
                 minR = (byte) ( Math.Max(   0, startColor[RGB.R] - tolerance.R ) );
                 maxR = (byte) ( Math.Min( 255, startColor[RGB.R] + tolerance.R ) );
@@ -222,22 +222,22 @@ namespace AForge.Imaging.Filters
         // Liner flood fill in 4 directions for grayscale images
         private unsafe void LinearFloodFill4Gray( IntPoint startingPoint )
         {
-            Queue<IntPoint> points = new Queue<IntPoint>( );
+            var points = new Queue<IntPoint>( );
             points.Enqueue( startingPoint );
 
             while ( points.Count > 0 )
             {
-                IntPoint point = points.Dequeue( );
+                var point = points.Dequeue( );
 
-                int x = point.X;
-                int y = point.Y;
+                var x = point.X;
+                var y = point.Y;
 
                 // get image pointer for current (X, Y)
-                byte* p = (byte*) CoordsToPointerGray( x, y );
+                var p = (byte*) CoordsToPointerGray( x, y );
 
                 // find left end of line to fill
-                int leftLineEdge = x;
-                byte* ptr = p;
+                var leftLineEdge = x;
+                var ptr = p;
 
                 while ( true )
                 {
@@ -257,7 +257,7 @@ namespace AForge.Imaging.Filters
                 leftLineEdge++;
 
                 // find right end of line to fill
-                int rightLineEdge = x;
+                var rightLineEdge = x;
                 ptr = p;
 
                 while ( true )
@@ -280,12 +280,12 @@ namespace AForge.Imaging.Filters
                 // loop to go up and down
                 ptr = (byte*) CoordsToPointerGray( leftLineEdge, y );
 
-                bool upperPointIsQueued = false;
-                bool lowerPointIsQueued = false;
-                int upperY = y - 1;
-                int lowerY = y + 1;
+                var upperPointIsQueued = false;
+                var lowerPointIsQueued = false;
+                var upperY = y - 1;
+                var lowerY = y + 1;
 
-                for ( int i = leftLineEdge; i <= rightLineEdge; i++, ptr++ )
+                for ( var i = leftLineEdge; i <= rightLineEdge; i++, ptr++ )
                 {
                     // go up
                     if ( ( y > startY ) && ( !checkedPixels[y - 1, i] ) && ( CheckGrayPixel( *( ptr - stride ) ) ) )
@@ -321,22 +321,22 @@ namespace AForge.Imaging.Filters
         // Liner flood fill in 4 directions for RGB
         private unsafe void LinearFloodFill4RGB( IntPoint startPoint )
         {
-            Queue<IntPoint> points = new Queue<IntPoint>( );
+            var points = new Queue<IntPoint>( );
             points.Enqueue( startingPoint );
 
             while ( points.Count > 0 )
             {
-                IntPoint point = points.Dequeue( );
+                var point = points.Dequeue( );
 
-                int x = point.X;
-                int y = point.Y;
+                var x = point.X;
+                var y = point.Y;
 
                 // get image pointer for current (X, Y)
-                byte* p = (byte*) CoordsToPointerRGB( x, y );
+                var p = (byte*) CoordsToPointerRGB( x, y );
 
                 // find left end of line to fill
-                int leftLineEdge = x;
-                byte* ptr = p;
+                var leftLineEdge = x;
+                var ptr = p;
 
                 while ( true )
                 {
@@ -358,7 +358,7 @@ namespace AForge.Imaging.Filters
                 leftLineEdge++;
 
                 // find right end of line to fill
-                int rightLineEdge = x;
+                var rightLineEdge = x;
                 ptr = p;
 
                 while ( true )
@@ -382,12 +382,12 @@ namespace AForge.Imaging.Filters
                 // loop to go up and down
                 ptr = (byte*) CoordsToPointerRGB( leftLineEdge, y );
 
-                bool upperPointIsQueued = false;
-                bool lowerPointIsQueued = false;
-                int upperY = y - 1;
-                int lowerY = y + 1;
+                var upperPointIsQueued = false;
+                var lowerPointIsQueued = false;
+                var upperY = y - 1;
+                var lowerY = y + 1;
 
-                for ( int i = leftLineEdge; i <= rightLineEdge; i++, ptr += 3 )
+                for ( var i = leftLineEdge; i <= rightLineEdge; i++, ptr += 3 )
                 {
                     // go up
                     if ( ( y > startY ) && ( !checkedPixels[upperY, i] ) && ( CheckRGBPixel( ptr - stride ) ) )

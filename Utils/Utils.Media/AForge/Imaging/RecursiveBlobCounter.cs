@@ -167,18 +167,18 @@ namespace AForge.Imaging
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( );
-                int p = imageWidth + 2 + 1;
+                var src = (byte*) image.ImageData.ToPointer( );
+                var p = imageWidth + 2 + 1;
 
                 if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
-                    int offset = stride - imageWidth;
+                    var offset = stride - imageWidth;
 
                     // for each line
-                    for ( int y = 0; y < imageHeight; y++ )
+                    for ( var y = 0; y < imageHeight; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < imageWidth; x++, src++, p++ )
+                        for ( var x = 0; x < imageWidth; x++, src++, p++ )
                         {
                             // check for non-labeled pixel
                             if ( ( *src > backgroundThresholdG ) && ( tempLabels[p] == 0 ) )
@@ -194,13 +194,13 @@ namespace AForge.Imaging
                 else
                 {
                     pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
-                    int offset = stride - imageWidth * pixelSize;
+                    var offset = stride - imageWidth * pixelSize;
 
                     // for each line
-                    for ( int y = 0; y < imageHeight; y++ )
+                    for ( var y = 0; y < imageHeight; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < imageWidth; x++, src += pixelSize, p++ )
+                        for ( var x = 0; x < imageWidth; x++, src += pixelSize, p++ )
                         {
                             // check for non-labeled pixel
                             if ( (
@@ -223,7 +223,7 @@ namespace AForge.Imaging
             // allocate labels array
             objectLabels = new int[imageWidth * imageHeight];
 
-            for ( int y = 0; y < imageHeight; y++ )
+            for ( var y = 0; y < imageHeight; y++ )
             {
                 Array.Copy( tempLabels, ( y + 1 ) * ( imageWidth + 2 ) + 1, objectLabels, y * imageWidth, imageWidth );
             }

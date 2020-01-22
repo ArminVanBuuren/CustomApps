@@ -92,7 +92,7 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
             // copy source image
-            UnmanagedImage sourceImage = image.Clone( );
+            var sourceImage = image.Clone( );
             // perform closing on the source image
             closing.ApplyInPlace( image );
             // subtract source image from the closed image

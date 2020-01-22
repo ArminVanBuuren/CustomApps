@@ -263,7 +263,7 @@ namespace AForge.Imaging
             CheckSourceFormat( image.PixelFormat );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -305,10 +305,10 @@ namespace AForge.Imaging
             CheckMaskProperties( mask.PixelFormat, new Size( mask.Width, mask.Height ), new Size( image.Width, image.Height ) );
 
             // lock bitmap and mask data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
-            BitmapData maskData = mask.LockBits(
+            var maskData = mask.LockBits(
                 new Rectangle( 0, 0, mask.Width, mask.Height ),
                 ImageLockMode.ReadOnly, mask.PixelFormat );
 
@@ -350,7 +350,7 @@ namespace AForge.Imaging
                 new Size( mask.GetLength( 1 ), mask.GetLength( 0 ) ), new Size( image.Width, image.Height ) );
 
             // lock bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -450,36 +450,36 @@ namespace AForge.Imaging
         private unsafe void ProcessImage( UnmanagedImage image, byte* mask, int maskLineSize )
         {
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             pixels = pixelsWithoutBlack = 0;
 
             red = green = blue = gray = null;
             redWithoutBlack = greenWithoutBlack = blueWithoutBlack = grayWithoutBlack = null;
 
-            int maskOffset = maskLineSize - width;
+            var maskOffset = maskLineSize - width;
 
             // check pixel format
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // alloc arrays
-                int[] g   = new int[256];
-                int[] gwb = new int[256];
+                var g   = new int[256];
+                var gwb = new int[256];
 
                 byte value;
-                int  offset = image.Stride - width;
+                var  offset = image.Stride - width;
 
                 // do the job
-                byte * p = (byte*) image.ImageData.ToPointer( );
+                var p = (byte*) image.ImageData.ToPointer( );
 
                 if ( mask == null )
                 {
                     // for each pixel
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p++ )
+                        for ( var x = 0; x < width; x++, p++ )
                         {
                             // get pixel value
                             value = *p;
@@ -499,10 +499,10 @@ namespace AForge.Imaging
                 else
                 {
                     // for each pixel
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p++, mask++ )
+                        for ( var x = 0; x < width; x++, p++, mask++ )
                         {
                             if ( *mask == 0 )
                                 continue;
@@ -531,28 +531,28 @@ namespace AForge.Imaging
             else
             {
                 // alloc arrays
-                int[]	r = new int[256];
-                int[]	g = new int[256];
-                int[]	b = new int[256];
+                var	r = new int[256];
+                var	g = new int[256];
+                var	b = new int[256];
 
-                int[]	rwb = new int[256];
-                int[]	gwb = new int[256];
-                int[]	bwb = new int[256];
+                var	rwb = new int[256];
+                var	gwb = new int[256];
+                var	bwb = new int[256];
 
                 byte rValue, gValue, bValue;
-                int  pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
-                int  offset = image.Stride - width * pixelSize;
+                var  pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+                var  offset = image.Stride - width * pixelSize;
 
                 // do the job
-                byte * p = (byte*) image.ImageData.ToPointer( );
+                var p = (byte*) image.ImageData.ToPointer( );
 
                 if ( mask == null )
                 {
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p += pixelSize )
+                        for ( var x = 0; x < width; x++, p += pixelSize )
                         {
                             // get pixel values
                             rValue = p[RGB.R];
@@ -578,10 +578,10 @@ namespace AForge.Imaging
                 else
                 {
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++, p += pixelSize, mask++ )
+                        for ( var x = 0; x < width; x++, p += pixelSize, mask++ )
                         {
                             if ( *mask == 0 )
                                 continue;

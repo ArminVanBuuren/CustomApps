@@ -191,7 +191,7 @@ namespace AForge.Video.Kinect
         {
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -209,7 +209,7 @@ namespace AForge.Video.Kinect
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -278,7 +278,7 @@ namespace AForge.Video.Kinect
                 {
                     if ( device == null )
                     {
-                        bool success = false;
+                        var success = false;
 
                         try
                         {
@@ -290,7 +290,7 @@ namespace AForge.Video.Kinect
                             // get Kinect device
                             device = Kinect.GetDevice( deviceID );
 
-                            KinectNative.VideoCameraFormat dataFormat = KinectNative.VideoCameraFormat.RGB;
+                            var dataFormat = KinectNative.VideoCameraFormat.RGB;
  
                             if ( cameraMode == VideoCameraMode.Bayer )
                             {
@@ -396,7 +396,7 @@ namespace AForge.Video.Kinect
                 {
                     if ( device != null )
                     {
-                        bool deviceFailed = device.IsDeviceFailed( deviceID );
+                        var deviceFailed = device.IsDeviceFailed( deviceID );
 
                         if ( !deviceFailed )
                         {
@@ -447,17 +447,17 @@ namespace AForge.Video.Kinect
 
                 unsafe
                 {
-                    byte* dst = (byte*) data.Scan0.ToPointer( );
-                    byte* src = (byte*) imageBuffer.ToPointer( );
+                    var dst = (byte*) data.Scan0.ToPointer( );
+                    var src = (byte*) imageBuffer.ToPointer( );
 
                     if ( cameraMode == VideoCameraMode.Color )
                     {
                         // color RGB 24 mode
-                        int offset = data.Stride - width * 3;
+                        var offset = data.Stride - width * 3;
 
-                        for ( int y = 0; y < height; y++ )
+                        for ( var y = 0; y < height; y++ )
                         {
-                            for ( int x = 0; x < width; x++, src += 3, dst += 3 )
+                            for ( var x = 0; x < width; x++, src += 3, dst += 3 )
                             {
                                 dst[0] = src[2];
                                 dst[1] = src[1];
@@ -469,11 +469,11 @@ namespace AForge.Video.Kinect
                     else
                     {
                         // infra red mode - grayscale output
-                        int stride = data.Stride;
+                        var stride = data.Stride;
 
                         if ( stride != width )
                         {
-                            for ( int y = 0; y < height; y++ )
+                            for ( var y = 0; y < height; y++ )
                             {
                                 SystemTools.CopyUnmanagedMemory( dst, src, width );
                                 dst += stride;

@@ -182,7 +182,7 @@ namespace AForge.Imaging.Filters
             {
                 if ( value is IFilterInformation )
                 {
-                    IFilterInformation info = (IFilterInformation) value;
+                    var info = (IFilterInformation) value;
                     if ( !info.FormatTranslations.ContainsKey( PixelFormat.Format24bppRgb ) )
                         throw new UnsupportedImageFormatException( "The specified filter does not support 24 bpp color images." );
                     if (
@@ -223,7 +223,7 @@ namespace AForge.Imaging.Filters
             {
                 if ( value is IFilterInformation )
                 {
-                    IFilterInformation info = (IFilterInformation) value;
+                    var info = (IFilterInformation) value;
                     if ( !info.FormatTranslations.ContainsKey( PixelFormat.Format24bppRgb ) )
                         throw new UnsupportedImageFormatException( "The specified filter does not support 24 bpp color images." );
                     if (
@@ -315,8 +315,8 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source image dimension
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
 
             // if generator was specified, then generate a texture
             // otherwise use provided texture
@@ -335,7 +335,7 @@ namespace AForge.Imaging.Filters
             }
 
             // apply first filter
-            UnmanagedImage filteredImage1 = filter1.Apply( sourceData );
+            var filteredImage1 = filter1.Apply( sourceData );
 
             // check size of the result image
             if ( ( width != filteredImage1.Width ) || ( height != filteredImage1.Height ) )
@@ -347,8 +347,8 @@ namespace AForge.Imaging.Filters
             // convert 1st image to RGB if required
             if ( filteredImage1.PixelFormat == PixelFormat.Format8bppIndexed )
             {
-                GrayscaleToRGB coloringFilter = new GrayscaleToRGB( );
-                UnmanagedImage temp = coloringFilter.Apply( filteredImage1 );
+                var coloringFilter = new GrayscaleToRGB( );
+                var temp = coloringFilter.Apply( filteredImage1 );
                 filteredImage1.Dispose( );
                 filteredImage1 = temp;
             }
@@ -370,8 +370,8 @@ namespace AForge.Imaging.Filters
                 // convert 2nd image to RGB if required
                 if ( filteredImage2.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
-                    GrayscaleToRGB coloringFilter = new GrayscaleToRGB( );
-                    UnmanagedImage temp = coloringFilter.Apply( filteredImage2 );
+                    var coloringFilter = new GrayscaleToRGB( );
+                    var temp = coloringFilter.Apply( filteredImage2 );
                     filteredImage2.Dispose( );
                     filteredImage2 = temp;
                 }
@@ -386,26 +386,26 @@ namespace AForge.Imaging.Filters
             // do the job
             unsafe
             {
-                byte* dst = (byte*) destinationData.ImageData.ToPointer( );
-                byte* src1 = (byte*) filteredImage1.ImageData.ToPointer( );
-                byte* src2 = (byte*) filteredImage2.ImageData.ToPointer( );
+                var dst = (byte*) destinationData.ImageData.ToPointer( );
+                var src1 = (byte*) filteredImage1.ImageData.ToPointer( );
+                var src2 = (byte*) filteredImage2.ImageData.ToPointer( );
 
-                int dstOffset  = destinationData.Stride - 3 * width;
-                int src1Offset = filteredImage1.Stride  - 3 * width;
-                int src2Offset = filteredImage2.Stride  - 3 * width;
+                var dstOffset  = destinationData.Stride - 3 * width;
+                var src1Offset = filteredImage1.Stride  - 3 * width;
+                var src2Offset = filteredImage2.Stride  - 3 * width;
 
                 if ( preserveLevel != 0.0 )
                 {
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++ )
+                        for ( var x = 0; x < width; x++ )
                         {
                             double t1 = texture[y, x];
-                            double t2 = 1 - t1;
+                            var t2 = 1 - t1;
 
-                            for ( int i = 0; i < 3; i++, src1++, src2++, dst++ )
+                            for ( var i = 0; i < 3; i++, src1++, src2++, dst++ )
                             {
                                 *dst = (byte) Math.Min( 255.0f,
                                     filterLevel * ( t1 * ( *src1 ) + t2 * ( *src2 ) ) +
@@ -420,15 +420,15 @@ namespace AForge.Imaging.Filters
                 else
                 {
                     // for each line
-                    for ( int y = 0; y < height; y++ )
+                    for ( var y = 0; y < height; y++ )
                     {
                         // for each pixel
-                        for ( int x = 0; x < width; x++ )
+                        for ( var x = 0; x < width; x++ )
                         {
                             double t1 = texture[y, x];
-                            double t2 = 1 - t1;
+                            var t2 = 1 - t1;
 
-                            for ( int i = 0; i < 3; i++, src1++, src2++, dst++ )
+                            for ( var i = 0; i < 3; i++, src1++, src2++, dst++ )
                             {
                                 *dst = (byte) Math.Min( 255.0f, t1 * *src1 + t2 * *src2 );
                             }

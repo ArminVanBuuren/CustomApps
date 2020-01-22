@@ -199,13 +199,13 @@ namespace AForge.Imaging
         /// 
         public static void FromRGB( RGB rgb, HSL hsl )
         {
-            float r = ( rgb.Red   / 255.0f );
-            float g = ( rgb.Green / 255.0f );
-            float b = ( rgb.Blue  / 255.0f );
+            var r = ( rgb.Red   / 255.0f );
+            var g = ( rgb.Green / 255.0f );
+            var b = ( rgb.Blue  / 255.0f );
 
-            float min = Math.Min( Math.Min( r, g ), b );
-            float max = Math.Max( Math.Max( r, g ), b );
-            float delta = max - min;
+            var min = Math.Min( Math.Min( r, g ), b );
+            var max = Math.Max( Math.Max( r, g ), b );
+            var delta = max - min;
 
             // get luminance value
             hsl.Luminance = ( max + min ) / 2;
@@ -257,7 +257,7 @@ namespace AForge.Imaging
         /// 
         public static HSL FromRGB( RGB rgb )
         {
-            HSL hsl = new HSL( );
+            var hsl = new HSL( );
             FromRGB( rgb, hsl );
             return hsl;
         }
@@ -279,7 +279,7 @@ namespace AForge.Imaging
             else
             {
                 float v1, v2;
-                float hue = (float) hsl.Hue / 360;
+                var hue = (float) hsl.Hue / 360;
 
                 v2 = ( hsl.Luminance < 0.5 ) ?
                     ( hsl.Luminance * ( 1 + hsl.Saturation ) ) :
@@ -301,7 +301,7 @@ namespace AForge.Imaging
         /// 
         public RGB ToRGB( )
         {
-            RGB rgb = new RGB( );
+            var rgb = new RGB( );
             ToRGB( this, rgb );
             return rgb;
         }
@@ -392,9 +392,9 @@ namespace AForge.Imaging
         /// 
         public static void FromRGB( RGB rgb, YCbCr ycbcr )
         {
-            float r = (float) rgb.Red / 255;
-            float g = (float) rgb.Green / 255;
-            float b = (float) rgb.Blue / 255;
+            var r = (float) rgb.Red / 255;
+            var g = (float) rgb.Green / 255;
+            var b = (float) rgb.Blue / 255;
 
             ycbcr.Y =  (float) (  0.2989 * r + 0.5866 * g + 0.1145 * b );
             ycbcr.Cb = (float) ( -0.1687 * r - 0.3313 * g + 0.5000 * b );
@@ -411,7 +411,7 @@ namespace AForge.Imaging
         /// 
         public static YCbCr FromRGB( RGB rgb )
         {
-            YCbCr ycbcr = new YCbCr( );
+            var ycbcr = new YCbCr( );
             FromRGB( rgb, ycbcr );
             return ycbcr;
         }
@@ -426,9 +426,9 @@ namespace AForge.Imaging
         public static void ToRGB( YCbCr ycbcr, RGB rgb )
         {
             // don't warry about zeros. compiler will remove them
-            float r = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y + 0.0000 * ycbcr.Cb + 1.4022 * ycbcr.Cr ) ) );
-            float g = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y - 0.3456 * ycbcr.Cb - 0.7145 * ycbcr.Cr ) ) );
-            float b = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y + 1.7710 * ycbcr.Cb + 0.0000 * ycbcr.Cr ) ) );
+            var r = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y + 0.0000 * ycbcr.Cb + 1.4022 * ycbcr.Cr ) ) );
+            var g = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y - 0.3456 * ycbcr.Cb - 0.7145 * ycbcr.Cr ) ) );
+            var b = Math.Max( 0.0f, Math.Min( 1.0f, (float) ( ycbcr.Y + 1.7710 * ycbcr.Cb + 0.0000 * ycbcr.Cr ) ) );
 
             rgb.Red   = (byte) ( r * 255 );
             rgb.Green = (byte) ( g * 255 );
@@ -444,7 +444,7 @@ namespace AForge.Imaging
         /// 
         public RGB ToRGB( )
         {
-            RGB rgb = new RGB( );
+            var rgb = new RGB( );
             ToRGB( this, rgb );
             return rgb;
         }

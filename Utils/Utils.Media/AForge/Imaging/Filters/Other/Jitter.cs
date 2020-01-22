@@ -109,26 +109,26 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // new pixel's position
             int ox, oy;
 
             // maximum value for random number generator
-            int max = radius * 2 + 1;
+            var max = radius * 2 + 1;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
             byte* p;
 
             // copy source to destination before
@@ -138,7 +138,7 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                int len = source.Width * pixelSize;
+                var len = source.Width * pixelSize;
 
                 for ( int y = 0, heigh = source.Height; y < heigh; y++ )
                 {
@@ -155,10 +155,10 @@ namespace AForge.Imaging.Filters
             // loops for RGB and grayscale images.
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++ )
+                for ( var x = startX; x < stopX; x++ )
                 {
                     // generate radnom pixel's position
                     ox = x + rand.Next( max ) - radius;
@@ -169,7 +169,7 @@ namespace AForge.Imaging.Filters
                     {
                         p = src + oy * srcStride + ox * pixelSize;
 
-                        for ( int i = 0; i < pixelSize; i++, dst++, p++ )
+                        for ( var i = 0; i < pixelSize; i++, dst++, p++ )
                         {
                             *dst = *p;
                         }

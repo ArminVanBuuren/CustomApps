@@ -54,13 +54,13 @@ namespace FastColoredTextBoxNS
 
         public bool Find(string pattern)
         {
-            RegexOptions opt = cbMatchCase.Checked ? RegexOptions.None : RegexOptions.IgnoreCase;
+            var opt = cbMatchCase.Checked ? RegexOptions.None : RegexOptions.IgnoreCase;
             if (!cbRegex.Checked)
                 pattern = Regex.Escape(pattern);
             if (cbWholeWord.Checked)
                 pattern = "\\b" + pattern + "\\b";
             //
-            Range range = tb.Selection.Clone();
+            var range = tb.Selection.Clone();
             range.Normalize();
             //
             if (firstSearch)

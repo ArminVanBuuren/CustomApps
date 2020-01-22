@@ -161,19 +161,19 @@ namespace AForge.Imaging.Filters
             BitmapData bgLockedData = null;
 
             // get image size
-            int width  = image.Width;
-            int height = image.Height;
-            int offset = image.Stride - ( ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? width : width * 3 );
+            var width  = image.Width;
+            var height = image.Height;
+            var offset = image.Stride - ( ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? width : width * 3 );
             
             // check if we have provided background
             if ( ( backgroundImage == null ) && ( unmanagedBackgroundImage == null ) )
             {
                 // resize image to 1/3 of its original size to make bluring faster
-                ResizeBicubic resizeFilter = new ResizeBicubic( (int) width / 3, (int) height / 3 );
-                UnmanagedImage tempImage = resizeFilter.Apply( image );
+                var resizeFilter = new ResizeBicubic( (int) width / 3, (int) height / 3 );
+                var tempImage = resizeFilter.Apply( image );
 
                 // create background image from the input image blurring it with Gaussian 5 times
-                GaussianBlur blur = new GaussianBlur( 5, 21 );
+                var blur = new GaussianBlur( 5, 21 );
 
                 blur.ApplyInPlace( tempImage );
                 blur.ApplyInPlace( tempImage );
@@ -212,20 +212,20 @@ namespace AForge.Imaging.Filters
             }
 
             // get background image's statistics (mean value is used as correction factor)
-            ImageStatistics bgStatistics = new ImageStatistics( bgImage );
+            var bgStatistics = new ImageStatistics( bgImage );
 
-            byte* src = (byte*) image.ImageData.ToPointer( );
-            byte* bg  = (byte*) bgImage.ImageData.ToPointer( );
+            var src = (byte*) image.ImageData.ToPointer( );
+            var bg  = (byte*) bgImage.ImageData.ToPointer( );
 
             // do the job
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                double mean = bgStatistics.Gray.Mean;
+                var mean = bgStatistics.Gray.Mean;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, src++, bg++ )
+                    for ( var x = 0; x < width; x++, src++, bg++ )
                     {
                         if ( *bg != 0 )
                         {
@@ -239,13 +239,13 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                double meanR = bgStatistics.Red.Mean;
-                double meanG = bgStatistics.Green.Mean;
-                double meanB = bgStatistics.Blue.Mean;
+                var meanR = bgStatistics.Red.Mean;
+                var meanG = bgStatistics.Green.Mean;
+                var meanB = bgStatistics.Blue.Mean;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, src += 3, bg += 3 )
+                    for ( var x = 0; x < width; x++, src += 3, bg += 3 )
                     {
                         // red
                         if ( bg[RGB.R] != 0 )

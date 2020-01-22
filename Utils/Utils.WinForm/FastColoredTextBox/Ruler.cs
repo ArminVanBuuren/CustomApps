@@ -99,11 +99,11 @@ namespace FastColoredTextBoxNS
             if (target == null)
                 return;
 
-            Point car = PointToClient(target.PointToScreen(target.PlaceToPoint(target.Selection.Start)));
+            var car = PointToClient(target.PointToScreen(target.PlaceToPoint(target.Selection.Start)));
 
-            Size fontSize = TextRenderer.MeasureText("W", Font);
+            var fontSize = TextRenderer.MeasureText("W", Font);
 
-            int column = 0;
+            var column = 0;
             e.Graphics.FillRectangle(new LinearGradientBrush(new Rectangle(0, 0, Width, Height), BackColor, BackColor2, 270), new Rectangle(0, 0, Width, Height));
 
             float columnWidth = target.CharWidth;

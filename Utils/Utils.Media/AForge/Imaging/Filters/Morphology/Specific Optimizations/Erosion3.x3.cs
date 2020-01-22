@@ -70,20 +70,20 @@ namespace AForge.Imaging.Filters
             }
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left + 1;
-            int startY  = rect.Top + 1;
-            int stopX   = rect.Right - 1;
-            int stopY   = rect.Bottom - 1;
+            var startX  = rect.Left + 1;
+            var startY  = rect.Top + 1;
+            var stopX   = rect.Right - 1;
+            var stopY   = rect.Bottom - 1;
 
-            int dstStride = destinationData.Stride;
-            int srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var srcStride = sourceData.Stride;
 
-            int dstOffset = dstStride - rect.Width + 1;
-            int srcOffset = srcStride - rect.Width + 1;
+            var dstOffset = dstStride - rect.Width + 1;
+            var srcOffset = srcStride - rect.Width + 1;
 
             // image pointers
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var src = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
             byte min;
 
@@ -107,7 +107,7 @@ namespace AForge.Imaging.Filters
             dst++;
 
             // for each pixel
-            for ( int x = startX; x < stopX; x++, src++, dst++ )
+            for ( var x = startX; x < stopX; x++, src++, dst++ )
             {
                 min = *src;
 
@@ -140,7 +140,7 @@ namespace AForge.Imaging.Filters
             dst += dstOffset;
 
             // --- process all lines except the last one
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 min = *src;
 
@@ -161,7 +161,7 @@ namespace AForge.Imaging.Filters
                 dst++;
 
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++, dst++ )
+                for ( var x = startX; x < stopX; x++, src++, dst++ )
                 {
                     min = *src;
 
@@ -222,7 +222,7 @@ namespace AForge.Imaging.Filters
             dst++;
 
             // for each pixel
-            for ( int x = startX; x < stopX; x++, src++, dst++ )
+            for ( var x = startX; x < stopX; x++, src++, dst++ )
             {
                 min = *src;
 

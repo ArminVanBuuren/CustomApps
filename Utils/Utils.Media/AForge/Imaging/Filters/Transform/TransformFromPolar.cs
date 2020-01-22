@@ -223,41 +223,41 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( destinationData.PixelFormat ) / 8;
+            var pixelSize = Bitmap.GetPixelFormatSize( destinationData.PixelFormat ) / 8;
 
             // get source image size
-            int width  = sourceData.Width;
-            int height = sourceData.Height;
-            int widthM1  = width - 1;
-            int heightM1 = height - 1;
+            var width  = sourceData.Width;
+            var height = sourceData.Height;
+            var widthM1  = width - 1;
+            var heightM1 = height - 1;
 
             // get destination image size
-            int newWidth  = destinationData.Width;
-            int newHeight = destinationData.Height;
-            int newWidthM1  = newWidth - 1;
-            int newHeightM1 = newHeight - 1;
+            var newWidth  = destinationData.Width;
+            var newHeight = destinationData.Height;
+            var newWidthM1  = newWidth - 1;
+            var newHeightM1 = newHeight - 1;
 
             // invert cirlce depth
-            double circleDisform = 1 - circleDepth;
+            var circleDisform = 1 - circleDepth;
 
             // get position of center pixel
-            double cx = (double) widthM1 / 2;
-            double cy = (double) heightM1 / 2;
-            double radius = ( cx < cy ) ? cx : cy;
+            var cx = (double) widthM1 / 2;
+            var cy = (double) heightM1 / 2;
+            var radius = ( cx < cy ) ? cx : cy;
             radius -= radius * circleDisform;
 
             // angle of the diagonal
-            double diagonalAngle = Math.Atan2( cy, cx );
+            var diagonalAngle = Math.Atan2( cy, cx );
 
             // offset angle in radians
-            double offsetAngleR = ( ( mapBackwards ) ? offsetAngle : -offsetAngle ) / 180 * Math.PI + PiHalf;
+            var offsetAngleR = ( ( mapBackwards ) ? offsetAngle : -offsetAngle ) / 180 * Math.PI + PiHalf;
 
             // do the job
-            byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+            var dst = (byte*) destinationData.ImageData.ToPointer( );
 
-            int srcStride = sourceData.Stride;
-            int dstOffset = destinationData.Stride - newWidth * pixelSize;
+            var srcStride = sourceData.Stride;
+            var dstOffset = destinationData.Stride - newWidth * pixelSize;
 
             // coordinates of source points
             int sx1, sy1, sx2, sy2;
@@ -267,20 +267,20 @@ namespace AForge.Imaging.Filters
             byte* p1, p2, p3, p4;
 
             // precalculate Sin/Cos values and distances from center to edge in the source image
-            double[] angleCos = new double[newWidth];
-            double[] angleSin = new double[newWidth];
-            double[] maxDistance = new double[newWidth];
+            var angleCos = new double[newWidth];
+            var angleSin = new double[newWidth];
+            var maxDistance = new double[newWidth];
 
-            for ( int x = 0; x < newWidth; x++ )
+            for ( var x = 0; x < newWidth; x++ )
             {
-                double angle = -Pi2 * x / newWidth + offsetAngleR;
+                var angle = -Pi2 * x / newWidth + offsetAngleR;
 
                 angleCos[x] = Math.Cos( angle );
                 angleSin[x] = Math.Sin( angle );
 
                 // calculate minimum angle between X axis and the
                 // line with the above calculated angle
-                double oxAngle = ( ( angle > 0 ) ? angle : -angle ) % Math.PI;
+                var oxAngle = ( ( angle > 0 ) ? angle : -angle ) % Math.PI;
                 if ( oxAngle > PiHalf )
                 {
                     oxAngle = Math.PI - oxAngle;
@@ -290,26 +290,26 @@ namespace AForge.Imaging.Filters
                 maxDistance[x] = circleDisform * ( ( oxAngle > diagonalAngle ) ? ( cy / Math.Sin( oxAngle ) ) : ( cx / Math.Cos( oxAngle ) ) );
             }
 
-            for ( int y = 0; y < newHeight; y++ )
+            for ( var y = 0; y < newHeight; y++ )
             {
-                double yPart = (double) y / newHeightM1;
+                var yPart = (double) y / newHeightM1;
 
                 if ( !mapFromTop )
                 {
                     yPart = 1 - yPart;
                 }
 
-                for ( int x = 0; x < newWidth; x++ )
+                for ( var x = 0; x < newWidth; x++ )
                 {
                     // calculate maximum allowed distance within wich we need to map Y axis of the destination image
-                    double maxAllowedDistance = radius + maxDistance[x];
+                    var maxAllowedDistance = radius + maxDistance[x];
 
                     // source pixel's distance from the center of the source image
-                    double distance = yPart * maxAllowedDistance;
+                    var distance = yPart * maxAllowedDistance;
 
                     // calculate pixel coordinates in the source image
-                    double sx = cx + distance * ( ( mapBackwards ) ? -angleCos[x] : angleCos[x] );
-                    double sy = cy - distance * angleSin[x];
+                    var sx = cx + distance * ( ( mapBackwards ) ? -angleCos[x] : angleCos[x] );
+                    var sy = cy - distance * angleSin[x];
 
                     sx1 = (int) sx;
                     sy1 = (int) sy;
@@ -332,7 +332,7 @@ namespace AForge.Imaging.Filters
                     p4 += sx2 * pixelSize;
 
                     // interpolate using 4 points
-                    for ( int i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
+                    for ( var i = 0; i < pixelSize; i++, dst++, p1++, p2++, p3++, p4++ )
                     {
                         *dst = (byte) (
                             dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +

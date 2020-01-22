@@ -113,28 +113,28 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( source.PixelFormat ) / 8;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int srcOffset = srcStride - rect.Width * pixelSize;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var srcOffset = srcStride - rect.Width * pixelSize;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // loop and array indexes
             int i, j, t;
             // kernel's radius
-            int radius = size >> 1;
+            var radius = size >> 1;
             // pixel value (min and max)
             byte minR, maxR, minG, maxG, minB, maxB, v;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
             byte* p;
 
             // allign pointers to the first pixel to process
@@ -146,10 +146,10 @@ namespace AForge.Imaging.Filters
                 // Grayscale image
 
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, src++, dst++ )
+                    for ( var x = startX; x < stopX; x++, src++, dst++ )
                     {
                         minG = 255;
                         maxG = 0;
@@ -200,10 +200,10 @@ namespace AForge.Imaging.Filters
                 // RGB image
 
                 // for each line
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                    for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                     {
                         minR = minG = minB = 255;
                         maxR = maxG = maxB = 0;

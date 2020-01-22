@@ -177,7 +177,7 @@ namespace Tester.Console
         {
             try
             {
-                string sTimeZone = args[0].ToString();
+                var sTimeZone = args[0].ToString();
                 Int32 timeZone;
                 if (Int32.TryParse(sTimeZone, out timeZone))
                 {
@@ -187,22 +187,22 @@ namespace Tester.Console
                 {
                     timeZone = 0;
                 }
-                string sFrom = args[1].ToString();
-                string sTo = args[2].ToString();
-                int spreadMinutes = (args.Length > 3) ? Convert.ToInt32(args[3].ToString()) : 120;
+                var sFrom = args[1].ToString();
+                var sTo = args[2].ToString();
+                var spreadMinutes = (args.Length > 3) ? Convert.ToInt32(args[3].ToString()) : 120;
                 //default value of spread is 120 minutes
 
-                DateTime now = DateTime.Now;
-                DateTime dFrom = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                var now = DateTime.Now;
+                var dFrom = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
                 dFrom = dFrom + stringToTimeSpan(sFrom);
                 dFrom = dFrom + TimeSpan.FromMinutes(timeZone);
-                DateTime dTo = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                var dTo = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
                 dTo = dTo + stringToTimeSpan(sTo);
                 dTo = dTo + TimeSpan.FromMinutes(timeZone);
 
                 if (now >= dFrom && now <= dTo) return "";
 
-                Random randomShift = new Random();
+                var randomShift = new Random();
                 if (now < dFrom)
                     return timespanToString(dFrom - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
                 if (now > dFrom)
@@ -223,10 +223,10 @@ namespace Tester.Console
 
         static TimeSpan stringToTimeSpan(string span)
         {
-            Regex rx = new Regex(@"((?<days>(\d+))\.)?(?<hours>(\d{1,2})):(?<mins>(\d{1,2}))");
-            Match match = rx.Match(span);
-            GroupCollection groups = match.Groups;
-            Int32 days = 0;
+            var rx = new Regex(@"((?<days>(\d+))\.)?(?<hours>(\d{1,2})):(?<mins>(\d{1,2}))");
+            var match = rx.Match(span);
+            var groups = match.Groups;
+            var days = 0;
             try
             {
                 days = Convert.ToInt32(groups["days"].Value);
@@ -235,7 +235,7 @@ namespace Tester.Console
             {
                 days = 0;
             }
-            TimeSpan timeSpan = new TimeSpan(days, Convert.ToInt32(groups["hours"].Value), Convert.ToInt32(groups["mins"].Value), 0);
+            var timeSpan = new TimeSpan(days, Convert.ToInt32(groups["hours"].Value), Convert.ToInt32(groups["mins"].Value), 0);
             return timeSpan;
         }
     }

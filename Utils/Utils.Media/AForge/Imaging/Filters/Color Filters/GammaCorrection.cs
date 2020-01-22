@@ -67,8 +67,8 @@ namespace AForge.Imaging.Filters
                 gamma = Math.Max( 0.1, Math.Min( 5.0, value ) );
 
                 // calculate tranformation table
-                double g = 1 / gamma;
-                for ( int i = 0; i < 256; i++ )
+                var g = 1 / gamma;
+                for ( var i = 0; i < 256; i++ )
                 {
                     table[i] = (byte) Math.Min( 255, (int) ( Math.Pow( i / 255.0, g ) * 255 + 0.5 ) );
                 }
@@ -107,25 +107,25 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left * pixelSize;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width * pixelSize;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var startX  = rect.Left * pixelSize;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width * pixelSize;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( startY * image.Stride + startX );
 
             // gamma correction
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
-                for ( int x = startX; x < stopX; x++, ptr++ )
+                for ( var x = startX; x < stopX; x++, ptr++ )
                 {
                     // process each pixel
                     *ptr = table[*ptr];

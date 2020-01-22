@@ -147,14 +147,14 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
             // get pixel size
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
 
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
-            int radius2 = radius * radius;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
+            var radius2 = radius * radius;
 
             int dr, dg, db;
             // sphere's center
@@ -162,21 +162,21 @@ namespace AForge.Imaging.Filters
             int cG = center.Green;
             int cB = center.Blue;
             // fill color
-            byte fR = fill.Red;
-            byte fG = fill.Green;
-            byte fB = fill.Blue;
+            var fR = fill.Red;
+            var fG = fill.Green;
+            var fB = fill.Blue;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( startY * image.Stride + startX * pixelSize );
 
             // for each row
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                 {
                     dr = cR - ptr[RGB.R];
                     dg = cG - ptr[RGB.G];

@@ -132,13 +132,13 @@ namespace AForge.Imaging.Filters
             stopY  = startY + rect.Height;
             stride = image.Stride;
 
-            int offset = stride - rect.Width;
+            var offset = stride - rect.Width;
 
             // pixel value and error value
             int v, error;
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             // allign pointer to the first pixel to process
             ptr += ( startY * stride + startX );

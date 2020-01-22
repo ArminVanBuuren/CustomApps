@@ -32,9 +32,9 @@ namespace HtmlAgilityPack
 
         internal static string GetOption(string name, string def)
         {
-            string p = def;
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 1; i < args.Length; i++)
+            var p = def;
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 1; i < args.Length; i++)
             {
                 GetStringArg(args[i], name, ref p);
             }
@@ -44,10 +44,10 @@ namespace HtmlAgilityPack
 
         internal static string GetOption(int index, string def)
         {
-            string p = def;
-            string[] args = Environment.GetCommandLineArgs();
-            int j = 0;
-            for (int i = 1; i < args.Length; i++)
+            var p = def;
+            var args = Environment.GetCommandLineArgs();
+            var j = 0;
+            for (var i = 1; i < args.Length; i++)
             {
                 if (GetStringArg(args[i], ref p))
                 {
@@ -64,9 +64,9 @@ namespace HtmlAgilityPack
 
         internal static bool GetOption(string name, bool def)
         {
-            bool p = def;
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 1; i < args.Length; i++)
+            var p = def;
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 1; i < args.Length; i++)
             {
                 GetBoolArg(args[i], name, ref p);
             }
@@ -76,9 +76,9 @@ namespace HtmlAgilityPack
 
         internal static int GetOption(string name, int def)
         {
-            int p = def;
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 1; i < args.Length; i++)
+            var p = def;
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 1; i < args.Length; i++)
             {
                 GetIntArg(args[i], name, ref p);
             }
@@ -138,8 +138,8 @@ namespace HtmlAgilityPack
 
         private static void ParseArgs()
         {
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 1; i < args.Length; i++)
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 1; i < args.Length; i++)
             {
                 // help
                 GetBoolArg(args[i], "?", ref Help);

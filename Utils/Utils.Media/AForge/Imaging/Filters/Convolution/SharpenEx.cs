@@ -132,21 +132,21 @@ namespace AForge.Imaging.Filters
         private void CreateFilter( )
         {
             // create Gaussian function
-            AForge.AMath.Gaussian gaus = new AForge.AMath.Gaussian( sigma );
+            var gaus = new AForge.AMath.Gaussian( sigma );
             // create kernel
-            double[,] kernel = gaus.Kernel2D( size );
-            double min = kernel[0, 0];
+            var kernel = gaus.Kernel2D( size );
+            var min = kernel[0, 0];
             // integer kernel
-            int[,] intKernel = new int[size, size];
-            int sum = 0;
-            int divisor = 0;
+            var intKernel = new int[size, size];
+            var sum = 0;
+            var divisor = 0;
 
             // calculate integer kernel
-            for ( int i = 0; i < size; i++ )
+            for ( var i = 0; i < size; i++ )
             {
-                for ( int j = 0; j < size; j++ )
+                for ( var j = 0; j < size; j++ )
                 {
-                    double v = kernel[i, j] / min;
+                    var v = kernel[i, j] / min;
 
                     if ( v > ushort.MaxValue )
                     {
@@ -160,11 +160,11 @@ namespace AForge.Imaging.Filters
             }
 
             // recalc kernel
-            int c = size >> 1;
+            var c = size >> 1;
 
-            for ( int i = 0; i < size; i++ )
+            for ( var i = 0; i < size; i++ )
             {
-                for ( int j = 0; j < size; j++ )
+                for ( var j = 0; j < size; j++ )
                 {
                     if ( ( i == c ) && ( j == c ) )
                     {

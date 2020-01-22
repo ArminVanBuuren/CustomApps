@@ -126,7 +126,7 @@ namespace AForge.Imaging
         /// 
         protected override void BuildObjectsMap( UnmanagedImage image )
         {
-            int stride = image.Stride;
+            var stride = image.Stride;
 
             // check pixel format
             if ( ( image.PixelFormat != PixelFormat.Format8bppIndexed ) &&
@@ -144,19 +144,19 @@ namespace AForge.Imaging
                 throw new InvalidImagePropertiesException( "BlobCounter cannot process images that are one pixel wide. Rotate the image or use RecursiveBlobCounter." );
             }
 
-            int imageWidthM1 = imageWidth - 1;
+            var imageWidthM1 = imageWidth - 1;
 
             // allocate labels array
             objectLabels = new int[imageWidth * imageHeight];
             // initial labels count
-            int labelsCount = 0;
+            var labelsCount = 0;
 
             // create map
-            int maxObjects = ( ( imageWidth / 2 ) + 1 ) * ( ( imageHeight / 2 ) + 1 ) + 1;
-            int[] map = new int[maxObjects];
+            var maxObjects = ( ( imageWidth / 2 ) + 1 ) * ( ( imageHeight / 2 ) + 1 ) + 1;
+            var map = new int[maxObjects];
 
             // initially map all labels to themself
-            for ( int i = 0; i < maxObjects; i++ )
+            for ( var i = 0; i < maxObjects; i++ )
             {
                 map[i] = i;
             }
@@ -164,12 +164,12 @@ namespace AForge.Imaging
             // do the job
             unsafe
             {
-                byte* src = (byte*) image.ImageData.ToPointer( );
-                int p = 0;
+                var src = (byte*) image.ImageData.ToPointer( );
+                var p = 0;
 
                 if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
-                    int offset = stride - imageWidth;
+                    var offset = stride - imageWidth;
 
                     // 1 - for pixels of the first row
                     if ( *src > backgroundThresholdG )
@@ -180,7 +180,7 @@ namespace AForge.Imaging
                     ++p;
 
                     // process the rest of the first row
-                    for ( int x = 1; x < imageWidth; x++, src++, p++ )
+                    for ( var x = 1; x < imageWidth; x++, src++, p++ )
                     {
                         // check if we need to label current pixel
                         if ( *src > backgroundThresholdG )
@@ -202,7 +202,7 @@ namespace AForge.Imaging
 
                     // 2 - for other rows
                     // for each row
-                    for ( int y = 1; y < imageHeight; y++ )
+                    for ( var y = 1; y < imageHeight; y++ )
                     {
                         // for the first pixel of the row, we need to check
                         // only upper and upper-right pixels
@@ -229,7 +229,7 @@ namespace AForge.Imaging
                         ++p;
 
                         // check left pixel and three upper pixels for the rest of pixels
-                        for ( int x = 1; x < imageWidthM1; x++, src++, p++ )
+                        for ( var x = 1; x < imageWidthM1; x++, src++, p++ )
                         {
                             if ( *src > backgroundThresholdG )
                             {
@@ -259,8 +259,8 @@ namespace AForge.Imaging
                                     }
                                     else
                                     {
-                                        int l1 = objectLabels[p];
-                                        int l2 = objectLabels[p + 1 - imageWidth];
+                                        var l1 = objectLabels[p];
+                                        var l2 = objectLabels[p + 1 - imageWidth];
 
                                         if ( ( l1 != l2 ) && ( map[l1] != map[l2] ) )
                                         {
@@ -283,12 +283,12 @@ namespace AForge.Imaging
                                             }
 
                                             // reindex
-                                            for ( int i = 1; i <= labelsCount; i++ )
+                                            for ( var i = 1; i <= labelsCount; i++ )
                                             {
                                                 if ( map[i] != i )
                                                 {
                                                     // reindex
-                                                    int j = map[i];
+                                                    var j = map[i];
                                                     while ( j != map[j] )
                                                     {
                                                         j = map[j];
@@ -344,11 +344,11 @@ namespace AForge.Imaging
                 else
                 {
                     // color images
-                    int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
-                    int offset = stride - imageWidth * pixelSize;
+                    var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+                    var offset = stride - imageWidth * pixelSize;
 
-                    int strideM1 = stride - pixelSize;
-                    int strideP1 = stride + pixelSize;
+                    var strideM1 = stride - pixelSize;
+                    var strideP1 = stride + pixelSize;
 
                     // 1 - for pixels of the first row
                     if ( ( src[RGB.R] | src[RGB.G] | src[RGB.B] ) != 0 )
@@ -359,7 +359,7 @@ namespace AForge.Imaging
                     ++p;
 
                     // process the rest of the first row
-                    for ( int x = 1; x < imageWidth; x++, src += pixelSize, p++ )
+                    for ( var x = 1; x < imageWidth; x++, src += pixelSize, p++ )
                     {
                         // check if we need to label current pixel
                         if ( ( src[RGB.R] > backgroundThresholdR ) ||
@@ -385,7 +385,7 @@ namespace AForge.Imaging
 
                     // 2 - for other rows
                     // for each row
-                    for ( int y = 1; y < imageHeight; y++ )
+                    for ( var y = 1; y < imageHeight; y++ )
                     {
                         // for the first pixel of the row, we need to check
                         // only upper and upper-right pixels
@@ -418,7 +418,7 @@ namespace AForge.Imaging
                         ++p;
 
                         // check left pixel and three upper pixels for the rest of pixels
-                        for ( int x = 1; x < imageWidth - 1; x++, src += pixelSize, p++ )
+                        for ( var x = 1; x < imageWidth - 1; x++, src += pixelSize, p++ )
                         {
                             if ( ( src[RGB.R] > backgroundThresholdR ) ||
                                  ( src[RGB.G] > backgroundThresholdG ) ||
@@ -458,8 +458,8 @@ namespace AForge.Imaging
                                     }
                                     else
                                     {
-                                        int l1 = objectLabels[p];
-                                        int l2 = objectLabels[p + 1 - imageWidth];
+                                        var l1 = objectLabels[p];
+                                        var l2 = objectLabels[p + 1 - imageWidth];
 
                                         if ( ( l1 != l2 ) && ( map[l1] != map[l2] ) )
                                         {
@@ -482,12 +482,12 @@ namespace AForge.Imaging
                                             }
 
                                             // reindex
-                                            for ( int i = 1; i <= labelsCount; i++ )
+                                            for ( var i = 1; i <= labelsCount; i++ )
                                             {
                                                 if ( map[i] != i )
                                                 {
                                                     // reindex
-                                                    int j = map[i];
+                                                    var j = map[i];
                                                     while ( j != map[j] )
                                                     {
                                                         j = map[j];
@@ -551,11 +551,11 @@ namespace AForge.Imaging
             }
 
             // allocate remapping array
-            int[] reMap = new int[map.Length];
+            var reMap = new int[map.Length];
 
             // count objects and prepare remapping array
             objectsCount = 0;
-            for ( int i = 1; i <= labelsCount; i++ )
+            for ( var i = 1; i <= labelsCount; i++ )
             {
                 if ( map[i] == i )
                 {
@@ -564,7 +564,7 @@ namespace AForge.Imaging
                 }
             }
             // second pass to complete remapping
-            for ( int i = 1; i <= labelsCount; i++ )
+            for ( var i = 1; i <= labelsCount; i++ )
             {
                 if ( map[i] != i )
                 {

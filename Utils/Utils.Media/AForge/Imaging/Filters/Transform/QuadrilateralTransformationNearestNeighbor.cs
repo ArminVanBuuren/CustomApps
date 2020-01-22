@@ -165,7 +165,7 @@ namespace AForge.Imaging.Filters
         protected override System.Drawing.Size CalculateNewImageSize( UnmanagedImage sourceData )
         {
             // perform checking of source corners - they must feet into the image
-            foreach ( IntPoint point in baseFilter.SourceQuadrilateral )
+            foreach ( var point in baseFilter.SourceQuadrilateral )
             {
                 if ( ( point.X < 0 ) ||
                      ( point.Y < 0 ) ||

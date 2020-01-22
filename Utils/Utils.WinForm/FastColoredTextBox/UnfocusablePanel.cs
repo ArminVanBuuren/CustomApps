@@ -30,7 +30,7 @@ namespace FastColoredTextBoxNS
 
             if (!string.IsNullOrEmpty(Text))
             {
-                StringFormat sf = new StringFormat();
+                var sf = new StringFormat();
                 sf.Alignment = TextAlignment;
                 sf.LineAlignment = StringAlignment.Center;
                 using(var brush = new SolidBrush(ForeColor))

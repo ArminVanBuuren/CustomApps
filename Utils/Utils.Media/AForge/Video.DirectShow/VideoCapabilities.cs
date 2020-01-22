@@ -65,7 +65,7 @@ namespace AForge.Video.DirectShow
 
             // ensure this device reports capabilities
             int count, size;
-            int hr = videoStreamConfig.GetNumberOfCapabilities( out count, out size );
+            var hr = videoStreamConfig.GetNumberOfCapabilities( out count, out size );
 
             if ( hr != 0 )
                 Marshal.ThrowExceptionForHR( hr );
@@ -77,15 +77,15 @@ namespace AForge.Video.DirectShow
                 throw new NotSupportedException( "Unable to retrieve video device capabilities. This video device requires a larger VideoStreamConfigCaps structure." );
 
             // group capabilities with similar parameters
-            Dictionary<uint, VideoCapabilities> videocapsList = new Dictionary<uint, VideoCapabilities>( );
+            var videocapsList = new Dictionary<uint, VideoCapabilities>( );
 
-            for ( int i = 0; i < count; i++ )
+            for ( var i = 0; i < count; i++ )
             {
                 try
                 {
-                    VideoCapabilities vc = new VideoCapabilities( videoStreamConfig, i );
+                    var vc = new VideoCapabilities( videoStreamConfig, i );
 
-                    uint key = ( ( (uint) vc.FrameSize.Height ) << 32 ) |
+                    var key = ( ( (uint) vc.FrameSize.Height ) << 32 ) |
                                ( ( (uint) vc.FrameSize.Width ) << 16 );
 
                     if ( !videocapsList.ContainsKey( key ) )
@@ -105,7 +105,7 @@ namespace AForge.Video.DirectShow
                 }
             }
 
-            VideoCapabilities[] videocaps = new VideoCapabilities[videocapsList.Count];
+            var videocaps = new VideoCapabilities[videocapsList.Count];
             videocapsList.Values.CopyTo( videocaps, 0 );
 
             return videocaps;
@@ -115,19 +115,19 @@ namespace AForge.Video.DirectShow
         internal VideoCapabilities( IAMStreamConfig videoStreamConfig, int index )
         {
             AMMediaType mediaType = null;
-            VideoStreamConfigCaps caps = new VideoStreamConfigCaps( );
+            var caps = new VideoStreamConfigCaps( );
 
             try
             {
                 // retrieve capabilities struct at the specified index
-                int hr = videoStreamConfig.GetStreamCaps( index, out mediaType, caps );
+                var hr = videoStreamConfig.GetStreamCaps( index, out mediaType, caps );
 
                 if ( hr != 0 )
                     Marshal.ThrowExceptionForHR( hr );
 
                 if ( mediaType.FormatType == FormatType.VideoInfo )
                 {
-                    VideoInfoHeader videoInfo = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
+                    var videoInfo = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
 
                     FrameSize = new Size( videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height );
                     BitCount = videoInfo.BmiHeader.BitCount;
@@ -136,7 +136,7 @@ namespace AForge.Video.DirectShow
                 }
                 else if ( mediaType.FormatType == FormatType.VideoInfo2 )
                 {
-                    VideoInfoHeader2 videoInfo = (VideoInfoHeader2) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader2 ) );
+                    var videoInfo = (VideoInfoHeader2) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader2 ) );
 
                     FrameSize = new Size( videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height );
                     BitCount = videoInfo.BmiHeader.BitCount;

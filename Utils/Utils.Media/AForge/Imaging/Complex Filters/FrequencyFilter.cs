@@ -94,29 +94,29 @@ namespace AForge.Imaging.ComplexFilters
             }
 
             // get image dimenstion
-            int width   = complexImage.Width;
-            int height  = complexImage.Height;
+            var width   = complexImage.Width;
+            var height  = complexImage.Height;
 
             // half of dimensions
-            int hw = width >> 1;
-            int hh = height >> 1;
+            var hw = width >> 1;
+            var hh = height >> 1;
 
             // min and max frequencies
-            int min = frequencyRange.Min;
-            int max = frequencyRange.Max;
+            var min = frequencyRange.Min;
+            var max = frequencyRange.Max;
 
             // complex data to process
-            Complex[,] data = complexImage.Data;
+            var data = complexImage.Data;
 
             // process all data
-            for ( int i = 0; i < height; i++ )
+            for ( var i = 0; i < height; i++ )
             {
-                int y = i - hh;
+                var y = i - hh;
 
-                for ( int j = 0; j < width; j++ )
+                for ( var j = 0; j < width; j++ )
                 {
-                    int x = j - hw;
-                    int d = (int) Math.Sqrt( x * x + y * y );
+                    var x = j - hw;
+                    var d = (int) Math.Sqrt( x * x + y * y );
 
                     // filter values outside the range
                     if ( ( d > max ) || ( d < min ) )

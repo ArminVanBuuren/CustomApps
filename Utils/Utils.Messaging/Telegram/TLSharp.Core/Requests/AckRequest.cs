@@ -19,7 +19,7 @@ namespace TLSharp.Core.Requests
             writer.Write(0x62d6b459); // msgs_ack
             writer.Write(0x1cb5c415); // Vector
             writer.Write(_msgs.Count);
-            foreach (ulong messageId in _msgs)
+            foreach (var messageId in _msgs)
             {
                 writer.Write(messageId);
             }

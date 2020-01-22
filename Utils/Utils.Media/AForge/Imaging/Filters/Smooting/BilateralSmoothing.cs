@@ -278,17 +278,17 @@ namespace AForge.Imaging.Filters
                     spatialFunc = new double[kernelSize, kernelSize];
                 }
 
-                int kernelRadius = kernelSize / 2;
+                var kernelRadius = kernelSize / 2;
 
-                for ( int i = 0; i < kernelSize; i++ )
+                for ( var i = 0; i < kernelSize; i++ )
                 {
-                    int ti  = i - kernelRadius;
-                    int ti2 = ti * ti;
+                    var ti  = i - kernelRadius;
+                    var ti2 = ti * ti;
 
-                    for ( int k = 0; k < kernelSize; k++ )
+                    for ( var k = 0; k < kernelSize; k++ )
                     {
-                        int tk = k - kernelRadius;
-                        int tk2 = tk * tk;
+                        var tk = k - kernelRadius;
+                        var tk2 = tk * tk;
 
                         spatialFunc[i, k] = M.Exp( -0.5 * M.Pow( M.Sqrt( ( ti2 + tk2 ) / spatialFactor ), spatialPower ) );
                     }
@@ -308,9 +308,9 @@ namespace AForge.Imaging.Filters
                     colorFunc = new double[colorsCount, colorsCount];
                 }
 
-                for ( int i = 0; i < colorsCount; i++ )
+                for ( var i = 0; i < colorsCount; i++ )
                 {
-                    for ( int k = 0; k < colorsCount; k++ )
+                    for ( var k = 0; k < colorsCount; k++ )
                     {
                         colorFunc[i, k] = M.Exp( -0.5 * ( M.Pow( M.Abs( i - k ) / colorFactor, colorPower ) ) );
                     }
@@ -336,7 +336,7 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int kernelHalf = kernelSize / 2;
+            var kernelHalf = kernelSize / 2;
 
             InitFilter( );
 
@@ -346,7 +346,7 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                Rectangle safeArea = rect;
+                var safeArea = rect;
                 safeArea.Inflate( -kernelHalf, -kernelHalf );
 
                 if ( ( Environment.ProcessorCount > 1 ) && ( enableParallelProcessing ) )
@@ -376,28 +376,28 @@ namespace AForge.Imaging.Filters
         // Perform parallel image processing without checking pixels' coordinates to make sure those are in bounds
         private unsafe void ProcessWithoutChecksParallel( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int startX = rect.Left;
-            int startY = rect.Top;
-            int stopX  = rect.Right;
-            int stopY  = rect.Bottom;
+            var startX = rect.Left;
+            var startY = rect.Top;
+            var stopX  = rect.Right;
+            var stopY  = rect.Bottom;
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
-            int kernelHalf = kernelSize / 2;
-            int bytesInKernelRow = kernelSize * pixelSize;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var kernelHalf = kernelSize / 2;
+            var bytesInKernelRow = kernelSize * pixelSize;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
 
-            int srcOffset = srcStride - rect.Width * pixelSize;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcOffset = srcStride - rect.Width * pixelSize;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // offset of the first kernel's pixel
-            int srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
+            var srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
             // offset to move to the next kernel's pixel after processing one kernel's row
-            int srcKernelOffset = srcStride - bytesInKernelRow;
+            var srcKernelOffset = srcStride - bytesInKernelRow;
 
-            byte* srcBase = (byte*) source.ImageData.ToPointer( );
-            byte* dstBase = (byte*) destination.ImageData.ToPointer( );
+            var srcBase = (byte*) source.ImageData.ToPointer( );
+            var dstBase = (byte*) destination.ImageData.ToPointer( );
 
             // allign pointers to the left most pixel in the first row
             srcBase += startX * pixelSize;
@@ -407,8 +407,8 @@ namespace AForge.Imaging.Filters
             {
                 Parallel.For( startY, stopY, delegate( int y )
                 {
-                    byte* src = srcBase + y * srcStride;
-                    byte* dst = dstBase + y * dstStride;
+                    var src = srcBase + y * srcStride;
+                    var dst = dstBase + y * dstStride;
 
                     byte srcR, srcG, srcB;
                     byte srcR0, srcG0, srcB0;
@@ -418,7 +418,7 @@ namespace AForge.Imaging.Filters
 
                     double sCoefR, sCoefG, sCoefB, sMembR, sMembG, sMembB, coefR, coefG, coefB;
 
-                    for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                    for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;
@@ -478,8 +478,8 @@ namespace AForge.Imaging.Filters
                 // 8bpp grayscale images
                 Parallel.For( startY, stopY, delegate( int y )
                 {
-                    byte* src = srcBase + y * srcStride;
-                    byte* dst = dstBase + y * dstStride;
+                    var src = srcBase + y * srcStride;
+                    var dst = dstBase + y * dstStride;
 
                     byte srcC;
                     byte srcC0;
@@ -488,7 +488,7 @@ namespace AForge.Imaging.Filters
 
                     int tx, ty;
 
-                    for ( int x = startX; x < stopX; x++, src++, dst++ )
+                    for ( var x = startX; x < stopX; x++, src++, dst++ )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;
@@ -530,30 +530,30 @@ namespace AForge.Imaging.Filters
         // Perform image processing without checking pixels' coordinates to make sure those are in bounds
         private unsafe void ProcessWithoutChecks( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int startX = rect.Left;
-            int startY = rect.Top;
-            int stopX  = rect.Right;
-            int stopY  = rect.Bottom;
+            var startX = rect.Left;
+            var startY = rect.Top;
+            var stopX  = rect.Right;
+            var stopY  = rect.Bottom;
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
-            int kernelHalf = kernelSize / 2;
-            int bytesInKernelRow = kernelSize * pixelSize;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var kernelHalf = kernelSize / 2;
+            var bytesInKernelRow = kernelSize * pixelSize;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
 
-            int srcOffset = srcStride - rect.Width * pixelSize;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcOffset = srcStride - rect.Width * pixelSize;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // offset of the first kernel's pixel
-            int srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
+            var srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
             // offset to move to the next kernel's pixel after processing one kernel's row
-            int srcKernelOffset = srcStride - bytesInKernelRow;
+            var srcKernelOffset = srcStride - bytesInKernelRow;
 
             int tx, ty;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
 
             // allign pointers to the first pixel to process
             src += startY * srcStride + startX * pixelSize;
@@ -567,9 +567,9 @@ namespace AForge.Imaging.Filters
 
                 double sCoefR, sCoefG, sCoefB, sMembR, sMembG, sMembB, coefR, coefG, coefB;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                    for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;
@@ -634,9 +634,9 @@ namespace AForge.Imaging.Filters
                 byte* srcPixel;
                 double sCoefC, sMembC, coefC;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, src++, dst++ )
+                    for ( var x = startX; x < stopX; x++, src++, dst++ )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;
@@ -680,34 +680,34 @@ namespace AForge.Imaging.Filters
         // Perform image processing with checking pixels' coordinates to make sure those are in bounds
         private unsafe void ProcessWithEdgeChecks( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
-            int width  = source.Width;
-            int height = source.Height;
+            var width  = source.Width;
+            var height = source.Height;
 
-            int startX = rect.Left;
-            int startY = rect.Top;
-            int stopX  = rect.Right;
-            int stopY  = rect.Bottom;
+            var startX = rect.Left;
+            var startY = rect.Top;
+            var stopX  = rect.Right;
+            var stopY  = rect.Bottom;
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
-            int kernelHalf = kernelSize / 2;
-            int bytesInKernelRow = kernelSize * pixelSize;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( source.PixelFormat ) / 8;
+            var kernelHalf = kernelSize / 2;
+            var bytesInKernelRow = kernelSize * pixelSize;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
 
-            int srcOffset = srcStride - rect.Width * pixelSize;
-            int dstOffset = dstStride - rect.Width * pixelSize;
+            var srcOffset = srcStride - rect.Width * pixelSize;
+            var dstOffset = dstStride - rect.Width * pixelSize;
 
             // offset of the first kernel's pixel
-            int srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
+            var srcKernelFistPixelOffset = kernelHalf * ( srcStride + pixelSize );
             // offset to move to the next kernel's pixel after processing one kernel's row
-            int srcKernelOffset = srcStride - bytesInKernelRow;
+            var srcKernelOffset = srcStride - bytesInKernelRow;
 
             int rx, ry;
             int tx, ty;
 
-            byte* src = (byte*) source.ImageData.ToPointer( );
-            byte* dst = (byte*) destination.ImageData.ToPointer( );
+            var src = (byte*) source.ImageData.ToPointer( );
+            var dst = (byte*) destination.ImageData.ToPointer( );
 
             // allign pointers to the first pixel to process
             src += startY * srcStride + startX * pixelSize;
@@ -722,9 +722,9 @@ namespace AForge.Imaging.Filters
 
                 double sCoefR, sCoefG, sCoefB, sMembR, sMembG, sMembB, coefR, coefG, coefB;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
+                    for ( var x = startX; x < stopX; x++, src += pixelSize, dst += pixelSize )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;
@@ -804,9 +804,9 @@ namespace AForge.Imaging.Filters
                 byte* srcPixel;
                 double sCoefC, sMembC, coefC;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, src++, dst++ )
+                    for ( var x = startX; x < stopX; x++, src++, dst++ )
                     {
                         // lower right corner - to start processing from that point
                         srcPixel = src + srcKernelFistPixelOffset;

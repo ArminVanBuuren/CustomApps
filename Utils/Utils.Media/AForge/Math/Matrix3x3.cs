@@ -66,7 +66,7 @@ namespace AForge.AMath
         {
             get
             {
-                Matrix3x3 m = new Matrix3x3( );
+                var m = new Matrix3x3( );
                 m.V00 = m.V11 = m.V22 = 1;
                 return m;
             }
@@ -109,10 +109,10 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateRotationY( float radians )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V00 = m.V22 = cos;
             m.V02 = sin;
@@ -132,10 +132,10 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateRotationX( float radians )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V11 = m.V22 = cos;
             m.V12 = -sin;
@@ -155,10 +155,10 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateRotationZ( float radians )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            var cos = (float) System.Math.Cos( radians );
+            var sin = (float) System.Math.Sin( radians );
 
             m.V00 = m.V11 = cos;
             m.V01 = -sin;
@@ -242,7 +242,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateFromRows( Vector3 row0, Vector3 row1, Vector3 row2 )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = row0.X;
             m.V01 = row0.Y;
@@ -271,7 +271,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateFromColumns( Vector3 column0, Vector3 column1, Vector3 column2 )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = column0.X;
             m.V10 = column0.Y;
@@ -298,7 +298,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 CreateDiagonal( Vector3 vector )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = vector.X;
             m.V11 = vector.Y;
@@ -356,7 +356,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 operator *( Matrix3x3 matrix1, Matrix3x3 matrix2 )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = matrix1.V00 * matrix2.V00 + matrix1.V01 * matrix2.V10 + matrix1.V02 * matrix2.V20;
             m.V01 = matrix1.V00 * matrix2.V01 + matrix1.V01 * matrix2.V11 + matrix1.V02 * matrix2.V21;
@@ -399,7 +399,7 @@ namespace AForge.AMath
         ///
         public static Matrix3x3 operator +( Matrix3x3 matrix1, Matrix3x3 matrix2 )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = matrix1.V00 + matrix2.V00;
             m.V01 = matrix1.V01 + matrix2.V01;
@@ -443,7 +443,7 @@ namespace AForge.AMath
         ///
         public static Matrix3x3 operator -( Matrix3x3 matrix1, Matrix3x3 matrix2 )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = matrix1.V00 - matrix2.V00;
             m.V01 = matrix1.V01 - matrix2.V01;
@@ -520,7 +520,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 operator *( Matrix3x3 matrix, float factor )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = matrix.V00 * factor;
             m.V01 = matrix.V01 * factor;
@@ -564,7 +564,7 @@ namespace AForge.AMath
         /// 
         public static Matrix3x3 operator +( Matrix3x3 matrix, float value )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = matrix.V00 + value;
             m.V01 = matrix.V01 + value;
@@ -700,7 +700,7 @@ namespace AForge.AMath
         /// 
         public Matrix3x3 Transpose( )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = V00;
             m.V01 = V10;
@@ -725,7 +725,7 @@ namespace AForge.AMath
         ///
         public Matrix3x3 MultiplySelfByTranspose( )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = V00 * V00 + V01 * V01 + V02 * V02;
             m.V10 = m.V01 = V00 * V10 + V01 * V11 + V02 * V12;
@@ -747,7 +747,7 @@ namespace AForge.AMath
         ///
         public Matrix3x3 MultiplyTransposeBySelf( )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = V00 * V00 + V10 * V10 + V20 * V20;
             m.V10 = m.V01 = V00 * V01 + V10 * V11 + V20 * V21;
@@ -769,7 +769,7 @@ namespace AForge.AMath
         /// 
         public Matrix3x3 Adjugate( )
         {
-            Matrix3x3 m = new Matrix3x3( );
+            var m = new Matrix3x3( );
 
             m.V00 = V11 * V22 - V12 * V21;
             m.V01 = -( V01 * V22 - V02 * V21 );
@@ -796,15 +796,15 @@ namespace AForge.AMath
         /// 
         public Matrix3x3 Inverse( )
         {
-            float det = Determinant;
+            var det = Determinant;
 
             if ( det == 0 )
             {
                 throw new ArgumentException( "Cannot calculate inverse of the matrix since it is singular." );
             }
 
-            float detInv = 1 / det;
-            Matrix3x3 m = Adjugate( );
+            var detInv = 1 / det;
+            var m = Adjugate( );
 
             m.V00 *= detInv;
             m.V01 *= detInv;
@@ -856,7 +856,7 @@ namespace AForge.AMath
         /// 
         public void SVD( out Matrix3x3 u, out Vector3 e, out Matrix3x3 v )
         {
-            double[,] uArray = new double[3, 3]
+            var uArray = new double[3, 3]
             {
                 { V00, V01, V02 },
                 { V10, V11, V12 },

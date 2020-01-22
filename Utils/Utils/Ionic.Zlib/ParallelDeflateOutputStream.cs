@@ -51,7 +51,7 @@ namespace Ionic.Zlib
         {
             this.buffer= new byte[size];
             // alloc 5 bytes overhead for every block (margin of safety= 2)
-            int n = size + ((size / 32768)+1) * 5 * 2;
+            var n = size + ((size / 32768)+1) * 5 * 2;
             this.compressed = new byte[n];
             this.compressor = new ZlibCodec();
             this.compressor.InitializeDeflate(compressLevel, false);
@@ -479,9 +479,9 @@ namespace Ionic.Zlib
             _toWrite = new Queue<int>();
             _toFill = new Queue<int>();
             _pool = new System.Collections.Generic.List<WorkItem>();
-            int nTasks = BufferPairsPerCore * Environment.ProcessorCount;
+            var nTasks = BufferPairsPerCore * Environment.ProcessorCount;
             nTasks = Math.Min(nTasks, _maxBufferPairs);
-            for(int i=0; i < nTasks; i++)
+            for(var i=0; i < nTasks; i++)
             {
                 _pool.Add(new WorkItem(_bufferSize, _compressLevel, Strategy, i));
                 _toFill.Enqueue(i);
@@ -523,7 +523,7 @@ namespace Ionic.Zlib
         /// <param name="count">the number of bytes to write.</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            bool mustWait = false;
+            var mustWait = false;
 
             // This method does this:
             //   0. handles any pending exceptions
@@ -562,7 +562,7 @@ namespace Ionic.Zlib
 
                 mustWait = false;
                 // use current buffer, or get a new buffer to fill
-                int ix = -1;
+                var ix = -1;
                 if (_currentlyFilling >= 0)
                 {
                     ix = _currentlyFilling;
@@ -590,9 +590,9 @@ namespace Ionic.Zlib
                     ++_lastFilled; // TODO: consider rollover?
                 }
 
-                WorkItem workitem = _pool[ix];
+                var workitem = _pool[ix];
 
-                int limit = ((workitem.buffer.Length - workitem.inputBytesAvailable) > count)
+                var limit = ((workitem.buffer.Length - workitem.inputBytesAvailable) > count)
                     ? count
                     : (workitem.buffer.Length - workitem.inputBytesAvailable);
 
@@ -652,9 +652,9 @@ namespace Ionic.Zlib
             // After writing a series of compressed buffers, each one closed
             // with Flush.Sync, we now write the final one as Flush.Finish,
             // and then stop.
-            byte[] buffer = new byte[128];
+            var buffer = new byte[128];
             var compressor = new ZlibCodec();
-            int rc = compressor.InitializeDeflate(_compressLevel, false);
+            var rc = compressor.InitializeDeflate(_compressLevel, false);
             compressor.InputBuffer = null;
             compressor.NextIn = 0;
             compressor.AvailableBytesIn = 0;
@@ -694,7 +694,7 @@ namespace Ionic.Zlib
             // compress any partial buffer
             if (_currentlyFilling >= 0)
             {
-                WorkItem workitem = _pool[_currentlyFilling];
+                var workitem = _pool[_currentlyFilling];
                 _DeflateOne(workitem);
                 _currentlyFilling = -1; // get a new buffer next Write()
             }
@@ -885,9 +885,9 @@ namespace Ionic.Zlib
 
             do
             {
-                int firstSkip = -1;
-                int millisecondsToWait = doAll ? 200 : (mustWait ? -1 : 0);
-                int nextToWrite = -1;
+                var firstSkip = -1;
+                var millisecondsToWait = doAll ? 200 : (mustWait ? -1 : 0);
+                var nextToWrite = -1;
 
                 do
                 {
@@ -906,7 +906,7 @@ namespace Ionic.Zlib
 
                         if (nextToWrite >= 0)
                         {
-                            WorkItem workitem = _pool[nextToWrite];
+                            var workitem = _pool[nextToWrite];
                             if (workitem.ordinal != _lastWritten + 1)
                             {
                                 // out of order. requeue and try again.
@@ -1151,11 +1151,11 @@ namespace Ionic.Zlib
         private void _DeflateOne(Object wi)
         {
             // compress one buffer
-            WorkItem workitem = (WorkItem) wi;
+            var workitem = (WorkItem) wi;
             try
             {
-                int myItem = workitem.index;
-                Ionic.Crc.CRC32 crc = new Ionic.Crc.CRC32();
+                var myItem = workitem.index;
+                var crc = new Ionic.Crc.CRC32();
 
                 // calc CRC on the buffer
                 crc.SlurpBlock(workitem.buffer, 0, workitem.inputBytesAvailable);
@@ -1199,8 +1199,8 @@ namespace Ionic.Zlib
 
         private bool DeflateOneSegment(WorkItem workitem)
         {
-            ZlibCodec compressor = workitem.compressor;
-            int rc= 0;
+            var compressor = workitem.compressor;
+            var rc= 0;
             compressor.ResetDeflate();
             compressor.NextIn = 0;
 
@@ -1230,7 +1230,7 @@ namespace Ionic.Zlib
             {
                 lock(_outputLock)
                 {
-                    int tid = Thread.CurrentThread.GetHashCode();
+                    var tid = Thread.CurrentThread.GetHashCode();
 #if !SILVERLIGHT
                     Console.ForegroundColor = (ConsoleColor) (tid % 8 + 8);
 #endif

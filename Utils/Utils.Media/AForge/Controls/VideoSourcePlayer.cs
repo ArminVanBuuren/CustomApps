@@ -416,9 +416,9 @@ namespace AForge.Controls
 
             lock ( sync )
             {
-                Graphics  g = e.Graphics;
-                Rectangle rect = this.ClientRectangle;
-                Pen       borderPen = new Pen( borderColor, 1 );
+                var  g = e.Graphics;
+                var rect = this.ClientRectangle;
+                var       borderPen = new Pen( borderColor, 1 );
 
                 // draw rectangle
                 g.DrawRectangle( borderPen, rect.X, rect.Y, rect.Width - 1, rect.Height - 1 );
@@ -427,12 +427,12 @@ namespace AForge.Controls
                 {
                     if ( ( currentFrame != null ) && ( lastMessage == null ) )
                     {
-                        Bitmap frame = ( convertedFrame != null ) ? convertedFrame : currentFrame;
+                        var frame = ( convertedFrame != null ) ? convertedFrame : currentFrame;
 
                         if ( keepRatio )
                         {
-                            double ratio = (double) frame.Width / frame.Height;
-                            Rectangle newRect = rect;
+                            var ratio = (double) frame.Width / frame.Height;
+                            var newRect = rect;
 
                             if ( rect.Width < rect.Height * ratio )
                             {
@@ -459,7 +459,7 @@ namespace AForge.Controls
                     else
                     {
                         // create font and brush
-                        SolidBrush drawBrush = new SolidBrush( this.ForeColor );
+                        var drawBrush = new SolidBrush( this.ForeColor );
 
                         g.DrawString( ( lastMessage == null ) ? "Connecting ..." : lastMessage,
                             this.Font, drawBrush, new PointF( 5, 5 ) );
@@ -477,9 +477,9 @@ namespace AForge.Controls
         {
             if ( ( autosize ) && ( this.Dock != DockStyle.Fill ) && ( this.Parent != null ) )
             {
-                Rectangle rc = this.Parent.ClientRectangle;
-                int width  = frameSize.Width;
-                int height = frameSize.Height;
+                var rc = this.Parent.ClientRectangle;
+                var width  = frameSize.Width;
+                var height = frameSize.Height;
 
                 // update controls size and location
                 this.SuspendLayout( );
@@ -494,7 +494,7 @@ namespace AForge.Controls
         {
             if ( !requestedToStop )
             {
-                Bitmap newFrame = (Bitmap) eventArgs.Frame.Clone( );
+                var newFrame = (Bitmap) eventArgs.Frame.Clone( );
 
                 // let user process the frame first
                 if ( NewFrame != null )

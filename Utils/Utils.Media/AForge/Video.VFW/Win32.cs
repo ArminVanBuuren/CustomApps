@@ -725,9 +725,9 @@ namespace AForge.Video.VFW
         /// 
         public static string decode_mmioFOURCC( int code )
         {
-            char[] chs = new char[4];
+            var chs = new char[4];
 
-            for ( int i = 0; i < 4; i++ )
+            for ( var i = 0; i < 4; i++ )
             {
                 chs[i] = (char) (byte) ( ( code >> ( i << 3 ) ) & 0xFF );
                 if ( !char.IsLetterOrDigit( chs[i] ) )
@@ -748,8 +748,8 @@ namespace AForge.Video.VFW
         /// 
         public static int AVISaveOptions( IntPtr stream, ref AVICOMPRESSOPTIONS options )
         {
-            IntPtr[] streams = new IntPtr[1];
-            IntPtr[] infPtrs = new IntPtr[1];
+            var streams = new IntPtr[1];
+            var infPtrs = new IntPtr[1];
             IntPtr mem;
             int ret;
 

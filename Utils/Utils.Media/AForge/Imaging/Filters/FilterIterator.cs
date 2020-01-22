@@ -160,12 +160,12 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( Bitmap image )
         {
             // lock source bitmap data
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
             // apply the filter
-            Bitmap dstImage = Apply( imageData );
+            var dstImage = Apply( imageData );
 
             // unlock source image
             image.UnlockBits( imageData );
@@ -189,11 +189,11 @@ namespace AForge.Imaging.Filters
         public Bitmap Apply( BitmapData imageData )
         {
             // initial iteration
-            Bitmap dstImg = baseFilter.Apply( imageData );
+            var dstImg = baseFilter.Apply( imageData );
             Bitmap tmpImg;
 
             // continue to iterate
-            for ( int i = 1; i < iterations; i++ )
+            for ( var i = 1; i < iterations; i++ )
             {
                 tmpImg = dstImg;
                 dstImg = baseFilter.Apply( tmpImg );
@@ -218,11 +218,11 @@ namespace AForge.Imaging.Filters
         public UnmanagedImage Apply( UnmanagedImage image )
         {
             // initial iteration
-            UnmanagedImage dstImg = baseFilter.Apply( image );
+            var dstImg = baseFilter.Apply( image );
             UnmanagedImage tmpImg;
 
             // continue to iterate
-            for ( int i = 1; i < iterations; i++ )
+            for ( var i = 1; i < iterations; i++ )
             {
                 tmpImg = dstImg;
                 dstImg = baseFilter.Apply( tmpImg );
@@ -256,12 +256,12 @@ namespace AForge.Imaging.Filters
             else
             {
                 // initial iteration
-                UnmanagedImage dstImg = baseFilter.Apply( sourceImage );
+                var dstImg = baseFilter.Apply( sourceImage );
                 UnmanagedImage tmpImg;
 
                 iterations--;
                 // continue to iterate
-                for ( int i = 1; i < iterations; i++ )
+                for ( var i = 1; i < iterations; i++ )
                 {
                     tmpImg = dstImg;
                     dstImg = baseFilter.Apply( tmpImg );

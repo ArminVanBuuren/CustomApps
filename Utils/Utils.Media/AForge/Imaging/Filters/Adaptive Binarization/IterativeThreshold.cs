@@ -123,10 +123,10 @@ namespace AForge.Imaging.Filters
         /// 
         public int CalculateThreshold( Bitmap image, Rectangle rect )
         {
-            int calculatedThreshold = 0;
+            var calculatedThreshold = 0;
 
             // lock source bitmap data
-            BitmapData data = image.LockBits(
+            var data = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -184,17 +184,17 @@ namespace AForge.Imaging.Filters
                  ( image.PixelFormat != PixelFormat.Format16bppGrayScale ) )
                 throw new UnsupportedImageFormatException( "Source pixel format is not supported by the routine." );
 
-            int calculatedThreshold = threshold;
+            var calculatedThreshold = threshold;
 
             // get start and stop X-Y coordinates
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
             // histogram array
             int[] integerHistogram = null;
-            int maxThreshold = 0;
+            var maxThreshold = 0;
 
             unsafe
             {
@@ -204,17 +204,17 @@ namespace AForge.Imaging.Filters
                     maxThreshold = 256;
 
                     // collect histogram first
-                    byte* ptr = (byte*) image.ImageData.ToPointer( );
-                    int offset = image.Stride - rect.Width;
+                    var ptr = (byte*) image.ImageData.ToPointer( );
+                    var offset = image.Stride - rect.Width;
 
                     // allign pointer to the first pixel to process
                     ptr += ( startY * image.Stride + startX );
 
                     // for each line	
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, ptr++ )
+                        for ( var x = startX; x < stopX; x++, ptr++ )
                         {
                             integerHistogram[*ptr]++;
                         }
@@ -227,16 +227,16 @@ namespace AForge.Imaging.Filters
                     maxThreshold = 65536;
 
                     // collect histogram first
-                    byte* basePtr = (byte*) image.ImageData.ToPointer( ) + startX * 2;
-                    int stride = image.Stride;
+                    var basePtr = (byte*) image.ImageData.ToPointer( ) + startX * 2;
+                    var stride = image.Stride;
 
                     // for each line	
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
-                        ushort* ptr = (ushort*) ( basePtr + y * stride );
+                        var ptr = (ushort*) ( basePtr + y * stride );
 
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, ptr++ )
+                        for ( var x = startX; x < stopX; x++, ptr++ )
                         {
                             integerHistogram[*ptr]++;
                         }
@@ -245,7 +245,7 @@ namespace AForge.Imaging.Filters
             }
 
             // old threshold value
-            int oldThreshold = 0;
+            var oldThreshold = 0;
 
             do
             {
@@ -253,19 +253,19 @@ namespace AForge.Imaging.Filters
 
                 // object's mean and amount of object's pixels
                 double meanObject = 0;
-                int objectPixels = 0;
+                var objectPixels = 0;
 
                 // background's mean and amount of background's pixels
                 double meanBackground = 0;
-                int backgroundPixels = 0;
+                var backgroundPixels = 0;
 
-                for ( int t = 0; t < calculatedThreshold; t++ )
+                for ( var t = 0; t < calculatedThreshold; t++ )
                 {
                     meanBackground += (double) t * integerHistogram[t];
                     backgroundPixels += integerHistogram[t];
                 }
                 // calculate object pixels
-                for ( int t = calculatedThreshold; t < maxThreshold; t++ )
+                for ( var t = calculatedThreshold; t < maxThreshold; t++ )
                 {
                     meanObject += (double) t * integerHistogram[t];
                     objectPixels += integerHistogram[t];

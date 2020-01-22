@@ -123,7 +123,7 @@ namespace Utils.ConditionEx
             if (ExpressionResultChanged == null)
                 return;
 
-            string temp = StringResult;
+            var temp = StringResult;
             ExpressionResultChanged.Invoke(this, EventArgs.Empty);
         }
 

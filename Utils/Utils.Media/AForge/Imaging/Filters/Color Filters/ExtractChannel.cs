@@ -118,10 +118,10 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get width and height
-            int width = sourceData.Width;
-            int height = sourceData.Height;
+            var width = sourceData.Width;
+            var height = sourceData.Height;
 
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
 
             if ( ( channel == RGB.A ) && ( pixelSize != 4 ) && ( pixelSize != 8 ) )
             {
@@ -130,19 +130,19 @@ namespace AForge.Imaging.Filters
 
             if ( pixelSize <= 4 )
             {
-                int srcOffset = sourceData.Stride - width * pixelSize;
-                int dstOffset = destinationData.Stride - width;
+                var srcOffset = sourceData.Stride - width * pixelSize;
+                var dstOffset = destinationData.Stride - width;
 
                 // do the job
-                byte * src = (byte*) sourceData.ImageData.ToPointer( );
-                byte * dst = (byte*) destinationData.ImageData.ToPointer( );
+                var src = (byte*) sourceData.ImageData.ToPointer( );
+                var dst = (byte*) destinationData.ImageData.ToPointer( );
 
                 // allign source pointer to the required channel
                 src += channel;
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, src += pixelSize, dst++ )
+                    for ( var x = 0; x < width; x++, src += pixelSize, dst++ )
                     {
                         *dst = *src;
                     }
@@ -154,22 +154,22 @@ namespace AForge.Imaging.Filters
             {
                 pixelSize /= 2;
 
-                byte* srcBase   = (byte*) sourceData.ImageData.ToPointer( );
-                byte* dstBase   = (byte*) destinationData.ImageData.ToPointer( );
-                int srcStride = sourceData.Stride;
-                int dstStride = destinationData.Stride;
+                var srcBase   = (byte*) sourceData.ImageData.ToPointer( );
+                var dstBase   = (byte*) destinationData.ImageData.ToPointer( );
+                var srcStride = sourceData.Stride;
+                var dstStride = destinationData.Stride;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    ushort* src = (ushort*) ( srcBase + y * srcStride );
-                    ushort* dst = (ushort*) ( dstBase + y * dstStride );
+                    var src = (ushort*) ( srcBase + y * srcStride );
+                    var dst = (ushort*) ( dstBase + y * dstStride );
 
                     // allign source pointer to the required channel
                     src += channel;
 
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src += pixelSize, dst++ )
+                    for ( var x = 0; x < width; x++, src += pixelSize, dst++ )
                     {
                         *dst = *src;
                     }

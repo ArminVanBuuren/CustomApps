@@ -122,7 +122,7 @@ namespace TLSharp.Core
                 var port = reader.ReadInt32();
 
                 var isAuthExsist = reader.ReadInt32() == 1;
-                int sessionExpires = 0;
+                var sessionExpires = 0;
                 TLUser TLUser = null;
                 if (isAuthExsist)
                 {
@@ -169,14 +169,14 @@ namespace TLSharp.Core
         private static ulong GenerateRandomUlong()
         {
             var random = new Random();
-            ulong rand = (((ulong)random.Next()) << 32) | ((ulong)random.Next());
+            var rand = (((ulong)random.Next()) << 32) | ((ulong)random.Next());
             return rand;
         }
 
         public long GetNewMessageId()
         {
-            long time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
-            long newMessageId = ((time / 1000 + TimeOffset) << 32) |
+            var time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
+            var newMessageId = ((time / 1000 + TimeOffset) << 32) |
                                 ((time % 1000) << 22) |
                                 (random.Next(524288) << 2); // 2^19
                                                             // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]

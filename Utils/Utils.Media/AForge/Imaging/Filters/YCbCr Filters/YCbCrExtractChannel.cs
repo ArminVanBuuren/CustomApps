@@ -105,27 +105,27 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
 
 			// get width and height
-			int width = sourceData.Width;
-			int height = sourceData.Height;
+			var width = sourceData.Width;
+			var height = sourceData.Height;
 
-            int srcOffset = sourceData.Stride - width * pixelSize;
-			int dstOffset = destinationData.Stride - width;
-			RGB rgb = new RGB( );
-			YCbCr ycbcr = new YCbCr( );
+            var srcOffset = sourceData.Stride - width * pixelSize;
+			var dstOffset = destinationData.Stride - width;
+			var rgb = new RGB( );
+			var ycbcr = new YCbCr( );
 
 			// do the job
-			byte * src = (byte *) sourceData.ImageData.ToPointer( );
-			byte * dst = (byte *) destinationData.ImageData.ToPointer( );
+			var src = (byte *) sourceData.ImageData.ToPointer( );
+			var dst = (byte *) destinationData.ImageData.ToPointer( );
 			byte v = 0;
 
 			// for each row
-			for ( int y = 0; y < height; y++ )
+			for ( var y = 0; y < height; y++ )
 			{
 				// for each pixel
-                for ( int x = 0; x < width; x++, src += pixelSize, dst++ )
+                for ( var x = 0; x < width; x++, src += pixelSize, dst++ )
 				{
 					rgb.Red		= src[RGB.R];
 					rgb.Green	= src[RGB.G];

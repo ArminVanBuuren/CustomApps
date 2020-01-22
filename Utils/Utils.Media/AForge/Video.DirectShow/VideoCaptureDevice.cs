@@ -169,7 +169,7 @@ namespace AForge.Video.DirectShow
                         }
                         else
                         {
-                            for ( int i = 0; ( i < 500 ) && ( crossbarVideoInputs == null ); i++ )
+                            for ( var i = 0; ( i < 500 ) && ( crossbarVideoInputs == null ); i++ )
                             {
                                 Thread.Sleep( 10 );
                             }
@@ -286,7 +286,7 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                int frames = framesReceived;
+                var frames = framesReceived;
                 framesReceived = 0;
                 return frames;
             }
@@ -304,7 +304,7 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                long bytes = bytesReceived;
+                var bytes = bytesReceived;
                 bytesReceived = 0;
                 return bytes;
             }
@@ -447,7 +447,7 @@ namespace AForge.Video.DirectShow
                         }
                         else
                         {
-                            for ( int i = 0; ( i < 500 ) && ( videoCapabilities == null ); i++ )
+                            for ( var i = 0; ( i < 500 ) && ( videoCapabilities == null ); i++ )
                             {
                                 Thread.Sleep( 10 );
                             }
@@ -501,7 +501,7 @@ namespace AForge.Video.DirectShow
                         }
                         else
                         {
-                            for ( int i = 0; ( i < 500 ) && ( snapshotCapabilities == null ); i++ )
+                            for ( var i = 0; ( i < 500 ) && ( snapshotCapabilities == null ); i++ )
                             {
                                 Thread.Sleep( 10 );
                             }
@@ -732,7 +732,7 @@ namespace AForge.Video.DirectShow
             lock ( sync )
             {
                 // wait max 5 seconds till the flag gets initialized
-                for ( int i = 0; ( i < 500 ) && ( !isCrossbarAvailable.HasValue ) && ( IsRunning ); i++ )
+                for ( var i = 0; ( i < 500 ) && ( !isCrossbarAvailable.HasValue ) && ( IsRunning ); i++ )
                 {
                     Thread.Sleep( 10 );
                 }
@@ -777,7 +777,7 @@ namespace AForge.Video.DirectShow
                     }
                     else
                     {
-                        for ( int i = 0; ( i < 500 ) && ( !isCrossbarAvailable.HasValue ); i++ )
+                        for ( var i = 0; ( i < 500 ) && ( !isCrossbarAvailable.HasValue ); i++ )
                         {
                             Thread.Sleep( 10 );
                         }
@@ -822,7 +822,7 @@ namespace AForge.Video.DirectShow
         /// 
         public bool SetCameraProperty( CameraControlProperty property, int value, CameraControlFlags controlFlags )
         {
-            bool ret = true;
+            var ret = true;
 
             // check if source was set
             if ( ( deviceMoniker == null ) || ( string.IsNullOrEmpty( deviceMoniker ) ) )
@@ -849,8 +849,8 @@ namespace AForge.Video.DirectShow
                     throw new NotSupportedException( "The video source does not support camera control." );
                 }
 
-                IAMCameraControl pCamControl = (IAMCameraControl) tempSourceObject;
-                int hr = pCamControl.Set( property, value, controlFlags );
+                var pCamControl = (IAMCameraControl) tempSourceObject;
+                var hr = pCamControl.Set( property, value, controlFlags );
 
                 ret = ( hr >= 0 );
 
@@ -876,7 +876,7 @@ namespace AForge.Video.DirectShow
         /// 
         public bool GetCameraProperty( CameraControlProperty property, out int value, out CameraControlFlags controlFlags )
         {
-            bool ret = true;
+            var ret = true;
 
             // check if source was set
             if ( ( deviceMoniker == null ) || ( string.IsNullOrEmpty( deviceMoniker ) ) )
@@ -903,8 +903,8 @@ namespace AForge.Video.DirectShow
                     throw new NotSupportedException( "The video source does not support camera control." );
                 }
 
-                IAMCameraControl pCamControl = (IAMCameraControl) tempSourceObject;
-                int hr = pCamControl.Get( property, out value, out controlFlags );
+                var pCamControl = (IAMCameraControl) tempSourceObject;
+                var hr = pCamControl.Get( property, out value, out controlFlags );
 
                 ret = ( hr >= 0 );
 
@@ -933,7 +933,7 @@ namespace AForge.Video.DirectShow
         /// 
         public bool GetCameraPropertyRange( CameraControlProperty property, out int minValue, out int maxValue, out int stepSize, out int defaultValue, out CameraControlFlags controlFlags )
         {
-            bool ret = true;
+            var ret = true;
 
             // check if source was set
             if ( ( deviceMoniker == null ) || ( string.IsNullOrEmpty( deviceMoniker ) ) )
@@ -960,8 +960,8 @@ namespace AForge.Video.DirectShow
                     throw new NotSupportedException( "The video source does not support camera control." );
                 }
 
-                IAMCameraControl pCamControl = (IAMCameraControl) tempSourceObject;
-                int hr = pCamControl.GetRange( property, out minValue, out maxValue, out stepSize, out defaultValue, out controlFlags );
+                var pCamControl = (IAMCameraControl) tempSourceObject;
+                var hr = pCamControl.GetRange( property, out minValue, out maxValue, out stepSize, out defaultValue, out controlFlags );
 
                 ret = ( hr >= 0 );
 
@@ -982,12 +982,12 @@ namespace AForge.Video.DirectShow
 
         private void WorkerThread( bool runGraph )
         {
-            ReasonToFinishPlaying reasonToStop = ReasonToFinishPlaying.StoppedByUser;
-            bool isSapshotSupported = false;
+            var reasonToStop = ReasonToFinishPlaying.StoppedByUser;
+            var isSapshotSupported = false;
 
             // grabber
-            Grabber videoGrabber = new Grabber( this, false );
-            Grabber snapshotGrabber = new Grabber( this, true );
+            var videoGrabber = new Grabber( this, false );
+            var snapshotGrabber = new Grabber( this, true );
 
             // objects
             object captureGraphObject = null;
@@ -1013,7 +1013,7 @@ namespace AForge.Video.DirectShow
             try
             {
                 // get type of capture graph builder
-                Type type = Type.GetTypeFromCLSID( Clsid.CaptureGraphBuilder2 );
+                var type = Type.GetTypeFromCLSID( Clsid.CaptureGraphBuilder2 );
                 if ( type == null )
                     throw new ApplicationException( "Failed creating capture graph builder" );
 
@@ -1073,7 +1073,7 @@ namespace AForge.Video.DirectShow
                 graph.AddFilter( snapshotGrabberBase, "grabber_snapshot" );
 
                 // set media type
-                AMMediaType mediaType = new AMMediaType( );
+                var mediaType = new AMMediaType( );
                 mediaType.MajorType = MediaType.Video;
                 mediaType.SubType   = MediaSubType.RGB24;
 
@@ -1150,7 +1150,7 @@ namespace AForge.Video.DirectShow
 
                     if ( videoSampleGrabber.GetConnectedMediaType( mediaType ) == 0 )
                     {
-                        VideoInfoHeader vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
+                        var vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
 
                         videoGrabber.Width = vih.BmiHeader.Width;
                         videoGrabber.Height = vih.BmiHeader.Height;
@@ -1165,7 +1165,7 @@ namespace AForge.Video.DirectShow
 
                         if ( snapshotSampleGrabber.GetConnectedMediaType( mediaType ) == 0 )
                         {
-                            VideoInfoHeader vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
+                            var vih = (VideoInfoHeader) Marshal.PtrToStructure( mediaType.FormatPtr, typeof( VideoInfoHeader ) );
 
                             snapshotGrabber.Width  = vih.BmiHeader.Width;
                             snapshotGrabber.Height = vih.BmiHeader.Height;
@@ -1329,15 +1329,15 @@ namespace AForge.Video.DirectShow
             // iterate through device's capabilities to find mediaType for desired resolution
             int capabilitiesCount = 0, capabilitySize = 0;
             AMMediaType newMediaType = null;
-            VideoStreamConfigCaps caps = new VideoStreamConfigCaps( );
+            var caps = new VideoStreamConfigCaps( );
 
             streamConfig.GetNumberOfCapabilities( out capabilitiesCount, out capabilitySize );
 
-            for ( int i = 0; i < capabilitiesCount; i++ )
+            for ( var i = 0; i < capabilitiesCount; i++ )
             {
                 try
                 {
-                    VideoCapabilities vc = new VideoCapabilities( streamConfig, i );
+                    var vc = new VideoCapabilities( streamConfig, i );
 
                     if ( resolution == vc )
                     {
@@ -1417,14 +1417,14 @@ namespace AForge.Video.DirectShow
             try
             {
                 // retrieve ISpecifyPropertyPages interface of the device
-                ISpecifyPropertyPages pPropPages = (ISpecifyPropertyPages) sourceObject;
+                var pPropPages = (ISpecifyPropertyPages) sourceObject;
 
                 // get property pages from the property bag
                 CAUUID caGUID;
                 pPropPages.GetPages( out caGUID );
 
                 // get filter info
-                FilterInfo filterInfo = new FilterInfo( deviceMoniker );
+                var filterInfo = new FilterInfo( deviceMoniker );
 
                 // create and display the OlePropertyFrame
                 Win32.OleCreatePropertyFrame( parentWindow, 0, 0, filterInfo.Name, 1, ref sourceObject, caGUID.cElems, caGUID.pElems, 0, 0, IntPtr.Zero );
@@ -1447,7 +1447,7 @@ namespace AForge.Video.DirectShow
                     return cacheCrossbarVideoInputs[deviceMoniker];
                 }
 
-                List<VideoInput> videoInputsList = new List<VideoInput>( );
+                var videoInputsList = new List<VideoInput>( );
 
                 if ( crossbar != null )
                 {
@@ -1457,7 +1457,7 @@ namespace AForge.Video.DirectShow
                     if ( crossbar.get_PinCounts( out outPinsCount, out inPinsCount ) == 0 )
                     {
                         // collect all video inputs
-                        for ( int i = 0; i < inPinsCount; i++ )
+                        for ( var i = 0; i < inPinsCount; i++ )
                         {
                             int pinIndexRelated;
                             PhysicalConnectorType type;
@@ -1473,7 +1473,7 @@ namespace AForge.Video.DirectShow
                     }
                 }
 
-                VideoInput[] videoInputs = new VideoInput[videoInputsList.Count];
+                var videoInputs = new VideoInput[videoInputsList.Count];
                 videoInputsList.CopyTo( videoInputs );
 
                 cacheCrossbarVideoInputs.Add( deviceMoniker, videoInputs );
@@ -1485,19 +1485,19 @@ namespace AForge.Video.DirectShow
         // Get type of input connected to video output of the crossbar
         private VideoInput GetCurrentCrossbarInput( IAMCrossbar crossbar )
         {
-            VideoInput videoInput = VideoInput.Default;
+            var videoInput = VideoInput.Default;
 
             int inPinsCount, outPinsCount;
 
             // gen number of pins in the crossbar
             if ( crossbar.get_PinCounts( out outPinsCount, out inPinsCount ) == 0 )
             {
-                int videoOutputPinIndex = -1;
+                var videoOutputPinIndex = -1;
                 int pinIndexRelated;
                 PhysicalConnectorType type;
 
                 // find index of the video output pin
-                for ( int i = 0; i < outPinsCount; i++ )
+                for ( var i = 0; i < outPinsCount; i++ )
                 {
                     if ( crossbar.get_CrossbarPinInfo( false, i, out pinIndexRelated, out type ) != 0 )
                         continue;
@@ -1538,13 +1538,13 @@ namespace AForge.Video.DirectShow
                 // gen number of pins in the crossbar
                 if ( crossbar.get_PinCounts( out outPinsCount, out inPinsCount ) == 0 )
                 {
-                    int videoOutputPinIndex = -1;
-                    int videoInputPinIndex = -1;
+                    var videoOutputPinIndex = -1;
+                    var videoInputPinIndex = -1;
                     int pinIndexRelated;
                     PhysicalConnectorType type;
 
                     // find index of the video output pin
-                    for ( int i = 0; i < outPinsCount; i++ )
+                    for ( var i = 0; i < outPinsCount; i++ )
                     {
                         if ( crossbar.get_CrossbarPinInfo( false, i, out pinIndexRelated, out type ) != 0 )
                             continue;
@@ -1557,7 +1557,7 @@ namespace AForge.Video.DirectShow
                     }
 
                     // find index of the required input pin
-                    for ( int i = 0; i < inPinsCount; i++ )
+                    for ( var i = 0; i < inPinsCount; i++ )
                     {
                         if ( crossbar.get_CrossbarPinInfo( true, i, out pinIndexRelated, out type ) != 0 )
                             continue;
@@ -1602,7 +1602,7 @@ namespace AForge.Video.DirectShow
         /// 
         private void OnSnapshotFrame( Bitmap image )
         {
-            TimeSpan timeSinceStarted = DateTime.Now - startTime;
+            var timeSinceStarted = DateTime.Now - startTime;
 
             // TODO: need to find better way to ignore the first snapshot, which is sent
             // automatically (or better disable it)
@@ -1654,24 +1654,24 @@ namespace AForge.Video.DirectShow
                 if ( parent.NewFrame != null )
                 {
                     // create new image
-                    System.Drawing.Bitmap image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
+                    var image = new Bitmap( width, height, PixelFormat.Format24bppRgb );
 
                     // lock bitmap data
-                    BitmapData imageData = image.LockBits(
+                    var imageData = image.LockBits(
                         new Rectangle( 0, 0, width, height ),
                         ImageLockMode.ReadWrite,
                         PixelFormat.Format24bppRgb );
 
                     // copy image data
-                    int srcStride = imageData.Stride;
-                    int dstStride = imageData.Stride;
+                    var srcStride = imageData.Stride;
+                    var dstStride = imageData.Stride;
 
                     unsafe
                     {
-                        byte* dst = (byte*) imageData.Scan0.ToPointer( ) + dstStride * ( height - 1 );
-                        byte* src = (byte*) buffer.ToPointer( );
+                        var dst = (byte*) imageData.Scan0.ToPointer( ) + dstStride * ( height - 1 );
+                        var src = (byte*) buffer.ToPointer( );
 
-                        for ( int y = 0; y < height; y++ )
+                        for ( var y = 0; y < height; y++ )
                         {
                             Win32.memcpy( dst, src, srcStride );
                             dst -= dstStride;

@@ -76,14 +76,14 @@ namespace FastColoredTextBoxNS
 
         private void btResore_Click(object sender, EventArgs e)
         {
-            HotkeysMapping h = new HotkeysMapping();
+            var h = new HotkeysMapping();
             h.InitDefault();
             BuildWrappers(h);
         }
 
         private void btRemove_Click(object sender, EventArgs e)
         {
-            for (int i = dgv.RowCount - 1; i >= 0; i--)
+            for (var i = dgv.RowCount - 1; i >= 0; i--)
                 if (dgv.Rows[i].Selected) dgv.Rows.RemoveAt(i);
         }
 
@@ -102,7 +102,7 @@ namespace FastColoredTextBoxNS
 
         private string GetUnAssignedActions()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             var dic = new Dictionary<FCTBAction, FCTBAction>();
 
             foreach (var w in wrappers)
@@ -124,7 +124,7 @@ namespace FastColoredTextBoxNS
     {
         public HotkeyWrapper(Keys keyData, FCTBAction action)
         {
-            KeyEventArgs a = new KeyEventArgs(keyData);
+            var a = new KeyEventArgs(keyData);
             Ctrl = a.Control;
             Shift = a.Shift;
             Alt = a.Alt;

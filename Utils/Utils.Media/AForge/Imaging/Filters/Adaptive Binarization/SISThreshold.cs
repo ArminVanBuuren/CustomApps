@@ -100,10 +100,10 @@ namespace AForge.Imaging.Filters
         /// 
         public int CalculateThreshold( Bitmap image, Rectangle rect )
         {
-            int calculatedThreshold = 0;
+            var calculatedThreshold = 0;
 
             // lock source bitmap data
-            BitmapData data = image.LockBits(
+            var data = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -160,14 +160,14 @@ namespace AForge.Imaging.Filters
             if ( image.PixelFormat != PixelFormat.Format8bppIndexed )
                 throw new UnsupportedImageFormatException( "Source pixel format is not supported by the routine." );
 
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int stopXM1 = stopX - 1;
-            int stopYM1 = stopY - 1;
-            int stride  = image.Stride;
-            int offset  = stride - rect.Width;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var stopXM1 = stopX - 1;
+            var stopYM1 = stopY - 1;
+            var stride  = image.Stride;
+            var offset  = stride - rect.Width;
 
             // differences and weights
             double ex, ey, weight, weightTotal = 0, total = 0;
@@ -175,7 +175,7 @@ namespace AForge.Imaging.Filters
             unsafe
             {
                 // do the job
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
 
                 // allign pointer to the first pixel to process
                 ptr += ( startY * image.Stride + startX );
@@ -184,11 +184,11 @@ namespace AForge.Imaging.Filters
                 ptr += stride;
 
                 // for each line
-                for ( int y = startY + 1; y < stopYM1; y++ )
+                for ( var y = startY + 1; y < stopYM1; y++ )
                 {
                     ptr++;
                     // for each pixels
-                    for ( int x = startX + 1; x < stopXM1; x++, ptr++ )
+                    for ( var x = startX + 1; x < stopXM1; x++, ptr++ )
                     {
                         // the equations are:
                         // ex = | I(x + 1, y) - I(x - 1, y) |

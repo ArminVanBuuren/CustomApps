@@ -65,7 +65,7 @@ namespace TLSharp.Core.Auth
 
                     var serverNonce = binaryReader.ReadBytes(16);
 
-                    byte[] pqbytes = Serializers.Bytes.read(binaryReader);
+                    var pqbytes = Serializers.Bytes.read(binaryReader);
                     var pq = new BigInteger(1, pqbytes);
 
                     var vectorId = binaryReader.ReadInt32();
@@ -78,7 +78,7 @@ namespace TLSharp.Core.Auth
                     var fingerprintCount = binaryReader.ReadInt32();
                     for (var i = 0; i < fingerprintCount; i++)
                     {
-                        byte[] fingerprint = binaryReader.ReadBytes(8);
+                        var fingerprint = binaryReader.ReadBytes(8);
                         fingerprints.Add(fingerprint);
                     }
 

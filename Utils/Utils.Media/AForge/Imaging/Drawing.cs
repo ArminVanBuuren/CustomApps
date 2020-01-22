@@ -59,18 +59,18 @@ namespace AForge.Imaging
         {
             CheckPixelFormat( image.PixelFormat );
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // image dimension
-            int imageWidth  = image.Width;
-            int imageHeight = image.Height;
-            int stride      = image.Stride;
+            var imageWidth  = image.Width;
+            var imageHeight = image.Height;
+            var stride      = image.Stride;
 
             // rectangle dimension and position
-            int rectX1 = rectangle.X;
-            int rectY1 = rectangle.Y;
-            int rectX2 = rectangle.X + rectangle.Width - 1;
-            int rectY2 = rectangle.Y + rectangle.Height - 1;
+            var rectX1 = rectangle.X;
+            var rectY1 = rectangle.Y;
+            var rectX2 = rectangle.X + rectangle.Width - 1;
+            var rectY2 = rectangle.Y + rectangle.Height - 1;
 
             // check if rectangle is in the image
             if ( ( rectX1 >= imageWidth ) || ( rectY1 >= imageHeight ) || ( rectX2 < 0 ) || ( rectY2 < 0 ) )
@@ -79,22 +79,22 @@ namespace AForge.Imaging
                 return;
             }
 
-            int startX  = Math.Max( 0, rectX1 );
-            int stopX   = Math.Min( imageWidth - 1, rectX2 );
-            int startY  = Math.Max( 0, rectY1 );
-            int stopY   = Math.Min( imageHeight - 1, rectY2 );
+            var startX  = Math.Max( 0, rectX1 );
+            var stopX   = Math.Min( imageWidth - 1, rectX2 );
+            var startY  = Math.Max( 0, rectY1 );
+            var stopY   = Math.Min( imageHeight - 1, rectY2 );
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( ) + startY * stride + startX * pixelSize;
+            var ptr = (byte*) image.ImageData.ToPointer( ) + startY * stride + startX * pixelSize;
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                byte gray = (byte) ( 0.2125 * color.R + 0.7154 * color.G + 0.0721 * color.B );
+                var gray = (byte) ( 0.2125 * color.R + 0.7154 * color.G + 0.0721 * color.B );
 
-                int fillWidth = stopX - startX + 1;
+                var fillWidth = stopX - startX + 1;
 
-                for ( int y = startY; y <= stopY; y++ )
+                for ( var y = startY; y <= stopY; y++ )
                 {
                     AForge.SystemTools.SetUnmanagedMemory( ptr, gray, fillWidth );
                     ptr += stride;
@@ -103,20 +103,20 @@ namespace AForge.Imaging
             else if ( image.PixelFormat == PixelFormat.Format32bppArgb )
             {
                 // color 32 bpp ARGB image
-                double fillAlpha    = color.A / 255.0;
-                double fillNegAlpha = 1.0 - fillAlpha;
+                var fillAlpha    = color.A / 255.0;
+                var fillNegAlpha = 1.0 - fillAlpha;
 
-                double fillRedPart   = fillAlpha * color.R;
-                double fillGreenPart = fillAlpha * color.G;
-                double fillBluePart  = fillAlpha * color.B;
+                var fillRedPart   = fillAlpha * color.R;
+                var fillGreenPart = fillAlpha * color.G;
+                var fillBluePart  = fillAlpha * color.B;
 
-                int offset = stride - ( stopX - startX + 1 ) * 4;
+                var offset = stride - ( stopX - startX + 1 ) * 4;
 
-                for ( int y = startY; y <= stopY; y++ )
+                for ( var y = startY; y <= stopY; y++ )
                 {
-                    for ( int x = startX; x <= stopX; x++, ptr += 4 )
+                    for ( var x = startX; x <= stopX; x++, ptr += 4 )
                     {
-                        double srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
+                        var srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
 
                         ptr[RGB.R] = (byte) ( ( fillRedPart   + srcAlphaPart * ptr[RGB.R] ) );
                         ptr[RGB.G] = (byte) ( ( fillGreenPart + srcAlphaPart * ptr[RGB.G] ) );
@@ -130,18 +130,18 @@ namespace AForge.Imaging
             else
             {
                 // color 24/32 RGB image
-                byte red    = color.R;
-                byte green  = color.G;
-                byte blue   = color.B;
+                var red    = color.R;
+                var green  = color.G;
+                var blue   = color.B;
 
-                int offset = stride - ( stopX - startX + 1 ) * pixelSize;
+                var offset = stride - ( stopX - startX + 1 ) * pixelSize;
 
                 if ( color.A == 255 )
                 {
                     // just copy fill color if it is not transparent
-                    for ( int y = startY; y <= stopY; y++ )
+                    for ( var y = startY; y <= stopY; y++ )
                     {
-                        for ( int x = startX; x <= stopX; x++, ptr += pixelSize )
+                        for ( var x = startX; x <= stopX; x++, ptr += pixelSize )
                         {
                             ptr[RGB.R] = red;
                             ptr[RGB.G] = green;
@@ -154,15 +154,15 @@ namespace AForge.Imaging
                 {
                     // do alpha blending for transparent colors
                     int fillAlpha = color.A;
-                    int fillNegAlpha = 255 - fillAlpha;
+                    var fillNegAlpha = 255 - fillAlpha;
 
-                    int fillRedPart   = fillAlpha * color.R;
-                    int fillGreenPart = fillAlpha * color.G;
-                    int fillBluePart  = fillAlpha * color.B;
+                    var fillRedPart   = fillAlpha * color.R;
+                    var fillGreenPart = fillAlpha * color.G;
+                    var fillBluePart  = fillAlpha * color.B;
 
-                    for ( int y = startY; y <= stopY; y++ )
+                    for ( var y = startY; y <= stopY; y++ )
                     {
-                        for ( int x = startX; x <= stopX; x++, ptr += pixelSize )
+                        for ( var x = startX; x <= stopX; x++, ptr += pixelSize )
                         {
                             ptr[RGB.R] = (byte) ( ( fillRedPart   + fillNegAlpha * ptr[RGB.R] ) / 255 );
                             ptr[RGB.G] = (byte) ( ( fillGreenPart + fillNegAlpha * ptr[RGB.G] ) / 255 );
@@ -203,18 +203,18 @@ namespace AForge.Imaging
         {
             CheckPixelFormat( image.PixelFormat );
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // image dimension
-            int imageWidth  = image.Width;
-            int imageHeight = image.Height;
-            int stride      = image.Stride;
+            var imageWidth  = image.Width;
+            var imageHeight = image.Height;
+            var stride      = image.Stride;
 
             // rectangle dimension and position
-            int rectX1 = rectangle.X;
-            int rectY1 = rectangle.Y;
-            int rectX2 = rectangle.X + rectangle.Width - 1;
-            int rectY2 = rectangle.Y + rectangle.Height - 1;
+            var rectX1 = rectangle.X;
+            var rectY1 = rectangle.Y;
+            var rectX2 = rectangle.X + rectangle.Width - 1;
+            var rectY2 = rectangle.Y + rectangle.Height - 1;
 
             // check if rectangle is in the image
             if ( ( rectX1 >= imageWidth ) || ( rectY1 >= imageHeight ) || ( rectX2 < 0 ) || ( rectY2 < 0 ) )
@@ -264,12 +264,12 @@ namespace AForge.Imaging
 
             CheckPixelFormat( image.PixelFormat );
 
-            int pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = System.Drawing.Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // image dimension
-            int imageWidth  = image.Width;
-            int imageHeight = image.Height;
-            int stride      = image.Stride;
+            var imageWidth  = image.Width;
+            var imageHeight = image.Height;
+            var stride      = image.Stride;
 
             // check if there is something to draw
             if (
@@ -296,10 +296,10 @@ namespace AForge.Imaging
                 return;
             }
 
-            int startX = point1.X;
-            int startY = point1.Y;
-            int stopX  = point2.X;
-            int stopY  = point2.Y;
+            var startX = point1.X;
+            var startY = point1.Y;
+            var stopX  = point2.X;
+            var stopY  = point2.Y;
 
             // compute pixel for grayscale image
             byte gray = 0;
@@ -309,28 +309,28 @@ namespace AForge.Imaging
             }
 
             // pre-compute some values for 32 bit color blending
-            double fillAlpha    = color.A / 255.0;
-            double fillNegAlpha = 1.0 - fillAlpha;
+            var fillAlpha    = color.A / 255.0;
+            var fillNegAlpha = 1.0 - fillAlpha;
 
-            double fillRedPart   = fillAlpha * color.R;
-            double fillGreenPart = fillAlpha * color.G;
-            double fillBluePart  = fillAlpha * color.B;
+            var fillRedPart   = fillAlpha * color.R;
+            var fillGreenPart = fillAlpha * color.G;
+            var fillBluePart  = fillAlpha * color.B;
 
-            int fillNegAlphaInt = 255 - color.A;
+            var fillNegAlphaInt = 255 - color.A;
 
-            int fillRedPartInt   = color.A * color.R;
-            int fillGreenPartInt = color.A * color.G;
-            int fillBluePartInt  = color.A * color.B;
+            var fillRedPartInt   = color.A * color.R;
+            var fillGreenPartInt = color.A * color.G;
+            var fillBluePartInt  = color.A * color.B;
 
             // draw the line
-            int dx = stopX - startX;
-            int dy = stopY - startY;
+            var dx = stopX - startX;
+            var dy = stopY - startY;
 
             if ( Math.Abs( dx ) >= Math.Abs( dy ) )
             {
                 // the line is more horizontal, we'll plot along the X axis
-                float slope = ( dx != 0 ) ? (float) dy / dx : 0;
-                int step = ( dx > 0 ) ? 1 : -1;
+                var slope = ( dx != 0 ) ? (float) dy / dx : 0;
+                var step = ( dx > 0 ) ? 1 : -1;
 
                 // correct dx so last point is included as well
                 dx += step;
@@ -338,26 +338,26 @@ namespace AForge.Imaging
                 if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
                     // grayscale image
-                    for ( int x = 0; x != dx; x += step )
+                    for ( var x = 0; x != dx; x += step )
                     {
-                        int px = startX + x;
-                        int py = (int) ( (float) startY + ( slope * (float) x ) );
+                        var px = startX + x;
+                        var py = (int) ( (float) startY + ( slope * (float) x ) );
 
-                        byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px;
+                        var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px;
                         *ptr = gray;
                     }
                 }
                 else if ( image.PixelFormat == PixelFormat.Format32bppArgb )
                 {
                     // color 32 ARGB image image
-                    for ( int x = 0; x != dx; x += step )
+                    for ( var x = 0; x != dx; x += step )
                     {
-                        int px = startX + x;
-                        int py = (int) ( (float) startY + ( slope * (float) x ) );
+                        var px = startX + x;
+                        var py = (int) ( (float) startY + ( slope * (float) x ) );
 
-                        byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * 4;
+                        var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * 4;
 
-                        double srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
+                        var srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
 
                         ptr[RGB.R] = (byte) ( ( fillRedPart   + srcAlphaPart * ptr[RGB.R] ) );
                         ptr[RGB.G] = (byte) ( ( fillGreenPart + srcAlphaPart * ptr[RGB.G] ) );
@@ -372,12 +372,12 @@ namespace AForge.Imaging
                     if ( color.A == 255 )
                     {
                         // just copy color for none transparent colors
-                        for ( int x = 0; x != dx; x += step )
+                        for ( var x = 0; x != dx; x += step )
                         {
-                            int px = startX + x;
-                            int py = (int) ( (float) startY + ( slope * (float) x ) );
+                            var px = startX + x;
+                            var py = (int) ( (float) startY + ( slope * (float) x ) );
 
-                            byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
+                            var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
 
                             ptr[RGB.R] = color.R;
                             ptr[RGB.G] = color.G;
@@ -387,12 +387,12 @@ namespace AForge.Imaging
                     else
                     {
                         // do alpha blending for transparent colors
-                        for ( int x = 0; x != dx; x += step )
+                        for ( var x = 0; x != dx; x += step )
                         {
-                            int px = startX + x;
-                            int py = (int) ( (float) startY + ( slope * (float) x ) );
+                            var px = startX + x;
+                            var py = (int) ( (float) startY + ( slope * (float) x ) );
 
-                            byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
+                            var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
 
                             ptr[RGB.R] = (byte) ( ( fillRedPartInt   + fillNegAlphaInt * ptr[RGB.R] ) / 255 );
                             ptr[RGB.G] = (byte) ( ( fillGreenPartInt + fillNegAlphaInt * ptr[RGB.G] ) / 255 );
@@ -404,8 +404,8 @@ namespace AForge.Imaging
             else
             {
                 // the line is more vertical, we'll plot along the y axis.
-                float slope = ( dy != 0 ) ? (float) dx / dy : 0;
-                int step = ( dy > 0 ) ? 1 : -1;
+                var slope = ( dy != 0 ) ? (float) dx / dy : 0;
+                var step = ( dy > 0 ) ? 1 : -1;
 
                 // correct dy so last point is included as well
                 dy += step;
@@ -413,26 +413,26 @@ namespace AForge.Imaging
                 if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
                 {
                     // grayscale image
-                    for ( int y = 0; y != dy; y += step )
+                    for ( var y = 0; y != dy; y += step )
                     {
-                        int px = (int) ( (float) startX + ( slope * (float) y ) );
-                        int py = startY + y;
+                        var px = (int) ( (float) startX + ( slope * (float) y ) );
+                        var py = startY + y;
 
-                        byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px;
+                        var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px;
                         *ptr = gray;
                     }
                 }
                 else if ( image.PixelFormat == PixelFormat.Format32bppArgb )
                 {
                     // color 32 bpp ARGB image
-                    for ( int y = 0; y != dy; y += step )
+                    for ( var y = 0; y != dy; y += step )
                     {
-                        int px = (int) ( (float) startX + ( slope * (float) y ) );
-                        int py = startY + y;
+                        var px = (int) ( (float) startX + ( slope * (float) y ) );
+                        var py = startY + y;
 
-                        byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * 4;
+                        var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * 4;
 
-                        double srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
+                        var srcAlphaPart = ( ptr[RGB.A] / 255.0 ) * fillNegAlpha;
 
                         ptr[RGB.R] = (byte) ( ( fillRedPart   + srcAlphaPart * ptr[RGB.R] ) );
                         ptr[RGB.G] = (byte) ( ( fillGreenPart + srcAlphaPart * ptr[RGB.G] ) );
@@ -447,12 +447,12 @@ namespace AForge.Imaging
                     if ( color.A == 255 )
                     {
                         // just copy color for none transparent colors
-                        for ( int y = 0; y != dy; y += step )
+                        for ( var y = 0; y != dy; y += step )
                         {
-                            int px = (int) ( (float) startX + ( slope * (float) y ) );
-                            int py = startY + y;
+                            var px = (int) ( (float) startX + ( slope * (float) y ) );
+                            var py = startY + y;
 
-                            byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
+                            var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
 
                             ptr[RGB.R] = color.R;
                             ptr[RGB.G] = color.G;
@@ -462,12 +462,12 @@ namespace AForge.Imaging
                     else
                     {
                         // do alpha blending for transparent colors
-                        for ( int y = 0; y != dy; y += step )
+                        for ( var y = 0; y != dy; y += step )
                         {
-                            int px = (int) ( (float) startX + ( slope * (float) y ) );
-                            int py = startY + y;
+                            var px = (int) ( (float) startX + ( slope * (float) y ) );
+                            var py = startY + y;
 
-                            byte* ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
+                            var ptr = (byte*) image.ImageData.ToPointer( ) + py * stride + px * pixelSize;
 
                             ptr[RGB.R] = (byte) ( ( fillRedPartInt   + fillNegAlphaInt * ptr[RGB.R] ) / 255 );
                             ptr[RGB.G] = (byte) ( ( fillGreenPartInt + fillNegAlphaInt * ptr[RGB.G] ) / 255 );
@@ -575,9 +575,9 @@ namespace AForge.Imaging
         {
             if ( end.X >= width )
             {
-                int newEndX = width - 1;
+                var newEndX = width - 1;
 
-                double c = (double) ( newEndX - start.X ) / ( end.X - start.X );
+                var c = (double) ( newEndX - start.X ) / ( end.X - start.X );
 
                 end.Y = (int) ( start.Y + c * ( end.Y - start.Y ) );
                 end.X = newEndX;
@@ -585,9 +585,9 @@ namespace AForge.Imaging
 
             if ( end.Y >= height )
             {
-                int newEndY = height - 1;
+                var newEndY = height - 1;
 
-                double c = (double) ( newEndY - start.Y ) / ( end.Y - start.Y );
+                var c = (double) ( newEndY - start.Y ) / ( end.Y - start.Y );
 
                 end.X = (int) ( start.X + c * ( end.X - start.X ) );
                 end.Y = newEndY;
@@ -595,7 +595,7 @@ namespace AForge.Imaging
 
             if ( end.X < 0 )
             {
-                double c = (double) ( 0 - start.X ) / ( end.X - start.X );
+                var c = (double) ( 0 - start.X ) / ( end.X - start.X );
 
                 end.Y = (int) ( start.Y + c * ( end.Y - start.Y ) );
                 end.X = 0;
@@ -603,7 +603,7 @@ namespace AForge.Imaging
 
             if ( end.Y < 0 )
             {
-                double c = (double) ( 0 - start.Y ) / ( end.Y - start.Y );
+                var c = (double) ( 0 - start.Y ) / ( end.Y - start.Y );
 
                 end.X = (int) ( start.X + c * ( end.X - start.X ) );
                 end.Y = 0;

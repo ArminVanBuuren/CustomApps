@@ -277,7 +277,7 @@ namespace Utils.Handles
                 //sum *= i / 2;
 
                 var lastSum = 0.0;
-                for (int j = 0; j < i - 1; ++j)
+                for (var j = 0; j < i - 1; ++j)
                     lastSum += initialValue + commonDifference * (j);
 
                 sum += lastSum + commonDifference * (i - 1);
@@ -302,7 +302,7 @@ namespace Utils.Handles
             dt.Columns.Add("a");
             dt.Columns.Add("sum");
 
-            for (int i = 0; i < elementsCount; i++)
+            for (var i = 0; i < elementsCount; i++)
             {
                 var dr = dt.NewRow();
                 dr["i"] = i;
@@ -324,7 +324,7 @@ namespace Utils.Handles
             dt.Columns.Add("a");
             dt.Columns.Add("sum");
 
-            for (int i = 0; i < elementsCount; i++)
+            for (var i = 0; i < elementsCount; i++)
             {
                 var dr = dt.NewRow();
                 dr["i"] = i;

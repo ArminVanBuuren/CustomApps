@@ -84,7 +84,7 @@ namespace BigMath.Utils
             {
                 throw new InvalidOperationException("Array length must be greater than offset.");
             }
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 2, offset, ale);
 
             return (short) (ale ? bytes[offset] | bytes[offset + 1] << 8 : bytes[offset] << 8 | bytes[offset + 1]);
@@ -201,7 +201,7 @@ namespace BigMath.Utils
             {
                 throw new InvalidOperationException("Array length must be greater than offset.");
             }
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 4, offset, ale);
 
             return (ale)
@@ -212,7 +212,7 @@ namespace BigMath.Utils
 
         private static void EnsureLength(ref byte[] bytes, int minLength, int offset, bool ale)
         {
-            int bytesLength = bytes.Length - offset;
+            var bytesLength = bytes.Length - offset;
             if (bytesLength < minLength)
             {
                 var b = new byte[minLength];
@@ -338,7 +338,7 @@ namespace BigMath.Utils
             {
                 throw new InvalidOperationException("Array length must be greater than offset.");
             }
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 8, offset, ale);
 
             return ale
@@ -399,7 +399,7 @@ namespace BigMath.Utils
         /// <param name="asLittleEndian">Convert from little endian.</param>
         public static void ToBytes(this Int128 value, byte[] buffer, int offset = 0, bool? asLittleEndian = null)
         {
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             value.Low.ToBytes(buffer, ale ? offset : offset + 8, ale);
             value.High.ToBytes(buffer, ale ? offset + 8 : offset, ale);
         }
@@ -445,7 +445,7 @@ namespace BigMath.Utils
             {
                 throw new InvalidOperationException("Array length must be greater than offset.");
             }
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 16, offset, ale);
 
             return new Int128(bytes.ToUInt64(ale ? offset + 8 : offset, ale), bytes.ToUInt64(ale ? offset : offset + 8, ale));
@@ -462,7 +462,7 @@ namespace BigMath.Utils
         /// <param name="asLittleEndian">Convert from little endian.</param>
         public static void ToBytes(this Int256 value, byte[] buffer, int offset = 0, bool? asLittleEndian = null)
         {
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
 
             value.D.ToBytes(buffer, ale ? offset : offset + 24, ale);
             value.C.ToBytes(buffer, ale ? offset + 8 : offset + 16, ale);
@@ -511,7 +511,7 @@ namespace BigMath.Utils
             {
                 throw new InvalidOperationException("Array length must be greater than offset.");
             }
-            bool ale = GetIsLittleEndian(asLittleEndian);
+            var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 32, offset, ale);
 
             ulong a = bytes.ToUInt64(ale ? offset + 24 : offset, ale);

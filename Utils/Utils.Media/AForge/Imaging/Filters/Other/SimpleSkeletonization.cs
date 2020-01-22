@@ -118,22 +118,22 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage source, UnmanagedImage destination, Rectangle rect )
         {
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
-            int srcStride = source.Stride;
-            int dstStride = destination.Stride;
-            int srcOffset = srcStride - rect.Width;
+            var srcStride = source.Stride;
+            var dstStride = destination.Stride;
+            var srcOffset = srcStride - rect.Width;
 
             int start;
 
             // do the job
-            byte* src0 = (byte*) source.ImageData.ToPointer( );
-            byte* dst0 = (byte*) destination.ImageData.ToPointer( );
-            byte* src = src0;
-            byte* dst = dst0;
+            var src0 = (byte*) source.ImageData.ToPointer( );
+            var dst0 = (byte*) destination.ImageData.ToPointer( );
+            var src = src0;
+            var dst = dst0;
 
             // horizontal pass
 
@@ -142,14 +142,14 @@ namespace AForge.Imaging.Filters
             dst += ( startY * dstStride );
 
             // for each line
-            for ( int y = startY; y < stopY; y++ )
+            for ( var y = startY; y < stopY; y++ )
             {
                 // make destination image filled with background color
                 AForge.SystemTools.SetUnmanagedMemory( dst + startX, bg, stopX - startX );
                 
                 start = -1;
                 // for each pixel
-                for ( int x = startX; x < stopX; x++, src++ )
+                for ( var x = startX; x < stopX; x++, src++ )
                 {
                     // looking for foreground pixel
                     if ( start == -1 )
@@ -180,14 +180,14 @@ namespace AForge.Imaging.Filters
             src0 += ( startY * srcStride );
 
             // for each column
-            for ( int x = startX; x < stopX; x++ )
+            for ( var x = startX; x < stopX; x++ )
             {
                 src = src0 + x;
                 dst = dst0 + x;
 
                 start = -1;
                 // for each row
-                for ( int y = startY; y < stopY; y++, src += srcStride )
+                for ( var y = startY; y < stopY; y++, src += srcStride )
                 {
                     // looking for foreground pixel
                     if ( start == -1 )

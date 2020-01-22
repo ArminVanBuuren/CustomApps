@@ -98,7 +98,7 @@ namespace AForge.Imaging.Filters
         public Dilatation( short[,] se )
             : this( )
         {
-            int s = se.GetLength( 0 );
+            var s = se.GetLength( 0 );
 
             // check structuring element size
             if ( ( s != se.GetLength( 1 ) ) || ( s < 3 ) || ( s > 99 ) || ( s % 2 == 0 ) )
@@ -118,30 +118,30 @@ namespace AForge.Imaging.Filters
         /// 
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData, Rectangle rect )
         {
-            PixelFormat pixelFormat = sourceData.PixelFormat;
+            var pixelFormat = sourceData.PixelFormat;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
 
             // structuring element's radius
-            int r = size >> 1;
+            var r = size >> 1;
 
             // flag to indicate if at least one pixel for the given structuring element was found
             bool foundSomething;
 
             if ( ( pixelFormat == PixelFormat.Format8bppIndexed ) || ( pixelFormat == PixelFormat.Format24bppRgb ) )
             {
-                int pixelSize = ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+                var pixelSize = ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
 
-                int dstStride = destinationData.Stride;
-                int srcStride = sourceData.Stride;
+                var dstStride = destinationData.Stride;
+                var srcStride = sourceData.Stride;
 
                 // base pointers
-                byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
-                byte* baseDst = (byte*) destinationData.ImageData.ToPointer( );
+                var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+                var baseDst = (byte*) destinationData.ImageData.ToPointer( );
 
                 // allign pointers by X
                 baseSrc += ( startX * pixelSize );
@@ -152,10 +152,10 @@ namespace AForge.Imaging.Filters
                     // grayscale image
 
                     // compute each line
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
-                        byte* src = baseSrc + y * srcStride;
-                        byte* dst = baseDst + y * dstStride;
+                        var src = baseSrc + y * srcStride;
+                        var dst = baseDst + y * dstStride;
 
                         byte max, v;
 
@@ -163,7 +163,7 @@ namespace AForge.Imaging.Filters
                         int t, ir, jr, i, j;
 
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, src++, dst++ )
+                        for ( var x = startX; x < stopX; x++, src++, dst++ )
                         {
                             max = 0;
                             foundSomething = false;
@@ -213,10 +213,10 @@ namespace AForge.Imaging.Filters
                     // 24 bpp color image
 
                     // compute each line
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
-                        byte* src = baseSrc + y * srcStride;
-                        byte* dst = baseDst + y * dstStride;
+                        var src = baseSrc + y * srcStride;
+                        var dst = baseDst + y * dstStride;
 
                         byte maxR, maxG, maxB, v;
                         byte* p;
@@ -225,7 +225,7 @@ namespace AForge.Imaging.Filters
                         int t, ir, jr, i, j;
 
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, src += 3, dst += 3 )
+                        for ( var x = startX; x < stopX; x++, src += 3, dst += 3 )
                         {
                             maxR = maxG = maxB = 0;
                             foundSomething = false;
@@ -297,14 +297,14 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                int pixelSize = ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 : 3;
+                var pixelSize = ( pixelFormat == PixelFormat.Format16bppGrayScale ) ? 1 : 3;
 
-                int dstStride = destinationData.Stride / 2;
-                int srcStride = sourceData.Stride / 2;
+                var dstStride = destinationData.Stride / 2;
+                var srcStride = sourceData.Stride / 2;
 
                 // base pointers
-                ushort* baseSrc = (ushort*) sourceData.ImageData.ToPointer( );
-                ushort* baseDst = (ushort*) destinationData.ImageData.ToPointer( );
+                var baseSrc = (ushort*) sourceData.ImageData.ToPointer( );
+                var baseDst = (ushort*) destinationData.ImageData.ToPointer( );
 
                 // allign pointers by X
                 baseSrc += ( startX * pixelSize );
@@ -315,10 +315,10 @@ namespace AForge.Imaging.Filters
                     // 16 bpp grayscale image
 
                     // compute each line
-                    for( int y = startY; y < stopY; y++ )
+                    for( var y = startY; y < stopY; y++ )
                     {
-                        ushort* src = baseSrc + y * srcStride;
-                        ushort* dst = baseDst + y * dstStride;
+                        var src = baseSrc + y * srcStride;
+                        var dst = baseDst + y * dstStride;
 
                         ushort max, v;
 
@@ -326,7 +326,7 @@ namespace AForge.Imaging.Filters
                         int t, ir, jr, i, j;
 
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, src++, dst++ )
+                        for ( var x = startX; x < stopX; x++, src++, dst++ )
                         {
                             max = 0;
                             foundSomething = false;
@@ -376,10 +376,10 @@ namespace AForge.Imaging.Filters
                     // 48 bpp color image
 
                     // compute each line
-                    for( int y = startY; y < stopY; y++ )
+                    for( var y = startY; y < stopY; y++ )
                     {
-                        ushort* src = baseSrc + y * srcStride;
-                        ushort* dst = baseDst + y * dstStride;
+                        var src = baseSrc + y * srcStride;
+                        var dst = baseDst + y * dstStride;
 
                         ushort maxR, maxG, maxB, v;
                         ushort* p;
@@ -388,7 +388,7 @@ namespace AForge.Imaging.Filters
                         int t, ir, jr, i, j;
 
                         // for each pixel
-                        for ( int x = startX; x < stopX; x++, src += 3, dst += 3 )
+                        for ( var x = startX; x < stopX; x++, src += 3, dst += 3 )
                         {
                             maxR = maxG = maxB = 0;
                             foundSomething = false;

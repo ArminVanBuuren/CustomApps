@@ -283,13 +283,13 @@ namespace AForge.AMath.Geometry
             */
 
             // the above is modified here to compare the numerator and denominator, rather than doing the division
-            Point abDelta = end - start;
-            Point acDelta = point - start;
+            var abDelta = end - start;
+            var acDelta = point - start;
 
-            float numerator   = acDelta.X * abDelta.X + acDelta.Y * abDelta.Y;
-            float denomenator = abDelta.X * abDelta.X + abDelta.Y * abDelta.Y;
+            var numerator   = acDelta.X * abDelta.X + acDelta.Y * abDelta.Y;
+            var denomenator = abDelta.X * abDelta.X + abDelta.Y * abDelta.Y;
 
-            ProjectionLocation result = ( numerator < 0 ) ? ProjectionLocation.RayA : ( numerator > denomenator ) ? ProjectionLocation.RayB : ProjectionLocation.SegmentAB;
+            var result = ( numerator < 0 ) ? ProjectionLocation.RayA : ( numerator > denomenator ) ? ProjectionLocation.RayB : ProjectionLocation.SegmentAB;
 
             return result;
         }

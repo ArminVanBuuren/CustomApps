@@ -206,7 +206,7 @@ namespace Utils.XmlRtfStyle
         {
             var builder = new StringBuilder(@"{\rtf1\unicode\ansicpg1251\deff0\deflang1033");
             builder.Append(@"{\fonttbl");
-            for (int i = 0; i < _fontTable.Count; i++)
+            for (var i = 0; i < _fontTable.Count; i++)
             {
                 builder.Append($@"{{\f{i}\fswiss\fcharset204 {_fontTable[i]};}}");
             }

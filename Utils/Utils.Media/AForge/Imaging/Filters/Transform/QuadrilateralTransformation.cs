@@ -290,50 +290,50 @@ namespace AForge.Imaging.Filters
         protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage destinationData )
         {
             // get source and destination images size
-            int srcWidth  = sourceData.Width;
-            int srcHeight = sourceData.Height;
-            int dstWidth  = destinationData.Width;
-            int dstHeight = destinationData.Height;
+            var srcWidth  = sourceData.Width;
+            var srcHeight = sourceData.Height;
+            var dstWidth  = destinationData.Width;
+            var dstHeight = destinationData.Height;
 
-            int pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
-            int srcStride = sourceData.Stride;
-            int dstStride = destinationData.Stride;
-            int offset = dstStride - dstWidth * pixelSize;
+            var pixelSize = Image.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            var srcStride = sourceData.Stride;
+            var dstStride = destinationData.Stride;
+            var offset = dstStride - dstWidth * pixelSize;
 
             // calculate tranformation matrix
-            List<IntPoint> dstRect = new List<IntPoint>( );
+            var dstRect = new List<IntPoint>( );
             dstRect.Add( new IntPoint( 0, 0 ) );
             dstRect.Add( new IntPoint( dstWidth - 1, 0 ) );
             dstRect.Add( new IntPoint( dstWidth - 1, dstHeight - 1 ) );
             dstRect.Add( new IntPoint( 0, dstHeight - 1 ) );
 
             // calculate tranformation matrix
-            double[,] matrix = QuadTransformationCalcs.MapQuadToQuad( dstRect, sourceQuadrilateral );
+            var matrix = QuadTransformationCalcs.MapQuadToQuad( dstRect, sourceQuadrilateral );
 
             // do the job
-            byte* ptr = (byte*) destinationData.ImageData.ToPointer( );
-            byte* baseSrc = (byte*) sourceData.ImageData.ToPointer( );
+            var ptr = (byte*) destinationData.ImageData.ToPointer( );
+            var baseSrc = (byte*) sourceData.ImageData.ToPointer( );
 
             if ( !useInterpolation )
             {
                 byte* p;
 
                 // for each row
-                for ( int y = 0; y < dstHeight; y++ )
+                for ( var y = 0; y < dstHeight; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < dstWidth; x++ )
+                    for ( var x = 0; x < dstWidth; x++ )
                     {
-                        double factor = matrix[2, 0] * x + matrix[2, 1] * y + matrix[2, 2];
-                        double srcX = ( matrix[0, 0] * x + matrix[0, 1] * y + matrix[0, 2] ) / factor;
-                        double srcY = ( matrix[1, 0] * x + matrix[1, 1] * y + matrix[1, 2] ) / factor;
+                        var factor = matrix[2, 0] * x + matrix[2, 1] * y + matrix[2, 2];
+                        var srcX = ( matrix[0, 0] * x + matrix[0, 1] * y + matrix[0, 2] ) / factor;
+                        var srcY = ( matrix[1, 0] * x + matrix[1, 1] * y + matrix[1, 2] ) / factor;
 
                         if ( ( srcX >= 0 ) && ( srcY >= 0 ) && ( srcX < srcWidth ) && ( srcY < srcHeight ) )
                         {
                             // get pointer to the pixel in the source image
                             p = baseSrc + (int) srcY * srcStride + (int) srcX * pixelSize;
                             // copy pixel's values
-                            for ( int i = 0; i < pixelSize; i++, ptr++, p++ )
+                            for ( var i = 0; i < pixelSize; i++, ptr++, p++ )
                             {
                                 *ptr = *p;
                             }
@@ -348,8 +348,8 @@ namespace AForge.Imaging.Filters
             }
             else
             {
-                int srcWidthM1  = srcWidth - 1;
-                int srcHeightM1 = srcHeight - 1;
+                var srcWidthM1  = srcWidth - 1;
+                var srcHeightM1 = srcHeight - 1;
 
                 // coordinates of source points
                 double dx1, dy1, dx2, dy2;
@@ -359,14 +359,14 @@ namespace AForge.Imaging.Filters
                 byte* p1, p2, p3, p4;
 
                 // for each row
-                for ( int y = 0; y < dstHeight; y++ )
+                for ( var y = 0; y < dstHeight; y++ )
                 {
                     // for each pixel
-                    for ( int x = 0; x < dstWidth; x++ )
+                    for ( var x = 0; x < dstWidth; x++ )
                     {
-                        double factor = matrix[2, 0] * x + matrix[2, 1] * y + matrix[2, 2];
-                        double srcX = ( matrix[0, 0] * x + matrix[0, 1] * y + matrix[0, 2] ) / factor;
-                        double srcY = ( matrix[1, 0] * x + matrix[1, 1] * y + matrix[1, 2] ) / factor;
+                        var factor = matrix[2, 0] * x + matrix[2, 1] * y + matrix[2, 2];
+                        var srcX = ( matrix[0, 0] * x + matrix[0, 1] * y + matrix[0, 2] ) / factor;
+                        var srcY = ( matrix[1, 0] * x + matrix[1, 1] * y + matrix[1, 2] ) / factor;
 
                         if ( ( srcX >= 0 ) && ( srcY >= 0 ) && ( srcX < srcWidth ) && ( srcY < srcHeight ) )
                         {
@@ -390,7 +390,7 @@ namespace AForge.Imaging.Filters
                             p4 += sx2 * pixelSize;
 
                             // interpolate using 4 points
-                            for ( int i = 0; i < pixelSize; i++, ptr++, p1++, p2++, p3++, p4++ )
+                            for ( var i = 0; i < pixelSize; i++, ptr++, p1++, p2++, p3++, p4++ )
                             {
                                 *ptr = (byte) (
                                     dy2 * ( dx2 * ( *p1 ) + dx1 * ( *p2 ) ) +

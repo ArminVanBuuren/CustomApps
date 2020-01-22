@@ -132,10 +132,10 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
-            PixelFormat pixelFormat = image.PixelFormat;
+            var pixelFormat = image.PixelFormat;
             // get image dimension
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // check overlay type
             if ( overlayImage != null )
@@ -149,7 +149,7 @@ namespace AForge.Imaging.Filters
                     throw new InvalidImagePropertiesException( "Overlay image size must be equal to source image size." );
 
                 // lock overlay image
-                BitmapData ovrData = overlayImage.LockBits(
+                var ovrData = overlayImage.LockBits(
                     new Rectangle( 0, 0, width, height ),
                     ImageLockMode.ReadOnly, pixelFormat );
 

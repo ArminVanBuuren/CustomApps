@@ -175,7 +175,7 @@ namespace Utils
             var firstPathParts = mainDirPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar).ToList();
             var secondPathParts = absoluteFilePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
 
-            for (int i = 0; i < firstPathParts.Count; i++)
+            for (var i = 0; i < firstPathParts.Count; i++)
             {
                 var current = firstPathParts[i];
                 if (!current.Equals(".") && !current.Equals(".."))
@@ -476,7 +476,7 @@ namespace Utils
                 formatString += ":0.";
 
             // Add decimals
-            for (int i = 0; i < decimalPlaces; i++)
+            for (var i = 0; i < decimalPlaces; i++)
                 formatString += "0";
 
             // Close placeholder
@@ -514,7 +514,7 @@ namespace Utils
         public static string ToFileSize(this double value)
         {
             string[] suffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-            for (int i = 0; i < suffixes.Length; i++)
+            for (var i = 0; i < suffixes.Length; i++)
             {
                 if (value <= (Math.Pow(1024, i + 1)))
                 {
@@ -658,7 +658,7 @@ namespace Utils
 
                         // Enumerate all of the results and add them to the 
                         // list to be returned
-                        for (int i = 0; i < pnProcInfo; i++)
+                        for (var i = 0; i < pnProcInfo; i++)
                         {
                             try
                             {

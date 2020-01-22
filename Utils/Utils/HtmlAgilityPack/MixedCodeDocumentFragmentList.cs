@@ -123,7 +123,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("fragment");
             }
 
-            int index = GetFragmentIndex(fragment);
+            var index = GetFragmentIndex(fragment);
             if (index == -1)
             {
                 throw new IndexOutOfRangeException();
@@ -166,7 +166,7 @@ namespace HtmlAgilityPack
                 throw new ArgumentNullException("fragment");
             }
 
-            for (int i = 0; i < _items.Count; i++)
+            for (var i = 0; i < _items.Count; i++)
             {
                 if ((_items[i]) == fragment)
                 {

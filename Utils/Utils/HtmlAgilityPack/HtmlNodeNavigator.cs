@@ -502,7 +502,7 @@ namespace HtmlAgilityPack
 #if TRACE_NAVIGATOR
             InternalTrace("localName=" + localName + ", namespaceURI=" + namespaceURI);
 #endif
-            HtmlAttribute att = _currentnode.Attributes[localName];
+            var att = _currentnode.Attributes[localName];
             if (att == null)
             {
 #if TRACE_NAVIGATOR
@@ -538,7 +538,7 @@ namespace HtmlAgilityPack
         /// <returns>true if the two navigators have the same position, otherwise, false.</returns>
         public override bool IsSamePosition(XPathNavigator other)
         {
-            HtmlNodeNavigator nav = other as HtmlNodeNavigator;
+            var nav = other as HtmlNodeNavigator;
             if (nav == null)
             {
 #if TRACE_NAVIGATOR
@@ -560,7 +560,7 @@ namespace HtmlAgilityPack
         /// <returns>true if successful, otherwise false. If false, the position of the navigator is unchanged.</returns>
         public override bool MoveTo(XPathNavigator other)
         {
-            HtmlNodeNavigator nav = other as HtmlNodeNavigator;
+            var nav = other as HtmlNodeNavigator;
             if (nav == null)
             {
 #if TRACE_NAVIGATOR
@@ -603,7 +603,7 @@ namespace HtmlAgilityPack
 #if TRACE_NAVIGATOR
             InternalTrace("localName=" + localName + ", namespaceURI=" + namespaceURI);
 #endif
-            int index = _currentnode.Attributes.GetAttributeIndex(localName);
+            var index = _currentnode.Attributes.GetAttributeIndex(localName);
             if (index == -1)
             {
 #if TRACE_NAVIGATOR
@@ -714,7 +714,7 @@ namespace HtmlAgilityPack
 #if TRACE_NAVIGATOR
             InternalTrace("id=" + id);
 #endif
-            HtmlNode node = _doc.GetElementbyId(id);
+            var node = _doc.GetElementbyId(id);
             if (node == null)
             {
 #if TRACE_NAVIGATOR

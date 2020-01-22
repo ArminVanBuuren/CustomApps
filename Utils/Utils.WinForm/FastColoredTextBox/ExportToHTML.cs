@@ -50,7 +50,7 @@ namespace FastColoredTextBoxNS
         public string GetHtml(FastColoredTextBox tb)
         {
             this.tb = tb;
-            Range sel = new Range(tb);
+            var sel = new Range(tb);
             sel.SelectAll();
             return GetHtml(sel);
         }
@@ -58,12 +58,12 @@ namespace FastColoredTextBoxNS
         public string GetHtml(Range r)
         {
             this.tb = r.tb;
-            Dictionary<StyleIndex, object> styles = new Dictionary<StyleIndex, object>();
-            StringBuilder sb = new StringBuilder();
-            StringBuilder tempSB = new StringBuilder();
-            StyleIndex currentStyleId = StyleIndex.None;
+            var styles = new Dictionary<StyleIndex, object>();
+            var sb = new StringBuilder();
+            var tempSB = new StringBuilder();
+            var currentStyleId = StyleIndex.None;
             r.Normalize();
-            int currentLine = r.Start.iLine;
+            var currentLine = r.Start.iLine;
             styles[currentStyleId] = null;
             //
             if (UseOriginalFont)
@@ -74,10 +74,10 @@ namespace FastColoredTextBoxNS
             if (IncludeLineNumbers)
                 tempSB.AppendFormat("<span class=lineNumber>{0}</span>  ", currentLine + 1);
             //
-            bool hasNonSpace = false;
-            foreach (Place p in r)
+            var hasNonSpace = false;
+            foreach (var p in r)
             {
-                Char c = r.tb[p.iLine][p.iChar];
+                var c = r.tb[p.iLine][p.iChar];
                 if (c.style != currentStyleId)
                 {
                     Flush(sb, tempSB, currentStyleId);
@@ -87,7 +87,7 @@ namespace FastColoredTextBoxNS
 
                 if (p.iLine != currentLine)
                 {
-                    for (int i = currentLine; i < p.iLine; i++)
+                    for (var i = currentLine; i < p.iLine; i++)
                     {
                         tempSB.Append(UseBr ? "<br>" : "\r\n");
                         if (IncludeLineNumbers)
@@ -144,12 +144,12 @@ namespace FastColoredTextBoxNS
 
         private string GetCss(StyleIndex styleIndex)
         {
-            List<Style> styles = new List<Style>();
+            var styles = new List<Style>();
             //find text renderer
             TextStyle textStyle = null;
-            int mask = 1;
-            bool hasTextStyle = false;
-            for (int i = 0; i < tb.Styles.Length; i++)
+            var mask = 1;
+            var hasTextStyle = false;
+            for (var i = 0; i < tb.Styles.Length; i++)
             {
                 if (tb.Styles[i] != null && ((int)styleIndex & mask) != 0)
                 if (tb.Styles[i].IsExportable)
@@ -157,7 +157,7 @@ namespace FastColoredTextBoxNS
                     var style = tb.Styles[i];
                     styles.Add(style);
 
-                    bool isTextStyle = style is TextStyle;
+                    var isTextStyle = style is TextStyle;
                     if (isTextStyle)
                         if (!hasTextStyle || tb.AllowSeveralTextStyleDrawing)
                         {
@@ -168,7 +168,7 @@ namespace FastColoredTextBoxNS
                 mask = mask << 1;
             }
             //add TextStyle css
-            string result = "";
+            var result = "";
             
             if (!hasTextStyle)
             {
@@ -209,7 +209,7 @@ namespace FastColoredTextBoxNS
                 sb.AppendFormat("<font class=fctb{0}>{1}</font>", GetStyleName(currentStyle), tempSB.ToString());
             else
             {
-                string css = GetCss(currentStyle);
+                var css = GetCss(currentStyle);
                 if(css!="")
                     sb.AppendFormat("<font style=\"{0}\">", css);
                 sb.Append(tempSB.ToString());

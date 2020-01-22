@@ -14,9 +14,9 @@ namespace TLSharp.Core.MTProto.Crypto
             key = gab.ToByteArrayUnsigned();
             using (SHA1 hash = new SHA1Managed())
             {
-                using (MemoryStream hashStream = new MemoryStream(hash.ComputeHash(key), false))
+                using (var hashStream = new MemoryStream(hash.ComputeHash(key), false))
                 {
-                    using (BinaryReader hashReader = new BinaryReader(hashStream))
+                    using (var hashReader = new BinaryReader(hashStream))
                     {
                         auxHash = hashReader.ReadUInt64();
                         hashReader.ReadBytes(4);
@@ -31,9 +31,9 @@ namespace TLSharp.Core.MTProto.Crypto
             key = data;
             using (SHA1 hash = new SHA1Managed())
             {
-                using (MemoryStream hashStream = new MemoryStream(hash.ComputeHash(key), false))
+                using (var hashStream = new MemoryStream(hash.ComputeHash(key), false))
                 {
-                    using (BinaryReader hashReader = new BinaryReader(hashStream))
+                    using (var hashReader = new BinaryReader(hashStream))
                     {
                         auxHash = hashReader.ReadUInt64();
                         hashReader.ReadBytes(4);
@@ -45,17 +45,17 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public byte[] CalcNewNonceHash(byte[] newNonce, int number)
         {
-            using (MemoryStream buffer = new MemoryStream(100))
+            using (var buffer = new MemoryStream(100))
             {
-                using (BinaryWriter bufferWriter = new BinaryWriter(buffer))
+                using (var bufferWriter = new BinaryWriter(buffer))
                 {
                     bufferWriter.Write(newNonce);
                     bufferWriter.Write((byte)number);
                     bufferWriter.Write(auxHash);
                     using (SHA1 sha1 = new SHA1Managed())
                     {
-                        byte[] hash = sha1.ComputeHash(buffer.GetBuffer(), 0, (int)buffer.Position);
-                        byte[] newNonceHash = new byte[16];
+                        var hash = sha1.ComputeHash(buffer.GetBuffer(), 0, (int)buffer.Position);
+                        var newNonceHash = new byte[16];
                         Array.Copy(hash, 4, newNonceHash, 0, 16);
                         return newNonceHash;
                     }

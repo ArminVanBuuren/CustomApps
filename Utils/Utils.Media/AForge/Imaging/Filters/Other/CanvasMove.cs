@@ -189,7 +189,7 @@ namespace AForge.Imaging.Filters
         ///
         protected override void ProcessFilter( UnmanagedImage image )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             switch ( pixelSize )
             {
@@ -209,29 +209,29 @@ namespace AForge.Imaging.Filters
         // Process the filter on the image with 8 bits per color channel
         private unsafe void ProcessFilter8bpc( UnmanagedImage image )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
-            bool is32bpp = ( pixelSize == 4 );
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var is32bpp = ( pixelSize == 4 );
 
             // get image width and height
-            int width  = image.Width;
-            int height = image.Height;
-            int stride = image.Stride;
+            var width  = image.Width;
+            var height = image.Height;
+            var stride = image.Stride;
 
-            int movePointX = movePoint.X;
-            int movePointY = movePoint.Y;
+            var movePointX = movePoint.X;
+            var movePointY = movePoint.Y;
 
             // intersection rectangle
-            Rectangle intersect = Rectangle.Intersect(
+            var intersect = Rectangle.Intersect(
                 new Rectangle( 0, 0, width, height ),
                 new Rectangle( movePointX, movePointY, width, height ) );
 
             // start, stop and step for X adn Y
-            int yStart  = 0;
-            int yStop   = height;
-            int yStep   = 1;
-            int xStart  = 0;
-            int xStop   = width;
-            int xStep   = 1;
+            var yStart  = 0;
+            var yStop   = height;
+            var yStep   = 1;
+            var xStart  = 0;
+            var xStop   = width;
+            var xStep   = 1;
 
             if ( movePointY > 0 )
             {
@@ -247,15 +247,15 @@ namespace AForge.Imaging.Filters
             }
 
             // do the job
-            byte* src = (byte*) image.ImageData.ToPointer( );
+            var src = (byte*) image.ImageData.ToPointer( );
             byte* pixel, moved;
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                for ( int y = yStart; y != yStop; y += yStep )
+                for ( var y = yStart; y != yStop; y += yStep )
                 {
-                    for ( int x = xStart; x != xStop; x += xStep )
+                    for ( var x = xStart; x != xStop; x += xStep )
                     {
                         // current pixel
                         pixel = src + y * stride + x;
@@ -276,9 +276,9 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                for ( int y = yStart; y != yStop; y += yStep )
+                for ( var y = yStart; y != yStop; y += yStep )
                 {
-                    for ( int x = xStart; x != xStop; x += xStep )
+                    for ( var x = xStart; x != xStop; x += xStep )
                     {
                         // current pixel
                         pixel = src + y * stride + x * pixelSize;
@@ -315,35 +315,35 @@ namespace AForge.Imaging.Filters
         // Process the filter on the image with 16 bits per color channel
         private unsafe void ProcessFilter16bpc( UnmanagedImage image )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
-            bool is64bpp = ( pixelSize == 8 );
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var is64bpp = ( pixelSize == 8 );
 
             // pad fill colours to 16-bits
-            ushort fillRed   = (ushort) ( this.fillRed   << 8 );
-            ushort fillGreen = (ushort) ( this.fillGreen << 8 );
-            ushort fillBlue  = (ushort) ( this.fillBlue  << 8 );
-            ushort fillAlpha = (ushort) ( this.fillAlpha << 8 );
+            var fillRed   = (ushort) ( this.fillRed   << 8 );
+            var fillGreen = (ushort) ( this.fillGreen << 8 );
+            var fillBlue  = (ushort) ( this.fillBlue  << 8 );
+            var fillAlpha = (ushort) ( this.fillAlpha << 8 );
 
             // get image width and height
-            int width  = image.Width;
-            int height = image.Height;
-            int stride = image.Stride;
+            var width  = image.Width;
+            var height = image.Height;
+            var stride = image.Stride;
 
-            int movePointX = movePoint.X;
-            int movePointY = movePoint.Y;
+            var movePointX = movePoint.X;
+            var movePointY = movePoint.Y;
 
             // intersection rectangle
-            Rectangle intersect = Rectangle.Intersect(
+            var intersect = Rectangle.Intersect(
                 new Rectangle( 0, 0, width, height ),
                 new Rectangle( movePointX, movePointY, width, height ) );
 
             // start, stop and step for X and Y
-            int yStart = 0;
-            int yStop = height;
-            int yStep = 1;
-            int xStart = 0;
-            int xStop = width;
-            int xStep = 1;
+            var yStart = 0;
+            var yStop = height;
+            var yStep = 1;
+            var xStart = 0;
+            var xStop = width;
+            var xStep = 1;
 
             if ( movePointY > 0 )
             {
@@ -359,15 +359,15 @@ namespace AForge.Imaging.Filters
             }
 
             // do the job
-            byte* src = (byte*) image.ImageData.ToPointer( );
+            var src = (byte*) image.ImageData.ToPointer( );
             ushort* pixel, moved;
 
             if ( image.PixelFormat == PixelFormat.Format16bppGrayScale )
             {
                 // grayscale image
-                for ( int y = yStart; y != yStop; y += yStep )
+                for ( var y = yStart; y != yStop; y += yStep )
                 {
-                    for ( int x = xStart; x != xStop; x += xStep )
+                    for ( var x = xStart; x != xStop; x += xStep )
                     {
                         // current pixel
                         pixel = (ushort*) ( src + y * stride + x * 2 );
@@ -387,9 +387,9 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                for ( int y = yStart; y != yStop; y += yStep )
+                for ( var y = yStart; y != yStop; y += yStep )
                 {
-                    for ( int x = xStart; x != xStop; x += xStep )
+                    for ( var x = xStart; x != xStop; x += xStep )
                     {
                         // current pixel
                         pixel = (ushort*) ( src + y * stride + x * pixelSize );

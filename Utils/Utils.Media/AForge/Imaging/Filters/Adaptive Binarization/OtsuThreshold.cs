@@ -100,10 +100,10 @@ namespace AForge.Imaging.Filters
         /// 
         public int CalculateThreshold( Bitmap image, Rectangle rect )
         {
-            int calculatedThreshold = 0;
+            var calculatedThreshold = 0;
 
             // lock source bitmap data
-            BitmapData data = image.LockBits(
+            var data = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -160,32 +160,32 @@ namespace AForge.Imaging.Filters
             if ( image.PixelFormat != PixelFormat.Format8bppIndexed )
                 throw new UnsupportedImageFormatException( "Source pixel format is not supported by the routine." );
 
-            int calculatedThreshold = 0;
+            var calculatedThreshold = 0;
 
             // get start and stop X-Y coordinates
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width;
 
             // histogram array
-            int[] integerHistogram = new int[256];
-            double[] histogram = new double[256];
+            var integerHistogram = new int[256];
+            var histogram = new double[256];
 
             unsafe
             {
                 // collect histogram first
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
 
                 // allign pointer to the first pixel to process
                 ptr += ( startY * image.Stride + startX );
 
                 // for each line	
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         integerHistogram[*ptr]++;
                     }
@@ -193,17 +193,17 @@ namespace AForge.Imaging.Filters
                 }
 
                 // pixels count in the processing region
-                int pixelCount = ( stopX - startX ) * ( stopY - startY );
+                var pixelCount = ( stopX - startX ) * ( stopY - startY );
                 // mean value of the processing region
                 double imageMean = 0;
 
-                for ( int i = 0; i < 256; i++ )
+                for ( var i = 0; i < 256; i++ )
                 {
                     histogram[i] = (double) integerHistogram[i] / pixelCount;
                     imageMean += histogram[i] * i;
                 }
 
-                double max = double.MinValue;
+                var max = double.MinValue;
 
                 // initial class probabilities
                 double class1Probability = 0;
@@ -213,14 +213,14 @@ namespace AForge.Imaging.Filters
                 double class1MeanInit = 0;
 
                 // check all thresholds
-                for ( int t = 0; ( t < 256 ) && ( class2Probability > 0 ); t++ )
+                for ( var t = 0; ( t < 256 ) && ( class2Probability > 0 ); t++ )
                 {
                     // calculate class means for the given threshold
-                    double class1Mean = class1MeanInit;
-                    double class2Mean = ( imageMean - ( class1Mean * class1Probability ) ) / class2Probability;
+                    var class1Mean = class1MeanInit;
+                    var class2Mean = ( imageMean - ( class1Mean * class1Probability ) ) / class2Probability;
 
                     // calculate between class variance
-                    double betweenClassVariance = ( class1Probability ) * ( 1.0 - class1Probability ) * Math.Pow( class1Mean - class2Mean, 2 );
+                    var betweenClassVariance = ( class1Probability ) * ( 1.0 - class1Probability ) * Math.Pow( class1Mean - class2Mean, 2 );
 
                     // check if we found new threshold candidate
                     if ( betweenClassVariance > max )

@@ -145,7 +145,7 @@ namespace AForge.Imaging
             }
 
             // lock source image
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -204,23 +204,23 @@ namespace AForge.Imaging
             }
 
             // get source image size
-            int width  = image.Width;
-            int height = image.Height;
-            int stride = image.Stride;
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var width  = image.Width;
+            var height = image.Height;
+            var stride = image.Stride;
+            var pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
             // window radius
-            int windowRadius = windowSize / 2;
+            var windowRadius = windowSize / 2;
 
             // offset
-            int offset = stride - windowSize * pixelSize;
+            var offset = stride - windowSize * pixelSize;
 
             // create moravec cornerness map
-            int[,] moravecMap = new int[height, width];
+            var moravecMap = new int[height, width];
 
             // do the job
             unsafe
             {
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
 
                 // for each row
                 for ( int y = windowRadius, maxY = height - windowRadius; y < maxY; y++ )
@@ -228,14 +228,14 @@ namespace AForge.Imaging
                     // for each pixel
                     for ( int x = windowRadius, maxX = width - windowRadius; x < maxX; x++ )
                     {
-                        int minSum = int.MaxValue;
+                        var minSum = int.MaxValue;
 
                         // go through 8 possible shifting directions
-                        for ( int k = 0; k < 8; k++ )
+                        for ( var k = 0; k < 8; k++ )
                         {
                             // calculate center of shifted window
-                            int sy = y + yDelta[k];
-                            int sx = x + xDelta[k];
+                            var sy = y + yDelta[k];
+                            var sx = x + xDelta[k];
 
                             // check if shifted window is within the image
                             if (
@@ -247,18 +247,18 @@ namespace AForge.Imaging
                                 continue;
                             }
 
-                            int sum = 0;
+                            var sum = 0;
 
-                            byte* ptr1 = ptr + ( y - windowRadius )  * stride + ( x - windowRadius )  * pixelSize;
-                            byte* ptr2 = ptr + ( sy - windowRadius ) * stride + ( sx - windowRadius ) * pixelSize;
+                            var ptr1 = ptr + ( y - windowRadius )  * stride + ( x - windowRadius )  * pixelSize;
+                            var ptr2 = ptr + ( sy - windowRadius ) * stride + ( sx - windowRadius ) * pixelSize;
 
                             // for each windows' rows
-                            for ( int i = 0; i < windowSize; i++ )
+                            for ( var i = 0; i < windowSize; i++ )
                             {
                                 // for each windows' pixels
                                 for ( int j = 0, maxJ = windowSize * pixelSize; j < maxJ; j++, ptr1++, ptr2++ )
                                 {
-                                    int dif = *ptr1 - *ptr2;
+                                    var dif = *ptr1 - *ptr2;
                                     sum += dif * dif;
                                 }
                                 ptr1 += offset;
@@ -284,7 +284,7 @@ namespace AForge.Imaging
             }
 
             // collect interesting points - only those points, which are local maximums
-            List<IntPoint> cornersList = new List<IntPoint>( );
+            var cornersList = new List<IntPoint>( );
 
             // for each row
             for ( int y = windowRadius, maxY = height - windowRadius; y < maxY; y++ )
@@ -292,13 +292,13 @@ namespace AForge.Imaging
                 // for each pixel
                 for ( int x = windowRadius, maxX = width - windowRadius; x < maxX; x++ )
                 {
-                    int currentValue = moravecMap[y, x];
+                    var currentValue = moravecMap[y, x];
 
                     // for each windows' rows
-                    for ( int i = -windowRadius; ( currentValue != 0 ) && ( i <= windowRadius ); i++ )
+                    for ( var i = -windowRadius; ( currentValue != 0 ) && ( i <= windowRadius ); i++ )
                     {
                         // for each windows' pixels
-                        for ( int j = -windowRadius; j <= windowRadius; j++ )
+                        for ( var j = -windowRadius; j <= windowRadius; j++ )
                         {
                             if ( moravecMap[y + i, x + j] > currentValue )
                             {

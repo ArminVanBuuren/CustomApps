@@ -157,7 +157,7 @@ namespace AForge.Imaging
             }
 
             // lock source image
-            BitmapData imageData = image.LockBits(
+            var imageData = image.LockBits(
                 new Rectangle( 0, 0, image.Width, image.Height ),
                 ImageLockMode.ReadOnly, image.PixelFormat );
 
@@ -216,8 +216,8 @@ namespace AForge.Imaging
             }
 
             // get source image size
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // make sure we have grayscale image
             UnmanagedImage grayImage = null;
@@ -232,15 +232,15 @@ namespace AForge.Imaging
                 grayImage = Grayscale.CommonAlgorithms.BT709.Apply( image );
             }
 
-            int[,] susanMap = new int[height, width];
+            var susanMap = new int[height, width];
 
             // do the job
             unsafe
             {
-                int stride = grayImage.Stride;
-                int offset = stride - width;
+                var stride = grayImage.Stride;
+                var offset = stride - width;
 
-                byte* src = (byte*) grayImage.ImageData.ToPointer( ) + stride * 3 + 3;
+                var src = (byte*) grayImage.ImageData.ToPointer( ) + stride * 3 + 3;
 
 			    // for each row
                 for ( int y = 3, maxY = height - 3; y < maxY; y++ )
@@ -249,23 +249,23 @@ namespace AForge.Imaging
                     for ( int x = 3, maxX = width - 3; x < maxX; x++, src++ )
                     {
                         // get value of the nucleus
-                        byte nucleusValue = *src;
+                        var nucleusValue = *src;
                         // usan - number of pixels with similar brightness
-                        int usan = 0;
+                        var usan = 0;
                         // center of gravity
                         int cx = 0, cy = 0;
 
                         // for each row of the mask
-                        for ( int i = -3; i <= 3; i++ )
+                        for ( var i = -3; i <= 3; i++ )
                         {
                             // determine row's radius
-                            int r = rowRadius[i + 3];
+                            var r = rowRadius[i + 3];
 
                             // get pointer to the central pixel of the row
-                            byte* ptr = src + stride * i;
+                            var ptr = src + stride * i;
 
                             // for each element of the mask's row
-                            for ( int j = -r; j <= r; j++ )
+                            for ( var j = -r; j <= r; j++ )
                             {
                                 // differenceThreshold
                                 if ( System.Math.Abs( nucleusValue - ptr[j] ) <= differenceThreshold )
@@ -314,7 +314,7 @@ namespace AForge.Imaging
             }
 
             // collect interesting points - only those points, which are local maximums
-            List<IntPoint> cornersList = new List<IntPoint>( );
+            var cornersList = new List<IntPoint>( );
 
             // for each row
             for ( int y = 2, maxY = height - 2; y < maxY; y++ )
@@ -322,13 +322,13 @@ namespace AForge.Imaging
                 // for each pixel
                 for ( int x = 2, maxX = width - 2; x < maxX; x++ )
                 {
-                    int currentValue = susanMap[y, x];
+                    var currentValue = susanMap[y, x];
 
                     // for each windows' row
-                    for ( int i = -2; ( currentValue != 0 ) && ( i <= 2 ); i++ )
+                    for ( var i = -2; ( currentValue != 0 ) && ( i <= 2 ); i++ )
                     {
                         // for each windows' pixel
-                        for ( int j = -2; j <= 2; j++ )
+                        for ( var j = -2; j <= 2; j++ )
                         {
                             if ( susanMap[y + i, x + j] > currentValue )
                             {

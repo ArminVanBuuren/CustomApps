@@ -100,9 +100,9 @@ namespace BigMath
         /// <param name="value">The value.</param>
         public Int128(decimal value)
         {
-            bool isNegative = value < 0;
-            uint[] bits = decimal.GetBits(value).ConvertAll(i => (uint) i);
-            uint scale = (bits[3] >> 16) & 0x1F;
+            var isNegative = value < 0;
+            var bits = decimal.GetBits(value).ConvertAll(i => (uint) i);
+            var scale = (bits[3] >> 16) & 0x1F;
             if (scale > 0)
             {
                 uint[] quotient;
@@ -218,7 +218,7 @@ namespace BigMath
         /// <param name="value">The value.</param>
         public Int128(Int256 value)
         {
-            ulong[] values = value.ToUIn64Array();
+            var values = value.ToUIn64Array();
             _hi = values[1];
             _lo = values[0];
         }
@@ -242,7 +242,7 @@ namespace BigMath
             }
 
             var value = new ulong[2];
-            for (int i = 0; i < ints.Length && i < 4; i++)
+            for (var i = 0; i < ints.Length && i < 4; i++)
             {
                 Buffer.BlockCopy(ints[i].ToBytes(), 0, value, i*4, 4);
             }
@@ -355,7 +355,7 @@ namespace BigMath
 
             if (!string.IsNullOrEmpty(format))
             {
-                char ch = format[0];
+                var ch = format[0];
                 if ((ch == 'x') || (ch == 'X'))
                 {
                     int min;
@@ -381,7 +381,7 @@ namespace BigMath
 
             var sb = new StringBuilder();
             var ten = new Int128(10);
-            Int128 current = Sign < 0 ? -this : this;
+            var current = Sign < 0 ? -this : this;
             Int128 r;
             while (true)
             {
@@ -396,7 +396,7 @@ namespace BigMath
                 }
             }
 
-            string s = sb.ToString();
+            var s = sb.ToString();
             if ((Sign < 0) && (s != "0"))
             {
                 return info.NegativeSign + s;
@@ -651,11 +651,11 @@ namespace BigMath
             }
 
             result = Zero;
-            bool hi = false;
-            int pos = 0;
-            for (int i = value.Length - 1; i >= 0; i--)
+            var hi = false;
+            var pos = 0;
+            for (var i = value.Length - 1; i >= 0; i--)
             {
-                char ch = value[i];
+                var ch = value[i];
                 ulong b;
                 if ((ch >= '0') && (ch <= '9'))
                 {
@@ -696,7 +696,7 @@ namespace BigMath
         private static bool TryParseNum(string value, out Int128 result)
         {
             result = Zero;
-            foreach (char ch in value)
+            foreach (var ch in value)
             {
                 byte b;
                 if ((ch >= '0') && (ch <= '9'))
@@ -864,8 +864,8 @@ namespace BigMath
         /// </returns>
         public static int Compare(Int128 left, Int128 right)
         {
-            int leftSign = left.Sign;
-            int rightSign = right.Sign;
+            var leftSign = left.Sign;
+            var rightSign = right.Sign;
 
             if (leftSign == 0 && rightSign == 0)
             {
@@ -1003,9 +1003,9 @@ namespace BigMath
             {
                 throw new DivideByZeroException();
             }
-            int dividendSign = dividend.Sign;
+            var dividendSign = dividend.Sign;
             dividend = dividendSign < 0 ? -dividend : dividend;
-            int divisorSign = divisor.Sign;
+            var divisorSign = divisor.Sign;
             divisor = divisorSign < 0 ? -divisor : divisor;
 
             uint[] quotient;
@@ -1046,7 +1046,7 @@ namespace BigMath
         public uint[] ToUIn32Array()
         {
             var ints = new uint[4];
-            ulong[] ulongs = ToUIn64Array();
+            var ulongs = ToUIn64Array();
             Buffer.BlockCopy(ulongs, 0, ints, 0, 16);
             return ints;
         }
@@ -1059,20 +1059,20 @@ namespace BigMath
         /// <returns>The product of the left and right parameters.</returns>
         public static Int128 Multiply(Int128 left, Int128 right)
         {
-            int leftSign = left.Sign;
+            var leftSign = left.Sign;
             left = leftSign < 0 ? -left : left;
-            int rightSign = right.Sign;
+            var rightSign = right.Sign;
             right = rightSign < 0 ? -right : right;
 
-            uint[] xInts = left.ToUIn32Array();
-            uint[] yInts = right.ToUIn32Array();
+            var xInts = left.ToUIn32Array();
+            var yInts = right.ToUIn32Array();
             var mulInts = new uint[8];
 
-            for (int i = 0; i < xInts.Length; i++)
+            for (var i = 0; i < xInts.Length; i++)
             {
-                int index = i;
+                var index = i;
                 ulong remainder = 0;
-                foreach (uint yi in yInts)
+                foreach (var yi in yInts)
                 {
                     remainder = remainder + (ulong) xInts[i]*yi + mulInts[index];
                     mulInts[index++] = (uint) remainder;
@@ -1357,7 +1357,7 @@ namespace BigMath
             }
 
             double d;
-            NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
+            var nfi = CultureInfo.InvariantCulture.NumberFormat;
             if (!double.TryParse(value.ToString(nfi), NumberStyles.Number, nfi, out d))
             {
                 throw new OverflowException();
@@ -1381,7 +1381,7 @@ namespace BigMath
             }
 
             float f;
-            NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
+            var nfi = CultureInfo.InvariantCulture.NumberFormat;
             if (!float.TryParse(value.ToString(nfi), NumberStyles.Number, nfi, out f))
             {
                 throw new OverflowException();
@@ -1711,7 +1711,7 @@ namespace BigMath
                 return value;
             }
 
-            ulong[] bits = MathUtils.ShiftRightSigned(value.ToUIn64Array(), shift);
+            var bits = MathUtils.ShiftRightSigned(value.ToUIn64Array(), shift);
             value._hi = bits[1];
             value._lo = bits[0];    //lo is stored in array entry 0
 
@@ -1731,7 +1731,7 @@ namespace BigMath
                 return value;
             }
 
-            ulong[] bits = MathUtils.ShiftLeft(value.ToUIn64Array(), shift);
+            var bits = MathUtils.ShiftLeft(value.ToUIn64Array(), shift);
             value._hi = bits[1];
             value._lo = bits[0];    //lo is stored in array entry 0
 
@@ -1756,7 +1756,7 @@ namespace BigMath
                 return left;
             }
 
-            Int128 result = left;
+            var result = left;
             result._hi |= right._hi;
             result._lo |= right._lo;
             return result;
@@ -1775,7 +1775,7 @@ namespace BigMath
                 return Zero;
             }
 
-            Int128 result = left;
+            var result = left;
             result._hi &= right._hi;
             result._lo &= right._lo;
             return result;

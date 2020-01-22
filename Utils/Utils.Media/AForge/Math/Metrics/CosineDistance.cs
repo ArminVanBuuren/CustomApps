@@ -48,7 +48,7 @@ namespace AForge.AMath.Metrics
         {
             double distance;
 
-            CosineSimilarity dist = new CosineSimilarity( );
+            var dist = new CosineSimilarity( );
             distance = (double) 1 - dist.GetSimilarityScore( p, q );
 
             return distance;

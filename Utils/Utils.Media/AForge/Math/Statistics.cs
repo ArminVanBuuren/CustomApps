@@ -115,7 +115,7 @@ namespace AForge.AMath
             double  stddev = 0;
             double  diff;
             int     hits;
-            int     total = 0;
+            var     total = 0;
 
             // for all values
             for ( int i = 0, n = values.Length; i < n; i++ )
@@ -165,13 +165,13 @@ namespace AForge.AMath
             int total = 0, n = values.Length;
 
             // for all values
-            for ( int i = 0; i < n; i++ )
+            for ( var i = 0; i < n; i++ )
             {
                 // accumalate total
                 total += values[i];
             }
 
-            int halfTotal = total / 2;
+            var halfTotal = total / 2;
             int median = 0, v = 0;
 
             // find median value
@@ -220,14 +220,14 @@ namespace AForge.AMath
             int total = 0, n = values.Length;
 
             // for all values
-            for ( int i = 0; i < n; i++ )
+            for ( var i = 0; i < n; i++ )
             {
                 // accumalate total
                 total += values[i];
             }
 
             int min, max, hits;
-            int h = (int) ( total * ( percent + ( 1 - percent ) / 2 ) );
+            var h = (int) ( total * ( percent + ( 1 - percent ) / 2 ) );
 
             // get range min value
             for ( min = 0, hits = total; min < n; min++ )
@@ -286,13 +286,13 @@ namespace AForge.AMath
         /// 
         public static double Entropy( int[] values )
         {
-            int     n = values.Length;
-            int     total = 0;
+            var     n = values.Length;
+            var     total = 0;
             double  entropy = 0;
             double  p;
 
             // calculate total amount of hits
-            for ( int i = 0; i < n; i++ )
+            for ( var i = 0; i < n; i++ )
             {
                 total += values[i];
             }
@@ -300,7 +300,7 @@ namespace AForge.AMath
             if ( total != 0 )
             {
                 // for all values
-                for ( int i = 0; i < n; i++ )
+                for ( var i = 0; i < n; i++ )
                 {
                     // get item's probability
                     p = (double) values[i] / total;

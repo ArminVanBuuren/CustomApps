@@ -231,26 +231,26 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 16;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 16;
 
             // processing start and stop X,Y positions
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var stopX   = startX + rect.Width;
+            var stopY   = startY + rect.Height;
+            var offset  = image.Stride - rect.Width * pixelSize;
 
             // do the job
-            byte* basePtr =(byte*) image.ImageData.ToPointer( );
+            var basePtr =(byte*) image.ImageData.ToPointer( );
 
             if ( image.PixelFormat == PixelFormat.Format16bppGrayScale )
             {
                 // grayscale image
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    ushort* ptr = (ushort*) ( basePtr + y * image.Stride ) + startX;
+                    var ptr = (ushort*) ( basePtr + y * image.Stride ) + startX;
 
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         // gray
                         *ptr = mapGreen[*ptr];
@@ -260,11 +260,11 @@ namespace AForge.Imaging.Filters
             else
             {
                 // RGB image
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    ushort* ptr = (ushort*) ( basePtr + y * image.Stride ) + startX * pixelSize;
+                    var ptr = (ushort*) ( basePtr + y * image.Stride ) + startX * pixelSize;
 
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         // red
                         ptr[RGB.R] = mapRed[ptr[RGB.R]];
@@ -296,9 +296,9 @@ namespace AForge.Imaging.Filters
                 b = (double) ( outRange.Min ) - k * inRange.Min;
             }
 
-            for ( int i = 0; i < 65536; i++ )
+            for ( var i = 0; i < 65536; i++ )
             {
-                ushort v = (ushort) i;
+                var v = (ushort) i;
 
                 if ( v >= inRange.Max )
                     v = (ushort) outRange.Max;

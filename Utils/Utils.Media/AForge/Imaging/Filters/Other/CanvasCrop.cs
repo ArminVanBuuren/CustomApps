@@ -189,22 +189,22 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // get image width and height
-            int width  = image.Width;
-            int height = image.Height;
-            int offset = image.Stride - width * pixelSize;
+            var width  = image.Width;
+            var height = image.Height;
+            var offset = image.Stride - width * pixelSize;
 
             // do the job
-            byte * ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, ptr++ )
+                    for ( var x = 0; x < width; x++, ptr++ )
                     {
                         if ( !region.Contains( x, y ) )
                         {
@@ -217,9 +217,9 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
-                    for ( int x = 0; x < width; x++, ptr += pixelSize )
+                    for ( var x = 0; x < width; x++, ptr += pixelSize )
                     {
                         if ( !region.Contains( x, y ) )
                         {

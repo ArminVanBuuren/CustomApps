@@ -76,31 +76,31 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 :
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 :
                 ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
 
-            int startX = rect.Left;
-            int startY = rect.Top;
-            int stopX  = startX + rect.Width;
-            int stopY  = startY + rect.Height;
-            int stride = image.Stride;
-            int offset = stride - rect.Width * pixelSize;
+            var startX = rect.Left;
+            var startY = rect.Top;
+            var stopX  = startX + rect.Width;
+            var stopY  = startY + rect.Height;
+            var stride = image.Stride;
+            var offset = stride - rect.Width * pixelSize;
 
-            int numberOfPixels = ( stopX - startX ) * ( stopY - startY );
+            var numberOfPixels = ( stopX - startX ) * ( stopY - startY );
 
             // check image format
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
                 // allign pointer to the first pixel to process
                 ptr += ( startY * stride + startX );
 
                 // calculate histogram
-                int[] histogram = new int[256];
-                for ( int y = startY; y < stopY; y++ )
+                var histogram = new int[256];
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         histogram[*ptr]++;
                     }
@@ -108,16 +108,16 @@ namespace AForge.Imaging.Filters
                 }
 
                 // calculate new intensity levels
-                byte[] equalizedHistogram = Equalize( histogram, numberOfPixels );
+                var equalizedHistogram = Equalize( histogram, numberOfPixels );
 
                 // update pixels' intensities
                 ptr = (byte*) image.ImageData.ToPointer( );
                 // allign pointer to the first pixel to process
                 ptr += ( startY * stride + startX );
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr++ )
+                    for ( var x = startX; x < stopX; x++, ptr++ )
                     {
                         *ptr = equalizedHistogram[*ptr];
                     }
@@ -127,18 +127,18 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                byte* ptr = (byte*) image.ImageData.ToPointer( );
+                var ptr = (byte*) image.ImageData.ToPointer( );
                 // allign pointer to the first pixel to process
                 ptr += ( startY * stride + startX * pixelSize );
 
                 // calculate histogram
-                int[] histogramR = new int[256];
-                int[] histogramG = new int[256];
-                int[] histogramB = new int[256];
+                var histogramR = new int[256];
+                var histogramG = new int[256];
+                var histogramB = new int[256];
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         histogramR[ptr[RGB.R]]++;
                         histogramG[ptr[RGB.G]]++;
@@ -148,18 +148,18 @@ namespace AForge.Imaging.Filters
                 }
 
                 // calculate new intensity levels
-                byte[] equalizedHistogramR = Equalize( histogramR, numberOfPixels );
-                byte[] equalizedHistogramG = Equalize( histogramG, numberOfPixels );
-                byte[] equalizedHistogramB = Equalize( histogramB, numberOfPixels );
+                var equalizedHistogramR = Equalize( histogramR, numberOfPixels );
+                var equalizedHistogramG = Equalize( histogramG, numberOfPixels );
+                var equalizedHistogramB = Equalize( histogramB, numberOfPixels );
 
                 // update pixels' intensities
                 ptr = (byte*) image.ImageData.ToPointer( );
                 // allign pointer to the first pixel to process
                 ptr += ( startY * stride + startX * pixelSize );
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         ptr[RGB.R] = equalizedHistogramR[ptr[RGB.R]];
                         ptr[RGB.G] = equalizedHistogramG[ptr[RGB.G]];
@@ -174,15 +174,15 @@ namespace AForge.Imaging.Filters
         // Histogram 
         private byte[] Equalize( int[] histogram, long numPixel )
         {
-            byte[] equalizedHistogram = new byte[256];
-            float coef = 255.0f / numPixel;
+            var equalizedHistogram = new byte[256];
+            var coef = 255.0f / numPixel;
 
             // calculate the first value
-            float prev = histogram[0] * coef;
+            var prev = histogram[0] * coef;
             equalizedHistogram[0] = (byte) prev;
 
             // calcualte the rest of values
-            for ( int i = 1; i < 256; i++ )
+            for ( var i = 1; i < 256; i++ )
             {
                 prev += histogram[i] * coef;
                 equalizedHistogram[i] = (byte) prev;

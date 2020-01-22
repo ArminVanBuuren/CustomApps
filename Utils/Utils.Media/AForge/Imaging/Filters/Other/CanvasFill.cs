@@ -183,39 +183,39 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image )
         {
-            int pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
+            var pixelSize = Image.GetPixelFormatSize( image.PixelFormat ) / 8;
 
             // get image width and height
-            int width  = image.Width;
-            int height = image.Height;
+            var width  = image.Width;
+            var height = image.Height;
 
             // start (X, Y) point of filling region
-            int startX = Math.Max( 0, region.X );
-            int startY = Math.Max( 0, region.Y );
+            var startX = Math.Max( 0, region.X );
+            var startY = Math.Max( 0, region.Y );
 
             // check if there is nothing to do
             if ( ( startX >= width ) || ( startY >= height ) )
                 return;
 
             // stop (X, Y) point of filling region
-            int stopX = Math.Min( width, region.Right );
-            int stopY = Math.Min( height, region.Bottom );
+            var stopX = Math.Min( width, region.Right );
+            var stopY = Math.Min( height, region.Bottom );
 
             // check if there is nothing to do
             if ( ( stopX <= startX ) || ( stopY <= startY ) )
                 return;
 
-            int stride = image.Stride;
+            var stride = image.Stride;
 
             // do the job
-            byte * ptr = (byte*) image.ImageData.ToPointer( ) + startY * stride + startX * pixelSize;
+            var ptr = (byte*) image.ImageData.ToPointer( ) + startY * stride + startX * pixelSize;
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                int fillWidth = stopX - startX;
+                var fillWidth = stopX - startX;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
                     AForge.SystemTools.SetUnmanagedMemory( ptr, fillGray, fillWidth );
                     ptr += stride;
@@ -224,11 +224,11 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                int offset = stride - ( stopX - startX ) * pixelSize;
+                var offset = stride - ( stopX - startX ) * pixelSize;
 
-                for ( int y = startY; y < stopY; y++ )
+                for ( var y = startY; y < stopY; y++ )
                 {
-                    for ( int x = startX; x < stopX; x++, ptr += pixelSize )
+                    for ( var x = startX; x < stopX; x++, ptr += pixelSize )
                     {
                         ptr[RGB.R] = fillRed;
                         ptr[RGB.G] = fillGreen;

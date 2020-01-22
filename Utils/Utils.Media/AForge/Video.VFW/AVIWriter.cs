@@ -249,7 +249,7 @@ namespace AForge.Video.VFW
 	            throw new ArgumentException( "Video file resolution must be a multiple of two." );
             }
 
-            bool success = false;
+            var success = false;
 
             try
             {
@@ -268,7 +268,7 @@ namespace AForge.Video.VFW
                     this.height = height;
 
                     // describe new stream
-                    Win32.AVISTREAMINFO info = new Win32.AVISTREAMINFO( );
+                    var info = new Win32.AVISTREAMINFO( );
 
                     info.type    = Win32.mmioFOURCC( "vids" );
                     info.handler = Win32.mmioFOURCC( codec );
@@ -281,7 +281,7 @@ namespace AForge.Video.VFW
                         throw new VideoException( "Failed creating stream." );
 
                     // describe compression options
-                    Win32.AVICOMPRESSOPTIONS options = new Win32.AVICOMPRESSOPTIONS( );
+                    var options = new Win32.AVICOMPRESSOPTIONS( );
 
                     options.handler = Win32.mmioFOURCC( codec );
                     options.quality = quality;
@@ -294,7 +294,7 @@ namespace AForge.Video.VFW
                         throw new VideoException( "Failed creating compressed stream." );
 
                     // describe frame format
-                    Win32.BITMAPINFOHEADER bitmapInfoHeader = new Win32.BITMAPINFOHEADER( );
+                    var bitmapInfoHeader = new Win32.BITMAPINFOHEADER( );
 
                     bitmapInfoHeader.size        = Marshal.SizeOf( bitmapInfoHeader.GetType( ) );
                     bitmapInfoHeader.width       = width;
@@ -394,18 +394,18 @@ namespace AForge.Video.VFW
                     throw new ArgumentException( "Bitmap size must be of the same as video size, which was specified on opening video file." );
 
                 // lock bitmap data
-                BitmapData imageData = frameImage.LockBits(
+                var imageData = frameImage.LockBits(
                     new Rectangle( 0, 0, width, height ),
                     ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb );
 
                 // copy image data
-                int srcStride = imageData.Stride;
-                int dstStride = stride;
+                var srcStride = imageData.Stride;
+                var dstStride = stride;
 
-                int src = imageData.Scan0.ToInt32( ) + srcStride * ( height - 1 );
-                int dst = buffer.ToInt32( );
+                var src = imageData.Scan0.ToInt32( ) + srcStride * ( height - 1 );
+                var dst = buffer.ToInt32( );
 
-                for ( int y = 0; y < height; y++ )
+                for ( var y = 0; y < height; y++ )
                 {
                     Win32.memcpy( dst, src, dstStride );
                     dst += dstStride;

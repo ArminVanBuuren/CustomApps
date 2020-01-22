@@ -28,7 +28,7 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         public static IPin GetPin( IBaseFilter filter, PinDirection dir, int num )
         {
-            IPin[] pin = new IPin[1];
+            var pin = new IPin[1];
             IEnumPins pinsEnum = null;
 
             // enum filter pins

@@ -160,7 +160,7 @@ namespace AForge.Imaging.ColorReduction
         /// 
         public Bitmap Apply( Bitmap sourceImage )
         {
-            BitmapData data = sourceImage.LockBits( new Rectangle( 0, 0, sourceImage.Width, sourceImage.Height ),
+            var data = sourceImage.LockBits( new Rectangle( 0, 0, sourceImage.Width, sourceImage.Height ),
                 ImageLockMode.ReadOnly, sourceImage.PixelFormat );
 
             Bitmap result = null;
@@ -205,7 +205,7 @@ namespace AForge.Imaging.ColorReduction
             cache.Clear( );
 
             // make a copy of the original image
-            UnmanagedImage source = sourceImage.Clone( );
+            var source = sourceImage.Clone( );
 
             // get image size
             width  = sourceImage.Width;
@@ -213,13 +213,13 @@ namespace AForge.Imaging.ColorReduction
             stride = sourceImage.Stride;
             pixelSize = Bitmap.GetPixelFormatSize( sourceImage.PixelFormat ) / 8;
 
-            int offset = stride - width * pixelSize;
+            var offset = stride - width * pixelSize;
 
             // create destination image
-            Bitmap destImage = new Bitmap( width, height, ( colorTable.Length > 16 ) ?
+            var destImage = new Bitmap( width, height, ( colorTable.Length > 16 ) ?
                 PixelFormat.Format8bppIndexed : PixelFormat.Format4bppIndexed );
             // and init its palette
-            ColorPalette cp = destImage.Palette;
+            var cp = destImage.Palette;
             for ( int i = 0, n = colorTable.Length; i < n; i++ )
             {
                 cp.Entries[i] = colorTable[i];
@@ -227,23 +227,23 @@ namespace AForge.Imaging.ColorReduction
             destImage.Palette = cp;
 
             // lock destination image
-            BitmapData destData = destImage.LockBits( new Rectangle( 0, 0, width, height ),
+            var destData = destImage.LockBits( new Rectangle( 0, 0, width, height ),
                 ImageLockMode.ReadWrite, destImage.PixelFormat );
 
             // pixel values
             int r, g, b;
 
             // do the job
-            byte* ptr = (byte*) source.ImageData.ToPointer( );
-            byte* dstBase = (byte*) destData.Scan0.ToPointer( );
+            var ptr = (byte*) source.ImageData.ToPointer( );
+            var dstBase = (byte*) destData.Scan0.ToPointer( );
             byte colorIndex;
 
-            bool is8bpp = ( colorTable.Length > 16 );
+            var is8bpp = ( colorTable.Length > 16 );
 
             // for each line
             for ( y = 0; y < height; y++ )
             {
-                byte* dst = dstBase + y * destData.Stride;
+                var dst = dstBase + y * destData.Stride;
 
                 // for each pixels
                 for ( x = 0; x < width; x++, ptr += pixelSize )
@@ -253,7 +253,7 @@ namespace AForge.Imaging.ColorReduction
                     b = ptr[RGB.B];
 
                     // get color from palette, which is the closest to current pixel's value
-                    Color closestColor = GetClosestColor( r, g, b, out colorIndex );
+                    var closestColor = GetClosestColor( r, g, b, out colorIndex );
 
                     // do error diffusion
                     Diffuse( r - closestColor.R, g - closestColor.G, b - closestColor.B, ptr );
@@ -292,7 +292,7 @@ namespace AForge.Imaging.ColorReduction
         // Get closest color from palette to the specified color
         private Color GetClosestColor( int red, int green, int blue, out byte colorIndex )
         {
-            Color color = Color.FromArgb( red, green, blue );
+            var color = Color.FromArgb( red, green, blue );
 
             if ( ( useCaching ) && ( cache.ContainsKey( color ) ) )
             {
@@ -301,15 +301,15 @@ namespace AForge.Imaging.ColorReduction
             else
             {
                 colorIndex = 0;
-                int minError = int.MaxValue;
+                var minError = int.MaxValue;
 
                 for ( int i = 0, n = colorTable.Length; i < n; i++ )
                 {
-                    int dr = red - colorTable[i].R;
-                    int dg = green - colorTable[i].G;
-                    int db = blue - colorTable[i].B;
+                    var dr = red - colorTable[i].R;
+                    var dg = green - colorTable[i].G;
+                    var db = blue - colorTable[i].B;
 
-                    int error = dr * dr + dg * dg + db * db;
+                    var error = dr * dr + dg * dg + db * db;
 
                     if ( error < minError )
                     {

@@ -98,34 +98,34 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
+            var pixelSize = ( image.PixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
 
-            int width   = rect.Width;
-            int height  = rect.Height;
+            var width   = rect.Width;
+            var height  = rect.Height;
 
             // processing start and stop X,Y positions
-            int startY  = rect.Top;
-            int stopY   = startY + height;
-            int startX  = rect.Left;
-            int stopX   = startX + width;
-            int startXInBytes = startX * pixelSize;
-            int stopXInBytes  = stopX * pixelSize;
+            var startY  = rect.Top;
+            var stopY   = startY + height;
+            var startX  = rect.Left;
+            var stopX   = startX + width;
+            var startXInBytes = startX * pixelSize;
+            var stopXInBytes  = stopX * pixelSize;
 
-            int stride = image.Stride;
+            var stride = image.Stride;
 
             // perform Y mirroring
             if ( mirrorY )
             {
                 // first pointer - points to the first pixel in line
-                byte* ptr1 = (byte*) image.ImageData.ToPointer( );
+                var ptr1 = (byte*) image.ImageData.ToPointer( );
                 ptr1 += ( startY * stride + startX * pixelSize );
                 // second pointer - points to the last pixel in line
-                byte* ptr2 = (byte*) image.ImageData.ToPointer( );
+                var ptr2 = (byte*) image.ImageData.ToPointer( );
                 ptr2 += ( startY * stride + ( stopX - 1 ) * pixelSize );
 
                 // offsets
-                int offset1 = stride - ( width >> 1 ) * pixelSize;
-                int offset2 = stride + ( width >> 1 ) * pixelSize;
+                var offset1 = stride - ( width >> 1 ) * pixelSize;
+                var offset2 = stride + ( width >> 1 ) * pixelSize;
 
                 // temporary value for swapping
                 byte v;
@@ -135,7 +135,7 @@ namespace AForge.Imaging.Filters
                     // grayscale mirroring
 
                     // for each line
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
                         // for each pixel
                         for ( int x = startX, halfStopX = startX + ( width >> 1 ); x < halfStopX; x++, ptr1++, ptr2-- )
@@ -154,7 +154,7 @@ namespace AForge.Imaging.Filters
                     // color mirroring
 
                     // for each line
-                    for ( int y = startY; y < stopY; y++ )
+                    for ( var y = startY; y < stopY; y++ )
                     {
                         // for each pixel
                         for ( int x = startX, halfStopX = startX + ( width >> 1 ); x < halfStopX; x++, ptr1 += 3, ptr2 -= 3 )
@@ -183,13 +183,13 @@ namespace AForge.Imaging.Filters
             // perform X mirroring
             if ( mirrorX )
             {
-                int offset = stride - rect.Width * pixelSize;
+                var offset = stride - rect.Width * pixelSize;
 
                 // first pointer - points to the first line
-                byte* ptr1 = (byte*) image.ImageData.ToPointer( );
+                var ptr1 = (byte*) image.ImageData.ToPointer( );
                 ptr1 += ( startY * stride + startX * pixelSize );
                 // second pointer - points to the last line
-                byte* ptr2 = (byte*) image.ImageData.ToPointer( );
+                var ptr2 = (byte*) image.ImageData.ToPointer( );
                 ptr2 += ( ( stopY - 1 ) * stride + startX * pixelSize );
 
                 // temporary value for swapping
@@ -199,7 +199,7 @@ namespace AForge.Imaging.Filters
                 for ( int y = startY, halfStopY = startY + ( height >> 1 ); y < halfStopY; y++ )
                 {
                     // for each pixel
-                    for ( int x = startXInBytes; x < stopXInBytes; x++, ptr1++, ptr2++ )
+                    for ( var x = startXInBytes; x < stopXInBytes; x++, ptr1++, ptr2++ )
                     {
                         // swap values
                         v = *ptr1;

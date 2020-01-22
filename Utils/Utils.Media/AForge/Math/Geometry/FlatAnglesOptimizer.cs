@@ -79,7 +79,7 @@ namespace AForge.AMath.Geometry
         public List<IntPoint> OptimizeShape( List<IntPoint> shape )
         {
             // optimized shape
-            List<IntPoint> optimizedShape = new List<IntPoint>( );
+            var optimizedShape = new List<IntPoint>( );
 
             if ( shape.Count <= 3 )
             {
@@ -93,7 +93,7 @@ namespace AForge.AMath.Geometry
                 // add first 2 points to the new shape
                 optimizedShape.Add( shape[0] );
                 optimizedShape.Add( shape[1] );
-                int pointsInOptimizedHull = 2;
+                var pointsInOptimizedHull = 2;
 
                 for ( int i = 2, n = shape.Count; i < n; i++ )
                 {

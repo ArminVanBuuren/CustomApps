@@ -29,7 +29,7 @@ namespace AForge.Imaging.Filters
         // Multiply two 3x3 matrices
         private static double[,] MultiplyMatrix( double[,] a, double[,] b )
         {
-            double[,] c = new double[3, 3];
+            var c = new double[3, 3];
 
             c[0, 0] = a[0, 0] * b[0, 0] + a[0, 1] * b[1, 0] + a[0, 2] * b[2, 0];
             c[0, 1] = a[0, 0] * b[0, 1] + a[0, 1] * b[1, 1] + a[0, 2] * b[2, 1];
@@ -47,7 +47,7 @@ namespace AForge.Imaging.Filters
         // Calculates adjugate 3x3 matrix
         private static double[,] AdjugateMatrix( double[,] a )
         {
-            double[,] b = new double[3, 3];
+            var b = new double[3, 3];
             b[0, 0] = Det2( a[1, 1], a[1, 2], a[2, 1], a[2, 2] );
             b[1, 0] = Det2( a[1, 2], a[1, 0], a[2, 2], a[2, 0] );
             b[2, 0] = Det2( a[1, 0], a[1, 1], a[2, 0], a[2, 1] );
@@ -64,7 +64,7 @@ namespace AForge.Imaging.Filters
         // Calculate matrix for unit square to quad mapping
         private static double[,] MapSquareToQuad( List<IntPoint> quad )
         {
-            double[,] sq = new double[3, 3];
+            var sq = new double[3, 3];
             double px, py;
 
             px = quad[0].X - quad[1].X + quad[2].X - quad[3].X;
@@ -117,8 +117,8 @@ namespace AForge.Imaging.Filters
         // Calculate matrix for general quad to quad mapping
         public static double[,] MapQuadToQuad( List<IntPoint> input, List<IntPoint> output )
         {
-            double[,] squareToInpit = MapSquareToQuad( input );
-            double[,] squareToOutput = MapSquareToQuad( output );
+            var squareToInpit = MapSquareToQuad( input );
+            var squareToOutput = MapSquareToQuad( output );
 
             if ( squareToOutput == null )
                 return null;

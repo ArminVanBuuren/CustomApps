@@ -42,7 +42,7 @@ namespace HtmlAgilityPack
 
         internal static string GetNameValuePairsValue(string text, string name)
         {
-            NameValuePairList l = new NameValuePairList(text);
+            var l = new NameValuePairList(text);
             return l.GetNameValuePairValue(name);
         }
 
@@ -57,7 +57,7 @@ namespace HtmlAgilityPack
         {
             if (name == null)
                 throw new ArgumentNullException();
-            List<KeyValuePair<string, string>> al = GetNameValuePairs(name);
+            var al = GetNameValuePairs(name);
             if (al.Count == 0)
                 return string.Empty;
 
@@ -76,15 +76,15 @@ namespace HtmlAgilityPack
             if (text == null)
                 return;
 
-            string[] p = text.Split(';');
-            foreach (string pv in p)
+            var p = text.Split(';');
+            foreach (var pv in p)
             {
                 if (pv.Length == 0)
                     continue;
-                string[] onep = pv.Split(new[] {'='}, 2);
+                var onep = pv.Split(new[] {'='}, 2);
                 if (onep.Length == 0)
                     continue;
-                KeyValuePair<string, string> nvp = new KeyValuePair<string, string>(onep[0].Trim().ToLowerInvariant(),
+                var nvp = new KeyValuePair<string, string>(onep[0].Trim().ToLowerInvariant(),
                     onep.Length < 2 ? "" : onep[1]);
 
                 _allPairs.Add(nvp);

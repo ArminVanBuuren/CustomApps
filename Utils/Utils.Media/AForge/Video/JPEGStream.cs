@@ -227,7 +227,7 @@ namespace AForge.Video
 		{
 			get
 			{
-				int frames = framesReceived;
+				var frames = framesReceived;
 				framesReceived = 0;
 				return frames;
 			}
@@ -245,7 +245,7 @@ namespace AForge.Video
 		{
 			get
 			{
-				long bytes = bytesReceived;
+				var bytes = bytesReceived;
 				bytesReceived = 0;
 				return bytes;
 			}
@@ -428,7 +428,7 @@ namespace AForge.Video
         private void WorkerThread( )
 		{
             // buffer to read stream
-			byte[] buffer = new byte[bufferSize];
+			var buffer = new byte[bufferSize];
             // HTTP web request
 			HttpWebRequest request = null;
             // web responce
@@ -436,7 +436,7 @@ namespace AForge.Video
             // stream for JPEG downloading
 			Stream stream = null;
             // random generator to add fake parameter for cache preventing
-			Random rand = new Random( (int) DateTime.Now.Ticks );
+			var rand = new Random( (int) DateTime.Now.Ticks );
             // download start time and duration
 			DateTime start;
 			TimeSpan span;
@@ -479,7 +479,7 @@ namespace AForge.Video
                     // force basic authentication through extra headers if required
                     if ( forceBasicAuthentication )
                     {
-                        string authInfo = string.Format( "{0}:{1}", login, password );
+                        var authInfo = string.Format( "{0}:{1}", login, password );
                         authInfo = Convert.ToBase64String( Encoding.Default.GetBytes( authInfo ) );
                         request.Headers["Authorization"] = "Basic " + authInfo;
                     }
@@ -516,7 +516,7 @@ namespace AForge.Video
 						// provide new image to clients
 						if ( NewFrame != null )
 						{
-							Bitmap bitmap = (Bitmap) Bitmap.FromStream( new MemoryStream( buffer, 0, total ) );
+							var bitmap = (Bitmap) Bitmap.FromStream( new MemoryStream( buffer, 0, total ) );
 							// notify client
                             NewFrame( this, new NewFrameEventArgs( bitmap ) );
 							// release the image
@@ -531,7 +531,7 @@ namespace AForge.Video
 						// get download duration
 						span = DateTime.Now.Subtract( start );
 						// miliseconds to sleep
-						int msec = frameInterval - (int) span.TotalMilliseconds;
+						var msec = frameInterval - (int) span.TotalMilliseconds;
 
                         if ( ( msec > 0 ) && ( stopEvent.WaitOne( msec, false ) ) )
                             break;

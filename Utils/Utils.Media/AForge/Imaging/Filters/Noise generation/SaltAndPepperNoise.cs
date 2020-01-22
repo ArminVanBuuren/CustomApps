@@ -98,41 +98,41 @@ namespace AForge.Imaging.Filters
         ///
         protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
         {
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int width   = rect.Width;
-            int height  = rect.Height;
-            int stride  = image.Stride;
+            var startX  = rect.Left;
+            var startY  = rect.Top;
+            var width   = rect.Width;
+            var height  = rect.Height;
+            var stride  = image.Stride;
 
-            int noisyPixels = (int) ( ( width * height * noiseAmount ) / 100 );
+            var noisyPixels = (int) ( ( width * height * noiseAmount ) / 100 );
 
             // values to set
-            byte[] values = new byte[2] { 0, 255 };
+            var values = new byte[2] { 0, 255 };
 
             // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
+            var ptr = (byte*) image.ImageData.ToPointer( );
 
             if ( image.PixelFormat == PixelFormat.Format8bppIndexed )
             {
                 // grayscale image
-                for ( int i = 0; i < noisyPixels; i++ )
+                for ( var i = 0; i < noisyPixels; i++ )
                 {
-                    int x = startX + rand.Next( width );
-                    int y = startY + rand.Next( height );
+                    var x = startX + rand.Next( width );
+                    var y = startY + rand.Next( height );
 
                     ptr[y * stride + x] = values[rand.Next( 2 )];
                 }
             }
             else
             {
-                int pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
+                var pixelSize = ( image.PixelFormat == PixelFormat.Format24bppRgb ) ? 3 : 4;
 
                 // color image
-                for ( int i = 0; i < noisyPixels; i++ )
+                for ( var i = 0; i < noisyPixels; i++ )
                 {
-                    int x = startX + rand.Next( width );
-                    int y = startY + rand.Next( height );
-                    int colorPlane = rand.Next( 3 );
+                    var x = startX + rand.Next( width );
+                    var y = startY + rand.Next( height );
+                    var colorPlane = rand.Next( 3 );
 
                     ptr[y * stride + x * pixelSize + colorPlane] = values[rand.Next( 2 )];
                 }

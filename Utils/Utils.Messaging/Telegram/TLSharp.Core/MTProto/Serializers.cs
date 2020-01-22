@@ -11,7 +11,7 @@ namespace TLSharp.Core.MTProto
         {
             public static byte[] read(BinaryReader binaryReader)
             {
-                byte firstByte = binaryReader.ReadByte();
+                var firstByte = binaryReader.ReadByte();
                 int len, padding;
                 if (firstByte == 254)
                 {
@@ -23,7 +23,7 @@ namespace TLSharp.Core.MTProto
                     padding = (len + 1) % 4;
                 }
 
-                byte[] data = binaryReader.ReadBytes(len);
+                var data = binaryReader.ReadBytes(len);
                 if (padding > 0)
                 {
                     padding = 4 - padding;
@@ -62,7 +62,7 @@ namespace TLSharp.Core.MTProto
                 }
 
 
-                for (int i = 0; i < padding; i++)
+                for (var i = 0; i < padding; i++)
                 {
                     binaryWriter.Write((byte)0);
                 }
@@ -75,7 +75,7 @@ namespace TLSharp.Core.MTProto
         {
             public static string read(BinaryReader reader)
             {
-                byte[] data = Bytes.read(reader);
+                var data = Bytes.read(reader);
                 return Encoding.UTF8.GetString(data, 0, data.Length);
             }
 
@@ -87,8 +87,8 @@ namespace TLSharp.Core.MTProto
 
         public static string VectorToString<T>(List<T> list)
         {
-            string[] tokens = new string[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            var tokens = new string[list.Count];
+            for (var i = 0; i < list.Count; i++)
             {
                 tokens[i] = list[i].ToString();
             }
