@@ -1,4 +1,4 @@
-<scenario name="SC.FP.Modify.Block">
+﻿<scenario name="SC.FP.Modify.Block">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -6,7 +6,6 @@
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-    <object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersCutter-Node" object="BySubscribersCutter">
@@ -25,7 +24,6 @@
         <param name="IfXmlPath:0" value="//AdditionalData/TdStatus" />
         <param name="IfXmlPath:1" value="//AdditionalData/PaStatus" />
         <param name="Command" value="ChangeStatuses" />
-        <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
     <node name="ChangeTdStatus-Node" object="IfCommander">
@@ -37,7 +35,6 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="//AdditionalData/TdStatus" />
         <param name="Command" value="ChangeTDStatusesOnFINPlatform" />
-        <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
     <node name="ChangePaStatus-Node" object="Commander">
@@ -47,18 +44,14 @@
         <result value="" node="ResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus" />
+        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus"/>
         <param name="Command" value="ChangePAStatusesOnFINPlatform" />
-        <param name="AppendSubscribersData" value="true" />
       </parameterslist>
     </node>
     <node name="CheckHasServices-Node" object="ConditionsResolver">
       <parameterslist>
-        <!-- Если нет признака игнорирования вызова команд типа UpdateTDC -->
-        <param name="IfNotXmlPath:0" value="//ProcessingOptions/IgnoreUpdateTDC" />
         <!-- Есть ли не пропускаемые услуги ? Иначе команла будет пустой. -->
-        <param name="OrXmlPath:0" value="//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0']" />
-        <param name="OrXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0']" />
+        <param name="MultiLevelCondition" value="(//AdditionalData/AddList/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0']) OR (//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL/SkipFP/Value[text()='0'])" />
       </parameterslist>
       <resultlist>
         <result value="0" node="ActivateBlockingsExt-Node" />
@@ -67,9 +60,7 @@
     </node>
     <node name="ActivateBlockingsExt-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="DeactivateBlockingsExt-Node" />
-        <result value="1538" node="DeactivateBlockingsExt-Node" />
-        <result value="" node="ResponseAssembler-Node" />
+        <result value="" node="DeactivateBlockingsExt-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="ServicesToActivate" />
@@ -81,9 +72,7 @@
     </node>
     <node name="DeactivateBlockingsExt-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CheckHasSubscriberData-Node" />
-        <result value="1538" node="CheckHasSubscriberData-Node" />
-        <result value="" node="ResponseAssembler-Node" />
+        <result value="" node="UpdateServices-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="ServicesToDeactivate" />
@@ -93,45 +82,13 @@
         <param name="XmlPath" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_GENERAL" />
       </parameterslist>
     </node>
-    <node name="CheckHasSubscriberData-Node" object="ConditionsResolver">
-      <parameterslist>
-        <param name="ObjectNameInContext" value="intermediateResponse" />
-        <param name="IfXmlPath:0" value="//SubscribersData/FinancialPlatform/LastOperationDate" />
-      </parameterslist>
-      <resultlist>
-        <result value="0" node="UpdateServices-WithoutSubscriberData-Node" />
-        <result value="" node="UpdateServices-WithSubscriberData-Node" />
-      </resultlist>
-    </node>
-    <node name="UpdateServices-WithSubscriberData-Node" object="Commander">
+    <node name="UpdateServices-Node" object="Commander">
       <resultlist>
         <result value="" node="ResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.UpdateTDCDataSet" />
         <param name="Asynchronous" value="true" />
-        <param name="AppendSubscribersData" value="true" />
-      </parameterslist>
-    </node>
-    <node name="UpdateServices-WithoutSubscriberData-Node" object="Commander">
-      <resultlist>
-        <result value="" node="Add-ChangeStatusesSubscriberData-Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.UpdateTDCDataSet" />
-        <param name="Asynchronous" value="true" />
-      </parameterslist>
-    </node>
-    <node name="Add-ChangeStatusesSubscriberData-Node" object="XmlNodesCopier">
-      <resultlist>
-        <result value="" node="ResponseAssembler-Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="SrcXml" value="$LastDecoderResult" />
-        <param name="DstMessage" value="intermediateResponse" />
-        <param name="CopyContentType" value="InnerXml" />
-        <param name="SrcXmlPath:0" value="./CustomData" />
-        <param name="DstXmlPath:0" value="ExtendedResponseMessage/AdditionalData" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler-Node" object="ResponseAssembler">

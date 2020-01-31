@@ -1,4 +1,4 @@
-<scenario name="SC.FP.Sync.Services">
+﻿<scenario name="SC.FP.Sync.Services">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -23,7 +23,7 @@
       </parameterslist>
     </node>
     <node name="SkipResponseAssembler" object="ResponseAssembler">
-      <parameterslist />
+      <parameterslist/>
       <resultlist>
         <result value="" node="" />
       </resultlist>
@@ -37,9 +37,7 @@
     </node>
     <node name="CommandDataConstructorExt-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructor-AdditionalNumberList" />
-        <result value="1538" node="CommandDataConstructor-AdditionalNumberList" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="CommandDataConstructor-AdditionalNumberList" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="Services" />
@@ -51,9 +49,7 @@
     </node>
     <node name="CommandDataConstructor-AdditionalNumberList" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="SyncServices-Node" />
-        <result value="1538" node="SyncServices-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="SyncServices-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="AdditionalNumbers" />

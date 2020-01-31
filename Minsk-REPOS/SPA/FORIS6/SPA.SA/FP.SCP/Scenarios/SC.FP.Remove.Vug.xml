@@ -29,7 +29,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/CugAvailableOnFP/Value[text()='1']" />
-        <param name="IfXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DeleteGroup/Value[text()='1']" />
+        <param name="OrXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/DeleteGroup/Value[text()='1']" />
         <param name="Command" value="SC.DeleteCallingCircle" />
       </parameterslist>
     </node>

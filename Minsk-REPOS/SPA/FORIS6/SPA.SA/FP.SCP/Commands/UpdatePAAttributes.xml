@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="UpdatePAAttributes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>UpdatePAAttributes</Description>
-  <Author Name="Nick Vilenski" Date="2016-05-19+14:30" />
-  <Properties GenerationType="DataSetXml" />
+  <Author Name="Nick Vilenski" Date="2016-05-19+14:30"/>
+  <Properties GenerationType="DataSetXml"/>
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="AccountSync.UpdatePersonalAccounts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -16,21 +17,22 @@
         </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="ContractNumber" Type="LocalParameter" />
-    <Item Name="CustomerTypeId" Type="LocalParameter" />
-    <Item Name="CalculationMethodId" Type="LocalParameter" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="ContractNumber" Type="LocalParameter"/>
+    <Item Name="CustomerTypeId" Type="LocalParameter"/>
+    <Item Name="CalculationMethodId" Type="LocalParameter"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
   </Request>
   <ParametersList>
     <Parameter Name="CalculationMethodId">
-      <Source Path="//UpdateAttributes/CalculationMethodId" AbsenceValue="" />
+      <Source Path="//UpdateAttributes/CalculationMethodId" AbsenceValue=""/>
     </Parameter>
     <Parameter Name="CustomerTypeId">
-      <Source Path="//UpdateAttributes/CustomerTypeId" AbsenceValue="" />
+      <Source Path="//UpdateAttributes/CustomerTypeId" AbsenceValue=""/>
     </Parameter>
     <Parameter Name="ContractNumber">
-      <Source Path="//UpdateAttributes/ContractNumber" AbsenceValue="" />
+      <Source Path="//UpdateAttributes/ContractNumber" AbsenceValue=""/>
     </Parameter>
   </ParametersList>
 </Command>
+

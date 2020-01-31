@@ -7,7 +7,7 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RollbackUnit" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.StackRollbackUnit" assembly="FORIS.SPA.MmlProcessing.dll"/>
   </objectList>
   <automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">
@@ -91,7 +91,6 @@
     <node name="CreateTDOnFINPlatform" object="Commander">
       <resultlist>
         <result value="0" node="AddAutopayment-Node" />
-        <result value="TerminalDeviceAlreadyDefined" node="UpdateTD-ServicesDataConstructor-Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -100,34 +99,6 @@
         <param name="Asynchronous" value="true" />
       </parameterslist>
     </node>
-    <!-- UpdateTD start -->
-    <node name="UpdateTD-ServicesDataConstructor-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="0" node="UpdateTD-Node" />
-        <result value="1538" node="UpdateTD-Node" />
-        <result value="" node="FinalResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="Services" />
-        <param name="ParametersDynamicObject" value="ServicesParams" />
-        <param name="ServicesCommand" value="SC.Service.ServiceRow" />
-        <param name="ParametersCommand" value="SC.Service.UpdateTDParameterRow" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL" />
-      </parameterslist>
-    </node>
-    <node name="UpdateTD-Node" object="Commander">
-      <parameterslist>
-        <param name="AppendSubscribersData" value="true" />
-        <param name="OverwriteDetailedResult" value="true" />
-        <param name="Command" value="SC.UpdateTD" />
-        <param name="Asynchronous" value="true" />
-      </parameterslist>
-      <resultlist>
-        <result value="0" node="AddAutopayment-Node" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-    </node>
-    <!-- UpdateTD end -->
     <node name="AddAutopayment-Node" object="IfCommander">
       <comment>Добавление услуги автоплатежа</comment>
       <resultlist>
@@ -136,7 +107,7 @@
         <result value="" node="FinalResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold" />
+        <param name="IfXmlPath:0" value="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold"/>
         <param name="Command" value="SC.SetAutopayment" />
       </parameterslist>
     </node>
@@ -150,14 +121,14 @@
         <param name="FinalStepCheck" value="true" />
       </parameterslist>
       <resultlist>
-        <result value="" node="RollbackNode" />
+        <result value="" node="RollbackNode"/>
       </resultlist>
     </node>
     <node name="RollbackNode" object="RollbackUnit">
       <resultlist>
-        <result value="" node="" />
+        <result value="" node=""/>
       </resultlist>
-      <parameterslist />
+      <parameterslist/>
     </node>
   </automat>
 </scenario>

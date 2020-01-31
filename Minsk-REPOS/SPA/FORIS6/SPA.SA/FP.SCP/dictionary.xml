@@ -1,223 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Dictionary>
   <WellknownsList>
-    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)" />
-    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)" />
-    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)" />
-    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)" />
-    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)" />
-    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)" />
-    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;, false)" />
+    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)"/>
+    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)"/>
+    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)"/>
+    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)"/>
+    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)"/>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)"/>
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;, false)"/>
   </WellknownsList>
   <ErrorsList CodePage="ascii">
     <!-- Ошибки при вызове по MSMQ -->
-    <Error Name="&lt;ERROR_CODE&gt;0&lt;" Value="SUCCESS" />
-    <Error Name="&lt;ERROR_CODE&gt;-151009&lt;" Value="MissedLanguageCode" />
-    <Error Name="&lt;ERROR_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;ERROR_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
-    <Error Name="&lt;ERROR_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
-    <Error Name="&lt;ERROR_CODE&gt;-154003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;ERROR_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
-    <Error Name="&lt;ERROR_CODE&gt;-154050&lt;" Value="UnregisteredExtensionNumber" />
-    <Error Name="&lt;ERROR_CODE&gt;-151005&lt;" Value="InvalidTariffPlan" />
-    <Error Name="&lt;ERROR_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;ERROR_CODE&gt;-151003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;ERROR_CODE&gt;-13000&lt;" Value="UnregisteredError" />
-    <Error Name="&lt;ERROR_CODE&gt;-13001&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;ERROR_CODE&gt;-13002&lt;" Value="ResourceLimitation" />
-    <Error Name="&lt;ERROR_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;ERROR_CODE&gt;-13004&lt;" Value="ProcessingFailure" />
-    <Error Name="&lt;ERROR_CODE&gt;-13007&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;ERROR_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;ERROR_CODE&gt;-13009&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;ERROR_CODE&gt;-13010&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;ERROR_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable" />
-    <Error Name="&lt;ERROR_CODE&gt;-13012&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;ERROR_CODE&gt;5002&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;ERROR_CODE&gt;5003&lt;" Value="UnregisteredCug" />
-    <Error Name="&lt;ERROR_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat" />
-    <Error Name="&lt;ERROR_CODE&gt;5005&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;ERROR_CODE&gt;5007&lt;" Value="TooManyCugMembers" />
-    <Error Name="&lt;ERROR_CODE&gt;5008&lt;" Value="UnregisteredCugMember" />
-    <Error Name="&lt;ERROR_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered" />
-    <Error Name="&lt;ERROR_CODE&gt;5012&lt;" Value="UnregisteredCug" />
+    <Error Name="&lt;ERROR_CODE&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="&lt;ERROR_CODE&gt;-151009&lt;" Value="MissedLanguageCode"/>
+    <Error Name="&lt;ERROR_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;ERROR_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="&lt;ERROR_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="&lt;ERROR_CODE&gt;-154003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;ERROR_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
+    <Error Name="&lt;ERROR_CODE&gt;-151005&lt;" Value="InvalidTariffPlan"/>
+    <Error Name="&lt;ERROR_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;ERROR_CODE&gt;-151003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13000&lt;" Value="UnregisteredError"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13001&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13002&lt;" Value="ResourceLimitation"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13004&lt;" Value="ProcessingFailure"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13007&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13009&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13010&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="&lt;ERROR_CODE&gt;-13012&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;ERROR_CODE&gt;5002&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;ERROR_CODE&gt;5003&lt;" Value="UnregisteredCug"/>
+    <Error Name="&lt;ERROR_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat"/>
+    <Error Name="&lt;ERROR_CODE&gt;5005&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;ERROR_CODE&gt;5007&lt;" Value="TooManyCugMembers"/>
+    <Error Name="&lt;ERROR_CODE&gt;5008&lt;" Value="UnregisteredCugMember"/>
+    <Error Name="&lt;ERROR_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered"/>
+    <Error Name="&lt;ERROR_CODE&gt;5012&lt;" Value="UnregisteredCug"/>
     <Error Name="&lt;ERROR_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
+
     <!-- Ошибки при вызове по Remoting -->
-    <Error Name="&lt;RESULT_CODE&gt;0&lt;" Value="SUCCESS" />
-    <Error Name="&lt;RESULT_CODE&gt;-151009&lt;" Value="MissedLanguageCode" />
-    <Error Name="&lt;RESULT_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;RESULT_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
-    <Error Name="&lt;RESULT_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
-    <Error Name="&lt;RESULT_CODE&gt;-154003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;RESULT_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
-    <Error Name="&lt;RESULT_CODE&gt;-154050&lt;" Value="UnregisteredExtensionNumber" />
-    <Error Name="&lt;RESULT_CODE&gt;-151005&lt;" Value="InvalidTariffPlan" />
-    <Error Name="&lt;RESULT_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;RESULT_CODE&gt;-151003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;RESULT_CODE&gt;-13000&lt;" Value="UnregisteredError" />
-    <Error Name="&lt;RESULT_CODE&gt;-13001&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;RESULT_CODE&gt;-13002&lt;" Value="ResourceLimitation" />
-    <Error Name="&lt;RESULT_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;RESULT_CODE&gt;-13004&lt;" Value="ProcessingFailure" />
-    <Error Name="&lt;RESULT_CODE&gt;-13007&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RESULT_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;RESULT_CODE&gt;-13009&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;RESULT_CODE&gt;-13010&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RESULT_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable" />
-    <Error Name="&lt;RESULT_CODE&gt;-13012&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RESULT_CODE&gt;5002&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;RESULT_CODE&gt;5003&lt;" Value="UnregisteredCug" />
-    <Error Name="&lt;RESULT_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat" />
-    <Error Name="&lt;RESULT_CODE&gt;5005&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;RESULT_CODE&gt;5007&lt;" Value="TooManyCugMembers" />
-    <Error Name="&lt;RESULT_CODE&gt;5008&lt;" Value="UnregisteredCugMember" />
-    <Error Name="&lt;RESULT_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered" />
-    <Error Name="&lt;RESULT_CODE&gt;5012&lt;" Value="UnregisteredCug" />
+    <Error Name="&lt;RESULT_CODE&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="&lt;RESULT_CODE&gt;-151009&lt;" Value="MissedLanguageCode"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;RESULT_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
+    <Error Name="&lt;RESULT_CODE&gt;-151005&lt;" Value="InvalidTariffPlan"/>
+    <Error Name="&lt;RESULT_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;-151003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13000&lt;" Value="UnregisteredError"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13001&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13002&lt;" Value="ResourceLimitation"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13004&lt;" Value="ProcessingFailure"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13007&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13009&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13010&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="&lt;RESULT_CODE&gt;-13012&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RESULT_CODE&gt;5002&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;5003&lt;" Value="UnregisteredCug"/>
+    <Error Name="&lt;RESULT_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat"/>
+    <Error Name="&lt;RESULT_CODE&gt;5005&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;RESULT_CODE&gt;5007&lt;" Value="TooManyCugMembers"/>
+    <Error Name="&lt;RESULT_CODE&gt;5008&lt;" Value="UnregisteredCugMember"/>
+    <Error Name="&lt;RESULT_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered"/>
+    <Error Name="&lt;RESULT_CODE&gt;5012&lt;" Value="UnregisteredCug"/>
     <Error Name="&lt;RESULT_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
+
     <!-- Ошибки при замене номера, вызове ICrmOperations -->
-    <Error Name="ERROR_CODE=&quot;0&quot;" Value="SUCCESS" />
-    <Error Name="ERROR_CODE=&quot;-13000&quot;" Value="UnregisteredError" />
-    <Error Name="ERROR_CODE=&quot;-13001&quot;" Value="CommandTimedOut" />
-    <Error Name="ERROR_CODE=&quot;-13002&quot;" Value="ResourceLimitation" />
-    <Error Name="ERROR_CODE=&quot;-13003&quot;" Value="NotSupportedCommandOrAction" />
-    <Error Name="ERROR_CODE=&quot;-13004&quot;" Value="ProcessingFailure" />
-    <Error Name="ERROR_CODE=&quot;-13007&quot;" Value="UnregisteredLogin" />
-    <Error Name="ERROR_CODE=&quot;-13008&quot;" Value="NotSupportedCommandOrAction" />
-    <Error Name="ERROR_CODE=&quot;-13009&quot;" Value="CommandTimedOut" />
-    <Error Name="ERROR_CODE=&quot;-13010&quot;" Value="UnregisteredLogin" />
-    <Error Name="ERROR_CODE=&quot;-13011&quot;" Value="ProcessingTemporaryUnavailable" />
-    <Error Name="ERROR_CODE=&quot;-13012&quot;" Value="UnregisteredLogin" />
-    <Error Name="ERROR_CODE=&quot;-154017&quot;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="ERROR_CODE=&quot;-154018&quot;" Value="UnregisteredTerminalDevice" />
-    <Error Name="ERROR_CODE=&quot;-154008&quot;" Value="PesonalAccountAlreadyDefined" />
-    <Error Name="ERROR_CODE=&quot;-154003&quot;" Value="InvalidInputData" />
-    <Error Name="ERROR_CODE=&quot;-151005&quot;" Value="InvalidTariffPlan" />
-    <Error Name="ERROR_CODE=&quot;-151008&quot;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="ERROR_CODE=&quot;-151003&quot;" Value="InvalidInputData" />
+    <Error Name="ERROR_CODE=&quot;0&quot;" Value="SUCCESS"/>
+    <Error Name="ERROR_CODE=&quot;-13000&quot;" Value="UnregisteredError"/>
+    <Error Name="ERROR_CODE=&quot;-13001&quot;" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE=&quot;-13002&quot;" Value="ResourceLimitation"/>
+    <Error Name="ERROR_CODE=&quot;-13003&quot;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE=&quot;-13004&quot;" Value="ProcessingFailure"/>
+    <Error Name="ERROR_CODE=&quot;-13007&quot;" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-13008&quot;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="ERROR_CODE=&quot;-13009&quot;" Value="CommandTimedOut"/>
+    <Error Name="ERROR_CODE=&quot;-13010&quot;" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-13011&quot;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="ERROR_CODE=&quot;-13012&quot;" Value="UnregisteredLogin"/>
+    <Error Name="ERROR_CODE=&quot;-154017&quot;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="ERROR_CODE=&quot;-154018&quot;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="ERROR_CODE=&quot;-154008&quot;" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="ERROR_CODE=&quot;-154003&quot;" Value="InvalidInputData"/>
+    <Error Name="ERROR_CODE=&quot;-151005&quot;" Value="InvalidTariffPlan"/>
+    <Error Name="ERROR_CODE=&quot;-151008&quot;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="ERROR_CODE=&quot;-151003&quot;" Value="InvalidInputData"/>
+    
     <!-- Ошибки при вызове по WCF -->
-    <Error Name="Code&gt;0&lt;" Value="SUCCESS" />
-    <Error Name="Code&gt;-13000&lt;" Value="UnregisteredError" />
-    <Error Name="Code&gt;-13001&lt;" Value="CommandTimedOut" />
-    <Error Name="Code&gt;-13002&lt;" Value="ResourceLimitation" />
-    <Error Name="Code&gt;-13003&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="Code&gt;-13004&lt;" Value="ProcessingFailure" />
-    <Error Name="Code&gt;-13007&lt;" Value="UnregisteredLogin" />
-    <Error Name="Code&gt;-13008&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="Code&gt;-13009&lt;" Value="CommandTimedOut" />
-    <Error Name="Code&gt;-13010&lt;" Value="UnregisteredLogin" />
-    <Error Name="Code&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable" />
-    <Error Name="Code&gt;-13012&lt;" Value="UnregisteredLogin" />
-    <Error Name="Code&gt;-151009&lt;" Value="MissedLanguageCode" />
-    <Error Name="Code&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="Code&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
-    <Error Name="Code&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
-    <Error Name="Code&gt;-154003&lt;" Value="InvalidInputData" />
-    <Error Name="Code&gt;-154050&lt;" Value="UnregisteredExtensionNumber" />
-    <Error Name="Code&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
-    <Error Name="Code&gt;-151005&lt;" Value="InvalidTariffPlan" />
-    <Error Name="Code&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="Code&gt;-151003&lt;" Value="InvalidInputData" />
-    <Error Name="Code&gt;5002&lt;" Value="CugAlreadyDefined" />
-    <Error Name="Code&gt;5003&lt;" Value="UnregisteredCug" />
-    <Error Name="Code&gt;5004&lt;" Value="InvalidCugIndexFormat" />
-    <Error Name="Code&gt;5005&lt;" Value="CugAlreadyDefined" />
-    <Error Name="Code&gt;5007&lt;" Value="TooManyCugMembers" />
-    <Error Name="Code&gt;5008&lt;" Value="UnregisteredCugMember" />
-    <Error Name="Code&gt;5009&lt;" Value="CugMemberAlreadyRegistered" />
-    <Error Name="Code&gt;5012&lt;" Value="UnregisteredCug" />
-    <!-- Ошибки при вызове по Remoting -->
-    <Error Name="&lt;RETURN_CODE&gt;0&lt;" Value="SUCCESS" />
-    <Error Name="&lt;RETURN_CODE&gt;-151009&lt;" Value="MissedLanguageCode" />
-    <Error Name="&lt;RETURN_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;RETURN_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
-    <Error Name="&lt;RETURN_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
-    <Error Name="&lt;RETURN_CODE&gt;-154003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;RETURN_CODE&gt;-154050&lt;" Value="UnregisteredExtensionNumber" />
-    <Error Name="&lt;RETURN_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
-    <Error Name="&lt;RETURN_CODE&gt;-151005&lt;" Value="InvalidTariffPlan" />
-    <Error Name="&lt;RETURN_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined" />
-    <Error Name="&lt;RETURN_CODE&gt;-151003&lt;" Value="InvalidInputData" />
-    <Error Name="&lt;RETURN_CODE&gt;-13000&lt;" Value="UnregisteredError" />
-    <Error Name="&lt;RETURN_CODE&gt;-13001&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;RETURN_CODE&gt;-13002&lt;" Value="ResourceLimitation" />
-    <Error Name="&lt;RETURN_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;RETURN_CODE&gt;-13004&lt;" Value="ProcessingFailure" />
-    <Error Name="&lt;RETURN_CODE&gt;-13007&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RETURN_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction" />
-    <Error Name="&lt;RETURN_CODE&gt;-13009&lt;" Value="CommandTimedOut" />
-    <Error Name="&lt;RETURN_CODE&gt;-13010&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RETURN_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable" />
-    <Error Name="&lt;RETURN_CODE&gt;-13012&lt;" Value="UnregisteredLogin" />
-    <Error Name="&lt;RETURN_CODE&gt;5002&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;RETURN_CODE&gt;5003&lt;" Value="UnregisteredCug" />
-    <Error Name="&lt;RETURN_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat" />
-    <Error Name="&lt;RETURN_CODE&gt;5005&lt;" Value="CugAlreadyDefined" />
-    <Error Name="&lt;RETURN_CODE&gt;5007&lt;" Value="TooManyCugMembers" />
-    <Error Name="&lt;RETURN_CODE&gt;5008&lt;" Value="UnregisteredCugMember" />
-    <Error Name="&lt;RETURN_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered" />
-    <Error Name="&lt;RETURN_CODE&gt;5012&lt;" Value="UnregisteredCug" />
-    <Error Name="&lt;RETURN_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
-    <Error Name="check SEE logs to see if there are any errors" Value="SCPInternalError" />
-    <Error Name="at NVision.See." Value="SCPInternalError" />
-    <Error Name="" Value="UnregisteredError" />
+    <Error Name="Code&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-13000&lt;" Value="UnregisteredError"/>
+    <Error Name="Code&gt;-13001&lt;" Value="CommandTimedOut"/>
+    <Error Name="Code&gt;-13002&lt;" Value="ResourceLimitation"/>
+    <Error Name="Code&gt;-13003&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="Code&gt;-13004&lt;" Value="ProcessingFailure"/>
+    <Error Name="Code&gt;-13007&lt;" Value="UnregisteredLogin"/>
+    <Error Name="Code&gt;-13008&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="Code&gt;-13009&lt;" Value="CommandTimedOut"/>
+    <Error Name="Code&gt;-13010&lt;" Value="UnregisteredLogin"/>
+    <Error Name="Code&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="Code&gt;-13012&lt;" Value="UnregisteredLogin"/>
+    <Error Name="Code&gt;-151009&lt;" Value="MissedLanguageCode"/>
+    <Error Name="Code&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="Code&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="Code&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="Code&gt;-154003&lt;" Value="InvalidInputData"/>
+    <Error Name="Code&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
+    <Error Name="Code&gt;-151005&lt;" Value="InvalidTariffPlan"/>
+    <Error Name="Code&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="Code&gt;-151003&lt;" Value="InvalidInputData"/>
+    <Error Name="Code&gt;5002&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="Code&gt;5003&lt;" Value="UnregisteredCug"/>
+    <Error Name="Code&gt;5004&lt;" Value="InvalidCugIndexFormat"/>
+    <Error Name="Code&gt;5005&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="Code&gt;5007&lt;" Value="TooManyCugMembers"/>
+    <Error Name="Code&gt;5008&lt;" Value="UnregisteredCugMember"/>
+    <Error Name="Code&gt;5009&lt;" Value="CugMemberAlreadyRegistered"/>
+    <Error Name="Code&gt;5012&lt;" Value="UnregisteredCug"/>
+    
+      <!-- Ошибки при вызове по Remoting -->
+    <Error Name="&lt;RETURN_CODE&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="&lt;RETURN_CODE&gt;-151009&lt;" Value="MissedLanguageCode"/>
+    <Error Name="&lt;RETURN_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;RETURN_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
+    <Error Name="&lt;RETURN_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
+    <Error Name="&lt;RETURN_CODE&gt;-154003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;RETURN_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
+    <Error Name="&lt;RETURN_CODE&gt;-151005&lt;" Value="InvalidTariffPlan"/>
+    <Error Name="&lt;RETURN_CODE&gt;-151008&lt;" Value="TerminalDeviceAlreadyDefined"/>
+    <Error Name="&lt;RETURN_CODE&gt;-151003&lt;" Value="InvalidInputData"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13000&lt;" Value="UnregisteredError"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13001&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13002&lt;" Value="ResourceLimitation"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13003&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13004&lt;" Value="ProcessingFailure"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13007&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13008&lt;" Value="NotSupportedCommandOrAction"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13009&lt;" Value="CommandTimedOut"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13010&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13011&lt;" Value="ProcessingTemporaryUnavailable"/>
+    <Error Name="&lt;RETURN_CODE&gt;-13012&lt;" Value="UnregisteredLogin"/>
+    <Error Name="&lt;RETURN_CODE&gt;5002&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;RETURN_CODE&gt;5003&lt;" Value="UnregisteredCug"/>
+    <Error Name="&lt;RETURN_CODE&gt;5004&lt;" Value="InvalidCugIndexFormat"/>
+    <Error Name="&lt;RETURN_CODE&gt;5005&lt;" Value="CugAlreadyDefined"/>
+    <Error Name="&lt;RETURN_CODE&gt;5007&lt;" Value="TooManyCugMembers"/>
+    <Error Name="&lt;RETURN_CODE&gt;5008&lt;" Value="UnregisteredCugMember"/>
+    <Error Name="&lt;RETURN_CODE&gt;5009&lt;" Value="CugMemberAlreadyRegistered"/>
+    <Error Name="&lt;RETURN_CODE&gt;5012&lt;" Value="UnregisteredCug"/>
+    <Error Name="&lt;RETURN_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />  
+  
+    <Error Name="" Value="UnregisteredError"/>
   </ErrorsList>
-  <RegexpsList />
+  <RegexpsList/>
   <ConstantsList>
-    <Constant Name="PRIVATE_USER_GROUPS" Value="" />
+    <Constant Name="PRIVATE_USER_GROUPS" Value=""/>
   </ConstantsList>
   <ParametersList>
+    <Parameter Name="BALANCE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//Balance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="CURRENCY_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CurrencyCode"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PA_STATUS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/Status"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PA_BALANCE_STATUS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BalanceStatus[string-length(.) > 0]"
+              AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="SERVICE_PROVIDER_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExternalServiceProviderCode[string-length(.) > 0]"
+              AbsenceValue="" PostFormat="SERVICE_PROVIDER_CODE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="BLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/BlockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="UNBLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/UnblockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="PARTIAL_BLOCK_LIMIT">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/PartialBlockLimit"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXPIRES">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateBalance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXPIRATION_DATE_MONITOR">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsNeedControlExpirationDateBalance"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="ADMIN_BLOCK">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="ADMIN_BLOCKED_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/AdminBlockedDate[string-length(.) > 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="BLOCKED_END_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockedEndDate[string-length(.) > 0]"  AbsenceValue="" PostFormat="BLOCKED_END_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
     <Parameter Name="TAX_GROUP_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//TaxGroupId" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData//TaxGroupId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="MAX_BLOCKED_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxBlockedPeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="AFTER_GRACE_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//AfterGracePeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="IS_GRACE_STARTS_ON_BLOCK">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsGraceStartOnBlock"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="VALIDITY_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ValidityPeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LIMIT_VALUE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Value"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="LIMIT_LEVEL">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) > 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="TARIFF_PLAN_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="BILLING_GROUP_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//BillingGroupId" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData//BillingGroupId"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="TERMINAL_DEVICE_STATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TdStatus/Status"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FIRST_CALL_END_DATE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateFirstCall[string-length(.) > 0]" AbsenceValue="" PostFormat="FIRST_CALL_END_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="MAX_INACTIVE_PERIOD">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxInactivePeriod"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="LANGUAGE" IsChoice="true" AbsenceValue="">
-      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId[string-length(.) &gt; 0]" />
-      <Source Path="ExtendedRequestMessage/AdditionalData/ContractInfo/LanguageId[string-length(.) &gt; 0]" />
-      <Source Path="ExtendedRequestMessage/AdditionalData//LanguageId[string-length(.) &gt; 0]" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ContractInfo/LanguageId[string-length(.) > 0]"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData//LanguageId[string-length(.) > 0]"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="TIME_ZONE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TimeZone" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TimeZone"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="TERMINAL_DEVICE_CLASS">
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassId[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="{0}" />
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassID[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="{0}" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassId[string-length(.) > 0]" AbsenceValue="" PostFormat="{0}"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassID[string-length(.) > 0]" AbsenceValue="" PostFormat="{0}"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="NEW_TERMINAL_DEVICE_CLASS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewTerminalDeviceClassID"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="SMS_USSD_LANG">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//LanguageIdSmsUssd"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FNF_POSITION">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//Position"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="FNF_NUMBER">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//FavoriteNumber"/>
+      <PossibleValues StringToKeyTable="true"/>
+    </Parameter>
+    <Parameter Name="EXTENDED_SERVICE_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/FavoritNumberList//FavoriteNumberTypeCode"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="CUSTOMER_TYPE_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//CustomerTypeId" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData//CustomerTypeId"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="PA_STATUS_CHANGE_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/PaStateChangeDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_STATUS_CHANGE_DATE=&quot;{0}&quot;" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaStateChangeDate[string-length(.) > 0]" AbsenceValue="" PostFormat="PA_STATUS_CHANGE_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="PA_BALANCE_STATUS_CHANGE_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/PaBalanceStateChangeDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS_CHANGE_DATE=&quot;{0}&quot;" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaBalanceStateChangeDate[string-length(.) > 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS_CHANGE_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="PSP_DAY_OF_MONTH">
-      <Source Path="//AdditionalData//IndividualBillingPeriod[string-length(.) &gt; 0]" AbsenceValue="" Template="substr({0},3,2)" PostFormat="PSP_DAY_OF_MONTH=&quot;{0}&quot;" />
-    </Parameter>
-    <Parameter Name="PSP_DAY_OF_MONTH_VALUE">
-      <Source Path="//AdditionalData//IndividualBillingPeriod[string-length(.) &gt; 0]" AbsenceValue="" Template="substr({0},3,2)" />
+      <Source Path="//AdditionalData//IndividualBillingPeriod[string-length(.) > 0]" AbsenceValue="" Template="substr({0},3,2)" PostFormat="PSP_DAY_OF_MONTH=&quot;{0}&quot;"/>
     </Parameter>
     <Parameter Name="CALCULATION_METHOD_ID">
       <Source Path="//AdditionalData//CalculationMethodId" AbsenceValue="0" />
     </Parameter>
     <Parameter Name="CONTRACT_NUMBER">
       <Source Path="//AdditionalData//ContractNumber" AbsenceValue="" />
-    </Parameter>
-    <Parameter Name="SERVICE_PROVIDER_CODE">
-      <Source Path="//AdditionalData//ExternalServiceProviderCode" AbsenceValue="" />
     </Parameter>
     <Parameter Name="SC.BALANCE">
       <Source Path="//AdditionalData/AddList//Balance" />
@@ -271,7 +375,7 @@
       <Source Path="//AdditionalData/AddList//PaStatus/BalanceStatus[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="SC.KEEP_BALANCES">
-      <Source Path="//AdditionalData/AddList//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true" />
+      <Source Path="//AdditionalData/AddList//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true"/>
     </Parameter>
     <Parameter Name="SC.TERMINAL_DEVICE_STATE">
       <Source Path="//AdditionalData/AddList//TdStatus/Status" />
@@ -289,26 +393,26 @@
       <Source Path="//AdditionalData/AddList//LanguageIdSmsUssd" />
     </Parameter>
     <Parameter Name="SC.NEW_TERMINAL_DEVICE_CLASS">
-      <Source Path="//AdditionalData/AddList//NewTerminalDeviceClassID" />
+      <Source Path="//AdditionalData/AddList//NewTerminalDeviceClassID"/>
     </Parameter>
     <Parameter Name="SERVICE_REQUEST_ID">
-      <Source Path="//CrmInternalProductActionId/Value[string-length(.) &gt; 0] | //CRMOriginalID/Value" PostFormat="{0}##REQUEST_ID_DIVIDER####ASYNC_REQUEST_ID##" />
+      <Source Path="//CrmInternalProductActionId/Value[string-length(.) &gt; 0] | //CRMOriginalID/Value" AbsenceValue="##ASYNC_REQUEST_ID##" PresenceValue="##ASYNC_REQUEST_ID##" />
     </Parameter>
   </ParametersList>
-  <DynamicParametersList />
+  <DynamicParametersList/>
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <DecodersList Root="Decoders">
-    <Decoder Path="FinancialPlatformDecoder.xml" />
+    <Decoder Path="FinancialPlatformDecoder.xml"/>
   </DecodersList>
   <XsltItemsList Root="Xslt">
-    <XsltItem Path="TransformToAPNStyle.xslt" />
-  </XsltItemsList>
-  <FunctionsList Root="Func" References="references.xml">
-    <Function Path="ifstringformat_scp.cs" />
-    <Function Path="ff_count_string.cs" />
-    <Function Path="func_adjust_utcoffset.cs" />
-    <Function Path="func_get_line_after_dot.cs" />
+    <XsltItem Path="TransformToAPNStyle.xslt"/>
+  </XsltItemsList>    
+  <FunctionsList Root="Func" References="references.xml" >
+    <Function Path="ifstringformat_scp.cs"/>
+    <Function Path="ff_count_string.cs"/>
+    <Function Path="func_adjust_utcoffset.cs"/>
+    <Function Path="func_get_line_after_dot.cs"/>
   </FunctionsList>
 </Dictionary>

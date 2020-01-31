@@ -1,25 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CreatePA.LowBalanceLimitsRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>CreatePAOnFINPlatform (LowBalanceLimits table)</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="MmlXml" />
   <Request>
     <RequestTemplate>
       <![CDATA[<Row PERSONAL_ACCOUNT_ID="##PersonalAccount##" LIMIT_VALUE="##LIMIT_VALUE##" ##LIMIT_LEVEL## />]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="LIMIT_VALUE" Type="LocalParameter" />
-    <Item Name="LIMIT_LEVEL" Type="LocalParameter" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="LIMIT_VALUE" Type="LocalParameter"/>
+    <Item Name="LIMIT_LEVEL" Type="LocalParameter"/>
   </Request>
   <ParametersList>
     <Parameter Name="LIMIT_VALUE">
-      <Source Path="//AdditionalData/AddList//BalanceLimits/NotificationLimits/NotificationLimit/Value" />
+      <Source Path="//AdditionalData/AddList//BalanceLimits/NotificationLimits/NotificationLimit/Value"/>
     </Parameter>
     <Parameter Name="LIMIT_LEVEL">
-      <Source Path="//AdditionalData/AddList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData/AddList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) > 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;"/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>

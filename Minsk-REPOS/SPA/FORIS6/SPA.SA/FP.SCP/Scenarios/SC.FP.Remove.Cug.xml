@@ -30,12 +30,25 @@
     <!-- первый цикл по группам -->
     <node name="ByServicesCutterCreateGroup-Node" object="ByServicesCutter">
       <resultlist>
-        <result value="0" node="DeleteCallingCircle" />
+        <result value="0" node="DeleteCallingCircleVPN" />
         <result value="" node="BySubscribersCutter" />
       </resultlist>
       <parameterslist>
         <param name="Queue" value="requestsSplittedByServicesQueue" />
         <param name="XmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCallingCircleVPN" object="IfCommander">
+      <resultlist>
+        <result value="0" node="ByServicesCutterCreateGroup-Node" />
+        <result value="1538" node="DeleteCallingCircle" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value[text()!='']" />
+        <param name="IfXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/CugAvailableOnFP/Value[text()='1']" />
+        <param name="IfXmlPath:2" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/DeleteGroup/Value[text()='1']" />
+        <param name="Command" value="SC.DeleteCallingCircleVPN" />
       </parameterslist>
     </node>
     <node name="DeleteCallingCircle" object="IfCommander">
@@ -58,12 +71,25 @@
     </node>
     <node name="ByServicesCutter-Node" object="ByServicesCutter">
       <resultlist>
-        <result value="0" node="DeleteCallingCircleMembers" />
+        <result value="0" node="DeleteCallingCircleMembersVPN" />
         <result value="" node="CycledResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Queue" value="requestsSplittedByServicesQueue" />
         <param name="XmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG" />
+      </parameterslist>
+    </node>
+    <node name="DeleteCallingCircleMembersVPN" object="IfCommander">
+      <resultlist>
+        <result value="0" node="DeleteCallingCircleAbcMembers-Node" />
+        <result value="1538" node="DeleteCallingCircleMembers" />
+        <result value="" node="FinalResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value[text()!='']" />
+        <param name="IfXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/CugAvailableOnFP/Value[text()='1']" />
+        <param name="IfNotXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/DeleteGroup/Value[text()='1']" />
+        <param name="Command" value="SC.DeleteCallingCircleMembersVPN" />
       </parameterslist>
     </node>
     <node name="DeleteCallingCircleMembers" object="IfCommander">
@@ -74,7 +100,7 @@
       </resultlist>
       <parameterslist>
         <param name="IfXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/CugAvailableOnFP/Value[text()='1']" />
-        <param name="IfNotXmlPath:1" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/DeleteGroup/Value[text()='1']" />
+        <param name="IfNotXmlPath:0" value="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/DeleteGroup/Value[text()='1']" />
         <param name="Command" value="SC.DeleteCallingCircleMembers" />
       </parameterslist>
     </node>

@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.DeleteCallingCircleMembers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteCallingCircleMembers</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -17,12 +18,10 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="CUG_ID" Type="LocalParameter" />
-    <Item Name="msisdn" Type="Wellknown" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="CUG_ID" Type="LocalParameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
     <Item Name="uid" Type="Wellknown" />
     <Item Name="UserGroupCode" Type="LocalParameter" />
   </Request>
@@ -41,6 +40,7 @@
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS" />
+    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS"/>
   </ErrorsList>
 </Command>
+

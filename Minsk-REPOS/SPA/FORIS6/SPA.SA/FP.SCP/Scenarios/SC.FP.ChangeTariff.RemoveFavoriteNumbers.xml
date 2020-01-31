@@ -1,4 +1,4 @@
-<scenario name="SC.FP.ChangeTariff.RemoveFavoriteNumbers">
+﻿<scenario name="SC.FP.ChangeTariff.RemoveFavoriteNumbers">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -18,7 +18,7 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
         <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
       </parameterslist>
     </node>
     <node name="SingleSCPDummyResponder" object="DummyResponder">
@@ -57,9 +57,7 @@
     </node>
     <node name="CommandDataConstructor" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="RemoveService-Node" />
-        <result value="1538" node="RemoveService-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="RemoveService-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="Services" />
@@ -80,9 +78,7 @@
     </node>
     <node name="FnFCommandDataConstructor" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="RemoveFavoriteNumbers-Node" />
-        <result value="1538" node="RemoveFavoriteNumbers-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="RemoveFavoriteNumbers-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="FnFServices" />

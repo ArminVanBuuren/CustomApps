@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.CounterReinitialization.ServiceRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>CounterReinitialization.ServiceRow</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="MmlXml" />
   <Request>
     <RequestTemplate>
@@ -14,24 +15,24 @@
   ADMIN_LIMIT="##AdminLimit##" />
  ]]>
     </RequestTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="ServiceCode" Type="LocalParameter" />
-    <Item Name="CounterValueCalculationType" Type="LocalParameter" />
-    <Item Name="ChargingDateTime" Type="LocalParameter" />
-    <Item Name="ChangeDateTime" Type="LocalParameter" />
-    <Item Name="SumType" Type="LocalParameter" />
-    <Item Name="TimeZone" Type="LocalParameter" />
-    <Item Name="AdminLimit" Type="LocalParameter" />
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="ServiceCode" Type="LocalParameter"/>
+    <Item Name="CounterValueCalculationType" Type="LocalParameter"/>
+    <Item Name="ChargingDateTime" Type="LocalParameter"/>
+    <Item Name="ChangeDateTime" Type="LocalParameter"/>
+    <Item Name="SumType" Type="LocalParameter"/>
+    <Item Name="TimeZone" Type="LocalParameter"/>
+    <Item Name="AdminLimit" Type="LocalParameter"/>
   </Request>
   <ParametersList>
     <Parameter Name="ServiceCode">
-      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/ServiceCode" />
+      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/ServiceCode"/>
     </Parameter>
     <Parameter Name="CounterValueCalculationType">
-      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/ReinitType" />
+      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/ReinitType"/>
     </Parameter>
     <Parameter Name="SumType">
-      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/SumType" AbsenceValue="0" />
+      <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/SumType" AbsenceValue="0"/>
     </Parameter>
     <Parameter Name="TimeZone">
       <Source Path="//AdditionalData/AddList/RFS_FP_COUNTER/Counter/TimeZone" />

@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeTDStatusesOnFINPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>ChangeTDStatusesOnFINPlatform</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
-  <Properties GenerationType="DataSetXml" />
+	<Description>ChangeTDStatusesOnFINPlatform</Description>
+	<Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+	<Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="IN_STATUSES_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -28,20 +29,19 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="TERMINAL_DEVICE_STATE" Type="LocalParameter" />
-    <Item Name="id" Type="Wellknown" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="TERMINAL_DEVICE_STATE" Type="LocalParameter"/>
+    <Item Name="id" Type="Wellknown"/>
     <Item Name="uid" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="TERMINAL_DEVICE_STATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/TdStatus/Status" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/TdStatus/Status"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+	<ErrorsList CodePage="ascii"/>
 </Command>
+

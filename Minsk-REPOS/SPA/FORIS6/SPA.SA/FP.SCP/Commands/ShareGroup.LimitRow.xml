@@ -1,22 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Command Name="ShareGroup.LimitRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Description>ShareGroup.LimitRow</Description>
-  <Author Name="Alexander Zaytsev" Date="2017-04-19+14:00" />
-  <Request>
-    <RequestTemplate>
-      <![CDATA[<Row CounterCode="##CounterCode##" ##Value## />]]>
-    </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="CounterCode" Type="LocalParameter" />
-    <Item Name="Value" Type="LocalParameter" />
-  </Request>
-  <ParametersList>
-    <Parameter Name="CounterCode">
-      <Source Path="//AdditionalData//ShareGroupLimitList/ShareGroupLimit/CounterCode" />
-    </Parameter>
-    <Parameter Name="Value">
-      <Source Path="//AdditionalData//ShareGroupLimitList/ShareGroupLimit/CounterLimit[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;" />
-    </Parameter>
-  </ParametersList>
+	<Description>ShareGroup.LimitRow</Description>
+	<Author Name="Alexander Zaytsev" Date="2017-04-19+14:00"/>
+	<Request>
+		<RequestTemplate>
+			<![CDATA[<Row CounterCode="##CounterCode##" ##Value## />]]>
+		</RequestTemplate>
+		<EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+		<Item Name="CounterCode" Type="LocalParameter"/>
+		<Item Name="Value" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="CounterCode">
+			<Source Path="//AdditionalData//ShareGroupLimitList/ShareGroupLimit/CounterCode" />
+		</Parameter>
+		<Parameter Name="Value">
+			<Source Path="//AdditionalData//ShareGroupLimitList/ShareGroupLimit/CounterLimit[string-length(.) > 0]" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;"/>
+		</Parameter>
+	</ParametersList>
 </Command>

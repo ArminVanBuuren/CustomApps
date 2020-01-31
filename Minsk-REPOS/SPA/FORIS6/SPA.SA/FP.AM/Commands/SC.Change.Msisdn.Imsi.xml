@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.Change.Msisdn.Imsi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>SC.Change.Msisdn.Imsi</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -24,21 +25,22 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="NEW.MSISDN" Type="LocalParameter" />
-    <Item Name="NEW.IMSI" Type="LocalParameter" />
-    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="NEW.MSISDN" Type="LocalParameter"/>
+    <Item Name="NEW.IMSI" Type="LocalParameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
     <Item Name="uid" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="NEW.IMSI">
-      <Source Path="//AdditionalData/AddList//NewIMSI/Value" />
+      <Source Path="//AdditionalData/AddList//NewIMSI/Value"/>
     </Parameter>
     <Parameter Name="NEW.MSISDN">
-      <Source Path="//AdditionalData/AddList//NewMSISDN/Value" AbsenceValue="" />
+      <Source Path="//AdditionalData/AddList//NewMSISDN/Value" AbsenceValue=""/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>
+

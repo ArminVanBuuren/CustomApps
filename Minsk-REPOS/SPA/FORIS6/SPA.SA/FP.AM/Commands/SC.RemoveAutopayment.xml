@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.RemoveAutopayment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>RemoveAutopayment</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -21,12 +22,10 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="GlobalUid" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
   </Request>
   <RollbackRequest>
     <RequestTemplate>
@@ -47,18 +46,16 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="GlobalUid" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="LIMIT_VALUE" Type="LocalParameter" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="LIMIT_VALUE" Type="LocalParameter"/>
   </RollbackRequest>
   <ParametersList>
     <Parameter Name="LIMIT_VALUE">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold/Value" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_AUTO_PAYMENT/AutoPaymentThreshold/Value"/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>

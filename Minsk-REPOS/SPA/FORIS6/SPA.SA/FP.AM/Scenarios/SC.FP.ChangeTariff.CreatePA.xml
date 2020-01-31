@@ -6,7 +6,7 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
   </objectList>
   <automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">
@@ -25,8 +25,8 @@
     </node>
     <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructor_ServiceCode-Node" />
-        <result value="1538" node="CommandDataConstructor_ServiceCode-Node" />
+        <result value="0" node="CreatePAOnFINPlatform" />
+        <result value="1538" node="CreatePAOnFINPlatform" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -35,37 +35,14 @@
         <param name="XmlPath" value="//AdditionalData/AddList//BalanceLimits/NotificationLimits/*" />
       </parameterslist>
     </node>
-    <node name="CommandDataConstructor_ServiceCode-Node" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="" node="CreatePAOnFINPlatform" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="ServiceTable" />
-        <param name="ServicesCommand" value="SC.CreatePA.ServiceTable" />
-        <param name="ParametersDynamicObject" value="ServiceParametersTable" />
-        <param name="ParametersCommand" value="SC.CreatePA.ParameterTable" />
-        <param name="XmlPath" value="//AdditionalData/EndList/RFS_FP_SERVICE_GENERAL[./ServiceLevel/Value[text()='PersonalAccount']]" />
-        <param name="IgnoreServiceSkip" value="true" />
-        <param name="AffixesUseType" value="SkipIfEmpty" />
-      </parameterslist>
-    </node>
     <node name="CreatePAOnFINPlatform" object="Commander">
       <resultlist>
-        <result value="PesonalAccountAlreadyDefined" node="UpdatePA-Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="Command" value="SC.CreatePA" />
         <param name="AppendSubscribersData" value="true" />
         <param name="Asynchronous" value="false" />
-      </parameterslist>
-    </node>
-    <node name="UpdatePA-Node" object="Commander">
-      <resultlist>
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="Command" value="SC.UpdatePA" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">

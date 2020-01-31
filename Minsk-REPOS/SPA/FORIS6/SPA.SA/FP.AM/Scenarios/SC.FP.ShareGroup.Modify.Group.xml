@@ -1,0 +1,30 @@
+<scenario name="SC.FP.ShareGroup.Modify.Group">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="DummyResponder" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="DummyResponder" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="DetailedResultDescription" value="Command not sending" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeTDClass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeTDClassOnFP</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -46,26 +47,24 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="datetime" Type="Wellknown" />
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter" />
-    <Item Name="RegisteredServices" Type="LocalDynamicParameter" />
-    <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="SC.NEW_TERMINAL_DEVICE_CLASS" Type="Parameter"/>
+    <Item Name="RegisteredServices" Type="LocalDynamicParameter"/>
+    <Item Name="RegisteredServicesParams" Type="LocalDynamicParameter"/>
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="RegisteredServices">
-      <Source Path="//string" />
-      <DynamicObject Name="RegisteredServices" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredServices" SkipMissed="True"/>
     </DynamicParameter>
     <DynamicParameter Name="RegisteredServicesParams">
-      <Source Path="//string" />
-      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True"/>
     </DynamicParameter>
   </DynamicParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>

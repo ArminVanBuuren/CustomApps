@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.DeleteTD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteTDOnFINPlatform</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -22,14 +23,14 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown" />
-    <Item Name="PersonalAccountId" Type="LocalParameter" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="KEEP_BALANCES" Type="LocalParameter" />
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="PersonalAccountId" Type="LocalParameter"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="KEEP_BALANCES" Type="LocalParameter"/>
   </Request>
   <ParametersList>
     <Parameter Name="KEEP_BALANCES">
-      <Source Path="//AdditionalData//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true" />
+      <Source Path="//AdditionalData//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true"/>
     </Parameter>
     <Parameter Name="PersonalAccountId" IsChoice="true">
       <Source Path="//IdentifiersList/Identifier/PersonalAccountNumber" />
@@ -37,6 +38,6 @@
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS" />
+    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS"/>
   </ErrorsList>
 </Command>

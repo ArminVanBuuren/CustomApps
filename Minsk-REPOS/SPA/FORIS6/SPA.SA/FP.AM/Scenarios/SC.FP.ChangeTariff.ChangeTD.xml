@@ -38,23 +38,13 @@
     <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
       <resultlist>
         <result value="0" node="ChangeTDClassOnFINPlatform" />
-        <result value="1538" node="FnFCommandDataConstructor" />
+        <result value="1538" node="ChangeTDClassOnFINPlatform" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredCounters" />
         <param name="ServicesCommand" value="SC.CounterRow" />
         <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
-      </parameterslist>
-    </node>
-    <node name="FnFCommandDataConstructor" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="" node="ChangeTPOnFINPlatform" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="FnFServices" />
-        <param name="ServicesCommand" value="SC.ChangeTariff.FavoriteNumberRow" />
-        <param name="XmlPath" value="//AdditionalData/*[self::RemoveList or self::AddList]/RFS_FP_SERVICE_FAVORITE_NUMBER" />
       </parameterslist>
     </node>
     <node name="ChangeTDClassOnFINPlatform" object="IfCommander">

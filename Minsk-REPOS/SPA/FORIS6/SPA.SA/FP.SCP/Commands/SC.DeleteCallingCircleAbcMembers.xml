@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.DeleteCallingCircleAbcMembers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>DeleteCallingCircleAbcMembers</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -17,13 +18,11 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="CUG_ID" Type="LocalParameter" />
-    <Item Name="SERVICE_CODE" Type="LocalParameter" />
-    <Item Name="MSISDN_ABC" Type="LocalParameter" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="CUG_ID" Type="LocalParameter"/>
+    <Item Name="SERVICE_CODE" Type="LocalParameter"/>
+    <Item Name="MSISDN_ABC" Type="LocalParameter"/>
     <Item Name="uid" Type="Wellknown" />
     <Item Name="UserGroupCode" Type="LocalParameter" />
   </Request>
@@ -37,12 +36,13 @@
       <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/ServiceAdditionalDataTypeCode/Value" AbsenceValue="" />
     </Parameter>
     <Parameter Name="MSISDN_ABC">
-      <Source Path="//Identifier/MsisdnAbc" />
+      <Source Path="//Identifier/MsisdnAbc"/>
     </Parameter>
     <Parameter Name="UserGroupCode">
       <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupCode/Value" AbsenceValue="" />
       <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_VUG/UserGroupCode/Value" AbsenceValue="" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>
+

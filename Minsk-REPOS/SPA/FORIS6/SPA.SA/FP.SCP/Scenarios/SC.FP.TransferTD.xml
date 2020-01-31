@@ -33,7 +33,7 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
         <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
       </parameterslist>
     </node>
     <!-- Проверяем ПО есть на текущей платформе -->
@@ -60,9 +60,7 @@
     <!-- или нет, если нет создаём -->
     <node name="CommandDataConstructor-Create-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructorCounters-Node" />
-        <result value="1538" node="CommandDataConstructorCounters-Node" />
-        <result value="" node="ResponseAssembler-Node" />
+        <result value="" node="CommandDataConstructorCounters-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredServices" />
@@ -74,9 +72,7 @@
     </node>
     <node name="CommandDataConstructorCounters-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="AddTDPAOnFP-Node" />
-        <result value="1538" node="AddTDPAOnFP-Node" />
-        <result value="" node="ResponseAssembler-Node" />
+        <result value="" node="AddTDPAOnFP-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredCounters" />

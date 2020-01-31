@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="ChangeBillingGroupOnFP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeBillingGroupOnFP</Description>
-  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -15,17 +16,15 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate>
-      <![CDATA[]]>
-    </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="NewBillingGroupId" Type="LocalParameter" />
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="NewBillingGroupId" Type="LocalParameter"/>
   </Request>
   <ParametersList>
     <Parameter Name="NewBillingGroupId">
-      <Source Path="ExtendedRequestMessage/AdditionalData//NewBillingGroupId" />
+      <Source Path="ExtendedRequestMessage/AdditionalData//NewBillingGroupId"/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>

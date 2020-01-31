@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CreateTD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>CreateTDOnFINPlatform</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -83,28 +84,28 @@ KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="TARIFF_PLAN_ID" Type="Parameter" />
-    <Item Name="BILLING_GROUP_ID" Type="Parameter" />
-    <Item Name="SC.TERMINAL_DEVICE_STATE" Type="Parameter" />
-    <Item Name="SC.ADMIN_BLOCK" Type="LocalParameter" />
-    <Item Name="SC.ADMIN_BLOCKED_DATE" Type="LocalParameter" />
-    <Item Name="SC.FIRST_CALL_END_DATE" Type="Parameter" />
-    <Item Name="SC.MAX_INACTIVE_PERIOD" Type="Parameter" />
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="imsi" Type="Wellknown" />
-    <Item Name="LANGUAGE" Type="Parameter" />
-    <Item Name="SC.TIME_ZONE" Type="Parameter" />
-    <Item Name="PRIVATE_USER_GROUPS" Type="Constant" />
-    <Item Name="TERMINAL_DEVICE_CLASS" Type="Parameter" />
-    <Item Name="SC.SMS_USSD_LANG" Type="Parameter" />
-    <Item Name="SC.KEEP_BALANCES" Type="Parameter" />
-    <Item Name="RegisteredServices" Type="LocalDynamicParameter" />
-    <Item Name="Parameters" Type="LocalDynamicParameter" />
-    <Item Name="FavoriteNumbers" Type="LocalDynamicParameter" />
-    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter" />
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="TARIFF_PLAN_ID" Type="Parameter"/>
+    <Item Name="BILLING_GROUP_ID" Type="Parameter"/>
+    <Item Name="SC.TERMINAL_DEVICE_STATE" Type="Parameter"/>
+    <Item Name="SC.ADMIN_BLOCK" Type="LocalParameter"/>
+    <Item Name="SC.ADMIN_BLOCKED_DATE" Type="LocalParameter"/>
+    <Item Name="SC.FIRST_CALL_END_DATE" Type="Parameter"/>
+    <Item Name="SC.MAX_INACTIVE_PERIOD" Type="Parameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="imsi" Type="Wellknown"/>
+    <Item Name="LANGUAGE" Type="Parameter"/>
+    <Item Name="SC.TIME_ZONE" Type="Parameter"/>
+    <Item Name="PRIVATE_USER_GROUPS" Type="Constant"/>
+    <Item Name="TERMINAL_DEVICE_CLASS" Type="Parameter"/>
+    <Item Name="SC.SMS_USSD_LANG" Type="Parameter"/>
+    <Item Name="SC.KEEP_BALANCES" Type="Parameter"/>
+    <Item Name="RegisteredServices" Type="LocalDynamicParameter"/>
+    <Item Name="Parameters" Type="LocalDynamicParameter"/>
+    <Item Name="FavoriteNumbers" Type="LocalDynamicParameter"/>
+    <Item Name="AdditionalNumbers" Type="LocalDynamicParameter"/>
   </Request>
   <RollbackRequest>
     <RequestTemplate>
@@ -125,39 +126,39 @@ KEEP_BALANCES="##SC.KEEP_BALANCES##"/>
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="datetime" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
   </RollbackRequest>
   <ParametersList>
     <Parameter Name="SC.ADMIN_BLOCK">
-      <Source Path="//AdditionalData/AddList//TdStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="//AdditionalData/AddList//TdStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
     <Parameter Name="SC.ADMIN_BLOCKED_DATE">
-      <Source Path="//AdditionalData/AddList//TdStatus/AdminBlockedDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;" />
-      <PossibleValues StringToKeyTable="true" />
+      <Source Path="//AdditionalData/AddList//TdStatus/AdminBlockedDate[string-length(.) > 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;"/>
+      <PossibleValues StringToKeyTable="true"/>
     </Parameter>
   </ParametersList>
   <DynamicParametersList>
     <DynamicParameter Name="RegisteredServices">
-      <Source Path="//string" />
-      <DynamicObject Name="RegisteredServices" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredServices" SkipMissed="True"/>
     </DynamicParameter>
     <DynamicParameter Name="Parameters">
-      <Source Path="//string" />
-      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredServicesParams" SkipMissed="True"/>
     </DynamicParameter>
     <DynamicParameter Name="FavoriteNumbers">
-      <Source Path="//string" />
-      <DynamicObject Name="RegisteredFavoriteNumbers" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="RegisteredFavoriteNumbers" SkipMissed="True"/>
     </DynamicParameter>
     <DynamicParameter Name="AdditionalNumbers">
-      <Source Path="//string" />
-      <DynamicObject Name="AdditionalNumbers" SkipMissed="True" />
+      <Source Path="//string"/>
+      <DynamicObject Name="AdditionalNumbers" SkipMissed="True"/>
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS" />
+    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="SUCCESS"/>
   </ErrorsList>
 </Command>

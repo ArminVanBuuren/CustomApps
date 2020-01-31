@@ -1,4 +1,4 @@
-<scenario name="SC.FP.Sync.Services">
+﻿<scenario name="SC.FP.Sync.Services">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -23,7 +23,7 @@
       </parameterslist>
     </node>
     <node name="SkipResponseAssembler" object="ResponseAssembler">
-      <parameterslist />
+      <parameterslist/>
       <resultlist>
         <result value="" node="" />
       </resultlist>

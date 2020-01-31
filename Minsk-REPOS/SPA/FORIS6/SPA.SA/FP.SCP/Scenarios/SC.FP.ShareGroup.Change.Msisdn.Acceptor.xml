@@ -1,19 +1,19 @@
 <scenario name="SC.FP.ShareGroup.Change.Msisdn.Acceptor">
-  <description>Изменение номера акцептора</description>
-  <objectList>
-    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+	<description>Изменение номера акцептора</description>
+	<objectList>
+		<object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
-  <automat>
+	<automat>
     <node name="BySubscribersCutter" object="BySubscribersCutter">
-      <resultlist>
-        <result value="0" node="ShareGroupChangeNumberAcceptor" />
-        <result value="" node="" />
-      </resultlist>
-    </node>
+			<resultlist>
+				<result value="0" node="ShareGroupChangeNumberAcceptor" />
+				<result value="" node="" />
+			</resultlist>
+		</node>
     <node name="ShareGroupChangeNumberAcceptor" object="Commander">
       <resultlist>
         <result value="769" node="HWErrorDummyResponder" />
@@ -22,7 +22,7 @@
       <parameterslist>
         <param name="Command" value="ShareGroupChangeNumberAcceptor" />
       </parameterslist>
-    </node>
+		</node>
     <node name="HWErrorDummyResponder" object="DummyResponder">
       <resultlist>
         <result value="" node="ResponseAssembler" />
@@ -32,10 +32,10 @@
         <param name="DetailedResult" value="SUCCESS" />
       </parameterslist>
     </node>
-    <node name="ResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="BySubscribersCutter" />
-      </resultlist>
-    </node>
-  </automat>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscribersCutter" />
+			</resultlist>
+		</node>
+	</automat>
 </scenario>

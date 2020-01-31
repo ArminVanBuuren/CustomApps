@@ -23,9 +23,7 @@
     </node>
     <node name="CommandDataConstructorFN-Create-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructorFN-Update-Node" />
-        <result value="1538" node="CommandDataConstructorFN-Update-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="CommandDataConstructorFN-Update-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="FavoriteNumbersServices" />
@@ -35,9 +33,7 @@
     </node>
     <node name="CommandDataConstructorFN-Update-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructorExt-Create-Node" />
-        <result value="1538" node="CommandDataConstructorExt-Create-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="CommandDataConstructorExt-Create-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="FavoriteNumbersServicesToUpdate" />
@@ -47,9 +43,7 @@
     </node>
     <node name="CommandDataConstructorExt-Create-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructorExt-Update-Node" />
-        <result value="1538" node="CommandDataConstructorExt-Update-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="CommandDataConstructorExt-Update-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredServices" />
@@ -61,9 +55,7 @@
     </node>
     <node name="CommandDataConstructorExt-Update-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="CommandDataConstructor-Node" />
-        <result value="1538" node="CommandDataConstructor-Node" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="CommandDataConstructor-Node" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredServicesToUpdate" />
@@ -75,24 +67,12 @@
     </node>
     <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
       <resultlist>
-        <result value="0" node="ChangeTDClassOnFINPlatform" />
-        <result value="1538" node="FnFCommandDataConstructor" />
-        <result value="" node="ResponseAssembler" />
+        <result value="" node="ChangeTDClassOnFINPlatform" />
       </resultlist>
       <parameterslist>
         <param name="ServicesDynamicObject" value="RegisteredCounters" />
         <param name="ServicesCommand" value="SC.CounterRow" />
         <param name="XmlPath" value="//AdditionalData/AddList//Counters/*" />
-      </parameterslist>
-    </node>
-    <node name="FnFCommandDataConstructor" object="FPCommandDataConstructor">
-      <resultlist>
-        <result value="" node="ChangeTPOnFINPlatform" />
-      </resultlist>
-      <parameterslist>
-        <param name="ServicesDynamicObject" value="FnFServices" />
-        <param name="ServicesCommand" value="SC.ChangeTariff.FavoriteNumberRow" />
-        <param name="XmlPath" value="//AdditionalData/*[self::RemoveList or self::AddList]/RFS_FP_SERVICE_FAVORITE_NUMBER" />
       </parameterslist>
     </node>
     <node name="ChangeTDClassOnFINPlatform" object="IfCommander">

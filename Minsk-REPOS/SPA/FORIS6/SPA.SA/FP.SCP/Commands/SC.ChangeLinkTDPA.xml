@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ChangeLinkTDPA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeTDPA</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
-  <Properties GenerationType="DataSetXml" />
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Properties GenerationType="DataSetXml"/>
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="UpdateTDCDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -23,15 +24,16 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="LocalParameter" />
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="PersonalAccount" Type="LocalParameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="datetime" Type="Wellknown"/>
   </Request>
   <ParametersList>
     <Parameter Name="PersonalAccount">
-      <Source Path="//AdditionalData//TransferTD/NewPersonalAccountNumber" />
+      <Source Path="//AdditionalData//TransferTD/NewPersonalAccountNumber"/>
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii" />
+  <ErrorsList CodePage="ascii"/>
 </Command>
+

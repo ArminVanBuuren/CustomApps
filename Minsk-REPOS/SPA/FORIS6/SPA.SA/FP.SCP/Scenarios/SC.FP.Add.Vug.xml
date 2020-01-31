@@ -24,7 +24,7 @@
     <node name="ChangeCallingCircle-Node" object="IfCommander">
       <parameterslist>
         <param name="IfXmlPath:0" value="//AdditionalData/AddList/RFS_FP_SERVICE_VUG/CugAvailableOnFP/Value[text()='1']" />
-        <param name="IfXmlPath:1" value="//AdditionalData/AddList/RFS_FP_SERVICE_VUG/CreateGroup/Value[text()='1']" />
+        <param name="OrXmlPath:0" value="//AdditionalData/AddList/RFS_FP_SERVICE_VUG/CreateGroup/Value[text()='1']" />
         <param name="Command" value="SC.ChangeCallingCircle" />
       </parameterslist>
       <resultlist>

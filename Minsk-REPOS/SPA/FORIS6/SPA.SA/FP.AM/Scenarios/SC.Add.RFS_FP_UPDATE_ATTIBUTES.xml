@@ -1,23 +1,23 @@
 <scenario name="UpdatePAAttributesOnFP">
-  <objectList>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
-  </objectList>
-  <automat>
-    <node name="DummyResponder" object="DummyResponder">
-      <resultlist>
-        <result value="" node="FinalResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="OverallResult" value="SUCCESS" />
-        <param name="DetailedResult" value="SUCCESS" />
-        <param name="DetailedResultDescription" value="Command not sending" />
-      </parameterslist>
-    </node>
-    <node name="FinalResponseAssembler" object="ResponseAssembler">
-      <resultlist>
-        <result value="" node="" />
-      </resultlist>
-    </node>
-  </automat>
-</scenario>
+    <objectList>
+      <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+      <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    </objectList>
+    <automat>
+      <node name="DummyResponder" object="DummyResponder">
+        <resultlist>
+          <result value="" node="FinalResponseAssembler" />
+        </resultlist>
+        <parameterslist>
+          <param name="OverallResult" value="SUCCESS" />
+          <param name="DetailedResult" value="SUCCESS" />
+          <param name="DetailedResultDescription" value="Command not sending" />
+        </parameterslist>
+      </node>
+      <node name="FinalResponseAssembler" object="ResponseAssembler">
+        <resultlist>
+          <result value="" node="" />
+        </resultlist>
+      </node>
+    </automat>
+  </scenario>
