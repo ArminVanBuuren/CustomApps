@@ -1,0 +1,60 @@
+<templateGroup name="BMS">
+	<macros>
+		<define name="_GET_BMS_COUNTER"	value="706" />
+  		<define name="_BMSHND" value="WCFHND_01" />
+  		<define name="_SMSCON" value="SMSCON_01" />
+	</macros>
+
+	<template procedureName="GetBMSBalance" handler="_BMSHND" sessionStorage="Remoting" sessionLifetime="300">
+		<condition>
+			<test item="${Recipient}"	matches="^_GET_BMS_COUNTER$" />
+		</condition>
+    	<receiveTemplate>
+			<Message type="getcounters" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
+				<Item procedureName="GetBalance">
+					<Attribute name="Customer" type="String" value="${sender}" />
+					<Attribute name="Balance" />
+					<Attribute name="Counters" />
+					<Attribute name="CreateDate" />
+					<Attribute name="Result" />
+	       		</Item>
+	       		@{store(sInputCode,${content})}
+			</Message>
+    	</receiveTemplate>
+		<deliveryTemplate conditionEx="#{'${Result}'='0'}">
+			<set conditionEx="0@{store(sDate,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/RecalculateDate/text()})}" />
+			<set conditionEx="0@{store(sDateFormated,#{formatDate('${sDate}', 'dd.MM.yyyy')})}" />
+			<set conditionEx="0@{store(sAmount,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/Value/text()})}" />				
+            <set item="Content" value="Ваш баланс в баллах = ${Balance}. На дату ${sDateFormated} сгорит ${sAmount} бал." />
+            <set item="Sender" value="_GET_BMS_COUNTER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="unicodefffe" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate>
+			<set item="Content"   value="Ошибка получения баланса'" />
+            <set item="Sender"   value="_GET_BMS_COUNTER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="unicodefffe" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+	</template>
+
+	<template procedureName="GetBMSCounterInvalidFormat">
+        <condition>
+            <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
+        </condition>
+        <receiveTemplate>
+			<Message id="${guid}" session_id="${guid}" >
+				<Attribute name="Customer"		value="${Sender}" />
+			</Message>
+        </receiveTemplate>
+		<deliveryTemplate direction="input" >
+			<set item="Content"		value="Формат запроса баланса: *_GET_BMS_COUNTER#" />
+			<set item="Encoding"	value="unicodefffe" />
+			<set item="Sender"		value="_GET_BMS_COUNTER" />
+			<set item="Recipient"	value="${Customer}" />
+		</deliveryTemplate>
+	</template>
+
+</templateGroup>

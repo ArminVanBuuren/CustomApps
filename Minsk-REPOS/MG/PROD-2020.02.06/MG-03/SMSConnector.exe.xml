@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
+  <Settings>
+    <Item name="ModuleType" value="SMSCON" />
+    <Item name="ModuleName" value="SMSCON_01" />
+    <Item name="CRMCacheCleanInterval" value="300" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="SMSCBindRetryDelay" value="30" />
+    <Item name="EnquireLinkInterval" value="60" />
+    <Item name="DefaultEncoding" value="ascii" />
+    <Item name="RegisteredDelivery" value="False" />
+    <Item name="SrcTon" value="0" />
+    <Item name="SrcNpi" value="1" />
+    <Item name="DstTon" value="1" />
+    <Item name="DstNpi" value="1" />
+    <Item name="SubmitEsmClass" value="0" />
+    <Item name="SubmitUssdServiceOp" value="0" />
+    <Item name="SplittingType" value="UDH" />
+    <Item name="ContentField" value="ShortMessage" />
+    <Item name="SplitBy" value="134" />
+    <Item name="SplitAfter" value="160" />
+    <Item name="Window" value="100" />
+    <Item name="WindowExceededDelay" value="60" />
+    <Item name="ResponseTimeout" value="600" />
+    <Item name="SuccessResponseCodes" value="0,40" />
+    <Item name="FetchLimit" value="25" />
+    <Item name="ThreadMultiplifier" value="1" />
+	<Item name="SendSpeedLimit" value="100" />
+	<Item name="UtcOffset" value="12+" />
+  </Settings>
+ <SMSCenters>
+	<!--<Connection host="10.128.23.46" port="3207" systemType="502" systemId="MG_FORIS" pass=""  /> -->
+	<Connection host="172.24.224.6" port="900" systemId="forismg2" pass="r45gA2eC5" /> 
+  </SMSCenters>
+  <TemplateProcessors defaultConfig="SMSTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor.xml" />
+  </TemplateProcessors>
+  <BlackList propertyName="Sender" regExpBan="^88">
+    <Ban>603221981</Ban>
+    <Ban>555715</Ban>
+  </BlackList>
+  <Encodings>
+    <Table name="iso-8859-1" encoding="0" />
+    <Table name="ascii" encoding="1" />
+    <Table name="ascii" encoding="2" />
+    <Table name="iso-8859-1" encoding="3" />
+    <Table name="ascii" encoding="4" special="7bit"/>
+    <Table name="shift-jis" encoding="5" />
+    <Table name="iso-8859-5" encoding="6" />
+    <Table name="iso-8859-8" encoding="7"  />
+    <Table name="unicodefffe" encoding="8" />
+  </Encodings>
+
+  <!--Monitors>
+    <HeartBeat periodSec="600" />
+    <NoActivity defaultThresholdSec="2400">
+      <MonitoredInterval thresholdSec="2400">
+        <day from="1" to="5" />
+        <hour from="2" to="6" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="40">
+        <day from="1" to="5" />
+        <hour from="16" to="20" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="5">
+        <day from="3" to="4" />
+        <hour from="16" to="17" />
+      </MonitoredInterval>
+    </NoActivity>
+    <NoDBConnection periodSec="2400" />
+    <NoDeviceConnection periodSec="2400" />
+    <NoDiscSpace periodSec="2400">
+      <warning threshold="20" />
+      <minor threshold="30" />
+      <major threshold="40" />
+      <critical threshold="50" />
+    </NoDiscSpace>
+  </Monitors-->
+
+</Application>

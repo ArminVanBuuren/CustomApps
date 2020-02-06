@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin name="ReplacePlugin">
+  <replace>
+    <condition path="/Message/@type" isEqual="serviceorderresult" />
+    <set path="/Message/Item/Service/@id">
+      <value original="changetariffplan" new="11111" />
+    </set>
+  </replace>
+   <replace>
+    <condition path="/Message/@type" isEqual="vmaspaymentresult" />
+    <set path="/Message/Item/@dbresult">
+      <value original="OK" new="0" />
+      <value original="AUTH_FAILED" new="-1" />
+      <value original="AUTH_CARD_NOT_FOUND" new="-1" />
+      <value original="AUTH_CARD_NOT_AVAILABLE" new="-1" />
+      <value original="AUTH_CARD_EXPIRED" new="-1" />
+      <value original="AUTH_CARD_BLOCKED" new="-1" />
+      <value original="AUTH_DEVICE_BLACKLISTED" new="-1" />
+      <value original="AUTH_DEVICE_NOT_FOUND_IN_RI" new="-1" />
+      <value original="AUTH_SESSION_COUNTER_MAX" new="-1" />
+      <value original="AUTH_GENERAL_COUNTER_MAX" new="-1" />
+    </set>
+  </replace>
+</plugin>

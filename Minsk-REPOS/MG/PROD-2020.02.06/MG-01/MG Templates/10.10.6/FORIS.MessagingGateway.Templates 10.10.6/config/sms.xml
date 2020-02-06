@@ -1,0 +1,48 @@
+<template procedureName="Change_tarifplan">
+  <condition>
+    <test item="0" matches="1" />
+  </condition>
+  <receiveTemplate>
+    <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Item customer="${token0}" >
+        <Service id="changetariffplan" action="0" class="@{switch(${token2}|704,lyubimyj|703,profi_30|1030,profi_150|1037,profi_300|1042,profi_VIP_800|1052,first|710,red|720,maxi|1322,maxiplus|1323,base|700,connect2|1213,maxiactive|1208,superzero|616,many_calls|1313,oblast|815,careful|650,onliner|1134,long_conversations|829,red_energy|827)}" />
+      </Item>
+    </Message>
+  </receiveTemplate>
+  <deliveryTemplate>
+    <set item="Content" value="Данный запрос не может быть выполнен" />
+    <set item="Content" condition="//Item/@dbresult=320341" value="Номер заблокирован, изменение тарифного плана невозможно" />
+    <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств для проведения операции. Проверить баланс: *100# и вызов." />
+    <set item="Content" condition="//Item/@dbresult=320203" value="Заявка на изменение тарифного плана уже обрабатывается" />
+    <set item="Content" condition="//Item/@dbresult=320400" value="Смена Вашего тарифного плана на выбранный не предусмотрена." />
+    <set item="Content" condition="//Item/@dbresult=320174" value="Смена Вашего тарифного плана на выбранный не предусмотрена." />
+    <set item="Content" condition="//Item/@dbresult=320181" value="Для смены тарифного плана Вам необходимо обратиться к персональному менеджеру. Справки по номеру 0990" />
+    <set item="Content" condition="//Item/@dbresult=330160" value="Изменение тарифа не возможно, т.к. на выбранном тарифе не доступны действующие условия кредитного метода расчетов. Для изменения тарифа обратитесь в справочную службу" />
+    <set item="Content" condition="//Item/@dbresult=0" value="Ожидайте SMS о смене тарифа. Приятного общения!" />
+    <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен" />
+    <set item="Encoding" value="unicodefffe" />
+    <set item="Sender" value="_SMS_ASSA_NEW" />
+    <set item="Recipient" value="${customer}" />
+  </deliveryTemplate>
+</template>
+
+<template procedureName="DB_ChangeTariffPlan">
+  <condition>
+    <test item="0" matches="1" />
+  </condition>
+  <receiveTemplate>
+    <Message />
+  </receiveTemplate>
+  <deliveryTemplate>
+    <set item="Content" value="Данный запрос не может быть выполнен" />
+    <set item="Content" condition="//Item/@dbresult=320341" value="Номер заблокирован, изменение тарифного плана невозможно" />
+    <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе для проведения операции" />
+    <set item="Content" condition="//Item/@dbresult=320203" value="Заявка на изменение тарифного плана уже обрабатывается" />
+    <set item="Content" condition="//Item/@dbresult=330160" value="Изменение тарифа не возможно, т.к. на выбранном тарифе не доступны действующие условия кредитного метода расчетов. Для изменения тарифа обратитесь в справочную службу" />
+    <set item="Content" condition="//Item/@dbresult=0" value="Заявка на изменение тарифного плана зарегистрирована" />
+    <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен" />
+    <set item="Encoding" value="unicodefffe" />
+    <set item="Sender" value="_SMS_ASSA_NEW" />
+    <set item="Recipient" value="${customer}" />
+  </deliveryTemplate>
+</template>

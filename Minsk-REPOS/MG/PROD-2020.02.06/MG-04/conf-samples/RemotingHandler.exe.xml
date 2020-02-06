@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Application>
+  <Settings>
+    <Item name="ModuleType" value="RMTHND" />
+    <Item name="ModuleName" value="RMTHND_01" />
+
+    <Item name="NumOfThreads" value="4" />
+  </Settings>
+  <TargetInterface>
+    <Interface name="Sample1_General.ITestRemoting" url="tcp://localhost:1234/Test.tcp" assembly="General.dll" />
+  </TargetInterface>
+</Application>

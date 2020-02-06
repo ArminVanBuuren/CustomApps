@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Application>
+  
+  <TargetDatabase>
+    <!-- alternative way to connect to target database
+    <Database type="OracleClient" scheme="mg_new" interfacePackage="TEST" connectionString="Server=forisos;User ID=mg_new;Password=mg"/>
+    -->
+    <Database forisDataKey="MG" interfacePackage="" />
+  </TargetDatabase>
+  
+  <Settings>
+	  <Item name="ModuleType" value="DBCON" />
+	  <Item name="ModuleName" value="DBCON_01" />
+    
+    <Item name="CRMCacheCleanInterval" value="10" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="ThreadMultiplifier" value="1" />
+    <Item name="FetchLimit" value="150"/>
+  </Settings>
+
+  <Monitors>
+    <HeartBeat periodSec="10" />
+    <NoActivity defaultThresholdSec="10">
+      <MonitoredInterval thresholdSec="20">
+        <day from="1" to="5" />
+        <hour from="2" to="6" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="40">
+        <day from="1" to="5" />
+        <hour from="16" to="20" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="5">
+        <day from="3" to="4" />
+        <hour from="16" to="17" />
+      </MonitoredInterval>
+    </NoActivity>
+    <NoDBConnection  periodSec="5" />
+    <NoDeviceConnection  periodSec="5" />
+    <NoDiscSpace  periodSec="10">
+      <warning threshold="20" />
+      <minor threshold="30" />
+      <major threshold="40" />
+      <critical threshold="50" />
+    </NoDiscSpace>
+  </Monitors>
+  
+</Application>

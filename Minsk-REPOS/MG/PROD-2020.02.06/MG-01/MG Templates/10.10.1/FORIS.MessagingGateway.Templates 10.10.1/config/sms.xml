@@ -1,0 +1,20 @@
+
+
+<!-- <macros>
+  <define name="_SMS_SERVICE_NUMBER" value="111" /> 
+</macros> -->
+
+<template procedureName="DB_LastPeriodBill">
+	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+	<deliveryTemplate>
+		<set item="Content" value="Сервис временно недоступен" /> 
+		<set item="Content" conditionEx="#{${dbresult}=0}" value="Последний счет за период ${beginday} - ${endday} на сумму #{/Message/Item/Attribute[@name='draftintdotpart']/@value div 100} #{if('${currency}'='810' or '${currency}'='RUB' or '${currency}'='Rub' or '${currency}'='rub','руб.','у.е.')}" /> 
+		<set item="Content" conditionEx="#{${dbresult}=320341}" value="Абонент не зарегистрирован" /> 
+		<set item="Content" conditionEx="#{${dbresult}=320600}" value="У абонента нет счетов" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		<set item="Sender" value="_SMS_SERVICE_NUMBER" /> 
+		<set item="Recipient" value="${customer}" /> 
+	</deliveryTemplate>
+</template>

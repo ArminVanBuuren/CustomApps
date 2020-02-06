@@ -1,0 +1,28 @@
+<templates connector="Fax">
+<template procedureName="IncomingContent">
+  <receiveTemplate>
+    <Message type="incomingcontent" initiator="faxcon" id="${guid}" session_id="@{newGuid}" timestamp="@{now}">
+      <Channel id="fax" />
+      <Item recipient="${Recipient}" sender="${Sender}" timestamp="31.10.2003 0:00:00">
+        <Content>${FaxContent}</Content>
+      </Item>
+    </Message>
+  </receiveTemplate>
+  <deliveryTemplate />
+</template>
+
+<template procedureName="DeliveryRequest" reportDelivery="true">
+	<receiveTemplate>
+		<Message />
+	</receiveTemplate>
+  
+  <deliveryTemplate>
+    <set item="FaxContent" value="#{//Content}"/>
+    <set item="Sender" value="503"/>
+    <set item="Recipient" value="${customer}"/>
+    <set item="FaxFileName" value="#{//Content/@filename}"/>
+  </deliveryTemplate>
+</template>
+</templates>
+
+

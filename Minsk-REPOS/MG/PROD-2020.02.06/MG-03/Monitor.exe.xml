@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <Settings>
+    <Item name="ModuleName" value="MONITOR_01" />
+    <Item name="ModuleType" value="MONITOR" />
+    <Item name="MGInstanceName" value="FORIS2" />
+    <Item name="StartDelaySec" value="5" />
+  </Settings>
+</Application>

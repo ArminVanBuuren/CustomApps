@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin name="ReplacePlugin">
+  <replace>
+    <condition path="/Message/@type" isEqual="serviceorderresult" />
+    <set path="/Message/Item/Service/@id">
+      <value original="otdetailedbill" new="10" />
+      <value original="otbillviafax" new="11" />
+      <value original="otdetailedbalance" new="12" />
+      <value original="" new="63" />
+      <value original="CB10555" new="10555" />
+      <value original="CB573" new="573" />
+      <value original="EX1" new="62" />
+      <value original="CB21" new="21" />      
+      <value original="CB22" new="22" />
+      <value original="CB264" new="264" />
+      <value original="CB532" new="532" />
+      <value original="CB9831" new="539" />
+      <value original="CB10363" new="10363" />
+      <value original="CB534" new="534" />
+      <value original="CB108" new="108" />
+      <value original="CB407391" new="407391" />
+      <value original="CB401049" new="401049" />
+      <value original="CB406139" new="406139" />
+      <value original="changetariffplan" new="11111" />
+      <value original="9" new="9" />
+      <value original="14" new="14" />
+      <value original="16" new="16" />
+      <value original="17" new="17" />
+      <value original="18" new="18" />
+      <value original="19" new="19" />
+      <value original="20" new="20" />
+      <value original="25" new="25" />
+      <value original="26" new="26" />
+      <value original="27" new="27" />
+      <value original="29" new="29" />
+      <value original="34" new="34" />
+      <value original="35" new="35" />
+      <value original="36" new="36" />
+      <value original="37" new="37" />
+      <value original="38" new="38" />
+      <value original="40" new="40" />
+      <value original="41" new="41" />
+      <value original="42" new="42" />
+      <value original="43" new="43" />
+      <value original="52" new="52" />
+      <value original="66" new="66" />
+      <value original="387" new="387" />
+      <value original="487" new="487" />
+      <value original="FR311000" new="6462" />
+      <value original="CB121" new="121" />
+      <value original="CB265" new="265" />
+      <value original="CB410868" new="410868" />
+      <value original="CB410153" new="410153" />
+      <value original="CB411552" new="411552" />
+      <value original="CB412586" new="412586" />
+      <value original="CB412686" new="412686" />	  
+      <value original="FRBLKUSER" new="412001" />
+      <value original="CB412694" new="412694" />
+      <value original="CB412736" new="412736" />
+      <value original="CB412737" new="412737" />
+      <value original="CB412738" new="412738" />
+      <value original="CB412574" new="412574" />
+      <value original="FR311000" new="311000" />
+      <value original="CB403864" new="403864" />
+      <value original="FR511001" new="511001" />
+      <value original="FR107700" new="107700" />
+      <value original="FR1960" new="1960" />	  
+      <value original="FR664004" new="664004" /> <!-- MTS Connect 50 -->
+      <value original="FR664005" new="664005" /> <!-- MTS Connect 100 -->
+      <value original="FR664006" new="664006" /> <!-- MTS Connect 500 -->
+      <value original="FR633" new="633" /> <!-- MTS Connect 1000 -->
+    <!--   <value original="CB123" new="123" /> roaming -->
+      <value original="FR589" new="589" /> <!-- zapros parol -->
+      <value original="FRKIS001" new="1001" /> <!-- KISSA administrator -->
+      <value original="FR858" new="858" /> <!-- Lubimii nolik -->
+      <value original="FR1732" new="1732" /> <!-- akcia 40% posle 3 minut -->
+	  <value original="FR5570" new="5570" /> <!-- sms-package 50 -->
+	  <value original="FR5571" new="5571" /> <!-- sms-package 100 -->
+	  <value original="FR5572" new="5572" /> <!-- sms-package 300 -->
+	  <value original="FR722" new="722" /> <!-- sms-package 500 -->
+	  <value original="FR882" new="882" /> <!-- mms package 10 -->
+	  <value original="FR883" new="883" /> <!-- mms package 25 -->
+	  <value original="FR884" new="884" /> <!-- mms drive -->
+	  <value original="CB401555" new="401555" /> <!-- poluchenie sms s saita -->
+	  <value original="CB403481" new="403481" /> <!-- poluchenie sms s email -->
+	  <value original="CB405130" new="405130" /> <!-- inf o balanse 4erez sms -->
+	  <value original="FR1949" new="1949" /> <!-- 3G connect 100mb -->
+	  <value original="FR1950" new="1950" /> <!-- 3G connect 500mb -->
+	  <value original="FR1951" new="1951" /> <!-- 3G connect 1Gb -->
+	  <value original="FR1952" new="1952" /> <!-- 3G connect 2Gb -->
+	  <value original="FR1953" new="1953" /> <!-- 3G connect 3Gb -->
+	  <value original="FR1954" new="1954" /> <!-- 3G connect 5Gb -->
+	  <value original="FR15573" new="15573" /> <!-- Bezlimit inet s telephone -->
+    </set>
+  </replace>
+  <replace>
+    <condition path="/Message/@type" isEqual="serviceinterrogationresult" />
+    <set path="/Message/Item/Service/@id">
+      <value original="otdetailedbill" new="10" />
+      <value original="otbillviafax" new="11" />
+      <value original="otdetailedbalance" new="12" />
+      <value original="" new="63" />
+      <value original="CB10555" new="10555" />
+      <value original="CB573" new="573" />
+      <value original="EX1" new="62" />
+      <value original="CB21" new="21" /> 
+      <value original="CB22" new="22" />
+      <value original="CB264" new="264" />
+      <value original="CB532" new="532" />
+      <value original="CB9831" new="539" />
+      <value original="CB10363" new="10363" />
+      <value original="CB534" new="534" />
+      <value original="CB108" new="108" />
+      <value original="CB407391" new="407391" />
+      <value original="CB401049" new="401049" />
+      <value original="CB406139" new="406139" />
+      <value original="changetariffplan" new="11111" />
+      <value original="9" new="9" />
+      <value original="14" new="14" />
+      <value original="16" new="16" />
+      <value original="17" new="17" />
+      <value original="18" new="18" />
+      <value original="19" new="19" />
+      <value original="20" new="20" />
+      <value original="25" new="25" />
+      <value original="26" new="26" />
+      <value original="27" new="27" />
+      <value original="29" new="29" />
+      <value original="34" new="34" />
+      <value original="35" new="35" />
+      <value original="36" new="36" />
+      <value original="37" new="37" />
+      <value original="38" new="38" />
+      <value original="40" new="40" />
+      <value original="41" new="41" />
+      <value original="42" new="42" />
+      <value original="43" new="43" />
+      <value original="52" new="52" />
+      <value original="66" new="66" />
+      <value original="387" new="387" />
+      <value original="487" new="487" />
+      <value original="FR311000" new="6462" />
+      <value original="CB121" new="121" />
+      <value original="CB265" new="265" />
+      <value original="CB410868" new="410868" />
+      <value original="CB410153" new="410153" />
+      <value original="CB411552" new="411552" />
+      <value original="CB412586" new="412586" />
+      <value original="CB412686" new="412686" />	  
+      <value original="FRBLKUSER" new="412001" />
+      <value original="CB412694" new="412694" />
+      <value original="CB412736" new="412736" />
+      <value original="CB412737" new="412737" />
+      <value original="CB412738" new="412738" />
+      <value original="CB412574" new="412574" />
+      <value original="FR311000" new="311000" />
+      <value original="CB403864" new="403864" />
+      <value original="FR511001" new="511001" />
+      <value original="FR107700" new="107700" />
+      <value original="FR1960" new="1960" />	  	  
+      <value original="FR664004" new="664004" /> <!-- MTS Connect 50 -->
+      <value original="FR664005" new="664005" /> <!-- MTS Connect 100 -->
+      <value original="FR664006" new="664006" /> <!-- MTS Connect 500 -->
+      <value original="FR633" new="633" /> <!-- MTS Connect 1000 -->
+    <!--   <value original="CB123" new="123" /> roaming -->
+      <value original="FR589" new="589" /> <!-- zapros parol -->
+      <value original="FRKIS001" new="1001" /> <!-- KISSA administrator -->
+      <value original="FR858" new="858" /> <!-- Lubimii nolik -->
+      <value original="FR1732" new="1732" /> <!-- akcia 40% posle 3 minut -->
+	  <value original="FR5570" new="5570" /> <!-- sms-package 50 -->
+	  <value original="FR5571" new="5571" /> <!-- sms-package 100 -->
+	  <value original="FR5572" new="5572" /> <!-- sms-package 300 -->
+	  <value original="FR722" new="722" /> <!-- sms-package 500 -->
+	  <value original="FR882" new="882" /> <!-- mms package 10 -->
+	  <value original="FR883" new="883" /> <!-- mms package 25 -->
+	  <value original="FR884" new="884" /> <!-- mms drive -->
+	  <value original="CB401555" new="401555" /> <!-- poluchenie sms s saita -->
+	  <value original="CB403481" new="403481" /> <!-- poluchenie sms s email -->
+	  <value original="CB405130" new="405130" /> <!-- inf o balanse 4erez sms -->
+	  <value original="FR1949" new="1949" /> <!-- 3G connect 100mb -->
+	  <value original="FR1950" new="1950" /> <!-- 3G connect 500mb -->
+	  <value original="FR1951" new="1951" /> <!-- 3G connect 1Gb -->
+	  <value original="FR1952" new="1952" /> <!-- 3G connect 2Gb -->
+	  <value original="FR1953" new="1953" /> <!-- 3G connect 3Gb -->
+	  <value original="FR1954" new="1954" /> <!-- 3G connect 5Gb -->
+	  <value original="FR15573" new="15573" /> <!-- Bezlimit inet s telephone -->	  
+    </set>
+  </replace>
+  
+  <replace>
+    <condition path="/Message/@type" isEqual="vmaspaymentresult" />
+    <set path="/Message/Item/@dbresult">
+      <value original="OK" new="0" />
+      <value original="AUTH_FAILED" new="-1" />
+      <value original="AUTH_CARD_NOT_FOUND" new="-1" />
+      <value original="AUTH_CARD_NOT_AVAILABLE" new="-1" />
+      <value original="AUTH_CARD_EXPIRED" new="-1" />
+      <value original="AUTH_CARD_BLOCKED" new="-1" />
+      <value original="AUTH_DEVICE_BLACKLISTED" new="-1" />
+      <value original="AUTH_DEVICE_NOT_FOUND_IN_RI" new="-1" />
+      <value original="AUTH_SESSION_COUNTER_MAX" new="-1" />
+      <value original="AUTH_GENERAL_COUNTER_MAX" new="-1" />
+    </set>
+  </replace>
+</plugin>

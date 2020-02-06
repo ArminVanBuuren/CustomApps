@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<templates connector="IVR">
+
+<template procedureName="DB_CValidation" persistent="false">
+  <input>
+   <param name="customer"/>
+  </input>
+  <output>
+      <param name="tariffplan" type="3" value="0" />
+      <param name="state" type="2" value="0" />
+      <param name="password" type="1" value="" />
+      <param name="customer_info" type="3" value="1" />
+      <param name="check" type="3" value="0" />
+      <param name="cost" type="3" value="0" />
+  </output>
+  <receiveTemplate>
+      <Message type="verificationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}" datasource="state" />
+      </Message>
+  </receiveTemplate>
+  <deliveryTemplate />
+ </template>  
+
+
+<template procedureName="DB_BalanceRetriev" persistent="false">
+  <input>
+   <param name="Customer"/>
+  </input>
+  <output>
+   <param name="balanceintpartdotpart"     type="3" value="0"/>
+   <param name="DisconnectionTime"         type="3" value="0"/>
+   <param name="recommendedprepayment"     type="3" value="0"/>
+   <param name="accumulator1"               type="3" value="0"/>
+   <param name="currency"                  type="3" value="933"/>
+   <param name="creditlimitintpartdotpart" type="3" value="0"/>
+   <param name="debtintpartdotpart"        type="3" value="0"/>
+   <param name="dateofissue"               type="1" value="0"/>
+   <param name="iscredit"                  type="2" value="0"/>
+  </output>
+  <receiveTemplate>
+   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+    <Item customer="${customer}" subject="balance" datasource="state"/>
+   </Message>
+  </receiveTemplate>
+  <deliveryTemplate />
+ </template>  
+
+
+
+
+<template procedureName="DB_SProcessing">
+    <condition>
+    </condition>
+  <receiveTemplate>
+   <Message type="serviceorder" initiator="IVRCON" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${customer}">
+					<Service id="${ServiceCode}" action="0" class="${Class}" needtarification="1" createrequest="1" />
+				</Item>
+			</Message>
+
+  </receiveTemplate>
+ <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="ServiceCode" />
+      <param name="class" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="dbresult" type="3" value="0"/>
+      <param name="state" type="2" value="0"/>
+      <param name="ischarged" type="2" value="0"/>
+      <param name="price" type="3" value="0"/>
+    </output>
+  </template>
+ 
+  <template procedureName="DB_SProcessing_del">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="Del_internight" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${service}" action="${action}" class="${class}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="customer" />
+      <param name="service" />
+      <param name="class" />
+      <param name="action" />
+    </input>
+    <output>
+      <param name="Subscription" type="2" value="0" />
+      <param name="Status" type="2" value="0" />
+      <param name="ISCharged" type="2" value="0" />
+    </output>
+  </template>
+
+
+	
+	
+ <template procedureName="DB_PayVerification" persistent="false">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="guaranteedpayment" action="6" datasource="state" />
+        </Item>
+    </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+    <param name="allowed" type="2" value="0" />
+    <param name="pending" type="2" value="0" />
+    <param name="maximumusd" type="3" value="0" />
+    <param name="maximumrur" type="3" value="0" />
+    </output>
+  </template>
+
+  
+ <template procedureName="DB_PayAcceptance">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+ 	<Item customer="${customer}" datasource="state">
+ 	  <Service id="guaranteedpayment" action="7">
+     		<Attribute name="amount" value="${amount}" />
+		<Attribute name="currency" value="${currency}" />
+		<!--Attribute name="init" value="${init}" /-->
+	  </Service>
+ 	</Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="amount" />
+      <param name="currency" />
+      <!--param name="init" /-->
+    </input>
+    <output>
+      <param name="allowed" type="2" value="1" />
+      <param name="amount" type="3" value="0" />
+      <param name="currency" type="3" value="933" />
+    </output>
+  </template>
+
+
+
+
+<template procedureName="DB_FaxPrepaymentOrder" persistent="false" handler="CRMCON_01">
+  <receiveTemplate>
+   <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+    <Item customer="${customer}" >
+	 <Service action="4" id="otbill">
+		<Attribute name="methoddelivery" value="fax" /> 
+		<Attribute name="address " value="${adress}" />
+	 </Service>
+	</Item> 
+   </Message>
+  </receiveTemplate>
+  <input>
+   <param name="customer"/>
+   <param name="adress"/>
+  </input>
+  <output>
+	<param name="dbresult"		type="3" value="0" />
+	<param name="state"			type="3" value="0" />
+  </output>
+  <deliveryTemplate />
+</template>  
+
+
+<template procedureName="DB_EmailPrepaymentOrder" persistent="false" handler="CRMCON_01">
+  <receiveTemplate>
+   <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+    <Item customer="${customer}" >
+	 <Service action="4" id="otbill">
+		<Attribute name="methoddelivery" value="email" /> 
+		<Attribute name="docformat" value="${docformat}" />
+	 </Service>
+	</Item> 
+   </Message>
+  </receiveTemplate>
+  <input>
+   <param name="customer"/>
+   <param name="docformat"/>
+  </input>
+  <output>
+	<param name="dbresult"		type="3" value="0" />
+	<param name="state"			type="3" value="0" />
+  </output>
+  <deliveryTemplate />
+</template>
+  
+  
+ <template procedureName="DB_PRequest">
+    <condition>
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service action="4" id="${service}">
+    <Attribute name="start" value="${start}" />
+    <Attribute name="end" value="${end}" />
+    <Attribute name="faxnumber" value="${faxnumber}" />
+          </Service>
+ </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate />
+    <input>
+      <param name="Customer" />
+      <param name="Service" />
+      <param name="Start" />
+      <param name="End" />
+      <param name="FaxNumber" />
+      <param name="Action" />
+    </input>
+    <output>
+    <param name="state" type="2" value="0" />
+    </output>
+  </template>
+
+</templates>

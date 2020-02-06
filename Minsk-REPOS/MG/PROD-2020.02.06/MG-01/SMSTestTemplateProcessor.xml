@@ -1,0 +1,596 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<templates connector="SMS">
+  <macros>
+    <define name="_mob_msisdn" value="^(375(25|29|33|44)\d{7})$" />
+    <define name="_pass_num" value="^(\d{4,8})$" />
+  </macros>
+
+
+<template procedureName="Get_PinPuk_OtherMSISDN_" handler="DBCON_01">
+	<condition>
+		<test item="${Recipient}" matches="^(839)$" />
+		<test item="${Content}" matches="^(\s*375(25|29|33|44)\d{7}\s*\d{4,}\s*)$" />
+    </condition>		
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.ttt_get_pinpuk_othermsisdn_v2" >
+					<Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+					<Attribute name="i_content" type="STRING" value="${Content}" />
+					<Attribute name="rez" type="STRING" /> 					
+				</Item>
+    	</Message>		
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  
+
+
+<!--- Добавление технологического. НЕ удалять -->
+<!-- <template procedureName="Get_PinPuk_OtherMSISDN_" contentSeparator="  * " handler="DBCON_01" >
+	<condition>
+		<test item="${Recipient}" matches="^(839)$" />
+		<test item="${Token0}" matches="^(375(25|29|33|44)\d{7})$" />
+		<test item="${Token1}" matches="^(\d{4,8})$" />
+    </condition>		
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.ttt_get_pinpuk_othermsisdn" >
+					<Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+					<Attribute name="i_dr_msisdn" type="STRING" value="${Token0}" />
+					<Attribute name="i_num_pass" type="STRING" value="${Token1}" />
+					<Attribute name="rez" type="STRING" /> 					
+				</Item>
+    	</Message>		
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template> -->
+  <!--<template procedureName="Get_PinPuk_OtherMSISDN_Reject_">
+	    <condition>
+        	<test item="${Recipient}" matches="^(839)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+				<set item="Content" value="Введите корректный запрос." />
+				<set item="Sender" value="839" />
+				<set item="Recipient" value="${customer}" />
+				<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template> -->
+
+<!--- Добавление технологического. НЕ удалять -->
+<template procedureName="Add_srv_tech_" handler="DBCON_01">
+	<condition>
+		<test item="${Sender}" matches="^(375297776242|375297776319)$" />
+		<test item="${Recipient}" matches="^(839)$" />
+		<test item="${Token0}" matches="^(111)$" />
+		<test item="${Token1}" matches="^\d{12}$" />
+    </condition>		
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="rep.addsrv_sychro_tech" >
+					<Attribute name="i_msisdn" type="STRING" value="${Token1}" />
+					<Attribute name="o_rez" type="STRING" /> 					
+				</Item>
+    	</Message>		
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${o_rez}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  
+
+
+<!--<template procedureName="FOOD_FLOOD_" handler="DBCON_01">
+	<condition>
+		<test item="${Recipient}" matches="^(839)$" />
+    </condition>		
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="rep.FOOD_FLOODS" >
+					<Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+					<Attribute name="i_txt" type="STRING" value="${Content}" />
+					<Attribute name="rez" type="STRING" /> 					
+				</Item>
+    	</Message>		
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  -->
+
+<!--- Добавление технологического. НЕ удалять -->
+<!-- <template procedureName="ChangePass_" handler="DBCON_01">
+	<condition>
+		<test item="${Recipient}" matches="^(839)$" />
+		<test item="${Token0}" matches="^([0-9a-zA-Z]{4,10})$" />
+    </condition>		
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.changepasswordselfcarev2" >
+					<Attribute name="customer" type="STRING" value="${Sender}" />
+					<Attribute name="oldpassword" type="STRING" value="1111" />
+					<Attribute name="confirmpassword" type="STRING" value="${Token0}" />
+					<Attribute name="src" type="STRING" value="6" />
+					<Attribute name="newpassword" type="STRING" value="${Token0}" />
+					<Attribute name="dbresult" type="STRING" /> 					
+					<Attribute name="detail" type="STRING" /> 					
+				</Item>
+    	</Message>		
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${detail}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  
+  <template procedureName="ChangePassReject_">
+	    <condition>
+        	<test item="${Recipient}" matches="^(839)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+				<set item="Content" value="Введите корректный пароль." />
+				<set item="Sender" value="839" />
+				<set item="Recipient" value="${customer}" />
+				<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template>
+
+-->
+   
+   
+   
+ <!--  
+  <template procedureName="2017_check_p2p" sessionStorage="Database" sessionLifetime="60">
+  <condition>
+   <test item="${Recipient}" matches="^839$" />
+   <test item="${token0}" matches="^(375(29|33|44|25)\d{7})$" /> 
+   <test item="${token1}" matches="^[1234]{1}$" />
+   <test item="${token2}" matches="^[а-яА-Яa-zA-Z0-9]{1,}$" />
+  </condition>
+  <receiveTemplate>
+   <Message type="serviceorder"  initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+    <Item customer="${Sender}">
+     <Service id="movepaymentrequest" action="5">
+      <Attribute name="receiver" value="${token0}" />
+      <Attribute name="amount" value="${token1}" />
+     </Service>
+    </Item>
+    @{store(storedSender,${Sender})}
+    @{store(storedRecipient,${token0})}
+    @{store(ssumm,${token1})}
+    @{store(sContent,${token2})}
+    @{store(sid,${session_id})} 
+   </Message>
+  </receiveTemplate>
+  <deliveryTemplate conditionEx="#{${dbresult}=0}" call="Add_P2P_2017" terminating="false" />
+  <deliveryTemplate connector="SMSCON_03" /> 
+ </template>
+ <template procedureName="Add_P2P_2017" handler="DBCON_01" sessionStorage="Database" sessionLifetime="60">
+  <condition>
+   <test item="0" matches="1" />
+  </condition>
+  <receiveTemplate>
+   <Message type="Add_P2P_2017" initiator="smscon" id="${guid}" session_id="${session_id}">
+    <Item procedureName="billing.mg_action_2017.p2p_2017_add" >
+     <Attribute name="src_addr" type="STRING" value="${storedSender}" />
+     <Attribute name="dst_addr" type="STRING" value="${storedRecipient}"/> 
+     <Attribute name="nick" type="STRING" value="${sContent}"/> 
+     <Attribute name="descrip" type="STRING" value="${sid}"/> 
+     <Attribute name="ssumma" type="INT" value="${ssumm}"/> 
+    </Item>
+   </Message>
+  </receiveTemplate>
+  <deliveryTemplate dropReply="true" >
+   <set conditionEx="0@{freeSession}" />
+  </deliveryTemplate>
+ </template>
+
+  <template procedureName="2017_confirm_p2p" sessionStorage="Database" sessionLifetime="60">
+	<condition>
+		<test item="${Recipient}" matches="^839$" />
+		<test item="${Content}" matches="^[0-9]{4}$" />
+	</condition>
+	<receiveTemplate>
+		<Message type="serviceorder"  initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+  			<Item customer="${Sender}">
+    				<Service id="movepaymentacceptance" action="5">
+      					<Attribute name="code" value="${Content}" />
+				</Service>
+ 			</Item>
+			@{store(storedSenderConf,${Sender})} 
+			@{store(sCode,${Content})} 
+		</Message>
+       </receiveTemplate>
+	   <deliveryTemplate conditionEx="#{${dbresult}=0}" call="Confirm_P2P_2017" terminating="false" />
+	   <deliveryTemplate connector="SMSCON_03" />
+	</template> 
+  	<template procedureName="Confirm_P2P_2017" handler="DBCON_01" sessionStorage="Database" sessionLifetime="60">
+	<condition>
+		<test item="0" matches="1" />
+    </condition>
+       <receiveTemplate>
+		<Message type="Confirm_P2P_2017" initiator="smscon" id="${guid}" session_id="${session_id}">
+				<Item procedureName="billing.mg_action_2017.p2p_2017_confirm" >
+					<Attribute name="src_addr" type="STRING" value="${storedSenderConf}" />
+					<Attribute name="code" type="STRING" value="${sCode}"/> 
+				</Item>
+    	</Message>
+       </receiveTemplate>
+	<deliveryTemplate dropReply="true" >
+		<set conditionEx="0@{freeSession}" />
+	</deliveryTemplate>
+	</template> 	   
+
+  <template procedureName="2017_reject_p2p">
+	<condition>
+		<test item="${Recipient}" matches="^839$" />
+	</condition>
+		<receiveTemplate>
+		<Message> <Item customer="${Sender}" /> </Message>
+       		</receiveTemplate>
+	<deliveryTemplate direction="input"  connector="SMSCON_03" />
+  </template> 
+-->
+<!--- Добавление технологического. НЕ удалять -->	
+	
+ <!-- <template procedureName="WifiRequest" handler="DBCON_02">
+	<condition>
+        	<test item="${Recipient}" matches="^839$" />
+        </condition>
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="wifi_alc.WiFiDispatcherTools.Wifi_Request" >
+					<Attribute name="p_msisdn" type="STRING" value="${Sender}" />
+					<Attribute name="p_smstext" type="STRING" value="wifi"/> 
+					<Attribute name="p_req_num" type="STRING" value="9114"/> 
+					<Attribute name="p_source_id" type="STRING" value="6"/> 
+					<Attribute name="o_rez" type="STRING" /> 
+					<Attribute name="o_rez_txt" type="STRING" /> 
+					<Attribute name="o_user" type="STRING" /> 
+					<Attribute name="o_pass" type="STRING" /> 
+				</Item>
+			</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${o_rez_txt}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Данный запрос не может быть выполнен." />		
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  -->
+
+
+<!--<template procedureName="rassrochka_1155" handler="DBCON_01">
+	<condition>
+        	<test item="${Recipient}" matches="^839$" />
+			<test item="${token0}" matches="^\d{12}$" />			
+        </condition>
+		<receiveTemplate>
+			<Message type="rassrochka" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.mg_lll_rassrochka" >
+					<Attribute name="p_msisdn_in" type="STRING" value="${Sender}" />
+					<Attribute name="pa_num" type="STRING" value="${Token0}"/> 
+					<Attribute name="msg" type="STRING" /> 
+					<Attribute name="dbresult" type="STRING" /> 
+				</Item>
+			</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${msg}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Данный запрос не может быть выполнен." />		
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>
+
+  <template procedureName="rassrochka_1155_other" handler="DBCON_01">
+	<condition>
+        	<test item="${Recipient}" matches="^839$" />
+			<test item="${token0}" matches="^{0,11}$" />			
+        </condition>
+		<receiveTemplate>
+			<Message type="rassrochka" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.mg_lll_rassrochka" >
+					<Attribute name="p_msisdn_in" type="STRING" value="${Sender}" />
+					<Attribute name="pa_num" type="STRING" value="help"/> 
+					<Attribute name="msg" type="STRING" /> 
+					<Attribute name="dbresult" type="STRING" /> 
+				</Item>
+			</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" condition="//Item/@dbresult='0'" value="${msg}" />
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Данный запрос не может быть выполнен." />		
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>  -->
+   
+  
+<!--	<template procedureName="List_service_customer">
+	<condition>
+			<test item="${Recipient}" matches="^(839)$" />
+        </condition>
+       <receiveTemplate>
+		<Message type="List_service" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${Sender}"></Item>
+		</Message>
+       </receiveTemplate>
+
+	  <deliveryTemplate direction="input" condition="not(matches(${customer},&quot;375(29|33|25|44)7776319$&quot;))"  terminating="true">
+       </deliveryTemplate >		   
+       <deliveryTemplate>
+		<set item="Content" value="К сожалению, произошла ошибка. Попробуйте еще раз." />
+		<set item="Content" condition="//Item/@dbresult='0'" value="${reply}" />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+           	<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+       </template> -->
+
+ <!-- <template procedureName="Test_839" handler="DBCON_02">
+	<condition>
+		<test item="${Recipient}" matches="^(839)$" />
+    </condition>
+       <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="oms.adapters_in.create_synch_order" >
+					<Attribute name="i_ident" type="STRING" value="${Sender}" />
+					<Attribute name="i_product" type="STRING" value="27"/> 
+					<Attribute name="i_action" type="STRING" value="1"/> 
+					<Attribute name="i_source_id" type="STRING" value="3"/> 
+					<Attribute name="i_add_param" type="STRING" value="CODE=${Content}" /> 
+					<Attribute name="o_order_id" type="STRING" /> 					
+					<Attribute name="o_result_code" type="STRING" /> 					
+					<Attribute name="o_result_msg" type="STRING" /> 
+				</Item>
+    	</Message>
+		</receiveTemplate>
+	<deliveryTemplate conditionEx="#{${dbresult}=0}">
+		<set item="Content" condition="//Item/Attribute[@name='o_result_code']/@value='0'" value="${o_result_msg}" />
+		<set item="Content" condition="//Item/Attribute[@name='o_result_code']/@value='1'" value="Заявка принята" />
+		<set item="Content" condition="//Item/Attribute[@name='o_result_code']/@value='-1'" value="Услуга не доступна" />
+		<set item="Sender" value="${Recipient}" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+	<deliveryTemplate conditionEx="#{${dbresult}!=0}">
+		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
+		<set item="Sender" value="${Recipient}" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>	   
+    </template>  -->
+
+ <!--<template procedureName="707_fake">
+	    <condition>
+        	<test item="${Recipient}" matches="^(839)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+		<set item="Content" value="Услуга временно недоступна." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template>  -->
+
+
+ <!--template procedureName="SMS_email">
+ <condition>
+  <test item="${Recipient}" matches="^(839)$" /> 
+  </condition>
+ <receiveTemplate>
+ <Message type="deliveryrequest" id="${guid}" session_id="@{newGuid}">
+ <Package package_id="@{newGuid}" template_id="email -2">
+ <Item customer="0890@mts.by" recipient="${Sender}">
+  <Content disposition="body" type="text/plain" encoding="Base64" charset="Windows-1251" subject="08900 SMS from number ${Sender}.">${Sender} ${Content}</Content> 
+  </Item>
+  </Package>
+  </Message>
+  </receiveTemplate>
+ <deliveryTemplate direction="input" terminating="false">
+  <set item="Content" value="Vasha zajavka prinjata. Dlja utochnenija detalej sotrudnik MTS svjazhetsja s Vami s 09.00 do 21.00." /> 
+  <set item="Recipient" value="${recipient}" /> 
+  <set item="Sender" value="08901" /> 
+  <set item="Encoding" value="iso-8859-1" /> 
+  </deliveryTemplate>
+  <deliveryTemplate direction="input" connector="EMAILCON_01" /> 
+  </template-->
+
+
+<!-- ############################  1982 TUT BY Testing  ####################### -->	
+<!--	<template procedureName="Add_tut_by">
+	    <condition>
+        	<test item="${Recipient}" matches="^(839)$" />
+			<test item="${Token0}" matches="^(M|m|N|n|D|d)" />
+			<test item="${Token1}" matches="^(A|a|R|r)" />			
+    	    </condition>
+           <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+			<Item customer="${Sender}"> 
+				<Service id="@{switch(${Token0}|FR6628,m|FR6628,N|FR6627,n|FR6627,D|FR6626,d|FR6626)}" 
+         service_id="@{switch(${Token0}|FR6628,m|FR6628,N|FR6627,n|FR6627,D|FR6626,d|FR6626)}" 
+          action="@{switch(${Token1}|2,a|2,R|3,r|3)}"/>
+		  @{store(sContent,${Content})}
+		 </Item>
+		</Message>
+           </receiveTemplate>
+		<deliveryTemplate>
+		<set item="Content" value="${customer} @{now()} ${sContent} ${ret_code}" />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+   	</template>  -->
+
+<!-- <template procedureName="SyntaxError_Add_Del_mobileTV">
+	    <condition>
+        	<test item="${Recipient}" matches="^(839)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+		<set item="Content" value="Отправляйте корректый шаблон" />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template> -->
+
+
+<!-- <template procedureName="kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+	<condition>
+		<test item="${Recipient}" matches="^839$" />
+		<test item="${Token0}" matches="^(0|1)$" />
+    </condition>
+       <receiveTemplate>
+		<Message type="kredit_dov" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+         		<Item customer="${Sender}"  ac="${Token0}" />
+    	</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+	    <set item="Content" value=" Информация недоступна."/>
+		<set item="Content" condition="//Item/@dbresult=0" value="${reply}" />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template> -->
+   
+ <!-- <template procedureName="err-kredit_dov" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+	<condition>
+        	<test item="${Recipient}" matches="^839$" />
+        </condition>
+       <receiveTemplate>
+		<Message > <Item customer="${Sender}"/>	</Message>
+       </receiveTemplate>
+       <deliveryTemplate direction="input">
+		<set item="Content" value="Неверный формат запроса.Попробуйте еще раз." />
+        <set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       </deliveryTemplate>
+   </template>	  -->
+
+<!--   <template procedureName="send_url">
+- <condition>
+  <test item="0" matches="1" /> 
+  </condition>
+- <receiveTemplate>
+  <Message /> 
+  </receiveTemplate>
+- <deliveryTemplate>
+		<set item= "Content" value="${rez}" />
+  <set item="Recipient" value="${Sender}" /> 
+  <set item="Sender" value="839" /> 
+  <set item="Encoding" value="unicodefffe" /> 
+  </deliveryTemplate>
+  </template> -->
+ 
+ <!--   <template procedureName="ussd_839_lopatov">
+- 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+- 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+- 	<deliveryTemplate>
+		<set item= "Content" value="${reply}" />
+		<set item="Recipient" value="${Sender}" /> 
+		<set item="Sender" value="839" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template> -->
+ 
+<!-- <template procedureName="Add_Del_service">
+	    <condition>
+        	<test item="${Recipient}" matches="^(510|311|312|313|314|315|316|707|500|0870246|330|320|0870249|839)$" />
+        	<test item="${Token0}" matches="^(A|a|R|r)$" />		
+    	    </condition>
+           <receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${Sender}"> 
+				<Service id="@{switch(${Recipient}|FR15573,311|FR1949,312|FR1950,313|FR1951,314|FR1952,315|FR1953,316|FR1954,707|FR2314,500|SCP1006,0870246|CB123,330|FR511001,320|FR107700,0870249|CB403864,839|FR5595)}" 
+         service_id="@{switch(${Recipient}|FR15573,311|FR1949,312|FR1950,313|FR1951,314|FR1952,315|FR1953,316|FR1954,707|FR2314,500|SCP1006,0870246|CB123,330|FR511001,320|FR107700,0870249|CB403864,839|FR5595)}"
+          action="@{switch(${Token0}|2,a|2,R|3,r|3)}"/>
+		 </Item>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate>
+		<set item="Content" value="К сожалению, произошла ошибка. Попробуйте еще раз." />
+		<set item="Content" condition="//Item/@dbresult=0" value="${msg}" />
+		<set item="Content" condition="//Item/@dbresult=1" value="${msg}" />		
+		<set item="Content" condition="//Item/@dbresult=320191" value="На балансе недостаточно средств для проведения операции." />
+		<set item="Content" condition="//Item/@dbresult=320174" value="Неверно задана операция." />
+		<set item="Content" condition="//Item/@dbresult=320172" value="Неверно задана услуга." />
+		<set item="Content" condition="//Item/@dbresult=320173" value="На тарифном плане нет данной услуги." />
+		<set item="Content" condition="//Item/@dbresult=320203" value="Существует заявка на удаление услуги." />
+		<set item="Content" condition="//Item/@dbresult=320204" value="Существует заявка на добавление услуги." />
+		<set item="Content" condition="//Item/@dbresult=320205" value="услуга уже существует." />
+		<set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен." />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template> -->
+
+<!-- <template procedureName="SyntaxError_Add_Del_service">
+	    <condition>
+        	<test item="${Recipient}" matches="^(510|311|312|313|314|315|316|707|500|0870246|330|320|839)$" />
+   	    </condition>
+           <receiveTemplate>
+		<Message>
+			<Item customer="${Sender}"/>
+		</Message>
+           </receiveTemplate>
+       		<deliveryTemplate direction="input">
+		<set item="Content" value="Отправляйте латинские буквы A или R" />
+		<set item="Sender" value="839" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="unicodefffe" />
+       		</deliveryTemplate>
+   	</template> -->
+
+
+</templates>

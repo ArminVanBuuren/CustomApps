@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
+  <Logging>
+    <Data enabled="true" file="data.log" directory="c:\FORISLog\MG" buffer="20" newLine="true" />
+    <Activity enabled="true" file="activity.log" directory="c:\FORISLog\MG" buffer="100" newLine="true" severity="ProcessingError" />
+    <Server enabled="false" severity="Debug" />
+    <Error enabled="false" file="error.log" directory="c:\FORISLog\MG" buffer="200" newLine="true" />
+    <PerformanceCounters send="false" receive="false" />
+    <EventLog enabled="false" name="" severity="ProcessingError" />
+  </Logging>
+  <Connections>
+    <Database forisDataKey="MG" interfacePackage="API" cmdTimeout="0" />
+    <Connector name="SOAPCON_01" type="SOAPCON" host="localhost" port="7771" sessionHandler="false" serviceName="FORIS.MessagingGateway.SOAPConnector" config="SOAPConnector.exe.xml" />
+    <Handler name="CRMCON_01" type="CRMCON" host="localhost" port="7770" sessionHandler="false" serviceName="FORIS.MessagingGateway.CRMConnector" config="CRMConnector.exe.xml" />
+    <Handler name="DBCON_01" type="DBCON" host="localhost" port="7772" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector" config="DBConnector.exe.xml" />
+	<Handler name="DBCON_02" type="DBCON" host="localhost" port="7773" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnector2" config="DBConnector2.exe.xml" />
+	<Handler name="DBCON_03" type="DBCON" host="localhost" port="7774" sessionHandler="false" serviceName="FORIS.MessagingGateway.DBConnectorBILL" config="DBConnectorBILL.exe.xml" /> 
+    <Connector name="SMSCON_01" type="SMSCON" host="localhost" port="5550" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSConnector" config="SMSConnector.exe.xml" />
+	<Connector name="SMSCON_02" type="SMSCON" host="localhost" port="5551" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSC2Connector" config="SMS2Connector.exe.xml" />
+	<Connector name="SMSCON_03" type="SMSCON" host="localhost" port="5552" sessionHandler="false" serviceName="FORIS.MessagingGateway.SMSC3Connector" config="SMS3Connector.exe.xml" />
+    <Handler name="WCFHND_01" type="WCFHND" host="localhost" port="3300" sessionHandler="false" serviceName="FORIS.MessagingGateway.WCFHandler" config="WCFHandler.exe.xml" />
+  </Connections>
+  <Settings />
+</Application>

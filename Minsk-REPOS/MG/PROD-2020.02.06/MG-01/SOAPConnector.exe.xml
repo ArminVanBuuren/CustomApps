@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <Settings>
+    <Item name="ModuleType" value="SOAPCON" />
+    <Item name="ModuleName" value="SOAPCON_01" />
+    <Item name="ListeningPort" value="5432" />
+    <!-- remoting interface listens this port -->
+    <Item name="ConnectionsLimit" value="50" />
+    <!-- quantity of simultaneous connections is limited -->
+    <Item name="ConnectionTTL" value="90" />
+    <!-- remote invocation's time-to-live -->
+    <Item name="URI" value="SOAP" />
+    <!-- URI of service. Must be unique within the host -->
+    <Item name="SessionCleanInterval" value="5" />
+    <Item name="CRMCacheCleanInterval" value="1000" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="FetchLimit" value="200" />
+    <Item name="HealthAlgo" value="Simple" />
+    <!-- Simple, Adaptive , Delta-->
+    <Item name="HealthParam" value="300" />
+    <Item name="ThreadMultiplifier" value="1" />
+  </Settings>
+  <TemplateProcessors defaultConfig="SOAPTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="SOAPTemplateProcessor" config="SOAPTemplateProcessor.xml" />
+  </TemplateProcessors>
+  <!--Monitors>
+    <HeartBeat periodSec="10" />
+    <NoActivity defaultThresholdSec="10">
+      <MonitoredInterval thresholdSec="20">
+        <day from="1" to="5" />
+        <hour from="2" to="6" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="40">
+        <day from="1" to="5" />
+        <hour from="16" to="20" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="5">
+        <day from="3" to="4" />
+        <hour from="16" to="17" />
+      </MonitoredInterval>
+    </NoActivity>
+    <NoDBConnection periodSec="5" />
+    <NoDeviceConnection periodSec="5" />
+    <NoDiscSpace periodSec="10">
+      <warning threshold="20" />
+      <minor threshold="30" />
+      <major threshold="40" />
+      <critical threshold="50" />
+    </NoDiscSpace>
+  </Monitors-->
+</Application>

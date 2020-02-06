@@ -1,0 +1,885 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<templates connector="SMS">
+	<macros>
+		<define name="__CONTENT" value="${Content}" /> <!--  ${Content}     Replace('${Content}','\&apos;','')  -->
+<!-- not supported
+		<define name="_SETCONTENT(_DBResult, _Content)"> 
+			<set item="Content" condition="//Item/@dbresult=_DBResult" value="_Content" />
+		</define>
+			_SETCONTENT(320341,"error 1")
+-->			
+
+		<define name="_SMS_SERVICE_NUMBER" value="5800" />
+		<define name="_MAX_LIST_LENGTH" value="97" />
+	</macros>
+
+  <template procedureName="AddToGroup1" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message />
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/inviter/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}">
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate call="AddToGroup2" conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/inviter/region[@id=${regioncode}]/tp[@id=${tariffplan}])>0}">
+            <set conditionEx="0@{store(sInviterRegion,${regioncode})}"  />
+            <set item="Content" value="AddToGroup2(0*${sInvited})" />
+            <set item="Sender" value="${sInviter}" />
+            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+        </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup2" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+                <Item customer="${sInvited}" />
+                <Attribute name="checkivrservice" value="0" />
+                <Attribute name="checkblocks" value="0" />
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/invited/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and not(${regioncode}=${sInviterRegion} or (${regioncode}=85 or ${regioncode}=120 or ${regioncode}=121 or ${regioncode}=122) and (${sInviterRegion}=85 or ${sInviterRegion}=120 or ${sInviterRegion}=121 or ${sInviterRegion}=122))}">            
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} nevozmozhno, on obsluzhivaetsja v drugom regione" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate call="AddToGroup3" conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/invited/region[@id=${regioncode}]/tp[@id=${tariffplan}])>0}"> 
+            <set item="Content" value="AddToGroup3(0*${sInvited})" />
+            <set item="Sender" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+        </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup3" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+                <Item customer="${sInviter}" action="2"  >                    
+                    <Attribute name="groupmember" value="" />
+                </Item>
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and string-length('${grouplisting}') >= _MAX_LIST_LENGTH}">
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} nevozmozhno. Prevyshen limit abonentov v gruppe. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate call="AddToGroup4"> 
+            <set item="Content" value="AddToGroup4(0*${sInvited})" />
+            <set item="Sender" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+        </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup4" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+                <Item customer="${sInvited}" action="2"  > 
+                    <Attribute name="groupmember" value="" />
+                </Item>
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and not (contains('${grouplisting}','${sInviter}'))}">
+            <set item="Content"   value="Abonent ${sInvited}  vhodit v sostav drugoi gruppy" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and contains('${grouplisting}','${sInviter}')}">
+            <set item="Content"   value="Abonent ${sInvited}  uge vhodit v sostav vashei gruppy" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}" />
+        </deliveryTemplate>
+        <deliveryTemplate terminating="false" conditionEx="#{${dbresult}=0}">            
+            <set item="Content"   value="Abonentu ${sInvited} otpravleno vashe priglashenie v gruppu" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0}">
+            <set item="Content" value="Priglashenie v gruppu ot abonenta ${sInviter}. Otvet na nomer _SMS_SERVICE_NUMBER s tekstom 'da' - priniat, 'net' - otkazatsia" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate>
+            <set item="Content" value="Oshibka pri proverke sostava gruppy" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="DelInvitation" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+      <condition>
+            <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+            <test item="${Content}" matches="(^No$)|(^Нет$)|(^NO$)|(^no$)|(^НЕТ$)|(^Net$)|(^NET$)|(^net$)|(^нет$)" />
+      </condition>
+      <receiveTemplate>
+            <Message id="@{newGuid}" session_id="@{setSessionId(MTSGROUP${Sender})}">
+                <Item customer="${Sender}" />
+            </Message>
+      </receiveTemplate>
+      <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'=''}">            
+            <set item="Content"   value="U Vas net aktivnyh priglashenij" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+      </deliveryTemplate>
+      <deliveryTemplate direction="input" terminating="false">
+            <set item="Content" value="Abonent ${sInvited}  ne podtverdil uchastie v gruppe. Vashe priglashenie annulirovano" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+      </deliveryTemplate>
+      <deliveryTemplate direction="input">
+            <set item="Content" value="Priglashenie ot ${sInviter} annulirovano" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+      </deliveryTemplate>
+  </template>
+
+  <template procedureName="AddToGroup_onResponse" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+            <test item="${Content}" matches="(^Da$)|(^DA$)|(^da$)|(^Да$)|(^ДА$)|(^да$)" />
+        </condition>
+        <receiveTemplate>
+            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(MTSGROUP${Sender})}">
+                <Item customer="${Sender}" />
+                <Attribute name="checkivrservice" value="0" />
+                <Attribute name="checkblocks" value="0" />
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'=''}">            
+            <set item="Content"   value="U Vas net aktivnyh priglashenij" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}" terminating="false">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna. Priglashenie annulirovano." />
+            <set item="Recipient" value="${sInvited}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna. Priglashenie annulirovano." />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/invited/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}" terminating="false">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna. Priglashenie annulirovano." />
+            <set item="Recipient" value="${sInvited}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/invited/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga ne dostupna. Priglashenie annulirovano." />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and not(${regioncode}=${sInviterRegion}  or (${regioncode}=85 or ${regioncode}=120 or ${regioncode}=121 or ${regioncode}=122) and (${sInviterRegion}=85 or ${sInviterRegion}=120 or ${sInviterRegion}=121 or ${sInviterRegion}=122))}" terminating="false">
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} nevozmozhno, abonenty obslugivayutsya v raznyh regionah. Priglashenie annulirovano." />
+            <set item="Recipient" value="${sInvited}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and not(${regioncode}=${sInviterRegion}  or (${regioncode}=85 or ${regioncode}=120 or ${regioncode}=121 or ${regioncode}=122) and (${sInviterRegion}=85 or ${sInviterRegion}=120 or ${sInviterRegion}=121 or ${sInviterRegion}=122))}">
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} nevozmozhno, on obsluzhivaetsja v drugom regione. Priglashenie annulirovano." />
+            <set item="Encoding" value="ascii" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate call="AddToGroup_onResponse2" conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/invited/region[@id=${regioncode}]/tp[@id=${tariffplan}])>0}"> 
+            <set item="Content" value="AddToGroup_onResponse2(Da)" />
+            <set item="Sender" value="${sInvited}" />
+            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+        </deliveryTemplate>
+  </template>
+        
+  <template procedureName="AddToGroup_onResponse2" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+                <Item customer="${sInviter}" />
+                <Attribute name="checkivrservice" value="0" />
+                <Attribute name="checkblocks" value="0" />
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}" terminating="false">            
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInvited}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/inviter/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}" terminating="false">            
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInviter}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/inviter/region[@id=${regioncode}]/tp[@id=${tariffplan}])=0}">            
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${sInvited}" />
+            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate call="AddToGroup_onResponse3" conditionEx="#{${dbresult}=0 and count(document('XML\mtsgroup.xml')//root/inviter/region[@id=${regioncode}]/tp[@id=${tariffplan}])>0}">
+            <set conditionEx="0@{store(sInviterRegion,${regioncode})}"  />
+            <set item="Sender" value="${sInvited}" />
+            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
+            <set item="Content" value="AddToGroup_onResponse3(Da)" />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="AddToGroup_onResponse3" sessionStorage="Database" sessionLifetime="86400" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+                <Item customer="${Sender}" action="0" > 
+                    <Attribute name="groupmember" value="${sInviter}" />
+                </Item>
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320204"  terminating="false">            
+            <set item="Content"   value="Na tarifnom plane abonenta ${sInvited} usluga 'Gruppa MTS' ne dostupna. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320204">            
+            <set item="Content"   value="Na vashem tarifnom plane usluga 'Gruppa MTS' ne dostupna. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320191" terminating="false">
+            <set item="Content"   value="Nedostatochno sredstv na litsevom schete dlja vypolnenija operatsii. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320191">            
+            <set item="Content"   value="Nedostatochno sredstv na litsevom schete dlja vypolnenija operatsii. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320704" terminating="false">
+            <set item="Content"   value="Est' otkritie zayavki na obrabotku. Povtorite zapros pozge" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320704">             
+            <set item="Content"   value="Est' otkritie zayavki na obrabotku. Povtorite zapros pozge" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320705" terminating="false">             
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} ne vozmozhno. Prevyshen limit abonentov v gruppe. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320705">             
+            <set item="Content"   value="Dobavlenie abonenta ${sInvited} ne vozmozhno. Prevyshen limit abonentov v gruppe. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320706" terminating="false">             
+            <set item="Content"   value="Abonent ${sInvited} ne mojet vhodit bolee chem v odnu gruppu. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=320706">             
+            <set item="Content"   value="Abonent ${sInvited} ne mojet vhodit bolee chem v odnu gruppu. Priglashenie annulirovano" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=0" terminating="false">            
+            <set item="Content"   value="Zayavka na dobavlenie abonenta ${sInvited} v gruppu zaregistrirovana" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInviter}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate condition="//Item/@dbresult=0">            
+            <set item="Content"   value="Zayavka na dobavlenie v gruppu zaregistrirovana" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+        <deliveryTemplate>            
+            <set item="Recipient"   value="${sInvited}" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Content" value="Operaciya nedostupna. Obratites v slujbu podderjki MTS" />
+            <set item="Encoding" value="ascii" />
+            <set conditionEx="0@{freeSession}"  />
+        </deliveryTemplate>
+  </template>
+ 
+  <template procedureName="ListOfGroup" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message />
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0}">    
+            <set item="Content"   value="#{if('${grouplisting}'='','Vy ne sostoite ni v odnoy gruppe','Sostav gruppy: ${grouplisting}')}" />   
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate>      			   
+            <set item="Content"   value="Oshibka poluchenia spiska gruppy" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="DelFromGroup" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <receiveTemplate>
+            <Message />
+        </receiveTemplate>
+        <deliveryTemplate conditionEx="#{${dbresult}=0}">      			   
+            <set item="Content"   value="Zayavka na udalenie iz gruppy zaregistrirovana" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate>      			   
+            <set item="Content"   value="Oshibka udalenia iz gruppy" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="AddToGroup_onClean" sessionStorage="Database" persistent="true">
+        <condition>
+            <test item="0" matches="1" />
+        </condition>
+        <deliveryTemplate terminating="false">
+            <set item="Content"   value="Abonent ${sInvited}  ne podtverdil uchastie v gruppe. Vashe priglashenie annulirovano" />
+            <set item="Recipient"  value="${sInviter}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+        <deliveryTemplate>
+            <set item="Content"   value="Vy ne podtverdili uchastie v gruppe. Priglashenie annulirovano" />
+            <set item="Recipient"  value="${sInvited}" />
+            <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+  </template>
+
+  <template procedureName="MTSGroupSyntaxError" persistent="true">
+        <condition>
+            <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+        </condition>                                    
+        <receiveTemplate>
+           <Message id="${guid}" session_id="@{newGuid}">
+               <Item customer="${Sender}" />
+           </Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input">            
+            <set item="Content"   value="Oshibka v formate zaprosa" />
+            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
+            <set item="Recipient" value="${Customer}" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+  </template>
+	
+	
+	
+	<template procedureName="Balance0" sessionStorage="Memory" sessionLifetime="60" persistent="false" >
+		<condition>
+			<test item="${Recipient}" matches="^98808$" />
+			<test item="${Content}" matches="^(A|a|D|d)$" />
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="smscon" 
+			id="${guid}" session_id="@{setSessionId(${Recipient}${Sender}${Content})}">
+									
+				<Item customer="${Sender}" subject="balance" />
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate direction="input" conditionEx="#{'${BALUSED}'!=''}@{store(BALUSED,1)}" >
+			<set item="Recipient" value="${customer}" />
+			<set item="Content" value="Slishkom chastij zapros balansa" />
+			<set item="Encoding" value="ascii" />
+			<set item="Sender" value="98808" />
+		</deliveryTemplate>
+		<deliveryTemplate>
+			<set item="Content"                                     value="Usluga ne predostavljaetsja dlja vashego tarifnogo plana" />
+			<set item="Content" condition="//Item/@dbresult=320344" value="Balans vremenno ne dostupen." />
+			<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} rub. Kolichestvo minut/SMS ${accumulator}. Blagodarim za svoevremennuju oplatu." />
+			<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} #{document('XML\currencies.xml')/currencies/currency[@code='${currency}']/@value}. #{if(${accumulator}>0,'Kolichestvo minut/SMS  ${accumulator}.','')} Blagodarim za svoevremennuju oplatu." />
+			<set item="Encoding" value="ascii" />
+			<set item="Sender" value="98808" />
+		</deliveryTemplate>
+	</template>
+
+	<template procedureName="Balance1" persistent="false" >
+		<condition>
+			<test item="${Recipient}" matches="^088011$" />
+<!--			<test item="${Content}" matches="^(A|a|D|d)$" /> -->
+		</condition>
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${Sender}" subject="balance" />
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="Content"                                value="Usluga ne predostavljaetsja dlja vashego tarifnogo plana" />
+			<set item="Content" condition="//Item/@dbresult=320344" value="Balans vremenno ne dostupen." />
+			<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} rub. Kolichestvo minut/SMS ${accumulator}. Blagodarim za svoevremennuju oplatu." />
+			<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} #{document('XML\currencies.xml')/currencies/currency[@code='${currency}']/@value}. #{if(${accumulator}>0,'Kolichestvo minut/SMS  ${accumulator}.','')} Blagodarim za svoevremennuju oplatu." />
+	<!--
+	 #{if(${accumulator}=-1,'', ' '}
+			<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} #{if(${currency}='','rub',#{document('XML\currencies.xml')/currencies/currency[@code=${currency}]/@value})} . Kolichestvo minut/SMS ${accumulator}. Blagodarim za svoevremennuju oplatu." />  -->
+			<set item="Encoding" value="ascii" />
+			<set item="Sender" value="088011" />
+		</deliveryTemplate>
+	</template>
+
+  <template procedureName="Change_tarifplan" sessionStorage="Memory" sessionLifetime="60">
+	<condition>
+		<test item="${Recipient}" matches="^1771$" />
+		<test item="#{count(document('XML\SMS_TARIF.xml')//item[@text='${Content}'])}" matches="^1|true$" />
+	</condition>
+	<receiveTemplate>
+		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${Recipient}${Sender}${Content})}">
+			<Item customer="${Sender}" >
+				<Service id="changetariffplan" action="0" class="#{document('XML\SMS_TARIF.xml')//item[@text='${Content}']/@ivrcode}" />        
+			</Item>
+		</Message>
+	</receiveTemplate>   
+		<deliveryTemplate direction="input" conditionEx="#{'${CHTPUSED}'!=''}@{store(CHTPUSED,1)}" >
+			<set item="Recipient" value="${customer}" />
+			<set item="Content" value="Smena tarifnogo plana v processe obrabotki. Obratites' pozzhe" />
+			<set item="Encoding" value="unicodefffe" />
+			<set item="Sender" value="1771" />
+		</deliveryTemplate>
+	<deliveryTemplate> 
+		<set item="Content" value="Dannyj zapros ne mozhet byt' vypolnen" />
+		<set item="Content" condition="//Item/@dbresult=320341" value="Nomer zablokirovan, izmenenie tarifnogo plana nevozmozhno" />
+		<set item="Content" condition="//Item/@dbresult=320191" value="Nedostatochno sredstv na balanse dlja provedenija operacii" />
+		<set item="Content" condition="//Item/@dbresult=0" value="Zajavka na izmenenie tarifnogo plana zaregistrirovana" />
+		<set item="Encoding" value="unicodefffe" />
+		<set item="Sender" value="1771" />
+	</deliveryTemplate>
+  </template>
+
+
+     <template procedureName="Change_tarifplan_Information">
+        <condition>
+			<test item="${Recipient}" matches="^1771$" />
+				<test  item="#{count(document('XML\texts2.xml')//recipient[@recipient='${Recipient}']/text[@message='${Content}'])}" matches="^1|true$" />
+			</condition>
+        <receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${Sender}" content="${Content}" />
+			</Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input">
+            <set item="Sender" value="1771" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Content"   value="#{document('XML\texts2.xml')//recipient[@recipient='${Sender}']/text/@text_str[../@message='*' or ../@message='${content}']}" />
+            <set item="Encoding" value="unicodefffe" />
+        </deliveryTemplate>
+     </template>
+  
+     <template procedureName="Change_tarifplan_Error">
+        <condition>
+			<test item="${Recipient}" matches="^1771$" />
+        </condition>
+        <receiveTemplate>
+			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="${Sender}" >
+					<Service id="changetariffplan" action="0" class="#{document('XML\SMS_TARIF.xml')//item[@text='${Content}']/@ivrcode}" />        
+				</Item>
+			</Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input">
+            <set item="Sender" value="1771" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Content"   value="Nepravilnij format soobshenija, otpravte HELP na 1771. " />
+            <set item="Encoding" value="unicodefffe" />
+        </deliveryTemplate>
+     </template>
+  
+  <template procedureName="FavNumber_Add">
+    <condition>
+	<test item="${Recipient}" matches="^1777$" />
+        <test item="${Content}" matches="^((FN)|(Fn)|(fn)|(ЛН)|(Лн)|(лн))\d{10}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="10">
+          <Attribute name="favouritenumber" value="#{substring('${Content}',3)}" />
+          <Attribute name="index" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Usluga 'ljubimyj nomer' ne predostavljaetsja dlja vashego tarifnogo plana" />
+      <set item="Content" condition="//Item/@dbresult=320142" value="Vse ljubimye nomera dobavleny ranee" />
+      <set item="Content" condition="//Item/@dbresult=320193" value="Vveden nepravil'nyj nomer telefona, povtorite zapros" />
+	<set item="Content" condition="//Item/@dbresult=0" value="Ljubimij nomer +${favouritenumber} dobavlen" />
+	<set item="Encoding" value="unicodefffe" />
+	<set item="Sender" value="1777" />
+    </deliveryTemplate>
+  </template>
+
+  <template procedureName="FavNumber_Del">
+	<condition>
+		<test item="${Recipient}" matches="^1777$" />
+		<test item="${Content}" matches="^((DN)|(Dn)|(Dn)|(УН)|(Ун)|(ун))\d{10}$" />
+	</condition>
+    <receiveTemplate>
+		<Message type="setprofile" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${Sender}" action="11">
+				<Attribute name="favouritenumber" value="#{substring('${Content}',3)}" />
+				<Attribute name="index" value="0" />
+			</Item>
+		</Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+		<set item="Content" value="Usluga 'ljubimyj nomer' ne predostavljaetsja dlja vashego tarifnogo plana" />
+		<set item="Content" condition="//Item/@dbresult=320142" value="Vse ljubimye nomera dobavleny ranee" />  
+		<set item="Content" condition="//Item/@dbresult=320193" value="Vveden nepravil'nyj nomer telefona, povtorite zapros" />
+		<set item="Content" condition="//Item/@dbresult=0" value="Ljubimij nomer +${favouritenumber} udalen" />
+		<set item="Encoding" value="unicodefffe" />
+		<set item="Sender" value="1777" />
+    </deliveryTemplate>
+  </template>
+
+   <template procedureName="FavNumber_SyntaxError">
+	<condition>
+		<test item="${Recipient}" matches="^1777$" />
+	</condition>
+	<receiveTemplate>
+		<Message type="setprofile" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+			<Item customer="${Sender}" action="10">
+				<Attribute name="favouritenumber" value="#{substring('${Content}',3)}" />
+				<Attribute name="index" value="0" />
+			</Item>
+		</Message>
+	</receiveTemplate>
+	<deliveryTemplate direction="input">
+		<set item="Content" value="Nepravilnij format soobshenija. Pravil`ny format FNYYYXXXXXXX dlja dobavlenija, DNYYYXXXXXXX dlja udalenija. Dlina dobovlyaemogo nomera - 10 simvolov." />
+		<set item="Encoding" value="unicodefffe" />
+		<set item="Sender" value="1777" />
+		<set item="Recipient" value="${customer}" />
+	</deliveryTemplate>
+  </template>
+ 
+    <template procedureName="Service_activate" sessionStorage="Database" sessionLifetime="300">
+        <condition>
+            <test item="${Recipient}" matches="^98801$" />
+			<!--
+			<test item="${Content}" matches="^((A)|(А)|(a)|(A30)|(А30)|(R1)|(r1)|(G)|(g)|(B10)|(b10)|(Б10)|(б10)|(B20)|(b20)|(Б20)|(б20)|(W)|(w)|(WR)|(Wr)|(wr)|(FREXMON)|(5050)|(5050P)|(5050PR)|(5050PWE)|(5050PRWE)|(5050PV)|(5050PVR)|(5050PVWE)|(5050PVRWE)|(OK)|(Ok)|(ok)|(ОК)|(Ок)|(ок)|(MTS)|(Mts)|(mts)|(МТС)|(Мтс)|(мтс))$" />
+			<Service id="@{switch(${Content}|-9999,A|FREXALL,А|FREXALL,a|FREXALL,A30|FREXMON,А30|FREXMON,R1|FREXSMS,r1|FREXSMS,G|CB404447,g|CB404447,B10|FRBONUS10,b10|FRBONUS10,Б10|FRBONUS10,б10|FRBONUS10,B20|FRBONUS20,b20|FRBONUS20,Б20|FRBONUS20,б20|FRBONUS20,W|FRUNLIMW,w|FRUNLIMW,WR|FRUNLIMW,Wr|FRUNLIMW,wr|FRUNLIMW,FREXMON|FREXSMS,5050|ACTION5050,5050P|ACTION5050,5050PR|ACTION5050,5050PWE|ACTION5050,5050PRWE|ACTION5050,5050PV|ACTION5050,5050PVR|ACTION5050,5050PVWE|ACTION5050,5050PVRWE|ACTION5050,OK|FRGOODOK,Ok|FRGOODOK,ok|FRGOODOK,ОК|FRGOODOK,Ок|FRGOODOK,ок|FRGOODOK,MTS|FRNOMERAMTS,Mts|FRNOMERAMTS,mts|FRNOMERAMTS,МТС|FRNOMERAMTS,Мтс|FRNOMERAMTS,мтс|FRNOMERAMTS)}"
+			-->
+			<test item="#{count(document('XML\SMS_SERVICE_names.xml')//item[code/@val='__CONTENT'])}" matches="^1|true$" />
+        </condition>
+        <receiveTemplate>
+            <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${Recipient}${Sender}__CONTENT)}">
+                <Item customer="${Sender}">
+					<Service id="#{document('XML\SMS_SERVICE_names.xml')//item[code/@val='__CONTENT']/@id}" 
+                    action="2" class="0" />
+				</Item>
+            </Message>
+        </receiveTemplate>
+		<deliveryTemplate direction="input" conditionEx="#{'${SRVUSED}'!=''}@{store(SRVUSED,1)}" >
+			<set item="Recipient" value="${customer}" />
+			<set item="Content" value="Izmenenie statusa uslugi v processe obrabotki. Obratites' pozzhe" />
+			<set item="Encoding" value="ascii" />
+			<set item="Sender" value="98801" />
+		</deliveryTemplate>
+        <deliveryTemplate>
+            <set item="Content"   value="Oshibka activacii uslugi #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text}. Poprobuite pozdnee." />
+            <set item="Content" condition="//Item/@dbresult=320203"   value="Sushestvuet nezavershennaya zajavka dlya uslugi #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text}" />
+            <set item="Content" condition="//Item/@dbresult=320204"   value="Usluga #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text} otsutstvuet na tarifnom plane" />
+            <set item="Content" condition="//Item/@dbresult=320205"   value="Usluga #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text} usze byla ranee dobavlena" />
+            <set item="Content" condition="//Item/@dbresult=320172" value="${Recipient} ${Sender}  Dobavlenije uslugi #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text} nedostupno." />
+            <set item="Content" condition="//Item/@dbresult=320191" value="Na schete nedostatochno denezhnih sredstv." />
+            <set item="Content" condition="//Item/@dbresult=0" value="Vasha zajavka na dobavlenije uslugi #{document('XML\SMS_SERVICE_names.xml')/items/item[@id=current()//Service/@id]/@text}  postavlena v ochered' na obrabotku." />
+            <set item="Encoding" value="unicodefffe" />
+			<set item="Recipient" value="${customer}" />
+            <set item="Sender" value="98801" />
+        </deliveryTemplate>
+    </template>    
+
+    <template procedureName="Service_Information">
+        <condition>
+            <test item="${Recipient}" matches="^98801$" />
+            <test  item="#{count(document('XML\texts2.xml')//recipient[@recipient='${Recipient}']/text[@message='${Content}'])}" matches="^1|true$" />
+        </condition>
+        <receiveTemplate>
+            <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+                <Item customer="${Sender}" content="${Content}" />
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input">
+            <set item="Sender" value="98801" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Content"   value="#{document('XML\texts2.xml')//recipient[@recipient='${Sender}']/text/@text_str[../@message='*' or ../@message='${content}']}" />
+            <set item="Encoding" value="unicodefffe" />
+        </deliveryTemplate>
+     </template>	
+	
+   <template procedureName="Service_activate_SyntaxError">
+	<condition>
+		<test item="${Recipient}" matches="^98801|98808|98809$" />
+	</condition>
+	<receiveTemplate>
+           <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${Recipient}${Sender}__CONTENT)}">
+                <Item customer="${Sender}">
+					<Service id="" action="2" class="0" />
+				</Item>
+            </Message>
+	</receiveTemplate>
+	<deliveryTemplate direction="input">
+		<set item="Content" value="Nepravilnij format soobshenija." />
+		<set item="Encoding" value="unicodefffe" />
+		<set item="Sender" value="98801" />
+		<set item="Recipient" value="${customer}" />
+	</deliveryTemplate>
+  </template>
+	
+	
+	<!--P_T_P-->
+	<template procedureName="PtP">
+        <condition>
+            <test item="${Recipient}" matches="^9060$" />
+            <test item="${Content}" matches="^[0-9]{10}\s[1-9][0-9]*\s[0-9]{1,10}$" />
+        </condition>
+        <receiveTemplate>
+            <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+                <Item customer="${Sender}">
+                    <Service id="movepayment" action="5">
+                      <Attribute name="receiver" value="7${token0}" />
+                      <Attribute name="amount" value="${token1}" />
+                      <Attribute name="PIN" value="${token2}" />
+                    </Service>
+                </Item>
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate>
+            <set item="Content" value="Peer-to-peer: Oshibka pri perevode sredstv." />           
+            <set item="Content" condition="//Item/@dbresult=0"      value="Vasha zayavka na perevod #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','rub','u.e')} prinyata." />
+            <set item="Content" condition="//Item/@dbresult=320012" value="Nepravilno nabran PIN" />
+
+            <set item="Content" condition="//Item/@dbresult=320191" value="Nedostatochno sredstv, dostupnyh dlya perevoda." />
+            <set item="Content" condition="//Item/@dbresult=320312" value="Usluga zablokirovana. Obratites v slujbu podderjki" />
+            <set item="Content" condition="//Item/@dbresult=320701" value="Maksimalno dostupnaya dlya perevoda summa sostavlyaet 10 USD ili 300 RUR (v zavisimosti ot valuti scheta) sozdayte zapros snova v formate: Ntelefona summa(v valute scheta) PIN" />
+            <set item="Content" condition="//Item/@dbresult=320702" value="Usluga po dannomu tarifnomu planu ne dostupna" />
+            <set item="Content" condition="//Item/@dbresult=320703" value="Perevod dannomu abonentu nevozmojen" />
+            <set item="Content" condition="//Item/@dbresult=320704" value="perevod nevozmojen, povtorite pozje" />
+            <set item="Encoding" value="ascii" />
+            <set item="Sender" value="9060" />
+            <set item="Recipient" value="${customer}" />
+        </deliveryTemplate>
+    </template>
+
+    <template procedureName="PtPSyntaxError">
+        <condition>
+            <test item="${Recipient}" matches="^9060$" />
+        </condition>
+        <receiveTemplate>
+          <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+               <Item customer="${Sender}" />
+          </Message>
+        </receiveTemplate>   
+        <deliveryTemplate direction="input">            
+            <set item="Sender" value="9060" />
+            <set item="Recipient" value="${customer}" />
+            <set item="Content" value="Sozdayte zapros snova v formate: Nomertelefona summa PIN" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+     </template>
+
+	<!--P_T_P-->
+
+	<!--  Check Friend phone Red -->
+	
+     <template procedureName="TariffPlan_Red">
+        <condition>
+            <test item="${Recipient}" matches="^8555$" />
+            <test item="${Content}" matches="^\s*(\+7|8|7){0,1}[0-9]{10}\s*$" />
+        </condition>
+        <receiveTemplate>
+            <Message type="verificationrequest" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Item customer="7#{substring('${Content}',string-length(normalize-space('${Content}'))-9)}" sender="${Sender}" /> 
+			</Message>
+        </receiveTemplate>
+        <deliveryTemplate>            
+            <set item="Recipient" value="${Sender}" /> <!-- -->
+            <set item="Sender" value="8555" />
+            <set item="Content"   value="Error in phone number or in service" />
+            <set item="Content" condition="//Item/@dbresult=0" value="#{if(document('XML\tp_red.xml')/root/tpred/@tpid=${tariffplan}, concat('Eto abonent RED - ',document('XML\tp_red.xml')/root/regions/region[@id=${regioncode}]/@name), 'Eto ne abonent RED')}" />
+            <set item="Content" condition="//Item/@dbresult=320341" value="Eto ne abonent RED" />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+     </template>
+
+     <template procedureName="TariffPlan_Red_Error">
+        <condition>
+            <test item="${Recipient}" matches="^8555$" />
+        </condition>
+        <receiveTemplate>
+            <Message type="verificationrequest" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+                <Item customer="${content}" sender="${Sender}" /> 
+            </Message>
+        </receiveTemplate>
+        <deliveryTemplate direction="input">
+            <set item="Sender" value="8555" />
+            <set item="Recipient" value="${Sender}" />
+            <set item="Content"   value="Sozdayte zapros snova v formate:  791...." />
+            <set item="Encoding" value="ascii" />
+        </deliveryTemplate>
+     </template>
+
+	<!--  / Check Friend phone Red -->
+
+	<template procedureName="SMSIncomingContent">
+		<condition>
+		</condition>	
+		<receiveTemplate>
+			<Message type="incomingcontent" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+				<Channel id="sms" />
+				<Item recipient="${Recipient}" sender="${Sender}" timestamp="@{now}">
+					<Content charset="${encoding}">${Content}</Content>
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<retry delay="5" attempts="1" />
+		<deliveryTemplate>
+            <set item="Content" value="${content}"/>
+ 			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+<!--	<template procedureName="DeliveryRequest">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message>
+			</Message>
+		</receiveTemplate>
+		<retry delay="5" attempts="1" />
+		<deliveryTemplate>
+			<set item="Content" value="${content}" />
+			<set item="Sender" value="000002" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template> -->
+	<template procedureName="DeliveryRequest">
+		<condition>
+		</condition>
+		<receiveTemplate>
+			<Message>
+			</Message>
+		</receiveTemplate>
+		<retry delay="5" attempts="1" />
+		<deliveryTemplate>
+			<set item="Content" value="${content}" />
+			<set item="Sender" value="000002" />
+			<set item="Recipient" value="${customer}" />
+			<set item="Priority" value="${priority}" />
+			<set item="Encoding" value="unicodefffe" />
+		</deliveryTemplate>
+	</template>
+
+  <template procedureName="USSDBalance1" >
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <retry delay="5" attempts="1" />
+			<deliveryTemplate >
+				<set item="Content" value="Usluga ne predostavljaetsja dlja vashego tarifnogo plana" />
+				<set item="Content" condition="//Item/@dbresult=0" value="Vash balans #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} #{document('XML\currencies.xml')/currencies/currency[@code='${currency}']/@value}. #{if(${accumulator}>0,'Kolichestvo minut/SMS  ${accumulator}.','')}"/>
+				<set item="Sender" value="000001" />
+				<set item="Recipient" value="${Customer}" />
+				<set item="Encoding" value="ascii" />
+			</deliveryTemplate>
+	</template>
+	
+</templates>

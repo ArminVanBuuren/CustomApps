@@ -1,0 +1,45 @@
+<Application configClass="FORIS.MessagingGateway.SMSConnector.SMSConnectorConfiguration" type="SMSCON">
+    <Settings>
+        <Item name="ModuleType" value="SMSCON" />
+        <Item name="ModuleName" value="USSDCON_12" />
+        <Item name="CRMCacheCleanInterval" value="64" />
+        <Item name="StoringInterval" value="10" />
+        <Item name="StoringHWM" value="20" />
+        <Item name="SMSCBindRetryDelay" value="5" />
+        <Item name="EnquireLinkInterval" value="60" />
+        <Item name="Window" value="0" />
+        <Item name="WindowExceededDelay" value="600" />
+        <Item name="RegisteredDelivery" value="false" />
+        <Item name="ResponseTimeout" value="60000" />
+        <Item name="DefaultEncoding" value="ascii" />
+        <Item name="SrcTon" value="0" />
+        <Item name="SrcNpi" value="1" />
+        <Item name="DstTon" value="1" />
+        <Item name="DstNpi" value="1" />
+        <Item name="SubmitEsmClass" value="0" />
+        <Item name="SubmitUssdServiceOp" value="17" />
+        <Item name="SplittingType" value="None" />  <!-- None, UDH-->
+        <Item name="ContentField" value="ShortMessage" />
+        <Item name="SplitBy" value="70" />
+        <Item name="SplitAfter" value="120" />
+        <Item name="SuccessResponseCodes" value="0,88" />
+    </Settings>
+    <SMSCenters>
+		<Connection host="10.128.218.164" port="3332" systemType="USSD" systemId="admin" pass="admin" />
+    </SMSCenters>
+	<TemplateProcessors defaultConfig="USSDTSTTemplateProcessor.xml">
+		<Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTSTTemplateProcessor.xml" />
+	</TemplateProcessors>
+    <Encodings>
+        <Table name="ascii" encoding="0" />
+        <Table name="ascii" encoding="1" />
+        <Table name="ascii" encoding="2" />
+        <Table name="iso-8859-1" encoding="3" />
+        <Table name="ascii" encoding="4" />
+        <Table name="shift-jis" encoding="5" />
+        <Table name="iso-8859-5" encoding="6" />
+        <Table name="iso-8859-8" encoding="7" />
+        <Table name="unicodefffe" encoding="8" /> 
+    </Encodings>
+
+</Application>

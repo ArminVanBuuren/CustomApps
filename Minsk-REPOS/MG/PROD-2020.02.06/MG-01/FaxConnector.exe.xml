@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <FTPConnections>
+    <FTP server="10.128.195.129" port="21" account="anonymous" password="" />
+  </FTPConnections>
+  <Settings>
+    <Item name="ModuleType" value="FAXCON" />
+    <Item name="ModuleName" value="FAXCON_01" />
+    <Item name="ReceiveDirectory" value="FaxReceive" />
+    <Item name="SendDirectory" value="FaxSend" />
+    <Item name="BackupDirectory" value="FaxBackup" />
+    <Item name="MetaFileExtension" value="xml" />
+    <Item name="DefaultInternationalPrefix" value="+375" />
+    <Item name="FaxAdapter" value="Default" />
+    <Item name="CRMCacheCleanInterval" value="10" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="ThreadMultiplifier" value="0" />
+    <Item name="FetchLimit" value="5" />
+  </Settings>
+  <TemplateProcessors defaultConfig="FaxTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="FaxTemplateProcessor" config="FaxTemplateProcessor.xml" />
+  </TemplateProcessors>
+
+  <!--Monitors>
+    <HeartBeat periodSec="10" />
+    <NoActivity defaultThresholdSec="10">
+      <MonitoredInterval thresholdSec="20">
+        <day from="1" to="5" />
+        <hour from="2" to="6" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="40">
+        <day from="1" to="5" />
+        <hour from="16" to="20" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="5">
+        <day from="3" to="4" />
+        <hour from="16" to="17" />
+      </MonitoredInterval>
+    </NoActivity>
+    <NoDBConnection periodSec="5" />
+    <NoDeviceConnection periodSec="5" />
+    <NoDiscSpace periodSec="10">
+      <warning threshold="20" />
+      <minor threshold="30" />
+      <major threshold="40" />
+      <critical threshold="50" />
+    </NoDiscSpace>
+  </Monitors-->
+
+</Application>

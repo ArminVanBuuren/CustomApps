@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Application>
+	
+	<MM7Connections>
+		<Receiver port="82" account="mg" password="mg"  />
+		<Submitter url="http://localhost:81/mm7" account="mg" password="mg" timeout="5000" />
+	</MM7Connections>
+	
+	<Settings>
+		<Item name="ModuleType" value="MMSCON" />
+		<Item name="ModuleName" value="MMSCON_01" />
+
+    <Item name="CRMCacheCleanInterval" value="10" />
+    <Item name="StoringInterval" value="20" />
+    <Item name="StoringHWM" value="200" />
+    <Item name="ThreadMultiplifier" value="1" />
+    <Item name="FetchLimit" value="150"/>
+  </Settings>
+	
+	<TemplateProcessors>
+		<Processor dll="DefaultTemplates.dll" class="MMSTemplateProcessor" />
+	</TemplateProcessors>
+
+  <Monitors>
+    <HeartBeat periodSec="10" />
+    <!--<NoActivity defaultThresholdSec="10">
+      <MonitoredInterval thresholdSec="20">
+        <day from="1" to="5" />
+        <hour from="2" to="6" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="40">
+        <day from="1" to="5" />
+        <hour from="16" to="20" />
+      </MonitoredInterval>
+      <MonitoredInterval thresholdSec="5">
+        <day from="3" to="4" />
+        <hour from="16" to="17" />
+      </MonitoredInterval>
+    </NoActivity>-->
+    <NoDBConnection  periodSec="5" />
+    <NoDeviceConnection  periodSec="5" />
+    <NoDiscSpace  periodSec="10">
+      <warning threshold="20" />
+      <minor threshold="30" />
+      <major threshold="40" />
+      <critical threshold="50" />
+    </NoDiscSpace>
+  </Monitors>
+  
+</Application>

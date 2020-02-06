@@ -1,0 +1,208 @@
+<templates connector="SMS">
+
+<template procedureName="mg_171_ussd_" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+	<condition>
+		<test item="${Recipient}" matches="^000171$" />
+		<test item="${Token0}" matches="^(0|1|2|3)$" />
+        </condition>
+       <receiveTemplate>
+		<Message type="ussd_171" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+         		<Item customer="${Sender}"  action="@{switch(${Token0}|0,1|1,2|1,3|1)}" srv="@{switch(${Token0}|0,1|1,2|2,3|3)}"/>
+    		</Message>
+       </receiveTemplate>
+       <deliveryTemplate>
+		<set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
+		<set item="Content" condition="//Item/@dbresult='0'" value="${reply}" />
+		<set item="Sender" value="000171" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="ascii" />
+       </deliveryTemplate>
+   </template>
+
+<template procedureName="check_p2p">
+	<condition>
+	<test item="${Recipient}" matches="^000363$" />
+	<test item="${token0}" matches="^\d{12}$" /> 
+	<test item="${token1}" matches="^[1-2]{1}$" />
+	</condition>
+
+	<receiveTemplate>
+		<Message type="serviceorder"  initiator="ussd" id="${guid}" session_id="@{newGuid}">
+  			<Item customer="${Sender}">
+    				<Service id="movepaymentrequest" action="5">
+      					<Attribute name="receiver" value="${token0}" />
+      					<Attribute name="amount" value="${token1}" />
+    				</Service>
+ 			</Item>
+		</Message>
+       </receiveTemplate>
+
+       <deliveryTemplate>
+		<set item="Content" value="dbresult #{//Item/@dbresult}" />
+		<set item="Content" condition="//Item/@dbresult='0'" value="Dlya podtwerjdeniya perevoda #{/Message/Item/Service/Attribute[@name='amount']/@value div 100} r. abonentu ${receiver} naberite *363*#{/Message/Item/Service/Attribute[@name='code']/@value}#" />
+		<set item="Content" condition="//Item/@dbresult='-1'" value="Perevod nevozmojen, povtorite pozje" />
+		<set item="Content" condition="//Item/@dbresult='320060'" value="U Vas net prav dlya obrabotki zaprosa." />
+		<set item="Content" condition="//Item/@dbresult='320705'" value="Takaya zajavka ne budet obrabotana" />
+		<set item="Content" condition="//Item/@dbresult='320704'" value="Prediduschaja zajavka ne obrabotana, povtorite pozje" />
+		<set item="Content" condition="//Item/@dbresult='320999'" value="Srok dejstvija koda avtorizatsii istek" />
+		<set item="Content" condition="//Item/@dbresult='320362'" value="U abonenta #{/Message/Item/Service/Attribute[@name='receiver']/@value} otkljuchena vozmozhnost priema P-t-P" />
+		<set item="Content" condition="//Item/@dbresult='320703'" value="Nepravilno ukazan nomer poluchatelya" />
+		<set item="Content" condition="//Item/@dbresult='320361'" value="Usluga zablokirovana, obratites v slujbu podderzhki" />
+		<set item="Content" condition="//Item/@dbresult='320702'" value="Usluga zablokirovana, obratites v slujbu podderzhki" />
+		<set item="Content" condition="//Item/@dbresult='320101'" value="Povtornij vvod informatsii, pojalujsta, sledujte instruktsii" />
+		<set item="Content" condition="//Item/@dbresult='320714'" value="Dostignut predel chisla poluchatelej" />
+		<set item="Content" condition="//Item/@dbresult='320710'" value="Slishkom malenkaja summa perevoda" />
+		<set item="Content" condition="//Item/@dbresult='320701'" value="Slishkom bolshaja summa perevoda" />
+		<set item="Content" condition="//Item/@dbresult='320711'" value="Ukazannaja summa previshaet limit perevodimih sredstv na segodnja" />
+		<set item="Content" condition="//Item/@dbresult='320712'" value="Prevyshen limit dlya poluchatelya za sutki" />
+		<set item="Content" condition="//Item/@dbresult='320713'" value="Nomer poluchatelja sovpadaet s Vashim nomerom, pojalujsta, povtorite vvod" />
+		<set item="Content" condition="//Item/@dbresult='320709'" value="Usluga zablokirovana, obratites w slujbu podderzhki" />
+		<set item="Content" condition="//Item/@dbresult='320191'" value="Na vashem schetu nedostatochno sredstv dlja perevoda abonentu #{/Message/Item/Service/Attribute[@name='receiver']/@value}" />
+		<set item="Sender" value="000363" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="iso-8859-1" />
+       </deliveryTemplate>
+
+  </template>
+    
+  <template procedureName="confirm_p2p">
+	<condition>
+        <test item="${Recipient}" matches="^000363$" />
+	<test item="${Content}" matches="^[0-9]{4}$" />
+	</condition>
+
+	<receiveTemplate>
+		<Message type="serviceorder"  initiator="ussd" id="${guid}" session_id="@{newGuid}">
+  			<Item customer="${Sender}">
+    				<Service id="movepaymentacceptance" action="5">
+      					<Attribute name="code" value="${Content}" />
+				</Service>
+ 			</Item>
+		</Message>
+       </receiveTemplate>
+
+       <deliveryTemplate>
+		<set item="Content" value="dbresult #{//Item/@dbresult}" />
+		<set item="Content" condition="//Item/@dbresult='-1'" value="Perevod newozmojen, povtorite pozje" />
+		<set item="Content" condition="//Item/@dbresult='0'" value="S Vashego litsevogo scheta perevedeno #{/Message/Item/Service/Attribute[@name='amount']/@value div 100} r. abonentu #{/Message/Item/Service/Attribute[@name='receiver']/@value}" />
+		<set item="Content" condition="//Item/@dbresult='320666'" value="Nevernij kod awtorizatsii" />
+		<set item="Content" condition="//Item/@dbresult='320704'" value="Prediduschaja zajavka ne obrabotana, povtorite pozje" />
+		<set item="Content" condition="//Item/@dbresult='320999'" value="Srok dejstwija koda awtorizatsii istek" />
+		<set item="Content" condition="//Item/@dbresult='320362'" value="U abonenta #{/Message/Item/Service/Attribute[@name='receiver']/@value} otkljuchena vozmozhnost priema P-t-P" />
+		<set item="Content" condition="//Item/@dbresult='320361'" value="Usluga zablokirovana, obratites w slujbu podderzhki" />
+		<set item="Content" condition="//Item/@dbresult='320101'" value="Powtornij vvod informatsii, pojalujsta, sledujte instruktsii" />
+		<set item="Content" condition="//Item/@dbresult='320714'" value="Dostignut predel chisla poluchatelej" />
+		<set item="Content" condition="//Item/@dbresult='320710'" value="Slishkom malenkaja summa perevoda" />
+		<set item="Content" condition="//Item/@dbresult='320701'" value="Slishkom bolshaja summa perevoda" />
+		<set item="Content" condition="//Item/@dbresult='320711'" value="Ukazannaja summa previshaet limit perevodimih sredstv na segodnja" />
+		<set item="Content" condition="//Item/@dbresult='320712'" value="Prevyshen limit dlya poluchatelya za sutki" />
+		<set item="Content" condition="//Item/@dbresult='320191'" value="Na vashem schetu nedostatochno sredstv dlja perevoda abonentu #{/Message/Item/Service/Attribute[@name='receiver']/@value}" />
+		<set item="Content" condition="//Item/@dbresult='320713'" value="Nomer poluchatelja sovpadaet s Vashim nomerom, pojalujsta, povtorite vvod" />
+		<set item="Content" condition="//Item/@dbresult='320709'" value="Usluga zablokirovana, obratites w slujbu podderzhki" />
+		<set item="Sender" value="000363" />
+		<set item="Recipient" value="${customer}" />
+		<set item="Encoding" value="iso-8859-1" />
+       </deliveryTemplate>
+
+  </template>
+
+  <template procedureName="rej_p2p">
+	<condition>
+		<test item="${Recipient}" matches="^000363$" />
+	</condition>
+		<receiveTemplate>
+		<Message> <Item customer="${Sender}" /> </Message>
+       		</receiveTemplate>
+	<deliveryTemplate direction="input">
+		<set item="Content" value="Oshibka v zaprose - proverte i sozdayte zapros snowa v formate: 375xxxxxxxxx summa"/>
+		<set item="Recipient" value="${customer}"/>
+		<set item="Sender" value="000363" />
+		<set item="Encoding" value="iso-8859-1" />
+	</deliveryTemplate>
+  </template>
+
+  <template procedureName="AddFavNumber_190_ussd" sessionStorage="Memory" sessionLifetime="300" >
+	<condition>
+		<test item="${Recipient}" matches="^000190$" />
+        <test item="${Token0}" matches="^(1)$" />
+        <test item="${Token1}" matches="^375(29|33|44|25)\d{7}$" />
+    </condition>
+	<receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${Sender}" subject="check" datasource="cust">
+                  <Attribute name="pMSISDN" value="#{substring('${Token1}',1,12)}" />
+                  @{store(sContent,${Token1})}
+        </Item>
+      </Message>
+    </receiveTemplate>
+	<deliveryTemplate conditionEx="#{(${dbresult}='58') or (${dbresult}='158')}" call="AddFavNumber_190_2" terminating="false">
+          <set item="Sender" value="${customer}" />
+          <set item="Content" value="${sContent}" />
+		  <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+	<deliveryTemplate conditionEx="#{(${dbresult}='58') or (${dbresult}='158')}" terminating="true">
+          <set item="Content" value="Vash zapros prinjat" />
+          <set item="Sender" value="000190" />
+          <set item="Recipient" value="${customer}" />
+          <set item="Encoding" value="ascii" />
+          <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+	<deliveryTemplate conditionEx="#{(${dbresult}!=58) and (${dbresult}!=158)}" terminating="true">
+          <set item="Content" value="Vvedennij nomer imeet nevernij TP" />
+          <set item="Sender" value="000190" />
+          <set item="Recipient" value="${customer}" />
+          <set item="Encoding" value="ascii" />
+          <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+</template>	
+
+<template procedureName="AddFavNumber_190_2">
+    <condition>
+        <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="10">
+          <Attribute name="favouritenumber" value="#{substring('${Content}',1,12)}" />
+          <Attribute name="index" value="0" />
+           <Attribute name="favouritenumbertypeid" value="5" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+<!--     <deliveryTemplate /> -->
+    <deliveryTemplate connector="SMSCON_02">
+          <set item="Content" value="${dbresult}" />
+          <set item="Sender" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+
+<template procedureName="DelFavNumber_190">
+	<condition>
+		<test item="${Recipient}" matches="^000190$" />
+        <test item="${Token0}" matches="^(0)$" />
+        <test item="${Token1}" matches="^375(29|33|44|25)\d{7}$" />
+    </condition>
+	<receiveTemplate>
+      <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="11">
+          <Attribute name="favouritenumber" value="#{substring('${Token1}',1,12)}" />
+          <Attribute name="index" value="0" />
+           <Attribute name="favouritenumbertypeid" value="5" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+          <set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
+          <set item="Content" condition="//Item/@dbresult=320341" value="Provedenie operacii nevozmozhno - vveden oshibochnii nomer" />
+          <set item="Content" condition="//Item/@dbresult=320142" value="Dostignuto maxmalnoe kolichestvo &quot; nomerov&quot;." />
+          <set item="Content" condition="//Item/@dbresult=320193" value="Provedenie operacii nevozmozhno.Obratites v kontaktnii centr po tel.0890." />
+          <set item="Content" condition="//Item/@dbresult=320191" value="U Vas nedostatochno sredstv dlia upravleniia &quot; nomerami&quot;." />
+          <set item="Content" condition="//Item/@dbresult=0" value="Zaiavka na obrabotky nomera +${favouritenumber} zaregistrirovana." />
+          <set item="Sender" value="000190" />
+          <set item="Recipient" value="${customer}" />
+          <set item="Encoding" value="ascii" />
+          <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+</template>
+
+</templates>

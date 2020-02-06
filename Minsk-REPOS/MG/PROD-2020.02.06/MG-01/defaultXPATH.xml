@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <assemblies>
+    <assembly>System.dll</assembly>
+  </assemblies>
+  <namespaces>
+    using System;
+    using System.Text.RegularExpressions;
+    using System.Xml.XPath;
+    using System.Xml.Xsl;
+    using System.IO;
+    using System.Reflection;
+  </namespaces>
+  <functions>
+    <sqrt>
+      <summary>
+        <syntax>sqrt(number_in)</syntax>
+        <definition>
+          Adds own implementation of
+          missing ternal operator support.
+          Function returns the square root of "number_in".
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+        public class SqrtFunction : IXsltContextFunction
+        {
+	        public int Minargs
+	        {
+		        get { return 1; }
+	        }
+
+	        public int Maxargs
+	        {
+		        get { return 1; }
+	        }
+
+	        public XPathResultType ReturnType
+	        {
+		        get { return XPathResultType.Number; }
+	        }
+
+	        public XPathResultType[] ArgTypes
+	        {
+		        get { return new XPathResultType[] {XPathResultType.Number}; }
+	        }
+
+	        public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
+	        {
+		        return Math.Sqrt(Int32.Parse(args[0].ToString()));
+	        }
+        }]]>
+      </code>
+    </sqrt>
+
+	<toupper>
+	  <summary>
+		<syntax>toupper(string_in)</syntax>
+		<definition>
+		</definition>
+	  </summary>
+	  <code><![CDATA[
+		public class ToupperFunction : IXsltContextFunction
+		{
+			public int Minargs
+			{
+				get { return 1; }
+			}
+				public int Maxargs
+			{
+				get { return 1; }
+			}
+				public XPathResultType ReturnType
+			{
+				get { return XPathResultType.Number; }
+			}
+				public XPathResultType[] ArgTypes
+			{
+				get { return new XPathResultType[] {XPathResultType.String}; }
+			}
+				public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
+			{
+			    string instr = args[0].ToString();
+			    try
+				{
+					return instr.ToUpper();
+				}
+				catch(Exception)
+				{
+				    return instr;
+				}
+			}
+			}]]></code>
+	</toupper>
+
+    <!--getTimeInRange>
+      <summary>
+        <syntax>getTimeInRange(from, to)</syntax>
+        <definition>
+			Returns empty string if the current time is in the range (from, to).
+			Otherwise returns random time within first spreadMinutes minutes of the range (from, to).
+			Default value of spread is 120 minutes. Custom value of spread can be passed throw third parameter.
+			Format of bounds must be 'hh:mm'.
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+        public class getTimeInRangeFunction : IXsltContextFunction
+        {
+	        public int Minargs
+	        {
+		        get { return 2; }
+	        }
+
+	        public int Maxargs
+	        {
+		        get { return 3; }
+	        }
+
+	        public XPathResultType ReturnType
+	        {
+		        get { return XPathResultType.String; }
+	        }
+
+	        public XPathResultType[] ArgTypes
+	        {
+		        get { return new XPathResultType[] {XPathResultType.String, XPathResultType.String}; }
+	        }
+
+	        public object Invoke(XsltContext xsltContext,
+						         object[] args, XPathNavigator docContext)
+	        {
+                try
+                {
+					string sFrom = args[0].ToString();
+					string sTo = args[1].ToString();
+					int spreadMinutes = (args.Length > 2)? Convert.ToInt32(args[2].ToString()) : 120;  //default value of spread is 120 minutes
+
+                    DateTime now = DateTime.Now;
+                    DateTime dFrom = new DateTime(now.Year, now.Month, now.Day,
+                        Convert.ToInt32(sFrom.Substring(0, 2)), Convert.ToInt32(sFrom.Substring(3, 2)), 0);
+                    DateTime dTo = new DateTime(now.Year, now.Month, now.Day,
+                        Convert.ToInt32(sTo.Substring(0, 2)), Convert.ToInt32(sTo.Substring(3, 2)), 0);
+
+                    if (now >= dFrom && now <= dTo) return "";
+
+                    Random randomShift = new Random();
+                    if (now < dFrom) return timespanToString(dFrom - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    if (now > dFrom) return timespanToString(dFrom.AddDays(1) - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    return "";
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+	        }
+            static string timespanToString(TimeSpan timespan)
+            {
+                return String.Format("000000{0:00}{1:00}{2:00}000R", timespan.Hours, timespan.Minutes, timespan.Seconds);
+            }
+        }]]>
+      </code>
+    </getTimeInRange-->
+
+	<formatDate>
+      <summary>
+        <syntax>getTimeInRange(timeZone, from, to)</syntax>
+        <definition>
+			Returns formated by template date
+			Parameters:
+			- date you want to format
+			- C# style date format 
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+		public class formatDateFunction : IXsltContextFunction
+		{
+			public int Minargs
+			{
+				get { return 2; }
+			}
+
+			public int Maxargs
+			{
+				get { return 2; }
+			}
+
+			public XPathResultType ReturnType
+			{
+				get { return XPathResultType.String; }
+			}
+
+			public XPathResultType[] ArgTypes
+			{
+				get { return new XPathResultType[] { XPathResultType.String, XPathResultType.String }; }
+			}
+
+
+			public object Invoke(XsltContext xsltContext,
+								 object[] args, XPathNavigator docContext)
+			{
+				try
+				{                
+					string date = args[0].ToString();
+					string format = args[1].ToString();
+					DateTime d = DateTime.Parse(date);
+					return d.ToString(format);
+				} 
+				catch
+				{
+					return "";
+				}
+			}
+        }]]>
+		</code>
+    </formatDate>
+	
+	 <getTimeInRange>
+      <summary>
+        <syntax>getTimeInRange(timeZone, from, to)</syntax>
+        <definition>
+			timeZone define time zone shift in minutes
+			Returns empty string if the current time is in the range (from, to).
+			Otherwise returns random time within first spreadMinutes minutes of the range (from, to).
+			Default value of spread is 120 minutes. Custom value of spread can be passed throw third parameter.
+			Format of bounds must be 'hh:mm'.
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+        public class getTimeInRangeFunction : IXsltContextFunction
+        {
+	        public int Minargs
+	        {
+		        get { return 3; }
+	        }
+
+	        public int Maxargs
+	        {
+		        get { return 4; }
+	        }
+
+	        public XPathResultType ReturnType
+	        {
+		        get { return XPathResultType.String; }
+	        }
+
+	        public XPathResultType[] ArgTypes
+	        {
+		        get { return new XPathResultType[] {XPathResultType.String, XPathResultType.String, XPathResultType.String, XPathResultType.String}; }
+	        }
+
+	        public object Invoke(XsltContext xsltContext,
+						         object[] args, XPathNavigator docContext)
+	        {
+                try
+                {
+					string sTimeZone = args[0].ToString();
+					Int32 timeZone = 0;
+					if (sTimeZone != "") 
+					{
+						timeZone = Convert.ToInt32(sTimeZone);
+					}
+					string sFrom = args[1].ToString();
+					string sTo = args[2].ToString();
+					int spreadMinutes = (args.Length > 3)? Convert.ToInt32(args[3].ToString()) : 120;  //default value of spread is 120 minutes
+
+                    DateTime now = DateTime.Now;
+                    DateTime dFrom = new DateTime(now.Year, now.Month, now.Day,
+                        Convert.ToInt32(sFrom.Substring(0, 2)), Convert.ToInt32(sFrom.Substring(3, 2)), 0);
+					dFrom = dFrom + TimeSpan.FromMinutes(timeZone);	
+                    DateTime dTo = new DateTime(now.Year, now.Month, now.Day,
+                        Convert.ToInt32(sTo.Substring(0, 2)), Convert.ToInt32(sTo.Substring(3, 2)), 0);
+					dTo = dTo + TimeSpan.FromMinutes(timeZone);
+
+                    if (now >= dFrom && now <= dTo) return "";
+
+                    Random randomShift = new Random();
+                    if (now < dFrom) return timespanToString(dFrom - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    if (now > dFrom) return timespanToString(dFrom.AddDays(1) - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    return "";
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+	        }
+
+			static string timespanToString(TimeSpan timespan)
+			{
+				return String.Format("0000{0:00}{1:00}{2:00}{3:00}000R", timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds);
+			}
+
+			static TimeSpan stringToTimeSpan(string span)
+			{
+				Regex rx = new Regex(@"((?<days>(\d+))\.)?(?<hours>(\d{1,2})):(?<mins>(\d{1,2}))");
+				Match match = rx.Match(span);
+				GroupCollection groups = match.Groups;
+				Int32 days = 0;
+				try
+				{
+					days = Convert.ToInt32(groups["days"].Value);
+				}
+				catch
+				{
+					days = 0;
+				}
+				TimeSpan timeSpan = new TimeSpan(days, Convert.ToInt32(groups["hours"].Value), Convert.ToInt32(groups["mins"].Value), 0);
+				return timeSpan;
+			}
+        }]]>
+      </code>
+    </getTimeInRange>
+	
+  </functions>
+</root>
+
+

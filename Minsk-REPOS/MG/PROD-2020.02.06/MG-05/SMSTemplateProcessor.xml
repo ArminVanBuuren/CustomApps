@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<templates connector="SMS">
+
+#include "config\get_bms_counters\sms.xml"
+
+<!-- Send sms -->
+   <template procedureName="SOAPSendSMS">
+- 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+- 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+- 	<deliveryTemplate>
+		<set item= "Content" value="${txt}" />
+		<set item="Recipient" value="${msisdn}" /> 
+		<set item="Sender" value="${source_addr}" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template>
+	
+<!-- SendSMSfromMSISDNNoRezident -->
+   <template procedureName="SendSMSfromMSISDNNoRezident">
+- 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+- 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+- 	<deliveryTemplate>
+		<set item="Content" value="${txt}" />
+		<set item="Recipient" value="${msisdn}" /> 
+		<set item="Sender" value="375292171313" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template>	
+
+   <template procedureName="SendCode">
+ 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+ 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+ 	<deliveryTemplate>
+		<set item= "Content" value="${code}" />
+		<set item="Recipient" value="${customer}" /> 
+		<set item="Sender" value="0884" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template>	
+
+   <template procedureName="MTSCodeSMSAuthentication_" > 
+ 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+ 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+ 	<deliveryTemplate>
+			<set item="Content" value="${o_code}" />
+			<set item="Recipient" value="${o_msisdn}" /> 
+		<set item="Sender" value="0884" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		<set conditionEx="0@{freeSession}" /> 
+		</deliveryTemplate>
+	</template>	
+	
+   <template procedureName="personnel">
+ 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+ 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+ 	<deliveryTemplate>
+		<set item= "Content" value="${txt}" />
+		<set item="Recipient" value="${customer}" /> 
+		<set item="Sender" value="0884" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template>		
+
+	<template procedureName="SendSMSC2C">
+ 		<condition>
+			<test item="0" matches="1" /> 
+		</condition>
+ 	<receiveTemplate>
+		<Message /> 
+	</receiveTemplate>
+ 	<deliveryTemplate>
+		<set item= "Content" value="${txt}" />
+		<set item="Recipient" value="${msisdn}" /> 
+		<set item="Sender" value="${source_addr}" /> 
+		<set item="Encoding" value="unicodefffe" /> 
+		</deliveryTemplate>
+	</template>
+	
+</templates>

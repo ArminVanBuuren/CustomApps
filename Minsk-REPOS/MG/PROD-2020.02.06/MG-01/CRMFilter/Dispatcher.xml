@@ -1,0 +1,13 @@
+<configuration cleanerPeriod="120" remotingPort="9100" logDirectoryPath="c:\FORISLog\MG">
+
+  <filter input=".\crmfilter_input" default=".\crmfilter_input0" alternative=".\telcrm_output" name="IN_00" >
+	<logging level="normal" buffer="200" />
+	<plugin typeName="DBAdapter" fileName="DBAdapter.dll" config="DBAdapter.xml" />
+  </filter>
+
+  <filter input=".\crmfilter_input0" default=".\telcrm_input" alternative="f-vmas-01\vms_input" name="IN_01" >
+	<logging level="normal" buffer="200" />
+	<plugin typeName="SplitterPlugin" fileName="Plugins.dll" />
+  </filter>
+
+</configuration>

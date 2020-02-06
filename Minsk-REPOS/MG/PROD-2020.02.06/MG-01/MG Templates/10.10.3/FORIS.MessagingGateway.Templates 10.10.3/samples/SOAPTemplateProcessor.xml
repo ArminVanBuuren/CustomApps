@@ -1,0 +1,5 @@
+<templates connector="SOAP">
+
+	#include "config\GuaranteedPayment\soap.xml"
+
+</templates>

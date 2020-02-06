@@ -1,0 +1,112 @@
+<templates connector="SOAP">
+
+  <template procedureName="TestMethod">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:tariffplan" value="${tariffplan}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="tariffplan" />
+    </output>
+  </template>
+
+  <template procedureName="GetInvocationsList" sessionStorage="Database" sessionLifetime="30">
+    <input>
+      <param name="customer" />
+    </input>
+    <receiveTemplate>
+      <Message type="getinvocationlist" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}" />
+        @{store(sInviter,${customer})}
+        @{store(sInvited,79151536837)}
+        @{store(sRegion,1)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="oparam:dbresult" value="0" />
+      <set item="oparam:invocationslist" value="@{GetCountSessionsContaining(sInviter,79163515044)}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <output>
+      <param name="dbresult" value="" />
+      <param name="invocationslist" value="" />
+    </output>
+  </template>
+
+  <template procedureName="DB_LastPeriodBill" sessionStorage="Memory" sessionLifetime="20" persistent="true" >
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}" subject="lastperiodbill" />
+        <Attribute name="startdate" value="${startdate}" />
+        <Attribute name="enddate" value="${enddate}" />
+        @{store(stest,111)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{${customer}=79163515044}" terminating="true">
+      <set item="oparam:dbresult" value="320341" />
+      <set item="oparam:beginday" value="31.12.2007" />
+      <set item="oparam:endday" value="@{GetSessionsContaining(stest,111)}" />
+      <set item="oparam:" conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${customer}=79163515045}" connector="SMSCON_01">
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}" call="DB_LastPeriodBill2">
+      <set item="iparam:customer" value="${customer}" />
+      <set item="iparam:beginday" value="${beginday}" />
+      <set item="iparam:endday"   value="${endday}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" value="" />
+      <param name="beginday" value="" />
+      <param name="endday" value="" />
+    </output>
+  </template>
+
+  <template procedureName="DB_LastPeriodBill2" sessionStorage="Memory" sessionLifetime="20" persistent="true" >
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}" subject="knownperiodbill" />
+        <Attribute name="startdate" value="${beginday}" />
+        <Attribute name="enddate" value="${endday}" />
+        @{store(stest,01.06.2008)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:draftintdotpart" value="${draftintdotpart}" />
+      <set item="oparam:beginday" value="${endday}" />
+      <set item="oparam:endday"   value="${stest}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="beginday" />
+      <param name="endday" />
+    </input>
+    <output>
+      <param name="dbresult" value="" />
+      <param name="draftintdotpart" value="" />
+      <param name="beginday" value="" />
+      <param name="endday" value="" />
+    </output>
+  </template>
+
+</templates>
+

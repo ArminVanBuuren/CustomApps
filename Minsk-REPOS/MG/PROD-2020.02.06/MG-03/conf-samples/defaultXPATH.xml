@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <assemblies>
+    <assembly>System.dll</assembly>
+  </assemblies>
+  <namespaces>
+    using System;
+    using System.Text.RegularExpressions;
+    using System.Xml.XPath;
+    using System.Xml.Xsl;
+    using System.IO;
+    using System.Reflection;
+  </namespaces>
+  <functions>
+    <sqrt>
+      <summary>
+        <syntax>sqrt(number_in)</syntax>
+        <definition>
+          Adds own implementation of
+          missing ternal operator support.
+          Function returns the square root of "number_in".
+        </definition>
+      </summary>
+      <code>
+        <![CDATA[
+        public class SqrtFunction : IXsltContextFunction
+        {
+	        public int Minargs
+	        {
+		        get { return 1; }
+	        }
+
+	        public int Maxargs
+	        {
+		        get { return 1; }
+	        }
+
+	        public XPathResultType ReturnType
+	        {
+		        get { return XPathResultType.Number; }
+	        }
+
+	        public XPathResultType[] ArgTypes
+	        {
+		        get { return new XPathResultType[] {XPathResultType.Number}; }
+	        }
+
+	        public object Invoke(XsltContext xsltContext,
+						         object[] args, XPathNavigator docContext)
+	        {
+		        return Math.Sqrt(Int32.Parse(args[0].ToString()));
+	        }
+        }]]>
+      </code>
+    </sqrt>
+  </functions>
+</root>
+

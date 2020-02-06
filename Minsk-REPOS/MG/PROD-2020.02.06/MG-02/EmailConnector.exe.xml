@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <EmailConnections>
+	<!-- <SMTP server="10.128.30.40" port="25" delay="5200">-->
+	<SMTP server="10.128.217.12" port="25" delay="5200">
+		<Account from="MTS" />   
+		<!-- <Account from="MTS" name="mgtw" password="505606" />   -->
+	</SMTP>
+  </EmailConnections>
+  <FTPConnections>
+    <FTP server="10.128.218.129" port="21" account="anonymous" password="" />
+  </FTPConnections>
+  <Settings>
+    <Item name="AttachmentsStorage" value="Disc" />
+    <Item name="ModuleType" value="EMAILCON" />
+    <Item name="ModuleName" value="EMAILCON_01" />
+    <Item name="DefaultCharset" value="ascii" />
+    <Item name="DefaultEncoding" value="ascii" />
+    <Item name="FetchLimit" value="70" />
+    <Item name="CRMCacheCleanInterval" value="1500" />
+    <Item name="SplitBy" value="6000" />
+    <Item name="TempDir" value="temp" />
+    <Item name="ArchivatorName" value="rar.exe" />
+    <Item name="ArchivatorLine" value="m -v{0}k -ep -m2 {1} {2}" />
+    <Item name="StoringInterval" value="10" />
+    <Item name="StoringHWM" value="100" />
+    <Item name="ThreadMultiplifier" value="4" />
+    <Item name="MailSendQueueSize" value="128" />
+    <Item name="MailSendQueueDelaySec" value="0" />
+    <Item name="NumberOfSplitters" value="4" />
+    <Item name="NumberOfDownloaders" value="12" />
+    <Item name="NumberOfSenders" value="40" />
+	<Item name="RegisteredDelivery" value="false" />
+  </Settings>
+  <TemplateProcessors defaultConfig="EmailTemplateProcessor.xml">
+    <Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="EmailTemplateProcessor.xml" />
+  </TemplateProcessors>
+   <Logging>
+    <Data enabled="false" file="data.log" directory="c:\FORISLog\MG" buffer="20" newLine="true" />
+    <Activity enabled="true" file="activity.log" directory="c:\FORISLog\MG" buffer="100" newLine="true" severity="ProcessingError" />
+    <Error enabled="true" file="error.log" directory="c:\FORISLog\MG" buffer="200" newLine="true" />
+    <PerformanceCounters send="false" receive="false" />
+    <EventLog enabled="false" name="" severity="ProcessingError" />
+  </Logging> 
+</Application>

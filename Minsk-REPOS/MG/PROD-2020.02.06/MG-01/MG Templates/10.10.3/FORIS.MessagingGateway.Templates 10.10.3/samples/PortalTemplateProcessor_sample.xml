@@ -1,0 +1,7 @@
+<templates connector="SMS">
+
+	#include "config\GuaranteedPayment\ussd.xml"
+
+	<!-- the rest of templates -->
+
+</templates>
