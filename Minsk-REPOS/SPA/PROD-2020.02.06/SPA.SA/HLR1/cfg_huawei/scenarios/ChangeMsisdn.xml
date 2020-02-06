@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="ChangeMSISDN">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+		<node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
+			<resultlist>
+				<result value="0" node="AddCB118Node"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddCB118Node" object="Commander">
+			<resultlist>
+				<result value="0" node="SEND_CANCELC_ALL_NEWMSISDN_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCB118"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="SEND_CANCELC_ALL_NEWMSISDN_Node" object="Commander">
+			<resultlist>
+				<result value="" node="IfFR15195Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="SEND_CANCELC_ALL_NEWMSISDN"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR15195Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeleteBanCFCallNode"/>
+				<result value="1" node="CheckIMSIChange"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15195"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>				
+		<node name="DeleteBanCFCallNode" object="Commander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNAddNewMSBanCFNode"/>
+				<result value="1538" node="ChangeMSISDNAddNewMSBanCFNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteBanCFCall"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="ChangeMSISDNAddNewMSBanCFNode" object="Commander">
+			<resultlist>
+				<result value="0" node="CheckIMSIChange"/>
+				<result value="1538" node="CheckIMSIChange"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="ChangeMSISDNAddNewMSBanCF"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>							
+		<node name="CheckIMSIChange" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+			    <param name="MultiLevelCondition" value="((ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI) AND (ExtendedRequestMessage/IdentifiersList/Identifier//IMSI != ExtendedRequestMessage/AdditionalData/ProvisionList//NewIMSI ))"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCB537"/>
+				<param name="Script" value="Command"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="SingleSubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

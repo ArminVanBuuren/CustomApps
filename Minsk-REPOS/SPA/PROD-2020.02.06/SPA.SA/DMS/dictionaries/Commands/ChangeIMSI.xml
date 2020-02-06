@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Замена Sim DMS</Description>
+	<Author Name="YAI" Date="2014-06-18+12:18"/>
+	<Request Template="{{&quot;method&quot;:&quot;ChangeImsi&quot;,&quot;msisdn&quot;:&quot;{0}&quot;,&quot;new_imsi&quot;:&quot;{1}&quot;}}">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="NewIMSI" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

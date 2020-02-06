@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddCB123" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление Роуминга на HLR HUAWEI</Description>
+	<Author Name="YAI" Date="2011-09-07+12:18"/>
+	<Request Template="MOD ODBROAM: ISDN=&quot;{0}&quot;,ODBROAM=NOBAR;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

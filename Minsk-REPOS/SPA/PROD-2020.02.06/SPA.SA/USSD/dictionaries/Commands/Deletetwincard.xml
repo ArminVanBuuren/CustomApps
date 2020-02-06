@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="Deletetwincard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление twin карта</Description>
+	<Author Name="YAI" Date="2012-03-01+15:50"/>
+	<Properties GenerationType="Database" />
+	<Request Template="function lop_multy_simcard.F_ADDSERVICEREQUEST({0},{1},{2},{3},{4}) return number">
+		<Item Name="SERVICE_CODE" Type="DatabaseParameter"/>	
+		<Item Name="MSISDN" Type="DatabaseParameter"/>
+		<Item Name="IMSI" Type="DatabaseParameter"/>
+		<Item Name="Event" Type="DatabaseParameter"/>	
+		<Item Name="NewMSISDN" Type="DatabaseParameter"/>		
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

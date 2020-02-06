@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBanCFCall" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление услуги Запрет переадресации вызова</Description>
+	<Author Name="YAI" Date="2018-01-15+15:00"/>
+	<Request Template="RMV FRFWDNO: HLRSN=1,  FWDNO=&quot;{0}{1}&quot;;">
+		<Item Name="msisdn.ndc" Type="Wellknown"/>
+		<Item Name="msisdn.sn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

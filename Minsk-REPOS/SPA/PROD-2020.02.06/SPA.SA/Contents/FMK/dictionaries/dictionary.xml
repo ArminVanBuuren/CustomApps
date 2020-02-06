@@ -1,0 +1,41 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;status&#34;:0" Value="SUCCESS"/>
+		<Error Name="&#34;status&#34;:1" Value="FAILURE"/>
+		<Error Name="503 Service Temporarily" Value="HardwareConnectionError"/>
+		<Error Name="502 Bad Gateway" Value="HardwareConnectionError"/>
+	</ErrorsList>	
+	<RegexpsList/>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList/>
+	<CommandsList Root=".\Contents\FMK\Dictionaries\Commands\">
+		<Command Path="DeleteSubscriber.xml"/>
+		<Command Path="DeleteServiceWAPGAMES.xml"/>
+		<Command Path="DeleteServiceWAPMUSIC.xml"/>
+		<Command Path="DeleteServiceWAPFILMS.xml"/>
+		<Command Path="AddServiceWAPMUSIC.xml"/>
+		<Command Path="AddServiceWAPFILMS.xml"/>
+		<Command Path="AddServiceWAPGAMES.xml"/>
+		<Command Path="BlockWAPFILMS.xml"/>
+		<Command Path="BlockWAPGAMES.xml"/>
+		<Command Path="BlockWAPMUSIC.xml"/>
+		<Command Path="UnBlockWAPFILMS.xml"/>
+		<Command Path="UnBlockWAPGAMES.xml"/>
+		<Command Path="UnBlockWAPMUSIC.xml"/>
+		<Command Path="ChangeMSISDN.xml"/>
+		<Command Path="GetInfoSubscriber.xml"/>
+		<Command Path="AddServiceMTSFOOTBALL.xml"/>
+		<Command Path="BlockMTSFOOTBALL.xml"/>
+		<Command Path="DeleteServiceMTSFOOTBALL.xml"/>
+		<Command Path="UnBlockMTSFOOTBALL.xml"/>
+	</CommandsList>
+</Dictionary>

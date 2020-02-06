@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="SEND_CANCELC_ALL_NEWMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Cancel Location</Description>
+	<Author Name="YAI" Date="2018-03-23+12:18"/>
+	<Request Template="SND CANCELC: ISDN=&quot;{0}&quot;, DEST=ALL;">
+		<Item Name="NewMSISDN" Type="Parameter" /> 
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ERR3810" Value="SUCCESS" />
+		<Error Name="ERR3808" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

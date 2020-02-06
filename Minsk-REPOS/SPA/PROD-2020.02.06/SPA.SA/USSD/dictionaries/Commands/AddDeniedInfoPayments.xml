@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddDeniedInfoPayments" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление запрета информирования о поступивших платежах</Description>
+	<Author Name="YAI" Date="2012-03-01+15:50"/>
+	<Properties GenerationType="Database" />
+	<Request Template="function spa_func.f_payment_addblacklist({0}) return number">
+		<Item Name="MSISDN" Type="DatabaseParameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

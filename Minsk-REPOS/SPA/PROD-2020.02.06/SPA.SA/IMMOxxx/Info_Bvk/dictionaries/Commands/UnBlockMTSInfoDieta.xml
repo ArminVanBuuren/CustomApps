@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UnBlockMTSInfoDieta" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>UnBlockMTSInfoDieta</Description>
+	<Author Name="YAI" Date="2019-06-17+10:50"/>
+	<Request Template="unblock/?msisdn={0}&amp;frcode=FR16617">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" /> 
+</Command>

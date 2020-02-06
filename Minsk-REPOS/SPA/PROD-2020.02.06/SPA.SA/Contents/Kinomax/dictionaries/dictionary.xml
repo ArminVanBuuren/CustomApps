@@ -1,0 +1,45 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&quot;code&quot;:&quot;OK&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;code&quot;:&quot;MSISDN Not Found&quot;" Value="NoSuchObjectInstance"/>
+		<Error Name="&quot;code&quot;:&quot;Already Exists&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;code&quot;:&quot;USER_NOT_FOUND&quot;" Value="UnregisteredProfile"/>
+		<Error Name="&quot;code&quot;:&quot;SERVICE_NOT_FOUND&quot;" Value="FAILURE"/>
+		<Error Name="&quot;code&quot;:&quot;SERVICE_IS_NOT_ACTIVE&quot;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList>
+        <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>
+    </RegexpsList>
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN"/>
+			<PossibleValues StringToKeyTable="true" />
+		</Parameter>
+	</ParametersList>
+	<DynamicParametersList/>
+	<CommandsList Root=".\Contents\Kinomax\Dictionaries\Commands\">
+		<Command Path="AddKinoMax.xml"/>
+		<Command Path="DeleteKinoMax.xml"/>
+		<Command Path="BlockKinoMax.xml"/>
+		<Command Path="UnBlockKinoMax.xml"/>
+		<Command Path="Comm.xml"/>
+		<Command Path="Delete.xml"/>
+		<Command Path="AddAmediateka.xml"/>
+		<Command Path="DeleteAmediateka.xml"/>
+		<Command Path="BlockAmediateka.xml"/>
+		<Command Path="UnBlockAmediateka.xml"/>
+		<Command Path="AddVideoteka.xml"/>
+		<Command Path="DeleteVideoteka.xml"/>
+		<Command Path="BlockVideoteka.xml"/>
+		<Command Path="UnBlockVideoteka.xml"/>
+		<Command Path="AddPackageNochnoy.xml"/>
+		<Command Path="DeletePackageNochnoy.xml"/>
+		<Command Path="BlockPackageNochnoy.xml"/>
+		<Command Path="UnBlockPackageNochnoy.xml"/>
+		<Command Path="ChangeMSISDN.xml"/>
+	</CommandsList>
+</Dictionary>

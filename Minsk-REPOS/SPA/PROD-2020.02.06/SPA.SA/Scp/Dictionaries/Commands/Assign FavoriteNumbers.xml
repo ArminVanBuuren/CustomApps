@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="Assign FavoriteNumbers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Description>Assign FavoriteNumbers</Description>
+	<Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="ManageFnFDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="ManageFnFNumbers;{7};SPA"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Msmq"/>
+  </Attributes>
+  <DataTable Name="ManageFnFDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="TERMINAL_DEVICE_CONTRACT_ID" Type="System.Int64"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="FNF_POSITION" Type="System.Int32"/>
+      <Column Name="FNF_NUMBER" Type="System.String"/>
+      <Column Name="EXTENDED_SERVICE_CODE" Type="System.String"/>
+      <Column Name="ACTION" Type="System.Int32"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut({0},4)-{8}" TERMINAL_DEVICE_CONTRACT_ID="{1}" PERSONAL_ACCOUNT_ID="{2}" FNF_POSITION="{3}" FNF_NUMBER="{4}" EXTENDED_SERVICE_CODE="{5}" ACTION="0"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+		<Item Name="TerminalDeviceID" Type="Wellknown"/>
+		<Item Name="PersonalAccount" Type="Wellknown"/>
+		<Item Name="FNF_POSITION" Type="Parameter"/>
+		<Item Name="FNF_NUMBER" Type="Parameter"/>
+		<Item Name="EXTENDED_SERVICE_CODE" Type="Parameter"/>
+		<Item Name="id" Type="Wellknown"/>
+		<Item Name="datetime" Type="Wellknown"/>
+    <Item Name="uid" Type="Wellknown" />
+	</Request>
+	<VariablesList>
+		<Variable Name="ASYNC_REQUEST_ID" Template="reversecut({0},4)-{8}"/>
+	</VariablesList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="-154005" Value="SUCCESS"/>
+  </ErrorsList>
+</Command>

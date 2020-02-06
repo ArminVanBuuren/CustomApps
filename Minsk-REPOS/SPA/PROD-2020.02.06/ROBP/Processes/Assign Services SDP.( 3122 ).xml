@@ -1,0 +1,35 @@
+<BusinessProcessData name="Assign Services SDP">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR15573" />
+          </resultlist>
+        </node>
+        <node name="AddFR15573" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR15573" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR8765" />
+          </resultlist>
+        </node>
+        <node name="AddFR8765" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR8765" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

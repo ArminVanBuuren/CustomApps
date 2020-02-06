@@ -1,0 +1,19 @@
+<BusinessProcessData name="Assign Favorite Numbers">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="Assign FavoriteNumbers" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="Assign FavoriteNumbers" object="Assign FavoriteNumbers">
+          <parameterslist>
+            <param name="operation" value="AssignFavoriteNumbersOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

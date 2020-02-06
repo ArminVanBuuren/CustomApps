@@ -1,0 +1,21 @@
+<BusinessProcessData name="Delete Subscriber in financial platform">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="DeleteSubscriberOnFINPlatform" class="FORIS.ServiceProvisioning.BPM.ImplicitHostRedirectingProcessor" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="DeleteSubscriberOnFINPlatform" object="DeleteSubscriberOnFINPlatform">
+          <parameterslist>
+            <param name="operation" value="DeleteSubscriberOnFINPlatform" />
+            <param name="SrcXml" value="$XmlRequest" />
+            <param name="CodeTemplate" value="FP:{//BalanceStorage/HostCode}" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

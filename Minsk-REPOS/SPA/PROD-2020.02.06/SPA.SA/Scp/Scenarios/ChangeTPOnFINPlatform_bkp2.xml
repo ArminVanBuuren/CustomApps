@@ -1,0 +1,94 @@
+<scenario name="ChangeTPOnFINPlatform">
+  <objectList>
+    <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="CommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.CommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="CommandDataConstructorExt" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.CommandDataConstructorExt" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="TransformerRequest" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.XslTransformerRequest" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="XmlNodesGrouper" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.XmlNodesGrouper" assembly="FORIS.SPA.MmlProcessing.dll" />
+  </objectList>
+  <automat>
+    <node name="XslTransformerRequest" object="TransformerRequest">
+      <resultlist>
+        <result value="0" node="XmlNodesGrouper" />
+      </resultlist>
+      <parameterslist>
+        <param name="XsltItemName:0" value="TransformToAPNStyle"/>
+      </parameterslist>
+    </node>
+    <node name="XmlNodesGrouper" object="XmlNodesGrouper">
+      <resultlist>
+        <result value="0" node="BySubscribersCutter" />
+      </resultlist>
+      <parameterslist>
+        <param name="ActivePaths:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/ServiceList" />
+        <param name="ActivePaths:1" value="ExtendedRequestMessage/AdditionalData/InitialList/ServiceList" />
+        <param name="ExcludeNodeNames:0" value="DateFrom" />
+      </parameterslist>
+    </node>
+    <node name="BySubscribersCutter" object="BySubscribersCutter">
+      <resultlist>
+        <result value="0" node="IdentifiersGenerator" />
+        <result value="1" node="" />
+      </resultlist>
+    </node>
+    <node name="IdentifiersGenerator" object="IdentifiersGenerator">
+      <parameterslist>
+        <param name="WellknownName" value="GlobalUid" />
+      </parameterslist>
+      <resultlist>
+        <result value="0" node="CommandDataConstructorExt-Node" />
+      </resultlist>
+    </node>
+    <node name="CommandDataConstructorExt-Node" object="CommandDataConstructorExt">
+      <resultlist>
+        <result value="" node="CommandDataConstructor-Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="DynamicObjectName:0" value="RegisteredServices" />
+        <param name="DynamicObjectName:1" value="RegisteredServicesParams" />
+        <param name="Command:0" value="ChangeTariffPlanOnFP.ServiceRow" />
+        <param name="Command:1" value="ChangeTariffPlanOnFP.ParameterRow" />
+        <param name="XmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList//*" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList//*/*" />
+        <param name="UseIfNotXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList//*/DoNotProcessingInFinancialPlatform[text()='True']" />
+        <param name="UseIfNotXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList//*/DoNotProcessingInFinancialPlatform[text()='1']" />
+        <param name="UseInnerIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList///FinancialPlatform" />
+        <!--param name="ApplyIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList//*[1]" /-->
+        <param name="IdentifierGenerationType" value="Unique" />
+        <param name="WellknownName" value="ServiceIdentifier" />
+      </parameterslist>
+    </node>
+    <node name="CommandDataConstructor-Node" object="CommandDataConstructor">
+      <resultlist>
+        <result value="" node="ChangeTPOnFINPlatform" />
+      </resultlist>
+      <parameterslist>
+        <param name="DynamicObjectName" value="RegisteredCounters" />
+        <param name="Command" value="ChangeTariffPlanOnFP.CounterRow" />
+        <param name="XmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeTP/Counters/*" />
+        <param name="ApplyIfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeTP/Counters/*[1]" />
+      </parameterslist>
+    </node>
+    <node name="ChangeTPOnFINPlatform" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="ChangeTPOnFINPlatform" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Asynchronous" value="true" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscribersCutter" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

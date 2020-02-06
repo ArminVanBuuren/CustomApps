@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddServiceAdminLBS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>AddServiceAdminLBS</Description>
+	<Author Name="NNM" Date="2019-09-25+10:55"/>
+	<Request Template="msisdn={0}&#38;servicecode=FR17148&#38;customerid={1}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="CustomerID" Type="DynamicParameter" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;result&#34;:0" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:1" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:2" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:-1" Value="MsisdnNotDefined"/>
+	</ErrorsList>
+</Command>

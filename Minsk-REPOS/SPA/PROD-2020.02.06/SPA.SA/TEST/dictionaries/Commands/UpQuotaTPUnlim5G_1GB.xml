@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UpQuotaTPUnlim5G_1GB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Пополнение квоты</Description>
+	<Author Name="YAI" Date="2018-02-12+10:00"/>
+	<Request Template="&#60;se:Envelope xmlns:se=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#62;
+&#60;se:Body&#62;
+&#60;CreateBalanceRequest xmlns=&#34;http://broadhop.com/unifiedapi/soap/types&#34;&#62;
+&#60;audit&#62;
+&#60;id&#62;SPA&#60;/id&#62;
+&#60;comment&#62;SPA.Activator&#60;/comment&#62;
+&#60;/audit&#62;
+&#60;networkId&#62;{0}&#60;/networkId&#62;
+&#60;balance&#62;
+&#60;code&#62;MTS_BALANCE&#60;/code&#62;
+&#60;quotaCode&#62;FR15329-1GB&#60;/quotaCode&#62;
+&#60;expirationDate&#62;getlastdayofmonth({1})T20:59:59Z&#60;/expirationDate&#62;
+&#60;quotaExpirationDate&#62;getlastdayofmonth({1})T20:59:59Z&#60;/quotaExpirationDate&#62;
+&#60;/balance&#62;
+&#60;/CreateBalanceRequest&#62;
+&#60;/se:Body&#62;
+&#60;/se:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="datetime" Type="Wellknown" Format="{0:yyyy-MM-dd}" />
+	</Request>
+		<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;errorCode&gt;0&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;1&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;25&lt;/errorCode&gt;" Value="SUCCESS"/>
+		<Error Name="&lt;errorCode&gt;2&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;3&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;4&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;5&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;6&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;7&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;8&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;9&lt;/errorCode&gt;" Value="MsisdnAlreadyDefined"/>
+		<Error Name="&lt;errorCode&gt;10&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;11&lt;/errorCode&gt;" Value="MsisdnNotDefined"/>
+		<Error Name="&lt;errorCode&gt;12&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;13&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;14&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;15&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;48&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;45&lt;/errorCode&gt;" Value="NoSuchObjectInstance"/>
+		<Error Name="&lt;errorCode&gt;49&lt;/errorCode&gt;" Value="FAILURE"/>
+		<Error Name="&lt;errorCode&gt;46&lt;/errorCode&gt;" Value="FAILURE"/>
+	</ErrorsList>
+</Command>

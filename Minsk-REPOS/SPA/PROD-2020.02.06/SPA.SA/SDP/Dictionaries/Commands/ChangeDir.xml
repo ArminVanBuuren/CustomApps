@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeDir" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Смена директория абонента</Description>
+	<Author Name="Alec Sergeyev" Date="2008-07-31+10:04"/>
+	<Request Template="cd //localhost/Radius/UserLists/default/{0}/Attributes^M">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ascii" />
+</Command>

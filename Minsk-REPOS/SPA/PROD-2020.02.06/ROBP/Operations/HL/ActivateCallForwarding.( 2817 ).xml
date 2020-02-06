@@ -1,0 +1,24 @@
+<OperationData>
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <CallForwarding HaltMode="AbortProcess" Type="AnyOfListed">
+          <CFB Type="Optional">
+            <ForwardingToAddress HaltMode="AbortProcess" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+          </CFB>
+          <CFU Type="Optional">
+            <ForwardingToAddress HaltMode="AbortProcess" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+          </CFU>
+          <CFNRC Type="Optional">
+            <ForwardingToAddress HaltMode="AbortProcess" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+          </CFNRC>
+          <CFNRY Type="Optional">
+            <ForwardingToAddress HaltMode="AbortProcess" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+            <NoReplyTimer HaltMode="AbortProcess" Type="Mandatory" MissedValueResult="MissedServiceParameterValue" />
+          </CFNRY>
+        </CallForwarding>
+      </ProvisionList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

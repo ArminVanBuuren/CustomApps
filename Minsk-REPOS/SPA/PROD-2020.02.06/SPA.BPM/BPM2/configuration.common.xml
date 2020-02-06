@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Settings>
+		<Add Key="ReportTimeout" Value="600"/>
+		<Add Key="CreatePerformanceCounters" Value="false"/>
+		<Add Key="ProfilerConfiguration" Value="Profiler.xml" />
+		<Add Key="ApplicationConfiguration" Value="..\BPM2\configuration.application.xml"/>
+		</Settings>
+	<DatabaseObjects Remotable="false">
+		<Add Name="FORIS.SPA.CBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.CBP"/>
+		<Add Name="FORIS.SPA.ARCHIVE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ARCHIVE"/>
+		<Add Name="FORIS.SPA.ROBP" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.ROBP"/>
+		<Add Name="FORIS.SPA.STATE" ConnectionDataType="connectionStringKey" ConnectionData="FORIS.SPA.STATE"/>
+		<Add Name="FORIS.RI" ConnectionDataType="uri" ConnectionData="tcp://f-spa-bpm-01:25192/ServiceProvisioningService"/>
+		<Add Name="FORIS.CATALOGUES" ConnectionDataType="uri" ConnectionData="tcp://cat:8901/DBService"/>
+	</DatabaseObjects>
+	</Configuration>

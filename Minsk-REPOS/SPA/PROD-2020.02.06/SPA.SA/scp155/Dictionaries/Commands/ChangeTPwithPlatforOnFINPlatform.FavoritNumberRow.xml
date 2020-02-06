@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Command Name="ChangeTPwithPlatforOnFINPlatform.FavoritNumberRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>ChangeTPwithPlatforOnFINPlatform (FavoritNumber table)</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="MmlXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<Row
+REQUEST_ID="reversecut({4},4)-{6}"
+TERMINAL_DEVICE_CONTRACT_ID="{0}" 
+FNF_NUMBER="{1}" 
+FNF_POSITION="{2}"
+EXTENDED_SERVICE_CODE="{3}"
+ACTION="0"/>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="FNF_NUMBER" Type="LocalParameter"/>
+    <Item Name="FNF_PODITION" Type="LocalParameter"/>
+    <Item Name="EXTENDED_SERVICE_CODE" Type="LocalParameter"/>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="GlobalUid" Type="Wellknown" />
+  </Request>
+      <VariablesList>
+    <Variable Name="ASYNC_REQUEST_ID" Template="reversecut({4},4)-{6}"/>
+	</VariablesList>
+  <ParametersList>
+    <Parameter Name="FNF_NUMBER">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/FavoritNumberList/*[1]/FavoriteNumber"/>
+    </Parameter>
+    <Parameter Name="FNF_PODITION">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/FavoritNumberList/*[1]/Position"/>
+    </Parameter>
+    <Parameter Name="EXTENDED_SERVICE_CODE">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/FavoritNumberList/*[1]/FavoriteNumberTypeCode"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>

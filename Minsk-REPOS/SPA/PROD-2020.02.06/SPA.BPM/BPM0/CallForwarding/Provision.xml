@@ -1,0 +1,27 @@
+<ExtendedRequestMessage>
+	<Source>crm</Source>
+	<SourceAddress>CRM</SourceAddress>
+	<Destination>bpm</Destination>
+	<DestinationAddress>BPM</DestinationAddress>
+	<ID>#MessageId#</ID>
+  <OriginalID>#MessageId#</OriginalID>
+  <OriginalSource>CRM</OriginalSource>
+  <Priority>Idle</Priority>
+	<AdditionalData Executable="True">
+		<ProvisionList>
+			<CallForwarding>
+				#CallForwardingParams#
+			</CallForwarding>
+		</ProvisionList>
+	</AdditionalData>	
+	<MustBeConfirmed>false</MustBeConfirmed>
+	<ActionNameAlias>Добавление услуги Переадресация вызова</ActionNameAlias>
+	<ActionName>Assign Call Forwarding Sync</ActionName>
+	<IdentifiersList>
+		<Identifier>
+			<MSISDN>#MSISDN#</MSISDN>
+			<IMSI>#IMSI#</IMSI>
+		</Identifier>
+	</IdentifiersList>
+	<ContinueByDefault>true</ContinueByDefault>
+</ExtendedRequestMessage>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+		<serviceInstance hardwareID="LB:1846">
+			<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\LineB\Scenarios"/>
+			</scenarioSource>
+			<socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="172.24.210.236"/> 
+									<Parameter Key="Port" Value="80"/>
+									<Parameter Key="Url" Value=""/>
+									<Parameter Key="MethodName" Value="POST"/>
+									<Parameter Key="Method" Value="POST"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<!--<Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8"/> -->
+									<Parameter Key="ContentType" Value="application/json; charset=utf-8"/>
+									<Parameter Key="ParameterName" Value=""/>
+									<Parameter Key="Connection.Header.Host" Value="F-SPA"/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="&quot;description&quot;:&quot;1 - OK&quot;" Failure="&quot;code&quot;: -32600" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\LineB\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Logoff" Path=".\LineB\Dictionaries\Scripts\logoff.xml"/>
+							<Script Name="Command" Path=".\LineB\Dictionaries\Scripts\Command.xml"/>
+							<Script Name="NoSleep" Path=".\LineB\Dictionaries\Scripts\nosleep.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\LineB\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\LineB\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>
+	</serviceInstances>
+</Configuration>

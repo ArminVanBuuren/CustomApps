@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="DeleteSubscriberOnRG">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" /> 
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" /> 		
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="DeleteSubsDengiNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteSubsDengiNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="IfServiceFR13005Node"/>
+				<result value="1538" node="IfServiceFR13005Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_dengi/"/>
+				<param name="Command" value="DeleteServiceDengi"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14766"/>
+			</parameterslist>
+		</node> 		
+		<node name="IfServiceFR13005Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeletePBSNode"/>
+				<result value="1" node="IfServiceFR12449Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR13005"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DeletePBSNode" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="DelServiceBillingPBSNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="restpbs/UnsubscribeAll"/>
+				<param name="Command" value="DeleteServicePBS"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="application/x-www-form-urlencoded; charset=utf-8"/>
+			</parameterslist>
+		</node> 
+		<node name="DelServiceBillingPBSNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="0" node="ExtractDBRESULTPBSNODE" /> 
+				<result value="" node="ResponseAssembler" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="SPA_FUNC.f_changemsisdn_delservice_crm" /> 
+				<param name="FunctionType" value="function" /> 
+				<param name="OutXml" value="db_result_func" />  
+				<param name="DbParameterName:0" value="i_msisdn" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+				<param name="DbParameterName:1" value="i_serviceid" /> 
+				<param name="DbParameterDirection:1" value="Input" /> 
+				<param name="DbParameterType:1" value="Int32" /> 
+				<param name="DbParameterValue:1" value="59217" /> 
+				<param name="DbParameterName:2" value="DBRESULTSRV" /> 
+				<param name="DbParameterDirection:2" value="ReturnValue" /> 
+				<param name="DbParameterType:2" value="Int32" /> 
+				<param name="DbParameterValue:2" value="5" /> 				
+			</parameterslist>
+		</node>	 
+		<node name="ExtractDBRESULTPBSNODE" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="CheckResultPBSNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_result_func" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE" /> 
+			</parameterslist>
+		</node>	
+		<node name="CheckResultPBSNode" object="Switch">
+			<resultlist>
+				<result value="2" node="IfServiceFR12449Node"/>
+				<result value="3" node="IfServiceFR12449Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE"/>
+				<param name="Value:2" value="1"/>
+				<param name="Value:3" value="2"/>
+			</parameterslist>
+		</node>	 		
+		<node name="IfServiceFR12449Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeleteMTSINFONode"/>
+				<result value="1" node="IfServiceFR12423Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12449"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DeleteMTSINFONode" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="DelServiceBillingMTSINFONode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="DeleteSubscriberMTSInfo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+			</parameterslist>
+		</node> 
+		<node name="DelServiceBillingMTSINFONode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="0" node="ExtractDBRESULTNODE" /> 
+				<result value="" node="ResponseAssembler" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="SPA_FUNC.f_changemsisdn_delservice_crm" /> 
+				<param name="FunctionType" value="function" /> 
+				<param name="OutXml" value="db_result_func" />  
+				<param name="DbParameterName:0" value="i_msisdn" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+				<param name="DbParameterName:1" value="i_serviceid" /> 
+				<param name="DbParameterDirection:1" value="Input" /> 
+				<param name="DbParameterType:1" value="Int32" /> 
+				<param name="DbParameterValue:1" value="56920" /> 
+				<param name="DbParameterName:2" value="DBRESULTSRV" /> 
+				<param name="DbParameterDirection:2" value="ReturnValue" /> 
+				<param name="DbParameterType:2" value="Int32" /> 
+				<param name="DbParameterValue:2" value="5" /> 				
+			</parameterslist>
+		</node>	 
+		<node name="ExtractDBRESULTNODE" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="CheckResultNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_result_func" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE" /> 
+			</parameterslist>
+		</node>	
+		<node name="CheckResultNode" object="Switch">
+			<resultlist>
+				<result value="2" node="IfServiceFR12423Node"/>
+				<result value="3" node="IfServiceFR12423Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE"/>
+				<param name="Value:2" value="1"/>
+				<param name="Value:3" value="2"/>
+			</parameterslist>
+		</node>	 	
+		<node name="IfServiceFR12423Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeleteVKurseNode"/>
+				<result value="1" node="IfServiceFR14145Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12423"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>		
+		<node name="DeleteVKurseNode" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="DelServiceBillingVKurseNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="vkurse/"/>
+				<param name="Command" value="DeleteServiceBudVKurse"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+			</parameterslist>
+		</node> 
+		<node name="DelServiceBillingVKurseNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="0" node="VKurseExtractDBRESULTNODE" /> 
+				<result value="" node="ResponseAssembler" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="SPA_FUNC.f_changemsisdn_delservice_crm" /> 
+				<param name="FunctionType" value="function" /> 
+				<param name="OutXml" value="db_result_func" />  
+				<param name="DbParameterName:0" value="i_msisdn" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+				<param name="DbParameterName:1" value="i_serviceid" /> 
+				<param name="DbParameterDirection:1" value="Input" /> 
+				<param name="DbParameterType:1" value="Int32" /> 
+				<param name="DbParameterValue:1" value="56786" /> 
+				<param name="DbParameterName:2" value="DBRESULTSRV" /> 
+				<param name="DbParameterDirection:2" value="ReturnValue" /> 
+				<param name="DbParameterType:2" value="Int32" /> 
+				<param name="DbParameterValue:2" value="5" /> 				
+			</parameterslist>
+		</node>	 
+		<node name="VKurseExtractDBRESULTNODE" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="VKurseCheckResultNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_result_func" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE" /> 
+			</parameterslist>
+		</node>	
+		<node name="VKurseCheckResultNode" object="Switch">
+			<resultlist>
+				<result value="2" node="IfServiceFR14145Node"/>
+				<result value="3" node="IfServiceFR14145Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE"/>
+				<param name="Value:2" value="1"/>
+				<param name="Value:3" value="2"/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceFR14145Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeletePressaNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14145"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="DeletePressaNode" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="DelServiceBillingPressaNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts_pressa/delete"/>
+				<param name="Command" value="ServicePressa"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+			</parameterslist>
+		</node> 
+		<node name="DelServiceBillingPressaNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="0" node="ExtractDBRESULTPressaNODE" /> 
+				<result value="" node="ResponseAssembler" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="SPA_FUNC.f_changemsisdn_delservice_crm" /> 
+				<param name="FunctionType" value="function" /> 
+				<param name="OutXml" value="db_result_func" />  
+				<param name="DbParameterName:0" value="i_msisdn" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+				<param name="DbParameterName:1" value="i_serviceid" /> 
+				<param name="DbParameterDirection:1" value="Input" /> 
+				<param name="DbParameterType:1" value="Int32" /> 
+				<param name="DbParameterValue:1" value="61052" /> 
+				<param name="DbParameterName:2" value="DBRESULTSRV" /> 
+				<param name="DbParameterDirection:2" value="ReturnValue" /> 
+				<param name="DbParameterType:2" value="Int32" /> 
+				<param name="DbParameterValue:2" value="5" /> 				
+			</parameterslist>
+		</node>	 
+		<node name="ExtractDBRESULTPressaNODE" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="CheckResultPressaNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_result_func" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE" /> 
+			</parameterslist>
+		</node>	
+		<node name="CheckResultPressaNode" object="Switch">
+			<resultlist>
+				<result value="2" node="DummyResponderNode"/>
+				<result value="3" node="DummyResponderNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/DBRESULTSERVICE"/>
+				<param name="Value:2" value="1"/>
+				<param name="Value:3" value="2"/>
+			</parameterslist>
+		</node>	 	
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

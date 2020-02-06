@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+		<Wellknown Name="newsisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN&quot;, false)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;result&#34;:true" Value="SUCCESS"/>
+		<Error Name="&#34;err_id&#34;:&#34;subscribe_exists&#34;" Value="FAILURE"/>
+		<Error Name="&#34;err_id&#34;:&#34;subscribe_not_exists&#34;" Value="NoServices"/>
+		<Error Name="&#34;err_id&#34;:&#34;is_active&#34;" Value="FAILURE"/>
+		<Error Name="&#34;err_id&#34;:&#34;is_inactive&#34;" Value="FAILURE"/>
+		<Error Name="&#34;err_id&#34;:&#34;number_exists&#34;" Value="MsisdnAlreadyDefined"/>
+		<Error Name="&#34;err_id&#34;:&#34;other&#34;" Value="FAILURE"/>
+		<Error Name="&#34;err_id&#34;:&#34;unknown_user&#34;" Value="NoSuchObjectInstance"/>
+		<Error Name="&#34;err_id&#34;:&#34;invalid_number&#34;" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList>
+		<Regexp Name="Error" Value='(Result"\s{0,}value="(?&lt;ERROR&gt;\d{1,3})")'/>
+	</RegexpsList>
+   <DynamicParametersList /> 
+	<CommandsList Root=".\SchoolLibrary\Dictionaries\Commands\">
+		<Command Path="Block.xml"/>
+		<Command Path="UnBlock.xml"/>
+		<Command Path="DeleteSubscriber.xml"/>
+		<Command Path="ChangeMSISDN.xml"/>
+		<Command Path="ChangeMSISDNtest.xml"/>
+		<Command Path="Add5class.xml"/>
+		<Command Path="Add6class.xml"/>
+		<Command Path="Add7class.xml"/>
+		<Command Path="Add8class.xml"/>
+		<Command Path="Add9class.xml"/>
+		<Command Path="Add10class.xml"/>
+		<Command Path="Add11class.xml"/>
+		<Command Path="AddAllclass.xml"/>
+		<Command Path="DelClassService.xml"/>
+	</CommandsList>
+</Dictionary>

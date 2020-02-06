@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="unblock_ic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Разблокировка входящей связи</Description>
+	<Author Name="YAI" Date="2013-08-05+12:18"/>
+	<Request Template="MOD ODB: ISDN=&quot;{0}&quot;, ODBIC=NOBIC;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

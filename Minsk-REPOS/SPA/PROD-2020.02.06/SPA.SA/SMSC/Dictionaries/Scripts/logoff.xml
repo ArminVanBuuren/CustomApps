@@ -1,0 +1,4 @@
+<Script Name="Logoff">
+  <write data="SMPP.UNBIND" addToLog="true"/>
+</Script>
+

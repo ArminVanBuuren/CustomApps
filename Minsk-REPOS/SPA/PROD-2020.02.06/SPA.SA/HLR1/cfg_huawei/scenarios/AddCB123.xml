@@ -1,0 +1,1028 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddCB123">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		 <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" /> 
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="IfConditionCB403864ResolverNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfConditionCB403864ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="DeleteCB403864ResolverNode"/>
+				<result value="1" node="AddCB123StandaloneNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/CB403864"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>		
+		<node name="AddCB123StandaloneNode" object="Commander">
+			<resultlist>
+				<result value="0" node="GetServiceSNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddCB123"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="GetServiceSNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="IfServiceFR562ROAMNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="select /*+ ordered use_nl(t,an,ar,rb) */ 
+														an.val as SERVICES,rb.code as OPER 
+												   from CRM.REQ_EXT_LNK t, crm.att_num an,  
+														crm.att_ref ar, crm.att_ref_book rb
+												   where t.ext_req_id='{0}' 
+														 and t.req_id=an.req_id and an.att_type_id=87
+														 and t.req_id=ar.req_id and ar.att_type_id=170
+														 and ar.att_ref_book_id=rb.att_ref_book_id" /> 
+				<param name="FunctionType" value="customQuery" /> 
+				<param name="OutXml" value="db_get_services" /> 
+				<param name="DbParameterName:0" value="i_customer" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="Varchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/OriginalID" /> 
+			</parameterslist>
+		</node>	
+		<node name="IfServiceFR562ROAMNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="IfCheckBanGPRSDelInREq_DB_Node"/>
+				<result value="1" node="IfRoamingWithBanGPRS_DB_Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR562"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="IfCheckBanGPRSDelInREq_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="Acc_networksNode" /> 
+				<result value="1" node="AddAccBanGPRSROAMINGNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_services" /> 
+				<param name="OrXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='0']" /> 
+			</parameterslist>
+		</node>			
+		<node name="IfRoamingWithBanGPRS_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddAccBanGPRSROAMINGNode" /> 
+				<result value="1" node="IfRoamingWithoutBanGPRS_DB_Node" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_services" /> 
+				<param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='1']" /> 
+				<param name="IfXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='1']" /> 
+			</parameterslist>
+		</node>	
+		<node name="IfRoamingWithoutBanGPRS_DB_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="Acc_networksNode" /> 
+				<result value="1" node="Acc_networksNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="db_get_services" /> 
+				<param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='1']" /> 
+				<param name="IfXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='0']" /> 
+			</parameterslist>
+		</node>	
+		<node name="AddAccBanGPRSROAMINGNode" object="Commander">
+			<resultlist>
+				<result value="0" node="Acc_networksNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccBanLTERoam"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
+		<node name="Acc_networksNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfServiceCB532Node2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AR_ALLPLMN"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceCB532Node2" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="IfServiceNode"/>
+				<result value="1" node="ExitDummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB532"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="1" node="DeactivateCFNRCNODE"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB265"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR51107"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR8114"/>
+			</parameterslist>
+		</node>			
+		<node name="DeactivateCFNRCNODE" object="Commander">
+			<resultlist>
+				<result value="0" node="DeactivateCFNRYNode"/>
+				<result value="" node="ResponseAssembler"/>				
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeactivateCFNRC"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="DeactivateCFNRYNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="DeactivateCFNRY"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="DeleteCB403864ResolverNode" object="Commander">
+			<resultlist>
+				<result value="0" node="Delete_CB_ICNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Delete_CB_OC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="Delete_CB_ICNode" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_ctrl_subscriberNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Delete_CB_IC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="CB_ctrl_subscriberNode" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteCB123Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_ctrl_subscriber"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="DeleteCB123Node" object="Commander">
+			<resultlist>
+				<result value="0" node="DeleteCB108Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCB123"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="DeleteCB108Node" object="Commander">
+			<resultlist>
+				<result value="0" node="Acc_networks2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="DeleteCB108"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="Acc_networks2Node" object="Commander">
+			<resultlist>
+				<result value="0" node="AddFR1096Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AR_ALLPLMN"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddFR1096Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddCB265Node"/>
+				<result value="1538" node="IfAddCB265Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR1096"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVideoCall"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="IfAddCB265Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddCB265Node"/>
+				<result value="1" node="AddCB532Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB265"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>		
+		<node name="AddCB265Node" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_ctrl_subscriber2Node"/>
+				<result value="1538" node="CB_ctrl_subscriber2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCB265"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CB_ctrl_subscriber2Node" object="Commander">
+			<resultlist>
+				<result value="0" node="AddCB532Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_ctrl_subscriber"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
+		<node name="AddCB532Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfAddCB573Node"/>
+				<result value="1538" node="IfAddCB573Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB532"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCB532"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="IfAddCB573Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddCB573Node"/>
+				<result value="1" node="AddCB108Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB573"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddCB573Node" object="Commander">
+			<resultlist>
+				<result value="0" node="Add_TS61Node"/>
+				<result value="1538" node="Add_TS61Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Add_BS26"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="Add_TS61Node" object="Commander">
+			<resultlist>
+				<result value="0" node="AddCB108Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Add_TS61"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddCB108Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="IfConditionCB410153ResolverNode"/>
+				<result value="1538" node="IfConditionCB410153ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB108"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCB108"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="IfConditionCB410153ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddProfileGPRS"/>
+				<result value="1" node="IfConditionFR511001ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB410153"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>		
+		<node name="IfConditionFR511001ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddProfileGPRS"/>
+				<result value="1" node="IfConditionFR1058ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR511001"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>			
+		<node name="AddProfileGPRS" object="Commander">
+			<resultlist>
+				<result value="0" node="AddProfileGPRSLTE"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddProfileGPRSLTE" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAMNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileGPRSLTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="UnBlockGPRSROAMNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfConditionFR1058ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
+		<node name="IfConditionFR1058ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddProfileGPRS_2"/>
+				<result value="1" node="IfConditionFR812ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR1058"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="AddProfileGPRS_2" object="Commander">
+			<resultlist>
+				<result value="0" node="AddProfileGPRSLTE_2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileGPRS2"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddProfileGPRSLTE_2" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAM2Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileGPRS2LTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="UnBlockGPRSROAM2Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfConditionFR812ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>				
+		<node name="IfConditionFR812ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddPDPREC5Node2"/>
+				<result value="1" node="IfConditionCB412703ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>
+		<node name="AddPDPREC5Node2" object="Commander">
+			<resultlist>
+				<result value="0" node="AddPDPREC5LTENode2"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccessPointName-5(VPN2.MTS.BY)"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddPDPREC5LTENode2" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAM3Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccessPointName-5(VPN2.MTS.BY)LTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="UnBlockGPRSROAM3Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfConditionCB412703ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="IfConditionCB412703ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddPDPREC5Node"/>
+				<result value="1" node="IfConditionFR7480ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>
+		<node name="AddPDPREC5Node" object="Commander">
+			<resultlist>
+				<result value="0" node="AddPDPREC5NodeLTENode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddAccessPointName-5(VPN2.MTS.BY)"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="AddPDPREC5NodeLTENode" object="Commander">
+			<resultlist>
+				<result value="0" node="AddPDPREC4Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="Command" value="AddAccessPointName-5(VPN2.MTS.BY)LTE"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="AddPDPREC4Node" object="Commander">
+			<resultlist>
+				<result value="0" node="AddPDPREC4LTENode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccessPointName-4(VPN.MTS.BY)"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddPDPREC4LTENode" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAM4Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccessPointName-4(VPN.MTS.BY)LTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="UnBlockGPRSROAM4Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfConditionFR7480ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfConditionFR7480ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddProfileM2MNode"/>
+				<result value="1" node="IfConditionFR9484ResolverNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>
+		<node name="AddProfileM2MNode" object="Commander">
+			<resultlist>
+				<result value="0" node="AddProfileM2MLTENode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileM2M"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddProfileM2MLTENode" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAM5Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddProfileM2MLTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="UnBlockGPRSROAM5Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfConditionFR9484ResolverNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfConditionFR9484ResolverNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddProfileVPNNode"/>
+				<result value="1" node="IfFR10654Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>
+		<node name="AddProfileVPNNode" object="Commander">
+			<resultlist>
+				<result value="0" node="AddProfileVPNLTENode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPN"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="AddProfileVPNLTENode" object="Commander">
+			<resultlist>
+				<result value="0" node="UnBlockGPRSROAM6Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddVPNLTE"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="UnBlockGPRSROAM6Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR10654Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="UnBlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR10654Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="Add_CB_OC_IPNode"/>
+				<result value="1" node="IfFR390Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10654"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="Add_CB_OC_IPNode" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_OC_act_ts11_IPNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Add_CB_OC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CB_OC_act_ts11_IPNode" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_ctrl_operator_IPNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_OC_act_ts1x"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="CB_ctrl_operator_IPNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR390Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_ctrl_operator"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="IfFR390Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="Add_CB_OC_390Node"/>
+				<result value="1" node="IfFR389Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR390"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="Add_CB_OC_390Node" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_OC_act_ts11_390Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Add_CB_OC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CB_OC_act_ts11_390Node" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_ctrl_operator_390Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_OC_act_ts1x"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="CB_ctrl_operator_390Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR389Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_ctrl_operator"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR389Node" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="Add_CB_IC_389Node"/>
+				<result value="1" node="IfBlockFullNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR389"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>	
+		<node name="Add_CB_IC_389Node" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_IC_act_ts11_389Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="Add_CB_IC"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="CB_IC_act_ts11_389Node" object="Commander">
+			<resultlist>
+				<result value="0" node="CB_ctrl_operator_IC_389Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_IC_act_ts1x"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
+		<node name="CB_ctrl_operator_IC_389Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfBlockFullNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="CB_ctrl_operator"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
+		<node name="IfBlockFullNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="BlockFullNode"/>
+				<result value="1" node="IfBlockPartNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+			</parameterslist>
+		</node>	
+		<node name="IfBlockPartNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="BlockPartNode"/>
+				<result value="1" node="ExitDummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+			</parameterslist>
+		</node>				
+		<node name="BlockPartNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfService_SoftBlock_Node"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockPart"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="BlockFullNode" object="Commander">
+			<resultlist>
+				<result value="0" node="Acc_networksBlkNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockFull"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="Acc_networksBlkNode" object="Commander">
+			<resultlist>
+				<result value="0" node="IfService_SoftBlock_Node"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AR_ONLYHPLMN"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfService_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="IfService_SoftBlock_ROAMING_Node"/>
+				<result value="1" node="IfServiceGPRSNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11307"/>
+			</parameterslist>
+		</node>	
+		<node name="IfService_SoftBlock_ROAMING_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="IfBlock_SoftBlock_Node"/>
+				<result value="1" node="IfServiceGPRSNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB123"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+			</parameterslist>
+		</node>		
+		<node name="IfBlock_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="SoftBlock_AddBanGprsRoam_Node"/>
+				<result value="1" node="IfService_SoftBlock_FR562_Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+			</parameterslist>
+		</node>				
+		<node name="IfService_SoftBlock_FR562_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="SoftBlock_AddBanGprsRoam_Node"/>
+				<result value="1" node="SoftBlock_AddRoam_Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR562"/>
+			</parameterslist>
+		</node>	
+		<node name="SoftBlock_AddBanGprsRoam_Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfServiceGPRSNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddAccBanLTERoam"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>					
+		<node name="SoftBlock_AddRoam_Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfServiceGPRSNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddCB123"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>						
+		<node name="IfServiceGPRSNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="IfServiceGPRS_VPN_Node"/>
+				<result value="1" node="ExitDummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB410153"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR511001"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR1058"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+			</parameterslist>
+		</node>	
+		<node name="IfServiceGPRS_VPN_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddBlockGPRSNode"/>
+				<result value="1" node="IfServiceGPRS_SoftBlock_Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864"/>
+			</parameterslist>
+		</node>			
+		<node name="IfServiceGPRS_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="ExitDummyResponderNode"/>
+				<result value="1" node="AddBlockGPRSNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11307"/>
+			</parameterslist>
+		</node>			
+		<node name="AddBlockGPRSNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="BlockGPRS"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="ExitDummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

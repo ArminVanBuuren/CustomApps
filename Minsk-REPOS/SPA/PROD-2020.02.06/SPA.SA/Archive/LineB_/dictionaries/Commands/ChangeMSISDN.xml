@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Замена номера</Description>
+	<Author Name="YAI" Date="2018-05-03+10:55"/>
+	<Request Template="{{&quot;msisdn&quot;:&quot;+{0}&quot;,&quot;new_msisdn&quot;:&quot;+{1}&quot;}}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name=" not found" Value="SUCCESS" /> 
+		<Error Name="item not found" Value="SUCCESS" /> 
+		<Error Name="&quot;code&quot;:6" Value="SUCCESS" /> 
+	</ErrorsList>
+</Command>

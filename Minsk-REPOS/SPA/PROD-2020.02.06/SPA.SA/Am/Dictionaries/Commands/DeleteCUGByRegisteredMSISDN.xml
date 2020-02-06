@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Command Name="DeleteCUGByRegisteredMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>DeleteCUGByRegisteredMSISDN</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+    <Attribute Name="Procedure" Type="System.String" Value="SCN_CUG_MANAGE_DATA"/>
+    <Attribute Name="CLIENT_ID" Type="System.String" Value="SPA"/>
+    <Attribute Name="REQUEST_ID" Type="System.String" Value="reversecut({0},4)-{4}"/>
+    <Attribute Name="CUG_ID" Type="System.String" Value="{2}"/>
+    <Attribute Name="ACTION" Type="System.Int32" Value="3"/>
+    <Attribute Name="SERVICE_CODE" Type="System.String"/>
+    <Attribute Name="TARGET_MSISDN" Type="System.String" Value="+{3}"/>
+  </Attributes>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown"/>
+    <Item Name="id" Type="Wellknown"/>
+    <Item Name="CUG_ID" Type="LocalParameter"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="uid" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="CUG_ID">
+      <Source Path="ExtendedRequestMessage/AdditionalData/RegisteredList/CUGList//ExternalGroupNumber"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii"/>
+</Command>
+

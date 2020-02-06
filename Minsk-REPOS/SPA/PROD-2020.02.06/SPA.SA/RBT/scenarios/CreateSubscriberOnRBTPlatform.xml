@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="CreateSubscriberOnRBTPlatform">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="IfCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="RBTFunction" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+  </objectList>
+  <automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="RBT"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="RBT" object="RBTFunction">
+			<resultlist>
+				<result value="" node="IfFRADMCGOODOK"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="CreateRBT"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>
+  <node name="IfFRADMCGOODOK" object="IfCommander">
+			<resultlist>
+				<result value="" node="IfFRGOODOK"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRADMCGOODOK"/>
+				<param name="Script" value="Command"/>
+				<param name="Command" value="AddFRADMCGOODOKOnRBT"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>
+  <node name="IfFRGOODOK" object="IfCommander">
+			<resultlist>
+				<result value="" node="IfFRCGOODOK"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRGOODOK"/>
+				<param name="Script" value="Command"/>
+				<param name="Command" value="AddFRGOODOKOnRBT"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>
+  <node name="IfFRCGOODOK" object="IfCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FRCGOODOK"/>
+				<param name="Script" value="Command"/>
+				<param name="Command" value="AddFRCGOODOKOnRBT"/>
+				<param name="ErrorDecodingType" value="ByRegexp"/>
+				<param name="CommandSource" value="Dictionary"/>
+			</parameterslist>
+		</node>   
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

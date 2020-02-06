@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="RateLicenceMartletDB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Корректировка по продаже лицензий</Description>
+	<Author Name="NNM" Date="2019-11-01+15:00"/>
+	<Properties GenerationType="Database" />
+	<Request Template="function spa_func.RateLicenceMartlet({0},{1}) return number">
+		<Item Name="MSISDN" Type="LocalDatabaseParameter"/>
+		<Item Name="Operation" Type="LocalDatabaseParameter"/>		
+	</Request>
+	<DatabaseParametersList>
+		<DatabaseParameter Name="MSISDN">
+			<Properties DatabaseArgumentName="i_msisdn" DatabaseArgumentType="varchar2" />
+				<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN"/>
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>
+		<DatabaseParameter Name="Operation">
+			<Properties DatabaseArgumentName="i_operation" DatabaseArgumentType="varchar2" />
+				<Source Path="/ExtendedRequestMessage/AdditionalData/ProvisionList//SERVICE_CODE" />
+			<PossibleValues StringToKeyTable="false">
+				<Item Key="FR17200" StringValue="FRDBTKSK" /> 
+				<Item Key="FR17201" StringValue="FRDBTEMS" /> 
+				<Item Key="FR17202" StringValue="FRDBDTEPC" /> 
+				<Item Key="FR17203" StringValue="FRDBTEMST" /> 
+				<Item Key="FR17204" StringValue="FRDBTNNRB" /> 
+				<Item Key="FR17205" StringValue="FRDBTNNESNG" /> 
+				<Item Key="FR17206" StringValue="FRDBDESCH" /> 
+				<Item Key="FR17154" StringValue="FRDBTKASP" /> 
+			</PossibleValues>
+		</DatabaseParameter>		 
+	</DatabaseParametersList>	
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;returned value=&quot;1&quot; /&gt;" Value="SUCCESS"/> 
+		<Error Name="&lt;returned value=&quot;-100&quot; /&gt;" Value="FAILURE"/> 
+		<Error Name="&lt;returned value=&quot;-1&quot; /&gt;" Value="FAILURE"/> 		
+		<Error Name="&lt;returned value=&quot;-2&quot; /&gt;" Value="FAILURE"/> 		
+		<Error Name="&lt;returned value=&quot;-10&quot; /&gt;" Value="FAILURE"/> 		
+	</ErrorsList>
+</Command>

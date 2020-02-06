@@ -1,0 +1,17 @@
+<OperationData>
+  <Request Name="RequestMessage" />
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList HaltMode="AbortProcess" Type="Optional">
+        <SubscribersData HaltMode="CancelOperation" Type="Optional">
+          <SupplementaryServicesList />
+          <BasicServicesList />
+          <MajorAttributesList />
+          <MinorAttributesList />
+          <GprServicesList />
+          <IntNetServicesList />
+        </SubscribersData>
+      </SubscribersDataList>
+    </AdditionalData>
+  </Response>
+</OperationData>

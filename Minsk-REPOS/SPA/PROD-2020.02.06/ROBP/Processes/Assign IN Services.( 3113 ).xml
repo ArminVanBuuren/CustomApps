@@ -1,0 +1,19 @@
+<BusinessProcessData name="Assign IN Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AssignInPlatformServices" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignInPlatformServices" object="AssignInPlatformServices">
+          <parameterslist>
+            <param name="operation" value="AssignInPlatformServices" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

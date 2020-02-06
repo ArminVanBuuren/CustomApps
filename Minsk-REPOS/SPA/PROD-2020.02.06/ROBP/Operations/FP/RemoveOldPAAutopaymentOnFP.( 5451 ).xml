@@ -1,0 +1,21 @@
+<OperationData>
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ProvisionList HaltMode="AbortProcess" Type="Mandatory" />
+      <RegisteredList Type="Optional" Copy="CopyListed">
+        <Include groupName="ServiceList" />
+      </RegisteredList>
+      <InitialList Type="Optional" Copy="CopyListed">
+        <Include groupName="ServiceList" />
+      </InitialList>
+      <DeviceInfo Type="Optional">
+        <TerminalDeviceType HaltMode="CancelOperation" Type="Restricted" InnerText="virtual" />
+      </DeviceInfo>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

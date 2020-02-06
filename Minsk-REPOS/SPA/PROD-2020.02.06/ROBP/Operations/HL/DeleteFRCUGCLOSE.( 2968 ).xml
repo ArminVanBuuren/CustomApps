@@ -1,0 +1,18 @@
+<OperationData>
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
+        <FRCUGCLOSE HaltMode="CancelOperation" Type="Optional">
+          <UserGroupCode Type="Optional" />
+        </FRCUGCLOSE>
+      </WithdrawalList>
+      <RegisteredList Type="Optional" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

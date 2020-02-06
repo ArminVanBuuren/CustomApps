@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="Login" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Login</Description>
+	<Author Name="yai" Date="2013-05-15+12:18"/>
+	<Request Template="LOGIN:dcr:dmstodms;">
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

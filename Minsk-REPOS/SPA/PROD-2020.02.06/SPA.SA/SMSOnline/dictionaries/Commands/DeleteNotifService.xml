@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteNotifService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Технологическая: интернет-подписка на сервисы</Description>
+	<Author Name="YAI" Date="2016-09-08+10:21"/>
+	<Request Template="v1/subscriptions/delete?phone={0}&amp;service=FR12221">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="&quot;code&quot;:&quot;OK&quot;" Value="SUCCESS"/>
+		<Error Name="&quot;code&quot;:&quot;SUBS_NOT_FOUND&quot;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

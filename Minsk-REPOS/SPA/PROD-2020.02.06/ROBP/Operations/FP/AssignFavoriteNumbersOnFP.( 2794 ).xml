@@ -1,0 +1,21 @@
+<OperationData>
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="FavoritNumberList" />
+      </ProvisionList>
+      <ExternalIdentifier Type="Optional" />
+      <RegisteredList Type="Optional" Copy="CopyAll" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage">
+    <AdditionalData>
+      <SubscribersDataList Type="Optional" Copy="CopyAll" />
+    </AdditionalData>
+  </Response>
+</OperationData>

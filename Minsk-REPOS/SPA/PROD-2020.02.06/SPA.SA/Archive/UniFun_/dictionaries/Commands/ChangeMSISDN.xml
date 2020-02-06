@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Изменение номера</Description>
+	<Author Name="YAI" Date="2015-04-08+10:52"/>
+	<Request Template="SyncFromUrl.php?old_msisdn=substr({0},3,9)&amp;new_msisdn=substr({1},3,9)">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="NewMSISDN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;result&gt;2&lt;/result&gt;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

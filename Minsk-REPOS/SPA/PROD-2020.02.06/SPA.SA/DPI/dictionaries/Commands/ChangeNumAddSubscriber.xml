@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeNumAddSubscriber" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>ChangeMSISDN</Description>
+	<Author Name="YAI" Date="2011-04-29+10:50"/>
+	<Request Template="&#60;soap:Envelope xmlns:soap=&#34;http://www.w3.org/2003/05/soap-envelope&#34; xmlns:typ=&#34;http://ws.apache.org/axis2/services/sub_info/types&#34;&#62;
+&#60;soap:Header/&#62;
+&#60;soap:Body&#62;
+&#60;typ:createSubscriber&#62;
+&#60;msisdn&#62;{0}&#60;/msisdn&#62;
+&#60;tier_name&#62;BRONZE&#60;/tier_name&#62;
+&#60;subscriber_status&#62;active&#60;/subscriber_status&#62;
+&#60;enable_sms&#62;yes&#60;/enable_sms&#62;
+&#60;enable_mail&#62;no&#60;/enable_mail&#62;
+&#60;profile_attribute&#62;
+&#60;attribute_name&#62;FR2040&#60;/attribute_name&#62;
+&#60;attribute_value&#62;no&#60;/attribute_value&#62;
+&#60;/profile_attribute&#62;
+&#60;/typ:createSubscriber&#62;
+&#60;/soap:Body&#62;
+&#60;/soap:Envelope&#62;">
+	<Item Name="NewMSISDN" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ascii">
+		<Error Name="Message&gt;Error_Subscriber_Already_Present&lt;" Value="SUCCESS"/>
+		<Error Name="Message&gt;Error_Subscriber_Record_Not_Present&lt;" Value="SUCCESS"/>	
+		<Error Name="SUCCESS" Value="SUCCESS"/>
+		<Error Name="ResultCode&gt;Success&lt;" Value="SUCCESS"/>
+		<Error Name="ResultCode&gt;Partial_Success&lt;" Value="FAILURE"/>		
+		<Error Name="ResultCode&gt;Total_Failure&lt;" Value="FAILURE"/>				
+		<Error Name="ResultCode&gt;Error_In_Connecting_Database&lt;" Value="FAILURE"/>
+		<Error Name="ResultCode&gt;Error_In_Preparing_Sql&lt;" Value="FAILURE"/>	
+	</ErrorsList>
+</Command>

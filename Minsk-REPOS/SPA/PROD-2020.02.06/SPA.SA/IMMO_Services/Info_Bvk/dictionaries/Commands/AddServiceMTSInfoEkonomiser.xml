@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddServiceMTSInfoEkonomiser" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>AddServiceMTSInfoEkonomiser</Description>
+	<Author Name="NNM" Date="2019-06-17+10:50"/>
+	<Request Template="api/subscribe/?msisdn={0}&amp;frcode=FR16614">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ascii" /> 
+</Command>

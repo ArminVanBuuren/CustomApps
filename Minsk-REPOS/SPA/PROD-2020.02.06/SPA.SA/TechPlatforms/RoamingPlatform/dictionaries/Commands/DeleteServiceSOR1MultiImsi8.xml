@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteServiceSOR1MultiImsi8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление. Imsi8</Description>
+	<Author Name="YAI" Date="2018-06-06+10:25"/>
+	<Request Template="&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+&#60;SOAP-ENV:Envelope xmlns:SOAP-ENV=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;&#62;
+&#60;SOAP-ENV:Body&#62;
+&#60;DeleteRequest xmlns=&#34;urn:sorwsdl&#34;&#62;
+&#60;imsi&#62;{0}&#60;/imsi&#62;
+&#60;groupId&#62;1&#60;/groupId&#62;
+&#60;/DeleteRequest&#62;
+&#60;/SOAP-ENV:Body&#62;
+&#60;/SOAP-ENV:Envelope&#62;">
+		<Item Name="imsix" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="imsix">
+			<Source Path="ExtendedRequestMessage/AdditionalData/IMSI8" /> 
+			<PossibleValues StringToKeyTable="true" /> 
+		</Parameter>
+	</ParametersList>	
+	<ErrorsList CodePage="ASCII" />
+</Command>

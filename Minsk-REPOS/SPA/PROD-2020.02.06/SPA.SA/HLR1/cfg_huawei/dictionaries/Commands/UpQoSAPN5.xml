@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="UpQoSAPN5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Повышение QOS</Description>
+	<Author Name="YAI" Date="2015-11-27+12:18"/>
+	<Request Template="MOD OPTGPRS: ISDN=&quot;{0}&quot;, PROV=MODPDPCNTX, APN_TYPE=PS_APN, APNTPLID=5, QOSTPLID=2;">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ERR3197" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

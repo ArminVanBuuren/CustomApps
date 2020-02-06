@@ -1,0 +1,61 @@
+<Dictionary>
+	<WellknownsList />
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;returned value=&quot;0&quot; /&gt;" Value="SUCCESS"/> 
+		<Error Name="&lt;returned value=&quot;20006&quot; /&gt;" Value="FAILURE"/> 		
+		<Error Name="&lt;returned value=&quot;20007&quot; /&gt;" Value="FAILURE"/> 		
+		<Error Name="&lt;returned value=&quot;-1&quot; /&gt;" Value="ResourceLimitation"/> 		
+	</ErrorsList>
+	<RegexpsList />
+	<ConstantsList />
+	<ParametersList/>
+	<DynamicParametersList />
+	<DatabaseParametersList>
+			<DatabaseParameter Name="iv_MSISDN">
+				<Properties DatabaseArgumentName="iv_MSISDN" DatabaseArgumentType="varchar2" />
+					<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN"/>
+				<PossibleValues StringToKeyTable="true"/>
+			</DatabaseParameter>
+			<DatabaseParameter Name="MSISDN">
+				<Properties DatabaseArgumentName="msisdn" DatabaseArgumentType="number" />
+					<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN"/>
+				<PossibleValues StringToKeyTable="true"/>
+			</DatabaseParameter>			
+			<DatabaseParameter Name="IMSI">
+				<Properties DatabaseArgumentName="imsi" DatabaseArgumentType="number" />
+					<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/IMSI"/>
+				<PossibleValues StringToKeyTable="true"/>
+			</DatabaseParameter>
+		<DatabaseParameter Name="SERVICE_CODE">
+  			<Properties DatabaseArgumentName="SERVICE_CODE" DatabaseArgumentType="varchar2" />
+				<Source Path="ExtendedRequestMessage/ActionName"/>
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>	
+		<DatabaseParameter Name="Event">
+  			<Properties DatabaseArgumentName="Event" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>
+		<DatabaseParameter Name="NewMSISDN">
+  			<Properties DatabaseArgumentName="Param" DatabaseArgumentType="varchar2" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>	
+		<DatabaseParameter Name="add_param">
+  			<Properties DatabaseArgumentName="Additional_param" DatabaseArgumentType="varchar2" />
+				<Source Path="dummy" AbsenceValue="0" />
+  			<PossibleValues StringToKeyTable="true" />
+ 		</DatabaseParameter>			
+	</DatabaseParametersList>	
+	<CommandsList Root=".\SMSE\Dictionaries\Commands\">
+		<Command Path="AddExtra.xml"/> 
+		<Command Path="DeleteExtra.xml"/> 
+		<Command Path="ChangeMSISDNExtra.xml"/> 
+		<Command Path="AddE2S.xml"/> 
+		<Command Path="ChangeMSISDNE2S.xml"/> 
+		<Command Path="DeleteE2S.xml"/> 
+	</CommandsList>
+		<DecodersList Root=".\SMSE\Dictionaries\Decoders">
+		<Decoder Path="DbReturnValueDecoder.xml"/>
+	</DecodersList>
+</Dictionary>

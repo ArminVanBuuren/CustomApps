@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFR2370onGS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="IfBlockNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="BlockNode"/>
+				<result value="1" node="UnBlockNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/BLTDLIM"/>
+				<param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CBBLKLOST"/>
+				<param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKCHK"/>
+				<param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKFIN"/>
+				<param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKKEEP"/>
+				<param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKPAY"/>
+				<param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKP"/>
+				<param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKTIME"/>
+				<param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER"/>
+			</parameterslist>
+		</node>			
+		<node name="BlockNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="Block_MobileSecurity_Node"/>
+				<result value="1538" node="Block_MobileSecurity_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="Block"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12221"/>
+			</parameterslist>
+		</node> 
+		<node name="Block_MobileSecurity_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="Block_ParentalControl_Node"/>
+				<result value="1538" node="Block_ParentalControl_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="BlockESETMobileSecurity"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14350"/>
+			</parameterslist>
+		</node> 
+		<node name="Block_ParentalControl_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="Block_MTSSmartInfo_Node"/>
+				<result value="1538" node="Block_MTSSmartInfo_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="BlockESETParentalControl"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14351"/>
+			</parameterslist>
+		</node> 
+		<node name="Block_MTSSmartInfo_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="Block_ParentalControl2_Node"/>
+				<result value="1538" node="Block_ParentalControl2_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtssmartinfo/remote-control/user/block"/>
+				<param name="Command" value="MTSSmartInfo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="application/json; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15735"/>
+			</parameterslist>
+		</node> 	
+		<node name="Block_ParentalControl2_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="BlockESETParentalControl2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17100"/>
+			</parameterslist>
+		</node> 		
+		<node name="UnBlockNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlock_MobileSecurity_Node"/>
+				<result value="1538" node="UnBlock_MobileSecurity_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="UnBlock"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12221"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlock_MobileSecurity_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlock_ParentalControl_Node"/>
+				<result value="1538" node="UnBlock_ParentalControl_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="UnBlockESETMobileSecurity"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14350"/>
+			</parameterslist>
+		</node>	
+		<node name="UnBlock_ParentalControl_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlock_MTSSmartInfo_Node"/>
+				<result value="1538" node="UnBlock_MTSSmartInfo_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="UnBlockESETParentalControl"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14351"/>
+			</parameterslist>
+		</node>		
+		<node name="UnBlock_MTSSmartInfo_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="UnBlock_ParentalControl2_Node"/>
+				<result value="1538" node="UnBlock_ParentalControl2_Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtssmartinfo/remote-control/user/unblock"/>
+				<param name="Command" value="MTSSmartInfo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="application/json; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15735"/>
+			</parameterslist>
+		</node> 
+		<node name="UnBlock_ParentalControl2_Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="smsonlinemtsby/"/>
+				<param name="Command" value="UnBlockESETParentalControl2"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="84"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.UserName" value=""/>
+				<param name="Connection.UserPwd" value=""/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(mtswap:gld82nnds32)"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17100"/>
+			</parameterslist>
+		</node>				
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

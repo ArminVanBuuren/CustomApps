@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddCB118onIS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoPogodaNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="ChangeMSISDNMTSInfoPogodaNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoGoroskopNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoGoroskopNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoPogoda"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16621"/>
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNMTSInfoGoroskopNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoMusicNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoMusicNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoGoroskop"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16622"/>
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNMTSInfoMusicNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoStatusNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoStatusNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoMusic"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16623"/>
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNMTSInfoStatusNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoRichNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoRichNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoStatus"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16615"/>
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNMTSInfoRichNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoDietaNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoDietaNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoRich"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16616"/>
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNMTSInfoDietaNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoGamesNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoGamesNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoDieta"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16617"/>
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNMTSInfoGamesNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoEkonomiserNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoEkonomiserNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoGames"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16624"/>
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNMTSInfoEkonomiserNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoNastroenieNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoNastroenieNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoEkonomiser"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16614"/>
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNMTSInfoNastroenieNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoKursvalNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoKursvalNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoNastroenie"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16618"/>
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNMTSInfoKursvalNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNMTSInfoAnekdotNode"/>
+				<result value="1538" node="ChangeMSISDNMTSInfoAnekdotNode"/>			
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoKursval"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16619"/>
+			</parameterslist>
+		</node> 		
+		<node name="ChangeMSISDNMTSInfoAnekdotNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mtsinfo/"/>
+				<param name="Command" value="ChangeMSISDNMTSInfoAnekdot"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="81"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/xml; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16620"/>
+			</parameterslist>
+		</node> 					
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

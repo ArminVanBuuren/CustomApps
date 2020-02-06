@@ -1,0 +1,19 @@
+<BusinessProcessData name="Modify DPI Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="ModifyService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="ModFR12793onQP" object="ModifyService">
+          <parameterslist>
+            <param name="operation" value="ModFR12793onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

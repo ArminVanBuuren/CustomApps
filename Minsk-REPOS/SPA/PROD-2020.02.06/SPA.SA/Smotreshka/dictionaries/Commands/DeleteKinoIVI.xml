@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteKinoIVI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>DeleteKinoIVI</Description>
+	<Author Name="YAI" Date="2016-04-13+10:50"/>
+	<Request Template="{{&quot;id&quot;:&quot;FR16494&quot;,&quot;valid&quot;:false}}">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+  <ErrorsList CodePage="ASCII">
+	<Error Name="404 Not Found" Value="SUCCESS" /> 
+  </ErrorsList>
+</Command>

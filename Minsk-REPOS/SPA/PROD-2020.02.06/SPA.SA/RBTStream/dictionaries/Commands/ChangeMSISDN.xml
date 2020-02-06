@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Замена номера.</Description>
+	<Author Name="YAI" Date="2016-07-14+10:21"/>
+	<Request Template="&#60;Envelope xmlns=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#62;
+&#60;Body&#62;
+&#60;changeMsisdn xmlns=&#34;http://billadapter.mtsby.rbt.immo.ru/&#34;&#62;
+&#60;OldMsisdn xmlns=&#34;&#34;&#62;{0}&#60;/OldMsisdn&#62;
+&#60;NewMsisdn xmlns=&#34;&#34;&#62;{1}&#60;/NewMsisdn&#62;
+&#60;/changeMsisdn&#62;
+&#60;/Body&#62;
+&#60;/Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" />
+	</Request>
+	<ErrorsList CodePage="ASCII" >
+		<Error Name="&lt;statusCode&gt;564&lt;/statusCode&gt;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

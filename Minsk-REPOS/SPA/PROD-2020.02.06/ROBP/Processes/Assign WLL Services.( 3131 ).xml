@@ -1,0 +1,107 @@
+<BusinessProcessData name="Assign WLL Services">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="AddService" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="AssignServiceOnFINPlatform" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AssignServiceOnFINPlatform" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR834" />
+          </resultlist>
+        </node>
+        <node name="AddFR834" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR834" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR835" />
+          </resultlist>
+        </node>
+        <node name="AddFR835" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR835" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR836" />
+          </resultlist>
+        </node>
+        <node name="AddFR836" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR836" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR387" />
+          </resultlist>
+        </node>
+        <node name="AddFR387" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR387" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR388" />
+          </resultlist>
+        </node>
+        <node name="AddFR388" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR388" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR389" />
+          </resultlist>
+        </node>
+        <node name="AddFR389" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR389" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR390" />
+          </resultlist>
+        </node>
+        <node name="AddFR390" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR390" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR391" />
+          </resultlist>
+        </node>
+        <node name="AddFR391" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR391" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR1002" />
+          </resultlist>
+        </node>
+        <node name="AddFR1002" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR1002" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR7614" />
+          </resultlist>
+        </node>
+        <node name="AddFR7614" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR7614" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR13064" />
+          </resultlist>
+        </node>
+        <node name="AddFR13064" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR13064" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

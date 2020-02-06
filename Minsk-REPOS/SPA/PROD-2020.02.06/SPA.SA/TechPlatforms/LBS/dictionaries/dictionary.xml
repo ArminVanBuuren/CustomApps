@@ -1,0 +1,55 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+	</WellknownsList>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;result&#34;:0" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:1" Value="SUCCESS"/>
+		<Error Name="&#34;result&#34;:-1" Value="MsisdnNotDefined"/>
+		<Error Name="&#34;result&#34;:-2" Value="InvalidMsisdnFormat"/>
+		<Error Name="&#34;result&#34;:-3" Value="InvalidRequest"/>
+		<Error Name="&#34;result&#34;:-4" Value="InvalidParameterValue"/>
+		<Error Name="&#34;result&#34;:-5" Value="FAILURE"/>
+		<Error Name="&#34;result&#34;:-7" Value="ResourceLimitation"/>
+	</ErrorsList>
+	<RegexpsList />
+	<ConstantsList />
+	<ParametersList>
+		<Parameter Name="NewMSISDN">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewMSISDN" /> 
+			<PossibleValues StringToKeyTable="true" /> 
+	</Parameter>
+  </ParametersList>
+	<DynamicParametersList>
+		<DynamicParameter Name="CustomerID">
+			<Source Path="root/return/record/column[@name='CUSTOMERID']" /> 
+			<DynamicObject Name="db_get_customerid" /> 
+		</DynamicParameter>	
+	</DynamicParametersList>
+	<CommandsList Root=".\TechPlatforms\LBS\Dictionaries\Commands\">
+		<Command Path="DeleteServiceAdminLBS.xml"/> 
+		<Command Path="AddServiceAdminLBS.xml"/> 
+		<Command Path="BlockAdmin.xml"/> 
+		<Command Path="BlockEmp.xml"/> 
+		<Command Path="UnBlockEmp.xml"/> 
+		<Command Path="UnBlockAdmin.xml"/> 
+		<Command Path="DeleteServiceEmpLBS.xml"/> 
+		<Command Path="AddServiceEmpLBS.xml"/> 
+		<Command Path="ChangeMSISDNAdminLBS.xml"/> 
+		<Command Path="ChangeMSISDNEmpLBS.xml"/> 
+		<Command Path="DeleteSubscriberAdminLBS.xml"/> 
+		<Command Path="DeleteSubscriberEmpLBS.xml"/> 		
+		<Command Path="AddServiceFamilyHereLBS.xml"/> 		
+		<Command Path="AddServiceTechFamilyHereLBS.xml"/> 		
+		<Command Path="BlockFamilyHereLBS.xml"/> 		
+		<Command Path="BlockTechFamilyHereLBS.xml"/> 		
+		<Command Path="ChangeMSISDNFamilyHereLBS.xml"/> 		
+		<Command Path="ChangeMSISDNTechFamilyHereLBS.xml"/> 		
+		<Command Path="DeleteServiceFamilyHereLBS.xml"/> 		
+		<Command Path="DeleteServiceTechFamilyHereLBS.xml"/> 		
+		<Command Path="DeleteSubscriberFamilyHereLBS.xml"/> 		
+		<Command Path="DeleteSubscriberTechFamilyHereLBS.xml"/> 		
+		<Command Path="UnBlockFamilyHereLBS.xml"/> 		
+		<Command Path="UnBlockTechFamilyHereLBS.xml"/> 		
+	</CommandsList>
+</Dictionary>

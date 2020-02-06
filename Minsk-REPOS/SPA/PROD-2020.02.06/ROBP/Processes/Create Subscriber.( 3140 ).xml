@@ -1,0 +1,224 @@
+<BusinessProcessData name="Create Subscriber">
+  <businessprocess>
+    <scenario>
+      <objectlist>
+        <object name="SplitForDummy" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+        <object name="DummyResult" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
+        <object name="CreateSubscribers" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscribersInTheHLR" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscribersInTheSMSC" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnQP" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnDB" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="DeleteBlockOnBMS" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnZN" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnTV" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnMT" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnSL" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnM2" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnDR" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnMA" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnVI" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnMU" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+        <object name="CreateSubscriberOnGS" class="FORIS.ServiceProvisioning.BPM.BPMProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
+      </objectlist>
+      <automat>
+        <node name="SplitForDummy" object="SplitForDummy">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16324" />
+          </parameterslist>
+          <resultlist>
+            <result value="0" node="DummyResult" />
+            <result value="" node="CreateSubscribersInTheHLR" />
+          </resultlist>
+        </node>
+        <node name="DummyResult" object="DummyResult">
+          <parameterslist>
+            <param name="XmlNameInContext" value="$XmlRequest" />
+            <param name="DetailedResult" value="0" />
+            <param name="DetailedResultDescription" value="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscribersInTheHLR" object="CreateSubscribersInTheHLR">
+          <parameterslist>
+            <param name="operation" value="CreateSubscribersInTheHLR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnQP" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnQP" object="CreateSubscriberOnQP">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnDB" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnDB" object="CreateSubscriberOnDB">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnSE" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnSE" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnSE" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnBMS" object="DeleteBlockOnBMS">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnBMS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnZN" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnZN" object="CreateSubscriberOnZN">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnZN" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnTV" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnTV" object="CreateSubscriberOnTV">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnTV" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnMT" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnMT" object="CreateSubscriberOnMT">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnMT" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnSL" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnSL" object="CreateSubscriberOnSL">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnSL" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnM2" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnM2" object="CreateSubscriberOnM2">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnM2" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnDR" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnDR" object="CreateSubscriberOnDR">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnDR" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnMA" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnMA" object="CreateSubscriberOnMA">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnVI" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnVI" object="CreateSubscriberOnVI">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnVI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnMU" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnMU" object="CreateSubscriberOnMU">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnMU" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnGS" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnGS" object="CreateSubscriberOnGS">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnGS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnSF" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnSF" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnSF" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnOP" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnOP" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnOP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnRG" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnRG" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnRG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnFK" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnFK" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnFK" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnVA" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnVA" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnVA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnMI" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnMI" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnMI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnRP" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnRP" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnRP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="" />
+          </resultlist>
+        </node>
+      </automat>
+    </scenario>
+  </businessprocess>
+</BusinessProcessData>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddCB537" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Изменение номера IMSI</Description>
+	<Author Name="yai" Date="2011-09-26+10:55"/>
+	<Request Template="MOD IMSI: IMSI=&quot;{0}&quot;, NEWIMSI=&quot;{1}&quot;;^M">
+		<Item Name="imsi" Type="Wellknown"/>
+		<Item Name="NewIMSI" Type="Parameter"/>
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

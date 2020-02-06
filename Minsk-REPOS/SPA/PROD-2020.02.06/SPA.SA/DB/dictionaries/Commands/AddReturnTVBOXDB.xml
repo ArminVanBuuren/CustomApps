@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddReturnTVBOXDB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Технологическая: возврат приставки iTV </Description>
+	<Author Name="YAI" Date="2015-01-16+15:50"/>
+	<Properties GenerationType="Database" />
+	<Request Template="function spa_func.f_add_request({0},{1},{2},{3}) return number">
+		<Item Name="MSISDN" Type="DatabaseParameter"/>
+		<Item Name="ServiceID" Type="LocalDatabaseParameter"/>		
+		<Item Name="Action" Type="LocalDatabaseParameter"/>		
+		<Item Name="add_param" Type="LocalDatabaseParameter"/>
+	</Request>
+	<DatabaseParametersList>
+		<DatabaseParameter Name="ServiceID">
+			<Properties DatabaseArgumentName="service_id" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="49366" />
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>
+		<DatabaseParameter Name="Action">
+			<Properties DatabaseArgumentName="event_id" DatabaseArgumentType="number" />
+				<Source Path="dummy" AbsenceValue="1" />
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>
+		<DatabaseParameter Name="add_param">
+			<Properties DatabaseArgumentName="Additional_param" DatabaseArgumentType="varchar2" />
+				<Source Path="ExtendedRequestMessage/OriginalID" />
+			<PossibleValues StringToKeyTable="true"/>
+		</DatabaseParameter>		
+	</DatabaseParametersList>	
+	<ErrorsList CodePage="ASCII"/>
+</Command>

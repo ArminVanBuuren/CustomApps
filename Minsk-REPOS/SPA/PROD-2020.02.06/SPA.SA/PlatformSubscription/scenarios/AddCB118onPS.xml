@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddCB118onPS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServicePlayboy18Node"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="ChangeMSISDNServicePlayboy18Node" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceVideoNode"/>
+				<result value="1538" node="ChangeMSISDNServiceVideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServicePlayboy18"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16625" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceVideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceSiteZnakomstvNode"/>
+				<result value="1538" node="ChangeMSISDNServiceSiteZnakomstvNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceVideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16626" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceSiteZnakomstvNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceMusicNode"/>
+				<result value="1538" node="ChangeMSISDNServiceMusicNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceSiteZnakomstv"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16627" />
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNServiceMusicNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceZOJNode"/>
+				<result value="1538" node="ChangeMSISDNServiceZOJNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceMusic"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16628" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceZOJNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceZOJ"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16629" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceMusicAudioingNode"/>
+				<result value="1538" node="ChangeMSISDNServiceMusicAudioingNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGame"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16630" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceMusicAudioingNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceFilmMobiletuberNode"/>
+				<result value="1538" node="ChangeMSISDNServiceFilmMobiletuberNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceMusicAudioing"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16679" />
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNServiceFilmMobiletuberNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameGamecatalogNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameGamecatalogNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceFilmMobiletuber"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16680" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameGamecatalogNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameUnlimitedgamezNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameUnlimitedgamezNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameGamecatalog"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16681" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameUnlimitedgamezNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameIslandmobNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameIslandmobNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameUnlimitedgamez"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16682" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameIslandmobNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameGamestoreNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameGamestoreNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameIslandmob"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16683" />
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNServiceGameGamestoreNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameMobigamerNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameMobigamerNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameGamestore"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16684" />
+			</parameterslist>
+		</node> 	
+		<node name="ChangeMSISDNServiceGameMobigamerNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceVideoVtrendoNode"/>
+				<result value="1538" node="ChangeMSISDNServiceVideoVtrendoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameMobigamer"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16685" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceVideoVtrendoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceVideoVideomeoNode"/>
+				<result value="1538" node="ChangeMSISDNServiceVideoVideomeoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceVideoVtrendo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16686" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceVideoVideomeoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceErovideoNode"/>
+				<result value="1538" node="ChangeMSISDNServiceErovideoNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceVideoVideomeo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16687" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceErovideoNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameAppsclubNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameAppsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceErovideo"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16688" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameAppsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceFitnessclubNode"/>
+				<result value="1538" node="ChangeMSISDNServiceFitnessclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameAppsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16689" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceFitnessclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceKidsclubNode"/>
+				<result value="1538" node="ChangeMSISDNServiceKidsclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceFitnessclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16691" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceKidsclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameappNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameappNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceKidsclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16692" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameappNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceBeFriendsNode"/>
+				<result value="1538" node="ChangeMSISDNServiceBeFriendsNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameapp"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16693" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceBeFriendsNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceDiscountclubNode"/>
+				<result value="1538" node="ChangeMSISDNServiceDiscountclubNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceBeFriends"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16695" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceDiscountclubNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceGameapppsNode"/>
+				<result value="1538" node="ChangeMSISDNServiceGameapppsNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceDiscountclub"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17098" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceGameapppsNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="ChangeMSISDNServiceMusicplaylistNode"/>
+				<result value="1538" node="ChangeMSISDNServiceMusicplaylistNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceGameappps"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16754" />
+			</parameterslist>
+		</node> 
+		<node name="ChangeMSISDNServiceMusicplaylistNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="IfServiceBlackListNode"/>
+				<result value="1538" node="IfServiceBlackListNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNServiceMusicplaylist"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16755" />
+			</parameterslist>
+		</node> 		
+		<node name="IfServiceBlackListNode" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteServiceBlackListNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR11430"/>
+			</parameterslist>
+		</node>		
+		<node name="DeleteServiceBlackListNode" object="HttpCmd">
+			<resultlist>
+				<result value="0" node="AddServiceBlackListNewMSISDNNode"/>
+				<result value="1538" node="AddServiceBlackListNewMSISDNNode"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="DeleteBlackList"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+			</parameterslist>
+		</node> 
+		<node name="AddServiceBlackListNewMSISDNNode" object="HttpCmd">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value=""/>
+				<param name="Command" value="ChangeMSISDNBlackList"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.193.238"/>
+				<param name="Connection.Port" value="9107"/>
+				<param name="Connection.Method" value="GET"/>
+				<param name="Connection.ContentType" value="text/html; charset=utf-8"/>
+				<param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037"/>
+			</parameterslist>
+		</node> 		
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="Del5class" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Удаление сервиса</Description>
+	<Author Name="YAI" Date="2015-07-14+13:25"/>
+	<Request Template="">
+		<Item Name="msisdn" Type="Wellknown"/>
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&#34;result&#34;:true" Value="SUCCESS"/>
+		<Error Name="&#34;err_id&#34;:&#34;subscribe_not_exists&#34;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

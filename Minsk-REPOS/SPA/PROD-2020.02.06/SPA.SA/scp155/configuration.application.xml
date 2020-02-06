@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<serviceInstances>
+      <serviceInstance hardwareID="FP:mi155scp">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+		<fileScenarioSource dir=".\SCP155\Scenarios"/>
+      </scenarioSource>
+
+      <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="30" periodDuration="10" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
+          <!--<config serviceGroup="MI1SCP" uri="tcp://mi-seeoec01:8022/CRMOperations.uri" uriRem="tcp://mi-seeoec01:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180"> -->
+		  <config serviceGroup="MI1SCP" uri="tcp://f-clust-scp-oec:8022/CRMOperations.uri" uriRem="tcp://f-clust-scp-oec:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180">
+		  <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-13002&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path=".\SCP155\Dictionaries" xml="Dictionary.xml" lifetime="00:01:30"/>
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path=".\SCP155\Misc" xml="RepetitionTable.xml"/>
+        </object>
+        <object name="generatorID" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.DatabaseIdentifiersGenerator, FORIS.SPA.MmlProcessing">
+          <config wellknown="uid" name="S_SCP_GENERATOR_ID" length="5"/>
+        </object>
+      </context>
+      <AsyncResponseProcessor PoolSize="1" ResponseTimeout="300000" Type="FORIS.ServiceProvisioning.ServiceActivator.Core.AmMsmqResponseProcessor, FORIS.SPA.ServiceActivator.Core">
+        <Processor QueuePath=".\spa.scp.responce" RejectQueuePath=".\spa.scp.reject" >
+          <Emulation Success=".\SCP155\Dictionary\asyncResult.xml" Failure=".\SCP155\Dictionary\asyncResult.xml" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
+        </Processor>
+      </AsyncResponseProcessor>
+    </serviceInstance>
+	</serviceInstances>
+</Configuration>

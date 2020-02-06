@@ -1,0 +1,9 @@
+<OperationData>
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <ExternalIdentifier HaltMode="CancelOperation" Type="Mandatory" InnerText=".{1,}" />
+      <SourceType HaltMode="CancelOperation" Type="Mandatory" InnerText=".{1,}" />
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

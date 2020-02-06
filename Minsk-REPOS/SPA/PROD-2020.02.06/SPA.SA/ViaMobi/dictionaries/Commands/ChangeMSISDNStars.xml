@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ChangeMSISDNStars" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Paparazzi</Description>
+	<Author Name="YAI" Date="2017-10-16+15:50"/>
+	<Request Template="subsapi?action=changemsisdn&amp;service=stars&amp;msisdn={0}&amp;new_msisdn={1}">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="NewMSISDN" Type="Parameter" /> 
+	</Request>
+	<ErrorsList CodePage="ascii" >
+		<Error Name="&#34;status&#34;:&#34;-2&#34;" Value="SUCCESS" />
+	</ErrorsList>
+</Command>

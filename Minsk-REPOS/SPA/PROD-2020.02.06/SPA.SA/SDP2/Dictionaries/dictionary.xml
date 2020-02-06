@@ -1,0 +1,36 @@
+<Dictionary>
+	<WellknownsList>
+		<Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)"/>
+<!--		<Wellknown Name="msisdn.cc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,0,3)"/>
+		<Wellknown Name="msisdn.ndc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3,2)"/>
+		<Wellknown Name="msisdn.sn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,5)"/>
+		<Wellknown Name="msisdn.fn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;,3)"/>
+		<Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;)"/>
+		<Wellknown Name="imsi.mcc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,0,3)"/>
+		<Wellknown Name="imsi.mnc" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,3,2)"/>
+		<Wellknown Name="imsi.msin" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;,5)"/> -->
+	</WellknownsList>
+	<ErrorsList CodePage="ascii">
+		<Error Name="Saving" Value="SUCCESS"/>
+		<Error Name="No active sessions found" Value="SUCCESS"/>
+		<Error Name="No active sessions" Value="SUCCESS"/>
+		<Error Name="Released" Value="SUCCESS"/>
+		<Error Name="Framed-IP-Address" Value="SUCCESS"/>
+		<Error Name="302 Ambiguous command" Value="FAILURE"/>
+		<Error Name="307 Object not found" Value="FAILURE"/>
+		<Error Name="310 Command failed" Value="FAILURE"/>
+	</ErrorsList>
+	<RegexpsList/>
+	<ConstantsList/>
+	<ParametersList/>
+	<DynamicParametersList/>
+	<CommandsList Root=".\SDP2\Dictionaries\Commands\">
+		<Command Path="ChangeDir.xml"/>
+		<Command Path="ChangeAttr.xml"/>
+		<Command Path="ChangeCommit.xml"/>
+		<Command Path="ReleaseSession.xml"/>
+		<Command Path="AllowAccess.xml"/>
+		<Command Path="DeniedAccess.xml"/>
+		<Command Path="RemoveProfile.xml"/>		
+	</CommandsList>
+</Dictionary>

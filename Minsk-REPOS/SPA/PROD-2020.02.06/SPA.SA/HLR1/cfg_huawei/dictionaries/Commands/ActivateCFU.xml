@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="ActivateCFU" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>>Активания услуги Переадресация вызова (безусловная)</Description>
+	<Author Name="YAI" Date="2011-10-04+12:18"/>
+	<Request Template="REG CFU: ISDN=&quot;{0}&quot;, FTN=&quot;{1}&quot;, PROPERTY=INTERNATIONAL, BSG=TS1X;">
+		<Item Name="msisdn" Type="Wellknown"/>
+		<Item Name="ForwardingToAddress" Type="LocalParameter"/>
+	</Request>
+	<ParametersList>
+		<Parameter Name="ForwardingToAddress">
+			<Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CFU/ForwardingToAddress"/>
+			<PossibleValues StringToKeyTable="false">
+				<Item Key="voicemail" StringValue="375297321321" />
+			</PossibleValues>
+		</Parameter>
+	</ParametersList>	
+	<ErrorsList CodePage="ASCII">
+		<Error Name="ERR3006" Value="SUCCESS" />
+	</ErrorsList>
+</Command>
