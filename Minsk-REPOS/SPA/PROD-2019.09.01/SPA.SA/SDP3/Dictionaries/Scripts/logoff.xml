@@ -1,6 +1,0 @@
-<Script Name="Logoff">
-	<wait data="--&gt;" timeout="3000"/>
-	<write data="exit^M"/>
-	<wait data="bill@minsk" timeout="3000"/>
-	<write data="exit^M"/>
-</Script>

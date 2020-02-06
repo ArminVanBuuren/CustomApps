@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="UnBlockLessPl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Уроки польского</Description>
-	<Author Name="YAI" Date="2017-12-04+09:50"/>
-	<Request Template="subsapi?action=unsuspend&amp;service=engster-ru2pl&amp;msisdn={0}">
-	<Item Name="msisdn" Type="Wellknown" />
-	</Request>
-	<ErrorsList CodePage="ascii" />
-</Command>

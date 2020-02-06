@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeleteFR836" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>>Удаление Переадресация вызова/Переадресация по неответу</Description>
-	<Author Name="YAI" Date="2011-09-15+12:18"/>
-	<Request Template="MOD CF: IMSI=&quot;{0}&quot;, CFNRYPROV=FALSE;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

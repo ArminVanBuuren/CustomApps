@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AR_ALLPLMN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Доступ во сети</Description>
-	<Author Name="YAI" Date="2011-09-07+12:18"/>
-	<Request Template="MOD RSZI: IMSI=&quot;{0}&quot;, RROPTION=ALL_PLMNS;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeleteSmartBalance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Удаление Смарт-Баланс</Description>
-	<Author Name="YAI" Date="2015-09-30+12:18"/>
-	<Request Template="MOD UCSI: ISDN=&quot;{0}&quot;, PROV=FALSE;">
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

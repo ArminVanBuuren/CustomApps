@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeleteBAOCTelDataFax" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>>Удаление ограничения исходящей связи, данных, факсов</Description>
-	<Author Name="YAI" Date="2011-09-21+12:18"/>
-	<Request Template="MOD CB: ISDN=&quot;{0}&quot;, BAOC=FALSE;^JMOD CBCOU: ISDN=&quot;{0}&quot;, COU=SUBSCRIBER;">
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

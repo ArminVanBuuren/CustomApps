@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="UnBlockonVD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление разблокировки</Description>
-	<Author Name="YAI" Date="2013-01-17+10:50"/>
-	<Request Template="userstatus.php?blogin=MTSby_bill_login&amp;bpsw=EcRd3wHOvGhZa_k&amp;ulogin={0}&amp;status=1&amp;xml=1">
-	<Item Name="msisdn" Type="Wellknown" />
-	</Request>
-	<ErrorsList CodePage="ascii" />
-</Command>
