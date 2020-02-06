@@ -184,8 +184,8 @@
 		</node>	
 		<node name="AddFR10769Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="AddFR16910Node"/>
-				<result value="1538" node="AddFR16910Node"/>
+				<result value="0" node="AddFR17185Node"/>
+				<result value="1538" node="AddFR17185Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -196,7 +196,22 @@
 				<param name="Script" value="Command"/>
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
-		</node>		
+		</node>	
+		<node name="AddFR17185Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="AddFR16910Node"/>
+				<result value="1538" node="AddFR16910Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17185"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddService5MbChinaBelGeely"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
 		<node name="AddFR16910Node" object="IfCommander">
 			<resultlist>
 				<result value="0" node="AddFR16871Node"/>
@@ -426,8 +441,8 @@
 		</node>	
 		<node name="AddFR10361Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="IfFR13097Node"/>
-				<result value="1538" node="IfFR13097Node"/>
+				<result value="0" node="IfFR17216Node"/>
+				<result value="1538" node="IfFR17216Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -439,6 +454,52 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>	
+		<node name="IfFR17216Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR17216Node"/>
+				<result value="1" node="IfFR17362Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17216"/>
+			</parameterslist>
+		</node>
+		<node name="AddServiceFR17216Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR17362Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="Command" value="AddBezlimitische2"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>	
+		<node name="IfFR17362Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR17362Node"/>
+				<result value="1" node="IfFR13097Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17362"/>
+			</parameterslist>
+		</node>
+		<node name="AddServiceFR17362Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR13097Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="Command" value="AddBrainDevice"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
 		<node name="IfFR13097Node" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="AddServiceFR13097Node"/>
@@ -945,6 +1006,7 @@
 				<param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12442"/>
 				<param name="OrXmlPath:10" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15506"/>
 				<param name="OrXmlPath:11" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15507"/>
+				<param name="OrXmlPath:12" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17303"/>
 			</parameterslist>
 		</node>			
 		<node name="FTTXAddPeeringBalanceNode" object="Commander">
@@ -977,8 +1039,8 @@
 		</node>	
 		<node name="FTTX_AddX6_Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="FTTXAddFR7241Node"/>
-				<result value="1538" node="FTTXAddFR7241Node"/>
+				<result value="0" node="FTTX_AddX7_Node"/>
+				<result value="1538" node="FTTX_AddX7_Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -989,7 +1051,22 @@
 				<param name="Script" value="Command"/>
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
-		</node>					
+		</node>	
+		<node name="FTTX_AddX7_Node" object="IfCommander">
+			<resultlist>
+				<result value="0" node="FTTXAddFR7241Node"/>
+				<result value="1538" node="FTTXAddFR7241Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17303"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Command" value="AddX7"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+			</parameterslist>
+		</node>			
 		<node name="FTTXAddFR7241Node" object="IfCommander">
 			<resultlist>
 				<result value="0" node="FTTXAddFR14994Node"/>

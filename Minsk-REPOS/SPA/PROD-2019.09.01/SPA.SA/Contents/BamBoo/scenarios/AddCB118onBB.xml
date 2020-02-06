@@ -11,6 +11,8 @@
 		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" /> 
 		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" /> 
 		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" /> 
 	</objectList>
 	<automat>
 		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -23,13 +25,43 @@
 		</node>
 		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
 			<resultlist>
-				<result value="0" node="DeleteSubscriberNode"/>
+				<result value="0" node="ChangeMSISDNKioskNode"/>
 				<result value="1" node=""/>
 			</resultlist>
 			<parameterslist>
 				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
 			</parameterslist>
 		</node>
+		<node name="ChangeMSISDNKioskNode" object="IfHttpCommander">
+			<resultlist>
+				<result value="0" node="IfFR10783Node"/>
+				<result value="1538" node="IfFR10783Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="mts-kiosk/serviceapi/mks/sc/FR17139/msisdn/contextWellknown(msisdn)/changemsisdn"/>
+				<param name="Command" value="ChangeMSISDN"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="10.128.213.41"/>
+				<param name="Connection.Port" value="93"/>
+				<param name="Connection.MethodName" value="POST" /> 
+				<param name="Connection.Method" value="POST" /> 
+				<param name="Connection.ContentType" value="application/json; charset=utf-8"/>
+				<param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17139" /> 
+			</parameterslist>
+		</node>				
+		<node name="IfFR10783Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="DeleteSubscriberNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR10783"/>
+			</parameterslist>
+		</node>			
 		<node name="DeleteSubscriberNode" object="HttpCmd">
 			<resultlist>
 				<result value="0" node="DelServiceBillingNode"/>

@@ -21,6 +21,7 @@
 	</DatabaseParametersList>	
 	<ErrorsList CodePage="ASCII">
 		<Error Name="&lt;returned value=&quot;0&quot; /&gt;" Value="SUCCESS"/> 
+		<Error Name="&lt;returned value=&quot;-100&quot; /&gt;" Value="SUCCESS"/> 
 		<Error Name="&lt;returned value=&quot;-1&quot; /&gt;" Value="FAILURE"/> 		
 		<Error Name="&lt;returned value=&quot;-2&quot; /&gt;" Value="FAILURE"/> 		
 		<Error Name="&lt;returned value=&quot;-10&quot; /&gt;" Value="FAILURE"/> 		

@@ -9,6 +9,7 @@
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
     <Attribute Name="Procedure" Type="System.String" Value="ChangeMSISDN_IMSI"/>
+    <Attribute Name="Interface" Type="System.String" Value="ICrmOperations"/>
   </Attributes>
   <DataTable Name="ChangeMSISDN_IMSIDataTable">
     <Columns>

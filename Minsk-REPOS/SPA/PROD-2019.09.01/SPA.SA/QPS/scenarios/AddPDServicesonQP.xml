@@ -409,8 +409,8 @@
 		</node>	
 		<node name="AddFR10361Node" object="IfCommander">
 			<resultlist>
-				<result value="0" node="IfFR13097Node"/>
-				<result value="1538" node="IfFR13097Node"/>
+				<result value="0" node="IfFR17216Node"/>
+				<result value="1538" node="IfFR17216Node"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -422,6 +422,52 @@
 				<param name="ErrorDecodingType" value="ByString"/>
 			</parameterslist>
 		</node>	
+		<node name="IfFR17216Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR17216Node"/>
+				<result value="1" node="IfFR17362Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17216"/>
+			</parameterslist>
+		</node>
+		<node name="AddServiceFR17216Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR17362Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="Command" value="AddBezlimitische2"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>
+		<node name="IfFR17362Node" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="AddServiceFR17362Node"/>
+				<result value="1" node="IfFR13097Node"/>
+			</resultlist>
+			<parameterslist>
+				<param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17362"/>
+			</parameterslist>
+		</node>
+		<node name="AddServiceFR17362Node" object="Commander">
+			<resultlist>
+				<result value="0" node="IfFR13097Node"/>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="AppendSubscribersData" value="false"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="Command" value="AddBrainDevice"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>			
 		<node name="IfFR13097Node" object="IfMultipleXmlConditionsResolver">
 			<resultlist>
 				<result value="0" node="AddServiceFR13097Node"/>

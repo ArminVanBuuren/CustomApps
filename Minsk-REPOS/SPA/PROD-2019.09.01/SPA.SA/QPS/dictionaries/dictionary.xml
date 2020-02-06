@@ -323,6 +323,15 @@
 		<Command Path="Delete1GBABroad.xml"/> 		
 		<Command Path="AddBusinessVPN10GbitsVL.xml"/> 		
 		<Command Path="DeleteBusinessVPN10GbitsVL.xml"/> 		
+		<Command Path="UpQuotaUnlimBorder.xml"/>
+		<Command Path="AddService5MbChinaBelGeely.xml"/>
+		<Command Path="DeleteService5MbChinaBelGeely.xml"/>
+		<Command Path="AddBezlimitische2.xml"/>
+		<Command Path="DeleteBezlimitische2.xml"/>
+		<Command Path="AddX7.xml"/>
+		<Command Path="DeleteX7.xml"/>
+		<Command Path="AddBrainDevice.xml"/>
+		<Command Path="DeleteBrainDevice.xml"/>
 	</CommandsList>
 	<FunctionsList Root=".\QPS\Dictionaries\Func" References="references.xml">
 		<Function Path="getlastdayofmonthbefore.cs" /> 

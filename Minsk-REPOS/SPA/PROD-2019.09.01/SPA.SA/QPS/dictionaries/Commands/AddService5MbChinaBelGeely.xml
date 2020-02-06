@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="AddService5MbChinaBelGeely" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Добавление услуги 5 Мб в Китае (БелДжи)</Description>
+	<Author Name="YAS" Date="2019-10-25+10:21"/>
+	<Request Template="&#60;se:Envelope xmlns:se=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#62;
+&#60;se:Body&#62;
+&#60;AddServiceRequest xmlns=&#34;http://broadhop.com/unifiedapi/soap/types&#34;&#62;
+&#60;audit&#62;
+&#60;id&#62;SPA&#60;/id&#62;
+&#60;/audit&#62;
+&#60;networkId&#62;{0}&#60;/networkId&#62;
+&#60;service&#62;
+&#60;code&#62;ROAM_CHINA&#60;/code&#62;
+&#60;enabled&#62;true&#60;/enabled&#62;
+&#60;/service&#62;
+&#60;balance&#62;
+&#60;code&#62;MTS_ROAMING&#60;/code&#62;
+&#60;quotaCode&#62;5MB_in_China&#60;/quotaCode&#62;
+&#60;startDate&#62;getyesterday({1})T21:00:00Z&#60;/startDate&#62;
+&#60;/balance&#62;
+&#60;/AddServiceRequest&#62;
+&#60;/se:Body&#62;
+&#60;/se:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	<Item Name="datetime" Type="Wellknown" Format="{0:yyyy-MM-dd}" />
+	</Request>
+	<ErrorsList CodePage="ASCII"/>
+</Command>

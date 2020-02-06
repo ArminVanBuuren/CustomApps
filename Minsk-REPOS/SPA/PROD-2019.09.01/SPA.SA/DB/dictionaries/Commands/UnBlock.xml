@@ -12,17 +12,18 @@
 	<DatabaseParametersList>
 		<DatabaseParameter Name="ServiceID">
 			<Properties DatabaseArgumentName="service_id" DatabaseArgumentType="number" />
-				<Source Path="/ExtendedRequestMessage/ActionName" />
+				<Source Path="/ExtendedRequestMessage/AdditionalData/WithdrawalList//SERVICE_CODE" />
 			<PossibleValues StringToKeyTable="false">
-				<Item Key="DeleteBLTDLIMonDB" StringValue="12533" /> 
-				<Item Key="DeleteCBBLKLOSTonDB" StringValue="6321" /> 
-				<Item Key="DeleteFRBLKCHKonDB" StringValue="6323" /> 
-				<Item Key="DeleteFRBLKFINonDB" StringValue="6320" /> 
-				<Item Key="DeleteFRBLKKEEPonDB" StringValue="11472" /> 
-				<Item Key="DeleteFRBLKPonDB" StringValue="6649" /> 
-				<Item Key="DeleteFRBLKPAYonDB" StringValue="12211" /> 
-				<Item Key="DeleteFRBLKTIMEonDB" StringValue="6322" /> 
-				<Item Key="DeleteFRBLKUSERonDB" StringValue="6319" /> 				
+				<Item Key="BLTDLIM" StringValue="12533" /> 
+				<Item Key="CBBLKLOST" StringValue="6321" /> 
+				<Item Key="FRBLKCHK" StringValue="6323" /> 
+				<Item Key="FRBLKFIN" StringValue="6320" /> 
+				<Item Key="FRBLKKEEP" StringValue="11472" /> 
+				<Item Key="FRBLKP" StringValue="6649" /> 
+				<Item Key="FRBLKPAY" StringValue="12211" /> 
+				<Item Key="FRBLKTIME" StringValue="6322" /> 
+				<Item Key="FRBLKUSER" StringValue="6319" /> 				
+				<Item Key="FRBLKINIT" StringValue="6318" /> 				
 			</PossibleValues>
 		</DatabaseParameter>
 		<DatabaseParameter Name="Action">

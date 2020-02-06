@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Command Name="DeleteBrainDevice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+	<Description>Технологическая: Умное устройство квота</Description>
+	<Author Name="NNM" Date="2020-01-30+10:30"/>
+	<Request Template="&#60;se:Envelope xmlns:se=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#62;
+&#60;se:Body&#62;
+&#60;DeleteServiceRequest xmlns=&#34;http://broadhop.com/unifiedapi/soap/types&#34;&#62;
+&#60;audit&#62;
+&#60;id&#62;SPA&#60;/id&#62;
+&#60;comment&#62;SPA.Activator&#60;/comment&#62;
+&#60;/audit&#62;
+&#60;networkId&#62;{0}&#60;/networkId&#62;
+&#60;serviceCode&#62;FR17362&#60;/serviceCode&#62;
+&#60;balance&#62;
+&#60;code&#62;MTS_BALANCE&#60;/code&#62;
+&#60;/balance&#62;
+&#60;hardDelete&#62;true&#60;/hardDelete&#62;
+&#60;/DeleteServiceRequest&#62;
+&#60;/se:Body&#62;
+&#60;/se:Envelope&#62;">
+	<Item Name="msisdn" Type="Wellknown" />
+	</Request>
+	<ErrorsList CodePage="ASCII">
+		<Error Name="&lt;errorCode&gt;49&lt;/errorCode&gt;" Value="SUCCESS"/>
+	</ErrorsList>
+</Command>

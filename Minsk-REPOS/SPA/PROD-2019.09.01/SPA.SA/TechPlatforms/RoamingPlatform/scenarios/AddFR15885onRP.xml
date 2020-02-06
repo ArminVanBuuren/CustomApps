@@ -83,7 +83,7 @@ where s.msisdn = {0}" />
 		</node>
 		<node name="ExtractIMSIX" object="XmlNodesCopier">
 			<resultlist>
-				<result value="" node="IFIMSI1Node" /> 
+				<result value="" node="CheckTagNode2" /> 
 			</resultlist>
 			<parameterslist>
 				<param name="SrcXml" value="db_get_imsixx" /> 
@@ -107,6 +107,23 @@ where s.msisdn = {0}" />
 				<param name="DstXmlPath:7" value="ExtendedRequestMessage/AdditionalData/IMSI8" />				
 			</parameterslist>
 		</node>
+		<node name="CheckTagNode2" object="IfMultipleXmlConditionsResolver">
+			<resultlist>
+				<result value="0" node="IFIMSI1Node" /> 
+				<result value="1" node="DummyResponderNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="xmlrequest" /> 
+				<param name="OrXmlPath:0" value="//AdditionalData/IMSI1" /> 
+				<param name="OrXmlPath:1" value="//AdditionalData/IMSI2" /> 
+				<param name="OrXmlPath:2" value="//AdditionalData/IMSI3" /> 
+				<param name="OrXmlPath:3" value="//AdditionalData/IMSI4" /> 
+				<param name="OrXmlPath:4" value="//AdditionalData/IMSI5" /> 
+				<param name="OrXmlPath:5" value="//AdditionalData/IMSI6" /> 
+				<param name="OrXmlPath:6" value="//AdditionalData/IMSI7" /> 
+				<param name="OrXmlPath:7" value="//AdditionalData/IMSI8" /> 
+			</parameterslist>
+		</node>				
 		<node name="IFIMSI1Node" object="Switch">
 			<resultlist>
 				<result value="1" node="Add_Multi_Imsi1_Node"/>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-	<Application Path=".\TEST\configuration.application.xml"/>
+	<Application Path=".\Test\configuration.application.xml"/>
 	<Settings>
-		<Add Key="ReportTimeout" Value="0"/>
-		<Add Key="Requests.MaxQueuedPerHost" Value="50"/>
+		<Add Key="ReportTimeout" Value="180"/>
+		<Add Key="Requests.MaxQueuedPerHost" Value="500"/>
 		<Add Key="Requests.PollPeriod" Value="5"/>
 		<Add Key="Requests.PollIdlePeriod" Value="2"/>
 		<Add Key="Responses.WritersCount" Value="5"/>

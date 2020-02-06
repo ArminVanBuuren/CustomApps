@@ -7,6 +7,7 @@
 		<Error Name="status&gt;102" Value="SUCCESS"/>		
 		<Error Name="status&gt;103" Value="SUCCESS"/>		
 		<Error Name="status&gt;000" Value="SUCCESS"/>		
+		<Error Name="407 Proxy Authentication" Value="ConnectionError"/>		
 	</ErrorsList>
 	<RegexpsList />
     <!--    <Regexp Name="Error" Value="(?&lt;ERROR&gt;-*\d)"/>

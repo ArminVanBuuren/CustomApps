@@ -62,6 +62,7 @@
     <Error Name="ERROR_CODE&gt;-151005" Value="InvalidTariffPlan"/>
     <Error Name="ERROR_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
     <Error Name="returns reusult: 1100 for IMSI:" Value="CommandTemporaryRejected" />
+	<Error Name="ERROR_CODE&gt;1100" Value="CommandTemporaryRejected" />
     <!-- Ошибки при замене номера -->
     <Error Name="ERROR_CODE=&quot;0" Value="SUCCESS"/>
     <Error Name="ERROR_CODE=&quot;-13000" Value="UnregisteredError"/>

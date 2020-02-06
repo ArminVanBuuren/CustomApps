@@ -8,10 +8,8 @@
       <![CDATA[<DataSet Name="IN_STATUSES_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
-    <Attribute Name="Procedure" Type="System.String" Value="SCN_CHANGE_LIFETIME_STATUS_BULK"/>
-    <Attribute Name="CLIENT_ID" Type="System.String" Value="SPA"/>
-    <Attribute Name="REQUEST_ID" Type="System.String" Value="reversecut({0},4)-{4}"/>
-    <Attribute Name="IN_STATUSES_DATA" Type="System.Data.DataSet" Value=""/>
+    <Attribute Name="Procedure" Type="System.String" Value="ChangeLifetimeStatuses"/>
+    <Attribute Name="Interface" Type="System.String" Value="ICrmOperations"/>
   </Attributes>
   <DataTable Name="REQUEST_DATA">
     <Columns>

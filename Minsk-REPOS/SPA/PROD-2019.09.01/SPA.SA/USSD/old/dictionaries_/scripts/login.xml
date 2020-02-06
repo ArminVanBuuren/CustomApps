@@ -1,7 +1,0 @@
-<Script Name="Login">
-	<wait data="Connected. Login:" timeout="4000"/>
-	<write data="cboss^J"/>
-	<wait data="Login accepted. Password:" timeout="4000"/>
-	<write data="cboss^J"/>
-	<wait data="Logged in. Access granted." timeout="4000"/>
-</Script>

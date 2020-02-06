@@ -126,7 +126,7 @@
 		<node name="IfServiceTVinKinoNode" object="IfConditionXmlResolver">
 			<resultlist>
 				<result value="0" node="AddTVinKinoNode"/>
-				<result value="1" node="DummyResponderNode"/>
+				<result value="1" node="IfServiceStartInKinoNode"/>
 			</resultlist>
 			<parameterslist>
 				<param name="ObjectNameInContext" value="request"/>
@@ -136,6 +136,7 @@
 		</node>			
 		<node name="AddTVinKinoNode" object="Commander">
 			<resultlist>
+				<result value="0" node="IfServiceStartInKinoNode"/>
 				<result value="" node="ResponseAssembler"/>
 			</resultlist>
 			<parameterslist>
@@ -145,7 +146,30 @@
 				<param name="CommandSource" value="Dictionary"/>
 				<param name="DynamicObject" value="(empty)"/>
 			</parameterslist>
-		</node>			
+		</node>
+		<node name="IfServiceStartInKinoNode" object="IfConditionXmlResolver">
+			<resultlist>
+				<result value="0" node="AddStartInKinoNode"/>
+				<result value="1" node="DummyResponderNode"/>
+			</resultlist>
+			<parameterslist>
+				<param name="ObjectNameInContext" value="request"/>
+				<param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17183"/>
+				<param name="Value:1" value=""/>
+			</parameterslist>
+		</node>
+		<node name="AddStartInKinoNode" object="Commander">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Command" value="AddServiceStartInKino"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+			</parameterslist>
+		</node>		
 		<node name="DummyResponderNode" object="DummyResponder">
 			<resultlist>
 				<result value="" node="ResponseAssembler"/>

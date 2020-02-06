@@ -8,7 +8,8 @@
 
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="30" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="MI1SCP" uri="tcp://f-clust-scp-oec:8022/CRMOperations.uri" uriRem="tcp://f-clust-scp-oec:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180"> 
+          <!--<config serviceGroup="MI1SCP" uri="tcp://mi-seeoec01:8022/CRMOperations.uri" uriRem="tcp://mi-seeoec01:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180"> -->
+		  <config serviceGroup="MI1SCP" uri="tcp://f-clust-scp-oec:8022/CRMOperations.uri" uriRem="tcp://f-clust-scp-oec:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180">
 		  <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-13002&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00"/>
           </config>
         </socket>

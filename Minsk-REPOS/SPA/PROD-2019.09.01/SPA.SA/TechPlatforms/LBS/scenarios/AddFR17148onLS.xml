@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario name="AddFR17148onLS">
+	<objectList>
+		<object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+		<object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll"/>
+		<object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll"/>
+		<object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" /> 
+		<object name="XmlNodesCopier" class="FORIS.ScenarioProcessing.CommonUnits.XmlNodesCopier" assembly="FORIS.SPA.SPF.dll" /> 		
+	</objectList>
+	<automat>
+		<node name="BySubscribersSplitter" object="BySubscribersSplitter">
+			<resultlist>
+				<result value="0" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+			<resultlist>
+				<result value="0" node="GetCutomerIDNode"/>
+				<result value="1" node=""/>
+			</resultlist>
+			<parameterslist>
+				<param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+			</parameterslist>
+		</node>
+		<node name="GetCutomerIDNode" object="DataBaseProcessor">
+			<resultlist>
+				<result value="" node="ExtractCustomerIDNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="DataBaseName" value="FORIS.SPA.BILLING" /> 
+				<param name="FunctionName" value="select nvl(max(billing.spa_func.GetCustomerID({0})),0) as CUSTOMERID from dual" /> 
+				<param name="FunctionType" value="customQuery" /> 
+				<param name="OutXml" value="db_get_customerid" /> 
+				<param name="DbParameterName:0" value="i_msisdn" /> 
+				<param name="DbParameterDirection:0" value="Input" /> 
+				<param name="DbParameterType:0" value="NVarchar2" /> 
+				<param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN" /> 
+			</parameterslist>
+		</node>	
+		<node name="ExtractCustomerIDNode" object="XmlNodesCopier">
+			<resultlist>
+				<result value="" node="IFCustIDNode" /> 
+			</resultlist>
+			<parameterslist>
+				<param name="SrcXml" value="db_get_customerid" /> 
+				<param name="DstMessage" value="xmlrequest" /> 
+				<param name="CopyContentType" value="InnerText" /> 
+				<param name="SrcXmlPath:0" value="root/return/record/column[@name='CUSTOMERID']" /> 
+				<param name="DstXmlPath:0" value="ExtendedRequestMessage/AdditionalData/CustomerID" /> 
+			</parameterslist>
+		</node>
+		<node name="IFCustIDNode" object="Switch">
+		<resultlist>
+		<result value="1" node="AddServiceNode" /> 
+		<result value="2" node="DummyResponderNode" /> 
+		<result value="3" node="DummyResponderNode" /> 
+		</resultlist>
+		<parameterslist>
+		<param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/CustomerID" /> 
+		<param name="Value:2" value="0" /> 
+		<param name="Value:3" value="-1" /> 
+		</parameterslist>
+		</node>
+		<node name="AddServiceNode" object="HttpCmd">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+			<parameterslist>
+				<param name="Connection.Url" value="api/addservice"/>
+				<param name="Command" value="AddServiceAdminLBS"/>
+				<param name="Script" value="Command"/>
+				<param name="ErrorDecodingType" value="ByString"/>
+				<param name="CommandSource" value="Dictionary"/>
+				<param name="DynamicObject" value="(empty)"/>
+				<param name="Connection.Host" value="172.30.160.9"/>
+				<param name="Connection.Port" value="8180"/>
+				<param name="Connection.Method" value="POST"/>
+				<param name="Connection.ContentType" value="application/x-www-form-urlencoded"/>
+				<param name="Connection.Header.Authorization" value="Basic Base64(billing-mts-rb:stVlT%QoVZyzJIZejpwI)"/>
+			</parameterslist>
+		</node> 
+		<node name="DummyResponderNode" object="DummyResponder">
+			<resultlist>
+				<result value="" node="ResponseAssembler"/>
+			</resultlist>
+		<parameterslist>
+			<param name="OverallResult" value="SUCCESS"/>
+			<param name="DetailedResult" value="SUCCESS"/>
+			<param name="Delay" value="0"/>
+		</parameterslist>
+		</node>			
+		<node name="ResponseAssembler" object="ResponseAssembler">
+			<resultlist>
+				<result value="" node="BySubscriberRequestDequeuer"/>
+			</resultlist>
+		</node>
+	</automat>
+</scenario>

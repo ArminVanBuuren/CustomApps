@@ -44,5 +44,47 @@
 				</object>					
 			</context>
 		</serviceInstance>
+		<serviceInstance hardwareID="LS:1851">
+		<scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+				<fileScenarioSource dir=".\TechPlatforms\LBS\Scenarios"/>
+			</scenarioSource>
+						<socketList poolSize="8" maxConnections="4" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="100" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+				<socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+					<config workingmode="wmGeneral">
+						<socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+							<config>
+								<ParametersList>
+									<Parameter Key="Host" Value="172.30.160.9"/> 
+									<Parameter Key="Port" Value="8180"/>
+									<Parameter Key="Url" Value=""/>
+									<Parameter Key="MethodName" Value="POST"/>
+									<Parameter Key="Method" Value="POST"/>
+									<Parameter Key="UserName" Value=""/>
+									<Parameter Key="UserPwd" Value=""/>
+									<!--<Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8"/> -->
+									<Parameter Key="ContentType" Value="html; charset=utf-8"/>
+									<Parameter Key="ParameterName" Value=""/>
+								</ParametersList>
+							</config>
+						</socket>
+						<Emulation Success="&#34;result&#34;:0" Failure="&#34;result&#34;:-1" RandomizePrintout="false" OverwriteCommandPrintout="true"  Lifetime="00:00:00.00"/>
+						<Timers IdleTimeout="6000"/>
+						<PredefinedScripts Login="Login" Command="Command" Idle="" Logoff=""/>
+						<ScriptsList> 
+							<Script Name="Login" Path=".\TechPlatforms\LBS\Dictionaries\Scripts\Login.xml"/>
+							<Script Name="Command" Path=".\TechPlatforms\LBS\Dictionaries\Scripts\Command.xml"/>
+						</ScriptsList> 
+					</config> 
+				</socket> 
+			</socketList>
+			<context>
+				<object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+					<config path=".\TechPlatforms\LBS\Dictionaries" xml="Dictionary.xml"/>
+				</object>
+				<object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+					<fileTableSource path=".\TechPlatforms\LBS\Misc" xml="RepetitionTable.xml"/>
+				</object>					
+			</context>
+		</serviceInstance>		
 	</serviceInstances>
 </Configuration>

@@ -115,5 +115,13 @@
 		<Command Path="ChangeMSISDNServiceDiscountclub.xml"/>	
 		<Command Path="DeleteServiceDiscountclub.xml"/>	
 		<Command Path="UnBlockServiceDiscountclub.xml"/>	
+		<Command Path="BlockServiceGameappps.xml"/>	
+		<Command Path="UnBlockServiceGameappps.xml"/>	
+		<Command Path="ChangeMSISDNServiceGameappps.xml"/>	
+		<Command Path="DeleteServiceGameappps.xml"/>	
+		<Command Path="BlockServiceMusicplaylist.xml"/>	
+		<Command Path="UnBlockServiceMusicplaylist.xml"/>	
+		<Command Path="ChangeMSISDNServiceMusicplaylist.xml"/>	
+		<Command Path="DeleteServiceMusicplaylist.xml"/>	
 	</CommandsList>
 </Dictionary>

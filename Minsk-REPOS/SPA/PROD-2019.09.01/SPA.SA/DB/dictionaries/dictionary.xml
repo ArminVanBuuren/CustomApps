@@ -492,7 +492,16 @@
 		<Command Path="AddTechComplectInternet2DB.xml"/>		
 		<Command Path="AddTechComplectInternet3DB.xml"/>		
 		<Command Path="AddBusinessVPN10GbitsDB.xml"/>		
-		<Command Path="DeleteBusinessVPN10GbitsDB.xml"/>		
+		<Command Path="DeleteBusinessVPN10GbitsDB.xml"/>
+		<Command Path="AddService5MbChinaBelGeelyDB.xml"/>		
+		<Command Path="DeleteService5MbChinaBelGeelyDB.xml"/>
+		<Command Path="RateLicenceMartletDB.xml"/>
+		<Command Path="AddBezlimitische2DB.xml"/>
+		<Command Path="DeleteBezlimitische2DB.xml"/>
+		<Command Path="AddX7DB.xml"/>
+		<Command Path="DeleteX7DB.xml"/>
+		<Command Path="AddBrainDeviceDB.xml"/>
+		<Command Path="DeleteBrainDeviceDB.xml"/>
 	</CommandsList>
 		<DecodersList Root=".\DB\Dictionaries\Decoders">
 		<Decoder Path="DbReturnValueDecoder.xml"/>
