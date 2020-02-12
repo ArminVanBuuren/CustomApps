@@ -440,6 +440,7 @@
     <Content Include="FORIS6\MG-05\CRMFilter\SplitterPlugin\SplitterPlugin.xml" />
     <Content Include="FORIS6\MG-05\defaultXPATH.xml" />
     <Content Include="FORIS6\MG-05\MGCommon.xml" />
+    <Content Include="FORIS6\Minsk-MGA-test.txt" />
     <Content Include="PROD-2020.02.06\MG-01\addrList.xml" />
     <Content Include="PROD-2020.02.06\MG-01\conf-samples\CRMConnector.exe.xml" />
     <Content Include="PROD-2020.02.06\MG-01\conf-samples\DBConnector.exe.xml" />

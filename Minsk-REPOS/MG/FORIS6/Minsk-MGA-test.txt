@@ -1,0 +1,19 @@
+
+<Message type="serviceorder" initiator="MyMTS" id="b7b6f772-e92f-4106-94ab-caa468f51b75" session_id="7e964699-cbfb-4b7b-9afb-aff6834c36e2">
+  <Item customer="375297776319">
+    <Service id="movepaymentrequest" action="5">
+      <Attribute name="receiver" value="375297505525" />
+      <Attribute name="amount" value="1" />
+    </Service>
+  </Item>
+</Message>
+ 
+
+select * from config
+where name = 'MGAInitiators' 
+
+smscon,6,1;ivrcon,9,1;ussd,15,1;ivrcc,9,1;emailcon,2,1;jrm,27,1;ccarecon,28,1;IMMO2,40,1;omsit,164,1;lbs,30,1;IMMO,38,1;Telephone,1,1;Email,2,1;Mail,3,1;Office,4,1;Fax,5,1;Sms,6,1;Operator,7,1;Issa,8,1;Assa,9,1;GroupOperations,10,1;System,11,1;CallCenter,12,1;RemoteDealerOperator,13,1;RemoteDealerOffice,14,1;Ussd,15,1;DebtorOperator,16,1;EmailOutgoing,17,1;SmsOutgoing,18,1;MailOutgoing,19,1;FaxOutgoing,20,1;CallOutgoing,21,1;Chat,22,1;Ametist,23,1;Ametist24,24,1;CorporateIssa,25,1;Bms,26,1;JrmWebFrontEnd,27,1;CCare,28,1;ElectronicAssistant,29,1;LocalBasedServices,30,1;UssdPartner,31,1;CampaignMS,32,1;Gso,33,1;Uprs,34,1;UnitedBill,35,1;Sas,36,1;MCD,37,1;Buongiorno,38,1;OxigenPortal,39,1;DSA,40,1;DealerPortal,41,1;Network,42,1;Payment,43,1;Siebel,44,1;ncih,45,1;femto,46,1;NcihNational,47,1;NcihCorporate,48,1;NcihAcService,49,1;Production,50,1;Debtors,51,1;Rbt,52,1;ExtDebtorSystem,55,1;NcihItp,56,1;SmBP,68,1;SingleFrontOffice,69,1;IvrCC,120,1;WLL,160,1;MVNO,161,1;ifree,162,1;Buongiorno1,163,1;OMSIT,164,1;BackFlushSMS,165,1;VoiceMail,166,1;Megogo,167,1;ActiveCloud,168,1;ITV,169,1;Unifun,170,1;Bamboo,171,1;USSDPortal,172,1;Bookmate,173,1;WebShop,174,1;BelInformMobil,175,1;ByCard,176,1;TechPlatform,177,1;SchoolLibrary,178,1;InternetMtsBy,179,1;Bdbel,180,1;DrWeb,181,1;PovodMtsBy,182,1;Memory,183,1;SMSExtra,184,1;NineSeven,185,1;LBS,186,1;MyMTS,187,1;Smotreshka,188,1;SC_TRADE,189,1;Rgkgroup,190,1;IncomingOffer,191,1;MtsMusic,192,1;ViaMobi,193,1;Paloma,194,1;SMSOnline,195,1;PartnerBusiness,196,1;SMSInform,197,1;MySafety,198,1;EVA,199,1;MtsMoney,200,1;Playfon,201,1;UkrMobGroup,202,1;MobileContentFactory,203,1;Belinvest,204,1;InteractiveBalance,205,1;JobsmsBy,206,1;LineB,207,1;MTSID,208,1;InteractiveBalanceBimmo,209,1;BalanceUnifun,210,1;MessaggioCom,211,1;KinoMax,212,1;ImmoZ,213,1;Platf,214,1;Family,215,1;Opera,10006,1;MobileCommerce,100500,1;
+ 
+select * from source_type t
+where t.source_type_id = 187
+

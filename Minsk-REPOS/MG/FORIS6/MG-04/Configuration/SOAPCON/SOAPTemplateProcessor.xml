@@ -3113,10 +3113,10 @@
     </output>
   </template>
   <!--    MTS_GuaranteedPayment             -->
-  <template procedureName="MTS_GuaranteedPayment">
+  <template procedureName="MTS_GuaranteedPayment" sessionStorage="Memory" sessionLifetime="60">
     <receiveTemplate>
       <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}">
+        <Item customer="${customer}">
           <Service id="guaranteedpayment" action="6" />
         </Item>
         @{store(MTSGuaranteedPaymentcustomer,${customer})}
@@ -3144,6 +3144,7 @@
       <set item="oparam:result_msg" conditionEx="#{${dbresult}=330141}" value="Превышено допустимое кол-во обещанных платежей" />
       <set item="oparam:result_msg" conditionEx="#{${dbresult}=330142}" value="Исчерпан лимит средств для ввода обещанного платежа" />
       <set item="oparam:result_msg" conditionEx="#{${dbresult}=330132}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <input>
       <param name="sourceid" />
@@ -3152,6 +3153,9 @@
       <param name="amount" />
     </input>
     <output>
+      <param name="customer" />
+      <param name="amount" />
+      <param name="sourceid" />
       <param name="result_code" />
       <param name="result_msg" />
     </output>
@@ -3159,7 +3163,7 @@
   <template procedureName="MTSGuaranteedPayment">
     <receiveTemplate>
       <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}">
+        <Item customer="${customer}">
           <Service id="guaranteedpayment" action="7">
             <Attribute name="amount" value="${amount}" />
             <Attribute name="currency" value="933" />
