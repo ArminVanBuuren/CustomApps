@@ -2,6 +2,7 @@
   <macros>
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
     <define name="_SMSCON_1" value="SMSCON_02_01" />
+    <define name="_SMSCON_ISSA" value="SMSCON_02_ISSA" />
     <define name="_ENCODING" value="unicodefffe" />
     <!-- ==========================  REDIRECT CONNECTORS   ========================= -->
   </macros>
@@ -41,6 +42,18 @@
       <set item="Encoding" value="_ENCODING" />
       <set item="ValidityPeriod" value="#{if((substring('${sScheduleTime}',1,2)='00' or '${sScheduleTime}'='${sValidityPeriod}'),'','${sValidityPeriod}')}" />
       <set item="ScheduleDeliveryTime" value="#{if((substring('${sScheduleTime}',1,2)='00' or '${sScheduleTime}'='${sValidityPeriod}'),'','${sScheduleTime}')}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="DeliveryRequestAutoInformation">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${sender}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="_ENCODING" />
     </deliveryTemplate>
   </template>
   <template procedureName="SendSMS" persistent="false">

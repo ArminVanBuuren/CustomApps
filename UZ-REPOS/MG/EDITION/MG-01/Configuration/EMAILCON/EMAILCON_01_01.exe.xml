@@ -1,7 +1,8 @@
 <Application configClass="FORIS.MessagingGateway.EmailConnector.EmailConnectorConfiguration" type="EMAILCON">
   <EmailConnections>
     <SMTP server="10.160.11.7" port="25" delay="500" advancedSmtp="true">
-      <Account from="no-reply@ums.uz" name="adums\no-reply" password="P@sswordqazWSX" />
+      <Account from="no-reply@mobi.uz" name="adums\no-reply" password="P@sswordqazWSX" />
+	  <Account from="billing_reports@mobi.uz" name="adums\billing_reports" password="P@sswordqazWSX" />
     </SMTP>
   </EmailConnections>
   <FTPConnections>
@@ -11,8 +12,8 @@
     <Item name="ModuleType" value="EMAILCON" />
     <Item name="ModuleName" value="EMAILCON_01_01" />
     <Item name="MessagesLimit" value="20" />
-    <Item name="DefaultCharset" value="unicodefffe" />
-    <Item name="DefaultEncoding" value="unicodefffe" />
+    <Item name="DefaultCharset" value="utf-8" />   <!--unicodefffe-->
+    <Item name="DefaultEncoding" value="utf-8" />
     <Item name="FetchLimit" value="20" />
     <Item name="CRMCacheCleanInterval" value="1200" />
     <Item name="StoringInterval" value="10" />

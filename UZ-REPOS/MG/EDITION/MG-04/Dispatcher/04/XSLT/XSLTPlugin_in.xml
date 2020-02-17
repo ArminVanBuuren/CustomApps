@@ -5,4 +5,5 @@
   <transform condition="/Message/@type='dummyrequest'" validation="1=1" successTemplate="XSLT\Scripts\DummyRequest.xsl" errorTemplate="" />
   <transform condition="/Message/@type='convertencoding'" validation="1=1" successTemplate="XSLT\Scripts\ConvertEncoding.xsl" errorTemplate="" />
   <transform condition="/Message/@type='parcecounters'" validation="1=1" successTemplate="XSLT\Scripts\GetCounters.xsl" errorTemplate="" />
+  <transform condition="/Message/@type='soapsendsms'" validation="1=1" successTemplate="XSLT\Scripts\SoapSendSMS.xsl" errorTemplate="" />
 </plugin>

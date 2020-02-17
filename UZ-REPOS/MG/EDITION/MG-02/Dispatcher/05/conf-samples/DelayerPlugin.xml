@@ -1,0 +1,4 @@
+<plugin name="DelayerPlugin">
+  <delay condition="/Message/@type='setprofile'" delayMilliseconds="1000" />
+  <delay condition="/Message/@type='verificationrequest'" delayMilliseconds="15000" />
+</plugin>

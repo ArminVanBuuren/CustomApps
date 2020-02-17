@@ -37,5 +37,7 @@
     <Map template_id="DirectSendSMS" connector="SMSCON_01_ISSA" template_name="DeliveryRequestFromISSA" />
     <Map template_id="Email_Test" connector="EMAILCON_01_01" template_name="Email_Test" />
     <Map template_id="SMSNewCustomer" connector="SMSCON_01_01" template_name="SMSNewCustomer" />
+	<Map template_id="BillingNotifySms" connector="SMSCON_01_01" template_name="DeliveryRequestNotify" />
+	<Map template_id="BillingNotifyEmail" connector="EMAILCON_01_01" template_name="DeliveryRequestNotify" />
   </TemplateToConnector>
 </Application>

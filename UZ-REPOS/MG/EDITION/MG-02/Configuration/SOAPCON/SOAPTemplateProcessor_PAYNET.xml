@@ -652,7 +652,7 @@
   <template procedureName="TransactionStatus" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-        <Item procedureName="transaction_status">
+        <Item procedureName="external_supplier.transaction_status_paynet">
           <Attribute name="p_transaction" type="STRING" value="${transaction}" />
           <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
           <Attribute name="result" type="out:STRING" />
@@ -751,7 +751,7 @@
   <template procedureName="TransactionStatusTp" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="false">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_${transaction}_${transactiontime})}">
-        <Item procedureName="transaction_status_tp">
+        <Item procedureName="external_supplier.transaction_status_tp">
           <Attribute name="p_transaction" type="STRING" value="${transaction}" />
           <Attribute name="p_transaction_time" type="STRING" value="${transactiontime}" />
           <Attribute name="result" type="out:STRING" />
@@ -868,7 +868,7 @@
   <template procedureName="TransactionPeriodicalCheck" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="300" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(PeriodicalCheck_${begintime}_${endtime})}">
-        <Item procedureName="transaction_check_select">
+        <Item procedureName="external_supplier.transaction_check_select">
           <Attribute name="p_begin_time" type="STRING" value="${begintime}" />
           <Attribute name="p_end_time" type="STRING" value="${endtime}" />
           <Attribute name="result" type="out:STRING" />
@@ -1051,7 +1051,7 @@
   <template procedureName="CheckTPChangeAward" handler="DBCON_02_01" sessionStorage="Memory" sessionLifetime="600" persistent="true">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
-        <Item procedureName="paynet_check_tp_award">
+        <Item procedureName="external_supplier.paynet_check_tp_award">
           <Attribute name="p_current_tp" type="STRING" value="${sCurrentTariff}" />
           <Attribute name="p_new_tp" type="STRING" value="${sNewTariffPlan}" />
           <Attribute name="result" type="out:STRING" />

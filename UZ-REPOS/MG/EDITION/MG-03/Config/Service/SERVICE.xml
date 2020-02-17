@@ -701,6 +701,14 @@ tplist               - Компонент выполняет проверки п
     >
     <soapcon value="LGHTRMNG"/>
   </Service>
+  <Service service_code="FRMINIRMNG" datefrom="20131001" dateto="" group="1"
+
+    service_name_ru="Mini rouming"
+    service_name_uz="Mini rouming"
+    service_name_en="Mini roaming"
+    >
+    <soapcon value="FRMINIRMNG"/>
+  </Service>
   <Service service_code="CB264" datefrom="20131001" dateto="" group="1" check_block="false"
 
     service_name_ru="Opredelitel^ nomera"
@@ -3288,6 +3296,32 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*301*13"/>
     <dealerussd value="*301*13*confirm"/>
     <dealerussd value="*301*13*1"/>
+  </Service>
+  <Service service_code="FRMIN2020" datefrom="20131001" dateto="" group="2"
+
+    service_name_ru="2020 Minut"
+    service_name_uz="2020 Daqiqa"
+    service_name_en="2020 Minutes"
+    >
+    <soapcon value="FRMIN2020"/>
+    <ivrcon value=""/>
+    <dealerussd value="*103*2020"/>
+    <dealerussd value="*103*2020*confirm"/>
+    <dealerussd value="*103*2020*1"/>
+
+  </Service>
+  <Service service_code="FRMB2020" datefrom="20131001" dateto="" group="2"
+
+    service_name_ru="2020 MB"
+    service_name_uz="2020 MB"
+    service_name_en="2020 MB"
+    >
+    <soapcon value="FRMB2020"/>
+    <ivrcon value=""/>
+    <dealerussd value="*102*2020"/>
+    <dealerussd value="*102*2020*confirm"/>
+    <dealerussd value="*102*2020*1"/>
+
   </Service>
   <Service service_code="MB300M1" datefrom="20131001" dateto="" group="5"
 

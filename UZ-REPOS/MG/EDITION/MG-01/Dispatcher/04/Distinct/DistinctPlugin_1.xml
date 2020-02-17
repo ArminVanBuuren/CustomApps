@@ -1,0 +1,6 @@
+<plugin name="DistinctPlugin_1" ifFound="serviceinterrogation">
+  <nodes timeOut="0">
+    <node path="/Message/Item/@customer" />
+    <node path="/Message/@session_id" />
+  </nodes>
+</plugin>

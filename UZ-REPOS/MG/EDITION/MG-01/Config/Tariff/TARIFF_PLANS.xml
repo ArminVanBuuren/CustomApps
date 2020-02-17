@@ -89,7 +89,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="101"/>
     <ivrcon value="101"/>
   </Tariff>
-  <Tariff ivrcode="102" datefrom="20131001" dateto="" group="1" availbalance="15"
+  <Tariff ivrcode="102" datefrom="20131001" dateto="" group="1" availbalance="16"
     info_notavailbalance_ru="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
     info_notavailbalance_uz="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
     info_notavailbalance_en="Dlya smeny tarifnogo plana na &quot;MAXI&quot;, na Vashem schetu dolzhno byt^ ne men^she 15 y.e."
@@ -122,7 +122,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="104"/>
     <ivrcon value="104"/>
   </Tariff>
-  <Tariff ivrcode="105" datefrom="20131001" dateto="20131001" group="1" availbalance="1"
+  <Tariff ivrcode="105" datefrom="20131001" dateto="20131001" group="1" availbalance="2"
 
     info_confirm_ru="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
     info_confirm_uz="Vash tekushiy tarifniy plan: &quot;[1]&quot;. Stoimost^ smeny plana obsluzhivaniya 1 y.e. Dlya smeny plana obsluzhivaniya na &quot;[0]&quot; otprav^te 1&#xA;&#xA;?.TP Info"
@@ -208,7 +208,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="111"/>
     <ivrcon value="111"/>
   </Tariff>
-  <Tariff ivrcode="113" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="113" datefrom="20131001" dateto="" group="1" availbalance="1"
 
     tariffname_ru="Corporate MAXI"
     tariffname_uz="Corporate MAXI"
@@ -306,7 +306,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="121"/>
     <ivrcon value="121"/>
   </Tariff>
-  <Tariff ivrcode="122" datefrom="20131001" dateto="" group="1" availbalance="25"
+  <Tariff ivrcode="122" datefrom="20131001" dateto="" group="1" availbalance="26"
 
     tariffname_ru="Ultra"
     tariffname_uz="Ultra"
@@ -372,7 +372,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*7*confirm"/>
     <dealerussd value="*2*1*7*1"/-->
   </Tariff>
-  <Tariff ivrcode="131" datefrom="20131001" dateto="" group="1" availbalance="150"
+  <Tariff ivrcode="131" datefrom="20131001" dateto="" group="1" availbalance="151"
 
     tariffname_ru="Maxi Year"
     tariffname_uz="Maxi Year"
@@ -386,7 +386,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*5*confirm"/>
     <dealerussd value="*2*1*5*1"/>
   </Tariff>
-  <Tariff ivrcode="132" datefrom="20131001" dateto="" group="1" availbalance="1000"
+  <Tariff ivrcode="132" datefrom="20131001" dateto="" group="1" availbalance="1001"
 
     tariffname_ru="Absolut Year"
     tariffname_uz="Absolut Year"
@@ -396,7 +396,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="132"/>
     <ivrcon value="132"/>
   </Tariff>
-  <Tariff ivrcode="133" datefrom="20131001" dateto="" group="1" availbalance="250"
+  <Tariff ivrcode="133" datefrom="20131001" dateto="" group="1" availbalance="251"
 
     tariffname_ru="Ultra Year"
     tariffname_uz="Ultra Year"
@@ -418,7 +418,7 @@ tplist               - Компонент выполняет проверки п
     tariffname_scg="Partner APN"
     >
   </Tariff>
-  <Tariff ivrcode="135" datefrom="20131001" dateto="20131001" group="1" availbalance="8"
+  <Tariff ivrcode="135" datefrom="20131001" dateto="20131001" group="1" availbalance="9"
  
     tariffname_ru="Super Optima"
     tariffname_uz="Super Optima"
@@ -463,7 +463,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="140"/>
     <ivrcon value="140"/>
   </Tariff>
-  <Tariff ivrcode="141" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="141" datefrom="20131001" dateto="" group="1" availbalance="1"
  
     tariffname_ru="M2M"
     tariffname_uz="M2M"
@@ -471,7 +471,7 @@ tplist               - Компонент выполняет проверки п
     tariffname_scg="M2M"
     >
   </Tariff>
-  <Tariff ivrcode="142" datefrom="20131001" dateto="" group="1" availbalance="3.05"
+  <Tariff ivrcode="142" datefrom="20131001" dateto="" group="1" availbalance="4.05"
  
     tariffname_ru="Besh"
     tariffname_uz="Besh"
@@ -481,7 +481,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="142"/>
     <ivrcon value="142"/>
   </Tariff>
-  <Tariff ivrcode="143" datefrom="20131001" dateto="" group="1" availbalance="3.20"
+  <Tariff ivrcode="143" datefrom="20131001" dateto="" group="1" availbalance="5.20"
     tariffname_ru="Baraka "
     tariffname_uz="Baraka"
     tariffname_en="Baraka"
@@ -494,7 +494,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*10*confirm"/>
     <dealerussd value="*2*1*10*1"/-->
   </Tariff>
-  <Tariff ivrcode="144" datefrom="20131001" dateto="" group="1" availbalance="10"
+  <Tariff ivrcode="144" datefrom="20131001" dateto="" group="1" availbalance="11"
     tariffname_ru="777 "
     tariffname_uz="777"
     tariffname_en="777"
@@ -507,7 +507,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*11*confirm"/>
     <dealerussd value="*2*1*11*1"/-->
   </Tariff>
-  <Tariff ivrcode="147" datefrom="20131001" dateto="" group="1" availbalance="35"
+  <Tariff ivrcode="147" datefrom="20131001" dateto="" group="1" availbalance="36"
     tariffname_ru="Perfect "
     tariffname_uz="Perfect"
     tariffname_en="Perfect"
@@ -520,7 +520,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*12*confirm"/>
     <dealerussd value="*2*1*12*1"/-->
   </Tariff>
-  <Tariff ivrcode="148" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="148" datefrom="20131001" dateto="" group="1" availbalance="1"
     tariffname_ru="Corporate Perfect "
     tariffname_uz="Corporate Perfect"
     tariffname_en="Corporate Perfect"
@@ -529,7 +529,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="148"/>
     <ivrcon value="148"/>
   </Tariff>
-  <Tariff ivrcode="149" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="149" datefrom="20131001" dateto="" group="1" availbalance="1"
     tariffname_ru="DGU "
     tariffname_uz="DGU"
     tariffname_en="DGU"
@@ -538,7 +538,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="149"/>
     <ivrcon value="149"/>
   </Tariff>
-  <Tariff ivrcode="150" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="150" datefrom="20131001" dateto="" group="1" availbalance="1"
     tariffname_ru="Corporate 777 "
     tariffname_uz="Corporate 777"
     tariffname_en="Corporate 777"
@@ -547,7 +547,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="150"/>
     <ivrcon value="150"/>
   </Tariff>
-  <Tariff ivrcode="151" datefrom="20131001" dateto="" group="1" availbalance="8"
+  <Tariff ivrcode="151" datefrom="20131001" dateto="" group="1" availbalance="9"
     tariffname_ru="555 "
     tariffname_uz="555"
     tariffname_en="555"
@@ -560,7 +560,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*13*confirm"/>
     <dealerussd value="*2*1*13*1"/-->
   </Tariff>
-  <Tariff ivrcode="153" datefrom="20131001" dateto="" group="1" availbalance="6"
+  <Tariff ivrcode="153" datefrom="20131001" dateto="" group="1" availbalance="7"
     tariffname_ru="Optima 333"
     tariffname_uz="Optima 333"
     tariffname_en="Optima 333"
@@ -573,7 +573,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*7*confirm"/>
     <dealerussd value="*2*1*7*1"/-->
   </Tariff>
-  <Tariff ivrcode="154" datefrom="20131001" dateto="" group="1" availbalance="3"
+  <Tariff ivrcode="154" datefrom="20131001" dateto="" group="1" availbalance="4"
     tariffname_ru="Terminal "
     tariffname_uz="Terminal"
     tariffname_en="Terminal"
@@ -586,7 +586,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*8*confirm"/>
     <dealerussd value="*2*1*8*1"/>
   </Tariff>
-  <Tariff ivrcode="155" datefrom="20131001" dateto="" group="1" availbalance="0"
+  <Tariff ivrcode="155" datefrom="20131001" dateto="" group="1" availbalance="1"
     tariffname_ru="Corporate Ultra"
     tariffname_uz="Corporate Ultra"
     tariffname_en="Corporate Ultra"
@@ -595,7 +595,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="155"/>
     <ivrcon value="155"/>
   </Tariff>
-  <Tariff ivrcode="156" datefrom="20131001" dateto="" group="1" availbalance="4"
+  <Tariff ivrcode="156" datefrom="20131001" dateto="" group="1" availbalance="5"
     tariffname_ru="Gap Bor!"
     tariffname_uz="Gap Bor!"
     tariffname_en="Gap Bor!"
@@ -609,7 +609,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*1*1"/>
 
   </Tariff>
-  <Tariff ivrcode="157" datefrom="20131001" dateto="" group="1" availbalance="100"
+  <Tariff ivrcode="157" datefrom="20131001" dateto="" group="1" availbalance="101"
     tariffname_ru="777 Year"
     tariffname_uz="777 Year"
     tariffname_en="777 Year"
@@ -622,7 +622,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*14*confirm"/>
     <dealerussd value="*2*1*14*1"/>
   </Tariff>
-  <Tariff ivrcode="158" datefrom="20131001" dateto="" group="1" availbalance="12"
+  <Tariff ivrcode="158" datefrom="20131001" dateto="" group="1" availbalance="13"
     tariffname_ru="Connect "
     tariffname_uz="Connect"
     tariffname_en="Connect"
@@ -635,7 +635,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*15*confirm"/>
     <dealerussd value="*2*1*00*15*1"/>
   </Tariff>
-  <Tariff ivrcode="159" datefrom="20131001" dateto="" group="1" availbalance="2.04"
+  <Tariff ivrcode="159" datefrom="20131001" dateto="" group="1" availbalance="3.04"
  
     tariffname_ru="Ajoyib"
     tariffname_uz="Ajoyib"
@@ -667,7 +667,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="163"/>
     <ivrcon value="163"/>
   </Tariff>
-  <Tariff ivrcode="164" datefrom="20131001" dateto="" group="1" availbalance="7.84"
+  <Tariff ivrcode="164" datefrom="20131001" dateto="" group="1" availbalance="8.84"
  
     tariffname_ru="Optimalniy"
     tariffname_uz="Optimal"
@@ -681,7 +681,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*3*confirm"/>
     <dealerussd value="*2*1*3*1"/>
   </Tariff>
-  <Tariff ivrcode="165" datefrom="20131001" dateto="" group="1" availbalance="7.84"
+  <Tariff ivrcode="165" datefrom="20131001" dateto="" group="1" availbalance="8.84"
  
     tariffname_ru="Optimalniy+"
     tariffname_uz="Optimal+"
@@ -695,7 +695,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*16*confirm"/>
     <dealerussd value="*2*1*00*16*1"/>
   </Tariff>
-  <Tariff ivrcode="166" datefrom="20131001" dateto="" group="1" availbalance="4.99"
+  <Tariff ivrcode="166" datefrom="20131001" dateto="" group="1" availbalance="5.99"
  
     tariffname_ru="Bazoviy"
     tariffname_uz="Asosiy"
@@ -709,7 +709,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*18*confirm"/>
     <dealerussd value="*2*1*00*18*1"/>
   </Tariff>
-  <Tariff ivrcode="167" datefrom="20131001" dateto="" group="1" availbalance="5.94"
+  <Tariff ivrcode="167" datefrom="20131001" dateto="" group="1" availbalance="6.94"
  
     tariffname_ru="Standartniy"
     tariffname_uz="Standart"
@@ -723,7 +723,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*17*confirm"/>
     <dealerussd value="*2*1*00*17*1"/>
   </Tariff>
-  <Tariff ivrcode="168" datefrom="20131001" dateto="" group="1" availbalance="9.97"
+  <Tariff ivrcode="168" datefrom="20131001" dateto="" group="1" availbalance="10.97"
  
     tariffname_ru="Udobniy"
     tariffname_uz="Qulay"
@@ -737,7 +737,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*19*confirm"/>
     <dealerussd value="*2*1*00*19*1"/>
   </Tariff>
-  <Tariff ivrcode="169" datefrom="20131001" dateto="" group="1" availbalance="9.97"
+  <Tariff ivrcode="169" datefrom="20131001" dateto="" group="1" availbalance="10.97"
  
     tariffname_ru="Udobniy+"
     tariffname_uz="Qulay+"
@@ -751,7 +751,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*20*confirm"/>
     <dealerussd value="*2*1*00*20*1"/>
   </Tariff>
-  <Tariff ivrcode="170" datefrom="20131001" dateto="" group="1" availbalance="14.96"
+  <Tariff ivrcode="170" datefrom="20131001" dateto="" group="1" availbalance="15.96"
  
     tariffname_ru="Premialniy"
     tariffname_uz="Premial"
@@ -765,7 +765,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*21*confirm"/>
     <dealerussd value="*2*1*00*21*1"/>
   </Tariff>
-  <Tariff ivrcode="171" datefrom="20131001" dateto="" group="1" availbalance="24.94"
+  <Tariff ivrcode="171" datefrom="20131001" dateto="" group="1" availbalance="25.94"
  
     tariffname_ru="Idealniy"
     tariffname_uz="Ideal"
@@ -779,7 +779,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*22*confirm"/>
     <dealerussd value="*2*1*00*22*1"/>
   </Tariff>
-  <Tariff ivrcode="172" datefrom="20131001" dateto="" group="1" availbalance="34.91"
+  <Tariff ivrcode="172" datefrom="20131001" dateto="" group="1" availbalance="35.91"
  
     tariffname_ru="VIP"
     tariffname_uz="VIP"
@@ -793,7 +793,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*2*1*00*23*confirm"/>
     <dealerussd value="*2*1*00*23*1"/>
   </Tariff>
-  <Tariff ivrcode="173" datefrom="20131001" dateto="" group="1" availbalance="149.63"
+  <Tariff ivrcode="173" datefrom="20131001" dateto="" group="1" availbalance="150.63"
  
     tariffname_ru="Premialniy Godovoy"
     tariffname_uz="Premial Yillik"
@@ -807,7 +807,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*00*21*confirm"/>
     <dealerussd value="*2*1*00*21*1"/-->
   </Tariff>
-  <Tariff ivrcode="174" datefrom="20131001" dateto="" group="1" availbalance="249.38"
+  <Tariff ivrcode="174" datefrom="20131001" dateto="" group="1" availbalance="250.38"
  
     tariffname_ru="Idealniy Godovoy"
     tariffname_uz="Ideal Yillik"
@@ -819,7 +819,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*109*confirm"/>
     <dealerussd value="*109*1"/>
   </Tariff>
-  <Tariff ivrcode="175" datefrom="20131001" dateto="" group="1" availbalance="349.13"
+  <Tariff ivrcode="175" datefrom="20131001" dateto="" group="1" availbalance="350.13"
  
     tariffname_ru="VIP Godovoy"
     tariffname_uz="VIP Yillik"
@@ -833,7 +833,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*00*23*confirm"/>
     <dealerussd value="*2*1*00*23*1"/-->
   </Tariff>
-  <Tariff ivrcode="176" datefrom="20131001" dateto="" group="1" availbalance="99.75"
+  <Tariff ivrcode="176" datefrom="20131001" dateto="" group="1" availbalance="100.75"
  
     tariffname_ru="Udobniy Godovoy"
     tariffname_uz="Qulay Yillik"
@@ -847,7 +847,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*00*19*confirm"/>
     <dealerussd value="*2*1*00*19*1"/-->
   </Tariff>
-  <Tariff ivrcode="177" datefrom="20131001" dateto="" group="1" availbalance="99.75"
+  <Tariff ivrcode="177" datefrom="20131001" dateto="" group="1" availbalance="100.75"
  
     tariffname_ru="Udobniy Godovoy+"
     tariffname_uz="Qulay Yillik+ "
@@ -861,7 +861,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*00*19*confirm"/>
     <dealerussd value="*2*1*00*19*1"/-->
   </Tariff>
-  <Tariff ivrcode="178" datefrom="20131001" dateto="" group="1" availbalance="9.5"
+  <Tariff ivrcode="178" datefrom="20131001" dateto="" group="1" availbalance="10.5"
  
     tariffname_ru="Chilla"
     tariffname_uz="Chilla"
@@ -885,7 +885,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="179"/>
     <ivrcon value="179"/>
   </Tariff>
-  <Tariff ivrcode="180" datefrom="20131001" dateto="" group="1" availbalance="2.37"
+  <Tariff ivrcode="180" datefrom="20131001" dateto="" group="1" availbalance="3.37"
  
     tariffname_ru="Kontragent arenda"
     tariffname_uz="Kontragent arenda"
@@ -899,7 +899,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*2*1*00*19*confirm"/>
     <dealerussd value="*2*1*00*19*1"/-->
   </Tariff>
-  <Tariff ivrcode="181" datefrom="20131001" dateto="" group="1" availbalance="18.53"
+  <Tariff ivrcode="181" datefrom="20131001" dateto="" group="1" availbalance="19.53"
  
     tariffname_ru="Eksklyuziv"
     tariffname_uz="Eksklyuziv"
@@ -939,7 +939,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="184"/>
     <ivrcon value="184"/>
   </Tariff>
-  <Tariff ivrcode="185" datefrom="20131001" dateto="" group="1" availbalance="4.75"
+  <Tariff ivrcode="185" datefrom="20131001" dateto="" group="1" availbalance="5.75"
  
     tariffname_ru="Chilla Lite"
     tariffname_uz="Chilla Lite"
@@ -951,7 +951,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*042*confirm"/>
     <dealerussd value="*042*1"/>
   </Tariff>
-  <Tariff ivrcode="186" datefrom="20131001" dateto="" group="1" availbalance="7.13"
+  <Tariff ivrcode="186" datefrom="20131001" dateto="" group="1" availbalance="8.13"
  
     tariffname_ru="Afrosiyob"
     tariffname_uz="Afrosiyob"
@@ -963,7 +963,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*042*confirm"/>
     <dealerussd value="*042*1"/-->
   </Tariff>
-  <Tariff ivrcode="187" datefrom="20131001" dateto="" group="1" availbalance="5.94"
+  <Tariff ivrcode="187" datefrom="20131001" dateto="" group="1" availbalance="6.94"
  
     tariffname_ru="Lokomotiv"
     tariffname_uz="Lokomotiv"
@@ -975,7 +975,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*042*confirm"/>
     <dealerussd value="*042*1"/-->
   </Tariff>
-  <Tariff ivrcode="188" datefrom="20131001" dateto="" group="1" availbalance="14.25"
+  <Tariff ivrcode="188" datefrom="20131001" dateto="" group="1" availbalance="15.25"
  
     tariffname_ru="Yorqin"
     tariffname_uz="Yorqin"
@@ -987,7 +987,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*113*confirm"/>
     <dealerussd value="*113*1"/>
   </Tariff>
-  <Tariff ivrcode="189" datefrom="20131001" dateto="" group="1" availbalance="2.38"
+  <Tariff ivrcode="189" datefrom="20131001" dateto="" group="1" availbalance="3.38"
  
     tariffname_ru="Oson"
     tariffname_uz="Oson"
@@ -997,7 +997,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="189"/>
     <ivrcon value="189"/>
   </Tariff>
-  <Tariff ivrcode="190" datefrom="20131001" dateto="" group="1" availbalance="142.51"
+  <Tariff ivrcode="190" datefrom="20131001" dateto="" group="1" availbalance="143.51"
  
     tariffname_ru="Yorqin Yillik"
     tariffname_uz="Yorqin Yillik"
@@ -1007,7 +1007,7 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="190"/>
     <ivrcon value="190"/>
   </Tariff>
-  <Tariff ivrcode="191" datefrom="20131001" dateto="" group="1" availbalance="4.75"
+  <Tariff ivrcode="191" datefrom="20131001" dateto="" group="1" availbalance="5.75"
  
     tariffname_ru="Shodlik"
     tariffname_uz="Shodlik"
@@ -1019,7 +1019,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*125*confirm"/>
     <dealerussd value="*125*1"/>
   </Tariff>
-  <Tariff ivrcode="192" datefrom="20131001" dateto="" group="1" availbalance="28.50"
+  <Tariff ivrcode="192" datefrom="20131001" dateto="" group="1" availbalance="29.50"
  
     tariffname_ru="Terminal Yillik"
     tariffname_uz="Terminal Yillik"
@@ -1031,7 +1031,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*125*confirm"/>
     <dealerussd value="*125*1"/-->
   </Tariff>
-  <Tariff ivrcode="193" datefrom="20131001" dateto="" group="1" availbalance="3.8"
+  <Tariff ivrcode="193" datefrom="20131001" dateto="" group="1" availbalance="4.8"
  
     tariffname_ru="O^qituvchi 1"
     tariffname_uz="O^qituvchi 1"
@@ -1043,7 +1043,7 @@ tplist               - Компонент выполняет проверки п
     <!--dealerussd value="*125*confirm"/>
     <dealerussd value="*125*1"/-->
   </Tariff>
-  <Tariff ivrcode="194" datefrom="20131001" dateto="" group="1" availbalance="7.13"
+  <Tariff ivrcode="194" datefrom="20131001" dateto="" group="1" availbalance="8.13"
  
     tariffname_ru="O^qituvchi 2"
     tariffname_uz="O^qituvchi 2"
@@ -1087,62 +1087,7 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*043*confirm"/>
     <dealerussd value="*043*1"/>
   </Tariff>
-  <Tariff ivrcode="202" datefrom="20131001" dateto="" group="1" availbalance="9.98"
- 
-    tariffname_ru="Uzbekistan Pass+"
-    tariffname_uz="Uzbekistan Pass+"
-    tariffname_en="Uzbekistan Pass+"
-    tariffname_scg="Uzbekistan Pass+"
-    >
-    <soapcon value="202"/>
-    <ivrcon value="202"/>
-  </Tariff>
-  <Tariff ivrcode="203" datefrom="20131001" dateto="" group="1" availbalance="4.99"
- 
-    tariffname_ru="Uzbekistan Pass Lite+"
-    tariffname_uz="Uzbekistan Pass Lite+"
-    tariffname_en="Uzbekistan Pass Lite+"
-    tariffname_scg="Uzbekistan Pass Lite+"
-    >
-    <soapcon value="203"/>
-    <ivrcon value="203"/>
-  </Tariff>
-  <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="16.62"
- 
-    tariffname_ru="MOBI 70"
-    tariffname_uz="MOBI 70"
-    tariffname_en="MOBI 70"
-    tariffname_scg="MOBI 70"
-    >
-    <soapcon value="205"/>
-    <ivrcon value="205"/>
-  </Tariff>
-  <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="26.12"
- 
-    tariffname_ru="MOBI 110"
-    tariffname_uz="MOBI 110"
-    tariffname_en="MOBI 110"
-    tariffname_scg="MOBI 110"
-
-  >
-
-    <soapcon value="206"/>
-    <ivrcon value="206"/>
-    <dealerussd value="*133*confirm"/>
-    <dealerussd value="*133*1"/>
-
-  </Tariff>
-  <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="35.62"
- 
-    tariffname_ru="MOBI 150"
-    tariffname_uz="MOBI 150"
-    tariffname_en="MOBI 150"
-    tariffname_scg="MOBI 150"
-    >
-    <soapcon value="207"/>
-    <ivrcon value="207"/>
-  </Tariff>
-  <Tariff ivrcode="200" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+  <Tariff ivrcode="200" datefrom="20131001" dateto="" group="1" availbalance="8.12"
  
     tariffname_ru="MOBI 30"
     tariffname_uz="MOBI 30"
@@ -1157,7 +1102,42 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*128*1"/>
 
   </Tariff>
-  <Tariff ivrcode="204" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+  <Tariff ivrcode="201" datefrom="20131001" dateto="" group="1"
+ 
+    tariffname_ru="MOBI 40"
+    tariffname_uz="MOBI 40"
+    tariffname_en="MOBI 40"
+    tariffname_scg="MOBI 40"
+
+    >
+
+    <soapcon value="201"/>
+    <ivrcon value="201"/>
+    <dealerussd value="*122*confirm"/>
+    <dealerussd value="*122*1"/>
+
+  </Tariff>
+  <Tariff ivrcode="202" datefrom="20131001" dateto="" group="1" availbalance="10.98"
+ 
+    tariffname_ru="Uzbekistan Pass+"
+    tariffname_uz="Uzbekistan Pass+"
+    tariffname_en="Uzbekistan Pass+"
+    tariffname_scg="Uzbekistan Pass+"
+    >
+    <soapcon value="202"/>
+    <ivrcon value="202"/>
+  </Tariff>
+  <Tariff ivrcode="203" datefrom="20131001" dateto="" group="1" availbalance="5.99"
+ 
+    tariffname_ru="Uzbekistan Pass Lite+"
+    tariffname_uz="Uzbekistan Pass Lite+"
+    tariffname_en="Uzbekistan Pass Lite+"
+    tariffname_scg="Uzbekistan Pass Lite+"
+    >
+    <soapcon value="203"/>
+    <ivrcon value="203"/>
+  </Tariff>
+  <Tariff ivrcode="204" datefrom="20131001" dateto="" group="1" availbalance="12.87"
  
     tariffname_ru="MOBI 50"
     tariffname_uz="MOBI 50"
@@ -1172,19 +1152,62 @@ tplist               - Компонент выполняет проверки п
     <dealerussd value="*129*1"/>
 
   </Tariff>
-  <Tariff ivrcode="210" datefrom="20131001" dateto="" group="1" availbalance="11.87"
+  <Tariff ivrcode="205" datefrom="20131001" dateto="" group="1" availbalance="17.62"
  
-    tariffname_ru="Corporate 50"
-    tariffname_uz="Corporate 50"
-    tariffname_en="Corporate 50"
-    tariffname_scg="Corporate 50"
-
+    tariffname_ru="MOBI 70"
+    tariffname_uz="MOBI 70"
+    tariffname_en="MOBI 70"
+    tariffname_scg="MOBI 70"
     >
-    <soapcon value="210"/>
-    <ivrcon value="210"/>
+    <soapcon value="205"/>
+    <ivrcon value="205"/>
+    <dealerussd value="*131*confirm"/>
+    <dealerussd value="*131*1"/>
 
   </Tariff>
-  <Tariff ivrcode="209" datefrom="20131001" dateto="" group="1" availbalance="7.12"
+  <Tariff ivrcode="206" datefrom="20131001" dateto="" group="1" availbalance="27.12"
+ 
+    tariffname_ru="MOBI 110"
+    tariffname_uz="MOBI 110"
+    tariffname_en="MOBI 110"
+    tariffname_scg="MOBI 110"
+
+  >
+
+    <soapcon value="206"/>
+    <ivrcon value="206"/>
+    <dealerussd value="*133*confirm"/>
+    <dealerussd value="*133*1"/>
+
+  </Tariff>
+  <Tariff ivrcode="207" datefrom="20131001" dateto="" group="1" availbalance="36.62"
+ 
+    tariffname_ru="MOBI 150"
+    tariffname_uz="MOBI 150"
+    tariffname_en="MOBI 150"
+    tariffname_scg="MOBI 150"
+    >
+    <soapcon value="207"/>
+    <ivrcon value="207"/>
+    <dealerussd value="*134*confirm"/>
+    <dealerussd value="*134*1"/>
+  </Tariff>
+   <Tariff ivrcode="208" datefrom="20131001" dateto="" group="1" availbalance="22.37"
+ 
+    tariffname_ru="MOBI 90"
+    tariffname_uz="MOBI 90"
+    tariffname_en="MOBI 90"
+    tariffname_scg="MOBI 90"
+
+    >
+
+    <soapcon value="208"/>
+    <ivrcon value="208"/>
+    <dealerussd value="*132*confirm"/>
+    <dealerussd value="*132*1"/>
+
+  </Tariff>
+  <Tariff ivrcode="209" datefrom="20131001" dateto="" group="1" availbalance="8.12"
  
     tariffname_ru="Corporate 30"
     tariffname_uz="Corporate 30"
@@ -1195,7 +1218,151 @@ tplist               - Компонент выполняет проверки п
     <soapcon value="209"/>
     <ivrcon value="209"/>
   </Tariff>
+  <Tariff ivrcode="210" datefrom="20131001" dateto="" group="1" availbalance="12.87"
+ 
+    tariffname_ru="Corporate 50"
+    tariffname_uz="Corporate 50"
+    tariffname_en="Corporate 50"
+    tariffname_scg="Corporate 50"
 
+    >
+    <soapcon value="210"/>
+    <ivrcon value="210"/>
+
+  </Tariff>  
+  <Tariff ivrcode="212" datefrom="20131001" dateto="" group="1" 
+ 
+    tariffname_ru="MOBI 20"
+    tariffname_uz="MOBI 20"
+    tariffname_en="MOBI 20"
+    tariffname_scg="MOBI 20"
+
+    >
+
+    <soapcon value="212"/>
+    <ivrcon value="212"/>
+    <dealerussd value="*120*confirm"/>
+    <dealerussd value="*120*1"/>
+
+  </Tariff>
+  <Tariff ivrcode="213" datefrom="20131001" dateto="" group="1" availbalance="357.26"
+ 
+    tariffname_ru="MOBI 150 Yillik"
+    tariffname_uz="MOBI 150 Yillik"
+    tariffname_en="MOBI 150 Yillik"
+    tariffname_scg="MOBI 150 Yillik"
+
+    >
+
+    <soapcon value="213"/>
+    <ivrcon value="213"/>
+
+  </Tariff>
+  <Tariff ivrcode="214" datefrom="20131001" dateto="" group="1" availbalance="262.26"
+ 
+    tariffname_ru="MOBI 110 Yillik"
+    tariffname_uz="MOBI 110 Yillik"
+    tariffname_en="MOBI 110 Yillik"
+    tariffname_scg="MOBI 110 Yillik"
+
+    >
+
+    <soapcon value="214"/>
+    <ivrcon value="214"/>
+
+
+  </Tariff>
+  <Tariff ivrcode="217" datefrom="20131001" dateto="" group="1" availbalance="31.88"
+ 
+    tariffname_ru="Corporate 130"
+    tariffname_uz="Corporate 130"
+    tariffname_en="Corporate 130"
+    tariffname_scg="Corporate 130"
+
+    >
+
+    <soapcon value="217"/>
+    <ivrcon value="217"/>
+
+  </Tariff>
+  <Tariff ivrcode="219" datefrom="20131001" dateto="" group="1" availbalance="24.75"
+ 
+    tariffname_ru="Corporate 100"
+    tariffname_uz="Corporate 100"
+    tariffname_en="Corporate 100"
+    tariffname_scg="Corporate 100"
+
+    >
+
+    <soapcon value="219"/>
+    <ivrcon value="219"/>
+
+  </Tariff>
+  <Tariff ivrcode="220" datefrom="20131001" dateto="" group="1" availbalance="20"
+ 
+    tariffname_ru="Corporate 80"
+    tariffname_uz="Corporate 80"
+    tariffname_en="Corporate 80"
+    tariffname_scg="Corporate 80"
+
+    >
+
+    <soapcon value="220"/>
+    <ivrcon value="220"/>
+
+  </Tariff>
+  <Tariff ivrcode="222" datefrom="20131001" dateto="" group="1" availbalance="167.25"
+ 
+    tariffname_ru="MOBI 70 Yillik"
+    tariffname_uz="MOBI 70 Yillik"
+    tariffname_en="MOBI 70 Yillik"
+    tariffname_scg="MOBI 70 Yillik"
+
+    >
+
+    <soapcon value="222"/>
+    <ivrcon value="222"/>
+
+  </Tariff>
+  <Tariff ivrcode="223" datefrom="20131001" dateto="" group="1" availbalance="119.75"
+ 
+    tariffname_ru="MOBI 50 Yillik"
+    tariffname_uz="MOBI 50 Yillik"
+    tariffname_en="MOBI 50 Yillik"
+    tariffname_scg="MOBI 50 Yillik"
+
+    >
+
+    <soapcon value="223"/>
+    <ivrcon value="223"/>
+
+  </Tariff>
+  <Tariff ivrcode="224" datefrom="20131001" dateto="" group="1" availbalance="214.75"
+ 
+    tariffname_ru="MOBI 90 Yillik"
+    tariffname_uz="MOBI 90 Yillik"
+    tariffname_en="MOBI 90 Yillik"
+    tariffname_scg="MOBI 90 Yillik"
+
+    >
+
+    <soapcon value="224"/>
+    <ivrcon value="224"/>
+
+  </Tariff>
+  <Tariff ivrcode="226" datefrom="20131001" dateto="" group="1" availbalance="1"
+ 
+    tariffname_ru="ASKUG"
+    tariffname_uz="ASKUG"
+    tariffname_en="ASKUG"
+    tariffname_scg="ASKUG"
+
+    >
+
+    <soapcon value="226"/>
+    <ivrcon value="226"/>
+
+  </Tariff>
 
 
 

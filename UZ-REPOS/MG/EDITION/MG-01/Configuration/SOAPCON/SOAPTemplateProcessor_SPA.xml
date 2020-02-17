@@ -4062,4 +4062,49 @@
       <param name="result" />
     </output>
   </template>
+  <template procedureName="SoapSendSMS" sessionStorage="Memory" sessionLifetime="10">
+    <receiveTemplate>
+      <Message type="soapsendsms" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(${customer}_SoapSendSMS)}">
+        <Item>
+          <Content value="${message}" />
+          <Sender value="${sender}" />
+          <Recipient value="${customer}" />
+          <Encoding value="${encoding}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate terminating="false">
+      <set item="oparam:result" value="0" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="SMSCON_01_INFORM" />
+    <input>
+      <param name="customer" />
+      <param name="sender" />
+      <param name="encoding" />
+      <param name="message" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="SoapInspector" sessionStorage="Memory" sessionLifetime="15" persistent="true">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(${customer}_SoapInspector)}">
+        <Item customer="${customer}">
+          <Service id="${service}" action="${action}" class="0" sourcetypeid="11" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${dbresult}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="action" />
+      <param name="service" />
+    </input>
+    <output>
+      <param name="result" />
+    </output>
+  </template>
 </templates>

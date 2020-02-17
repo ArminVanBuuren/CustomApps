@@ -58,4 +58,15 @@
       <set item="MailCharSet" value="Windows-1251" />
     </deliveryTemplate>
   </template>
+    <template procedureName="DeliveryRequestNotify">
+  <deliveryTemplate>
+    <set item="BodyText" value="#{//Content[@disposition='body']}" />
+    <set item="ContentType" value="#{//Content[@disposition='body']/@type}" />
+    <set item="From" value="billing_reports@mobi.uz" />
+    <set item="Subject" value="#{//Content[@disposition='body']/@subject}" />
+    <set item="To" value="${customer}" />
+    <set item="MailEncoding" value="8bit" />
+    <set item="MailCharSet" value="#{//Content[@disposition='body']/@charset}" />
+  </deliveryTemplate>
+</template>
 </templates>

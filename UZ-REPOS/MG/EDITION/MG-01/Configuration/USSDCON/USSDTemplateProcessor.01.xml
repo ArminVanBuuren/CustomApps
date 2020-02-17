@@ -209,7 +209,7 @@
         </Item>
         @{store(sCustomer,${Sender})}
         @{store(sRecipient,${Recipient})}
-        @{store(sLang,rut)}
+        @{store(sLang,ru)}
         @{store(sTariffIvrCode,126)}
         @{store(sSlujebNumber,_SLUJEB_TP_NUMBER)}
         @{store(sSlujebCode,_SLUJEB_TP_CODE)}

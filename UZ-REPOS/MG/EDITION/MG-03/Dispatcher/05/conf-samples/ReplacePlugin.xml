@@ -1,0 +1,16 @@
+<plugin name="ReplacePlugin">
+  <replace>
+    <condition path="/Message/@initiator" isEqual="ivrcon" />
+    <condition path="/Message/Item/Service/@id" isEqual="changetariffplan" />
+    <set path="/Message/Item/Service/@class">
+      <value original="5" new="88" />
+      <value original="63" new="9999" />
+    </set>
+  </replace>
+  <replace>
+    <condition path="/Message/@type" isEqual="retrievecustomerdataresult" />
+    <set path="/Message/Item/Attribute[@name='currency']/@value">
+      <value original="RUR" new="810" />
+    </set>
+  </replace>
+</plugin>

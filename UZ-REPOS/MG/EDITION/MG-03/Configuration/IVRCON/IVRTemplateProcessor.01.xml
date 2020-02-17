@@ -899,6 +899,64 @@
       <param name="AccSMS" type="3" value="-1" />
     </output>
   </template>
+  <template procedureName="DB_BalanceRetriev4">
+    <condition />
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[_CURRENT_MODULE/@value='rut']/@param}">
+        <Item customer="${Customer}" subject="balance">
+          <Attribute name="unpayment" value="0" />
+          <Attribute name="requestcountertype" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>                     
+	<deliveryTemplate>                                                
+		<set item="param:DBResult" value="${dbresult}"/>
+		<set item="param:AccBalance" value="${balanceintpartdotpart}"/>
+		<set item="param:AccGPRS_1" value="#{if('${accumulator}'='','-1','#{replace('#{//Item/Attribute[@name='gprs']/@value}','(.+)\.(.+)\\.(.+)\.(.+)','$1')}')}"/>
+		<set item="param:AccGPRS_2" value="#{if('${accumulator}'='','-1','#{replace('#{//Item/Attribute[@name='gprs']/@value}','(.+)\.(.+)\\.(.+)\.(.+)','$3')}')}"/>
+		<set item="param:AccMIN" value="#{if('${accumulator}'='','-1','#{replace('#{//Item/Attribute[@name='voice']/@value}','(\d+)(\.(.*))?','$1')}')}"/>
+		<set item="param:AccSMS" value="#{if('${accumulator}'='','-1','#{//Item/Attribute[@name='sms']/@value}')}"/>
+	</deliveryTemplate>
+	<input>
+		<param name="Customer"/>
+	</input>
+	<output>
+		<param name="DBResult"   type="3" value="-1"/>
+		<param name="AccBalance" type="3" value="-1"/>
+		<param name="AccGPRS_1"    type="3" value="-1"/>
+		<param name="AccGPRS_2"    type="3" value="-1"/>
+		<param name="AccMIN"     type="3" value="-1"/>
+		<param name="AccSMS"     type="3" value="-1"/>
+	</output>
+  </template>
+  <template procedureName="DB_BalanceRetriev5">
+    <condition />
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${Customer}_GetIVRBalance_#{document('_DICTIONARY_PATH')/Dictionary/Language/Item[_CURRENT_MODULE/@value='rut']/@param}">
+        <Item customer="${Customer}" subject="balance">
+          <Attribute name="unpayment" value="0" />
+          <Attribute name="requestcountertype" value="1" />
+        </Item>
+      </Message>
+    </receiveTemplate>                     
+	<deliveryTemplate>                                                
+		<set item="param:DBResult" value="${dbresult}"/>
+		<set item="param:AccBalance" value="${balanceintpartdotpart}"/>
+		<set item="param:AccGPRS" value="-1"/>
+		<set item="param:AccMIN" value="#{if('${accumulator}'='','-1','#{replace('#{//Item/Attribute[@name='voice']/@value}','(\d+)(\.?(.*))','$1')}')}"/>
+		<set item="param:AccSMS" value="#{if('${accumulator}'='','-1','#{//Item/Attribute[@name='sms']/@value}')}"/>
+	</deliveryTemplate>
+	<input>
+		<param name="Customer"/>
+	</input>
+	<output>
+		<param name="DBResult"   type="3" value="-1"/>
+		<param name="AccBalance" type="3" value="-1"/>
+		<param name="AccGPRS"    type="3" value="-1"/>
+		<param name="AccMIN"     type="3" value="-1"/>
+		<param name="AccSMS"     type="3" value="-1"/>
+	</output>
+  </template>
   <template procedureName="SendPriceSMS">
     <condition />
     <receiveTemplate>

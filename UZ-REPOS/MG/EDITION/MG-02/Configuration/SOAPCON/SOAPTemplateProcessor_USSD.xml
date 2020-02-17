@@ -3810,4 +3810,48 @@
       <param name="dbresult" value="0" />
     </output>
   </template>
+  <template procedureName="GetAvtoMobi" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetAvtoMobi_${customer})}">
+        <Item procedureName="other_spikes.AVTO_MOBI_CHANCE_ID">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="p_lang" type="STRING" value="${lang}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="Xizmatidan foydalanish uchun so'rovingiz qabul qilindi. Javobni SMS tarzida kuting / Vash zapros prinyat. Ojidayte otvet v vide SMS" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="result" value="" />
+      <param name="dbresult" value="0" />
+    </output>
+  </template>
+  <template procedureName="GetApDate" handler="_DBCON" sessionStorage="Memory" sessionLifetime="60" persistent="true">
+    <receiveTemplate>
+      <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GetApDate_${customer})}">
+        <Item procedureName="other_spikes.GET_AP_DATE_MG">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="p_lang" type="STRING" value="${lang}" />
+          <Attribute name="result" type="out:STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result" value="${no-escape:result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="lang" />
+    </input>
+    <output>
+      <param name="result" value="" />
+      <param name="dbresult" value="0" />
+    </output>
+  </template>
 </templates>

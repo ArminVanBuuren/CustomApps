@@ -445,7 +445,7 @@ tplist               - Компонент выполняет проверки п
     info_320206_en="You have no debt for the Promised payment."
 
     info_330124_ru="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
-    info_330124_uz="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
+    info_330124_uz="Va^da qilingan to^lov xizmati faol. Xizmat faollashtirilganidan 3 kun o^tib hisobingizdan avtomatik ravishda 3,5 sh.b. yechib olinadi. So^rov ro^yxatga olindi"
     info_330124_en="Promised payment service is active. 3,5 units will be automatically charged-off from your account after 3 days from activation"
 
     info_inprogress_ru="Slishkom chastiy zapros."
@@ -465,7 +465,7 @@ tplist               - Компонент выполняет проверки п
     info_330724_en="Server Error. Please try later"
 
     info_320704_ru="Ustanovlen zapret na podklyuchenie usligi &quot;Obeshanniy platezh&quot;"
-    info_320704_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatildi"
+    info_320704_uz="&quot;Va^da qilingan to^lov&quot; xizmatiga cheklanish o^rnatilgan"
     info_320704_en="&quot;Promised payment&quot; service connection is banned"
     >
     <soapcon value="_GRNTPAY"/>
@@ -564,9 +564,9 @@ tplist               - Компонент выполняет проверки п
   </Service>
   <Service name="_GETNUMBERBYPASSPORT"
 
-    info_success_ru="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor UMS"
-    info_success_uz="Sizning nomingizdagi raqamlar ro^yxati: [0] UMS tanlaganingizdan minnatdormiz"
-    info_success_en="Under your name numbers registered: [0] Thank you for choosing UMS"
+    info_success_ru="Na vashe imya zaregistrirovani nomera: [0] Blagodarim Vas za vibor Mobiuz"
+    info_success_uz="Sizning nomingizdagi raqamlar ro^yxati: [0] Mobiuz tanlaganingizdan minnatdormiz"
+    info_success_en="Under your name numbers registered: [0] Thank you for choosing Mobiuz"
     >
     <soapcon value="_GETNUMBERBYPASSPORT"/>
   </Service>

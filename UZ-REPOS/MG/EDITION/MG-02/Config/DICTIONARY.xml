@@ -229,9 +229,9 @@ Created by Vladimir Khovanskiy
     <code value="330154"/>
   </Item>
   <Item
-    info_ru="U Vas ne ustanovlena usluga Mobil^ny^y pomoshnik. Pozhaluysta, obratites^ v sluzhbu podderzhki UMS ."
-    info_uz="Sizda &quot;Mobil yordamchi&quot; xizmati o^rnatilmagan. Iltimos UMS qo^llash xizmatiga murojaat qiling"
-    info_en="You don^t have service &quot;Mobile Assistant&quot;. Contact your support UMS."
+    info_ru="U Vas ne ustanovlena usluga Mobil^ny^y pomoshnik. Pozhaluysta, obratites^ v sluzhbu podderzhki Mobiuz ."
+    info_uz="Sizda &quot;Mobil yordamchi&quot; xizmati o^rnatilmagan. Iltimos Mobiuz qo^llash xizmatiga murojaat qiling"
+    info_en="You don^t have service &quot;Mobile Assistant&quot;. Contact your support Mobiuz."
     info_pay="320060"
     info_rbt="320060"
     info_scg="320060"
@@ -350,7 +350,7 @@ Created by Vladimir Khovanskiy
   </Item>
   <Item
     info_ru="Prevyshena maksimal^naja summa obeshhannogo platezha."
-    info_uz="Prevyshena maksimal^naja summa obeshhannogo platezha."
+    info_uz="Va^da qilingan to^lov miqdorining maksimal darajasidan oshib o^tdi"
     info_en="Maximal amount of promised payment has exceeded."
     info_pay="320111"
     info_rbt="320111"
@@ -360,7 +360,7 @@ Created by Vladimir Khovanskiy
   </Item>
   <Item
     info_ru="Obeshhannyj platezh ne mozhet byt^ zaregistrirovan."
-    info_uz="Obeshhannyj platezh ne mozhet byt^ zaregistrirovan."
+    info_uz="Va^da qilingan to^lov xizmati ro^yxatdan o^tmadi"
     info_en="Promised payment can not be registered."
     info_pay="320121"
     info_rbt="320121"

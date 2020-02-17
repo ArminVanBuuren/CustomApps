@@ -43,6 +43,18 @@
       <set item="ScheduleDeliveryTime" value="#{if((substring('${sScheduleTime}',1,2)='00' or '${sScheduleTime}'='${sValidityPeriod}'),'','${sScheduleTime}')}" />
     </deliveryTemplate>
   </template>
+  <template procedureName="DeliveryRequestAutoInformation">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:Content}" />
+      <set item="Sender" value="${sender}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="_ENCODING" />
+    </deliveryTemplate>
+  </template>
   <template procedureName="SendSMS" persistent="false">
     <condition>
       <test item="0" matches="1" />

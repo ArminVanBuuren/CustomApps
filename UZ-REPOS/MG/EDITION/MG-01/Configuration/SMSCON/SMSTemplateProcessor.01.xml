@@ -3,6 +3,7 @@
     <!-- ==========================  SMSCON SPECIAL   ========================= -->
     <define name="_SMS_NUM_1" value="111" />
     <define name="_SMS_NUM_2" value="1771" />
+    <define name="_SMSCON_ISSA" value="SMSCON_01_ISSA" />
     <!-- ==========================  SMSCON SPECIAL   ========================= -->
     <!-- ==========================  SERVICE PROVISIONING  ========================= -->
     <define name="_GET_SERVICE_RESULT" value="#{if('#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}'='','#{if('#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}'='','_GET_DBRESULT','#{document('_SERVICE_PATH')/ServiceList/Group[@name='${sGroupName}']/@info_${sDbresult}__GET_LANG}')}','#{document('_SERVICE_PATH')/ServiceList/Service[_CURRENT_MODULE/@value='${sService}']/@info_${sDbresult}__GET_LANG}')}" />
@@ -148,6 +149,7 @@
       <test item="0" matches="1" />
     </condition>
     <receiveTemplate />
+    <deliveryTemplate conditionEx="#{'${sender}'!=''}" connector="_SMSCON_ISSA" />
     <deliveryTemplate>
       <set item="Content" value="#{XmlReplacer('#{replace('${Content}','(@@@@@@)','${customer}')}')}" />
       <set item="Sender" value="_SMS_NUM_1" />
@@ -578,4 +580,28 @@
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
+  <template procedureName="SoapSendSMS" sessionStorage="Memory" reportDelivery="false">
+    <retry delay="1" attempts="1" />
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate />
+    <deliveryTemplate>
+      <set item="Content" value="${no-escape:content}" />
+      <set item="Sender" value="${sender}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="${encoding}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="DeliveryRequestNotify">
+  <condition>
+    <test item="0" matches="1" />
+  </condition>
+  <deliveryTemplate>
+    <set item="Content" value="#{//Content/text()}" />
+    <set item="Sender" value="_SMS_NUM_1" />
+    <set item="Recipient" value="${customer}" />
+    <set item="Encoding" value="unicodefffe" />
+  </deliveryTemplate>
+</template>
 </templates>
