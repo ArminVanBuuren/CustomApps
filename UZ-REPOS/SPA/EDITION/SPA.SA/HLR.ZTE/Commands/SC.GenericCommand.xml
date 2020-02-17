@@ -34,8 +34,8 @@
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_QRYUSER]//Identifier/MSISDN" PostFormat="Qry User:MSISDN={0},Item=ALL;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=STEERING;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=STEERING;" />
-      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_UMS_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=ALLOW_GT_UMS_PS_CORE;" />
+      <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEACT_UMS_2]//Identifier/MSISDN" PostFormat="Set EPCBsc:MSISDN={0},EPCROAMSCH=2;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEDEL_1]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},ROAMSCH=*;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SCHEMEDEL_2]//Identifier/MSISDN" PostFormat="Mod BscEx:MSISDN={0},PSROAMSCH=*;" />
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SMMO0]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMO=0;" />
@@ -44,5 +44,7 @@
       <Source Path="/*[1][AdditionalData//RFS_HLR_TEST_SMMT1]//Identifier/MSISDN" PostFormat="MOD TELE:MSISDN={0},SMMT=1;" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="windows-1251" />
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="222007" Value="SUCCESS" />
+  </ErrorsList>
 </Command>

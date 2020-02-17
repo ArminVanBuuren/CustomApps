@@ -23,6 +23,7 @@
         <param name="OrXmlPath:1" value="//RES_HLR_PROFILE/Value[text()='DEALERS']" />
         <param name="OrXmlPath:2" value="//RES_HLR_PROFILE/Value[text()='DGU']" />
         <param name="OrXmlPath:3" value="//RES_HLR_PROFILE/Value[text()='AIISKUE']" />
+        <param name="OrXmlPath:4" value="//RES_HLR_PROFILE/Value[text()='ASKUG']" />
         <param name="Command" value="SC.Modify_LTE" />
       </parameterslist>
     </node>

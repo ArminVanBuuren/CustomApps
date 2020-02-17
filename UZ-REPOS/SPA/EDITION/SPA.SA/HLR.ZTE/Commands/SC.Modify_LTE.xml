@@ -15,6 +15,7 @@
         <Source Type="OrXmlPath:1" Path="//RES_HLR_PROFILE/Value[text()='DEALERS']"/>
         <Source Type="OrXmlPath:2" Path="//RES_HLR_PROFILE/Value[text()='DGU']"/>
         <Source Type="OrXmlPath:3" Path="//RES_HLR_PROFILE/Value[text()='AIISKUE']"/>
+        <Source Type="OrXmlPath:4" Path="//RES_HLR_PROFILE/Value[text()='ASKUG']"/>
       </SourcesList>
     </LogicalGroupParameter>
   </LogicalGroupParametersList>

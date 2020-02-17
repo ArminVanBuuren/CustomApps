@@ -283,6 +283,8 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.GetSubscriberGPRS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.GetSubscriberLOC.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.GetSubscriberLTE.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_BAOC.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CBCtrl.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_CSI.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemePS.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Commands\SC.Modify_RoamingSchemeCS.xml" />
@@ -546,6 +548,7 @@
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Misc\RepetitionTable.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\GetSubscriberByMSISDN.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.GetSubscriber.xml" />
+    <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.BAOC.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Modify.CLIP.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.Add.RFS_HLR_CLIR.xml" />
     <Content Include="EDITION\SPA.SA\HLR.ZTE\Scenarios\SC.HLR.Add.CallForwarding.xml" />

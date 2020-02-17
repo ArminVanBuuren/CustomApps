@@ -1,0 +1,22 @@
+<Command Name="SC.Modify_CBCtrl">
+  <Description>Модификация баррингов исходящей связи</Description>
+  <Author Name="Khovanskiy Vladimir" Date="2018-09-20+09:00" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[Mod SS:MSISDN=##msisdn##,CBCtrl=##BARRING##,CB_PWD=0000;^M]]>
+    </RequestTemplate>
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="BARRING" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="BARRING" IsChoice="true" AbsenceValue="1">
+      <Source Path="//AddList/RFS_HLR_ODB_OC_BAOC/RES_HLR_ODB_OC_BAOC/Value[text()='NoCallsBaoc']" PostFormat="0" />
+      <Source Path="//ModifyList/RFS_HLR_ODB_OC_BAOC/RES_HLR_ODB_OC_BAOC/Value[text()='NoCallsBaoc']" PostFormat="0" />
+      <Source Path="//EndList/RFS_HLR_ODB_OC_BAOC/RES_HLR_ODB_BAOC/Value[text()='NoCallsBaoc']" PostFormat="0" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="windows-1251">
+    <Error Name="110109" Value="SUCCESS" />
+    <!--Subscriber does not exist-->
+  </ErrorsList>
+</Command>

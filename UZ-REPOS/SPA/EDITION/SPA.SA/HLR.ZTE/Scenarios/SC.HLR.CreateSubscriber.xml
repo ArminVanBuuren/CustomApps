@@ -102,11 +102,13 @@
         <result value="1" node="Add_TCSI" />
         <result value="2" node="Delete_NAM" />
         <result value="3" node="Delete_NAM" />
+        <result value="4" node="Delete_NAM" />
       </resultlist>
       <parameterslist>
         <param name="XmlPath" value="//RES_HLR_PROFILE/Value/text()" />
         <param name="Value:2" value="AIISKUE" />
         <param name="Value:3" value="DEALERS" />
+        <param name="Value:4" value="ASKUG" />
       </parameterslist>
     </node>
     <node name="Add_TCSI" object="IfCommander">
