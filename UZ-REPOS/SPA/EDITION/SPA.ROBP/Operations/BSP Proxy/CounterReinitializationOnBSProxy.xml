@@ -1,0 +1,10 @@
+<OperationData Name="CounterReinitializationOnBSProxy" NEType="BSP" NEAlias="BSP Proxy">
+  <Request>
+    <AdditionalData Executable="True">
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="ScpCounterList" />
+      </ProvisionList>
+    </AdditionalData>
+  </Request>
+  <Response />
+</OperationData>

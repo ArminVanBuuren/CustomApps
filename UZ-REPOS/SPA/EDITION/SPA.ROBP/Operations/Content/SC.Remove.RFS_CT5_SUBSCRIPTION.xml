@@ -1,4 +1,4 @@
-<OperationData Name="SC.Remove.RFS_CT5_SUBSCRIPTION" NEType="CT5" NEAlias="UNIFUN">
+<OperationData Name="SC.Remove.RFS_CT5_SUBSCRIPTION" NEType="CT5" NEAlias="Content">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
       <WithdrawalList Type="Optional" />
