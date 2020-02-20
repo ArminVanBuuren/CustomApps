@@ -12,6 +12,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Utils;
+
 //using TeleSharp.TL;
 //using TLSharp.Core;
 //using Utils;
@@ -36,6 +38,9 @@ namespace Tester.Console
         {
             try
             {
+                var ss = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".GetEncoding("[А-я]{8,}");
+                var ss1 = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".StringConvert(Encoding.GetEncoding("windows-1252"), Encoding.GetEncoding("windows-1251"));
+
                 var dd = new FormatFunction();
                 var dd12 = dd.Invoke(null, new[] { @"{0}-{1}-{2}\r\n", "22;33;44" }, null);
                 var res = FormatFunction.get_codelist("1111", @"@@ \@      =     ^^ \^", "", ";");
