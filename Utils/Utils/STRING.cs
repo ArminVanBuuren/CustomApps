@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Utils
 {
@@ -114,6 +117,58 @@ namespace Utils
         public static bool Like(this string input, string value)
         {
             return value != null && input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        public class EncodingParcer
+        {
+            internal EncodingParcer(Encoding from, Encoding to)
+            {
+                From = from;
+                To = to;
+            }
+            public Encoding From { get; }
+            public Encoding To { get; }
+            public override string ToString()
+            {
+                return $"From[{From.HeaderName}] To[{To.HeaderName}]";
+            }
+        }
+
+        /// <summary>
+        /// Определить правильную кодировку по неизвестному тексту используя регулярные выражения
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="regexPatternMatcher">Паттерн регулярного выражения с чем текст должен совпадать. Например [А-я]</param>
+        /// <returns></returns>
+        public static Dictionary<EncodingParcer, string> GetEncoding(this string source, string regexPatternMatcher)
+        {
+            //const string source = @"Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó ""C:\@MyRepos\TestingPrj\CalculateCRC\CalculateCRC\bin\Debug\2\A7563639.bin"", òàê êàê ýòîò ôàéë èñïîëüçóåòñÿ äðóãèì ïðîöåññîì.";
+            //const string destination = @"Процесс не может получить доступ к файлу ""C:\@MyRepos\TestingPrj\CalculateCRC\CalculateCRC\bin\Debug\2\A7563639.bin"", так как этот файл используется другим процессом.";
+            var collectionMatches = new Dictionary<EncodingParcer, string>();
+            var regex = new Regex(regexPatternMatcher, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            foreach (var sourceEncInfo in Encoding.GetEncodings())
+            {
+                var encodingSource = sourceEncInfo.GetEncoding();
+                var bytes = encodingSource.GetBytes(source);
+                foreach (var targetEncInfo in Encoding.GetEncodings())
+                {
+                    var targetEncoding = targetEncInfo.GetEncoding();
+                    var encoding = new EncodingParcer(encodingSource, targetEncoding);
+                    var res = targetEncoding.GetString(bytes);
+
+                    if (regex.IsMatch(res))
+                    {
+                        collectionMatches.Add(encoding, res);
+                    }
+                }
+            }
+
+            return collectionMatches;
+        }
+
+        public static string StringConvert(this string source, Encoding from, Encoding to)
+        {
+            return to.GetString(from.GetBytes(source));
         }
     }
 }

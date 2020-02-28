@@ -95,6 +95,7 @@
     <Compile Include="AppUpdater\Hasher.cs" />
     <Compile Include="AppUpdater\ApplicationUpdaterProcessingArgs.cs" />
     <Compile Include="AppUpdater\Updater\UploadProgress.cs" />
+    <Compile Include="ATTRIBUTES.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
