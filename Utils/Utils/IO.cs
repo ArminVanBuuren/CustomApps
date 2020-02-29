@@ -550,7 +550,7 @@ namespace Utils
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static string SetCorrectStringPath(string sample)
+        public static string RemoveInvalidChars(string sample)
         {
             var encoded = Encoding.GetEncoding(1251).GetBytes(sample);
             var corrected = Encoding.GetEncoding(1250).GetString(encoded);
