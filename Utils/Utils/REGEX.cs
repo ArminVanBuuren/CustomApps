@@ -6,6 +6,29 @@ namespace Utils
     public static class REGEX
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pattern">Регулярное выражение</param>
+        /// <param name="input">Текст где парсятся группы (?&lt;GROUP1&gt;.+)</param>
+        /// <param name="outFormat">Пост-результирующий формат - "Результат: %GROUP1%"</param>
+        /// <returns></returns>
+        public static string Replacer(this Regex pattern, string input, string outFormat)
+        {
+            var result = outFormat;
+            var groups = pattern.Match(input).Groups;
+            foreach (var groupName in pattern.GetGroupNames())
+            {
+                if (int.TryParse(groupName, out _))
+                    continue;
+
+                result = new Regex($@"%\s*{groupName}\s*%", RegexOptions.IgnoreCase).Replace(result, groups[groupName].Value.Trim());
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
         /// Получить RegexOptions из строки
         /// </summary>
         /// <param name="inputStringOptions">должны быть разделены символом '|'</param>

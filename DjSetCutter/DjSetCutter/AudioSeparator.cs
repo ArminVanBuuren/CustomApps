@@ -133,7 +133,7 @@ namespace DjSetCutter
                     }
                     catch (InvalidOperationException ex)
                     {
-                        ProcessingException?.Invoke($"'{mp3File}' was skip. Exception:{ex.Message}", EventArgs.Empty);
+                        ProcessingException?.Invoke($"'{mp3File}' was skipped. InvalidOperationException:{ex.Message}", EventArgs.Empty);
                     }
                     catch (Exception ex)
                     {
@@ -171,6 +171,7 @@ namespace DjSetCutter
                 return $"{File} [{Start}]";
             }
         }
+
         static string Replacer(Regex pattern, string source, string format, out string indexStart)
         {
             indexStart = string.Empty;

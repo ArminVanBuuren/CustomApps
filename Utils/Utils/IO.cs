@@ -544,6 +544,24 @@ namespace Utils
             }
         }
 
+        static readonly string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+        /// <summary>
+        /// Корректирует пути
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <returns></returns>
+        public static string SetCorrectStringPath(string sample)
+        {
+            var encoded = Encoding.GetEncoding(1251).GetBytes(sample);
+            var corrected = Encoding.GetEncoding(1250).GetString(encoded);
+
+            foreach (var c in invalid)
+            {
+                corrected = corrected.Replace(c.ToString(), "");
+            }
+
+            return corrected;
+        }
 
         #region Who is looking of file
 
