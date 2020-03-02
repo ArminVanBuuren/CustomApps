@@ -443,7 +443,7 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var process = new SemaphoreHelper<ServiceActivator>((ServiceActivator sa) =>
+                MultiTasking.Run((ServiceActivator sa) =>
                 {
                     try
                     {
@@ -453,9 +453,7 @@ namespace SPAFilter.SPA
                     {
                         MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }, 10);
-
-                process.Execute(activators);
+                }, activators, null, 10);
             }
 
             LoadActivators();
