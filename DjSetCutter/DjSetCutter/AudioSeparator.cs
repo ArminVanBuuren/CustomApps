@@ -48,7 +48,7 @@ namespace DjSetCutter
                 }
                 catch (Exception ex)
                 {
-                    ProcessingException?.Invoke($"{ex.GetType()} when process on folder '{dirPath}'. {ex}", EventArgs.Empty);
+                    ProcessingException?.Invoke($"{ex.GetType()} when process on folder '{dirPath}'.\r\n{ex}", EventArgs.Empty);
                 }
             }, 5);
 
@@ -137,11 +137,11 @@ namespace DjSetCutter
                 }
                 catch (InvalidOperationException ex)
                 {
-                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped. InvalidOperationException:{ex}", EventArgs.Empty);
+                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped.\r\nInvalidOperationException:{ex}", EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
-                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped. {ex.GetType()}:{ex}", EventArgs.Empty);
+                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped.\r\n{ex.GetType()}:{ex}", EventArgs.Empty);
                 }
             }
         }
