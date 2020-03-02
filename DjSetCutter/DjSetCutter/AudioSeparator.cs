@@ -45,7 +45,7 @@ namespace DjSetCutter
             {
                 try
                 {
-                    PerformSet(dirPath);
+                    SeparateMusicSet(dirPath);
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +87,7 @@ namespace DjSetCutter
             IsCancellationRequested = true;
         }
 
-        void PerformSet(string dirPath)
+        void SeparateMusicSet(string dirPath)
         {
             var dirName = Path.GetFileName(dirPath);
             var destFormat = Path.IsPathRooted(destinatonFormat) ? destinatonFormat : Path.Combine(dirPath, destinatonFormat);
