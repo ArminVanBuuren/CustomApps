@@ -9,7 +9,6 @@ namespace DjSetCutter
     public partial class Form1 : Form
     {
         private AudioSeparator separator;
-        private CancellationTokenSource token;
         private bool isWorked = false;
 
         public Form1()
@@ -35,23 +34,23 @@ namespace DjSetCutter
             }
         }
 
-        
         private async void ButtonStartStop_Click(object sender, EventArgs e)
         {
             StatusTextLable.Text = "";
 
             if (!isWorked)
             {
-                if (textBoxDirPath.Text.IsNullOrEmpty() && !Directory.Exists(textBoxDirPath.Text))
+                if (textBoxDirPath.Text.IsNullOrEmpty() || !Directory.Exists(textBoxDirPath.Text))
                 {
                     StatusTextLable.Text = @"Directory is empty or not Exist!";
                     return;
                 }
 
+                exceptionMessage.Text = string.Empty;
                 isWorked = true;
                 ChangeFormStatus();
 
-                token = new CancellationTokenSource();
+                
                 separator = new AudioSeparator(new Regex(textBox1.Text, RegexOptions.Compiled | (checkBox1.Checked ? RegexOptions.Multiline : RegexOptions.Singleline))
                     , new Regex(textBox2.Text, RegexOptions.Compiled | (checkBox2.Checked ? RegexOptions.Multiline : RegexOptions.Singleline))
                     , new Regex(textBox3.Text, RegexOptions.Compiled | (checkBox3.Checked ? RegexOptions.Multiline : RegexOptions.Singleline))
@@ -60,14 +59,14 @@ namespace DjSetCutter
                     , deleteSourceCUE.Checked
                     , deleteSourceMP3.Checked);
                 separator.ProcessingException += ProcessingException;
-                await separator.StartAsync(token);
+                await separator.StartAsync();
 
                 isWorked = false;
                 ChangeFormStatus();
             }
             else
             {
-                token.Cancel();
+                separator.Stop();
             }
         }
 
@@ -100,9 +99,11 @@ namespace DjSetCutter
 
             Invoke(new MethodInvoker(delegate
             {
-                exceptionMessage.Text = info + Environment.NewLine + exceptionMessage.Text;
+                if (exceptionMessage.Text.IsNullOrEmpty())
+                    exceptionMessage.Text = info;
+                else
+                    exceptionMessage.Text = exceptionMessage.Text + Environment.NewLine + new string('=', 50) + Environment.NewLine + info;
             }));
         }
-
     }
 }

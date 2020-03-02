@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Utils.Handles
+namespace DjSetCutter
 {
     public class SemaphoreHelper<T> : IDisposable
     {
+        public bool IsCancellationRequested { get; private set; } = false;
         private Action<T> _action;
         private Semaphore _pool;
-
-        public bool IsCancellationRequested { get; private set; } = false;
 
         public SemaphoreHelper(Action<T> action, int maxThreads = 2)
         {

@@ -22,6 +22,7 @@ namespace DjSetCutter
         private readonly string destinatonFormat;
         private readonly bool removeSourceCUE = false;
         private readonly bool removeSourceMp3 = false;
+        private SemaphoreHelper<string> process;
 
         public AudioSeparator(Regex trackSeparator, Regex trackInfo, Regex dirParser, string sourcePath, string destinatonFormat, bool removeSourceCUE = false, bool removeSourceMp3 = false)
         {
@@ -34,113 +35,114 @@ namespace DjSetCutter
             this.removeSourceMp3 = removeSourceMp3;
         }
 
-        public async Task StartAsync(CancellationTokenSource cancelToken)
+        public async Task StartAsync()
         {
-            await Task.Factory.StartNew((token) => GetDirectory(sourcePath, (CancellationToken)token), cancelToken.Token);
-        }
+            var listOfDirs = Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories).ToList();
+            listOfDirs.Add(sourcePath);
 
-        void GetDirectory(string dirPath, CancellationToken token)
-        {
-            foreach (var dir in Directory.GetDirectories(dirPath, "*", SearchOption.TopDirectoryOnly))
+            process = new SemaphoreHelper<string>((string dirPath) =>
             {
-                GetDirectory(dir, token);
-            }
-            PerformSet(dirPath, token);
-        }
-
-        void PerformSet(string dirPath, CancellationToken token)
-        {
-            try
-            {
-                if (token.IsCancellationRequested)
-                    return;
-
-                var dirName = Path.GetFileName(dirPath);
-                var destFormat = Path.IsPathRooted(destinatonFormat) ? destinatonFormat : Path.Combine(dirPath, destinatonFormat);
-
-                var files = Directory.GetFiles(dirPath, "*.cue");
-                var mp3File = string.Empty;
-                foreach (var cueFile in files)
+                try
                 {
-                    try
-                    {
-                        mp3File = cueFile.Substring(0, cueFile.Length - 4) + ".mp3";
-                        if (!File.Exists(mp3File))
-                            continue;
-
-                        File.SetAttributes(cueFile, FileAttributes.Normal);
-                        File.SetAttributes(mp3File, FileAttributes.Normal);
-
-                        string cueData;
-                        using (var inputStream = File.OpenRead(cueFile))
-                        {
-                            using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
-                            {
-                                cueData = inputReader.ReadToEnd();
-                            }
-                        }
-
-                        var tracks = new List<CueTrack>();
-                        foreach (Match track in trackSeparator.Matches(cueData))
-                        {
-                            if (token.IsCancellationRequested)
-                                return;
-
-                            var trackDest = Replacer(dirParser, dirPath, destFormat, out _);
-                            trackDest = Replacer(trackInfo, track.Value, trackDest, out var index);
-
-                            var indexSplit = index.Split(':');
-                            var spanMin = TimeSpan.FromMinutes(int.Parse(indexSplit[0]));
-                            var spanSec = TimeSpan.FromSeconds(int.Parse(indexSplit[1]));
-                            var spanMilisec = TimeSpan.FromMilliseconds(int.Parse(indexSplit[2] + "0"));
-                            var start = spanMin + spanSec + spanMilisec;
-
-                            tracks.Add(new CueTrack(trackDest, start));
-                        }
-
-                        if (tracks.Count == 0)
-                            continue;
-
-                        if (!Directory.Exists(tracks[0].Folder))
-                            Directory.CreateDirectory(tracks[0].Folder);
-
-                        using (Stream stream = new FileStream(mp3File, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                        {
-                            using (var reader = new Mp3FileReader(stream))
-                            {
-                                for (var i = 0; i < tracks.Count; i++)
-                                {
-                                    if (token.IsCancellationRequested)
-                                        return;
-
-                                    if (File.Exists(tracks[i].Destination))
-                                        File.Delete(tracks[i].Destination);
-
-                                    TrimMp3(reader, tracks[i].Destination, tracks[i].Start, i + 1 >= tracks.Count ? reader.TotalTime : tracks[i + 1].Start);
-                                }
-                            }
-                        }
-
-                        if (removeSourceCUE)
-                            File.Delete(cueFile);
-
-                        if (removeSourceMp3)
-                            File.Delete(mp3File);
-
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        ProcessingException?.Invoke($"'{mp3File}' was skipped. InvalidOperationException:{ex}", EventArgs.Empty);
-                    }
-                    catch (Exception ex)
-                    {
-                        ProcessingException?.Invoke($"'{mp3File}' was skipped. {ex.GetType()}:{ex}", EventArgs.Empty);
-                    }
+                    PerformSet(dirPath);
                 }
-            }
-            catch (Exception ex)
+                catch (Exception ex)
+                {
+                    ProcessingException?.Invoke($"{ex.GetType()} when process on folder '{dirPath}'. {ex}", EventArgs.Empty);
+                }
+            }, 5);
+
+            await process.ExecuteAsync(listOfDirs);
+        }
+
+        public void Stop()
+        {
+            process?.Abort();
+        }
+
+        void PerformSet(string dirPath)
+        {
+            var dirName = Path.GetFileName(dirPath);
+            var destFormat = Path.IsPathRooted(destinatonFormat) ? destinatonFormat : Path.Combine(dirPath, destinatonFormat);
+
+            var files = Directory.GetFiles(dirPath, "*.cue");
+            var mp3File = string.Empty;
+            foreach (var cueFile in files)
             {
-                throw;
+                try
+                {
+                    mp3File = cueFile.Substring(0, cueFile.Length - 4) + ".mp3";
+                    if (!File.Exists(mp3File))
+                        continue;
+
+                    File.SetAttributes(cueFile, FileAttributes.Normal);
+                    File.SetAttributes(mp3File, FileAttributes.Normal);
+
+                    string cueData;
+                    using (var inputStream = File.OpenRead(cueFile))
+                    {
+                        using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
+                        {
+                            cueData = inputReader.ReadToEnd();
+                        }
+                    }
+
+                    var tracks = new List<CueTrack>();
+                    foreach (Match track in trackSeparator.Matches(cueData))
+                    {
+                        var trackDest = Replacer(dirParser, dirPath, destFormat, out _);
+                        trackDest = Replacer(trackInfo, track.Value, trackDest, out var index);
+
+                        var indexSplit = index.Split(':');
+                        var spanMin = TimeSpan.FromMinutes(int.Parse(indexSplit[0]));
+                        var spanSec = TimeSpan.FromSeconds(int.Parse(indexSplit[1]));
+                        var spanMilisec = TimeSpan.FromMilliseconds(int.Parse(indexSplit[2] + "0"));
+                        var start = spanMin + spanSec + spanMilisec;
+
+                        tracks.Add(new CueTrack(trackDest, start));
+                    }
+
+                    if (tracks.Count == 0)
+                        continue;
+
+                    if (!Directory.Exists(tracks[0].Folder))
+                        Directory.CreateDirectory(tracks[0].Folder);
+
+                    using (Stream stream = new FileStream(mp3File, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                    {
+                        using (var reader = new Mp3FileReader(stream))
+                        {
+                            for (var i = 0; i < tracks.Count; i++)
+                            {
+                                if(process.IsCancellationRequested)
+                                    return;
+
+                                if (File.Exists(tracks[i].Destination))
+                                    File.Delete(tracks[i].Destination);
+
+                                TrimMp3(reader, tracks[i].Destination, tracks[i].Start, i + 1 >= tracks.Count ? reader.TotalTime : tracks[i + 1].Start);
+                            }
+                        }
+                    }
+
+                    if (process.IsCancellationRequested)
+                        return;
+
+                    if (removeSourceCUE)
+                        File.Delete(cueFile);
+
+                    if (removeSourceMp3)
+                        File.Delete(mp3File);
+
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped. InvalidOperationException:{ex}", EventArgs.Empty);
+                }
+                catch (Exception ex)
+                {
+                    ProcessingException?.Invoke($"Mp3 file '{mp3File}' was skipped. {ex.GetType()}:{ex}", EventArgs.Empty);
+                }
             }
         }
 
