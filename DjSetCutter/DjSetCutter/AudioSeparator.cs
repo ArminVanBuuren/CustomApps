@@ -71,7 +71,6 @@ namespace DjSetCutter
                         File.SetAttributes(cueFile, FileAttributes.Normal);
                         File.SetAttributes(mp3File, FileAttributes.Normal);
 
-
                         string cueData;
                         using (var inputStream = File.OpenRead(cueFile))
                         {
@@ -91,8 +90,6 @@ namespace DjSetCutter
                             trackDest = Replacer(trackInfo, track.Value, trackDest, out var index);
 
                             var indexSplit = index.Split(':');
-                            if(indexSplit.Length < 3)
-                                continue;
                             var spanMin = TimeSpan.FromMinutes(int.Parse(indexSplit[0]));
                             var spanSec = TimeSpan.FromSeconds(int.Parse(indexSplit[1]));
                             var spanMilisec = TimeSpan.FromMilliseconds(int.Parse(indexSplit[2] + "0"));
@@ -133,17 +130,13 @@ namespace DjSetCutter
                     }
                     catch (InvalidOperationException ex)
                     {
-                        ProcessingException?.Invoke($"'{mp3File}' was skipped. InvalidOperationException:{ex.Message}", EventArgs.Empty);
+                        ProcessingException?.Invoke($"'{mp3File}' was skipped. InvalidOperationException:{ex}", EventArgs.Empty);
                     }
                     catch (Exception ex)
                     {
-                        ProcessingException?.Invoke($"{ex.GetType()} \"{ex}\" when read or write track {mp3File}", EventArgs.Empty);
+                        ProcessingException?.Invoke($"'{mp3File}' was skipped. {ex.GetType()}:{ex}", EventArgs.Empty);
                     }
                 }
-            }
-            catch (ThreadAbortException)
-            {
-                throw;
             }
             catch (Exception ex)
             {

@@ -61,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDirPath.Location = new System.Drawing.Point(83, 100);
             this.textBoxDirPath.Name = "textBoxDirPath";
-            this.textBoxDirPath.Size = new System.Drawing.Size(892, 20);
+            this.textBoxDirPath.Size = new System.Drawing.Size(904, 20);
             this.textBoxDirPath.TabIndex = 0;
             this.textBoxDirPath.Text = "D:\\TEST";
             // 
@@ -77,7 +77,7 @@
             // ButtonDirPath
             // 
             this.ButtonDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonDirPath.Location = new System.Drawing.Point(981, 98);
+            this.ButtonDirPath.Location = new System.Drawing.Point(993, 98);
             this.ButtonDirPath.Name = "ButtonDirPath";
             this.ButtonDirPath.Size = new System.Drawing.Size(45, 23);
             this.ButtonDirPath.TabIndex = 2;
@@ -91,7 +91,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxFormat.Location = new System.Drawing.Point(83, 126);
             this.textBoxFormat.Name = "textBoxFormat";
-            this.textBoxFormat.Size = new System.Drawing.Size(892, 20);
+            this.textBoxFormat.Size = new System.Drawing.Size(904, 20);
             this.textBoxFormat.TabIndex = 3;
             this.textBoxFormat.Tag = "";
             this.textBoxFormat.Text = "..\\%DIR_NAME%\\[ASOT %EPISODE%] %TRACK%. %PERFORMER% - %TITLE%.mp3";
@@ -108,7 +108,7 @@
             // ButtonStartStop
             // 
             this.ButtonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonStartStop.Location = new System.Drawing.Point(936, 310);
+            this.ButtonStartStop.Location = new System.Drawing.Point(948, 308);
             this.ButtonStartStop.Name = "ButtonStartStop";
             this.ButtonStartStop.Size = new System.Drawing.Size(90, 23);
             this.ButtonStartStop.TabIndex = 5;
@@ -121,9 +121,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tempstat,
             this.StatusTextLable});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 343);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 341);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1038, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1050, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -149,7 +149,7 @@
             this.exceptionMessage.Location = new System.Drawing.Point(15, 178);
             this.exceptionMessage.Name = "exceptionMessage";
             this.exceptionMessage.ReadOnly = true;
-            this.exceptionMessage.Size = new System.Drawing.Size(1011, 127);
+            this.exceptionMessage.Size = new System.Drawing.Size(1023, 125);
             this.exceptionMessage.TabIndex = 7;
             this.exceptionMessage.Text = "";
             // 
@@ -157,7 +157,7 @@
             // 
             this.deleteSourceCUE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.deleteSourceCUE.AutoSize = true;
-            this.deleteSourceCUE.Location = new System.Drawing.Point(12, 314);
+            this.deleteSourceCUE.Location = new System.Drawing.Point(12, 312);
             this.deleteSourceCUE.Name = "deleteSourceCUE";
             this.deleteSourceCUE.Size = new System.Drawing.Size(126, 17);
             this.deleteSourceCUE.TabIndex = 8;
@@ -168,7 +168,7 @@
             // 
             this.deleteSourceMP3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.deleteSourceMP3.AutoSize = true;
-            this.deleteSourceMP3.Location = new System.Drawing.Point(144, 314);
+            this.deleteSourceMP3.Location = new System.Drawing.Point(144, 312);
             this.deleteSourceMP3.Name = "deleteSourceMP3";
             this.deleteSourceMP3.Size = new System.Drawing.Size(126, 17);
             this.deleteSourceMP3.TabIndex = 14;
@@ -190,7 +190,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(68, 19);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(892, 20);
+            this.textBox1.Size = new System.Drawing.Size(904, 20);
             this.textBox1.TabIndex = 16;
             this.textBox1.Tag = "";
             this.textBox1.Text = "TRACK.+?INDEX\\s*[0-9 :]+";
@@ -207,7 +207,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(15, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1011, 80);
+            this.groupBox1.Size = new System.Drawing.Size(1023, 80);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Track\'s regex parser from CUE";
@@ -216,7 +216,7 @@
             // 
             this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(966, 48);
+            this.checkBox2.Location = new System.Drawing.Point(978, 48);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(35, 17);
             this.checkBox2.TabIndex = 21;
@@ -229,7 +229,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.Location = new System.Drawing.Point(68, 45);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(892, 20);
+            this.textBox2.Size = new System.Drawing.Size(904, 20);
             this.textBox2.TabIndex = 20;
             this.textBox2.Tag = "";
             this.textBox2.Text = "TRACK\\s*(?<TRACK>\\d+).+?PERFORMER\\s*(\\\"\"|)(?<PERFORMER>.+?)(\\\"\"|)TITLE\\s*(\\\"\"|)(?" +
@@ -248,7 +248,7 @@
             // 
             this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(966, 22);
+            this.checkBox1.Location = new System.Drawing.Point(978, 22);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(35, 17);
             this.checkBox1.TabIndex = 17;
@@ -270,7 +270,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox3.Location = new System.Drawing.Point(83, 152);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(892, 20);
+            this.textBox3.Size = new System.Drawing.Size(904, 20);
             this.textBox3.TabIndex = 18;
             this.textBox3.Tag = "";
             this.textBox3.Text = "(?<DIR_NAME>(?<EPISODE>\\d+)\\s*\\(\\d+\\-\\d+\\-\\d+\\))";
@@ -279,7 +279,7 @@
             // 
             this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(981, 155);
+            this.checkBox3.Location = new System.Drawing.Point(993, 155);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(35, 17);
             this.checkBox3.TabIndex = 23;
@@ -290,7 +290,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1038, 365);
+            this.ClientSize = new System.Drawing.Size(1050, 363);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox3);
@@ -306,7 +306,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxDirPath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(390, 214);
+            this.MinimumSize = new System.Drawing.Size(390, 321);
             this.Name = "Form1";
             this.Text = "Dj Set Cutter";
             this.statusStrip1.ResumeLayout(false);

@@ -15,6 +15,10 @@ namespace DjSetCutter
         public Form1()
         {
             InitializeComponent();
+            var toolTip = new ToolTip();
+            toolTip.SetToolTip(checkBox1, "Multi Line");
+            toolTip.SetToolTip(checkBox2, "Multi Line");
+            toolTip.SetToolTip(checkBox3, "Multi Line");
         }
 
         private void ButtonDirPath_Click(object sender, EventArgs e)
