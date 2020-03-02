@@ -54,7 +54,7 @@ namespace DjSetCutter
             }, listOfDirs, 5));
         }
 
-        void Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2)
+        void Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads)
         {
             var pool = new Semaphore(maxThreads, maxThreads, typeof(T).GetHashCode().ToString() + action.GetHashCode().ToString());
             var listOfTasks = new List<Task>();
