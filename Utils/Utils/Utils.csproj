@@ -99,6 +99,7 @@
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />
     <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
+    <Compile Include="CollectionHelper\HashTable.cs" />
     <Compile Include="CollectionHelper\HashtableComparer.cs" />
     <Compile Include="CollectionHelper\PriorityQueue.cs" />
     <Compile Include="COLLECTIONS.cs" />
@@ -127,7 +128,7 @@
     <Compile Include="Handles\MathProgression.cs" />
     <Compile Include="Handles\MemStatus.cs" />
     <Compile Include="Handles\PathProperty.cs" />
-    <Compile Include="Handles\SemaphoreHelper.cs" />
+    <Compile Include="MultiTasking.cs" />
     <Compile Include="HOST.cs" />
     <Compile Include="HtmlAgilityPack\crc32.cs" />
     <Compile Include="HtmlAgilityPack\EncodingFoundException.cs" />

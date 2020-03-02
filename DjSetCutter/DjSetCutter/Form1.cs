@@ -66,7 +66,7 @@ namespace DjSetCutter
             }
             else
             {
-                separator.Stop();
+                separator?.Stop();
             }
         }
 

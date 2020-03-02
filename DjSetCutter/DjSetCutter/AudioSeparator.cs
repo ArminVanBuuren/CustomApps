@@ -22,7 +22,7 @@ namespace DjSetCutter
         private readonly string destinatonFormat;
         private readonly bool removeSourceCUE = false;
         private readonly bool removeSourceMp3 = false;
-        private SemaphoreHelper<string> process;
+        private bool IsCancellationRequested = false;
 
         public AudioSeparator(Regex trackSeparator, Regex trackInfo, Regex dirParser, string sourcePath, string destinatonFormat, bool removeSourceCUE = false, bool removeSourceMp3 = false)
         {
@@ -37,10 +37,11 @@ namespace DjSetCutter
 
         public async Task StartAsync()
         {
+            IsCancellationRequested = false;
             var listOfDirs = Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories).ToList();
             listOfDirs.Add(sourcePath);
 
-            process = new SemaphoreHelper<string>((string dirPath) =>
+            await Task.Factory.StartNew(() => Run((string dirPath) =>
             {
                 try
                 {
@@ -50,14 +51,40 @@ namespace DjSetCutter
                 {
                     ProcessingException?.Invoke($"{ex.GetType()} when process on folder '{dirPath}'.\r\n{ex}", EventArgs.Empty);
                 }
-            }, 5);
+            }, listOfDirs, 5));
+        }
 
-            await process.ExecuteAsync(listOfDirs);
+        void Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2)
+        {
+            var pool = new Semaphore(maxThreads, maxThreads, typeof(T).GetHashCode().ToString() + action.GetHashCode().ToString());
+            var listOfTasks = new List<Task>();
+
+            foreach (var item in data)
+            {
+                if (IsCancellationRequested)
+                    break;
+
+                pool.WaitOne();
+
+                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                {
+                    if (IsCancellationRequested)
+                    {
+                        pool.Release();
+                        return;
+                    }
+
+                    action.Invoke((T)input);
+                    pool.Release();
+                }, item));
+            }
+
+            Task.WaitAll(listOfTasks.ToArray());
         }
 
         public void Stop()
         {
-            process?.Abort();
+            IsCancellationRequested = true;
         }
 
         void PerformSet(string dirPath)
@@ -105,6 +132,9 @@ namespace DjSetCutter
                     if (tracks.Count == 0)
                         continue;
 
+                    if (IsCancellationRequested)
+                        return;
+
                     if (!Directory.Exists(tracks[0].Folder))
                         Directory.CreateDirectory(tracks[0].Folder);
 
@@ -114,7 +144,7 @@ namespace DjSetCutter
                         {
                             for (var i = 0; i < tracks.Count; i++)
                             {
-                                if(process.IsCancellationRequested)
+                                if(IsCancellationRequested)
                                     return;
 
                                 if (File.Exists(tracks[i].Destination))
@@ -125,7 +155,7 @@ namespace DjSetCutter
                         }
                     }
 
-                    if (process.IsCancellationRequested)
+                    if (IsCancellationRequested)
                         return;
 
                     if (removeSourceCUE)
