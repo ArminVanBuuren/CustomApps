@@ -14,7 +14,6 @@ using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.SC;
 using Utils;
 using Utils.CollectionHelper;
-using Utils.Handles;
 using Utils.WinForm.CustomProgressBar;
 
 namespace SPAFilter.SPA

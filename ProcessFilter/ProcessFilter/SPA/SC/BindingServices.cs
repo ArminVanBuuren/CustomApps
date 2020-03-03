@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
 using Utils;
-using static Utils.XPATH;
 
 namespace SPAFilter.SPA.SC
 {
