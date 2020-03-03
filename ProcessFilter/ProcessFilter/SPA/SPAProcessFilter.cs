@@ -434,7 +434,7 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                MultiTasking.Run((ServiceActivator sa) =>
+                MultiTasking.Run((sa) =>
                 {
                     try
                     {
