@@ -9,12 +9,12 @@ namespace Utils
 {
     public class MultiTasking
     {
-        public static async Task RunAsync(List<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
+        public static async Task RunAsync(IEnumerable<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
         {
             await Task.Factory.StartNew(() => Run(actions, cancel, maxThreads));
         }
 
-        public static void Run(List<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
+        public static void Run(IEnumerable<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
         {
             var pool = new Semaphore(maxThreads, maxThreads, actions.GetHashCode().ToString());
             var listOfTasks = new List<Task>();
