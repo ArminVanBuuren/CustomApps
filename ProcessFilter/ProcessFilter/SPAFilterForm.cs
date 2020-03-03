@@ -380,14 +380,9 @@ namespace SPAFilter
                 Updater.SecondsRunDelay = 3;
 
                 if (Updater.ProjectBuildPack.NeedRestartApplication)
-                {
                     SaveData();
-                    AppUpdater.DoUpdate(Updater);
-                }
-                else
-                {
-                    AppUpdater.DoUpdate(Updater);
-                }
+
+                AppUpdater.DoUpdate(Updater);
             }
             catch (Exception ex)
             {
