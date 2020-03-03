@@ -9,12 +9,12 @@ namespace Utils
 {
     public class MultiTasking
     {
-        public static async Task RunAsync(IEnumerable<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
+        public static async Task RunAsync(IEnumerable<Action> actions, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
-            await Task.Factory.StartNew(() => Run(actions, cancel, maxThreads));
+            await Task.Factory.StartNew(() => Run(actions, maxThreads, cancel));
         }
 
-        public static void Run(IEnumerable<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
+        public static void Run(IEnumerable<Action> actions, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_{actions.GetHashCode()}");
             var listOfTasks = new List<Task>();
@@ -42,12 +42,12 @@ namespace Utils
             Task.WaitAll(listOfTasks.ToArray());
         }
 
-        public static async Task<HashTable<Func<T>, T>> RunAsync<T>(IEnumerable<Func<T>> funcs, CancellationTokenSource cancel, int maxThreads = 2)
+        public static async Task<HashTable<Func<T>, T>> RunAsync<T>(IEnumerable<Func<T>> funcs, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
-            return await Task.Factory.StartNew(() => Run(funcs, cancel, maxThreads));
+            return await Task.Factory.StartNew(() => Run(funcs, maxThreads, cancel));
         }
 
-        public static HashTable<Func<T>, T> Run<T>(IEnumerable<Func<T>> funcs, CancellationTokenSource cancel, int maxThreads = 2)
+        public static HashTable<Func<T>, T> Run<T>(IEnumerable<Func<T>> funcs, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_{typeof(T).GetHashCode() + funcs.GetHashCode()}");
             var result = new HashTable<Func<T>, T>(funcs.Count());
@@ -78,12 +78,12 @@ namespace Utils
             return result;
         }
 
-        public static async Task RunAsync<T>(Action<T> action, IEnumerable<T> data, CancellationTokenSource cancel, int maxThreads = 2)
+        public static async Task RunAsync<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
-            await Task.Factory.StartNew(() => Run(action, data, cancel, maxThreads));
+            await Task.Factory.StartNew(() => Run(action, data, maxThreads, cancel));
         }
 
-        public static void Run<T>(Action<T> action, IEnumerable<T> data, CancellationTokenSource cancel, int maxThreads = 2)
+        public static void Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_{typeof(T).GetHashCode() + action.GetHashCode()}");
             var listOfTasks = new List<Task>();
@@ -111,12 +111,12 @@ namespace Utils
             Task.WaitAll(listOfTasks.ToArray());
         }
 
-        public static async Task<HashTable<TIn, TOut>> RunAsync<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, CancellationTokenSource cancel, int maxThreads = 2)
+        public static async Task<HashTable<TIn, TOut>> RunAsync<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
-            return await Task<HashTable<TIn, TOut>>.Factory.StartNew(() => Run(func, data, cancel, maxThreads));
+            return await Task<HashTable<TIn, TOut>>.Factory.StartNew(() => Run(func, data, maxThreads, cancel));
         }
 
-        public static HashTable<TIn, TOut> Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, CancellationTokenSource cancel, int maxThreads = 2)
+        public static HashTable<TIn, TOut> Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, int maxThreads = 2, CancellationTokenSource cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode()}");
             var result = new HashTable<TIn, TOut>(data.Count());
