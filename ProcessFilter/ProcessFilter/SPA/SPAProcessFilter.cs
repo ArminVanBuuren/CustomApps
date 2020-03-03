@@ -364,7 +364,7 @@ namespace SPAFilter.SPA
                 lock (ACTIVATORS_SYNC)
                 {
                     var lastActivatorList = new List<ServiceActivator>(_activators.Values);
-
+                    
                     var result = MultiTasking.Run((inputFile) =>
                     {
                         try
