@@ -383,7 +383,7 @@ namespace SPAFilter.SPA
                         {
                             return ex.Message;
                         }
-                    }, filePathList, null, 10);
+                    }, filePathList, 10);
 
                     ReloadActivators(lastActivatorList);
 
@@ -445,7 +445,7 @@ namespace SPAFilter.SPA
                     {
                         return ex.Message;
                     }
-                }, activators, null, 10);
+                }, activators, 10);
 
                 var errors = string.Join(Environment.NewLine, result.Where(x => !x.Value.IsNullOrEmpty()).Select(x => x.Value));
                 if (!errors.IsNullOrEmptyTrim())
