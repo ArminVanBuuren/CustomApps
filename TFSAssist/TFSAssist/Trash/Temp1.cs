@@ -43,7 +43,7 @@ namespace TFSAssist.Trash
 			var parent = element;
 			while (parent != null)
 			{
-				T correctlyTyped = parent as T;
+				var correctlyTyped = parent as T;
 				if (correctlyTyped != null)
 				{
 					return correctlyTyped;
@@ -61,7 +61,7 @@ namespace TFSAssist.Trash
 		private static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection) where T : Visual
 		{
 			var count = VisualTreeHelper.GetChildrenCount(parent);
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
 				var child = VisualTreeHelper.GetChild(parent, i);
 				if (child is T)

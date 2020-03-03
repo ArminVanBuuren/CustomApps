@@ -791,7 +791,7 @@ namespace TFSAssist
                 case "CLEARLOG":
                     lock (syncTraces)
                     {
-                        for (int i = Traces.Count - 1; i >= 0; i--)
+                        for (var i = Traces.Count - 1; i >= 0; i--)
                         {
                             var trace = Traces[i];
                             Traces.Remove(trace);
