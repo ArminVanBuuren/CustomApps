@@ -361,46 +361,37 @@ namespace SPAFilter.SPA
         {
             await Task.Factory.StartNew(() =>
             {
-                var lastActivatorList = new List<ServiceActivator>();
-
-                var errors = string.Empty;
                 lock (ACTIVATORS_SYNC)
                 {
-                    lastActivatorList.AddRange(_activators.Values);
+                    var lastActivatorList = new List<ServiceActivator>(_activators.Values);
 
-                    var taskList = new List<Task>();
-                    foreach (var filePath in filePathList)
+                    var result = MultiTasking.Run((inputFile) =>
                     {
-                        if (_activators.ContainsKey(filePath))
+                        try
                         {
-                            errors += $"Activator \"{filePath}\" already exist.\r\n";
-                            continue;
+                            if (_activators.ContainsKey(inputFile))
+                            {
+                                return $"Activator \"{inputFile}\" already exist.";
+                            }
+                            else
+                            {
+                                _activators.Add(inputFile, new ServiceActivator(inputFile));
+                                return string.Empty;
+                            }
                         }
-
-                        var task = new Task(() =>
+                        catch (Exception ex)
                         {
-                            try
-                            {
-                                var file = filePath;
-                                _activators.Add(file, new ServiceActivator(file));
-                            }
-                            catch (Exception ex)
-                            {
-                                errors += $"{ex.Message}\r\n";
-                            }
-                        });
-                        task.Start();
-                        taskList.Add(task);
-                    }
-
-                    Task.WaitAll(taskList.ToArray());
+                            return ex.Message;
+                        }
+                    }, filePathList, null, 10);
 
                     ReloadActivators(lastActivatorList);
-                }
 
-                if (!errors.IsNullOrEmptyTrim())
-                {
-                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    var errors = string.Join(Environment.NewLine, result.Where(x => !x.Value.IsNullOrEmpty()).Select(x => x.Value));
+                    if (!errors.IsNullOrEmptyTrim())
+                    {
+                        MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             });
         }
