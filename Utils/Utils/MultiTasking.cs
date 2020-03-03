@@ -16,7 +16,7 @@ namespace Utils
 
         public static void Run(IEnumerable<Action> actions, CancellationTokenSource cancel, int maxThreads = 2)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, actions.GetHashCode().ToString());
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_{actions.GetHashCode()}");
             var listOfTasks = new List<Task>();
 
             foreach (var action in actions)
@@ -42,6 +42,42 @@ namespace Utils
             Task.WaitAll(listOfTasks.ToArray());
         }
 
+        public static async Task<HashTable<Func<T>, T>> RunAsync<T>(IEnumerable<Func<T>> funcs, CancellationTokenSource cancel, int maxThreads = 2)
+        {
+            return await Task.Factory.StartNew(() => Run(funcs, cancel, maxThreads));
+        }
+
+        public static HashTable<Func<T>, T> Run<T>(IEnumerable<Func<T>> funcs, CancellationTokenSource cancel, int maxThreads = 2)
+        {
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_{typeof(T).GetHashCode() + funcs.GetHashCode()}");
+            var result = new HashTable<Func<T>, T>(funcs.Count());
+            var listOfTasks = new List<Task>();
+
+            foreach (var func in funcs)
+            {
+                if (cancel != null && cancel.IsCancellationRequested)
+                    break;
+
+                pool.WaitOne();
+
+                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                {
+                    if (cancel != null && cancel.IsCancellationRequested)
+                    {
+                        pool.Release();
+                        return;
+                    }
+
+                    var func1 = (Func<T>) input;
+                    result.Add(func1, func1.Invoke());
+                    pool.Release();
+                }, func));
+            }
+
+            Task.WaitAll(listOfTasks.ToArray());
+            return result;
+        }
+
         public static async Task RunAsync<T>(Action<T> action, IEnumerable<T> data, CancellationTokenSource cancel, int maxThreads = 2)
         {
             await Task.Factory.StartNew(() => Run(action, data, cancel, maxThreads));
@@ -49,7 +85,7 @@ namespace Utils
 
         public static void Run<T>(Action<T> action, IEnumerable<T> data, CancellationTokenSource cancel, int maxThreads = 2)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, typeof(T).GetHashCode().ToString() + action.GetHashCode().ToString());
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_{typeof(T).GetHashCode() + action.GetHashCode()}");
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -82,7 +118,7 @@ namespace Utils
 
         public static HashTable<TIn, TOut> Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, CancellationTokenSource cancel, int maxThreads = 2)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, (typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode()) + func.GetHashCode().ToString());
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode()}");
             var result = new HashTable<TIn, TOut>(data.Count());
             var listOfTasks = new List<Task>();
 
