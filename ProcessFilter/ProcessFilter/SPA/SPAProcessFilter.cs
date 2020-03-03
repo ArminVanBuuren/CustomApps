@@ -434,17 +434,24 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                MultiTasking.Run((sa) =>
+                var result = MultiTasking.Run((sa) =>
                 {
                     try
                     {
                         sa.Refresh();
+                        return string.Empty;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return ex.Message;
                     }
                 }, activators, null, 10);
+
+                var errors = string.Join(Environment.NewLine, result.Where(x => !x.Value.IsNullOrEmpty()).Select(x => x.Value));
+                if (!errors.IsNullOrEmptyTrim())
+                {
+                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             LoadActivators();
