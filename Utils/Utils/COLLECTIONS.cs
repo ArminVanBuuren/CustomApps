@@ -53,8 +53,8 @@ namespace Utils
         /// var query = people.DistinctBy(p => new { p.Id, p.Name });
         ///
         /// Other options:
-        /// List<Person> distinctPeople = allPeople.GroupBy(p => p.PersonId).Select(g => g.First()).ToList();
-        /// List<Person> distinctPeople = allPeople.GroupBy(p => new {p.PersonId, p.FavoriteColor} ).Select(g => g.First()).ToList();
+        /// List&lt;Person&gt; distinctPeople = allPeople.GroupBy(p => p.PersonId).Select(g => g.First()).ToList();
+        /// List&lt;Person&gt; distinctPeople = allPeople.GroupBy(p => new {p.PersonId, p.FavoriteColor} ).Select(g => g.First()).ToList();
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TKey"></typeparam>

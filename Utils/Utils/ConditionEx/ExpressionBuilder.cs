@@ -106,39 +106,40 @@ namespace Utils.ConditionEx
 
         static int WaitEndOfParam(ExpressionBuilder pac, StringBuilder temp, int state, char c, ref int waitSymol)
         {
-            if (c == '{')
+            switch (c)
             {
-                temp.Append(c);
-                return 2;
+                case '{':
+                    temp.Append(c);
+                    return 2;
+                case '\'':
+                    waitSymol++;
+                    pac.AddConditionParameter(temp.ToString());
+                    temp.Remove(0, temp.Length);
+                    return 0;
+                default:
+                    temp.Append(c);
+                    return state;
             }
-
-            if (c == '\'')
-            {
-                waitSymol++;
-                pac.AddConditionParameter(temp.ToString());
-                temp.Remove(0, temp.Length);
-                return 0;
-            }
-            temp.Append(c);
-            return state;
         }
 
         static int WaitResources(StringBuilder temp, int state, char c, ref int closeCommand)
         {
-            if (c == '{')
+            switch (c)
             {
-                if (closeCommand == 0)
+                case '{':
+                {
+                    if (closeCommand == 0)
+                        closeCommand++;
                     closeCommand++;
-                closeCommand++;
-            }
-            else if (c == '}')
-            {
-                if (closeCommand > 0)
-                    closeCommand--;
-                temp.Append(c);
-                if (closeCommand == 0)
-                    return 1;
-                return 2;
+                    break;
+                }
+                case '}':
+                {
+                    if (closeCommand > 0)
+                        closeCommand--;
+                    temp.Append(c);
+                    return closeCommand == 0 ? 1 : 2;
+                }
             }
             temp.Append(c);
             return state;
@@ -187,21 +188,23 @@ namespace Utils.ConditionEx
             //если в текущем блоке есть подблоки выражений
             if (_parent.ExpressionList.Count > 0)
             {
-                //если текущий Parent блок реализует группировку в виде скобок () то создаем новый блок 
-                //и добавляем его в текущий Parent, потом пересоздаем новый блок в текущий блок Parent
-                //и в новый уже добавляем обработанное условие
-                if (_parent.LogicalGroup == LogicalGroupType.And)
+                switch (_parent.LogicalGroup)
                 {
-                    var newChildBlock = new Expression();
-                    _parent.ExpressionList.AddChild(newChildBlock);
-                    _parent = newChildBlock;
-                }
-                else if (_parent.LogicalGroup == LogicalGroupType.Or)
-                {
-                    //Если оператор AND, а в текущем блоке обрабатывается операция OR, то создаем новый блок с операцией AND
-                    //и туда запихиваем в подблоки уже текущие обработанные операции с OR
-                    LogicalGroupIfOpenBkt();
-                    return;
+                    //если текущий Parent блок реализует группировку в виде скобок () то создаем новый блок 
+                    //и добавляем его в текущий Parent, потом пересоздаем новый блок в текущий блок Parent
+                    //и в новый уже добавляем обработанное условие
+                    case LogicalGroupType.And:
+                    {
+                        var newChildBlock = new Expression();
+                        _parent.ExpressionList.AddChild(newChildBlock);
+                        _parent = newChildBlock;
+                        break;
+                    }
+                    case LogicalGroupType.Or:
+                        //Если оператор AND, а в текущем блоке обрабатывается операция OR, то создаем новый блок с операцией AND
+                        //и туда запихиваем в подблоки уже текущие обработанные операции с OR
+                        LogicalGroupIfOpenBkt();
+                        return;
                 }
             }
             //добавляем в текущий Parent блок обработанное условие condition если в данном блоке не обрабатывется операторы OR и скобки 

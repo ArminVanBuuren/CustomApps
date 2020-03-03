@@ -76,7 +76,7 @@ namespace Utils
 
             var sFilePath = Path.Combine(sDir, sFileName);
             var sFinalDir = Path.GetDirectoryName(sFilePath);
-            if (!Directory.Exists(sFinalDir))
+            if (sFinalDir != null && !Directory.Exists(sFinalDir))
                 Directory.CreateDirectory(sFinalDir);
 
             using (var outFile = new FileStream(sFilePath, FileMode.Create, FileAccess.Write, FileShare.None))

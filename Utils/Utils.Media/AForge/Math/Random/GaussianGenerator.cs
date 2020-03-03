@@ -8,8 +8,6 @@
 
 namespace AForge.AMath.Random
 {
-    using System;
-
     /// <summary>
     /// Gaussian random numbers generator.
     /// </summary>

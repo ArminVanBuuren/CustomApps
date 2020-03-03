@@ -10,7 +10,6 @@ namespace AForge.Imaging.ComplexFilters
 {
     using System;
     using AForge;
-    using AForge.AMath;
 
     /// <summary>
     /// Filtering of frequencies outside of specified range in complex Fourier

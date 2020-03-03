@@ -14,9 +14,8 @@ namespace AForge.Video
     using System.Text;
     using System.Threading;
 	using System.Net;
-    using System.Security;
 
-	/// <summary>
+    /// <summary>
 	/// JPEG video source.
     /// </summary>
     /// 

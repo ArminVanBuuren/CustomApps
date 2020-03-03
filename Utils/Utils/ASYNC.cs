@@ -39,10 +39,10 @@ namespace Utils
         }
 
         /// <summary>
-        /// Execute an async Task<T> method which has a T return type synchronously
+        /// Execute an async Task&lt;T&gt; method which has a T return type synchronously
         /// </summary>
         /// <typeparam name="T">Return Type</typeparam>
-        /// <param name="task">Task<T> method to execute</param>
+        /// <param name="task">Task&lt;T&gt; method to execute</param>
         /// <returns></returns>
         public static T RunSync<T>(Func<Task<T>> task)
         {
@@ -88,7 +88,6 @@ namespace Utils
             if (await Task.WhenAny(task, Task.Delay(millisecondsTimeout)) == task)
             {
                 // task completed within timeout
-                return;
             }
 
             // timeout logic

@@ -13,7 +13,7 @@ namespace Utils
         /// <param name="dwThreadAffinityMask"></param>
         /// <returns></returns>
         [DllImport("kernel32.dll")]
-        static extern UIntPtr SetThreadAffinityMask(IntPtr hThread, UIntPtr dwThreadAffinityMask);
+        public static extern UIntPtr SetThreadAffinityMask(IntPtr hThread, UIntPtr dwThreadAffinityMask);
 
         [DllImport("psapi.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -94,7 +94,7 @@ namespace Utils
             return resultTotal;
         }
 
-        private static ProcessInfo ProcessInfoByID(int ID)
+        public static ProcessInfo ProcessInfoByID(int ID)
         {
             // gets the process info by it's id
             if (ProcessList == null || ProcessList.Length == 0)
@@ -120,30 +120,29 @@ namespace Utils
             if (process == null)
                 return default(double);
 
-            if (IntPtr.Size == 4)
+            switch (IntPtr.Size)
             {
-                // 32-bit application
-                return ((double)process.PagedMemorySize64 / 2);
-            }
-            else if (IntPtr.Size == 8)
-            {
-                // 64-bit application
-                return process.PagedMemorySize64;
-            }
+                case 4:
+                    // 32-bit application
+                    return ((double)process.PagedMemorySize64 / 2);
+                case 8:
+                    // 64-bit application
+                    return process.PagedMemorySize64;
+                default:
+                    //var test1 = ((double) process.MinWorkingSet).ToFileSize();
+                    //var test2 = ((double) process.MaxWorkingSet).ToFileSize();
+                    //var test3 = ((double) process.NonpagedSystemMemorySize64).ToFileSize();
+                    //var test4 = ((double) process.PagedMemorySize64).ToFileSize();
+                    //var test5 = ((double) process.PagedSystemMemorySize64).ToFileSize();
+                    //var test6 = ((double) process.PeakPagedMemorySize64).ToFileSize();
+                    //var test7 = ((double) process.PeakVirtualMemorySize64).ToFileSize();
+                    //var test8 = ((double) process.PeakWorkingSet64).ToFileSize();
+                    //var test9 = ((double) process.VirtualMemorySize64).ToFileSize();
+                    //var test10 = ((double) process.WorkingSet64).ToFileSize();
 
-            //var test1 = ((double) process.MinWorkingSet).ToFileSize();
-            //var test2 = ((double) process.MaxWorkingSet).ToFileSize();
-            //var test3 = ((double) process.NonpagedSystemMemorySize64).ToFileSize();
-            //var test4 = ((double) process.PagedMemorySize64).ToFileSize();
-            //var test5 = ((double) process.PagedSystemMemorySize64).ToFileSize();
-            //var test6 = ((double) process.PeakPagedMemorySize64).ToFileSize();
-            //var test7 = ((double) process.PeakVirtualMemorySize64).ToFileSize();
-            //var test8 = ((double) process.PeakWorkingSet64).ToFileSize();
-            //var test9 = ((double) process.VirtualMemorySize64).ToFileSize();
-            //var test10 = ((double) process.WorkingSet64).ToFileSize();
-
-            // The future is now!
-            return default(double);
+                    // The future is now!
+                    return default(double);
+            }
         }
     }
 }

@@ -8,8 +8,6 @@
 
 namespace AForge.AMath.Random
 {
-    using System;
-
     /// <summary>
     /// Interface for random numbers generators.
     /// </summary>

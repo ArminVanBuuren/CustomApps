@@ -12,9 +12,8 @@ namespace AForge.Video.VFW
 	using System.Drawing;
 	using System.Drawing.Imaging;
 	using System.Runtime.InteropServices;
-    using AForge;
 
-	/// <summary>
+    /// <summary>
     /// AVI files writing using Video for Windows interface.
 	/// </summary>
     /// 

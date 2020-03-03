@@ -8,8 +8,6 @@
 
 namespace AForge.AMath.Metrics
 {
-    using System;
-
     /// <summary>
     /// Interface for similarity algorithms.
     /// </summary>

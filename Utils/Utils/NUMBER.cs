@@ -63,7 +63,7 @@ namespace Utils
         /// </summary>
         public static bool IsParity(this int dbl)
         {
-            return dbl % 2 == 0 ? true : false;
+            return dbl % 2 == 0;
         }
     }
 }

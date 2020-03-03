@@ -8,7 +8,6 @@
 
 namespace AForge.AMath.Random
 {
-    using System;
     using AForge;
 
     /// <summary>

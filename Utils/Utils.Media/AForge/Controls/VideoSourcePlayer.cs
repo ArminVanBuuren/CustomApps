@@ -7,13 +7,9 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Data;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 using AForge.Video;

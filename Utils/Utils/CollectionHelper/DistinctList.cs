@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Utils.CollectionHelper
 {
-    public sealed class DistinctList<T> : IList<T>
+    [Serializable]
+    public sealed class DistinctList<T> : IList<T>, ISerializable, IDisposable
     {
         private readonly IEqualityComparer<T> _comparer;
         readonly Dictionary<T, bool> _items;
@@ -147,6 +148,17 @@ namespace Utils.CollectionHelper
         public override string ToString()
         {
             return _items != null ? _items.Keys.ToString() : base.ToString();
+        }
+
+        public void Dispose()
+        {
+            var disposable = _items as IDisposable;
+            disposable?.Dispose();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            ((ISerializable)_items).GetObjectData(info, context);
         }
 
         /// <inheritdoc />

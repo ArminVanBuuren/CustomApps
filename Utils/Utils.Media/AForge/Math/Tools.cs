@@ -8,8 +8,6 @@
 
 namespace AForge.AMath
 {
-    using System;
-
     /// <summary>
     /// Set of tool functions.
     /// </summary>

@@ -6,6 +6,7 @@ namespace Utils.CollectionHelper
 {
     /// <inheritdoc />
     /// <summary>Очередь с приоритетом элементов</summary>
+    [Serializable]
     public class PriorityQueue<T, TKey> : IEnumerable<T> where TKey : IComparable
     {
         private readonly Func<T, TKey> _keySelector;

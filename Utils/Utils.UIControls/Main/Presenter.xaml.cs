@@ -1,15 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using Utils.UIControls.Tools;
-
-namespace Utils.UIControls.Main
+﻿namespace Utils.UIControls.Main
 {
     public partial class Presenter
     {

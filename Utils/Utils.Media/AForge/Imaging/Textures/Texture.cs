@@ -8,7 +8,6 @@
 
 namespace AForge.Imaging.Textures
 {
-    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
 

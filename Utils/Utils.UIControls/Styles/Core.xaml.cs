@@ -94,7 +94,7 @@ namespace Utils.UIControls.Styles
 				for (var i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
 				{
 					var child = VisualTreeHelper.GetChild(depObj, i);
-					if (child != null && child is T)
+					if (child is T)
 					{
 						yield return (T)child;
 					}
@@ -215,12 +215,11 @@ namespace Utils.UIControls.Styles
 		{
 			var start = -1;
 			var end = 0;
-			var temp = -1;
-			var i = -1;
+            var i = -1;
 			foreach (var cr in textox.Text)
 			{
 				i++;
-				if (int.TryParse(cr.ToString(), out temp))
+				if (int.TryParse(cr.ToString(), out _))
 				{
 					if (start == -1)
 						start = i;

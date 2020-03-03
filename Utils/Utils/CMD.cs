@@ -6,14 +6,6 @@ namespace Utils
 {
     public static class CMD
     {
-        //string argument_start = "/C choice /C Y /N /D Y /T 4 & Start \"\" /D \"{0}\" \"{1}\"";
-        //string argument_update = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{1}\" \"{2}\"";
-        //string argument_update_start = argument_update + " & Start \"\" /D \"{3}\" \"{4}\" {5}";
-        //string argument_add = "/C choice /C Y /N /D Y /T 4 & Move /Y \"{0}\" \"{1}\"";
-        //string argument_remove = "/C choice /C Y /N /D Y /T 4 & Del /F /Q \"{0}\"";
-        //string argument_complete = "";
-
-
         const string argument_start = "/C choice /C Y /N /D Y /T 4 {0} & Start \"\" /D \"{1}\" \"{2}\"";
         const string argument_update = "/C choice /C Y /N /D Y /T 4 {0} & Del /F /Q \"{1}\" & choice /C Y /N /D Y /T 2 & Move /Y \"{2}\" \"{3}\"";
         const string argument_update_start = argument_update + " {4} & Start \"\" /D \"{5}\" \"{6}\" {7}";

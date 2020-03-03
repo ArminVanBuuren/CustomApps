@@ -8,7 +8,6 @@
 
 namespace AForge.AMath.Geometry
 {
-    using System;
     using System.Collections.Generic;
 
     using AForge;

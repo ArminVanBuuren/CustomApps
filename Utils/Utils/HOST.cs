@@ -146,22 +146,28 @@ namespace Utils
             return allDetailedData;
         }
 
-        static void AddValue(DuplicateDictionary<string, string> collection, ManagementObject manageObj, string key)
+        static void AddValue(DuplicateDictionary<string, string> collection, ManagementBaseObject manageObj, string key)
         {
             var manageValue = manageObj[key];
             try
             {
-                if (manageValue == null)
-                    return;
-                if (manageValue is string[] result)
+                switch (manageValue)
                 {
-                    foreach (var strVal in result)
+                    case null:
+                        return;
+                    case string[] result:
                     {
-                        collection.Add(key, strVal);
+                        foreach (var strVal in result)
+                        {
+                            collection.Add(key, strVal);
+                        }
+
+                        break;
                     }
+                    default:
+                        collection.Add(key, manageValue.ToString());
+                        break;
                 }
-                else
-                    collection.Add(key, manageValue.ToString());
             }
             catch (Exception)
             {

@@ -60,7 +60,7 @@ namespace Utils
             return localTime;
         }
 
-        private static Assembly CustomResolve(object sender, ResolveEventArgs args)
+        public static Assembly CustomResolve(object sender, ResolveEventArgs args)
         {
             // System.AppDomain.CurrentDomain.AssemblyResolve += CustomResolve;
             if (args.Name.StartsWith("library"))

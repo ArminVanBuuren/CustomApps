@@ -9,7 +9,6 @@
 namespace AForge
 {
     using System;
-    using System.ComponentModel;
 
     /// <summary>
     /// Structure for representing a pair of coordinates of integer type.

@@ -230,19 +230,20 @@ namespace Utils.XmlRtfStyle
 
                 Label_01BC:
                 temp.Append(ch);
-                if (temp.ToString() == "!--")
+                switch (temp.ToString())
                 {
-                    rtf.SetForeColor(settings.SymbolColor);
-                    rtf.AddText(temp.ToString(), settings.SymbolStyle);
-                    temp.Remove(0, temp.Length);
-                    state = 8;
-                }
-                else if (temp.ToString() == "![CDATA[")
-                {
-                    rtf.SetForeColor(settings.SymbolColor);
-                    rtf.AddText(temp.ToString(), settings.SymbolStyle);
-                    temp.Remove(0, temp.Length);
-                    state = 9;
+                    case "!--":
+                        rtf.SetForeColor(settings.SymbolColor);
+                        rtf.AddText(temp.ToString(), settings.SymbolStyle);
+                        temp.Remove(0, temp.Length);
+                        state = 8;
+                        break;
+                    case "![CDATA[":
+                        rtf.SetForeColor(settings.SymbolColor);
+                        rtf.AddText(temp.ToString(), settings.SymbolStyle);
+                        temp.Remove(0, temp.Length);
+                        state = 9;
+                        break;
                 }
 
                 continue;
@@ -339,56 +340,52 @@ namespace Utils.XmlRtfStyle
 
         static int ReadValueDQ(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitAttrOrEndOfTag, int readSpecInValueDQ, int state, char c)
         {
-            if (c == '"')
+            switch (c)
             {
-                rtf.SetForeColor(settings.ValueColor);
-                rtf.AddText(temp.ToString(), settings.ValueStyle);
-                temp.Remove(0, temp.Length);
-                rtf.SetForeColor(settings.QuoteColor);
-                rtf.AddText(c.ToString(), settings.QuoteStyle);
-                state = waitAttrOrEndOfTag;
-                return state;
+                case '"':
+                    rtf.SetForeColor(settings.ValueColor);
+                    rtf.AddText(temp.ToString(), settings.ValueStyle);
+                    temp.Remove(0, temp.Length);
+                    rtf.SetForeColor(settings.QuoteColor);
+                    rtf.AddText(c.ToString(), settings.QuoteStyle);
+                    state = waitAttrOrEndOfTag;
+                    return state;
+                case '&':
+                    rtf.SetForeColor(settings.ValueColor);
+                    rtf.AddText(temp.ToString(), settings.ValueStyle);
+                    temp.Remove(0, temp.Length);
+                    temp.Append(c);
+                    state = readSpecInValueDQ;
+                    return state;
+                default:
+                    temp.Append(c);
+                    return state;
             }
-
-            if (c == '&')
-            {
-                rtf.SetForeColor(settings.ValueColor);
-                rtf.AddText(temp.ToString(), settings.ValueStyle);
-                temp.Remove(0, temp.Length);
-                temp.Append(c);
-                state = readSpecInValueDQ;
-                return state;
-            }
-
-            temp.Append(c);
-            return state;
         }
 
         static int ReadValueSQ(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitAttrOrEndOfTag, int readSpecInValueSQ, int state, char c)
         {
-            if (c == '\'')
+            switch (c)
             {
-                rtf.SetForeColor(settings.ValueColor);
-                rtf.AddText(temp.ToString(), settings.ValueStyle);
-                temp.Remove(0, temp.Length);
-                rtf.SetForeColor(settings.QuoteColor);
-                rtf.AddText(c.ToString(), settings.QuoteStyle);
-                state = waitAttrOrEndOfTag;
-                return state;
+                case '\'':
+                    rtf.SetForeColor(settings.ValueColor);
+                    rtf.AddText(temp.ToString(), settings.ValueStyle);
+                    temp.Remove(0, temp.Length);
+                    rtf.SetForeColor(settings.QuoteColor);
+                    rtf.AddText(c.ToString(), settings.QuoteStyle);
+                    state = waitAttrOrEndOfTag;
+                    return state;
+                case '&':
+                    rtf.SetForeColor(settings.ValueColor);
+                    rtf.AddText(temp.ToString(), settings.ValueStyle);
+                    temp.Remove(0, temp.Length);
+                    temp.Append(c);
+                    state = readSpecInValueSQ;
+                    return state;
+                default:
+                    temp.Append(c);
+                    return state;
             }
-
-            if (c == '&')
-            {
-                rtf.SetForeColor(settings.ValueColor);
-                rtf.AddText(temp.ToString(), settings.ValueStyle);
-                temp.Remove(0, temp.Length);
-                temp.Append(c);
-                state = readSpecInValueSQ;
-                return state;
-            }
-
-            temp.Append(c);
-            return state;
         }
 
         static int WaitAttrOrEndOfTag(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int waitTag, int readAttr, int state, char c)
@@ -402,19 +399,19 @@ namespace Utils.XmlRtfStyle
             rtf.SetForeColor(0, 0, 0);
             rtf.AddText(temp.ToString());
             temp.Remove(0, temp.Length);
-            if (c == '>')
-            {
-                rtf.SetForeColor(settings.SymbolColor);
-                rtf.AddText(c.ToString(), settings.SymbolStyle);
-                state = waitTag;
-                return state;
-            }
 
-            if ((c == '/') || (c == '?'))
+            switch (c)
             {
-                rtf.SetForeColor(settings.SymbolColor);
-                rtf.AddText(c.ToString(), settings.SymbolStyle);
-                return state;
+                case '>':
+                    rtf.SetForeColor(settings.SymbolColor);
+                    rtf.AddText(c.ToString(), settings.SymbolStyle);
+                    state = waitTag;
+                    return state;
+                case '/':
+                case '?':
+                    rtf.SetForeColor(settings.SymbolColor);
+                    rtf.AddText(c.ToString(), settings.SymbolStyle);
+                    return state;
             }
 
             temp.Append(c);
@@ -441,57 +438,53 @@ namespace Utils.XmlRtfStyle
 
         static int WaitTag(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int readTag, int readSpecInText, int state, char c)
         {
-            if (c == '<')
+            switch (c)
             {
-                rtf.SetForeColor(settings.TextColor);
-                rtf.AddText(temp.ToString(), settings.TextStyle);
-                temp.Remove(0, temp.Length);
-                rtf.SetForeColor(settings.SymbolColor);
-                rtf.AddText(c.ToString(), settings.SymbolStyle);
-                state = readTag;
-                return state;
+                case '<':
+                    rtf.SetForeColor(settings.TextColor);
+                    rtf.AddText(temp.ToString(), settings.TextStyle);
+                    temp.Remove(0, temp.Length);
+                    rtf.SetForeColor(settings.SymbolColor);
+                    rtf.AddText(c.ToString(), settings.SymbolStyle);
+                    state = readTag;
+                    return state;
+                case '&':
+                    rtf.SetForeColor(settings.TextColor);
+                    rtf.AddText(temp.ToString(), settings.TextStyle);
+                    temp.Remove(0, temp.Length);
+                    temp.Append(c);
+                    state = readSpecInText;
+                    return state;
+                default:
+                    temp.Append(c);
+                    return state;
             }
-
-            if (c == '&')
-            {
-                rtf.SetForeColor(settings.TextColor);
-                rtf.AddText(temp.ToString(), settings.TextStyle);
-                temp.Remove(0, temp.Length);
-                temp.Append(c);
-                state = readSpecInText;
-                return state;
-            }
-
-            temp.Append(c);
-            return state;
         }
 
         static int WaitValue(RtfFromXml settings, RtfBuilder rtf, StringBuilder temp, int readValueSQ, int readValueDQ, int state, char c)
         {
-            if (c == '\'')
+            switch (c)
             {
-                rtf.SetForeColor(0, 0, 0);
-                rtf.AddText(temp.ToString());
-                temp.Remove(0, temp.Length);
-                rtf.SetForeColor(settings.QuoteColor);
-                rtf.AddText(c.ToString(), settings.QuoteStyle);
-                state = readValueSQ;
-                return state;
+                case '\'':
+                    rtf.SetForeColor(0, 0, 0);
+                    rtf.AddText(temp.ToString());
+                    temp.Remove(0, temp.Length);
+                    rtf.SetForeColor(settings.QuoteColor);
+                    rtf.AddText(c.ToString(), settings.QuoteStyle);
+                    state = readValueSQ;
+                    return state;
+                case '"':
+                    rtf.SetForeColor(0, 0, 0);
+                    rtf.AddText(temp.ToString());
+                    temp.Remove(0, temp.Length);
+                    rtf.SetForeColor(settings.QuoteColor);
+                    rtf.AddText(c.ToString(), settings.QuoteStyle);
+                    state = readValueDQ;
+                    return state;
+                default:
+                    temp.Append(c);
+                    return state;
             }
-
-            if (c == '"')
-            {
-                rtf.SetForeColor(0, 0, 0);
-                rtf.AddText(temp.ToString());
-                temp.Remove(0, temp.Length);
-                rtf.SetForeColor(settings.QuoteColor);
-                rtf.AddText(c.ToString(), settings.QuoteStyle);
-                state = readValueDQ;
-                return state;
-            }
-
-            temp.Append(c);
-            return state;
         }
     }
 }

@@ -7,9 +7,7 @@
 
 namespace AForge.Imaging.Filters
 {
-	using System;
-
-	/// <summary>
+    /// <summary>
 	/// Ordered dithering using Bayer matrix.
 	/// </summary>
 	/// 

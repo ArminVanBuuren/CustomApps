@@ -387,9 +387,9 @@ namespace Utils
             return tempDirectory;
         }
 
-        static ArrayList TempGetFileProcesses(string strFile)
+        public static Hashtable GetFileProcesses(string file)
         {
-            var myProcessArray = new ArrayList();
+            var myProcessArray = new Hashtable();
             var processes = Process.GetProcesses();
             var i = 0;
             for (i = 0; i <= processes.GetUpperBound(0) - 1; i++)
@@ -405,9 +405,9 @@ namespace Utils
                     var j = 0;
                     for (j = 0; j <= modules.Count - 1; j++)
                     {
-                        if (modules[j].FileName.Equals(strFile, StringComparison.CurrentCultureIgnoreCase))
+                        if (modules[j].FileName.IndexOf(file, StringComparison.CurrentCultureIgnoreCase) != -1)
                         {
-                            myProcessArray.Add(myProcess);
+                            myProcessArray.Add(modules[j].FileName, myProcess);
                             break;
                             // TODO: might not be correct. Was : Exit For
                         }

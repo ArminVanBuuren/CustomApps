@@ -6,7 +6,6 @@
 // contacts@aforgenet.com
 //
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace AForge.Video.DirectShow.Internals
