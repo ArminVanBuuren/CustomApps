@@ -36,8 +36,6 @@ namespace DjSetCutter
 
         private async void ButtonStartStop_Click(object sender, EventArgs e)
         {
-            StatusTextLable.Text = "";
-
             if (!isWorked)
             {
                 if (textBoxDirPath.Text.IsNullOrEmpty() || !Directory.Exists(textBoxDirPath.Text))
@@ -46,6 +44,7 @@ namespace DjSetCutter
                     return;
                 }
 
+                StatusTextLable.Text = "";
                 exceptionMessage.Text = string.Empty;
                 isWorked = true;
                 ChangeFormStatus();
@@ -67,6 +66,7 @@ namespace DjSetCutter
             else
             {
                 separator?.Stop();
+                StatusTextLable.Text = @"Stopping...";
             }
         }
 
@@ -77,7 +77,7 @@ namespace DjSetCutter
 
         void ChangeFormStatus()
         {
-            StatusTextLable.Text = isWorked ? "Working..." : "Finished";
+            StatusTextLable.Text = isWorked ? @"Working..." : @"Finished";
             ButtonStartStop.Text = isWorked ? @"Stop" : @"Start";
             textBox1.Enabled = !isWorked;
             textBox2.Enabled = !isWorked;

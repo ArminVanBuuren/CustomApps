@@ -134,9 +134,6 @@ namespace DjSetCutter
                     if (IsCancellationRequested)
                         return;
 
-                    if (!Directory.Exists(tracks[0].Folder))
-                        Directory.CreateDirectory(tracks[0].Folder);
-
                     using (Stream stream = new FileStream(mp3File, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
                         using (var reader = new Mp3FileReader(stream))
@@ -146,9 +143,12 @@ namespace DjSetCutter
                                 if(IsCancellationRequested)
                                     return;
 
+                                if (!Directory.Exists(tracks[i].Folder))
+                                    Directory.CreateDirectory(tracks[i].Folder);
+
                                 if (File.Exists(tracks[i].Destination))
                                     File.Delete(tracks[i].Destination);
-
+                                
                                 TrimMp3(reader, tracks[i].Destination, tracks[i].Start, i + 1 >= tracks.Count ? reader.TotalTime : tracks[i + 1].Start);
                             }
                         }
