@@ -79,9 +79,9 @@ namespace Utils
             return string.Empty;
         }
 
-        public static DuplicateDictionary<string, string> GetChildNodes(this XmlNode node, StringComparer type = null)
+        public static DoubleDictionary<string, string> GetChildNodes(this XmlNode node, StringComparer type = null)
         {
-            var dictionary = new DuplicateDictionary<string, string>(type ?? StringComparer.CurrentCulture);
+            var dictionary = new DoubleDictionary<string, string>(type ?? StringComparer.CurrentCulture, node.ChildNodes.Count);
 
             foreach (XmlNode child in node.ChildNodes)
             {

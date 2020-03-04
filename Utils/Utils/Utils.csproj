@@ -98,7 +98,7 @@
     <Compile Include="ATTRIBUTES.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />
-    <Compile Include="CollectionHelper\DuplicateDictionary.cs" />
+    <Compile Include="CollectionHelper\DoubleDictionary.cs" />
     <Compile Include="CollectionHelper\HashTable.cs" />
     <Compile Include="CollectionHelper\HashtableComparer.cs" />
     <Compile Include="CollectionHelper\PriorityQueue.cs" />

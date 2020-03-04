@@ -6,7 +6,7 @@ using System.Linq;
 namespace Utils.CollectionHelper
 {
     [Serializable]
-    public class HashTable<T1, T2> : IList<KeyValuePair<T1, T2>>, ICollection<KeyValuePair<T1, T2>>, IEnumerable<KeyValuePair<T1, T2>>, IEnumerable, IList, ICollection, IReadOnlyList<KeyValuePair<T1, T2>>, IReadOnlyCollection<KeyValuePair<T1, T2>>
+    public class Hashtable<T1, T2> : IList<KeyValuePair<T1, T2>>, ICollection<KeyValuePair<T1, T2>>, IEnumerable<KeyValuePair<T1, T2>>, IEnumerable, IList, ICollection, IReadOnlyList<KeyValuePair<T1, T2>>, IReadOnlyCollection<KeyValuePair<T1, T2>>
     {
         private readonly List<KeyValuePair<T1, T2>> hashTable;
 
@@ -25,11 +25,11 @@ namespace Utils.CollectionHelper
             set => ((IList)hashTable)[index] = value;
         }
 
-        public HashTable() : this(4)
+        public Hashtable() : this(4)
         {
 
         }
-        public HashTable(IEnumerable<T1> collection) : this(collection.Count())
+        public Hashtable(IEnumerable<T1> collection) : this(collection.Count())
         {
             foreach (var item in collection)
             {
@@ -37,7 +37,7 @@ namespace Utils.CollectionHelper
             }
         }
 
-        public HashTable(int capacity)
+        public Hashtable(int capacity)
         {
             this.hashTable = new List<KeyValuePair<T1, T2>>(capacity);
         }

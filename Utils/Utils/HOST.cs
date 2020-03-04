@@ -113,9 +113,9 @@ namespace Utils
             return stringResult.ToString().Trim();
         }
 
-        public static DuplicateDictionary<string, string> GetDetailedHostInfo()
+        public static DoubleDictionary<string, string> GetDetailedHostInfo()
         {
-            var allDetailedData = new DuplicateDictionary<string, string>();
+            var allDetailedData = new DoubleDictionary<string, string>(15);
             var machineName = Environment.MachineName;
             allDetailedData.Add("Host", machineName);
             allDetailedData.Add("FullName", Dns.GetHostEntry(machineName).HostName);
@@ -146,7 +146,7 @@ namespace Utils
             return allDetailedData;
         }
 
-        static void AddValue(DuplicateDictionary<string, string> collection, ManagementBaseObject manageObj, string key)
+        static void AddValue(DoubleDictionary<string, string> collection, ManagementBaseObject manageObj, string key)
         {
             var manageValue = manageObj[key];
             try

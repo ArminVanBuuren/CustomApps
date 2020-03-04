@@ -4,6 +4,7 @@ using System.Diagnostics;
 //using System.Net.Http;
 using System.Text;
 using Utils;
+using Utils.CollectionHelper;
 
 //using TeleSharp.TL;
 //using TLSharp.Core;
@@ -28,7 +29,7 @@ namespace Tester.Console
         static void Main(string[] args)
         {
             try
-            {
+            { 
                 var ss = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".GetEncoding("[А-я]{8,}");
                 var ss1 = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".StringConvert(Encoding.GetEncoding("windows-1252"), Encoding.GetEncoding("windows-1251"));
 
