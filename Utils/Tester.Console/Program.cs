@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 //using System.Data.OleDb;
 using System.Diagnostics;
+using System.Linq;
 //using System.Net.Http;
 using System.Text;
+using System.Threading;
 using Utils;
 using Utils.CollectionHelper;
 
@@ -26,10 +29,35 @@ namespace Tester.Console
         //    return (p + pp, p);
         //}
 
+
+
         static void Main(string[] args)
         {
             try
-            { 
+            {
+                var obj = new object();
+                var iter = 0;
+                var actions = new List<Action>();
+                var cancel = new CancellationTokenSource();
+                for (var i = 0; i < 21500; i++)
+                {
+                    actions.Add(() =>
+                    {
+                        Thread.Sleep(5);
+                        lock (obj)
+                            System.Console.Write($"[{iter++}];");
+                    });
+                }
+                var stop = new Stopwatch();
+                stop.Start();
+                cancel.CancelAfter(15000);
+                var result = MultiTasking.Run(actions, 25, cancel.Token);
+                stop.Stop();
+                System.Console.WriteLine();
+                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{result.Keys.Count()}] Values=[{result.Values.Count()}] Exception=[{string.Join(";\r\n",result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message))}]");
+                System.Console.ReadKey();
+                return;
+
                 var ss = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".GetEncoding("[А-я]{8,}");
                 var ss1 = "Ïðîöåññ íå ìîæåò ïîëó÷èòü äîñòóï ê ôàéëó".StringConvert(Encoding.GetEncoding("windows-1252"), Encoding.GetEncoding("windows-1251"));
 
