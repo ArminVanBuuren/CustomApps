@@ -33,7 +33,7 @@ namespace SPAFilter.SPA.Collection
         public DistinctList<string> Links = new DistinctList<string>();
         public DistinctList<CFS> CFSList = new DistinctList<CFS>();
 
-        public DuplicateDictionary<CFS, string> Depends {get;} = new DuplicateDictionary<CFS, string>();
+        public DoubleDictionary<CFS, string> Depends {get;} = new DoubleDictionary<CFS, string>();
 
         public RFS(XmlNode rfsNode, IReadOnlyDictionary<string, CFS> allCFS, XPathNavigator navigator)
         {
@@ -100,7 +100,7 @@ namespace SPAFilter.SPA.Collection
     public class ServiceCatalog : CollectionHostType
     {
         public string Prefix { get; }
-        internal DuplicateDictionary<string, RFSOperation> AllRFS { get; }
+        internal DoubleDictionary<string, RFSOperation> AllRFS { get; }
         internal Dictionary<string, ScenarioOperation> AllScenarios { get; }
 
         public ServiceCatalog(string filePath)
@@ -114,7 +114,7 @@ namespace SPAFilter.SPA.Collection
                 throw new Exception("Service Catalog is invalid. Attribute \"scenarioPrefix\" not found.");
             Prefix = prefix.Value;
 
-            AllRFS = new DuplicateDictionary<string, RFSOperation>();
+            AllRFS = new DoubleDictionary<string, RFSOperation>();
             AllScenarios = new Dictionary<string, ScenarioOperation>();
 
             if(!navigator.Select(@"/Configuration/RFSList/RFS", out var rfsList))

@@ -366,27 +366,19 @@ namespace SPAFilter.SPA
                     
                     var result = MultiTasking.Run((inputFile) =>
                     {
-                        try
+                        if (_activators.ContainsKey(inputFile))
                         {
-                            if (_activators.ContainsKey(inputFile))
-                            {
-                                return $"Activator \"{inputFile}\" already exist.";
-                            }
-                            else
-                            {
-                                _activators.Add(inputFile, new ServiceActivator(inputFile));
-                                return string.Empty;
-                            }
+                            throw new Exception($"Activator \"{inputFile}\" already exist.");
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            return ex.Message;
+                            _activators.Add(inputFile, new ServiceActivator(inputFile));
                         }
                     }, filePathList, 10);
 
                     ReloadActivators(lastActivatorList);
 
-                    var errors = string.Join(Environment.NewLine, result.Where(x => !x.Value.IsNullOrEmpty()).Select(x => x.Value));
+                    var errors = string.Join(Environment.NewLine, result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message));
                     if (!errors.IsNullOrEmptyTrim())
                     {
                         MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -433,20 +425,9 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var result = MultiTasking.Run((sa) =>
-                {
-                    try
-                    {
-                        sa.Refresh();
-                        return string.Empty;
-                    }
-                    catch (Exception ex)
-                    {
-                        return ex.Message;
-                    }
-                }, activators, 10);
+                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, 10);
 
-                var errors = string.Join(Environment.NewLine, result.Where(x => !x.Value.IsNullOrEmpty()).Select(x => x.Value));
+                var errors = string.Join(Environment.NewLine, result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
                     MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
