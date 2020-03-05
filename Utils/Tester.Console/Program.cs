@@ -56,15 +56,15 @@ namespace Tester.Console
                 {
                     actions.Add(() =>
                     {
-                        Thread.Sleep(5);
+                        //Thread.Sleep(5);
                         lock (obj)
                             System.Console.Write($"[{iter++}];");
                     });
                 }
                 var stop = new Stopwatch();
                 stop.Start();
-                cancel.CancelAfter(15000);
-                var result = MultiTasking.Run(actions, 25, cancel.Token);
+                //cancel.CancelAfter(15000);
+                var result = MultiTasking.Run(actions, 10, cancel.Token);
                 stop.Stop();
                 System.Console.WriteLine();
                 System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{result.Keys.Count()}] Values=[{result.Values.Count()}] Exception=[{string.Join(";\r\n",result.Values.Where(x => !x.IsSuccess).Select(x => x.Error.Message))}]");

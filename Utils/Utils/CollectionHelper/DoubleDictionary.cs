@@ -352,8 +352,7 @@ namespace Utils.CollectionHelper
 
         public override string ToString()
         {
-            lock (_syncRoot)
-                return _values.ToString();
+            return this.GetType().ToString();
         }
     }
 }

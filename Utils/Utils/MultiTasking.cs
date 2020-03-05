@@ -54,6 +54,11 @@ namespace Utils
         {
             return _values.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            return this.GetType().ToString();
+        }
     }
 
     [Serializable]
@@ -77,6 +82,11 @@ namespace Utils
         public TSource Source { get; }
         public TResult Result { get; }
         public Exception Error { get; }
+
+        public override string ToString()
+        {
+            return IsSuccess ? Result.ToString() : Error.Message;
+        }
     }
 
     [Serializable]
@@ -123,6 +133,11 @@ namespace Utils
         {
             return _values.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            return this.GetType().ToString();
+        }
     }
 
     [Serializable]
@@ -144,6 +159,11 @@ namespace Utils
         public bool IsSuccess { get; }
         public TSource Source { get; }
         public Exception Error { get; }
+
+        public override string ToString()
+        {
+            return IsSuccess ? Source.ToString() : Error.Message;
+        }
     }
 
     public class MultiTasking
