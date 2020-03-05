@@ -155,7 +155,7 @@ namespace Utils
 
         public static MTActionCallBackList<Action> Run(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_{actions.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_1_{actions.GetHashCode() + 3}");
             var result = new MTActionCallBackList<Action>(actions.Count());
             var listOfTasks = new List<Task>();
 
@@ -200,7 +200,7 @@ namespace Utils
 
         public static void Run(IEnumerable<Action> actions, Action<MTActionCallBackList<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_{actions.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_2_{actions.GetHashCode() + 3}");
             var result = new MTActionCallBackList<Action>(actions.Count());
             var listOfTasks = new List<Task>();
 
@@ -247,7 +247,7 @@ namespace Utils
 
         public static void Run(IEnumerable<Action> actions, Action<MTActionCallBack<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_{actions.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_3_{actions.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var action in actions)
@@ -293,7 +293,7 @@ namespace Utils
 
         public static MTFuncCallBackList<Func<T>, T> Run<T>(IEnumerable<Func<T>> funcs, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_1_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
             var result = new MTFuncCallBackList<Func<T>, T>(funcs.Count());
             var listOfTasks = new List<Task>();
             
@@ -338,7 +338,7 @@ namespace Utils
 
         public static void Run<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBackList<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_2_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
             var result = new MTFuncCallBackList<Func<T>, T>(funcs.Count());
             var listOfTasks = new List<Task>();
 
@@ -385,7 +385,7 @@ namespace Utils
 
         public static void Run<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBack<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_3_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var func in funcs)
@@ -430,7 +430,7 @@ namespace Utils
 
         public static MTActionCallBackList<T> Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_1_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
             var result = new MTActionCallBackList<T>(data.Count());
             var listOfTasks = new List<Task>();
 
@@ -475,7 +475,7 @@ namespace Utils
 
         public static void Run<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBackList<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_2_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
             var result = new MTActionCallBackList<T>(data.Count());
             var listOfTasks = new List<Task>();
 
@@ -522,7 +522,7 @@ namespace Utils
 
         public static void Run<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBack<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_3_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -567,7 +567,7 @@ namespace Utils
 
         public static MTFuncCallBackList<TIn, TOut> Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_1_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
             var result = new MTFuncCallBackList<TIn, TOut>(data.Count());
             var listOfTasks = new List<Task>();
 
@@ -612,7 +612,7 @@ namespace Utils
 
         public static void Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBackList<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_2_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
             var result = new MTFuncCallBackList<TIn, TOut>(data.Count());
             var listOfTasks = new List<Task>();
 
@@ -659,7 +659,7 @@ namespace Utils
 
         public static void Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBack<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_3_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
