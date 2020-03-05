@@ -323,6 +323,12 @@ namespace Utils.CollectionHelper
                 ((ISerializable) _values).GetObjectData(info, context);
         }
 
+        public IEnumerator<KeyValuePair<TKey, List<TValue>>> GetEnumerator()
+        {
+            lock (_syncRoot)
+                return ((IDictionary<TKey, List<TValue>>)_values).GetEnumerator();
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             lock (_syncRoot)
@@ -333,12 +339,6 @@ namespace Utils.CollectionHelper
         {
             lock (_syncRoot)
                 return ((IDictionary) _values).GetEnumerator();
-        }
-
-        public IEnumerator<KeyValuePair<TKey, List<TValue>>> GetEnumerator()
-        {
-            lock (_syncRoot)
-                return ((IDictionary<TKey, List<TValue>>) _values).GetEnumerator();
         }
 
         public void Dispose()

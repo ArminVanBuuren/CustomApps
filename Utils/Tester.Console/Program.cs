@@ -35,6 +35,19 @@ namespace Tester.Console
         {
             try
             {
+                //var d111 = new MTFuncCallBackList<string, int>();
+                //d111.Add(new MTFuncCallBack<string, int>("1", 1));
+                //d111.Add(new MTFuncCallBack<string, int>("1", 2));
+                //d111.Add(new MTFuncCallBack<string, int>("1", 3));
+                //d111.Add(new MTFuncCallBack<string, int>("1", 4));
+                //d111.Add(new MTFuncCallBack<string, int>("1", 5));
+                //d111.Add(new MTFuncCallBack<string, int>("2", 1));
+                //d111.Add(new MTFuncCallBack<string, int>("2", 2));
+                //foreach (var item in d111)
+                //{
+
+                //}
+
                 var obj = new object();
                 var iter = 0;
                 var actions = new List<Action>();
@@ -54,7 +67,7 @@ namespace Tester.Console
                 var result = MultiTasking.Run(actions, 25, cancel.Token);
                 stop.Stop();
                 System.Console.WriteLine();
-                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{result.Keys.Count()}] Values=[{result.Values.Count()}] Exception=[{string.Join(";\r\n",result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message))}]");
+                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{result.Keys.Count()}] Values=[{result.Values.Count()}] Exception=[{string.Join(";\r\n",result.Values.Where(x => !x.IsSuccess).Select(x => x.Error.Message))}]");
                 System.Console.ReadKey();
                 return;
 
