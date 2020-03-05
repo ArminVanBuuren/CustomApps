@@ -378,7 +378,7 @@ namespace SPAFilter.SPA
 
                     ReloadActivators(lastActivatorList);
 
-                    var errors = string.Join(Environment.NewLine, result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message));
+                    var errors = string.Join(Environment.NewLine, result.Values.Where(x => !x.IsSuccess && x.Exception != null).Select(x => x.Exception.Message));
                     if (!errors.IsNullOrEmptyTrim())
                     {
                         MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -427,7 +427,7 @@ namespace SPAFilter.SPA
             {
                 var result = MultiTasking.Run((sa) => sa.Refresh(), activators, 10);
 
-                var errors = string.Join(Environment.NewLine, result.Values.Where(x => x is Exception).Select(ex => ((Exception)ex).Message));
+                var errors = string.Join(Environment.NewLine, result.Values.Where(x => !x.IsSuccess && x.Exception != null).Select(x => x.Exception.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
                     MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
