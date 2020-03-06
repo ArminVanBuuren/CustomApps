@@ -34,7 +34,6 @@
     <Map template_id="CUGsend" connector="SMSCON_02" template_name="DeliveryRequest" />
     <Map template_id="fax -2" connector="FAXCON_01" template_name="DeliveryRequest" />
     <Map template_id="email -2" connector="EMAILCON_01" template_name="DeliveryRequest" />
-    <Map template_id="BillingNotifyEmail" connector="EMAILCON_01" template_name="DeliveryRequest" />
     <Map template_id="mms -2" connector="MMSCON_01" template_name="DeliveryRequest" />
     <Map template_id="DirectSendSMS" connector="SMSCON_02" template_name="DeliveryRequestIssa" />
     <Map template_id="DirectSendEmail" connector="EMAILCON_01" template_name="DeliveryRequest" />

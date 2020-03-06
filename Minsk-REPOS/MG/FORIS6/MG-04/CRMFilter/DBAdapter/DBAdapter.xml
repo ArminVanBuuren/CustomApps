@@ -2,7 +2,7 @@
   <Connections>
     <Handler name="db" type="ForisDataAccess" connectionString="FORIS.TelCRM.CustomerManagement" />
   </Connections>
-  <ThreadPooling use="true" forwarding="true" minThreads="50" />
+  <ThreadPooling use="true" forwarding="true" minThreads="1" />
   <Procedures>
     <!--  S O A P -->
     <!-- balance -->
@@ -217,8 +217,7 @@
         </Message>
       </SendTemplate>
     </Procedure>
-    <Procedure cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment'
-               and /Message/Item/@datasource='state' and /Message/Item/Service/@action='6'" call="BILLING.IS_PAY_CLAIMED" using="db">
+    <Procedure cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment' and /Message/Item/Service/@action='6'" call="BILLING.IS_PAY_CLAIMED" using="db">
       <Parameters>
         <param name="dbresult" type="out:string" value="" />
         <param name="p_Allowed" type="out:string" value="0" />

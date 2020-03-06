@@ -1,4 +1,4 @@
-﻿<!--	
+<!--	
 <templateGroup name="BMS">
 
 <template procedureName="BMS_OrderGift_SMS" sessionStorage="Memory" sessionLifetime="120" >
@@ -154,7 +154,7 @@
         </condition>
 	<deliveryTemplate dropReply="true" /> 
 	 </template> 	 
-	 
+-->	 
 	 
 	<template procedureName="DeliveryRequestIssa" persistent="false">
 	<retry delay="300" attempts="2" />
@@ -170,7 +170,7 @@
 	</template> 
 
 
-	<template procedureName="DeliveryRequestIssa" persistent="false">
+<!--	<template procedureName="DeliveryRequestIssa" persistent="false">
         <condition>
             <test item="0" matches="1" />
         </condition>

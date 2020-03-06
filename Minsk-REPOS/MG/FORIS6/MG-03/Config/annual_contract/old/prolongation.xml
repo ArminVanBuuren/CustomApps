@@ -1,6 +1,0 @@
-<prolongations>
-  <prolongation ussd_code="6661" sms_code="pro1" ivr_code="1666" prolongation_type="1" service_code="FRSALE15N" sms_number="1123345" ussd_number="111" />
-  <!-- пролонгация без увеличения скидки -->
-  <prolongation ussd_code="6662" sms_code="pro2" ivr_code="2666" prolongation_type="2" service_code="FRSALE15N" sms_number="1123345" ussd_number="111" />
-  <!-- пролонгация с увеличением скидки -->
-</prolongations>

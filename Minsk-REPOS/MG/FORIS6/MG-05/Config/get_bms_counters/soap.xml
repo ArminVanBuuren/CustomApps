@@ -1,6 +1,6 @@
  	<template procedureName="BMS.GetBMSBalance" handler="WCFHND_01">
 		<receiveTemplate>
-			<Message type="getcounters" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+			<Message type="getcounters" initiator="smscon" id="${guid}" session_id="@{newGuid}">
 				<Item procedureName="GetBalance">
 					<Attribute name="Customer" type="String" value="${customer}" />
 					<Attribute name="Balance" />
@@ -21,9 +21,10 @@
 			<param name="dbresult" type="3" value="0" />
 		</output>
 	</template>
+
 	 <template procedureName="BMS_OrderGift" sessionStorage="Memory" sessionLifetime="50" onClean="OrderGift_onClean">
     <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="ivrcon" id="@{setMessageId(@{newGuid})}" session_id="@{setSessionId(@{newGuid})}">
+      <Message type="retrievecustomerdata" initiator="SMSCON" id="@{setMessageId(@{newGuid})}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${customer}"  subject="category" />
         @{store(sGiftcode,${giftcode})} 				                  
         @{store(sCustomer,${customer})}         
@@ -60,7 +61,7 @@
   </template>
   <template procedureName="BMS_OrderGift_Step2" sessionStorage="Memory" sessionLifetime="50" onClean="OrderGift_onClean">
     <receiveTemplate>
-      <Message type="orderbonusgiftrequest" initiator="ivrcon" id="${guid}" session_id="${SessionId}">
+      <Message type="orderbonusgiftrequest" initiator="SMSCON" id="${guid}" session_id="${SessionId}">
         <Item customer="${customer}">
           <Attribute name="giftcode" value="${giftcode}" />
         </Item>
@@ -99,3 +100,33 @@
       <param name="giftprovisionid" />
     </output>
   </template>
+
+<template procedureName="DB_AddRemoveService" persistent="true">
+    <receiveTemplate>
+      <Message type="bundleprovision" initiator="SMSCON" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${customer}">
+          <Service id="${servicecode}" action="#{if('${serviceaction}'='2','add',if('${serviceaction}'='3','remove',-1))}" needtariffication="${needtariffication}" enddate="${enddate}" informOnImpossibility="${informOnImpossibility}" sourcetypeid ="${sourcetypeid}" userid="${userid}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate terminating="false">
+      <set item="oparam:RESULT" value="${dbresult}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${message}'!=''}" connector="SMSCON_01">
+      <set item="Content" value="${message}" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="servicecode" value="" />
+      <param name="serviceaction" value="2" />
+      <param name="needtariffication" value="" />
+	  <param name="enddate" value="00.00.01 01.01.2099"/>
+      <param name="informOnImpossibility" value="1" />
+      <param name="sourcetypeid" value="1" />
+      <param name="userid" value="1" />
+    </input>
+    <output>
+      <param name="RESULT" value="0" />
+    </output>
+</template> 

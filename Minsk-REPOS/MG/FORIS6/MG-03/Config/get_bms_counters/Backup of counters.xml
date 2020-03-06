@@ -1,8 +1,0 @@
-<counters>
-  <counter ussd_code="1233" ivr_code="321" bms_code="1044" />
-  <!--	   <counter ussd_code="1233" ivr_code="321" bms_code="1047" />-->
-  <counter ussd_code="4566" ivr_code="654" bms_code="1042" />
-  <!--	<counter ussd_code="4566" ivr_code="654" bms_code="1048" />-->
-  <counter ussd_code="7899" ivr_code="987" bms_code="1043" />
-  <!--	   <counter ussd_code="7899" ivr_code="987" bms_code="1049" />-->
-</counters>

@@ -7,6 +7,7 @@
   <template procedureName="GetBMSBalance" handler="_BMSHND" sessionStorage="Remoting" sessionLifetime="300">
     <condition>
       <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
+      <test item="${Sender}" matches="^(375336036086|375297776601|375292502521|375292620793|375292537090|375292504781|375295544074)$" />
     </condition>
     <receiveTemplate>
       <Message type="getcounters" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -24,7 +25,7 @@
       <set conditionEx="0@{store(sDate,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/RecalculateDate/text()})}" />
       <set conditionEx="0@{store(sDateFormated,#{formatDate('${sDate}', 'dd.MM.yyyy')})}" />
       <set conditionEx="0@{store(sAmount,#{nodeset('${Counters}')/Counters/CounterData[Code='Sremain-Coldest']/Value/text()})}" />
-      <set item="Content" value="Ваш баланс в баллах = ${Balance}. На дату ${sDateFormated} сгорит ${sAmount} бал." />
+      <set item="Content" value="Ваш баланс в баллах: ${Balance}. На дату ${sDateFormated} сгорит ${sAmount} бал." />
       <set item="Sender" value="_GET_BMS_COUNTER" />
       <set item="Recipient" value="${Customer}" />
       <set item="Encoding" value="unicodefffe" />
@@ -41,6 +42,7 @@
   <template procedureName="GetBMSCounterInvalidFormat">
     <condition>
       <test item="${Recipient}" matches="^_GET_BMS_COUNTER$" />
+      <test item="${Sender}" matches="^(375336036086|375297776601|375292502521|375292620793|375292537090|375292504781|375295544074)$" />
     </condition>
     <receiveTemplate>
       <Message id="${guid}" session_id="${guid}">

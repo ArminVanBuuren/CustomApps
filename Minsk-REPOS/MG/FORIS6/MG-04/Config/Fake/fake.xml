@@ -1,0 +1,28 @@
+<template procedureName="DB_CreditCorrection">
+  <receiveTemplate>
+    <Message type="DB_CreditCorrection" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+      <Item>
+        <Attribute name="sourcetypeid" type="STRING" value="${sourcetypeid}" />
+        <Attribute name="amount" type="STRING" value="${amount}" />
+        <Attribute name="customer" type="STRING" value="${customer}" />
+        <Attribute name="correctiontype" type="STRING" value="${correctiontype}" />
+        <Attribute name="userid" type="STRING" value="${userid}" />
+        <Attribute name="operationtype" type="STRING" value="${operationtype}" />
+      </Item>
+    </Message>
+  </receiveTemplate>
+  <deliveryTemplate direction="input">
+    <set item="oparam:dbresult" value="Ошибка при выполнении запроса." />
+  </deliveryTemplate>
+  <input>
+    <param name="sourcetypeid" />
+    <param name="amount" />
+    <param name="customer" />
+    <param name="correctiontype" />
+    <param name="userid" />
+    <param name="operationtype" />
+  </input>
+  <output>
+    <param name="dbresult" />
+  </output>
+</template>

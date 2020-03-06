@@ -7,8 +7,7 @@
     <Item name="StoringHWM" value="200" />
   </Settings>
   <IVRServers>
-    <!--MedioListener host="" port="9992" scp="0x0988" remoteHost="10.128.49.11" /-->
-    <MedioListener host="" port="9994" scp="0x0988" />
+    <MedioListener host="" port="9992" scp="0x0988" />
   </IVRServers>
   <TemplateProcessors defaultConfig="IVRTemplateProcessor.xml">
     <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" />

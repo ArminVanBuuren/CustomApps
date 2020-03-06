@@ -1,13 +1,12 @@
 <Application>
   <EmailConnections>
-    <!-- <SMTP server="10.128.217.12" port="25" delay="5200"> -->
-    <SMTP server="localhost" port="2525" delay="5200">
-      <!-- <Account from="MTS" name="mgtw" password="505606" />   -->
+    <!--SMTP server="10.128.217.12" port="25" delay="5200"-->
+    <SMTP server="localhost" port="25" delay="5200">
       <Account from="MTS" />
     </SMTP>
   </EmailConnections>
   <FTPConnections>
-    <FTP server="10.128.230.181" port="21" account="anonymous" password="" />
+    <FTP server="f6-mg01" port="21" account="anonymous" password="" />
   </FTPConnections>
   <Settings>
     <Item name="AttachmentsStorage" value="Disc" />
@@ -18,8 +17,8 @@
     <Item name="FetchLimit" value="70" />
     <Item name="CRMCacheCleanInterval" value="1500" />
     <Item name="SplitBy" value="6000" />
-    <Item name="TempDir" value="c:\FORIS\Messaging Gateway\temp" />
-    <Item name="ArchivatorName" value="c:\FORIS\Messaging Gateway\rar.exe" />
+    <Item name="TempDir" value="..\..\temp" />
+    <Item name="ArchivatorName" value="..\..\rar.exe" />
     <Item name="ArchivatorLine" value="m -v{0}k -ep -m2 {1} {2}" />
     <Item name="StoringInterval" value="10" />
     <Item name="StoringHWM" value="100" />

@@ -6,6 +6,7 @@
     <Connector name="IVRCON_02" type="IVRCON" host="localhost" port="4442" sessionHandler="false" serviceName="FORIS.MG.IVRCON_02" config="Configuration\IVRCON\IVRCON_02.exe.xml" />
     <Connector name="SMSCON_01" type="SMSCON" host="localhost" port="4440" sessionHandler="false" serviceName="FORIS.MG.SMSCON_01" config="Configuration\SMSCON\SMSCON_01.exe.xml" />
     <Connector name="SMSCON_02" type="SMSCON" host="localhost" port="4444" sessionHandler="false" serviceName="FORIS.MG.SMSCON_02" config="Configuration\SMSCON\SMSCON_02.exe.xml" />
+    <Connector name="SMSCON_03" type="SMSCON" host="localhost" port="4454" sessionHandler="false" serviceName="FORIS.MG.SMSCON_03" config="Configuration\SMSCON\SMSCON_03.exe.xml" />
     <Connector name="SOAPCON_01" type="SOAPCON" host="localhost" port="4443" sessionHandler="false" serviceName="FORIS.MG.SOAPCON_01" config="Configuration\SOAPCON\SOAPCON_01.exe.xml" />
     <Handler name="CRMCON_01" type="CRMCON" host="localhost" port="7770" sessionHandler="false" serviceName="FORIS.MG.CRMCON_01" config="Configuration\CRMCON\CRMCON_01.exe.xml" />
     <Handler name="DBCON_01" type="DBCON" host="localhost" port="7772" sessionHandler="true" serviceName="FORIS.MG.DBCON_01" config="Configuration\DBCON\DBCON_01.exe.xml" />
@@ -22,7 +23,7 @@
   </Settings>
   <log4net>
     <appender name="BufferingDataFileAppender" type="log4net.Appender.BufferingForwardingAppender">
-      <bufferSize value="5" />
+      <bufferSize value="20" />
       <appender-ref ref="DataFileAppender" />
     </appender>
     <appender name="DataFileAppender" type="log4net.Appender.RollingFileAppender">
@@ -41,7 +42,7 @@
       </layout>
     </appender>
     <appender name="BufferingActivityFileAppender" type="log4net.Appender.BufferingForwardingAppender">
-      <bufferSize value="5" />
+      <bufferSize value="100" />
       <appender-ref ref="ActivityFileAppender" />
     </appender>
     <appender name="ActivityFileAppender" type="log4net.Appender.RollingFileAppender">
@@ -52,7 +53,7 @@
       <maximumFileSize value="300MB" />
       <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
       <filter type="log4net.Filter.LevelRangeFilter">
-        <levelMin value="DEBUG" />
+        <levelMin value="FATAL" />
         <levelMax value="FATAL" />
       </filter>
       <layout type="log4net.Layout.PatternLayout">

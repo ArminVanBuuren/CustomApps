@@ -1,5 +1,298 @@
 <templates connector="SOAP">
   #include "..\..\config\get_bms_counters\soap.xml"
+  #include "..\..\config\mobile_commerce\soap.xml"
+  #include "..\..\config\MISC\misc.xml"
+  #include "..\..\config\USSDP\ussdp.xml"
+  #include "..\..\config\Fake\fake.xml"
+  #include "..\..\config\CallCenter\CallCenter.xml"
+  <!--    MTS_GetCountersSRC             -->
+  <template procedureName="MTS_GetCountersSRC" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetCountersSRC" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(SRCGetCounterscustomer,${customer})}
+        @{store(SRCGetCounterssourceid,${sourceid})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="SRCGetCounters">
+      <set item="iparam:customer" value="${SRCGetCounterscustomer}" />
+      <set item="iparam:sourceid" value="${SRCGetCounterssourceid}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="sourceid" />
+      <param name="sec_code" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <template procedureName="SRCGetCounters" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
+        <Item procedureName="billing.mg_pack.GetCountersSRC">
+          <Attribute name="i_customer" type="STRING" value="${customer}" />
+          <Attribute name="i_src" type="STRING" value="${sourceid}" />
+          <Attribute name="i_is_null" type="STRING" value="0" />
+          <Attribute name="Counter" type="CURSOR" />
+          <Attribute name="outparam1" type="STRING" />
+          <Attribute name="outparam2" type="INT" />
+          <Attribute name="time_request" type="out:DATETIME" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:Counters" value="#{NodesetToString(nodeset('${Counter}'))}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="sourceid" />
+    </input>
+    <output>
+      <param name="Counters" />
+    </output>
+  </template>
+  <!-- MTS_SendSMSfromMSISDNNoRezident -->
+  <template procedureName="MTS_SendSMSfromMSISDNNoRezident" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_SendSMSfromMSISDNNoRezident" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(SendSMSfromMSISDNNoRezidentcustomer,${customer})}
+        @{store(SendSMSfromMSISDNNoRezidenttxt,${txt})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="SendSMSfromMSISDNNoRezident">
+      <set item="iparam:customer" value="${SendSMSfromMSISDNNoRezidentcustomer}" />
+      <set item="iparam:txt" value="${SendSMSfromMSISDNNoRezidenttxt}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_result}" />
+      <set item="oparam:result" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+      <param name="txt" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="SendSMSfromMSISDNNoRezident">
+    <receiveTemplate>
+      <Message type="SendSMS" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item>
+          <Attribute name="msisdn" type="STRING" value="${customer}" />
+          <Attribute name="txt" type="STRING" value="${txt}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" condition="(matches(/Message/Item/Attribute[@name='msisdn']/@value,&quot;^375[0-9]{9}$&quot;))" terminating="true">
+      <set item="oparam:rez" value="Возможна только отправка на зарубежных операторов" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="oparam:rez" value="Будет отправлено SMS-сообщение" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" connector="SMSCON_02">
+      <set item="Content" value="${txt}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="txt" />
+    </input>
+    <output>
+      <param name="rez" />
+    </output>
+  </template>
+  <!--  MTS_GetMSISDNTypeUNP -->
+  <template procedureName="MTS_GetMSISDNTypeUNP" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetMSISDNTypeUNP" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(GetCustomerTypecustomerUNP,${customer})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetMSISDNTypeUNPMSISDN">
+      <set item="iparam:customer" value="${GetCustomerTypecustomerUNP}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_result}" />
+      <set item="oparam:result" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="GetMSISDNTypeUNPMSISDN" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="setprofile" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="billing.mg_pack.GetCustomerTypeUNP">
+          <Attribute name="i_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="o_fiz_ur" type="STRING" />
+          <Attribute name="o_unp" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:CustomerType" condition="//Item/@dbresult='0'" value="${o_fiz_ur}" />
+      <set item="oparam:CustomerType" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:UNP" condition="//Item/@dbresult='0'" value="${o_unp}" />
+      <set item="oparam:UNP" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="CustomerType" />
+      <param name="UNP" />
+    </output>
+  </template>
+  <!--  MTS_GetMSISDNType -->
+  <template procedureName="MTS_GetMSISDNType" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetMSISDNType" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(GetCustomerTypecustomer,${customer})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetMSISDNTypeMSISDN">
+      <set item="iparam:customer" value="${GetCustomerTypecustomer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_result}" />
+      <set item="oparam:result" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="GetMSISDNTypeMSISDN" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="setprofile" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="billing.mg_pack.GetCustomerType">
+          <Attribute name="i_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="v_fiz_ur" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:CustomerType" condition="//Item/@dbresult='0'" value="${v_fiz_ur}" />
+      <set item="oparam:CustomerType" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="CustomerType" />
+    </output>
+  </template>
+  <!--  MTS_GetDataFamily -->
+  <template procedureName="MTS_GetDataFamily" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetDataFamily" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(GetDataFamilycustomer,${customer})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetDataFamilyLBS">
+      <set item="iparam:customer" value="${GetDataFamilycustomer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_result}" />
+      <set item="oparam:dbresult" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:result" value="${o_message}" />
+      <set item="oparam:result" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="GetDataFamilyLBS" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="setprofile" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="billing.mg_pack.GetDataFamily">
+          <Attribute name="i_customer" type="STRING" value="${customer}" />
+          <Attribute name="o_serv" type="STRING" />
+          <Attribute name="o_blk" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:Blocking" condition="//Item/@dbresult='0'" value="${o_blk}" />
+      <set item="oparam:Blocking" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:Services" condition="//Item/@dbresult='0'" value="${o_serv}" />
+      <set item="oparam:Services" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="Blocking" />
+      <param name="Services" />
+    </output>
+  </template>
   <!--  MTS_AddCountSIMLBS -->
   <template procedureName="MTS_AddCountSIMLBS" handler="DBCON_01">
     <receiveTemplate>
@@ -748,9 +1041,10 @@
         @{store(GetAbonentBIRTHDAY,${birthday})}
         @{store(GetAbonentMSISDN,${msisdn})}
         @{store(GetAbonentIMEI,${imei})}
+        @{store(GetAbonentdocument,${document})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="Get_Abonent_Age_">
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="Get_Abonent_Age_2">
       <set item="iparam:sp_code" value="${GetAbonentAgeSPCODE}" />
       <set item="iparam:id_sale" value="${GetAbonentIDSALE}" />
       <set item="iparam:inn" value="${GetAbonentINN}" />
@@ -760,6 +1054,7 @@
       <set item="iparam:birthday" value="${GetAbonentBIRTHDAY}" />
       <set item="iparam:msisdn" value="${GetAbonentMSISDN}" />
       <set item="iparam:imei" value="${GetAbonentIMEI}" />
+      <set item="iparam:document" value="${GetAbonentdocument}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -778,16 +1073,18 @@
       <param name="birthday" />
       <param name="msisdn" />
       <param name="imei" />
+      <param name="document" />
     </input>
     <output>
       <param name="result_code" />
       <param name="result_msg" />
     </output>
   </template>
-  <template procedureName="Get_Abonent_Age_" handler="DBCON_02">
+  <template procedureName="Get_Abonent_Age_2" handler="DBCON_01">
     <receiveTemplate>
       <Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
-        <Item procedureName="DEDUCT.PALOMA.GET_ABON_AGE">
+        <Item procedureName="billing.PALOMA_PKG.GET_ABON_AGE">
+          <Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
           <Attribute name="p_sp_code" type="STRING" value="${sp_code}" />
           <Attribute name="p_id_sale" type="STRING" value="${id_sale}" />
           <Attribute name="p_inn" type="STRING" value="${inn}" />
@@ -795,17 +1092,28 @@
           <Attribute name="p_name" type="STRING" value="${fistname}" />
           <Attribute name="p_patr_name" type="STRING" value="${patr_name}" />
           <Attribute name="p_birthday" type="STRING" value="${birthday}" />
-          <Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
+          <Attribute name="p_document" type="STRING" value="${document}" />
           <Attribute name="p_imei" type="STRING" value="${imei}" />
+          <Attribute name="detail" type="CURSOR" />
+          <Attribute name="o_age" type="STRING" />
+          <Attribute name="o_sc_result" type="STRING" />
           <Attribute name="o_result" type="STRING" />
+          <Attribute name="time_request" type="out:DATETIME" />
         </Item>
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="oparam:result" value="${o_result}" />
+      <set item="oparam:result" condition="//Item/@dbresult='0'" value="${o_result}" />
       <set item="oparam:result" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:sc_result" condition="//Item/@dbresult='0'" value="${o_sc_result}" />
+      <set item="oparam:sc_result" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:age" condition="//Item/@dbresult='0'" value="${o_age}" />
+      <set item="oparam:age" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:details" condition="//Item/@dbresult='0'" value="#{NodesetToString(nodeset('${detail}'))}" />
+      <set item="oparam:details" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
     </deliveryTemplate>
     <input>
+      <param name="msisdn" />
       <param name="sp_code" />
       <param name="id_sale" />
       <param name="inn" />
@@ -813,10 +1121,152 @@
       <param name="fistname" />
       <param name="patr_name" />
       <param name="birthday" />
-      <param name="msisdn" />
+      <param name="document" />
       <param name="imei" />
     </input>
     <output>
+      <param name="result" />
+      <param name="sc_result" />
+      <param name="age" />
+      <param name="details" />
+    </output>
+  </template>
+  <!--    MTS_Start_scoring            -->
+  <template procedureName="MTS_Start_scoring" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_Start_scoring" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(StartScoreSourceid,${sourceid})}
+        @{store(StartScoreSp_code,${sp_code})}
+        @{store(StartScoreOperator,${operator})}
+        @{store(StartScoreId_sale,${id_sale})}
+        @{store(StartScoreInn,${inn})}
+        @{store(StartScoreSurname,${surname})}
+        @{store(StartScoreName,${name})}
+        @{store(StartScorePatr_name,${patr_name})}
+        @{store(StartScoreBirthday,${birthday})}
+        @{store(StartScoreDocument,${document})}
+        @{store(StartScoreMsisdn,${msisdn})}
+        @{store(StartScoreAddress,${address})}
+        @{store(StartScoreContact_phone,${contact_phone})}
+        @{store(StartScoreContact_email,${contact_email})}
+        @{store(StartScoreImei,${imei})}
+        @{store(StartScoreProject,${project})}
+        @{store(StartScorePrice,${price})}
+        @{store(StartScorePeriod,${period})}
+        @{store(StartScoreDop_info,${dop_info})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="StartScore">
+      <set item="iparam:operator" value="${StartScoreOperator}" />
+      <set item="iparam:id_sale" value="${StartScoreId_sale}" />
+      <set item="iparam:inn" value="${StartScoreInn}" />
+      <set item="iparam:surname" value="${StartScoreSurname}" />
+      <set item="iparam:name" value="${StartScoreName}" />
+      <set item="iparam:patr_name" value="${StartScorePatr_name}" />
+      <set item="iparam:birthday" value="${StartScoreBirthday}" />
+      <set item="iparam:document" value="${StartScoreDocument}" />
+      <set item="iparam:msisdn" value="${StartScoreMsisdn}" />
+      <set item="iparam:address" value="${StartScoreAddress}" />
+      <set item="iparam:contact_phone" value="${StartScoreContact_phone}" />
+      <set item="iparam:contact_email" value="${StartScoreContact_email}" />
+      <set item="iparam:imei" value="${StartScoreImei}" />
+      <set item="iparam:project" value="${StartScoreProject}" />
+      <set item="iparam:price" value="${StartScorePrice}" />
+      <set item="iparam:period" value="${StartScorePeriod}" />
+      <set item="iparam:dop_info" value="${StartScoreDop_info}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="sp_code" />
+      <param name="operator" />
+      <param name="id_sale" />
+      <param name="inn" />
+      <param name="surname" />
+      <param name="name" />
+      <param name="patr_name" />
+      <param name="birthday" />
+      <param name="document" />
+      <param name="msisdn" />
+      <param name="address" />
+      <param name="contact_phone" />
+      <param name="contact_email" />
+      <param name="imei" />
+      <param name="project" />
+      <param name="price" />
+      <param name="period" />
+      <param name="dop_info" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <template procedureName="StartScore" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
+        <Item procedureName="billing.paloma_pkg.start_scoring">
+          <Attribute name="p_sp_code" type="STRING" value="${sp_code}" />
+          <Attribute name="p_operator" type="STRING" value="${operator}" />
+          <Attribute name="p_id_sale" type="STRING" value="${id_sale}" />
+          <Attribute name="p_inn" type="STRING" value="${inn}" />
+          <Attribute name="p_surname" type="STRING" value="${surname}" />
+          <Attribute name="p_name" type="STRING" value="${name}" />
+          <Attribute name="p_patr_name" type="STRING" value="${patr_name}" />
+          <Attribute name="p_birthday" type="STRING" value="${birthday}" />
+          <Attribute name="p_document" type="STRING" value="${document}" />
+          <Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
+          <Attribute name="p_address" type="STRING" value="${address}" />
+          <Attribute name="p_contact_phone" type="STRING" value="${contact_phone}" />
+          <Attribute name="p_contact_mail" type="STRING" value="${contact_email}" />
+          <Attribute name="p_imei" type="STRING" value="${imei}" />
+          <Attribute name="p_project" type="STRING" value="${project}" />
+          <Attribute name="p_price" type="STRING" value="${price}" />
+          <Attribute name="p_period" type="STRING" value="${period}" />
+          <Attribute name="p_dop_info" type="STRING" value="${dop_info}" />
+          <Attribute name="o_sc_id" type="STRING" />
+          <Attribute name="o_result" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:sc_id" value="${o_sc_id}" />
+      <set item="oparam:result" value="${o_result}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sp_code" />
+      <param name="operator" />
+      <param name="id_sale" />
+      <param name="inn" />
+      <param name="surname" />
+      <param name="name" />
+      <param name="patr_name" />
+      <param name="birthday" />
+      <param name="document" />
+      <param name="msisdn" />
+      <param name="address" />
+      <param name="contact_phone" />
+      <param name="contact_email" />
+      <param name="imei" />
+      <param name="project" />
+      <param name="price" />
+      <param name="period" />
+      <param name="dop_info" />
+    </input>
+    <output>
+      <param name="sc_id" />
       <param name="result" />
     </output>
   </template>
@@ -2662,6 +3112,7 @@
           <Attribute name="p_CONTACT_PHONE" type="STRING" value="${contact_phone}" />
           <Attribute name="o_acc" type="STRING" />
           <Attribute name="o_res" type="STRING" />
+          <Attribute name="o_scor_id" type="STRING" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -2670,6 +3121,8 @@
       <set item="oparam:acc" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
       <set item="oparam:res" condition="//Item/@dbresult='0'" value="${o_res}" />
       <set item="oparam:res" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
+      <set item="oparam:scor_id" condition="//Item/@dbresult='0'" value="${o_scor_id}" />
+      <set item="oparam:scor_id" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
     </deliveryTemplate>
     <input>
       <param name="order_id" />
@@ -2696,6 +3149,7 @@
     <output>
       <param name="acc" />
       <param name="res" />
+      <param name="scor_id" />
     </output>
   </template>
   <!--    MTS_AddNumAcceptor            -->
@@ -3153,9 +3607,6 @@
       <param name="amount" />
     </input>
     <output>
-      <param name="customer" />
-      <param name="amount" />
-      <param name="sourceid" />
       <param name="result_code" />
       <param name="result_msg" />
     </output>
@@ -3296,66 +3747,6 @@
     <output>
       <param name="Cust_ID" />
       <param name="DBRes" />
-    </output>
-  </template>
-  <!--    MTS_Check_Sub_Blk_Srv_Memory             -->
-  <template procedureName="MTS_Check_Sub_Blk_Srv_Memory" handler="DBCON_01">
-    <receiveTemplate>
-      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item procedureName="BILLING.mg_auth">
-          <Attribute name="i_source" type="STRING" value="${sourceid}" />
-          <Attribute name="i_code" type="STRING" value="${sec_code}" />
-          <Attribute name="i_method" type="STRING" value="MTS_Check_Sub_Blk_Srv_Memory" />
-          <Attribute name="o_result" type="STRING" />
-          <Attribute name="o_message" type="STRING" />
-        </Item>
-        @{store(CheckSubBlkSrvMemorycustomer,${customer})}
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="CheckSubBlkSrvMemory">
-      <set item="iparam:customer" value="${CheckSubBlkSrvMemorycustomer}" />
-      <set conditionEx="0@{freeSession}" />
-    </deliveryTemplate>
-    <deliveryTemplate>
-      <set item="oparam:result_code" value="${o_result}" />
-      <set item="oparam:result_msg" value="${o_message}" />
-    </deliveryTemplate>
-    <input>
-      <param name="customer" />
-      <param name="sourceid" />
-      <param name="sec_code" />
-    </input>
-    <output>
-      <param name="result_code" />
-      <param name="result_msg" />
-    </output>
-  </template>
-  <template procedureName="CheckSubBlkSrvMemory" handler="DBCON_01">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
-        <Item procedureName="billing.mg_pack.check_sub_blk_srv">
-          <Attribute name="i_msisdn" type="STRING" value="${customer}" />
-          <Attribute name="o_srv" type="STRING" />
-          <Attribute name="o_blk" type="STRING" />
-          <Attribute name="o_subscriber" type="STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="oparam:Service" condition="//Item/@dbresult='0'" value="${o_srv}" />
-      <set item="oparam:Service" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
-      <set item="oparam:Subscriber" condition="//Item/@dbresult='0'" value="${o_subscriber}" />
-      <set item="oparam:Subscriber" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
-      <set item="oparam:Blocking" condition="//Item/@dbresult='0'" value="${o_blk}" />
-      <set item="oparam:Blocking" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
-    </deliveryTemplate>
-    <input>
-      <param name="customer" />
-    </input>
-    <output>
-      <param name="Service" />
-      <param name="Subscriber" />
-      <param name="Blocking" />
     </output>
   </template>
   <!-- 1c. проверка -->
@@ -6909,11 +7300,13 @@
         </Item>
         @{store(ChangeTPcustomer,${customer})}
         @{store(ChangeTPTariffPlan,${tariffplan})}
+        @{store(ChangeTPsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="MTSCheckChangeTariffPlan">
       <set item="iparam:customer" value="${ChangeTPcustomer}" />
       <set item="iparam:tariffplan" value="${ChangeTPTariffPlan}" />
+      <set item="iparam:sourceid" value="${ChangeTPsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -6937,6 +7330,7 @@
         <Item procedureName="BILLING.mg_lll_manual_sm">
           <Attribute name="num" type="STRING" value="${customer}" />
           <Attribute name="tp_out" type="STRING" value="${tariffplan}" />
+          <Attribute name="v_sourse" type="STRING" value="${sourceid}" />
           <Attribute name="rez" type="STRING" />
         </Item>
         @{store(CheckChangeTPcustomer,${customer})}
@@ -6954,6 +7348,7 @@
     <input>
       <param name="customer" />
       <param name="tariffplan" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="RESULT" />

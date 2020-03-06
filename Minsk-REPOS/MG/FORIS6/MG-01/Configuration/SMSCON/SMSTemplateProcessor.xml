@@ -11,14 +11,14 @@
   <!-- #########################################    714	turbo button	   ####################### -->
   <template procedureName="Add_Services_SMS_" handler="DBCON_01">
     <condition>
-      <test item="${Recipient}" matches="^(2060|2080|371|372|373|374|375|376|790|710|720|730|740|530|510|3000|714|1022|2020|2030|2200|2240|6030|7040|7061|7064|7602|7603|7050|7270)$" />
+      <test item="${Recipient}" matches="^(2060|2080|371|372|373|374|375|376|790|710|720|730|740|530|510|3000|714|1022|2020|2030|2200|2240|2920|6030|7040|7061|7064|7602|7603|7050|7270|8480)$" />
       <test item="${Token0}" matches="^(A|a)$" />
     </condition>
     <receiveTemplate conditionEx="#{('${Token0}' = A or '${Token0}'= a)}">
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
         <Item procedureName="billing.add_close_srv_req.add_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR16850,2080|FR10998,371|FR11607,372|FR11608,373|FR11609,374|FR11610,375|FR11648,376|FR11649,790|FR7476,710|FR5595,720|FR5596,730|FR8798,740|FR10361,530|FR15573,510|FR8765,3000|FR7783,714|FR5614,1022|FR16695,2020|FR9389,2030|FR9388,2200|FR11873,2240|FR16494,6030|FR16638,7040|FR11095,7061|FR16500,7064|FR16503,7602|FR16501,7603|FR16502,7050|FR10757,7270|FR12194)}" />
+          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR16850,2080|FR10998,371|FR11607,372|FR11608,373|FR11609,374|FR11610,375|FR11648,376|FR11649,790|FR7476,710|FR5595,720|FR5596,730|FR8798,740|FR10361,530|FR15573,510|FR8765,3000|FR7783,714|FR5614,1022|FR16695,2020|FR9389,2030|FR9388,2200|FR11873,2240|FR16494,2920|FR17183,6030|FR16638,7040|FR11095,7061|FR16500,7064|FR16503,7602|FR16501,7603|FR16502,7050|FR10757,7270|FR12194,8480|FR17468)}" />
           <Attribute name="source" type="STRING" value="6" />
           <Attribute name="dbresult" type="STRING" />
           <Attribute name="reply" type="STRING" />
@@ -36,14 +36,14 @@
   </template>
   <template procedureName="Rem_Services_SMS_" handler="DBCON_01">
     <condition>
-      <test item="${Recipient}" matches="^(2080|371|372|373|374|375|376|790|710|720|730|740|530|510|1901|3000|1022|2020|2030|2060|2200|2240|6030|7040|7050|7061|7064|7602|7603|7270)$" />
+      <test item="${Recipient}" matches="^(2080|371|372|373|374|375|376|790|710|720|730|740|530|510|1901|3000|1022|2020|2030|2060|2200|2240|2920|6030|7040|7050|7061|7064|7602|7603|7270|8480)$" />
       <test item="${Token0}" matches="^(R|r)$" />
     </condition>
     <receiveTemplate conditionEx="#{('${Token0}' = R or '${Token0}'= r)}">
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
         <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
           <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR10998,371|FR11607,372|FR11608,373|FR11609,374|FR11610,375|FR11648,376|FR11649,790|FR7476,710|FR5595,720|FR5596,730|FR8798,740|FR10361,530|FR15573,510|FR8765,1901|FR634,3000|FR7783,1022|FR16695,2020|FR9389,2030|FR9388,2060|FR16850,2200|FR11873,2240|FR16494,6030|FR16638,7040|FR11095,7050|FR10757,7061|FR16500,7064|FR16503,7602|FR16501,7603|FR16502,7270|FR12194)}" />
+          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR10998,371|FR11607,372|FR11608,373|FR11609,374|FR11610,375|FR11648,376|FR11649,790|FR7476,710|FR5595,720|FR5596,730|FR8798,740|FR10361,530|FR15573,510|FR8765,1901|FR634,3000|FR7783,1022|FR16695,2020|FR9389,2030|FR9388,2060|FR16850,2200|FR11873,2240|FR16494,2920|FR17183,6030|FR16638,7040|FR11095,7050|FR10757,7061|FR16500,7064|FR16503,7602|FR16501,7603|FR16502,7270|FR12194,8480|FR17468)}" />
           <Attribute name="source" type="STRING" value="6" />
           <Attribute name="d_end" type="STRING" value="0" />
           <Attribute name="dbresult" type="STRING" />
@@ -365,74 +365,6 @@
   <template procedureName="Err_MySafety_" persistent="true" sessionStorage="Memory" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(6911)$" />
-    </condition>
-    <receiveTemplate>
-      <Message>
-        <Item customer="${Sender}" />
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate direction="input">
-      <set item="Content" value="Неверный формат запроса.Попробуйте еще раз." />
-      <set item="Sender" value="0870" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate>
-  </template>
-  <!-- ############################  Add Rem Scool Book  ####################### -->
-  <template procedureName="Add_Scool_Book_" handler="DBCON_01">
-    <condition>
-      <test item="${Recipient}" matches="^(5605|5606|5607|5608|5609|5610|5611|5612)$" />
-      <test item="${Token0}" matches="^(A|a)$" />
-    </condition>
-    <receiveTemplate conditionEx="#{('${Content}' = A or '${Content}'= a)}">
-      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.add_close_srv_req.add_srv_req">
-          <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR11189,5606|FR11190,5607|FR11191,5608|FR11192,5609|FR11193,5610|FR11194,5611|FR11195,5612|FR11196)}" />
-          <Attribute name="source" type="STRING" value="6" />
-          <Attribute name="dbresult" type="STRING" />
-          <Attribute name="reply" type="STRING" />
-          <Attribute name="ret_code" type="STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="Content" condition="//Item/@dbresult='0'" value="${reply}" />
-      <set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-      <set item="Sender" value="${Recipient}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate>
-  </template>
-  <template procedureName="Del_Scool_Book_" handler="DBCON_01">
-    <condition>
-      <test item="${Recipient}" matches="^(5605|5606|5607|5608|5609|5610|5611|5612)$" />
-      <test item="${Token0}" matches="^(R|r)$" />
-    </condition>
-    <receiveTemplate conditionEx="#{('${Content}' = R or '${Content}'= r)}">
-      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="BILLING.add_close_srv_req.del_srv_req">
-          <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-          <Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR11189,5606|FR11190,5607|FR11191,5608|FR11192,5609|FR11193,5610|FR11194,5611|FR11195,5612|FR11196)}" />
-          <Attribute name="source" type="STRING" value="6" />
-          <Attribute name="d_end" type="STRING" value="0" />
-          <Attribute name="dbresult" type="STRING" />
-          <Attribute name="reply" type="STRING" />
-          <Attribute name="ret_code" type="STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="Content" condition="//Item/@dbresult='0'" value="${reply}" />
-      <set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-      <set item="Sender" value="${Recipient}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate>
-  </template>
-  <template procedureName="Err_Scool_Book_" persistent="true" sessionStorage="Memory" sessionLifetime="60">
-    <condition>
-      <test item="${Recipient}" matches="^(5605|5606|5607|5608|5609|5610|5611|5612)$" />
     </condition>
     <receiveTemplate>
       <Message>
@@ -930,15 +862,12 @@
    	</template>	-->
   <!-- ############################  send_url ####################### -->
   <template procedureName="send_url">
-    -
     <condition>
       <test item="0" matches="1" />
     </condition>
-    -
     <receiveTemplate>
       <Message />
     </receiveTemplate>
-    -
     <deliveryTemplate>
       <set item="Content" value="${rez}" />
       <set item="Recipient" value="${Sender}" />
@@ -1302,15 +1231,12 @@
   </template>
   <!-- ############################  9999 END ####################### -->
   <template procedureName="ussd_839_lopatov">
-    -
     <condition>
       <test item="0" matches="1" />
     </condition>
-    -
     <receiveTemplate>
       <Message />
     </receiveTemplate>
-    -
     <deliveryTemplate>
       <set item="Content" value="${reply}" />
       <set item="Recipient" value="${Sender}" />
@@ -1629,7 +1555,7 @@
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Неверный формат запроса.Попробуйте еще раз." />
+      <set item="Content" value="Неверный формат запроса.Укажите номер и кодовое слово." />
       <set item="Sender" value="0877" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />

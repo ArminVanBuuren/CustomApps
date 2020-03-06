@@ -26,7 +26,7 @@
     <Item name="SuccessResponseCodes" value="0,88" />
   </Settings>
   <SMSCenters>
-    <!--<Connection host="172.17.129.20" port="5000" systemId="srvHypernet2" pass="hyper2" /> -->
+    <!--Connection host="172.24.224.6" port="900" systemId="srvHypernet2" pass="hyper2" /-->
     <Connection host="localhost" port="900" systemId="srvHypernet2" pass="hyper2" />
   </SMSCenters>
   <TemplateProcessors defaultConfig="USSDSRVTemplateProcessor.xml">

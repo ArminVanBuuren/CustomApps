@@ -459,15 +459,12 @@
   </template>
   <!-- ############################  send_url ####################### -->
   <template procedureName="send_url">
-    -
     <condition>
       <test item="0" matches="1" />
     </condition>
-    -
     <receiveTemplate>
       <Message />
     </receiveTemplate>
-    -
     <deliveryTemplate>
       <set item="Content" value="${rez}" />
       <set item="Recipient" value="${Sender}" />
@@ -734,15 +731,12 @@
   </template>
   <!-- ############################  9999 END ####################### -->
   <template procedureName="ussd_839_lopatov">
-    -
     <condition>
       <test item="0" matches="1" />
     </condition>
-    -
     <receiveTemplate>
       <Message />
     </receiveTemplate>
-    -
     <deliveryTemplate>
       <set item="Content" value="${reply}" />
       <set item="Recipient" value="${Sender}" />

@@ -1,14 +1,13 @@
 <Application>
   <EmailConnections>
-    <!-- <SMTP server="10.128.217.12" port="25" delay="5200"> -->
-    <SMTP server="localhost" port="2525" delay="5200">
-      <!-- <Account from="MTS" name="mgtw" password="505606" />   -->
+    <!--SMTP server="10.128.217.12" port="25" delay="5200"-->
+    <SMTP server="localhost" port="25" delay="5200">
       <Account from="MTS" />
     </SMTP>
   </EmailConnections>
   <FTPConnections>
     <FTP server="localhost" port="21" account="anonymous" password="" />
-    <FTP server="10.128.230.181" port="21" account="anonymous" password="" />
+    <FTP server="f6-mg01" port="21" account="anonymous" password="" />
   </FTPConnections>
   <Settings>
     <Item name="AttachmentsStorage" value="Disc" />

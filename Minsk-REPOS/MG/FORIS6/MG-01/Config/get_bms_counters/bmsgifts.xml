@@ -35,6 +35,11 @@
   <gift number="76" code="FR11467" needPrpReg="false" name="Бонус код World of Tanks 250 gold" />
   <gift number="77" code="FR11468" needPrpReg="false" name="Бонус код World of Tanks 500 gold" />
   <gift number="78" code="FR11469" needPrpReg="false" name="Бонус код World of Tanks 1 день премиум" />
+  <gift number="80" code="FR17082" needPrpReg="false" name="МТС Music" />
+  <gift number="81" code="FR17083" needPrpReg="false" name="Кино от IVI" />
+  <gift number="82" code="FR17084" needPrpReg="false" name="МТС ТВ" />
+  <gift number="83" code="FR17085" needPrpReg="false" name="Мобильное Кино" />
+  <gift number="84" code="FR17086" needPrpReg="false" name="Мобильная библиотека МТС" />
   <gift number="91" code="FR11939" needPrpReg="false" name="Бонус- код Bycard  1 р." />
   <gift number="92" code="FR11940" needPrpReg="false" name="Бонус- код Bycard  2 р." />
   <gift number="93" code="FR11941" needPrpReg="false" name="Бонус- код Bycard  3 р." />
@@ -46,6 +51,10 @@
   <gift number="110" code="FR16278" needPrpReg="false" name="Технологическая: Все сети на 4G лайт, МТС Бонус (1 мес.)" />
   <gift number="120" code="FR16276" needPrpReg="false" name="Технологическая: Безлимит на соцсети, МТС Бонус (1 мес.)" />
   <gift number="121" code="FR16277" needPrpReg="false" name="Технологическая: Безлимит на мессенджеры, МТС Бонус (1 мес.)" />
+  <gift number="122" code="FR17031" needPrpReg="false" name="Безлимит на YouTube" />
+  <gift number="123" code="FR17032" needPrpReg="false" name="Безлимит на YouTube (на Супер 8)" />
+  <gift number="124" code="FR17033" needPrpReg="false" name="Безлимит интернета (до 1 Мбит/сек)" />
+  <gift number="125" code="FR17034" needPrpReg="false" name="Безлимит интернета (до 2 Мбит/сек)" />
   <gift number="1005" code="FR11212" needPrpReg="false" name="Пакет минут в сети МТС 005" />
   <gift number="1010" code="FR11217" needPrpReg="false" name="Пакет минут в сети МТС 010" />
   <gift number="1020" code="FR11218" needPrpReg="false" name="Пакет минут в сети МТС 020" />

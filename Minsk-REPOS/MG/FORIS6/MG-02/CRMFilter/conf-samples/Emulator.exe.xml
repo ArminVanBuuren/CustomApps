@@ -1,9 +1,0 @@
-<Application>
-  <Settings>
-    <Item name="ModuleName" value="EMULATOR_01" />
-    <Item name="ModuleType" value="EMULATOR" />
-  </Settings>
-  <SmppEmulators>
-    <SmppEmulator name="smpp1" host="" port="4802" isCLEnable="true" />
-  </SmppEmulators>
-</Application>

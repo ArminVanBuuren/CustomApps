@@ -9,8 +9,8 @@
     <Item name="EnquireLinkInterval" value="60" />
     <Item name="DefaultEncoding" value="ascii" />
     <Item name="RegisteredDelivery" value="false" />
-    <Item name="SrcTon" value="0" />
-    <Item name="SrcNpi" value="1" />
+    <Item name="SrcTon" value="5" />
+    <Item name="SrcNpi" value="0" />
     <Item name="DstTon" value="1" />
     <Item name="DstNpi" value="1" />
     <Item name="SubmitEsmClass" value="0" />
@@ -27,7 +27,7 @@
     <Item name="UtcOffset" value="12+" />
   </Settings>
   <SMSCenters>
-    <!--<Connection host="172.17.138.19" port="3707" systemType="90016" systemId="forismg" pass="mgforis"  /> -->
+    <!--Connection host="172.24.224.6" port="900" systemId="forismg2" pass="r45gA2eC5"  /-->
     <Connection host="localhost" port="900" systemId="forismg2" pass="r45gA2eC5" />
   </SMSCenters>
   <Anumbertransformations />

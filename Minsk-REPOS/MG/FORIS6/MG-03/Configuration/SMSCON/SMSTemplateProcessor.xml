@@ -18,6 +18,24 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
+  <!-- SendSMSfromMSISDNNoRezident -->
+  <template procedureName="SendSMSfromMSISDNNoRezident">
+    -
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    -
+    <receiveTemplate>
+      <Message />
+    </receiveTemplate>
+    -
+    <deliveryTemplate>
+      <set item="Content" value="${txt}" />
+      <set item="Recipient" value="${msisdn}" />
+      <set item="Sender" value="375292171313" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
   <template procedureName="SendCode">
     <condition>
       <test item="0" matches="1" />

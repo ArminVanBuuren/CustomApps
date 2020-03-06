@@ -1,6 +1,5 @@
 <templates connector="SOAP">
   #include "..\..\config\get_bms_counters\soap.xml"
-  #include "..\..\config\callcenter\callcenter.xml"
   <template procedureName="DB_AddRemoveService" persistent="true">
     <receiveTemplate>
       <Message type="bundleprovision" initiator="IVRCON" id="${guid}" session_id="@{newGuid}">
@@ -52,27 +51,5 @@
     <output>
       <param name="dbresult" />
     </output>
-  </template>
-  <template procedureName="DB_BalanceRetriev" persistent="false">
-    <input>
-      <param name="Customer" />
-    </input>
-    <output>
-      <param name="balanceintpartdotpart" type="3" value="0" />
-      <param name="DisconnectionTime" type="3" value="0" />
-      <param name="recommendedprepayment" type="3" value="0" />
-      <param name="accumulator1" type="3" value="0" />
-      <param name="currency" type="3" value="933" />
-      <param name="creditlimitintpartdotpart" type="3" value="0" />
-      <param name="debtintpartdotpart" type="3" value="0" />
-      <param name="dateofissue" type="1" value="0" />
-      <param name="iscredit" type="2" value="0" />
-    </output>
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}" subject="balance" />
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate />
   </template>
 </templates>
