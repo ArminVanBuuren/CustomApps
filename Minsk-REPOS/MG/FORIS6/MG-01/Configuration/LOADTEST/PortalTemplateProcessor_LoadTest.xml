@@ -9,7 +9,8 @@
     <define name="__REGEX_PTP_FOR_GW" value="^[0-9]{11}\*direct_money_transfer\*\+?[0-9]{10,11}\*[1-9]{1}[0-9]*$" />
     <define name="__REGEX_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*(1|2|3)\*[1-9]{1}[0-9]*\s*$" />
     <define name="__REGEX_CANCEL_SPONSOR_FOR_GW" value="^[0-9]{11}\*periodic_money_transfer\*\+?[0-9]{10,11}\*off$" />
-  </macros>#include "config\ServiceOrderErrorHandler.xml"	
+  </macros>
+  #include "config\ServiceOrderErrorHandler.xml"
   <template procedureName="GUDOK_Adding">
     <condition>
       <test item="${Recipient}" matches="^222$" />

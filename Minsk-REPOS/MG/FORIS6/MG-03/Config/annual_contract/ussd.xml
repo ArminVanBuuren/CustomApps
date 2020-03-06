@@ -1,33 +1,31 @@
-﻿<templateGroup name="AnnualContract">
-	<macros>
-  		<define name="_SMSCON" value="SMSCON_01_03" />
-	</macros>
-
-	<template procedureName="ProlongateAnnualContract" sessionStorage="Memory" sessionLifetime="30">
-		<condition>
-			<test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}'])>0,1,0)}" matches="1" />
-		</condition>
-    	<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
-			    @{store(sUssdNumber,${Recipient})}
-				<Item customer="${sender}" >
-			        <Service id="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
-			            <Attribute name="prolongation_type" value="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}']/@prolongation_type}"/>
-			        </Service>
-				</Item>
-			</Message>
-    	</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content"   value="Ваша заявка принята. Ждите ответа по смс." />
-            <set item="Sender" value="${sUssdNumber}" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-
-<!--
+<templateGroup name="AnnualContract">
+  <macros>
+    <define name="_SMSCON" value="SMSCON_01_03" />
+  </macros>
+  <template procedureName="ProlongateAnnualContract" sessionStorage="Memory" sessionLifetime="30">
+    <condition>
+      <test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}'])&gt;0,1,0)}" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(${guid})}">
+        @{store(sUssdNumber,${Recipient})}
+        <Item customer="${sender}">
+          <Service id="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
+            <Attribute name="prolongation_type" value="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_code='#{normalize-space('${content}')}' and @ussd_number='${Recipient}']/@prolongation_type}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята. Ждите ответа по смс." />
+      <set item="Sender" value="${sUssdNumber}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--
 	<template procedureName="ProlongateAnnualContractInvalidFormat">
         <condition>
 			<test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ussd_number='${Recipient}'])>0,1,0)}" matches="1" />

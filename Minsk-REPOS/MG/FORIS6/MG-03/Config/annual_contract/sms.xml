@@ -1,34 +1,33 @@
-﻿<templateGroup name="AnnualContract">
-
-	<template procedureName="ProlongateAnnualContract" sessionStorage="Memory" sessionLifetime="30">
-		<condition>
-			<test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}'])>0,1,0)}" matches="1" />
-		</condition>
-    	<receiveTemplate>
-			<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${guid})}">
-			    @{store(sSmsNumber,${Recipient})}
-				<Item customer="${sender}" >
-			        <Service id="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
-			            <Attribute name="prolongation_type" value="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}']/@prolongation_type}"/>
-			        </Service>
-				</Item>
-			</Message>
-    	</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Произошла ошибка пролонгации услуги 'Годовой контракт'" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Заявка на пролонгацию услуги 'Годовой контракт' зарегистрирована" />
-			<set item="Content" conditionEx="#{${dbresult}=320203}" value="Пролонгация услуги 'Годовой контракт' невозможна пока не завершится предыдущая операция" />
-			<set item="Content" conditionEx="#{${dbresult}=320204}" value="Услуга 'Годовой контракт' не предоставляется для вашего тарифного плана" />
-			<set item="Content" conditionEx="#{${dbresult}=320205}" value="Услуга 'Годовой контракт' была добавлена ранее" />
-			<set item="Content" conditionEx="#{${dbresult}=320191}" value="Недостаточно средств на балансе для проведения операции" />
-			<set item="Content" conditionEx="#{${dbresult}=320343}" value="Отсутствует услуга для пролонгации" />
-            <set item="Sender" value="#{if('${sSmsNumber}'!='','${sSmsNumber}','#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@service_code='${service_id}']/@sms_number}')}" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-	</template>
-<!--
+<templateGroup name="AnnualContract">
+  <template procedureName="ProlongateAnnualContract" sessionStorage="Memory" sessionLifetime="30">
+    <condition>
+      <test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}'])&gt;0,1,0)}" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(${guid})}">
+        @{store(sSmsNumber,${Recipient})}
+        <Item customer="${sender}">
+          <Service id="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
+            <Attribute name="prolongation_type" value="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_code='#{normalize-space('${content}')}' and @sms_number='${Recipient}']/@prolongation_type}" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Произошла ошибка пролонгации услуги 'Годовой контракт'" />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Заявка на пролонгацию услуги 'Годовой контракт' зарегистрирована" />
+      <set item="Content" conditionEx="#{${dbresult}=320203}" value="Пролонгация услуги 'Годовой контракт' невозможна пока не завершится предыдущая операция" />
+      <set item="Content" conditionEx="#{${dbresult}=320204}" value="Услуга 'Годовой контракт' не предоставляется для вашего тарифного плана" />
+      <set item="Content" conditionEx="#{${dbresult}=320205}" value="Услуга 'Годовой контракт' была добавлена ранее" />
+      <set item="Content" conditionEx="#{${dbresult}=320191}" value="Недостаточно средств на балансе для проведения операции" />
+      <set item="Content" conditionEx="#{${dbresult}=320343}" value="Отсутствует услуга для пролонгации" />
+      <set item="Sender" value="#{if('${sSmsNumber}'!='','${sSmsNumber}','#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@service_code='${service_id}']/@sms_number}')}" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+  </template>
+  <!--
 	<template procedureName="ProlongateAnnualContractInvalidFormat">
         <condition>
 			<test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_number='${Recipient}'])>0,1,0)}" matches="1" />
@@ -48,5 +47,4 @@
 		</deliveryTemplate>
 	</template>
 -->
-
 </templateGroup>

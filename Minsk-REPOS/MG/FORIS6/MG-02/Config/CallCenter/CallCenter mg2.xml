@@ -1,3 +1,163 @@
+<!-- DB_GetInfoICR_test -->
+   <template procedureName="DB_GetInfoICR_test" handler="DBCON_01">
+      <receiveTemplate>
+         <Message type="validation" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+            <Item procedureName="BILLING.db_get_info_for_icr_test" >
+               <Attribute name="msisdn" type="STRING" value="${customer}" />
+               <Attribute name="rezz" type="STRING"/> 
+               <Attribute name="tariff_id" type="STRING"/> 
+               <Attribute name="password" type="STRING" /> 
+               <Attribute name="check_password" type="STRING" /> 
+               <Attribute name="cost" type="STRING" /> 
+               <Attribute name="status" type="STRING" /> 
+               <Attribute name="check_3g" type="STRING" /> 
+               <Attribute name="arpu" type="STRING" /> 
+               <Attribute name="mou" type="STRING" />  
+               <Attribute name="mbou" type="STRING" /> 
+               <Attribute name="flag_app" type="STRING" />
+               <Attribute name="cmr" type="STRING" />
+               <Attribute name="p_balance" type="STRING" />
+			   <Attribute name="full_lock" type="STRING" />
+               <Attribute name="flag_ussd_balance" type="STRING" />
+            </Item>
+         </Message>
+      </receiveTemplate>
+      <deliveryTemplate>
+         <set item="oparam:dbresult" value="${rezz}" /> 
+         <set item="oparam:tariff_id" value="${tariff_id}" />
+         <set item="oparam:password" value="${password}" />
+         <set item="oparam:check_password" value="${check_password}" />
+         <set item="oparam:cost" value="${cost}" />
+         <set item="oparam:status" value="${status}" />
+         <set item="oparam:check_3g" value="${check_3g}" />
+         <set item="oparam:arpu" value="${arpu}" />
+         <set item="oparam:mou" value="${mou}" />
+         <set item="oparam:mbou" value="${mbou}" />
+         <set item="oparam:flag_app" value="${flag_app}" />
+         <set item="oparam:cmr" value="${cmr}" />
+         <set item="oparam:balance" value="${p_balance}" />
+		 <set item="oparam:full_lock" value="${full_lock}" />
+         <set item="oparam:flag_ussd_balance" value="${flag_ussd_balance}" />
+      </deliveryTemplate>
+      <input>
+         <param name="customer" /> 
+      </input>
+      <output>
+         <param name="dbresult" /> 
+         <param name="tariff_id" /> 
+         <param name="password" /> 
+         <param name="check_password" /> 
+         <param name="cost" /> 
+         <param name="status" /> 
+         <param name="check_3g" /> 
+         <param name="arpu" /> 
+         <param name="mou" /> 
+         <param name="mbou" /> 
+         <param name="flag_app" />
+         <param name="cmr" />
+         <param name="balance" />
+		 <param name="full_lock" />
+         <param name="flag_ussd_balance" />
+      </output>
+   </template>
+
+<!--    EVA.DB_RassrochkaForIvrNew       -->
+	<template procedureName="DB_RassrochkaForIvrNew" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="interrogationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.db_rassrochka_for_ivr_new" >
+					<Attribute name="p_msisdn" type="STRING" value="${customer}"/> 
+					<Attribute name="p_send_sms" type="STRING" value="${SendSMS}"/> 
+					<Attribute name="ls" type="STRING" /> 
+					<Attribute name="v_bg" type="STRING" /> 
+					<Attribute name="installment_curr" type="STRING" /> 
+					<Attribute name="installment_common" type="STRING" />
+					<Attribute name="installment_month" type="STRING" />
+					<Attribute name="v_dop" type="STRING" />
+					<Attribute name="v_summ_neust" type="STRING" /> 
+					<Attribute name="v_dop_d_to" type="STRING" />
+					<Attribute name="dbresponse" type="STRING" />					
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>		
+				<set item="oparam:ls" value="${ls}" />
+				<set item="oparam:bg" value="${v_bg}" />
+				<set item="oparam:installment_curr" value="${installment_curr}" />
+				<set item="oparam:installment_common" value="${installment_common}" />
+				<set item="oparam:installment_month" value="${installment_month}" />
+				<set item="oparam:dop" value="${v_dop}" />
+				<set item="oparam:summ_neust" value="${v_summ_neust}" />
+				<set item="oparam:dop_d_to" value="${v_dop_d_to}" />
+				<set item="oparam:response" value="${dbresponse}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="SendSMS" />
+		</input>
+		<output>
+			<param name="ls" />
+			<param name="bg" />
+			<param name="installment_curr" />
+			<param name="installment_common" />
+			<param name="installment_month" />
+			<param name="dop" />
+			<param name="summ_neust" />
+			<param name="dop_d_to" />
+			<param name="response" />		
+		</output>
+	</template>
+
+<!--    check password universal        -->
+	<template procedureName="DB_CheckPassword" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="interrogationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.mg_pack.authportal" >
+					<Attribute name="p_msisdn" type="STRING" value="${customer}"/> 
+					<Attribute name="pass" type="STRING" value="${password}"/> 
+					<Attribute name="dbresult" type="STRING" /> 
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>		
+			<set item="oparam:result" value="${dbresult}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="password" />
+		</input>
+		<output>
+			<param name="result" />	
+		</output>
+	</template>
+
+<!--    set password universal        -->
+	<template procedureName="DB_SetPassword" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="interrogationrequest" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.mg_pack.setpassword" >
+					<Attribute name="customer" type="STRING" value="${customer}"/> 
+					<Attribute name="newpassword" type="STRING" value="${newpassword}"/> 
+					<Attribute name="src" type="STRING" value="9"/> 
+					<Attribute name="dbresult" type="STRING" /> 
+					<Attribute name="detail" type="STRING" /> 
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>		
+			<set item="oparam:result" value="${dbresult}" />
+			<set item="oparam:detail" value="${detail}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="newpassword" />
+		</input>
+		<output>
+			<param name="result" />	
+			<param name="detail" />	
+		</output>
+	</template>
+	
 <!--    for SIVR inf about cost of TP   -->      
 	<template procedureName="DB_ivr_cost_of_service" handler="DBCON_01">
 		<receiveTemplate>
@@ -281,6 +441,7 @@
 				<Attribute name="o_blok_exceed_limit" type="STRING"  /> 
 				<Attribute name="o_mc" type="STRING"  /> 
 				<Attribute name="o_is_op" type="STRING"  />
+				<Attribute name="full_lock" type="STRING"  />
 			</Item>
 		</Message>
 	</receiveTemplate>
@@ -294,6 +455,7 @@
 		<set item="oparam:blok_exceed_limit" value="${o_blok_exceed_limit}" />
 		<set item="oparam:mc" value="${o_mc}" />
 		<set item="oparam:is_op" value="${o_is_op}" />
+		<set item="oparam:full_lock" value="${full_lock}" />
 	</deliveryTemplate>
 	<input>
 		<param name="customer" />  
@@ -308,6 +470,7 @@
 		<param name="blok_exceed_limit" />
 		<param name="mc" />
 		<param name="is_op" />
+		<param name="full_lock" />
 	</output>
   </template>
 
@@ -1101,86 +1264,65 @@
 	</template>	
 	
 		<!--    DB_PayVerification              -->
-		<template procedureName="DB_PayVerification">
+		<template procedureName="DB_PayVerification" handler="DBCON_01">
 		<receiveTemplate>
-      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="guaranteedpayment" action="6" />
-        </Item>
-      </Message>
+			<Message type="verificationrequest" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.IS_PAY_CLAIMED" >
+					<Attribute name="dbresult" type="STRING"/> 
+					<Attribute name="p_Allowed" type="STRING" /> 
+					<Attribute name="p_Pending" type="STRING" /> 
+					<Attribute name="p_Maximumusd" type="STRING" /> 
+					<Attribute name="p_Maximumrur" type="STRING"/> 
+					<Attribute name="p_msisdn" type="STRING"  value="${customer}"/> 
+					<Attribute name="p_msisdn_o" type="STRING" /> <!-- number customer from IMSI-->
+					<Attribute name="p_source" type="STRING" value="9"/> 
+					<Attribute name="p_pending_str" type="STRING" /> 
+					<Attribute name="p_addon" type="STRING" value="${quick_credit}" /> 
+				</Item>
+			</Message>
 		</receiveTemplate>
 		<deliveryTemplate>		
 			<set item="oparam:dbresult" value="${dbresult}" />
-			<set item="oparam:IsAllowed" value="" />
-			<set item="oparam:Pending" value="" />
-      <set item="oparam:MaxRUB" conditionEx="#{'${maximumrur}'!=''}" value="#{${maximumrur} div 100}" />
-      <set item="oparam:MaxRUB" conditionEx="#{'${maximumrur}'=''}" value="" />
-      <set item="oparam:MaxUSD" conditionEx="#{'${maximumusd}'!=''}" value="#{${maximumusd} div 100}" />
-      <set item="oparam:MaxUSD" conditionEx="#{'${maximumusd}'=''}" value="" />
-    </deliveryTemplate>
-		<input>
-			<param name="customer" />
-      <param name="quick_credit" />
-		</input>
-		<output>
-      <param name="dbresult" />
-      <param name="IsAllowed" />
-      <param name="Pending" />
-      <param name="MaxRUB" />
-      <param name="MaxUSD" />
-    </output>
-	</template>
-
-<!--    DB_PayAcceptance  YandexSpeechKit             -->
-	<template procedureName="DB_PayAcceptanceY">
-		<receiveTemplate>
-      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="guaranteedpayment" action="7">
-            <Attribute name="amount" value="#{number(${amount} * 100)}" />
-            <Attribute name="currency" value="933" />
-          </Service>
-        </Item>
-      </Message>
-		</receiveTemplate>
-		<deliveryTemplate>		
-			<set item="oparam:dbresult" value="${dbresult}" />
-			<set item="oparam:IsAllowed" value="${allowed}" />
-      <set item="oparam:Amount" conditionEx="#{'${amount}'!=''}" value="#{${amount} div 100}" />
-      <set item="oparam:Amount" conditionEx="#{'${amount}'=''}" value="" />
-			<set item="oparam:Currency" value="${currency}" />
+			<set item="oparam:IsAllowed" value="${p_Allowed}" /> 
+			<set item="oparam:Pending" value="${p_Pending}" />
+			<set item="oparam:MaxRUB" value="${p_Maximumrur}" />
+			<set item="oparam:MaxUSD" value="${p_Maximumusd}" />
 		</deliveryTemplate>
 		<input>
 			<param name="customer" />
-			<param name="amount" />
-      <param name="quick_credit" />
+			<param name="quick_credit" />
 		</input>
-    <output>
-      <param name="dbresult" />
-      <param name="IsAllowed" />
-      <param name="Amount" />
-      <param name="Currency" />
-    </output>
+		<output>
+			<param name="dbresult" />
+			<param name="IsAllowed" />
+			<param name="Pending" />		
+			<param name="MaxRUB" />		
+			<param name="MaxUSD" />		
+		</output>
 	</template>
-	
-	<!--    DB_PayAcceptance              -->
-	<template procedureName="DB_PayAcceptance">
+
+<!--    DB_PayAcceptance  YandexSpeechKit             -->
+	<template procedureName="DB_PayAcceptanceY" handler="DBCON_01">
 		<receiveTemplate>
-      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="guaranteedpayment" action="7">
-            <Attribute name="amount" value="#{number(${amount} * 100)}" />
-            <Attribute name="currency" value="933" />
-          </Service>
-        </Item>
-      </Message>
+			<Message type="verificationrequest" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.mg_add_pay_claimed" >
+					<Attribute name="dbresult" type="STRING"/> 
+					<Attribute name="p_Allowed" type="STRING" /> 
+					<Attribute name="p_Amount" type="STRING" /> 
+					<Attribute name="p_Currency" type="STRING" /> 
+					<Attribute name="p_msisdn" type="STRING" value="${customer}"/> 
+					<Attribute name="p_sum" type="STRING"  value="${amount}"/> 
+					<Attribute name="p_curr" type="STRING" value="933"/> 
+					<Attribute name="p_source" type="STRING" value="199" /> 
+					<Attribute name="p_addon" type="STRING" value="${quick_credit}" /> 
+				</Item>
+			</Message>
 		</receiveTemplate>
-		<deliveryTemplate>
-      <set item="oparam:dbresult" value="${dbresult}" />
-      <set item="oparam:IsAllowed" value="${allowed}" />
-      <set item="oparam:Amount" conditionEx="#{'${amount}'!=''}" value="#{${amount} div 100}" />
-      <set item="oparam:Amount" conditionEx="#{'${amount}'=''}" value="" />
-      <set item="oparam:Currency" value="${currency}" />
+		<deliveryTemplate>		
+			<set item="oparam:dbresult" value="${dbresult}" />
+			<set item="oparam:IsAllowed" value="${p_Allowed}" /> 
+			<set item="oparam:Amount" value="${p_Amount}" />
+			<set item="oparam:Currency" value="${p_Currency}" />
 		</deliveryTemplate>
 		<input>
 			<param name="customer" />
@@ -1188,10 +1330,46 @@
 			<param name="quick_credit" />
 		</input>
 		<output>
-      <param name="dbresult" />
-      <param name="IsAllowed" />
-      <param name="Amount" />
-      <param name="Currency" />
+			<param name="dbresult" />
+			<param name="IsAllowed" />
+			<param name="Amount" />		
+			<param name="Currency" />		
+		</output>
+	</template>
+	
+	<!--    DB_PayAcceptance              -->
+	<template procedureName="DB_PayAcceptance" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="verificationrequest" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="BILLING.mg_add_pay_claimed" >
+					<Attribute name="dbresult" type="STRING"/> 
+					<Attribute name="p_Allowed" type="STRING" /> 
+					<Attribute name="p_Amount" type="STRING" /> 
+					<Attribute name="p_Currency" type="STRING" /> 
+					<Attribute name="p_msisdn" type="STRING" value="${customer}"/> 
+					<Attribute name="p_sum" type="STRING"  value="${amount}"/> 
+					<Attribute name="p_curr" type="STRING" value="933"/> 
+					<Attribute name="p_source" type="STRING" value="9" /> 
+					<Attribute name="p_addon" type="STRING" value="${quick_credit}" /> 
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>		
+			<set item="oparam:dbresult" value="${dbresult}" />
+			<set item="oparam:IsAllowed" value="${p_Allowed}" /> 
+			<set item="oparam:Amount" value="${p_Amount}" />
+			<set item="oparam:Currency" value="${p_Currency}" />
+		</deliveryTemplate>
+		<input>
+			<param name="customer" />
+			<param name="amount" />
+			<param name="quick_credit" />
+		</input>
+		<output>
+			<param name="dbresult" />
+			<param name="IsAllowed" />
+			<param name="Amount" />		
+			<param name="Currency" />		
 		</output>
 	</template>
 	

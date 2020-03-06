@@ -1,105 +1,98 @@
-﻿<templateGroup name="ServicePackages">
-	<macros>
-		<define name="_PKG_ADD_NUMBER"		value="11112" />
-		<define name="_PKG_REMOVE_NUMBER"	value="22223" />
-		<define name="_PKG_GETLIST_NUMBER"	value="45456" />
-	</macros>
-	<!--Кастомизировано под нужды tfs-mts #81055-->
-	<template procedureName="USSDGetServicePackages">
-		<condition>
-			<test item="${Recipient}" matches="^_PKG_GETLIST_NUMBER$" />
-			<test item="${Content}" matches="^US-VIEW$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${sender}" subject="product" languageCode="1"/>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content"		value="Сообщение об успешном создании заявки, согласованное с МТС" />
-			<set item="Content"		conditionEx="#{${dbresult}!=0}" value="Сообщение об ошибке, согласованное с МТС" />
-				<!--Кастом начало-->
-			<set item="Content" conditionEx="#{${dbresult}=0 and '${pkgnamelist}'!=''}" value="Ваши пакеты услуг: ${pkgnamelist}" /> 
-			<set item="Content" conditionEx="#{${dbresult}=0 and '${pkgnamelist}'=''}" value="У Вас нет подключенных пакетов услуг" /> 
-				<!--Кастом конец-->
-			<set item="Encoding"	value="unicodefffe" />
-			<set item="Sender"		value="_PKG_GETLIST_NUMBER" />
-			<set item="Recipient"	value="${Customer}" />
-		</deliveryTemplate>
-	</template>
-	
-	
-	<template procedureName="USSDAddServicePackage">
-		<condition>
-			<test item="${Recipient}" matches="^_PKG_ADD_NUMBER$" />
-			<!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="^1|true$" /-->
-			<test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${Content}'])}" matches="^1|true$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${sender}" action="9.2">
-				    <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}"/>
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content"		value="Сообщение об успешном создании заявки, согласованное с МТС" />
-			<set item="Content"		conditionEx="#{${dbresult}!=0}" value="#{/Message/Item/Product/Error[1]/Attribute[@name='message']/text()}" />
-            <set item="Content"		conditionEx="#{${dbresult}=320203 and &quot;${Content}&quot;=''}"  value="Добавление пакета услуг невозможно до завершения предыдущей операции" />
-            <set item="Content"		conditionEx="#{${dbresult}=320204 and &quot;${Content}&quot;=''}"  value="Пакет услуг не предоставляется для Вашего тарифного плана" />
-            <set item="Content"		conditionEx="#{${dbresult}=320205 and &quot;${Content}&quot;=''}"  value="Пакет услуг был добавлен ранее" />
-            <set item="Content"		conditionEx="#{${dbresult}=320191 and &quot;${Content}&quot;=''}"  value="Недостаточно средств на балансе  для проведения операции" />
-            <set item="Content"		conditionEx="#{&quot;${Content}&quot;=''}"  value="Выполнить запрос невозможно. Обратитесь, пожалуйста, в офис МТС." />
-			<set item="Encoding"	value="unicodefffe" />
-			<set item="Sender"		value="_PKG_ADD_NUMBER" />
-			<set item="Recipient"	value="${Customer}" />
-		</deliveryTemplate>
-	</template>
-	
-	
-	<template procedureName="USSDRemoveServicePackage">
-		<condition>
-			<test item="${Recipient}" matches="^_PKG_REMOVE_NUMBER$" />
-			<!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="1" /-->
-			<test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}'])}" matches="^1|true$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${sender}" action="10.2">
-				    <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}"/>
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Сообщение об успешном создании заявки, согласованное с МТС" />
-			<set item="Content" conditionEx="#{${dbresult}!=0}" value="#{/Message/Item/Product/Error[1]/Attribute[@name='message']/text()}" />
-            <set item="Content"		conditionEx="#{${dbresult}=320203 and &quot;${Content}&quot;=''}"  value="Удаление пакета услуг невозможно до завершения предыдущей операции" />
-            <set item="Content"		conditionEx="#{${dbresult}=320204 and &quot;${Content}&quot;=''}"  value="Пакет услуг не предоставляется для Вашего тарифного плана" />
-            <set item="Content"		conditionEx="#{${dbresult}=320206 and &quot;${Content}&quot;=''}"  value="Пакет услуг был удален ранее" />
-            <set item="Content"		conditionEx="#{${dbresult}=320191 and &quot;${Content}&quot;=''}"  value="Недостаточно средств на балансе  для проведения операции" />
-            <set item="Content"		conditionEx="#{&quot;${Content}&quot;=''}"  value="Выполнить запрос невозможно. Обратитесь, пожалуйста, в офис МТС." />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="_PKG_REMOVE_NUMBER" />
-			<set item="Recipient" value="{Customer}" />
-		</deliveryTemplate>
-	</template>
-	
-	
-	<template procedureName="USSDManageServicePackage_Error">
-		<condition>
-			<test item="${Recipient}" matches="^(_PKG_REMOVE_NUMBER|_PKG_ADD_NUMBER)$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${sender}" sender="${Recipient}" />
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input">
-			<set item="Content" value="Сообщение о неверном формате сообщения, согласованное с МТС:${token0},${Content},${Recipient}" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="${sender}" />
-			<set item="Recipient" value="${customer}" />
-		</deliveryTemplate>
-	</template>	
-
+<templateGroup name="ServicePackages">
+  <macros>
+    <define name="_PKG_ADD_NUMBER" value="11112" />
+    <define name="_PKG_REMOVE_NUMBER" value="22223" />
+    <define name="_PKG_GETLIST_NUMBER" value="45456" />
+  </macros>
+  <!--Кастомизировано под нужды tfs-mts #81055-->
+  <template procedureName="USSDGetServicePackages">
+    <condition>
+      <test item="${Recipient}" matches="^_PKG_GETLIST_NUMBER$" />
+      <test item="${Content}" matches="^US-VIEW$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" subject="product" languageCode="1" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Сообщение об успешном создании заявки, согласованное с МТС" />
+      <set item="Content" conditionEx="#{${dbresult}!=0}" value="Сообщение об ошибке, согласованное с МТС" />
+      <!--Кастом начало-->
+      <set item="Content" conditionEx="#{${dbresult}=0 and '${pkgnamelist}'!=''}" value="Ваши пакеты услуг: ${pkgnamelist}" />
+      <set item="Content" conditionEx="#{${dbresult}=0 and '${pkgnamelist}'=''}" value="У Вас нет подключенных пакетов услуг" />
+      <!--Кастом конец-->
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_PKG_GETLIST_NUMBER" />
+      <set item="Recipient" value="${Customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="USSDAddServicePackage">
+    <condition>
+      <test item="${Recipient}" matches="^_PKG_ADD_NUMBER$" />
+      <!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="^1|true$" /-->
+      <test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${Content}'])}" matches="^1|true$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" action="9.2">
+          <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Сообщение об успешном создании заявки, согласованное с МТС" />
+      <set item="Content" conditionEx="#{${dbresult}!=0}" value="#{/Message/Item/Product/Error[1]/Attribute[@name='message']/text()}" />
+      <set item="Content" conditionEx="#{${dbresult}=320203 and &quot;${Content}&quot;=''}" value="Добавление пакета услуг невозможно до завершения предыдущей операции" />
+      <set item="Content" conditionEx="#{${dbresult}=320204 and &quot;${Content}&quot;=''}" value="Пакет услуг не предоставляется для Вашего тарифного плана" />
+      <set item="Content" conditionEx="#{${dbresult}=320205 and &quot;${Content}&quot;=''}" value="Пакет услуг был добавлен ранее" />
+      <set item="Content" conditionEx="#{${dbresult}=320191 and &quot;${Content}&quot;=''}" value="Недостаточно средств на балансе  для проведения операции" />
+      <set item="Content" conditionEx="#{&quot;${Content}&quot;=''}" value="Выполнить запрос невозможно. Обратитесь, пожалуйста, в офис МТС." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_PKG_ADD_NUMBER" />
+      <set item="Recipient" value="${Customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="USSDRemoveServicePackage">
+    <condition>
+      <test item="${Recipient}" matches="^_PKG_REMOVE_NUMBER$" />
+      <!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="1" /-->
+      <test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}'])}" matches="^1|true$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" action="10.2">
+          <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Сообщение об успешном создании заявки, согласованное с МТС" />
+      <set item="Content" conditionEx="#{${dbresult}!=0}" value="#{/Message/Item/Product/Error[1]/Attribute[@name='message']/text()}" />
+      <set item="Content" conditionEx="#{${dbresult}=320203 and &quot;${Content}&quot;=''}" value="Удаление пакета услуг невозможно до завершения предыдущей операции" />
+      <set item="Content" conditionEx="#{${dbresult}=320204 and &quot;${Content}&quot;=''}" value="Пакет услуг не предоставляется для Вашего тарифного плана" />
+      <set item="Content" conditionEx="#{${dbresult}=320206 and &quot;${Content}&quot;=''}" value="Пакет услуг был удален ранее" />
+      <set item="Content" conditionEx="#{${dbresult}=320191 and &quot;${Content}&quot;=''}" value="Недостаточно средств на балансе  для проведения операции" />
+      <set item="Content" conditionEx="#{&quot;${Content}&quot;=''}" value="Выполнить запрос невозможно. Обратитесь, пожалуйста, в офис МТС." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_PKG_REMOVE_NUMBER" />
+      <set item="Recipient" value="{Customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="USSDManageServicePackage_Error">
+    <condition>
+      <test item="${Recipient}" matches="^(_PKG_REMOVE_NUMBER|_PKG_ADD_NUMBER)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${sender}" sender="${Recipient}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Сообщение о неверном формате сообщения, согласованное с МТС:${token0},${Content},${Recipient}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="${sender}" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
 </templateGroup>

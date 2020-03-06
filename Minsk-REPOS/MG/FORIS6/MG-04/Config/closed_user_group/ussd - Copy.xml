@@ -1,4 +1,4 @@
-﻿<templateGroup name="GroupManager2">
+<templateGroup name="GroupManager2">
   <macros>
     <define name="_USSD_NUMBER_TEST_GROUP" value="580" />
     <define name="_USSD_NUMBER_GROUP_RESP" value="500" />
@@ -14,7 +14,7 @@
     <define name="_CUG2_LIST_CODE" value="22" />
     <define name="_CUG3_LIST_CODE" value="222" />
     <define name="_CUG4_LIST_CODE" value="2222" />
-	<define name="_SMSCON" value="SMSCON_01_05"/>
+    <define name="_SMSCON" value="SMSCON_01_05" />
   </macros>
   <template procedureName="AddToGroupCUGT_USSD" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
     <condition>
@@ -253,10 +253,8 @@
       <set item="RegisteredDelivery" value="false" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <deliveryTemplate connector="_SMSCON"/>
+    <deliveryTemplate connector="_SMSCON" />
   </template>
- 
- 
   <template procedureName="CUGSyntaxErrorSMS">
     <condition>
       <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
@@ -303,11 +301,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  
-  
-  
-  
-  
   <template procedureName="AddToGroup1_TEST_GROUP" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
     <condition>
       <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />

@@ -304,7 +304,7 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-  <template procedureName="GuarantedPaymentRUR">
+  <template procedureName="GuarantedPaymentBYN">
     <condition>
       <test item="${Recipient}" matches="^300$" />
       <test item="${Content}" matches="^[0-9]{1,3}$" />
@@ -314,7 +314,7 @@
         <Item customer="${Sender}">
           <Service id="guaranteedpayment" action="7">
             <Attribute name="amount" value="${token0}" />
-            <Attribute name="currency" value="810" />
+            <Attribute name="currency" value="933" />
           </Service>
         </Item>
       </Message>

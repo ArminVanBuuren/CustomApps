@@ -1,22 +1,18 @@
-﻿<templateGroup name="MTS_BONUS">
-	<macros>
-    <define name="_SMS_SERVICE_NUMBER"	value="4555" />
+<templateGroup name="MTS_BONUS">
+  <macros>
+    <define name="_SMS_SERVICE_NUMBER" value="4555" />
     <define name="_BMSHND" value="WCFHND_01" />
-
-    <define name="_USER_ID_OF_CHANGE" value="-1"/>
-    <define name="_CHANNEL_CODE" value="SMS"/>
-    <define name="_CAMPAIGN_CODE" value="MTS_BONUS"/>
-    <define name="_LANGUAGE_CODE" value="1"/>
-    <define name="_CRM_BMS_SERVICE_CODE" value="TMTSBON"/>
-    
+    <define name="_USER_ID_OF_CHANGE" value="-1" />
+    <define name="_CHANNEL_CODE" value="SMS" />
+    <define name="_CAMPAIGN_CODE" value="MTS_BONUS" />
+    <define name="_LANGUAGE_CODE" value="1" />
+    <define name="_CRM_BMS_SERVICE_CODE" value="TMTSBON" />
   </macros>
-
   <!-- BUC_34: IAccount.GetBalance  -->
-  <template procedureName="MTSBonusGetStatusForBalance" handler="_BMSHND" 
-	smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForBalance" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^(?i)(бал|баллы|баланс|bal|score|balans|balanc|бонус|инфо|инфа|i|bonus|bonys|bonuc|bonyc|info|inf)$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^(?i)(бал|баллы|баланс|bal|score|balans|balanc|бонус|инфо|инфа|i|bonus|bonys|bonuc|bonyc|info|inf)$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -24,7 +20,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -42,15 +37,14 @@
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusAssingToCampaing" >
+    <deliveryTemplate call="MTSBonusAssingToCampaing">
       <set item="Content" value="" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusGetBonusBalance" handler="_BMSHND"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetBonusBalance" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -74,14 +68,11 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <!-- BUC_34:Запрос прогноза ближайшего сгорания баллов через SMS-->
-  <template procedureName="MTSBonusGetStatusForFutureBalance" handler="_BMSHND" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForFutureBalance" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^(?i)(прогноз|prognoz)$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^(?i)(прогноз|prognoz)$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -89,7 +80,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -107,15 +97,14 @@
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusAssingToCampaing" >
+    <deliveryTemplate call="MTSBonusAssingToCampaing">
       <set item="Content" value="" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusGetBonusBalanceFutureExpiration" handler="_BMSHND"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetBonusBalanceFutureExpiration" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -124,7 +113,6 @@
         <Item procedureName="GetAccountBalanceFutureExpiration">
           <Attribute name="Account" type="String" value="${Sender}" />
           <Attribute name="DateDays" type="String" value="30" />
-
           <Attribute name="ToDate" />
           <Attribute name="ExpirationBalance" />
           <Attribute name="Balance" />
@@ -141,14 +129,11 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-
   <!-- BUC_55:Отключение от ежемесячного информирования о балансе-->
-  <template procedureName="MTSBonusGetStatusForNotification" handler="_BMSHND" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForNotification" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^(?i)out$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^(?i)out$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -156,27 +141,25 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${Result}'!='0' or ('${ParticipationStatus}'!='AWC' and '${ParticipationStatus}'!='ACT')}" >
+    <deliveryTemplate conditionEx="#{'${Result}'!='0' or ('${ParticipationStatus}'!='AWC' and '${ParticipationStatus}'!='ACT')}">
       <set item="Content" value="Участвовать в МТС Бонус могут только физические лица. Ознакомиться с правилами программы можно на сайте www.bonus.mts.ru" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusSetAccountNotificationType" >
+    <deliveryTemplate call="MTSBonusSetAccountNotificationType">
       <set item="Content" value="" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusSetAccountNotificationType" handler="_BMSHND"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusSetAccountNotificationType" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -186,7 +169,6 @@
           <Attribute name="Account" type="String" value="${Sender}" />
           <Attribute name="NotificationTypeCode" type="String" value="BALANCE_STATE" />
           <Attribute name="Enabled" type="String" value="0" />
-
           <Attribute name="Result" />
         </Item>
       </Message>
@@ -199,17 +181,11 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-
-  
-  
-  
-
   <!-- BUC_30: Механизм акции "Пригласи друга"   -->
-  <template procedureName="MTSBonusGetStatusForInvitation" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForInvitation" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^(?i)taf(\+7|8|7){0,1}[0-9]{10}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^(?i)taf(\+7|8|7){0,1}[0-9]{10}$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -217,7 +193,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -230,17 +205,16 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusGetStatusForInvitationTarget" >
+    <deliveryTemplate call="MTSBonusGetStatusForInvitationTarget">
       <set item="Content" value="${sTargetAccount}" />
       <set item="Sender" value="${sSender}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusGetStatusForInvitationTarget" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForInvitationTarget" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -250,7 +224,6 @@
           <Attribute name="Account" value="${sTargetAccount}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -261,17 +234,16 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusAddCampaignInvitation" >
+    <deliveryTemplate call="MTSBonusAddCampaignInvitation">
       <set item="Content" value="${sTargetAccount}" />
       <set item="Sender" value="${sSender}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusAddCampaignInvitation" handler="_BMSHND" sessionStorage="Memory" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusAddCampaignInvitation" handler="_BMSHND" sessionStorage="Memory" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -282,13 +254,12 @@
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="InvitedAccount" value="${sTargetAccount}" />
           <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
-
           <Attribute name="InvitationResponse" />
           <Attribute name="Result" />
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate >
+    <deliveryTemplate>
       <set item="Content" value="По техническим причинам отправка приглашения будет доступна позднее. Приносим извинения за доставленные неудобства." />
       <set item="Content" conditionEx="#{'${Result}'='-770740'}" value="Абонент с номером ${sTargetAccount} уже приглашен в программу МТС Бонус. Пожалуйста, попробуйте пригласить другого абонента." />
       <set item="Content" conditionEx="#{'${Result}'='-771002'}" value="${InvitationResponse}" />
@@ -296,20 +267,13 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
-
-  
-  
-    
-      
   <!-- BUC_16: IOrder.OrderGift, Заказ вознаграждения через SMS\USSD  -->
-  <template procedureName="MTSBonusGetStatusForOrderGift" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForOrderGift" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
       <test item="#{if(document('config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode != '',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
@@ -318,7 +282,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -330,24 +293,23 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'!='0' or ('${ParticipationStatus}'!='AWC' and '${ParticipationStatus}'!='ACT')}">
       <set item="Content" value="Уважаемый абонент! Зарегистрируйтесь в программе МТС Бонус - отправьте 1 на 4555." />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusOrderGift" >
+    <deliveryTemplate call="MTSBonusOrderGift">
       <set item="Content" value="${sGiftCode}" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusOrderGift" handler="_BMSHND" sessionStorage="Memory" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusOrderGift" handler="_BMSHND" sessionStorage="Memory" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -360,7 +322,6 @@
           <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
           <Attribute name="TargetMsisdn" value="" />
           <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
-
           <Attribute name="ResultReason" />
           <Attribute name="Result" />
         </Item>
@@ -376,23 +337,16 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Msisdn}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-  
-  
-  
-  
-  
-  
   <!-- BUC_22 Регистрация перевода баллов по акции Подари баллы по SMS,  -->
-  <template procedureName="MTSBonusGetStatusForTransfer" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForTransfer" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)gift|дар$" />
-      <test item="${token1}"	matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
-      <test item="${token2}"	matches="^[0-9]{1,10}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)gift|дар$" />
+      <test item="${token1}" matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
+      <test item="${token2}" matches="^[0-9]{1,10}$" />
       <test item="#{if('${Sender}' = concat('7',substring(normalize-space('${token1}'),string-length(normalize-space('${token1}'))-9)),1,0)}" matches="0" />
     </condition>
     <receiveTemplate>
@@ -401,7 +355,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -415,14 +368,14 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'!='0' or ('${ParticipationStatus}'!='AWC' and '${ParticipationStatus}'!='ACT')}">
       <set item="Content" value="Ваш номер ${Account} не является участником программы." />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate call="MTSBonusCheckAccountPair">
       <set item="Content" value="${sTargetAccount}" />
@@ -431,8 +384,7 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusCheckAccountPair" handler="_BMSHND"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusCheckAccountPair" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -442,7 +394,6 @@
           <Attribute name="AccountA" type="String" value="${sSender}" />
           <Attribute name="AccountB" type="String" value="${sTargetAccount}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
-
           <Attribute name="SameInstanceResult" />
           <Attribute name="SameCampaignResult" />
           <Attribute name="ResultReason" />
@@ -450,7 +401,7 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${Result}'='0' and '${SameInstanceResult}'='1' and '${SameCampaignResult}'='1'}" call="MTSBonusGetStatusForTransferTarget" >
+    <deliveryTemplate conditionEx="#{'${Result}'='0' and '${SameInstanceResult}'='1' and '${SameCampaignResult}'='1'}" call="MTSBonusGetStatusForTransferTarget">
       <set item="Content" value="${sTargetAccount}" />
       <set item="Sender" value="${sSender}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
@@ -463,12 +414,10 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
-  <template procedureName="MTSBonusGetStatusForTransferTarget" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForTransferTarget" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -478,7 +427,6 @@
           <Attribute name="Account" value="${sTargetAccount}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -489,24 +437,23 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'!='0' or ('${ParticipationStatus}'!='AWC' and '${ParticipationStatus}'!='ACT')}">
       <set item="Content" value="Абонент с номером ${sTargetAccount} не является участником программы МТС Бонус. Пригласите друга в программу МТС Бонус и получите 50 бонусных баллов!" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusOrderGiftTransfer" >
+    <deliveryTemplate call="MTSBonusOrderGiftTransfer">
       <set item="Content" value="${sTargetAccount}" />
       <set item="Sender" value="${sSender}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
- <template procedureName="MTSBonusOrderGiftTransfer" handler="_BMSHND" sessionStorage="Memory" 
- smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusOrderGiftTransfer" handler="_BMSHND" sessionStorage="Memory" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -519,7 +466,6 @@
           <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
           <Attribute name="TargetMsisdn" value="${sTargetAccount}" />
           <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
-
           <Attribute name="ResultReason" />
           <Attribute name="Result" />
         </Item>
@@ -535,17 +481,16 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Msisdn}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
   <!-- BUC_22 Регистрация перевода баллов по акции Подари баллы по SMS, ПРОДОЛЖЕНИЕ -->
-  <template procedureName="MTSBonusGetStatusForTransferCheck1"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForTransferCheck1" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)gift|дар$" />
-      <test item="${token1}"	matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
-      <test item="${token2}"	matches="^[0-9]{1,10}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)gift|дар$" />
+      <test item="${token1}" matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
+      <test item="${token2}" matches="^[0-9]{1,10}$" />
       <test item="#{if('${Sender}' = concat('7',substring(normalize-space('${token1}'),string-length(normalize-space('${token1}'))-9)),1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
@@ -555,19 +500,18 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate  direction="input" >
+    <deliveryTemplate direction="input">
       <set item="Content" value="Вы не можете отправить подарок себе." />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusGetStatusForTransferCheck2"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForTransferCheck2" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)gift|дар$" />
-      <test item="${token1}"	matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)gift|дар$" />
+      <test item="${token1}" matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -576,18 +520,17 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate  direction="input" >
+    <deliveryTemplate direction="input">
       <set item="Content" value="Вы ввели некорректное количество баллов." />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusGetStatusForTransferCheck3"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForTransferCheck3" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)gift|дар$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)gift|дар$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -596,25 +539,19 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate  direction="input" >
+    <deliveryTemplate direction="input">
       <set item="Content" value="Вы ввели некорректный номер получателя перевода." />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  
-  
-
-  
-
   <!-- BUC_23 Подтверждение получения баллов через SMS  -->
-  <template procedureName="MTSBonusTransferConfirmationAccept" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusTransferConfirmationAccept" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)(принять|mygift)$" />
-      <test item="${token1}"	matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)(принять|mygift)$" />
+      <test item="${token1}" matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
     </condition>
     <receiveTemplate>
       <Message type="giftprovisionconfirmation" initiator="sms" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -624,7 +561,6 @@
           <Attribute name="Confirmation" value="1" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
           <Attribute name="GiftCode" value="BONUS_TRANSFER" />
-          
           <Attribute name="GetResult" />
           <Attribute name="GiftExists" />
           <Attribute name="ResultReason" />
@@ -642,15 +578,14 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusTransferConfirmationRefuse" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusTransferConfirmationRefuse" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${token0}"	matches="^(?i)(отказ|nogift)$" />
-      <test item="${token1}"	matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${token0}" matches="^(?i)(отказ|nogift)$" />
+      <test item="${token1}" matches="^(\+7|8|7){0,1}9[0-9]{9}$" />
     </condition>
     <receiveTemplate>
       <Message type="giftprovisionconfirmation" initiator="sms" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -660,7 +595,6 @@
           <Attribute name="Confirmation" value="0" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
           <Attribute name="GiftCode" value="BONUS_TRANSFER" />
-
           <Attribute name="GetResult" />
           <Attribute name="GiftExists" />
           <Attribute name="ResultReason" />
@@ -678,19 +612,14 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${sSender}" />
       <set item="Encoding" value="unicodefffe" />
-      <set conditionEx="0@{freeSession}"  />
+      <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-
-  
-  
-  
   <!-- BUC_09. Отключение абонента от программы через SMS\USSD Предварительное -->
-  <template procedureName="MTSBonusGetParticipationStart" handler="_BMSHND" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetParticipationStart" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^0$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^0$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipations" initiator="sms" id="${guid}" session_id="${guid}">
@@ -698,7 +627,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="CampaignExists" />
           <Attribute name="Result" />
         </Item>
@@ -712,12 +640,11 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
- <!-- BUC_09. Отключение абонента от программы через SMS\USSD Заключительное -->
-  <template procedureName="MTSBonusGetParticipationFinal" handler="_BMSHND" 
-  smsLogTemplateId="BMSAutoInformation">
+  <!-- BUC_09. Отключение абонента от программы через SMS\USSD Заключительное -->
+  <template procedureName="MTSBonusGetParticipationFinal" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="${Content}"	matches="^Y$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^Y$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipations" initiator="sms" id="${guid}" session_id="${guid}">
@@ -725,14 +652,13 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="CampaignExists" />
           <Attribute name="Result" />
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${Result}'='0' and '${CampaignExists}'='1'}" call="MTSBonusRemoveFromCampaign" >
-      <set item="Content"  value="" />
+    <deliveryTemplate conditionEx="#{'${Result}'='0' and '${CampaignExists}'='1'}" call="MTSBonusRemoveFromCampaign">
+      <set item="Content" value="" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
@@ -744,8 +670,7 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <template procedureName="MTSBonusRemoveFromCampaign" handler="_BMSHND"
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusRemoveFromCampaign" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -756,7 +681,6 @@
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
           <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
-
           <Attribute name="RemoveResponse" />
           <Attribute name="Result" />
         </Item>
@@ -764,21 +688,16 @@
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'!='0'}">
       <set item="Content" value="В настоящее мы не можем обработать ваш запрос. Пожалуйста, попробуйте позднее." />
-      <set item="Sender"   value="_SMS_SERVICE_NUMBER" />
+      <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${RemoveAccount}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
     <deliveryTemplate dropReply="true" />
   </template>
-
-  
-  
-  
   <!-- BUC_03.: Регистрация в МТС Бонус через SMS\USSD  -->
-  <template procedureName="MTSBonusGetStatusForAssign" handler="_BMSHND" 
-  smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusGetStatusForAssign" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
-      <test item="${Recipient}"	matches="^_SMS_SERVICE_NUMBER$" />
+      <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="${guid}">
@@ -786,7 +705,6 @@
           <Attribute name="Account" value="${Sender}" />
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="LanguageCode" value="_LANGUAGE_CODE" />
-
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
@@ -804,15 +722,14 @@
       <set item="Recipient" value="${Account}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate call="MTSBonusAssingToCampaing" >
+    <deliveryTemplate call="MTSBonusAssingToCampaing">
       <set item="Content" value="" />
       <set item="Sender" value="${Account}" />
       <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-	<template procedureName="MTSBonusAssingToCampaing" handler="_BMSHND" 
-	smsLogTemplateId="BMSAutoInformation">
+  <template procedureName="MTSBonusAssingToCampaing" handler="_BMSHND" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="0" matches="1" />
     </condition>
@@ -823,7 +740,6 @@
           <Attribute name="CampaignCode" value="_CAMPAIGN_CODE" />
           <Attribute name="ChannelCode" value="_CHANNEL_CODE" />
           <Attribute name="UserIdOfChange" value="_USER_ID_OF_CHANGE" />
-
           <Attribute name="AssignResponse" />
           <Attribute name="Result" />
         </Item>
@@ -836,6 +752,5 @@
       <set item="Recipient" value="${AssignAccount}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-	</template>
-
+  </template>
 </templateGroup>

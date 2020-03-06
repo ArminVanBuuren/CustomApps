@@ -3119,7 +3119,7 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6"/>
+          <Service id="guaranteedpayment" action="6" />
         </Item>
         @{store(sContent,${Content})}
       </Message>
@@ -3201,7 +3201,7 @@ https://smart-university.ru/eng/ege/express
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6"/>
+          <Service id="guaranteedpayment" action="6" />
         </Item>
         @{store(sContent,${Content})}
       </Message>

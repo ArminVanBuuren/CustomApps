@@ -1,42 +1,40 @@
-﻿<templateGroup name="irpa">
-	<macros>
-		<define name="_USSD_SERVICE_NUMBER" value="00111" />
-	</macros>
-
-	<template procedureName="GetIndividualBillingPeriodDate">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_SERVICE_NUMBER$" />
-			<test item="${Content}" matches="^_getbillingperiod_$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="getindividualbillingperioddate" initiator="ussd" id="${guid}" session_id="${guid}">
-				<Item customer="${Sender}">
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Дата списания ежемесячной платы - #{substring('${IndividualBillingPeriodDate}',1,2)} число месяца" />
-			<set item="Content" conditionEx="#{${dbresult}=330162}" value="Дата списания ежемесячной платы за услуги и опции будет установлена после активации номера" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="_USSD_SERVICE_NUMBER" />
-			<set item="Recipient" value="${customer}" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="IRPA_Format_Error">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_SERVICE_NUMBER$" />
-		</condition>
-        <receiveTemplate>
-            <Message initiator="smscon" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}" />
-            </Message>
-        </receiveTemplate>   
-        <deliveryTemplate direction="input">            
-            <set item="Sender" value="_USSD_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Content" value="Ошибка в формате запроса" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-	</template>
+<templateGroup name="irpa">
+  <macros>
+    <define name="_USSD_SERVICE_NUMBER" value="00111" />
+  </macros>
+  <template procedureName="GetIndividualBillingPeriodDate">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_SERVICE_NUMBER$" />
+      <test item="${Content}" matches="^_getbillingperiod_$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="getindividualbillingperioddate" initiator="ussd" id="${guid}" session_id="${guid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Дата списания ежемесячной платы - #{substring('${IndividualBillingPeriodDate}',1,2)} число месяца" />
+      <set item="Content" conditionEx="#{${dbresult}=330162}" value="Дата списания ежемесячной платы за услуги и опции будет установлена после активации номера" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_USSD_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="IRPA_Format_Error">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_SERVICE_NUMBER$" />
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Sender" value="_USSD_SERVICE_NUMBER" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" value="Ошибка в формате запроса" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
 </templateGroup>

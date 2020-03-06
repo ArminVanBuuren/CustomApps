@@ -1,96 +1,92 @@
 <templateGroup name="GuaranteedPayment">
-
-	<macros>
-		<define name="_SMSCON" value="SMSCON_01" />
-	</macros>
-	<template procedureName="Verification" sessionStorage="Memory" sessionLifetime="29">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item customer="${customer}">
-					<Service id="guaranteedpayment" action="6" />
-				</Item>
-				@{store(sSessionExists,1)}
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
-			<set item="oparam:dbresult" value="${dbresult}" />
-	        <set item="oparam:maximumrur" value="#{if('${maximumrur}'!='',number('${maximumrur}') div 100,0)}" />
-	        <set item="oparam:maximumusd" value="#{if('${maximumusd}'!='',number('${maximumusd}') div 100,0)}" />
-	        <set item="oparam:balance" value="#{if('${balance}'!='',number('${balance}') div 100,0)}" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON"></deliveryTemplate>
-		<input>
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="dbresult" value=""/>
-			<param name="maximumrur" value="0" />
-			<param name="maximumusd" value="0" />
-			<param name="balance" value="0" />
-		</output>
-	</template>
-	
-	<template procedureName="Acceptance" sessionStorage="Memory" sessionLifetime="29">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item customer="${customer}">
-					<Service id="guaranteedpayment" action="7">
-						<Attribute name="amount" value="#{if('${amount}'='','',number('${amount}') * 100)}" />
-						<Attribute name="currency" value="810" />
-					</Service>
-				</Item>
-				@{store(sSessionExists,1)}
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
-			<set item="oparam:dbresult" value="${dbresult}" />
-	        <set item="oparam:maximumrur" value="#{if('${maximumrur}'!='',number('${maximumrur}') div 100,0)}" />
-	        <set item="oparam:maximumusd" value="#{if('${maximumusd}'!='',number('${maximumusd}') div 100,0)}" />
-	        <set item="oparam:balance" value="#{if('${balance}'!='',number('${balance}') div 100,0)}" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-		<input>
-			<param name="customer" />
-			<param name="amount" />
-		</input>
-		<output>
-			<param name="dbresult" value="" />
-			<param name="maximumrur" value="0" />
-			<param name="maximumusd" value="0" />
-			<param name="balance" value="0" />
-		</output>
-	</template>
-	
-	<template procedureName="List" sessionStorage="Memory" sessionLifetime="29">
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(${guid})}">
-			    <Item customer="${customer}" subject="get_guaranteedpayment" />
-			    @{store(sSessionExists,1)}
-			    @{store(sIndex,#{number('${index}')+1})}
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
-			<set item="oparam:dbresult" value="${dbresult}" />
-			<set item="oparam:count" value="#{//Item/@count}" />
-			<set item="oparam:day" value="#{//Item/row[${sIndex}]/Attribute[@name='day']/@value}" />
-			<set item="oparam:currency" value="#{//Item/row[${sIndex}]/Attribute[@name='currency']/@value}" />
-			<set item="oparam:intpartfracpart" value="#{//Item/row[${sIndex}]/Attribute[@name='intpartfracpart']/@value}" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-		<input>
-			<param name="customer" />
-			<param name="index" />
-		</input>
-		<output>
-		    <param name="dbresult" type="3" value="0"/>
-		    <param name="count" type="3" value="0"/>
-		    <param name="day" type="4" value="0"/>
-		    <param name="currency" type="3" value="0"/>
-		    <param name="intpartfracpart" type="3" value="0"/>
-		</output>
-	</template>
-
+  <macros>
+    <define name="_SMSCON" value="SMSCON_01" />
+  </macros>
+  <template procedureName="Verification" sessionStorage="Memory" sessionLifetime="29">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}">
+          <Service id="guaranteedpayment" action="6" />
+        </Item>
+        @{store(sSessionExists,1)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:maximumrur" value="#{if('${maximumrur}'!='',number('${maximumrur}') div 100,0)}" />
+      <set item="oparam:maximumusd" value="#{if('${maximumusd}'!='',number('${maximumusd}') div 100,0)}" />
+      <set item="oparam:balance" value="#{if('${balance}'!='',number('${balance}') div 100,0)}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="dbresult" value="" />
+      <param name="maximumrur" value="0" />
+      <param name="maximumusd" value="0" />
+      <param name="balance" value="0" />
+    </output>
+  </template>
+  <template procedureName="Acceptance" sessionStorage="Memory" sessionLifetime="29">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item customer="${customer}">
+          <Service id="guaranteedpayment" action="7">
+            <Attribute name="amount" value="#{if('${amount}'='','',number('${amount}') * 100)}" />
+            <Attribute name="currency" value="810" />
+          </Service>
+        </Item>
+        @{store(sSessionExists,1)}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:maximumrur" value="#{if('${maximumrur}'!='',number('${maximumrur}') div 100,0)}" />
+      <set item="oparam:maximumusd" value="#{if('${maximumusd}'!='',number('${maximumusd}') div 100,0)}" />
+      <set item="oparam:balance" value="#{if('${balance}'!='',number('${balance}') div 100,0)}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+    <input>
+      <param name="customer" />
+      <param name="amount" />
+    </input>
+    <output>
+      <param name="dbresult" value="" />
+      <param name="maximumrur" value="0" />
+      <param name="maximumusd" value="0" />
+      <param name="balance" value="0" />
+    </output>
+  </template>
+  <template procedureName="List" sessionStorage="Memory" sessionLifetime="29">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="ivrcc" id="${guid}" session_id="@{setSessionId(${guid})}">
+        <Item customer="${customer}" subject="get_guaranteedpayment" />
+        @{store(sSessionExists,1)}
+        @{store(sIndex,#{number('${index}')+1})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sSessionExists}'='1'}">
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:count" value="#{//Item/@count}" />
+      <set item="oparam:day" value="#{//Item/row[${sIndex}]/Attribute[@name='day']/@value}" />
+      <set item="oparam:currency" value="#{//Item/row[${sIndex}]/Attribute[@name='currency']/@value}" />
+      <set item="oparam:intpartfracpart" value="#{//Item/row[${sIndex}]/Attribute[@name='intpartfracpart']/@value}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+    <input>
+      <param name="customer" />
+      <param name="index" />
+    </input>
+    <output>
+      <param name="dbresult" type="3" value="0" />
+      <param name="count" type="3" value="0" />
+      <param name="day" type="4" value="0" />
+      <param name="currency" type="3" value="0" />
+      <param name="intpartfracpart" type="3" value="0" />
+    </output>
+  </template>
 </templateGroup>

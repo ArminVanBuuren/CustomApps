@@ -1,45 +1,42 @@
-﻿<templateGroup name="irpa">
-
-	<macros>
-		<define name="__SMS_SERVICE_NUMBER_IRPA" value="176" />
-		<define name="_WWW_IRPA" value="example.irpa.mts.ru" />
-		<!--ссылка на pda-сайт с описанием сервиса ИРПА.-->
-	</macros>
-
-	<template procedureName="GetIndividualBillingPeriodDate">
-		<condition>
-			<test item="${Recipient}" matches="^__SMS_SERVICE_NUMBER_IRPA$" />
-			<test item="${Content}" matches="^176$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="getindividualbillingperioddate" initiator="smscon" id="${guid}" session_id="${guid}">
-				<Item customer="${Sender}">
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру - #{substring('${IndividualBillingPeriodDate}',1,2)} число каждого месяца. Не забудьте вовремя пополнять счет. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
-			<set item="Content" conditionEx="#{${dbresult}=330162}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру будет установлена после активации номера. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="__SMS_SERVICE_NUMBER_IRPA" />
-			<set item="Recipient" value="${customer}" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="IRPA_Format_Error">
-		<condition>
-			<test item="${Recipient}" matches="^__SMS_SERVICE_NUMBER_IRPA$" />
-		</condition>
-        <receiveTemplate>
-            <Message initiator="smscon" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}" />
-            </Message>
-        </receiveTemplate>   
-        <deliveryTemplate direction="input">            
-            <set item="Sender" value="__SMS_SERVICE_NUMBER_IRPA" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Content" value="Ошибка в формате запроса" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-	</template>
+<templateGroup name="irpa">
+  <macros>
+    <define name="__SMS_SERVICE_NUMBER_IRPA" value="176" />
+    <define name="_WWW_IRPA" value="example.irpa.mts.ru" />
+    <!--ссылка на pda-сайт с описанием сервиса ИРПА.-->
+  </macros>
+  <template procedureName="GetIndividualBillingPeriodDate">
+    <condition>
+      <test item="${Recipient}" matches="^__SMS_SERVICE_NUMBER_IRPA$" />
+      <test item="${Content}" matches="^176$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="getindividualbillingperioddate" initiator="smscon" id="${guid}" session_id="${guid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+      <set item="Content" conditionEx="#{${dbresult}=0}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру - #{substring('${IndividualBillingPeriodDate}',1,2)} число каждого месяца. Не забудьте вовремя пополнять счет. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
+      <set item="Content" conditionEx="#{${dbresult}=330162}" value="Дата списания ежемесячной платы за услуги и опции по Вашему номеру будет установлена после активации номера. Подробнее: _WWW_IRPA. Спасибо, что Вы с нами, МТС" />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="__SMS_SERVICE_NUMBER_IRPA" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="IRPA_Format_Error">
+    <condition>
+      <test item="${Recipient}" matches="^__SMS_SERVICE_NUMBER_IRPA$" />
+    </condition>
+    <receiveTemplate>
+      <Message initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Sender" value="__SMS_SERVICE_NUMBER_IRPA" />
+      <set item="Recipient" value="${customer}" />
+      <set item="Content" value="Ошибка в формате запроса" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
 </templateGroup>

@@ -44,9 +44,6 @@
     <smstext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</ussdtext>
   </gift>
-
-  
-  
   <gift ussdcode="21" bmscode="20sms">
     <smscode>смс20</smscode>
     <smscode>20смс</smscode>
@@ -87,9 +84,6 @@
     <smstext>Спасибо! Пакет 500 SMS будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 500 SMS будет подключен в течение суток.</ussdtext>
   </gift>
-
-
-  
   <gift ussdcode="31" bmscode="10mb">
     <smscode>интернет10</smscode>
     <smscode>10интернет</smscode>
@@ -120,9 +114,6 @@
     <smstext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</ussdtext>
   </gift>
-
-
-
   <gift ussdcode="41" bmscode="10mms">
     <smscode>ммс10</smscode>
     <smscode>10ммс</smscode>
@@ -147,5 +138,4 @@
     <smstext>Спасибо! Пакет 60 MMS будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 MMS будет подключен в течение суток.</ussdtext>
   </gift>
-  
 </gifts>

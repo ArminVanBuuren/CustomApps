@@ -1,434 +1,428 @@
-﻿<templateGroup name="GroupManager">
-	<macros>
-		<define name="_USSD_NUMBER_TEST_GROUP" value="580" />
-		<define name="_USSD_NUMBER_GROUP_RESP" value="500" />
-		<define name="_USSD_NUMBER_DEL" value="519" />
-		<define name="_TEST_GROUP_INVITE_CODE" value="000" />
-		<define name="_TEST_GROUP_DEL_CODE" value="222" />
-		<define name="_TEST_GROUP_LIST_CODE" value="111" />
-		<define name="_CUGT1_INVITE_CODE" value="0" />
-		<define name="_CUGT2_INVITE_CODE" value="00" />
-		<define name="_CUGT3_INVITE_CODE" value="000" />
-		<define name="_CUGT4_INVITE_CODE" value="0000" />
-		<define name="_CUGT5_INVITE_CODE" value="123" /> <!--VMESTE -->
-		<define name="_CUG1_LIST_CODE" value="2" />
-		<define name="_CUG2_LIST_CODE" value="22" />
-		<define name="_CUG3_LIST_CODE" value="222" />
-		<define name="_CUG4_LIST_CODE" value="2222" />
-		<define name="_USSD_GROUP_DEL_CODE" value="1" />
-		<define name="_SMSCON" value="SMSCON_01_03"/>
-	</macros>
-    <template procedureName="DelFromGroup_USSD">
-        <condition>
-            <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-            <test item="${Content}" matches="^_USSD_GROUP_DEL_CODE$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}" action="1"  >                    
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="@{switch(${Content}|-1,_USSD_GROUP_DEL_CODE|44827)}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-			<set item="Content"   value="Ваша заявка принята" />
-            <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-	</template>  
-	<template procedureName="AddToGroupCUGT_USSD" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-			<test item="${Content}" matches="^(_CUGT1_INVITE_CODE|_CUGT2_INVITE_CODE|_CUGT3_INVITE_CODE|_CUGT4_INVITE_CODE|_CUGT5_INVITE_CODE)\*[0-9]{11}$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(InviteMember(7#{substring('${token1}',string-length('${token1}')-9)}))}">
-				<Item customer="${Sender}">
-					<Attribute name="checkivrservice" value="0" />
-					<Attribute name="checkblocks" value="0" />
-					<Attribute name="grouptype" value="@{switch(${token0}|-1,_CUGT1_INVITE_CODE|FRCUGLG,_CUGT2_INVITE_CODE|CUGT2,_CUGT3_INVITE_CODE|CUGT3,_CUGT4_INVITE_CODE|CUGT4,_CUGT5_INVITE_CODE|FRVMESTE)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="У абонента ${sInvited} есть ваше активное приглашение. Чтобы принять его абонент ${sInvited} должен отправить СМС со словом DA на номер _USSD_NUMBER_TEST_GROUP" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="У абонента ${sInvited} есть активное приглашение в другую группу." />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${Customer}'='#{substring-after(substring-before('${session_id}',')'),'(')}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="Номер приглашенного абонента ${Customer} совпадает с вашим. Заявка не принята" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" call="AddToGroup1_CUGT_USSD">
-			<set item="Content" value="AddToGroup1(#{substring-after(substring-before('${session_id}',')'),'(')})" />
-			<set item="Sender" value="${customer}" />
-			<set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Encoding" value="ascii" />
-			<set conditionEx="0@{store(sAlreadyInvited,1)}" />
-			<set conditionEx="0@{store(sInviter,${Customer})}" />
-			<set conditionEx="0@{store(sInvited,#{substring-after(substring-before('${session_id}',')'),'(')})}" />
-			<set conditionEx="0@{store(sTryCount,1)}" />
-			<set conditionEx="0@{store(sGroupType,${grouptype})}" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="ListOfGroupCUGT_USSD">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-			<test item="${Content}" matches="^(_CUG1_LIST_CODE|_CUG2_LIST_CODE|_CUG3_LIST_CODE|_CUG4_LIST_CODE)$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="customergroup" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" action="2">
-					<Attribute name="groupmember" value="0" />
-					<Attribute name="index" value="@{switch(${Content}|-1,_CUG1_LIST_CODE|44819,_CUG2_LIST_CODE|92106,_CUG3_LIST_CODE|92123,_CUG4_LIST_CODE|45072)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=0}">
-			<set item="Content" value="#{if('${grouplisting}'='','Вы не состоите в группе','Состав группы: ${grouplisting}')}" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Ошибка получения списка группы" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="DelFromGroup_CUGT">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_DEL$" />
-			<!--test item="${Content}" matches="^(0|00|000|0000|123)\*[0-9]{11}$" /-->
-			<test item="${Content}" matches="^(_CUGT1_INVITE_CODE|_CUGT2_INVITE_CODE|_CUGT3_INVITE_CODE|_CUGT4_INVITE_CODE|_CUGT5_INVITE_CODE)$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" action="1">
-					<Attribute name="groupmember" value="0" />
-					<Attribute name="index" value="@{switch(${token0}|-1,_CUGT1_INVITE_CODE|44819,_CUGT2_INVITE_CODE|92106,_CUGT3_INVITE_CODE|92123,_CUGT4_INVITE_CODE|45072)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=0}">
-			<set item="Content" value="Заявка на удаление из группы зарегистрирована" />
-			<set item="Sender" value="_USSD_NUMBER_DEL" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate condition="//Item/@dbresult=320708">
-			<set item="Content" value="Вы не состоите в группе" />
-			<set item="Sender" value="_USSD_NUMBER_DEL" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Ошибка удаления из группы" />
-			<set item="Sender" value="_USSD_NUMBER_DEL" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="AddToGroup1_CUGT_USSD" sessionStorage="Database" sessionLifetime="86400">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-				<Item customer="${sInviter}">
-					<Attribute name="checkivrservice" value="0" />
-					<Attribute name="checkblocks" value="0" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})&gt;5}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup1_CUGT_USSD">
-			<set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
-			<set item="Content" value="AddToGroup1(0*${sInvited}*${sTryCount})" />
-			<set item="Sender" value="${sInviter}" />
-			<set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=320060}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Content" value="Отсутствуют права на проведение операции." />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}!=0}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Content" value="На тарифном плане абонента ${sInviter} услуга недоступна" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate call="AddToGroup2_CUGT" conditionEx="#{${dbresult}=0}">
-			<set conditionEx="0@{store(sTryCount,1)}" />
-			<set item="Content" value="AddToGroup2(0*${sInvited})" />
-			<set item="Sender" value="${sInviter}" />
-			<set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="AddToGroup2_CUGT" sessionStorage="Database" sessionLifetime="86400">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-				<Item customer="${sInvited}">
-					<Attribute name="checkivrservice" value="0" />
-					<Attribute name="checkblocks" value="0" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})&gt;5}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup2_CUGT">
-			<set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
-			<set item="Content" value="AddToGroup2(0*${sInvited}*${sTryCount})" />
-			<set item="Sender" value="${sInviter}" />
-			<set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}!=0}">
-			<set item="Content" value="На тарифном плане абонента ${sInvited} услуга недоступна" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate call="AddToGroup3_CUGT_USSD" conditionEx="#{${dbresult}=0 }">
-			<set conditionEx="0@{store(sTryCount,1)}" />
-			<set item="Content" value="AddToGroup3(0*${sInvited})" />
-			<set item="Sender" value="${sInviter}" />
-			<set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="AddToGroup3_CUGT_USSD" sessionStorage="Database" sessionLifetime="86400">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-				<Item customer="${sInvited}" action="3">
-					<Attribute name="groupmember" value="${sInviter}" />
-					<Attribute name="index" value="@{switch(${sGroupType}|${sGroupType},FRCUGLG|44819,CUGT2|92106,CUGT3|92123,CUGT4|45072,FRVMESTE|44827)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate terminating="false" conditionEx="#{${dbresult}=0}">
-			<set item="Content" value="Абоненту ${sInvited} отправлено ваше приглашение в группу" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{'${dbresult}'!='0'}">
-			<set item="Content" value="Ошибка при проверке состава группы" />
-			<set item="Content" conditionEx="#{${dbresult}=320205}" value="услуга уже подключена" />
-			<set item="Content" conditionEx="#{${dbresult}=320707}" value="у пользователей разные регионы" />
-			<set item="Content" conditionEx="#{${dbresult}=320203}" value="существует открытая заявка" />
-			<set item="Content" conditionEx="#{${dbresult}=320194}" value="операции с группой запрещены" />
-			<set item="Content" conditionEx="#{${dbresult}=320204}" value="у пользователя нет услуги или неизвестный тип группы" />
-			<set item="Content" conditionEx="#{${dbresult}=320191}" value="недостаточно средств" />
-			<set item="Content" conditionEx="#{${dbresult}=320705}" value="достигнут предел числа участников группы" />
-			<set item="Content" conditionEx="#{${dbresult}=320706}" value="пользователь уже включен в другую группу" />
-			<set item="Content" conditionEx="#{${dbresult}=320341}" value="неизвестный номер телефона" />
-			<set item="Content" conditionEx="#{${dbresult}=320347}" value="пользователь находится в блокировке" />
-			<set item="Content" conditionEx="#{${dbresult}=330003}" value="тарифный план приглашающего не позволяет создавать группу" />
-			<set item="Content" conditionEx="#{${dbresult}=330004}" value="тарифный план приглашаемого не позволяет вступать в группу" />
-			<set item="Content" conditionEx="#{${dbresult}=330005}" value="для вступления в группу необходимо сменить тарифный план" />
-			<set item="Content" conditionEx="#{${dbresult}=330006}" value="Не найден тип группы пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330007}" value="Абонент не может изменить группу пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330008}" value="Иностранные клиенты не поддерживаются данным типом группы пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330009}" value="Не найдена группа пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330010}" value="Приглашающий тарифный плана не допускается для этого типа группы пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330011}" value="Номер тарифного плана не допускается для этого типа группы пользователей" />
-			<set item="Content" conditionEx="#{${dbresult}=330012}" value="Минимум числа членов группы была достигнута. Никто не может быть удален" />
-			<set item="Content" conditionEx="#{${dbresult}=330013}" value="Номер может быть добавлены в группу только после приглашения" />
-			<set item="Content" conditionEx="#{${dbresult}=-1}" value="Данный запрос не может быть выполнен." />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${sInviter}" />
-			<set item="RegisteredDelivery" value="false" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON"/>
-	</template>
-
-
-	<template procedureName="CUGSyntaxErrorSMS">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-		</condition>
-		<receiveTemplate>
-			<Message id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" />
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input">
-			<set item="Content" value="Выйти из группы: *5194*0#. Узнать состав: *258*2#" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="CUGSyntaxErrorSMSResp">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-		</condition>
-		<receiveTemplate>
-			<Message id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" />
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input">
-			<set item="Content" value="Ошибка формата" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
-	<template procedureName="CUGTSyntaxError1">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message />
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="Content" value="Создать группу: *258*1*7YYYXXXXXXX#. Выйти из группы: *258*0#. Узнать состав: *258*2#" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
-
-
-
-
-
-	<template procedureName="AddToGroup1_TEST_GROUP" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-			<test item="${Content}" matches="^_TEST_GROUP_INVITE_CODE\*[0-9]{11}$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(TEST_GROUP7#{substring('${token1}',string-length('${token1}')-9)})}">
-				<Item customer="${Sender}">
-					<Attribute name="checkivrservice" value="0" />
-					<Attribute name="checkblocks" value="0" />
-					<Attribute name="grouptype" value="TEST_GROUP" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="У абонента ${sInvited} есть ваше активное приглашение" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="У абонента ${sInvited} есть активное приглашение в другую группу" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" conditionEx="#{'${Customer}'='7#{substring('${session_id}',string-length('${session_id}')-9)}'}">
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Content" value="Номер приглашаемого абонента ${Customer} совпадает с вашим." />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}" />
-		</deliveryTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content" value="Ваша заявка принята" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{store(sAlreadyInvited,1)}" />
-			<set conditionEx="0@{store(sInviter,${Customer})}" />
-			<set conditionEx="0@{store(sInvited,7#{substring('${session_id}',string-length('${session_id}')-9)})}" />
-			<set conditionEx="0@{store(sTryCount,1)}" />
-			<set conditionEx="0@{store(sGroupType,${grouptype})}" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<template procedureName="AddToGroup_onClean" sessionStorage="Database">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message id="@{newGuid}" session_id="${SessionId}" />
-		</receiveTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<template procedureName="ListOfGroup_TEST_GROUP">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-			<test item="${Content}" matches="^_TEST_GROUP_LIST_CODE$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" action="2">
-					<Attribute name="groupmember" value="0" />
-					<Attribute name="index" value="@{switch(${Content}|-1,_LIST_OPERATION_CODE|3,_DUET_LIST_CODE|4,_TEST_GROUP_LIST_CODE|27)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content" value="Ваша заявка принята" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<template procedureName="DelFromGroup_TEST_GROUP">
-		<condition>
-			<test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
-			<test item="${Content}" matches="^_TEST_GROUP_DEL_CODE$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${Sender}" action="1">
-					<Attribute name="groupmember" value="0" />
-					<Attribute name="index" value="@{switch(${Content}|-1,_DEL_OPERATION_CODE|3,_DUET_DEL_CODE|4,_TEST_GROUP_DEL_CODE|27)}" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input" terminating="false">
-			<set item="Content" value="Ваша заявка принята" />
-			<set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-			<set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate connector="_SMSCON" />
-	</template>
-	<!--  <template procedureName="TEST_GROUPSyntaxError1"> 
+<templateGroup name="GroupManager">
+  <macros>
+    <define name="_USSD_NUMBER_TEST_GROUP" value="580" />
+    <define name="_USSD_NUMBER_GROUP_RESP" value="500" />
+    <define name="_USSD_NUMBER_DEL" value="519" />
+    <define name="_TEST_GROUP_INVITE_CODE" value="000" />
+    <define name="_TEST_GROUP_DEL_CODE" value="222" />
+    <define name="_TEST_GROUP_LIST_CODE" value="111" />
+    <define name="_CUGT1_INVITE_CODE" value="0" />
+    <define name="_CUGT2_INVITE_CODE" value="00" />
+    <define name="_CUGT3_INVITE_CODE" value="000" />
+    <define name="_CUGT4_INVITE_CODE" value="0000" />
+    <define name="_CUGT5_INVITE_CODE" value="123" />
+    <!--VMESTE -->
+    <define name="_CUG1_LIST_CODE" value="2" />
+    <define name="_CUG2_LIST_CODE" value="22" />
+    <define name="_CUG3_LIST_CODE" value="222" />
+    <define name="_CUG4_LIST_CODE" value="2222" />
+    <define name="_USSD_GROUP_DEL_CODE" value="1" />
+    <define name="_SMSCON" value="SMSCON_01_03" />
+  </macros>
+  <template procedureName="DelFromGroup_USSD">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^_USSD_GROUP_DEL_CODE$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="1">
+          <Attribute name="groupmember" value="0" />
+          <Attribute name="index" value="@{switch(${Content}|-1,_USSD_GROUP_DEL_CODE|44827)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="AddToGroupCUGT_USSD" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^(_CUGT1_INVITE_CODE|_CUGT2_INVITE_CODE|_CUGT3_INVITE_CODE|_CUGT4_INVITE_CODE|_CUGT5_INVITE_CODE)\*[0-9]{11}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(InviteMember(7#{substring('${token1}',string-length('${token1}')-9)}))}">
+        <Item customer="${Sender}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+          <Attribute name="grouptype" value="@{switch(${token0}|-1,_CUGT1_INVITE_CODE|FRCUGLG,_CUGT2_INVITE_CODE|CUGT2,_CUGT3_INVITE_CODE|CUGT3,_CUGT4_INVITE_CODE|CUGT4,_CUGT5_INVITE_CODE|FRVMESTE)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="У абонента ${sInvited} есть ваше активное приглашение. Чтобы принять его абонент ${sInvited} должен отправить СМС со словом DA на номер _USSD_NUMBER_TEST_GROUP" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="У абонента ${sInvited} есть активное приглашение в другую группу." />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${Customer}'='#{substring-after(substring-before('${session_id}',')'),'(')}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="Номер приглашенного абонента ${Customer} совпадает с вашим. Заявка не принята" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" call="AddToGroup1_CUGT_USSD">
+      <set item="Content" value="AddToGroup1(#{substring-after(substring-before('${session_id}',')'),'(')})" />
+      <set item="Sender" value="${customer}" />
+      <set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Encoding" value="ascii" />
+      <set conditionEx="0@{store(sAlreadyInvited,1)}" />
+      <set conditionEx="0@{store(sInviter,${Customer})}" />
+      <set conditionEx="0@{store(sInvited,#{substring-after(substring-before('${session_id}',')'),'(')})}" />
+      <set conditionEx="0@{store(sTryCount,1)}" />
+      <set conditionEx="0@{store(sGroupType,${grouptype})}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="ListOfGroupCUGT_USSD">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^(_CUG1_LIST_CODE|_CUG2_LIST_CODE|_CUG3_LIST_CODE|_CUG4_LIST_CODE)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="2">
+          <Attribute name="groupmember" value="0" />
+          <Attribute name="index" value="@{switch(${Content}|-1,_CUG1_LIST_CODE|44819,_CUG2_LIST_CODE|92106,_CUG3_LIST_CODE|92123,_CUG4_LIST_CODE|45072)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="#{if('${grouplisting}'='','Вы не состоите в группе','Состав группы: ${grouplisting}')}" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ошибка получения списка группы" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="DelFromGroup_CUGT">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_DEL$" />
+      <!--test item="${Content}" matches="^(0|00|000|0000|123)\*[0-9]{11}$" /-->
+      <test item="${Content}" matches="^(_CUGT1_INVITE_CODE|_CUGT2_INVITE_CODE|_CUGT3_INVITE_CODE|_CUGT4_INVITE_CODE|_CUGT5_INVITE_CODE)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="1">
+          <Attribute name="groupmember" value="0" />
+          <Attribute name="index" value="@{switch(${token0}|-1,_CUGT1_INVITE_CODE|44819,_CUGT2_INVITE_CODE|92106,_CUGT3_INVITE_CODE|92123,_CUGT4_INVITE_CODE|45072)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Заявка на удаление из группы зарегистрирована" />
+      <set item="Sender" value="_USSD_NUMBER_DEL" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate condition="//Item/@dbresult=320708">
+      <set item="Content" value="Вы не состоите в группе" />
+      <set item="Sender" value="_USSD_NUMBER_DEL" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Ошибка удаления из группы" />
+      <set item="Sender" value="_USSD_NUMBER_DEL" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup1_CUGT_USSD" sessionStorage="Database" sessionLifetime="86400">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sInviter}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})&gt;5}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup1_CUGT_USSD">
+      <set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
+      <set item="Content" value="AddToGroup1(0*${sInvited}*${sTryCount})" />
+      <set item="Sender" value="${sInviter}" />
+      <set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=320060}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Content" value="Отсутствуют права на проведение операции." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}!=0}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Content" value="На тарифном плане абонента ${sInviter} услуга недоступна" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="AddToGroup2_CUGT" conditionEx="#{${dbresult}=0}">
+      <set conditionEx="0@{store(sTryCount,1)}" />
+      <set item="Content" value="AddToGroup2(0*${sInvited})" />
+      <set item="Sender" value="${sInviter}" />
+      <set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup2_CUGT" sessionStorage="Database" sessionLifetime="86400">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sInvited}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})&gt;5}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Content" value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup2_CUGT">
+      <set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
+      <set item="Content" value="AddToGroup2(0*${sInvited}*${sTryCount})" />
+      <set item="Sender" value="${sInviter}" />
+      <set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{${dbresult}!=0}">
+      <set item="Content" value="На тарифном плане абонента ${sInvited} услуга недоступна" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate call="AddToGroup3_CUGT_USSD" conditionEx="#{${dbresult}=0 }">
+      <set conditionEx="0@{store(sTryCount,1)}" />
+      <set item="Content" value="AddToGroup3(0*${sInvited})" />
+      <set item="Sender" value="${sInviter}" />
+      <set item="Recipient" value="_USSD_NUMBER_TEST_GROUP" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup3_CUGT_USSD" sessionStorage="Database" sessionLifetime="86400">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sInvited}" action="3">
+          <Attribute name="groupmember" value="${sInviter}" />
+          <Attribute name="index" value="@{switch(${sGroupType}|${sGroupType},FRCUGLG|44819,CUGT2|92106,CUGT3|92123,CUGT4|45072,FRVMESTE|44827)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate terminating="false" conditionEx="#{${dbresult}=0}">
+      <set item="Content" value="Абоненту ${sInvited} отправлено ваше приглашение в группу" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}">
+      <set item="Content" value="Ошибка при проверке состава группы" />
+      <set item="Content" conditionEx="#{${dbresult}=320205}" value="услуга уже подключена" />
+      <set item="Content" conditionEx="#{${dbresult}=320707}" value="у пользователей разные регионы" />
+      <set item="Content" conditionEx="#{${dbresult}=320203}" value="существует открытая заявка" />
+      <set item="Content" conditionEx="#{${dbresult}=320194}" value="операции с группой запрещены" />
+      <set item="Content" conditionEx="#{${dbresult}=320204}" value="у пользователя нет услуги или неизвестный тип группы" />
+      <set item="Content" conditionEx="#{${dbresult}=320191}" value="недостаточно средств" />
+      <set item="Content" conditionEx="#{${dbresult}=320705}" value="достигнут предел числа участников группы" />
+      <set item="Content" conditionEx="#{${dbresult}=320706}" value="пользователь уже включен в другую группу" />
+      <set item="Content" conditionEx="#{${dbresult}=320341}" value="неизвестный номер телефона" />
+      <set item="Content" conditionEx="#{${dbresult}=320347}" value="пользователь находится в блокировке" />
+      <set item="Content" conditionEx="#{${dbresult}=330003}" value="тарифный план приглашающего не позволяет создавать группу" />
+      <set item="Content" conditionEx="#{${dbresult}=330004}" value="тарифный план приглашаемого не позволяет вступать в группу" />
+      <set item="Content" conditionEx="#{${dbresult}=330005}" value="для вступления в группу необходимо сменить тарифный план" />
+      <set item="Content" conditionEx="#{${dbresult}=330006}" value="Не найден тип группы пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330007}" value="Абонент не может изменить группу пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330008}" value="Иностранные клиенты не поддерживаются данным типом группы пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330009}" value="Не найдена группа пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330010}" value="Приглашающий тарифный плана не допускается для этого типа группы пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330011}" value="Номер тарифного плана не допускается для этого типа группы пользователей" />
+      <set item="Content" conditionEx="#{${dbresult}=330012}" value="Минимум числа членов группы была достигнута. Никто не может быть удален" />
+      <set item="Content" conditionEx="#{${dbresult}=330013}" value="Номер может быть добавлены в группу только после приглашения" />
+      <set item="Content" conditionEx="#{${dbresult}=-1}" value="Данный запрос не может быть выполнен." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${sInviter}" />
+      <set item="RegisteredDelivery" value="false" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="CUGSyntaxErrorSMS">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+    </condition>
+    <receiveTemplate>
+      <Message id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Выйти из группы: *5194*0#. Узнать состав: *258*2#" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="CUGSyntaxErrorSMSResp">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+    </condition>
+    <receiveTemplate>
+      <Message id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" />
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input">
+      <set item="Content" value="Ошибка формата" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="CUGTSyntaxError1">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message />
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Создать группу: *258*1*7YYYXXXXXXX#. Выйти из группы: *258*0#. Узнать состав: *258*2#" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="AddToGroup1_TEST_GROUP" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^_TEST_GROUP_INVITE_CODE\*[0-9]{11}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(TEST_GROUP7#{substring('${token1}',string-length('${token1}')-9)})}">
+        <Item customer="${Sender}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+          <Attribute name="grouptype" value="TEST_GROUP" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="У абонента ${sInvited} есть ваше активное приглашение" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="У абонента ${sInvited} есть активное приглашение в другую группу" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" conditionEx="#{'${Customer}'='7#{substring('${session_id}',string-length('${session_id}')-9)}'}">
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Content" value="Номер приглашаемого абонента ${Customer} совпадает с вашим." />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+      <set conditionEx="0@{store(sAlreadyInvited,1)}" />
+      <set conditionEx="0@{store(sInviter,${Customer})}" />
+      <set conditionEx="0@{store(sInvited,7#{substring('${session_id}',string-length('${session_id}')-9)})}" />
+      <set conditionEx="0@{store(sTryCount,1)}" />
+      <set conditionEx="0@{store(sGroupType,${grouptype})}" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="AddToGroup_onClean" sessionStorage="Database">
+    <condition>
+      <test item="0" matches="1" />
+    </condition>
+    <receiveTemplate>
+      <Message id="@{newGuid}" session_id="${SessionId}" />
+    </receiveTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="ListOfGroup_TEST_GROUP">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^_TEST_GROUP_LIST_CODE$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="2">
+          <Attribute name="groupmember" value="0" />
+          <Attribute name="index" value="@{switch(${Content}|-1,_LIST_OPERATION_CODE|3,_DUET_LIST_CODE|4,_TEST_GROUP_LIST_CODE|27)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <template procedureName="DelFromGroup_TEST_GROUP">
+    <condition>
+      <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP$" />
+      <test item="${Content}" matches="^_TEST_GROUP_DEL_CODE$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="customergroup" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+        <Item customer="${Sender}" action="1">
+          <Attribute name="groupmember" value="0" />
+          <Attribute name="index" value="@{switch(${Content}|-1,_DEL_OPERATION_CODE|3,_DUET_DEL_CODE|4,_TEST_GROUP_DEL_CODE|27)}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate direction="input" terminating="false">
+      <set item="Content" value="Ваша заявка принята" />
+      <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
+      <set item="Recipient" value="${Customer}" />
+      <set item="Encoding" value="unicodefffe" />
+    </deliveryTemplate>
+    <deliveryTemplate connector="_SMSCON" />
+  </template>
+  <!--  <template procedureName="TEST_GROUPSyntaxError1"> 
         <condition>
             <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP" />
         </condition>                                    

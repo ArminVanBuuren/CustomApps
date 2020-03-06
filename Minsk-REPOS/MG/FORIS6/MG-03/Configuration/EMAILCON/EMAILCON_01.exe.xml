@@ -1,7 +1,8 @@
 <Application>
   <EmailConnections>
     <!-- <SMTP server="10.128.30.40" port="25" delay="5200">-->
-    <SMTP server="10.128.217.12" port="25" delay="5200">
+    <!--<SMTP server="10.128.217.12" port="25" delay="5200"> -->
+    <SMTP server="1278.0.0.1" port="25" delay="5200">
       <Account from="MTS" />
       <!-- <Account from="MTS" name="mgtw" password="505606" />   -->
     </SMTP>

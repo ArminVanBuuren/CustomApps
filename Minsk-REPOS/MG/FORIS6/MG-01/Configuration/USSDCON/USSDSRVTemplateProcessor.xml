@@ -277,8 +277,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6"/>
-
+          <Service id="guaranteedpayment" action="6" />
         </Item>
         @{store(sContent,#{number(${Content} * 100)})}
       </Message>
@@ -384,7 +383,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Service id="guaranteedpayment" action="6"/>
+          <Service id="guaranteedpayment" action="6" />
         </Item>
         @{store(sContent,#{number(${Content} * 100)})}
       </Message>

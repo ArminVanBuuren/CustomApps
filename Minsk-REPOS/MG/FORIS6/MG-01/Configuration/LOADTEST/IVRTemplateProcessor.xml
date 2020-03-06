@@ -632,10 +632,9 @@
     <output>
       <param name="newpassword" type="1" value="" />
     </output>
-  </template>  
-  <template procedureName="DB_SProcessing" sessionStorage="Database" sessionLifetime="180">    
-    <condition>
-    </condition>
+  </template>
+  <template procedureName="DB_SProcessing" sessionStorage="Database" sessionLifetime="180">
+    <condition />
     <receiveTemplate>
       <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${customer}">

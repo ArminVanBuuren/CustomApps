@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Application configClass="FORIS.MessagingGateway.IVRConnector.IVRConnectorConfiguration" type="IVRCON">
   <IVRServers>
     <MedioListener host="10.128.230.182" port="9994" scp="0x0998" />

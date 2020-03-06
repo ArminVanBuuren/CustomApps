@@ -1,4 +1,4 @@
-﻿<templates connector="SMS">
+<templates connector="SMS">
   <macros>
     <define name="_BMSHND" value="WCFHND_01" />
     <define name="_CRM_BMS_SERVICE_CODE " value="TMTSBONA" />

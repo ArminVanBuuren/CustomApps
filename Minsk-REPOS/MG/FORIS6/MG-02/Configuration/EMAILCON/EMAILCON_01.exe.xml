@@ -18,8 +18,8 @@
     <Item name="FetchLimit" value="70" />
     <Item name="CRMCacheCleanInterval" value="1500" />
     <Item name="SplitBy" value="6000" />
-    <Item name="TempDir" value="..\..\temp" />
-    <Item name="ArchivatorName" value="..\..\rar.exe" />
+    <Item name="TempDir" value="c:\FORIS\Messaging Gateway\temp" />
+    <Item name="ArchivatorName" value="c:\FORIS\Messaging Gateway\rar.exe" />
     <Item name="ArchivatorLine" value="m -v{0}k -ep -m2 {1} {2}" />
     <Item name="StoringInterval" value="10" />
     <Item name="StoringHWM" value="100" />

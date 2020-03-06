@@ -131,6 +131,7 @@
     <Content Include="FORIS6\MG-02\Config\annual_contract\prolongation.xml" />
     <Content Include="FORIS6\MG-02\Config\annual_contract\sms.xml" />
     <Content Include="FORIS6\MG-02\Config\annual_contract\ussd.xml" />
+    <Content Include="FORIS6\MG-02\Config\CallCenter\CallCenter mg2.xml" />
     <Content Include="FORIS6\MG-02\Config\CallCenter\CallCenter.xml" />
     <Content Include="FORIS6\MG-02\Config\closed_user_group\cug_product_id.xml" />
     <Content Include="FORIS6\MG-02\Config\closed_user_group\cug_sms.xml" />
@@ -880,6 +881,7 @@
     <None Include="FORIS6\MG-05\CRMFilter\Dispatcher.exe.config.upgrade" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="FORIS6\MG-02\Config\CallCenter\old\" />
     <Folder Include="PROD-2020.02.06\MG-01\config\get_bms_counters\Backup\" />
     <Folder Include="PROD-2020.02.06\MG-01\dssms\" />
     <Folder Include="PROD-2020.02.06\MG-01\Service Manager\en\" />

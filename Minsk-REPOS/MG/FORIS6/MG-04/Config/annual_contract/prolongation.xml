@@ -1,7 +1,10 @@
-﻿<prolongations>
-	<prolongation ussd_code="6661" sms_code="pro1" ivr_code="1666" prolongation_type="1" service_code="TESTPGK" sms_number="1123345" ussd_number="111" />  <!-- пролонгация без увеличения скидки -->
-	<prolongation ussd_code="6662" sms_code="pro2" ivr_code="2666" prolongation_type="2" service_code="TESTPGK" sms_number="1123345" ussd_number="111" />  <!-- пролонгация с увеличением скидки -->
-	<prolongation ussd_code="6663" sms_code="pro3" ivr_code="3666" prolongation_type="2" service_code="TESTPGK2" sms_number="1123345" ussd_number="111" />  <!-- пролонгация с увеличением скидки -->
-	<prolongation ussd_code="6664" sms_code="pro4" ivr_code="4666" prolongation_type="1" service_code="TESTPGK2" sms_number="1123345" ussd_number="111" />  <!-- пролонгация без увеличения скидки -->
-
+<prolongations>
+  <prolongation ussd_code="6661" sms_code="pro1" ivr_code="1666" prolongation_type="1" service_code="TESTPGK" sms_number="1123345" ussd_number="111" />
+  <!-- пролонгация без увеличения скидки -->
+  <prolongation ussd_code="6662" sms_code="pro2" ivr_code="2666" prolongation_type="2" service_code="TESTPGK" sms_number="1123345" ussd_number="111" />
+  <!-- пролонгация с увеличением скидки -->
+  <prolongation ussd_code="6663" sms_code="pro3" ivr_code="3666" prolongation_type="2" service_code="TESTPGK2" sms_number="1123345" ussd_number="111" />
+  <!-- пролонгация с увеличением скидки -->
+  <prolongation ussd_code="6664" sms_code="pro4" ivr_code="4666" prolongation_type="1" service_code="TESTPGK2" sms_number="1123345" ussd_number="111" />
+  <!-- пролонгация без увеличения скидки -->
 </prolongations>

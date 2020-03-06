@@ -1,4 +1,4 @@
-﻿<gifts>
+<gifts>
   <gift ussdcode="10" bmscode="10min">
     <smscode>мин10</smscode>
     <smscode>10мин</smscode>
@@ -44,33 +44,27 @@
     <smstext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</ussdtext>
   </gift>
-
   <gift ussdcode="2250" bmscode="2250">
     <smscode>2250</smscode>
     <smscode>вау50</smscode>
     <smstext>Спасибо! Ваучер на скидку 50% будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Ваучер на скидку 50% будет подключен в течение суток.</ussdtext>
   </gift>
- 
   <gift ussdcode="50" bmscode="FRMSKPE928">
     <smscode>exp50</smscode>
     <smstext>Спасибо! Услуга Express 50 будет подключена в течение суток.</smstext>
     <ussdtext>Спасибо! Услуга Express 50 будет подключена в течение суток.</ussdtext>
-  </gift> 
-
+  </gift>
   <gift ussdcode="70" bmscode="FRMSKPE930">
     <smscode>exp70</smscode>
     <smstext>Спасибо! Услуга Express 70 будет подключена в течение суток.</smstext>
     <ussdtext>Спасибо! Услуга Express 70 будет подключена в течение суток.</ussdtext>
-  </gift> 
-
+  </gift>
   <gift ussdcode="150" bmscode="FRMSKPE932">
     <smscode>exp150</smscode>
     <smstext>Спасибо! Услуга Express 150 будет подключена в течение суток.</smstext>
     <ussdtext>Спасибо! Услуга Express 150 будет подключена в течение суток.</ussdtext>
-  </gift> 
-
-  
+  </gift>
   <gift ussdcode="21" bmscode="20sms">
     <smscode>смс20</smscode>
     <smscode>20смс</smscode>
@@ -111,9 +105,6 @@
     <smstext>Спасибо! Пакет 500 SMS будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 500 SMS будет подключен в течение суток.</ussdtext>
   </gift>
-
-
-  
   <gift ussdcode="31" bmscode="10mb">
     <smscode>интернет10</smscode>
     <smscode>10интернет</smscode>
@@ -144,9 +135,6 @@
     <smstext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 Mb будет подключен в течение суток.</ussdtext>
   </gift>
-
-
-
   <gift ussdcode="41" bmscode="10mms">
     <smscode>ммс10</smscode>
     <smscode>10ммс</smscode>
@@ -171,7 +159,7 @@
     <smstext>Спасибо! Пакет 60 MMS будет подключен в течение суток.</smstext>
     <ussdtext>Спасибо! Пакет 60 MMS будет подключен в течение суток.</ussdtext>
   </gift>
-   <gift ussdcode="2841367" bmscode="2841367">
+  <gift ussdcode="2841367" bmscode="2841367">
     <smscode>2841367</smscode>
     <smscode>2841367</smscode>
     <smscode>2841367</smscode>
@@ -186,5 +174,5 @@
     <smscode>1187234</smscode>
     <smstext>Спасибо! SMS-информирование по карте «МТС Деньги» будет подключен.</smstext>
     <ussdtext>Спасибо!	SMS-информирование по карте «МТС Деньги» будет подключен.</ussdtext>
-  </gift> 
+  </gift>
 </gifts>
