@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <connection host="10.128.195.130" port="9995" />
-  <routing_label opc="2456" dpc="2440" />
-</settings>

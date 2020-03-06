@@ -879,7 +879,7 @@
    </template>
 
 <!-- CLEEP -->
-   <template procedureName="DB_CleepDecision" handler="DBCON_01">
+   <template procedureName="DB_CleepDecision" handler="DBCON_01" sessionStorage="Memory" sessionLifetime="15">
       <receiveTemplate>
          <Message type="validation" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
             <Item procedureName="BILLING.cleep_decision_making" >

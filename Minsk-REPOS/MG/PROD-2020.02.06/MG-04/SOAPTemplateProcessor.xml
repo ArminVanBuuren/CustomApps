@@ -7,6 +7,65 @@
 	#include "config\Fake\fake.xml"
 	#include "config\CallCenter\CallCenter.xml"
 
+	<!--    MTS_GetCountersSRC             -->
+		<template procedureName="MTS_GetCountersSRC" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+				<Item procedureName="BILLING.mg_auth" >
+					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
+					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
+					<Attribute name="i_method" type="STRING" value="MTS_GetCountersSRC" /> 
+					<Attribute name="o_result" type="STRING" /> 
+					<Attribute name="o_message" type="STRING" /> 
+				</Item>
+				@{store(SRCGetCounterscustomer,${customer})} 
+				@{store(SRCGetCounterssourceid,${sourceid})} 
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="SRCGetCounters" >
+			<set item="iparam:customer" value="${SRCGetCounterscustomer}" /> 
+			<set item="iparam:sourceid" value="${SRCGetCounterssourceid}" /> 
+			<set conditionEx="0@{freeSession}" /> 
+		</deliveryTemplate>	 
+		<deliveryTemplate>
+			<set item="oparam:result_code" value="${o_result}" />
+			<set item="oparam:result_msg" value="${o_message}" />
+		</deliveryTemplate>	
+		<input>
+			<param name="customer" />
+			<param name="sourceid" />
+			<param name="sec_code" />
+		</input>
+		<output>
+			<param name="result_code" />
+			<param name="result_msg" />		
+		</output>
+	</template>		
+	<template procedureName="SRCGetCounters" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
+				<Item procedureName="billing.mg_pack.GetCountersSRC" >
+					<Attribute name="i_customer" type="STRING" value="${customer}" />
+					<Attribute name="i_src" type="STRING" value="${sourceid}" />
+					<Attribute name="i_is_null" type="STRING" value="0" />
+					<Attribute name="Counter" type="CURSOR" /> 
+					<Attribute name="outparam1" type="STRING" />
+					<Attribute name="outparam2" type="INT" /> 
+					<Attribute name="time_request" type="out:DATETIME" />
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:Counters" value="#{NodesetToString(nodeset('${Counter}'))}" />
+		</deliveryTemplate>	
+		<input>
+			<param name="customer" />
+			<param name="sourceid" />
+		</input>
+		<output>
+			<param name="Counters" />
+		</output>
+	</template> 	
 
 	<!-- MTS_SendSMSfromMSISDNNoRezident -->
 	<template procedureName="MTS_SendSMSfromMSISDNNoRezident" handler="DBCON_01">
@@ -3737,67 +3796,7 @@
 		</output>
 	</template> 	
 	
-	<!--    MTS_Check_Sub_Blk_Srv_Memory             -->
-		<template procedureName="MTS_Check_Sub_Blk_Srv_Memory" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item procedureName="BILLING.mg_auth" >
-					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
-					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
-					<Attribute name="i_method" type="STRING" value="MTS_Check_Sub_Blk_Srv_Memory" /> 
-					<Attribute name="o_result" type="STRING" /> 
-					<Attribute name="o_message" type="STRING" /> 
-				</Item>
-				@{store(CheckSubBlkSrvMemorycustomer,${customer})} 
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="CheckSubBlkSrvMemory" >
-			<set item="iparam:customer" value="${CheckSubBlkSrvMemorycustomer}" /> 
-			<set conditionEx="0@{freeSession}" /> 
-		</deliveryTemplate>	 
-		<deliveryTemplate>
-			<set item="oparam:result_code" value="${o_result}" />
-			<set item="oparam:result_msg" value="${o_message}" />
-		</deliveryTemplate>	
-		<input>
-			<param name="customer" />
-			<param name="sourceid" />
-			<param name="sec_code" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />		
-		</output>
-	</template>		
-	<template procedureName="CheckSubBlkSrvMemory" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
-				<Item procedureName="billing.mg_pack.check_sub_blk_srv" >
-					<Attribute name="i_msisdn" type="STRING" value="${customer}" />
-					<Attribute name="o_srv" type="STRING" /> 
-					<Attribute name="o_blk" type="STRING" /> 
-					<Attribute name="o_subscriber" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:Service" condition="//Item/@dbresult='0'" value="${o_srv}" /> 
-			<set item="oparam:Service" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 
-			<set item="oparam:Subscriber" condition="//Item/@dbresult='0'" value="${o_subscriber}" /> 
-			<set item="oparam:Subscriber" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 
-			<set item="oparam:Blocking" condition="//Item/@dbresult='0'" value="${o_blk}" /> 
-			<set item="oparam:Blocking" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 			
-		</deliveryTemplate>	
-		<input>
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="Service" />
-			<param name="Subscriber" />
-			<param name="Blocking" />
-		</output>
-	</template> 		
-	
+
 	<!-- 1c. проверка -->
 	<template procedureName="CustomerDataAndValidation1S" handler="DBCON_01">
 		<receiveTemplate>

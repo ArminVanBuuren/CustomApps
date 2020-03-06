@@ -1,0 +1,767 @@
+﻿<plugin name="DBAdapter">
+	<Connections>
+		<Handler name="db" type="OracleClient" connectionString="Server=crm;User ID=cust;Password=xa2qJliGe4y;Min Pool size=20"/> 
+	</Connections>
+	<ThreadPooling use="true" forwarding="true" minThreads="50" />
+	<Procedures>
+<!--  S O A P -->
+
+
+<!-- DMS order -->
+		<Procedure	cond="/Message/@type='DB_DMS_order'"
+			call="billing.DMS_REQ" using="db" >
+			<Parameters>
+				<param name="customer" type="string" value="${customer}"/>
+				<param name="rez" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="veryficationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${rez}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- check Alarm -->
+		<Procedure	cond="/Message/@type='DB_checkAlarm'"
+			call="billing.DB_ChangeAnnID" using="db" >
+			<Parameters>
+				<param name="serv" type="string" value="${service}"/>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="annid" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="veryficationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item annid="${annid}" dbresult="${dbresult}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- new port number for 0890 -->
+		<Procedure	cond="/Message/@type='DB_IVR_PortingNumber'"
+			call="billing.DB_IVR_PortingNumber" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="dbresult" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="veryficationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- Guest TP Champ number for 0890 -->
+		<Procedure	cond="/Message/@type='DB_IVR_Guest_TP'"
+			call="billing.DB_IVR_Guest_TP" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="dbresult" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="veryficationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- balance -->
+		<Procedure	cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='balance' and /Message/Item/@datasource='state' and /Message/@initiator='soapcon'"
+			call="billing.lll_dpi_balance" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_balance_str" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${p_balance_str}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- balance_2 -->
+		<Procedure	cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='balance_2' and /Message/Item/@datasource='state' and /Message/@initiator='soapcon'"
+			call="billing.SMS_GET_BALANS" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="rez" type="out:string" value=""/>				
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" rez="${rez}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>			
+		
+<!-- GetServices -->
+		<Procedure	cond="/Message/@type='service_GET' and /Message/@initiator='soapcon'"
+			call="billing.lll_dpi_service" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_serv_str" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${p_serv_str}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- Get PA by MSISDN for KMR -->
+		<Procedure	cond="/Message/@type='DB_IVR_AutoCall_KMR'"
+			call="billing.DB_IVR_AutoCall_KMR" using="db" >
+			<Parameters>
+				<param name="mob_num" type="string" value="${customer}"/>
+				<param name="res" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${res}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+<!-- 0890 3G connect -->
+		<Procedure	cond="/Message/@type='DB_Check_3g'"
+			call="billing.mg_is_gprs_srv" using="db" >
+			<Parameters>
+				<param name="mob_num" type="string" value="${customer}"/>
+				<param name="dbresult" type="out:string" value=""/>			
+			</Parameters>
+			<SendTemplate>
+				<Message type="verificationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" result="${dbresult}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+
+<!-- 0890 Personal Manager for VIP -->
+		<Procedure	cond="/Message/@type='DB_Check_PM'"
+			call="billing.lll_pers_m_for_absolut" using="db" >
+			<Parameters>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="is_prov" type="string" value="${is_provision}"/>
+				<param name="dbrez" type="out:string" value=""/>				
+			</Parameters>
+			<SendTemplate>
+				<Message type="verificationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbrez}" result="${dbrez}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- 0890 kodovoe slovo  -->
+		<Procedure	cond="/Message/@type='DB_Check_code_sword'"
+			call="billing.mg_get_code_wr" using="db" >
+			<Parameters>
+				<param name="mob_num" type="string" value="${customer}"/>
+				<param name="code_w" type="out:string" value=""/>				
+			</Parameters>
+			<SendTemplate>
+				<Message type="verificationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="0" result="${code_w}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- 0890 IVR Track -->
+		<Procedure	cond="/Message/@type='DB_IVR_Track'"
+			call="billing.DB_IVR_Track" using="db" >
+			<Parameters>
+				<param name="orig_number" type="string" value="${customer}"/>
+				<param name="CP" type="string" value="${CallProcess}"/>
+				<param name="Track" type="string" value="${Track}"/>
+				<param name="Dialled" type="string" value="${Dialled}"/>
+				<param name="param" type="string" value="${Added_param}"/>
+				<param name="dbresult" type="out:string" value=""/>				
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" result="${dbresult}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+
+<!-- 0990 -->
+		<Procedure	cond="/Message/@type='DB_0990'"
+			call="billing.lll_ivr_0990" using="db" >
+			<Parameters>
+				<param name="mob_num" type="string" value="${customer}"/>
+				<param name="pr" type="out:string" value=""/>			
+			</Parameters>
+			<SendTemplate>
+				<Message type="verificationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${pr}" result="${pr}">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+		
+		<Procedure	cond="(	
+					/Message/Item/Service/@service_id='FR511001' or
+					/Message/Item/Service/@service_id='FR1960' or
+					/Message/Item/Service/@service_id='FR300' or					
+					/Message/Item/Service/@service_id='FR5618' or					
+					/Message/Item/Service/@service_id='FR2040' or						
+					/Message/Item/Service/@service_id='FR5595' or						
+					/Message/Item/Service/@service_id='FR5664' or					
+					/Message/Item/Service/@service_id='CB410153' or
+				       /Message/Item/Service/@service_id='CB108') and 
+				       /Message/Item/Service/@action='2' and /Message/@initiator='soapcon'" 
+					call="BILLING.add_close_srv_req.add_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${src}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" msg="${reply}">
+						<Service id="${service_id}" >
+					        	<Attribute name="state" value="0" />
+					        	<Attribute name="ischarged" value="0" />
+    						</Service>
+  					</Item>				
+				</Message>
+			</SendTemplate>
+		</Procedure>
+		
+		<Procedure	cond="(
+					/Message/Item/Service/@service_id='FR511001' or
+					/Message/Item/Service/@service_id='FR1960' or
+					/Message/Item/Service/@service_id='FR300' or					
+					/Message/Item/Service/@service_id='FR5618' or					
+					/Message/Item/Service/@service_id='FR2040' or						
+					/Message/Item/Service/@service_id='FR5595' or						
+					/Message/Item/Service/@service_id='FR5664' or					
+					/Message/Item/Service/@service_id='CB410153' or
+				       /Message/Item/Service/@service_id='CB108') and 
+				       /Message/Item/Service/@action='3' and /Message/@initiator='soapcon'" 
+					call="BILLING.add_close_srv_req.del_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${src}"/>
+				<param name="d_end" type="string" value="0" /> 
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" msg="${reply}">
+						<Service id="${service_id}" >
+					        	<Attribute name="state" value="0" />
+					        	<Attribute name="ischarged" value="0" />
+    						</Service>
+  					</Item>				
+				</Message>
+			</SendTemplate>
+		</Procedure>		
+		<Procedure	cond="/Message/@type='get_counters' and /Message/@initiator='soapcon'" 
+					call="billing.lll_dpi_counters" using="db" >
+			<Parameters>
+				<param name="counters_out" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" msg="${counters_out}">
+  					</Item>				
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+		
+<!-- DB_PayMentRetriew -->
+
+		<Procedure	cond="/Message/@type='paymentretriew' and /Message/Item/@datasource='state' " 
+					call="billing.enin_DB_PaymentRetriev" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_count" type="out:string" value=""/>
+				<param name="p_am1" type="out:string" value=""/>
+				<param name="p_dt1" type="out:string" value=""/>
+				<param name="p_am2" type="out:string" value=""/>
+				<param name="p_dt2" type="out:string" value=""/>
+				<param name="p_am3" type="out:string" value=""/>
+				<param name="p_dt3" type="out:string" value=""/>
+				<param name="p_am4" type="out:string" value=""/>
+				<param name="p_dt4" type="out:string" value=""/>
+				<param name="p_am5" type="out:string" value=""/>
+				<param name="p_dt5" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="paymentretriewresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="active">
+						<Attribute name="count" value="${p_count}"/>
+						<Attribute name="payment1" value="${p_am1}"/>
+						<Attribute name="payment2" value="${p_am2}"/>
+						<Attribute name="payment3" value="${p_am3}"/>
+						<Attribute name="payment4" value="${p_am4}"/>
+						<Attribute name="payment5" value="${p_am5}"/>
+						<Attribute name="date1" value="${p_dt1}"/>
+						<Attribute name="date2" value="${p_dt2}"/>
+						<Attribute name="date3" value="${p_dt3}"/>
+						<Attribute name="date4" value="${p_dt4}"/>
+						<Attribute name="date5" value="${p_dt5}"/>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>		
+
+<!-- TP_prechange_check -->
+
+		<Procedure	cond="/Message/@type='TP_prechange_check'" 
+					call="BILLING.lll_ussd_p_ch_tp" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="result_str" type="out:string" value=""/>
+				<param name="num" type="string" value="${customer}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="check_result" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" result="${result_str}">					
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+
+		<Procedure	cond="/Message/@type='retrievecustomerdata' and /Message/Item/@subject='balance' and /Message/Item/@datasource='state'" 
+					call="BILLING.GET_BALL_IVR_190207" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_Balance" type="out:string" value=""/>
+				<param name="p_Accum1" type="out:string" value=""/>
+				<param name="p_Accum2" type="out:string" value=""/>
+				<param name="p_Accum3" type="out:string" value=""/>
+				<param name="p_disconnectiontime" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="retrievecustomerdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="active">
+						<Attribute name="balanceintpartdotpart" value="${p_Balance}"/>
+						<Attribute name="accumulator1" value="${p_Accum1}"/>
+						<Attribute name="accumulator2" value="${p_Accum2}"/>
+						<Attribute name="accumulator3" value="${p_Accum3}"/>
+						<Attribute name="disconnectiontime" value="${p_disconnectiontime}"/>						
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+
+		<Procedure	cond="/Message/@type='verificationrequest' and /Message/Item/@datasource='state'" 
+					call="billing.mg_get_validation_for_ivr" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_Tariffplan" type="out:string" value=""/>
+				<param name="p_State" type="out:string" value=""/>
+				<param name="p_Password" type="out:string" value=""/>
+				<param name="p_Regioncode" type="out:string" value=""/>
+				<param name="p_tp_name" type="out:string" value=""/>
+				<param name="p_check_password" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_cost" type="out:string" value=""/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="verificationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" Tariffplan="${p_Tariffplan}" tp_name="${p_tp_name}" State="${p_State}" check="${p_check_password}" cost="${p_cost}">
+						<Attribute name="Password" value="${p_Password}"/>
+						<Attribute name="customer_info" value="${p_Regioncode}"/>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+		<Procedure	cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment' and /Message/Item/Service/@action='9'" 
+					call="billing.mg_deact_op" using="db" >
+			<Parameters>
+				<param name="mob_num" type="string" value="${customer}"/>
+				<param name="dbresult" type="out:string" value=""/>		
+			</Parameters>
+			<SendTemplate>
+				<Message type="retrievecustomerdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="0">
+					<Service id="guaranteedpayment" resultcode="0">
+					</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+		<Procedure	cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment' and /Message/Item/Service/@action='6'" 
+					call="BILLING.IS_PAY_CLAIMED" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_Allowed" type="out:string" value="0"/>
+				<param name="p_Pending" type="out:string" value="0"/>
+				<param name="p_Maximumusd" type="out:string" value=""/>
+				<param name="p_Maximumrur" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_msisdn_o" type="out:string" value=""/>  <!-- p_msisdn_o number customer from IMSI -->
+				<param name="p_source" type="string" value="9"/>
+				<param name="p_pending_str" type="out:string" value="0"/>
+				<param name="p_addon" type="string" value="0"/>				
+			</Parameters>
+			<SendTemplate>
+				<Message type="retrievecustomerdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="0">
+					<Service id="guaranteedpayment" resultcode="0">
+						<Attribute name="allowed" value="${p_Allowed}" />
+						<Attribute name="pending" value="${p_Pending}" />
+						<Attribute name="maximumusd" value="${p_Maximumusd}" />
+						<Attribute name="maximumrur" value="${p_Maximumrur}" />
+					</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+
+		<Procedure	cond="/Message/@type='serviceorder' and /Message/Item/Service/@id='guaranteedpayment' 
+					and /Message/Item/@datasource='state' and /Message/Item/Service/@action='7'" 
+					call="BILLING.mg_add_pay_claimed" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_Allowed" type="out:string" value="0"/>
+				<param name="p_Amount" type="out:string" value="0"/>
+				<param name="p_Currency" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_sum" type="string" value="${amount}"/>
+				<param name="p_curr" type="string" value="${currency}"/>
+				<param name="p_source" type="string" value="${init}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="0">
+					<Service id="guaranteedpayment" resultcode="0">
+						<Attribute name="allowed" value="${p_Allowed}" />
+						<Attribute name="amount" value="${p_Amount}" />
+						<Attribute name="currency" value="${p_Currency}" />
+					</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+ <!--              <Procedure	cond="/Message/@type='Del_internight'" 
+					call="billing.enin_del_srv_any" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="FR107700"/>
+				<param name="source" type="string" value="9"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+  					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+    						<Service id="FR107700" resultcode="0">
+      							<Attribute name="state" value="0" />
+      							<Attribute name="ischarged" value="0" />
+    						</Service>
+  					</Item>
+				</Message>			
+			</SendTemplate>
+		</Procedure>
+-->
+
+                <Procedure	cond="/Message/@type='serviceinterrogation' and /Message/Item/@datasource='state'" call="BILLING.mg_serviceinterrogation" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="p_Allowed" type="out:string" value="0"/>
+				<param name="p_Subscription" type="out:string" value="0"/>
+				<param name="p_Status" type="out:string" value="0"/>
+				<param name="p_Class" type="out:string" value="0"/>
+				<param name="p_ChargedAmount" type="out:string" value="-1"/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="p_service" type="string" value="${service}"/>
+			</Parameters>
+			<SendTemplate>				
+				<Message type="serviceinterrogationresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" state="0">
+    						<Service id="${service}" resultcode="0">
+							<Attribute name="allowed" value="${p_Allowed}" />
+							<Attribute name="subscription" value="${p_Subscription}" />
+							<Attribute name="status" value="${p_Status}" />
+							<Attribute name="class" value="${p_Class}" />
+							<Attribute name="chargedamount" value="${p_ChargedAmount}" />
+ 						</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- закрыто можно удалить -->
+<!-- Добавление услуг
+
+		<Procedure	cond="/Message/@type='AddService'" 
+					call="BILLING.enin_add_srv_any_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${service_init_source}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" reply = "${reply}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>	
+
+		-->	
+
+<!-- Удаление услуг 
+
+
+		<Procedure	cond="/Message/@type='DelService'" 
+					call="BILLING.enin_del_srv_any_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${service_init_source}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" reply = "${reply}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>  
+              
+за ненадобностью -->
+
+<Procedure	cond="/Message/@type='Add_Service'" 
+					call="BILLING.add_close_srv_req.add_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${source}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Attribute name="dbresult" value="${ret_code}"/>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<Procedure	cond="/Message/@type='Del_Service'" 
+					call="BILLING.add_close_srv_req.del_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="${source}"/>
+				<param name="d_end" type="string" value="${time}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Attribute name="dbresult" value="${ret_code}" />
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- Добавление смс-роуминг  -->	
+<Procedure	cond="/Message/@type='serviceorder' and /Message/Item/Service/@action='0' and /Message/Item/Service/@service_id='CB403864' " 
+					call="BILLING.lll_add_sms_rouning" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="9"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Service id="${service_id}" resultcode="0">
+							<Attribute name="state" value="0" />
+							<Attribute name="ischarged" value="0" />
+						</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>		
+
+<!-- Dobavlenie uslug serviceorder IVR-->
+<Procedure	
+cond="
+(/Message/Item/Service/@service_id='SCP1005' or
+/Message/Item/Service/@service_id='FR511001' or
+/Message/Item/Service/@service_id='FR5570' or
+/Message/Item/Service/@service_id='FR5571' or
+/Message/Item/Service/@service_id='FR5572' or
+/Message/Item/Service/@service_id='FR669' or 
+/Message/Item/Service/@service_id='FR670' or 
+/Message/Item/Service/@service_id='FR671' or 
+/Message/Item/Service/@service_id='FR633' or 
+/Message/Item/Service/@service_id='FR634' or 
+/Message/Item/Service/@service_id='FR733' or
+/Message/Item/Service/@service_id='CB123' or 
+/Message/Item/Service/@service_id='CB403864' or 
+/Message/Item/Service/@service_id='CB412736' or 
+/Message/Item/Service/@service_id='CB412737' or 
+/Message/Item/Service/@service_id='CB412738' or 
+/Message/Item/Service/@service_id='FR665' or  
+/Message/Item/Service/@service_id='FR666' or 
+/Message/Item/Service/@service_id='FR667' or 
+/Message/Item/Service/@service_id='FR668' or
+/Message/Item/Service/@service_id='FR722' or
+/Message/Item/Service/@service_id='FR1960' or
+/Message/Item/Service/@service_id='FR107700' ) and 
+/Message/Item/Service/@action='0' " 
+					call="BILLING.add_close_srv_req.add_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="9"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Service id="${service_id}" resultcode="0">
+					        	<Attribute name="state" value="0" />
+					        	<Attribute name="ischarged" value="0" />
+    						</Service>
+  					</Item>				
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- Udalenie uslug serviceorder koncom mesiaca SMS--> 
+<Procedure	
+cond="
+(/Message/Item/Service/@service_id='CB412736' or
+/Message/Item/Service/@service_id='CB412737' or
+/Message/Item/Service/@service_id='CB412738' or
+/Message/Item/Service/@service_id='FR5571' or
+/Message/Item/Service/@service_id='FR5572' or
+/Message/Item/Service/@service_id='FR5573' or
+/Message/Item/Service/@service_id='FR634' or
+/Message/Item/Service/@service_id='FR669' or
+/Message/Item/Service/@service_id='FR670' or
+/Message/Item/Service/@service_id='FR671' or
+/Message/Item/Service/@service_id='FR633' or 
+/Message/Item/Service/@service_id='FR733' or 
+/Message/Item/Service/@service_id='CB412736' or 
+/Message/Item/Service/@service_id='CB412737' or 
+/Message/Item/Service/@service_id='CB412738' or 
+/Message/Item/Service/@service_id='FR665' or  
+/Message/Item/Service/@service_id='FR666' or 
+/Message/Item/Service/@service_id='FR667' or 
+/Message/Item/Service/@service_id='FR668' or 
+/Message/Item/Service/@service_id='FR664004' or 
+/Message/Item/Service/@service_id='FR664005' or 
+/Message/Item/Service/@service_id='FR664006' or 
+/Message/Item/Service/@service_id='FR1960' or 
+/Message/Item/Service/@service_id='FR107700') and
+/Message/Item/Service/@action='1'" 
+					call="BILLING.add_close_srv_req.del_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="9"/>
+				<param name="d_end" type="string" value="1"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Service id="${service_id}" resultcode="0">
+					        	<Attribute name="state" value="0" />
+					        	<Attribute name="ischarged" value="0" />
+    						</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+<!-- Udalenie uslug serviceorder tekuschim dnem SMS--> 
+<Procedure	
+cond="
+(/Message/Item/Service/@service_id='SCP1005' or
+/Message/Item/Service/@service_id='CB123' or 
+/Message/Item/Service/@service_id='FR511001') and
+/Message/Item/Service/@action='1'" 
+					call="BILLING.add_close_srv_req.del_srv_req" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="ret_code" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+				<param name="srv_del_str" type="string" value="${service_id}"/>
+				<param name="source" type="string" value="9"/>
+				<param name="d_end" type="string" value="0"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${ret_code}" state="0">
+						<Service id="${service_id}" resultcode="0">
+					        	<Attribute name="state" value="0" />
+					        	<Attribute name="ischarged" value="0" />
+    						</Service>
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+		<Procedure	cond="/Message/@type='Cost_customer' and /Message/Item/@datasource='state'" 
+					call="BILLING.mg_get_tsennost" using="db" >
+			<Parameters>
+				<param name="dbresult" type="out:string" value=""/>
+				<param name="reply" type="out:string" value=""/>
+				<param name="p_msisdn" type="string" value="${customer}"/>
+			</Parameters>
+			<SendTemplate>
+				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
+					<Item customer="${customer}" dbresult="${dbresult}" reply = "${reply}" state="0">
+					</Item>
+				</Message>
+			</SendTemplate>
+		</Procedure>
+
+	</Procedures>
+</plugin>
