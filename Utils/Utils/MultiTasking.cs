@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using Utils.CollectionHelper;
 
 namespace Utils
@@ -187,7 +184,7 @@ namespace Utils
 
         public override string ToString()
         {
-            return this.GetType().ToString();
+            return GetType().ToString();
         }
     }
 
