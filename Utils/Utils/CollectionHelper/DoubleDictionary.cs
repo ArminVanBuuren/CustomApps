@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Utils.CollectionHelper
 {
     [Serializable]
-    public class DoubleDictionary<TKey, TValue> : IDictionary, ISerializable, IDisposable
+    public class DoubleDictionary<TKey, TValue> : IDictionary<TKey, List<TValue>>, IDictionary, ISerializable, IDisposable
     {
         object _syncRoot = new object();
         readonly Dictionary<TKey, List<TValue>> _values;
@@ -186,6 +187,24 @@ namespace Utils.CollectionHelper
         ICollection IDictionary.Keys => (ICollection) Keys;
 
         ICollection IDictionary.Values => Values.ToList();
+
+        ICollection<TKey> IDictionary<TKey, List<TValue>>.Keys
+        {
+            get
+            {
+                lock (_syncRoot)
+                    return _values.Keys;
+            }
+        }
+
+        ICollection<List<TValue>> IDictionary<TKey, List<TValue>>.Values
+        {
+            get
+            {
+                lock (_syncRoot)
+                    return _values.Values;
+            }
+        }
 
         /// <summary>
         /// Добавляет значения в имеющийся ключ, любо создает новую запись
