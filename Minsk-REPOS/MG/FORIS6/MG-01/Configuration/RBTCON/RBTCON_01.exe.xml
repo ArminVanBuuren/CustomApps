@@ -28,8 +28,8 @@
     <Connection host="localhost" port="5000" systemType="rbt" systemId="mg" pass="mg" />
   </SMSCenters>
   <Anumbertransformations />
-  <TemplateProcessors defaultConfig="RBTTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="RBTTemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="RBTTemplateProcessor.01.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="RBTTemplateProcessor.01.xml" />
   </TemplateProcessors>
   <Encodings>
     <Table name="iso-8859-1" encoding="0" />

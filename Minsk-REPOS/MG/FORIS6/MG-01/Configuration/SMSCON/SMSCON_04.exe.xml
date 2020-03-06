@@ -33,8 +33,8 @@
     <Connection host="localhost" port="900" systemId="tolya" pass="uit" />
   </SMSCenters>
   <Anumbertransformations />
-  <TemplateProcessors defaultConfig="SMSTestTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTestTemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="SMSTemplateProcessor.TEST.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor.TEST.xml" />
   </TemplateProcessors>
   <blackList propertyName="Sender" regExpBan="^666$">
     <Ban>999999999</Ban>

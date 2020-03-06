@@ -29,8 +29,8 @@
     <!--Connection host="172.24.224.6" port="900" systemId="testuit" pass="uit" /-->
     <Connection host="localhost" port="900" systemId="testuit" pass="uit" />
   </SMSCenters>
-  <TemplateProcessors defaultConfig="USSDTestTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTestTemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="USSDTemplateProcessor.TEST.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor.TEST.xml" />
   </TemplateProcessors>
   <Encodings>
     <Table name="ascii" encoding="0" />

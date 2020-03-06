@@ -30,7 +30,7 @@
     <Item name="NumberOfSenders" value="40" />
     <Item name="RegisteredDelivery" value="false" />
   </Settings>
-  <TemplateProcessors defaultConfig="EmailTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="EmailTemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="EmailTemplateProcessor.01.xml">
+    <Processor dll="DefaultTemplates.dll" class="EmailTemplateProcessor" config="EmailTemplateProcessor.01.xml" />
   </TemplateProcessors>
 </Application>

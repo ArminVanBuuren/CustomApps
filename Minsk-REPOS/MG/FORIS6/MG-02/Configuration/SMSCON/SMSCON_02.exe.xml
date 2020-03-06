@@ -31,8 +31,8 @@
     <Connection host="localhost" port="900" systemId="forismg2" pass="r45gA2eC5" />
   </SMSCenters>
   <Anumbertransformations />
-  <TemplateProcessors defaultConfig="SMSTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMS2TemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="SMSTemplateProcessor.01.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor.02.xml" />
   </TemplateProcessors>
   <blackList propertyName="Sender" regExpBan="^666$">
     <Ban>999999999</Ban>

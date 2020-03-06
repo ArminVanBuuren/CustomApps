@@ -9,7 +9,7 @@
   <IVRServers>
     <MedioListener host="" port="9992" scp="0x0988" />
   </IVRServers>
-  <TemplateProcessors defaultConfig="IVRTemplateProcessor.xml">
+  <TemplateProcessors defaultConfig="IVRTemplateProcessor.01.xml">
     <Processor dll="DefaultTemplates.dll" class="IVRTemplateProcessor" />
   </TemplateProcessors>
 </Application>

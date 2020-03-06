@@ -29,8 +29,8 @@
     <!--Connection host="172.24.224.6" port="900" systemId="srvHypernet2" pass="hyper2" /-->
     <Connection host="localhost" port="900" systemId="srvHypernet2" pass="hyper2" />
   </SMSCenters>
-  <TemplateProcessors defaultConfig="USSDSRVTemplateProcessor.xml">
-    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDSRVTemplateProcessor.xml" />
+  <TemplateProcessors defaultConfig="USSDTemplateProcessor.SRV.xml">
+    <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor.SRV.xml" />
   </TemplateProcessors>
   <Encodings>
     <Table name="ascii" encoding="0" />
