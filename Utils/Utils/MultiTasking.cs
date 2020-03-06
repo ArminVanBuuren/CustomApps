@@ -11,30 +11,164 @@ using Utils.CollectionHelper;
 namespace Utils
 {
     [Serializable]
-    public class MTFuncCallBackList<TSource, TResult>
+    public class MTActionResult : MultiTaskingResult<Action, bool>
     {
-        private readonly DoubleDictionary<TSource, MTFuncCallBack<TSource, TResult>> _values;
-        internal MTFuncCallBackList(int capacity = 4)
+        public override event EventHandler IsCompeted;
+        public MTActionResult(IEnumerable<Action> actions, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
         {
-            _values = new DoubleDictionary<TSource, MTFuncCallBack<TSource, TResult>>(capacity);
+            Source = actions;
+            Result = new MTCallBackList<Action, bool>(actions.Count());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            MultiTasking.Run(Source, CallBack, MaxThreads, CancelToken.Token);
+            IsCompeted?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    [Serializable]
+    public class MTActionResult<TSource> : MultiTaskingResult<TSource, bool>
+    {
+        public override event EventHandler IsCompeted;
+        private Action<TSource> _action;
+        public MTActionResult(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        {
+            _action = action;
+            Source = data;
+            Result = new MTCallBackList<TSource, bool>(data.Count());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            MultiTasking.Run(_action, Source, CallBack, MaxThreads, CancelToken.Token);
+            IsCompeted?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    [Serializable]
+    public class MTFuncResult<TResult> : MultiTaskingResult<Func<TResult>, TResult>
+    {
+        public override event EventHandler IsCompeted;
+        public MTFuncResult(IEnumerable<Func<TResult>> funcs, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        {
+            Source = funcs;
+            Result = new MTCallBackList<Func<TResult>, TResult>(funcs.Count());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            MultiTasking.Run(Source, CallBack, MaxThreads, CancelToken.Token);
+            IsCompeted?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    [Serializable]
+    public class MTFuncResult<TSource, TResult> : MultiTaskingResult<TSource, TResult>
+    {
+        public override event EventHandler IsCompeted;
+        private Func<TSource, TResult> _func;
+        public MTFuncResult(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        {
+            _func = func;
+            Source = data;
+            Result = new MTCallBackList<TSource, TResult>(data.Count());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            MultiTasking.Run(_func, Source, CallBack, MaxThreads, CancelToken.Token);
+            IsCompeted?.Invoke(this, EventArgs.Empty);
+        }
+    }
+    
+    [Serializable]
+    public abstract class MultiTaskingResult<TSource, TResult>
+    {
+        public abstract event EventHandler IsCompeted;
+        public int MaxThreads { get; }
+        public int MillisecondsDalay { get; }
+        public IEnumerable<TSource> Source { get; protected set; }
+        public MTCallBackList<TSource, TResult> Result { get; protected set; }
+        public bool IsComplete => Source.Count() == Result.Values.Count();
+        public int PercentOfComplete => (Result.Values.Count() * 100) / Source.Count();
+        protected CancellationTokenSource CancelToken { get; private set; }
+
+        protected MultiTaskingResult(int maxThreads, int millisecondsDalay)
+        {
+            MaxThreads = maxThreads;
+            MillisecondsDalay = millisecondsDalay;
+        }
+
+        public async Task StartAsync()
+        {
+            await Task.Factory.StartNew(Start);
+        }
+
+        public virtual void Start()
+        {
+            Result.Clear();
+            CancelToken = new CancellationTokenSource();
+
+            if (MillisecondsDalay > 0)
+                CancelToken.CancelAfter(MillisecondsDalay);
+        }
+
+        protected void CallBack(MTCallBack<TSource, TResult> result)
+        {
+            Result.Add(result);
+        }
+
+        public void Stop()
+        {
+            CancelToken?.Cancel();
+        }
+
+        public override string ToString()
+        {
+            return $"IsComplete=[{IsComplete}] PercentOfComplete={PercentOfComplete}";
+        }
+    }
+
+    [Serializable]
+    public class MTCallBackList<TSource, TResult>
+    {
+        private readonly DoubleDictionary<TSource, MTCallBack<TSource, TResult>> _values;
+
+        public int Count => _values.Count;
+        public IEnumerable<TSource> Keys => _values.Keys;
+        public IEnumerable<MTCallBack<TSource, TResult>> Values => _values.Values;
+
+        internal MTCallBackList(int capacity = 4)
+        {
+            _values = new DoubleDictionary<TSource, MTCallBack<TSource, TResult>>(capacity);
         }
 
         internal void Add(TSource source, TResult result)
         {
-            Add(new MTFuncCallBack<TSource, TResult>(source, result));
+            Add(new MTCallBack<TSource, TResult>(source, result));
         }
 
-        internal void Add(TSource source, Exception exception)
+        internal void Add(TSource source, Exception error)
         {
-            Add(new MTFuncCallBack<TSource, TResult>(source, exception));
+            Add(new MTCallBack<TSource, TResult>(source, error));
         }
 
-        internal void Add(MTFuncCallBack<TSource, TResult> item)
+        internal void Add(MTCallBack<TSource, TResult> item)
         {
             _values.Add(item.Source, item);
         }
 
-        public bool TryGetValue(TSource source, out List<MTFuncCallBack<TSource, TResult>> value)
+        internal void Clear()
+        {
+            _values.Clear();
+        }
+
+        public bool TryGetValue(TSource source, out List<MTCallBack<TSource, TResult>> value)
         {
             if (_values.TryGetValue(source, out var res))
             {
@@ -46,11 +180,7 @@ namespace Utils
             return false;
         }
 
-        public int Count => _values.Count;
-        public IEnumerable<TSource> Keys => _values.Keys;
-        public IEnumerable<MTFuncCallBack<TSource, TResult>> Values => _values.Values;
-
-        public IEnumerator<KeyValuePair<TSource, List<MTFuncCallBack<TSource, TResult>>>> GetEnumerator()
+        public IEnumerator<KeyValuePair<TSource, List<MTCallBack<TSource, TResult>>>> GetEnumerator()
         {
             return _values.GetEnumerator();
         }
@@ -62,121 +192,55 @@ namespace Utils
     }
 
     [Serializable]
-    public class MTFuncCallBack<TSource, TResult>
+    public class MTCallBack<TSource, TResult>
     {
-        internal MTFuncCallBack(TSource source, TResult result)
+        public TSource Source { get; }
+        public TResult Result { get; }
+        public Exception Error { get; internal set; }
+
+        internal MTCallBack(TSource source, TResult result)
         {
-            IsSuccess = true;
             Source = source;
             Result = result;
         }
 
-        internal MTFuncCallBack(TSource source, Exception error)
+        internal MTCallBack(TSource source, Exception error)
         {
-            IsSuccess = false;
             Source = source;
             Error = error;
         }
 
-        public bool IsSuccess { get; }
-        public TSource Source { get; }
-        public TResult Result { get; }
-        public Exception Error { get; }
-
         public override string ToString()
         {
-            return IsSuccess ? Result.ToString() : Error.Message;
+            return Error == null ? $"{Source}=[{Result}]" : Error.Message;
         }
     }
 
-    [Serializable]
-    public class MTActionCallBackList<TSource>
+    public class MTCallbackTimeoutException : Exception
     {
-        private readonly DoubleDictionary<TSource, MTActionCallBack<TSource>> _values;
-        internal MTActionCallBackList(int capacity = 4)
+        public MTCallbackTimeoutException():base("Exception when wait callback.")
         {
-            _values = new DoubleDictionary<TSource, MTActionCallBack<TSource>>(capacity);
+
         }
-
-        internal void Add(TSource source)
+        public MTCallbackTimeoutException(Exception ex) : base("Exception when wait callback.", ex)
         {
-            Add(new MTActionCallBack<TSource>(source));
-        }
 
-        internal void Add(TSource source, Exception exception)
-        {
-            Add(new MTActionCallBack<TSource>(source, exception));
-        }
-
-        internal void Add(MTActionCallBack<TSource> item)
-        {
-            _values.Add(item.Source, item);
-        }
-
-        public bool TryGetValue(TSource source, out List<MTActionCallBack<TSource>> value)
-        {
-            if (_values.TryGetValue(source, out var res))
-            {
-                value = res;
-                return true;
-            }
-
-            value = null;
-            return false;
-        }
-
-        public int Count => _values.Count;
-        public IEnumerable<TSource> Keys => _values.Keys;
-        public IEnumerable<MTActionCallBack<TSource>> Values => _values.Values;
-
-        public IEnumerator<KeyValuePair<TSource, List<MTActionCallBack<TSource>>>> GetEnumerator()
-        {
-            return _values.GetEnumerator();
-        }
-
-        public override string ToString()
-        {
-            return this.GetType().ToString();
-        }
-    }
-
-    [Serializable]
-    public class MTActionCallBack<TSource>
-    {
-        internal MTActionCallBack(TSource source)
-        {
-            IsSuccess = true;
-            Source = source;
-        }
-
-        internal MTActionCallBack(TSource source, Exception error)
-        {
-            IsSuccess = false;
-            Source = source;
-            Error = error;
-        }
-
-        public bool IsSuccess { get; }
-        public TSource Source { get; }
-        public Exception Error { get; }
-
-        public override string ToString()
-        {
-            return IsSuccess ? Source.ToString() : Error.Message;
         }
     }
 
     public class MultiTasking
     {
-        public static async Task<MTActionCallBackList<Action>> RunAsync(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
+        public const int CallbackTimeout = 1000;
+
+        public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            return await Task<MTActionCallBackList<Action>>.Factory.StartNew(() => Run(actions, maxThreads, cancel));
+            return await Task<MTCallBackList<Action, bool>>.Factory.StartNew(() => Run(actions, maxThreads, cancel));
         }
 
-        public static MTActionCallBackList<Action> Run(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
+        public static MTCallBackList<Action, bool> Run(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_1_{actions.GetHashCode() + 3}");
-            var result = new MTActionCallBackList<Action>(actions.Count());
+            var result = new MTCallBackList<Action, bool>(actions.Count());
             var listOfTasks = new List<Task>();
 
             foreach (var action in actions)
@@ -196,7 +260,7 @@ namespace Utils
 
                         inputAction.Invoke();
 
-                        result.Add(inputAction);
+                        result.Add(inputAction,true);
                     }
                     catch (Exception ex)
                     {
@@ -213,59 +277,25 @@ namespace Utils
             return result;
         }
 
-        public static async Task RunAsync(IEnumerable<Action> actions, Action<MTActionCallBackList<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync(IEnumerable<Action> actions, Action<MTCallBackList<Action, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(actions, callback, maxThreads, cancel));
         }
 
-        public static void Run(IEnumerable<Action> actions, Action<MTActionCallBackList<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run(IEnumerable<Action> actions, Action<MTCallBackList<Action, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_2_{actions.GetHashCode() + 3}");
-            var result = new MTActionCallBackList<Action>(actions.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var action in actions)
-            {
-                if (cancel != null && cancel.Value.IsCancellationRequested)
-                    break;
-
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
-                {
-                    var inputAction = (Action)input;
-                    try
-                    {
-                        if (cancel != null && cancel.Value.IsCancellationRequested)
-                            return;
-
-                        inputAction.Invoke();
-
-                        result.Add(inputAction);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputAction, ex);
-                    }
-                    finally
-                    {
-                        pool.Release();
-                    }
-                }, action));
-            }
-
-            Task.WaitAll(listOfTasks.ToArray());
+            var result = Run(actions, maxThreads, cancel);
 
             if (callback != null)
-                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBackList<Action>)callbackItem), result);
+                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<Action, bool>)callbackItem), result);
         }
 
-        public static async Task RunAsync(IEnumerable<Action> actions, Action<MTActionCallBack<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync(IEnumerable<Action> actions, Action<MTCallBack<Action, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(actions, callback, maxThreads, cancel));
         }
 
-        public static void Run(IEnumerable<Action> actions, Action<MTActionCallBack<Action>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run(IEnumerable<Action> actions, Action<MTCallBack<Action, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_3_{actions.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
@@ -279,6 +309,8 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
+                    Task taskCallback = null;
+                    MTCallBack<Action, bool> callbackItem = null;
                     var inputAction = (Action)input;
                     try
                     {
@@ -288,15 +320,25 @@ namespace Utils
                         inputAction.Invoke();
 
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBack<Action>) callbackItem), new MTActionCallBack<Action>(inputAction));
+                        {
+                            callbackItem = new MTCallBack<Action, bool>(inputAction, true);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                        }
                     }
                     catch (Exception ex)
                     {
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBack<Action>) callbackItem), new MTActionCallBack<Action>(inputAction, ex));
+                        {
+                            callbackItem = new MTCallBack<Action, bool>(inputAction, ex);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                        }
                     }
                     finally
                     {
+                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        {
+                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        }
                         pool.Release();
                     }
                 }, action));
@@ -306,15 +348,15 @@ namespace Utils
         }
 
 
-        public static async Task<MTFuncCallBackList<Func<T>, T>> RunAsync<T>(IEnumerable<Func<T>> funcs, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task<MTCallBackList<Func<TResult>, TResult>> RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            return await Task<MTFuncCallBackList<Func<T>, T>>.Factory.StartNew(() => Run(funcs, maxThreads, cancel));
+            return await Task<MTCallBackList<Func<TResult>, TResult>>.Factory.StartNew(() => Run(funcs, maxThreads, cancel));
         }
 
-        public static MTFuncCallBackList<Func<T>, T> Run<T>(IEnumerable<Func<T>> funcs, int maxThreads = 2, CancellationToken? cancel = null)
+        public static MTCallBackList<Func<TResult>, TResult> Run<TResult>(IEnumerable<Func<TResult>> funcs, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_1_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
-            var result = new MTFuncCallBackList<Func<T>, T>(funcs.Count());
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<TResult>>_1_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}");
+            var result = new MTCallBackList<Func<TResult>, TResult>(funcs.Count());
             var listOfTasks = new List<Task>();
             
             foreach (var func in funcs)
@@ -326,7 +368,7 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputFunc = (Func<T>) input;
+                    var inputFunc = (Func<TResult>) input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -351,61 +393,27 @@ namespace Utils
             return result;
         }
 
-        public static async Task RunAsync<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBackList<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBackList<Func<TResult>, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(funcs, callback, maxThreads, cancel));
         }
 
-        public static void Run<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBackList<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBackList<Func<TResult>, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_2_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
-            var result = new MTFuncCallBackList<Func<T>, T>(funcs.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var func in funcs)
-            {
-                if (cancel != null && cancel.Value.IsCancellationRequested)
-                    break;
-
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
-                {
-                    var inputFunc = (Func<T>)input;
-                    try
-                    {
-                        if (cancel != null && cancel.Value.IsCancellationRequested)
-                            return;
-
-                        var res = inputFunc.Invoke();
-
-                        result.Add(inputFunc, res);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputFunc, ex);
-                    }
-                    finally
-                    {
-                        pool.Release();
-                    }
-                }, func));
-            }
-
-            Task.WaitAll(listOfTasks.ToArray());
+            var result = Run(funcs, maxThreads, cancel);
 
             if (callback != null)
-                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBackList<Func<T>, T>)callbackItem), result);
+                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<Func<TResult>, TResult>)callbackItem), result);
         }
 
-        public static async Task RunAsync<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBack<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBack<Func<TResult>, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(funcs, callback, maxThreads, cancel));
         }
 
-        public static void Run<T>(IEnumerable<Func<T>> funcs, Action<MTFuncCallBack<Func<T>, T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBack<Func<TResult>, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<T>>_3_{typeof(T).GetHashCode() + funcs.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<TResult>>_3_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var func in funcs)
@@ -417,7 +425,9 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputFunc = (Func<T>)input;
+                    Task taskCallback = null;
+                    MTCallBack<Func<TResult>, TResult> callbackItem = null;
+                    var inputFunc = (Func<TResult>)input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -426,15 +436,25 @@ namespace Utils
                         var res = inputFunc.Invoke();
 
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBack<Func<T>, T>)callbackItem), new MTFuncCallBack<Func<T>, T>(inputFunc, res));
+                        {
+                            callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, res);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                        }
                     }
                     catch (Exception ex)
                     {
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBack<Func<T>, T>)callbackItem), new MTFuncCallBack<Func<T>, T>(inputFunc, ex));
+                        {
+                            callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, ex);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                        }
                     }
                     finally
                     {
+                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        {
+                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        }
                         pool.Release();
                     }
                 }, func));
@@ -443,15 +463,15 @@ namespace Utils
             Task.WaitAll(listOfTasks.ToArray());
         }
 
-        public static async Task<MTActionCallBackList<T>> RunAsync<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task<MTCallBackList<TSource, bool>> RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            return await Task<MTActionCallBackList<T>>.Factory.StartNew(() => Run(action, data, maxThreads, cancel));
+            return await Task<MTCallBackList<TSource, bool>>.Factory.StartNew(() => Run(action, data, maxThreads, cancel));
         }
 
-        public static MTActionCallBackList<T> Run<T>(Action<T> action, IEnumerable<T> data, int maxThreads = 2, CancellationToken? cancel = null)
+        public static MTCallBackList<TSource, bool> Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_1_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
-            var result = new MTActionCallBackList<T>(data.Count());
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<TSource>_1_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}");
+            var result = new MTCallBackList<TSource, bool>(data.Count());
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -463,7 +483,7 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputItem = (T) input;
+                    var inputItem = (TSource) input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -471,7 +491,7 @@ namespace Utils
 
                         action.Invoke(inputItem);
 
-                        result.Add(inputItem);
+                        result.Add(inputItem, true);
                     }
                     catch (Exception ex)
                     {
@@ -488,61 +508,27 @@ namespace Utils
             return result;
         }
 
-        public static async Task RunAsync<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBackList<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBackList<TSource, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(action, data, callback, maxThreads, cancel));
         }
 
-        public static void Run<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBackList<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBackList<TSource, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_2_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
-            var result = new MTActionCallBackList<T>(data.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var item in data)
-            {
-                if (cancel != null && cancel.Value.IsCancellationRequested)
-                    break;
-
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
-                {
-                    var inputItem = (T)input;
-                    try
-                    {
-                        if (cancel != null && cancel.Value.IsCancellationRequested)
-                            return;
-
-                        action.Invoke(inputItem);
-
-                        result.Add(inputItem);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputItem, ex);
-                    }
-                    finally
-                    {
-                        pool.Release();
-                    }
-                }, item));
-            }
-
-            Task.WaitAll(listOfTasks.ToArray());
-
+            var result = Run(action, data, maxThreads, cancel);
+            
             if (callback != null)
-                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBackList<T>)callbackItem), result);
+                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<TSource, bool>)callbackItem), result);
         }
 
-        public static async Task RunAsync<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBack<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBack<TSource, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(action, data, callback, maxThreads, cancel));
         }
 
-        public static void Run<T>(Action<T> action, IEnumerable<T> data, Action<MTActionCallBack<T>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBack<TSource, bool>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Action<T>_3_{typeof(T).GetHashCode() + action.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Action<TSource>_3_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -554,7 +540,9 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputItem = (T)input;
+                    Task taskCallback = null;
+                    MTCallBack<TSource, bool> callbackItem = null;
+                    var inputItem = (TSource)input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -563,15 +551,25 @@ namespace Utils
                         action.Invoke(inputItem);
 
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBack<T>)callbackItem), new MTActionCallBack<T>(inputItem));
+                        {
+                            callbackItem = new MTCallBack<TSource, bool>(inputItem, true);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>) callbackItem2), callbackItem);
+                        }
                     }
                     catch (Exception ex)
                     {
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTActionCallBack<T>)callbackItem), new MTActionCallBack<T>(inputItem, ex));
+                        {
+                            callbackItem = new MTCallBack<TSource, bool>(inputItem, ex);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>) callbackItem2), callbackItem);
+                        }
                     }
                     finally
                     {
+                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        {
+                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        }
                         pool.Release();
                     }
                 }, item));
@@ -580,15 +578,15 @@ namespace Utils
             Task.WaitAll(listOfTasks.ToArray());
         }
 
-        public static async Task<MTFuncCallBackList<TIn, TOut>> RunAsync<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task<MTCallBackList<TSource, TResult>> RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            return await Task<MTFuncCallBackList<TIn, TOut>>.Factory.StartNew(() => Run(func, data, maxThreads, cancel));
+            return await Task<MTCallBackList<TSource, TResult>>.Factory.StartNew(() => Run(func, data, maxThreads, cancel));
         }
 
-        public static MTFuncCallBackList<TIn, TOut> Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, int maxThreads = 2, CancellationToken? cancel = null)
+        public static MTCallBackList<TSource, TResult> Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_1_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
-            var result = new MTFuncCallBackList<TIn, TOut>(data.Count());
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TSource, TResult>_1_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}");
+            var result = new MTCallBackList<TSource, TResult>(data.Count());
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -600,7 +598,7 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputItem = (TIn) input;
+                    var inputItem = (TSource) input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -625,61 +623,27 @@ namespace Utils
             return result;
         }
 
-        public static async Task RunAsync<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBackList<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBackList<TSource, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(func, data, callback, maxThreads, cancel));
         }
 
-        public static void Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBackList<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBackList<TSource, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_2_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
-            var result = new MTFuncCallBackList<TIn, TOut>(data.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var item in data)
-            {
-                if (cancel != null && cancel.Value.IsCancellationRequested)
-                    break;
-
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
-                {
-                    var inputItem = (TIn)input;
-                    try
-                    {
-                        if (cancel != null && cancel.Value.IsCancellationRequested)
-                            return;
-
-                        var res = func.Invoke(inputItem);
-
-                        result.Add(inputItem, res);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputItem, ex);
-                    }
-                    finally
-                    {
-                        pool.Release();
-                    }
-                }, item));
-            }
-
-            Task.WaitAll(listOfTasks.ToArray());
-
+            var result = Run(func, data, maxThreads, cancel);
+            
             if (callback != null)
-                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBackList<TIn, TOut>) callbackItem), result);
+                Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<TSource, TResult>) callbackItem), result);
         }
 
-        public static async Task RunAsync<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBack<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static async Task RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBack<TSource, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
             await Task.Factory.StartNew(() => Run(func, data, callback, maxThreads, cancel));
         }
 
-        public static void Run<TIn, TOut>(Func<TIn, TOut> func, IEnumerable<TIn> data, Action<MTFuncCallBack<TIn, TOut>> callback, int maxThreads = 2, CancellationToken? cancel = null)
+        public static void Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBack<TSource, TResult>> callback, int maxThreads = 2, CancellationToken? cancel = null)
         {
-            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TIn, TOut>_3_{typeof(TIn).GetHashCode() + typeof(TOut).GetHashCode() + func.GetHashCode() + 3}");
+            var pool = new Semaphore(maxThreads, maxThreads, $"Func<TSource, TResult>_3_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
 
             foreach (var item in data)
@@ -691,7 +655,9 @@ namespace Utils
 
                 listOfTasks.Add(Task.Factory.StartNew((input) =>
                 {
-                    var inputItem = (TIn)input;
+                    Task taskCallback = null;
+                    MTCallBack<TSource, TResult> callbackItem = null;
+                    var inputItem = (TSource)input;
                     try
                     {
                         if (cancel != null && cancel.Value.IsCancellationRequested)
@@ -700,15 +666,25 @@ namespace Utils
                         var res = func.Invoke(inputItem);
 
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBack<TIn, TOut>)callbackItem), new MTFuncCallBack<TIn, TOut>(inputItem, res));
+                        {
+                            callbackItem = new MTCallBack<TSource, TResult>(inputItem, res);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                        }
                     }
                     catch (Exception ex)
                     {
                         if (callback != null)
-                            Task.Factory.StartNew((callbackItem) => callback.Invoke((MTFuncCallBack<TIn, TOut>)callbackItem), new MTFuncCallBack<TIn, TOut>(inputItem, ex));
+                        {
+                            callbackItem = new MTCallBack<TSource, TResult>(inputItem, ex);
+                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                        }
                     }
                     finally
                     {
+                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        {
+                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        }
                         pool.Release();
                     }
                 }, item));

@@ -50,24 +50,27 @@ namespace Tester.Console
 
                 var obj = new object();
                 var iter = 0;
-                var actions = new List<Action>();
-                var cancel = new CancellationTokenSource();
-                for (var i = 0; i < 21500; i++)
+                var actions = new List<int>();
+                Action<int> func = (int input) =>
                 {
-                    actions.Add(() =>
-                    {
-                        //Thread.Sleep(5);
-                        lock (obj)
-                            System.Console.Write($"[{iter++}];");
-                    });
+                    //Thread.Sleep(5);
+                    System.Console.Write($"[{input}];");
+                };
+                var cancel = new CancellationTokenSource();
+                for (var i = 0; i < 10; i++)
+                {
+                    actions.Add(i);
                 }
                 var stop = new Stopwatch();
                 stop.Start();
                 //cancel.CancelAfter(15000);
-                var result = MultiTasking.Run(actions, 10, cancel.Token);
+                //MultiTasking.Run(actions, 10, cancel.Token);
+                var mt = new MTActionResult<int>(func, actions);
+                mt.Start();
                 stop.Stop();
                 System.Console.WriteLine();
-                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{result.Keys.Count()}] Values=[{result.Values.Count()}] Exception=[{string.Join(";\r\n",result.Values.Where(x => !x.IsSuccess).Select(x => x.Error.Message))}]");
+                //mt.Result.Values.Select(x => x.)
+                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{mt.Result.Keys.Count()}] Values=[{mt.Result.Values.Count()}] Exception=[{string.Join(";\r\n", mt.Result.Values.Where(x => x.Error != null).Select(x => x.Error.Message))}]");
                 System.Console.ReadKey();
                 return;
 
