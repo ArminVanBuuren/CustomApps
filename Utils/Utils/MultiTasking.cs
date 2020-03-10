@@ -227,7 +227,7 @@ namespace Utils
 
     public class MultiTasking
     {
-        public const int CallbackTimeout = 1000;
+        public const int CallbackTimeout = 3000;
 
         public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
         {
