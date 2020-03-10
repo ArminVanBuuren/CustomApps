@@ -11,10 +11,9 @@ namespace Utils
     public class MTActionResult : MultiTaskingResult<Action, bool>
     {
         public override event EventHandler IsCompeted;
-        public MTActionResult(IEnumerable<Action> actions, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        public MTActionResult(IEnumerable<Action> actions, int maxThreads = 2, int millisecondsDalay = -1) : base(actions, maxThreads, millisecondsDalay)
         {
-            Source = actions;
-            Result = new MTCallBackList<Action, bool>(actions.Count());
+
         }
 
         public override void Start()
@@ -30,11 +29,9 @@ namespace Utils
     {
         public override event EventHandler IsCompeted;
         private Action<TSource> _action;
-        public MTActionResult(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        public MTActionResult(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(data, maxThreads, millisecondsDalay)
         {
             _action = action;
-            Source = data;
-            Result = new MTCallBackList<TSource, bool>(data.Count());
         }
 
         public override void Start()
@@ -49,10 +46,9 @@ namespace Utils
     public class MTFuncResult<TResult> : MultiTaskingResult<Func<TResult>, TResult>
     {
         public override event EventHandler IsCompeted;
-        public MTFuncResult(IEnumerable<Func<TResult>> funcs, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        public MTFuncResult(IEnumerable<Func<TResult>> funcs, int maxThreads = 2, int millisecondsDalay = -1) : base(funcs, maxThreads, millisecondsDalay)
         {
-            Source = funcs;
-            Result = new MTCallBackList<Func<TResult>, TResult>(funcs.Count());
+
         }
 
         public override void Start()
@@ -68,11 +64,9 @@ namespace Utils
     {
         public override event EventHandler IsCompeted;
         private Func<TSource, TResult> _func;
-        public MTFuncResult(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(maxThreads, millisecondsDalay)
+        public MTFuncResult(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, int millisecondsDalay = -1) : base(data, maxThreads, millisecondsDalay)
         {
             _func = func;
-            Source = data;
-            Result = new MTCallBackList<TSource, TResult>(data.Count());
         }
 
         public override void Start()
@@ -91,12 +85,14 @@ namespace Utils
         public int MillisecondsDalay { get; }
         public IEnumerable<TSource> Source { get; protected set; }
         public MTCallBackList<TSource, TResult> Result { get; protected set; }
-        public bool IsComplete => Source.Count() == Result.Values.Count();
+        public bool IsCompleted => Source.Count() == Result.Values.Count();
         public int PercentOfComplete => (Result.Values.Count() * 100) / Source.Count();
         protected CancellationTokenSource CancelToken { get; private set; }
 
-        protected MultiTaskingResult(int maxThreads, int millisecondsDalay)
+        protected MultiTaskingResult(IEnumerable<TSource> source, int maxThreads, int millisecondsDalay)
         {
+            Source = source;
+            Result = new MTCallBackList<TSource, TResult>(Source.Count());
             MaxThreads = maxThreads;
             MillisecondsDalay = millisecondsDalay;
         }
@@ -127,7 +123,7 @@ namespace Utils
 
         public override string ToString()
         {
-            return $"IsComplete=[{IsComplete}] PercentOfComplete={PercentOfComplete}";
+            return $"IsCompleted=[{IsCompleted}] PercentOfComplete={PercentOfComplete}";
         }
     }
 
