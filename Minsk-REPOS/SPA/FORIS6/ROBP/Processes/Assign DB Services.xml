@@ -7,7 +7,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="AssignServiceOnFINPlatform" />
           </resultlist>
@@ -1625,6 +1627,22 @@
             <param name="operation" value="AddFR13097onQP" />
           </parameterslist>
           <resultlist>
+            <result value="" node="AddFR17362onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17362onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17362onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17362onQP" />
+          </resultlist>
+        </node>
+        <node name="AddFR17362onQP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17362onQP" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="AddFR13060onDB" />
           </resultlist>
         </node>
@@ -1729,6 +1747,22 @@
             <param name="operation" value="AddFR15507onQP" />
           </parameterslist>
           <resultlist>
+            <result value="" node="AddFR17303onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17303onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17303onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17303onQP" />
+          </resultlist>
+        </node>
+        <node name="AddFR17303onQP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17303onQP" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="AddFR15513onQP" />
           </resultlist>
         </node>
@@ -1815,6 +1849,94 @@
         <node name="AddFR16913onQP" object="AddService">
           <parameterslist>
             <param name="operation" value="AddFR16913onQP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17024onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17024onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17024onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17112onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17112onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17112onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17113onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17113onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17113onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17114onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17114onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17114onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17115onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17115onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17115onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17116onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17116onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17116onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17006onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17006onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17006onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17007onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17007onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17007onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17008onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17008onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17008onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17124onDB" />
+          </resultlist>
+        </node>
+        <node name="AddFR17124onDB" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17124onDB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17124onQP" />
+          </resultlist>
+        </node>
+        <node name="AddFR17124onQP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17124onQP" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

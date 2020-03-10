@@ -2,9 +2,9 @@
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
       <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
-        <CB21 HaltMode="CancelOperation" Type="Optional" />
-        <CB22 HaltMode="CancelOperation" Type="Optional" />
-        <CB401049 HaltMode="CancelOperation" Type="Optional" />
+        <CB21 Type="Optional" />
+        <CB22 Type="Optional" />
+        <CB401049 Type="Optional" />
       </WithdrawalList>
       <RegisteredList Type="Optional" />
     </AdditionalData>

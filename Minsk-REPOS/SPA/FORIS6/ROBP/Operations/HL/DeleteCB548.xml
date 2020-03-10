@@ -2,7 +2,7 @@
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
       <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
-        <CB548 HaltMode="CancelOperation" Type="Optional">
+        <CB548 Type="Optional">
           <UserGroupCode Type="Optional" />
         </CB548>
       </WithdrawalList>

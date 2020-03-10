@@ -7,7 +7,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="CheckSourceTypeCode" />
+          </parameterslist>
           <resultlist>
             <result value="" node="AssignServiceOnFINPlatform" />
           </resultlist>

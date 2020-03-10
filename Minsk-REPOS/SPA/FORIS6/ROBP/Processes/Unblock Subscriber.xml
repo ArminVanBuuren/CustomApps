@@ -6,12 +6,13 @@
         <object name="ParallelUnBlock" class="FORIS.ServiceProvisioning.BPM.ParallelProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
         <object name="CheckBLK" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
         <object name="TerminalStub" class="FORIS.ServiceProvisioning.BPM.TerminalStub" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
-        <object name="DummyResponder" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
         <object name="SCProcessingUnit" class="FORIS.ServiceProvisioning.BPM.SCProcessingUnit" assembly="FORIS.SPA.BPMProcessingUnit.dll" />
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="DeleteFullBLK" />
           </resultlist>
@@ -39,7 +40,7 @@
           </parameterslist>
           <resultlist>
             <result value="0" node="IsAlreadyPartBlocked" />
-            <result value="1" node="ExitNode" />
+            <result value="1" node="DeleteBlockOnFP" />
           </resultlist>
         </node>
         <node name="IsAlreadyPartBlocked" object="CheckBLK">
@@ -58,7 +59,7 @@
             <param name="operation" value="UnBlockFullAndBlockPart" />
           </parameterslist>
           <resultlist>
-            <result value="" node="ExitNode" />
+            <result value="" node="DeleteBlockOnFP" />
           </resultlist>
         </node>
         <node name="UnBlockFull" object="ParallelUnBlock">
@@ -69,10 +70,7 @@
             <param name="operation" value="UnBlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="UnBlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonVI" requiredForSuccess="SUCCESS" />
@@ -88,9 +86,13 @@
             <param name="operation" value="UnBlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
-            <result value="" node="ExitNode" />
+            <result value="" node="DeleteBlockOnFP" />
           </resultlist>
         </node>
         <node name="DeletePartBLK" object="CheckBLK">
@@ -102,7 +104,7 @@
           </parameterslist>
           <resultlist>
             <result value="0" node="IsAlreadyFullBlocked_2" />
-            <result value="1" node="ExitNode" />
+            <result value="1" node="DeleteBlockOnFP" />
           </resultlist>
         </node>
         <node name="IsAlreadyFullBlocked_2" object="CheckBLK">
@@ -117,7 +119,7 @@
             <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKUSER" />
           </parameterslist>
           <resultlist>
-            <result value="0" node="ExitNode" />
+            <result value="0" node="DeleteBlockOnFP" />
             <result value="1" node="IsAlreadyPartBlocked_2" />
           </resultlist>
         </node>
@@ -128,7 +130,7 @@
           </parameterslist>
           <resultlist>
             <result value="0" node="UnBlockPart" />
-            <result value="1" node="ExitNode" />
+            <result value="1" node="DeleteBlockOnFP" />
           </resultlist>
         </node>
         <node name="UnBlockPart" object="ParallelUnBlock">
@@ -139,10 +141,7 @@
             <param name="operation" value="UnBlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="UnBlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonVI" requiredForSuccess="SUCCESS" />
@@ -158,6 +157,26 @@
             <param name="operation" value="UnBlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonIV" requiredForSuccess="SUCCESS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBlockOnFP" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnFP" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DelBlockOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnBMS" object="BPMProcessingUnit">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnBMS" />
           </parameterslist>
           <resultlist>
             <result value="" node="ExitNode" />

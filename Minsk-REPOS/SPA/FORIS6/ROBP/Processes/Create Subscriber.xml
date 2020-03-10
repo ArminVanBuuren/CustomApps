@@ -65,6 +65,14 @@
             <param name="operation" value="CreateSubscriberOnSE" />
           </parameterslist>
           <resultlist>
+            <result value="" node="DeleteBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="DeleteBlockOnBMS" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="DeleteBlockOnBMS" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="CreateSubscriberOnZN" />
           </resultlist>
         </node>
@@ -73,36 +81,12 @@
             <param name="operation" value="CreateSubscriberOnZN" />
           </parameterslist>
           <resultlist>
-            <result value="" node="CreateSubscriberOnTV" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriberOnTV" object="CreateSubscribers">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriberOnTV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="CreateSubscriberOnMT" />
           </resultlist>
         </node>
         <node name="CreateSubscriberOnMT" object="CreateSubscribers">
           <parameterslist>
             <param name="operation" value="CreateSubscriberOnMT" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="CreateSubscriberOnSL" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriberOnSL" object="CreateSubscribers">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriberOnSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="CreateSubscriberOnM2" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriberOnM2" object="CreateSubscribers">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriberOnM2" />
           </parameterslist>
           <resultlist>
             <result value="" node="CreateSubscriberOnDR" />
@@ -215,6 +199,30 @@
         <node name="CreateSubscriberOnKM" object="CreateSubscribers">
           <parameterslist>
             <param name="operation" value="CreateSubscriberOnKM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnIS" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnIS" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnBB" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnBB" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriberOnIV" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriberOnIV" object="CreateSubscribers">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriberOnIV" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

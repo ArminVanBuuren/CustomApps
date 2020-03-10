@@ -2,6 +2,7 @@
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="CFS_FIX_B2C_INTERNET" formatVersion="1">
   <HostTypeList>
     <HostType name="BS" nriType="RI" allowTerminalDeviceType="mobile,virtual" description="Платформа Bonus Management System" />
+    <HostType name="CHECK" nriType="RI" allowTerminalDeviceType="mobile,virtual" description="Check Source Type Code" />
     <HostType name="FP" nriType="RI" availableSystem="FinancialPlatform" allowTerminalDeviceType="mobile,virtual,fix" orderAdjustment="1000" description="Финансовая платформа" />
   </HostTypeList>
   <HostGroupList />
@@ -43,6 +44,7 @@
     <RFSParameter name="ServiceLevel" path="//SERVICE_LEVEL" description="Уровень принадлежности услуги (PA,TD,...)" />
     <RFSParameter name="ShgAvailableOnFP" path="exist(//AvailableShgHostTypes/SC)" description="Share группа доступна на фин.платформе" />
     <RFSParameter name="SkipFP" path="bool(//DoNotProcessingInFinancialPlatform)" description="Флаг пропуска на фин.платформе" />
+    <RFSParameter name="SourceTypeCode" path="//SourceTypeCode" description="Код источника" />
     <RFSParameter name="Subscriber" path="xml(//Subscriber)" description="Параметры создания абонента" />
     <RFSParameter name="TariffPlanId" path="//TariffPlanId" description="Тарифный план" />
     <RFSParameter name="TransferTD" path="xml(//TransferTD)" description="Параметры переноса ПО" />
@@ -86,6 +88,9 @@
     </RFS>
     <RFS name="RFS_BMS_TRANSFER_TD" hostType="BS" description="Изменение ЛС и ПО на BMS">
       <RFSParameter name="TransferTD" />
+    </RFS>
+    <RFS name="RFS_CHECK_SOURCE_TYPE_CODE" hostType="CHECK" description="Шаблон для получения параметра кода источника">
+      <RFSParameter name="SourceTypeCode" useType="Mandatory" />
     </RFS>
     <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" hostType="FP" description="Порог автоплатежа на фин.платформе">
       <RFSParameter name="AutoPaymentThreshold" />
@@ -387,6 +392,9 @@
     <CFS name="CFS_BMS_SERVICE" isMarker="true" description="Шаблон услуги BMS">
       <RFS name="RFS_BMS_SERVICE" linkType="Add" />
     </CFS>
+    <CFS name="CFS_CHECK_SOURCE_TYPE_CODE" isMarker="true" description="Шаблон для получения параметра кода источника">
+      <RFS name="RFS_CHECK_SOURCE_TYPE_CODE" linkType="Add" />
+    </CFS>
     <CFS name="CFS_FP_ADDITIONAL_NUMBER" isMarker="true" description="Шаблон доп.номера для FP">
       <RFS name="RFS_FP_SERVICE_ADDITIONAL_NUMBER" linkType="Add" />
     </CFS>
@@ -491,6 +499,8 @@
         <RFSParameter name="AdditionalNumberType" value="5" />
       </RFS>
     </CFS>
+    <CFS name="FFTEST1" globalServiceCode="FFTEST1" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="Тестовый Любимый номер 1" />
+    <CFS name="FFTEST2" globalServiceCode="FFTEST2" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="Тестовый Любимый номер 2" />
     <CFS name="FPRAPUS" globalServiceCode="FPRAPUSL" copyOf="CFS_FP_SERVICE_GENERAL" description="Показатель расхода абонента за период для Пакета услуг" />
     <CFS name="FPRASKID" globalServiceCode="FPRASKID" copyOf="CFS_FP_SERVICE_GENERAL" description="Показатель расхода абонента за период для Скидки" />
     <CFS name="FR0990" globalServiceCode="FR0990" copyOf="CFS_FP_SERVICE_GENERAL" description="Выделенное обслуживание по номеру 0990" />
@@ -722,7 +732,7 @@
     <CFS name="FR10246" globalServiceCode="FR10246" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 10% 3G Коннект 1 Гб, ТП Компания" />
     <CFS name="FR10247" globalServiceCode="FR10247" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 10% 3G Коннект 2 Гб, ТП Компания" />
     <CFS name="FR10248" globalServiceCode="FR10248" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 10% Корпоративный безлимитный интернет" />
-    <CFS name="FR10249" globalServiceCode="FR10249" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка Форум, в сутки" />
+    <CFS name="FR10249" globalServiceCode="FR10249" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка Форум, в сутки" />
     <CFS name="FR1025" globalServiceCode="FR1025" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата, в мес." />
     <CFS name="FR10250" globalServiceCode="FR10250" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei P6 (3228000) доп.соглашение 12 мес." />
     <CFS name="FR10251" globalServiceCode="FR10251" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei P7 (4609000) доп.соглашение 12 мес." />
@@ -792,7 +802,7 @@
     <CFS name="FR10310" globalServiceCode="FR10310" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 15% Европа и др. страны ТП Компания" />
     <CFS name="FR10311" globalServiceCode="FR10311" copyOf="CFS_FP_SERVICE_GENERAL" description="Роуминг +30/+30/+10" />
     <CFS name="FR10312" globalServiceCode="FR10312" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV" />
-    <CFS name="FR10313" globalServiceCode="FR10313" copyOf="CFS_FP_SERVICE_GENERAL" description="iTV-Smart" />
+    <CFS name="FR10313" globalServiceCode="FR10313" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="iTV-Smart" />
     <CFS name="FR10314" globalServiceCode="FR10314" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Беспроцетная:I9500 доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR10315" globalServiceCode="FR10315" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung N910C (13463000)" />
     <CFS name="FR10316" globalServiceCode="FR10316" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: рассрочка 4мес:I9500 доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -1264,7 +1274,7 @@
     <CFS name="FR10754" globalServiceCode="FR10754" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Huawei Power Bank (3 шт)" />
     <CFS name="FR10755" globalServiceCode="FR10755" copyOf="CFS_FP_SERVICE_GENERAL" description="Инвайт-код World of Warplanes" />
     <CFS name="FR10756" globalServiceCode="FR10756" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Подключение ITV Smart" />
-    <CFS name="FR10757" globalServiceCode="FR10757" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильная библиотека МТС" />
+    <CFS name="FR10757" globalServiceCode="FR10757" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мобильная библиотека МТС" />
     <CFS name="FR10758" globalServiceCode="FR10758" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка Мобильная библиотека МТС" />
     <CFS name="FR10759" globalServiceCode="FR10759" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смарт для каждого: I9060(2) доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR1076" globalServiceCode="FR1076" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony Ericsson W302 (666 000) " />
@@ -1286,9 +1296,9 @@
     <CFS name="FR10776" globalServiceCode="FR10776" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Твой смартфон: Hua G730 доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR10777" globalServiceCode="FR10777" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Твой смартфон: Pre 5505 доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR10778" globalServiceCode="FR10778" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Твой смартфон: Pre 5507 доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR10779" globalServiceCode="FR10779" copyOf="CFS_FP_SERVICE_GENERAL" description="Вольная паслуга" />
+    <CFS name="FR10779" globalServiceCode="FR10779" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вольная паслуга" />
     <CFS name="FR1078" globalServiceCode="FR1078" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony Ericsson W380i (668 000) " />
-    <CFS name="FR10780" globalServiceCode="FR10780" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы UNIFUN" />
+    <CFS name="FR10780" globalServiceCode="FR10780" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы UNIFUN" />
     <CFS name="FR10781" globalServiceCode="FR10781" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смарт для каждого: E5(E500H) доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR10782" globalServiceCode="FR10782" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смарт для каждого: D335(2) доп.12мес.на Отл,Р300,Р600,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR10783" globalServiceCode="FR10783" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы Bamboo" />
@@ -1604,7 +1614,7 @@
     <CFS name="FR11092" globalServiceCode="FR11092" copyOf="CFS_FP_SERVICE_GENERAL" description="Подключение к сети интернет по РРЛ" />
     <CFS name="FR11093" globalServiceCode="FR11093" copyOf="CFS_FP_SERVICE_GENERAL" description="Подключение к сети интернет по РРЛ 90 млн рублей" />
     <CFS name="FR11094" globalServiceCode="FR11094" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за точку подключения по РРЛ" />
-    <CFS name="FR11095" globalServiceCode="FR11095" copyOf="CFS_FP_SERVICE_GENERAL" description="Мобильная библиотека МТС - Книги" />
+    <CFS name="FR11095" globalServiceCode="FR11095" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мобильная библиотека МТС - Книги" />
     <CFS name="FR11096" globalServiceCode="FR11096" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка – all-net 135, ТП Компания" />
     <CFS name="FR11097" globalServiceCode="FR11097" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка – all-net ЛН 60, ТП Компания" />
     <CFS name="FR11098" globalServiceCode="FR11098" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка – all-net 80, ТП Корпорация 40-99,Компания100 " />
@@ -1707,15 +1717,15 @@
     <CFS name="FR11186" globalServiceCode="FR11186" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка – all-net+ЛН, ТП КОМПАНИЯ_ОЭЦ Президента" />
     <CFS name="FR11187" globalServiceCode="FR11187" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:Hua Р7(2) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11188" globalServiceCode="FR11188" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:Sam i9060i/ds(2) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR11189" globalServiceCode="FR11189" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 5 класс" />
+    <CFS name="FR11189" globalServiceCode="FR11189" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 5 класс" />
     <CFS name="FR1119" globalServiceCode="FR1119" copyOf="CFS_FP_SERVICE_GENERAL" description="Ноутбук MSI U130 (1 550 000)  с 20.04.2010" />
-    <CFS name="FR11190" globalServiceCode="FR11190" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 6 класс" />
-    <CFS name="FR11191" globalServiceCode="FR11191" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 7 класс" />
-    <CFS name="FR11192" globalServiceCode="FR11192" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 8 класс" />
-    <CFS name="FR11193" globalServiceCode="FR11193" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 9 класс" />
-    <CFS name="FR11194" globalServiceCode="FR11194" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 10 класс" />
-    <CFS name="FR11195" globalServiceCode="FR11195" copyOf="CFS_FP_SERVICE_GENERAL" description="Мой 11 класс" />
-    <CFS name="FR11196" globalServiceCode="FR11196" copyOf="CFS_FP_SERVICE_GENERAL" description="Вся программа 5-11 классов" />
+    <CFS name="FR11190" globalServiceCode="FR11190" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 6 класс" />
+    <CFS name="FR11191" globalServiceCode="FR11191" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 7 класс" />
+    <CFS name="FR11192" globalServiceCode="FR11192" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 8 класс" />
+    <CFS name="FR11193" globalServiceCode="FR11193" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 9 класс" />
+    <CFS name="FR11194" globalServiceCode="FR11194" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 10 класс" />
+    <CFS name="FR11195" globalServiceCode="FR11195" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Мой 11 класс" />
+    <CFS name="FR11196" globalServiceCode="FR11196" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вся программа 5-11 классов" />
     <CFS name="FR11197" globalServiceCode="FR11197" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:Huawei P8 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11198" globalServiceCode="FR11198" copyOf="CFS_FP_SERVICE_GENERAL" description="100ГБ на 3 мес." />
     <CFS name="FR11199" globalServiceCode="FR11199" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:Samsung J500H ds доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -1949,7 +1959,7 @@
     <CFS name="FR11419" globalServiceCode="FR11419" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:HTC 326G DS доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11420" globalServiceCode="FR11420" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Каждому по смарту:Alc Pixi3 (4027D) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11421" globalServiceCode="FR11421" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на АП Телематика20-Пинский автопарк" />
-    <CFS name="FR11422" globalServiceCode="FR11422" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Видео 18+" />
+    <CFS name="FR11422" globalServiceCode="FR11422" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Видео 18+" />
     <CFS name="FR11423" globalServiceCode="FR11423" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% Смена владельца – Нацстат" />
     <CFS name="FR11424" globalServiceCode="FR11424" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 10% Телематика 20" />
     <CFS name="FR11425" globalServiceCode="FR11425" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 15% Телематика 35" />
@@ -1957,12 +1967,12 @@
     <CFS name="FR11427" globalServiceCode="FR11427" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% Смена владельца – Нац стат" />
     <CFS name="FR11428" globalServiceCode="FR11428" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:iPhone 5s CPO в МТС:iPhone 5s CPO доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11429" globalServiceCode="FR11429" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет автоматического расторжения" />
-    <CFS name="FR11430" globalServiceCode="FR11430" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Отказ от Интернет-подписки" />
+    <CFS name="FR11430" globalServiceCode="FR11430" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Отказ от Интернет-подписки" />
     <CFS name="FR11431" globalServiceCode="FR11431" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: БИТ - 25%. Участник" />
     <CFS name="FR11432" globalServiceCode="FR11432" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: БИТ - 25%. Скидка" />
     <CFS name="FR11433" globalServiceCode="FR11433" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Инет 4 - 15%. Участник" />
     <CFS name="FR11434" globalServiceCode="FR11434" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Инет 4 - 15%. Скидка" />
-    <CFS name="FR11435" globalServiceCode="FR11435" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Видеоприколы" />
+    <CFS name="FR11435" globalServiceCode="FR11435" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Видеоприколы" />
     <CFS name="FR11436" globalServiceCode="FR11436" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка пакет SMS – Гомельский областной суд" />
     <CFS name="FR11437" globalServiceCode="FR11437" copyOf="CFS_FP_SERVICE_GENERAL" description="Пакет 1000 SMS" />
     <CFS name="FR11438" globalServiceCode="FR11438" copyOf="CFS_FP_SERVICE_GENERAL" description="Организация выделенной линии со скидкой 82%" />
@@ -2057,7 +2067,7 @@
     <CFS name="FR11524" globalServiceCode="FR11524" copyOf="CFS_FP_SERVICE_GENERAL" description="Больше Интернета" />
     <CFS name="FR11525" globalServiceCode="FR11525" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая –  МиниБИТ -100%.Участник" />
     <CFS name="FR11526" globalServiceCode="FR11526" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая – МиниБИТ -100%. Скидка" />
-    <CFS name="FR11527" globalServiceCode="FR11527" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка Музыкальный портал, в сутки" />
+    <CFS name="FR11527" globalServiceCode="FR11527" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка Музыкальный портал, в сутки" />
     <CFS name="FR11528" globalServiceCode="FR11528" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора за смартом:Galaxy S5 (G900F) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11529" globalServiceCode="FR11529" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора за смартом:Prestigio D3(3505) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR1153" globalServiceCode="FR1153" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5560 (1 160 000) " />
@@ -2185,8 +2195,8 @@
     <CFS name="FR11643" globalServiceCode="FR11643" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус 4 руб. на Домашний Интернет (без НДС)" />
     <CFS name="FR11644" globalServiceCode="FR11644" copyOf="CFS_FP_SERVICE_GENERAL" description="LTE 25" />
     <CFS name="FR11645" globalServiceCode="FR11645" copyOf="CFS_FP_SERVICE_GENERAL" description="LTE 50" />
-    <CFS name="FR11646" globalServiceCode="FR11646" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Интернет-подписка Флирт" />
-    <CFS name="FR11647" globalServiceCode="FR11647" copyOf="CFS_FP_SERVICE_GENERAL" description="Пользователь Портала мобильных приложений" />
+    <CFS name="FR11646" globalServiceCode="FR11646" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Интернет-подписка Флирт" />
+    <CFS name="FR11647" globalServiceCode="FR11647" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Пользователь Портала мобильных приложений" />
     <CFS name="FR11648" globalServiceCode="FR11648" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS пакет 1000 автопродление" />
     <CFS name="FR11649" globalServiceCode="FR11649" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный SMS-пакет 50" />
     <CFS name="FR1165" globalServiceCode="FR1165" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KP105 (116 240)  (-20%)" />
@@ -2242,10 +2252,10 @@
     <CFS name="FR11699" globalServiceCode="FR11699" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора обновиться:Alcatel 5022D доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR1170" globalServiceCode="FR1170" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KP265 (356 400)  (-10%)" />
     <CFS name="FR11700" globalServiceCode="FR11700" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора обновиться:Sams J200H/DS доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR11701" globalServiceCode="FR11701" copyOf="CFS_FP_SERVICE_GENERAL" description="Вторая память: 2 ГБ" />
-    <CFS name="FR11702" globalServiceCode="FR11702" copyOf="CFS_FP_SERVICE_GENERAL" description="Вторая память: 10 ГБ" />
-    <CFS name="FR11703" globalServiceCode="FR11703" copyOf="CFS_FP_SERVICE_GENERAL" description="Вторая память: 50 ГБ" />
-    <CFS name="FR11704" globalServiceCode="FR11704" copyOf="CFS_FP_SERVICE_GENERAL" description="Вторая память: 100 ГБ" />
+    <CFS name="FR11701" globalServiceCode="FR11701" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вторая память: 2 ГБ" />
+    <CFS name="FR11702" globalServiceCode="FR11702" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вторая память: 10 ГБ" />
+    <CFS name="FR11703" globalServiceCode="FR11703" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вторая память: 50 ГБ" />
+    <CFS name="FR11704" globalServiceCode="FR11704" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Вторая память: 100 ГБ" />
     <CFS name="FR11705" globalServiceCode="FR11705" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора за смартом:Samsung Galaxy A5 (2016) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11706" globalServiceCode="FR11706" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора за смартом:ALCATEL 5022d доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11707" globalServiceCode="FR11707" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Пора за смартом:Sams J200H/ds доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -2357,16 +2367,16 @@
     <CFS name="FR11805" globalServiceCode="FR11805" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Подарок 8марта:Hua Р8 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11806" globalServiceCode="FR11806" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Подарок 8марта:Honor 4x доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11807" globalServiceCode="FR11807" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:iPhone 5s CPO:iPhone 5s CPO(4) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR11808" globalServiceCode="FR11808" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 1" />
-    <CFS name="FR11809" globalServiceCode="FR11809" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 2" />
+    <CFS name="FR11808" globalServiceCode="FR11808" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 1" />
+    <CFS name="FR11809" globalServiceCode="FR11809" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 2" />
     <CFS name="FR1181" globalServiceCode="FR1181" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KF510 (743 920)  (-20%)" />
-    <CFS name="FR11810" globalServiceCode="FR11810" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 3" />
-    <CFS name="FR11811" globalServiceCode="FR11811" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 1" />
-    <CFS name="FR11812" globalServiceCode="FR11812" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 2" />
-    <CFS name="FR11813" globalServiceCode="FR11813" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 3" />
-    <CFS name="FR11814" globalServiceCode="FR11814" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 1" />
-    <CFS name="FR11815" globalServiceCode="FR11815" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 2" />
-    <CFS name="FR11816" globalServiceCode="FR11816" copyOf="CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 3" />
+    <CFS name="FR11810" globalServiceCode="FR11810" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Классик 3" />
+    <CFS name="FR11811" globalServiceCode="FR11811" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 1" />
+    <CFS name="FR11812" globalServiceCode="FR11812" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 2" />
+    <CFS name="FR11813" globalServiceCode="FR11813" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Премиум 3" />
+    <CFS name="FR11814" globalServiceCode="FR11814" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 1" />
+    <CFS name="FR11815" globalServiceCode="FR11815" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 2" />
+    <CFS name="FR11816" globalServiceCode="FR11816" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Dr.Web Мобильный 3" />
     <CFS name="FR11817" globalServiceCode="FR11817" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Подари планшет: Prestigio Muze(2) доп.12мес.на Интернет" />
     <CFS name="FR11818" globalServiceCode="FR11818" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Отличное предложение:Alcatel 4027d доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR11819" globalServiceCode="FR11819" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Отличное предложение:Alcatel 6045K доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -2428,7 +2438,7 @@
     <CFS name="FR1187" globalServiceCode="FR1187" copyOf="CFS_FP_SERVICE_GENERAL" description="LG GB106 (135 920)  (-20%)" />
     <CFS name="FR11870" globalServiceCode="FR11870" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: бриллиантовый номер для Абсолют за 0 руб. (12 мес.) с 01.04.16" />
     <CFS name="FR11871" globalServiceCode="FR11871" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа смартфона LG Max X155 за 2 10 руб._12 мес." />
-    <CFS name="FR11873" globalServiceCode="FR11873" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС ТВ" />
+    <CFS name="FR11873" globalServiceCode="FR11873" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС ТВ" />
     <CFS name="FR11874" globalServiceCode="FR11874" copyOf="CFS_FP_SERVICE_GENERAL" description="Домашнее ТВ" />
     <CFS name="FR11875" globalServiceCode="FR11875" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка МТС ТВ" />
     <CFS name="FR11878" globalServiceCode="FR11878" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 50% Инет 2" />
@@ -2696,7 +2706,7 @@
     <CFS name="FR12126" globalServiceCode="FR12126" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пакет 8192 МБ, СМАРТ ОФИС ultra" />
     <CFS name="FR12127" globalServiceCode="FR12127" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пакет 1000 мин. all-net, СМАРТ ОФИС ultra" />
     <CFS name="FR12128" globalServiceCode="FR12128" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пакет 150 м/н мин., СМАРТ ОФИС ultra" />
-    <CFS name="FR12129" globalServiceCode="FR12129" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка Игры2" />
+    <CFS name="FR12129" globalServiceCode="FR12129" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка Игры2" />
     <CFS name="FR1213" globalServiceCode="FR1213" copyOf="CFS_FP_SERVICE_GENERAL" description="LG GM200 (380 800)  (-20%)" />
     <CFS name="FR12130" globalServiceCode="FR12130" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на ТП Компания (Белмаркет)" />
     <CFS name="FR12131" globalServiceCode="FR12131" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пакет минут во все сети на ТП Компания_100" />
@@ -2745,10 +2755,10 @@
     <CFS name="FR12170" globalServiceCode="FR12170" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка Музыка Бамбу" />
     <CFS name="FR12171" globalServiceCode="FR12171" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая – Corporate, доступно оборудование по 31.12.2016 (ARPU юр.л. от 60 т.р.)" />
     <CFS name="FR12172" globalServiceCode="FR12172" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая – Corporate, доступно оборудование по 31.12.2016 (ARPU юр.л. до 60 т.р.)" />
-    <CFS name="FR12173" globalServiceCode="FR12173" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата услуги ТОНИНГ" />
-    <CFS name="FR12174" globalServiceCode="FR12174" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный ТОНИНГ" />
-    <CFS name="FR12175" globalServiceCode="FR12175" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитный ТОНИНГ" />
-    <CFS name="FR12176" globalServiceCode="FR12176" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата мелодии дня" />
+    <CFS name="FR12173" globalServiceCode="FR12173" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Абонентская плата услуги ТОНИНГ" />
+    <CFS name="FR12174" globalServiceCode="FR12174" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Корпоративный ТОНИНГ" />
+    <CFS name="FR12175" globalServiceCode="FR12175" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Безлимитный ТОНИНГ" />
+    <CFS name="FR12176" globalServiceCode="FR12176" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Абонентская плата мелодии дня" />
     <CFS name="FR12177" globalServiceCode="FR12177" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на Бизнес Коннект Мини" />
     <CFS name="FR12178" globalServiceCode="FR12178" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 50%  на ДК - 2-я линия удержания" />
     <CFS name="FR12179" globalServiceCode="FR12179" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% на Инет 1/2/4/6 (Белмаркет)" />
@@ -2767,7 +2777,7 @@
     <CFS name="FR12191" globalServiceCode="FR12191" copyOf="CFS_FP_SERVICE_GENERAL" description="Организация выделенной линии со скидкой 67%" />
     <CFS name="FR12192" globalServiceCode="FR12192" copyOf="CFS_FP_SERVICE_GENERAL" description="Организация выделенной линии со скидкой 72%" />
     <CFS name="FR12193" globalServiceCode="FR12193" copyOf="CFS_FP_SERVICE_GENERAL" description="Организация выделенной линии со скидкой 66%" />
-    <CFS name="FR12194" globalServiceCode="FR12194" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Music" />
+    <CFS name="FR12194" globalServiceCode="FR12194" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Music" />
     <CFS name="FR12195" globalServiceCode="FR12195" copyOf="CFS_FP_SERVICE_GENERAL" description="Офисная телефония" />
     <CFS name="FR12196" globalServiceCode="FR12196" copyOf="CFS_FP_SERVICE_GENERAL" description="Отказ от акции &quot;СМАРТ Одноклассники&quot;" />
     <CFS name="FR12197" globalServiceCode="FR12197" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 100% Инет 4" />
@@ -2791,12 +2801,12 @@
     <CFS name="FR12214" globalServiceCode="FR12214" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смарт к лету:LG K580ds доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR12215" globalServiceCode="FR12215" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смарт к лету:Huawei Y6 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR12216" globalServiceCode="FR12216" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС Музыка" />
-    <CFS name="FR12217" globalServiceCode="FR12217" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы ВиаМоби" />
+    <CFS name="FR12217" globalServiceCode="FR12217" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы ВиаМоби" />
     <CFS name="FR12218" globalServiceCode="FR12218" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Продажа АО" />
     <CFS name="FR12219" globalServiceCode="FR12219" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на ТП СМАРТ ОФИС maxi (Мода с доставкой)" />
     <CFS name="FR1222" globalServiceCode="FR1222" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 1208 (144 000)  (-10%)" />
     <CFS name="FR12220" globalServiceCode="FR12220" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 80% Инет 6" />
-    <CFS name="FR12221" globalServiceCode="FR12221" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «SMS Online»" />
+    <CFS name="FR12221" globalServiceCode="FR12221" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «SMS Online»" />
     <CFS name="FR12222" globalServiceCode="FR12222" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МОПТ СМАРТ ОФИС mini (Единый тариф)" />
     <CFS name="FR12223" globalServiceCode="FR12223" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: акция «Встречаем СМАРТ Гостей»" />
     <CFS name="FR12224" globalServiceCode="FR12224" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 4 ГБ на ТП «МТС СМАРТ Гостевой»" />
@@ -2860,7 +2870,7 @@
     <CFS name="FR12278" globalServiceCode="FR12278" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: все сети_Гомельавтодор_СМАРТ ОФИС mini" />
     <CFS name="FR12279" globalServiceCode="FR12279" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: все сети_Гомельавтодор_СМАРТ ОФИС midi" />
     <CFS name="FR1228" globalServiceCode="FR1228" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 2323c-2 (226 800)  (-10%)" />
-    <CFS name="FR12280" globalServiceCode="FR12280" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы ViaMobi" />
+    <CFS name="FR12280" globalServiceCode="FR12280" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы ViaMobi" />
     <CFS name="FR12281" globalServiceCode="FR12281" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Единый тариф_ Лакокраска" />
     <CFS name="FR12282" globalServiceCode="FR12282" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа смартфона Lenovo A2010-A за 1 700 000_12 мес." />
     <CFS name="FR12283" globalServiceCode="FR12283" copyOf="CFS_FP_SERVICE_GENERAL" description="Пакет 100 минут международных вызовов" />
@@ -3007,7 +3017,7 @@
     <CFS name="FR12418" globalServiceCode="FR12418" copyOf="CFS_FP_SERVICE_GENERAL" description="Общественная сеть Wi-Fi Mobile 2" />
     <CFS name="FR12419" globalServiceCode="FR12419" copyOf="CFS_FP_SERVICE_GENERAL" description="Общественная сеть Wi-Fi Mobile 3" />
     <CFS name="FR1242" globalServiceCode="FR1242" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 5030c-2 (216 000)  (-10%)" />
-    <CFS name="FR12423" globalServiceCode="FR12423" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Сервисы BelIMMO" />
+    <CFS name="FR12423" globalServiceCode="FR12423" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Сервисы BelIMMO" />
     <CFS name="FR12424" globalServiceCode="FR12424" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет 0-100 МБ" />
     <CFS name="FR12425" globalServiceCode="FR12425" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет 100-500 МБ" />
     <CFS name="FR12426" globalServiceCode="FR12426" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет 500 МБ-2 ГБ" />
@@ -3034,8 +3044,8 @@
     <CFS name="FR12445" globalServiceCode="FR12445" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Всё! СуперБИТ" />
     <CFS name="FR12446" globalServiceCode="FR12446" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_БелСофт" />
     <CFS name="FR12447" globalServiceCode="FR12447" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Яркие смарты:Samsung j120Fds доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR12448" globalServiceCode="FR12448" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы IMMO" />
-    <CFS name="FR12449" globalServiceCode="FR12449" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы МТС-Инфо" />
+    <CFS name="FR12448" globalServiceCode="FR12448" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы IMMO" />
+    <CFS name="FR12449" globalServiceCode="FR12449" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервисы МТС-Инфо" />
     <CFS name="FR1245" globalServiceCode="FR1245" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 5130c (471 200)  (-20%)" />
     <CFS name="FR12450" globalServiceCode="FR12450" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС СМАРТ лайт тройной бонус х2, нов." />
     <CFS name="FR12451" globalServiceCode="FR12451" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС СМАРТ mini тройной бонус х2, нов." />
@@ -3248,7 +3258,7 @@
     <CFS name="FR12652" globalServiceCode="FR12652" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_ УЖРП Ленинского р-на" />
     <CFS name="FR12653" globalServiceCode="FR12653" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка МТС Телематика 20_ЖКХ Гродно_по 31.01.2020" />
     <CFS name="FR12654" globalServiceCode="FR12654" copyOf="CFS_FP_SERVICE_GENERAL" description="40 ГБ в LTE" />
-    <CFS name="FR12655" globalServiceCode="FR12655" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Отписка от ошибки 404" />
+    <CFS name="FR12655" globalServiceCode="FR12655" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Отписка от ошибки 404" />
     <CFS name="FR12656" globalServiceCode="FR12656" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Образование Витебск" />
     <CFS name="FR12657" globalServiceCode="FR12657" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 50% все сети (Умный бизнес)" />
     <CFS name="FR12658" globalServiceCode="FR12658" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: изменение тарификации: Единый тариф" />
@@ -3607,7 +3617,7 @@
     <CFS name="FR13002" globalServiceCode="FR13002" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС СМАРТ mini удвоение трафика" />
     <CFS name="FR13003" globalServiceCode="FR13003" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС СМАРТ удвоение трафика" />
     <CFS name="FR13004" globalServiceCode="FR13004" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС СМАРТ+ удвоение трафика" />
-    <CFS name="FR13005" globalServiceCode="FR13005" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Автооплата ППМП" />
+    <CFS name="FR13005" globalServiceCode="FR13005" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Автооплата ППМП" />
     <CFS name="FR13006" globalServiceCode="FR13006" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: БОНУС за договор. Участник" />
     <CFS name="FR13007" globalServiceCode="FR13007" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: БОНУС 5 ГБ за договор. Скидка" />
     <CFS name="FR13008" globalServiceCode="FR13008" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: БОНУС 1000 мин за договор. Скидка" />
@@ -3773,8 +3783,8 @@
     <CFS name="FR1317" globalServiceCode="FR1317" copyOf="CFS_FP_SERVICE_GENERAL" description="SonyEricsson S312 (422 910)  (-10%)" />
     <CFS name="FR13170" globalServiceCode="FR13170" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка  на МОПТ (Умный бизнес)_Рубикон" />
     <CFS name="FR13171" globalServiceCode="FR13171" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка GPRS-роуминг_Рубикон" />
-    <CFS name="FR13172" globalServiceCode="FR13172" copyOf="CFS_FP_SERVICE_GENERAL" description="Под защитой" />
-    <CFS name="FR13173" globalServiceCode="FR13173" copyOf="CFS_FP_SERVICE_GENERAL" description="Под защитой. Пакет оптимальный" />
+    <CFS name="FR13172" globalServiceCode="FR13172" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Под защитой" />
+    <CFS name="FR13173" globalServiceCode="FR13173" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Под защитой. Пакет оптимальный" />
     <CFS name="FR13174" globalServiceCode="FR13174" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая  настройка Под защитой" />
     <CFS name="FR1318" globalServiceCode="FR1318" copyOf="CFS_FP_SERVICE_GENERAL" description="SonyEricsson S312 (375 920)  (-20%)" />
     <CFS name="FR13181" globalServiceCode="FR13181" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем планшет: iPad mini 2 32Gb доп.12мес.на Интернет" />
@@ -4182,7 +4192,7 @@
     <CFS name="FR14142" globalServiceCode="FR14142" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% - переадресация on-net_150 минут" />
     <CFS name="FR14143" globalServiceCode="FR14143" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 50% - переадресация on-net" />
     <CFS name="FR14144" globalServiceCode="FR14144" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Газпромнефть" />
-    <CFS name="FR14145" globalServiceCode="FR14145" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис МТС Пресса" />
+    <CFS name="FR14145" globalServiceCode="FR14145" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис МТС Пресса" />
     <CFS name="FR14146" globalServiceCode="FR14146" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка интернет_ Газпромнефть" />
     <CFS name="FR14147" globalServiceCode="FR14147" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Ярк смарт17:ZTE Z10 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR14148" globalServiceCode="FR14148" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Ярк смарт17:ZTE A610 plus доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -4356,7 +4366,7 @@
     <CFS name="FR14306" globalServiceCode="FR14306" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг sms МТС РФ 0,13 ТП Компания" />
     <CFS name="FR14307" globalServiceCode="FR14307" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг GPRS МТС РФ 0,20 ТП Компания" />
     <CFS name="FR14308" globalServiceCode="FR14308" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестирование MultiIMSI" />
-    <CFS name="FR14309" globalServiceCode="FR14309" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «ИНВЕСТМЕНТ НЕТВОРК КОМПАНИ»" />
+    <CFS name="FR14309" globalServiceCode="FR14309" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «ИНВЕСТМЕНТ НЕТВОРК КОМПАНИ»" />
     <CFS name="FR1431" globalServiceCode="FR1431" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5550 (800 000)  (-20%)" />
     <CFS name="FR14310" globalServiceCode="FR14310" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «BelIMMO»" />
     <CFS name="FR14311" globalServiceCode="FR14311" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 72,38532110% на Интернет (за 1МБ)" />
@@ -4402,8 +4412,8 @@
     <CFS name="FR14348" globalServiceCode="FR14348" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: смарт и акс в расср 2017: Sams А510F(2)+2 акс доп.12мес." />
     <CFS name="FR14349" globalServiceCode="FR14349" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: смарт и акс в расср 2017:Sams А510F(2)+3 акс доп.12мес." />
     <CFS name="FR1435" globalServiceCode="FR1435" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5560 (928 000)  (-20%)" />
-    <CFS name="FR14350" globalServiceCode="FR14350" copyOf="CFS_FP_SERVICE_GENERAL" description="Антивирус ESET Mobile Security" />
-    <CFS name="FR14351" globalServiceCode="FR14351" copyOf="CFS_FP_SERVICE_GENERAL" description="ESETNOD32 ParentalControl" />
+    <CFS name="FR14350" globalServiceCode="FR14350" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Антивирус ESET Mobile Security" />
+    <CFS name="FR14351" globalServiceCode="FR14351" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="ESETNOD32 ParentalControl" />
     <CFS name="FR14352" globalServiceCode="FR14352" copyOf="CFS_FP_SERVICE_GENERAL" description="75 минут международных вызовов" />
     <CFS name="FR14353" globalServiceCode="FR14353" copyOf="CFS_FP_SERVICE_GENERAL" description="200 минут международных вызовов" />
     <CFS name="FR14354" globalServiceCode="FR14354" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Умный Бизнес 1,2,3,4_Штадлер" />
@@ -4422,7 +4432,7 @@
     <CFS name="FR14369" globalServiceCode="FR14369" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 79,89690722% на МОПТ (УБ 2)" />
     <CFS name="FR1437" globalServiceCode="FR1437" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5600 (975 920)  (-20%)" />
     <CFS name="FR14370" globalServiceCode="FR14370" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 75,62913907% на МОПТ (УБ 3)" />
-    <CFS name="FR14371" globalServiceCode="FR14371" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «NET CONTENT OU»" />
+    <CFS name="FR14371" globalServiceCode="FR14371" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет-подписка на сервисы «NET CONTENT OU»" />
     <CFS name="FR14372" globalServiceCode="FR14372" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Все сети на СМАРТ mini, МТС Бонус (1 мес.)" />
     <CFS name="FR14373" globalServiceCode="FR14373" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Все сети на 4G мини, МТС Бонус (1 мес.)" />
     <CFS name="FR14374" globalServiceCode="FR14374" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Все сети на СМАРТ, МТС Бонус (1 мес.)" />
@@ -4731,7 +4741,7 @@
     <CFS name="FR14670" globalServiceCode="FR14670" copyOf="CFS_FP_SERVICE_GENERAL" description="Единый тариф 2017_Умный бизнес_Брест,Витебск,Гродно,Минск_12 мес." />
     <CFS name="FR14671" globalServiceCode="FR14671" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бизнес Коннект 8_БГУ" />
     <CFS name="FR14672" globalServiceCode="FR14672" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 10% Бизнес Коннект 8" />
-    <CFS name="FR14673" globalServiceCode="FR14673" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис «Jobsms.by»" />
+    <CFS name="FR14673" globalServiceCode="FR14673" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис «Jobsms.by»" />
     <CFS name="FR14674" globalServiceCode="FR14674" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пакет 5 ГБ_Онлайнер" />
     <CFS name="FR14675" globalServiceCode="FR14675" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем смарт17:Sams A520F(4) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR14676" globalServiceCode="FR14676" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем смарт17:Sams A720F(3) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -4825,7 +4835,7 @@
     <CFS name="FR14762" globalServiceCode="FR14762" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на МОПТ ВММК 15%. Не менее 44 ПО на УБ" />
     <CFS name="FR14763" globalServiceCode="FR14763" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% на АП &quot;Зеленый номер&quot;, в мес." />
     <CFS name="FR14765" globalServiceCode="FR14765" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 90,2125% на услугу &quot;Зеленый номер&quot; категории III" />
-    <CFS name="FR14766" globalServiceCode="FR14766" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Деньги" />
+    <CFS name="FR14766" globalServiceCode="FR14766" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Деньги" />
     <CFS name="FR14767" globalServiceCode="FR14767" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка МТС Деньги" />
     <CFS name="FR14768" globalServiceCode="FR14768" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем смарт17:Sony F3311 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR14769" globalServiceCode="FR14769" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем смарт17:Sony G3312 доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -4855,7 +4865,7 @@
     <CFS name="FR14790" globalServiceCode="FR14790" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем планшет2017:Prestigio 3418 доп.12мес.на Интернет" />
     <CFS name="FR14791" globalServiceCode="FR14791" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем планшет2017:Prestigio 3131 доп.12мес.на Интернет" />
     <CFS name="FR14792" globalServiceCode="FR14792" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем планшет2017:Lenovo TB3-850 доп.12мес.на Интернет" />
-    <CFS name="FR14793" globalServiceCode="FR14793" copyOf="CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории III_Царь Горы" />
+    <CFS name="FR14793" globalServiceCode="FR14793" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории III_Царь Горы" />
     <CFS name="FR14794" globalServiceCode="FR14794" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка сервиса Царь горы" />
     <CFS name="FR14795" globalServiceCode="FR14795" copyOf="CFS_FP_SERVICE_GENERAL" description="Все_сети_Умный_Бизнес_MNP_6мес" />
     <CFS name="FR14796" globalServiceCode="FR14796" copyOf="CFS_FP_SERVICE_GENERAL" description="Все_сети_Умный_Бизнес_MNP_12мес" />
@@ -4867,9 +4877,9 @@
     <CFS name="FR14801" globalServiceCode="FR14801" copyOf="CFS_FP_SERVICE_GENERAL" description="Единый тариф MNP_Умный бизнес_25% _2017" />
     <CFS name="FR14802" globalServiceCode="FR14802" copyOf="CFS_FP_SERVICE_GENERAL" description="Единый тариф MNP_Умный бизнес_50%_2017" />
     <CFS name="FR14803" globalServiceCode="FR14803" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всем смарт17:Sams N950F доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
-    <CFS name="FR14804" globalServiceCode="FR14804" copyOf="CFS_FP_SERVICE_GENERAL" description="WAP_GAMES" />
-    <CFS name="FR14805" globalServiceCode="FR14805" copyOf="CFS_FP_SERVICE_GENERAL" description="WAP_MUSIC" />
-    <CFS name="FR14806" globalServiceCode="FR14806" copyOf="CFS_FP_SERVICE_GENERAL" description="WAP_FILMS" />
+    <CFS name="FR14804" globalServiceCode="FR14804" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="WAP_GAMES" />
+    <CFS name="FR14805" globalServiceCode="FR14805" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="WAP_MUSIC" />
+    <CFS name="FR14806" globalServiceCode="FR14806" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="WAP_FILMS" />
     <CFS name="FR14807" globalServiceCode="FR14807" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка WAP-портал МТС" />
     <CFS name="FR14808" globalServiceCode="FR14808" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ЮниХелп" />
     <CFS name="FR14809" globalServiceCode="FR14809" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище_Тетеринг. Сутки" />
@@ -4943,7 +4953,7 @@
     <CFS name="FR14874" globalServiceCode="FR14874" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 25% на Интернет Mini" />
     <CFS name="FR14875" globalServiceCode="FR14875" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 25% на Интернет Midi" />
     <CFS name="FR14876" globalServiceCode="FR14876" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка смартфон Apple iPhone 7 Plus 128 Gb_Маклай. Не менее 500 ПО на ТП Интернет" />
-    <CFS name="FR14877" globalServiceCode="FR14877" copyOf="CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории III_ Paparazzi" />
+    <CFS name="FR14877" globalServiceCode="FR14877" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории III_ Paparazzi" />
     <CFS name="FR14878" globalServiceCode="FR14878" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка сервиса Папарацци" />
     <CFS name="FR14879" globalServiceCode="FR14879" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Телематика_АК-3" />
     <CFS name="FR1488" globalServiceCode="FR1488" copyOf="CFS_FP_SERVICE_GENERAL" description="SonyEricsson J10i2 (1 116 000)  (-10%)" />
@@ -5074,10 +5084,10 @@
     <CFS name="FR14996" globalServiceCode="FR14996" copyOf="CFS_FP_SERVICE_GENERAL" description="Приветственный бонус для FTTx" />
     <CFS name="FR14997" globalServiceCode="FR14997" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:смарт/планшет:iPhone 8 Plus 64GB доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR14998" globalServiceCode="FR14998" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис МТС Киоск" />
-    <CFS name="FR14999" globalServiceCode="FR14999" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки русского" />
-    <CFS name="FR15000" globalServiceCode="FR15000" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки английского" />
-    <CFS name="FR15001" globalServiceCode="FR15001" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки польского" />
-    <CFS name="FR15002" globalServiceCode="FR15002" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Родная мова" />
+    <CFS name="FR14999" globalServiceCode="FR14999" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки русского" />
+    <CFS name="FR15000" globalServiceCode="FR15000" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки английского" />
+    <CFS name="FR15001" globalServiceCode="FR15001" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Уроки польского" />
+    <CFS name="FR15002" globalServiceCode="FR15002" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Родная мова" />
     <CFS name="FR15003" globalServiceCode="FR15003" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Баланс воды" />
     <CFS name="FR15004" globalServiceCode="FR15004" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: подписка на сервис Баланс веса" />
     <CFS name="FR15005" globalServiceCode="FR15005" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Услуга Все сети лайт со скидкой 50%" />
@@ -5458,7 +5468,7 @@
     <CFS name="FR15373" globalServiceCode="FR15373" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Инет 4_МРЦ" />
     <CFS name="FR15374" globalServiceCode="FR15374" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_МинскГорСуд. Не менее 100 ПО (39 на УБ1-3)" />
     <CFS name="FR15375" globalServiceCode="FR15375" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: УБ 2-4_гр.Адженс" />
-    <CFS name="FR15376" globalServiceCode="FR15376" copyOf="CFS_FP_SERVICE_GENERAL" description="Футбол МТС" />
+    <CFS name="FR15376" globalServiceCode="FR15376" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Футбол МТС" />
     <CFS name="FR15377" globalServiceCode="FR15377" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка FOOTBALL MTS" />
     <CFS name="FR15378" globalServiceCode="FR15378" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:смарт/планшет:Samsung A320F(4) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
     <CFS name="FR15379" globalServiceCode="FR15379" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:смарт/планшет:Samsung A520F(2) доп.12мес.на Отл,СМАРТЫ,ULTRA,Персона,Абсолют" />
@@ -5725,13 +5735,13 @@
     <CFS name="FR15624" globalServiceCode="FR15624" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Nokia 7 plus доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15625" globalServiceCode="FR15625" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ОП2018:Xi 4A 2/32Gb доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15626" globalServiceCode="FR15626" copyOf="CFS_FP_SERVICE_GENERAL" description="Cel-Fi PRO" />
-    <CFS name="FR15627" globalServiceCode="FR15627" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 1" />
-    <CFS name="FR15628" globalServiceCode="FR15628" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 2" />
-    <CFS name="FR15629" globalServiceCode="FR15629" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 3" />
+    <CFS name="FR15627" globalServiceCode="FR15627" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 1" />
+    <CFS name="FR15628" globalServiceCode="FR15628" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 2" />
+    <CFS name="FR15629" globalServiceCode="FR15629" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 3" />
     <CFS name="FR1563" globalServiceCode="FR1563" copyOf="CFS_FP_SERVICE_GENERAL" description="VEON A68 (359 100)  (-10%)" />
-    <CFS name="FR15630" globalServiceCode="FR15630" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 4" />
-    <CFS name="FR15631" globalServiceCode="FR15631" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 5" />
-    <CFS name="FR15632" globalServiceCode="FR15632" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 6" />
+    <CFS name="FR15630" globalServiceCode="FR15630" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 4" />
+    <CFS name="FR15631" globalServiceCode="FR15631" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 5" />
+    <CFS name="FR15632" globalServiceCode="FR15632" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Дополнительный номер 6" />
     <CFS name="FR15633" globalServiceCode="FR15633" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительный номер  - 100% скидка" />
     <CFS name="FR15634" globalServiceCode="FR15634" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: миграция на Безлимитище. Участник" />
     <CFS name="FR15635" globalServiceCode="FR15635" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: миграция на Безлимитище" />
@@ -5800,9 +5810,9 @@
     <CFS name="FR15692" globalServiceCode="FR15692" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на интернет-пакеты на удержание и МОПТ +25% (Матрица Бизнес Unlim)" />
     <CFS name="FR15693" globalServiceCode="FR15693" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на интернет-пакеты на удержание и МОПТ +50% (Матрица Бизнес Unlim)" />
     <CFS name="FR15694" globalServiceCode="FR15694" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на интернет-пакеты на удержание и МОПТ +33% (Матрица Бизнес Unlim)" />
-    <CFS name="FR15695" globalServiceCode="FR15695" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Doc - получение документов с МТС ID" />
-    <CFS name="FR15696" globalServiceCode="FR15696" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Doc -  получение документов с USB-ключом" />
-    <CFS name="FR15697" globalServiceCode="FR15697" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Doc – отправка документов" />
+    <CFS name="FR15695" globalServiceCode="FR15695" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Doc - получение документов с МТС ID" />
+    <CFS name="FR15696" globalServiceCode="FR15696" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Doc -  получение документов с USB-ключом" />
+    <CFS name="FR15697" globalServiceCode="FR15697" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Doc – отправка документов" />
     <CFS name="FR15698" globalServiceCode="FR15698" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: повышение 01.05.2018" />
     <CFS name="FR15699" globalServiceCode="FR15699" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Xia A1 64Gb(2) доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR1570" globalServiceCode="FR1570" copyOf="CFS_FP_SERVICE_GENERAL" description="VEON A380 (256 000)  (-20%)" />
@@ -5826,7 +5836,7 @@
     <CFS name="FR15716" globalServiceCode="FR15716" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: повышение (Компания АГРО) 01.05.2018" />
     <CFS name="FR15717" globalServiceCode="FR15717" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: повышение (Корпорация 10) 01.05.2018" />
     <CFS name="FR15718" globalServiceCode="FR15718" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: повышение (Корпорация 40) 01.05.2018" />
-    <CFS name="FR15719" globalServiceCode="FR15719" copyOf="CFS_FP_SERVICE_GENERAL" description="Пользователь подписки на Kidsclub.mts.by, 1 день" />
+    <CFS name="FR15719" globalServiceCode="FR15719" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Пользователь подписки на Kidsclub.mts.by, 1 день" />
     <CFS name="FR1572" globalServiceCode="FR1572" copyOf="CFS_FP_SERVICE_GENERAL" description="LG BL20e (1 080 000)  (-10%)" />
     <CFS name="FR15720" globalServiceCode="FR15720" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на on-net_0,0325" />
     <CFS name="FR15721" globalServiceCode="FR15721" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на off-net_0,109" />
@@ -5839,12 +5849,12 @@
     <CFS name="FR15728" globalServiceCode="FR15728" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов по 31.05.2018" />
     <CFS name="FR15729" globalServiceCode="FR15729" copyOf="CFS_FP_SERVICE_GENERAL" description="Звонок однополчанину" />
     <CFS name="FR1573" globalServiceCode="FR1573" copyOf="CFS_FP_SERVICE_GENERAL" description="LG BL20e (960 000)  (-20%)" />
-    <CFS name="FR15730" globalServiceCode="FR15730" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пользователь LineB" />
+    <CFS name="FR15730" globalServiceCode="FR15730" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: пользователь LineB" />
     <CFS name="FR15731" globalServiceCode="FR15731" copyOf="CFS_FP_SERVICE_GENERAL" description="200 минут во все сети" />
     <CFS name="FR15732" globalServiceCode="FR15732" copyOf="CFS_FP_SERVICE_GENERAL" description="5 ЛН на Безлимитище для новых" />
     <CFS name="FR15733" globalServiceCode="FR15733" copyOf="CFS_FP_SERVICE_GENERAL" description="5 ЛН на Безлимитище для новых. Участник" />
     <CFS name="FR15734" globalServiceCode="FR15734" copyOf="CFS_FP_SERVICE_GENERAL" description="Минимальная гарантированная плата за уникальное альфа-имя (ежемесячно)" />
-    <CFS name="FR15735" globalServiceCode="FR15735" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС Смарт Инфо" />
+    <CFS name="FR15735" globalServiceCode="FR15735" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС Смарт Инфо" />
     <CFS name="FR15736" globalServiceCode="FR15736" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: бронзовый номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.05.18" />
     <CFS name="FR15737" globalServiceCode="FR15737" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: серебряный номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.05.18" />
     <CFS name="FR15738" globalServiceCode="FR15738" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: золотой номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.05.18" />
@@ -6004,9 +6014,9 @@
     <CFS name="FR15881" globalServiceCode="FR15881" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:iPhone 7 128Gb доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15882" globalServiceCode="FR15882" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:iPhone 7+ 32Gb доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15883" globalServiceCode="FR15883" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:iPhone 7+ 128Gb доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
-    <CFS name="FR15884" globalServiceCode="FR15884" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR1" />
-    <CFS name="FR15885" globalServiceCode="FR15885" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR2" />
-    <CFS name="FR15886" globalServiceCode="FR15886" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR3" />
+    <CFS name="FR15884" globalServiceCode="FR15884" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR1" />
+    <CFS name="FR15885" globalServiceCode="FR15885" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR2" />
+    <CFS name="FR15886" globalServiceCode="FR15886" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: SOR3" />
     <CFS name="FR15887" globalServiceCode="FR15887" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Xia Redmi 5a16GB доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15888" globalServiceCode="FR15888" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Xia Redmi S2 32GB доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR15889" globalServiceCode="FR15889" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Xia Redmi 5Plus32GB доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
@@ -6081,7 +6091,7 @@
     <CFS name="FR15952" globalServiceCode="FR15952" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг вызовы в РФ МТС РФ 0, 9760 ТП Компания" />
     <CFS name="FR15953" globalServiceCode="FR15953" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг sms МТС РФ 0,1355 ТП Компания" />
     <CFS name="FR15954" globalServiceCode="FR15954" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг GPRS МТС РФ 0,2084 ТП Компания" />
-    <CFS name="FR15955" globalServiceCode="FR15955" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: удаление подписок" />
+    <CFS name="FR15955" globalServiceCode="FR15955" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: удаление подписок" />
     <CFS name="FR15956" globalServiceCode="FR15956" copyOf="CFS_FP_SERVICE_GENERAL" description="Подарки от МТС: безлимитный интернет" />
     <CFS name="FR15957" globalServiceCode="FR15957" copyOf="CFS_FP_SERVICE_GENERAL" description="Подарки от МТС: безлимит на МТС" />
     <CFS name="FR15959" globalServiceCode="FR15959" copyOf="CFS_FP_SERVICE_GENERAL" description="Виртуальный процессор 2,6 ГГц" />
@@ -6296,12 +6306,12 @@
     <CFS name="FR16151" globalServiceCode="FR16151" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нов гаджет:Xia Redmi 516GB доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16152" globalServiceCode="FR16152" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Открытый интернет_БелагроБел" />
     <CFS name="FR16153" globalServiceCode="FR16153" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Открытый интернет 524MB" />
-    <CFS name="FR16154" globalServiceCode="FR16154" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_GAMES2" />
-    <CFS name="FR16155" globalServiceCode="FR16155" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_HEALTH" />
-    <CFS name="FR16156" globalServiceCode="FR16156" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_ INTERNET_SUBS_MUSIC2" />
-    <CFS name="FR16157" globalServiceCode="FR16157" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_FLIRT" />
-    <CFS name="FR16158" globalServiceCode="FR16158" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_FUN" />
-    <CFS name="FR16159" globalServiceCode="FR16159" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории II, в сутки_INTERNET_SUBS_18+" />
+    <CFS name="FR16154" globalServiceCode="FR16154" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_GAMES2" />
+    <CFS name="FR16155" globalServiceCode="FR16155" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_HEALTH" />
+    <CFS name="FR16156" globalServiceCode="FR16156" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_ INTERNET_SUBS_MUSIC2" />
+    <CFS name="FR16157" globalServiceCode="FR16157" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_FLIRT" />
+    <CFS name="FR16158" globalServiceCode="FR16158" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории I, в сутки_INTERNET_SUBS_FUN" />
+    <CFS name="FR16159" globalServiceCode="FR16159" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка категории II, в сутки_INTERNET_SUBS_18+" />
     <CFS name="FR1616" globalServiceCode="FR1616" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung C3212 (538 000) " />
     <CFS name="FR16160" globalServiceCode="FR16160" copyOf="CFS_FP_SERVICE_GENERAL" description="Знакомства с МТС, в сутки_Доступ к сервису &quot;Знакомства&quot; :ZNAKOMSTVA_1" />
     <CFS name="FR16161" globalServiceCode="FR16161" copyOf="CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории VII_MTSPRESSA" />
@@ -6440,7 +6450,7 @@
     <CFS name="FR16283" globalServiceCode="FR16283" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:смартфон2018:iPhone 8 64GB доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16284" globalServiceCode="FR16284" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:смартфон2018:iPhone X 64GB доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16285" globalServiceCode="FR16285" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитище+" />
-    <CFS name="FR16286" globalServiceCode="FR16286" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка на Fitnessclub.mts.by, 1 день" />
+    <CFS name="FR16286" globalServiceCode="FR16286" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка на Fitnessclub.mts.by, 1 день" />
     <CFS name="FR16287" globalServiceCode="FR16287" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая скидка 100% «Подписка на Fitnessclub.mts.by, 3 дня»" />
     <CFS name="FR16288" globalServiceCode="FR16288" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Запрос на миграцию MNP" />
     <CFS name="FR16289" globalServiceCode="FR16289" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: передача данных на скорости до 2 мБит/сек." />
@@ -6615,20 +6625,20 @@
     <CFS name="FR1646" globalServiceCode="FR1646" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5620 (900 000) " />
     <CFS name="FR1647" globalServiceCode="FR1647" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5620 (810 000)  (-10%)" />
     <CFS name="FR1648" globalServiceCode="FR1648" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5620 (720 000)  (-20%)" />
-    <CFS name="FR16489" globalServiceCode="FR16489" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: участник пилотного проекта Интерактивный баланс" />
+    <CFS name="FR16489" globalServiceCode="FR16489" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: участник пилотного проекта Интерактивный баланс" />
     <CFS name="FR1649" globalServiceCode="FR1649" copyOf="CFS_FP_SERVICE_GENERAL" description="Бонус для «Путешественника»" />
     <CFS name="FR16490" globalServiceCode="FR16490" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Оставайтесь на связи 1_ДС 36 мес." />
     <CFS name="FR16491" globalServiceCode="FR16491" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Оставайтесь на связи 2_ДС 36 мес." />
     <CFS name="FR16492" globalServiceCode="FR16492" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Оставайтесь на связи 3_ДС 36 мес." />
-    <CFS name="FR16493" globalServiceCode="FR16493" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС ТВ соц.пакет" />
-    <CFS name="FR16494" globalServiceCode="FR16494" copyOf="CFS_FP_SERVICE_GENERAL" description="Кино от ivi" />
+    <CFS name="FR16493" globalServiceCode="FR16493" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС ТВ соц.пакет" />
+    <CFS name="FR16494" globalServiceCode="FR16494" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Кино от ivi" />
     <CFS name="FR16497" globalServiceCode="FR16497" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит 3" />
     <CFS name="FR16498" globalServiceCode="FR16498" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит 3 12М" />
     <CFS name="FR16499" globalServiceCode="FR16499" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 100% Безлимит 3" />
-    <CFS name="FR16500" globalServiceCode="FR16500" copyOf="CFS_FP_SERVICE_GENERAL" description="ТВ от KinoMax" />
-    <CFS name="FR16501" globalServiceCode="FR16501" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка на Амедиатеку" />
-    <CFS name="FR16502" globalServiceCode="FR16502" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка на Видеотеку" />
-    <CFS name="FR16503" globalServiceCode="FR16503" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка на пакет «Ночной»" />
+    <CFS name="FR16500" globalServiceCode="FR16500" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="ТВ от KinoMax" />
+    <CFS name="FR16501" globalServiceCode="FR16501" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка на Амедиатеку" />
+    <CFS name="FR16502" globalServiceCode="FR16502" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка на Видеотеку" />
+    <CFS name="FR16503" globalServiceCode="FR16503" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка на пакет «Ночной»" />
     <CFS name="FR16504" globalServiceCode="FR16504" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% ТВ от KinoMax, 7 дней" />
     <CFS name="FR16505" globalServiceCode="FR16505" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% Подписка на Амедиатеку, 7 дней" />
     <CFS name="FR16506" globalServiceCode="FR16506" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% Доступ SVOD-контенту  от KinoMax категории II, 7 дней" />
@@ -6743,25 +6753,25 @@
     <CFS name="FR16611" globalServiceCode="FR16611" copyOf="CFS_FP_SERVICE_GENERAL" description="Будь в курсе: подписка День в истории" />
     <CFS name="FR16612" globalServiceCode="FR16612" copyOf="CFS_FP_SERVICE_GENERAL" description="Будь в курсе: подписка В мире непознанного" />
     <CFS name="FR16613" globalServiceCode="FR16613" copyOf="CFS_FP_SERVICE_GENERAL" description="Будь в курсе: подписка на Inяз" />
-    <CFS name="FR16614" globalServiceCode="FR16614" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Экономайзер" />
-    <CFS name="FR16615" globalServiceCode="FR16615" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Статусы" />
-    <CFS name="FR16616" globalServiceCode="FR16616" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Как стать богатым" />
-    <CFS name="FR16617" globalServiceCode="FR16617" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на диеты" />
-    <CFS name="FR16618" globalServiceCode="FR16618" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на настроение" />
-    <CFS name="FR16619" globalServiceCode="FR16619" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на курс валют" />
+    <CFS name="FR16614" globalServiceCode="FR16614" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Экономайзер" />
+    <CFS name="FR16615" globalServiceCode="FR16615" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Статусы" />
+    <CFS name="FR16616" globalServiceCode="FR16616" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Как стать богатым" />
+    <CFS name="FR16617" globalServiceCode="FR16617" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на диеты" />
+    <CFS name="FR16618" globalServiceCode="FR16618" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на настроение" />
+    <CFS name="FR16619" globalServiceCode="FR16619" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на курс валют" />
     <CFS name="FR1662" globalServiceCode="FR1662" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KF301 (436 500)  (-10%)" />
-    <CFS name="FR16620" globalServiceCode="FR16620" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на анекдоты" />
-    <CFS name="FR16621" globalServiceCode="FR16621" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на погоду" />
-    <CFS name="FR16622" globalServiceCode="FR16622" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на гороскоп" />
-    <CFS name="FR16623" globalServiceCode="FR16623" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на музыку" />
-    <CFS name="FR16624" globalServiceCode="FR16624" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на игры" />
-    <CFS name="FR16625" globalServiceCode="FR16625" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на Playboy 18+_m.xvideos.by" />
-    <CFS name="FR16626" globalServiceCode="FR16626" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_m.funzone.by/video" />
-    <CFS name="FR16627" globalServiceCode="FR16627" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на сайт знакомств_m.funzone.by/flirt" />
-    <CFS name="FR16628" globalServiceCode="FR16628" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_m.funzone.by/subs" />
-    <CFS name="FR16629" globalServiceCode="FR16629" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на ЗОЖ_m.funzone.by/health" />
+    <CFS name="FR16620" globalServiceCode="FR16620" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на анекдоты" />
+    <CFS name="FR16621" globalServiceCode="FR16621" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на погоду" />
+    <CFS name="FR16622" globalServiceCode="FR16622" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на гороскоп" />
+    <CFS name="FR16623" globalServiceCode="FR16623" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на музыку" />
+    <CFS name="FR16624" globalServiceCode="FR16624" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на игры" />
+    <CFS name="FR16625" globalServiceCode="FR16625" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на Playboy 18+_m.xvideos.by" />
+    <CFS name="FR16626" globalServiceCode="FR16626" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_m.funzone.by/video" />
+    <CFS name="FR16627" globalServiceCode="FR16627" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на сайт знакомств_m.funzone.by/flirt" />
+    <CFS name="FR16628" globalServiceCode="FR16628" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_m.funzone.by/subs" />
+    <CFS name="FR16629" globalServiceCode="FR16629" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на ЗОЖ_m.funzone.by/health" />
     <CFS name="FR1663" globalServiceCode="FR1663" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KF301 (388 000)  (-20%)" />
-    <CFS name="FR16630" globalServiceCode="FR16630" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_m.funzone.by/game" />
+    <CFS name="FR16630" globalServiceCode="FR16630" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_m.funzone.by/game" />
     <CFS name="FR16631" globalServiceCode="FR16631" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры 8 ДСО:смартфоны(2) доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16632" globalServiceCode="FR16632" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры А ДСО:смартфоны доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16633" globalServiceCode="FR16633" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% на доставку счетов заказной почтой_по 31.12.2018" />
@@ -6769,7 +6779,7 @@
     <CFS name="FR16635" globalServiceCode="FR16635" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: запрос клиента на доставку счета заказной почтой" />
     <CFS name="FR16636" globalServiceCode="FR16636" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Apple iPhone X 64GB за 2299,00_18 мес." />
     <CFS name="FR16637" globalServiceCode="FR16637" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Председатель 2" />
-    <CFS name="FR16638" globalServiceCode="FR16638" copyOf="CFS_FP_SERVICE_GENERAL" description="Кино и сериалы START.RU" />
+    <CFS name="FR16638" globalServiceCode="FR16638" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Кино и сериалы START.RU" />
     <CFS name="FR16639" globalServiceCode="FR16639" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка «Кино и сериалы START.RU», 7 дней" />
     <CFS name="FR1664" globalServiceCode="FR1664" copyOf="CFS_FP_SERVICE_GENERAL" description="LG KF305 (695 000) " />
     <CFS name="FR16640" globalServiceCode="FR16640" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Samsung J810F DS за 525,00_12 мес." />
@@ -6810,25 +6820,25 @@
     <CFS name="FR16676" globalServiceCode="FR16676" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 8 по 31.03.2019" />
     <CFS name="FR16677" globalServiceCode="FR16677" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер Max по 31.03.2019" />
     <CFS name="FR16678" globalServiceCode="FR16678" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер. Участник" />
-    <CFS name="FR16679" globalServiceCode="FR16679" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_audioing.by" />
+    <CFS name="FR16679" globalServiceCode="FR16679" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_audioing.by" />
     <CFS name="FR1668" globalServiceCode="FR1668" copyOf="CFS_FP_SERVICE_GENERAL" description="LG GD350 (449 100)  (-10%)" />
-    <CFS name="FR16680" globalServiceCode="FR16680" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на фильмы_mobiletuber.by" />
-    <CFS name="FR16681" globalServiceCode="FR16681" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_gamecatalog.by" />
-    <CFS name="FR16682" globalServiceCode="FR16682" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_unlimitedgamez.by" />
-    <CFS name="FR16683" globalServiceCode="FR16683" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_islandmob.by" />
-    <CFS name="FR16684" globalServiceCode="FR16684" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_game-store.by" />
-    <CFS name="FR16685" globalServiceCode="FR16685" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_mobigamer.by" />
-    <CFS name="FR16686" globalServiceCode="FR16686" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_vtrendo.by" />
-    <CFS name="FR16687" globalServiceCode="FR16687" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_videomeo.by" />
-    <CFS name="FR16688" globalServiceCode="FR16688" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на эро_m.erovideo.by" />
-    <CFS name="FR16689" globalServiceCode="FR16689" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_appsclub.mts.by_1 day" />
+    <CFS name="FR16680" globalServiceCode="FR16680" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на фильмы_mobiletuber.by" />
+    <CFS name="FR16681" globalServiceCode="FR16681" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_gamecatalog.by" />
+    <CFS name="FR16682" globalServiceCode="FR16682" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_unlimitedgamez.by" />
+    <CFS name="FR16683" globalServiceCode="FR16683" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_islandmob.by" />
+    <CFS name="FR16684" globalServiceCode="FR16684" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_game-store.by" />
+    <CFS name="FR16685" globalServiceCode="FR16685" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_mobigamer.by" />
+    <CFS name="FR16686" globalServiceCode="FR16686" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_vtrendo.by" />
+    <CFS name="FR16687" globalServiceCode="FR16687" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на видео_videomeo.by" />
+    <CFS name="FR16688" globalServiceCode="FR16688" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на эро_m.erovideo.by" />
+    <CFS name="FR16689" globalServiceCode="FR16689" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_appsclub.mts.by_1 day" />
     <CFS name="FR1669" globalServiceCode="FR1669" copyOf="CFS_FP_SERVICE_GENERAL" description="LG GD350 (399 200)  (-20%)" />
     <CFS name="FR16690" globalServiceCode="FR16690" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_appsclub.mts.by_7 days" />
-    <CFS name="FR16691" globalServiceCode="FR16691" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на ЗОЖ_fitnessclub.mts.by" />
-    <CFS name="FR16692" globalServiceCode="FR16692" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_kidsclub.mts.by" />
-    <CFS name="FR16693" globalServiceCode="FR16693" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_app.mts.by_1 day" />
+    <CFS name="FR16691" globalServiceCode="FR16691" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на ЗОЖ_fitnessclub.mts.by" />
+    <CFS name="FR16692" globalServiceCode="FR16692" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_kidsclub.mts.by" />
+    <CFS name="FR16693" globalServiceCode="FR16693" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_app.mts.by_1 day" />
     <CFS name="FR16694" globalServiceCode="FR16694" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_app.mts.by_7 days" />
-    <CFS name="FR16695" globalServiceCode="FR16695" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на by.befriendz.net" />
+    <CFS name="FR16695" globalServiceCode="FR16695" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на by.befriendz.net" />
     <CFS name="FR16696" globalServiceCode="FR16696" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая скидка 100% BeFriends, 3 дня" />
     <CFS name="FR16697" globalServiceCode="FR16697" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Акция:банк «МоскваМинск» 8ГБ доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
     <CFS name="FR16698" globalServiceCode="FR16698" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Акция:банк2 «Белинвестбанк» 8ГБ доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
@@ -6892,8 +6902,8 @@
     <CFS name="FR16751" globalServiceCode="FR16751" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 40% на Бизнес Коннект для удержания" />
     <CFS name="FR16752" globalServiceCode="FR16752" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: КБИ Резервный канал" />
     <CFS name="FR16753" globalServiceCode="FR16753" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Карта" />
-    <CFS name="FR16754" globalServiceCode="FR16754" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_appps.by" />
-    <CFS name="FR16755" globalServiceCode="FR16755" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_playlist.by" />
+    <CFS name="FR16754" globalServiceCode="FR16754" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на игры_appps.by" />
+    <CFS name="FR16755" globalServiceCode="FR16755" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на музыку_playlist.by" />
     <CFS name="FR16756" globalServiceCode="FR16756" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Предзаказ:Пакет Безлимит на 180 дней доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16757" globalServiceCode="FR16757" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Предзаказ:Пакет Безлимит на 180 дней доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16758" globalServiceCode="FR16758" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Время роста (больше SIM)" />
@@ -6908,7 +6918,7 @@
     <CFS name="FR16766" globalServiceCode="FR16766" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ОП2019:Планшет159 доп.12мес.на Отл, 4G, ULTRA, Персона, Абсолют" />
     <CFS name="FR16767" globalServiceCode="FR16767" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Lenovo ТВ-8504Х TAB за 340,0_18 мес." />
     <CFS name="FR16768" globalServiceCode="FR16768" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ (УБ1)_МРЦ _по 31.08.2019" />
-    <CFS name="FR16769" globalServiceCode="FR16769" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: пользователь «KinoMax»" />
+    <CFS name="FR16769" globalServiceCode="FR16769" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: пользователь «KinoMax»" />
     <CFS name="FR1677" globalServiceCode="FR1677" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung E1310 (180 000) " />
     <CFS name="FR16770" globalServiceCode="FR16770" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% «Подписка на Видеотеку», 7 дней" />
     <CFS name="FR16771" globalServiceCode="FR16771" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% «Подписка на пакет «Ночной»», 7 дней" />
@@ -6945,7 +6955,7 @@
     <CFS name="FR1680" globalServiceCode="FR1680" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка SMS -30%" />
     <CFS name="FR16800" globalServiceCode="FR16800" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Интернат" />
     <CFS name="FR16802" globalServiceCode="FR16802" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 10% на Корпоративный безлимитный интернет" />
-    <CFS name="FR16803" globalServiceCode="FR16803" copyOf="CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории VII_trener" />
+    <CFS name="FR16803" globalServiceCode="FR16803" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Доступ к информационному комплексу категории VII_trener" />
     <CFS name="FR16804" globalServiceCode="FR16804" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка сервиса Тренер" />
     <CFS name="FR16805" globalServiceCode="FR16805" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: тариф (500 мин.) для БАТ_по 28.02.2021" />
     <CFS name="FR16806" globalServiceCode="FR16806" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: тариф (1000 мин.) для БАТ_по 28.02.2021" />
@@ -7116,52 +7126,568 @@
     <CFS name="FR16958" globalServiceCode="FR16958" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А2 ДСО:смартфоны доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR16959" globalServiceCode="FR16959" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А2 ДСО:смартфоны доп.18мес.на Отл,4G,ULTRA,Персона,Абсолют" />
     <CFS name="FR1696" globalServiceCode="FR1696" copyOf="CFS_FP_SERVICE_GENERAL" description="300 SMS" />
+    <CFS name="FR16960" globalServiceCode="FR16960" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: SMS во все сети" />
+    <CFS name="FR16961" globalServiceCode="FR16961" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка Инет 1_Чаусский Жилкомхоз" />
+    <CFS name="FR16962" globalServiceCode="FR16962" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка КБИ_БСБ Банк" />
+    <CFS name="FR16963" globalServiceCode="FR16963" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Huawei P20 lite за 499,00_12 мес." />
+    <CFS name="FR16964" globalServiceCode="FR16964" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Статусы TRY" />
+    <CFS name="FR16965" globalServiceCode="FR16965" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Как стать богатым TRY" />
+    <CFS name="FR16966" globalServiceCode="FR16966" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на диеты TRY" />
+    <CFS name="FR16967" globalServiceCode="FR16967" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на настроение TRY" />
+    <CFS name="FR16968" globalServiceCode="FR16968" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на курс валют TRY" />
+    <CFS name="FR16969" globalServiceCode="FR16969" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на анекдоты TRY" />
     <CFS name="FR1697" globalServiceCode="FR1697" copyOf="CFS_FP_SERVICE_GENERAL" description="500 SMS" />
+    <CFS name="FR16970" globalServiceCode="FR16970" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на погоду TRY" />
+    <CFS name="FR16971" globalServiceCode="FR16971" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на гороскоп TRY" />
+    <CFS name="FR16972" globalServiceCode="FR16972" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на музыку TRY" />
+    <CFS name="FR16973" globalServiceCode="FR16973" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на игры TRY" />
+    <CFS name="FR16974" globalServiceCode="FR16974" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка Экономайзер TRY" />
+    <CFS name="FR16975" globalServiceCode="FR16975" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: бриллиантовый номер для Абсолют за 0 руб. (12 мес.) с 01.07.19" />
+    <CFS name="FR16976" globalServiceCode="FR16976" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: золотой номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.07.19" />
+    <CFS name="FR16977" globalServiceCode="FR16977" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: серебряный номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.07.19" />
+    <CFS name="FR16978" globalServiceCode="FR16978" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: бронзовый номер для ULTRA и Абсолют за 0 руб. (12 мес.) с 01.07.19" />
+    <CFS name="FR16979" globalServiceCode="FR16979" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов по 31.07.2019" />
+    <CFS name="FR16980" globalServiceCode="FR16980" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов(СМАРТ ОФИС (mini)) по 31.07.2019" />
+    <CFS name="FR16981" globalServiceCode="FR16981" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов(СМАРТ ОФИС (midi)) по 31.07.2019" />
+    <CFS name="FR16982" globalServiceCode="FR16982" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов(СМАРТ ОФИС (maxi)) по 31.07.2019" />
+    <CFS name="FR16983" globalServiceCode="FR16983" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов(СМАРТ ОФИС (ultra)) по 31.07.2019" />
+    <CFS name="FR16984" globalServiceCode="FR16984" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (5-39)) по 31.07.2019" />
+    <CFS name="FR16985" globalServiceCode="FR16985" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (40-99)) по 31.07.2019" />
+    <CFS name="FR16986" globalServiceCode="FR16986" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (от 100)) по 31.07.2019" />
+    <CFS name="FR16987" globalServiceCode="FR16987" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (от 100)) по 31.07.2019" />
+    <CFS name="FR16988" globalServiceCode="FR16988" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (от 100_Транспорт)) по 31.07.2019" />
+    <CFS name="FR16989" globalServiceCode="FR16989" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (200)) по 31.07.2019" />
     <CFS name="FR1699" globalServiceCode="FR1699" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6700c-1 (1 300 000) " />
+    <CFS name="FR16990" globalServiceCode="FR16990" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания (200_БЕЛТЕЛЕКОМ)) по 31.07.2019" />
+    <CFS name="FR16991" globalServiceCode="FR16991" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Компания АГРО) по 31.07.2019" />
+    <CFS name="FR16992" globalServiceCode="FR16992" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Корпорация (10)) по 31.07.2019" />
+    <CFS name="FR16993" globalServiceCode="FR16993" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Корпорация (40)) по 31.07.2019" />
+    <CFS name="FR16994" globalServiceCode="FR16994" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Корпорация (100)) по 31.07.2019" />
+    <CFS name="FR16995" globalServiceCode="FR16995" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: сохранение тарифов (Корпорация (200)) по 31.07.2019" />
+    <CFS name="FR16997" globalServiceCode="FR16997" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка «МТС ТВ», 7 дней" />
+    <CFS name="FR16998" globalServiceCode="FR16998" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 45% на МОПТ (Умный бизнес 2)" />
+    <CFS name="FR16999" globalServiceCode="FR16999" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Акция:банк «МоскваМинск» Безлимит на90дн доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
     <CFS name="FR1700" globalServiceCode="FR1700" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6700c-1 (1 170 000)  (-10%)" />
+    <CFS name="FR17000" globalServiceCode="FR17000" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Акция:банк2 «Белинвестбанк» Безлимит на90дн доп.12мес.наОтл,4G,Супер,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17001" globalServiceCode="FR17001" copyOf="CFS_FP_SERVICE_GENERAL" description="1 ГБ за границей" />
+    <CFS name="FR17002" globalServiceCode="FR17002" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Samsung A105 2/32Gb за 240,00_12 мес." />
+    <CFS name="FR17003" globalServiceCode="FR17003" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Трейд-ин.Часы Samsung доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17004" globalServiceCode="FR17004" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: РРЛ Витебск" />
+    <CFS name="FR17005" globalServiceCode="FR17005" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Направленный Wi-Fi Витебск" />
+    <CFS name="FR17006" globalServiceCode="FR17006" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет 1 (НУ70) доп. 12мес" />
+    <CFS name="FR17007" globalServiceCode="FR17007" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет 2 (НУ60) доп. 12мес" />
+    <CFS name="FR17008" globalServiceCode="FR17008" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет 3 (НУ120) доп. 18мес" />
+    <CFS name="FR17009" globalServiceCode="FR17009" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Телематика_Энергосбыт-Гомельэнерго" />
     <CFS name="FR1701" globalServiceCode="FR1701" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6700c-1 (1 040 000)  (-20%)" />
+    <CFS name="FR17010" globalServiceCode="FR17010" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Lync здравоохрвнение" />
+    <CFS name="FR17011" globalServiceCode="FR17011" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 16,27907% на услугу «SMS с короткого номера во все сети (за 1 SMS) для банка Дабрабыт" />
+    <CFS name="FR17012" globalServiceCode="FR17012" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 11,627907% на услугу «SMS с короткого номера во все сети (за 1 SMS) для Белнефтехим" />
+    <CFS name="FR17013" globalServiceCode="FR17013" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% на услугу «Сервисное сообщение в Viber для Белнефтехим" />
+    <CFS name="FR17014" globalServiceCode="FR17014" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 33% на услугу «Сервисное сообщение в Viber для банка Дабрабыт" />
+    <CFS name="FR17015" globalServiceCode="FR17015" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 29% на услугу «Рекламное сообщение в Viber для Белнефтехим" />
+    <CFS name="FR17016" globalServiceCode="FR17016" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 16,666667% на услугу «Рекламное сообщение в  Viber для банка Дабрабыт" />
+    <CFS name="FR17017" globalServiceCode="FR17017" copyOf="CFS_FP_SERVICE_GENERAL" description="ТВ в МТС Кино" />
+    <CFS name="FR17018" globalServiceCode="FR17018" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка «ТВ в МТС Кино», 7 дней" />
+    <CFS name="FR17019" globalServiceCode="FR17019" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа Samsung G960F DS 64Gb за 1 739_12 мес." />
     <CFS name="FR1702" globalServiceCode="FR1702" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6700c-1Gold (2 000 000) " />
+    <CFS name="FR17020" globalServiceCode="FR17020" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа  Samsung G973 6/128Gb за 2 122,09_12 мес." />
+    <CFS name="FR17021" globalServiceCode="FR17021" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СмартфонСоСтраховкой:Н199;Бонус 5 ГБ доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17022" globalServiceCode="FR17022" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СмартфонСоСтраховкой:Н199;Бонус 5 ГБ доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17023" globalServiceCode="FR17023" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 25% до 31.01.2020" />
+    <CFS name="FR17024" globalServiceCode="FR17024" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка МТС Карта" />
+    <CFS name="FR17025" globalServiceCode="FR17025" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая Скидка 100% NB-IoT" />
+    <CFS name="FR17026" globalServiceCode="FR17026" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Телематика_ИлевнБиУай" />
+    <CFS name="FR17027" globalServiceCode="FR17027" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% Телематика 120" />
+    <CFS name="FR17028" globalServiceCode="FR17028" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: МОПТ 5,00 (УБ2)" />
+    <CFS name="FR17029" globalServiceCode="FR17029" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: МОПТ 7,00 (УБ3)" />
     <CFS name="FR1703" globalServiceCode="FR1703" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6760s-1 (1 199 000) " />
+    <CFS name="FR17030" globalServiceCode="FR17030" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: Россия, Украина 10%" />
+    <CFS name="FR17031" globalServiceCode="FR17031" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит на YouTube, МТС Бонус (1 мес.)" />
+    <CFS name="FR17032" globalServiceCode="FR17032" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит на YouTube (Супер 8), МТС Бонус (1 мес.)" />
+    <CFS name="FR17033" globalServiceCode="FR17033" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит интернета (до 1 Мбит/сек), МТС Бонус (1 мес.)" />
+    <CFS name="FR17034" globalServiceCode="FR17034" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит интернета (до 2 Мбит/сек), МТС Бонус (1 мес.)" />
+    <CFS name="FR17035" globalServiceCode="FR17035" copyOf="CFS_FP_SERVICE_GENERAL" description="Гостевой Супер max (с 01.08.2019)" />
+    <CFS name="FR17036" globalServiceCode="FR17036" copyOf="CFS_FP_SERVICE_GENERAL" description="75 минут международных вызовов в Россию" />
+    <CFS name="FR17037" globalServiceCode="FR17037" copyOf="CFS_FP_SERVICE_GENERAL" description="200 минут международных вызовов в Россию" />
+    <CFS name="FR17038" globalServiceCode="FR17038" copyOf="CFS_FP_SERVICE_GENERAL" description="300 минут международных вызовов в Россию" />
+    <CFS name="FR17039" globalServiceCode="FR17039" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на Безлимит (до1 Мбит/сек)_25КК" />
     <CFS name="FR1704" globalServiceCode="FR1704" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6760s-1 (1 079 100)  (-10%)" />
+    <CFS name="FR17040" globalServiceCode="FR17040" copyOf="CFS_FP_SERVICE_GENERAL" description="SIP-многоканальность скидка 48%" />
+    <CFS name="FR17041" globalServiceCode="FR17041" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитный интернет для Корпоративный Супер max" />
+    <CFS name="FR17042" globalServiceCode="FR17042" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая  скидка 100% 30 календарных дней «МТС ТВ» новичкам" />
+    <CFS name="FR17043" globalServiceCode="FR17043" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка НИАЭП 01.09.2019-31.08.2020" />
+    <CFS name="FR17044" globalServiceCode="FR17044" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: АП 1,2896 ТП Компания" />
+    <CFS name="FR17045" globalServiceCode="FR17045" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: off-net 0,0520 ТП Компания 200" />
+    <CFS name="FR17046" globalServiceCode="FR17046" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: м/н вызовы РФ 0,2956 ТП Компания 200" />
+    <CFS name="FR17047" globalServiceCode="FR17047" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: Корпоративный безлимитный интернет 4,6169 ТП Компания 200" />
+    <CFS name="FR17048" globalServiceCode="FR17048" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг вызовы в РБ_РФ 0,6860 ТП Компания" />
+    <CFS name="FR17049" globalServiceCode="FR17049" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг вызовы в РФ_РФ 0,6860 ТП Компания" />
     <CFS name="FR1705" globalServiceCode="FR1705" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia 6760s-1 (959 200)  (-20%)" />
+    <CFS name="FR17050" globalServiceCode="FR17050" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг sms МТС РФ 0,1398 ТП Компания" />
+    <CFS name="FR17051" globalServiceCode="FR17051" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг GPRS_РФ 0,215 ТП Компания" />
+    <CFS name="FR17052" globalServiceCode="FR17052" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н159;Бонус 2 ГБ доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17053" globalServiceCode="FR17053" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н259;Бонус 8 ГБ доп.12мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17054" globalServiceCode="FR17054" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н109;Планшет  доп.12мес.на Интернет" />
+    <CFS name="FR17055" globalServiceCode="FR17055" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н259;Бонус 8 ГБ доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17056" globalServiceCode="FR17056" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка 18+ на сайт videosaloon.by" />
+    <CFS name="FR17057" globalServiceCode="FR17057" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на сайт kinoteka.by" />
+    <CFS name="FR17058" globalServiceCode="FR17058" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на сайт musicteka.by" />
+    <CFS name="FR17059" globalServiceCode="FR17059" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-подписка на сайт depositfiles.by" />
     <CFS name="FR1706" globalServiceCode="FR1706" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Подарок разговоры" />
+    <CFS name="FR17060" globalServiceCode="FR17060" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Открытый интернет_Гомельпромстрой" />
+    <CFS name="FR17061" globalServiceCode="FR17061" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер-бокс max+" />
+    <CFS name="FR17062" globalServiceCode="FR17062" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Вм.Выгоднее299:доп.12мес.на Супер,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17063" globalServiceCode="FR17063" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Вм.Выгоднее299: доп.24мес.на Супер,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17064" globalServiceCode="FR17064" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер max+ для новых" />
+    <CFS name="FR17065" globalServiceCode="FR17065" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер max+, СМАРТ общение" />
+    <CFS name="FR17066" globalServiceCode="FR17066" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер для новых" />
+    <CFS name="FR17067" globalServiceCode="FR17067" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 8 для новых" />
+    <CFS name="FR17068" globalServiceCode="FR17068" copyOf="CFS_FP_SERVICE_GENERAL" description="Акция на тарифах Супер. Участник" />
+    <CFS name="FR17069" globalServiceCode="FR17069" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер max+ 30%. Скидка" />
     <CFS name="FR1707" globalServiceCode="FR1707" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Подарок SMS" />
+    <CFS name="FR17071" globalServiceCode="FR17071" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер max+" />
+    <CFS name="FR17072" globalServiceCode="FR17072" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер удвоение минут (с 19.08.2019)" />
+    <CFS name="FR17073" globalServiceCode="FR17073" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 8 удвоение минут (с 19.08.2019)" />
+    <CFS name="FR17074" globalServiceCode="FR17074" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер_ОИ" />
+    <CFS name="FR17075" globalServiceCode="FR17075" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 8 Безлимит интернета (до 1Мбит/сек). Скидка" />
+    <CFS name="FR17076" globalServiceCode="FR17076" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер max+ Безлимит интернета (до 2Мбит/сек). Скидка" />
+    <CFS name="FR17077" globalServiceCode="FR17077" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Отмена ограничения_Супер 8" />
+    <CFS name="FR17078" globalServiceCode="FR17078" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Отмена ограничения_Супер max+" />
+    <CFS name="FR17079" globalServiceCode="FR17079" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер max+ 15%. Скидка" />
     <CFS name="FR1708" globalServiceCode="FR1708" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Подарок интернет" />
+    <CFS name="FR17080" globalServiceCode="FR17080" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% Телематика 10, 20" />
+    <CFS name="FR17081" globalServiceCode="FR17081" copyOf="CFS_FP_SERVICE_GENERAL" description="Предоставление инфраструктуры с установленным ПО и шлюзом безопасности" />
+    <CFS name="FR17082" globalServiceCode="FR17082" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС Music, МТС Бонус (10дней)" />
+    <CFS name="FR17083" globalServiceCode="FR17083" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Кино от IVI, МТС Бонус (10дней)" />
+    <CFS name="FR17084" globalServiceCode="FR17084" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МТС ТВ, МТС Бонус (10дней)" />
+    <CFS name="FR17085" globalServiceCode="FR17085" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Мобильное Кино, МТС Бонус (10дней)" />
+    <CFS name="FR17086" globalServiceCode="FR17086" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Мобильная библиотека МТС, МТС Бонус (10дней)" />
+    <CFS name="FR17087" globalServiceCode="FR17087" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Music на 30 дней" />
+    <CFS name="FR17088" globalServiceCode="FR17088" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка МТС Music на 30 дней, 30 дней" />
+    <CFS name="FR17089" globalServiceCode="FR17089" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка МТС Music на сутки, 7 дней" />
     <CFS name="FR1709" globalServiceCode="FR1709" copyOf="CFS_FP_SERVICE_GENERAL" description="VEON S303 (459 000) " />
+    <CFS name="FR17090" globalServiceCode="FR17090" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа USB-модема HUAWEI E3372h-153 за 1,00_18 мес._СовМин" />
+    <CFS name="FR17091" globalServiceCode="FR17091" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая : для тестирования" />
+    <CFS name="FR17092" globalServiceCode="FR17092" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н159;Бонус 2 ГБ доп.24мес.на Отл,4G,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17093" globalServiceCode="FR17093" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод:Н109;Планшет  доп.24мес.на Интернет" />
+    <CFS name="FR17094" globalServiceCode="FR17094" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Телематика_Белкоопвнешторг" />
+    <CFS name="FR17095" globalServiceCode="FR17095" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бизнез Unlim_ДПД Бел" />
+    <CFS name="FR17096" globalServiceCode="FR17096" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Открытый интернет 2048 MB" />
+    <CFS name="FR17097" globalServiceCode="FR17097" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: sms-пакет 20" />
+    <CFS name="FR17098" globalServiceCode="FR17098" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Клуб скидок" />
+    <CFS name="FR17099" globalServiceCode="FR17099" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: роуминг вх. МТС РФ 0,59 ТП Компания" />
     <CFS name="FR1710" globalServiceCode="FR1710" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка VPN 20 - 2000" />
+    <CFS name="FR17100" globalServiceCode="FR17100" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Родительский контроль ESET" />
+    <CFS name="FR17101" globalServiceCode="FR17101" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг вх.вызовы_РФ 0,59 ТП Компания" />
+    <CFS name="FR17102" globalServiceCode="FR17102" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx Wi-Fi роутер" />
+    <CFS name="FR17103" globalServiceCode="FR17103" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx Wi-Fi роутер 5 ГГц" />
+    <CFS name="FR17104" globalServiceCode="FR17104" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx ТВ-приставка" />
+    <CFS name="FR17105" globalServiceCode="FR17105" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx 2-я ТВ-приставка" />
+    <CFS name="FR17106" globalServiceCode="FR17106" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Белорусская МИС" />
+    <CFS name="FR17109" globalServiceCode="FR17109" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% на подключение оборудования Wi-Fi" />
     <CFS name="FR1711" globalServiceCode="FR1711" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за входящие. Участник" />
+    <CFS name="FR17110" globalServiceCode="FR17110" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 66% на Бизнес VPN межобластной 2" />
+    <CFS name="FR17111" globalServiceCode="FR17111" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 81% на Бизнес VPN межобластной 4" />
+    <CFS name="FR17112" globalServiceCode="FR17112" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка VPN: Минсктранс (навигация)" />
+    <CFS name="FR17113" globalServiceCode="FR17113" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка VPN: БФТ" />
+    <CFS name="FR17114" globalServiceCode="FR17114" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка VPN: Департамент охраны МВД РБ транспортные (avtoguard)" />
+    <CFS name="FR17115" globalServiceCode="FR17115" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка VPN: РУП &quot;Информационно-издательский центр по налогам и сборам&quot;" />
+    <CFS name="FR17116" globalServiceCode="FR17116" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка VPN: ЗАО &quot;Безопасные дороги Беларуси&quot;" />
+    <CFS name="FR17117" globalServiceCode="FR17117" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: интернет для настройки точек доступа Wi-Fi" />
+    <CFS name="FR17118" globalServiceCode="FR17118" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес Поиск (свыше 100 sim-карт)" />
+    <CFS name="FR17119" globalServiceCode="FR17119" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес Поиск (от 51 до 100 sim-карт)" />
     <CFS name="FR1712" globalServiceCode="FR1712" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за входящие" />
+    <CFS name="FR17120" globalServiceCode="FR17120" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес Поиск (от 11 до 50 sim-карт)" />
+    <CFS name="FR17121" globalServiceCode="FR17121" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес Поиск (от 6 до 10 sim-карт)" />
+    <CFS name="FR17122" globalServiceCode="FR17122" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес Поиск (до 5 sim-карт включительно)" />
+    <CFS name="FR17123" globalServiceCode="FR17123" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% Бизнес Поиск 2 мес" />
+    <CFS name="FR17124" globalServiceCode="FR17124" copyOf="CFS_FP_SERVICE_GENERAL" description="Бизнес VPN 10 Гбит/с" />
+    <CFS name="FR17125" globalServiceCode="FR17125" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 37% на Бизнес VPN 10 Гбит/с" />
+    <CFS name="FR17126" globalServiceCode="FR17126" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП КС max_ Серволюкс" />
+    <CFS name="FR17127" globalServiceCode="FR17127" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Умный Бизнес 4_ Серволюкс" />
+    <CFS name="FR17128" globalServiceCode="FR17128" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Ultra_ Серволюкс" />
+    <CFS name="FR17129" globalServiceCode="FR17129" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка ТП Умный бизнес 1_Серволюкс" />
     <CFS name="FR1713" globalServiceCode="FR1713" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка внутри сети 10%" />
+    <CFS name="FR17130" globalServiceCode="FR17130" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на пакеты в роуминге_ Серволюкс" />
+    <CFS name="FR17131" globalServiceCode="FR17131" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 3,8 руб (УБ 1)" />
+    <CFS name="FR17132" globalServiceCode="FR17132" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 5,6 руб (УБ 2)" />
+    <CFS name="FR17133" globalServiceCode="FR17133" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 9,8 руб (УБ 3)" />
+    <CFS name="FR17134" globalServiceCode="FR17134" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 20,958 руб (УБ 4)" />
+    <CFS name="FR17135" globalServiceCode="FR17135" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 47,0 руб (Ultra)" />
+    <CFS name="FR17136" globalServiceCode="FR17136" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 19,465 руб (КС max)" />
+    <CFS name="FR17137" globalServiceCode="FR17137" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% Интернет-услуги" />
+    <CFS name="FR17138" globalServiceCode="FR17138" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 20% на пакеты минут в роуминге" />
+    <CFS name="FR17139" globalServiceCode="FR17139" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="МТС Киоск" />
     <CFS name="FR1714" globalServiceCode="FR1714" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на Интернет-Лайт 20%" />
+    <CFS name="FR17140" globalServiceCode="FR17140" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка услуги «МТС Киоск»" />
+    <CFS name="FR17141" globalServiceCode="FR17141" copyOf="CFS_FP_SERVICE_GENERAL" description="Родительский контроль ESET – ознакомительный период" />
+    <CFS name="FR17142" globalServiceCode="FR17142" copyOf="CFS_FP_SERVICE_GENERAL" description="60 минут вызовов в роуминге, в месяц" />
+    <CFS name="FR17143" globalServiceCode="FR17143" copyOf="CFS_FP_SERVICE_GENERAL" description="300 минут вызовов в роуминге, в месяц" />
+    <CFS name="FR17144" globalServiceCode="FR17144" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка интернет-услуги_модемы (ошибка оборудования)" />
+    <CFS name="FR17145" globalServiceCode="FR17145" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Cel-Fi GO Mkit за 2 251_24 мес." />
+    <CFS name="FR17146" globalServiceCode="FR17146" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% МОПТ Бизнес Unlim" />
+    <CFS name="FR17147" globalServiceCode="FR17147" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_МПКО_30.09.2020" />
+    <CFS name="FR17148" globalServiceCode="FR17148" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Администратор Бизнес Поиск" />
+    <CFS name="FR17149" globalServiceCode="FR17149" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бизнес Поиск" />
     <CFS name="FR1715" globalServiceCode="FR1715" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на Срочный безлимит 40%" />
+    <CFS name="FR17150" globalServiceCode="FR17150" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Сотрудник  Бизнес Поиск" />
+    <CFS name="FR17151" globalServiceCode="FR17151" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: роуминг GPRS_10% на ТП Компания_КГБ" />
+    <CFS name="FR17152" globalServiceCode="FR17152" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: продажа оборудования Аливария 09.2019_12 мес." />
+    <CFS name="FR17153" globalServiceCode="FR17153" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (2250 МБ) УБ 2" />
+    <CFS name="FR17154" globalServiceCode="FR17154" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Kaspersky Internet Security для Android 1 год (1 устройство)»" />
+    <CFS name="FR17155" globalServiceCode="FR17155" copyOf="CFS_FP_SERVICE_GENERAL" description="Приостановка списания по продуктам «Антивирус и другое ПО»" />
+    <CFS name="FR17156" globalServiceCode="FR17156" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 5% БИТ" />
+    <CFS name="FR17157" globalServiceCode="FR17157" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 60% на SIP-многоканальность" />
+    <CFS name="FR17158" globalServiceCode="FR17158" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Заботаоблизких:Н49:Бонус 3 ГБ доп.12мес.на Близкий" />
+    <CFS name="FR17159" globalServiceCode="FR17159" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Заботаоблизких:Н49:Бонус 3 ГБ доп.24мес.на Близкий" />
+    <CFS name="FR17160" globalServiceCode="FR17160" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Скорая Гомель_30.09.2020" />
+    <CFS name="FR17161" globalServiceCode="FR17161" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Myphone Maestro+ за 9,9_24 мес." />
+    <CFS name="FR17162" globalServiceCode="FR17162" copyOf="CFS_FP_SERVICE_GENERAL" description="Турбокнопка за границей" />
+    <CFS name="FR17163" globalServiceCode="FR17163" copyOf="CFS_FP_SERVICE_GENERAL" description="Турбокнопка за границей. Регион 1" />
+    <CFS name="FR17164" globalServiceCode="FR17164" copyOf="CFS_FP_SERVICE_GENERAL" description="Турбокнопка за границей. Регион 2" />
+    <CFS name="FR17165" globalServiceCode="FR17165" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: участник акции на удержание 2019_Гомель_1" />
+    <CFS name="FR17166" globalServiceCode="FR17166" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: участник акции на удержание 2019_Гомель" />
+    <CFS name="FR17167" globalServiceCode="FR17167" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: участник акции на удержание 2019_Витебск" />
+    <CFS name="FR17168" globalServiceCode="FR17168" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Запрос на миграцию MNP_2019" />
+    <CFS name="FR17169" globalServiceCode="FR17169" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Переход на Все свои_2019" />
     <CFS name="FR1717" globalServiceCode="FR1717" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Утром дешевле. Скидка 30%" />
+    <CFS name="FR17170" globalServiceCode="FR17170" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище для удержания 2019_180дн." />
+    <CFS name="FR17171" globalServiceCode="FR17171" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище для удержания 2019_365дн." />
+    <CFS name="FR17172" globalServiceCode="FR17172" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Организация SIP-подключения скидка 50%" />
+    <CFS name="FR17173" globalServiceCode="FR17173" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 40% на Общественную сеть Wi-Fi Ethernet 4" />
+    <CFS name="FR17174" globalServiceCode="FR17174" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 92% на АП РРЛ" />
+    <CFS name="FR17175" globalServiceCode="FR17175" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на услугу &quot;Зеленый номер&quot; категории II" />
+    <CFS name="FR17176" globalServiceCode="FR17176" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Новый айфон:Безлимит 90 дней:Н199:доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17177" globalServiceCode="FR17177" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Новый айфон:Безлимит 90 дней:Н199:доп.31мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17178" globalServiceCode="FR17178" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Интернет mini_ИПЮкович" />
+    <CFS name="FR17179" globalServiceCode="FR17179" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 10% Интернет mini" />
     <CFS name="FR1718" globalServiceCode="FR1718" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Утром дешевле. Скидка 30%. Участник" />
+    <CFS name="FR17180" globalServiceCode="FR17180" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Рассрочка 31 мес" />
+    <CFS name="FR17181" globalServiceCode="FR17181" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительные настройки SIP-телефонии" />
+    <CFS name="FR17182" globalServiceCode="FR17182" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительные настройки SIP-телефонии, за 1 номер" />
+    <CFS name="FR17183" globalServiceCode="FR17183" copyOf="CFS_FP_SERVICE_GENERAL" description="START" />
+    <CFS name="FR17184" globalServiceCode="FR17184" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка «START в МТС Кино», 7 дней" />
+    <CFS name="FR17185" globalServiceCode="FR17185" copyOf="CFS_FP_SERVICE_GENERAL" description="5 МБ в Китае" />
+    <CFS name="FR17186" globalServiceCode="FR17186" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер для новых-2" />
+    <CFS name="FR17187" globalServiceCode="FR17187" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 8 для новых-2" />
+    <CFS name="FR17188" globalServiceCode="FR17188" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгодный трейд-ин:Безлимит 90 дней:Н199:доп.12мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
+    <CFS name="FR17189" globalServiceCode="FR17189" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгодный трейд-ин:Безлимит 90 дней:Н199:доп.24мес.на Отл,4G,Супер,ULTRA,Персона,Абсолют" />
     <CFS name="FR1719" globalServiceCode="FR1719" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 40%" />
+    <CFS name="FR17190" globalServiceCode="FR17190" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет (Скидка)" />
+    <CFS name="FR17191" globalServiceCode="FR17191" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес 3_БОТ_BOSS" />
+    <CFS name="FR17192" globalServiceCode="FR17192" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес 3_БОТ_VIP" />
+    <CFS name="FR17193" globalServiceCode="FR17193" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес 3_БОТ" />
+    <CFS name="FR17194" globalServiceCode="FR17194" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (6500 МБ)_УБ 3" />
+    <CFS name="FR17195" globalServiceCode="FR17195" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (3500 МБ)_УБ 3" />
+    <CFS name="FR17196" globalServiceCode="FR17196" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: МН пакет 20 минут (УБ) " />
+    <CFS name="FR17197" globalServiceCode="FR17197" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес 1_БОТ" />
+    <CFS name="FR17198" globalServiceCode="FR17198" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (4750 МБ)_УБ 1" />
+    <CFS name="FR17199" globalServiceCode="FR17199" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: sms-пакет 250 (УБ1)" />
     <CFS name="FR1720" globalServiceCode="FR1720" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 40%. Участник" />
+    <CFS name="FR17200" globalServiceCode="FR17200" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Kaspersky Safe Kids 1 год (1 аккаунт)»." />
+    <CFS name="FR17201" globalServiceCode="FR17201" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «ESET NOD32 Mobile Security - бессрочная лицензия на 1 устройство»." />
+    <CFS name="FR17202" globalServiceCode="FR17202" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «ESET NOD32 Parental Control – универсальная лицензия на 1 год для всей семьи»." />
+    <CFS name="FR17203" globalServiceCode="FR17203" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «ESET NOD32 Mobile Security - лицензия на 1 год на 3 устройства»." />
+    <CFS name="FR17204" globalServiceCode="FR17204" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Лицензия Навител Навигатор+ карты РБ 365 дней»." />
+    <CFS name="FR17205" globalServiceCode="FR17205" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Лицензия Навител Навигатор карты Европа + Содружество 365 дней»." />
+    <CFS name="FR17206" globalServiceCode="FR17206" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Мобильная лицензия к интернет-фильтру Eshild, 1 год, 1 Android устройство»." />
+    <CFS name="FR17207" globalServiceCode="FR17207" copyOf="CFS_FP_SERVICE_GENERAL" description="Код активации ПО «Премиум лицензия к интернет-фильтру AdGuard, 1 год, 1(PC/Mac) + 1(Android) устройства»." />
+    <CFS name="FR17208" globalServiceCode="FR17208" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 370 минут во все сети_УБ1" />
+    <CFS name="FR17209" globalServiceCode="FR17209" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Коммунарка. Не менее 630 ПО (430 на УБ)" />
     <CFS name="FR1721" globalServiceCode="FR1721" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на MMS-Пакет 10 -30%" />
+    <CFS name="FR17210" globalServiceCode="FR17210" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% на Добровольную блокировку_ИлевнБиУай" />
+    <CFS name="FR17211" globalServiceCode="FR17211" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Переадресация в сети МТС скидка 100% (SIP-Cloud)" />
+    <CFS name="FR17212" globalServiceCode="FR17212" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 9% на общественный Wi-Fi Ethernet 3" />
+    <CFS name="FR17213" globalServiceCode="FR17213" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на ТП _Стальная линия" />
+    <CFS name="FR17214" globalServiceCode="FR17214" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на Безлимит на КСmax" />
+    <CFS name="FR17215" globalServiceCode="FR17215" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на 1 ГБ, в мес._Бизнес Unlim" />
+    <CFS name="FR17216" globalServiceCode="FR17216" copyOf="CFS_FP_SERVICE_GENERAL" description="Режим модема 2.0" />
+    <CFS name="FR17217" globalServiceCode="FR17217" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит для новых, Супер" />
+    <CFS name="FR17218" globalServiceCode="FR17218" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит для новых, Супер 8" />
+    <CFS name="FR17219" globalServiceCode="FR17219" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит для новых, Супер max+" />
     <CFS name="FR1722" globalServiceCode="FR1722" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 3й минуты разговора -30%. Скидка" />
+    <CFS name="FR17220" globalServiceCode="FR17220" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит для новых, Безлимитище 2.0." />
+    <CFS name="FR17221" globalServiceCode="FR17221" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимит для новых. Участник" />
+    <CFS name="FR17222" globalServiceCode="FR17222" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитище 2.0., СМАРТ общение" />
+    <CFS name="FR17223" globalServiceCode="FR17223" copyOf="CFS_FP_SERVICE_GENERAL" description="Запрет замены тарифного плана" />
+    <CFS name="FR17224" globalServiceCode="FR17224" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгодный трейд-ин:5 ГБ:Н119:доп.12 на Акционные ТП" />
+    <CFS name="FR17225" globalServiceCode="FR17225" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгодный трейд-ин:5 ГБ:Н119:доп.24 на Акционные ТП" />
+    <CFS name="FR17226" globalServiceCode="FR17226" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер для возврата_5,95 руб" />
+    <CFS name="FR17227" globalServiceCode="FR17227" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 8 для возврата_9,95 руб" />
+    <CFS name="FR17228" globalServiceCode="FR17228" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище 2.0 для возврата_14 руб." />
+    <CFS name="FR17229" globalServiceCode="FR17229" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на МОПТ_5,95 руб._12М" />
     <CFS name="FR1723" globalServiceCode="FR1723" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 3й минуты разговора -30%. Скидка. Участник" />
+    <CFS name="FR17230" globalServiceCode="FR17230" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на МОПТ_9,95 руб. 12М" />
+    <CFS name="FR17231" globalServiceCode="FR17231" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на МОПТ_14,0 руб. 12М" />
+    <CFS name="FR17232" globalServiceCode="FR17232" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит интернета (до 1Мбит/сек). Скидка_180" />
+    <CFS name="FR17233" globalServiceCode="FR17233" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Телематика 20_Автопарк Вилейка" />
+    <CFS name="FR17234" globalServiceCode="FR17234" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 50% Телематика 20" />
+    <CFS name="FR17235" globalServiceCode="FR17235" copyOf="CFS_FP_SERVICE_GENERAL" description="Дополнительные настройки SIP-телефонии 30%" />
+    <CFS name="FR17236" globalServiceCode="FR17236" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Безлимит 512кБит_Аливария" />
+    <CFS name="FR17237" globalServiceCode="FR17237" copyOf="CFS_FP_SERVICE_GENERAL" description="Предоставление SIM-чипа" />
+    <CFS name="FR17238" globalServiceCode="FR17238" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 95% на ОВЛ ГПК" />
+    <CFS name="FR17239" globalServiceCode="FR17239" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 97% на ОВЛ ГПК" />
     <CFS name="FR1724" globalServiceCode="FR1724" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 5 минут в день -30%. Скидка" />
+    <CFS name="FR17240" globalServiceCode="FR17240" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 10:6Гб:Н219:смартфоны доп.18мес.на Акционные ТП" />
+    <CFS name="FR17241" globalServiceCode="FR17241" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 10:6Гб:Н219:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17242" globalServiceCode="FR17242" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 10:6Гб:Н219:смартфоны доп.24мес.на Акционные ТП" />
+    <CFS name="FR17243" globalServiceCode="FR17243" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А10:7Гб:Н239:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17244" globalServiceCode="FR17244" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А10:7Гб:Н239:смартфоны доп.18мес.на Акционные ТП" />
+    <CFS name="FR17245" globalServiceCode="FR17245" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А10:7Гб:Н239:смартфоны доп.24мес.на Акционные ТП" />
+    <CFS name="FR17246" globalServiceCode="FR17246" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет Бизнес 1" />
+    <CFS name="FR17247" globalServiceCode="FR17247" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Комплект Интернет Бизнес 2" />
+    <CFS name="FR17248" globalServiceCode="FR17248" copyOf="CFS_FP_SERVICE_GENERAL" description="Подключение оборудования в рамках Комплект Интернет Бизнес 2" />
+    <CFS name="FR17249" globalServiceCode="FR17249" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес 2_ВЧ08188" />
     <CFS name="FR1725" globalServiceCode="FR1725" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 5 минут в день -30%. Скидка. Участник" />
+    <CFS name="FR17250" globalServiceCode="FR17250" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (4250 МБ)_УБ 2" />
+    <CFS name="FR17251" globalServiceCode="FR17251" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ЛегкийТрейд-ин:Н109 доп.12мес.на Акционные ТП" />
+    <CFS name="FR17252" globalServiceCode="FR17252" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ЛегкийТрейд-ин:Н109 доп.24мес.на Акционные ТП" />
+    <CFS name="FR17253" globalServiceCode="FR17253" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СпециальнаяЦена:Н149 доп.12мес.на Акционные ТП" />
+    <CFS name="FR17254" globalServiceCode="FR17254" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Белдорцентр VIP" />
+    <CFS name="FR17255" globalServiceCode="FR17255" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% на Безлимит интернета (до 1 Мбит/сек)" />
+    <CFS name="FR17256" globalServiceCode="FR17256" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга A" />
+    <CFS name="FR17257" globalServiceCode="FR17257" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга B" />
+    <CFS name="FR17258" globalServiceCode="FR17258" copyOf="CFS_FP_COUNTER_AND_SDP" description="Тест.Услуга C" />
+    <CFS name="FR17259" globalServiceCode="FR17259" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга S" />
+    <CFS name="FR17260" globalServiceCode="FR17260" copyOf="CFS_FP_COUNTER_AND_SDP" description="PayPerDay_1" />
+    <CFS name="FR17261" globalServiceCode="FR17261" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_2" />
+    <CFS name="FR17262" globalServiceCode="FR17262" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_3" />
+    <CFS name="FR17263" globalServiceCode="FR17263" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_4" />
+    <CFS name="FR17264" globalServiceCode="FR17264" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_5" />
+    <CFS name="FR17265" globalServiceCode="FR17265" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_6" />
+    <CFS name="FR17266" globalServiceCode="FR17266" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_7" />
+    <CFS name="FR17267" globalServiceCode="FR17267" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_8" />
+    <CFS name="FR17268" globalServiceCode="FR17268" copyOf="CFS_FP_SERVICE_GENERAL" description="PayPerDay_9" />
+    <CFS name="FR17269" globalServiceCode="FR17269" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая услуга: спец терминал VIP" />
+    <CFS name="FR17270" globalServiceCode="FR17270" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище 2.0 30%. Участник" />
+    <CFS name="FR17271" globalServiceCode="FR17271" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище 2.0 15%. Участник" />
+    <CFS name="FR17272" globalServiceCode="FR17272" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище 2.0 30%. Скидка" />
+    <CFS name="FR17273" globalServiceCode="FR17273" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимитище 2.0 15%. Скидка" />
+    <CFS name="FR17274" globalServiceCode="FR17274" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на Инет 2_Пекин" />
+    <CFS name="FR17275" globalServiceCode="FR17275" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на Инет 2 – 80%" />
+    <CFS name="FR17276" globalServiceCode="FR17276" copyOf="CFS_FP_SERVICE_GENERAL" description="Семья здесь" />
+    <CFS name="FR17277" globalServiceCode="FR17277" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка 100% Семья здесь 30 дн" />
+    <CFS name="FR17278" globalServiceCode="FR17278" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Трекинг Семья здесь" />
+    <CFS name="FR17279" globalServiceCode="FR17279" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая  скидка 100% 10 календарных дней «МТС ТВ» мигрантам»" />
     <CFS name="FR1728" globalServiceCode="FR1728" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Утром дешевле. Скидка 40%" />
+    <CFS name="FR17280" globalServiceCode="FR17280" copyOf="CFS_FP_SERVICE_GENERAL" description="Акция Корпоративный Супер max (новый)" />
+    <CFS name="FR17281" globalServiceCode="FR17281" copyOf="CFS_FP_SERVICE_GENERAL" description="Акция Корпоративный Супер max (мигрант)" />
+    <CFS name="FR17282" globalServiceCode="FR17282" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Безлимит интернета (до 2 Мбит/сек)_0,10 руб" />
+    <CFS name="FR17283" globalServiceCode="FR17283" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: РРЛ 5000" />
+    <CFS name="FR17284" globalServiceCode="FR17284" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: АП РРЛ 20" />
+    <CFS name="FR17285" globalServiceCode="FR17285" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ОВЛ 5500" />
+    <CFS name="FR17286" globalServiceCode="FR17286" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ОВЛ 5553" />
+    <CFS name="FR17287" globalServiceCode="FR17287" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: РРЛ 5210" />
+    <CFS name="FR17288" globalServiceCode="FR17288" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая  скидка 100% 10 календарных дней «МТС ТВ»" />
     <CFS name="FR1729" globalServiceCode="FR1729" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Утром дешевле. Скидка 40%. Участник" />
+    <CFS name="FR17290" globalServiceCode="FR17290" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Messaging Hub" />
+    <CFS name="FR17291" globalServiceCode="FR17291" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Предоставление SIM-чипа со скидкой 13,27%" />
+    <CFS name="FR17292" globalServiceCode="FR17292" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка VMware по конфигурации" />
+    <CFS name="FR17293" globalServiceCode="FR17293" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: VMware контракт 1 год" />
+    <CFS name="FR17294" globalServiceCode="FR17294" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов69:доп.12мес.на акционныеТП" />
+    <CFS name="FR17295" globalServiceCode="FR17295" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов89:доп.12мес.на акционныеТП" />
+    <CFS name="FR17296" globalServiceCode="FR17296" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов109:доп.12мес.на акционныеТП" />
+    <CFS name="FR17297" globalServiceCode="FR17297" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов159:доп.12мес.на акционныеТП" />
+    <CFS name="FR17298" globalServiceCode="FR17298" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов89:доп.24мес.на акционныеТП" />
+    <CFS name="FR17299" globalServiceCode="FR17299" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов159:доп.24мес.на акционныеТП" />
     <CFS name="FR1730" globalServiceCode="FR1730" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на Интернет-Лайт 40%" />
+    <CFS name="FR17300" globalServiceCode="FR17300" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод для гаджетов29:доп.12мес.на акционныеТП" />
+    <CFS name="FR17301" globalServiceCode="FR17301" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ГПК_50 мин МН_по 31.03.2020_спец." />
+    <CFS name="FR17302" globalServiceCode="FR17302" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 50 мин МН УБ2_ГПК" />
+    <CFS name="FR17303" globalServiceCode="FR17303" copyOf="CFS_FP_SERVICE_GENERAL" description="Х7" />
+    <CFS name="FR17304" globalServiceCode="FR17304" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx Wi-Fi роутер 5 ГГц для Х7" />
+    <CFS name="FR17305" globalServiceCode="FR17305" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: FTTx 3-я ТВ-приставка" />
+    <CFS name="FR17306" globalServiceCode="FR17306" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Х7 за 40 рублей (удержание)" />
+    <CFS name="FR17307" globalServiceCode="FR17307" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ОВЛ 5330" />
+    <CFS name="FR17308" globalServiceCode="FR17308" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая 3G Коннект 100 МБ_1,875" />
+    <CFS name="FR17309" globalServiceCode="FR17309" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Нац.кадастр.агенство" />
     <CFS name="FR1731" globalServiceCode="FR1731" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на замену ТП" />
+    <CFS name="FR17310" globalServiceCode="FR17310" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 350 минут во все сети_УБ1" />
+    <CFS name="FR17311" globalServiceCode="FR17311" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: доп. трафик (750 МБ)_УБ 1" />
+    <CFS name="FR17312" globalServiceCode="FR17312" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: sms-пакет 30 (УБ1)" />
+    <CFS name="FR17313" globalServiceCode="FR17313" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 750 минут во все сети_УБ2" />
+    <CFS name="FR17314" globalServiceCode="FR17314" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: КБИ_ЛУКОЙЛ" />
+    <CFS name="FR17315" globalServiceCode="FR17315" copyOf="CFS_FP_SERVICE_GENERAL" description="Минимальная обязательная плата за трафик, мес." />
+    <CFS name="FR17316" globalServiceCode="FR17316" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая настройка: APN NBIOT-2" />
+    <CFS name="FR17317" globalServiceCode="FR17317" copyOf="CFS_FP_SERVICE_GENERAL" description="Услуга по предоставлению инфраструктуры" />
+    <CFS name="FR17318" globalServiceCode="FR17318" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H199:Пакет Безлимит на 90 дней доп.12мес.на Акционные ТП" />
+    <CFS name="FR17319" globalServiceCode="FR17319" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H119:Бонус 5 ГБ доп.24мес.на Акционные ТП" />
     <CFS name="FR1732" globalServiceCode="FR1732" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 3й минуты разговора -40%. Скидка" />
+    <CFS name="FR17320" globalServiceCode="FR17320" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H199:Пакет Безлимит на 90 дней доп.24мес.на Акционные ТП" />
+    <CFS name="FR17321" globalServiceCode="FR17321" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H119:Бонус 5 ГБ доп.12мес.на Акционные ТП" />
+    <CFS name="FR17322" globalServiceCode="FR17322" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H99:Планшет  доп.24мес.на Интернет" />
+    <CFS name="FR17323" globalServiceCode="FR17323" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Гаджеты20:H99:Планшет  доп.12мес.на Интернет" />
+    <CFS name="FR17324" globalServiceCode="FR17324" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 11:6Гб:Н219:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17325" globalServiceCode="FR17325" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 11:6Гб:Н219:смартфоны доп.18мес.на Акционные ТП" />
+    <CFS name="FR17326" globalServiceCode="FR17326" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П 11:6Гб:Н219:смартфоны доп.24мес.на Акционные ТП" />
+    <CFS name="FR17327" globalServiceCode="FR17327" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А11:7Гб:Н239:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17328" globalServiceCode="FR17328" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А11:7Гб:Н239:смартфоны доп.18мес.на Акционные ТП" />
+    <CFS name="FR17329" globalServiceCode="FR17329" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры-П А11:7Гб:Н239:смартфоны доп.24мес.на Акционные ТП" />
     <CFS name="FR1733" globalServiceCode="FR1733" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 3й минуты разговора -40%. Скидка. Участник" />
+    <CFS name="FR17330" globalServiceCode="FR17330" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н69:доп.24мес.на акционные ТП" />
+    <CFS name="FR17331" globalServiceCode="FR17331" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н89:доп.24мес.на акционные ТП" />
+    <CFS name="FR17332" globalServiceCode="FR17332" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н109:доп.24мес.на акционные ТП" />
+    <CFS name="FR17333" globalServiceCode="FR17333" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н159:доп.24мес.на акционные ТП" />
+    <CFS name="FR17334" globalServiceCode="FR17334" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н199:доп.24мес.на акционные ТП" />
+    <CFS name="FR17335" globalServiceCode="FR17335" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н29:доп.12мес.на акционные ТП" />
+    <CFS name="FR17336" globalServiceCode="FR17336" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н49:доп.12мес.на акционные ТП" />
+    <CFS name="FR17337" globalServiceCode="FR17337" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н69:доп.12мес.на акционные ТП" />
+    <CFS name="FR17338" globalServiceCode="FR17338" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н89:доп.12мес.на акционные ТП" />
+    <CFS name="FR17339" globalServiceCode="FR17339" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н109:доп.12мес.на акционные ТП" />
+    <CFS name="FR17340" globalServiceCode="FR17340" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н159:доп.12мес.на акционные ТП" />
+    <CFS name="FR17341" globalServiceCode="FR17341" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Нос.устройства2020:Н199:доп.12мес.на акционные ТП" />
+    <CFS name="FR17342" globalServiceCode="FR17342" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры 11:H155:2ГБ:смартфоны  доп.12мес.на Акционные ТП" />
+    <CFS name="FR17343" globalServiceCode="FR17343" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры 11 ДСО:H212:4ГБ:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17344" globalServiceCode="FR17344" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры 11 ДСО:H212:4ГБ:смартфоны доп.24 мес.на Акционные ТП" />
+    <CFS name="FR17345" globalServiceCode="FR17345" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры А11 ДСО:H249:5ГБ:смартфоны доп.12мес.на Акционные ТП" />
+    <CFS name="FR17346" globalServiceCode="FR17346" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Дилеры А11 ДСО:H249:5ГБ:смартфоны доп.24мес.на Акционные ТП" />
+    <CFS name="FR17348" globalServiceCode="FR17348" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ – 20%_Радамир" />
+    <CFS name="FR17349" globalServiceCode="FR17349" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 20% (КС)" />
     <CFS name="FR1735" globalServiceCode="FR1735" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за платеж 15 000: 20 мин" />
+    <CFS name="FR17350" globalServiceCode="FR17350" copyOf="CFS_FP_SERVICE_GENERAL" description="Регистрация ресурсов в БелГИЭ" />
+    <CFS name="FR17351" globalServiceCode="FR17351" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: РРЛ 5200" />
+    <CFS name="FR17352" globalServiceCode="FR17352" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 35% на БК5" />
+    <CFS name="FR17353" globalServiceCode="FR17353" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на «Бизнес Unlim»_Белкоопсоюз» (0-1000 ПО)" />
+    <CFS name="FR17354" globalServiceCode="FR17354" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на «Бизнес Unlim»_Белкоопсоюз» (1001-5000 ПО)" />
+    <CFS name="FR17355" globalServiceCode="FR17355" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на «Бизнес Unlim»_Белкоопсоюз» (5001-10000 ПО)" />
+    <CFS name="FR17356" globalServiceCode="FR17356" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на «Бизнес Unlim»_Белкоопсоюз» (более 10001 ПО)" />
+    <CFS name="FR17357" globalServiceCode="FR17357" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на «4 Гб, мес.» БU _100%_Белкоопсоюз" />
+    <CFS name="FR17358" globalServiceCode="FR17358" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% на «4 Гб, мес.» Бизнес Unlim" />
+    <CFS name="FR17359" globalServiceCode="FR17359" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ-«Корпоративный Супер max»_Белкоопсоюз" />
     <CFS name="FR1736" globalServiceCode="FR1736" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за платеж 20 000" />
+    <CFS name="FR17360" globalServiceCode="FR17360" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% на МОПТ ТП Корпоративный Супер max" />
+    <CFS name="FR17361" globalServiceCode="FR17361" copyOf="CFS_FP_SERVICE_GENERAL" description="Доступ абонента к Единому Зеленому номеру" />
+    <CFS name="FR17362" globalServiceCode="FR17362" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умное устройство квота" />
+    <CFS name="FR17363" globalServiceCode="FR17363" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% Интернет Mini" />
+    <CFS name="FR17364" globalServiceCode="FR17364" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% Интернет Midi" />
+    <CFS name="FR17365" globalServiceCode="FR17365" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% Интернет Maxi" />
+    <CFS name="FR17366" globalServiceCode="FR17366" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Корп.Супер max_Минский городской суд" />
+    <CFS name="FR17367" globalServiceCode="FR17367" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод2020:Н119;Бонус 2 ГБ доп.12мес.на Акционные ТП" />
+    <CFS name="FR17368" globalServiceCode="FR17368" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод2020:Н239;Бонус 5 ГБ доп.12мес.на Акционные ТП" />
+    <CFS name="FR17369" globalServiceCode="FR17369" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод2020:Н119;Бонус 2 ГБ доп.24мес.на Акционные ТП" />
     <CFS name="FR1737" globalServiceCode="FR1737" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за платеж 25 000" />
+    <CFS name="FR17370" globalServiceCode="FR17370" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Промокод2020:Н239;Бонус 5 ГБ доп.24мес.на Акционные ТП" />
+    <CFS name="FR17371" globalServiceCode="FR17371" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ПростойТрейд-инHuawei:Н89:доп.12мес.на акционные ТП" />
+    <CFS name="FR17372" globalServiceCode="FR17372" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ПростойТрейд-инHuawei:Н109:доп.12мес.на акционные ТП" />
+    <CFS name="FR17373" globalServiceCode="FR17373" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ПростойТрейд-инHuawei:Н89:доп.24мес.на акционные ТП" />
+    <CFS name="FR17374" globalServiceCode="FR17374" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ПростойТрейд-инHuawei:Н109:доп.24мес.на акционные ТП" />
+    <CFS name="FR17375" globalServiceCode="FR17375" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Умный бизнес_Гомельский ОИК" />
+    <CFS name="FR17376" globalServiceCode="FR17376" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 39,20% на 60 минут вызовов в роуминге" />
+    <CFS name="FR17377" globalServiceCode="FR17377" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ОВЛ 5662" />
+    <CFS name="FR17378" globalServiceCode="FR17378" copyOf="CFS_FP_SERVICE_GENERAL" description="Умный учёт" />
+    <CFS name="FR17379" globalServiceCode="FR17379" copyOf="CFS_FP_SERVICE_GENERAL" description="Умный учет 96М" />
     <CFS name="FR1738" globalServiceCode="FR1738" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на MMS-Пакет 10 -40%" />
+    <CFS name="FR17380" globalServiceCode="FR17380" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 100% Умный учет" />
+    <CFS name="FR17381" globalServiceCode="FR17381" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 100% скидка NBIOT 8 лет" />
+    <CFS name="FR17382" globalServiceCode="FR17382" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 1.6R доп.12мес.на Интернет вещей" />
+    <CFS name="FR17383" globalServiceCode="FR17383" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 2.5R доп.12мес.на Интернет вещей" />
+    <CFS name="FR17384" globalServiceCode="FR17384" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 200мм доп.12мес.на Интернет вещей" />
+    <CFS name="FR17385" globalServiceCode="FR17385" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 250мм доп.12мес.на Интернет вещей" />
+    <CFS name="FR17386" globalServiceCode="FR17386" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G6R 200мм доп.12мес.на Интернет вещей" />
+    <CFS name="FR17387" globalServiceCode="FR17387" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 250мм доп.12мес.на Интернет вещей" />
+    <CFS name="FR17388" globalServiceCode="FR17388" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4TR 110мм доп.12мес.на Интернет вещей" />
+    <CFS name="FR17389" globalServiceCode="FR17389" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 1.6R рассрочка.24 мес.на Интернет вещей" />
     <CFS name="FR1739" globalServiceCode="FR1739" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 35%" />
+    <CFS name="FR17390" globalServiceCode="FR17390" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 2.5R рассрочка.24 мес. на Интернет вещей" />
+    <CFS name="FR17391" globalServiceCode="FR17391" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 200мм рассрочка.24 мес. на Интернет вещей" />
+    <CFS name="FR17392" globalServiceCode="FR17392" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 250мм рассрочка.24 мес на Интернет вещей" />
+    <CFS name="FR17393" globalServiceCode="FR17393" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G6R 200мм рассрочка.24 мес Интернет вещей" />
+    <CFS name="FR17394" globalServiceCode="FR17394" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 250мм рассрочка.24 мес Интернет вещей" />
+    <CFS name="FR17395" globalServiceCode="FR17395" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4TR 110мм рассрочка.24 мес Интернет вещей" />
+    <CFS name="FR17396" globalServiceCode="FR17396" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 1.6R 8 лет. на Интернет вещей" />
+    <CFS name="FR17397" globalServiceCode="FR17397" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО Вега 2.5R 8 лет .на Интернет вещей" />
+    <CFS name="FR17398" globalServiceCode="FR17398" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 200мм 8 лет на Интернет вещей" />
+    <CFS name="FR17399" globalServiceCode="FR17399" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4R 250мм 8 лет на Интернет вещей" />
     <CFS name="FR1740" globalServiceCode="FR1740" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 35%. Участник" />
+    <CFS name="FR17400" globalServiceCode="FR17400" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G6R 200мм 8 лет на Интернет вещей" />
+    <CFS name="FR17401" globalServiceCode="FR17401" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G6R 250мм 8 лет на Интернет вещей" />
+    <CFS name="FR17402" globalServiceCode="FR17402" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:БелОМО СГД 3T G4TR 110мм 8 лет на Интернет вещей" />
+    <CFS name="FR17403" globalServiceCode="FR17403" copyOf="CFS_FP_SERVICE_GENERAL" description="Единый Зеленый номер" />
+    <CFS name="FR17404" globalServiceCode="FR17404" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СамымЛюбимым:H139:доп.12мес. на Абсолют,Ultra,Безлимитище2,Суперmax+" />
+    <CFS name="FR17405" globalServiceCode="FR17405" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СамымЛюбимым:H249:доп.12мес. на Абсолют,Ultra,Безлимитище2,Суперmax+" />
+    <CFS name="FR17406" globalServiceCode="FR17406" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СамымЛюбимым:H139:доп.24мес. на Абсолют,Ultra,Безлимитище2,Суперmax+" />
+    <CFS name="FR17407" globalServiceCode="FR17407" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:СамымЛюбимым:H249:доп.24мес. на Абсолют,Ultra,Безлимитище2,Суперmax+" />
+    <CFS name="FR17408" globalServiceCode="FR17408" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н29:доп.12мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют " />
+    <CFS name="FR17409" globalServiceCode="FR17409" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н49:доп.12мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют" />
     <CFS name="FR1741" globalServiceCode="FR1741" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус за пополнение 1500 р" />
+    <CFS name="FR17410" globalServiceCode="FR17410" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н69:доп.12мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют" />
+    <CFS name="FR17411" globalServiceCode="FR17411" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н159:доп.12мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют" />
+    <CFS name="FR17412" globalServiceCode="FR17412" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н69:доп.24мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют" />
+    <CFS name="FR17413" globalServiceCode="FR17413" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Всегдастобой:Н159:доп.24мес.на Безлимит2.0,Суперmax+,ULTRA,Абсолют" />
+    <CFS name="FR17414" globalServiceCode="FR17414" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на новости" />
+    <CFS name="FR17415" globalServiceCode="FR17415" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС-Инфо: подписка на финансы" />
+    <CFS name="FR17417" globalServiceCode="FR17417" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет для дома Макс" />
+    <CFS name="FR17418" globalServiceCode="FR17418" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Самисчасами:Н29:доп.12мес.наСуперGo" />
+    <CFS name="FR17419" globalServiceCode="FR17419" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Самисчасами:Н49:доп.12мес.наСуперGo          " />
     <CFS name="FR1742" globalServiceCode="FR1742" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 60%" />
+    <CFS name="FR17420" globalServiceCode="FR17420" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Корп.Супер_Упр.делами Президента" />
+    <CFS name="FR17421" globalServiceCode="FR17421" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% на МОПТ КС" />
+    <CFS name="FR17422" globalServiceCode="FR17422" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% на МОПТ КС8" />
+    <CFS name="FR17423" globalServiceCode="FR17423" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 30% на МОПТ КСmax" />
+    <CFS name="FR17424" globalServiceCode="FR17424" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бизнес Unlim_Пуховичский РИК" />
+    <CFS name="FR17425" globalServiceCode="FR17425" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на ТП «Безлимитище 2.0_Лыжный союз»" />
+    <CFS name="FR17426" globalServiceCode="FR17426" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на МОПТ 31,25% (Безлимитище 2.0)" />
+    <CFS name="FR17427" globalServiceCode="FR17427" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка на роуминг 10% (Лыжный союз)" />
+    <CFS name="FR17428" globalServiceCode="FR17428" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Безлимит 512кБит_ Белоруснефть-Транс" />
+    <CFS name="FR17429" globalServiceCode="FR17429" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 25% на БК1 для БК" />
     <CFS name="FR1743" globalServiceCode="FR1743" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 SMS 60%. Участник" />
+    <CFS name="FR17430" globalServiceCode="FR17430" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: ОВЛ 5078" />
+    <CFS name="FR17431" globalServiceCode="FR17431" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:  ЮЛ_КМР_ СМС о долге и блокировке" />
+    <CFS name="FR17432" globalServiceCode="FR17432" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н89:доп.12мес.на акционныеТП" />
+    <CFS name="FR17433" globalServiceCode="FR17433" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н109:доп.12мес.на акционныеТП" />
+    <CFS name="FR17434" globalServiceCode="FR17434" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н159:доп.12мес.на акционныеТП" />
+    <CFS name="FR17435" globalServiceCode="FR17435" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н89:доп.24мес.на акционныеТП" />
+    <CFS name="FR17436" globalServiceCode="FR17436" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н109:доп.24мес.на акционныеТП" />
+    <CFS name="FR17437" globalServiceCode="FR17437" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н159:доп.24мес.на акционныеТП" />
+    <CFS name="FR17438" globalServiceCode="FR17438" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смартчасы в выгодныйтрейдин:Н159:доп.24мес.на акционныеТП" />
+    <CFS name="FR17439" globalServiceCode="FR17439" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Смартчасы в выгодныйтрейдин:Н159:доп.12мес.на акционныеТП" />
+    <CFS name="FR17440" globalServiceCode="FR17440" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Новый самсунг:H199:Пакет Безлимит на 90 дней доп.12мес.на Акционные ТП" />
+    <CFS name="FR17441" globalServiceCode="FR17441" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Новый самсунг:H199:Пакет Безлимит на 90 дней доп.24мес.на Акционные ТП" />
+    <CFS name="FR17442" globalServiceCode="FR17442" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 10 без накопления" />
+    <CFS name="FR17443" globalServiceCode="FR17443" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 25  без накопления" />
+    <CFS name="FR17444" globalServiceCode="FR17444" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер max 50  без накопления" />
+    <CFS name="FR17445" globalServiceCode="FR17445" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер-бокс 10" />
+    <CFS name="FR17446" globalServiceCode="FR17446" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер-бокс 25" />
+    <CFS name="FR17447" globalServiceCode="FR17447" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер-бокс 50" />
+    <CFS name="FR17448" globalServiceCode="FR17448" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Супер 10 (минуты)" />
     <CFS name="FR1745" globalServiceCode="FR1745" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на SMS-пакет 50:30%" />
+    <CFS name="FR17451" globalServiceCode="FR17451" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая 100% на Режим модема для Безлимитище +" />
+    <CFS name="FR17452" globalServiceCode="FR17452" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер для новых 2020" />
+    <CFS name="FR17453" globalServiceCode="FR17453" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 10 для новых 2020" />
+    <CFS name="FR17454" globalServiceCode="FR17454" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 25 для новых 2020" />
+    <CFS name="FR17455" globalServiceCode="FR17455" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер max 50 для новых 2020" />
+    <CFS name="FR17456" globalServiceCode="FR17456" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитище + для новых 2020" />
+    <CFS name="FR17457" globalServiceCode="FR17457" copyOf="CFS_FP_SERVICE_GENERAL" description="Акция на тарифах Супер и Безлимитище +. Участник" />
+    <CFS name="FR17458" globalServiceCode="FR17458" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: 250 МБ в роуминге(Супер max 50)" />
+    <CFS name="FR17459" globalServiceCode="FR17459" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 10, СМАРТ общение" />
     <CFS name="FR1746" globalServiceCode="FR1746" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на SMS-пакет 50:50%" />
+    <CFS name="FR17460" globalServiceCode="FR17460" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 25, СМАРТ общение" />
+    <CFS name="FR17461" globalServiceCode="FR17461" copyOf="CFS_FP_SERVICE_GENERAL" description="Безлимитище +, СМАРТ общение" />
+    <CFS name="FR17462" globalServiceCode="FR17462" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 10, СМАРТ общение (скидка на МОПТ 6 мес.)" />
+    <CFS name="FR17463" globalServiceCode="FR17463" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 25, СМАРТ общение (скидка на МОПТ 6 мес.)" />
+    <CFS name="FR17464" globalServiceCode="FR17464" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 10. Скидка на МОПТ" />
+    <CFS name="FR17465" globalServiceCode="FR17465" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер 25. Скидка на МОПТ" />
+    <CFS name="FR17466" globalServiceCode="FR17466" copyOf="CFS_FP_SERVICE_GENERAL" description="Супер max 50. Скидка на МОПТ" />
+    <CFS name="FR17467" globalServiceCode="FR17467" copyOf="CFS_FP_SERVICE_GENERAL" description="Режим модема+" />
+    <CFS name="FR17468" globalServiceCode="FR17468" copyOf="CFS_FP_SERVICE_GENERAL" description="IVI" />
+    <CFS name="FR17469" globalServiceCode="FR17469" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 100% «IVI, 14 дней»" />
     <CFS name="FR1747" globalServiceCode="FR1747" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 5 минут в день -40%. Скидка" />
+    <CFS name="FR17470" globalServiceCode="FR17470" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка: 4,08% SMS-Extra" />
+    <CFS name="FR17471" globalServiceCode="FR17471" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ВамБонус!:H439:доп.12мес. на Cуперmах50" />
+    <CFS name="FR17472" globalServiceCode="FR17472" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ВамБонус!:H439:доп.12мес. на Cуперmах50" />
+    <CFS name="FR17473" globalServiceCode="FR17473" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ВамБонус!:H239:доп.24мес. на Суперmax50" />
+    <CFS name="FR17474" globalServiceCode="FR17474" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:ВамБонус!:H439:доп.24мес. на Суперmax50" />
+    <CFS name="FR17475" globalServiceCode="FR17475" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Телематика_Электорозаправки Белоруснефть" />
+    <CFS name="FR17476" globalServiceCode="FR17476" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка 5% на МОПТ (Умный бизнес)" />
+    <CFS name="FR17477" globalServiceCode="FR17477" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Интернет Mini_Гос.инспекция" />
+    <CFS name="FR17478" globalServiceCode="FR17478" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Корп.Супер max_МОДЕРН-ЭКСПО" />
+    <CFS name="FR17479" globalServiceCode="FR17479" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: скидка Безлимит 512кБит_МОДЕРН-ЭКСПО" />
     <CFS name="FR1748" globalServiceCode="FR1748" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: После 5 минут в день -40%. Скидка. Участник" />
+    <CFS name="FR17480" globalServiceCode="FR17480" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н29:доп.12мес.на акционныеТП" />
+    <CFS name="FR17481" globalServiceCode="FR17481" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н49:доп.12мес.на акционныеТП" />
+    <CFS name="FR17482" globalServiceCode="FR17482" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая:Выгоднаяпара:Н69:доп.12мес.на акционныеТП" />
+    <CFS name="FR17483" globalServiceCode="FR17483" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Корп.Супер max_Карго Лайн" />
+    <CFS name="FR17484" globalServiceCode="FR17484" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая 100% на ivi" />
     <CFS name="FR1749" globalServiceCode="FR1749" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 MMS 40%" />
     <CFS name="FR1750" globalServiceCode="FR1750" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка после 2 MMS 40%. Участник" />
     <CFS name="FR1755" globalServiceCode="FR1755" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Вечером дешевле. Скидка 30%" />
@@ -7960,7 +8486,7 @@
     <CFS name="FR3326" globalServiceCode="FR3326" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia E66-1 (1 249 500) -15% МТС" />
     <CFS name="FR3327" globalServiceCode="FR3327" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia E72-1 (1 985 000)" />
     <CFS name="FR3328" globalServiceCode="FR3328" copyOf="CFS_FP_SERVICE_GENERAL" description="Nokia E72-1 (1 687 250) -15% МТС" />
-    <CFS name="FR333" globalServiceCode="FR333" copyOf="CFS_FP_SERVICE_GENERAL" description="SCP тестовый абонент." />
+    <CFS name="FR333" globalServiceCode="FR333" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="SCP тестовый абонент." />
     <CFS name="FR3333" globalServiceCode="FR3333" copyOf="CFS_FP_SERVICE_GENERAL" description="SE C510 (828 000)" />
     <CFS name="FR3335" globalServiceCode="FR3335" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5150 (870 000)" />
     <CFS name="FR3337" globalServiceCode="FR3337" copyOf="CFS_FP_SERVICE_GENERAL" description="Samsung S5620 (1 006 000)" />
@@ -8702,6 +9228,7 @@
     <CFS name="FR502430" globalServiceCode="FR502430" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смена владельца (-50%)" />
     <CFS name="FR502431" globalServiceCode="FR502431" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смена владельца (16000)" />
     <CFS name="FR502432" globalServiceCode="FR502432" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смена владельца (1100)" />
+    <CFS name="FR502445" globalServiceCode="FR502445" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="За мой счет - 1" />
     <CFS name="FR502446" globalServiceCode="FR502446" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="За мой счет - 2" />
     <CFS name="FR502447" globalServiceCode="FR502447" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="За мой счет - 3" />
     <CFS name="FR502449" globalServiceCode="FR502449" copyOf="CFS_FP_FAVORITE_NUMBER,CFS_FP_SERVICE_GENERAL" description="За мой счет - 5" />
@@ -11666,7 +12193,7 @@
     <CFS name="FR802" globalServiceCode="FR802" copyOf="CFS_FP_SERVICE_GENERAL" description="уДачный безлимит" />
     <CFS name="FR803" globalServiceCode="FR803" copyOf="CFS_FP_SERVICE_GENERAL" description="Ночной безлимит" />
     <CFS name="FR804" globalServiceCode="FR804" copyOf="CFS_FP_SERVICE_GENERAL" description="Ночной безлимит." />
-    <CFS name="FR806" globalServiceCode="FR806" copyOf="CFS_FP_SERVICE_GENERAL" description="ТОНИНГ + Мелодии дня - технологическая" />
+    <CFS name="FR806" globalServiceCode="FR806" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="ТОНИНГ + Мелодии дня - технологическая" />
     <CFS name="FR809" globalServiceCode="FR809" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Моя компания скидка 50%" />
     <CFS name="FR8100" globalServiceCode="FR8100" copyOf="CFS_FP_SERVICE_GENERAL" description="Отличный Интернет" />
     <CFS name="FR8101" globalServiceCode="FR8101" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Скидка на услугу Отличный Интернет" />
@@ -11762,7 +12289,7 @@
     <CFS name="FR8187" globalServiceCode="FR8187" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony ST21i (2492000)" />
     <CFS name="FR8188" globalServiceCode="FR8188" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony ST21i2 (2639000)" />
     <CFS name="FR8189" globalServiceCode="FR8189" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony ST23i (3226000)" />
-    <CFS name="FR819" globalServiceCode="FR819" copyOf="CFS_FP_SERVICE_GENERAL" description="SMS-extra" />
+    <CFS name="FR819" globalServiceCode="FR819" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="SMS-extra" />
     <CFS name="FR8190" globalServiceCode="FR8190" copyOf="CFS_FP_SERVICE_GENERAL" description="Veon A48 (586000)" />
     <CFS name="FR8191" globalServiceCode="FR8191" copyOf="CFS_FP_SERVICE_GENERAL" description="Veon A78 (1026000)" />
     <CFS name="FR8192" globalServiceCode="FR8192" copyOf="CFS_FP_SERVICE_GENERAL" description="Veon S303 (791000)" />
@@ -12070,7 +12597,7 @@
     <CFS name="FR8504" globalServiceCode="FR8504" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смартфон от МТС-2: МТС Fit доп. 18 мес. на Отличный, Р300, Р600" />
     <CFS name="FR8505" globalServiceCode="FR8505" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смартфон от МТС-2: МТС Viva доп. 18 мес. на Отличный, Р300, Р600" />
     <CFS name="FR8506" globalServiceCode="FR8506" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Смартфон от МТС-2: Huawei G510 доп. 18 мес. на Отличный, Р300, Р600" />
-    <CFS name="FR8507" globalServiceCode="FR8507" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Персональный гудок" />
+    <CFS name="FR8507" globalServiceCode="FR8507" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Персональный гудок" />
     <CFS name="FR8508" globalServiceCode="FR8508" copyOf="CFS_FP_SERVICE_GENERAL" description="Huawei HG232f (527000)" />
     <CFS name="FR8509" globalServiceCode="FR8509" copyOf="CFS_FP_SERVICE_GENERAL" description=" МТС Fit 18 мес. (986000) доп.соглашение 18 мес." />
     <CFS name="FR8510" globalServiceCode="FR8510" copyOf="CFS_FP_SERVICE_GENERAL" description="МТС Viva 18 мес. (1394000) доп.соглашение 18 мес." />
@@ -12470,8 +12997,8 @@
     <CFS name="FR8881" globalServiceCode="FR8881" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony ST21i2 (2381000)" />
     <CFS name="FR8882" globalServiceCode="FR8882" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony ST27i (4313000)" />
     <CFS name="FR8883" globalServiceCode="FR8883" copyOf="CFS_FP_SERVICE_GENERAL" description="Sony C5303 (5589000)" />
-    <CFS name="FR8884" globalServiceCode="FR8884" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Пользователь Знакомства" />
-    <CFS name="FR8885" globalServiceCode="FR8885" copyOf="CFS_FP_SERVICE_GENERAL" description="Подписка на услугу «Знакомства с МТС»" />
+    <CFS name="FR8884" globalServiceCode="FR8884" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Технологическая: Пользователь Знакомства" />
+    <CFS name="FR8885" globalServiceCode="FR8885" copyOf="CFS_CHECK_SOURCE_TYPE_CODE,CFS_FP_SERVICE_GENERAL" description="Подписка на услугу «Знакомства с МТС»" />
     <CFS name="FR8886" globalServiceCode="FR8886" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус 750. Участник" />
     <CFS name="FR8887" globalServiceCode="FR8887" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус 750 МБ" />
     <CFS name="FR8888" globalServiceCode="FR8888" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая: Бонус 750 мин на МТС" />
@@ -13775,6 +14302,8 @@
       <RFS name="RFS_FP_AUTO_PAYMENT_LIMIT" linkType="Add" actionName="Assign Autopayment Limit;Remove Autopayment Limit;Modify Autopayment Limit" />
       <RFS name="RFS_FP_PERSONAL_ACCOUNT" linkType="Add" actionName="-Assign Autopayment Limit;-Remove Autopayment Limit;-Modify Autopayment Limit" />
     </CFS>
+    <CFS name="PGAT1" globalServiceCode="PGAT1" copyOf="CFS_FP_SERVICE_GENERAL" description="PGAT1" />
+    <CFS name="PGAT2" globalServiceCode="PGAT2" copyOf="CFS_FP_SERVICE_GENERAL" description="PGAT2" />
     <CFS name="PPD175_1.1" globalServiceCode="PPD175_1.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_1.1" />
     <CFS name="PPD175_2.1" globalServiceCode="PPD175_2.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_2.1" />
     <CFS name="PPD175_3.1" globalServiceCode="PPD175_3.1" copyOf="CFS_FP_COUNTER_AND_SDP" description="PPD175_3.1" />
@@ -13827,7 +14356,9 @@
     <CFS name="TESTPPDD" globalServiceCode="TESTPPDD" copyOf="CFS_FP_COUNTER_AND_SDP" description="Тест.Услуга D" />
     <CFS name="TESTPPDS" globalServiceCode="TESTPPDS" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.Услуга S" />
     <CFS name="TESTPPDSERV" globalServiceCode="TESTPPDSERV" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST. First PPD service" />
+    <CFS name="TFFTEST" globalServiceCode="TFFTEST" copyOf="CFS_FP_SERVICE_GENERAL" description="Технологическая - Тестовый ЛН" />
     <CFS name="TMP000002" globalServiceCode="TMP000002" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга 25" />
+    <CFS name="TMP000005" globalServiceCode="TMP000005" copyOf="CFS_FP_SERVICE_GENERAL" description="test22012020" />
     <CFS name="TransferTD" priority="9999" type="OneTime" description="Перенос ПО">
       <RFS name="RFS_BMS_TRANSFER_TD" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_TRANSFER_TD" />
@@ -13883,6 +14414,9 @@
         <RFS name="RFS_FP_CHANGE_TARIFF_AP" action="Remove" dependsOn="RFS_FP_SERVICE_AUTO_PAYMENT" order="5" />
       </Configuration>
     </Handler>
+    <Handler name="CheckSourceTypeCode" type="RFSFilter" description="Обработчик для проверки тега SourceTypeCode. Прописан в бизнес-процессы.">
+      <Configuration allow="FP,BS,CHECK" />
+    </Handler>
     <Handler name="DeleteFPSubscriberForChangeTariffHandler" type="Custom" description="Обработчик RFS для удаления абонента на старой платформы при изменении тарифного плана">
       <Configuration type="FORIS.SPA.SC.Customization.DeleteFPSubscriberForChangeTariffHandler, FORIS.SPA.SC.Customization">
         <RFS name="RFS_FP_CHANGE_TARIFF_FN" dependsOn="RFS_FP_SERVICE_FAVORITE_NUMBER" order="7" />
@@ -13891,7 +14425,7 @@
       </Configuration>
     </Handler>
     <Handler name="FP.CancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе. Прописан в бизнес-процессы.">
-      <Configuration deny="FP" />
+      <Configuration deny="FP,CHECK" />
     </Handler>
     <Handler name="FP.DeleteSubscriber" type="DeleteSubscriber" description="Обработчик специфичного удаления абонента с FP">
       <Configuration hostType="FP">
@@ -13906,7 +14440,7 @@
       <Configuration allow="FP" />
     </Handler>
     <Handler name="FP.ExtendedCancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе и BMS. Прописан в бизнес-процессы.">
-      <Configuration deny="FP,BS" />
+      <Configuration deny="FP,BS,CHECK" />
     </Handler>
     <Handler name="FP.ExtendedExclusiveHandler" type="RFSFilter" description="Обработчик выделения обработки на фин.платформе,BMS. Прописан в бизнес-процессы.">
       <Configuration allow="FP,BS" />

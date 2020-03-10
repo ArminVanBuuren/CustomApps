@@ -1,0 +1,11 @@
+<OperationData Name="AddFR16616onIS" NEType="IS" NEAlias="IS">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <SourceType Type="Optional" />
+      <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR16616 HaltMode="CancelOperation" Type="Mandatory" />
+      </ProvisionList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

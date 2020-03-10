@@ -11,7 +11,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="IsAlreadyFullBlocked_2" />
           </resultlist>
@@ -50,10 +52,7 @@
             <param name="operation" value="UnBlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonSL" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="UnBlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonVI" requiredForSuccess="SUCCESS" />
@@ -69,6 +68,9 @@
             <param name="operation" value="UnBlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="UnBlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="UnBlockonLS" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

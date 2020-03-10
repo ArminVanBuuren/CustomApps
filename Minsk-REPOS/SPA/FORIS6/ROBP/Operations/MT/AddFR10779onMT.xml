@@ -1,7 +1,7 @@
 <OperationData Name="AddFR10779onMT" NEType="MT" NEAlias="MT">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
-      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <SourceType Type="Optional" />
       <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
         <FR10779 HaltMode="CancelOperation" Type="Mandatory" />
       </ProvisionList>

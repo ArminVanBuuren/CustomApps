@@ -4,6 +4,18 @@
       <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
         <CB108 HaltMode="CancelOperation" Type="Mandatory" />
       </ProvisionList>
+      <RegisteredList Type="Optional">
+        <BLTDLIM HaltMode="CancelOperation" Type="Restricted" />
+        <CBBLKLOST HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKCHK HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKFIN HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKKEEP HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKPAY HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKTIME HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKUSER HaltMode="CancelOperation" Type="Restricted" />
+        <FRBLKP HaltMode="CancelOperation" Type="Restricted" />
+        <FR16324 HaltMode="CancelOperation" Type="Restricted" />
+      </RegisteredList>
     </AdditionalData>
   </Request>
   <Response Name="ResponseMessage" />

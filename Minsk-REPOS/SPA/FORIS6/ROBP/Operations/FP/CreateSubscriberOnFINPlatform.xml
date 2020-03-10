@@ -13,15 +13,15 @@
             <Status HaltMode="AbortProcess" Type="Mandatory" />
             <BalanceStatus HaltMode="AbortProcess" Type="Mandatory" />
             <BlockStatus HaltMode="AbortProcess" Type="Mandatory" />
-            <AdminBlockedDate Type="Optional" />
-            <BlockedEndDate Type="Optional" />
+            <AdminBlockedDate HaltMode="AbortProcess" Type="Mandatory" />
+            <BlockedEndDate HaltMode="AbortProcess" Type="Mandatory" />
           </PaStatus>
           <TdStatus Type="Optional">
             <Status HaltMode="AbortProcess" Type="Mandatory" />
             <BlockStatus HaltMode="AbortProcess" Type="Mandatory" />
             <AdminBlockedDate HaltMode="AbortProcess" Type="Mandatory" />
           </TdStatus>
-          <BalanceLimits Type="Optional">
+          <BalanceLimits HaltMode="AbortProcess" Type="Mandatory">
             <BlockLimit HaltMode="AbortProcess" Type="Mandatory" />
             <UnblockLimit HaltMode="AbortProcess" Type="Mandatory" />
             <PartialBlockLimit HaltMode="AbortProcess" Type="Mandatory" />

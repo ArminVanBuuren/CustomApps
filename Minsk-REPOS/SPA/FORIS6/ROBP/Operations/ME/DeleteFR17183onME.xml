@@ -1,0 +1,10 @@
+<OperationData Name="DeleteFR17183onME" NEType="ME" NEAlias="ME">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR17183 HaltMode="CancelOperation" Type="Mandatory" />
+      </WithdrawalList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

@@ -178,6 +178,8 @@
         <FR17007 Type="Optional" />
         <FR17008 Type="Optional" />
         <FR17124 Type="Optional" />
+        <FR17185 Type="Optional" />
+        <FR17216 Type="Optional" />
       </RegisteredList>
     </AdditionalData>
   </Request>

@@ -1,7 +1,7 @@
 <OperationData Name="DeleteCUGOO" NEType="HL" NEAlias="HL">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
-      <BalanceStorage HaltMode="AbortProcess" Type="Optional" />
+      <BalanceStorage Type="Optional" />
       <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
         <CUGOO HaltMode="CancelOperation" Type="Mandatory">
           <UserGroupCode HaltMode="AbortProcess" Type="Mandatory" />

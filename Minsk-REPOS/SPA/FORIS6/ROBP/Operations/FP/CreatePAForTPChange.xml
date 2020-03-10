@@ -19,13 +19,13 @@
             <Status HaltMode="CancelOperation" Type="Mandatory" />
             <BalanceStatus HaltMode="CancelOperation" Type="Mandatory" />
             <BlockStatus HaltMode="CancelOperation" Type="Mandatory" />
-            <AdminBlockedDate Type="Optional" />
-            <BlockedEndDate Type="Optional" />
+            <AdminBlockedDate HaltMode="CancelOperation" Type="Mandatory" />
+            <BlockedEndDate HaltMode="CancelOperation" Type="Mandatory" />
           </PaStatus>
           <TdStatus Type="Optional">
             <Status HaltMode="CancelOperation" Type="Mandatory" />
             <BlockStatus HaltMode="CancelOperation" Type="Mandatory" />
-            <AdminBlockedDate Type="Optional" />
+            <AdminBlockedDate HaltMode="CancelOperation" Type="Mandatory" />
           </TdStatus>
           <BalanceLimits Type="Optional">
             <BlockLimit HaltMode="CancelOperation" Type="Mandatory" />

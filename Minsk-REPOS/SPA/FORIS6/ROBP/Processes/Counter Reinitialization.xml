@@ -9,6 +9,7 @@
         <node name="SCProcessingUnit" object="SCProcessingUnit">
           <parameterslist>
             <param name="ProcessingOptions:0" value="IsCounterProcess" />
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

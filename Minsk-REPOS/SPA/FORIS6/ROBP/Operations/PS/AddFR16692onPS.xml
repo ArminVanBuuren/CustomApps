@@ -1,7 +1,7 @@
 <OperationData Name="AddFR16692onPS" NEType="PS" NEAlias="PS">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
-      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <SourceType Type="Optional" />
       <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
         <FR16692 HaltMode="CancelOperation" Type="Mandatory" />
       </ProvisionList>

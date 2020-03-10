@@ -9,7 +9,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="SplitForDummy" />
           </resultlist>
@@ -111,36 +113,12 @@
             <param name="operation" value="CreateSubscriber_ZN" />
           </parameterslist>
           <resultlist>
-            <result value="" node="CreateSubscriber_TV" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriber_TV" object="CreateSubscriber_">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriber_TV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="CreateSubscriber_MT" />
           </resultlist>
         </node>
         <node name="CreateSubscriber_MT" object="CreateSubscriber_">
           <parameterslist>
             <param name="operation" value="CreateSubscriber_MT" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="CreateSubscriber_SL" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriber_SL" object="CreateSubscriber_">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriber_SL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="CreateSubscriber_M2" />
-          </resultlist>
-        </node>
-        <node name="CreateSubscriber_M2" object="CreateSubscriber_">
-          <parameterslist>
-            <param name="operation" value="CreateSubscriber_M2" />
           </parameterslist>
           <resultlist>
             <result value="" node="CreateSubscriber_DR" />
@@ -253,6 +231,30 @@
         <node name="CreateSubscriber_KM" object="CreateSubscriber_">
           <parameterslist>
             <param name="operation" value="CreateSubscriber_KM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriber_IS" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriber_IS" object="CreateSubscriber_">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriber_IS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriber_BB" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriber_BB" object="CreateSubscriber_">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriber_BB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CreateSubscriber_IV" />
+          </resultlist>
+        </node>
+        <node name="CreateSubscriber_IV" object="CreateSubscriber_">
+          <parameterslist>
+            <param name="operation" value="CreateSubscriber_IV" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

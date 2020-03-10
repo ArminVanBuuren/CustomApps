@@ -2,7 +2,7 @@
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
       <WithdrawalList HaltMode="CancelOperation" Type="AnyOfListed">
-        <FRCUGPRIL HaltMode="CancelOperation" Type="Optional">
+        <FRCUGPRIL Type="Optional">
           <UserGroupCode Type="Optional" />
         </FRCUGPRIL>
       </WithdrawalList>

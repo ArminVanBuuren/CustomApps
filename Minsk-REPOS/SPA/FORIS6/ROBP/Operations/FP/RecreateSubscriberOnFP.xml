@@ -6,8 +6,8 @@
           <NewMSISDN HaltMode="AbortProcess" Type="Mandatory" />
           <NewIMSI HaltMode="AbortProcess" Type="Mandatory" />
           <IsChangeHLR HaltMode="AbortProcess" Type="Mandatory" />
-          <EncryptedKi HaltMode="AbortProcess" Type="Optional" />
-          <VersionsA3A8 HaltMode="AbortProcess" Type="Optional" />
+          <EncryptedKi Type="Optional" />
+          <VersionsA3A8 Type="Optional" />
         </ChangeMsisdn>
       </ProvisionList>
       <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" />

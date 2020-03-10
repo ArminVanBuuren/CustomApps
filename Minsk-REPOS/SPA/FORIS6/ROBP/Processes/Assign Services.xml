@@ -8,27 +8,10 @@
         <object name="Dummy" class="FORIS.ScenarioProcessing.CommonUnits.ConditionalDummyResultCreator" assembly="FORIS.SPA.SPF.dll" />
       </objectlist>
       <automat>
-        <node name="CheckSourceTypeCode" object="Split">
-          <parameterslist>
-            <param name="XmlNameInContext" value="$XmlRequest" />
-            <param name="IfXmlPath:0" value="ExtendedRequestMessage/AdditionalData//SourceTypeCode[string-length(.) &gt; 0]" />
-          </parameterslist>
-          <resultlist>
-            <result value="0" node="SCProcessingUnit" />
-            <result value="" node="Dummy" />
-          </resultlist>
-        </node>
-        <node name="Dummy" object="Dummy">
-          <parameterslist>
-            <param name="DetailedResult" value="1" />
-            <param name="DetailedResultDescription" value="SourceTypeCode not found in request" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="" />
-          </resultlist>
-        </node>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="CheckSourceTypeCode" />
+          </parameterslist>
           <resultlist>
             <result value="" node="AssignServiceOnFINPlatform" />
           </resultlist>
@@ -292,6 +275,54 @@
         <node name="AddFR16780" object="AddService">
           <parameterslist>
             <param name="operation" value="AddFR16780" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR16863" />
+          </resultlist>
+        </node>
+        <node name="AddFR16863" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR16863" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17316" />
+          </resultlist>
+        </node>
+        <node name="AddFR17316" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17316" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17150" />
+          </resultlist>
+        </node>
+        <node name="AddFR17150" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17150" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17148onLS" />
+          </resultlist>
+        </node>
+        <node name="AddFR17148onLS" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17148onLS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17276" />
+          </resultlist>
+        </node>
+        <node name="AddFR17276" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17276" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddFR17278" />
+          </resultlist>
+        </node>
+        <node name="AddFR17278" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddFR17278" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

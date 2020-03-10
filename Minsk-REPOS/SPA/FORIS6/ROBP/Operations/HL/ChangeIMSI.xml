@@ -8,7 +8,7 @@
           <VersionsA3A8 Type="Optional" />
         </ChangeImsi>
       </ProvisionList>
-      <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" />
+      <RegisteredList HaltMode="CancelOperation" Type="Mandatory" />
     </AdditionalData>
   </Request>
   <Response Name="ResponseMessage" />

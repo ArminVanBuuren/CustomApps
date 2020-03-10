@@ -1,0 +1,10 @@
+<OperationData Name="DeleteFR17185onQP" NEType="QP" NEAlias="QP">
+  <Request Name="RequestMessage">
+    <AdditionalData Executable="True">
+      <WithdrawalList HaltMode="AbortProcess" Type="AnyOfListed">
+        <FR17185 HaltMode="CancelOperation" Type="Mandatory" />
+      </WithdrawalList>
+    </AdditionalData>
+  </Request>
+  <Response Name="ResponseMessage" />
+</OperationData>

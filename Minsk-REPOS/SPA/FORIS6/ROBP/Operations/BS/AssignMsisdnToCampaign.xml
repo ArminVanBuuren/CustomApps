@@ -4,7 +4,6 @@
       <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
         <Include groupName="BMSList" />
       </ProvisionList>
-      <DeviceInfo />
     </AdditionalData>
   </Request>
   <Response Name="ExtendedResponseMessage" />

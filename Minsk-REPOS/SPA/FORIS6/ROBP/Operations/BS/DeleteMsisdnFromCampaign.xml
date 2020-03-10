@@ -4,7 +4,6 @@
       <RegisteredList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
         <Include groupName="BMSList" />
       </RegisteredList>
-      <DeviceInfo />
     </AdditionalData>
   </Request>
   <Response Name="ExtendedResponseMessage" />

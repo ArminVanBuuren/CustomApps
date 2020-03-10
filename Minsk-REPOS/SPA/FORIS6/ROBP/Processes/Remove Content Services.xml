@@ -7,7 +7,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="CheckSourceTypeCode" />
+          </parameterslist>
           <resultlist>
             <result value="" node="RemoveServiceOnFINPlatform" />
           </resultlist>
@@ -65,14 +67,6 @@
             <param name="operation" value="DeleteFR8885onZN" />
           </parameterslist>
           <resultlist>
-            <result value="" node="DeleteFR10312onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10312onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10312onTV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="DeleteFR10312onQP" />
           </resultlist>
         </node>
@@ -87,14 +81,6 @@
         <node name="DeleteFR10312onDB" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR10312onDB" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR10313onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10313onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10313onTV" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteFR10313onQP" />
@@ -113,14 +99,6 @@
             <param name="operation" value="DeleteFR10757onMT" />
           </parameterslist>
           <resultlist>
-            <result value="" node="DeleteFR10864onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10864onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10864onTV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="DeleteFR10864onQP" />
           </resultlist>
         </node>
@@ -135,14 +113,6 @@
         <node name="DeleteFR10864onDB" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR10864onDB" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR10865onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10865onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10865onTV" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteFR10865onQP" />
@@ -161,14 +131,6 @@
             <param name="operation" value="DeleteFR10865onDB" />
           </parameterslist>
           <resultlist>
-            <result value="" node="DeleteFR10866onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10866onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10866onTV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="DeleteFR10866onQP" />
           </resultlist>
         </node>
@@ -183,14 +145,6 @@
         <node name="DeleteFR10866onDB" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR10866onDB" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR10867onTV" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR10867onTV" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR10867onTV" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteFR10867onQP" />
@@ -223,70 +177,6 @@
         <node name="DeleteFR10249onZN" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR10249onZN" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11189onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11189onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11189onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11190onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11190onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11190onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11191onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11191onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11191onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11192onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11192onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11192onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11193onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11193onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11193onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11194onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11194onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11194onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11195onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11195onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11195onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11196onSL" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11196onSL" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11196onSL" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteFR10783onBB" />
@@ -335,38 +225,6 @@
         <node name="DeleteFR11435onZN" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR11435onZN" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11701onM2" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11701onM2" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11701onM2" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11702onM2" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11702onM2" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11702onM2" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11703onM2" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11703onM2" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11703onM2" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="DeleteFR11704onM2" />
-          </resultlist>
-        </node>
-        <node name="DeleteFR11704onM2" object="DeleteService">
-          <parameterslist>
-            <param name="operation" value="DeleteFR11704onM2" />
           </parameterslist>
           <resultlist>
             <result value="" node="DeleteFR11808onDR" />
@@ -785,7 +643,7 @@
             <param name="operation" value="DeleteFR15719onOP" />
           </parameterslist>
           <resultlist>
-            <result value="" node="DeleteFR15735onGS" />
+            <result value="" node="DeleteFR16154onZN" />
           </resultlist>
         </node>
         <node name="DeleteFR15735onGS" object="DeleteService">
@@ -1049,6 +907,22 @@
             <param name="operation" value="DeleteFR11430onPS" />
           </parameterslist>
           <resultlist>
+            <result value="" node="DeleteFR16754onPS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16754onPS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16754onPS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16755onPS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16755onPS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16755onPS" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="DeleteFR16500onKM" />
           </resultlist>
         </node>
@@ -1087,6 +961,174 @@
         <node name="DeleteFR16769onKM" object="DeleteService">
           <parameterslist>
             <param name="operation" value="DeleteFR16769onKM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16614onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16614onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16614onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16615onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16615onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16615onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16616onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16616onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16616onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16617onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16617onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16617onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16618onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16618onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16618onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16619onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16619onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16619onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16620onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16620onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16620onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16621onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16621onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16621onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16622onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16622onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16622onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16623onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16623onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16623onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16624onIS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16624onIS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16624onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16996onMA" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16996onMA" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16996onMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16638onMA" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16638onMA" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16638onMA" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17017onME" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17017onME" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17017onME" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17087onMU" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17087onMU" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17087onMU" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17100onRG" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17100onRG" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17100onRG" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR16803onVI" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR16803onVI" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR16803onVI" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17098onPS" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17098onPS" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17098onPS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17139onBB" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17139onBB" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17139onBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17183onME" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17183onME" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17183onME" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="DeleteFR17468onIV" />
+          </resultlist>
+        </node>
+        <node name="DeleteFR17468onIV" object="DeleteService">
+          <parameterslist>
+            <param name="operation" value="DeleteFR17468onIV" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

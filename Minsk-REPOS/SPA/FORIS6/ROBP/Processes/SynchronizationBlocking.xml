@@ -22,10 +22,7 @@
             <param name="operation" value="AddFR2370onVD" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="AddFR2370onTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="AddFR2370onSL" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="AddFR2370onM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onVI" requiredForSuccess="SUCCESS" />
@@ -41,6 +38,10 @@
             <param name="operation" value="AddFR2370onOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="AddFR2370onKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddFR2370onIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddFR2370onBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddFR2370onLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddFR2370onIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

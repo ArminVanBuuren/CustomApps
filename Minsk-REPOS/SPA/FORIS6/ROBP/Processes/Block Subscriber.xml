@@ -11,7 +11,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="SplitForDummy" />
           </resultlist>
@@ -20,6 +22,7 @@
           <parameterslist>
             <param name="XmlNameInContext" value="$XmlRequest" />
             <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKEND" />
+            <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKINIT" />
           </parameterslist>
           <resultlist>
             <result value="0" node="DummyResult" />
@@ -34,6 +37,22 @@
           </parameterslist>
           <resultlist>
             <result value="" node="" />
+          </resultlist>
+        </node>
+        <node name="AddBlockOnFP" object="Block">
+          <parameterslist>
+            <param name="operation" value="AddBlockOnFP" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddBlockOnBMS" />
+          </resultlist>
+        </node>
+        <node name="AddBlockOnBMS" object="Block">
+          <parameterslist>
+            <param name="operation" value="AddBlockOnBMS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="CheckFullBLK" />
           </resultlist>
         </node>
         <node name="CheckFullBLK" object="CheckBLK">
@@ -66,6 +85,8 @@
         </node>
         <node name="FullBLK" object="ParallelBlock">
           <parameterslist>
+            <param name="operation" value="AddBlockOnFP" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddBlockOnBMS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockFull" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonSD" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonSS" requiredForSuccess="SUCCESS" />
@@ -74,10 +95,7 @@
             <param name="operation" value="BlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="BlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonVI" requiredForSuccess="SUCCESS" />
@@ -93,6 +111,10 @@
             <param name="operation" value="BlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />
@@ -100,6 +122,8 @@
         </node>
         <node name="PartBLK" object="ParallelBlock">
           <parameterslist>
+            <param name="operation" value="AddBlockOnFP" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="AddBlockOnBMS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockPart" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonSD" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonSS" requiredForSuccess="SUCCESS" />
@@ -108,10 +132,7 @@
             <param name="operation" value="BlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="BlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonVI" requiredForSuccess="SUCCESS" />
@@ -127,6 +148,10 @@
             <param name="operation" value="BlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

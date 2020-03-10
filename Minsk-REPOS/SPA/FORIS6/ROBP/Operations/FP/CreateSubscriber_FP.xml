@@ -12,13 +12,16 @@
           <PaStatus Type="Optional">
             <Status HaltMode="AbortProcess" Type="Mandatory" />
             <BalanceStatus HaltMode="AbortProcess" Type="Mandatory" />
+            <BlockStatus HaltMode="AbortProcess" Type="Mandatory" />
+            <AdminBlockedDate HaltMode="AbortProcess" Type="Mandatory" />
+            <BlockedEndDate HaltMode="AbortProcess" Type="Mandatory" />
           </PaStatus>
           <TdStatus Type="Optional">
             <Status HaltMode="AbortProcess" Type="Mandatory" />
-            <BlockStatus Type="Optional" />
-            <AdminBlockedDate Type="Optional" />
+            <BlockStatus HaltMode="AbortProcess" Type="Mandatory" />
+            <AdminBlockedDate HaltMode="AbortProcess" Type="Mandatory" />
           </TdStatus>
-          <BalanceLimits Type="Optional">
+          <BalanceLimits HaltMode="AbortProcess" Type="Mandatory">
             <BlockLimit HaltMode="AbortProcess" Type="Mandatory" />
             <UnblockLimit HaltMode="AbortProcess" Type="Mandatory" />
             <PartialBlockLimit HaltMode="AbortProcess" Type="Mandatory" />
@@ -53,8 +56,6 @@
         <HostId Type="Optional" />
         <HostCode Type="Optional" />
       </BalanceStorage>
-      <DeviceInfo />
-      <AccountInfo />
     </AdditionalData>
   </Request>
   <Response Name="ResponseMessage">

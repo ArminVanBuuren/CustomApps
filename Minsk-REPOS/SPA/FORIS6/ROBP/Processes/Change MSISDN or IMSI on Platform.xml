@@ -9,7 +9,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="SplitForDummy" />
           </resultlist>
@@ -159,22 +161,6 @@
             <param name="operation" value="ChangeMSISDNonUF" />
           </parameterslist>
           <resultlist>
-            <result value="" node="ChangeMSISDNonSL" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNonSL" object="Change">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNonSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="ChangeMSISDNonM2" />
-          </resultlist>
-        </node>
-        <node name="ChangeMSISDNonM2" object="Change">
-          <parameterslist>
-            <param name="operation" value="ChangeMSISDNonM2" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="ChangeMSISDNonDR" />
           </resultlist>
         </node>
@@ -311,6 +297,30 @@
             <param name="operation" value="ChangeMSISDNonKM" />
           </parameterslist>
           <resultlist>
+            <result value="" node="ChangeMSISDNonIS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonIS" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonLS" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonLS" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonLS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ChangeMSISDNonIV" />
+          </resultlist>
+        </node>
+        <node name="ChangeMSISDNonIV" object="Change">
+          <parameterslist>
+            <param name="operation" value="ChangeMSISDNonIV" />
+          </parameterslist>
+          <resultlist>
             <result value="" node="ChangeMSISDN" />
           </resultlist>
         </node>
@@ -359,14 +369,6 @@
             <param name="operation" value="ChangeIMSIonQP" />
           </parameterslist>
           <resultlist>
-            <result value="" node="AddCB118" />
-          </resultlist>
-        </node>
-        <node name="AddCB118" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB118" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="AddCB537onDM" />
           </resultlist>
         </node>
@@ -383,22 +385,6 @@
             <param name="operation" value="AddCB537onRP" />
           </parameterslist>
           <resultlist>
-            <result value="" node="AddCB537" />
-          </resultlist>
-        </node>
-        <node name="AddCB537" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB537" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddCB537onQP" />
-          </resultlist>
-        </node>
-        <node name="AddCB537onQP" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB537onQP" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="AddCB118onRT" />
           </resultlist>
         </node>
@@ -413,14 +399,6 @@
         <node name="AddCB118onSE" object="Change">
           <parameterslist>
             <param name="operation" value="AddCB118onSE" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddCB118onQP" />
-          </resultlist>
-        </node>
-        <node name="AddCB118onQP" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB118onQP" />
           </parameterslist>
           <resultlist>
             <result value="" node="AddCB118onVM" />
@@ -501,22 +479,6 @@
         <node name="AddCB118onUF" object="Change">
           <parameterslist>
             <param name="operation" value="AddCB118onUF" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddCB118onSL" />
-          </resultlist>
-        </node>
-        <node name="AddCB118onSL" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB118onSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="AddCB118onM2" />
-          </resultlist>
-        </node>
-        <node name="AddCB118onM2" object="Change">
-          <parameterslist>
-            <param name="operation" value="AddCB118onM2" />
           </parameterslist>
           <resultlist>
             <result value="" node="AddCB118onDR" />
@@ -653,6 +615,22 @@
         <node name="AddCB118onKM" object="Change">
           <parameterslist>
             <param name="operation" value="AddCB118onKM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onIS" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onIS" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="AddCB118onLS" />
+          </resultlist>
+        </node>
+        <node name="AddCB118onLS" object="Change">
+          <parameterslist>
+            <param name="operation" value="AddCB118onLS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

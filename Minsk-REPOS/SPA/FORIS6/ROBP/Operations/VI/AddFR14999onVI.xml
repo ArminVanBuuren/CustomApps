@@ -1,7 +1,7 @@
 <OperationData Name="AddFR14999onVI" NEType="VI" NEAlias="VI">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
-      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <SourceType Type="Optional" />
       <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
         <FR14999 HaltMode="CancelOperation" Type="Mandatory" />
       </ProvisionList>

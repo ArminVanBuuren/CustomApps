@@ -74,36 +74,12 @@
             <param name="operation" value="SynchronizeSubscriberDataOnZN" />
           </parameterslist>
           <resultlist>
-            <result value="" node="SynchronizeSubscriberDataOnTV" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeSubscriberDataOnTV" object="SynchronizeSubscriberData">
-          <parameterslist>
-            <param name="operation" value="SynchronizeSubscriberDataOnTV" />
-          </parameterslist>
-          <resultlist>
             <result value="" node="SynchronizeSubscriberDataOnMT" />
           </resultlist>
         </node>
         <node name="SynchronizeSubscriberDataOnMT" object="SynchronizeSubscriberData">
           <parameterslist>
             <param name="operation" value="SynchronizeSubscriberDataOnMT" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="SynchronizeSubscriberDataOnSL" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeSubscriberDataOnSL" object="SynchronizeSubscriberData">
-          <parameterslist>
-            <param name="operation" value="SynchronizeSubscriberDataOnSL" />
-          </parameterslist>
-          <resultlist>
-            <result value="" node="SynchronizeSubscriberDataOnM2" />
-          </resultlist>
-        </node>
-        <node name="SynchronizeSubscriberDataOnM2" object="SynchronizeSubscriberData">
-          <parameterslist>
-            <param name="operation" value="SynchronizeSubscriberDataOnM2" />
           </parameterslist>
           <resultlist>
             <result value="" node="SynchronizeSubscriberDataOnDR" />
@@ -216,6 +192,38 @@
         <node name="SynchronizeSubscriberDataOnKM" object="SynchronizeSubscriberData">
           <parameterslist>
             <param name="operation" value="SynchronizeSubscriberDataOnKM" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="SynchronizeSubscriberDataOnIS" />
+          </resultlist>
+        </node>
+        <node name="SynchronizeSubscriberDataOnIS" object="SynchronizeSubscriberData">
+          <parameterslist>
+            <param name="operation" value="SynchronizeSubscriberDataOnIS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="SynchronizeSubscriberDataOnBB" />
+          </resultlist>
+        </node>
+        <node name="SynchronizeSubscriberDataOnBB" object="SynchronizeSubscriberData">
+          <parameterslist>
+            <param name="operation" value="SynchronizeSubscriberDataOnBB" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="SynchronizeSubscriberDataOnLS" />
+          </resultlist>
+        </node>
+        <node name="SynchronizeSubscriberDataOnLS" object="SynchronizeSubscriberData">
+          <parameterslist>
+            <param name="operation" value="SynchronizeSubscriberDataOnLS" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="SynchronizeSubscriberDataOnIV" />
+          </resultlist>
+        </node>
+        <node name="SynchronizeSubscriberDataOnIV" object="SynchronizeSubscriberData">
+          <parameterslist>
+            <param name="operation" value="SynchronizeSubscriberDataOnIV" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

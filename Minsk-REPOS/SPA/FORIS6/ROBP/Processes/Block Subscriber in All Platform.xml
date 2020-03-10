@@ -11,7 +11,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="SplitForDummy" />
           </resultlist>
@@ -20,6 +22,7 @@
           <parameterslist>
             <param name="XmlNameInContext" value="$XmlRequest" />
             <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKEND" />
+            <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FRBLKINIT" />
           </parameterslist>
           <resultlist>
             <result value="0" node="DummyResult" />
@@ -92,10 +95,7 @@
             <param name="operation" value="BlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="BlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonVI" requiredForSuccess="SUCCESS" />
@@ -111,6 +111,10 @@
             <param name="operation" value="BlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />
@@ -128,10 +132,7 @@
             <param name="operation" value="BlockonBT" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonZN" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonME" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonTV" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMT" requiredForSuccess="SUCCESS" />
-            <param name="operation" value="BlockonSL" requiredForSuccess="Nothing" />
-            <param name="operation" value="BlockonM2" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonDR" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonMA" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonVI" requiredForSuccess="SUCCESS" />
@@ -147,6 +148,10 @@
             <param name="operation" value="BlockonOP" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonPS" requiredForSuccess="SUCCESS" />
             <param name="operation" value="BlockonKM" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonBB" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonLS" requiredForSuccess="SUCCESS" />
+            <param name="operation" value="BlockonIV" requiredForSuccess="SUCCESS" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

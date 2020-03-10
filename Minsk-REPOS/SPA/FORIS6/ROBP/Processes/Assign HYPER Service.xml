@@ -7,7 +7,9 @@
       </objectlist>
       <automat>
         <node name="SCProcessingUnit" object="SCProcessingUnit">
-          <parameterslist />
+          <parameterslist>
+            <param name="RFSFilterHandler" value="FP.ExtendedExclusiveHandler" />
+          </parameterslist>
           <resultlist>
             <result value="" node="AssignServiceOnFINPlatform" />
           </resultlist>
@@ -39,6 +41,14 @@
         <node name="ResetSession" object="AddService">
           <parameterslist>
             <param name="operation" value="AddResetSession" />
+          </parameterslist>
+          <resultlist>
+            <result value="" node="ResetSessionOnQP" />
+          </resultlist>
+        </node>
+        <node name="ResetSessionOnQP" object="AddService">
+          <parameterslist>
+            <param name="operation" value="AddResetSessiononQP" />
           </parameterslist>
           <resultlist>
             <result value="" node="" />

@@ -1,7 +1,7 @@
 <OperationData Name="AddFR17100onRG" NEType="RG" NEAlias="RG">
   <Request Name="RequestMessage">
     <AdditionalData Executable="True">
-      <SourceType HaltMode="CancelOperation" Type="Mandatory" />
+      <SourceType Type="Optional" />
       <ProvisionList HaltMode="AbortProcess" Type="AnyOfListed">
         <FR17100 HaltMode="CancelOperation" Type="Mandatory" />
       </ProvisionList>
