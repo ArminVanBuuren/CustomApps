@@ -1,6 +1,6 @@
 <Command Name="SC.ChangeTariff.FavoriteNumberRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>FavoriteNumbers (services table)</Description>
-  <Author Name="Zaytsev Alexander" Date="2017-10-31+01:01"/>
+  <Author Name="Zaytsev Alexander" Date="2017-10-31+01:01" />
   <Properties GenerationType="MmlXml" />
   <Request>
     <RequestTemplate>
@@ -12,29 +12,31 @@
  EXTENDED_SERVICE_CODE="##EXTENDED_SERVICE_CODE##"
  ACTION="##ServiceAction##"/>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="FNF_POSITION" Type="LocalParameter"/>
-    <Item Name="FNF_NUMBER" Type="LocalParameter"/>
-    <Item Name="EXTENDED_SERVICE_CODE" Type="LocalParameter"/>
-    <Item Name="ServiceAction" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="FNF_POSITION" Type="LocalParameter" />
+    <Item Name="FNF_NUMBER" Type="LocalParameter" />
+    <Item Name="EXTENDED_SERVICE_CODE" Type="LocalParameter" />
+    <Item Name="ServiceAction" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="FNF_POSITION">
-      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumberPosition/Value"/>
+      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumberPosition/Value" />
     </Parameter>
     <Parameter Name="FNF_NUMBER">
-      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumber/Value"/>
+      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumber/Value" />
     </Parameter>
     <Parameter Name="EXTENDED_SERVICE_CODE">
-      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumberTypeCode/Value"/>
+      <Source Path="//AdditionalData/*/RFS_FP_SERVICE_FAVORITE_NUMBER/FavoriteNumberTypeCode/Value" />
     </Parameter>
     <Parameter Name="ServiceAction" IsChoice="true">
-      <Source Path="//AdditionalData/AddList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="0"/>
-      <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="1"/>
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="2"/>
-      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="0"/>
+      <Source Path="//AdditionalData/AddList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="0" />
+      <Source Path="//AdditionalData/ModifyList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="1" />
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="2" />
+      <Source Path="//AdditionalData/EndList/RFS_FP_SERVICE_FAVORITE_NUMBER" PostFormat="0" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

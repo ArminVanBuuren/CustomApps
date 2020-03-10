@@ -1,4 +1,4 @@
-﻿<scenario name="SC.FP.Modify.Block">
+<scenario name="SC.FP.Modify.Block">
   <objectList>
     <object name="BySubscribersCutter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestCutterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -44,7 +44,7 @@
         <result value="" node="ResponseAssembler-Node" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus"/>
+        <param name="IfXmlPath:0" value="//AdditionalData/PaStatus" />
         <param name="Command" value="ChangePAStatusesOnFINPlatform" />
       </parameterslist>
     </node>

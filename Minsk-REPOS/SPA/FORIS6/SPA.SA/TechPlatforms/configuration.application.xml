@@ -13,12 +13,11 @@
       <repetitionTable>..\SPA.SA\TechPlatforms\RoamingPlatform\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="172.18.121.243"/-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="172.18.121.243" />
                   <Parameter Key="Port" Value="80" />
                   <Parameter Key="Url" Value="scripts" />
                   <Parameter Key="MethodName" Value="" />
@@ -38,6 +37,40 @@
               <Script Name="Logoff" Path="..\SPA.SA\TechPlatforms\RoamingPlatform\Scripts\logoff.xml" />
               <Script Name="Command" Path="..\SPA.SA\TechPlatforms\RoamingPlatform\Scripts\Command.xml" />
               <Script Name="NoSleep" Path="..\SPA.SA\TechPlatforms\RoamingPlatform\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+    </serviceInstance>
+    <serviceInstance hardwareID="LS:1851">
+      <dictionary>..\SPA.SA\TechPlatforms\LBS\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\TechPlatforms\LBS\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\TechPlatforms\LBS\Misc\RepetitionTable.xml</repetitionTable>
+      <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmGeneral">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="172.30.160.9" />
+                  <Parameter Key="Port" Value="8180" />
+                  <Parameter Key="Url" Value="" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="UserName" Value="" />
+                  <Parameter Key="UserPwd" Value="" />
+                  <!--<Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8"/> -->
+                  <Parameter Key="ContentType" Value="html; charset=utf-8" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="&quot;result&quot;:0" Failure="&quot;result&quot;:-1" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\TechPlatforms\LBS\Scripts\Login.xml" />
+              <Script Name="Command" Path="..\SPA.SA\TechPlatforms\LBS\Scripts\Command.xml" />
             </ScriptsList>
           </config>
         </socket>

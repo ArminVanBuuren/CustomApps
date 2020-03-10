@@ -1,0 +1,9 @@
+<Command Name="ChangeMSISDN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Замена номера</Description>
+  <Author Name="YAI" Date="2016-08-02+10:21" />
+  <Request Template="{{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;changemsisdn&quot;,&quot;params&quot;:{{&quot;oldmsisdn&quot;:&quot;{0}&quot;,&quot;newmsisdn&quot;:&quot;{1}&quot;}},&quot;description&quot;:&quot;changemsisdn&quot;}}">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

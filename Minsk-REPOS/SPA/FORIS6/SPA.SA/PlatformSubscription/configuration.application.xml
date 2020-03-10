@@ -3,7 +3,7 @@
     <Add Key="Requests.MaxQueuedPerHost" Value="800" />
     <Add Key="Requests.PollPeriod" Value="5" />
     <Add Key="Requests.PollIdlePeriod" Value="2" />
-    <Add Key="ProfilerConfiguration" Value="Profiler_Full2.xml" />
+    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
     <Add Key="FORIS.RI" Value="BEB" />
   </Settings>
   <serviceInstances>
@@ -13,12 +13,11 @@
       <repetitionTable>..\SPA.SA\PlatformSubscription\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <Parameter Key="Host" Value="127.0.0.1" />
-                  <!--Parameter Key="Host" Value="10.128.193.238"/-->
+                  <Parameter Key="Host" Value="10.128.193.238" />
                   <Parameter Key="Port" Value="9107" />
                   <Parameter Key="Url" Value="" />
                   <Parameter Key="MethodName" Value="POST" />

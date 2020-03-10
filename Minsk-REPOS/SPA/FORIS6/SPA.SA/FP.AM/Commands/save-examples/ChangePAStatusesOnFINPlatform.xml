@@ -1,0 +1,47 @@
+<Command Name="ChangePAStatusesOnFINPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>ChangePAStatusesOnFINPlatform</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="IN_STATUSES_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="ChangeLifetimeStatuses"/>
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+  </Attributes>
+  <DataTable Name="REQUEST_DATA">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut(##org.id##,4)-##uid##"/>
+    </Rows>
+  </DataTable>
+  <DataTable Name="PA_STATUSES">
+    <Columns>
+      <Column Name="PA_ID" Type="System.Int64"/>
+      <Column Name="PA_STATUS" Type="System.Int32"/>
+    </Columns>
+    <Rows>
+      <Row PA_ID="{1}" PA_STATUS="{2}"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="PA_STATUS" Type="LocalParameter" />
+    <Item Name="id" Type="Wellknown" />
+    <Item Name="uid" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="PA_STATUS">
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaStatus/Status" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii" />
+</Command>

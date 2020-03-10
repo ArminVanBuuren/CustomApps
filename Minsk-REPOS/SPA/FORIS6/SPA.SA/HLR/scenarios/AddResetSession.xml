@@ -6,8 +6,6 @@
     <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
-    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -214,42 +212,12 @@
     <node name="IfCB410153Node" object="IfConditionXmlResolver">
       <resultlist>
         <result value="0" node="AddGPRSPROFILEONLYNode" />
-        <result value="1" node="GetServicePDNode" />
+        <result value="1" node="IfFR511001Node" />
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="request" />
         <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB410153" />
         <param name="Value:1" value="" />
-      </parameterslist>
-    </node>
-    <node name="GetServicePDNode" object="DataBaseProcessor">
-      <resultlist>
-        <result value="" node="IfCB410153_DB_Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="FORIS.SPA.BILLING" />
-        <param name="FunctionName" value="select /*+ ordered use_nl(t,an, an1)*/
-														an.val SERVICEPD
-													from CRM.REQ_EXT_LNK t, crm.att_num an
-													where t.ext_req_id='{0}'
-													and an.req_id=t.req_id
-													and an.att_type_id=87" />
-        <param name="FunctionType" value="customQuery" />
-        <param name="OutXml" value="db_get_service_PD" />
-        <param name="DbParameterName:0" value="i_customer" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/OriginalID" />
-      </parameterslist>
-    </node>
-    <node name="IfCB410153_DB_Node" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="AddGPRSPROFILEONLYNode" />
-        <result value="1" node="IfFR511001Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="db_get_service_PD" />
-        <param name="OrXmlPath:0" value="root/return/record/column[@name='SERVICEPD'][text()='6602']" />
       </parameterslist>
     </node>
     <node name="IfFR511001Node" object="IfConditionXmlResolver">

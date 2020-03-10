@@ -31,11 +31,15 @@
         <result value="1" node="AddServiceNode" />
         <result value="2" node="DummyResponderNode" />
         <result value="3" node="DummyResponderNode" />
+        <result value="4" node="DummyResponderNode" />
+        <result value="5" node="DummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR8507/SourceTypeCode" />
         <param name="Value:2" value="163" />
         <param name="Value:3" value="40" />
+        <param name="Value:4" value="Buongiorno" />
+        <param name="Value:5" value="Dsa" />
       </parameterslist>
     </node>
     <node name="AddServiceNode" object="Commander">

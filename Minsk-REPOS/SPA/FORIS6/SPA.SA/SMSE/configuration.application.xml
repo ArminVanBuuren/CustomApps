@@ -12,7 +12,7 @@
       <repetitionTable>..\SPA.SA\SMSE\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="6" maxConnections="3" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="30" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.DatabaseSocket, FORIS.SPA.Communication">
               <config connectionData="FORIS.SPA.BILLING" responseTemplate="" />
             </socket>

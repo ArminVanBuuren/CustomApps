@@ -1,0 +1,44 @@
+<Command Name="SC.Change.Msisdn.Imsi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>SC.Change.Msisdn.Imsi</Description>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="ChangeMSISDN_IMSIDataSet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Attributes>
+    <Attribute Name="Label" Type="System.String" Value="ChangeMSISDN_IMSI"/>  
+    <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
+  </Attributes>
+  <DataTable Name="ChangeMSISDN_IMSIDataTable">
+    <Columns>
+      <Column Name="REQUEST_ID" Type="System.String"/>
+      <Column Name="TDC_ID" Type="System.Int64"/>
+      <Column Name="PERSONAL_ACCOUNT_ID" Type="System.Int64"/>
+      <Column Name="MSISDN" Type="System.String"/>
+      <Column Name="IMSI" Type="System.String"/>
+    </Columns>
+    <Rows>
+      <Row REQUEST_ID="reversecut(##org.id##,4)-##uid##" TDC_ID="##TerminalDeviceID##" PERSONAL_ACCOUNT_ID="##PersonalAccount##"
+           MSISDN="nvl(##NEW.MSISDN##,##msisdn##)" IMSI="##NEW.IMSI##"/>
+    </Rows>
+  </DataTable>
+</DataSet>]]>
+    </RequestTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="NEW.MSISDN" Type="LocalParameter" />
+    <Item Name="NEW.IMSI" Type="LocalParameter" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="uid" Type="Wellknown" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="NEW.IMSI">
+      <Source Path="//AdditionalData/AddList//NewIMSI/Value" />
+    </Parameter>
+    <Parameter Name="NEW.MSISDN">
+      <Source Path="//AdditionalData/AddList//NewMSISDN/Value" AbsenceValue="" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii" />
+</Command>

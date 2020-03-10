@@ -1,4 +1,4 @@
-<scenario name="DeleteFR16693onPS">
+<scenario name="DeleteFR16695onPS">
   <objectList>
     <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -35,7 +35,7 @@
         <result value="2" node="DummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/FR16695/SourceTypeCode" />
         <param name="Value:2" value="214" />
       </parameterslist>
     </node>

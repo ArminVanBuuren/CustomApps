@@ -7,6 +7,7 @@
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -105,15 +106,14 @@
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
-    <node name="IfServiceFR12786Node" object="IfConditionXmlResolver">
+    <node name="IfServiceFR12786Node" object="IfMultipleXmlConditionsResolver">
       <resultlist>
         <result value="0" node="UpQuotaLTEConnectNode" />
         <result value="1" node="IfServiceFR8798Node" />
       </resultlist>
       <parameterslist>
-        <param name="ObjectNameInContext" value="request" />
-        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12786" />
-        <param name="Value:1" value="" />
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR12786" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17417" />
       </parameterslist>
     </node>
     <node name="UpQuotaLTEConnectNode" object="Commander">

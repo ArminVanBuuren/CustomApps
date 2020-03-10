@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.DeleteCallingCircleVPN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Description>SC.DeleteCallingCircleVPN</Description>
-	<Author Name="Yakovlev Ivan" Date="2015-12-21+14:00"/>
-	<Properties GenerationType="DataSetXml" />
-	<Request>
-		<RequestTemplate>
-			<![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>SC.DeleteCallingCircleVPN</Description>
+  <Author Name="Yakovlev Ivan" Date="2015-12-21+14:00" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
     <Attribute Name="Procedure" Type="System.String" Value="SCN_CUG_MANAGE_DATA"/>
@@ -22,33 +21,33 @@
 	<Attribute Name="PARENT_CUG_ID" Type="System.String" ##PARENT_CUG_ID##/>
   </Attributes>
 </DataSet>]]>
-		</RequestTemplate>
-		<EmulationPrintoutTemplate>
-			<![CDATA[]]>
-		</EmulationPrintoutTemplate>
-		<Item Name="org.id" Type="Wellknown"/>
-		<Item Name="CUG_ID" Type="LocalParameter"/>
-		<Item Name="uid" Type="Wellknown" />
-		<Item Name="VPN_MEMBER_TYPE" Type="LocalParameter" />
-		<Item Name="PARENT_CUG_ID" Type="LocalParameter" />
-		<Item Name="VPN_TYPE" Type="LocalParameter" />
-	</Request>
-	<ParametersList>
-		<Parameter Name="CUG_ID">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupId/Value" />
-		</Parameter>
-		<Parameter Name="VPN_MEMBER_TYPE">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value" />
-		</Parameter>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
+    <Item Name="uid" Type="Wellknown" />
+    <Item Name="VPN_MEMBER_TYPE" Type="LocalParameter" />
+    <Item Name="PARENT_CUG_ID" Type="LocalParameter" />
+    <Item Name="VPN_TYPE" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="CUG_ID">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupId/Value" />
+    </Parameter>
+    <Parameter Name="VPN_MEMBER_TYPE">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value" />
+    </Parameter>
     <Parameter Name="PARENT_CUG_ID">
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="VPN_TYPE">
-      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" PresenceValue="InternalVPN" AbsenceValue="VPN"/>
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" PresenceValue="InternalVPN" AbsenceValue="VPN" />
     </Parameter>
-	</ParametersList>
+  </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS"/>
-    <Error Name="RETURN_CODE&gt;5003&lt;" Value="SUCCESS"/>
+    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS" />
+    <Error Name="RETURN_CODE&gt;5003&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

@@ -1,0 +1,13 @@
+<Command Name="ChangeMSISDNTechFamilyHereLBS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>ChangeMSISDNTechFamilyHereLBS</Description>
+  <Author Name="NNM" Date="2020-01-10+10:55" />
+  <Request Template="msisdn={0}&amp;newmsisdn={1}&amp;servicecode=FR17278">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="NewMSISDN" Type="Parameter" />
+  </Request>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;result&quot;:0" Value="SUCCESS" />
+    <Error Name="&quot;result&quot;:1" Value="SUCCESS" />
+    <Error Name="&quot;result&quot;:-1" Value="SUCCESS" />
+  </ErrorsList>
+</Command>

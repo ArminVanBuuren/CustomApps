@@ -13,7 +13,7 @@
       <repetitionTable>..\SPA.SA\Contents\FMK\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -48,7 +48,7 @@
       <repetitionTable>..\SPA.SA\Contents\MTSID\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -83,7 +83,7 @@
       <repetitionTable>..\SPA.SA\Contents\DrWeb\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -114,47 +114,12 @@
         </socket>
       </socketList>
     </serviceInstance>
-    <serviceInstance hardwareID="M2:1831">
-      <dictionary>..\SPA.SA\Contents\2Memory\Dictionary.xml</dictionary>
-      <scenarios>..\SPA.SA\Contents\2Memory\Scenarios</scenarios>
-      <repetitionTable>..\SPA.SA\Contents\2Memory\Misc\RepetitionTable.xml</repetitionTable>
-      <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
-        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
-            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
-              <config>
-                <ParametersList>
-                  <Parameter Key="Host" Value="10.1.35.61" />
-                  <Parameter Key="Port" Value="8180" />
-                  <Parameter Key="Url" Value="foris/forisws.wsdl" />
-                  <Parameter Key="MethodName" Value="POST" />
-                  <Parameter Key="Method" Value="POST" />
-                  <Parameter Key="UserName" Value="" />
-                  <Parameter Key="UserPwd" Value="" />
-                  <Parameter Key="ContentType" Value="text/xml;charset=UTF-8" />
-                  <!--<Parameter Key="Header.SOAPAction" Value=""/> -->
-                </ParametersList>
-              </config>
-            </socket>
-            <Emulation Success="&lt;ns2:errorCode&gt;0&lt;/ns2:errorCode&gt;" Failure="DeleteResult&gt;false&lt;/DeleteResult&gt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
-            <Timers IdleTimeout="6000" />
-            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
-            <ScriptsList>
-              <Script Name="Login" Path="..\SPA.SA\Contents\2Memory\Scripts\Login.xml" />
-              <Script Name="Logoff" Path="..\SPA.SA\Contents\2Memory\Scripts\logoff.xml" />
-              <Script Name="Command" Path="..\SPA.SA\Contents\2Memory\Scripts\Command.xml" />
-              <Script Name="NoSleep" Path="..\SPA.SA\Contents\2Memory\Scripts\nosleep.xml" />
-            </ScriptsList>
-          </config>
-        </socket>
-      </socketList>
-    </serviceInstance>
     <serviceInstance hardwareID="BB:1828">
       <dictionary>..\SPA.SA\Contents\BamBoo\Dictionary.xml</dictionary>
       <scenarios>..\SPA.SA\Contents\BamBoo\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -190,7 +155,7 @@
       <repetitionTable>..\SPA.SA\Contents\UniFun\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -219,48 +184,13 @@
         </socket>
       </socketList>
     </serviceInstance>
-    <serviceInstance hardwareID="SL:1830">
-      <dictionary>..\SPA.SA\Contents\SchoolLibrary\Dictionary.xml</dictionary>
-      <scenarios>..\SPA.SA\Contents\SchoolLibrary\Scenarios</scenarios>
-      <repetitionTable>..\SPA.SA\Contents\SchoolLibrary\Misc\RepetitionTable.xml</repetitionTable>
-      <socketList poolSize="16" maxConnections="4" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="200" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
-        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
-            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
-              <config>
-                <ParametersList>
-                  <Parameter Key="Host" Value="10.128.218.152" />
-                  <Parameter Key="Port" Value="80" />
-                  <Parameter Key="Url" Value="/mts_api/v1" />
-                  <Parameter Key="MethodName" Value="POST" />
-                  <Parameter Key="Method" Value="POST" />
-                  <Parameter Key="UserName" Value="" />
-                  <Parameter Key="UserPwd" Value="" />
-                  <Parameter Key="ContentType" Value="text/html; charset=utf-8" />
-                  <Parameter Key="ParameterName" Value="" />
-                </ParametersList>
-              </config>
-            </socket>
-            <Emulation Success="&quot;result&quot;:true" Failure="False" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
-            <Timers IdleTimeout="6000" />
-            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
-            <ScriptsList>
-              <Script Name="Login" Path="..\SPA.SA\Contents\SchoolLibrary\Scripts\Login.xml" />
-              <Script Name="Logoff" Path="..\SPA.SA\Contents\SchoolLibrary\Scripts\logoff.xml" />
-              <Script Name="Command" Path="..\SPA.SA\Contents\SchoolLibrary\Scripts\Command.xml" />
-              <Script Name="NoSleep" Path="..\SPA.SA\Contents\SchoolLibrary\Scripts\nosleep.xml" />
-            </ScriptsList>
-          </config>
-        </socket>
-      </socketList>
-    </serviceInstance>
     <serviceInstance hardwareID="SF:1840">
       <dictionary>..\SPA.SA\Contents\MySafety\Dictionary.xml</dictionary>
       <scenarios>..\SPA.SA\Contents\MySafety\Scenarios</scenarios>
       <repetitionTable>..\SPA.SA\Contents\MySafety\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -295,7 +225,7 @@
       <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -326,12 +256,11 @@
       <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="10.128.24.47" /-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="10.128.24.47" />
                   <Parameter Key="Port" Value="80" />
                   <Parameter Key="Url" Value="" />
                   <Parameter Key="MethodName" Value="GET" />
@@ -358,7 +287,7 @@
       <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -389,7 +318,7 @@
       <scenarios>..\SPA.SA\Contents\VR\Scenarios</scenarios>
       <socketList poolSize="5" maxConnections="1" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="50" periodDuration="10" autoconnect="0" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -421,13 +350,12 @@
       <repetitionTable>..\SPA.SA\Contents\Opera\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="300" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
                   <!-- <Parameter Key="Host" Value="http://api.Opera.by"/> -->
-                  <!--Parameter Key="Host" Value="10.128.213.41" /-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="10.128.213.41" />
                   <Parameter Key="Port" Value="89" />
                   <Parameter Key="Url" Value="mtsopera/" />
                   <Parameter Key="MethodName" Value="GET" />
@@ -458,12 +386,11 @@
       <repetitionTable>..\SPA.SA\Contents\LineB\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="172.24.210.236" /-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="172.24.210.236" />
                   <Parameter Key="Port" Value="80" />
                   <Parameter Key="Url" Value="" />
                   <Parameter Key="MethodName" Value="POST" />
@@ -496,7 +423,7 @@
       <repetitionTable>..\SPA.SA\Contents\UnsubContentUnknown\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
@@ -531,12 +458,11 @@
       <repetitionTable>..\SPA.SA\Contents\Kinomax\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="10.128.213.41" /-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="10.128.213.41" />
                   <Parameter Key="Port" Value="92" />
                   <Parameter Key="Url" Value="" />
                   <Parameter Key="MethodName" Value="POST" />
@@ -567,12 +493,11 @@
       <repetitionTable>..\SPA.SA\Contents\RBT\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="4" maxConnections="2" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="5" periodDuration="5" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="172.17.134.1" /-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="172.17.134.1" />
                   <Parameter Key="Port" Value="10085" />
                   <Parameter Key="Url" Value="?OPERATION=" />
                   <Parameter Key="MethodName" Value="GET" />
@@ -592,6 +517,78 @@
               <Script Name="Logoff" Path="..\SPA.SA\Contents\RBT\Scripts\logoff.xml" />
               <Script Name="Command" Path="..\SPA.SA\Contents\RBT\Scripts\Command.xml" />
               <Script Name="NoSleep" Path="..\SPA.SA\Contents\RBT\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+    </serviceInstance>
+    <serviceInstance hardwareID="KY:1852">
+      <dictionary>..\SPA.SA\Contents\Key4You\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\Key4You\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\Key4You\Misc\RepetitionTable.xml</repetitionTable>
+      <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmGeneral">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.128.213.41" />
+                  <Parameter Key="Port" Value="94" />
+                  <Parameter Key="Url" Value="martlet/api/create_mts/" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="UserName" Value="" />
+                  <Parameter Key="UserPwd" Value="" />
+                  <!--<Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8"/> -->
+                  <Parameter Key="ContentType" Value="application/json; charset=utf-8" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="&quot;Status&quot;:true" Failure="&quot;Status&quot;:false" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\Contents\Key4You\Scripts\Login.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\Contents\Key4You\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\Contents\Key4You\Scripts\Command.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\Contents\Key4You\Scripts\nosleep.xml" />
+            </ScriptsList>
+          </config>
+        </socket>
+      </socketList>
+    </serviceInstance>
+    <serviceInstance hardwareID="IV:1853">
+      <dictionary>..\SPA.SA\Contents\IVI\Dictionary.xml</dictionary>
+      <scenarios>..\SPA.SA\Contents\IVI\Scenarios</scenarios>
+      <repetitionTable>..\SPA.SA\Contents\IVI\Misc\RepetitionTable.xml</repetitionTable>
+      <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
+          <config workingmode="wmGeneral">
+            <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
+              <config>
+                <ParametersList>
+                  <Parameter Key="Host" Value="10.128.213.41" />
+                  <Parameter Key="Port" Value="95" />
+                  <Parameter Key="Url" Value="ivi-mts/" />
+                  <Parameter Key="MethodName" Value="POST" />
+                  <Parameter Key="Method" Value="POST" />
+                  <Parameter Key="UserName" Value="" />
+                  <Parameter Key="UserPwd" Value="" />
+                  <!--<Parameter Key="ContentType" Value="application/soap+xml; charset=utf-8"/> -->
+                  <Parameter Key="ContentType" Value="text/xml; charset=utf-8" />
+                  <Parameter Key="ParameterName" Value="" />
+                </ParametersList>
+              </config>
+            </socket>
+            <Emulation Success="&quot;Status&quot;:true" Failure="&quot;Status&quot;:false" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
+            <Timers IdleTimeout="6000" />
+            <PredefinedScripts Login="Login" Command="Command" Idle="" Logoff="" />
+            <ScriptsList>
+              <Script Name="Login" Path="..\SPA.SA\Contents\IVI\Scripts\Login.xml" />
+              <Script Name="Logoff" Path="..\SPA.SA\Contents\IVI\Scripts\logoff.xml" />
+              <Script Name="Command" Path="..\SPA.SA\Contents\IVI\Scripts\Command.xml" />
+              <Script Name="NoSleep" Path="..\SPA.SA\Contents\IVI\Scripts\nosleep.xml" />
             </ScriptsList>
           </config>
         </socket>

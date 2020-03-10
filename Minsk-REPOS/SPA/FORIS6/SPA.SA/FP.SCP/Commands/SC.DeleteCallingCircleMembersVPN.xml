@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.DeleteCallingCircleMembersVPN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Description>SC.DeleteCallingCircleMembersVPN</Description>
-	<Author Name="Yakovlev Ivan" Date="2015-10-15+14:00"/>
-	<Properties GenerationType="DataSetXml" />
-	<Request>
-		<RequestTemplate>
-			<![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>SC.DeleteCallingCircleMembersVPN</Description>
+  <Author Name="Yakovlev Ivan" Date="2015-10-15+14:00" />
+  <Properties GenerationType="DataSetXml" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="SCN_CUG_MANAGE_DATA" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Attributes>
     <Attribute Name="Protocol" Type="System.String" Value="Remoting"/>
     <Attribute Name="Procedure" Type="System.String" Value="SCN_CUG_MANAGE_DATA"/>
@@ -22,49 +21,48 @@
 	<Attribute Name="PARENT_CUG_ID" Type="System.String" ##PARENT_CUG_ID##/>
   </Attributes>
 </DataSet>]]>
-		</RequestTemplate>
-		<EmulationPrintoutTemplate>
-			<![CDATA[]]>
-		</EmulationPrintoutTemplate>
-		<Item Name="org.id" Type="Wellknown"/>
-		<Item Name="id" Type="Wellknown"/>
-		<Item Name="CUG_ID" Type="LocalParameter"/>
-		<Item Name="SERVICE_CODE" Type="LocalParameter"/>
-		<Item Name="msisdn" Type="Wellknown"/>
-		<Item Name="uid" Type="Wellknown" />
-		<Item Name="VPN_MEMBER_TYPE" Type="LocalParameter" />
-		<Item Name="PARENT_CUG_ID" Type="LocalParameter" />
-		<Item Name="VPN_TYPE" Type="LocalParameter" />
-		<Item Name="PRIVATE_NUMBER" Type="LocalParameter" />
-		<Item Name="DESTINATION_NUMBER" Type="LocalParameter" />
-	</Request>
-	<ParametersList>
-		<Parameter Name="CUG_ID">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupId/Value" />
-		</Parameter>
-		<Parameter Name="SERVICE_CODE">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ServiceCode/Value" />
-		</Parameter>
-		<Parameter Name="VPN_MEMBER_TYPE">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value" />
-		</Parameter>
-		<Parameter Name="PARENT_CUG_ID">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;"/>
-		</Parameter>
-		<Parameter Name="VPN_TYPE">
-			<Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" PresenceValue="InternalVPN" AbsenceValue="VPN"/>
-		</Parameter>
-		<Parameter Name="PRIVATE_NUMBER">
-			<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/VpnPrivateNumber" AbsenceValue="" />
-		</Parameter>
-		<Parameter Name="DESTINATION_NUMBER">
-			<Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/VpnDestinationNumber" AbsenceValue="" />
-		</Parameter>
-	</ParametersList>
-	<ErrorsList CodePage="ascii">
-		<Error Name="RESULT_CODE&gt;10004" Value="SUCCESS" Description="Terminal device with specified ID already removed"/>
-		<Error Name="RESULT_CODE&gt;1225" Value="SUCCESS" Description="VPNGroup Not Exist"/>
-		<Error Name="RESULT_CODE&gt;1226" Value="SUCCESS" Description="This MSISDN is not defined in VPN"/>
-	</ErrorsList>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
+    <Item Name="SERVICE_CODE" Type="LocalParameter" />
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="uid" Type="Wellknown" />
+    <Item Name="VPN_MEMBER_TYPE" Type="LocalParameter" />
+    <Item Name="PARENT_CUG_ID" Type="LocalParameter" />
+    <Item Name="VPN_TYPE" Type="LocalParameter" />
+    <Item Name="PRIVATE_NUMBER" Type="LocalParameter" />
+    <Item Name="DESTINATION_NUMBER" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="CUG_ID">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/UserGroupId/Value" />
+    </Parameter>
+    <Parameter Name="SERVICE_CODE">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ServiceCode/Value" />
+    </Parameter>
+    <Parameter Name="VPN_MEMBER_TYPE">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/MemberType/Value" />
+    </Parameter>
+    <Parameter Name="PARENT_CUG_ID">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" AbsenceValue="" PostFormat="Value=&quot;{0}&quot;" />
+    </Parameter>
+    <Parameter Name="VPN_TYPE">
+      <Source Path="//AdditionalData/RemoveList/RFS_FP_SERVICE_CUG/ParentCugId/Value[text()!='']" PresenceValue="InternalVPN" AbsenceValue="VPN" />
+    </Parameter>
+    <Parameter Name="PRIVATE_NUMBER">
+      <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/VpnPrivateNumber" AbsenceValue="" />
+    </Parameter>
+    <Parameter Name="DESTINATION_NUMBER">
+      <Source Path="ExtendedRequestMessage/IdentifiersList/Identifier/VpnDestinationNumber" AbsenceValue="" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="RESULT_CODE&gt;10004" Value="SUCCESS" Description="Terminal device with specified ID already removed" />
+    <Error Name="RESULT_CODE&gt;1225" Value="SUCCESS" Description="VPNGroup Not Exist" />
+    <Error Name="RESULT_CODE&gt;1226" Value="SUCCESS" Description="This MSISDN is not defined in VPN" />
+  </ErrorsList>
 </Command>
-

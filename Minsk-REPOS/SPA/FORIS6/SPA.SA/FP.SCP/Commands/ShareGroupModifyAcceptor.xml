@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="ShareGroupModifyAcceptor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ShareGroupModifyAcceptor</Description>
-  <Author Name="Alexander Zaytsev" Date="2017-04-19+14:00"/>
+  <Author Name="Alexander Zaytsev" Date="2017-04-19+14:00" />
   <Request>
     <RequestTemplate>
       <![CDATA[<DataSet Name="ShareEverything.SEManageData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -26,37 +25,39 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="id" Type="Wellknown"/>
-    <Item Name="CUG_ID" Type="LocalParameter"/>
-    <Item Name="msisdn" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
+    <Item Name="msisdn" Type="Wellknown" />
     <Item Name="uid" Type="Wellknown" />
-    <Item Name="Limits" Type="LocalDynamicParameter"/>
-    <Item Name="ACTION" Type="LocalParameter"/>
-    <Item Name="SERVICE_CODE" Type="LocalParameter"/>
+    <Item Name="Limits" Type="LocalDynamicParameter" />
+    <Item Name="ACTION" Type="LocalParameter" />
+    <Item Name="SERVICE_CODE" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="SERVICE_CODE" IsChoice="true">
-      <Source Path="//AdditionalData//SERVICE_CODE"/>
-      <Source Path="//AdditionalData//ServiceCode/Value"/>
+      <Source Path="//AdditionalData//SERVICE_CODE" />
+      <Source Path="//AdditionalData//ServiceCode/Value" />
     </Parameter>
     <Parameter Name="CUG_ID">
       <Source Path="//AdditionalData//ExternalGroupNumber/Value" />
     </Parameter>
     <Parameter Name="ACTION">
-      <Source Path="//AdditionalData//CounterOperation/Value[text()='Remove']" AbsenceValue="2" PresenceValue="11"/>
+      <Source Path="//AdditionalData//CounterOperation/Value[text()='Remove']" AbsenceValue="2" PresenceValue="11" />
     </Parameter>
   </ParametersList>
   <DynamicParametersList>
     <DynamicParameter Name="Limits">
-      <Source Path="//string"/>
-      <DynamicObject Name="Limits" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="Limits" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Code&gt;303&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;5003&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;101&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;303&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;5003&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;101&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

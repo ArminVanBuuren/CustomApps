@@ -1264,7 +1264,7 @@
     </node>
     <node name="IfServiceGPRSNode" object="IfMultipleXmlConditionsResolver">
       <resultlist>
-        <result value="0" node="IfServiceGPRS_VPN_Node" />
+        <result value="0" node="IfServiceGPRS_SoftBlock_Node" />
         <result value="1" node="ExitDummyResponderNode" />
       </resultlist>
       <parameterslist>
@@ -1275,18 +1275,6 @@
         <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480" />
         <param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812" />
         <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
-      </parameterslist>
-    </node>
-    <node name="IfServiceGPRS_VPN_Node" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="AddBlockGPRSNode" />
-        <result value="1" node="IfServiceGPRS_SoftBlock_Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703" />
-        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480" />
-        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812" />
-        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
       </parameterslist>
     </node>
     <node name="IfServiceGPRS_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">

@@ -1,0 +1,20 @@
+<Dictionary>
+  <WellknownsList>
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;)" />
+  </WellknownsList>
+  <ErrorsList CodePage="ASCII">
+    <Error Name="&quot;Status&quot;:100" Value="SUCCESS" />
+    <Error Name="&quot;Status&quot;:101" Value="FAILURE" />
+    <Error Name="&quot;Status&quot;:102" Value="MsisdnNotDefined" />
+    <Error Name="&quot;Status&quot;:103" Value="DuplicatedExtensionNumber" />
+    <Error Name="&quot;Status&quot;:104" Value="InvalidAttributeValue" />
+    <Error Name="&quot;Status&quot;:true" Value="SUCCESS" />
+    <Error Name="503 Service Temporarily Unavailable" Value="ConnectionError" />
+    <Error Name="502 Bad Gateway" Value="ConnectionError" />
+    <Error Name="502 Proxy Error" Value="ConnectionError" />
+  </ErrorsList>
+  <RegexpsList />
+  <ParametersList />
+  <DynamicParametersList />
+  <CommandsList Root="Commands" Mask="*.xml" />
+</Dictionary>

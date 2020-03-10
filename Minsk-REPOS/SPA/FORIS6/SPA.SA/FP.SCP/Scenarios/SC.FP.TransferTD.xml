@@ -33,7 +33,7 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
         <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
       </parameterslist>
     </node>
     <!-- Проверяем ПО есть на текущей платформе -->

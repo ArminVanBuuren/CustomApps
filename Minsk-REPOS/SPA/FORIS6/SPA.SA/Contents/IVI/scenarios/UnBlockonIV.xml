@@ -1,0 +1,182 @@
+<scenario name="UnBlockonIV">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="RequestDequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
+    <object name="HttpCmd" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="IfHttpCommander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.HttpRequestProcessorConditional" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Switch" class="FORIS.ScenarioProcessing.CommonUnits.ParametersSwitch" assembly="FORIS.SPA.SPF.dll" />
+    <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
+  </objectList>
+  <automat>
+    <node name="BySubscribersSplitter" object="BySubscribersSplitter">
+      <resultlist>
+        <result value="0" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
+      <resultlist>
+        <result value="0" node="IfBlockNode" />
+        <result value="1" node="" />
+      </resultlist>
+      <parameterslist>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
+      </parameterslist>
+    </node>
+    <node name="IfBlockNode" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="UnBlockNode" />
+        <result value="1" node="DummyResponderNode" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="MultiLevelCondition" value="
+					((//WithdrawalList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/CBBLKLOST)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKCHK)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKFIN)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKKEEP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKPAY)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKP)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKTIME)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKTIME)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKUSER))
+					
+					OR
+					
+					((//WithdrawalList/FRBLKUSER)
+					AND (NOT //RegisteredList/BLTDLIM)
+					AND (NOT //RegisteredList/CBBLKLOST)
+					AND (NOT //RegisteredList/FRBLKCHK)
+					AND (NOT //RegisteredList/FRBLKFIN)
+					AND (NOT //RegisteredList/FRBLKKEEP)
+					AND (NOT //RegisteredList/FRBLKPAY)
+					AND (NOT //RegisteredList/FRBLKP)
+					AND (NOT //RegisteredList/FRBLKTIME))
+					
+					" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockNode" object="HttpCmd">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="ivi-mts/" />
+        <param name="Command" value="UnBlockIVI" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.213.41" />
+        <param name="Connection.Port" value="98" />
+        <param name="Connection.Method" value="POST" />
+        <param name="Connection.ContentType" value="text/xml; charset=utf-8" />
+      </parameterslist>
+    </node>
+    <node name="DummyResponderNode" object="DummyResponder">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="OverallResult" value="SUCCESS" />
+        <param name="DetailedResult" value="SUCCESS" />
+        <param name="Delay" value="0" />
+      </parameterslist>
+    </node>
+    <node name="ResponseAssembler" object="ResponseAssembler">
+      <resultlist>
+        <result value="" node="BySubscriberRequestDequeuer" />
+      </resultlist>
+    </node>
+  </automat>
+</scenario>

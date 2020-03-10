@@ -8,7 +8,6 @@
     <object name="IfConditionXmlResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfConditionXmlResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IfMultipleXmlConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
-    <object name="DataBaseProcessor" class="FORIS.ScenarioProcessing.CommonUnits.DataBaseProcessor" assembly="FORIS.SPA.SPF.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
@@ -41,7 +40,7 @@
     </node>
     <node name="AddCB123StandaloneNode" object="Commander">
       <resultlist>
-        <result value="0" node="GetServiceSNode" />
+        <result value="0" node="IfServiceFR562ROAMNode" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -51,69 +50,15 @@
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
-    <node name="GetServiceSNode" object="DataBaseProcessor">
-      <resultlist>
-        <result value="" node="IfServiceFR562ROAMNode" />
-      </resultlist>
-      <parameterslist>
-        <param name="DataBaseName" value="FORIS.SPA.BILLING" />
-        <param name="FunctionName" value="select /*+ ordered use_nl(t,an,ar,rb) */ 
-														an.val as SERVICES,rb.code as OPER 
-												   from CRM.REQ_EXT_LNK t, crm.att_num an,  
-														crm.att_ref ar, crm.att_ref_book rb
-												   where t.ext_req_id='{0}' 
-														 and t.req_id=an.req_id and an.att_type_id=87
-														 and t.req_id=ar.req_id and ar.att_type_id=170
-														 and ar.att_ref_book_id=rb.att_ref_book_id" />
-        <param name="FunctionType" value="customQuery" />
-        <param name="OutXml" value="db_get_services" />
-        <param name="DbParameterName:0" value="i_customer" />
-        <param name="DbParameterDirection:0" value="Input" />
-        <param name="DbParameterType:0" value="Varchar2" />
-        <param name="DbParameterXpathValue:0" value="ExtendedRequestMessage/OriginalID" />
-      </parameterslist>
-    </node>
     <node name="IfServiceFR562ROAMNode" object="IfConditionXmlResolver">
       <resultlist>
-        <result value="0" node="IfCheckBanGPRSDelInREq_DB_Node" />
-        <result value="1" node="IfRoamingWithBanGPRS_DB_Node" />
+        <result value="0" node="AddAccBanGPRSROAMINGNode" />
+        <result value="1" node="Acc_networksNode" />
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="request" />
         <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR562" />
         <param name="Value:1" value="" />
-      </parameterslist>
-    </node>
-    <node name="IfCheckBanGPRSDelInREq_DB_Node" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="Acc_networksNode" />
-        <result value="1" node="AddAccBanGPRSROAMINGNode" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="db_get_services" />
-        <param name="OrXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='0']" />
-      </parameterslist>
-    </node>
-    <node name="IfRoamingWithBanGPRS_DB_Node" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="AddAccBanGPRSROAMINGNode" />
-        <result value="1" node="IfRoamingWithoutBanGPRS_DB_Node" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="db_get_services" />
-        <param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='1']" />
-        <param name="IfXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='1']" />
-      </parameterslist>
-    </node>
-    <node name="IfRoamingWithoutBanGPRS_DB_Node" object="IfMultipleXmlConditionsResolver">
-      <resultlist>
-        <result value="0" node="Acc_networksNode" />
-        <result value="1" node="Acc_networksNode" />
-      </resultlist>
-      <parameterslist>
-        <param name="ObjectNameInContext" value="db_get_services" />
-        <param name="IfXmlPath:0" value="/root/return/record[column/@name='SERVICES' and column/text()='6105' and column/@name='OPER' and column/text()='1']" />
-        <param name="IfXmlPath:1" value="/root/return/record[column/@name='SERVICES' and column/text()='8717' and column/@name='OPER' and column/text()='0']" />
       </parameterslist>
     </node>
     <node name="AddAccBanGPRSROAMINGNode" object="Commander">
@@ -981,11 +926,7 @@
         <result value="1" node="IfServiceGPRS_SoftBlock_Node" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703" />
-        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480" />
-        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812" />
-        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
-        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
       </parameterslist>
     </node>
     <node name="IfServiceGPRS_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">

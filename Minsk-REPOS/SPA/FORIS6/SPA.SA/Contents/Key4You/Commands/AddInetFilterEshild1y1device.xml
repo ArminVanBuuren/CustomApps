@@ -1,0 +1,15 @@
+<Command Name="AddInetFilterEshild1y1device" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Добавление</Description>
+  <Author Name="NNM" Date="2019-10-31+13:21" />
+  <Request Template="{{&quot;Auth&quot;:&quot;RjrUTFnPXuYIWXXG4iGqVfQg&quot;,&quot;Phone_number&quot;:&quot;{0}&quot;,&quot;Operation_ID&quot;:&quot;{1}&quot;,&quot;Order&quot;:{{&quot;KSU&quot;:&quot;0401&quot;}}}}">
+    <Item Name="msisdn" Type="Wellknown" />
+    <Item Name="ReqID" Type="LocalParameter" />
+  </Request>
+  <ParametersList>
+    <Parameter Name="ReqID">
+      <Source Path="ExtendedRequestMessage/OriginalID" />
+      <PossibleValues StringToKeyTable="true" />
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ASCII" />
+</Command>

@@ -14,10 +14,11 @@
       <repetitionTable>..\SPA.SA\HLR\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="20" maxConnections="20" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
-              <config host="127.0.0.1" port="7776" />
+              <config host="172.24.67.145" port="7776" />
             </socket>
+            <!--Emulation Success="c:\FORIS\SPA\SPA.SA\HLR\Commands\CF_EMU\EMU.txt" Failure="ERR1017" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" /-->
             <Emulation Success="SUCCESS0001" Failure="ERR1017" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
             <Timers IdleTimeout="27" />
             <PredefinedScripts Login="Login" Command="Command" Idle="NoSleep" Logoff="Logoff" />

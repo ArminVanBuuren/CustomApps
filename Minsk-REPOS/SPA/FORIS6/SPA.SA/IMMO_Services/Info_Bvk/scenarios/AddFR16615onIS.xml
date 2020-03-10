@@ -36,7 +36,7 @@
         <result value="2" node="DummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList/FR16615/SourceTypeCode" />
         <param name="Value:2" value="206" />
       </parameterslist>
     </node>

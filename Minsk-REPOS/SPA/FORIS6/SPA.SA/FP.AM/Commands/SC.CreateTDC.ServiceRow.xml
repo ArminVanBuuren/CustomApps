@@ -1,28 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.CreateTDC.ServiceRow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>CreateTDOnFINPlatform (services table)</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="MmlXml" />
   <Request>
     <RequestTemplate>
       <![CDATA[<Row
 SERVICE_ROW_ID="##ServiceIdentifier##"
-REQUEST_ID="reversecut(##org.id##,4)-##GlobalUid##"
+REQUEST_ID="##ASYNC_REQUEST_ID##"
 TERMINAL_DEVICE_CONTRACT_ID="##TerminalDeviceID##" 
+PERSONAL_ACCOUNT_ID="##PersonalAccount##"
 SERVICE_CODE="xmldecodename(##Service##)" 
 ##DateFrom## 
 ##CounterCoefficient## ##DiscountType## ##DiscountValue##/>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
     <Item Name="GlobalUid" Type="Wellknown" />
-    <Item Name="TerminalDeviceID" Type="Wellknown"/>
-    <Item Name="Service" Type="LocalParameter"/>
-    <Item Name="DateFrom" Type="LocalParameter"/>
-    <Item Name="CounterCoefficient" Type="LocalParameter"/>
-    <Item Name="DiscountType" Type="LocalParameter"/>
-    <Item Name="DiscountValue" Type="LocalParameter"/>
-    <Item Name="ServiceIdentifier" Type="Wellknown"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown" />
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="Service" Type="LocalParameter" />
+    <Item Name="DateFrom" Type="LocalParameter" />
+    <Item Name="CounterCoefficient" Type="LocalParameter" />
+    <Item Name="DiscountType" Type="LocalParameter" />
+    <Item Name="DiscountValue" Type="LocalParameter" />
+    <Item Name="ServiceIdentifier" Type="Wellknown" />
   </Request>
   <ParametersList>
     <Parameter Name="Service" IsChoice="true">
@@ -30,21 +33,21 @@ SERVICE_CODE="xmldecodename(##Service##)"
       <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/ServiceCode/Value" />
     </Parameter>
     <Parameter Name="DateFrom" IsChoice="true" AbsenceValue="">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/DateFrom/Value[string-length(.) > 0]" PostFormat="DATE_FROM=&quot;{0}&quot;"/>
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/DateFrom/Value[string-length(.) > 0]" PostFormat="DATE_FROM=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/DateFrom/Value[string-length(.) &gt; 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/DateFrom/Value[string-length(.) &gt; 0]" PostFormat="DATE_FROM=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="CounterCoefficient" IsChoice="true" AbsenceValue="">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='CounterCoefficient' or name()='discount_counter']/@value[string-length(.) > 0]" PostFormat="COUNTER_COEFFICIENT=&quot;{0}&quot;"/>
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='CounterCoefficient' or name()='discount_counter']/@value[string-length(.) > 0]" PostFormat="COUNTER_COEFFICIENT=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='CounterCoefficient' or name()='discount_counter']/@value[string-length(.) &gt; 0]" PostFormat="COUNTER_COEFFICIENT=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='CounterCoefficient' or name()='discount_counter']/@value[string-length(.) &gt; 0]" PostFormat="COUNTER_COEFFICIENT=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="DiscountType" IsChoice="true" AbsenceValue="">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='DiscountType' or name()='discount_type']/@value[string-length(.) > 0]" PostFormat="DISCOUNT_TYPE=&quot;{0}&quot;"/>
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='DiscountType' or name()='discount_type']/@value[string-length(.) > 0]" PostFormat="DISCOUNT_TYPE=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='DiscountType' or name()='discount_type']/@value[string-length(.) &gt; 0]" PostFormat="DISCOUNT_TYPE=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='DiscountType' or name()='discount_type']/@value[string-length(.) &gt; 0]" PostFormat="DISCOUNT_TYPE=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="DiscountValue" IsChoice="true" AbsenceValue="">
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='DiscountValue' or name()='discount_value']/@value[string-length(.) > 0]" PostFormat="DISCOUNT_VALUE=&quot;{0}&quot;"/>
-      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='DiscountValue' or name()='discount_value']/@value[string-length(.) > 0]" PostFormat="DISCOUNT_VALUE=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_GENERAL/Parameters/*[name()='DiscountValue' or name()='discount_value']/@value[string-length(.) &gt; 0]" PostFormat="DISCOUNT_VALUE=&quot;{0}&quot;" />
+      <Source Path="//AdditionalData//RFS_FP_SERVICE_FAVORITE_NUMBER/Parameters/*[name()='DiscountValue' or name()='discount_value']/@value[string-length(.) &gt; 0]" PostFormat="DISCOUNT_VALUE=&quot;{0}&quot;" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

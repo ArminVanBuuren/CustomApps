@@ -1,6 +1,6 @@
 <Command Name="SC.SyncFavoriteNumbers" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>Команда добавления/удаления любимых номеров</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -24,14 +24,14 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <Item Name="datetime" Type="Wellknown"/>
-    <Item Name="FnFServices" Type="LocalDynamicParameter"/>
+    <Item Name="datetime" Type="Wellknown" />
+    <Item Name="FnFServices" Type="LocalDynamicParameter" />
   </Request>
   <DynamicParametersList>
     <DynamicParameter Name="FnFServices">
-      <Source Path="//string"/>
-      <DynamicObject Name="FnFServices" SkipMissed="True"/>
+      <Source Path="//string" />
+      <DynamicObject Name="FnFServices" SkipMissed="True" />
     </DynamicParameter>
   </DynamicParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

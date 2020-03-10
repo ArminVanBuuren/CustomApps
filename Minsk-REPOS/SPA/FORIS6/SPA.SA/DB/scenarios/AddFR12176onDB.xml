@@ -24,12 +24,12 @@
     </node>
     <node name="IfSourceTypeNode" object="Switch">
       <resultlist>
-        <result value="0" node="DummyResponderNode" />
+        <result value="0" node="ResponseAssembler" />
         <result value="1" node="AddServiceDBNODE" />
         <result value="2" node="DummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList//SourceTypeCode" />
         <param name="Value:2" value="23" />
       </parameterslist>
     </node>

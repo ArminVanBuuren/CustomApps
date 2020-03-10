@@ -1,23 +1,23 @@
 <scenario name="SC.FP.Change.Msisdn.Imsi">
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
     <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
       <resultlist>
-        <result value="0" node="ChangeMsisdnImsi-Node"/>
-        <result value="1" node=""/>
+        <result value="0" node="ChangeMsisdnImsi-Node" />
+        <result value="1" node="" />
       </resultlist>
       <parameterslist>
-        <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+        <param name="queueName" value="requestsSplittedBySubscriberQueue" />
       </parameterslist>
     </node>
     <node name="ChangeMsisdnImsi-Node" object="Commander">
@@ -25,16 +25,16 @@
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
-        <param name="CommandSource" value="Dictionary"/>
-        <param name="Command" value="SC.Change.Msisdn.Imsi"/>
-        <param name="Script" value="Command"/>
-        <param name="AppendSubscribersData" value="true"/>
-        <param name="ErrorDecodingType" value="ByString"/>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="SC.Change.Msisdn.Imsi" />
+        <param name="Script" value="Command" />
+        <param name="AppendSubscribersData" value="true" />
+        <param name="ErrorDecodingType" value="ByString" />
       </parameterslist>
     </node>
     <node name="ResponseAssembler" object="ResponseAssembler">
       <resultlist>
-        <result value="" node="SingleSubscriberRequestDequeuer"/>
+        <result value="" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
   </automat>

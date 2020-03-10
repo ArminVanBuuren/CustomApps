@@ -1,7 +1,7 @@
-﻿<scenario name="SC.FP.ChangeCounterProfile">
+<scenario name="SC.FP.ChangeCounterProfile">
   <objectList>
-    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
-    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll" />
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="RiParametersReader" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RiLinkedDataInitializer" assembly="FORIS.SPA.MmlProcessing.dll" />
@@ -12,13 +12,13 @@
   <automat>
     <node name="BySubscribersSplitter" object="BySubscribersSplitter">
       <resultlist>
-        <result value="0" node="SingleSubscriberRequestDequeuer"/>
+        <result value="0" node="SingleSubscriberRequestDequeuer" />
       </resultlist>
     </node>
     <node name="SingleSubscriberRequestDequeuer" object="Dequeuer">
       <resultlist>
         <result value="0" node="RiParametersReader" />
-        <result value="" node=""/>
+        <result value="" node="" />
       </resultlist>
       <parameterslist>
         <param name="queueName" value="requestsSplittedBySubscriberQueue" />
@@ -32,7 +32,7 @@
       <parameterslist>
         <param name="IdentityName" value="IMSI" />
         <param name="ResultContextKey" value="RiParametersList" />
-        <param name="DataType" value="GetBalanceStorageByImsiList"/>
+        <param name="DataType" value="GetBalanceStorageByImsiList" />
         <param name="IdentityXmlPath" value="//IdentifiersList/Identifier/IMSI" />
       </parameterslist>
     </node>
@@ -42,7 +42,7 @@
         <result value="0" node="SmbpMappingDataConstructorNode" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="//AdditionalData/AddList//UseBS[text()='0']"/>
+        <param name="IfXmlPath:0" value="//AdditionalData/AddList//UseBS[text()='0']" />
       </parameterslist>
     </node>
     <node name="CheckHostTypeCode" object="ConditionsResolver">

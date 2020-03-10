@@ -1,6 +1,6 @@
 <Configuration>
   <Settings>
-    <Add Key="ProfilerConfiguration" Value="Profiler_Full.xml" />
+    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
     <Add Key="AsyncScenario" Value="true" />
     <Add Key="AsyncResponseTTL" Value="300" />
     <Add Key="FORIS.RI" Value="BEB" />
@@ -25,7 +25,7 @@
       </MacroList>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="30" periodDuration="10" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Integrated.ScpSocket, FORIS.SPA.Communication.Integrated">
-          <config serviceGroup="SCP155" uri="tcp://scpmi2it01:8022/CRMOperations.uri" uriRem="tcp://scpmi2it01:8022/REMRemote.uri" queue="scpmi2it01\account_management_queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180">
+          <config serviceGroup="MI1SCP" uri="tcp://clust-scp:8022/CRMOperations.uri" uriRem="tcp://clust-scp:8022/REMRemote.uri" queue="mi-seesca01\mscp.out.queue" timeout="300" login="LREMClient" password="dncornholio" workingmode="wmGeneral" SessionRefreshTimeout="180">
             <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-13002&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
           </config>
         </socket>

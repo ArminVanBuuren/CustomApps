@@ -20,7 +20,7 @@
     </DatabaseParameter>
     <DatabaseParameter Name="SRC">
       <Properties DatabaseArgumentName="src" DatabaseArgumentType="varchar2" />
-      <Source Path="ExtendedRequestMessage/AdditionalData/SourceType" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//SourceTypeCode" />
       <PossibleValues StringToKeyTable="true" />
     </DatabaseParameter>
   </DatabaseParametersList>

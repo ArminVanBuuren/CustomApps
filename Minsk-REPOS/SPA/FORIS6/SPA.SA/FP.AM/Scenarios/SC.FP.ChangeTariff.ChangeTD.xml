@@ -38,7 +38,7 @@
     <node name="CommandDataConstructor-Node" object="FPCommandDataConstructor">
       <resultlist>
         <result value="0" node="ChangeTDClassOnFINPlatform" />
-        <result value="1538" node="ChangeTDClassOnFINPlatform" />
+        <result value="1538" node="ChangeTPOnFINPlatform" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>

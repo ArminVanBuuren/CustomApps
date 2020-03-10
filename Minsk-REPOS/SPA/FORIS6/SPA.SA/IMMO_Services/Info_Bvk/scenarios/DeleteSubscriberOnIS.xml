@@ -57,7 +57,7 @@
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="db_get_servicesdb" />
-        <param name="OrXmlPath:0" value="/root/return/record[column/@name='CNTSERVICES' and column/text()='0'" />
+        <param name="OrXmlPath:0" value="/root/return/record[column/@name='CNTSERVICES' and column/text()='0']" />
       </parameterslist>
     </node>
     <node name="DeleteServiceNode" object="HttpCmd">

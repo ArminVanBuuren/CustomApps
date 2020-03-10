@@ -1,0 +1,8 @@
+<Command Name="GetSubscriberByIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Запрос данных на HLR HUAWEI</Description>
+  <Author Name="LifefaN" Date="2011-09-07+12:18" />
+  <Request Template="LST SUB: IMSI=&quot;{0}&quot;, DETAIL= TRUE;">
+    <Item Name="imsi" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ASCII" />
+</Command>

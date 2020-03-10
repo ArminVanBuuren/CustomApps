@@ -37,7 +37,7 @@
         <result value="3" node="AddServiceDengiNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/ProvisionList//SourceTypeCode" />
         <param name="Value:2" value="163" />
         <param name="Value:3" value="175" />
       </parameterslist>

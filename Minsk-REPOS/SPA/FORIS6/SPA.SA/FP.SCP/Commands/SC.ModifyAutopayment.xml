@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Command Name="SC.ModifyAutopayment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>SC.ModifyAutopayment</Description>
-  <Author Name="Max Smirnov" Date="2012-11-19+13:30"/>
+  <Author Name="Max Smirnov" Date="2012-11-19+13:30" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -24,16 +23,18 @@
   </DataTable>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
     <Item Name="GlobalUid" Type="Wellknown" />
-    <Item Name="PersonalAccount" Type="Wellknown"/>
-    <Item Name="LIMIT_VALUE" Type="LocalParameter"/>
+    <Item Name="PersonalAccount" Type="Wellknown" />
+    <Item Name="LIMIT_VALUE" Type="LocalParameter" />
   </Request>
   <ParametersList>
     <Parameter Name="LIMIT_VALUE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ModifyList/RFS_FP_PERSONAL_ACCOUNT/PersonalAccount/AutopaymentLimit"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ModifyList/RFS_FP_PERSONAL_ACCOUNT/PersonalAccount/AutopaymentLimit" />
     </Parameter>
   </ParametersList>
-  <ErrorsList CodePage="ascii"/>
+  <ErrorsList CodePage="ascii" />
 </Command>

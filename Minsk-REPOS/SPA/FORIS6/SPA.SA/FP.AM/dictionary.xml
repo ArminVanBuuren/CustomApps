@@ -1,206 +1,203 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Dictionary>
   <WellknownsList>
-    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)"/>
-    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)"/>
-    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)"/>
-    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)"/>
-    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)"/>
-    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)"/>
-    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;, false)"/>
+    <Wellknown Name="org.id" Value="xmlsubstr(&quot;ExtendedRequestMessage/OriginalID&quot;)" />
+    <Wellknown Name="id" Value="xmlsubstr(&quot;ExtendedRequestMessage/ID&quot;)" />
+    <Wellknown Name="PersonalAccount" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/PersonalAccountNumber&quot;, false)" />
+    <Wellknown Name="cn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/ContractNumber&quot;, false)" />
+    <Wellknown Name="TerminalDeviceID" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/TerminalDeviceId&quot;, false)" />
+    <Wellknown Name="msisdn" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/MSISDN&quot;, false)" />
+    <Wellknown Name="imsi" Value="xmlsubstr(&quot;ExtendedRequestMessage/IdentifiersList/Identifier/IMSI&quot;, false)" />
   </WellknownsList>
   <ErrorsList CodePage="ascii">
-    <Error Name="Code&gt;0&lt;" Value="SUCCESS"/>
-    <Error Name="Code&gt;-151000&lt;" Value="UnregisteredError"/>
-    <Error Name="Code&gt;-151001&lt;" Value="InvalidIdentifier"/>
-    <Error Name="Code&gt;-151002&lt;" Value="InvalidIdentifier"/>
-    <Error Name="Code&gt;-151003&lt;" Value="InvalidInputData"/>
-    <Error Name="Code&gt;-151004&lt;" Value="ResourceLimitation"/>
-    <Error Name="Code&gt;-151005&lt;" Value="InvalidNewTariffPlan"/>
-    <Error Name="Code&gt;-151007&lt;" Value="MsisdnAlreadyDefined"/>
-    <Error Name="Code&gt;-151008&lt;" Value="DuplicateManagedObjectInstance"/>
-    <Error Name="Code&gt;-151009&lt;" Value="MissedLanguageCode"/>
-    <Error Name="Code&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
-    <Error Name="Code&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
-    <Error Name="Code&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
-    <Error Name="Code&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
-    <Error Name="ERROR_CODE&gt;0&lt;" Value="SUCCESS"/>
-    <Error Name="ERROR_CODE&gt;-151000&lt;" Value="UnregisteredError"/>
-    <Error Name="ERROR_CODE&gt;-151001&lt;" Value="InvalidIdentifier"/>
-    <Error Name="ERROR_CODE&gt;-151002&lt;" Value="InvalidIdentifier"/>
-    <Error Name="ERROR_CODE&gt;-151003&lt;" Value="InvalidInputData"/>
-    <Error Name="ERROR_CODE&gt;-151004&lt;" Value="ResourceLimitation"/>
-    <Error Name="ERROR_CODE&gt;-151005&lt;" Value="InvalidNewTariffPlan"/>
-    <Error Name="ERROR_CODE&gt;-151007&lt;" Value="MsisdnAlreadyDefined"/>
-    <Error Name="ERROR_CODE&gt;-151008&lt;" Value="DuplicateManagedObjectInstance"/>
-    <Error Name="ERROR_CODE&gt;-151009&lt;" Value="MissedLanguageCode"/>
-    <Error Name="ERROR_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined"/>
-    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice"/>
-    <Error Name="ERROR_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined"/>
-    <Error Name="ERROR_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount"/>
+    <Error Name="Code&gt;0&lt;" Value="SUCCESS" />
+    <Error Name="Code&gt;-151000&lt;" Value="UnregisteredError" />
+    <Error Name="Code&gt;-151001&lt;" Value="InvalidIdentifier" />
+    <Error Name="Code&gt;-151002&lt;" Value="InvalidIdentifier" />
+    <Error Name="Code&gt;-151003&lt;" Value="InvalidInputData" />
+    <Error Name="Code&gt;-151004&lt;" Value="ResourceLimitation" />
+    <Error Name="Code&gt;-151005&lt;" Value="InvalidNewTariffPlan" />
+    <Error Name="Code&gt;-151007&lt;" Value="MsisdnAlreadyDefined" />
+    <Error Name="Code&gt;-151008&lt;" Value="DuplicateManagedObjectInstance" />
+    <Error Name="Code&gt;-151009&lt;" Value="MissedLanguageCode" />
+    <Error Name="Code&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
+    <Error Name="Code&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
+    <Error Name="Code&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
+    <Error Name="Code&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
+    <Error Name="ERROR_CODE&gt;0&lt;" Value="SUCCESS" />
+    <Error Name="ERROR_CODE&gt;-151000&lt;" Value="UnregisteredError" />
+    <Error Name="ERROR_CODE&gt;-151001&lt;" Value="InvalidIdentifier" />
+    <Error Name="ERROR_CODE&gt;-151002&lt;" Value="InvalidIdentifier" />
+    <Error Name="ERROR_CODE&gt;-151003&lt;" Value="InvalidInputData" />
+    <Error Name="ERROR_CODE&gt;-151004&lt;" Value="ResourceLimitation" />
+    <Error Name="ERROR_CODE&gt;-151005&lt;" Value="InvalidNewTariffPlan" />
+    <Error Name="ERROR_CODE&gt;-151007&lt;" Value="MsisdnAlreadyDefined" />
+    <Error Name="ERROR_CODE&gt;-151008&lt;" Value="DuplicateManagedObjectInstance" />
+    <Error Name="ERROR_CODE&gt;-151009&lt;" Value="MissedLanguageCode" />
+    <Error Name="ERROR_CODE&gt;-154017&lt;" Value="TerminalDeviceAlreadyDefined" />
+    <Error Name="ERROR_CODE&gt;-154018&lt;" Value="UnregisteredTerminalDevice" />
+    <Error Name="ERROR_CODE&gt;-154008&lt;" Value="PesonalAccountAlreadyDefined" />
+    <Error Name="ERROR_CODE&gt;-154032&lt;" Value="TerminalDeviceLinkedToPersonalAccount" />
     <Error Name="ERROR_CODE&gt;CancelledByAdministrator&lt;" Value="ProcessingCanceledByUser" />
     <!-- Для команд Замена SIM-карты и/или номера. Например ChangeCB118OnFP-->
-    <Error Name=" ERROR_CODE=&quot;0&quot;" Value="SUCCESS"/>
-    <Error Name=" ERROR_CODE=&quot;-151000&quot;" Value="UnregisteredError"/>
-    <Error Name=" ERROR_CODE=&quot;-151001&quot;" Value="InvalidIdentifier"/>
-    <Error Name=" ERROR_CODE=&quot;-151002&quot;" Value="InvalidIdentifier"/>
-    <Error Name=" ERROR_CODE=&quot;-151003&quot;" Value="InvalidInputData"/>
-    <Error Name=" ERROR_CODE=&quot;-151004&quot;" Value="ResourceLimitation"/>
-    <Error Name=" ERROR_CODE=&quot;-151005&quot;" Value="InvalidNewTariffPlan"/>
-    <Error Name=" ERROR_CODE=&quot;-151007&quot;" Value="MsisdnAlreadyDefined"/>
-    <Error Name=" ERROR_CODE=&quot;-151008&quot;" Value="DuplicateManagedObjectInstance"/>
-    <Error Name=" ERROR_CODE=&quot;-151009&quot;" Value="MissedLanguageCode"/>
-    <Error Name=" ERROR_CODE=&quot;-154017" Value="TerminalDeviceAlreadyDefined"/>
-    <Error Name=" ERROR_CODE=&quot;-154018&quot;" Value="UnregisteredTerminalDevice"/>
-    <Error Name=" ERROR_CODE=&quot;-154008" Value="PesonalAccountAlreadyDefined"/>
-    <Error Name=" ERROR_CODE=&quot;-154032" Value="TerminalDeviceLinkedToPersonalAccount"/>
-    <Error Name="ERROR_CODE" Value="UnregisteredError"/>
-    <Error Name="Code&gt;" Value="UnregisteredError"/>
+    <Error Name=" ERROR_CODE=&quot;0&quot;" Value="SUCCESS" />
+    <Error Name=" ERROR_CODE=&quot;-151000&quot;" Value="UnregisteredError" />
+    <Error Name=" ERROR_CODE=&quot;-151001&quot;" Value="InvalidIdentifier" />
+    <Error Name=" ERROR_CODE=&quot;-151002&quot;" Value="InvalidIdentifier" />
+    <Error Name=" ERROR_CODE=&quot;-151003&quot;" Value="InvalidInputData" />
+    <Error Name=" ERROR_CODE=&quot;-151004&quot;" Value="ResourceLimitation" />
+    <Error Name=" ERROR_CODE=&quot;-151005&quot;" Value="InvalidNewTariffPlan" />
+    <Error Name=" ERROR_CODE=&quot;-151007&quot;" Value="MsisdnAlreadyDefined" />
+    <Error Name=" ERROR_CODE=&quot;-151008&quot;" Value="DuplicateManagedObjectInstance" />
+    <Error Name=" ERROR_CODE=&quot;-151009&quot;" Value="MissedLanguageCode" />
+    <Error Name=" ERROR_CODE=&quot;-154017" Value="TerminalDeviceAlreadyDefined" />
+    <Error Name=" ERROR_CODE=&quot;-154018&quot;" Value="UnregisteredTerminalDevice" />
+    <Error Name=" ERROR_CODE=&quot;-154008" Value="PesonalAccountAlreadyDefined" />
+    <Error Name=" ERROR_CODE=&quot;-154032" Value="TerminalDeviceLinkedToPersonalAccount" />
+    <Error Name="ERROR_CODE" Value="UnregisteredError" />
+    <Error Name="Code&gt;" Value="UnregisteredError" />
   </ErrorsList>
-  <RegexpsList/>
+  <RegexpsList />
   <ConstantsList>
-    <Constant Name="PRIVATE_USER_GROUPS" Value=""/>
+    <Constant Name="PRIVATE_USER_GROUPS" Value="" />
   </ConstantsList>
   <ParametersList>
     <Parameter Name="BALANCE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//Balance"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//Balance" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="CURRENCY_CODE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CurrencyCode"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//CurrencyCode" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PA_STATUS">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/Status"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/Status" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PA_BALANCE_STATUS">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BalanceStatus[string-length(.) > 0]"
-              AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BalanceStatus[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="SERVICE_PROVIDER_CODE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExternalServiceProviderCode[string-length(.) > 0]"
-              AbsenceValue="" PostFormat="SERVICE_PROVIDER_CODE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExternalServiceProviderCode[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="SERVICE_PROVIDER_CODE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="BLOCK_LIMIT">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/BlockLimit"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/BlockLimit" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="UNBLOCK_LIMIT">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/UnblockLimit"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/UnblockLimit" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PARTIAL_BLOCK_LIMIT">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/PartialBlockLimit"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/PartialBlockLimit" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="EXPIRES">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateBalance"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateBalance" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="EXPIRATION_DATE_MONITOR">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsNeedControlExpirationDateBalance"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsNeedControlExpirationDateBalance" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="ADMIN_BLOCK">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockStatus" AbsenceValue="" PostFormat="ADMIN_BLOCK=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="ADMIN_BLOCKED_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/AdminBlockedDate[string-length(.) > 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/AdminBlockedDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="ADMIN_BLOCKED_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="BLOCKED_END_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockedEndDate[string-length(.) > 0]"  AbsenceValue="" PostFormat="BLOCKED_END_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//PaStatus/BlockedEndDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="BLOCKED_END_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="TAX_GROUP_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//TaxGroupId"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData//TaxGroupId" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="MAX_BLOCKED_PERIOD">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxBlockedPeriod"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxBlockedPeriod" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="AFTER_GRACE_PERIOD">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//AfterGracePeriod"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//AfterGracePeriod" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="IS_GRACE_STARTS_ON_BLOCK">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsGraceStartOnBlock"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//IsGraceStartOnBlock" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="VALIDITY_PERIOD">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ValidityPeriod"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ValidityPeriod" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="LIMIT_VALUE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Value"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Value" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="LIMIT_LEVEL">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) > 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//BalanceLimits/NotificationLimits/NotificationLimit/Level[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="LIMIT_LEVEL=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="TARIFF_PLAN_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TariffPlanId" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="BILLING_GROUP_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//BillingGroupId"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData//BillingGroupId" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="TERMINAL_DEVICE_STATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TdStatus/Status"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TdStatus/Status" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="FIRST_CALL_END_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateFirstCall[string-length(.) > 0]" AbsenceValue="" PostFormat="FIRST_CALL_END_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//ExpirationDateFirstCall[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="FIRST_CALL_END_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="MAX_INACTIVE_PERIOD">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxInactivePeriod"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//MaxInactivePeriod" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="LANGUAGE" IsChoice="true" AbsenceValue="">
-      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId[string-length(.) > 0]"/>
-      <Source Path="ExtendedRequestMessage/AdditionalData/ContractInfo/LanguageId[string-length(.) > 0]"/>
-      <Source Path="ExtendedRequestMessage/AdditionalData//LanguageId[string-length(.) > 0]"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/AccountInfo/LanguageId[string-length(.) &gt; 0]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/ContractInfo/LanguageId[string-length(.) &gt; 0]" />
+      <Source Path="ExtendedRequestMessage/AdditionalData//LanguageId[string-length(.) &gt; 0]" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="TIME_ZONE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TimeZone"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//TimeZone" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="TERMINAL_DEVICE_CLASS">
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassId[string-length(.) > 0]" AbsenceValue="" PostFormat="{0}"/>
-      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassID[string-length(.) > 0]" AbsenceValue="" PostFormat="{0}"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassId[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="{0}" />
+      <Source Path="ExtendedRequestMessage/AdditionalData/DeviceInfo/TerminalDeviceClassID[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="{0}" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="NEW_TERMINAL_DEVICE_CLASS">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewTerminalDeviceClassID"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//NewTerminalDeviceClassID" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="SMS_USSD_LANG">
-      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//LanguageIdSmsUssd"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList//LanguageIdSmsUssd" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="CUSTOMER_TYPE_ID">
-      <Source Path="ExtendedRequestMessage/AdditionalData//CustomerTypeId"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData//CustomerTypeId" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PA_STATUS_CHANGE_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/PaStateChangeDate[string-length(.) > 0]" AbsenceValue="" PostFormat="PA_STATUS_CHANGE_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaStateChangeDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_STATUS_CHANGE_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PA_BALANCE_STATUS_CHANGE_DATE">
-      <Source Path="ExtendedRequestMessage/AdditionalData/PaBalanceStateChangeDate[string-length(.) > 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS_CHANGE_DATE=&quot;{0}&quot;"/>
-      <PossibleValues StringToKeyTable="true"/>
+      <Source Path="ExtendedRequestMessage/AdditionalData/PaBalanceStateChangeDate[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS_CHANGE_DATE=&quot;{0}&quot;" />
+      <PossibleValues StringToKeyTable="true" />
     </Parameter>
     <Parameter Name="PSP_DAY_OF_MONTH">
-      <Source Path="//AdditionalData//IndividualBillingPeriod[string-length(.) > 0]" AbsenceValue="" Template="substr({0},3,2)" PostFormat="PSP_DAY_OF_MONTH=&quot;{0}&quot;"/>
+      <Source Path="//AdditionalData//IndividualBillingPeriod[string-length(.) &gt; 0]" AbsenceValue="" Template="substr({0},3,2)" PostFormat="PSP_DAY_OF_MONTH=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="CALCULATION_METHOD_ID">
       <Source Path="//AdditionalData//CalculationMethodId" AbsenceValue="0" />
@@ -260,7 +257,7 @@
       <Source Path="//AdditionalData/AddList//PaStatus/BalanceStatus[string-length(.) &gt; 0]" AbsenceValue="" PostFormat="PA_BALANCE_STATUS=&quot;{0}&quot;" />
     </Parameter>
     <Parameter Name="SC.KEEP_BALANCES">
-      <Source Path="//AdditionalData/AddList//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true"/>
+      <Source Path="//AdditionalData/AddList//KeepBalances[text()='true' or text()='1']" AbsenceValue="false" PresenceValue="true" />
     </Parameter>
     <Parameter Name="SC.TERMINAL_DEVICE_STATE">
       <Source Path="//AdditionalData/AddList//TdStatus/Status" />
@@ -278,17 +275,20 @@
       <Source Path="//AdditionalData/AddList//LanguageIdSmsUssd" />
     </Parameter>
     <Parameter Name="SC.NEW_TERMINAL_DEVICE_CLASS">
-      <Source Path="//AdditionalData/AddList//NewTerminalDeviceClassID"/>
-    </Parameter>    
+      <Source Path="//AdditionalData/AddList//NewTerminalDeviceClassID" />
+    </Parameter>
+    <Parameter Name="SERVICE_REQUEST_ID">
+      <Source Path="//CrmInternalProductActionId/Value[string-length(.) &gt; 0] | //CRMOriginalID/Value" AbsenceValue="##ASYNC_REQUEST_ID##" PresenceValue="##ASYNC_REQUEST_ID##" />
+    </Parameter>
   </ParametersList>
-  <DynamicParametersList/>
+  <DynamicParametersList />
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
   <DecodersList Root="Decoders">
-    <Decoder Path="FinancialPlatformDecoder.xml"/>
+    <Decoder Path="FinancialPlatformDecoder.xml" />
   </DecodersList>
   <XsltItemsList Root="Xslt">
-    <XsltItem Path="TransformToAPNStyle.xslt"/>
+    <XsltItem Path="TransformToAPNStyle.xslt" />
   </XsltItemsList>
 </Dictionary>

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Command Name="SC.ChangeCallingCircle" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Description>ChangeCallingCircle</Description>
-  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01"/>
+  <Author Name="Victor Kosonogov" Date="2017-05-01+01:01" />
   <Properties GenerationType="DataSetXml" />
   <Request>
     <RequestTemplate>
@@ -21,8 +20,8 @@
     <EmulationPrintoutTemplate>
       <![CDATA[]]>
     </EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="CUG_ID" Type="LocalParameter"/>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
     <Item Name="uid" Type="Wellknown" />
     <Item Name="UserGroupCode" Type="LocalParameter" />
   </Request>
@@ -41,9 +40,11 @@
   </Attributes>
 </DataSet>]]>
     </RequestTemplate>
-    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
-    <Item Name="org.id" Type="Wellknown"/>
-    <Item Name="CUG_ID" Type="LocalParameter"/>
+    <EmulationPrintoutTemplate>
+      <![CDATA[]]>
+    </EmulationPrintoutTemplate>
+    <Item Name="org.id" Type="Wellknown" />
+    <Item Name="CUG_ID" Type="LocalParameter" />
     <Item Name="uid" Type="Wellknown" />
     <Item Name="UserGroupCode" Type="LocalParameter" />
   </RollbackRequest>
@@ -62,7 +63,7 @@
     </Parameter>
   </ParametersList>
   <ErrorsList CodePage="ascii">
-    <Error Name="ResultCode&gt;303&lt;" Value="FAILURE"/>
-    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS"/>
+    <Error Name="ResultCode&gt;303&lt;" Value="FAILURE" />
+    <Error Name="RETURN_CODE&gt;0&lt;" Value="SUCCESS" />
   </ErrorsList>
 </Command>

@@ -14,12 +14,11 @@
       <repetitionTable>..\SPA.SA\IMMO_Services\Pressa_Dengi\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="178.124.129.131"/-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="178.124.129.131" />
                   <Parameter Key="Port" Value="80" />
                   <Parameter Key="Url" Value="" />
                   <Parameter Key="MethodName" Value="GET" />
@@ -50,12 +49,11 @@
       <repetitionTable>..\SPA.SA\IMMO_Services\Info_Bvk\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="250" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="10.128.213.41"/-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="10.128.213.41" />
                   <Parameter Key="Port" Value="81" />
                   <Parameter Key="Url" Value="mtsinfo" />
                   <Parameter Key="MethodName" Value="POST" />

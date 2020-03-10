@@ -123,11 +123,7 @@
         <result value="1" node="UnBlockGPRSNode" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703" />
-        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480" />
-        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812" />
-        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
-        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
       </parameterslist>
     </node>
     <node name="AddBlockGPRSNode" object="Commander">

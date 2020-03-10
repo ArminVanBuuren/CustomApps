@@ -1,0 +1,52 @@
+﻿<scenario name="CS.SC.BMS.POP.InformAddRemove">
+  <objectList>
+    <object name="BySubscribersSplitter" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestSplitterBySubscribers" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Dequeuer" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.RequestDequeuer" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="Commander" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.Processors.RequestProcessor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll"/>
+    <object name="CommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.CommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll"/>
+  </objectList>
+  <automat>
+    <automat>
+      <node name="BySubscribersSplitter-Node" object="BySubscribersSplitter">
+        <resultlist>
+          <result value="0" node="SingleSubscriberRequestDequeuer-Node"/>
+        </resultlist>
+      </node>
+      <node name="SingleSubscriberRequestDequeuer-Node" object="Dequeuer">
+        <resultlist>
+          <result value="0" node="SetBLKServicesCommandCtor-Node"/>
+          <result value="1" node=""/>
+        </resultlist>
+        <parameterslist>
+          <param name="queueName" value="requestsSplittedBySubscriberQueue"/>
+        </parameterslist>
+      </node>
+      <node name="SetBLKServicesCommandCtor-Node" object="CommandDataConstructor">
+        <resultlist>
+          <result value="1538" node="ResponseAssembler-Node"/>
+          <result value="" node="SetBLKServices-Node"/>
+        </resultlist>
+        <parameterslist>
+          <param name="ApplyIfXmlPath:0" value="//AdditionalData/*[local-name()='AddList' or local-name()='RemoveList']/RFS_BMS_POP_SERVICE_INFO/ServiceCode/Value[string-length(.)>0]" />
+          <param name="UseIfXmlPath:0" value="//AdditionalData/*[local-name()='AddList' or local-name()='RemoveList']/RFS_BMS_POP_SERVICE_INFO/ServiceCode/Value[string-length(.)>0]"/>
+          <param name="DynamicObjectName" value="BLKServices"/>
+          <param name="XmlPath:0" value="//AdditionalData/*[local-name()='AddList' or local-name()='RemoveList']/RFS_BMS_POP_SERVICE_INFO"/>
+          <param name="Command" value="SetBLKServices.CommandCtor"/>
+        </parameterslist>
+      </node>
+      <node  name="SetBLKServices-Node" object="Commander">
+        <resultlist>
+          <result value="" node="ResponseAssembler-Node" />
+        </resultlist>
+        <parameterslist>
+          <param name="Command" value="SetBLKServices.Command"/>
+        </parameterslist>
+      </node>
+      <node name="ResponseAssembler-Node" object="ResponseAssembler">
+        <resultlist>
+          <result value="" node="SingleSubscriberRequestDequeuer-Node"/>
+        </resultlist>
+      </node>
+    </automat>
+  </scenario>

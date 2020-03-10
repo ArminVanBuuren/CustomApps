@@ -56,6 +56,7 @@
       </resultlist>
       <parameterslist>
         <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
       </parameterslist>
     </node>
     <node name="NBIoT_CreateSubscriberNBIoTNode" object="Commander">
@@ -94,14 +95,42 @@
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
-    <node name="NBIoT_AddProfileNBIoT_Node" object="Commander">
+    <node name="NBIoT_AddProfileNBIoT_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="NBIoT_AddProfileNBIoT2_Node" />
+        <result value="1538" node="NBIoT_AddProfileNBIoT2_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddProfileNBIoT" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="NBIoT_AddProfileNBIoT2_Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="NBIoT_AddProvLTE_Node" />
+        <result value="1538" node="NBIoT_AddProvLTE_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddProfileNBIoT2" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="NBIoT_AddProvLTE_Node" object="Commander">
       <resultlist>
         <result value="0" node="IfInPlatform" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="CommandSource" value="Dictionary" />
-        <param name="Command" value="AddProfileNBIoT" />
+        <param name="Command" value="AddProvLTE" />
         <param name="AppendSubscribersData" value="false" />
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
@@ -433,8 +462,8 @@
     </node>
     <node name="AddCB264Node" object="IfCommander">
       <resultlist>
-        <result value="0" node="IfConditionCB265ResolverNode" />
-        <result value="1538" node="IfConditionCB265ResolverNode" />
+        <result value="0" node="AddFR17150Node" />
+        <result value="1538" node="AddFR17150Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -442,6 +471,48 @@
         <param name="CommandSource" value="Dictionary" />
         <param name="AppendSubscribersData" value="false" />
         <param name="Command" value="AddCB264" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17150Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="AddFR17276Node" />
+        <result value="1538" node="AddFR17276Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17150" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddLBSEmp" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17276Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="AddFR17278Node" />
+        <result value="1538" node="AddFR17278Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17276" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddLBSEmp" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17278Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="IfConditionCB265ResolverNode" />
+        <result value="1538" node="IfConditionCB265ResolverNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17278" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddLBSEmp" />
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
@@ -2720,6 +2791,7 @@
         <param name="OrXmlPath:6" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
         <param name="OrXmlPath:7" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
         <param name="OrXmlPath:8" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="OrXmlPath:9" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
       </parameterslist>
     </node>
     <node name="IfServiceGPRS_VPN_Node" object="IfMultipleXmlConditionsResolver">
@@ -2728,12 +2800,9 @@
         <result value="1" node="IfServiceGPRS_SoftBlock_Node" />
       </resultlist>
       <parameterslist>
-        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB412703" />
-        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR7480" />
-        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR812" />
-        <param name="OrXmlPath:3" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR9484" />
-        <param name="OrXmlPath:4" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
-        <param name="OrXmlPath:5" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/CB403864" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="OrXmlPath:2" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
       </parameterslist>
     </node>
     <node name="IfServiceGPRS_SoftBlock_Node" object="IfMultipleXmlConditionsResolver">
@@ -2752,6 +2821,7 @@
       </resultlist>
       <parameterslist>
         <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16863" />
+        <param name="OrXmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
       </parameterslist>
     </node>
     <node name="AddBlockGPRSNode" object="Commander">

@@ -333,8 +333,8 @@
     </node>
     <node name="AddFR12786Node" object="IfCommander">
       <resultlist>
-        <result value="0" node="AddFR16219Node" />
-        <result value="1538" node="AddFR16219Node" />
+        <result value="0" node="AddFR17417Node" />
+        <result value="1538" node="AddFR17417Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -342,6 +342,36 @@
         <param name="CommandSource" value="Dictionary" />
         <param name="AppendSubscribersData" value="false" />
         <param name="Command" value="AddLTEConnect" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17417Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="AddFR17458Node" />
+        <result value="1538" node="AddFR17458Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17417" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddMaxforHome" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17458Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="AddFR16219Node" />
+        <result value="1538" node="AddFR16219Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17458" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="Add250mbInRoam" />
         <param name="Script" value="Command" />
         <param name="ErrorDecodingType" value="ByString" />
       </parameterslist>
@@ -408,8 +438,8 @@
     </node>
     <node name="AddFR10361Node" object="IfCommander">
       <resultlist>
-        <result value="0" node="IfFR13097Node" />
-        <result value="1538" node="IfFR13097Node" />
+        <result value="0" node="IfFR17216Node" />
+        <result value="1538" node="IfFR17216Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -419,6 +449,52 @@
         <param name="Command" value="AddMiniBit" />
         <param name="Script" value="Command" />
         <param name="ErrorDecodingType" value="ByString" />
+      </parameterslist>
+    </node>
+    <node name="IfFR17216Node" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="AddServiceFR17216Node" />
+        <result value="1" node="IfFR17362Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17216" />
+      </parameterslist>
+    </node>
+    <node name="AddServiceFR17216Node" object="Commander">
+      <resultlist>
+        <result value="0" node="IfFR17362Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Command" value="AddBezlimitische2" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="IfFR17362Node" object="IfMultipleXmlConditionsResolver">
+      <resultlist>
+        <result value="0" node="AddServiceFR17362Node" />
+        <result value="1" node="IfFR13097Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="OrXmlPath:0" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17362" />
+      </parameterslist>
+    </node>
+    <node name="AddServiceFR17362Node" object="Commander">
+      <resultlist>
+        <result value="0" node="IfFR13097Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="Command" value="AddBrainDevice" />
+        <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
     <node name="IfFR13097Node" object="IfMultipleXmlConditionsResolver">
@@ -713,7 +789,7 @@
     <node name="IfFR17001Node" object="IfConditionXmlResolver">
       <resultlist>
         <result value="0" node="AddFR17001Node" />
-        <result value="1" node="IfFR16401Node" />
+        <result value="1" node="AddFR17467Node" />
       </resultlist>
       <parameterslist>
         <param name="ObjectNameInContext" value="request" />
@@ -723,7 +799,7 @@
     </node>
     <node name="AddFR17001Node" object="Commander">
       <resultlist>
-        <result value="0" node="IfFR16401Node" />
+        <result value="0" node="AddFR17467Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -732,6 +808,21 @@
         <param name="ErrorDecodingType" value="ByString" />
         <param name="CommandSource" value="Dictionary" />
         <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="AddFR17467Node" object="IfCommander">
+      <resultlist>
+        <result value="0" node="IfFR16401Node" />
+        <result value="1538" node="IfFR16401Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17467" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="AddBezlimitischePlus" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
       </parameterslist>
     </node>
     <node name="IfFR16401Node" object="IfConditionXmlResolver">

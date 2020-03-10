@@ -6,7 +6,7 @@
     <object name="ResponseAssembler" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.ResponseAssembler" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="FPCommandDataConstructor" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.FPProcessingUnits.FPCommandDataConstructor" assembly="FORIS.SPA.MmlProcessing.dll" />
     <object name="IdentifiersGenerator" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.IdentifiersGenerator" assembly="FORIS.SPA.MmlProcessing.dll" />
-    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll"/>
+    <object name="ConditionsResolver" class="FORIS.ScenarioProcessing.CommonUnits.IfMultipleXmlConditionsResolver" assembly="FORIS.SPA.SPF.dll" />
     <object name="DummyResponder" class="FORIS.ServiceProvisioning.MmlProcessing.SPF.DummyResponder" assembly="FORIS.SPA.MmlProcessing.dll" />
   </objectList>
   <automat>
@@ -19,7 +19,7 @@
       <parameterslist>
         <param name="IfXmlPath:0" value="*['processingFlag(SingleSCPEnabled)'='True']" />
         <param name="IfXmlPath:1" value="//PreviousPlatform/HostCode" />
-        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]"/>
+        <param name="IfNotXmlPath:0" value="//PreviousPlatform/HostCode[contains('[HOST_CODE_BS]',.)]" />
       </parameterslist>
     </node>
     <node name="SingleSCPDummyResponder" object="DummyResponder">
@@ -64,12 +64,12 @@
     </node>
     <node name="NewParametersFilter-Node" object="ConditionsResolver">
       <resultlist>
-        <result value="0" node="CreatePAOnFINPlatform2"/>
-        <result value="" node="CreatePAOnFINPlatform1"/>
+        <result value="0" node="CreatePAOnFINPlatform2" />
+        <result value="" node="CreatePAOnFINPlatform1" />
       </resultlist>
       <parameterslist>
-        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']"/>
-        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']"/>
+        <param name="IfXmlPath:0" value="*['processingFlag(send_calc_method_id)'='True']" />
+        <param name="IfNotXmlPath:0" value="/*['[SCP_VER]'='151']" />
       </parameterslist>
     </node>
     <node name="CreatePAOnFINPlatform1" object="Commander">

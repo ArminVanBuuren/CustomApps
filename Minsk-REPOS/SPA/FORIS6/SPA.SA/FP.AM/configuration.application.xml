@@ -1,6 +1,6 @@
 <Configuration>
   <Settings>
-    <Add Key="ProfilerConfiguration" Value="Profiler_Full.xml" />
+    <Add Key="ProfilerConfiguration" Value="Profiler.xml" />
     <Add Key="AsyncScenario" Value="true" />
     <Add Key="AsyncResponseTTL" Value="300" />
     <Add Key="FORIS.RI" Value="BEB" />

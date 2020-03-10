@@ -30,10 +30,12 @@
         <result value="0" node="ResponseAssembler" />
         <result value="1" node="DeleteServiceNode" />
         <result value="2" node="DummyResponderNode" />
+        <result value="3" node="DummyResponderNode" />
       </resultlist>
       <parameterslist>
-        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/SourceType" />
+        <param name="XmlPath" value="ExtendedRequestMessage/AdditionalData/WithdrawalList/FR8507/SourceTypeCode" />
         <param name="Value:2" value="163" />
+        <param name="Value:3" value="Buongiorno" />
       </parameterslist>
     </node>
     <node name="DeleteServiceNode" object="Commander">

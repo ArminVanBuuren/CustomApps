@@ -20,16 +20,39 @@
     </node>
     <node name="BySubscriberRequestDequeuer" object="RequestDequeuer">
       <resultlist>
-        <result value="0" node="NBIoT_Access2G3G_Node" />
+        <result value="0" node="IfServiceFR17316Node" />
         <result value="1" node="" />
       </resultlist>
       <parameterslist>
         <param name="queueName" value="requestsSplittedBySubscriberQueue" />
       </parameterslist>
     </node>
+    <node name="IfServiceFR17316Node" object="IfConditionXmlResolver">
+      <resultlist>
+        <result value="0" node="SetDefAPNID3000Node" />
+        <result value="1" node="NBIoT_Access2G3G_Node" />
+      </resultlist>
+      <parameterslist>
+        <param name="ObjectNameInContext" value="request" />
+        <param name="XmlPath:1" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17316" />
+        <param name="Value:1" value="" />
+      </parameterslist>
+    </node>
+    <node name="SetDefAPNID3000Node" object="Commander">
+      <resultlist>
+        <result value="0" node="NBIoT_DeleteProfileNBIoT_Node" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="AppendSubscribersData" value="false" />
+        <param name="Command" value="SetDefANPID3000" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
     <node name="NBIoT_Access2G3G_Node" object="Commander">
       <resultlist>
-        <result value="0" node="NBIoT_AddProfileNBIoT_Node" />
+        <result value="0" node="BlockGPRSNode" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -39,26 +62,26 @@
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>
-    <node name="NBIoT_AddProfileNBIoT_Node" object="Commander">
-      <resultlist>
-        <result value="0" node="BlockGPRSNode" />
-        <result value="" node="ResponseAssembler" />
-      </resultlist>
-      <parameterslist>
-        <param name="CommandSource" value="Dictionary" />
-        <param name="Command" value="DeleteProfileNBIoT" />
-        <param name="AppendSubscribersData" value="false" />
-        <param name="DynamicObject" value="(empty)" />
-      </parameterslist>
-    </node>
     <node name="BlockGPRSNode" object="Commander">
       <resultlist>
+        <result value="0" node="NBIoT_DeleteProfileNBIoT_Node" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
         <param name="CommandSource" value="Dictionary" />
         <param name="AppendSubscribersData" value="false" />
         <param name="Command" value="BlockGPRS" />
+        <param name="DynamicObject" value="(empty)" />
+      </parameterslist>
+    </node>
+    <node name="NBIoT_DeleteProfileNBIoT_Node" object="Commander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="CommandSource" value="Dictionary" />
+        <param name="Command" value="DeleteProfileNBIoT" />
+        <param name="AppendSubscribersData" value="false" />
         <param name="DynamicObject" value="(empty)" />
       </parameterslist>
     </node>

@@ -1,0 +1,4 @@
+<Script Name="Command">
+  <write data="{0}^M^J" addToLog="true" />
+  <wait data="200 OK" timeout="10000" />
+</Script>

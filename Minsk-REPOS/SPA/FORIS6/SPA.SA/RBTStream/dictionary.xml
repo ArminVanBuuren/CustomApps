@@ -37,7 +37,7 @@
   <CommandsList Root="Commands" Mask="*.xml">
     <!-- All new commands are included by Mask=*.xml attribute -->
   </CommandsList>
-  <DecodersList Root="..\SPA.SA\RBT\Decoders">
+  <DecodersList Root="..\SPA.SA\RBTStream\Decoders">
     <Decoder Path="RbtDecoder.xml" />
   </DecodersList>
 </Dictionary>

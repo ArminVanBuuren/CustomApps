@@ -589,6 +589,8 @@
     </node>
     <node name="UnBlockServiceDiscountclubNode" object="IfHttpCommander">
       <resultlist>
+        <result value="0" node="UnBlockServiceGameapppsNode" />
+        <result value="1538" node="UnBlockServiceGameapppsNode" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -604,6 +606,46 @@
         <param name="Connection.ContentType" value="text/html; charset=utf-8" />
         <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
         <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17098" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockServiceGameapppsNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="UnBlockServiceMusicplaylistNode" />
+        <result value="1538" node="UnBlockServiceMusicplaylistNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="" />
+        <param name="Command" value="UnBlockServiceGameappps" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.193.238" />
+        <param name="Connection.Port" value="9107" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html; charset=utf-8" />
+        <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16754" />
+      </parameterslist>
+    </node>
+    <node name="UnBlockServiceMusicplaylistNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="" />
+        <param name="Command" value="UnBlockServiceMusicplaylist" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.193.238" />
+        <param name="Connection.Port" value="9107" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html; charset=utf-8" />
+        <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16755" />
       </parameterslist>
     </node>
     <node name="DummyResponderNode" object="DummyResponder">

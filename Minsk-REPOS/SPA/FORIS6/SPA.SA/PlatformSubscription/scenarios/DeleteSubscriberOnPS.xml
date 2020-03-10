@@ -492,6 +492,8 @@
     </node>
     <node name="DeleteServiceDiscountclubNode" object="IfHttpCommander">
       <resultlist>
+        <result value="0" node="DeleteServiceGameapppsNode" />
+        <result value="1538" node="DeleteServiceGameapppsNode" />
         <result value="" node="ResponseAssembler" />
       </resultlist>
       <parameterslist>
@@ -507,6 +509,46 @@
         <param name="Connection.ContentType" value="text/html; charset=utf-8" />
         <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
         <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17098" />
+      </parameterslist>
+    </node>
+    <node name="DeleteServiceGameapppsNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="0" node="DeleteServiceMusicplaylistNode" />
+        <result value="1538" node="DeleteServiceMusicplaylistNode" />
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="" />
+        <param name="Command" value="DeleteServiceGameappps" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.193.238" />
+        <param name="Connection.Port" value="9107" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html; charset=utf-8" />
+        <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16754" />
+      </parameterslist>
+    </node>
+    <node name="DeleteServiceMusicplaylistNode" object="IfHttpCommander">
+      <resultlist>
+        <result value="" node="ResponseAssembler" />
+      </resultlist>
+      <parameterslist>
+        <param name="Connection.Url" value="" />
+        <param name="Command" value="DeleteServiceMusicplaylist" />
+        <param name="Script" value="Command" />
+        <param name="ErrorDecodingType" value="ByString" />
+        <param name="CommandSource" value="Dictionary" />
+        <param name="DynamicObject" value="(empty)" />
+        <param name="Connection.Host" value="10.128.193.238" />
+        <param name="Connection.Port" value="9107" />
+        <param name="Connection.Method" value="GET" />
+        <param name="Connection.ContentType" value="text/html; charset=utf-8" />
+        <param name="Connection.Header.Authorization" value="916c7385943757fb7436c7c4f4df494df877a037" />
+        <param name="IfXmlPath" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR16755" />
       </parameterslist>
     </node>
     <node name="DummyResponderNode" object="DummyResponder">

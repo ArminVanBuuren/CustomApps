@@ -14,12 +14,11 @@
       <repetitionTable>..\SPA.SA\ViaMobi\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="10" maxConnections="10" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="500" periodDuration="20" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.HttpSocket, FORIS.SPA.Communication">
               <config>
                 <ParametersList>
-                  <!--Parameter Key="Host" Value="10.128.213.41"/-->
-                  <Parameter Key="Host" Value="127.0.0.1" />
+                  <Parameter Key="Host" Value="10.128.213.41" />
                   <Parameter Key="Port" Value="80" />
                   <Parameter Key="Url" Value="viamobi_mts/" />
                   <Parameter Key="MethodName" Value="GET" />

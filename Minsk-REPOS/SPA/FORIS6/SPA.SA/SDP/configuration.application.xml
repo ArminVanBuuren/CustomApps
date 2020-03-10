@@ -14,10 +14,9 @@
       <repetitionTable>..\SPA.SA\SDP\Misc\RepetitionTable.xml</repetitionTable>
       <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="1000" deltaAverageTime="4000" maxCommandsPerPeriod="200" periodDuration="10" autoconnect="1" reconfigurationTimeout="0">
         <socket type="FORIS.ServiceProvisioning.Communication.Script.ManagedScriptSocket, FORIS.SPA.Communication">
-          <config workingmode="wmPermanentEmulation">
+          <config workingmode="wmGeneral">
             <socket type="FORIS.ServiceProvisioning.Communication.TelnetSocket, FORIS.SPA.Communication">
-              <!--config host="172.24.189.129" port="23"/-->
-              <config host="127.0.0.1" port="23" />
+              <config host="172.24.189.129" port="23" />
             </socket>
             <Emulation Success="Released" Failure="Command failed" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" />
             <Timers IdleTimeout="240000" />

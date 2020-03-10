@@ -1,0 +1,8 @@
+<Command Name="BlockServiceGameappps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
+  <Description>Block Service</Description>
+  <Author Name="NNM" Date="2019-11-28+15:30" />
+  <Request Template="block?frcode=FR16754&amp;msisdn={0}">
+    <Item Name="msisdn" Type="Wellknown" />
+  </Request>
+  <ErrorsList CodePage="ascii" />
+</Command>

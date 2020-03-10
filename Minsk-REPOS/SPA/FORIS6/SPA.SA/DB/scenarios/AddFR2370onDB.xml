@@ -62,6 +62,7 @@
         <param name="OrXmlPath:31" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR14995" />
         <param name="OrXmlPath:32" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15506" />
         <param name="OrXmlPath:33" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR15507" />
+        <param name="OrXmlPath:34" value="ExtendedRequestMessage/AdditionalData/RegisteredList/FR17303" />
       </parameterslist>
     </node>
     <node name="AddSyncBlockingNODE" object="Commander">

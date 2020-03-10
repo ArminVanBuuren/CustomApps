@@ -35,9 +35,9 @@
         <param name="DataBaseName" value="FORIS.SPA.BILLING" />
         <param name="FunctionName" value="select /*+ ordered use_nl(t,an,ar,rb) */ 
 														an.val as SERVICES,rb.code as OPER 
-												   from CRM.REQ_EXT_LNK t, crm.att_num an,  
+												   from CRM.req_process_lnk t, crm.att_num an,  
 														crm.att_ref ar, crm.att_ref_book rb
-												   where t.ext_req_id='{0}' 
+												   where t.req_id='{0}' 
 														 and t.req_id=an.req_id and an.att_type_id=87
 														 and t.req_id=ar.req_id and ar.att_type_id=170
 														 and ar.att_ref_book_id=rb.att_ref_book_id" />
