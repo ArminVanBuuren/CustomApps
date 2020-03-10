@@ -211,19 +211,33 @@ namespace Utils
 
     public class MTCallbackTimeoutException : Exception
     {
-        public MTCallbackTimeoutException():base("Exception when wait callback.")
+        public MTCallbackTimeoutException():base("Exception when wait callback")
         {
 
         }
-        public MTCallbackTimeoutException(Exception ex) : base("Exception when wait callback.", ex)
+        public MTCallbackTimeoutException(Exception ex) : base("Exception when wait callback", ex)
         {
 
         }
     }
 
+    public class MTCallbackException : Exception
+    {
+        public Exception CallbackError { get; }
+
+        public MTCallbackException(Exception callBackError) : base("Exception when processing callback")
+        {
+            CallbackError = callBackError;
+        }
+        public MTCallbackException(Exception taskError, Exception callBackError) : base("Exception when processing callback", taskError)
+        {
+            CallbackError = callBackError;
+        }
+    }
+
     public class MultiTasking
     {
-        public const int CallbackTimeout = 3000;
+        //public const int CallbackTimeout = 3000;
 
         public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, int maxThreads = 2, CancellationToken? cancel = null)
         {
@@ -315,7 +329,7 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<Action, bool>(inputAction, true);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
                         }
                     }
                     catch (Exception ex)
@@ -323,15 +337,27 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<Action, bool>(inputAction, ex);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
                         }
                     }
                     finally
                     {
-                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        if (taskCallback != null)
                         {
-                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            try
+                            {
+                                taskCallback?.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            }
                         }
+
+                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        //{
+                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        //}
                         pool.Release();
                     }
                 }, action));
@@ -431,7 +457,7 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, res);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
                         }
                     }
                     catch (Exception ex)
@@ -439,15 +465,27 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, ex);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
                         }
                     }
                     finally
                     {
-                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        if (taskCallback != null)
                         {
-                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            try
+                            {
+                                taskCallback?.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            }
                         }
+
+                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        //{
+                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        //}
                         pool.Release();
                     }
                 }, func));
@@ -546,7 +584,7 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<TSource, bool>(inputItem, true);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
                         }
                     }
                     catch (Exception ex)
@@ -554,15 +592,28 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<TSource, bool>(inputItem, ex);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
                         }
                     }
                     finally
                     {
-                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        if (taskCallback != null)
                         {
-                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            try
+                            {
+                                taskCallback?.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            }
                         }
+
+                        //taskCallback?.RunSynchronously();
+                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        //{
+                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        //}
                         pool.Release();
                     }
                 }, item));
@@ -661,7 +712,7 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<TSource, TResult>(inputItem, res);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
                         }
                     }
                     catch (Exception ex)
@@ -669,15 +720,27 @@ namespace Utils
                         if (callback != null)
                         {
                             callbackItem = new MTCallBack<TSource, TResult>(inputItem, ex);
-                            taskCallback = Task.Factory.StartNew((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                            taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
                         }
                     }
                     finally
                     {
-                        if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        if (taskCallback != null)
                         {
-                            callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            try
+                            {
+                                taskCallback?.Start();
+                            }
+                            catch (Exception ex)
+                            {
+                                callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            }
                         }
+
+                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                        //{
+                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                        //}
                         pool.Release();
                     }
                 }, item));

@@ -53,11 +53,11 @@ namespace Tester.Console
                 var actions = new List<int>();
                 Action<int> func = (int input) =>
                 {
-                    //Thread.Sleep(10);
+                    Thread.Sleep(1000);
                     System.Console.Write($"[{input}];");
                 };
                 var cancel = new CancellationTokenSource();
-                for (var i = 0; i < 100000; i++)
+                for (var i = 0; i < 1000; i++)
                 {
                     actions.Add(i);
                 }
@@ -65,7 +65,7 @@ namespace Tester.Console
                 stop.Start();
                 //cancel.CancelAfter(15000);
                 //MultiTasking.Run(actions, 10, cancel.Token);
-                var mt = new MTActionResult<int>(func, actions, 5);
+                var mt = new MTActionResult<int>(func, actions, 100);
                 mt.Start();
                 stop.Stop();
                 System.Console.WriteLine();
