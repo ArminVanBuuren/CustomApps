@@ -3212,7 +3212,7 @@ https://smart-university.ru/eng/ege/express
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Usluga ne predostavlyaetsya dlya Vashego tarifnogo plana." />
-      <set item="Content" condition="//Item/@dbresult=0" value="ОБещанный платеж на сумму ${amount} р. принят.Отображение на балансе в течение 30 мин." />
+      <set item="Content" condition="//Item/@dbresult=0" value="Обещанный платеж на сумму #{${amount} div 100} р. принят.Отображение на балансе в течение 30 мин." />
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа в 3 руб." />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />

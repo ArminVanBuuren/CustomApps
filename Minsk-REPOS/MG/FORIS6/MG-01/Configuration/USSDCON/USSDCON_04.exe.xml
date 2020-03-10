@@ -26,8 +26,7 @@
     <Item name="SuccessResponseCodes" value="0,88" />
   </Settings>
   <SMSCenters>
-    <!--Connection host="172.24.224.6" port="900" systemId="testuit" pass="uit" /-->
-    <Connection host="localhost" port="900" systemId="testuit" pass="uit" />
+    <Connection host="172.24.224.6" port="900" systemId="testuit" pass="uit" />
   </SMSCenters>
   <TemplateProcessors defaultConfig="USSDTemplateProcessor.TEST.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor.TEST.xml" />

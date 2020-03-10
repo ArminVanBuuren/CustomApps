@@ -4,7 +4,10 @@
   #include "..\..\config\MISC\misc.xml"
   #include "..\..\config\USSDP\ussdp.xml"
   #include "..\..\config\Fake\fake.xml"
-  #include "..\..\config\CallCenter\CallCenter.xml"
+  #include "..\..\config\callcenter\callcenter.xml"
+  <macros>
+    <define name="_src_id_" value="@{switch(${sourceid}|ivrcon,4|Office,7|Operator,10|GroupOperations,11|System,15|Ussd,23|Ametist,33|Gso,38|Buongiorno,163|Buongiorno1,164|OMSIT,172|USSDPortal,179|InternetMtsBy,186|LBS,187|MyMTS,10006|Opera)}" />
+  </macros>
   <!--    MTS_GetCountersSRC             -->
   <template procedureName="MTS_GetCountersSRC" handler="DBCON_01">
     <receiveTemplate>
@@ -3447,12 +3450,14 @@
         @{store(MTSMovePaymentCustomer,${customer})}
         @{store(MTSMovePaymentCustomerReceicer,${customer_receiver})}
         @{store(MTSMovePaymentCustomerSumma,${summa})}
+        @{store(MTSMovePaymentCustomersourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="MTSMovePayments">
       <set item="iparam:customer" value="${MTSMovePaymentCustomer}" />
       <set item="iparam:customer_receiver" value="${MTSMovePaymentCustomerReceicer}" />
       <set item="iparam:summa" value="${MTSMovePaymentCustomerSumma}" />
+      <set item="iparam:sourceid" value="${MTSMovePaymentCustomersourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -3473,7 +3478,7 @@
   </template>
   <template procedureName="MTSMovePayments">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}">
           <Service id="movepaymentrequest" action="5">
             <Attribute name="receiver" value="${customer_receiver}" />
@@ -3508,6 +3513,7 @@
       <param name="customer" />
       <param name="customer_receiver" />
       <param name="summa" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="result_code" />
@@ -3567,38 +3573,30 @@
     </output>
   </template>
   <!--    MTS_GuaranteedPayment             -->
-  <template procedureName="MTS_GuaranteedPayment" sessionStorage="Memory" sessionLifetime="60">
+  <template procedureName="MTS_GuaranteedPayment" handler="DBCON_01">
     <receiveTemplate>
       <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${customer}">
-          <Service id="guaranteedpayment" action="6" />
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GuaranteedPayment" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
         </Item>
         @{store(MTSGuaranteedPaymentcustomer,${customer})}
-        @{store(MTSGuaranteedPaymentamount,#{${amount} * 100})}
+        @{store(MTSGuaranteedPaymentamount,${amount})}
         @{store(MTSGuaranteedPaymentsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate conditionEx="#{'${dbresult}'='0'}" call="MTSGuaranteedPayment">
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="MTSGuaranteedPayment">
       <set item="iparam:customer" value="${MTSGuaranteedPaymentcustomer}" />
       <set item="iparam:amount" value="${MTSGuaranteedPaymentamount}" />
       <set item="iparam:sourceid" value="${MTSGuaranteedPaymentsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
-      <set item="oparam:result_code" value="${dbresult}" />
-      <set item="oparam:result_msg" value="Извините, но данный запрос не может быть выполнен." />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320341}" value="Номер Вашего телефона не зарегистрирован" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320191}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320203}" value="Услуга не может быть предоставлена, предыдущий обещанный платеж не погашен или в процессе регистрации" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320111}" value="Указывайте сумму не превышающую #{${maximumusd} div 100} р." />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320121}" value="Невозможно установить обещанный платеж" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320113}" value="Сумма обещанного платежа меньше минимально возможной" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330140}" value="Обратитесь к персональному менеджеру" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330141}" value="Превышено допустимое кол-во обещанных платежей" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330142}" value="Исчерпан лимит средств для ввода обещанного платежа" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=330132}" value="Данный сервис недоступен. Ваш баланс #{number('${balance}') div 100} р." />
-      <set conditionEx="0@{freeSession}" />
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
     </deliveryTemplate>
     <input>
       <param name="sourceid" />
@@ -3611,30 +3609,23 @@
       <param name="result_msg" />
     </output>
   </template>
-  <template procedureName="MTSGuaranteedPayment">
+  <template procedureName="MTSGuaranteedPayment" handler="DBCON_01">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="guaranteedpayment" action="7">
-            <Attribute name="amount" value="${amount}" />
-            <Attribute name="currency" value="933" />
-          </Service>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="@{newGuid}" session_id="@{newGuid}">
+        <Item procedureName="billing.mg_pack.GuaranteedPayment">
+          <Attribute name="i_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_summa" type="STRING" value="${amount}" />
+          <Attribute name="o_rez" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
         </Item>
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="oparam:result_code" condition="//Item/@dbresult='0'" value="${dbresult}" />
+      <set item="oparam:result_code" condition="//Item/@dbresult='0'" value="${o_dbresult}" />
       <set item="oparam:result_code" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
-      <set item="oparam:result_msg" value="Ошибка при выполнении запроса." />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=0" value="Обещанный платеж на сумму #{${amount} div 100} р. принят.Отображение на балансе в течение 10 минут." />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=320341" value="Нельзя ввести обещанный платеж на Вашем тарифном плане" />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=320110" value="Минимальная сумма обещанного платежа 1 руб.Введите большую сумму." />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320347}" value="Услуга не может быть предоставлена, потому что номер заблокирован" />
-      <set item="oparam:result_msg" conditionEx="#{${dbresult}=320191}" value="Услуга не может быть предоставлена, недостаточно средств" />
-      <set item="oparam:result_msg" condition="//Item/@dbresult=-1" value="Обещанный платеж не может быть принят." />
+      <set item="oparam:result_msg" condition="//Item/@dbresult='0'" value="${o_rez}" />
+      <set item="oparam:result_msg" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
     </deliveryTemplate>
     <input>
       <param name="customer" />
@@ -3882,145 +3873,145 @@
       <param name="msg" />
     </output>
   </template>
-  <!-- 1c. проверка 2 -->
-  <template procedureName="CustomerDataAndValidation1SI" handler="DBCON_01">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.sales_1s.CUSTOMER_DATA_AND_VALIDATION_I">
-          <Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
-          <Attribute name="p_inn" type="STRING" value="${i_inn}" />
-          <Attribute name="p_customer_type" type="INT" value="${customer_type}" />
-          <Attribute name="p_operator" type="STRING" value="${operator}" />
-          <Attribute name="p_model" type="STRING" value="${model}" />
-          <Attribute name="p_proj_code" type="STRING" value="${proj_code}" />
-          <Attribute name="p_id_akcia" type="INT" value="${id_akcia}" />
-          <Attribute name="o_customer_id" type="INT" />
-          <Attribute name="o_customer_type" type="INT" />
-          <Attribute name="o_unn" type="STRING" />
-          <Attribute name="o_naim" type="STRING" />
-          <Attribute name="o_ur_adr" type="STRING" />
-          <Attribute name="o_r_account" type="STRING" />
-          <Attribute name="o_bank_code" type="STRING" />
-          <Attribute name="o_bank_name" type="STRING" />
-          <Attribute name="o_filial_code" type="STRING" />
-          <Attribute name="o_f" type="STRING" />
-          <Attribute name="o_s" type="STRING" />
-          <Attribute name="o_p" type="STRING" />
-          <Attribute name="o_bd" type="STRING" />
-          <Attribute name="o_sex" type="STRING" />
-          <Attribute name="o_inn" type="STRING" />
-          <Attribute name="o_doc_type" type="STRING" />
-          <Attribute name="o_doc_ser" type="STRING" />
-          <Attribute name="o_doc_number" type="STRING" />
-          <Attribute name="o_doc_date" type="STRING" />
-          <Attribute name="o_doc_auth" type="STRING" />
-          <Attribute name="o_adr" type="STRING" />
-          <Attribute name="o_work" type="STRING" />
-          <Attribute name="o_contact" type="STRING" />
-          <Attribute name="o_scor_id" type="INT" />
-          <Attribute name="rez" type="INT" />
-          <Attribute name="msg" type="STRING" />
-          <Attribute name="o_strana" type="STRING" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate condition="//Item/@dbresult='0'">
-      <set item="oparam:customer_id" value="${o_customer_id}" />
-      <set item="oparam:customer_type" value="${o_customer_type}" />
-      <set item="oparam:unn" value="${o_unn}" />
-      <set item="oparam:naim" value="${o_naim}" />
-      <set item="oparam:ur_adr" value="${o_ur_adr}" />
-      <set item="oparam:account" value="${o_r_account}" />
-      <set item="oparam:bank_code" value="${o_bank_code}" />
-      <set item="oparam:bank_name" value="${o_bank_name}" />
-      <set item="oparam:filial_code" value="${o_filial_code}" />
-      <set item="oparam:f" value="${o_f}" />
-      <set item="oparam:s" value="${o_s}" />
-      <set item="oparam:p" value="${o_p}" />
-      <set item="oparam:bd" value="${o_bd}" />
-      <set item="oparam:sex" value="${o_sex}" />
-      <set item="oparam:inn" value="${o_inn}" />
-      <set item="oparam:doc_type" value="${o_doc_type}" />
-      <set item="oparam:doc_ser" value="${o_doc_ser}" />
-      <set item="oparam:doc_number" value="${o_doc_number}" />
-      <set item="oparam:doc_date" value="${o_doc_date}" />
-      <set item="oparam:doc_auth" value="${o_doc_auth}" />
-      <set item="oparam:adr" value="${o_adr}" />
-      <set item="oparam:work" value="${o_work}" />
-      <set item="oparam:contact" value="${o_contact}" />
-      <set item="oparam:scor_id" value="${o_scor_id}" />
-      <set item="oparam:rez" value="${rez}" />
-      <set item="oparam:msg" value="${msg}" />
-      <set item="oparam:strana" value="${o_strana}" />
-    </deliveryTemplate>
-    <deliveryTemplate condition="//Item/@dbresult!='0'">
-      <set item="oparam:customer_id" value="Ошибка выполнения запроса." />
-      <set item="oparam:customer_type" value="Ошибка выполнения запроса." />
-      <set item="oparam:unn" value="Ошибка выполнения запроса." />
-      <set item="oparam:naim" value="Ошибка выполнения запроса." />
-      <set item="oparam:ur_adr" value="Ошибка выполнения запроса." />
-      <set item="oparam:account" value="Ошибка выполнения запроса." />
-      <set item="oparam:bank_code" value="Ошибка выполнения запроса." />
-      <set item="oparam:bank_name" value="Ошибка выполнения запроса." />
-      <set item="oparam:filial_code" value="Ошибка выполнения запроса." />
-      <set item="oparam:f" value="Ошибка выполнения запроса." />
-      <set item="oparam:s" value="Ошибка выполнения запроса." />
-      <set item="oparam:p" value="Ошибка выполнения запроса." />
-      <set item="oparam:bd" value="Ошибка выполнения запроса." />
-      <set item="oparam:sex" value="Ошибка выполнения запроса." />
-      <set item="oparam:inn" value="Ошибка выполнения запроса." />
-      <set item="oparam:doc_type" value="Ошибка выполнения запроса." />
-      <set item="oparam:doc_ser" value="Ошибка выполнения запроса." />
-      <set item="oparam:doc_number" value="Ошибка выполнения запроса." />
-      <set item="oparam:doc_date" value="Ошибка выполнения запроса." />
-      <set item="oparam:doc_auth" value="Ошибка выполнения запроса." />
-      <set item="oparam:adr" value="Ошибка выполнения запроса." />
-      <set item="oparam:work" value="Ошибка выполнения запроса." />
-      <set item="oparam:contact" value="Ошибка выполнения запроса." />
-      <set item="oparam:scor_id" value="Ошибка выполнения запроса." />
-      <set item="oparam:rez" value="Ошибка выполнения запроса." />
-      <set item="oparam:msg" value="Ошибка выполнения запроса." />
-      <set item="oparam:strana" value="Ошибка выполнения запроса." />
-    </deliveryTemplate>
-    <input>
-      <param name="msisdn" />
-      <param name="i_inn" />
-      <param name="customer_type" />
-      <param name="operator" />
-      <param name="model" />
-      <param name="proj_code" />
-      <param name="id_akcia" />
-    </input>
-    <output>
-      <param name="customer_id" />
-      <param name="customer_type" />
-      <param name="unn" />
-      <param name="naim" />
-      <param name="ur_adr" />
-      <param name="account" />
-      <param name="bank_code" />
-      <param name="bank_name" />
-      <param name="filial_code" />
-      <param name="f" />
-      <param name="s" />
-      <param name="p" />
-      <param name="bd" />
-      <param name="sex" />
-      <param name="inn" />
-      <param name="doc_type" />
-      <param name="doc_ser" />
-      <param name="doc_number" />
-      <param name="doc_date" />
-      <param name="doc_auth" />
-      <param name="adr" />
-      <param name="work" />
-      <param name="contact" />
-      <param name="scor_id" />
-      <param name="rez" />
-      <param name="msg" />
-      <param name="strana" />
-    </output>
-  </template>
+	<!-- 1c. проверка 2 -->
+	<template procedureName="CustomerDataAndValidation1SI" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.sales_1s.CUSTOMER_DATA_AND_VALIDATION_I" >
+					<Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
+					<Attribute name="p_inn" type="STRING" value="${i_inn}" />
+					<Attribute name="p_customer_type" type="INT" value="${customer_type}" />
+					<Attribute name="p_operator" type="STRING" value="${operator}" />
+					<Attribute name="p_model" type="STRING" value="${model}" />
+					<Attribute name="p_proj_code" type="STRING" value="${proj_code}" />
+					<Attribute name="p_id_akcia" type="INT" value="${id_akcia}" />
+					<Attribute name="o_customer_id" type="INT" />
+					<Attribute name="o_customer_type" type="INT" />
+					<Attribute name="o_unn" type="STRING" />
+					<Attribute name="o_naim" type="STRING" />
+					<Attribute name="o_ur_adr" type="STRING" />
+					<Attribute name="o_r_account" type="STRING" />
+					<Attribute name="o_bank_code" type="STRING" />
+					<Attribute name="o_bank_name" type="STRING" />
+					<Attribute name="o_filial_code" type="STRING" />
+					<Attribute name="o_f" type="STRING" />
+					<Attribute name="o_s" type="STRING" />
+					<Attribute name="o_p" type="STRING" />
+					<Attribute name="o_bd" type="STRING" />
+					<Attribute name="o_sex" type="STRING" />
+					<Attribute name="o_inn" type="STRING" />
+					<Attribute name="o_doc_type" type="STRING" />
+					<Attribute name="o_doc_ser" type="STRING" />
+					<Attribute name="o_doc_number" type="STRING" />
+					<Attribute name="o_doc_date" type="STRING" />
+					<Attribute name="o_doc_auth" type="STRING" />
+					<Attribute name="o_adr" type="STRING" /> 
+					<Attribute name="o_work" type="STRING" /> 
+					<Attribute name="o_contact" type="STRING" /> 
+					<Attribute name="o_scor_id" type="INT" /> 
+					<Attribute name="rez" type="INT" /> 
+					<Attribute name="msg" type="STRING" /> 
+					<Attribute name="o_strana" type="STRING" /> 
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate condition="//Item/@dbresult='0'" >
+			<set item="oparam:customer_id" value="${o_customer_id}" /> 
+			<set item="oparam:customer_type" value="${o_customer_type}" /> 
+			<set item="oparam:unn" value="${o_unn}" /> 
+			<set item="oparam:naim" value="${o_naim}" /> 
+			<set item="oparam:ur_adr" value="${o_ur_adr}" /> 
+			<set item="oparam:account" value="${o_r_account}" /> 
+			<set item="oparam:bank_code" value="${o_bank_code}" /> 
+			<set item="oparam:bank_name" value="${o_bank_name}" /> 
+			<set item="oparam:filial_code" value="${o_filial_code}" /> 
+			<set item="oparam:f" value="${o_f}" /> 
+			<set item="oparam:s" value="${o_s}" /> 
+			<set item="oparam:p" value="${o_p}" /> 		
+			<set item="oparam:bd" value="${o_bd}" /> 
+			<set item="oparam:sex" value="${o_sex}" /> 
+			<set item="oparam:inn" value="${o_inn}" /> 
+			<set item="oparam:doc_type" value="${o_doc_type}" /> 
+			<set item="oparam:doc_ser" value="${o_doc_ser}" /> 
+			<set item="oparam:doc_number" value="${o_doc_number}" /> 
+			<set item="oparam:doc_date" value="${o_doc_date}" /> 
+			<set item="oparam:doc_auth" value="${o_doc_auth}" /> 
+			<set item="oparam:adr" value="${o_adr}" /> 
+			<set item="oparam:work" value="${o_work}" /> 
+			<set item="oparam:contact" value="${o_contact}" /> 
+			<set item="oparam:scor_id" value="${o_scor_id}" /> 
+			<set item="oparam:rez" value="${rez}" /> 
+			<set item="oparam:msg" value="${msg}" /> 
+			<set item="oparam:strana" value="${o_strana}" /> 
+		</deliveryTemplate>
+		<deliveryTemplate condition="//Item/@dbresult!='0'" >
+			<set item="oparam:customer_id" value="Ошибка выполнения запроса." />
+			<set item="oparam:customer_type" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:unn" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:naim" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:ur_adr" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:account" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:bank_code" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:bank_name" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:filial_code" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:f" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:s" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:p" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:bd" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:sex" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:inn" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:doc_type" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:doc_ser" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:doc_number" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:doc_date" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:doc_auth" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:adr" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:work" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:contact" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:scor_id" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:rez" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:msg" value="Ошибка выполнения запроса." /> 
+			<set item="oparam:strana" value="Ошибка выполнения запроса." /> 
+		</deliveryTemplate>	
+		<input>
+			<param name="msisdn" />
+			<param name="i_inn" />
+			<param name="customer_type" />
+			<param name="operator" />
+			<param name="model" />
+			<param name="proj_code" />
+			<param name="id_akcia" />
+		</input>
+		<output>
+			<param name="customer_id" />
+			<param name="customer_type" />
+			<param name="unn" />
+			<param name="naim" />
+			<param name="ur_adr" />
+			<param name="account" />
+			<param name="bank_code" />
+			<param name="bank_name" />
+			<param name="filial_code" />
+			<param name="f" />
+			<param name="s" />
+			<param name="p" />
+			<param name="bd" />
+			<param name="sex" />
+			<param name="inn" />
+			<param name="doc_type" />
+			<param name="doc_ser" />
+			<param name="doc_number" />
+			<param name="doc_date" />
+			<param name="doc_auth" />
+			<param name="adr" />
+			<param name="work" />
+			<param name="contact" />
+			<param name="scor_id" />
+			<param name="rez" />
+			<param name="msg" />
+			<param name="strana" />
+		</output>
+	</template> 	
   <!-- 1c. ret -->
   <template procedureName="RealisationReturn1C" handler="DBCON_01">
     <receiveTemplate>
@@ -6040,6 +6031,7 @@
         @{store(DetBilldocformat,${docformat})}
         @{store(DetBillstartdate,${startdate})}
         @{store(DetBillenddate,${enddate})}
+        @{store(DetBillsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="DetailedBill">
@@ -6048,6 +6040,7 @@
       <set item="iparam:docformat" value="${DetBilldocformat}" />
       <set item="iparam:startdate" value="${DetBillstartdate}" />
       <set item="iparam:enddate" value="${DetBillenddate}" />
+      <set item="iparam:sourceid" value="${DetBillsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -6070,7 +6063,7 @@
   </template>
   <template procedureName="DetailedBill">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}">
           <Service action="4" id="otdetailedbill">
             <Attribute name="methoddelivery" value="Email" />
@@ -6092,6 +6085,7 @@
       <param name="docformat" />
       <param name="startdate" />
       <param name="enddate" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -6257,70 +6251,70 @@
     </output>
   </template>
   <!-- 1c. проверка -->
-  <template procedureName="LoadNewRealisation1S" handler="DBCON_01">
-    <receiveTemplate>
-      <Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-        <Item procedureName="billing.sales_1s.LOAD_NEW_REALISATION">
-          <Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
-          <Attribute name="p_acc" type="STRING" value="${acc}" />
-          <Attribute name="p_summ" type="STRING" value="${summ}" />
-          <Attribute name="p_date_from" type="STRING" value="${date_from}" />
-          <Attribute name="p_srok" type="INT" value="${srok}" />
-          <Attribute name="p_day_pay" type="STRING" value="${day_pay}" />
-          <Attribute name="p_balance" type="STRING" value="${balance}" />
-          <Attribute name="p_user_fio" type="STRING" value="${user_fio}" />
-          <Attribute name="p_office" type="STRING" value="${office}" />
-          <Attribute name="p_phone_imei" type="STRING" value="${phone_imei}" />
-          <Attribute name="p_phone_name" type="STRING" value="${phone_name}" />
-          <Attribute name="p_old_acc" type="STRING" value="${old_acc}" />
-          <Attribute name="p_project_name" type="STRING" value="${project_name}" />
-          <Attribute name="p_customer_type" type="INT" value="${customer_type}" />
-          <Attribute name="p_kol" type="INT" value="${kol}" />
-          <Attribute name="p_scor_id" type="INT" value="${scor_id}" />
-          <Attribute name="p_customer_id" type="INT" value="${customer_id}" />
-          <Attribute name="p_akcia" type="INT" value="${akcia}" />
-          <Attribute name="p_oper_type" type="INT" value="${oper_type}" />
-          <Attribute name="p_first_pay" type="STRING" value="${first_pay}" />
-          <Attribute name="p_base_acc" type="STRING" value="${base_acc}" />
-          <Attribute name="p_add_info" type="STRING" value="${add_info}" />
-          <Attribute name="p_eq_type" type="STRING" value="${eq_type}" />
-          <Attribute name="o_rez" type="INT" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate>
-      <set item="oparam:rez" condition="//Item/@dbresult='0'" value="${o_rez}" />
-      <set item="oparam:rez" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." />
-    </deliveryTemplate>
-    <input>
-      <param name="msisdn" />
-      <param name="acc" />
-      <param name="summ" />
-      <param name="date_from" />
-      <param name="srok" />
-      <param name="day_pay" />
-      <param name="balance" />
-      <param name="user_fio" />
-      <param name="office" />
-      <param name="phone_imei" />
-      <param name="phone_name" />
-      <param name="old_acc" />
-      <param name="project_name" />
-      <param name="kol" />
-      <param name="customer_type" />
-      <param name="scor_id" />
-      <param name="customer_id" />
-      <param name="akcia" />
-      <param name="oper_type" />
-      <param name="first_pay" />
-      <param name="base_acc" />
-      <param name="add_info" />
-      <param name="eq_type" />
-    </input>
-    <output>
-      <param name="rez" />
-    </output>
-  </template>
+	<template procedureName="LoadNewRealisation1S" handler="DBCON_01">
+		<receiveTemplate>
+			<Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+				<Item procedureName="billing.sales_1s.LOAD_NEW_REALISATION" >
+					<Attribute name="p_msisdn" type="STRING" value="${msisdn}" />
+					<Attribute name="p_acc" type="STRING" value="${acc}" />
+					<Attribute name="p_summ" type="STRING" value="${summ}" />
+					<Attribute name="p_date_from" type="STRING" value="${date_from}" />
+					<Attribute name="p_srok" type="INT" value="${srok}" />
+					<Attribute name="p_day_pay" type="STRING" value="${day_pay}" />
+					<Attribute name="p_balance" type="STRING" value="${balance}" />
+					<Attribute name="p_user_fio" type="STRING" value="${user_fio}" />
+					<Attribute name="p_office" type="STRING" value="${office}" />
+					<Attribute name="p_phone_imei" type="STRING" value="${phone_imei}" />
+					<Attribute name="p_phone_name" type="STRING" value="${phone_name}" />
+					<Attribute name="p_old_acc" type="STRING" value="${old_acc}" />
+					<Attribute name="p_project_name" type="STRING" value="${project_name}" />
+					<Attribute name="p_customer_type" type="INT" value="${customer_type}" />
+					<Attribute name="p_kol" type="INT" value="${kol}" />
+					<Attribute name="p_scor_id" type="INT" value="${scor_id}" />
+					<Attribute name="p_customer_id" type="INT" value="${customer_id}" />
+					<Attribute name="p_akcia" type="INT" value="${akcia}" />
+					<Attribute name="p_oper_type" type="INT" value="${oper_type}" />
+					<Attribute name="p_first_pay" type="STRING" value="${first_pay}" />
+					<Attribute name="p_base_acc" type="STRING" value="${base_acc}" />
+					<Attribute name="p_add_info" type="STRING" value="${add_info}" />
+					<Attribute name="p_eq_type" type="STRING" value="${eq_type}" />
+					<Attribute name="o_rez" type="INT" /> 
+				</Item>
+			</Message>
+		</receiveTemplate>
+		<deliveryTemplate>
+			<set item="oparam:rez" condition="//Item/@dbresult='0'" value="${o_rez}" /> 
+			<set item="oparam:rez" condition="//Item/@dbresult!='0'" value="Ошибка при выполнении запроса." /> 
+		</deliveryTemplate>
+		<input>
+			<param name="msisdn" />
+			<param name="acc" />
+			<param name="summ" />
+			<param name="date_from" />
+			<param name="srok" />
+			<param name="day_pay" />
+			<param name="balance" />
+			<param name="user_fio" />
+			<param name="office" />
+			<param name="phone_imei" />
+			<param name="phone_name" />
+			<param name="old_acc" />
+			<param name="project_name" />
+			<param name="kol" />
+			<param name="customer_type" />
+			<param name="scor_id" />
+			<param name="customer_id" />
+			<param name="akcia" />
+			<param name="oper_type" />
+			<param name="first_pay" />
+			<param name="base_acc" />
+			<param name="add_info" />
+			<param name="eq_type" />
+		</input>
+		<output>
+			<param name="rez" />
+		</output>
+	</template> 	
   <!-- Проверка для ITV.BY -->
   <template procedureName="ValidateITV" handler="DBCON_01">
     <receiveTemplate>
@@ -6543,12 +6537,14 @@
         @{store(MTS_TransferP2Pcustomer,${customer})}
         @{store(MTS_TransferP2Pcustomer_receiver,${customer_receiver})}
         @{store(MTS_TransferP2Pmoney,${money})}
+        @{store(MTS_TransferP2Psourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="Transfer_P2P">
       <set item="iparam:customer" value="${MTS_TransferP2Pcustomer}" />
       <set item="iparam:customer_receiver" value="${MTS_TransferP2Pcustomer_receiver}" />
       <set item="iparam:money" value="${MTS_TransferP2Pmoney}" />
+      <set item="iparam:sourceid" value="${MTS_TransferP2Psourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -6569,7 +6565,7 @@
   </template>
   <template procedureName="Transfer_P2P">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}">
           <Service id="movepaymentrequest" action="5">
             <Attribute name="receiver" value="${customer_receiver}" />
@@ -6604,6 +6600,7 @@
       <param name="customer" />
       <param name="customer_receiver" />
       <param name="money" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -6622,11 +6619,13 @@
         </Item>
         @{store(MTS_ConfirmP2Pcustomer,${customer})}
         @{store(MTS_ConfirmP2Pcode,${code})}
+        @{store(MTS_ConfirmP2Psourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="Confirm_P2P">
       <set item="iparam:customer" value="${MTS_ConfirmP2Pcustomer}" />
       <set item="iparam:code" value="${MTS_ConfirmP2Pcode}" />
+      <set item="iparam:sourceid" value="${MTS_ConfirmP2Psourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -6646,7 +6645,7 @@
   </template>
   <template procedureName="Confirm_P2P">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}">
           <Service id="movepaymentacceptance" action="5">
             <Attribute name="code" value="${code}" />
@@ -6663,6 +6662,7 @@
     <input>
       <param name="customer" />
       <param name="code" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -6683,12 +6683,14 @@
         @{store(DetBalcustomer,${customer})}
         @{store(DetBaladdress,${address})}
         @{store(DetBaldocformat,${docformat})}
+        @{store(DetBalsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="DetailedBalance">
       <set item="iparam:customer" value="${DetBalcustomer}" />
       <set item="iparam:address" value="${DetBaladdress}" />
       <set item="iparam:docformat" value="${DetBaldocformat}" />
+      <set item="iparam:sourceid" value="${DetBalsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -6709,7 +6711,7 @@
   </template>
   <template procedureName="DetailedBalance">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}">
           <Service action="4" id="otdetailedbalance">
             <Attribute name="methoddelivery" value="Email" />
@@ -6727,6 +6729,7 @@
       <param name="customer" />
       <param name="address" />
       <param name="docformat" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -7335,11 +7338,13 @@
         </Item>
         @{store(CheckChangeTPcustomer,${customer})}
         @{store(CheckChangeTPTariffPlan,${tariffplan})}
+        @{store(CheckChangeTPsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='rez']/@value}'='1'}" call="ChangeTariffPlan">
       <set item="iparam:PhoneNumber" value="${CheckChangeTPcustomer}" />
       <set item="iparam:TariffPlan" value="${CheckChangeTPTariffPlan}" />
+      <set item="iparam:sourceid" value="${CheckChangeTPsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -7356,7 +7361,7 @@
   </template>
   <template procedureName="ChangeTariffPlan">
     <receiveTemplate>
-      <Message type="serviceorder" initiator="USSD" id="${guid}" session_id="@{newGuid}">
+      <Message type="serviceorder" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${PhoneNumber}">
           <Service id="changetariffplan" action="0" class="${TariffPlan}" needtarification="1" createrequest="1" />
         </Item>
@@ -7368,6 +7373,7 @@
     <input>
       <param name="PhoneNumber" />
       <param name="TariffPlan" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="RESULT" />
@@ -7450,11 +7456,13 @@
         </Item>
         @{store(AddNewFavNumcustomer,${customer})}
         @{store(AddNewFavNumfavnum,${favnum})}
+        @{store(AddNewFavNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="ValidationByMSISDN_add">
       <set item="iparam:customer" value="${AddNewFavNumcustomer}" />
       <set item="iparam:favnum" value="${AddNewFavNumfavnum}" />
+      <set item="iparam:sourceid" value="${AddNewFavNumfavsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -7489,11 +7497,13 @@
         </Item>
         @{store(AddNewFavNumcustomer,${customer})}
         @{store(AddNewFavNumfavnum,${favnum})}
+        @{store(AddNewFavNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="matches(/Message/Item/Attribute[@name='p_Tariffplan']/@value,(212|213|214|215|1212|1213|1214|1215) }" call="AddNewFavNum">
       <set item="iparam:customer" value="${AddNewFavNumcustomer}" />
       <set item="iparam:favnum" value="${AddNewFavNumfavnum}" />
+      <set item="iparam:sourceid" value="${AddNewFavNumfavsourceid}" />
       <set item="iparam:favouritenumtype" value="40" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
@@ -7505,6 +7515,7 @@
     <input>
       <param name="customer" />
       <param name="favnum" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="result_code" />
@@ -7512,7 +7523,7 @@
   </template>
   <template procedureName="AddNewFavNum">
     <receiveTemplate>
-      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Message type="setprofile" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}" action="10">
           <Attribute name="favouritenumber" value="${favnum}" />
           <Attribute name="index" value="0" />
@@ -7528,6 +7539,7 @@
       <param name="customer" />
       <param name="favnum" />
       <param name="favouritenumtype" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -7546,11 +7558,13 @@
         </Item>
         @{store(DeleteNewFavNumcustomer,${customer})}
         @{store(DeleteNewFavNumfavnum,${favnum})}
+        @{store(DeleteNewFavNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="ValidationByMSISDN_del">
       <set item="iparam:customer" value="${DeleteNewFavNumcustomer}" />
       <set item="iparam:favnum" value="${DeleteNewFavNumfavnum}" />
+      <set item="iparam:sourceid" value="${DeleteNewFavNumfavsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -7585,11 +7599,13 @@
         </Item>
         @{store(DeleteNewFavNumcustomer,${customer})}
         @{store(DeleteNewFavNumfavnum,${favnum})}
+        @{store(DeleteNewFavNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="matches(/Message/Item/Attribute[@name='p_Tariffplan']/@value,(212|213|214|215|1212|1213|1214|1215) }" call="DeleteFavoriteNum">
       <set item="iparam:customer" value="${DeleteNewFavNumcustomer}" />
       <set item="iparam:favnum" value="${DeleteNewFavNumfavnum}" />
+      <set item="iparam:sourceid" value="${DeleteNewFavNumfavsourceid}" />
       <set item="iparam:favouritenumtype" value="40" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
@@ -7601,6 +7617,7 @@
     <input>
       <param name="customer" />
       <param name="favnum" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="result_code" />
@@ -7608,7 +7625,7 @@
   </template>
   <template procedureName="DeleteFavoriteNum">
     <receiveTemplate>
-      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Message type="setprofile" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}" action="11">
           <Attribute name="favouritenumber" value="${favnum}" />
           <Attribute name="index" value="0" />
@@ -7624,6 +7641,7 @@
       <param name="customer" />
       <param name="favnum" />
       <param name="favouritenumtype" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />
@@ -7643,12 +7661,14 @@
         @{store(UpdateFavouriteNumcustomer,${customer})}
         @{store(UpdateFavouriteNumfavnum,${favnum})}
         @{store(UpdateFavouriteNumfavnumnew,${favnumnew})}
+        @{store(UpdateFavouriteNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="ValidationByMSISDN_update">
       <set item="iparam:customer" value="${UpdateFavouriteNumcustomer}" />
       <set item="iparam:favnum" value="${UpdateFavouriteNumfavnum}" />
       <set item="iparam:favnumnew" value="${UpdateFavouriteNumfavnumnew}" />
+      <set item="iparam:sourceid" value="${UpdateFavouriteNumfavsourceid}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate>
@@ -7685,12 +7705,14 @@
         @{store(UpdateFavouriteNumcustomer,${customer})}
         @{store(UpdateFavouriteNumfavnum,${favnum})}
         @{store(UpdateFavouriteNumfavnumnew,${favnumnew})}
+        @{store(UpdateFavouriteNumfavsourceid,${sourceid})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="matches(/Message/Item/Attribute[@name='p_Tariffplan']/@value,(212|213|214|215|216|1212|1213|1214|1215|1216) }" call="UpdateFavouriteNum">
       <set item="iparam:customer" value="${UpdateFavouriteNumcustomer}" />
       <set item="iparam:favnum" value="${UpdateFavouriteNumfavnum}" />
       <set item="iparam:favnumnew" value="${UpdateFavouriteNumfavnumnew}" />
+      <set item="iparam:sourceid" value="${UpdateFavouriteNumfavsourceid}" />
       <set item="iparam:favouritenumtype" value="40" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
@@ -7704,6 +7726,7 @@
       <param name="customer" />
       <param name="favnum" />
       <param name="favnumnew" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="result_code" />
@@ -7711,7 +7734,7 @@
   </template>
   <template procedureName="UpdateFavouriteNum">
     <receiveTemplate>
-      <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
+      <Message type="setprofile" initiator="_src_id_" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}" action="9">
           <Attribute name="favouritenumber" value="${favnum}" />
           <Attribute name="favouritenumbernew" value="${favnumnew}" />
@@ -7731,6 +7754,7 @@
       <param name="favnum" />
       <param name="favnumnew" />
       <param name="favouritenumtype" />
+      <param name="sourceid" />
     </input>
     <output>
       <param name="dbresult" />

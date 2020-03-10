@@ -29,8 +29,7 @@
     <Item name="UtcOffset" value="08+" />
   </Settings>
   <SMSCenters>
-    <!--Connection host="172.24.224.6" port="900" systemId="tolya" pass="uit"  /-->
-    <Connection host="localhost" port="900" systemId="tolya" pass="uit" />
+    <Connection host="172.24.224.6" port="900" systemId="tolya" pass="uit"  />
   </SMSCenters>
   <Anumbertransformations />
   <TemplateProcessors defaultConfig="SMSTemplateProcessor.TEST.xml">

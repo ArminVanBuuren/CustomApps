@@ -1,4 +1,4 @@
-<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
+﻿<Application configClass="FORIS.MessagingGateway.Configuration.CommonConfiguration">
   <Connections>
     <Database forisDataKey="MG" interfacePackage="API" cmdTimeout="0" />
     <Connector name="EMAILCON_01" type="EMAILCON" host="localhost" port="6660" sessionHandler="false" serviceName="FORIS.MG.EMAILCON_01" config="Configuration\EMAILCON\EMAILCON_01.exe.xml" />

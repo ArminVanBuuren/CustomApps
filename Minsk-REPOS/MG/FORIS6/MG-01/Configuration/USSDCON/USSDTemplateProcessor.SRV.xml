@@ -169,11 +169,11 @@
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Извините. Информация временно недоступна." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму ${amount} р. принят." />
+      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму #{${amount} div 100} р. принят." />
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
       <set item="Content" condition="//Item/@dbresult=320112" value="Срочный кредит недоступен." />
-      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - ${amount} р. Для ввода наберите *114*сумма#." />
+      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - #{${amount} div 100} р. Для ввода наберите *114*сумма#." />
       <set item="Content" conditionEx="#{('${amount}' = 0 and '${dbresult}'= 320113) }" value="Услуга Вам недоступна.Воспользуйтесь ОП *113*сумма# (до 5 р.)" />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
       <set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести срочный кредит на Вашем тарифном плане." />
@@ -324,11 +324,11 @@
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Извините. Информация временно недоступна." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму ${amount} р. принят." />
+      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму #{${amount} div 100} р. принят." />
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
       <set item="Content" condition="//Item/@dbresult=320112" value="Срочный кредит недоступен." />
-      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - ${amount} р. Для ввода наберите *114*сумма#." />
+      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - #{${amount} div 100} р. Для ввода наберите *114*сумма#." />
       <set item="Content" conditionEx="#{('${amount}' = 0 and '${dbresult}'= 320113) }" value="Услуга Вам недоступна.Воспользуйтесь ОП *113*сумма# (до 5 р.)" />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
       <set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести срочный кредит на Вашем тарифном плане." />
@@ -430,11 +430,11 @@
     <retry delay="1" attempts="0" />
     <deliveryTemplate>
       <set item="Content" value="Извините. Информация временно недоступна." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму ${amount} р. принят." />
+      <set item="Content" condition="//Item/@dbresult=0" value="Срочный кредит на сумму #{${amount} div 100} р. принят." />
       <set item="Content" condition="//Item/@dbresult=320203" value="Регистрация запрещена - предыдущий обещанный платеж не оплачен." />
       <set item="Content" condition="//Item/@dbresult=320111" value="Превышена разрешенная сумма обещанного платежа." />
       <set item="Content" condition="//Item/@dbresult=320112" value="Срочный кредит недоступен." />
-      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - ${amount} р. Для ввода наберите *114*сумма#." />
+      <set item="Content" conditionEx="#{('${amount}' &gt; 0 and '${dbresult}'= 320113) }" value="Макс. сумма - #{${amount} div 100} р. Для ввода наберите *114*сумма#." />
       <set item="Content" conditionEx="#{('${amount}' = 0 and '${dbresult}'= 320113) }" value="Услуга Вам недоступна.Воспользуйтесь ОП *113*сумма# (до 5 р.)" />
       <set item="Content" condition="//Item/@dbresult=320121" value="Платеж не может быть зарегистрирован." />
       <set item="Content" condition="//Item/@dbresult=320341" value="Нельзя ввести срочный кредит на Вашем тарифном плане." />

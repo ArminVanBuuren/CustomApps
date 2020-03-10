@@ -39,7 +39,6 @@
   </Settings>
   <SMSCenters>
     <Connection host="10.84.176.246" port="7042" systemType="ussd" systemId="admin" pass="admin" />
-    <!-- <Connection host="localhost" port="7042" systemType="ussd" systemId="admin" pass="admin" /> -->
   </SMSCenters>
   <Anumbertransformations>
     <!-- Configuration for St-Peterburg region -->
