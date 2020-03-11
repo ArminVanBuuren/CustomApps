@@ -155,20 +155,6 @@
 	<deliveryTemplate dropReply="true" /> 
 	 </template> 	 
 -->
-	 
-	<template procedureName="DeliveryRequestIssa" persistent="false">
-	<retry delay="300" attempts="2" />
-	<deliveryTemplate>
-      <set item="Content" value="#{//Content/text()}" />
-      <set item="Sender" value="#{if(substring('${Sender}',1,3)='375','1241${Sender}','0870')}" />
-      <set item="Recipient" value="${customer}" />
-      <set item="Encoding" value="#{//Content/@charset}" />
-      <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" />
-      <set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" />
-	</deliveryTemplate> 
-	</template> 
-
 
 <!--	<template procedureName="DeliveryRequestIssa" persistent="false">
         <condition>
