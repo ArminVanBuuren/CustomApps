@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Сервера");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Типы");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Сервера");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Типы");
             this.txtText = new System.Windows.Forms.TextBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.server = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -46,6 +46,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
+            this.useRegex = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -55,7 +56,6 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtText
@@ -135,13 +135,13 @@
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(0, 0);
             this.trvMain.Name = "trvMain";
-            treeNode5.Name = "trvServers";
-            treeNode5.Text = "Сервера";
-            treeNode6.Name = "trvTypes";
-            treeNode6.Text = "Типы";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Сервера";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Типы";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(126, 517);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -149,7 +149,7 @@
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Location = new System.Drawing.Point(969, 6);
+            this.btnSearch.Location = new System.Drawing.Point(879, 6);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 3;
@@ -160,7 +160,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(1050, 6);
+            this.btnClear.Location = new System.Drawing.Point(960, 5);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 3;
@@ -174,7 +174,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPattern.Location = new System.Drawing.Point(12, 8);
             this.txtPattern.Name = "txtPattern";
-            this.txtPattern.Size = new System.Drawing.Size(951, 20);
+            this.txtPattern.Size = new System.Drawing.Size(861, 20);
             this.txtPattern.TabIndex = 4;
             // 
             // pgbThreads
@@ -240,11 +240,24 @@
             this.StatusTextLable.Name = "StatusTextLable";
             this.StatusTextLable.Size = new System.Drawing.Size(0, 17);
             // 
+            // useRegex
+            // 
+            this.useRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.useRegex.AutoSize = true;
+            this.useRegex.Location = new System.Drawing.Point(1041, 8);
+            this.useRegex.Name = "useRegex";
+            this.useRegex.Size = new System.Drawing.Size(79, 17);
+            this.useRegex.TabIndex = 9;
+            this.useRegex.Text = "Use Regex";
+            this.useRegex.UseVisualStyleBackColor = true;
+            this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1137, 597);
+            this.Controls.Add(this.useRegex);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.pgbThreads);
@@ -264,8 +277,6 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,6 +300,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
+        private System.Windows.Forms.CheckBox useRegex;
     }
 }
 

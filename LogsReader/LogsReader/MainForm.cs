@@ -20,6 +20,7 @@ namespace LogsReader
     {
         private bool _isWorked = false;
         private bool _isStopPending = false;
+        private Func<string, bool> _isMatch = null;
         Regex _maskRegex = null;
         public LogsReaderSettings Settings { get; private set; }
         private MTFuncResult<FileLog, List<DataTemplate>> _multiTasking;
@@ -124,6 +125,7 @@ namespace LogsReader
             txtPattern.Enabled = !_isWorked;
             dgvFiles.Enabled = !_isWorked;
             txtText.Enabled = !_isWorked;
+            useRegex.Enabled = !_isWorked;
         }
 
         void CheckProgress()
@@ -162,61 +164,78 @@ namespace LogsReader
 
         private List<DataTemplate> ReadData(FileLog fileLog)
         {
-            var lastTraceLines = new Stack<string>(10);
+            const int maxLinesStack = 10;
+            var beforeTraceLines = new Stack<string>(maxLinesStack);
             var listResult = new List<DataTemplate>();
             using (var inputStream = File.OpenRead(fileLog.FilePath))
             {
                 using (var inputReader = new StreamReader(inputStream))
                 {
-                    var isLastWasSuccess = false;
+                    int stackLines = 0;
                     string line;
+                    DataTemplate lastResult = null;
                     while ((line = inputReader.ReadLine()) != null && !_isStopPending)
                     {
-                        if (isLastWasSuccess)
+                        if (lastResult != null)
                         {
-                            if (!_maskRegex.IsMatch(line))
+                            if (stackLines <= maxLinesStack)
                             {
-                                listResult.Last().Message += Environment.NewLine + line;
-                                continue;
+                                if (!lastResult.IsMatched)
+                                    listResult.Add(lastResult);
+                                stackLines = 0;
+                                lastResult = null;
                             }
-                            else
+
+                            if (lastResult != null)
                             {
-                                isLastWasSuccess = false;
+                                if (lastResult.IsMatched && !IsLineMatched(line, fileLog, out _))
+                                {
+                                    stackLines++;
+                                    lastResult.Message = lastResult.Message + Environment.NewLine + line;
+                                    continue;
+                                }
+                                else if (!lastResult.IsMatched && IsLineMatched(lastResult.Message + Environment.NewLine + line, fileLog, out var afterResult))
+                                {
+                                    listResult.Add(afterResult);
+                                    lastResult = afterResult;
+                                }
                             }
                         }
-                        
-                        if (line.IndexOf(txtPattern.Text, StringComparison.CurrentCultureIgnoreCase) == -1)
+
+                        if (!_isMatch.Invoke(line))
                         {
-                            lastTraceLines.Push(line);
-                            if (lastTraceLines.Count >= 10)
-                                lastTraceLines.Pop();
+                            beforeTraceLines.Push(line);
+                            if (beforeTraceLines.Count >= maxLinesStack)
+                                beforeTraceLines.Pop();
                             continue;
                         }
 
-                        if (!IsAppendMatched(line, fileLog, listResult))
+                        if (IsLineMatched(line, fileLog, out lastResult))
                         {
-                            var isMatched = false;
-                            var builder = new StringBuilder();
-                            var lastline = line;
-                            while (lastTraceLines.Count > 0)
+                            listResult.Add(lastResult);
+                        }
+                        else
+                        {
+                            lastResult.Message = line;
+                            while (stackLines <= maxLinesStack && beforeTraceLines.Count > 0)
                             {
-                                lastline = lastTraceLines.Pop() + Environment.NewLine + lastline;
+                                stackLines++;
+                                lastResult.Message = beforeTraceLines.Pop() + Environment.NewLine + lastResult.Message;
 
-                                if (IsAppendMatched(lastline, fileLog, listResult))
+                                if (IsLineMatched(lastResult.Message, fileLog, out var beforeResult))
                                 {
-                                    isMatched = true;
+                                    lastResult = beforeResult;
                                     break;
-                                }
-
-                                if (!isMatched)
-                                {
-
                                 }
                             }
                         }
 
-                        lastTraceLines.Clear();
-                        isLastWasSuccess = true;
+                        beforeTraceLines.Clear();
+                    }
+
+                    if (lastResult != null && !lastResult.IsMatched)
+                    {
+                        listResult.Add(lastResult);
                     }
                 }
             }
@@ -238,22 +257,29 @@ namespace LogsReader
             return listResult;
         }
 
-        bool IsAppendMatched(string line, FileLog fileLog, ICollection<DataTemplate> listResult)
+        bool IsLineMatched(string line, FileLog fileLog, out DataTemplate result)
         {
             var maskMatch = _maskRegex.Match(line);
             if (maskMatch.Success)
             {
-                listResult.Add(new DataTemplate
+                result = new DataTemplate
                 {
+                    IsMatched = true,
                     Server = fileLog.Server,
                     Date = maskMatch.Groups["Date"].Value,
                     FileName = fileLog.FileName,
                     TraceType = maskMatch.Groups["TraceType"].Value,
                     Message = maskMatch.Groups["Message"].Value
-                });
+                };
                 return true;
             }
 
+            result = new DataTemplate
+            {
+                IsMatched = false,
+                Server = fileLog.Server,
+                FileName = fileLog.FileName
+            };
             return false;
         }
 
@@ -304,6 +330,19 @@ namespace LogsReader
         private void dgvFiles_SelectionChanged(object sender, EventArgs e)
         {
             txtText.Text = dgvFiles.CurrentRow.Cells[4].Value.ToString();
+        }
+
+        private void useRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            if (useRegex.Checked)
+            {
+                var searchPattern = new Regex(txtPattern.Text, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                _isMatch = (input) => searchPattern.IsMatch(input);
+            }
+            else
+            {
+                _isMatch = (input) => input.IndexOf(txtPattern.Text, StringComparison.CurrentCultureIgnoreCase) != -1;
+            }
         }
     }
 }

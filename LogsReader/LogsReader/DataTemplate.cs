@@ -9,6 +9,8 @@ namespace LogsReader
 {
     public class DataTemplate
     {
+        public bool IsMatched { get; set; }
+
         [DGVColumn(ColumnPosition.First, "Server")]
         public string Server { get; set; }
 
