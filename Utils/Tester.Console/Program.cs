@@ -48,6 +48,12 @@ namespace Tester.Console
 
                 //}
 
+                var sss = "<TEST><node/><!-- test11 --></TEST>";
+                if (sss.IsXml(out var documnet))
+                {
+                    var fff = documnet.PrintXml(15);
+                }
+
                 var obj = new object();
                 var iter = 0;
                 var actions = new List<int>();

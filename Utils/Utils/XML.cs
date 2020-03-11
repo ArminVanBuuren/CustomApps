@@ -898,21 +898,33 @@ namespace Utils
 
         #endregion
 
-        public static string PrintXml(string xmlString)
+        /// <summary>
+        /// Красиво отформатировать XML документ
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <param name="removeCommentsAfter">Удалить комментарий после определенной длинны</param>
+        /// <returns></returns>
+        public static string PrintXml(string xmlString, int removeCommentsAfter = -1)
         {
             var xml = new XmlDocument();
             xml.LoadXml(xmlString);
-            return xml.PrintXml();
+            return xml.PrintXml(removeCommentsAfter);
         }
 
-        public static string PrintXml(this XmlDocument xml)
+        /// <summary>
+        /// Красиво отформатировать XML документ
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="removeCommentsAfter">Удалить комментарий после определенной длинны</param>
+        /// <returns></returns>
+        public static string PrintXml(this XmlDocument xml, int removeCommentsAfter = -1)
         {
             var source = new StringBuilder(xml.OuterXml.Length + 100);
-            ProcessXmlInnerText(xml.DocumentElement, source, 0);
+            ProcessXmlInnerText(xml.DocumentElement, source, 0, removeCommentsAfter);
             return source.ToString();
         }
 
-        static bool ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested)
+        static bool ProcessXmlInnerText(XmlNode node, StringBuilder source, int nested, int removeCommentsAfter)
         {
             var whiteSpaces = new string(' ', nested);
 
@@ -948,6 +960,14 @@ namespace Utils
                         }
 
                     case "#comment":
+                        var outerComment = node.OuterXml.Trim();
+                        if (removeCommentsAfter <= -1 || outerComment.Length <= removeCommentsAfter)
+                        {
+                            source.Append(Environment.NewLine);
+                            source.Append(whiteSpaces);
+                            source.Append(outerComment);
+                        }
+                        break;
                     case "#cdata-section":
                         source.Append(Environment.NewLine);
                         source.Append(whiteSpaces);
@@ -991,7 +1011,7 @@ namespace Utils
                     var addNewLine = true;
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
-                        addNewLine = ProcessXmlInnerText(node2, source, nested);
+                        addNewLine = ProcessXmlInnerText(node2, source, nested, removeCommentsAfter);
                     }
 
                     if (node.ChildNodes.Count == 1 && !addNewLine)
