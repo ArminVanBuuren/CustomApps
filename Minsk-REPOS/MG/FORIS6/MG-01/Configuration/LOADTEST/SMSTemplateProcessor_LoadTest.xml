@@ -191,18 +191,6 @@
         </Item>
       </Message>
     </receiveTemplate>
-    <!--		<deliveryTemplate conditionEx="#{'${sGroupType}'='MAXIDUET'}" call="AddToGroup1_MAXIDUET">            
-			<set item="Content" value="AddToGroup1(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{store(sAlreadyInvited,1)}" />
-            <set conditionEx="0@{store(sInviter,${sInviter})}" />
-            <set conditionEx="0@{store(sInvited,${sInvited})}" />
-			<set conditionEx="0@{store(sTryCount,1)}" />
-            <set conditionEx="0@{store(sGroupType,${sGroupType})}" />
-        </deliveryTemplate>
--->
     <deliveryTemplate conditionEx="#{'${sGroupType}'='TEST_GROUP'}" call="AddToGroup1_TEST_GROUP">
       <set item="Content" value="AddToGroup1(0*${sInvited})" />
       <set item="Sender" value="${sInviter}" />
@@ -338,53 +326,6 @@
     </deliveryTemplate>
   </template>
   <!-- END group Duet SMS -->
-  <!-- Udalit Begin group Dialog SMS
-  <template procedureName="AddToGroupMAXIDuet" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
-        <condition>
-            <test item="${Recipient}" matches="^_MI_MAXIDUET_SERVICE_NUMBER$" />
-            <test item="${Content}" matches="^[0-9]{11}$" />
-        </condition>                                    
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(MAXIDUET7#{substring('${token0}',string-length('${token0}')-9)})}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                    <Attribute name="grouptype" value="@{switch(${Recipient}|UNDEFINED,_MI_SERVICE_NUMBER|DUET,_MI_ISSA_NUMBER|MTSGROUP,_DUET_ISSA_NUMBER|DUET,_MI_MAXIDUET_SERVICE_NUMBER|MAXIDUET)}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Content"   value="У абонента ${sInvited} есть ваше активное приглашение. Чтобы принять его абонент ${sInvited} должен отправить СМС со словом DA на номер _MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Content"   value="У абонента ${sInvited} есть активное приглашение в другую группу." />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${Customer}'='7#{substring('${session_id}',string-length('${session_id}')-9)}'}">
-             <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-             <set item="Recipient" value="${Customer}" />
-             <set item="Content"   value="Номер приглашенного абонента ${Customer} совпадает с вашим. Заявка не принята" />
-             <set item="Encoding" value="unicodefffe" />
-             <set conditionEx="0@{freeSession}"  /> 
-        </deliveryTemplate>        
-        <deliveryTemplate direction="input" call="AddToGroup1_MAXIDUET">            
-            <set item="Content"   value="AddToGroup1(7#{substring('${session_id}',string-length('${session_id}')-9)})" />
-            <set item="Sender" value="${customer}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{store(sAlreadyInvited,1)}" />
-            <set conditionEx="0@{store(sInviter,${Customer})}" />
-            <set conditionEx="0@{store(sInvited,7#{substring('${session_id}',string-length('${session_id}')-9)})}" />
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set conditionEx="0@{store(sGroupType,${grouptype})}" />
-        </deliveryTemplate>
-  </template>
- Udalit END group Dialog SMS-->
   <!-- Begin Proverka i Udalenie DIALOG -->
   <template procedureName="ListOfGroupMAXIDuet" secretMarker="##" secretText="******">
     <condition>
@@ -445,291 +386,6 @@
     </deliveryTemplate>
   </template>
   <!-- END Proverka i Udalenie DIALOG -->
-  <!--Udalit eto DIALOG Dobavlenie
-  <template procedureName="AddToGroup1_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInviter}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})=5}">
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-			<set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup1_MAXIDUET">            
-			<set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
-			<set item="Content" value="AddToGroup1(0*${sInvited}*${sTryCount})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=320060}">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Content"   value="Отсутствуют права на проведение операции." />
-	<set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="Отсутствуют права на проведение операции." />
-	<set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="Отсутствуют права на проведение операции." />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>		
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Content"   value="Отправить приглашение может только абонент ТП 'МЫ' " />
-			<set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна" />
-			<set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup2_MAXIDUET" conditionEx="#{${dbresult}=0 }">  
-            <set conditionEx="0@{store(sInviterRegion,${regioncode})}"  />
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set item="Content" value="AddToGroup2(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup2_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInvited}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})>5}">
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup2_MAXIDUET">            
-            <set conditionEx="0@{store(sTryCount,#{number('${sTryCount}')+1})}" />
-            <set item="Content" value="AddToGroup2(0*${sInvited}*${sTryCount})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
-            <set item="Content"   value="На тарифном плане абонента ${sInvited} услуга недоступна" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and '${regioncode}'!='${sInviterRegion}'}">            
-	<set item="Content"   value="Добавление абонента ${sInvited} невозможно, он из другого региона" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-        <deliveryTemplate call="AddToGroup3_MAXIDUET" conditionEx="#{${dbresult}=0 }"> 
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set item="Content" value="AddToGroup3(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup3_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInviter}" action="2"  >                    
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="@{switch(${sGroupType}|-1,MTSGROUP|44822,DUET|44824,MAXIDUET|44826)}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and string-length('${grouplisting}') >= @{switch('${sGroupType}'|-1,'MTSGROUP'|_MAX_LIST_LENGTH,'DUET'|_MAX_DUET_LIST_LENGTH,'MAXIDUET'|_MAX_MAXIDUET_LIST_LENGTH)} }">
-            <set item="Content"   value="Превышен лимит абонентов в группе" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup4_MAXIDUET"> 
-            <set item="Content" value="AddToGroup4(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup4_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInvited}" action="2"  > 
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="3" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and not (contains('${grouplisting}','${sInviter}'))}">
-			<set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}" />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup4A_MAXIDUET"> 
-            <set item="Content" value="AddToGroup4A(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup4A_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInvited}" action="2"  > 
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="4" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and not (contains('${grouplisting}','${sInviter}'))}">
-			<set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}" />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup4B_MAXIDUET"> 
-            <set item="Content" value="AddToGroup4B(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>  
-
-  <template procedureName="AddToGroup4B_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInvited}" action="2"  > 
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="2" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and not (contains('${grouplisting}','${sInviter}'))}">
-			<set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}" />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup5_MAXIDUET"> 
-            <set item="Content" value="AddToGroup5(0*${sInvited})" />
-            <set item="Sender" value="${sInviter}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup5_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInvited}" action="2"  > 
-                    <Attribute name="groupmember" value="0" />
-                    <Attribute name="index" value="@{switch(${sGroupType}|-1,MTSGROUP|44822,DUET|44824,MAXIDUET|44826)}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and not (contains('${grouplisting}','${sInviter}'))}">
-            <set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{'${grouplisting}'!='' and contains('${grouplisting}','${sInviter}')}">
-	<set item="Content"   value="Абонент ${sInvited} уже входит в состав вашей группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}" />
-        </deliveryTemplate>
-        <deliveryTemplate terminating="false" conditionEx="#{${dbresult}=0}">            
-			<set item="Content"   value="Абоненту ${sInvited} отправлено ваше приглашение в группу" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0}">
-            <set item="Content" value="Priglashenie v gruppu ot abonenta ${sInviter}. Otvet na nomer _MI_SERVICE_NUMBER s slovom DA - priniat, NET - otkazatsia" />
-            <set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="Приглашение в группу Дуэт от ${sInviter}.Ответьте ДА или НЕТ на  _MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="Приглашение в группу Диалог от ${sInviter}.Ответьте ДА или НЕТ на  _MI_MAXIDUET_SERVICE_NUMBER" />			
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate>
-	<set item="Content" value="Ошибка при проверке состава группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />			
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="DelInvitation_MAXIDUET" sessionStorage="Database" sessionLifetime="86400" persistent="true">
-      <condition>
-            <test item="${Recipient}" matches="^_MI_MAXIDUET_SERVICE_NUMBER$" />
-            <test item="${Content}" matches="(^\s*[NnНн][OoОо]\s*$)|(^\s*[NnНн][EeЕе][TtТт]\s*$)" />
-      </condition>
-      <receiveTemplate>
-			<Message id="@{newGuid}" session_id="@{setSessionId(MAXIDUET${Sender})}"> 
-                <Item customer="${Sender}" />
-            </Message>
-      </receiveTemplate>
-      <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'=''}">            
-            <set item="Content"   value="У вас нет активных приглашений" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate direction="input" terminating="false">
-            <set item="Content" value="Абонент ${sInvited} не подтвердил участие в группе. Ваше приглашение аннулировано." />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-      </deliveryTemplate>
-      <deliveryTemplate direction="input">
-            <set item="Content" value="Вы не подтвердили участие в группе. Приглашение аннулировано." />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-      </deliveryTemplate>
-  </template>
--->
   <!-- только для DUET и МЫ -->
   <template procedureName="RULES_AddToGroup_onResponse_DUET_MTS_MAXIDUET" sessionStorage="Database" sessionLifetime="86400" persistent="true" secretMarker="##" secretText="******">
     <condition>
@@ -745,12 +401,6 @@
         @{store(sGroupType,#{if('${sGroupType}'='','MTSGROUP','${sGroupType}')})}
       </Message>
     </receiveTemplate>
-    <!--		<deliveryTemplate call="AddToGroup_onResponse_MAXIDUET" direction="input" conditionEx="#{'${sGroupType}'='MAXIDUET'}" > 
-            <set item="Content" value="MAXIDUET" />
-            <set item="Sender" value="${sInvited}" />
-            <set item="Recipient" value="_MI_SERVICE_NUMBER" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>		-->
     <deliveryTemplate call="AddToGroup_onResponse_DUET" direction="input" conditionEx="#{'${sGroupType}'='DUET'}">
       <set item="Content" value="DUET" />
       <set item="Sender" value="${sInvited}" />
@@ -764,227 +414,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <!--Udalit' eto DIALOG
-  <template procedureName="AddToGroup_onResponse_MAXIDUET" sessionStorage="Database" sessionLifetime="86400" persistent="true">
-        <condition>
-            <test item="${Recipient}" matches="^_MI_MAXIDUET_SERVICE_NUMBER$" />
-            <test item="${Content}" matches="^\s*(([DdДд][AaАа])|([YyУу][EeЕе][SsСс]))\s*$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="@{setSessionId(MAXIDUET${Sender})}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'=''}@{store(sAlreadyInvited,)}">
-            <set item="Content" value="У вас нет активных приглашений" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})>5}">
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInvited}" />
-			<set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup_onResponse_MAXIDUET">            
-            <set conditionEx="0@{store(sTryCount,#{number(${sTryCount})+1})}" />
-            <set conditionEx="0@{store(sAlreadyInvited,1)" />   
-            <set item="Content" value="AddToGroup_onResponse(Da*${sTryCount})" /> 
-            <set item="Sender" value="${sInvited}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}" terminating="false">            
-			<set item="Content"   value="На тарифном плане абонента ${sInvited} услуга недоступна." />
-            <set item="Recipient" value="${sInvited}" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
-            <set item="Content"   value="На тарифном плане абонента ${sInvited} услуга недоступна." />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup_onResponse2_MAXIDUET" conditionEx="#{${dbresult}=0 }"> 
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set conditionEx="0@{store(sInvitedRegion,${regioncode})}"  />
-            <set item="Content" value="AddToGroup_onResponse2_MAXIDUET(Da)" />
-            <set item="Sender" value="${sInvited}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-  </template>
-        
-  <template procedureName="AddToGroup_onResponse2_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${sInviter}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item> 
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1 and number(${sTryCount})>5}">
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInvited}" />
-            <set item="Content"   value="Данный запрос сейчас не может быть выполнен. Повторите пожалуйста позже." />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=-1}" call="AddToGroup_onResponse2_MAXIDUET">            
-	<set conditionEx="0@{store(sTryCount,#{number(${sTryCount})+1})}" />
-	<set item="Content" value="AddToGroup_onResponse2(Da*${sTryCount})" />
-            <set item="Sender" value="${sInvited}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}" terminating="false">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInviter}" />
-            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
-            <set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна." />
-            <set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна." />			
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}!=0}">            
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient" value="${sInvited}" />
-            <set item="Content"   value="Otpravit priglashenie mozhet tolko abonent tarifa 'Mi'. Priglashenie annulirovano." />
-            <set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна." />
-            <set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="На тарифном плане абонента ${sInviter} услуга недоступна." />			
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and '${regioncode}'!='${sInvitedRegion}'}" terminating="false">
-            <set item="Content"   value="Добавление абонента ${sInvited} невозможно, он из другого региона" />
-            <set item="Recipient" value="${sInvited}" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=0 and '${regioncode}'!='${sInvitedRegion}'}">            
-            <set item="Content"   value="Добавление абонента ${sInvited} невозможно, он из другого региона" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Sender"   value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate call="AddToGroup_onResponse3_MAXIDUET" conditionEx="#{${dbresult}=0 }">
-            <set conditionEx="0@{store(sInviterRegion,${regioncode})}"  />
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set item="Sender" value="${sInvited}" />
-            <set item="Recipient" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Content" value="AddToGroup_onResponse3_MAXIDUET(Da)" />
-        </deliveryTemplate>
-  </template>
-
-  <template procedureName="AddToGroup_onResponse3_MAXIDUET" sessionStorage="Database" sessionLifetime="86400">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="customergroup" initiator="smscon" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${Sender}" action="0" > 
-                    <Attribute name="groupmember" value="${sInviter}" />
-                    <Attribute name="index" value="@{switch(${sGroupType}|-1,MTSGROUP|44822,DUET|44824,MAXIDUET|44826)}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320204"  terminating="false">            
-            <set item="Content"   value="На тарифном плане абонента ${sInvited} услуга недоступна. приглашение анулировано" />
-			<set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="Услуга 'Дуэт' на тарифном плане абонента ${sInvited} недоступна." />
-			<set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="Услуга 'Диалог' на тарифном плане абонента ${sInvited} недоступна." />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320204">            
-            <set item="Content"   value="На Вашем тарифном плане услуга недоступна. Приглашение анулировано" />
-			<set item="Content" conditionEx="#{'${sGroupType}'='DUET'}" value="Услуга 'Дуэт' на вашем тарифном плане недоступна." />
-			<set item="Content" conditionEx="#{'${sGroupType}'='MAXIDUET'}" value="Услуга 'Диалог' на вашем тарифном плане недоступна." />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320191" terminating="false">
-            <set item="Content"   value="Недостаточно средств на лицевом счете для выполнения операции" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320191">            
-            <set item="Content"   value="Недостаточно средств на лицевом счете для выполнения операции" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320704" terminating="false">
-            <set item="Content"   value="Есть открытые заявки на обработку. Повторите запрос позже" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320704">             
-            <set item="Content"   value="Есть открытые заявки на обработку. Повторите запрос позже" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320705" terminating="false">             
-            <set item="Content"   value="Превышен лимит абонентов в группе." />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320705">             
-            <set item="Content"   value="Превышен лимит абонентов в группе" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320706" terminating="false">             
-            <set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=320706">             
-            <set item="Content"   value="Абонент ${sInvited} входит в состав другой группы" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=0" terminating="false">            
-			<set item="Content"   value="Заявка на добавление абонента ${sInvited} в группу зарегистрирована" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInviter}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate condition="//Item/@dbresult=0">            
-			<set item="Content"   value="Заявка на добавление в группу зарегистрирована." />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate>            
-            <set item="Recipient"   value="${sInvited}" />
-            <set item="Sender" value="_MI_MAXIDUET_SERVICE_NUMBER" />
-			<set item="Content" value="Операция недоступна. Обратитесь в службу поддержки МТС." />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-  </template>
- End Udalit' eto DIALOG Dobavlenie-->
   <!-- Begin Proverka, Udalenie i Ohibka DIALOG-->
   <template procedureName="ListOfGroup_MAXIDUET" secretMarker="##" secretText="******">
     <condition>
@@ -2286,92 +1715,12 @@
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-  <!-- <template procedureName="CheckLastDetailCost">
-        <condition>
-            <test item="${Sender}" matches="^00111$" />
-	<test item="${Content}" matches="^[0-9]{11}\*check_lastpayment$" />
-        </condition>
-        <receiveTemplate>
-           <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${token0}" subject="last_sms_detail_cost" />
-			</Message>
-
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template> -->
   <!-- Используется для нагрузочного тестирования -->
   <!--  P-t-P -->
-  <!--
-    <template procedureName="PtP" sessionStorage="Memory" sessionLifetime="120" onClean="Notif_onClean">
-        <condition>
-            <test item="${Recipient}" matches="^_PTP_SERVICE_NUMBER$" />
-	    <test item="${Content}" matches="^\+?[0-9]{10,12}\s[1-9]{1}[0-9]*\s*$" />                                    
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-                <Item customer="${Sender}">
-                    <Service id="movepayment" action="5">
-                      <Attribute name="receiver" value="#{replace('${token0}','.*(\d{10})','7$1')}" />
-                      <Attribute name="amount" value="${token1}" />
-                      <Attribute name="PIN" value="#{normalize-space('${token2}')}" />
-                    </Service>
-                </Item>
-            @{store(sService,${Recipient})}
-            @{store(sCustomer,${Sender})}
-            </Message>
-        </receiveTemplate>
-	<deliveryTemplate conditionEx="#{${dbresult}=330140}" forward="ServiceOrderErrorHandler.SendCRMErrorMessage" />
-        <deliveryTemplate direction="input" conditionEx="#{${amount}>300}">
-            <set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Content" value="Maksimalno dostupnaya dlya perevoda summa sostavlyaet 300 rub. Sozdayte zapros snova v formate: Ntelefona Summa PIN" />
-            <set item="Encoding" value="ascii" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate>
-            <set item="Content" value="Peer-to-peer: Oshibka pri perevode sredstv." />            
-            <set item="Content" condition="//Item/@dbresult=0"      value="Vasha zayavka na perevod #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','rub.','u.e')} zaregistrirovana. Gdite SMS s rezultatom" />
-            <set item="Content" condition="//Item/@dbresult=320012" value="Nepravilno nabran PIN" />
-            <set item="Content" condition="//Item/@dbresult=320191" value="Nedostatochno sredstv, dostupnyh dlya perevoda." />
-            <set item="Content" condition="//Item/@dbresult=320312" value="Usluga zablokirovana. Obratites v slujbu podderjki" />
-            <set item="Content" condition="//Item/@dbresult=320701" value="Maksimalno dostupnaya dlya perevoda summa sostavlyaet 300 rub. Sozdayte zapros snova v formate: Ntelefona summa PIN" />
-            <set item="Content" condition="//Item/@dbresult=320702" value="Usluga ne dostupna organizacijam i abonentam kreditnogo metoda rascheta" />
-            <set item="Content" condition="//Item/@dbresult=320703" value="Perevod dannomu abonentu nevozmojen" />
-            <set item="Content" condition="//Item/@dbresult=320704" value="perevod nevozmojen, povtorite pozje" />
-            <set item="Content" condition="//Item/@dbresult=320711" value="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya otpravitelya" />
-            <set item="Content" condition="//Item/@dbresult=320712" value="Prevyshen limit summy na popolnenie balansa drugim abonentam za sutki dlya poluchatelya" />
-
-            <set item="Encoding" value="ascii" />
-            <set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=330154 or ${dbresult}=330155}" forward="ServiceOrderErrorHandler.SendCRMErrorMessage" />
-    </template>
--->
   <template procedureName="Notif_onClean" sessionStorage="Memory" secretMarker="##" secretText="******">
     <condition>
       <test item="0" matches="1" />
     </condition>
-    <!--
-        <receiveTemplate>
-            <Message id="@{newGuid}" session_id="${SessionId}">
-		<Item customer="${Sender}" />
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate terminating="false">
-            <set item="Content"  value="Нет ответа от CRM в течение 2 минут (${sCustomer})" />
-            <set item="Sender" value="${sService}" />
-            <set item="Recipient" value="_4MONITORING" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
--->
     <deliveryTemplate>
       <set item="Content" value="Извините, сервис временно не доступен" />
       <set item="Sender" value="${sService}" />
@@ -2721,9 +2070,6 @@
       <set item="Content" condition="//Item/@dbresult=0" value="#{if(${balanceintpartdotpart}&gt;=0,'Ваш баланс:','Ваша задолженность:')}#{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100}руб." />
       <set item="Content" conditionEx="#{${dbresult}=0 and '${iscredit}'='1'}" value="Ваш кредитный баланс:#{${balanceintpartdotpart} div 100} руб.; кредитный лимит: #{${creditlimitintpartdotpart}  div 100}руб." />
       <set item="Content" conditionEx="#{${dbresult}=0 and count(/Message/Item/accumulators/accumulator)&gt;=1}" value="${Content}. #{/Message/Item/accumulators/@sms}" />
-      <!--		
-		<set item="Content" conditionEx="#{${dbresult}=0 and count(/Message/Item/accumulators/accumulator)>=1}" value="${Content}#{if(/Message/Item/accumulators/accumulator/@id='voicemin',concat(', остаток минут ',/Message/Item/accumulators/accumulator[@id='voicemin']/@val),'')}#{if(/Message/Item/accumulators/accumulator/@id='usedmin',concat(', использовано минут ',/Message/Item/accumulators/accumulator[@id='usedmin']/@val),'')}#{if(/Message/Item/accumulators/accumulator/@id='usedsec',concat(', использовано минут ', round(/Message/Item/accumulators/accumulator[@id='usedsec']/@val div 60)),'')}#{if(/Message/Item/accumulators/accumulator/@id='sms',concat(', СМС ',/Message/Item/accumulators/accumulator[@id='sms']/@val),'')}#{if(/Message/Item/accumulators/accumulator/@id='gprs',concat(', GPRS ', round(/Message/Item/accumulators/accumulator[@id='gprs']/@val div 1048576),' Mb'),'')}#{if(/Message/Item/accumulators/accumulator/@id='voicesec',concat(', остаток минут ',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60)),'')}#{if(/Message/Item/accumulators/accumulator/@id='mms',concat(', ММС ',/Message/Item/accumulators/accumulator[@id='mms']/@val),'')}." />
--->
       <set item="Content" condition="//Item/@dbresult=320343" value="Данная услуга не предоставляется" />
       <set item="Encoding" value="unicodefffe" />
       <set item="Sender" value="088011" />
@@ -3057,33 +2403,6 @@
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{${dbresult}=330154 or ${dbresult}=330155}" forward="ServiceOrderErrorHandler.SendCRMErrorMessage" />
   </template>
-  <!--
-	<template procedureName="MaxiActionMember">
-        <condition>
-            <test item="${Recipient}" matches="^1890$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-                        <Service id="FRAKZ" action="2" class="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-	<deliveryTemplate conditionEx="#{${dbresult}=330140}" forward="ServiceOrderErrorHandler.SendCRMErrorMessage" />
-        <deliveryTemplate>
-            <set item="Content"   value="Ошибка при добавлении услуги 'Заявка на участие в акции'" />
-            <set item="Content" condition="//Item/@dbresult=0" value="Заявка на участие в акции зарегистрирована" />
-            <set item="Content" condition="//Item/@dbresult=320203" value="Добавление услуги 'Заявка на участие в акции' невозможно пока не завершится предыдущая операция" />
-            <set item="Content" condition="//Item/@dbresult=320204" value="Услуга 'Заявка на участие в акции' не предоставляется для вашего тарифного плана" />
-            <set item="Content" condition="//Item/@dbresult=320205" value="Услуга 'Заявка на участие в акции' была добавлена ранее" />
-            <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе для проведения операции" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Sender" value="1890" />
-            <set item="Recipient" value="${customer}" />
-        </deliveryTemplate>
-        <deliveryTemplate conditionEx="#{${dbresult}=330154 or ${dbresult}=330155}" forward="ServiceOrderErrorHandler.SendCRMErrorMessage" />
-	</template>
--->
   <!-- Начало период с 15.07.2008г  по 31.08.2008г Общайся больше  -->
   <template procedureName="Service_Interrogation_CommunicateItIsMore" secretMarker="##" secretText="******">
     <condition>
@@ -3851,54 +3170,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <!--    <template procedureName="DeliveryRequest">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <retry delay="5" attempts="1" />
-        <deliveryTemplate conditionEx="#{document('blacklist.xml')//list/item='${Customer}'}" call="DropDelivery">
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="111" />
-            <set item="Recipient" value="${customer}" />
-        </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{(number(substring-after(substring-before('@{now}',':'),' '))>=20 or 3>number(substring-after(substring-before('@{now}',':'),' '))) and (contains(&quot;#{//Content/text()}&quot;,'избежание')  or contains(&quot;#{//Content/text()}&quot;,'Перевод успешен') or contains(&quot;#{//Content/text()}&quot;,'Иначе') or contains(&quot;#{//Content/text()}&quot;,'израсходован') or contains(&quot;#{//Content/text()}&quot;,'израсходовали') )}">
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="111" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="ValidityPeriod" value="000000160000000R" />
-            <set item="ScheduleDeliveryTime" value="000000130000000R" />
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{(number(substring-after(substring-before('@{now}',':'),' '))>=3 and 9>number(substring-after(substring-before('@{now}',':'),' '))) and (contains(&quot;#{//Content/text()}&quot;,'избежание') or contains(&quot;#{//Content/text()}&quot;,'Перевод успешен') or contains(&quot;#{//Content/text()}&quot;,'Иначе') or contains(&quot;#{//Content/text()}&quot;,'израсходован') or contains(&quot;#{//Content/text()}&quot;,'израсходовали') )}">
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="111" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="ValidityPeriod" value="000000090000000R" />
-            <set item="ScheduleDeliveryTime" value="000000060000000R" />
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-		<deliveryTemplate conditionEx="#{(contains(&quot;#{//Content/text()}&quot;,'избежание') or contains(&quot;#{//Content/text()}&quot;,'Перевод успешен') or contains(&quot;#{//Content/text()}&quot;,'Иначе') or contains(&quot;#{//Content/text()}&quot;,'израсходован') or contains(&quot;#{//Content/text()}&quot;,'израсходовали') )}">
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="111" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="ValidityPeriod" value="000000030000000R" />
-            <set item="ScheduleDeliveryTime" value="" />
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-        <deliveryTemplate>
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="#{if(count(/Message/Package/Item/@sender)>0,/Message/Package/Item/@sender,'111')}" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="#{if(count(/Message/Package/Item/Content/@charset)>0,/Message/Package/Item/Content/@charset,'unicodefffe')}" />
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-       
-    </template>
-
--->
   <template procedureName="DeliveryRequest" secretMarker="##" secretText="******">
     <condition>
       <test item="0" matches="1" />
@@ -4058,45 +3329,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <!-- <template procedureName="CheckBlock" secretMarker="##" secretText="******">
-		<condition>
-			<test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
-			<test item="${Content}" matches="^[0-9]+\srub$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item customer="${Sender}">
-					<Attribute name="checkivrservice" value="0" />
-					<Attribute name="checkblocks" value="1" />
-				</Item>
-				@{store(sContent,${Content})}
-			</Message>
-		</receiveTemplate>
-
-		<deliveryTemplate conditionEx="#{${dbresult}=0 and count(document('op_ban.xml')//tps/tp[@ivr='${tariffplan}'] )>0  }"> 
-            <set item="Content"   value="Услуга не предоставляется на вашем тарифном плане" />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>    
-
-        <deliveryTemplate conditionEx="#{${dbresult}=0}" call="GuarantedPaymentRUR">
-            <set item="Sender" value="${Customer}" />
-            <set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
-
-		<deliveryTemplate>
-			<set item="Content" value="Сервис временно недоступен. Пожалуйста, повторите попытку позже." />
-			<set item="Content" conditionEx="#{${dbresult}=320341}" value="Сообщение, согласованное с МТС о невалидном номере телефона." />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-            <set item="Recipient" value="${Customer}" />
-			<set item="Encoding" value="unicodefffe"/>
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-	</template> -->
   <template procedureName="ErrorCheckBlock" secretMarker="##" secretText="******">
     <condition>
       <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
@@ -4848,7 +4080,6 @@
       <set item="Content" value="Ошибка при переводе средств" />
       <set item="Content" condition="//Item/@dbresult=0" value="Наберите *_USSD_SPONSOR_NUMBER*${code}# для регулярного пополнения баланса абонента ${receiver} на сумму #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е.')} с периодом @{switch(${metric}|-1,DAY|день,WEEK|неделя,MONTH|месяц)}" />
       <set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />
-      <!--<set item="Content" condition="//Item/@dbresult=320701" value="Максимально допустимая для перевода сумма составляет #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е.')}, создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />-->
       <set item="Content" condition="//Item/@dbresult=320701" value="Сумма больше доступной. Создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />
       <set item="Content" condition="//Item/@dbresult=320702" value="Услуга по данному тарифному плану недоступна" />
       <set item="Content" condition="//Item/@dbresult=320703" value="Перевод данному абоненту невозможен" />
@@ -4877,7 +4108,6 @@
       <set item="Content" condition="//Item/@dbresult=0" value="Ваша заявка на перевод #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е')} абоненту ${receiver} зарегистрирована" />
       <set item="Content" conditionEx="#{//Item/@dbresult=0 and '${operation}'='2'}" value="Ваша заявка на удаление получателя ${receiver} зарегистрирована" />
       <set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />
-      <!--<set item="Content" condition="//Item/@dbresult=320701" value="Максимально допустимая для перевода сумма составляет #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е.')}, создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />-->
       <set item="Content" condition="//Item/@dbresult=320701" value="Сумма больше доступной. Создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />
       <set item="Content" condition="//Item/@dbresult=320702" value="Услуга по данному тарифному плану недоступна" />
       <set item="Content" condition="//Item/@dbresult=320703" value="Перевод данному абоненту невозможен" />
@@ -5439,26 +4669,6 @@
     </deliveryTemplate>
   </template>
   <!--BEGIN Мобильная детализация USSD ================================= -->
-  <!-- <template procedureName="CheckLastDetailCost" secretMarker="##" secretText="******">
-        <condition>
-          <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message />
-        </receiveTemplate>
-		
-        <deliveryTemplate>
-		<set item="Content" value="Ошибка информирования о последних списаниях" /> 
-		<set item="Content" condition="//Item/@dbresult=320343" value="Автоинформирование о списаниях для вашего номера не подключено"/>		
-		<set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />			
-		<set item="Content" condition="//Item/@dbresult=-1" value="Сервис временно недоступен. Попробуйте позже"/>
-		<set item="Content"  value="${textlastdetail}"/>
-		<set item="Encoding" value="unicodefffe" />
-		<set item="Sender" value="111" />
-		<set item="Recipient" value="${customer}" />
-		<set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
- </template>  -->
   <template procedureName="CheckLastDetailAll" secretMarker="##" secretText="******">
     <condition>
       <test item="0" matches="1" />
@@ -5591,7 +4801,6 @@
     <deliveryTemplate>
       <set item="Content" value="Ошибка при переводе средств" />
       <set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />
-      <!--<set item="Content" condition="//Item/@dbresult=320701" value="Максимально допустимая для перевода сумма составляет #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е.')}, создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />-->
       <set item="Content" condition="//Item/@dbresult=320701" value="Сумма больше доступной. Создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />
       <set item="Content" condition="//Item/@dbresult=320702" value="Услуга по данному тарифному плану недоступна" />
       <set item="Content" condition="//Item/@dbresult=320703" value="Перевод данному абоненту невозможен" />
@@ -5625,7 +4834,6 @@
       <set item="Content" condition="//Item/@dbresult=0" value="Ваша заявка на перевод #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е')} абоненту ${receiver} зарегистрирована" />
       <set item="Content" conditionEx="#{//Item/@dbresult=0 and '${operation}'='2'}" value="Ваша заявка на удаление получателя ${receiver} зарегистрирована" />
       <set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />
-      <!--<set item="Content" condition="//Item/@dbresult=320701" value="Максимально допустимая для перевода сумма составляет #{${amount} div 100} #{if('${currency}'='810' or '${currency}'='RUB','руб.','у.е.')}, создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />-->
       <set item="Content" condition="//Item/@dbresult=320701" value="Сумма больше доступной. Создайте запрос снова в формате: *_USSD_SPONSOR_NUMBER*[Nтел]*[период(1,2,3)]*[сумма(в валюте счета)]#" />
       <set item="Content" condition="//Item/@dbresult=320702" value="Услуга по данному тарифному плану недоступна" />
       <set item="Content" condition="//Item/@dbresult=320703" value="Перевод данному абоненту невозможен" />
@@ -5979,162 +5187,6 @@
     </deliveryTemplate>
   </template>
   <!-- TEMPLATES FOR SERVICE 'BALANCE OF CHILD': END  -->
-  <!-- TEMPLATES FOR SERVICE 'BALANCE OF CHILD': BEGIN
-	<template procedureName="IsChild_LN" sessionStorage="Database" sessionLifetime="300" onClean="ChildsBalance_onClean_LN">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-        <receiveTemplate>
-          <Message />
-        </receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sParentLN}'=''}" call="DropDelivery">
-			<set item="Content" value="DropDelivery(IsChildLN)" />
-			<set item="Sender" value="${customer}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-		</deliveryTemplate> 
-			<deliveryTemplate conditionEx="#{${dbresult}=0}" call="IsParent_LN">
-			<set item="Content"   value="IsParent*${sParentLN}" />
-			<set item="Sender" value="${sParentLN}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate>
-			<set item="Content"   value="Ошибка авторизации. Операция недоступна" />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-			<set item="Recipient" value="${sParentLN}" />
-			<set item="Encoding" value="unicodefffe" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-	</template>
-
-	<template procedureName="IsParent_LN" sessionStorage="Database" sessionLifetime="300" onClean="ChildsBalance_onClean_LN">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-				<Item customer="${sChildLN}" action="8">
-					<Attribute name="favouritenumber" value="" />
-					<Attribute name="index" value="1" />
-					<Attribute name="favouritenumbertypeid" value="1" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sParentLN}'=''}" call="DropDelivery">
-			<set item="Content" value="DropDelivery*IsParentLN" />
-			<set item="Sender" value="${customer}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{(${dbresult}=0 and '7${favouritenumber}'='${sParentLN}' or (${dbresult}=0 and '${favouritenumber}'='${sParentLN}'))}" call="BalanceOfChild_LN">
-			<set item="Content"   value="BalanceOfChild*${sChildLN}*${favouritenumber}" />
-			<set item="Sender" value="${sParentLN}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=0 and //Item/Attribute[@name='count']/@value>1}"  call="IsParentRecursive_LN">
-			<set item="Content" value="IsParentRecursive*${sChildLN}*${favouritenumber}" />
-			<set item="Sender" value="${sParentLN}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}!=0 or (${dbresult}=0 and //Item/Attribute[@name='count']/@value=0) or (${dbresult}=0 and //Item/Attribute[@name='count']/@value=1 and '7${favouritenumber}'!='${sParentLN}') or (${dbresult}=0 and //Item/Attribute[@name='count']/@value=1 and '${favouritenumber}'!='${sParentLN}')}">
-			<set item="Content" value="Вы не являетесь 'Родительским' номером абонента ${sChildLN}" />
-			<set item="Content" conditionEx="#{${dbresult}=-1}" value="Данный запрос не может быть выполнен" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-			<set item="Recipient" value="${sParent}" />
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate> 		
-	</template>
-
-	<template procedureName="IsParentRecursive_LN" sessionStorage="Database" sessionLifetime="300" onClean="ChildsBalance_onClean_LN">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="setprofile" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-			@{store(sCount,#{if('${sCount}'='',1,number(${sCount}))})}
-				<Item customer="${sChildLN}" action="8">
-					<Attribute name="favouritenumber" value="" />
-					<Attribute name="index" value="#{number(${sCount})+1}" />
-					<Attribute name="favouritenumbertypeid" value="1" />
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sParentLN}'=''}" call="DropDelivery">
-			<set item="Content" value="DropDelivery(IsParentLN)" />
-			<set item="Sender" value="${customer}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{(${dbresult}=0 and '7${favouritenumber}'='${sParentLN}') or (${dbresult}=0 and '${favouritenumber}'='${sParentLN}')}" call="BalanceOfChild_LN">
-			<set item="Content"   value="BalanceOfChild*${sChildLN}*${favouritenumber}" />
-			<set item="Sender" value="${sParentLN}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}=0 and //Item/Attribute[@name='count']/@value>${sCount}+1}"  call="IsParentRecursive_LN">
-			<set conditionEx="0@{store(sCount,#{number(${sCount})+1})}" />
-			<set item="Content" value="IsParentRecursive*${sChildLN}*${favouritenumber}" />
-			<set item="Sender" value="${sParentLN}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-		<deliveryTemplate conditionEx="#{${dbresult}!=0 or number('${sCount}')>3 or (${dbresult}=0 and //Item/Attribute[@name='count']/@value=${sCount}+1 and '7${favouritenumber}'!='${sParentLN}')or (${dbresult}=0 and //Item/Attribute[@name='count']/@value=${sCount}+1 and '${favouritenumber}'!='${sParentLN}')}">  
-			<set item="Content" value="Вы не являетесь 'Родительским' номером абонента ${sChildLN}" />
-			<set item="Content" conditionEx="#{${dbresult}=-1}" value="Данный запрос не может быть выполнен" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-			<set item="Recipient" value="${sParentLN}" />
-			<set conditionEx="0@{freeSession}"  /> 
-		</deliveryTemplate>		
-	</template>
-
-	<template procedureName="BalanceOfChild_LN" sessionStorage="Database" sessionLifetime="300" onClean="ChildsBalance_onClean_LN">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-				<Item customer="${sParentLN}" subject="favouritenumberbalance">
-					<Attribute name="favouritenumber" value="${sChildLN}" />
-					<Attribute name="favouritenumbertypeid" value="1"/>
-					<Attribute name="requestcountertype" value="3"/>
-				</Item>
-			</Message> 
-		</receiveTemplate>
-		<deliveryTemplate conditionEx="#{'${sParentLN}'=''}" call="DropDelivery">
-			<set item="Content" value="DropDelivery(IsParentLN)" />
-			<set item="Sender" value="${customer}" />
-			<set item="Recipient" value="_SMS_SERVICE_NUMBER" />
-		</deliveryTemplate>
-		<deliveryTemplate> 
-			<set item="Content" value="Сервис временно не доступен" />
-			<set item="Content" conditionEx="#{${dbresult}=0}" value="#{if(${balanceintpartdotpart}>=0,'Баланс ребенка ${sChildLN}:','Баланс ребенка ${sChildLN}:  ')} #{/Message/Item/Attribute[@name='balanceintpartdotpart']/@value div 100} руб.  #{translate('${cntdescription}','=',':')}" />
-			<set item="Content" conditionEx="#{${dbresult}=0 and '${iscredit}'='1'}" value="Кредитный баланс ребенка ${sChildLN}: #{${balanceintpartdotpart} div 100} руб., кредитный лимит: #{number(${creditlimitintpartdotpart}) div 100} руб. #{translate('${cntdescription}','=',':')}" />
-		   <set item="Content" conditionEx="#{${dbresult}=0 and count(/Message/Item/accumulators/accumulator)>=1}" value="${Content}#{/Message/Item/accumulators/@smsln} #{translate('${cntdescription}','=',':')}" />
-			<set item="Content" conditionEx="#{${dbresult}=320343}" value="Абоненту ${sChild} услуга 'Запрос баланса' не предоставляется" />
-			<set item="Content" conditionEx="#{${dbresult}=320060}" value="У Вас нет прав на проведение данной операции." />
-			<set item="Content" conditionEx="#{${dbresult}=320956}" value="Вы не являетесь 'Родительским' номером абонента ${sChildLN}" />
-			<set item="Content" conditionEx="#{${dbresult}=320193}" value="Вы не являетесь 'Родительским' номером абонента ${sChildLN}" />
-			<set item="Sender" value="_CHILDS_BALANCE_SERVICE" />
-			<set item="Recipient" value="${sParentLN}" />
-			<set item="Encoding" value="unicodefffe"/>
-			<set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate>
-	</template>
-
-	<template procedureName="ChildsBalance_onClean_LN" sessionStorage="Database" sessionLifetime="300" persistent="false">
-		<condition>
-			<test item="0" matches="1" />
-		</condition>
-		<deliveryTemplate>
-			<set item="Content"  value="Сервис временно недоступен. Пожалуйста, повторите попытку позже" />
-			<set item="Sender" value="_SMS_SERVICE_NUMBER" />
-			<set item="Recipient" value="${sParentLN}" />
-			<set item="Encoding" value="unicodefffe" />
-		</deliveryTemplate>
-	</template>
- TEMPLATES FOR SERVICE 'BALANCE OF CHILD': END  -->
   <!-- Begin Packages -->
   <template procedureName="USSDGetServicePackages" secretMarker="##" secretText="******">
     <condition>
@@ -6260,12 +5312,6 @@
     <deliveryTemplate>
       <set item="Content" value="Сервис временно не доступен" />
       <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
-      <!--            <set item="Content" condition="//Item/@dbresult=320203" value="Добавление услуги 'ЧАТ' невозможно пока не завершится предыдущая операция" />
-            <set item="Content" condition="//Item/@dbresult=320204" value="Услуга 'ЧАТ' не предоставляется для вашего тарифного плана" />
-            <set item="Content" condition="//Item/@dbresult=320205" value="Услуга 'ЧАТ' была добавлена ранее" />
-            <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе  для проведения операции" />
-            <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен" />
--->
       <set item="Encoding" value="unicodefffe" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${customer}" />
@@ -6281,12 +5327,6 @@
     <deliveryTemplate>
       <set item="Content" value="Сервис временно не доступен" />
       <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
-      <!--            <set item="Content" condition="//Item/@dbresult=320203" value="Удаление услуги 'ЧАТ' невозможно пока не завершится предыдущая операция" />
-            <set item="Content" condition="//Item/@dbresult=320204" value="Услуга 'ЧАТ' не предоставляется для вашего тарифного плана" />
-            <set item="Content" condition="//Item/@dbresult=320206" value="Услуга 'ЧАТ' была удалена ранее" />
-            <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе  для проведения операции" />
-            <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен" />
-			-->
       <set item="Encoding" value="unicodefffe" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${customer}" />
@@ -6352,21 +5392,6 @@
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${customer}" />
     </deliveryTemplate>
-    <!--<deliveryTemplate>
-			<set item="Content"   value="Данная услуга для Вас недоступна. Подробности по номеру 05902.1" />
-			<set item="Content" condition="//Item/@dbresult=0" value="Заявка на подключение услуги Индивидуальный кредит принята. Метод расчётов будет изменён на кредитный. Подробности по номеру 05902.1" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-        </deliveryTemplate>
-		
-		<deliveryTemplate conditionEx="#{'${service_id}'='411069'} ">
-			<set item="Content"   value="Данная услуга для Вас недоступна. Подробности по номеру 05902.2" />
-			<set item="Content" condition="//Item/@dbresult=0" value="Заявка на подключение услуги Индивидуальный кредит принята. Метод расчётов будет изменён на кредитный. Подробности по номеру 05902.2" />
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Sender" value="_SMS_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-        </deliveryTemplate>-->
     <deliveryTemplate>
       <set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе для проведения операции" />
       <set item="Content" condition="//Item/@dbresult=320174" value="Смена Вашего тарифного плана на выбранный не предусмотрена." />
@@ -6455,11 +5480,6 @@
     <deliveryTemplate>
       <set item="Content" value="Сервис временно не доступен" />
       <set item="Content" condition="//Item/@dbresult=0" value="Статус перерасчета кредитного лимита изменен" />
-      <!--		<set item="Content" condition="//Item/@dbresult=320204" value="Услуга по данному тарифному плану недоступна" />
-		<set item="Content" condition="//Item/@dbresult=320205" value="Услуга была добавлена ранее" />
-		<set item="Content" condition="//Item/@dbresult=320206" value="Услуга была удалена ранее" />
-		<set item="Content" condition="//Item/@dbresult=320191" value="Недостаточно средств на балансе  для проведения операции" />
--->
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />

@@ -1,20 +1,4 @@
 <templateGroup name="BMS">
-  <!--template procedureName="7070_fake">
-	    <condition>
-        	<test item="${Recipient}" matches="^(7070)$" />
-   	    </condition>
-           <receiveTemplate>
-		<Message>
-			<Item customer="${Sender}"/>
-		</Message>
-           </receiveTemplate>
-       		<deliveryTemplate direction="input">
-		<set item="Content" value="Извините, услуга временно недоступна" />
-		<set item="Sender" value="7070" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Encoding" value="unicodefffe" />
-       		</deliveryTemplate>
-   	</template-->
   <template procedureName="BMS_OrderGift_SMS" sessionStorage="Memory" sessionLifetime="120">
     <condition>
       <test item="${Recipient}" matches="^7070$" />

@@ -1,8 +1,9 @@
-﻿    <define name="_USSD_NUMBER_TEST_GROUP" value="519" />
-    <define name="_TEST_GROUP_INVITE_CODE" value="000" />
-    <define name="_TEST_GROUP_DEL_CODE" value="222" />
-    <define name="_TEST_GROUP_LIST_CODE" value="111" />
-    <define name="_CUGT1_DEL_CODE" value="0" />
-    <define name="_CUGT2_DEL_CODE" value="00" />
-    <define name="_CUGT3_DEL_CODE" value="000" />
-    <define name="_CUGT4_DEL_CODE" value="0000" />
+
+  <define name="_USSD_NUMBER_TEST_GROUP" value="519" />
+  <define name="_TEST_GROUP_INVITE_CODE" value="000" />
+  <define name="_TEST_GROUP_DEL_CODE" value="222" />
+  <define name="_TEST_GROUP_LIST_CODE" value="111" />
+  <define name="_CUGT1_DEL_CODE" value="0" />
+  <define name="_CUGT2_DEL_CODE" value="00" />
+  <define name="_CUGT3_DEL_CODE" value="000" />
+  <define name="_CUGT4_DEL_CODE" value="0000" />

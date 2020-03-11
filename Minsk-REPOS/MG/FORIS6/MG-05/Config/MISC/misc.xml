@@ -1,552 +1,547 @@
-	<!--    MTS_GetBonusBalanceMSISDN              -->
-		<template procedureName="MTS_GetBonusBalanceMSISDN" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item procedureName="BILLING.mg_auth" >
-					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
-					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
-					<Attribute name="i_method" type="STRING" value="MTS_GetBonusBalanceMSISDN" /> 
-					<Attribute name="o_result" type="STRING" /> 
-					<Attribute name="o_message" type="STRING" /> 
-				</Item>
-				@{store(MTSGetBonusBalanceCustomer,${customer})} 
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetBonusBalanceMSISDN" >
-			<set item="iparam:customer" value="${MTSGetBonusBalanceCustomer}" /> 
-			<set conditionEx="0@{freeSession}" /> 
-		</deliveryTemplate>	 
-		<deliveryTemplate>
-			<set item="oparam:result_code" value="${o_result}" />
-			<set item="oparam:result_msg" value="${o_message}" />
-		</deliveryTemplate>	
-		<input>
-			<param name="sourceid" />
-			<param name="sec_code" />
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />		
-		</output>
-	</template>		
-	<template procedureName="GetBonusBalanceMSISDN" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="oms.mobile_app.get_bonus_balance_by_msisdn">
-					<Attribute name="p_msisdn" type="STRING" value="${customer}" /> 
-					<Attribute name="o_balance" type="STRING" /> 
-					<Attribute name="o_end_period_date" type="DATETIME" /> 
-					<Attribute name="o_bal_to_lost" type="STRING" /> 
-					<Attribute name="dbresult" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:balance" condition="//Item/@dbresult='0'" value="${o_balance}" /> 
-			<set item="oparam:balance"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:end_period" condition="//Item/@dbresult='0'" value="${o_end_period_date}" /> 
-			<set item="oparam:end_period"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:balance_lost" condition="//Item/@dbresult='0'" value="${o_bal_to_lost}" /> 
-			<set item="oparam:balance_lost"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:dbres" condition="//Item/@dbresult='0'" value="${dbresult}" /> 
-			<set item="oparam:dbres"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-		</deliveryTemplate>
-		<input>
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="balance" />
-			<param name="end_period" />
-			<param name="balance_lost" />
-			<param name="dbres" />
-		</output>
-	</template>
-	
-	<!--    MTS_GetBalanceMSISDN              -->
-		<template procedureName="MTS_GetBalanceMSISDN" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item procedureName="BILLING.mg_auth" >
-					<Attribute name="i_source" type="STRING" value="${sourceid}" /> 
-					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
-					<Attribute name="i_method" type="STRING" value="MTS_GetBalanceMSISDN" /> 
-					<Attribute name="o_result" type="STRING" /> 
-					<Attribute name="o_message" type="STRING" /> 
-				</Item>
-				@{store(MTSGetBalanceCustomer,${customer})} 
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetBalanceMSISDNN" >
-			<set item="iparam:customer" value="${MTSGetBalanceCustomer}" /> 
-			<set conditionEx="0@{freeSession}" /> 
-		</deliveryTemplate>	 
-		<deliveryTemplate>
-			<set item="oparam:result_code" value="${o_result}" />
-			<set item="oparam:result_msg" value="${o_message}" />
-		</deliveryTemplate>	
-		<input>
-			<param name="sourceid" />
-			<param name="sec_code" />
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />		
-		</output>
-	</template>		
-	<template procedureName="GetBalanceMSISDNN" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="oms.mobile_app.get_balance_by_msisdn">
-					<Attribute name="p_msisdn" type="STRING" value="${customer}" /> 
-					<Attribute name="o_balance" type="STRING" /> 
-					<Attribute name="dbresult" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:balance" condition="//Item/@dbresult='0'" value="${o_balance}" /> 
-			<set item="oparam:balance"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:dbres" condition="//Item/@dbresult='0'" value="${dbresult}" /> 
-			<set item="oparam:dbres"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-		</deliveryTemplate>
-		<input>
-			<param name="customer" />
-		</input>
-		<output>
-			<param name="balance" />
-			<param name="dbres" />
-		</output>
-	</template>
-	
-	<!-- mvno -->
-	<template procedureName="VNOFTTXActivation" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="oms.wrappers.vno_fttx_activation" >
-					<Attribute name="i_ip_addr" type="STRING" value="${ipaddr}" />
-					<Attribute name="i_icc_id" type="STRING" value="${iccid}" />
-					<Attribute name="o_text_res" type="STRING" /> 
-					<Attribute name="o_db_res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:text_res" condition="//Item/@dbresult='0'" value="${o_text_res}" /> 
-			<set item="oparam:text_res" condition="//Item/@dbresult!='0'" value="Žøèáêà ïðè âûïîëíåíèè çàïðîñà." /> 
-			<set item="oparam:db_res" condition="//Item/@dbresult='0'" value="${o_db_res}" /> 
-			<set item="oparam:db_res" condition="//Item/@dbresult!='0'" value="Žøèáêà ïðè âûïîëíåíèè çàïðîñà." /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="ipaddr" />
-			<param name="iccid" />
-		</input>
-		<output>
-			<param name="text_res" />
-			<param name="db_res" />
-		</output>
-	</template> 
-	<!--    CreateOrder              -->
-		<template procedureName="MTS_CreateOrder" handler="DBCON_01">
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-				<Item procedureName="BILLING.mg_auth" >
-					<Attribute name="i_source" type="STRING" value="${source_id}" /> 
-					<Attribute name="i_code" type="STRING" value="${sec_code}" /> 
-					<Attribute name="i_method" type="STRING" value="MTS_CreateOrder" /> 
-					<Attribute name="o_result" type="STRING" /> 
-					<Attribute name="o_message" type="STRING" /> 
-				</Item>
-				@{store(coident,${ident})} 
-				@{store(coproduct,${product})}
-				@{store(coaction,${action})}
-				@{store(cosource_id,${source_id})}
-				@{store(coadd_param,${add_param})}
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate  conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="CreateOrder" >
-			<set item="iparam:ident" value="${coident}" /> 
-			<set item="iparam:product" value="${coproduct}" /> 
-			<set item="iparam:action" value="${coaction}" /> 
-			<set item="iparam:source_id" value="${cosource_id}" /> 
-			<set item="iparam:add_param" value="${coadd_param}" /> 
-			<set conditionEx="0@{freeSession}" /> 
-		</deliveryTemplate>	 
-		<deliveryTemplate>
-			<set item="oparam:result_code" value="${o_result}" />
-			<set item="oparam:result_msg" value="${o_message}" />
-			<set item="oparam:order_id" value="${o_message}" />
-		</deliveryTemplate>	
-		<input>
-			<param name="ident" />
-			<param name="product" />
-			<param name="action" />
-			<param name="source_id" />
-			<param name="add_param" />
-			<param name="sec_code" />
-		</input>
-		<output>
-			<param name="result_code" />
-			<param name="result_msg" />		
-			<param name="order_id" />
-		</output>
-	</template>		
-	<template procedureName="CreateOrder" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="CreateOrder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="oms.adapters_in.create_synch_order">
-					<Attribute name="i_ident" type="STRING" value="${ident}" /> 
-					<Attribute name="i_product" type="STRING" value="${product}" /> 
-					<Attribute name="i_action" type="STRING" value="${action}" /> 
-					<Attribute name="i_source_id" type="STRING" value="${source_id}" /> 
-					<Attribute name="i_add_param" type="STRING" value="${add_param}" /> 
-					<Attribute name="o_order_id" type="STRING" /> 
-					<Attribute name="o_result_code" type="STRING" /> 
-					<Attribute name="o_result_msg" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:order_id" condition="//Item/@dbresult='0'" value="${o_order_id}" /> 
-			<set item="oparam:result_code"  condition="//Item/@dbresult='0'" value="${o_result_code}" /> 		
-			<set item="oparam:result_msg" condition="//Item/@dbresult='0'" value="${o_result_msg}" /> 
-			<set item="oparam:order_id"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:result_code" condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:result_msg"  condition="//Item/@dbresult!='0'" value="${Žøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="ident" />
-			<param name="product" />
-			<param name="action" />
-			<param name="source_id" />
-			<param name="add_param" />
-		</input>
-		<output>
-			<param name="order_id" />
-			<param name="result_code" />
-			<param name="result_msg" />
-		</output>
-	</template>
-	<!--    fttx_activation              -->
-	<template procedureName="fttx_activation" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="fttx_activation" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="oms.wrappers.fttx_activation">
-					<Attribute name="i_ip_addr" type="STRING" value="${ip_addr}" /> 
-					<Attribute name="i_icc_id" type="STRING" value="${icc_id}" /> 
-					<Attribute name="o_text_res" type="STRING" /> 
-					<Attribute name="o_db_res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:text_res" condition="//Item/@dbresult='0'" value="${o_text_res}" /> 
-			<set item="oparam:db_res"  condition="//Item/@dbresult='0'" value="${o_db_res}" /> 		
-			<set item="oparam:text_res" condition="//Item/@dbresult!='0'" value="${o_text_res}" /> 
-			<set item="oparam:db_res"  condition="//Item/@dbresult!='0'" value="${o_db_res}" /> 
-		</deliveryTemplate>
-		<input>
-			<param name="ip_addr" />
-			<param name="icc_id" />
-		</input>
-		<output>
-			<param name="text_res" />
-			<param name="db_res" />
-		</output>
-	</template>
-	<!--    Find_City              -->
-	<template procedureName="Find_City" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="Find_City" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Sity">
-					<Attribute name="findsity" type="STRING" value="${findcity}" /> 
-					<Attribute name="id_sity1" type="STRING" /> 
-					<Attribute name="id_sity2" type="STRING" /> 
-					<Attribute name="id_sity3" type="STRING" /> 
-					<Attribute name="id_sity4" type="STRING" /> 
-					<Attribute name="id_sity5" type="STRING" /> 
-					<Attribute name="sity1" type="STRING" /> 
-					<Attribute name="sity2" type="STRING" /> 
-					<Attribute name="sity3" type="STRING" /> 
-					<Attribute name="sity4" type="STRING" /> 
-					<Attribute name="sity5" type="STRING" /> 
-					<Attribute name="res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:id_city1" condition="//Item/@dbresult='0'" value="${id_sity1}" /> 
-			<set item="oparam:id_city1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_city2" condition="//Item/@dbresult='0'" value="${id_sity2}" /> 
-			<set item="oparam:id_city2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_city3" condition="//Item/@dbresult='0'" value="${id_sity3}" /> 
-			<set item="oparam:id_city3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_city4" condition="//Item/@dbresult='0'" value="${id_sity4}" /> 
-			<set item="oparam:id_city4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_city5" condition="//Item/@dbresult='0'" value="${id_sity5}" /> 
-			<set item="oparam:id_city5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:city1" condition="//Item/@dbresult='0'" value="${sity1}" /> 
-			<set item="oparam:city1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:city2" condition="//Item/@dbresult='0'" value="${sity2}" /> 
-			<set item="oparam:city2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:city3" condition="//Item/@dbresult='0'" value="${sity3}" /> 
-			<set item="oparam:city3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:city4" condition="//Item/@dbresult='0'" value="${sity4}" /> 
-			<set item="oparam:city4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:city5" condition="//Item/@dbresult='0'" value="${sity5}" /> 
-			<set item="oparam:city5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" /> 
-			<set item="oparam:res"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="findcity" />
-		</input>
-		<output>
-			<param name="id_city1" />
-			<param name="id_city2" />
-			<param name="id_city3" />
-			<param name="id_city4" />
-			<param name="id_city5" />
-			<param name="city1" />
-			<param name="city2" />
-			<param name="city3" />
-			<param name="city4" />
-			<param name="city5" />
-			<param name="res" />
-		</output>
-	</template>
-	
-	<!--    Find_Street              -->
-	<template procedureName="Find_Street" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="Find_Street" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Street">
-					<Attribute name="id_sity" type="STRING" value="${city}" /> 
-					<Attribute name="findstreet" type="STRING" value="${findstreet}" /> 
-					<Attribute name="id_street1" type="STRING" /> 
-					<Attribute name="id_street2" type="STRING" /> 
-					<Attribute name="id_street3" type="STRING" /> 
-					<Attribute name="id_street4" type="STRING" /> 
-					<Attribute name="id_street5" type="STRING" /> 
-					<Attribute name="street1" type="STRING" /> 
-					<Attribute name="street2" type="STRING" /> 
-					<Attribute name="street3" type="STRING" /> 
-					<Attribute name="street4" type="STRING" /> 
-					<Attribute name="street5" type="STRING" /> 
-					<Attribute name="res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:id_street1" condition="//Item/@dbresult='0'" value="${id_street1}" /> 
-			<set item="oparam:id_street1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_street2" condition="//Item/@dbresult='0'" value="${id_street2}" /> 
-			<set item="oparam:id_street2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_street3" condition="//Item/@dbresult='0'" value="${id_street3}" /> 
-			<set item="oparam:id_street3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_street4" condition="//Item/@dbresult='0'" value="${id_street4}" /> 
-			<set item="oparam:id_street4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_street5" condition="//Item/@dbresult='0'" value="${id_street5}" /> 
-			<set item="oparam:id_street5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:street1" condition="//Item/@dbresult='0'" value="${street1}" /> 
-			<set item="oparam:street1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:street2" condition="//Item/@dbresult='0'" value="${street2}" /> 
-			<set item="oparam:street2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:street3" condition="//Item/@dbresult='0'" value="${street3}" /> 
-			<set item="oparam:street3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:street4" condition="//Item/@dbresult='0'" value="${street4}" /> 
-			<set item="oparam:street4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:street5" condition="//Item/@dbresult='0'" value="${street5}" /> 
-			<set item="oparam:street5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" /> 
-			<set item="oparam:res"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="city" />
-			<param name="findstreet" />
-		</input>
-		<output>
-			<param name="id_street1" />
-			<param name="id_street2" />
-			<param name="id_street3" />
-			<param name="id_street4" />
-			<param name="id_street5" />
-			<param name="street1" />
-			<param name="street2" />
-			<param name="street3" />
-			<param name="street4" />
-			<param name="street5" />
-			<param name="res" />
-		</output>
-	</template>	
-	
-<!--    Find_Street              -->
-	<template procedureName="Find_Home" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="Find_Home" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Home">
-					<Attribute name="id_street" type="STRING" value="${street}" /> 
-					<Attribute name="findhome" type="STRING" value="${findhome}" /> 
-					<Attribute name="id_home1" type="STRING" /> 
-					<Attribute name="id_home2" type="STRING" /> 
-					<Attribute name="id_home3" type="STRING" /> 
-					<Attribute name="id_home4" type="STRING" /> 
-					<Attribute name="id_home5" type="STRING" /> 
-					<Attribute name="home1" type="STRING" /> 
-					<Attribute name="home2" type="STRING" /> 
-					<Attribute name="home3" type="STRING" /> 
-					<Attribute name="home4" type="STRING" /> 
-					<Attribute name="home5" type="STRING" /> 
-					<Attribute name="res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:id_home1" condition="//Item/@dbresult='0'" value="${id_home1}" /> 
-			<set item="oparam:id_home1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_home2" condition="//Item/@dbresult='0'" value="${id_home2}" /> 
-			<set item="oparam:id_home2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_home3" condition="//Item/@dbresult='0'" value="${id_home3}" /> 
-			<set item="oparam:id_home3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_home4" condition="//Item/@dbresult='0'" value="${id_home4}" /> 
-			<set item="oparam:id_home4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_home5" condition="//Item/@dbresult='0'" value="${id_home5}" /> 
-			<set item="oparam:id_home5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:home1" condition="//Item/@dbresult='0'" value="${home1}" /> 
-			<set item="oparam:home1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:home2" condition="//Item/@dbresult='0'" value="${home2}" /> 
-			<set item="oparam:home2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:home3" condition="//Item/@dbresult='0'" value="${home3}" /> 
-			<set item="oparam:home3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:home4" condition="//Item/@dbresult='0'" value="${home4}" /> 
-			<set item="oparam:home4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:home5" condition="//Item/@dbresult='0'" value="${home5}" /> 
-			<set item="oparam:home5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" /> 
-			<set item="oparam:res"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="street" />
-			<param name="findhome" />
-		</input>
-		<output>
-			<param name="id_home1" />
-			<param name="id_home2" />
-			<param name="id_home3" />
-			<param name="id_home4" />
-			<param name="id_home5" />
-			<param name="home1" />
-			<param name="home2" />
-			<param name="home3" />
-			<param name="home4" />
-			<param name="home5" />
-			<param name="res" />
-		</output>
-	</template>		
-	
-<!--    Find_Street              -->
-	<template procedureName="Find_Flat" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="Find_Flat" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Flat">
-					<Attribute name="id_home" type="STRING" value="${home}" /> 
-					<Attribute name="findflat" type="STRING" value="${findflat}" /> 
-					<Attribute name="id_flat1" type="STRING" /> 
-					<Attribute name="id_flat2" type="STRING" /> 
-					<Attribute name="id_flat3" type="STRING" /> 
-					<Attribute name="id_flat4" type="STRING" /> 
-					<Attribute name="id_flat5" type="STRING" /> 
-					<Attribute name="flat1" type="STRING" /> 
-					<Attribute name="flat2" type="STRING" /> 
-					<Attribute name="flat3" type="STRING" /> 
-					<Attribute name="flat4" type="STRING" /> 
-					<Attribute name="flat5" type="STRING" /> 
-					<Attribute name="res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:id_flat1" condition="//Item/@dbresult='0'" value="${id_flat1}" /> 
-			<set item="oparam:id_flat1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_flat2" condition="//Item/@dbresult='0'" value="${id_flat2}" /> 
-			<set item="oparam:id_flat2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:id_flat3" condition="//Item/@dbresult='0'" value="${id_flat3}" /> 
-			<set item="oparam:id_flat3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_flat4" condition="//Item/@dbresult='0'" value="${id_flat4}" /> 
-			<set item="oparam:id_flat4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:id_flat5" condition="//Item/@dbresult='0'" value="${id_flat5}" /> 
-			<set item="oparam:id_flat5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:flat1" condition="//Item/@dbresult='0'" value="${flat1}" /> 
-			<set item="oparam:flat1"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:flat2" condition="//Item/@dbresult='0'" value="${flat2}" /> 
-			<set item="oparam:flat2"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:flat3" condition="//Item/@dbresult='0'" value="${flat3}" /> 
-			<set item="oparam:flat3"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:flat4" condition="//Item/@dbresult='0'" value="${flat4}" /> 
-			<set item="oparam:flat4"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:flat5" condition="//Item/@dbresult='0'" value="${flat5}" /> 
-			<set item="oparam:flat5"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" /> 
-			<set item="oparam:res"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="home" />
-			<param name="findflat" />
-		</input>
-		<output>
-			<param name="id_flat1" />
-			<param name="id_flat2" />
-			<param name="id_flat3" />
-			<param name="id_flat4" />
-			<param name="id_flat5" />
-			<param name="flat1" />
-			<param name="flat2" />
-			<param name="flat3" />
-			<param name="flat4" />
-			<param name="flat5" />
-			<param name="res" />
-		</output>
-	</template>		
-	
-<!--    Register_Free_Port              -->
-	<template procedureName="Register_Free_Port" handler="DBCON_02">
-		<receiveTemplate>
-			<Message type="Register_Free_Port" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="JFTTX_PROD.FindFreePortBTK.Register_Free_Port">
-					<Attribute name="l_flatID" type="STRING" value="${flatID}" /> 
-					<Attribute name="p_CROSSBOX" type="STRING" /> 
-					<Attribute name="P_CROSSBOX_PORTNUMBER" type="STRING" /> 
-					<Attribute name="P_SWITCH" type="STRING" /> 
-					<Attribute name="p_SWITCH_PORTNUMBER" type="STRING" /> 
-					<Attribute name="P_IP" type="STRING" /> 
-					<Attribute name="res" type="STRING" /> 
-				</Item>
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate>
-			<set item="oparam:CROSSBOX" condition="//Item/@dbresult='0'" value="${p_CROSSBOX}" /> 
-			<set item="oparam:CROSSBOX"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:CROSSBOX_PORTNUMBER" condition="//Item/@dbresult='0'" value="${P_CROSSBOX_PORTNUMBER}" /> 
-			<set item="oparam:CROSSBOX_PORTNUMBER"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 		
-			<set item="oparam:SWITCH" condition="//Item/@dbresult='0'" value="${P_SWITCH}" /> 
-			<set item="oparam:SWITCH"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:SWITCH_PORTNUMBER" condition="//Item/@dbresult='0'" value="${p_SWITCH_PORTNUMBER}" /> 
-			<set item="oparam:SWITCH_PORTNUMBER"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 
-			<set item="oparam:IP" condition="//Item/@dbresult='0'" value="${P_IP}" /> 
-			<set item="oparam:IP"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-			<set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" /> 
-			<set item="oparam:res"  condition="//Item/@dbresult!='0'" value="${Îøèáêà ïðè âûïîëíåíèè çàïðîñà}" /> 			
-		</deliveryTemplate>
-		<input>
-			<param name="flatID" />
-		</input>
-		<output>
-			<param name="CROSSBOX" />
-			<param name="CROSSBOX_PORTNUMBER" />
-			<param name="SWITCH" />
-			<param name="SWITCH_PORTNUMBER" />
-			<param name="IP" />
-			<param name="res" />
-		</output>
-	</template>		
+
+  <!--    MTS_GetBonusBalanceMSISDN              -->
+  <template procedureName="MTS_GetBonusBalanceMSISDN" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetBonusBalanceMSISDN" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(MTSGetBonusBalanceCustomer,${customer})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetBonusBalanceMSISDN">
+      <set item="iparam:customer" value="${MTSGetBonusBalanceCustomer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <template procedureName="GetBonusBalanceMSISDN" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="oms.mobile_app.get_bonus_balance_by_msisdn">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="o_balance" type="STRING" />
+          <Attribute name="o_end_period_date" type="DATETIME" />
+          <Attribute name="o_bal_to_lost" type="STRING" />
+          <Attribute name="dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:balance" condition="//Item/@dbresult='0'" value="${o_balance}" />
+      <set item="oparam:balance" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:end_period" condition="//Item/@dbresult='0'" value="${o_end_period_date}" />
+      <set item="oparam:end_period" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:balance_lost" condition="//Item/@dbresult='0'" value="${o_bal_to_lost}" />
+      <set item="oparam:balance_lost" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:dbres" condition="//Item/@dbresult='0'" value="${dbresult}" />
+      <set item="oparam:dbres" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="balance" />
+      <param name="end_period" />
+      <param name="balance_lost" />
+      <param name="dbres" />
+    </output>
+  </template>
+  <!--    MTS_GetBalanceMSISDN              -->
+  <template procedureName="MTS_GetBalanceMSISDN" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_GetBalanceMSISDN" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(MTSGetBalanceCustomer,${customer})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="GetBalanceMSISDNN">
+      <set item="iparam:customer" value="${MTSGetBalanceCustomer}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <template procedureName="GetBalanceMSISDNN" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="oms.mobile_app.get_balance_by_msisdn">
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="o_balance" type="STRING" />
+          <Attribute name="dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:balance" condition="//Item/@dbresult='0'" value="${o_balance}" />
+      <set item="oparam:balance" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:dbres" condition="//Item/@dbresult='0'" value="${dbresult}" />
+      <set item="oparam:dbres" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+    </input>
+    <output>
+      <param name="balance" />
+      <param name="dbres" />
+    </output>
+  </template>
+  <!-- mvno -->
+  <template procedureName="VNOFTTXActivation" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="retrievecustomerdata" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="oms.wrappers.vno_fttx_activation">
+          <Attribute name="i_ip_addr" type="STRING" value="${ipaddr}" />
+          <Attribute name="i_icc_id" type="STRING" value="${iccid}" />
+          <Attribute name="o_text_res" type="STRING" />
+          <Attribute name="o_db_res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:text_res" condition="//Item/@dbresult='0'" value="${o_text_res}" />
+      <set item="oparam:text_res" condition="//Item/@dbresult!='0'" value="Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°." />
+      <set item="oparam:db_res" condition="//Item/@dbresult='0'" value="${o_db_res}" />
+      <set item="oparam:db_res" condition="//Item/@dbresult!='0'" value="Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°." />
+    </deliveryTemplate>
+    <input>
+      <param name="ipaddr" />
+      <param name="iccid" />
+    </input>
+    <output>
+      <param name="text_res" />
+      <param name="db_res" />
+    </output>
+  </template>
+  <!--    CreateOrder              -->
+  <template procedureName="MTS_CreateOrder" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${source_id}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_CreateOrder" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(coident,${ident})}
+        @{store(coproduct,${product})}
+        @{store(coaction,${action})}
+        @{store(cosource_id,${source_id})}
+        @{store(coadd_param,${add_param})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="CreateOrder">
+      <set item="iparam:ident" value="${coident}" />
+      <set item="iparam:product" value="${coproduct}" />
+      <set item="iparam:action" value="${coaction}" />
+      <set item="iparam:source_id" value="${cosource_id}" />
+      <set item="iparam:add_param" value="${coadd_param}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:result_code" value="${o_result}" />
+      <set item="oparam:result_msg" value="${o_message}" />
+      <set item="oparam:order_id" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="ident" />
+      <param name="product" />
+      <param name="action" />
+      <param name="source_id" />
+      <param name="add_param" />
+      <param name="sec_code" />
+    </input>
+    <output>
+      <param name="result_code" />
+      <param name="result_msg" />
+      <param name="order_id" />
+    </output>
+  </template>
+  <template procedureName="CreateOrder" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="CreateOrder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="oms.adapters_in.create_synch_order">
+          <Attribute name="i_ident" type="STRING" value="${ident}" />
+          <Attribute name="i_product" type="STRING" value="${product}" />
+          <Attribute name="i_action" type="STRING" value="${action}" />
+          <Attribute name="i_source_id" type="STRING" value="${source_id}" />
+          <Attribute name="i_add_param" type="STRING" value="${add_param}" />
+          <Attribute name="o_order_id" type="STRING" />
+          <Attribute name="o_result_code" type="STRING" />
+          <Attribute name="o_result_msg" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:order_id" condition="//Item/@dbresult='0'" value="${o_order_id}" />
+      <set item="oparam:result_code" condition="//Item/@dbresult='0'" value="${o_result_code}" />
+      <set item="oparam:result_msg" condition="//Item/@dbresult='0'" value="${o_result_msg}" />
+      <set item="oparam:order_id" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:result_code" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:result_msg" condition="//Item/@dbresult!='0'" value="${Ð‹ÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="ident" />
+      <param name="product" />
+      <param name="action" />
+      <param name="source_id" />
+      <param name="add_param" />
+    </input>
+    <output>
+      <param name="order_id" />
+      <param name="result_code" />
+      <param name="result_msg" />
+    </output>
+  </template>
+  <!--    fttx_activation              -->
+  <template procedureName="fttx_activation" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="fttx_activation" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="oms.wrappers.fttx_activation">
+          <Attribute name="i_ip_addr" type="STRING" value="${ip_addr}" />
+          <Attribute name="i_icc_id" type="STRING" value="${icc_id}" />
+          <Attribute name="o_text_res" type="STRING" />
+          <Attribute name="o_db_res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:text_res" condition="//Item/@dbresult='0'" value="${o_text_res}" />
+      <set item="oparam:db_res" condition="//Item/@dbresult='0'" value="${o_db_res}" />
+      <set item="oparam:text_res" condition="//Item/@dbresult!='0'" value="${o_text_res}" />
+      <set item="oparam:db_res" condition="//Item/@dbresult!='0'" value="${o_db_res}" />
+    </deliveryTemplate>
+    <input>
+      <param name="ip_addr" />
+      <param name="icc_id" />
+    </input>
+    <output>
+      <param name="text_res" />
+      <param name="db_res" />
+    </output>
+  </template>
+  <!--    Find_City              -->
+  <template procedureName="Find_City" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="Find_City" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Sity">
+          <Attribute name="findsity" type="STRING" value="${findcity}" />
+          <Attribute name="id_sity1" type="STRING" />
+          <Attribute name="id_sity2" type="STRING" />
+          <Attribute name="id_sity3" type="STRING" />
+          <Attribute name="id_sity4" type="STRING" />
+          <Attribute name="id_sity5" type="STRING" />
+          <Attribute name="sity1" type="STRING" />
+          <Attribute name="sity2" type="STRING" />
+          <Attribute name="sity3" type="STRING" />
+          <Attribute name="sity4" type="STRING" />
+          <Attribute name="sity5" type="STRING" />
+          <Attribute name="res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:id_city1" condition="//Item/@dbresult='0'" value="${id_sity1}" />
+      <set item="oparam:id_city1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_city2" condition="//Item/@dbresult='0'" value="${id_sity2}" />
+      <set item="oparam:id_city2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_city3" condition="//Item/@dbresult='0'" value="${id_sity3}" />
+      <set item="oparam:id_city3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_city4" condition="//Item/@dbresult='0'" value="${id_sity4}" />
+      <set item="oparam:id_city4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_city5" condition="//Item/@dbresult='0'" value="${id_sity5}" />
+      <set item="oparam:id_city5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:city1" condition="//Item/@dbresult='0'" value="${sity1}" />
+      <set item="oparam:city1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:city2" condition="//Item/@dbresult='0'" value="${sity2}" />
+      <set item="oparam:city2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:city3" condition="//Item/@dbresult='0'" value="${sity3}" />
+      <set item="oparam:city3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:city4" condition="//Item/@dbresult='0'" value="${sity4}" />
+      <set item="oparam:city4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:city5" condition="//Item/@dbresult='0'" value="${sity5}" />
+      <set item="oparam:city5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" />
+      <set item="oparam:res" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="findcity" />
+    </input>
+    <output>
+      <param name="id_city1" />
+      <param name="id_city2" />
+      <param name="id_city3" />
+      <param name="id_city4" />
+      <param name="id_city5" />
+      <param name="city1" />
+      <param name="city2" />
+      <param name="city3" />
+      <param name="city4" />
+      <param name="city5" />
+      <param name="res" />
+    </output>
+  </template>
+  <!--    Find_Street              -->
+  <template procedureName="Find_Street" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="Find_Street" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Street">
+          <Attribute name="id_sity" type="STRING" value="${city}" />
+          <Attribute name="findstreet" type="STRING" value="${findstreet}" />
+          <Attribute name="id_street1" type="STRING" />
+          <Attribute name="id_street2" type="STRING" />
+          <Attribute name="id_street3" type="STRING" />
+          <Attribute name="id_street4" type="STRING" />
+          <Attribute name="id_street5" type="STRING" />
+          <Attribute name="street1" type="STRING" />
+          <Attribute name="street2" type="STRING" />
+          <Attribute name="street3" type="STRING" />
+          <Attribute name="street4" type="STRING" />
+          <Attribute name="street5" type="STRING" />
+          <Attribute name="res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:id_street1" condition="//Item/@dbresult='0'" value="${id_street1}" />
+      <set item="oparam:id_street1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_street2" condition="//Item/@dbresult='0'" value="${id_street2}" />
+      <set item="oparam:id_street2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_street3" condition="//Item/@dbresult='0'" value="${id_street3}" />
+      <set item="oparam:id_street3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_street4" condition="//Item/@dbresult='0'" value="${id_street4}" />
+      <set item="oparam:id_street4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_street5" condition="//Item/@dbresult='0'" value="${id_street5}" />
+      <set item="oparam:id_street5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:street1" condition="//Item/@dbresult='0'" value="${street1}" />
+      <set item="oparam:street1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:street2" condition="//Item/@dbresult='0'" value="${street2}" />
+      <set item="oparam:street2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:street3" condition="//Item/@dbresult='0'" value="${street3}" />
+      <set item="oparam:street3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:street4" condition="//Item/@dbresult='0'" value="${street4}" />
+      <set item="oparam:street4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:street5" condition="//Item/@dbresult='0'" value="${street5}" />
+      <set item="oparam:street5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" />
+      <set item="oparam:res" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="city" />
+      <param name="findstreet" />
+    </input>
+    <output>
+      <param name="id_street1" />
+      <param name="id_street2" />
+      <param name="id_street3" />
+      <param name="id_street4" />
+      <param name="id_street5" />
+      <param name="street1" />
+      <param name="street2" />
+      <param name="street3" />
+      <param name="street4" />
+      <param name="street5" />
+      <param name="res" />
+    </output>
+  </template>
+  <!--    Find_Street              -->
+  <template procedureName="Find_Home" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="Find_Home" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Home">
+          <Attribute name="id_street" type="STRING" value="${street}" />
+          <Attribute name="findhome" type="STRING" value="${findhome}" />
+          <Attribute name="id_home1" type="STRING" />
+          <Attribute name="id_home2" type="STRING" />
+          <Attribute name="id_home3" type="STRING" />
+          <Attribute name="id_home4" type="STRING" />
+          <Attribute name="id_home5" type="STRING" />
+          <Attribute name="home1" type="STRING" />
+          <Attribute name="home2" type="STRING" />
+          <Attribute name="home3" type="STRING" />
+          <Attribute name="home4" type="STRING" />
+          <Attribute name="home5" type="STRING" />
+          <Attribute name="res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:id_home1" condition="//Item/@dbresult='0'" value="${id_home1}" />
+      <set item="oparam:id_home1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_home2" condition="//Item/@dbresult='0'" value="${id_home2}" />
+      <set item="oparam:id_home2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_home3" condition="//Item/@dbresult='0'" value="${id_home3}" />
+      <set item="oparam:id_home3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_home4" condition="//Item/@dbresult='0'" value="${id_home4}" />
+      <set item="oparam:id_home4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_home5" condition="//Item/@dbresult='0'" value="${id_home5}" />
+      <set item="oparam:id_home5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:home1" condition="//Item/@dbresult='0'" value="${home1}" />
+      <set item="oparam:home1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:home2" condition="//Item/@dbresult='0'" value="${home2}" />
+      <set item="oparam:home2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:home3" condition="//Item/@dbresult='0'" value="${home3}" />
+      <set item="oparam:home3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:home4" condition="//Item/@dbresult='0'" value="${home4}" />
+      <set item="oparam:home4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:home5" condition="//Item/@dbresult='0'" value="${home5}" />
+      <set item="oparam:home5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" />
+      <set item="oparam:res" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="street" />
+      <param name="findhome" />
+    </input>
+    <output>
+      <param name="id_home1" />
+      <param name="id_home2" />
+      <param name="id_home3" />
+      <param name="id_home4" />
+      <param name="id_home5" />
+      <param name="home1" />
+      <param name="home2" />
+      <param name="home3" />
+      <param name="home4" />
+      <param name="home5" />
+      <param name="res" />
+    </output>
+  </template>
+  <!--    Find_Street              -->
+  <template procedureName="Find_Flat" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="Find_Flat" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="JFTTX_PROD.FindFreePortBTK.Find_Flat">
+          <Attribute name="id_home" type="STRING" value="${home}" />
+          <Attribute name="findflat" type="STRING" value="${findflat}" />
+          <Attribute name="id_flat1" type="STRING" />
+          <Attribute name="id_flat2" type="STRING" />
+          <Attribute name="id_flat3" type="STRING" />
+          <Attribute name="id_flat4" type="STRING" />
+          <Attribute name="id_flat5" type="STRING" />
+          <Attribute name="flat1" type="STRING" />
+          <Attribute name="flat2" type="STRING" />
+          <Attribute name="flat3" type="STRING" />
+          <Attribute name="flat4" type="STRING" />
+          <Attribute name="flat5" type="STRING" />
+          <Attribute name="res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:id_flat1" condition="//Item/@dbresult='0'" value="${id_flat1}" />
+      <set item="oparam:id_flat1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_flat2" condition="//Item/@dbresult='0'" value="${id_flat2}" />
+      <set item="oparam:id_flat2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_flat3" condition="//Item/@dbresult='0'" value="${id_flat3}" />
+      <set item="oparam:id_flat3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_flat4" condition="//Item/@dbresult='0'" value="${id_flat4}" />
+      <set item="oparam:id_flat4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:id_flat5" condition="//Item/@dbresult='0'" value="${id_flat5}" />
+      <set item="oparam:id_flat5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:flat1" condition="//Item/@dbresult='0'" value="${flat1}" />
+      <set item="oparam:flat1" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:flat2" condition="//Item/@dbresult='0'" value="${flat2}" />
+      <set item="oparam:flat2" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:flat3" condition="//Item/@dbresult='0'" value="${flat3}" />
+      <set item="oparam:flat3" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:flat4" condition="//Item/@dbresult='0'" value="${flat4}" />
+      <set item="oparam:flat4" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:flat5" condition="//Item/@dbresult='0'" value="${flat5}" />
+      <set item="oparam:flat5" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" />
+      <set item="oparam:res" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="home" />
+      <param name="findflat" />
+    </input>
+    <output>
+      <param name="id_flat1" />
+      <param name="id_flat2" />
+      <param name="id_flat3" />
+      <param name="id_flat4" />
+      <param name="id_flat5" />
+      <param name="flat1" />
+      <param name="flat2" />
+      <param name="flat3" />
+      <param name="flat4" />
+      <param name="flat5" />
+      <param name="res" />
+    </output>
+  </template>
+  <!--    Register_Free_Port              -->
+  <template procedureName="Register_Free_Port" handler="DBCON_02">
+    <receiveTemplate>
+      <Message type="Register_Free_Port" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="JFTTX_PROD.FindFreePortBTK.Register_Free_Port">
+          <Attribute name="l_flatID" type="STRING" value="${flatID}" />
+          <Attribute name="p_CROSSBOX" type="STRING" />
+          <Attribute name="P_CROSSBOX_PORTNUMBER" type="STRING" />
+          <Attribute name="P_SWITCH" type="STRING" />
+          <Attribute name="p_SWITCH_PORTNUMBER" type="STRING" />
+          <Attribute name="P_IP" type="STRING" />
+          <Attribute name="res" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:CROSSBOX" condition="//Item/@dbresult='0'" value="${p_CROSSBOX}" />
+      <set item="oparam:CROSSBOX" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:CROSSBOX_PORTNUMBER" condition="//Item/@dbresult='0'" value="${P_CROSSBOX_PORTNUMBER}" />
+      <set item="oparam:CROSSBOX_PORTNUMBER" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:SWITCH" condition="//Item/@dbresult='0'" value="${P_SWITCH}" />
+      <set item="oparam:SWITCH" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:SWITCH_PORTNUMBER" condition="//Item/@dbresult='0'" value="${p_SWITCH_PORTNUMBER}" />
+      <set item="oparam:SWITCH_PORTNUMBER" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:IP" condition="//Item/@dbresult='0'" value="${P_IP}" />
+      <set item="oparam:IP" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+      <set item="oparam:res" condition="//Item/@dbresult='0'" value="${res}" />
+      <set item="oparam:res" condition="//Item/@dbresult!='0'" value="${ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°}" />
+    </deliveryTemplate>
+    <input>
+      <param name="flatID" />
+    </input>
+    <output>
+      <param name="CROSSBOX" />
+      <param name="CROSSBOX_PORTNUMBER" />
+      <param name="SWITCH" />
+      <param name="SWITCH_PORTNUMBER" />
+      <param name="IP" />
+      <param name="res" />
+    </output>
+  </template>

@@ -24,7 +24,7 @@
     <Item name="FetchLimit" value="100" />
   </Settings>
   <SMSCenters>
-    <Connection host="172.17.134.40" port="5000" systemType="rbt" systemId="mg" pass="mg"  />
+    <Connection host="172.17.134.40" port="5000" systemType="rbt" systemId="mg" pass="mg" />
   </SMSCenters>
   <Anumbertransformations />
   <TemplateProcessors defaultConfig="RBTTemplateProcessor.01.xml">

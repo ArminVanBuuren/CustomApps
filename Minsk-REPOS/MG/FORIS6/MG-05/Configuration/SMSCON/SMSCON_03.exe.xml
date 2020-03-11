@@ -27,7 +27,7 @@
     <Item name="UtcOffset" value="12+" />
   </Settings>
   <SMSCenters>
-    <Connection host="172.24.224.6" port="900" systemId="forismg2" pass="r45gA2eC5"  />
+    <Connection host="172.24.224.6" port="900" systemId="forismg2" pass="r45gA2eC5" />
   </SMSCenters>
   <Anumbertransformations />
   <TemplateProcessors defaultConfig="SMSTemplateProcessor.01.xml">
@@ -47,29 +47,4 @@
     <Table name="iso-8859-8" encoding="7" />
     <Table name="unicodefffe" encoding="8" />
   </Encodings>
-  <!--Monitors>
-    <HeartBeat periodSec="10" />
-    <NoActivity defaultThresholdSec="10">
-      <MonitoredInterval thresholdSec="20">
-        <day from="1" to="5" />
-        <hour from="2" to="6" />
-      </MonitoredInterval>
-      <MonitoredInterval thresholdSec="40">
-        <day from="1" to="5" />
-        <hour from="16" to="20" />
-      </MonitoredInterval>
-      <MonitoredInterval thresholdSec="5">
-        <day from="3" to="4" />
-        <hour from="16" to="17" />
-      </MonitoredInterval>
-    </NoActivity>
-    <NoDBConnection  periodSec="5" />
-    <NoDeviceConnection  periodSec="5" />
-    <NoDiscSpace  periodSec="10">
-      <warning threshold="20" />
-      <minor threshold="30" />
-      <major threshold="40" />
-      <critical threshold="50" />
-    </NoDiscSpace>
-  </Monitors-->
 </Application>

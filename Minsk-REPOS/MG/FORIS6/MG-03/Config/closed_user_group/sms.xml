@@ -8,10 +8,6 @@
     <define name="_GROUP_TYPE_NAME" value="#{document('config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}']/@smscode}" />
     <define name="_GROUP_TO_PRODUCT_TYPE" value="#{document('config\closed_user_group\product_id.xml')/groups/group[@smscode='${sGroupType}']/@product_id}" />
     <define name="_CHECK_RECIPIENT_NUMBER" value="#{count(document('config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}'])}" />
-    <!--
-		<define name="_PRODUCT_TYPE_ID"				value="#{document('config\closed_user_group\product_id.xml')/groups/group[@smscode='#{toupper('${token0}')}']/@product_id}" /> 
-		<define name="_GROUP_TO_PRODUCT_TYPE"		value="#{document('config\closed_user_group\product_id.xml')/groups/group[@smscode='${sGroupType}']/@product_id}" />
--->
   </macros>
   <template procedureName="DelFromGroup_USSD">
     <condition>

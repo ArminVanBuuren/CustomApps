@@ -309,21 +309,6 @@
       </SendTemplate>
     </Procedure>
     <!--  USSD 478 utrom deshevle         -->
-    <!-- <Procedure	cond="/Message/Item/Service/@service_id='FR1717'" 
-					call="billing.mg_crm_comp_utrom_desh" using="db" >
-			<Parameters>
-				<param name="num" type="string" value="${customer}"/>
-				<param name="ac" type="string" value="${action}"/>
-				<param name="msg" type="out:string" value=""/>
-				<param name="dbresult" type="out:string" value=""/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${dbresult}" reply = "${msg}" state="0">
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure> -->
     <!--  USSD 105 Red zone enerdgy activate -->
     <Procedure cond="/Message/@type='ussd_105'" call="billing.lll_Red_Energy.Activate_RedEnergy" using="db">
       <Parameters>
@@ -351,21 +336,6 @@
       </SendTemplate>
     </Procedure>
     <!--  Rassrochka passport ussd 791, sms 7910     -->
-    <!--              <Procedure	cond="/Message/@type='RassrochkaPassport'" 
-					call="billing.lll_rassrochka_pasport " using="db" >
-			<Parameters>
-				<param name="num" type="string" value="${customer}"/>
-				<param name="passp_num" type="string" value="${passport_number}"/>
-				<param name="rez" type="out:string" value=""/>
-				<param name="msg" type="out:string" value=""/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${rez}" msg="${msg}">
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure> -->
     <!--  Ostavaisa s MTS         -->
     <Procedure cond="/Message/@type='ussd_172'" call="billing.mg_del_ost_mts" using="db">
       <Parameters>
@@ -1239,21 +1209,6 @@
         </Message>
       </SendTemplate>
     </Procedure>
-    <!-- Процедура STS_CUG.Register_Request 
-<Procedure cond="/Message/@type='customergroup' and /Message/Item/@subject='invite' and /Message/Item/@datasource='cust'" call="STS_CUG.Register_Request" using="db" >
-	<Parameters>
-		<param name="p_Error_Code" type="out:string" value=""/>
-		<param name="p_CUG_Member_MSISDN" type="string" value="${p_CUG_Member_MSISDN}"/>
-		<param name="p_Initiator_MSISDN" type="string" value="${p_Initiator_MSISDN}"/>
-	</Parameters>
-	<SendTemplate>
-		<Message type="retrievecustomerdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-			<Item customer="${p_Initiator_MSISDN}" dbresult="${p_Error_Code}">
-				<Attribute name="p_CUG_Member_MSISDN" value="${p_CUG_Member_MSISDN}" />
-			</Item>
-		</Message>
-	</SendTemplate>
-</Procedure> -->
     <!-- Процедура STS_CUG.Close_Request -->
     <Procedure cond="/Message/@type='customergroup' and /Message/Item/@subject='answer' and /Message/Item/@datasource='cust'" call="STS_CUG.Close_Request" using="db">
       <Parameters>

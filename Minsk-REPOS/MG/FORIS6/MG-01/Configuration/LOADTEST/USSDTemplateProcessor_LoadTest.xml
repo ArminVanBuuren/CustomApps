@@ -83,14 +83,6 @@
       <set item="Encoding" value="ascii" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <!-- Это тестовая вставка для установки языка интерфейса 
-        <deliveryTemplate call="SetCommunicationLang" conditionEx="#{${dbresult}=0 and '${sServiceNumber}'='_PTP_SERVICE_NUMBER' and matches('${sContent}','^555\*(1|2)$')}">
-            <set item="Sender" value="${sCustomer}" />
-            <set item="Recipient" value="${sServiceNumber}" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-        </deliveryTemplate>
--->
     <deliveryTemplate conditionEx="#{'${sCustomer}'!='' and ${dbresult}=320347}">
       <set item="Content" value="Error: Ustanovlena blokirovka. Operaciya nedostupna" />
       <set item="Sender" value="${sServiceNumber}" />
@@ -169,13 +161,6 @@
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
-    <!--deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Vasha zayavka prinyata" />
-            <set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" /-->
   </template>
   <!--  SPONSOR -->
   <template procedureName="SponsorRequest">
@@ -249,25 +234,6 @@
     </deliveryTemplate>
     <deliveryTemplate connector="_SMSCON" />
   </template>
-  <!--template procedureName="SetCommunicationLang">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-        <receiveTemplate>
-            <Message type="setprofile" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${Sender}">
-		<Attribute name="communicationlanguage" value="${token1}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята/Your request is accepted" />
-            <set item="Sender" value="_PTP_SERVICE_NUMBER" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-    </template-->
   <template procedureName="USSDAddService">
     <condition>
       <test item="${Recipient}" matches="^200$" />
@@ -327,27 +293,6 @@
       <set item="Encoding" value="ascii" />
     </deliveryTemplate>
   </template>
-  <!--template procedureName="ISSA_Password">
-        <condition>
-            <test item="${Recipient}" matches="^555$" />
-            <test item="${Content}" matches="^[0-9]{4,7}$" />
-        </condition>
-        <receiveTemplate>
-            <Message type="setprofile" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${Sender}">
-                    <Attribute name="oldpassword" value="" />
-                    <Attribute name="newpassword" value="${token0}" />
-                    <Attribute name="confirmpassword" value="${token0}" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate>
-			<set item="Content" value="Error: ${dbresult}" />
-            <set item="Content" condition="${dbresult}" value="Ok" />
-            <set item="Encoding" value="ascii" />
-        </deliveryTemplate>
-
-    </template-->
   <!-- Информация о последних начислениях -->
   <template procedureName="USSDLastCharges">
     <condition>

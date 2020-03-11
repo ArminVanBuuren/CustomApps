@@ -27,24 +27,4 @@
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-  <!--
-	<template procedureName="ProlongateAnnualContractInvalidFormat">
-        <condition>
-			<test item="#{if(count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@sms_number='${Recipient}'])>0,1,0)}" matches="1" />
-        </condition>
-        <receiveTemplate>
-			<Message id="${guid}" session_id="${guid}">
-				<Attribute name="customer" value="${sender}" />
-				<Attribute name="sms_number" value="${Recipient}" />
-				<Attribute name="content" value="${content}" />
-			</Message>
-        </receiveTemplate>
-		<deliveryTemplate direction="input" >
-			<set item="Content"		value="Неизвестный код пролонгации: ${content}" />
-			<set item="Encoding"	value="unicodefffe" />
-			<set item="Sender"		value="${sms_number}" />
-			<set item="Recipient"	value="${customer}" />
-		</deliveryTemplate>
-	</template>
--->
 </templateGroup>

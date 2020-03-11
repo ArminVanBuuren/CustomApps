@@ -98,16 +98,4 @@
     <Table name="unicodefffe" encoding="8" />
     <!-- Values bigger than 8 have different meaning (it is not encoding at all) -->
   </Encodings>
-  <!--   <Monitors>
-		<HeartBeat periodSec="10" />
-		<NoActivity defaultThresholdSec="240">
-		<MonitoredInterval thresholdSec="60">
-				<day from="1" to="5" />
-				<hour from="8" to="19" />
-			</MonitoredInterval>
-		</NoActivity>
-		<NoDBConnection  periodSec="30" />
-		<NoDeviceConnection  periodSec="10" />
-	</Monitors>  
--->
 </Application>

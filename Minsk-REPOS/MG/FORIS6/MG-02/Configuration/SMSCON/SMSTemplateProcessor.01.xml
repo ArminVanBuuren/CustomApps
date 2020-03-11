@@ -13,22 +13,14 @@
     <deliveryTemplate conditionEx="#{(substring(//Content/text(),1,20) = 'Vypolneno popolnenie') or (substring(//Content/text(),1,20) = 'Выполнено пополнение') or (substring(//Content/text(),1,18) = 'Пополнение баланса')}">
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="364" />
-      <!--<set item="Encoding" value="#{//Content/@charset}" />
-      		<set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" /> -->
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
-      <!--<set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      		<set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
     <deliveryTemplate>
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="0870" />
       <set item="Encoding" value="unicodefffe" />
-      <!--<set item="Encoding" value="#{//Content/@charset}" />
-      		<set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" /> -->
       <set item="Recipient" value="${customer}" />
-      <!-- <set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      		<set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
   <template procedureName="DeliveryRequestPtP" persistent="true">
@@ -43,12 +35,8 @@
     <deliveryTemplate>
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="364" />
-      <!--<set item="Encoding" value="#{//Content/@charset}" />
-      <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" /> -->
       <set item="Encoding" value="unicodefffe" />
       <set item="Recipient" value="${customer}" />
-      <!-- <set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
   <template procedureName="DeliveryRequestIssa" persistent="true">
@@ -64,7 +52,6 @@
       <set item="Content" value="#{//Content/text()}" />
       <set item="Sender" value="0870" />
       <set item="Recipient" value="${customer}" />
-      <!--set item="Encoding" value="#{if(count(/Message/Package/Item/Content/@charset)>0,/Message/Package/Item/Content/@charset,@{GetEncoding(#{translate(//Content/text(),',','.')},'unicodefffe','ascii')})}" /-->
       <set item="Encoding" value="#{//Content/@charset}" />
       <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" />
     </deliveryTemplate>
@@ -75,11 +62,6 @@
       <set item="Encoding" conditionEx="#{'#{//Content/@charset}'!=''}" value="#{//Content/@charset}" />
       <set item="Encoding" conditionEx="#{'#{//Content/@charset}'='' and not(matches('${Content}','[А-я]'))}" value="iso-8859-1" />
       <set item="Encoding" conditionEx="#{'#{//Content/@charset}'='' and matches('${Content}','[А-я]')}" value="unicodefffe" />
-      <!--set item="Encoding" value="#{if(count(/Message/Package/Item/Content/@charset)>0,/Message/Package/Item/Content/@charset,@{GetEncoding(#{translate(//Content/text(),',','.')},'unicodefffe','ascii')})}" /-->
-      <!-- <set item="Encoding" value="#{//Content/@charset}" />
-	  <set item="Encoding" condition="not(//Content/@charset)" value="unicodefffe" /> -->
-      <!--<set item="ValidityPeriod" condition = "//Item/@validityPeriod" value="${validityPeriod}" />
-      <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
   <template procedureName="DB_Send_SMS" persistent="false">

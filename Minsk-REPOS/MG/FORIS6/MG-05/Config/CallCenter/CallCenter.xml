@@ -1,3 +1,4 @@
+
   <!--    EVA.DB_RassrochkaForIvrNew       -->
   <template procedureName="DB_RassrochkaForIvrNew" handler="DBCON_01">
     <receiveTemplate>
@@ -1352,9 +1353,12 @@
       <Message type="setprofile" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}" action="${action}">
           <Attribute name="favouritenumber" value="${favnum}" />
-          <Attribute name="index" value="${index}" />@{switch(${action}|,9|
-          <Attribute name="favouritenumbernew" value="${favnumnew}" />,10|
-          <Attribute name="favouritenumbernew" value="${favnumnew}" />,11|
+          <Attribute name="index" value="${index}" />
+          @{switch(${action}|,9|
+          <Attribute name="favouritenumbernew" value="${favnumnew}" />
+          ,10|
+          <Attribute name="favouritenumbernew" value="${favnumnew}" />
+          ,11|
           <Attribute name="favouritenumbernew" value="${favnumnew}" />
           )}
           <Attribute name="favouritenumbertypeid" value="${favouritenumbertypeid}" />

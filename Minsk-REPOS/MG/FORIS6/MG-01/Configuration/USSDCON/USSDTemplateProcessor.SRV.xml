@@ -232,20 +232,6 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <!--    <template procedureName="PersonalGuaranteedPayment_SyntaxError">
-    <condition>
-        <test item="${Recipient}" matches="^(114)$" />
-    </condition>
-    <receiveTemplate>
-		<Message> <Item customer="${Sender}" /> </Message>
-	</receiveTemplate>
-    <deliveryTemplate direction="input">
-		<set item="Content" value="Pozhaluista, posylaite tol'ko tsifry!"/>
-		<set item="Sender" value="114" />
-		<set item="Recipient" value="${customer}"/>
-		<set item="Encoding" value="ascii" />
-    </deliveryTemplate>
-	</template>  -->
   <!-- Cancel Guaranteed payment-->
   <template procedureName="SMS_Cancel_GuaranteedPayment" sessionLifetime="60">
     <condition>
@@ -815,18 +801,4 @@
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
   </template>
-  <!-- <template procedureName="personal_trash">
-  	<condition>
-		<test item="${Recipient}" matches="^839$" />
-	</condition>
-		<receiveTemplate>
-		<Message> <Item customer="${Sender}" /> </Message>
-       		</receiveTemplate>
-	<deliveryTemplate direction="input">
-		<set item="Content" value="ТЕСТ" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Sender" value="839" />
-		<set item="Encoding" value="unicodefffe" />
-	</deliveryTemplate>
-</template> -->
 </templates>

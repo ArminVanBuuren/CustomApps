@@ -496,12 +496,6 @@
       <set item="Content" value="${sContent}" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
-    <!--        <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*check_payment$') and ${dbresult}=0}" call="USSD_PortalOpenBills">
-            <set item="Sender" value="00111" />
-            <set item="Recipient" value="11111" />
-            <set item="Content"   value="${sContent}" />
-            <set conditionEx="0@{freeSession}"  />
-		</deliveryTemplate> -->
     <deliveryTemplate conditionEx="#{matches('${sContent}','^[0-9]{11}\*addim') and ${dbresult}=0}" call="Addim_MTSChat">
       <set item="Sender" value="00111" />
       <set item="Recipient" value="11111" />
@@ -1443,25 +1437,6 @@
     </deliveryTemplate>
     <deliveryTemplate connector="_SMSCON" />
   </template>
-  <!--		<template procedureName="USSD_PortalOpenBills">
-        <condition>
-            <test item="0" matches="1" />            
-        </condition>
-        <receiveTemplate>
-            <Message type="retrievecustomerdata" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-                <Item customer="${token0}" subject="openbills"> 
-					<Attribute name="includeunbilleddata" value="1" />              
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" terminating="false">            
-            <set item="Content"   value="Ваша заявка принята. Ждите СМС с результатом" />
-            <set item="Sender" value="11111" />
-            <set item="Recipient" value="00111" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON"/>
-    </template> -->
   <!--Начало  МТС ЧАТ  -->
   <template procedureName="Addim_MTSChat">
     <condition>

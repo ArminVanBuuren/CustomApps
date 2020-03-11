@@ -16,23 +16,6 @@
     <define name="_MAXIDUET_LIST_CODE" value="1" />
     <define name="_SMSCON" value="SMSCON_01_01" />
   </macros>
-  <!--
-<template procedureName="MTSGroupDialogClose">
-        <condition>
-            <test item="${Recipient}" matches="^138$" />
-        </condition>                                    
-        <receiveTemplate>
-           <Message id="${guid}" session_id="@{newGuid}">
-               <Item customer="${Sender}" />
-           </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input">            
-            <set item="Content"   value="Услуга больше недоступна." />
-            <set item="Sender" value="138" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-  </template>  -->
   <!-- Mi -->
   <template procedureName="AddToGroup1" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
     <condition>
@@ -127,54 +110,6 @@
     </deliveryTemplate>
     <deliveryTemplate connector="_SMSCON" />
   </template>
-  <!--Udalit' eto DIALOG
-  <template procedureName="AddToGroup1_MAXIDUET" sessionStorage="Database" sessionLifetime="86400" onClean="AddToGroup_onClean">
-        <condition>
-            <test item="${Recipient}" matches="^_USSD_NUMBER_MAXIDUET$" />
-            <test item="${Content}" matches="^_MAXIDUET_INVITE_CODE\*[0-9]{11}$" />
-        </condition>         
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="@{setSessionId(MAXIDUET7#{substring('${token1}',string-length('${token1}')-9)})}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                    <Attribute name="grouptype" value="MAXIDUET" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'='${Customer}'}">            
-            <set item="Sender" value="_USSD_NUMBER_MAXIDUET" />
-            <set item="Recipient" value="${Customer}" />
-			<set item="Content"   value="У абонента ${sInvited} есть ваше активное приглашение" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${sAlreadyInvited}'!='' and '${sInviter}'!='${Customer}'}">    
-            <set item="Sender" value="_USSD_NUMBER_MAXIDUET" />
-            <set item="Recipient" value="${Customer}" />
-	<set item="Content"   value="У абонента ${sInvited} есть активное приглашение в другую группу" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-        <deliveryTemplate direction="input" conditionEx="#{'${Customer}'='7#{substring('${session_id}',string-length('${session_id}')-9)}'}">
-             <set item="Sender" value="_USSD_NUMBER_MAXIDUET" />
-             <set item="Recipient" value="${Customer}" />
-             <set item="Content"   value="Номер приглашаемого абонента ${Customer} совпадает с вашим." />
-             <set item="Encoding" value="unicodefffe" />
-             <set conditionEx="0@{freeSession}"  /> 
-        </deliveryTemplate>        
-        <deliveryTemplate direction="input" terminating="false">            
-	<set item="Content"   value="Ваша заявка принята" />
-            <set item="Sender" value="_USSD_NUMBER_MAXIDUET" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-            <set conditionEx="0@{store(sAlreadyInvited,1)}" />
-            <set conditionEx="0@{store(sInviter,${Customer})}" />
-            <set conditionEx="0@{store(sInvited,7#{substring('${session_id}',string-length('${session_id}')-9)})}" />
-            <set conditionEx="0@{store(sTryCount,1)}" />
-            <set conditionEx="0@{store(sGroupType,${grouptype})}" />
-        </deliveryTemplate>
-        <deliveryTemplate connector="_SMSCON" />
-  </template>    
- -->
   <template procedureName="AddToGroup_onClean" sessionStorage="Database">
     <condition>
       <test item="0" matches="1" />

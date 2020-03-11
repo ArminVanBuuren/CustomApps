@@ -214,27 +214,6 @@
     </deliveryTemplate>
   </template>
   <!-- ############################  Hei_Code ####################### закрылся -->
-  <!--<template procedureName="Hei_Code_" handler="DBCON_01">
-	<condition>
-		<test item="${Recipient}" matches="^(6600)$" />
-    </condition>
-       <receiveTemplate>
-		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="billing.MG_Hei_Code_Func" >
-					<Attribute name="customer" type="STRING" value="${Sender}" />
-					<Attribute name="rez" type="STRING" /> 
-				</Item>
-    	</Message>
-		</receiveTemplate>
-       <deliveryTemplate>
-		<set item="Content" condition="//Item/@dbresult='0'" value="${rez}" />
-		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-		<set item="Sender" value="${Recipient}" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Encoding" value="unicodefffe" />
-       </deliveryTemplate>
-   </template> 
-  -->
   <!-- ############################  HR-BRAND-2014 ####################### -->
   <template procedureName="HR-BRAND-2014_" handler="DBCON_02">
     <condition>
@@ -390,31 +369,6 @@
     </deliveryTemplate>
   </template>
   <!-- ############################  TP Internet Mini Midi Maxi ####################### -->
-  <!--<template procedureName="Add_on_TP_Internet" handler="DBCON_01">
-	<condition>
-		<test item="${Recipient}" matches="^(317|318|319)$" />
-		<test item="${Token0}" matches="^(A|a)$" />
-    </condition>
-       <receiveTemplate conditionEx="#{('${Content}' = A or '${Content}'= a)}" >
-		<Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
-				<Item procedureName="billing.add_close_srv_req.add_srv_req" >
-					<Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-					<Attribute name="srv_del_str" type="STRING" value="@{switch(${Recipient}|FR8280,318|FR8281,319|FR8282)}" /> 
-					<Attribute name="source" type="STRING" value="6"/> 
-					<Attribute name="dbresult" type="STRING" /> 
-					<Attribute name="reply" type="STRING" /> 
-					<Attribute name="ret_code" type="STRING" /> 					
-				</Item>
-    	</Message>
-	</receiveTemplate>
-       <deliveryTemplate>
-		<set item="Content" condition="//Item/@dbresult='0'" value="${reply}" />
-		<set item="Content" condition="//Item/@dbresult!='0'" value="Ошибка выполнения запроса." />
-		<set item="Sender" value="${Recipient}" />
-		<set item="Recipient" value="${customer}" />
-		<set item="Encoding" value="unicodefffe" />
-       </deliveryTemplate>
-   </template>  -->
   <template procedureName="Del_on_TP_Internet" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(317|318|319)$" />
@@ -1063,34 +1017,6 @@
   </template>
   <!-- ############################  0877 END ####################### -->
   <!-- ############################  721 ####################### -->
-  <!--  <template procedureName="Check_Change_TP_skidka" sessionLifetime="60" >
-	<condition>
-		<test item="${Recipient}" matches="^(721)$" />
-	</condition>
-        <receiveTemplate>
-          <Message type="serviceinterrogation" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-            <Item customer="${Sender}" datasource="state">
-                <Service id="FR2507" Service_id="FR2507" action="interrogation"/>
-            </Item>
-          </Message>
-       </receiveTemplate>
-	<deliveryTemplate conditionEx="#{('${subscription}' = 1 and '${dbresult}'= 0) }" call="Check_Tariff_Plan">
-		<set item="Sender" value="${customer}" />
-		<set conditionEx="0@{freeSession}" />
-	</deliveryTemplate>
-   <retry delay="1" attempts="0" />
-	<deliveryTemplate>
-			<set item="Content" value="К сожалению, произошла ошибка. Попробуйте еще раз." /> 
-			<set item="Content" condition="//Item/@dbresult='320341'" value="Вам не доступна льготная смена ТП" /> 
-			<set item="Content" condition="//Item/@dbresult='320191'" value="Вам не доступна льготная смена ТП" /> 
-			<set item="Content" condition="//Item/@dbresult='320204'" value="Вам не доступна льготная смена ТП" />
-			<set item="Content" condition="//Item/@dbresult='320282'" value="Вам не доступна льготная смена ТП" /> 
-			<set item="Content" condition="//Item/@dbresult='0'" value="Вам не доступна льготная смена ТП" /> 
-            <set item="Encoding" value="unicodefffe" />
-            <set item="Sender" value="721" />
-            <set item="Recipient" value="${customer}" />
-       </deliveryTemplate>
-    </template> -->
   <template procedureName="PreCheck_Change_TP_" sessionLifetime="60">
     <condition>
       <test item="${Recipient}" matches="^(721)$" />
@@ -1864,38 +1790,6 @@
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
   </template>
-  <!--    <condition>
-     <test item="${Recipient}" matches="^190$" />
-        <test item="${Token0}" matches="^(add|del|Add|Del|ADd|DEl|aDd|dEl|ADD|DEL)$" />
-        <test item="${Token1}" matches="^375(292|295|297|298|336|333)\d{6}$" />
-    </condition>
--->
-  <!--
-      <deliveryTemplate conditionEx="#{('${subscription}' = 0 and '${dbresult}'=0) or (${dbresult}='320282')}" call="SMS_TrueVM1Order">
-		<set item="Sender" value="${customer}" />
-       </deliveryTemplate>
--->
-  <!--    <receiveTemplate>
-      <Message type="setprofile" initiator="smscon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item customer="${Sender}" subject="check" datasource="cust" action="@{switch(${Token0}|10,del|11)}">
-                  @{store(storedAction,${action})}
-                  @{store(storedCustomer,${Sender})}
-                  <Attribute name="pMSISDN" value="#{substring('${Token1}',1,12)}" />
-                  @{store(storedMSISDN,${pMSISDN})}
-        </Item>
-      </Message>
-    </receiveTemplate>
--->
-  <!--    <deliveryTemplate conditionEx="#{${dbresult}!=(58|158)}" terminating="true" >
-          <set item="Content" value="Vvedennij nomer imeet nevernij tarifnij plan" />
-          <set item="Sender" value="190" />
-          <set item="Recipient" value="${storedCustomer}" />
-          <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate> -->
-  <!--
-10.06.2009 18:07:58 #10	Content: <Message type="setprofile" initiator="smscon" id="029a0780-bf95-44b9-8174-d01f2583b1c9" session_id="27e71edf-d85a-496a-ac0a-bf0c86c1be9f">
-<Item customer="190" action=""><Attribute name="favouritenumber" value="375297026957" /><Attribute name="index" value="0" /><Attribute name="favouritenumbertypeid" value="5" /></Item></Message>
--->
   <template procedureName="AddFavNumber_190">
     <condition>
       <test item="0" matches="1" />
@@ -2947,38 +2841,4 @@ sms s nomera 364 ptp perevod podtverjdenie abonenty A-->
       <set item="ScheduleDeliveryTime" condition = "//Item/@scheduleTime" value="${scheduleTime}" /> -->
     </deliveryTemplate>
   </template>
-  <!--	
-	<template procedureName="DB_AddRemoveService">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-	<retry delay="300" attempts="2" />
-        <deliveryTemplate>
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="0870" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','23:30')}" /> 
-            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:30')}" />  
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-	 </template>
-
-	
-	<template procedureName="DeliveryRequestBMS">
-        <condition>
-            <test item="0" matches="1" />
-        </condition>
-	<retry delay="300" attempts="2" />
-        <deliveryTemplate>
-            <set item="Content" value="#{//Content/text()}" />
-            <set item="Sender" value="0870" />
-            <set item="Recipient" value="${customer}" />
-            <set item="Encoding" value="ascii" />
-            <set item="ScheduleDeliveryTime" value="#{getTimeInRange('08:00','23:30')}" />  
-            <set item="ValidityPeriod" value="#{getTimeInRange('11:00','23:30')}" />  
-            <set item="RegisteredDelivery" value="false" />
-        </deliveryTemplate>
-	 </template>
--->
 </templates>

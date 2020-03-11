@@ -293,44 +293,6 @@
         </Message>
       </SendTemplate>
     </Procedure>
-    <!-- <Procedure	cond="/Message/@type='Add_Service'" 
-					call="BILLING.add_close_srv_req.add_srv_req" using="db" >
-			<Parameters>
-				<param name="dbresult" type="out:string" value=""/>
-				<param name="reply" type="out:string" value=""/>
-				<param name="ret_code" type="out:string" value=""/>
-				<param name="p_msisdn" type="string" value="${customer}"/>
-				<param name="srv_del_str" type="string" value="${service_id}"/>
-				<param name="source" type="string" value="${source}"/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${ret_code}" state="0">
-						<Attribute name="dbresult" value="${ret_code}"/>
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure>
-
-<Procedure	cond="/Message/@type='Del_Service'" 
-					call="BILLING.add_close_srv_req.del_srv_req" using="db" >
-			<Parameters>
-				<param name="dbresult" type="out:string" value=""/>
-				<param name="reply" type="out:string" value=""/>
-				<param name="ret_code" type="out:string" value=""/>
-				<param name="p_msisdn" type="string" value="${customer}"/>
-				<param name="srv_del_str" type="string" value="${service_id}"/>
-				<param name="source" type="string" value="${source}"/>
-				<param name="d_end" type="string" value="${time}"/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${ret_code}" state="0">
-						<Attribute name="dbresult" value="${ret_code}" />
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure> -->
     <Procedure cond="/Message/@type='Cost_customer' and /Message/Item/@datasource='state'" call="BILLING.mg_get_tsennost" using="db">
       <Parameters>
         <param name="dbresult" type="out:string" value="" />

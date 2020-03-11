@@ -355,65 +355,6 @@
     </deliveryTemplate>
     <deliveryTemplate />
   </template>
-  <!-- <template procedureName="DB_BalanceRetriev3" persistent="false"> 
-  <input> 
-   <param name="Customer"/> 
-  </input> 
-  <output> 
-   <param name="dbresult"		 type="3" value="0"/> 
-   <param name="balanceintpartdotpart"	 type="3" value="0"/> 
-   <param name="accumulator11"		 type="3" value="-1"/> 
-   <param name="accumulatorSMS"		 type="3" value="-1"/> 
-   <param name="accumulatorGPRS"	 type="3" value="-1"/> 
-   <param name="accumulatorMinutesUsed"	 type="3" value="-1"/> 
-   <param name="accumulatorMMS"		 type="3" value="-1"/>
-   <param name="accumulatorMAXI"	 type="3" value="-1"/>   
-   <param name="accumulatorUsedLimitCorp"		 type="3" value="-1"/>
-   <param name="accumulatorFreeLN"		 type="3" value="-1"/>
-   <param name="accumulator24chas"		 type="3" value="-1"/>  
-   <param name="accumulatorStacRyzMin"	 type="3" value="-1"/>   
-   <param name="CreditLimit"               type="3" value="-1" />   
-   <param name="debt"               type="3" value="-1" />   
-   <param name="dEndDate"               type="1" value="-1" />   
-   <param name="Accumulator6"               type="3" value="-1" />   
-   <param name="dEndDate_2"               type="1" value="-1" />   
-   <param name="Accumulator7"               type="3" value="-1" />   
-   <param name="dEndDate_3"               type="1" value="-1" />   
-   <param name="Accumulator8"               type="3" value="-1" />   
-   <param name="currency"		 type="3" value="0"/> 
-  </output> 
-  <receiveTemplate> 
-   <Message type="retrievecustomerdata" initiator="ivrcon" id="${guid}" session_id="@{newGuid}"> 
-    <Item customer="${customer}" subject="balance" datasource="db" >
-		<Attribute name="requestcountertype" value="3" />
-    </Item>
-   </Message> 
-  </receiveTemplate> 
-  <deliveryTemplate conditionEx="#{count(/Message/Item/accumulators/accumulator)>=0}"> 
-    <set item="param:dbresult" value="${dbresult}" /> 
-    <set item="param:balanceintpartdotpart" value="${balanceintpartdotpart}" /> 
-    <set item="param:accumulator11" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec',round(/Message/Item/accumulators/accumulator[@id='voicesec']/@val div 60),-1))}" /> 
-    <set item="param:accumulatorSMS" value="#{if(/Message/Item/accumulators/accumulator/@id='sms',/Message/Item/accumulators/accumulator[@id='sms']/@val,-1)}" /> 
-    <set item="param:accumulatorGPRS" value="#{if(/Message/Item/accumulators/accumulator/@id='gprs',/Message/Item/accumulators/accumulator[@id='gprs']/@val,-1)}" /> 
-    <set item="param:accumulatorMinutesUsed" value="#{if(/Message/Item/accumulators/accumulator/@id='usedmin',/Message/Item/accumulators/accumulator[@id='usedmin']/@val,if(/Message/Item/accumulators/accumulator/@id='voiceminaccum',/Message/Item/accumulators/accumulator[@id='voiceminaccum']/@val,if(/Message/Item/accumulators/accumulator/@id='usedsec',round(/Message/Item/accumulators/accumulator[@id='usedsec']/@val div 60),-1)))}" /> 
-    <set item="param:accumulatorMMS" value="#{if(/Message/Item/accumulators/accumulator/@id='mms',/Message/Item/accumulators/accumulator[@id='mms']/@val,-1)}" />
-    <set item="param:accumulatorMAXI" value="#{if(/Message/Item/accumulators/accumulator/@id='voiceminmaxi',/Message/Item/accumulators/accumulator[@id='voiceminmaxi']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesec_mts',/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val,if(/Message/Item/accumulators/accumulator/@id='voicesecmaxi',round(/Message/Item/accumulators/accumulator[@id='voicesecmaxi']/@val div 60)  ,  if(/Message/Item/accumulators/accumulator/@id='voiceminmg',/Message/Item/accumulators/accumulator[@id='voiceminmg']/@val  ,if(/Message/Item/accumulators/accumulator/@id='voiceminmts',/Message/Item/accumulators/accumulator[@id='voiceminmts']/@val,-1)))))}" />  
-    <set item="param:accumulatorUsedLimitCorp" value="#{if(/Message/Item/accumulators/accumulator/@id='usedrur',string(translate(/Message/Item/accumulators/accumulator[@id='usedrur']/@val,',','.'))*100,-1)}" />	
-    <set item="param:accumulatorFreeLN" value="#{if(/Message/Item/accumulators/accumulator/@id='usedminfreeln',/Message/Item/accumulators/accumulator[@id='usedminfreeln']/@val,-1)}" />
-    <set item="param:accumulator24chas" value="#{if(/Message/Item/accumulators/accumulator/@id='voiceminmts',round(/Message/Item/accumulators/accumulator[@id='voiceminmts']/@val*60),if(/Message/Item/accumulators/accumulator/@id='voicesec_mts',round(/Message/Item/accumulators/accumulator[@id='voicesec_mts']/@val div 60),0))}" /> 
-    <set item="param:accumulatorStacRyzMin" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin',/Message/Item/accumulators/accumulator[@id='voicemin']/@val,-1)}" />
-    <set item="param:CreditLimit" value="#{if('${creditlimitintpartdotpart}'!='','${creditlimitintpartdotpart}' ,-1)}" /> 
-    <set item="param:debt" value="#{if('${debtintpartdotpart}'!='','-${debtintpartdotpart}',-1)}" />
-    <set item="param:dEndDate" value="#{if(('${dateofissue}'='' or '${debtintpartdotpart}'='000' or '${debtintpartdotpart}'=''),-1,'${dateofissue}')}" />
-    <set item="param:Accumulator6" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1',/Message/Item/accumulators/accumulator[@id='voicemin1']/@val,-1)}" />
-    <set item="param:dEndDate_2" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin1',/Message/Item/accumulators/accumulator[@id='voicemin1']/@dt,-1)}" />
-    <set item="param:Accumulator7" value="#{if(/Message/Item/accumulators/accumulator/@id='sms1',/Message/Item/accumulators/accumulator[@id='sms1']/@val,-1)}" />
-    <set item="param:dEndDate_3" value="#{if(/Message/Item/accumulators/accumulator/@id='sms1',/Message/Item/accumulators/accumulator[@id='sms1']/@dt,-1)}" />
-    <set item="param:Accumulator8" value="#{if(/Message/Item/accumulators/accumulator/@id='voicemin700',/Message/Item/accumulators/accumulator[@id='voicemin700']/@val,-1)}" />
-    <set item="param:currency" value="#{if('${currency}'='',0,number('${currency}'))}" />
-  </deliveryTemplate> 
-  <deliveryTemplate /> 
- </template> -->
   <!--    <set item="param:Accumulator6" value="-1" />
     <set item="param:dEndDate_2" value="-1" />
     <set item="param:Accumulator7" value="-1" />
@@ -664,31 +605,6 @@
       <param name="price" type="2" value="0" />
     </output>
   </template>
-  <!--
-  <template procedureName="DB_SProcessing" persistent="false">
-    <condition>
-    </condition>
-    <receiveTemplate>
-      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="${service}" action="${action}" class="${class}" />
-        </Item>
-      </Message>
-    </receiveTemplate>
-    <deliveryTemplate />
-    <input>
-      <param name="customer" />
-      <param name="service" />
-      <param name="class" />
-      <param name="action" />
-    </input>
-    <output>
-      <param name="Subscription" type="2" value="0" />
-      <param name="Status" type="2" value="0" />
-      <param name="ISCharged" type="2" value="0" />
-    </output>
-  </template>
--->
   <template procedureName="DB_SProcessing_NEW">
     <condition />
     <receiveTemplate>
@@ -849,32 +765,6 @@
       <param name="intpartfracpart" type="3" value="0" />
     </output>
   </template>
-  <!--
-   <template procedureName="DB_CustomerBlock">
-    <condition>
-    </condition>
-    <receiveTemplate>
-      <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${customer}">
-          <Service id="blockphone" action="4">
-            <Attribute name="state" value="${action}" />
-            <Attribute name="start" value="${start}" /> 
-          </Service>
-        </Item>
-      </Message>
-    </receiveTemplate>
-    
-    <input>
-      <param name="customer" />
-      <param name="start" />
-      <param name="action" />
-    </input>
-    <output>
-      <param name="state" type="3" value="0" />
-    </output>
-  </template>
-
--->
   <template procedureName="DB_CustomerBlock">
     <condition />
     <receiveTemplate>

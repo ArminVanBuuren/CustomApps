@@ -422,24 +422,4 @@
     </deliveryTemplate>
     <deliveryTemplate connector="_SMSCON" />
   </template>
-  <!--  <template procedureName="TEST_GROUPSyntaxError1"> 
-        <condition>
-            <test item="${Recipient}" matches="^_USSD_NUMBER_TEST_GROUP" />
-        </condition>                                    
-        <receiveTemplate>
-            <Message type="verificationrequest" initiator="ussd" id="@{newGuid}" session_id="${SessionId}">
-                <Item customer="${Sender}">
-                    <Attribute name="checkivrservice" value="0" />
-                    <Attribute name="checkblocks" value="0" />
-                </Item>
-            </Message>
-        </receiveTemplate>
-  <deliveryTemplate direction="input" terminating="false">            
-   <set item="Content"   value="Ошибка в запросе, создайте запрос в формате: *519*код*7YYYXXXXXXX#" />
-            <set item="Sender" value="_USSD_NUMBER_TEST_GROUP" />
-            <set item="Recipient" value="${Customer}" />
-            <set item="Encoding" value="unicodefffe" />
-        </deliveryTemplate>
-  <deliveryTemplate connector="_SMSCON" />
-  </template> -->
 </templateGroup>

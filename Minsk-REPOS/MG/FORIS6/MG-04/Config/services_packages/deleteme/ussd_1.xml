@@ -79,20 +79,4 @@
       <set item="Recipient" value="{Customer}" />
     </deliveryTemplate>
   </template>
-  <!--template procedureName="USSDManageServicePackage_Error">
-		<condition>
-			<test item="${Recipient}" matches="^(_PKG_REMOVE_NUMBER|_PKG_ADD_NUMBER)$" />
-		</condition>
-		<receiveTemplate>
-			<Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-				<Item customer="${sender}" sender="${Recipient}" />
-			</Message>
-		</receiveTemplate>
-		<deliveryTemplate direction="input">
-			<set item="Content" value="Сообщение о неверном формате сообщения, согласованное с МТС" />
-			<set item="Encoding" value="unicodefffe" />
-			<set item="Sender" value="${sender}" />
-			<set item="Recipient" value="${customer}" />
-		</deliveryTemplate>
-	</template-->
 </templateGroup>

@@ -448,28 +448,6 @@
         </Message>
       </SendTemplate>
     </Procedure>
-    <!--              <Procedure	cond="/Message/@type='Del_internight'" 
-					call="billing.enin_del_srv_any" using="db" >
-			<Parameters>
-				<param name="dbresult" type="out:string" value=""/>
-				<param name="reply" type="out:string" value=""/>
-				<param name="ret_code" type="out:string" value=""/>
-				<param name="p_msisdn" type="string" value="${customer}"/>
-				<param name="srv_del_str" type="string" value="FR107700"/>
-				<param name="source" type="string" value="9"/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-  					<Item customer="${customer}" dbresult="${ret_code}" state="0">
-    						<Service id="FR107700" resultcode="0">
-      							<Attribute name="state" value="0" />
-      							<Attribute name="ischarged" value="0" />
-    						</Service>
-  					</Item>
-				</Message>			
-			</SendTemplate>
-		</Procedure>
--->
     <Procedure cond="/Message/@type='serviceinterrogation' and /Message/Item/@datasource='state'" call="BILLING.mg_serviceinterrogation" using="db">
       <Parameters>
         <param name="dbresult" type="out:string" value="" />
@@ -496,49 +474,6 @@
       </SendTemplate>
     </Procedure>
     <!-- закрыто можно удалить -->
-    <!-- Добавление услуг
-
-		<Procedure	cond="/Message/@type='AddService'" 
-					call="BILLING.enin_add_srv_any_req" using="db" >
-			<Parameters>
-				<param name="dbresult" type="out:string" value=""/>
-				<param name="reply" type="out:string" value=""/>
-				<param name="ret_code" type="out:string" value=""/>
-				<param name="p_msisdn" type="string" value="${customer}"/>
-				<param name="srv_del_str" type="string" value="${service_id}"/>
-				<param name="source" type="string" value="${service_init_source}"/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${dbresult}" reply = "${reply}" state="0">
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure>	
-
-		-->
-    <!-- Удаление услуг 
-
-
-		<Procedure	cond="/Message/@type='DelService'" 
-					call="BILLING.enin_del_srv_any_req" using="db" >
-			<Parameters>
-				<param name="dbresult" type="out:string" value=""/>
-				<param name="reply" type="out:string" value=""/>
-				<param name="ret_code" type="out:string" value=""/>
-				<param name="p_msisdn" type="string" value="${customer}"/>
-				<param name="srv_del_str" type="string" value="${service_id}"/>
-				<param name="source" type="string" value="${service_init_source}"/>
-			</Parameters>
-			<SendTemplate>
-				<Message type="serviceorderdataresult" id="@{newGuid}" session_id="${session_id}" request_id="${id}">
-					<Item customer="${customer}" dbresult="${dbresult}" reply = "${reply}" state="0">
-					</Item>
-				</Message>
-			</SendTemplate>
-		</Procedure>  
-              
-за ненадобностью -->
     <Procedure cond="/Message/@type='Add_Service'" call="BILLING.add_close_srv_req.add_srv_req" using="db">
       <Parameters>
         <param name="dbresult" type="out:string" value="" />
