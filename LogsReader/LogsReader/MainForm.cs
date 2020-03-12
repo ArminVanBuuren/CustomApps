@@ -1,7 +1,6 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -61,7 +60,7 @@ namespace LogsReader
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             TryGetCellValue(row, "IsMatched", out var cell);
-            if (cell != null && cell is bool cellValue)
+            if (cell is bool)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
             }
