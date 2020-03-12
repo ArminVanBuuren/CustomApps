@@ -85,7 +85,7 @@ namespace Utils
         public int MillisecondsDalay { get; }
         public IEnumerable<TSource> Source { get; protected set; }
         public MTCallBackList<TSource, TResult> Result { get; protected set; }
-        public bool IsCompleted => Source.Count() == Result.Values.Count();
+        public bool IsCompleted => Source.Count() == Result.Values.Count() || (CancelToken != null && CancelToken.IsCancellationRequested);
         public int PercentOfComplete => (Result.Values.Count() * 100) / Source.Count();
         protected CancellationTokenSource CancelToken { get; private set; }
 
