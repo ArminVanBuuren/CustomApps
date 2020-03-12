@@ -27,6 +27,25 @@ namespace Utils
             return result;
         }
 
+        public static bool Verify(string testPattern)
+        {
+            if ((testPattern != null) && (testPattern.Trim().Length > 0))
+            {
+                try
+                {
+                    Regex.Match("", testPattern);
+                    return true;
+                }
+                catch (ArgumentException)
+                {
+                    return false; // BAD PATTERN: Syntax error
+                }
+            }
+            else
+            {
+                return false; //BAD PATTERN: Pattern is null or blank
+            }
+        }
 
         /// <summary>
         /// Получить RegexOptions из строки

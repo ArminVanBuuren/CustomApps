@@ -306,6 +306,7 @@ namespace Utils
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Action>_3_{actions.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
+            var listOfCallBack = new List<Task>();
 
             foreach (var action in actions)
             {
@@ -346,7 +347,8 @@ namespace Utils
                         {
                             try
                             {
-                                taskCallback?.Start();
+                                listOfCallBack.Add(taskCallback);
+                                taskCallback.Start();
                             }
                             catch (Exception ex)
                             {
@@ -364,6 +366,7 @@ namespace Utils
             }
 
             Task.WaitAll(listOfTasks.ToArray());
+            Task.WaitAll(listOfCallBack.ToArray());
         }
 
 
@@ -434,6 +437,7 @@ namespace Utils
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"IEnumerable<Func<TResult>>_3_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
+            var listOfCallBack = new List<Task>();
 
             foreach (var func in funcs)
             {
@@ -474,7 +478,8 @@ namespace Utils
                         {
                             try
                             {
-                                taskCallback?.Start();
+                                listOfCallBack.Add(taskCallback);
+                                taskCallback.Start();
                             }
                             catch (Exception ex)
                             {
@@ -492,6 +497,7 @@ namespace Utils
             }
 
             Task.WaitAll(listOfTasks.ToArray());
+            Task.WaitAll(listOfCallBack.ToArray());
         }
 
         public static async Task<MTCallBackList<TSource, bool>> RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
@@ -561,6 +567,7 @@ namespace Utils
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"Action<TSource>_3_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
+            var listOfCallBack = new List<Task>();
 
             foreach (var item in data)
             {
@@ -601,7 +608,8 @@ namespace Utils
                         {
                             try
                             {
-                                taskCallback?.Start();
+                                listOfCallBack.Add(taskCallback);
+                                taskCallback.Start();
                             }
                             catch (Exception ex)
                             {
@@ -620,6 +628,7 @@ namespace Utils
             }
 
             Task.WaitAll(listOfTasks.ToArray());
+            Task.WaitAll(listOfCallBack.ToArray());
         }
 
         public static async Task<MTCallBackList<TSource, TResult>> RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, int maxThreads = 2, CancellationToken? cancel = null)
@@ -689,6 +698,7 @@ namespace Utils
         {
             var pool = new Semaphore(maxThreads, maxThreads, $"Func<TSource, TResult>_3_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}");
             var listOfTasks = new List<Task>();
+            var listOfCallBack = new List<Task>();
 
             foreach (var item in data)
             {
@@ -729,7 +739,8 @@ namespace Utils
                         {
                             try
                             {
-                                taskCallback?.Start();
+                                listOfCallBack.Add(taskCallback);
+                                taskCallback.Start();
                             }
                             catch (Exception ex)
                             {
@@ -747,6 +758,7 @@ namespace Utils
             }
 
             Task.WaitAll(listOfTasks.ToArray());
+            Task.WaitAll(listOfCallBack.ToArray());
         }
     }
 }
