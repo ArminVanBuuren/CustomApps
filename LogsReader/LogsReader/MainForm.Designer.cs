@@ -43,10 +43,24 @@
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.pgbThreads = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -67,7 +81,7 @@
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtText.Size = new System.Drawing.Size(977, 334);
+            this.txtText.Size = new System.Drawing.Size(875, 334);
             this.txtText.TabIndex = 0;
             // 
             // dgvFiles
@@ -92,7 +106,7 @@
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(974, 174);
+            this.dgvFiles.Size = new System.Drawing.Size(872, 174);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             // 
@@ -133,7 +147,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(0, 0);
+            this.trvMain.Location = new System.Drawing.Point(0, 199);
             this.trvMain.Name = "trvMain";
             treeNode1.Name = "trvServers";
             treeNode1.Text = "Сервера";
@@ -142,7 +156,7 @@
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(126, 517);
+            this.trvMain.Size = new System.Drawing.Size(228, 318);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
@@ -198,6 +212,20 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.textBox6);
+            this.splitContainer1.Panel1.Controls.Add(this.label7);
+            this.splitContainer1.Panel1.Controls.Add(this.textBox5);
+            this.splitContainer1.Panel1.Controls.Add(this.label6);
+            this.splitContainer1.Panel1.Controls.Add(this.textBox4);
+            this.splitContainer1.Panel1.Controls.Add(this.label5);
+            this.splitContainer1.Panel1.Controls.Add(this.textBox3);
+            this.splitContainer1.Panel1.Controls.Add(this.label4);
+            this.splitContainer1.Panel1.Controls.Add(this.textBox2);
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
+            this.splitContainer1.Panel1.Controls.Add(this.comboBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.trvMain);
             this.splitContainer1.Panel1MinSize = 100;
             // 
@@ -205,8 +233,99 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(1113, 521);
-            this.splitContainer1.SplitterDistance = 128;
+            this.splitContainer1.SplitterDistance = 230;
             this.splitContainer1.TabIndex = 7;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox4.Location = new System.Drawing.Point(61, 118);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(162, 20);
+            this.textBox4.TabIndex = 12;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 121);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Log dir:";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox3.Location = new System.Drawing.Point(61, 92);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(162, 20);
+            this.textBox3.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 95);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "MaxThrds:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox2.Location = new System.Drawing.Point(61, 66);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(162, 20);
+            this.textBox2.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Types:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Scheme:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(61, 13);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(162, 21);
+            this.comboBox1.TabIndex = 5;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(61, 40);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(162, 20);
+            this.textBox1.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 43);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Servers:";
             // 
             // splitContainer2
             // 
@@ -223,7 +342,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtText);
-            this.splitContainer2.Size = new System.Drawing.Size(981, 521);
+            this.splitContainer2.Size = new System.Drawing.Size(879, 521);
             this.splitContainer2.SplitterDistance = 177;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -244,13 +363,48 @@
             // 
             this.useRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.useRegex.AutoSize = true;
-            this.useRegex.Location = new System.Drawing.Point(1041, 8);
+            this.useRegex.Location = new System.Drawing.Point(1041, 10);
             this.useRegex.Name = "useRegex";
             this.useRegex.Size = new System.Drawing.Size(79, 17);
             this.useRegex.TabIndex = 9;
             this.useRegex.Text = "Use Regex";
             this.useRegex.UseVisualStyleBackColor = true;
-            this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
+            // 
+            // textBox5
+            // 
+            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox5.Location = new System.Drawing.Point(61, 144);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(162, 20);
+            this.textBox5.TabIndex = 14;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 147);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Lines:";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox6.Location = new System.Drawing.Point(61, 173);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(162, 20);
+            this.textBox6.TabIndex = 16;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 176);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Pattern:";
             // 
             // MainForm
             // 
@@ -269,6 +423,7 @@
             this.Text = "MG Logs Reader";
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -301,6 +456,20 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.CheckBox useRegex;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label7;
     }
 }
 
