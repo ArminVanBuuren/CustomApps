@@ -24,7 +24,7 @@ namespace LogsReader
         [DGVColumn(ColumnPosition.After, "Message", false)]
         public string Message { get; set; }
 
-        [DGVColumn(ColumnPosition.Last, "Server", false)]
+        [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
         public bool IsMatched { get; set; }
     }
 }
