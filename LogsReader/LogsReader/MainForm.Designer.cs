@@ -446,7 +446,8 @@ namespace LogsReader
             this.Controls.Add(this.btnSearch);
             this.MinimumSize = new System.Drawing.Size(398, 283);
             this.Name = "MainForm";
-            this.Text = "MG Logs Reader";
+            this.Text = "Logs Reader";
+            this.Icon = global::LogsReader.Properties.Resources.icons_100;
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
