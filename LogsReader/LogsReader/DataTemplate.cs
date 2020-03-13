@@ -20,14 +20,14 @@ namespace LogsReader
         public string Date
         {
             get => _date;
-            set => _date = value.Replace(Environment.NewLine, "");
+            set => _date = value.Replace(Environment.NewLine, string.Empty);
         }
 
         [DGVColumn(ColumnPosition.After, "TraceType")]
         public string TraceType
         {
             get => _traceType;
-            set => _traceType = value.Replace(Environment.NewLine, "");
+            set => _traceType = value.Replace(Environment.NewLine, string.Empty);
         }
 
         [DGVColumn(ColumnPosition.After, "FileName")]

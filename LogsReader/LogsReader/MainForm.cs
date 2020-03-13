@@ -132,7 +132,7 @@ namespace LogsReader
                     {
                         if (!REGEX.Verify(txtPattern.Text))
                         {
-                            SetStatus(@"Regular expression for search pattern is invalid! Please check.", true);
+                            ReportStatus(@"Regular expression for search pattern is invalid! Please check.", true);
                             return;
                         }
 
@@ -147,7 +147,7 @@ namespace LogsReader
                     IsStopPending = false;
                     IsWorked = true;
                     ChangeFormStatus();
-                    SetStatus(@"Working...", false);
+                    ReportStatus(@"Working...", false);
 
 
                     var kvpList = await Task<List<FileLog>>.Factory.StartNew(() => GetFileLogs(
@@ -156,12 +156,12 @@ namespace LogsReader
 
                     if (kvpList.Count <= 0)
                     {
-                        SetStatus(@"No logs files found", true);
+                        ReportStatus(@"No logs files found", true);
                         return;
                     }
 
                     MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads);
-                    new Action(CheckProgress).BeginInvoke(IsCompleted, null);
+                    new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
                     var i = 0;
@@ -171,17 +171,17 @@ namespace LogsReader
 
                     if (result.Count <= 0)
                     {
-                        SetStatus(@"No logs found", true);
+                        ReportStatus(@"No logs found", true);
                         return;
                     }
 
                     await dgvFiles.AssignCollectionAsync(result, null, true);
 
-                    SetStatus(@"Finished", false);
+                    ReportStatus(@"Finished", false);
                 }
                 catch (Exception ex)
                 {
-                    SetStatus(ex.Message, true);
+                    ReportStatus(ex.Message, true);
                 }
                 finally
                 {
@@ -193,7 +193,7 @@ namespace LogsReader
             {
                 IsStopPending = true;
                 MultiTaskingHandler?.Stop();
-                SetStatus(@"Stopping...", false);
+                ReportStatus(@"Stopping...", false);
             }
         }
 
@@ -265,7 +265,7 @@ namespace LogsReader
             }
         }
 
-        void IsCompleted(IAsyncResult asyncResult)
+        void ProcessCompleted(IAsyncResult asyncResult)
         {
             try
             {
@@ -482,9 +482,9 @@ namespace LogsReader
             try
             {
                 if (CurrentSettings != null)
-                    CurrentSettings.CatchWaring -= SetStatus;
+                    CurrentSettings.CatchWaring -= ReportStatus;
                 CurrentSettings = Settings.Schemes[chooseScheme.Text];
-                CurrentSettings.CatchWaring += SetStatus;
+                CurrentSettings.CatchWaring += ReportStatus;
 
                 serversText.Text = CurrentSettings.Servers;
                 typesText.Text = CurrentSettings.Types;
@@ -496,7 +496,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                SetStatus(ex.Message, true);
+                ReportStatus(ex.Message, true);
             }
             finally
             {
@@ -620,7 +620,7 @@ namespace LogsReader
             }
         }
 
-        void SetStatus(string message, bool isError)
+        void ReportStatus(string message, bool isError)
         {
             _statusInfo.Text = message;
             _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
@@ -653,14 +653,14 @@ namespace LogsReader
         {
             dgvFiles.DataSource = null;
             dgvFiles.Refresh();
-            FCTB.Text = "";
-            FCTBFullsStackTrace.Text = "";
+            FCTB.Text = string.Empty;
+            FCTBFullsStackTrace.Text = string.Empty;
             pgbThreads.Value = 0;
             completedFilesStatus.Text = @"0";
             totalFilesStatus.Text = @"0";
             Finded = 0;
             _findedInfo.Text = Finded.ToString();
-            SetStatus("", false);
+            ReportStatus(string.Empty, false);
         }
     }
 }

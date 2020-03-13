@@ -22,7 +22,7 @@ namespace LogsReader
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
         XmlNode[] _previousSearch =
         {
-            new XmlDocument().CreateCDataSection(@"")
+            new XmlDocument().CreateCDataSection(string.Empty)
         };
 
         [XmlAnyElement("PreviousSearchComment")]
