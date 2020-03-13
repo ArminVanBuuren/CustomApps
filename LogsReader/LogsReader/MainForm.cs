@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace LogsReader
         private int _finded = 0;
         
         private readonly ToolStripStatusLabel _statusInfo = new ToolStripStatusLabel();
-        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel();
+        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel("0");
 
         /// <summary>
         /// Статус выполнения поиска
@@ -97,6 +98,12 @@ namespace LogsReader
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = Language.XML;
             FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+
+            FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+            FCTBFullsStackTrace.ClearStylesBuffer();
+            FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
+            FCTBFullsStackTrace.Language = Language.XML;
+            FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
             try
             {
@@ -172,8 +179,23 @@ namespace LogsReader
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
+                    
+                    var result = MultiTaskingHandler.Result.Values.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ToList();
+                    var resultError = MultiTaskingHandler.Result.Values.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+                    {
+                        listErr.Add(new DataTemplate()
+                        {
+                            Server = x.Source.Server,
+                            Date = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff"),
+                            FileName = x.Source.FileName,
+                            TraceType = x.Error.GetType().ToString(),
+                            Message = x.Error.ToString()
+                        });
+                        return listErr;
+                    });
+                    result.AddRange(resultError);
+
                     var i = 0;
-                    var result = MultiTaskingHandler.Result.Values.SelectMany(x => x.Result).OrderBy(p => p.Date).ToList();
                     foreach (var v in result)
                         v.ID = ++i;
 
