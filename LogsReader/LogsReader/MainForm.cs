@@ -104,7 +104,7 @@ namespace LogsReader
             Closing += (s, e) => { SaveSettings(); };
         }
 
-        private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private static void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             TryGetCellValue(row, "IsMatched", out var cell);
@@ -458,26 +458,6 @@ namespace LogsReader
             }
         }
 
-        static bool GetCellItemSelectedRows(DataGridView grid, out List<string> result, string name = "Message")
-        {
-            result = new List<string>();
-            if (grid.SelectedRows.Count > 0)
-            {
-                foreach (DataGridViewRow row in grid.SelectedRows)
-                {
-                    if (TryGetCellValue(row, name, out var cellValue))
-                        result.Add(cellValue.ToString());
-                }
-
-                result = result.Distinct().ToList();
-            }
-            else
-            {
-                return false;
-            }
-            return result.Count > 0;
-        }
-
         static bool TryGetCellValue(DataGridViewRow row, string cellName, out object result)
         {
             result = null;
@@ -609,7 +589,7 @@ namespace LogsReader
         {
             CurrentSettings.MaxTraceLines = res;
             maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-            SaveSettings(); ;
+            SaveSettings();
         }
 
         private void tracePatternText_TextChanged(object sender, EventArgs e)

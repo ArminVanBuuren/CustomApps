@@ -1,14 +1,11 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using Utils;
 using static Utils.ASSEMBLY;
@@ -244,53 +241,4 @@ namespace LogsReader
             TraceLinePatternRegex = new Regex(_traceLinePattern[0].Value, RegexOptions.Compiled | RegexOptions.Singleline);
         }
     }
-
-    //public abstract class LRSettingsSerializable : IXmlSerializable
-    //{
-    //    public XmlSchema GetSchema()
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public abstract void ReadXml(XmlReader reader);
-
-    //    public void WriteXml(XmlWriter writer)
-    //    {
-    //        var tp = GetType();
-    //        var props = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-    //        foreach (var propertyInfo in props)
-    //        {
-    //            var attrs = propertyInfo.GetCustomAttributes(true);
-    //            if (attrs.Length == 0 || attrs.Any(p => p is XmlIgnoreAttribute))
-    //                continue;
-
-    //            foreach (var attribute in attrs)
-    //            {
-    //                switch (attribute)
-    //                {
-    //                    case XmlCommentAttribute _:
-    //                        writer.WriteComment(propertyInfo.GetCustomAttributes(typeof(XmlCommentAttribute), false).Cast<XmlCommentAttribute>().Single().Value);
-    //                        break;
-    //                    case XmlElementAttribute element:
-    //                        if (propertyInfo.GetValue(this) is Dictionary<string, LRSettingsScheme>)
-    //                        {
-    //                            new XmlSerializer(typeof(LRSettingsScheme)).Serialize(stream, settings);
-    //                        }
-    //                        writer.WriteElementString(element.ElementName, propertyInfo.GetValue(this).ToString());
-    //                        break;
-    //                    case XmlAttributeAttribute element:
-    //                        writer.WriteAttributeString(element.AttributeName, propertyInfo.GetValue(this).ToString());
-    //                        break;
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-
-    //[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    //public class XmlCommentAttribute : Attribute
-    //{
-    //    public string Value { get; set; }
-    //}
-
 }
