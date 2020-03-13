@@ -23,6 +23,24 @@ namespace LogsReader
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme() };
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
+        XmlNode[] _previousSearch =
+        {
+            new XmlDocument().CreateCDataSection(@"")
+        };
+
+        [XmlAnyElement("PreviousSearchComment")]
+        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment("Предыдущее значение поиска"); set { } }
+
+        [XmlElement("PreviousSearch")]
+        public XmlNode[] PreviousSearch
+        {
+            get => _previousSearch;
+            set
+            {
+                if (value != null && value.Length > 0)
+                    _previousSearch = value;
+            }
+        }
 
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
@@ -144,7 +162,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("MaxThreadsComment")]
-        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment("Максимальное количество потоков. Для отключения опции установить значение -1"); set { } }
+        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment("Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответсвовать количеству обрабатываемых файлов логов."); set { } }
 
         [XmlElement("MaxThreads")]
         public int MaxThreads

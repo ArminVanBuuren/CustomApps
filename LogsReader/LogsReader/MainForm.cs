@@ -18,25 +18,47 @@ namespace LogsReader
 {
     public partial class MainForm : Form
     {
+        private readonly object _syncRootFinded = new object();
+        private int _finded = 0;
         private bool _isWorked = false;
         private bool _isStopPending = false;
         private Func<string, bool> _isMatch = null;
 
         private readonly LRSettings _allSettings;
         public LRSettingsScheme CurrentSettings { get; private set; }
+
+        public int Finded
+        {
+            get
+            {
+                lock (_syncRootFinded)
+                    return _finded;
+            }
+            set
+            {
+                lock (_syncRootFinded)
+                    _finded = value;
+            }
+        }
+
         private MTFuncResult<FileLog, List<DataTemplate>> _multiTasking;
 
-        private readonly ToolStripStatusLabel statusInfo = new ToolStripStatusLabel();
+        private readonly ToolStripStatusLabel _statusInfo = new ToolStripStatusLabel();
+        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel();
 
         public MainForm()
         {
             InitializeComponent();
 
             statusStrip1.Items.Add(new ToolStripSeparator());
-            statusStrip1.Items.Add(statusInfo);
+            statusStrip1.Items.Add(new ToolStripStatusLabel("Finded:"));
+            statusStrip1.Items.Add(_findedInfo);
+            statusStrip1.Items.Add(new ToolStripSeparator());
+            statusStrip1.Items.Add(_statusInfo);
+            
+
             dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
-            FCTB.AutoCompleteBracketsList = new[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
             FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
@@ -47,6 +69,7 @@ namespace LogsReader
             {
                 _allSettings = LRSettings.Deserialize();
                 chooseScheme.DataSource = _allSettings.Schemes.Keys.ToList();
+                txtPattern.AssignValue(_allSettings.PreviousSearch[0].Value, txtPattern_TextChanged);
             }
             catch (Exception ex)
             {
@@ -60,7 +83,7 @@ namespace LogsReader
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             TryGetCellValue(row, "IsMatched", out var cell);
-            if (cell is bool)
+            if (cell is bool cell0 && cell0)
             {
                 row.DefaultCellStyle.BackColor = Color.White;
             }
@@ -112,7 +135,7 @@ namespace LogsReader
                         return;
                     }
 
-                    _multiTasking = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, kvpList.Count);
+                    _multiTasking = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads);
                     new Action(CheckProgress).BeginInvoke(IsCompleted, null);
                     await _multiTasking.StartAsync();
 
@@ -171,9 +194,7 @@ namespace LogsReader
         {
             if (_isWorked)
             {
-                pgbThreads.Value = 0;
-                completedFilesStatus.Text = @"0";
-                totalFilesStatus.Text = @"0";
+                ClearForm();
             }
 
             btnSearch.Text = _isWorked ? @"Stop" : @"Search";
@@ -182,6 +203,7 @@ namespace LogsReader
             txtPattern.Enabled = !_isWorked;
             dgvFiles.Enabled = !_isWorked;
             FCTB.Enabled = !_isWorked;
+            FCTBFullsStackTrace.Enabled = !_isWorked;
             useRegex.Enabled = !_isWorked;
             chooseScheme.Enabled = !_isWorked;
             serversText.Enabled = !_isWorked;
@@ -207,6 +229,7 @@ namespace LogsReader
                         pgbThreads.Value = progress;
                         completedFilesStatus.Text = completed;
                         totalFilesStatus.Text = total;
+                        _findedInfo.Text = Finded.ToString();
                     }));
                     Thread.Sleep(10);
                 }
@@ -226,8 +249,14 @@ namespace LogsReader
                     pgbThreads.Value = 100;
                     if (_multiTasking != null)
                     {
-                        completedFilesStatus.Text = _multiTasking.Source.Count().ToString();
-                        totalFilesStatus.Text = _multiTasking.Result.Values.Count().ToString();
+                        completedFilesStatus.Text = _multiTasking.Result.Values.Count().ToString();
+                        totalFilesStatus.Text = _multiTasking.Source.Count().ToString();  
+                    }
+                    else
+                    {
+                        _findedInfo.Text = Finded.ToString();
+                        completedFilesStatus.Text = @"0";
+                        totalFilesStatus.Text = @"0";
                     }
                 }));
             }
@@ -251,7 +280,7 @@ namespace LogsReader
 
         private List<DataTemplate> ReadData(FileLog fileLog)
         {
-            var beforeTraceLines = new Stack<string>(CurrentSettings.MaxTraceLines);
+            var beforeTraceLines = new Queue<string>(CurrentSettings.MaxTraceLines);
             var listResult = new List<DataTemplate>();
             using (var inputStream = File.OpenRead(fileLog.FilePath))
             {
@@ -276,7 +305,9 @@ namespace LogsReader
                             {
                                 if (lastResult.IsMatched)
                                 {
-                                    if (!IsLineMatched(line, fileLog, out _))
+                                    // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
+                                    // Иначе строка относится к другому логу и завершается дополнение
+                                    if (!CurrentSettings.TraceLinePatternRegex.IsMatch(line))
                                     {
                                         stackLines++;
                                         lastResult.Message = lastResult.Message + Environment.NewLine + line;
@@ -288,24 +319,37 @@ namespace LogsReader
                                         lastResult = null;
                                     }
                                 }
-                                else if (!lastResult.IsMatched && IsLineMatched(lastResult.Message + Environment.NewLine + line, fileLog, out var afterResult))
+                                else if (!lastResult.IsMatched)
                                 {
-                                    listResult.Add(afterResult);
-                                    lastResult = afterResult;
+                                    // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
+                                    stackLines++;
+                                    var appendFailedLog = lastResult.Message + Environment.NewLine + line;
+                                    if (IsLineMatched(appendFailedLog, fileLog, out var afterSuccessResult))
+                                    {
+                                        // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
+                                        listResult.Add(afterSuccessResult);
+                                        lastResult = afterSuccessResult;
+                                    }
+                                    else
+                                    {
+                                        // Паттерн не сработал успешно, но лог дополняется для следующей попытки
+                                        lastResult.Message = appendFailedLog;
+                                    }
                                 }
                             }
                         }
 
                         if (!_isMatch.Invoke(line))
                         {
-                            beforeTraceLines.Push(line);
-                            if (beforeTraceLines.Count >= CurrentSettings.MaxTraceLines)
-                                beforeTraceLines.Pop();
+                            beforeTraceLines.Enqueue(line);
+                            if (beforeTraceLines.Count > CurrentSettings.MaxTraceLines)
+                                beforeTraceLines.Dequeue();
                             continue;
                         }
                         else
                         {
-                            stackLines = 0;
+                            Finded++;
+                            stackLines = 1;
                         }
 
                         if (IsLineMatched(line, fileLog, out lastResult))
@@ -314,15 +358,17 @@ namespace LogsReader
                         }
                         else
                         {
-                            lastResult.Message = line;
-                            while (stackLines <= CurrentSettings.MaxTraceLines && beforeTraceLines.Count > 0)
+                            // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
+                            var reverceBeforeTraceLines = new Queue<string>(beforeTraceLines.Reverse());
+                            while (stackLines < CurrentSettings.MaxTraceLines && reverceBeforeTraceLines.Count > 0)
                             {
                                 stackLines++;
-                                lastResult.Message = beforeTraceLines.Pop() + Environment.NewLine + lastResult.Message;
+                                lastResult.Message = reverceBeforeTraceLines.Dequeue() + Environment.NewLine + lastResult.Message;
 
                                 if (IsLineMatched(lastResult.Message, fileLog, out var beforeResult))
                                 {
                                     lastResult = beforeResult;
+                                    listResult.Add(lastResult);
                                     break;
                                 }
                             }
@@ -341,9 +387,9 @@ namespace LogsReader
             return listResult;
         }
 
-        bool IsLineMatched(string line, FileLog fileLog, out DataTemplate result)
+        bool IsLineMatched(string message, FileLog fileLog, out DataTemplate result)
         {
-            var maskMatch = CurrentSettings.TraceLinePatternRegex.Match(line);
+            var maskMatch = CurrentSettings.TraceLinePatternRegex.Match(message);
             if (maskMatch.Success)
             {
                 result = new DataTemplate
@@ -353,7 +399,8 @@ namespace LogsReader
                     Date = maskMatch.Groups["Date"].Value,
                     FileName = fileLog.FileName,
                     TraceType = maskMatch.Groups["TraceType"].Value,
-                    Message = maskMatch.Groups["Message"].Value
+                    Message = maskMatch.Groups["Message"].Value,
+                    EntireMessage = message
                 };
                 return true;
             }
@@ -362,28 +409,27 @@ namespace LogsReader
             {
                 IsMatched = false,
                 Server = fileLog.Server,
-                FileName = fileLog.FileName
+                FileName = fileLog.FileName,
+                Message = message
             };
             return false;
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            dgvFiles.DataSource = null;
-            dgvFiles.Refresh();
-            FCTB.Text = "";
-            SetStatus("", false);
-            pgbThreads.Value = 0;
-            completedFilesStatus.Text = @"0";
-            totalFilesStatus.Text = @"0";
-        }
-
         private void dgvFiles_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvFiles.CurrentRow != null && GetCellItemSelectedRows(dgvFiles, out var result))
+            if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
+                return;
+
+            if (TryGetCellValue(dgvFiles.SelectedRows[0], "Message", out var message))
             {
-                FCTB.Text = result.First();
+                FCTB.Text = message.ToString();
                 FCTB.ClearUndo();
+            }
+
+            if (TryGetCellValue(dgvFiles.SelectedRows[0], "EntireMessage", out var entireMessage))
+            {
+                FCTBFullsStackTrace.Text = entireMessage.ToString();
+                FCTBFullsStackTrace.ClearUndo();
             }
         }
 
@@ -466,6 +512,7 @@ namespace LogsReader
                     continue;
                 trvMain.Nodes["trvServers"].Nodes.Add(s.Key.ToLower());
             }
+            trvMain.ExpandAll();
 
             SaveSettings();
         }
@@ -483,6 +530,7 @@ namespace LogsReader
                     continue;
                 trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.ToUpper());
             }
+            trvMain.ExpandAll();
 
             SaveSettings();
         }
@@ -491,10 +539,22 @@ namespace LogsReader
         {
             if (int.TryParse(maxThreadsText.Text, out var res))
             {
-                CurrentSettings.MaxThreads = res;
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-                SaveSettings();
+                MaxThreadsTextSave(res);
             }
+        }
+
+        private void maxThreadsText_Leave(object sender, EventArgs e)
+        {
+            if (!int.TryParse(maxThreadsText.Text, out var res))
+                res = -1;
+            MaxThreadsTextSave(res);
+        }
+
+        void MaxThreadsTextSave(int res)
+        {
+            CurrentSettings.MaxThreads = res;
+            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
+            SaveSettings();
         }
 
         private void logDirText_TextChanged(object sender, EventArgs e)
@@ -508,10 +568,23 @@ namespace LogsReader
         {
             if (int.TryParse(maxLinesStackText.Text, out var res))
             {
-                CurrentSettings.MaxTraceLines = res;
-                maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-                SaveSettings();
+                MaxLinesStackTextSave(res);
             }
+        }
+
+        private void maxLinesStackText_Leave(object sender, EventArgs e)
+        {
+            if (!int.TryParse(maxLinesStackText.Text, out var res))
+                res = -1;
+
+            MaxLinesStackTextSave(res);
+        }
+
+        void MaxLinesStackTextSave(int res)
+        {
+            CurrentSettings.MaxTraceLines = res;
+            maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
+            SaveSettings(); ;
         }
 
         private void tracePatternText_TextChanged(object sender, EventArgs e)
@@ -522,16 +595,11 @@ namespace LogsReader
             SaveSettings();
         }
 
-        async void SaveSettings()
-        {
-            if (_allSettings != null)
-                await LRSettings.SerializeAsync(_allSettings);
-        }
-
         private void trvMain_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Level == 0)
                 CheckTreeViewNode(e.Node, e.Node.Checked);
+            ValidationCheck();
         }
 
         private void CheckTreeViewNode(TreeNode node, bool isChecked)
@@ -549,18 +617,45 @@ namespace LogsReader
 
         void SetStatus(string message, bool isError)
         {
-            statusInfo.Text = message;
-            statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
+            _statusInfo.Text = message;
+            _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
         }
 
         private void txtPattern_TextChanged(object sender, EventArgs e)
         {
+            _allSettings.PreviousSearch[0].Value = txtPattern.Text;
             ValidationCheck();
+            SaveSettings();
         }
 
         void ValidationCheck()
         {
-            btnSearch.Enabled = CurrentSettings.IsCorrect && !txtPattern.Text.IsNullOrEmptyTrim();
+            btnSearch.Enabled = CurrentSettings.IsCorrect && !txtPattern.Text.IsNullOrEmptyTrim() && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+        }
+
+        async void SaveSettings()
+        {
+            if (_allSettings != null)
+                await LRSettings.SerializeAsync(_allSettings);
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+        }
+
+        void ClearForm()
+        {
+            dgvFiles.DataSource = null;
+            dgvFiles.Refresh();
+            FCTB.Text = "";
+            FCTBFullsStackTrace.Text = "";
+            pgbThreads.Value = 0;
+            completedFilesStatus.Text = @"0";
+            totalFilesStatus.Text = @"0";
+            Finded = 0;
+            _findedInfo.Text = Finded.ToString();
+            SetStatus("", false);
         }
     }
 }
