@@ -69,5 +69,88 @@ namespace LogsReader.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings from &apos;{0}&apos; is incorrect! Moved to {1}.
+        ///{2}.
+        /// </summary>
+        internal static string LRSettings_Deserialize_Ex {
+            get {
+                return ResourceManager.GetString("LRSettings_Deserialize_Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Предыдущее значение поиска..
+        /// </summary>
+        internal static string LRSettings_PreviousSearchComment {
+            get {
+                return ResourceManager.GetString("LRSettings_PreviousSearchComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save Settings to specified path=[{0}].
+        ///{1}.
+        /// </summary>
+        internal static string LRSettings_Serialize_Ex {
+            get {
+                return ResourceManager.GetString("LRSettings_Serialize_Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Путь к папке с логами. Диск должен указан вместе со знаком $ (C$, D$, F$).
+        /// </summary>
+        internal static string LRSettingsScheme_LogsDirectoryComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_LogsDirectoryComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов логов..
+        /// </summary>
+        internal static string LRSettingsScheme_MaxThreadsComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_MaxThreadsComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Максимальное количество строк для одного трейса.
+        /// </summary>
+        internal static string LRSettingsScheme_MaxTraceLinesComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_MaxTraceLinesComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую.
+        /// </summary>
+        internal static string LRSettingsScheme_ServersComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_ServersComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паттерн для считывания значений в найденном фрагменте лога. Учитывать регулярное выражение будет работать как однострочный режим - RegexOptions=Singleline. Обязательно использовать именованные группировки ? - дата; ? - тип трейса; ? - лог.
+        /// </summary>
+        internal static string LRSettingsScheme_TraceLinePatternComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_TraceLinePatternComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Типы файлов. Указать через запятую.
+        /// </summary>
+        internal static string LRSettingsScheme_TypesComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_TypesComment", resourceCulture);
+            }
+        }
     }
 }

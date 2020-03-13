@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Exception = System.Exception;
@@ -80,7 +81,14 @@ namespace LogsReader
             statusStrip1.Items.Add(_findedInfo);
             statusStrip1.Items.Add(new ToolStripSeparator());
             statusStrip1.Items.Add(_statusInfo);
-            
+
+            var tooltipPrintXML = new ToolTip{ InitialDelay = 50 };
+            tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
+            tooltipPrintXML.SetToolTip(typesText, Resources.LRSettingsScheme_TypesComment);
+            tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
+            tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
+            tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
+            tooltipPrintXML.SetToolTip(traceLinePatternText, Resources.LRSettingsScheme_TraceLinePatternComment);
 
             dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
@@ -236,7 +244,7 @@ namespace LogsReader
             maxThreadsText.Enabled = !IsWorked;
             logDirText.Enabled = !IsWorked;
             maxLinesStackText.Enabled = !IsWorked;
-            tracePatternText.Enabled = !IsWorked;
+            traceLinePatternText.Enabled = !IsWorked;
         }
 
         void CheckProgress()
@@ -491,7 +499,7 @@ namespace LogsReader
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-                tracePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
+                traceLinePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
                 btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
             catch (Exception ex)
@@ -594,8 +602,8 @@ namespace LogsReader
 
         private void tracePatternText_TextChanged(object sender, EventArgs e)
         {
-            CurrentSettings.TraceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(tracePatternText.Text) };
-            tracePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
+            CurrentSettings.TraceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(traceLinePatternText.Text) };
+            traceLinePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
             ValidationCheck();
             SaveSettings();
         }

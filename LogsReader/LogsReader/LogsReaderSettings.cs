@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using LogsReader.Properties;
 using Utils;
 using static Utils.ASSEMBLY;
 
@@ -25,8 +26,8 @@ namespace LogsReader
             new XmlDocument().CreateCDataSection(string.Empty)
         };
 
-        [XmlAnyElement("PreviousSearchComment")]
-        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment("Предыдущее значение поиска"); set { } }
+        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
+        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment); set { } }
 
         [XmlElement("PreviousSearch")]
         public XmlNode[] PreviousSearch
@@ -79,7 +80,8 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unable to save Settings to specified path=[{SettingsPath}].\r\n{ex.Message}");
+                
+                MessageBox.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message));
             }
         }
 
@@ -109,7 +111,7 @@ namespace LogsReader
                 File.Copy(SettingsPath, IncorrectSettingsPath);
                 File.Delete(SettingsPath);
 
-                MessageBox.Show($"Settings from '{SettingsPath}' is incorrect! Moved to {IncorrectSettingsPath}.\r\n{ex.Message}");
+                MessageBox.Show(string.Format(Resources.LRSettings_Deserialize_Ex, SettingsPath, IncorrectSettingsPath, ex.Message));
             }
 
             return sett ?? new LRSettings();
@@ -139,7 +141,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("ServersComment")]
-        public XmlComment ServersComment { get => new XmlDocument().CreateComment("Сервера для поиска"); set { } }
+        public XmlComment ServersComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_ServersComment); set { } }
 
         [XmlElement("Servers")]
         public string Servers
@@ -149,7 +151,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("TypesComment")]
-        public XmlComment TypesComment { get => new XmlDocument().CreateComment("Типы файлов"); set { } }
+        public XmlComment TypesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment); set { } }
 
         [XmlElement("Types")]
         public string Types
@@ -159,7 +161,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("MaxThreadsComment")]
-        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment("Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответсвовать количеству обрабатываемых файлов логов."); set { } }
+        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment); set { } }
 
         [XmlElement("MaxThreads")]
         public int MaxThreads
@@ -169,7 +171,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("LogsDirectoryComment")]
-        public XmlComment LogsDirectoryComment { get => new XmlDocument().CreateComment("Папка с логами"); set { } }
+        public XmlComment LogsDirectoryComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_LogsDirectoryComment); set { } }
 
         [XmlElement("LogsDirectory")]
         public string LogsDirectory
@@ -179,7 +181,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("MaxTraceLinesComment")]
-        public XmlComment MaxTraceLinesComment { get => new XmlDocument().CreateComment("Максимальный стек трейса"); set { } }
+        public XmlComment MaxTraceLinesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxTraceLinesComment); set { } }
 
         [XmlElement("MaxTraceLines")]
         public int MaxTraceLines
@@ -189,7 +191,7 @@ namespace LogsReader
         }
 
         [XmlAnyElement("TraceLinePatternComment")]
-        public XmlComment TraceLinePatternComment { get => new XmlDocument().CreateComment("Паттерн для считывания значений в найденном фрагменте лога. Учитывать что RegexOptions = Singleline. Использовать именованные группировки ?<Date> - дата; ?<TraceType> - тип трейса; ?<Message> - лог"); set { } }
+        public XmlComment TraceLinePatternComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceLinePatternComment); set { } }
 
         [XmlElement]
         public XmlNode[] TraceLinePattern

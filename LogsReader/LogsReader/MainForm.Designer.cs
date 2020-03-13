@@ -45,7 +45,7 @@ namespace LogsReader
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.pgbThreads = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tracePatternText = new System.Windows.Forms.TextBox();
+            this.traceLinePatternText = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -221,7 +221,7 @@ namespace LogsReader
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.tracePatternText);
+            this.splitContainer1.Panel1.Controls.Add(this.traceLinePatternText);
             this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.maxLinesStackText);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
@@ -247,13 +247,13 @@ namespace LogsReader
             // 
             // tracePatternText
             // 
-            this.tracePatternText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.traceLinePatternText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tracePatternText.Location = new System.Drawing.Point(61, 173);
-            this.tracePatternText.Name = "tracePatternText";
-            this.tracePatternText.Size = new System.Drawing.Size(162, 20);
-            this.tracePatternText.TabIndex = 16;
-            this.tracePatternText.TextChanged += new System.EventHandler(this.tracePatternText_TextChanged);
+            this.traceLinePatternText.Location = new System.Drawing.Point(61, 173);
+            this.traceLinePatternText.Name = "tracePatternText";
+            this.traceLinePatternText.Size = new System.Drawing.Size(162, 20);
+            this.traceLinePatternText.TabIndex = 16;
+            this.traceLinePatternText.TextChanged += new System.EventHandler(this.tracePatternText_TextChanged);
             // 
             // label7
             // 
@@ -593,7 +593,7 @@ namespace LogsReader
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox maxLinesStackText;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox tracePatternText;
+        private System.Windows.Forms.TextBox traceLinePatternText;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel0;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;

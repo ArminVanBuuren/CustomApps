@@ -121,4 +121,33 @@
   <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="LRSettingsScheme_LogsDirectoryComment" xml:space="preserve">
+    <value>Путь к папке с логами. Диск должен указан вместе со знаком $ (C$, D$, F$)</value>
+  </data>
+  <data name="LRSettingsScheme_MaxThreadsComment" xml:space="preserve">
+    <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов логов.</value>
+  </data>
+  <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
+    <value>Максимальное количество строк для одного трейса</value>
+  </data>
+  <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
+    <value>Сервера для поиска. Указать через запятую</value>
+  </data>
+  <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
+    <value>Паттерн для считывания значений в найденном фрагменте лога. Учитывать регулярное выражение будет работать как однострочный режим - RegexOptions=Singleline. Обязательно использовать именованные группировки ? - дата; ? - тип трейса; ? - лог</value>
+  </data>
+  <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
+    <value>Типы файлов. Указать через запятую</value>
+  </data>
+  <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
+    <value>Settings from '{0}' is incorrect! Moved to {1}.
+{2}</value>
+  </data>
+  <data name="LRSettings_PreviousSearchComment" xml:space="preserve">
+    <value>Предыдущее значение поиска.</value>
+  </data>
+  <data name="LRSettings_Serialize_Ex" xml:space="preserve">
+    <value>Unable to save Settings to specified path=[{0}].
+{1}</value>
+  </data>
 </root>
