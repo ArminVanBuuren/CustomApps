@@ -192,7 +192,7 @@ namespace LogsReader
 
                     if (kvpList.Count <= 0)
                     {
-                        ReportStatus(@"No logs files found", true);
+                        ReportStatus(@"No files logs found", true);
                         return;
                     }
 
