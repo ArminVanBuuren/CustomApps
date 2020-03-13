@@ -35,8 +35,8 @@ namespace LogsReader
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("Types");
             this.FCTB = new FastColoredTextBoxNS.FastColoredTextBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.trvMain = new System.Windows.Forms.TreeView();
@@ -110,7 +110,6 @@ namespace LogsReader
             this.FCTB.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FCTB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.FCTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FCTB.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.FCTB.ForeColor = System.Drawing.Color.Black;
             this.FCTB.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.FCTB.IsReplaceMode = false;
@@ -158,13 +157,13 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(0, 199);
             this.trvMain.Name = "trvMain";
-            treeNode5.Name = "trvServers";
-            treeNode5.Text = "Servers";
-            treeNode6.Name = "trvTypes";
-            treeNode6.Text = "Types";
+            treeNode31.Name = "trvServers";
+            treeNode31.Text = "Servers";
+            treeNode32.Name = "trvTypes";
+            treeNode32.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
+            treeNode31,
+            treeNode32});
             this.trvMain.Size = new System.Drawing.Size(228, 318);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -176,18 +175,18 @@ namespace LogsReader
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "Search";
+            this.btnSearch.Text = "Search [F5]";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.ButtonStartStop_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(960, 5);
+            this.btnClear.Location = new System.Drawing.Point(960, 6);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 3;
-            this.btnClear.Text = "Clear";
+            this.btnClear.Text = "Clear [F6]";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -245,32 +244,32 @@ namespace LogsReader
             this.splitContainer1.SplitterDistance = 230;
             this.splitContainer1.TabIndex = 7;
             // 
-            // tracePatternText
+            // traceLinePatternText
             // 
             this.traceLinePatternText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.traceLinePatternText.Location = new System.Drawing.Point(61, 173);
-            this.traceLinePatternText.Name = "tracePatternText";
-            this.traceLinePatternText.Size = new System.Drawing.Size(162, 20);
+            this.traceLinePatternText.Location = new System.Drawing.Point(76, 169);
+            this.traceLinePatternText.Name = "traceLinePatternText";
+            this.traceLinePatternText.Size = new System.Drawing.Size(147, 20);
             this.traceLinePatternText.TabIndex = 16;
             this.traceLinePatternText.TextChanged += new System.EventHandler(this.tracePatternText_TextChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 176);
+            this.label7.Location = new System.Drawing.Point(6, 172);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.Size = new System.Drawing.Size(67, 13);
             this.label7.TabIndex = 15;
-            this.label7.Text = "Pattern:";
+            this.label7.Text = "Line Pattern:";
             // 
             // maxLinesStackText
             // 
             this.maxLinesStackText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxLinesStackText.Location = new System.Drawing.Point(61, 144);
+            this.maxLinesStackText.Location = new System.Drawing.Point(76, 144);
             this.maxLinesStackText.Name = "maxLinesStackText";
-            this.maxLinesStackText.Size = new System.Drawing.Size(162, 20);
+            this.maxLinesStackText.Size = new System.Drawing.Size(147, 20);
             this.maxLinesStackText.TabIndex = 14;
             this.maxLinesStackText.TextChanged += new System.EventHandler(this.maxLinesStackText_TextChanged);
             this.maxLinesStackText.Leave += new System.EventHandler(this.maxLinesStackText_Leave);
@@ -280,17 +279,17 @@ namespace LogsReader
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 147);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.Size = new System.Drawing.Size(58, 13);
             this.label6.TabIndex = 13;
-            this.label6.Text = "Lines:";
+            this.label6.Text = "Max Lines:";
             // 
             // logDirText
             // 
             this.logDirText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logDirText.Location = new System.Drawing.Point(61, 118);
+            this.logDirText.Location = new System.Drawing.Point(76, 118);
             this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(162, 20);
+            this.logDirText.Size = new System.Drawing.Size(147, 20);
             this.logDirText.TabIndex = 12;
             this.logDirText.TextChanged += new System.EventHandler(this.logDirText_TextChanged);
             // 
@@ -299,17 +298,17 @@ namespace LogsReader
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 121);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 13);
+            this.label5.Size = new System.Drawing.Size(62, 13);
             this.label5.TabIndex = 11;
-            this.label5.Text = "Log dir:";
+            this.label5.Text = "Logs folder:";
             // 
             // maxThreadsText
             // 
             this.maxThreadsText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxThreadsText.Location = new System.Drawing.Point(61, 92);
+            this.maxThreadsText.Location = new System.Drawing.Point(76, 92);
             this.maxThreadsText.Name = "maxThreadsText";
-            this.maxThreadsText.Size = new System.Drawing.Size(162, 20);
+            this.maxThreadsText.Size = new System.Drawing.Size(147, 20);
             this.maxThreadsText.TabIndex = 10;
             this.maxThreadsText.TextChanged += new System.EventHandler(this.maxThreadsText_TextChanged);
             this.maxThreadsText.Leave += new System.EventHandler(this.maxThreadsText_Leave);
@@ -319,17 +318,17 @@ namespace LogsReader
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 95);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.Size = new System.Drawing.Size(72, 13);
             this.label4.TabIndex = 9;
-            this.label4.Text = "MaxThrds:";
+            this.label4.Text = "Max Threads:";
             // 
             // typesText
             // 
             this.typesText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.typesText.Location = new System.Drawing.Point(61, 66);
+            this.typesText.Location = new System.Drawing.Point(76, 66);
             this.typesText.Name = "typesText";
-            this.typesText.Size = new System.Drawing.Size(162, 20);
+            this.typesText.Size = new System.Drawing.Size(147, 20);
             this.typesText.TabIndex = 8;
             this.typesText.TextChanged += new System.EventHandler(this.typesText_TextChanged);
             // 
@@ -338,9 +337,9 @@ namespace LogsReader
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 69);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Types:";
+            this.label3.Text = "File Types:";
             // 
             // label2
             // 
@@ -357,9 +356,9 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chooseScheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.chooseScheme.FormattingEnabled = true;
-            this.chooseScheme.Location = new System.Drawing.Point(61, 13);
+            this.chooseScheme.Location = new System.Drawing.Point(76, 13);
             this.chooseScheme.Name = "chooseScheme";
-            this.chooseScheme.Size = new System.Drawing.Size(162, 21);
+            this.chooseScheme.Size = new System.Drawing.Size(147, 21);
             this.chooseScheme.TabIndex = 5;
             this.chooseScheme.SelectedIndexChanged += new System.EventHandler(this.chooseScheme_SelectedIndexChanged);
             // 
@@ -367,9 +366,9 @@ namespace LogsReader
             // 
             this.serversText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.serversText.Location = new System.Drawing.Point(61, 40);
+            this.serversText.Location = new System.Drawing.Point(76, 40);
             this.serversText.Name = "serversText";
-            this.serversText.Size = new System.Drawing.Size(162, 20);
+            this.serversText.Size = new System.Drawing.Size(147, 20);
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.serversText_TextChanged);
             // 
@@ -430,7 +429,7 @@ namespace LogsReader
             this.FullTraceStack.Location = new System.Drawing.Point(4, 22);
             this.FullTraceStack.Name = "FullTraceStack";
             this.FullTraceStack.Padding = new System.Windows.Forms.Padding(3);
-            this.FullTraceStack.Size = new System.Drawing.Size(867, 310);
+            this.FullTraceStack.Size = new System.Drawing.Size(863, 308);
             this.FullTraceStack.TabIndex = 1;
             this.FullTraceStack.Text = "Full Trace";
             // 
@@ -456,6 +455,7 @@ namespace LogsReader
             this.FCTBFullsStackTrace.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FCTBFullsStackTrace.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.FCTBFullsStackTrace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FCTBFullsStackTrace.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.FCTBFullsStackTrace.ForeColor = System.Drawing.Color.Black;
             this.FCTBFullsStackTrace.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.FCTBFullsStackTrace.IsReplaceMode = false;
@@ -470,7 +470,7 @@ namespace LogsReader
             this.FCTBFullsStackTrace.RightBracket2 = ')';
             this.FCTBFullsStackTrace.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.FCTBFullsStackTrace.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTBFullsStackTrace.ServiceColors")));
-            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(861, 304);
+            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(857, 302);
             this.FCTBFullsStackTrace.TabIndex = 1;
             this.FCTBFullsStackTrace.TabLength = 2;
             this.FCTBFullsStackTrace.WordWrap = true;

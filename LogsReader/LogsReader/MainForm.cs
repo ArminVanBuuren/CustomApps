@@ -92,6 +92,9 @@ namespace LogsReader
             tooltipPrintXML.SetToolTip(traceLinePatternText, Resources.LRSettingsScheme_TraceLinePatternComment);
 
             dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+            Closing += (s, e) => { SaveSettings(); };
+            KeyPreview = true;
+            KeyDown += MainForm_KeyDown;
 
             FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             FCTB.ClearStylesBuffer();
@@ -115,8 +118,26 @@ namespace LogsReader
             {
                 MessageBox.Show(ex.Message);
             }
+        }
 
-            Closing += (s, e) => { SaveSettings(); };
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.F5 when btnSearch.Enabled:
+                        ButtonStartStop_Click(this, EventArgs.Empty);
+                        break;
+                    case Keys.F6 when btnClear.Enabled:
+                        ClearForm();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
+            }
         }
 
         private static void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -252,7 +273,7 @@ namespace LogsReader
                 ClearForm();
             }
 
-            btnSearch.Text = IsWorked ? @"Stop" : @"Search";
+            btnSearch.Text = IsWorked ? @"Stop" : @"Search [F5]";
             btnClear.Enabled = !IsWorked;
             trvMain.Enabled = !IsWorked;
             txtPattern.Enabled = !IsWorked;
@@ -302,6 +323,7 @@ namespace LogsReader
                 Invoke(new MethodInvoker(delegate
                 {
                     pgbThreads.Value = 100;
+                    _findedInfo.Text = Finded.ToString();
                     if (MultiTaskingHandler != null)
                     {
                         completedFilesStatus.Text = MultiTaskingHandler.Result.Values.Count().ToString();
@@ -309,7 +331,6 @@ namespace LogsReader
                     }
                     else
                     {
-                        _findedInfo.Text = Finded.ToString();
                         completedFilesStatus.Text = @"0";
                         totalFilesStatus.Text = @"0";
                     }
@@ -403,7 +424,7 @@ namespace LogsReader
                         }
                         else
                         {
-                            Finded++;
+                            ++Finded;
                             stackLines = 1;
                         }
 

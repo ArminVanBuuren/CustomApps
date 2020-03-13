@@ -294,7 +294,7 @@ namespace SPAFilter
             _spaFilter = new SPAProcessFilter();
 
             InitializeComponent();
-            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
+            
             var tooltipPrintXML = new ToolTip
             {
                 InitialDelay = 50
@@ -322,6 +322,7 @@ namespace SPAFilter
                 // ignored
             }
 
+            KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
             KeyDown += ProcessFilterForm_KeyDown;
 
             dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;

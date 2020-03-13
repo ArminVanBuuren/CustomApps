@@ -856,8 +856,4 @@
         ///wAAAA////////////////8AAAAA==
 </value>
   </data>
-  <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
-    <value>Settings from '{0}' is incorrect! Moved to {1}.
-{2}</value>
-  </data>
 </root>
