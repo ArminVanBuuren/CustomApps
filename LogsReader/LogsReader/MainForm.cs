@@ -20,14 +20,44 @@ namespace LogsReader
     {
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
-        private bool _isWorked = false;
-        private bool _isStopPending = false;
-        private Func<string, bool> _isMatch = null;
+        
+        private readonly ToolStripStatusLabel _statusInfo = new ToolStripStatusLabel();
+        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel();
 
-        private readonly LRSettings _allSettings;
-        public LRSettingsScheme CurrentSettings { get; private set; }
+        /// <summary>
+        /// Статус выполнения поиска
+        /// </summary>
+        private bool IsWorked { get; set; } = false;
 
-        public int Finded
+        /// <summary>
+        /// Запрос на ожидание остановки выполнения поиска
+        /// </summary>
+        private bool IsStopPending { get; set; } = false;
+
+        /// <summary>
+        /// Функция на валидацию по критерию поиска в строке лога
+        /// </summary>
+        private Func<string, bool> IsMatchSearchPatternFunc { get; set; } = null;
+
+        /// <summary>
+        /// Все настройки
+        /// </summary>
+        private LRSettings Settings { get; set; }
+
+        /// <summary>
+        /// Текущая схема настроек
+        /// </summary>
+        private LRSettingsScheme CurrentSettings { get; set; }
+
+        /// <summary>
+        /// Основной обработчик для работы в асинхронном режиме
+        /// </summary>
+        private MTFuncResult<FileLog, List<DataTemplate>> MultiTaskingHandler { get; set; }
+
+        /// <summary>
+        /// Количество совпадений по критериям поиска
+        /// </summary>
+        private int Finded
         {
             get
             {
@@ -40,11 +70,6 @@ namespace LogsReader
                     _finded = value;
             }
         }
-
-        private MTFuncResult<FileLog, List<DataTemplate>> _multiTasking;
-
-        private readonly ToolStripStatusLabel _statusInfo = new ToolStripStatusLabel();
-        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel();
 
         public MainForm()
         {
@@ -67,9 +92,9 @@ namespace LogsReader
 
             try
             {
-                _allSettings = LRSettings.Deserialize();
-                chooseScheme.DataSource = _allSettings.Schemes.Keys.ToList();
-                txtPattern.AssignValue(_allSettings.PreviousSearch[0].Value, txtPattern_TextChanged);
+                Settings = LRSettings.Deserialize();
+                chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
+                txtPattern.AssignValue(Settings.PreviousSearch[0].Value, txtPattern_TextChanged);
             }
             catch (Exception ex)
             {
@@ -99,7 +124,7 @@ namespace LogsReader
 
         private async void ButtonStartStop_Click(object sender, EventArgs e)
         {
-            if (!_isWorked)
+            if (!IsWorked)
             {
                 try
                 {
@@ -112,15 +137,15 @@ namespace LogsReader
                         }
 
                         var searchPattern = new Regex(txtPattern.Text, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                        _isMatch = (input) => searchPattern.IsMatch(input);
+                        IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
                     }
                     else
                     {
-                        _isMatch = (input) => input.IndexOf(txtPattern.Text, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.CurrentCultureIgnoreCase) != -1;
                     }
 
-                    _isStopPending = false;
-                    _isWorked = true;
+                    IsStopPending = false;
+                    IsWorked = true;
                     ChangeFormStatus();
                     SetStatus(@"Working...", false);
 
@@ -135,12 +160,12 @@ namespace LogsReader
                         return;
                     }
 
-                    _multiTasking = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads);
+                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads);
                     new Action(CheckProgress).BeginInvoke(IsCompleted, null);
-                    await _multiTasking.StartAsync();
+                    await MultiTaskingHandler.StartAsync();
 
                     var i = 0;
-                    var result = _multiTasking.Result.Values.SelectMany(x => x.Result).OrderBy(p => p.Date).ToList();
+                    var result = MultiTaskingHandler.Result.Values.SelectMany(x => x.Result).OrderBy(p => p.Date).ToList();
                     foreach (var v in result)
                         v.ID = ++i;
 
@@ -160,14 +185,14 @@ namespace LogsReader
                 }
                 finally
                 {
-                    _isWorked = false;
+                    IsWorked = false;
                     ChangeFormStatus();
                 }
             }
             else
             {
-                _isStopPending = true;
-                _multiTasking?.Stop();
+                IsStopPending = true;
+                MultiTaskingHandler?.Stop();
                 SetStatus(@"Stopping...", false);
             }
         }
@@ -192,37 +217,37 @@ namespace LogsReader
 
         void ChangeFormStatus()
         {
-            if (_isWorked)
+            if (IsWorked)
             {
                 ClearForm();
             }
 
-            btnSearch.Text = _isWorked ? @"Stop" : @"Search";
-            btnClear.Enabled = !_isWorked;
-            trvMain.Enabled = !_isWorked;
-            txtPattern.Enabled = !_isWorked;
-            dgvFiles.Enabled = !_isWorked;
-            FCTB.Enabled = !_isWorked;
-            FCTBFullsStackTrace.Enabled = !_isWorked;
-            useRegex.Enabled = !_isWorked;
-            chooseScheme.Enabled = !_isWorked;
-            serversText.Enabled = !_isWorked;
-            typesText.Enabled = !_isWorked;
-            maxThreadsText.Enabled = !_isWorked;
-            logDirText.Enabled = !_isWorked;
-            maxLinesStackText.Enabled = !_isWorked;
-            tracePatternText.Enabled = !_isWorked;
+            btnSearch.Text = IsWorked ? @"Stop" : @"Search";
+            btnClear.Enabled = !IsWorked;
+            trvMain.Enabled = !IsWorked;
+            txtPattern.Enabled = !IsWorked;
+            dgvFiles.Enabled = !IsWorked;
+            FCTB.Enabled = !IsWorked;
+            FCTBFullsStackTrace.Enabled = !IsWorked;
+            useRegex.Enabled = !IsWorked;
+            chooseScheme.Enabled = !IsWorked;
+            serversText.Enabled = !IsWorked;
+            typesText.Enabled = !IsWorked;
+            maxThreadsText.Enabled = !IsWorked;
+            logDirText.Enabled = !IsWorked;
+            maxLinesStackText.Enabled = !IsWorked;
+            tracePatternText.Enabled = !IsWorked;
         }
 
         void CheckProgress()
         {
             try
             {
-                var total = _multiTasking.Source.Count().ToString();
-                while (_isWorked && _multiTasking != null && !_multiTasking.IsCompleted)
+                var total = MultiTaskingHandler?.Source.Count().ToString();
+                while (IsWorked && MultiTaskingHandler != null && !MultiTaskingHandler.IsCompleted)
                 {
-                    var completed = _multiTasking.Result.Values.Count().ToString();
-                    var progress = _multiTasking.PercentOfComplete;
+                    var completed = MultiTaskingHandler.Result.Values.Count().ToString();
+                    var progress = MultiTaskingHandler.PercentOfComplete;
 
                     Invoke(new MethodInvoker(delegate
                     {
@@ -247,10 +272,10 @@ namespace LogsReader
                 Invoke(new MethodInvoker(delegate
                 {
                     pgbThreads.Value = 100;
-                    if (_multiTasking != null)
+                    if (MultiTaskingHandler != null)
                     {
-                        completedFilesStatus.Text = _multiTasking.Result.Values.Count().ToString();
-                        totalFilesStatus.Text = _multiTasking.Source.Count().ToString();  
+                        completedFilesStatus.Text = MultiTaskingHandler.Result.Values.Count().ToString();
+                        totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();  
                     }
                     else
                     {
@@ -289,7 +314,7 @@ namespace LogsReader
                     var stackLines = 0;
                     string line;
                     DataTemplate lastResult = null;
-                    while ((line = inputReader.ReadLine()) != null && !_isStopPending)
+                    while ((line = inputReader.ReadLine()) != null && !IsStopPending)
                     {
                         if (lastResult != null)
                         {
@@ -339,7 +364,7 @@ namespace LogsReader
                             }
                         }
 
-                        if (!_isMatch.Invoke(line))
+                        if (!IsMatchSearchPatternFunc.Invoke(line))
                         {
                             beforeTraceLines.Enqueue(line);
                             if (beforeTraceLines.Count > CurrentSettings.MaxTraceLines)
@@ -478,7 +503,7 @@ namespace LogsReader
             {
                 if (CurrentSettings != null)
                     CurrentSettings.CatchWaring -= SetStatus;
-                CurrentSettings = _allSettings.Schemes[chooseScheme.Text];
+                CurrentSettings = Settings.Schemes[chooseScheme.Text];
                 CurrentSettings.CatchWaring += SetStatus;
 
                 serversText.Text = CurrentSettings.Servers;
@@ -623,7 +648,7 @@ namespace LogsReader
 
         private void txtPattern_TextChanged(object sender, EventArgs e)
         {
-            _allSettings.PreviousSearch[0].Value = txtPattern.Text;
+            Settings.PreviousSearch[0].Value = txtPattern.Text;
             ValidationCheck();
             SaveSettings();
         }
@@ -635,8 +660,8 @@ namespace LogsReader
 
         async void SaveSettings()
         {
-            if (_allSettings != null)
-                await LRSettings.SerializeAsync(_allSettings);
+            if (Settings != null)
+                await LRSettings.SerializeAsync(Settings);
         }
 
         private void btnClear_Click(object sender, EventArgs e)
