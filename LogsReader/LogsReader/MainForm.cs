@@ -29,7 +29,7 @@ namespace LogsReader
         /// <summary>
         /// Статус выполнения поиска
         /// </summary>
-        private bool IsWorked { get; set; } = false;
+        private bool IsWorking { get; set; } = false;
 
         /// <summary>
         /// Запрос на ожидание остановки выполнения поиска
@@ -160,7 +160,7 @@ namespace LogsReader
 
         private async void ButtonStartStop_Click(object sender, EventArgs e)
         {
-            if (!IsWorked)
+            if (!IsWorking)
             {
                 try
                 {
@@ -181,7 +181,7 @@ namespace LogsReader
                     }
 
                     IsStopPending = false;
-                    IsWorked = true;
+                    IsWorking = true;
                     ChangeFormStatus();
                     ReportStatus(@"Working...", false);
 
@@ -236,7 +236,7 @@ namespace LogsReader
                 }
                 finally
                 {
-                    IsWorked = false;
+                    IsWorking = false;
                     ChangeFormStatus();
                 }
             }
@@ -268,26 +268,26 @@ namespace LogsReader
 
         void ChangeFormStatus()
         {
-            if (IsWorked)
+            if (IsWorking)
             {
                 ClearForm();
             }
 
-            btnSearch.Text = IsWorked ? @"Stop" : @"Search [F5]";
-            btnClear.Enabled = !IsWorked;
-            trvMain.Enabled = !IsWorked;
-            txtPattern.Enabled = !IsWorked;
-            dgvFiles.Enabled = !IsWorked;
-            FCTB.Enabled = !IsWorked;
-            FCTBFullsStackTrace.Enabled = !IsWorked;
-            useRegex.Enabled = !IsWorked;
-            chooseScheme.Enabled = !IsWorked;
-            serversText.Enabled = !IsWorked;
-            typesText.Enabled = !IsWorked;
-            maxThreadsText.Enabled = !IsWorked;
-            logDirText.Enabled = !IsWorked;
-            maxLinesStackText.Enabled = !IsWorked;
-            traceLinePatternText.Enabled = !IsWorked;
+            btnSearch.Text = IsWorking ? @"Stop" : @"Search [F5]";
+            btnClear.Enabled = !IsWorking;
+            trvMain.Enabled = !IsWorking;
+            txtPattern.Enabled = !IsWorking;
+            dgvFiles.Enabled = !IsWorking;
+            FCTB.Enabled = !IsWorking;
+            FCTBFullsStackTrace.Enabled = !IsWorking;
+            useRegex.Enabled = !IsWorking;
+            chooseScheme.Enabled = !IsWorking;
+            serversText.Enabled = !IsWorking;
+            typesText.Enabled = !IsWorking;
+            maxThreadsText.Enabled = !IsWorking;
+            logDirText.Enabled = !IsWorking;
+            maxLinesStackText.Enabled = !IsWorking;
+            traceLinePatternText.Enabled = !IsWorking;
         }
 
         void CheckProgress()
@@ -295,7 +295,7 @@ namespace LogsReader
             try
             {
                 var total = MultiTaskingHandler?.Source.Count().ToString();
-                while (IsWorked && MultiTaskingHandler != null && !MultiTaskingHandler.IsCompleted)
+                while (IsWorking && MultiTaskingHandler != null && !MultiTaskingHandler.IsCompleted)
                 {
                     var completed = MultiTaskingHandler.Result.Values.Count().ToString();
                     var progress = MultiTaskingHandler.PercentOfComplete;
