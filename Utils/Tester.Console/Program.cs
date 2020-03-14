@@ -36,18 +36,29 @@ namespace Tester.Console
             try
             {
                 var stop = new Stopwatch();
-                stop.Start();
-                var lines = IO.CountLinesReader(@"C:\test\1_1.txt");
-                stop.Stop();
-                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
-                stop.Reset();
 
-                stop.Start();
-                lines = IO.CountLinesSmarter(@"C:\test\1_1.txt");
-                stop.Stop();
-                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
-                stop.Reset();
-                
+                //var list = new List<byte[]>();
+                //while (true)
+                //{
+                //    list.Add(new byte[2000000]);
+                //    System.Console.WriteLine(SERVER.GetMemUsage(Process.GetCurrentProcess()));
+                //    Thread.Sleep(1000);
+                //}
+
+
+
+                //stop.Start();
+                //var lines = IO.CountLinesReader(@"C:\test\1_1.txt");
+                //stop.Stop();
+                //System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                //stop.Reset();
+
+                //stop.Start();
+                //lines = IO.CountLinesSmarter(@"C:\test\1_1.txt");
+                //stop.Stop();
+                //System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                //stop.Reset();
+
                 //var d111 = new MTFuncCallBackList<string, int>();
                 //d111.Add(new MTFuncCallBack<string, int>("1", 1));
                 //d111.Add(new MTFuncCallBack<string, int>("1", 2));
