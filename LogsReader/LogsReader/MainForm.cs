@@ -17,7 +17,7 @@ using Exception = System.Exception;
 
 namespace LogsReader
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
@@ -77,9 +77,11 @@ namespace LogsReader
             InitializeComponent();
 
             statusStrip1.Items.Add(new ToolStripSeparator());
-            statusStrip1.Items.Add(new ToolStripStatusLabel("Finded:"));
+            statusStrip1.Items.Add(new ToolStripStatusLabel("Finded:") { Font = this.Font });
+            _findedInfo.Font = this.Font;
             statusStrip1.Items.Add(_findedInfo);
             statusStrip1.Items.Add(new ToolStripSeparator());
+            _statusInfo.Font = this.Font;
             statusStrip1.Items.Add(_statusInfo);
 
             var tooltipPrintXML = new ToolTip{ InitialDelay = 50 };
@@ -99,12 +101,14 @@ namespace LogsReader
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = Language.XML;
+            FCTB.Font = new Font("Segoe UI", 9);
             FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
             FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
             FCTBFullsStackTrace.ClearStylesBuffer();
             FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
             FCTBFullsStackTrace.Language = Language.XML;
+            FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
             FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
             try
@@ -112,6 +116,7 @@ namespace LogsReader
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
                 txtPattern.AssignValue(Settings.PreviousSearch[0].Value, txtPattern_TextChanged);
+                useRegex.Checked = Settings.UseRegex;
             }
             catch (Exception ex)
             {
@@ -670,6 +675,12 @@ namespace LogsReader
         {
             Settings.PreviousSearch[0].Value = txtPattern.Text;
             ValidationCheck();
+            SaveSettings();
+        }
+
+        private void useRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.UseRegex = useRegex.Checked;
             SaveSettings();
         }
 

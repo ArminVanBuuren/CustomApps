@@ -40,6 +40,9 @@ namespace LogsReader
             }
         }
 
+        [XmlAttribute("UseRegex")]
+        public bool UseRegex { get; set; }
+
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
