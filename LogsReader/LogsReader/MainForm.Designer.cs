@@ -65,11 +65,7 @@ namespace LogsReader
             this.Message = new System.Windows.Forms.TabPage();
             this.FullTraceStack = new System.Windows.Forms.TabPage();
             this.FCTBFullsStackTrace = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel0 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.completedFilesStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.totalFilesStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.FCTB)).BeginInit();
@@ -86,7 +82,6 @@ namespace LogsReader
             this.Message.SuspendLayout();
             this.FullTraceStack.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FCTBFullsStackTrace)).BeginInit();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // FCTB
@@ -432,7 +427,7 @@ namespace LogsReader
             this.FullTraceStack.Location = new System.Drawing.Point(4, 22);
             this.FullTraceStack.Name = "FullTraceStack";
             this.FullTraceStack.Padding = new System.Windows.Forms.Padding(3);
-            this.FullTraceStack.Size = new System.Drawing.Size(863, 308);
+            this.FullTraceStack.Size = new System.Drawing.Size(958, 369);
             this.FullTraceStack.TabIndex = 1;
             this.FullTraceStack.Text = "Full Trace";
             // 
@@ -473,50 +468,20 @@ namespace LogsReader
             this.FCTBFullsStackTrace.RightBracket2 = ')';
             this.FCTBFullsStackTrace.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.FCTBFullsStackTrace.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTBFullsStackTrace.ServiceColors")));
-            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(857, 302);
+            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(952, 363);
             this.FCTBFullsStackTrace.TabIndex = 1;
             this.FCTBFullsStackTrace.TabLength = 2;
             this.FCTBFullsStackTrace.WordWrap = true;
             this.FCTBFullsStackTrace.Zoom = 100;
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.GripMargin = new System.Windows.Forms.Padding(1);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel0,
-            this.completedFilesStatus,
-            this.toolStripStatusLabel1,
-            this.totalFilesStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 667);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1289, 22);
-            this.statusStrip1.TabIndex = 8;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel0
-            // 
-            this.toolStripStatusLabel0.Margin = new System.Windows.Forms.Padding(5, 3, 0, 2);
-            this.toolStripStatusLabel0.Name = "toolStripStatusLabel0";
-            this.toolStripStatusLabel0.Size = new System.Drawing.Size(90, 17);
-            this.toolStripStatusLabel0.Text = "Completed files";
-            // 
-            // completedFilesStatus
-            // 
-            this.completedFilesStatus.Name = "completedFilesStatus";
-            this.completedFilesStatus.Size = new System.Drawing.Size(13, 17);
-            this.completedFilesStatus.Text = "0";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(18, 17);
-            this.toolStripStatusLabel1.Text = "of";
-            // 
-            // totalFilesStatus
-            // 
-            this.totalFilesStatus.Name = "totalFilesStatus";
-            this.totalFilesStatus.Size = new System.Drawing.Size(13, 17);
-            this.totalFilesStatus.Text = "0";
+            this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
+            this.statusStrip.Location = new System.Drawing.Point(0, 667);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(1289, 22);
+            this.statusStrip.TabIndex = 8;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // StatusTextLable
             // 
@@ -541,7 +506,7 @@ namespace LogsReader
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1289, 689);
             this.Controls.Add(this.useRegex);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.pgbThreads);
             this.Controls.Add(this.txtPattern);
@@ -567,8 +532,6 @@ namespace LogsReader
             this.Message.ResumeLayout(false);
             this.FullTraceStack.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FCTBFullsStackTrace)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -585,7 +548,7 @@ namespace LogsReader
         private System.Windows.Forms.ProgressBar pgbThreads;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.CheckBox useRegex;
         private System.Windows.Forms.Label label1;
@@ -602,10 +565,6 @@ namespace LogsReader
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox traceLinePatternText;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel0;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel totalFilesStatus;
-        private System.Windows.Forms.ToolStripStatusLabel completedFilesStatus;
         private FastColoredTextBox FCTBFullsStackTrace;
         private TabControl tabControl1;
         private TabPage Message;

@@ -144,10 +144,13 @@
 {2}</value>
   </data>
   <data name="LRSettings_PreviousSearchComment" xml:space="preserve">
-    <value>Предыдущее значение поиска.</value>
+    <value>Предыдущее значение поиска. </value>
   </data>
   <data name="LRSettings_Serialize_Ex" xml:space="preserve">
     <value>Unable to save Settings to specified path=[{0}].
 {1}</value>
+  </data>
+  <data name="LRSettings_UseRegexComment" xml:space="preserve">
+    <value>Поиск по регулярному выражению выполняется быстрее.</value>
   </data>
 </root>

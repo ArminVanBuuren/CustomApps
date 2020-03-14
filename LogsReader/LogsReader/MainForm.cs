@@ -1,10 +1,10 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,6 @@ using System.Xml;
 using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
-using Exception = System.Exception;
 
 namespace LogsReader
 {
@@ -21,9 +20,13 @@ namespace LogsReader
     {
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
-        
-        private readonly ToolStripStatusLabel _statusInfo = new ToolStripStatusLabel();
-        private readonly ToolStripStatusLabel _findedInfo = new ToolStripStatusLabel("0");
+
+        private readonly ToolStripStatusLabel _statusInfo;
+        private readonly ToolStripStatusLabel _findedInfo;
+        private readonly ToolStripStatusLabel _completedFilesStatus;
+        private readonly ToolStripStatusLabel _totalFilesStatus;
+        private readonly ToolStripStatusLabel _cpuUsage;
+        private readonly ToolStripStatusLabel _ramUsage;
 
         /// <summary>
         /// Статус выполнения поиска
@@ -76,15 +79,45 @@ namespace LogsReader
         {
             InitializeComponent();
 
-            statusStrip1.Items.Add(new ToolStripSeparator());
-            statusStrip1.Items.Add(new ToolStripStatusLabel("Finded:") { Font = this.Font });
-            _findedInfo.Font = this.Font;
-            statusStrip1.Items.Add(_findedInfo);
-            statusStrip1.Items.Add(new ToolStripSeparator());
-            _statusInfo.Font = this.Font;
-            statusStrip1.Items.Add(_statusInfo);
+            #region Set StatusStrip
+
+            var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
+            var statusStripItemsPaddingMiddle = new Padding(-3, 3, 0, 2);
+
+            statusStrip.Items.Add(new ToolStripStatusLabel("CPU Usage:") { Font = this.Font, Margin = new Padding(5, 3, 0, 2) });
+            _cpuUsage = new ToolStripStatusLabel("  0%") { Font = this.Font, Margin = new Padding(-7, 3, 0, 2) };
+            statusStrip.Items.Add(_cpuUsage);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("RAM Usage:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+            _ramUsage = new ToolStripStatusLabel("  0 b") { Font = this.Font, Margin = new Padding(-4, 3, 0, 2) };
+            statusStrip.Items.Add(_ramUsage);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            statusStrip.Items.Add(_completedFilesStatus);
+            statusStrip.Items.Add(new ToolStripStatusLabel("of") { Font = this.Font, Margin = statusStripItemsPaddingMiddle });
+            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            statusStrip.Items.Add(_totalFilesStatus);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("Found") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+            _findedInfo = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            statusStrip.Items.Add(_findedInfo);
+            statusStrip.Items.Add(new ToolStripStatusLabel("matches") { Font = this.Font, Margin = statusStripItemsPaddingMiddle });
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            _statusInfo = new ToolStripStatusLabel("") { Font = this.Font, Margin = statusStripItemsPaddingStart };
+            statusStrip.Items.Add(_statusInfo);
+
+            var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
+            thread.Start();
+
+            #endregion
 
             var tooltipPrintXML = new ToolTip{ InitialDelay = 50 };
+            tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
             tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
             tooltipPrintXML.SetToolTip(typesText, Resources.LRSettingsScheme_TypesComment);
             tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
@@ -121,6 +154,32 @@ namespace LogsReader
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Мониторинг локальных ресурсов
+        /// </summary>
+        void CalculateLocalResources()
+        {
+            var appCPU = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName, true);
+            appCPU.NextValue();
+            while (true)
+            {
+                try
+                {
+                    Invoke(new MethodInvoker(delegate
+                    {
+                        double.TryParse(appCPU.NextValue().ToString(), out var result);
+                        _cpuUsage.Text = $"{(int)(result / Environment.ProcessorCount),3}%";
+                        _ramUsage.Text = $"{Process.GetCurrentProcess().PrivateMemorySize64.ToFileSize(),-5}";
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+                Thread.Sleep(1000);
             }
         }
 
@@ -166,6 +225,7 @@ namespace LogsReader
         {
             if (!IsWorking)
             {
+                var stop = new Stopwatch();
                 try
                 {
                     if (useRegex.Checked)
@@ -184,6 +244,7 @@ namespace LogsReader
                         IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
 
+                    stop.Start();
                     IsStopPending = false;
                     IsWorking = true;
                     ChangeFormStatus();
@@ -231,7 +292,8 @@ namespace LogsReader
 
                     await dgvFiles.AssignCollectionAsync(result, null, true);
 
-                    ReportStatus(@"Finished", false);
+                    stop.Stop();
+                    ReportStatus($"Finished for {stop.Elapsed.ToReadableString()}", false);
                 }
                 catch (Exception ex)
                 {
@@ -241,6 +303,8 @@ namespace LogsReader
                 {
                     IsWorking = false;
                     ChangeFormStatus();
+                    if (stop.IsRunning)
+                        stop.Stop();
                 }
             }
             else
@@ -265,6 +329,13 @@ namespace LogsReader
                     }
                 }
             }
+
+            //var stop = new Stopwatch();
+            //stop.Start();
+            //var getCountLines = new MTFuncResult<FileLog, long>((input) => IO.CountLinesReader(input.FilePath), kvpList, kvpList.Count, ThreadPriority.Lowest);
+            //getCountLines.Start();
+            //var lines = getCountLines.Result.Values.Select(x => x.Result).Sum(x => x);
+            //stop.Stop();
 
             return kvpList;
         }
@@ -304,8 +375,8 @@ namespace LogsReader
                     Invoke(new MethodInvoker(delegate
                     {
                         pgbThreads.Value = progress;
-                        completedFilesStatus.Text = completed;
-                        totalFilesStatus.Text = total;
+                        _completedFilesStatus.Text = completed;
+                        _totalFilesStatus.Text = total;
                         _findedInfo.Text = Finded.ToString();
                     }));
                     Thread.Sleep(10);
@@ -327,13 +398,13 @@ namespace LogsReader
                     _findedInfo.Text = Finded.ToString();
                     if (MultiTaskingHandler != null)
                     {
-                        completedFilesStatus.Text = MultiTaskingHandler.Result.Values.Count().ToString();
-                        totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();  
+                        _completedFilesStatus.Text = MultiTaskingHandler.Result.Values.Count().ToString();
+                        _totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();  
                     }
                     else
                     {
-                        completedFilesStatus.Text = @"0";
-                        totalFilesStatus.Text = @"0";
+                        _completedFilesStatus.Text = @"0";
+                        _totalFilesStatus.Text = @"0";
                     }
                 }));
             }
@@ -361,7 +432,7 @@ namespace LogsReader
             var listResult = new List<DataTemplate>();
             using (var inputStream = File.OpenRead(fileLog.FilePath))
             {
-                using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
+                using (var inputReader = new StreamReader(inputStream, IO.GetEncoding(fileLog.FilePath)))
                 {
                     var stackLines = 0;
                     string line;
@@ -707,8 +778,8 @@ namespace LogsReader
             FCTB.Text = string.Empty;
             FCTBFullsStackTrace.Text = string.Empty;
             pgbThreads.Value = 0;
-            completedFilesStatus.Text = @"0";
-            totalFilesStatus.Text = @"0";
+            _completedFilesStatus.Text = @"0";
+            _totalFilesStatus.Text = @"0";
             Finded = 0;
             _findedInfo.Text = Finded.ToString();
             ReportStatus(string.Empty, false);

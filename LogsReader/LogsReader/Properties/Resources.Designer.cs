@@ -81,7 +81,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Предыдущее значение поиска..
+        ///   Looks up a localized string similar to Предыдущее значение поиска. .
         /// </summary>
         internal static string LRSettings_PreviousSearchComment {
             get {
@@ -96,6 +96,15 @@ namespace LogsReader.Properties {
         internal static string LRSettings_Serialize_Ex {
             get {
                 return ResourceManager.GetString("LRSettings_Serialize_Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее..
+        /// </summary>
+        internal static string LRSettings_UseRegexComment {
+            get {
+                return ResourceManager.GetString("LRSettings_UseRegexComment", resourceCulture);
             }
         }
         

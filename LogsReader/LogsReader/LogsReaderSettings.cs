@@ -21,13 +21,14 @@ namespace LogsReader
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme() };
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
+        private bool _useRegex = true;
         XmlNode[] _previousSearch =
         {
             new XmlDocument().CreateCDataSection(string.Empty)
         };
 
         [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
-        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment); set { } }
+        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment + Resources.LRSettings_UseRegexComment); set { } }
 
         [XmlElement("PreviousSearch")]
         public XmlNode[] PreviousSearch
@@ -41,7 +42,11 @@ namespace LogsReader
         }
 
         [XmlAttribute("UseRegex")]
-        public bool UseRegex { get; set; }
+        public bool UseRegex
+        {
+            get => _useRegex;
+            set => _useRegex = value;
+        }
 
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
