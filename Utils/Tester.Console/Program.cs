@@ -35,6 +35,19 @@ namespace Tester.Console
         {
             try
             {
+                var stop = new Stopwatch();
+                stop.Start();
+                var lines = IO.CountLinesReader(@"C:\test\1_1.txt");
+                stop.Stop();
+                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                stop.Reset();
+
+                stop.Start();
+                lines = IO.CountLinesSmarter(@"C:\test\1_1.txt");
+                stop.Stop();
+                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                stop.Reset();
+                
                 //var d111 = new MTFuncCallBackList<string, int>();
                 //d111.Add(new MTFuncCallBack<string, int>("1", 1));
                 //d111.Add(new MTFuncCallBack<string, int>("1", 2));
@@ -67,7 +80,7 @@ namespace Tester.Console
                 {
                     actions.Add(i);
                 }
-                var stop = new Stopwatch();
+                
                 stop.Start();
                 //cancel.CancelAfter(15000);
                 //MultiTasking.Run(actions, 10, cancel.Token);

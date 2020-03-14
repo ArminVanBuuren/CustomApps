@@ -77,7 +77,7 @@ namespace Utils
                 appCPUCounter.NextValue();
                 System.Threading.Thread.Sleep(1000);
                 double.TryParse(appCPUCounter.NextValue().ToString(), out var resultApp);
-                return resultApp;
+                return resultApp / Environment.ProcessorCount;
             }
 
             var totalCPUCounter = new PerformanceCounter
@@ -118,31 +118,32 @@ namespace Utils
         public static double GetMemUsage(Process process)
         {
             if (process == null)
-                return default(double);
+                return -1;
+            return process.PrivateMemorySize64;
 
-            switch (IntPtr.Size)
-            {
-                case 4:
-                    // 32-bit application
-                    return ((double)process.PagedMemorySize64 / 2);
-                case 8:
-                    // 64-bit application
-                    return process.PagedMemorySize64;
-                default:
-                    //var test1 = ((double) process.MinWorkingSet).ToFileSize();
-                    //var test2 = ((double) process.MaxWorkingSet).ToFileSize();
-                    //var test3 = ((double) process.NonpagedSystemMemorySize64).ToFileSize();
-                    //var test4 = ((double) process.PagedMemorySize64).ToFileSize();
-                    //var test5 = ((double) process.PagedSystemMemorySize64).ToFileSize();
-                    //var test6 = ((double) process.PeakPagedMemorySize64).ToFileSize();
-                    //var test7 = ((double) process.PeakVirtualMemorySize64).ToFileSize();
-                    //var test8 = ((double) process.PeakWorkingSet64).ToFileSize();
-                    //var test9 = ((double) process.VirtualMemorySize64).ToFileSize();
-                    //var test10 = ((double) process.WorkingSet64).ToFileSize();
+            //switch (IntPtr.Size)
+            //{
+            //    case 4:
+            //        // 32-bit application
+            //        return ((double)process.PagedMemorySize64 / 2);
+            //    case 8:
+            //        // 64-bit application
+            //        return process.PagedMemorySize64;
+            //    default:
+            //        //var test1 = ((double) process.MinWorkingSet).ToFileSize();
+            //        //var test2 = ((double) process.MaxWorkingSet).ToFileSize();
+            //        //var test3 = ((double) process.NonpagedSystemMemorySize64).ToFileSize();
+            //        //var test4 = ((double) process.PagedMemorySize64).ToFileSize();
+            //        //var test5 = ((double) process.PagedSystemMemorySize64).ToFileSize();
+            //        //var test6 = ((double) process.PeakPagedMemorySize64).ToFileSize();
+            //        //var test7 = ((double) process.PeakVirtualMemorySize64).ToFileSize();
+            //        //var test8 = ((double) process.PeakWorkingSet64).ToFileSize();
+            //        //var test9 = ((double) process.VirtualMemorySize64).ToFileSize();
+            //        //var test10 = ((double) process.WorkingSet64).ToFileSize();
 
-                    // The future is now!
-                    return default(double);
-            }
+            //        // The future is now!
+            //        return default(double);
+            //}
         }
     }
 }

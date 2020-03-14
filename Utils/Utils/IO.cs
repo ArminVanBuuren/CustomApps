@@ -68,6 +68,85 @@ namespace Utils
             return context;
         }
 
+        public static long CountLinesReader(string file)
+        {
+            return CountLinesReader(new FileInfo(file));
+        }
+
+        public static long CountLinesReader(FileInfo file)
+        {
+            if (!file.Exists)
+                return -1;
+
+            var lineCounter = 0L;
+            using (var reader = new StreamReader(file.FullName, GetEncoding(file.FullName)))
+                while (reader.ReadLine() != null)
+                    lineCounter++;
+
+            return lineCounter;
+        }
+
+        private const char CR = '\r';
+        private const char LF = '\n';
+        private const char NULL = (char)0;
+
+        public static long CountLinesSmarter(string filePath)
+        {
+            using (var inputStream = File.OpenRead(filePath))
+                return CountLinesSmarter(inputStream);
+        }
+
+        public static long CountLinesSmarter(Stream stream)
+        {
+            var lineCount = 0L;
+
+            var byteBuffer = new byte[1024 * 1024];
+            var prevChar = NULL;
+            var pendingTermination = false;
+
+            int bytesRead;
+            while ((bytesRead = stream.Read(byteBuffer, 0, byteBuffer.Length)) > 0)
+            {
+                for (var i = 0; i < bytesRead; i++)
+                {
+                    var currentChar = (char) byteBuffer[i];
+
+                    switch (currentChar)
+                    {
+                        case NULL:
+                            continue;
+                        case CR:
+                        case LF:
+                        {
+                            if (prevChar == CR && currentChar == LF)
+                            {
+                                continue;
+                            }
+
+                            lineCount++;
+                            pendingTermination = false;
+                            break;
+                        }
+                        default:
+                        {
+                            if (!pendingTermination)
+                            {
+                                pendingTermination = true;
+                            }
+
+                            break;
+                        }
+                    }
+
+                    prevChar = currentChar;
+                }
+            }
+
+            if (pendingTermination)
+                lineCount++;
+            return lineCount;
+        }
+
         public static void WriteFile(string path, string content, Encoding encoding = null)
         {
             if (encoding == null && File.Exists(path))
@@ -447,7 +526,7 @@ namespace Utils
         {
             newBytes = bytes;
             var formatString = "{0";
-            var byteType = "B";
+            var byteType = "b";
 
             if (newBytes <= 1024)
             {
@@ -456,19 +535,19 @@ namespace Utils
             else if (newBytes > 1024 && newBytes < 1048576)
             {
                 newBytes /= 1024;
-                byteType = "KB";
+                byteType = "Kb";
             }
             else if (newBytes > 1048576 && newBytes < 1073741824)
             {
                 // Check if best size in MB
                 newBytes /= 1048576;
-                byteType = "MB";
+                byteType = "Mb";
             }
             else
             {
                 // Best size in GB
                 newBytes /= 1073741824;
-                byteType = "GB";
+                byteType = "Gb";
             }
 
             // Show decimals
@@ -504,6 +583,29 @@ namespace Utils
             return ((int)bytes) / 1073741824;
         }
 
+        /// <summary>
+        /// Return a string describing the value as a file size.
+        /// For example, 1.23 MB.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToFileSize(this int value)
+        {
+            return ToFileSize((double)value);
+        }
+
+        /// <summary>
+        /// Return a string describing the value as a file size.
+        /// For example, 1.23 MB.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToFileSize(this long value)
+        {
+            return ToFileSize((double)value);
+        }
+
+        static readonly string[] suffixes = { "bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb" };
 
         /// <summary>
         /// Return a string describing the value as a file size.
@@ -513,7 +615,6 @@ namespace Utils
         /// <returns></returns>
         public static string ToFileSize(this double value)
         {
-            string[] suffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
             for (var i = 0; i < suffixes.Length; i++)
             {
                 if (value <= (Math.Pow(1024, i + 1)))
