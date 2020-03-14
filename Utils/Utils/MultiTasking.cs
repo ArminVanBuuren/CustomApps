@@ -471,7 +471,14 @@ namespace Utils
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
 
-                        callback?.Invoke(callbackItem);
+                        try
+                        {
+                            callback?.Invoke(callbackItem);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = ThreadPriority.Normal;
@@ -619,7 +626,14 @@ namespace Utils
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
 
-                        callback?.Invoke(callbackItem);
+                        try
+                        {
+                            callback?.Invoke(callbackItem);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = ThreadPriority.Normal;
@@ -767,7 +781,14 @@ namespace Utils
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
 
-                        callback?.Invoke(callbackItem);
+                        try
+                        {
+                            callback?.Invoke(callbackItem);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = ThreadPriority.Normal;
@@ -915,7 +936,14 @@ namespace Utils
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
 
-                        callback?.Invoke(callbackItem);
+                        try
+                        {
+                            callback?.Invoke(callbackItem);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = ThreadPriority.Normal;
