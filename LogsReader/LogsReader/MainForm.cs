@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -185,7 +184,6 @@ namespace LogsReader
                     ChangeFormStatus();
                     ReportStatus(@"Working...", false);
 
-
                     var kvpList = await Task<List<FileLog>>.Factory.StartNew(() => GetFileLogs(
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked),
                         trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked)));
@@ -196,12 +194,12 @@ namespace LogsReader
                         return;
                     }
 
-                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads);
+                    // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
+                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads, ThreadPriority.Lowest);
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
-                    
-                    var result = MultiTaskingHandler.Result.Values.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ToList();
+                    var result = MultiTaskingHandler.Result.Values.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ThenBy(p => p.FileName).ToList();
                     var resultError = MultiTaskingHandler.Result.Values.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate()
@@ -269,9 +267,7 @@ namespace LogsReader
         void ChangeFormStatus()
         {
             if (IsWorking)
-            {
                 ClearForm();
-            }
 
             btnSearch.Text = IsWorking ? @"Stop" : @"Search [F5]";
             btnClear.Enabled = !IsWorking;
@@ -594,9 +590,7 @@ namespace LogsReader
         private void maxThreadsText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxThreadsText.Text, out var res))
-            {
                 MaxThreadsTextSave(res);
-            }
         }
 
         private void maxThreadsText_Leave(object sender, EventArgs e)
@@ -623,9 +617,7 @@ namespace LogsReader
         private void maxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var res))
-            {
                 MaxLinesStackTextSave(res);
-            }
         }
 
         private void maxLinesStackText_Leave(object sender, EventArgs e)
@@ -658,16 +650,13 @@ namespace LogsReader
             ValidationCheck();
         }
 
-        private void CheckTreeViewNode(TreeNode node, bool isChecked)
+        private static void CheckTreeViewNode(TreeNode node, bool isChecked)
         {
             foreach (TreeNode item in node.Nodes)
             {
                 item.Checked = isChecked;
-
                 if (item.Nodes.Count > 0)
-                {
                     CheckTreeViewNode(item, isChecked);
-                }
             }
         }
 
