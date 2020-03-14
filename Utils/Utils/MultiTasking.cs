@@ -365,6 +365,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         inputAction.Invoke();
 
                         result.Add(inputAction,true);
@@ -375,6 +378,9 @@ namespace Utils
                     }
                     finally
                     {
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, action));
@@ -420,11 +426,14 @@ namespace Utils
                 {
                     //Task taskCallback = null;
                     MTCallBack<Action, bool> callbackItem = null;
-                    var inputAction = (Action)input;
+                    var inputAction = (Action) input;
                     try
                     {
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
+
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
 
                         inputAction.Invoke();
 
@@ -444,7 +453,6 @@ namespace Utils
                     }
                     finally
                     {
-                        callback?.Invoke(callbackItem);
                         //if (taskCallback != null)
                         //{
                         //    try
@@ -462,6 +470,12 @@ namespace Utils
                         //{
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
+
+                        callback?.Invoke(callbackItem);
+
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, action));
@@ -499,6 +513,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         var res = inputFunc.Invoke();
 
                         result.Add(inputFunc, res);
@@ -509,6 +526,9 @@ namespace Utils
                     }
                     finally
                     {
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, func));
@@ -560,6 +580,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         var res = inputFunc.Invoke();
 
                         if (callback != null)
@@ -578,7 +601,6 @@ namespace Utils
                     }
                     finally
                     {
-                        callback?.Invoke(callbackItem);
                         //if (taskCallback != null)
                         //{
                         //    try
@@ -596,6 +618,12 @@ namespace Utils
                         //{
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
+
+                        callback?.Invoke(callbackItem);
+
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, func));
@@ -632,6 +660,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         action.Invoke(inputItem);
 
                         result.Add(inputItem, true);
@@ -642,6 +673,9 @@ namespace Utils
                     }
                     finally
                     {
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, item));
@@ -693,6 +727,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         action.Invoke(inputItem);
 
                         if (callback != null)
@@ -711,7 +748,6 @@ namespace Utils
                     }
                     finally
                     {
-                        callback?.Invoke(callbackItem);
                         //if (taskCallback != null)
                         //{
                         //    try
@@ -730,6 +766,12 @@ namespace Utils
                         //{
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
+
+                        callback?.Invoke(callbackItem);
+
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, item));
@@ -766,6 +808,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         var res = func.Invoke(inputItem);
 
                         result.Add(inputItem, res);
@@ -776,6 +821,9 @@ namespace Utils
                     }
                     finally
                     {
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, item));
@@ -828,6 +876,9 @@ namespace Utils
                         if (mt.CancelToken.IsCancellationRequested)
                             return;
 
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = mt.Priority;
+
                         var res = func.Invoke(inputItem);
 
                         if (callback != null)
@@ -846,7 +897,6 @@ namespace Utils
                     }
                     finally
                     {
-                        callback?.Invoke(callbackItem);
                         //if (taskCallback != null)
                         //{
                         //    try
@@ -864,6 +914,12 @@ namespace Utils
                         //{
                         //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
                         //}
+
+                        callback?.Invoke(callbackItem);
+
+                        if (mt.Priority != ThreadPriority.Normal)
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
                         pool.Release();
                     }
                 }, item));
