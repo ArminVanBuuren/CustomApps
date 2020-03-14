@@ -118,7 +118,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для одного трейса..
+        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттерном из TraceLinePattern. Лишние строки отсекаются..
         /// </summary>
         internal static string LRSettingsScheme_MaxTraceLinesComment {
             get {
