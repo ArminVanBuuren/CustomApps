@@ -176,7 +176,7 @@ namespace LogsReader
                     }
                     else
                     {
-                        IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
 
                     IsStopPending = false;
