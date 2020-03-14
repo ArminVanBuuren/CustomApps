@@ -166,7 +166,7 @@ namespace LogsReader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(285, 417);
+            this.trvMain.Size = new System.Drawing.Size(283, 417);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
