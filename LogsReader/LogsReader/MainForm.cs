@@ -152,7 +152,7 @@ namespace LogsReader
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
-                    cell2.ToolTipText = "Not matched by TraceLinePattern";
+                    cell2.ToolTipText = "Doesn't match regex pattern for trace line";
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace LogsReader
                     {
                         if (!REGEX.Verify(txtPattern.Text))
                         {
-                            ReportStatus(@"Regular expression for search pattern is invalid! Please check.", true);
+                            ReportStatus(@"Regular expression for search pattern is incorrect! Please check.", true);
                             return;
                         }
 
