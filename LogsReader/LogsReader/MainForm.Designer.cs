@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using LogsReader.Properties;
 
 namespace LogsReader
 {
@@ -541,7 +542,8 @@ namespace LogsReader
             this.Controls.Add(this.txtPattern);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSearch);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Resources.icon;
+            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(398, 283);
             this.Name = "MainForm";
             this.Text = "Logs Reader";
