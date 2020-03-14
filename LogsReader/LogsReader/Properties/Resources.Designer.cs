@@ -109,7 +109,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов логов..
+        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов..
         /// </summary>
         internal static string LRSettingsScheme_MaxThreadsComment {
             get {
@@ -118,7 +118,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для одного трейса.
+        ///   Looks up a localized string similar to Максимальное количество строк для одного трейса..
         /// </summary>
         internal static string LRSettingsScheme_MaxTraceLinesComment {
             get {
@@ -127,7 +127,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую.
+        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую..
         /// </summary>
         internal static string LRSettingsScheme_ServersComment {
             get {
@@ -136,7 +136,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерн для считывания значений в найденном фрагменте лога. Регулярное выражение будет работать как однострочный режим - RegexOptions=Singleline. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение.
+        ///   Looks up a localized string similar to Паттерн для считывания значений в найденном фрагменте лога (количество строк фрагмента устанавливается в опции MaxTraceLines). Регулярное выражение работает в однострочном режиме - RegexOptions=Singleline. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение.
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {
@@ -145,7 +145,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Типы файлов. Указать через запятую.
+        ///   Looks up a localized string similar to Типы файлов. Указать через запятую..
         /// </summary>
         internal static string LRSettingsScheme_TypesComment {
             get {

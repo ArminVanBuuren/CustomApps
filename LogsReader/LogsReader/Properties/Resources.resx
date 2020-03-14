@@ -125,19 +125,19 @@
     <value>Путь к папке с логами. Диск должен указан вместе со знаком $ (C$, D$, F$)</value>
   </data>
   <data name="LRSettingsScheme_MaxThreadsComment" xml:space="preserve">
-    <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов логов.</value>
+    <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
   <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
-    <value>Максимальное количество строк для одного трейса</value>
+    <value>Максимальное количество строк для одного трейса.</value>
   </data>
   <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
-    <value>Сервера для поиска. Указать через запятую</value>
+    <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
-    <value>Паттерн для считывания значений в найденном фрагменте лога. Регулярное выражение будет работать как однострочный режим - RegexOptions=Singleline. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение</value>
+    <value>Паттерн для считывания значений в найденном фрагменте лога (количество строк фрагмента устанавливается в опции MaxTraceLines). Регулярное выражение работает в однострочном режиме - RegexOptions=Singleline. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение</value>
   </data>
   <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
-    <value>Типы файлов. Указать через запятую</value>
+    <value>Типы файлов. Указать через запятую.</value>
   </data>
   <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
     <value>Settings from '{0}' is incorrect! Moved to {1}.
