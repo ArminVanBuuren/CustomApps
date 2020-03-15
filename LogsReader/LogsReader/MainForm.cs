@@ -26,6 +26,7 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _completedFilesStatus;
         private readonly ToolStripStatusLabel _totalFilesStatus;
         private readonly ToolStripStatusLabel _cpuUsage;
+        private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
 
         /// <summary>
@@ -84,12 +85,17 @@ namespace LogsReader
             var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
             var statusStripItemsPaddingMiddle = new Padding(-3, 3, 0, 2);
 
-            statusStrip.Items.Add(new ToolStripStatusLabel("CPU Usage:") { Font = this.Font, Margin = new Padding(5, 3, 0, 2) });
+            statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = new Padding(7, 3, 0, 2) });
             _cpuUsage = new ToolStripStatusLabel("  0%") { Font = this.Font, Margin = new Padding(-7, 3, 0, 2) };
             statusStrip.Items.Add(_cpuUsage);
 
             statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(new ToolStripStatusLabel("RAM Usage:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+            statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+            _threadsUsage = new ToolStripStatusLabel(" 0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            statusStrip.Items.Add(_threadsUsage);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
             _ramUsage = new ToolStripStatusLabel("  0 b") { Font = this.Font, Margin = new Padding(-4, 3, 0, 2) };
             statusStrip.Items.Add(_ramUsage);
 
@@ -171,8 +177,10 @@ namespace LogsReader
                     Invoke(new MethodInvoker(delegate
                     {
                         double.TryParse(appCPU.NextValue().ToString(), out var result);
+                        var currentProcess = Process.GetCurrentProcess();
                         _cpuUsage.Text = $"{(int)(result / Environment.ProcessorCount),3}%";
-                        _ramUsage.Text = $"{Process.GetCurrentProcess().PrivateMemorySize64.ToFileSize(),-5}";
+                        _threadsUsage.Text = $"{currentProcess.Threads.Count, -2}";
+                        _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
                     }));
                 }
                 catch (Exception ex)
@@ -265,8 +273,8 @@ namespace LogsReader
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
-                    var result = MultiTaskingHandler.Result.Values.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ThenBy(p => p.FileName).ToList();
-                    var resultError = MultiTaskingHandler.Result.Values.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+                    var result = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ThenBy(p => p.FileName).ToList();
+                    var resultError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate()
                         {
@@ -293,7 +301,7 @@ namespace LogsReader
                     await dgvFiles.AssignCollectionAsync(result, null, true);
 
                     stop.Stop();
-                    ReportStatus($"Finished for {stop.Elapsed.ToReadableString()}", false);
+                    ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
                 }
                 catch (Exception ex)
                 {
@@ -366,10 +374,10 @@ namespace LogsReader
         {
             try
             {
-                var total = MultiTaskingHandler?.Source.Count().ToString();
+                var total = MultiTaskingHandler?.Source.Count.ToString();
                 while (IsWorking && MultiTaskingHandler != null && !MultiTaskingHandler.IsCompleted)
                 {
-                    var completed = MultiTaskingHandler.Result.Values.Count().ToString();
+                    var completed = MultiTaskingHandler.Result.Count.ToString();
                     var progress = MultiTaskingHandler.PercentOfComplete;
 
                     Invoke(new MethodInvoker(delegate
@@ -398,7 +406,7 @@ namespace LogsReader
                     _findedInfo.Text = Finded.ToString();
                     if (MultiTaskingHandler != null)
                     {
-                        _completedFilesStatus.Text = MultiTaskingHandler.Result.Values.Count().ToString();
+                        _completedFilesStatus.Text = MultiTaskingHandler.Result.Count.ToString();
                         _totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();  
                     }
                     else
