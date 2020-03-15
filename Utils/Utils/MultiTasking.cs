@@ -146,8 +146,8 @@ namespace Utils
         public ReadOnlyCollection<TSource> Source { get; }
         public MTCallBackList<TSource, TResult> Result { get; protected set; }
 
-        public bool IsCompleted => Source.Count() == Result.CountValues || CancelToken.IsCancellationRequested;
-        public int PercentOfComplete => (Result.CountValues * 100) / Source.Count();
+        public bool IsCompleted => Source.Count() == Result.Count || CancelToken.IsCancellationRequested;
+        public int PercentOfComplete => (Result.Count * 100) / Source.Count();
 
         protected MultiTaskingResult(IEnumerable<TSource> source, MultiTaskingTemplate mtTemplate) : this(source,  mtTemplate.MaxThreads, mtTemplate.Priority, mtTemplate.CancelAfterMilliseconds) { }
 
@@ -228,11 +228,10 @@ namespace Utils
     {
         private readonly DoubleDictionary<TSource, MTCallBack<TSource, TResult>> _values;
 
-        public int CountKeys => _values.Count;
-        public int CountValues => _values.CountValues;
+        public int Count => _values.CountValues;
 
-        public IEnumerable<TSource> Keys => _values.Keys;
-        public IEnumerable<MTCallBack<TSource, TResult>> Values => _values.Values;
+        public IEnumerable<TSource> SourceList => _values.Keys;
+        public IEnumerable<MTCallBack<TSource, TResult>> CallBackList => _values.Values;
 
         internal MTCallBackList(int capacity = 4)
         {

@@ -110,7 +110,7 @@ namespace Tester.Console
                 stop.Stop();
                 System.Console.WriteLine();
                 //mt.Result.Values.Select(x => x.)
-                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{mt.Result.Keys.Count()}] Values=[{mt.Result.Values.Count()}] Exception=[{string.Join(";\r\n", mt.Result.Values.Where(x => x.Error != null).Select(x => x.Error.Message))}]");
+                System.Console.WriteLine($"Complete=[{stop.ElapsedMilliseconds}] Keys=[{mt.Result.SourceList.Count()}] Values=[{mt.Result.CallBackList.Count()}] Exception=[{string.Join(";\r\n", mt.Result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message))}]");
                 System.Console.ReadKey();
                 return;
 
