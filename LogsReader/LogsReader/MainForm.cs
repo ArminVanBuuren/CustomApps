@@ -197,7 +197,7 @@ namespace LogsReader
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.F5 when btnSearch.Enabled:
+                    case Keys.F5 when btnSearch.Enabled && !IsWorking:
                         ButtonStartStop_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
