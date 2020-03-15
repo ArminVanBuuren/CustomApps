@@ -37,6 +37,16 @@ namespace Tester.Console
             {
                 var stop = new Stopwatch();
 
+                var sss11 = new DoubleDictionary<string, string>();
+                for (int i = 0; i < 10000000; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        sss11.Add(i.ToString(), j.ToString());
+                    }
+                }
+                var tsttt = sss11.CountValues;
+                System.Console.ReadKey();
                 //var list = new List<byte[]>();
                 //while (true)
                 //{

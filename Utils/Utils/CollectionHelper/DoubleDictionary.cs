@@ -148,6 +148,21 @@ namespace Utils.CollectionHelper
             }
         }
 
+        public int CountValues
+        {
+            get
+            {
+                lock (_syncRoot)
+                {
+                    return  _values.Values.Aggregate(new int(), (cnt, thisCount) =>
+                    {
+                        cnt += thisCount.Count;
+                        return cnt;
+                    });
+                }
+            }
+        }
+
         public bool IsReadOnly
         {
             get
@@ -206,6 +221,7 @@ namespace Utils.CollectionHelper
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Добавляет значения в имеющийся ключ, любо создает новую запись
         /// </summary>

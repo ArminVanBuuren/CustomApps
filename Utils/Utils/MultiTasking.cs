@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -141,20 +142,19 @@ namespace Utils
     [Serializable]
     public abstract class MultiTaskingResult<TSource, TResult> : MultiTaskingTemplate
     {
+        readonly object _syncRoot = new object();
+
         public abstract event EventHandler IsCompeted;
-        public IEnumerable<TSource> Source { get; protected set; }
+        public ReadOnlyCollection<TSource> Source { get; }
         public MTCallBackList<TSource, TResult> Result { get; protected set; }
-        public bool IsCompleted => Source.Count() == Result.Values.Count() || CancelToken.IsCancellationRequested;
+        public bool IsCompleted => Source.Count() == Result.Count || CancelToken.IsCancellationRequested;
         public int PercentOfComplete => (Result.Values.Count() * 100) / Source.Count();
 
-        protected MultiTaskingResult(IEnumerable<TSource> source, MultiTaskingTemplate mtTemplate) : this(source,  mtTemplate.MaxThreads, mtTemplate.Priority, mtTemplate.CancelAfterMilliseconds)
-        {
-
-        }
+        protected MultiTaskingResult(IEnumerable<TSource> source, MultiTaskingTemplate mtTemplate) : this(source,  mtTemplate.MaxThreads, mtTemplate.Priority, mtTemplate.CancelAfterMilliseconds) { }
 
         protected MultiTaskingResult(IEnumerable<TSource> source, int maxThreads, ThreadPriority priority, int cancelAfterMilliseconds) : base( maxThreads, priority, cancelAfterMilliseconds)
         {
-            Source = source;
+            Source = new ReadOnlyCollection<TSource>(source.ToList());
             Result = new MTCallBackList<TSource, TResult>(Source.Count());
         }
 
@@ -229,7 +229,7 @@ namespace Utils
     {
         private readonly DoubleDictionary<TSource, MTCallBack<TSource, TResult>> _values;
 
-        public int Count => _values.Count;
+        public int Count => _values.CountValues;
         public IEnumerable<TSource> Keys => _values.Keys;
         public IEnumerable<MTCallBack<TSource, TResult>> Values => _values.Values;
 
