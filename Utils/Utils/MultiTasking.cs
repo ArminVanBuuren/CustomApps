@@ -142,13 +142,12 @@ namespace Utils
     [Serializable]
     public abstract class MultiTaskingResult<TSource, TResult> : MultiTaskingTemplate
     {
-        readonly object _syncRoot = new object();
-
         public abstract event EventHandler IsCompeted;
         public ReadOnlyCollection<TSource> Source { get; }
         public MTCallBackList<TSource, TResult> Result { get; protected set; }
-        public bool IsCompleted => Source.Count() == Result.Count || CancelToken.IsCancellationRequested;
-        public int PercentOfComplete => (Result.Values.Count() * 100) / Source.Count();
+
+        public bool IsCompleted => Source.Count() == Result.CountValues || CancelToken.IsCancellationRequested;
+        public int PercentOfComplete => (Result.CountValues * 100) / Source.Count();
 
         protected MultiTaskingResult(IEnumerable<TSource> source, MultiTaskingTemplate mtTemplate) : this(source,  mtTemplate.MaxThreads, mtTemplate.Priority, mtTemplate.CancelAfterMilliseconds) { }
 
@@ -229,7 +228,9 @@ namespace Utils
     {
         private readonly DoubleDictionary<TSource, MTCallBack<TSource, TResult>> _values;
 
-        public int Count => _values.CountValues;
+        public int CountKeys => _values.Count;
+        public int CountValues => _values.CountValues;
+
         public IEnumerable<TSource> Keys => _values.Keys;
         public IEnumerable<MTCallBack<TSource, TResult>> Values => _values.Values;
 
