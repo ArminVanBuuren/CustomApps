@@ -81,78 +81,78 @@ namespace LogsReader
         {
             InitializeComponent();
 
-            #region Set StatusStrip
-
-            var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
-            var statusStripItemsPaddingMiddle = new Padding(-3, 3, 0, 2);
-
-            statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = new Padding(7, 3, 0, 2) });
-            _cpuUsage = new ToolStripStatusLabel("  0%") { Font = this.Font, Margin = new Padding(-7, 3, 0, 2) };
-            statusStrip.Items.Add(_cpuUsage);
-
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-            _threadsUsage = new ToolStripStatusLabel(" 0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            statusStrip.Items.Add(_threadsUsage);
-
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-            _ramUsage = new ToolStripStatusLabel("  0 b") { Font = this.Font, Margin = new Padding(-4, 3, 0, 2) };
-            statusStrip.Items.Add(_ramUsage);
-
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            statusStrip.Items.Add(_completedFilesStatus);
-            statusStrip.Items.Add(new ToolStripStatusLabel("of") { Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            statusStrip.Items.Add(_totalFilesStatus);
-
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(new ToolStripStatusLabel("Found") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-            _findedInfo = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            statusStrip.Items.Add(_findedInfo);
-            statusStrip.Items.Add(new ToolStripStatusLabel("matches") { Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-
-            statusStrip.Items.Add(new ToolStripSeparator());
-            _statusInfo = new ToolStripStatusLabel("") { Font = this.Font, Margin = statusStripItemsPaddingStart };
-            statusStrip.Items.Add(_statusInfo);
-
-            var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
-            thread.Start();
-
-            #endregion
-
-            var tooltipPrintXML = new ToolTip{ InitialDelay = 50 };
-            tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
-            tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
-            tooltipPrintXML.SetToolTip(typesText, Resources.LRSettingsScheme_TypesComment);
-            tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
-            tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
-            tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
-            tooltipPrintXML.SetToolTip(traceLinePatternText, Resources.LRSettingsScheme_TraceLinePatternComment);
-
-            dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-            Closing += (s, e) => { SaveSettings(); };
-            KeyPreview = true;
-            KeyDown += MainForm_KeyDown;
-
-            FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-            FCTB.ClearStylesBuffer();
-            FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.Language = Language.XML;
-            FCTB.Font = new Font("Segoe UI", 9);
-            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
-
-            FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-            FCTBFullsStackTrace.ClearStylesBuffer();
-            FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
-            FCTBFullsStackTrace.Language = Language.XML;
-            FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
-            FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
-
             try
             {
+                #region Set StatusStrip
+
+                var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
+                var statusStripItemsPaddingMiddle = new Padding(-3, 3, 0, 2);
+
+                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = new Padding(7, 3, 0, 2)});
+                _cpuUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 3, 0, 2)};
+                statusStrip.Items.Add(_cpuUsage);
+
+                statusStrip.Items.Add(new ToolStripSeparator());
+                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _threadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                statusStrip.Items.Add(_threadsUsage);
+
+                statusStrip.Items.Add(new ToolStripSeparator());
+                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = new Padding(-4, 3, 0, 2)};
+                statusStrip.Items.Add(_ramUsage);
+
+                statusStrip.Items.Add(new ToolStripSeparator());
+                statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                statusStrip.Items.Add(_completedFilesStatus);
+                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
+                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                statusStrip.Items.Add(_totalFilesStatus);
+
+                statusStrip.Items.Add(new ToolStripSeparator());
+                statusStrip.Items.Add(new ToolStripStatusLabel("Found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                statusStrip.Items.Add(_findedInfo);
+                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
+
+                statusStrip.Items.Add(new ToolStripSeparator());
+                _statusInfo = new ToolStripStatusLabel("") {Font = this.Font, Margin = statusStripItemsPaddingStart};
+                statusStrip.Items.Add(_statusInfo);
+
+                var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
+                thread.Start();
+
+                #endregion
+
+                var tooltipPrintXML = new ToolTip {InitialDelay = 50};
+                tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
+                tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
+                tooltipPrintXML.SetToolTip(typesText, Resources.LRSettingsScheme_TypesComment);
+                tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
+                tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
+                tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
+                tooltipPrintXML.SetToolTip(traceLinePatternText, Resources.LRSettingsScheme_TraceLinePatternComment);
+
+                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+                Closing += (s, e) => { SaveSettings(); };
+                KeyPreview = true;
+                KeyDown += MainForm_KeyDown;
+
+                FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+                FCTB.ClearStylesBuffer();
+                FCTB.Range.ClearStyle(StyleIndex.All);
+                FCTB.Language = Language.XML;
+                FCTB.Font = new Font("Segoe UI", 9);
+                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+
+                FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+                FCTBFullsStackTrace.ClearStylesBuffer();
+                FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
+                FCTBFullsStackTrace.Language = Language.XML;
+                FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
+                FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
                 txtPattern.AssignValue(Settings.PreviousSearch[0].Value, txtPattern_TextChanged);
@@ -160,7 +160,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -169,26 +169,39 @@ namespace LogsReader
         /// </summary>
         void CalculateLocalResources()
         {
-            var appCPU = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName, true);
-            appCPU.NextValue();
-            while (true)
+            try
             {
-                try
+                Action checkAppCPU = null;
+                var curProcName = SERVER.ObtainCurrentProcessName();
+                if (curProcName != null)
                 {
+                    var appCPU = new PerformanceCounter("Process", "% Processor Time", curProcName, true);
+                    appCPU.NextValue();
+                    checkAppCPU = () =>
+                    {
+                        double.TryParse(appCPU.NextValue().ToString(), out var cpuResult);
+                        _cpuUsage.Text = $"{(int) (cpuResult / Environment.ProcessorCount),3}%";
+                    };
+                }
+
+                while (true)
+                {
+
                     Invoke(new MethodInvoker(delegate
                     {
-                        double.TryParse(appCPU.NextValue().ToString(), out var result);
+                        checkAppCPU?.Invoke();
                         var currentProcess = Process.GetCurrentProcess();
-                        _cpuUsage.Text = $"{(int)(result / Environment.ProcessorCount),3}%";
-                        _threadsUsage.Text = $"{currentProcess.Threads.Count, -2}";
+                        _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
                         _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
                     }));
+
+                    Thread.Sleep(1000);
                 }
-                catch (Exception ex)
-                {
-                    // ignored
-                }
-                Thread.Sleep(1000);
+            }
+            catch (Exception ex)
+            {
+                Invoke(new MethodInvoker(() => MessageBox.Show(ex.ToString())));
+                // ignored
             }
         }
 
@@ -326,16 +339,21 @@ namespace LogsReader
 
         List<FileLog> GetFileLogs(IEnumerable<TreeNode> servers, IEnumerable<TreeNode> traceTypes)
         {
+            var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsDirectory);
+            var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
             var kvpList = new List<FileLog>();
+            
             foreach (var serverNode in servers)
             {
-                foreach (var typeNode in traceTypes)
+                var serverDir = string.Format(logsDirFormat, serverNode.Text);
+                if (!Directory.Exists(serverDir))
+                    continue;
+
+                var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
+                foreach (var fileLog in files.Select(x => new FileLog(serverNode.Text, x)))
                 {
-                    var files = Directory.GetFiles($@"\\{serverNode.Text}\{CurrentSettings.LogsDirectory}", $@"*{typeNode.Text}*", SearchOption.AllDirectories);
-                    foreach (var filePath in files)
-                    {
-                        kvpList.Add(new FileLog(serverNode.Text, filePath));
-                    }
+                    if(traceTypes.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
+                        kvpList.Add(fileLog);
                 }
             }
 
@@ -347,6 +365,23 @@ namespace LogsReader
             //stop.Stop();
 
             return kvpList;
+        }
+
+        class FileLog
+        {
+            public FileLog(string server, string filePath)
+            {
+                Server = server;
+                FilePath = filePath;
+            }
+            public string Server { get; }
+            public string FileName => Path.GetFileName(FilePath);
+            public string FilePath { get; }
+
+            public override string ToString()
+            {
+                return FileName;
+            }
         }
 
         void ChangeFormStatus()
@@ -421,18 +456,6 @@ namespace LogsReader
             {
                 // ignored
             }
-        }
-
-        class FileLog
-        {
-            public FileLog(string server, string filePath)
-            {
-                Server = server;
-                FilePath = filePath;
-            }
-            public string Server { get; }
-            public string FileName => Path.GetFileName(FilePath);
-            public string FilePath { get; }
         }
 
         private List<DataTemplate> ReadData(FileLog fileLog)
@@ -651,6 +674,7 @@ namespace LogsReader
             }
             trvMain.ExpandAll();
 
+            ValidationCheck();
             SaveSettings();
         }
 
@@ -669,6 +693,7 @@ namespace LogsReader
             }
             trvMain.ExpandAll();
 
+            ValidationCheck();
             SaveSettings();
         }
 
@@ -696,6 +721,7 @@ namespace LogsReader
         {
             CurrentSettings.LogsDirectory = logDirText.Text;
             logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
+            ValidationCheck();
             SaveSettings();
         }
 
@@ -766,7 +792,13 @@ namespace LogsReader
 
         void ValidationCheck()
         {
-            btnSearch.Enabled = CurrentSettings.IsCorrect && !txtPattern.Text.IsNullOrEmptyTrim() && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+            var isCorrectPath = IO.CHECK_PATH.IsMatch(logDirText.Text);
+            logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+            btnSearch.Enabled = isCorrectPath
+                                && CurrentSettings.IsCorrect 
+                                && !txtPattern.Text.IsNullOrEmptyTrim() 
+                                && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) 
+                                && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
         }
 
         async void SaveSettings()

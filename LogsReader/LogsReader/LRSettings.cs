@@ -132,10 +132,10 @@ namespace LogsReader
         public event CatchWaringHandler CatchWaring;
         private string _schemeName = "MG";
         private string _servers = "mg1,mg2,mg3,mg4";
-        private string _types = "crm,soap,sms,ivr,db,dispatcher";
+        private string _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
         private int _maxThreads = -1;
         private int _maxTraceLines = 10;
-        private string _logsDirectory = @"C$\FORISLOG\MG";
+        private string _logsDirectory = @"C:\FORISLOG\MG";
         XmlNode[] _traceLinePattern =
         {
             new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)")
