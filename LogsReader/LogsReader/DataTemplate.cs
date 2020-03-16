@@ -1,54 +1,188 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader
 {
+    public class FileLog
+    {
+        public FileLog(string server, string filePath)
+        {
+            Server = server;
+            FileName = Path.GetFileName(FilePath);
+            FilePath = filePath;
+        }
+        public string Server { get; }
+        public string FileName { get; }
+        public string FilePath { get; }
+
+        public override string ToString()
+        {
+            return $"\\{Server}\\{FilePath}";
+        }
+    }
+
+    public class DataTemplateCollection : IEnumerable<DataTemplate>, IDisposable
+    {
+        int _index = 0;
+        private readonly Dictionary<int, DataTemplate> _values;
+
+        public DataTemplateCollection(IEnumerable<DataTemplate> list)
+        {
+            _values = new Dictionary<int, DataTemplate>(list.Count());
+            foreach (var template in list)
+            {
+                template.ID = ++_index;
+                _values.Add(template.ID, template);
+            }
+        }
+
+        public void AddRange(IEnumerable<DataTemplate> list)
+        {
+            foreach (var template in list)
+            {
+                template.ID = ++_index;
+                _values.Add(template.ID, template);
+            }
+        }
+
+        public int Count => _values.Count;
+
+        public DataTemplate this[int id] => _values[id];
+
+        public void Clear()
+        {
+            _values.Clear();
+        }
+
+        public IEnumerator<DataTemplate> GetEnumerator()
+        {
+            return _values.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _values.Values.GetEnumerator();
+        }
+
+        public void Dispose()
+        {
+            Clear();
+        }
+    }
+
     public class DataTemplate
     {
-        private string _entireMessage = null;
+        private readonly FileLog _fileLog;
+        private StringBuilder _message = new StringBuilder();
+        private StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
+        private string _description = null;
         private string _traceType = null;
 
+        public DataTemplate(FileLog fileLog, string date, string traceType, string description, string message, string entireMessage)
+        {
+            IsMatched = true;
+            _fileLog = fileLog;
+
+            Date = date;
+            if (DateTime.TryParse(Date, out var dateOfTrace))
+                DateOfTrace = dateOfTrace;
+
+            TraceType = traceType;
+            Description = description;
+            _message.Append(message);
+            _entireMessage.Append(entireMessage);
+        }
+
+        public DataTemplate(FileLog fileLog, string message)
+        {
+            IsMatched = false;
+            _fileLog = fileLog;
+            _message.Append(message);
+            _entireMessage.Append(message);
+        }
+
+        public DataTemplate(FileLog fileLog, Exception error)
+        {
+            IsMatched = false;
+            _fileLog = fileLog;
+
+            DateOfTrace = DateTime.Now;
+            Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
+
+            TraceType = error.GetType().ToString();
+            _message.Append(error.ToString());
+            _entireMessage.Append(error.ToString());
+        }
+
         [DGVColumn(ColumnPosition.First, "ID")]
-        public int ID { get; set; }
+        public int ID { get; internal set; }
 
         [DGVColumn(ColumnPosition.First, "Server")]
-        public string Server { get; set; }
+        public string Server => _fileLog.Server;
 
         [DGVColumn(ColumnPosition.After, "Date")]
         public string Date
         {
             get => _date;
-            set => _date = value.Replace(Environment.NewLine, string.Empty);
+            private set => _date = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
+
+        [DGVColumn(ColumnPosition.After, "FileName")]
+        public string FileName => _fileLog.FileName;
+
+        public DateTime? DateOfTrace { get; }
 
         [DGVColumn(ColumnPosition.After, "TraceType")]
         public string TraceType
         {
             get => _traceType;
-            set => _traceType = value.Replace(Environment.NewLine, string.Empty);
+            private set => _traceType = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
-        [DGVColumn(ColumnPosition.After, "FileName")]
-        public string FileName { get; set; }
-
-        [DGVColumn(ColumnPosition.After, "Message", false)]
-        public string Message { get; set; }
+        [DGVColumn(ColumnPosition.After, "Description")]
+        public string Description
+        {
+            get => _description;
+            private set => _description = value?.Replace(Environment.NewLine, string.Empty).Trim();
+        }
 
         [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
-        public bool IsMatched { get; set; }
+        public bool IsMatched { get; private set; }
 
-        [DGVColumn(ColumnPosition.Last, "EntireMessage", false)]
+        public string Message
+        {
+            get => _message.ToString();
+            private set => _message = new StringBuilder(value);
+        }
+
         public string EntireMessage
         {
             get
             {
-                if (!IsMatched && _entireMessage.IsNullOrEmpty())
+                if (!IsMatched && _entireMessage.Length == 0)
                     return Message;
-                return _entireMessage;
+                return _entireMessage.ToString();
             }
-            set => _entireMessage = value;
+            private set => _entireMessage = new StringBuilder(value);
+        }
+
+        public void AppendMessageBefore(string str)
+        {
+            _message.Insert(0, str);
+            _entireMessage.Insert(0, str);
+        }
+
+        public void AppendMessageAfter(string str)
+        {
+            _message.Append(str);
+            _entireMessage.Append(str);
         }
     }
 }

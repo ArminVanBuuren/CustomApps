@@ -60,6 +60,8 @@ namespace LogsReader
         /// </summary>
         private MTFuncResult<FileLog, List<DataTemplate>> MultiTaskingHandler { get; set; }
 
+        private DataTemplateCollection ResultList { get; set; }
+
         /// <summary>
         /// Количество совпадений по критериям поиска
         /// </summary>
@@ -153,6 +155,10 @@ namespace LogsReader
                 FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
                 FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
+                var today = DateTime.Now;
+                dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
+                dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
+
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
                 txtPattern.AssignValue(Settings.PreviousSearch[0].Value, txtPattern_TextChanged);
@@ -225,24 +231,6 @@ namespace LogsReader
             }
         }
 
-        private static void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            var row = ((DataGridView)sender).Rows[e.RowIndex];
-            TryGetCellValue(row, "IsMatched", out var cell);
-            if (cell is bool cell0 && cell0)
-            {
-                row.DefaultCellStyle.BackColor = Color.White;
-            }
-            else
-            {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell2 in row.Cells)
-                {
-                    cell2.ToolTipText = "Doesn't match regex pattern for trace line";
-                }
-            }
-        }
-
         private async void ButtonStartStop_Click(object sender, EventArgs e)
         {
             if (!IsWorking)
@@ -266,6 +254,12 @@ namespace LogsReader
                         IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
 
+                    if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
+                    {
+                        ReportStatus(@"Date of end must be greater than date of start.", true);
+                        return;
+                    }
+
                     stop.Start();
                     IsStopPending = false;
                     IsWorking = true;
@@ -287,32 +281,29 @@ namespace LogsReader
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
-                    var result = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result).OrderBy(p => p.Date).ThenBy(p => p.FileName).ToList();
-                    var resultError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+                    var resultOfSuccess = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result);
+                    if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+                    else if (dateTimePickerStart.Checked)
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value >= dateTimePickerStart.Value);
+                    else if (dateTimePickerEnd.Checked)
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+
+                    ResultList = new DataTemplateCollection(resultOfSuccess.OrderBy(p => p.Date).ThenBy(p => p.FileName));
+                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
-                        listErr.Add(new DataTemplate()
-                        {
-                            Server = x.Source.Server,
-                            Date = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff"),
-                            FileName = x.Source.FileName,
-                            TraceType = x.Error.GetType().ToString(),
-                            Message = x.Error.ToString()
-                        });
+                        listErr.Add(new DataTemplate(x.Source, x.Error));
                         return listErr;
                     });
-                    result.AddRange(resultError);
+                    ResultList.AddRange(resultOfError);
 
-                    var i = 0;
-                    foreach (var v in result)
-                        v.ID = ++i;
-
-                    if (result.Count <= 0)
+                    if (ResultList.Count <= 0)
                     {
                         ReportStatus(@"No logs found", true);
                         return;
                     }
 
-                    await dgvFiles.AssignCollectionAsync(result, null, true);
+                    await dgvFiles.AssignCollectionAsync(ResultList, null, true);
 
                     stop.Stop();
                     ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
@@ -367,22 +358,7 @@ namespace LogsReader
             return kvpList;
         }
 
-        class FileLog
-        {
-            public FileLog(string server, string filePath)
-            {
-                Server = server;
-                FilePath = filePath;
-            }
-            public string Server { get; }
-            public string FileName => Path.GetFileName(FilePath);
-            public string FilePath { get; }
-
-            public override string ToString()
-            {
-                return FileName;
-            }
-        }
+        
 
         void ChangeFormStatus()
         {
@@ -490,7 +466,7 @@ namespace LogsReader
                                     if (!CurrentSettings.TraceLinePatternRegex.IsMatch(line))
                                     {
                                         stackLines++;
-                                        lastResult.Message = lastResult.Message + Environment.NewLine + line;
+                                        lastResult.AppendMessageAfter(Environment.NewLine + line);
                                         continue;
                                     }
                                     else
@@ -513,7 +489,7 @@ namespace LogsReader
                                     else
                                     {
                                         // Паттерн не сработал успешно, но лог дополняется для следующей попытки
-                                        lastResult.Message = appendFailedLog;
+                                        lastResult.AppendMessageAfter(appendFailedLog);
                                     }
                                 }
                             }
@@ -543,7 +519,7 @@ namespace LogsReader
                             while (stackLines < CurrentSettings.MaxTraceLines && reverceBeforeTraceLines.Count > 0)
                             {
                                 stackLines++;
-                                lastResult.Message = reverceBeforeTraceLines.Dequeue() + Environment.NewLine + lastResult.Message;
+                                lastResult.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
 
                                 if (IsLineMatched(lastResult.Message, fileLog, out var beforeResult))
                                 {
@@ -572,64 +548,93 @@ namespace LogsReader
             var maskMatch = CurrentSettings.TraceLinePatternRegex.Match(message);
             if (maskMatch.Success)
             {
-                result = new DataTemplate
-                {
-                    IsMatched = true,
-                    Server = fileLog.Server,
-                    Date = maskMatch.Groups["Date"].Value,
-                    FileName = fileLog.FileName,
-                    TraceType = maskMatch.Groups["TraceType"].Value,
-                    Message = maskMatch.Groups["Message"].Value,
-                    EntireMessage = message
-                };
+                result = new DataTemplate(fileLog, 
+                    maskMatch.Groups["Date"].Value, 
+                    maskMatch.Groups["TraceType"].Value, 
+                    maskMatch.Groups["Description"].Value, 
+                    maskMatch.Groups["Message"].Value, 
+                    message);
                 return true;
             }
 
-            result = new DataTemplate
-            {
-                IsMatched = false,
-                Server = fileLog.Server,
-                FileName = fileLog.FileName,
-                Message = message
-            };
+            result = new DataTemplate(fileLog, message);
             return false;
+        }
+
+        private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                var row = ((DataGridView)sender).Rows[e.RowIndex];
+                var tempalteID = TryGetTemaplteIDOfRow(row);
+                if (tempalteID == -1 || ResultList == null)
+                    return;
+                var template = ResultList[tempalteID];
+
+                if (template.IsMatched)
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightPink;
+                    foreach (DataGridViewCell cell2 in row.Cells)
+                    {
+                        cell2.ToolTipText = "Doesn't match regex pattern for trace line";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
+            }
         }
 
         private void dgvFiles_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
-                return;
-
-            if (TryGetCellValue(dgvFiles.SelectedRows[0], "Message", out var message))
+            try
             {
-                FCTB.Text = message.ToString();
+                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
+                    return;
+
+                var tempalteID = TryGetTemaplteIDOfRow(dgvFiles.SelectedRows[0]);
+
+                if (tempalteID == -1 || ResultList == null)
+                {
+                    FCTB.Text = string.Empty;
+                    FCTB.ClearUndo();
+                    FCTBFullsStackTrace.Text = string.Empty;
+                    FCTBFullsStackTrace.ClearUndo();
+                    return;
+                }
+
+                var template = ResultList[tempalteID];
+                FCTB.Text = template.Message;
                 FCTB.ClearUndo();
-            }
-
-            if (TryGetCellValue(dgvFiles.SelectedRows[0], "EntireMessage", out var entireMessage))
-            {
-                FCTBFullsStackTrace.Text = entireMessage.ToString();
+                FCTBFullsStackTrace.Text = template.EntireMessage;
                 FCTBFullsStackTrace.ClearUndo();
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
             }
         }
 
-        static bool TryGetCellValue(DataGridViewRow row, string cellName, out object result)
+        static int TryGetTemaplteIDOfRow(DataGridViewRow row)
         {
-            result = null;
-
             if (row == null)
-                return false;
+                return -1;
 
             foreach (DataGridViewCell cell in row.Cells)
             {
-                if (!cell.OwningColumn.Name.Equals(cellName, StringComparison.CurrentCultureIgnoreCase))
+                if (!cell.OwningColumn.Name.Equals("ID", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                result = cell.Value;
-                return true;
+                if (cell.Value is int value)
+                    return value;
             }
 
-            return false;
+            return -1;
         }
 
         private void chooseScheme_SelectedIndexChanged(object sender, EventArgs e)
@@ -816,6 +821,8 @@ namespace LogsReader
         {
             dgvFiles.DataSource = null;
             dgvFiles.Refresh();
+            ResultList.Clear();
+            ResultList = null;
             FCTB.Text = string.Empty;
             FCTBFullsStackTrace.Text = string.Empty;
             pgbThreads.Value = 0;

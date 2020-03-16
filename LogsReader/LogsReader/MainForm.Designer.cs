@@ -36,8 +36,8 @@ namespace LogsReader
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
             this.FCTB = new FastColoredTextBoxNS.FastColoredTextBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.trvMain = new System.Windows.Forms.TreeView();
@@ -68,6 +68,10 @@ namespace LogsReader
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
+            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FCTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -121,7 +125,7 @@ namespace LogsReader
             this.FCTB.RightBracket2 = ')';
             this.FCTB.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.FCTB.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTB.ServiceColors")));
-            this.FCTB.Size = new System.Drawing.Size(956, 365);
+            this.FCTB.Size = new System.Drawing.Size(952, 342);
             this.FCTB.TabIndex = 0;
             this.FCTB.TabLength = 2;
             this.FCTB.WordWrap = true;
@@ -152,16 +156,16 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(0, 192);
+            this.trvMain.Location = new System.Drawing.Point(0, 247);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode3.Name = "trvServers";
+            treeNode3.Text = "Servers";
+            treeNode4.Name = "trvTypes";
+            treeNode4.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(283, 417);
+            treeNode3,
+            treeNode4});
+            this.trvMain.Size = new System.Drawing.Size(283, 362);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
@@ -217,6 +221,10 @@ namespace LogsReader
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.label9);
+            this.splitContainer1.Panel1.Controls.Add(this.label8);
+            this.splitContainer1.Panel1.Controls.Add(this.dateTimePickerEnd);
+            this.splitContainer1.Panel1.Controls.Add(this.dateTimePickerStart);
             this.splitContainer1.Panel1.Controls.Add(this.traceLinePatternText);
             this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.maxLinesStackText);
@@ -400,13 +408,15 @@ namespace LogsReader
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.Message);
             this.tabControl1.Controls.Add(this.FullTraceStack);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(970, 397);
+            this.tabControl1.Size = new System.Drawing.Size(966, 374);
             this.tabControl1.TabIndex = 1;
             // 
             // Message
@@ -416,7 +426,7 @@ namespace LogsReader
             this.Message.Location = new System.Drawing.Point(4, 22);
             this.Message.Name = "Message";
             this.Message.Padding = new System.Windows.Forms.Padding(3);
-            this.Message.Size = new System.Drawing.Size(962, 371);
+            this.Message.Size = new System.Drawing.Size(958, 348);
             this.Message.TabIndex = 0;
             this.Message.Text = "Message";
             // 
@@ -427,7 +437,7 @@ namespace LogsReader
             this.FullTraceStack.Location = new System.Drawing.Point(4, 22);
             this.FullTraceStack.Name = "FullTraceStack";
             this.FullTraceStack.Padding = new System.Windows.Forms.Padding(3);
-            this.FullTraceStack.Size = new System.Drawing.Size(958, 369);
+            this.FullTraceStack.Size = new System.Drawing.Size(958, 329);
             this.FullTraceStack.TabIndex = 1;
             this.FullTraceStack.Text = "Full Trace";
             // 
@@ -468,7 +478,7 @@ namespace LogsReader
             this.FCTBFullsStackTrace.RightBracket2 = ')';
             this.FCTBFullsStackTrace.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.FCTBFullsStackTrace.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTBFullsStackTrace.ServiceColors")));
-            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(952, 363);
+            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(952, 323);
             this.FCTBFullsStackTrace.TabIndex = 1;
             this.FCTBFullsStackTrace.TabLength = 2;
             this.FCTBFullsStackTrace.WordWrap = true;
@@ -499,6 +509,52 @@ namespace LogsReader
             this.useRegex.Text = "Use Regex";
             this.useRegex.UseVisualStyleBackColor = true;
             this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
+            // 
+            // dateTimePickerStart
+            // 
+            this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePickerStart.Checked = false;
+            this.dateTimePickerStart.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerStart.Location = new System.Drawing.Point(78, 191);
+            this.dateTimePickerStart.Name = "dateTimePickerStart";
+            this.dateTimePickerStart.ShowCheckBox = true;
+            this.dateTimePickerStart.ShowUpDown = true;
+            this.dateTimePickerStart.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerStart.TabIndex = 20;
+            // 
+            // dateTimePickerEnd
+            // 
+            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePickerEnd.Checked = false;
+            this.dateTimePickerEnd.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(78, 218);
+            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
+            this.dateTimePickerEnd.ShowCheckBox = true;
+            this.dateTimePickerEnd.ShowUpDown = true;
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerEnd.TabIndex = 21;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 195);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 15);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Date Start:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 222);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(57, 15);
+            this.label9.TabIndex = 23;
+            this.label9.Text = "Date End:";
             // 
             // MainForm
             // 
@@ -569,6 +625,10 @@ namespace LogsReader
         private TabControl tabControl1;
         private TabPage Message;
         private TabPage FullTraceStack;
+        private DateTimePicker dateTimePickerStart;
+        private DateTimePicker dateTimePickerEnd;
+        private Label label8;
+        private Label label9;
     }
 }
 

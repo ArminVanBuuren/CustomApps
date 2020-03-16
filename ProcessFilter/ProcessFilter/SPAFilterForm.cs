@@ -1179,7 +1179,8 @@ namespace SPAFilter
                         Location = _notepadLocation.Location,
                         WindowState = _notepadWindowsState,
                         WordWrap = _notepadWordWrap,
-                        WordHighlights = _notepadWordHighlights
+                        WordHighlights = _notepadWordHighlights,
+                        SizingGrip = true
                     };
                     _notepad.Closed += _notepad_Closed;
                     _notepad.Show();

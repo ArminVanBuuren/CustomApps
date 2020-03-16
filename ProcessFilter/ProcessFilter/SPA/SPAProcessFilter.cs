@@ -374,11 +374,11 @@ namespace SPAFilter.SPA
                         {
                             _activators.Add(inputFile, new ServiceActivator(inputFile));
                         }
-                    }, filePathList, 10);
+                    }, filePathList, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
 
                     ReloadActivators(lastActivatorList);
 
-                    var errors = string.Join(Environment.NewLine, result.Values.Where(x => x.Error != null).Select(x => x.Error.Message));
+                    var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                     if (!errors.IsNullOrEmptyTrim())
                     {
                         MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -425,9 +425,9 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, 10);
+                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
 
-                var errors = string.Join(Environment.NewLine, result.Values.Where(x => x.Error != null).Select(x => x.Error.Message));
+                var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
                     MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

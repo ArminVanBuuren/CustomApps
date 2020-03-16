@@ -131,14 +131,14 @@ namespace LogsReader
     {
         public event CatchWaringHandler CatchWaring;
         private string _schemeName = "MG";
-        private string _servers = "mg1,mg2,mg3,mg4";
+        private string _servers = "mg1,mg2,mg3,mg4,mg5";
         private string _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
         private int _maxThreads = -1;
         private int _maxTraceLines = 10;
         private string _logsDirectory = @"C:\FORISLOG\MG";
         XmlNode[] _traceLinePattern =
         {
-            new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)")
+            new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)\s*(?<Message>\<.+)")
         };
 
         [XmlAttribute]
@@ -234,6 +234,11 @@ namespace LogsReader
                 if (groups.All(x => x != "TraceType"))
                 {
                     CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<TraceType>' in TraceLinePattern", true);
+                    return false;
+                }
+                if (groups.All(x => x != "Description"))
+                {
+                    CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<Description>' in TraceLinePattern", true);
                     return false;
                 }
                 if (groups.All(x => x != "Message"))
