@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -440,7 +441,7 @@ namespace LogsReader
             var listResult = new List<DataTemplate>();
             using (var inputStream = File.OpenRead(fileLog.FilePath))
             {
-                using (var inputReader = new StreamReader(inputStream, IO.GetEncoding(fileLog.FilePath)))
+                using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
                 {
                     var stackLines = 0;
                     string line;
