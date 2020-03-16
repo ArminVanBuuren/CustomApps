@@ -14,6 +14,7 @@ using System.Xml;
 using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
+using Utils.WinForm.Notepad;
 
 namespace LogsReader
 {
@@ -29,6 +30,9 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _cpuUsage;
         private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
+        private NotepadControl _notepad;
+        private Editor _message;
+        private Editor _fullTrace;
 
         /// <summary>
         /// Статус выполнения поиска
@@ -141,19 +145,25 @@ namespace LogsReader
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
 
-                FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-                FCTB.ClearStylesBuffer();
-                FCTB.Range.ClearStyle(StyleIndex.All);
-                FCTB.Language = Language.XML;
-                FCTB.Font = new Font("Segoe UI", 9);
-                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+                _notepad = new NotepadControl();
+                splitContainer2.Panel2.Controls.Add(_notepad);
+                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
+                _fullTrace = _notepad.AddDocument("Full Trace", string.Empty, Language.XML);
+                _notepad.Dock = DockStyle.Fill;
 
-                FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-                FCTBFullsStackTrace.ClearStylesBuffer();
-                FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
-                FCTBFullsStackTrace.Language = Language.XML;
-                FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
-                FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+                //FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+                //FCTB.ClearStylesBuffer();
+                //FCTB.Range.ClearStyle(StyleIndex.All);
+                //FCTB.Language = Language.XML;
+                //FCTB.Font = new Font("Segoe UI", 9);
+                //FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+
+                //FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+                //FCTBFullsStackTrace.ClearStylesBuffer();
+                //FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
+                //FCTBFullsStackTrace.Language = Language.XML;
+                //FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
+                //FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
                 var today = DateTime.Now;
                 dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
@@ -370,8 +380,7 @@ namespace LogsReader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            FCTB.Enabled = !IsWorking;
-            FCTBFullsStackTrace.Enabled = !IsWorking;
+            _notepad.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             chooseScheme.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -601,18 +610,14 @@ namespace LogsReader
 
                 if (tempalteID == -1 || ResultList == null)
                 {
-                    FCTB.Text = string.Empty;
-                    FCTB.ClearUndo();
-                    FCTBFullsStackTrace.Text = string.Empty;
-                    FCTBFullsStackTrace.ClearUndo();
+                    _message.Text = string.Empty;
+                    _fullTrace.Text = string.Empty;
                     return;
                 }
 
                 var template = ResultList[tempalteID];
-                FCTB.Text = template.Message;
-                FCTB.ClearUndo();
-                FCTBFullsStackTrace.Text = template.EntireMessage;
-                FCTBFullsStackTrace.ClearUndo();
+                _message.Text = template.Message;
+                _fullTrace.Text = template.EntireMessage;
             }
             catch (Exception ex)
             {
@@ -799,8 +804,13 @@ namespace LogsReader
         {
             var isCorrectPath = IO.CHECK_PATH.IsMatch(logDirText.Text);
             logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+
+            var settIsCorrect = CurrentSettings.IsCorrect;
+            if(settIsCorrect)
+                ReportStatus(string.Empty, false);
+
             btnSearch.Enabled = isCorrectPath
-                                && CurrentSettings.IsCorrect 
+                                && settIsCorrect
                                 && !txtPattern.Text.IsNullOrEmptyTrim() 
                                 && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) 
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
@@ -821,10 +831,10 @@ namespace LogsReader
         {
             dgvFiles.DataSource = null;
             dgvFiles.Refresh();
-            ResultList.Clear();
+            ResultList?.Clear();
             ResultList = null;
-            FCTB.Text = string.Empty;
-            FCTBFullsStackTrace.Text = string.Empty;
+            _message.Text = string.Empty;
+            _fullTrace.Text = string.Empty;
             pgbThreads.Value = 0;
             _completedFilesStatus.Text = @"0";
             _totalFilesStatus.Text = @"0";

@@ -34,11 +34,8 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
-            this.FCTB = new FastColoredTextBoxNS.FastColoredTextBox();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.trvMain = new System.Windows.Forms.TreeView();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -61,10 +58,6 @@ namespace LogsReader
             this.serversText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.Message = new System.Windows.Forms.TabPage();
-            this.FullTraceStack = new System.Windows.Forms.TabPage();
-            this.FCTBFullsStackTrace = new FastColoredTextBoxNS.FastColoredTextBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
@@ -72,7 +65,6 @@ namespace LogsReader
             this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.FCTB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -80,56 +72,8 @@ namespace LogsReader
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.Message.SuspendLayout();
-            this.FullTraceStack.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FCTBFullsStackTrace)).BeginInit();
             this.SuspendLayout();
-            // 
-            // FCTB
-            // 
-            this.FCTB.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.FCTB.AutoIndentCharsPatterns = "";
-            this.FCTB.AutoScrollMinSize = new System.Drawing.Size(0, 12);
-            this.FCTB.BackBrush = null;
-            this.FCTB.CharHeight = 12;
-            this.FCTB.CharWidth = 7;
-            this.FCTB.CommentPrefix = null;
-            this.FCTB.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.FCTB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FCTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FCTB.Font = new System.Drawing.Font("Courier New", 8.25F);
-            this.FCTB.ForeColor = System.Drawing.Color.Black;
-            this.FCTB.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.FCTB.IsReplaceMode = false;
-            this.FCTB.Language = FastColoredTextBoxNS.Language.XML;
-            this.FCTB.LeftBracket = '<';
-            this.FCTB.LeftBracket2 = '(';
-            this.FCTB.Location = new System.Drawing.Point(3, 3);
-            this.FCTB.Name = "FCTB";
-            this.FCTB.Paddings = new System.Windows.Forms.Padding(0);
-            this.FCTB.ReadOnly = true;
-            this.FCTB.RightBracket = '>';
-            this.FCTB.RightBracket2 = ')';
-            this.FCTB.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.FCTB.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTB.ServiceColors")));
-            this.FCTB.Size = new System.Drawing.Size(952, 342);
-            this.FCTB.TabIndex = 0;
-            this.FCTB.TabLength = 2;
-            this.FCTB.WordWrap = true;
-            this.FCTB.Zoom = 100;
             // 
             // dgvFiles
             // 
@@ -158,13 +102,13 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(0, 247);
             this.trvMain.Name = "trvMain";
-            treeNode3.Name = "trvServers";
-            treeNode3.Text = "Servers";
-            treeNode4.Name = "trvTypes";
-            treeNode4.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(283, 362);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -398,91 +342,9 @@ namespace LogsReader
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.dgvFiles);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer2.Size = new System.Drawing.Size(974, 613);
             this.splitContainer2.SplitterDistance = 208;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.Message);
-            this.tabControl1.Controls.Add(this.FullTraceStack);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(966, 374);
-            this.tabControl1.TabIndex = 1;
-            // 
-            // Message
-            // 
-            this.Message.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.Message.Controls.Add(this.FCTB);
-            this.Message.Location = new System.Drawing.Point(4, 22);
-            this.Message.Name = "Message";
-            this.Message.Padding = new System.Windows.Forms.Padding(3);
-            this.Message.Size = new System.Drawing.Size(958, 348);
-            this.Message.TabIndex = 0;
-            this.Message.Text = "Message";
-            // 
-            // FullTraceStack
-            // 
-            this.FullTraceStack.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.FullTraceStack.Controls.Add(this.FCTBFullsStackTrace);
-            this.FullTraceStack.Location = new System.Drawing.Point(4, 22);
-            this.FullTraceStack.Name = "FullTraceStack";
-            this.FullTraceStack.Padding = new System.Windows.Forms.Padding(3);
-            this.FullTraceStack.Size = new System.Drawing.Size(958, 329);
-            this.FullTraceStack.TabIndex = 1;
-            this.FullTraceStack.Text = "Full Trace";
-            // 
-            // FCTBFullsStackTrace
-            // 
-            this.FCTBFullsStackTrace.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.FCTBFullsStackTrace.AutoIndentCharsPatterns = "";
-            this.FCTBFullsStackTrace.AutoScrollMinSize = new System.Drawing.Size(0, 12);
-            this.FCTBFullsStackTrace.BackBrush = null;
-            this.FCTBFullsStackTrace.CharHeight = 12;
-            this.FCTBFullsStackTrace.CharWidth = 7;
-            this.FCTBFullsStackTrace.CommentPrefix = null;
-            this.FCTBFullsStackTrace.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.FCTBFullsStackTrace.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FCTBFullsStackTrace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FCTBFullsStackTrace.Font = new System.Drawing.Font("Courier New", 8.25F);
-            this.FCTBFullsStackTrace.ForeColor = System.Drawing.Color.Black;
-            this.FCTBFullsStackTrace.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.FCTBFullsStackTrace.IsReplaceMode = false;
-            this.FCTBFullsStackTrace.Language = FastColoredTextBoxNS.Language.XML;
-            this.FCTBFullsStackTrace.LeftBracket = '<';
-            this.FCTBFullsStackTrace.LeftBracket2 = '(';
-            this.FCTBFullsStackTrace.Location = new System.Drawing.Point(3, 3);
-            this.FCTBFullsStackTrace.Name = "FCTBFullsStackTrace";
-            this.FCTBFullsStackTrace.Paddings = new System.Windows.Forms.Padding(0);
-            this.FCTBFullsStackTrace.ReadOnly = true;
-            this.FCTBFullsStackTrace.RightBracket = '>';
-            this.FCTBFullsStackTrace.RightBracket2 = ')';
-            this.FCTBFullsStackTrace.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.FCTBFullsStackTrace.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FCTBFullsStackTrace.ServiceColors")));
-            this.FCTBFullsStackTrace.Size = new System.Drawing.Size(952, 323);
-            this.FCTBFullsStackTrace.TabIndex = 1;
-            this.FCTBFullsStackTrace.TabLength = 2;
-            this.FCTBFullsStackTrace.WordWrap = true;
-            this.FCTBFullsStackTrace.Zoom = 100;
             // 
             // statusStrip
             // 
@@ -573,7 +435,6 @@ namespace LogsReader
             this.MinimumSize = new System.Drawing.Size(398, 283);
             this.Name = "MainForm";
             this.Text = "Logs Reader";
-            ((System.ComponentModel.ISupportInitialize)(this.FCTB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -581,21 +442,14 @@ namespace LogsReader
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.Message.ResumeLayout(false);
-            this.FullTraceStack.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.FCTBFullsStackTrace)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private FastColoredTextBox FCTB;
         private System.Windows.Forms.DataGridView dgvFiles;
         private System.Windows.Forms.TreeView trvMain;
         private System.Windows.Forms.Button btnSearch;
@@ -621,10 +475,6 @@ namespace LogsReader
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox traceLinePatternText;
         private System.Windows.Forms.Label label7;
-        private FastColoredTextBox FCTBFullsStackTrace;
-        private TabControl tabControl1;
-        private TabPage Message;
-        private TabPage FullTraceStack;
         private DateTimePicker dateTimePickerStart;
         private DateTimePicker dateTimePickerEnd;
         private Label label8;

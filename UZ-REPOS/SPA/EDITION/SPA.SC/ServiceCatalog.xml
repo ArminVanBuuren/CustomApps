@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
+    <HostType name="BM" nriType="RI" allowTerminalDeviceType="mobile" description="Bonus Management System" />
     <HostType name="BSP" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа счетчиков BSProxy" />
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
     <HostType name="CT5" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content UNIFUN" />
@@ -69,6 +70,7 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
+    <RFS name="RFS_BMS_SERVICE" hostType="BM" processType="DynamicList" description="Услуга включения в кампанию на BMS" />
     <RFS name="RFS_BSPROXY_COUNTER" hostType="BSP" processType="DynamicList" description="Счетчик на BSProxy">
       <RFSParameter name="Counter" />
     </RFS>
@@ -332,6 +334,10 @@
     </RFS>
     <RFS name="RFS_HLR_NET_APN_M2M_BS" base="RFS_HLR_NET_APN" hostType="HL" description="M2M APN">
       <Resource name="RES_HLR_NET_APN" value="M2M.APN" />
+      <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
+    </RFS>
+    <RFS name="RFS_HLR_NET_APN_M2M_CENTRAL" base="RFS_HLR_NET_APN" hostType="HL" description="CENTRAL BANK APN">
+      <Resource name="RES_HLR_NET_APN" value="CENTRAL.BANK" />
       <Resource name="RES_HLR_NET_SERVICE" value="M2M" />
     </RFS>
     <RFS name="RFS_HLR_ODB_IC" hostType="HL" description="Барринг входящей связи">
@@ -859,6 +865,7 @@
     <CFS name="FRAPIDEALYILLIK" globalServiceCode="FRAPIDEALYILLIK" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Ideal Yillik" />
     <CFS name="FRAPKB" globalServiceCode="FRAPKB" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата для КБ" />
     <CFS name="FRAPKONTRAGENT" globalServiceCode="FRAPKONTRAGENT" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Kontragent arenda" />
+    <CFS name="FRAPKUG" globalServiceCode="FRAPKUG" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП КУГ" />
     <CFS name="FRAPLOKOMOTIV" globalServiceCode="FRAPLOKOMOTIV" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Lokomotiv" />
     <CFS name="FRAPMAXI" globalServiceCode="FRAPMAXI" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП MAXI" />
     <CFS name="FRAPMAXINEW" globalServiceCode="FRAPMAXINEW" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Maxi New" />
@@ -1043,8 +1050,13 @@
     <CFS name="FRBMSBESH200" globalServiceCode="FRBMSBESH200" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.200 sms на Besh при платежах" />
     <CFS name="FRBMSBRK20" globalServiceCode="FRBMSBRK20" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.20 mb на Baraka при платежах" />
     <CFS name="FRBMSBRK50" globalServiceCode="FRBMSBRK50" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.50 mb на Baraka при платежах_old" />
+    <CFS name="FRBMSCHTP" isMarker="true" description="BMS. Смена ТП">
+      <RFS name="RFS_BMS_SERVICE" linkType="Add" />
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+    </CFS>
     <CFS name="FRBMSPP" globalServiceCode="FRBMSPP" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS. Участие при платежах" />
     <CFS name="FRBMSPP2" globalServiceCode="FRBMSPP2" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.100 минут на UMS при платежах" />
+    <CFS name="FRBMSSMN" globalServiceCode="FRBMSSMN" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.300 MB при смене ТП" />
     <CFS name="FRBMSUMSIP" globalServiceCode="FRBMSUMSIP" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.Безлимит на UMS при покупке ИП" />
     <CFS name="FRBONCORP3" globalServiceCode="FRBONCORP3" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-Corp 1000 MB 500 MIN 500 SMS" />
     <CFS name="FRBONGPRS100" globalServiceCode="FRBONGPRS100" copyOf="CFS_FP_SERVICE_GENERAL" description="Bonus-paket 100 MB" />
@@ -1362,6 +1374,11 @@
       <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
       <RFS name="RFS_HLR_NET_APN_M2M_BEPRO" linkType="Add" />
     </CFS>
+    <CFS name="FRM2MAPNCENTRALBANK" description="M2M APN CENTRAL BANK">
+      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
+      <RFS name="RFS_HLR_NET_ALLOW" linkType="Add" />
+      <RFS name="RFS_HLR_NET_APN_M2M_CENTRAL" linkType="Add" />
+    </CFS>
     <CFS name="FRM2MAPNFMS" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN Fleet Managment Solutuons" />
     <CFS name="FRM2MAPNNGMK" copyOf="CFS_FP_SERVICE_GENERAL" description="M2M APN NGMK" />
     <CFS name="FRM2MSMS100" globalServiceCode="FRM2MSMS100" copyOf="CFS_FP_SERVICE_GENERAL" description="OnNet 100 SMS M2M" />
@@ -1454,7 +1471,7 @@
     <CFS name="FRMINB750" globalServiceCode="FRMINB750" copyOf="CFS_FP_SERVICE_GENERAL" description="Голосовой пакет Business 750 Min" />
     <CFS name="FRMINIRMNG" priority="99" description="Mini Роуминг">
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-      <RFS name="RFS_HLR_ODB_OC_BAOC" linkType="Set" />
+      <RFS name="RFS_HLR_CALLS_BAN" linkType="Add" />
       <RFS name="RFS_HLR_ROAMING" linkType="Add" />
     </CFS>
     <CFS name="FRMINMIL" globalServiceCode="FRMINMIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Миллионы от UMS MIN" />
@@ -1657,6 +1674,7 @@
     <CFS name="FRPRPACK500" globalServiceCode="FRPRPACK500" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo Pack 500" />
     <CFS name="FRPRPACK5000" globalServiceCode="FRPRPACK5000" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo Pack 5000" />
     <CFS name="FRPRPACK500MB" globalServiceCode="FRPRPACK500MB" copyOf="CFS_FP_SERVICE_GENERAL" description="Promo_Paket 500 MB" />
+    <CFS name="FRPRSVYAZ" globalServiceCode="FRPRSVYAZ" copyOf="CFS_FP_SERVICE_GENERAL" description="Правительственная связь" />
     <CFS name="FRPTPNEW" globalServiceCode="FRPTPNEW" copyOf="CFS_FP_SERVICE_GENERAL" description="P-to-P перевод New" />
     <CFS name="FRPTPPER" globalServiceCode="FRPTPPER" copyOf="CFS_FP_SERVICE_GENERAL" description="P-t-P перевод" />
     <CFS name="FRPWD" globalServiceCode="FRPWD" copyOf="CFS_FP_SERVICE_GENERAL" description="Интернет-пароль" />
@@ -2248,6 +2266,7 @@
       <CFS name="FRM2MAPN" />
       <CFS name="FRM2MAPNBANK" />
       <CFS name="FRM2MAPNBEPRO" />
+      <CFS name="FRM2MAPNCENTRALBANK" />
       <CFS name="FRM2MAPNFMS" />
       <CFS name="FRM2MAPNNGMK" />
       <CFS name="FRNEWSCG" />
@@ -2387,6 +2406,12 @@
     </Handler>
   </HandlerList>
   <ScenarioList>
+    <Scenario name="BMS.AssignMsisdnToCampaign" description="Add Campaing">
+      <RFS name="RFS_BMS_SERVICE" scenarioType="Add" />
+    </Scenario>
+    <Scenario name="BMS.RemoveMsisdnToCampaign" description="Remove Campaing">
+      <RFS name="RFS_BMS_SERVICE" scenarioType="Remove" />
+    </Scenario>
     <Scenario name="BSP.ChangeCounterProfile" description="Переинициализация счетчиков на BSProxy">
       <RFS name="RFS_BSPROXY_COUNTER" scenarioType="Add" />
     </Scenario>
