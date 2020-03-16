@@ -65,6 +65,61 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Process.GetCurrentProcess().ProcessName - может работать некорректно, поэтому лучше использовать данный метод
+        /// </summary>
+        /// <returns></returns>
+        public static string ObtainCurrentProcessName()
+        {
+            string baseProcessName;
+            string processName = null;
+            int processId;
+            var notFound = true;
+            var processOptionsChecked = 0;
+            var maxNrOfParallelProcesses = 3 + 1;
+
+            try
+            {
+                baseProcessName = Process.GetCurrentProcess().ProcessName;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            try
+            {
+                processId = Process.GetCurrentProcess().Id;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            while (notFound)
+            {
+                processName = baseProcessName;
+                if (processOptionsChecked > maxNrOfParallelProcesses)
+                    break;
+
+                if (processOptionsChecked == 1)
+                    processName = $"{baseProcessName}_{processId}";
+                else if (processOptionsChecked > 1)
+                    processName = $"{baseProcessName}#{processOptionsChecked - 1}";
+
+                try
+                {
+                    if (processId == (int)new PerformanceCounter("Process", "ID Process", processName).NextValue())
+                        notFound = !true;
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+                processOptionsChecked++;
+            }
+            return processName;
+        }
 
         public static ProcessInfo[] ProcessList;
         const ProcessInfo PROCESS_INFO_NOT_FOUND = null;

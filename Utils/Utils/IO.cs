@@ -9,11 +9,14 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Utils
 {
     public static class IO
     {
+        public static Regex CHECK_PATH = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
         /// <summary>
         /// Determines a text file's encoding by analyzing its byte order mark (BOM).
         /// Defaults to ASCII when detection of the text file's endianness fails.

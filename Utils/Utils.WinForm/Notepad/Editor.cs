@@ -9,17 +9,22 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    internal class Editor : IDisposable
+    public class Editor : IDisposable
     {
+        static object syncWhenFileChanged { get; } = new object();
+
         private bool _wordHighLisghts = false;
+        private bool _validateEditorOnChange = false;
         private string _fileName = null;
         private string _source = null;
 
         private readonly Encoding _defaultEncoding = new UTF8Encoding(false);
         readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
-        static object syncWhenFileChanged { get; } = new object();
+        
         bool _isDisposed = false;
         FileSystemWatcher _watcher;
+
+        internal FastColoredTextBox FCTB { get; private set; }
 
         public event EventHandler OnSomethingChanged;
 
@@ -55,7 +60,6 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public FastColoredTextBox FCTB { get; private set; }
         public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
 
         public bool WordHighlights
@@ -91,6 +95,41 @@ namespace Utils.WinForm.Notepad
                 {
                     return Encoding.Default;
                 }
+            }
+        }
+
+        
+
+        public string Text
+        {
+            get => FCTB.Text;
+            set
+            {
+                try
+                {
+                    FCTB.Text = Source = value;
+                    FCTB.ClearUndo();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+
+        public bool ValidateOnChange
+        {
+            get => _validateEditorOnChange;
+            set
+            {
+                if(_validateEditorOnChange == value)
+                    return;
+
+                _validateEditorOnChange = value;
+                if (_validateEditorOnChange)
+                    FCTB.TextChanged += Fctb_TextChanged;
+                else
+                    FCTB.TextChanged -= Fctb_TextChanged;
             }
         }
 
@@ -164,7 +203,7 @@ namespace Utils.WinForm.Notepad
             FCTB.Language = language;
             FCTB.Text = Source;
 
-            FCTB.TextChanged += Fctb_TextChanged;
+            ValidateOnChange = true;
             FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
         }
 

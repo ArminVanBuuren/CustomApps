@@ -164,6 +164,12 @@
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="Notepad\Editor.cs" />
+    <Compile Include="Notepad\NotepadControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Notepad\NotepadControl.Designer.cs">
+      <DependentUpon>NotepadControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notepad\Notepad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -192,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FastColoredTextBox\ReplaceForm.resx">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notepad\NotepadControl.resx">
+      <DependentUpon>NotepadControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Notepad\Notepad.resx">
       <DependentUpon>Notepad.cs</DependentUpon>

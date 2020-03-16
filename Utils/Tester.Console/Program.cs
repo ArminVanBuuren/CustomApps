@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 //using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Utils;
 using Utils.CollectionHelper;
@@ -37,16 +38,21 @@ namespace Tester.Console
             {
                 var stop = new Stopwatch();
 
-                var sss11 = new DoubleDictionary<string, string>();
-                for (int i = 0; i < 10000000; i++)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        sss11.Add(i.ToString(), j.ToString());
-                    }
-                }
-                var tsttt = sss11.CountValues;
+                var rrrr = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.IgnoreCase);
+                var match = rrrr.Match(@"C:\test\1\2.txt");
                 System.Console.ReadKey();
+
+
+                //var sss11 = new DoubleDictionary<string, string>();
+                //for (int i = 0; i < 10000000; i++)
+                //{
+                //    for (int j = 0; j < 5; j++)
+                //    {
+                //        sss11.Add(i.ToString(), j.ToString());
+                //    }
+                //}
+                //var tsttt = sss11.CountValues;
+                //System.Console.ReadKey();
                 //var list = new List<byte[]>();
                 //while (true)
                 //{
