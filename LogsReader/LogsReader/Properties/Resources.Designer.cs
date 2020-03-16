@@ -109,7 +109,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Путь к папке с логами. Диск должен указан вместе со знаком $ (C$, D$, F$).
+        ///   Looks up a localized string similar to Путь к папке с логами.
         /// </summary>
         internal static string LRSettingsScheme_LogsDirectoryComment {
             get {
