@@ -28,6 +28,7 @@ namespace Utils.WinForm.Notepad
         private bool _userCanCloseTabItem = false;
         private bool _readOnly = false;
         private int _lastSelectedPage = 0;
+        private Font _textFont = new Font("Segoe UI", 9F);
 
         public event EventHandler OnRefresh;
 
@@ -101,6 +102,26 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        public Font TabsFont
+        {
+            get => TabControlObj.Font;
+            set => TabControlObj.Font = value;
+        }
+
+        public Font TextFont
+        {
+            get => _textFont;
+            set
+            {
+                if(Equals(_textFont, value))
+                    return;
+
+                _textFont = value;
+                foreach (var editor in ListOfEditors.Values)
+                    editor.Font = _textFont;
+            }
+        }
+
         public NotepadControl()
         {
             InitializeComponent();
@@ -116,7 +137,6 @@ namespace Utils.WinForm.Notepad
             {
                 _listOfLanguages.Items.Add(lang);
             }
-            _listOfLanguages.Font = new Font("Segoe UI", 8F);
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
             statusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
@@ -268,6 +288,7 @@ namespace Utils.WinForm.Notepad
             }
 
             var editor = new Editor(headerName, bodyText, WordWrap, language, WordHighlights);
+            AssignOptions(editor);
             InitializePage(editor);
             return editor;
         }
@@ -292,8 +313,15 @@ namespace Utils.WinForm.Notepad
             }
 
             var newFileEditor = new FileEditor(filePath, WordWrap, WordHighlights);
+            AssignOptions(newFileEditor);
             InitializePage(newFileEditor);
             return newFileEditor;
+        }
+
+        void AssignOptions(Editor editor)
+        {
+            editor.Font = TextFont;
+            editor.ReadOnly = ReadOnly;
         }
 
         public void SelectEditor(int tabIndex)

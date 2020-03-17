@@ -133,6 +133,12 @@ namespace Utils.WinForm.Notepad
             set => FCTB.ReadOnly = value;
         }
 
+        public Font Font
+        {
+            get => FCTB.Font;
+            set => FCTB.Font = value;
+        }
+
         public int TextLength => FCTB.TextLength;
         public int LinesCount => FCTB.LinesCount;
         public Range Selection => FCTB.Selection;
