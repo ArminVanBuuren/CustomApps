@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader
@@ -79,8 +78,8 @@ namespace LogsReader
     public class DataTemplate
     {
         private readonly FileLog _fileLog;
-        private StringBuilder _message = new StringBuilder();
-        private StringBuilder _entireMessage = new StringBuilder();
+        private readonly StringBuilder _message = new StringBuilder();
+        private readonly StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
         private string _description = null;
         private string _traceType = null;
@@ -117,8 +116,8 @@ namespace LogsReader
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
 
             TraceType = error.GetType().ToString();
-            _message.Append(error.ToString());
-            _entireMessage.Append(error.ToString());
+            _message.Append(error);
+            _entireMessage.Append(error);
         }
 
         [DGVColumn(ColumnPosition.First, "ID")]
@@ -159,7 +158,6 @@ namespace LogsReader
         public string Message
         {
             get => _message.ToString();
-            private set => _message = new StringBuilder(value);
         }
 
         public string EntireMessage
@@ -170,7 +168,6 @@ namespace LogsReader
                     return Message;
                 return _entireMessage.ToString();
             }
-            private set => _entireMessage = new StringBuilder(value);
         }
 
         public void AppendMessageBefore(string str)

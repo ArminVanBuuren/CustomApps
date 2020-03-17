@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -295,7 +294,7 @@ namespace LogsReader
         XmlNode[] _traceLinePattern = new XmlNode[]
         {
             new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*$"),
-            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>\w+)\s*(?<Message>.+)$"),
+            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)$"),
             new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
         };
 
@@ -312,27 +311,30 @@ namespace LogsReader
             get => _traceLinePattern;
             set
             {
+                IsCorrectRegex = false;
+
                 if (value != null)
                 {
                     if (value.Length > 0)
                         _traceLinePattern = value;
                 }
 
-                string error = string.Empty;
                 foreach (var pattern in _traceLinePattern)
                 {
                     if (pattern == null)
                     {
-                        MessageBox.Show("Some pattern is null");
+                        MessageBox.Show("One of patterns is null. Please check config.");
                         return;
                     }
                     else if (!REGEX.Verify(pattern.Value))
                     {
-                        MessageBox.Show("Some pattern is incorrect");
+                        MessageBox.Show($"Pattern [{pattern.Value}] is incorrect");
                         return;
                     }
                     else
+                    {
                         RegexItem.Add(new Regex(pattern.Value, RegexOptions.Compiled | RegexOptions.Singleline));
+                    }
                 }
 
                 IsCorrectRegex = true;

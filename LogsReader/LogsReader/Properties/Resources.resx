@@ -140,14 +140,14 @@
     <value>Типы файлов. Указать через запятую.</value>
   </data>
   <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
-    <value>Settings from '{0}' is incorrect! Moved to {1}.
+    <value>Config '{0}' is incorrect! Moved to {1}.
 {2}</value>
   </data>
   <data name="LRSettings_PreviousSearchComment" xml:space="preserve">
     <value>Предыдущее значение поиска. </value>
   </data>
   <data name="LRSettings_Serialize_Ex" xml:space="preserve">
-    <value>Unable to save Settings to specified path=[{0}].
+    <value>Unable to save config to path=[{0}].
 {1}</value>
   </data>
   <data name="LRSettings_UseRegexComment" xml:space="preserve">

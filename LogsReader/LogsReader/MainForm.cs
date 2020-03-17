@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
@@ -151,7 +150,9 @@ namespace LogsReader
                 var notepad = new NotepadControl();
                 splitContainer2.Panel2.Controls.Add(notepad);
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = notepad.AddDocument("Full Trace", string.Empty, Language.Custom);
+                _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
+                notepad.TabsFont = this.Font;
+                notepad.TextFont = new Font("Segoe UI", 10F);
                 notepad.Dock = DockStyle.Fill;
                 notepad.SelectEditor(0);
                 notepad.ReadOnly = true;

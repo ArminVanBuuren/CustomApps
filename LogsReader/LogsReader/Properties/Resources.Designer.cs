@@ -71,7 +71,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings from &apos;{0}&apos; is incorrect! Moved to {1}.
+        ///   Looks up a localized string similar to Config &apos;{0}&apos; is incorrect! Moved to {1}.
         ///{2}.
         /// </summary>
         internal static string LRSettings_Deserialize_Ex {
@@ -90,7 +90,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to save Settings to specified path=[{0}].
+        ///   Looks up a localized string similar to Unable to save config to path=[{0}].
         ///{1}.
         /// </summary>
         internal static string LRSettings_Serialize_Ex {
