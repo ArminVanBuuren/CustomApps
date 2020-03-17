@@ -30,9 +30,9 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _cpuUsage;
         private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
-        private NotepadControl _notepad;
-        private Editor _message;
-        private Editor _fullTrace;
+        private readonly NotepadControl _notepad;
+        private readonly Editor _message;
+        private readonly Editor _fullTrace;
 
         /// <summary>
         /// Статус выполнения поиска
@@ -138,7 +138,6 @@ namespace LogsReader
                 tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
                 tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
-                tooltipPrintXML.SetToolTip(traceLinePatternText, Resources.LRSettingsScheme_TraceLinePatternComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 Closing += (s, e) => { SaveSettings(); };
@@ -183,7 +182,7 @@ namespace LogsReader
         /// <summary>
         /// Мониторинг локальных ресурсов
         /// </summary>
-        void CalculateLocalResources()
+        async void CalculateLocalResources()
         {
             try
             {
@@ -202,22 +201,20 @@ namespace LogsReader
 
                 while (true)
                 {
-
-                    Invoke(new MethodInvoker(delegate
-                    {
-                        checkAppCPU?.Invoke();
-                        var currentProcess = Process.GetCurrentProcess();
-                        _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
-                        _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-                    }));
-
+                    await Task.Factory.StartNew(() =>
+                        Invoke(new MethodInvoker(delegate
+                        {
+                            checkAppCPU?.Invoke();
+                            var currentProcess = Process.GetCurrentProcess();
+                            _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
+                            _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+                        })));
                     Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
             {
-                Invoke(new MethodInvoker(() => MessageBox.Show(ex.ToString())));
-                // ignored
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -388,7 +385,6 @@ namespace LogsReader
             maxThreadsText.Enabled = !IsWorking;
             logDirText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
-            traceLinePatternText.Enabled = !IsWorking;
         }
 
         void CheckProgress()
@@ -472,7 +468,7 @@ namespace LogsReader
                                 {
                                     // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
                                     // Иначе строка относится к другому логу и завершается дополнение
-                                    if (!CurrentSettings.TraceLinePatternRegex.IsMatch(line))
+                                    if (CurrentSettings.IsMatch(line) == null)
                                     {
                                         stackLines++;
                                         lastResult.AppendMessageAfter(Environment.NewLine + line);
@@ -554,7 +550,7 @@ namespace LogsReader
 
         bool IsLineMatched(string message, FileLog fileLog, out DataTemplate result)
         {
-            var maskMatch = CurrentSettings.TraceLinePatternRegex.Match(message);
+            var maskMatch = CurrentSettings.IsMatch(message);
             if (maskMatch.Success)
             {
                 result = new DataTemplate(fileLog, 
@@ -656,7 +652,6 @@ namespace LogsReader
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-                traceLinePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
                 btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
             catch (Exception ex)
@@ -753,14 +748,6 @@ namespace LogsReader
         {
             CurrentSettings.MaxTraceLines = res;
             maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-            SaveSettings();
-        }
-
-        private void tracePatternText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.TraceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(traceLinePatternText.Text) };
-            traceLinePatternText.AssignValue(CurrentSettings.TraceLinePattern[0].Value, tracePatternText_TextChanged);
-            ValidationCheck();
             SaveSettings();
         }
 

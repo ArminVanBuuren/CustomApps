@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -136,10 +137,7 @@ namespace LogsReader
         private int _maxThreads = -1;
         private int _maxTraceLines = 10;
         private string _logsDirectory = @"C:\FORISLOG\MG";
-        XmlNode[] _traceLinePattern =
-        {
-            new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)\s*(?<Message>\<.+)")
-        };
+        private TraceLinePattern _traceLinePattern = new TraceLinePattern();
 
         [XmlAttribute]
         public string Name
@@ -202,58 +200,128 @@ namespace LogsReader
         public XmlComment TraceLinePatternComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceLinePatternComment); set { } }
 
         [XmlElement]
-        public XmlNode[] TraceLinePattern
+        public TraceLinePattern TraceLinePattern
         {
             get => _traceLinePattern;
             set
             {
-                if (value != null && value.Length > 0 && REGEX.Verify(value[0].Value))
-                    _traceLinePattern = value;
-
-                TraceLinePatternRegex = new Regex(_traceLinePattern[0].Value, RegexOptions.Compiled | RegexOptions.Singleline);   
+                if (value != null)
+                {
+                    if (value.Items.Length > 0)
+                        _traceLinePattern = value;
+                }
             }
         }
 
-        [XmlIgnore]
-        public Regex TraceLinePatternRegex { get; private set; }
+        public Match IsMatch(string input)
+        {
+            foreach (var regexPatt in TraceLinePattern.RegexItem)
+            {
+                var match = regexPatt.Match(input);
+                if (match.Success)
+                    return match;
+            }
+
+            return null;
+        }
 
         [XmlIgnore]
         public bool IsCorrect
         {
             get
             {
-                if (TraceLinePatternRegex == null)
-                    return false;
-
-                var groups = TraceLinePatternRegex.GetGroupNames();
-                if (groups.All(x => x != "Date"))
+                if (!TraceLinePattern.IsCorrectRegex)
                 {
-                    CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<Date>' in TraceLinePattern", true);
-                    return false;
-                }
-                if (groups.All(x => x != "TraceType"))
-                {
-                    CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<TraceType>' in TraceLinePattern", true);
-                    return false;
-                }
-                if (groups.All(x => x != "Description"))
-                {
-                    CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<Description>' in TraceLinePattern", true);
-                    return false;
-                }
-                if (groups.All(x => x != "Message"))
-                {
-                    CatchWaring?.Invoke($"Scheme '{Name}' is incorrect. Not found group '?<Message>' in TraceLinePattern", true);
+                    CatchWaring?.Invoke($"Some pattern is incorrect! Please check.", true);
                     return false;
                 }
 
+                if (TraceLinePattern.RegexItem.Count == 0)
+                {
+                    CatchWaring?.Invoke($"Not found any Regex line pattern", true);
+                    return false;
+                }
+
+                foreach (var rgPatt in TraceLinePattern.RegexItem)
+                {
+                    var groups = rgPatt.GetGroupNames();
+                    if (groups.All(x => x != "Date"))
+                    {
+                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
+                        return false;
+                    }
+                    if (groups.All(x => x != "TraceType"))
+                    {
+                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<TraceType>' in TraceLinePattern", true);
+                        return false;
+                    }
+                    if (groups.All(x => x != "Message"))
+                    {
+                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Message>' in TraceLinePattern", true);
+                        return false;
+                    }
+                }
                 return true;
             }
         }
 
         public LRSettingsScheme()
         {
-            TraceLinePatternRegex = new Regex(_traceLinePattern[0].Value, RegexOptions.Compiled | RegexOptions.Singleline);
+            TraceLinePattern = new TraceLinePattern();
         }
+    }
+
+    [XmlRoot("TraceLinePattern")]
+    public class TraceLinePattern
+    {
+        XmlNode[] _traceLinePattern = new XmlNode[]
+        {
+            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>)$"),
+            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>\w+)\s*(?<Message>.+)$"),
+            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
+        };
+
+        public TraceLinePattern()
+        {
+            Items = _traceLinePattern;
+        }
+
+        internal bool IsCorrectRegex { get; private set; } = false;
+
+        [XmlElement("Item")]
+        public XmlNode[] Items
+        {
+            get => _traceLinePattern;
+            set
+            {
+                if (value != null)
+                {
+                    if (value.Length > 0)
+                        _traceLinePattern = value;
+                }
+
+                string error = string.Empty;
+                foreach (var pattern in _traceLinePattern)
+                {
+                    if (pattern == null)
+                    {
+                        MessageBox.Show("Some pattern is null");
+                        return;
+                    }
+                    else if (!REGEX.Verify(pattern.Value))
+                    {
+                        MessageBox.Show("Some pattern is incorrect");
+                        return;
+                    }
+                    else
+                        RegexItem.Add(new Regex(pattern.Value, RegexOptions.Compiled | RegexOptions.Singleline));
+                }
+
+                IsCorrectRegex = true;
+            }
+        }
+
+        [XmlIgnore]
+        public List<Regex> RegexItem { get; private set; } = new List<Regex>();
     }
 }

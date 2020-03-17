@@ -43,8 +43,10 @@ namespace LogsReader
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.pgbThreads = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.traceLinePatternText = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.logDirText = new System.Windows.Forms.TextBox();
@@ -61,10 +63,6 @@ namespace LogsReader
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
-            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -100,7 +98,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(0, 247);
+            this.trvMain.Location = new System.Drawing.Point(1, 220);
             this.trvMain.Name = "trvMain";
             treeNode1.Name = "trvServers";
             treeNode1.Text = "Servers";
@@ -109,7 +107,7 @@ namespace LogsReader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(283, 362);
+            this.trvMain.Size = new System.Drawing.Size(283, 391);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
@@ -169,8 +167,6 @@ namespace LogsReader
             this.splitContainer1.Panel1.Controls.Add(this.label8);
             this.splitContainer1.Panel1.Controls.Add(this.dateTimePickerEnd);
             this.splitContainer1.Panel1.Controls.Add(this.dateTimePickerStart);
-            this.splitContainer1.Panel1.Controls.Add(this.traceLinePatternText);
-            this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.maxLinesStackText);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
             this.splitContainer1.Panel1.Controls.Add(this.logDirText);
@@ -194,24 +190,51 @@ namespace LogsReader
             this.splitContainer1.SplitterDistance = 287;
             this.splitContainer1.TabIndex = 7;
             // 
-            // traceLinePatternText
+            // label9
             // 
-            this.traceLinePatternText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(4, 195);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(57, 15);
+            this.label9.TabIndex = 23;
+            this.label9.Text = "Date End:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(4, 168);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 15);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Date Start:";
+            // 
+            // dateTimePickerEnd
+            // 
+            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.traceLinePatternText.Location = new System.Drawing.Point(78, 164);
-            this.traceLinePatternText.Name = "traceLinePatternText";
-            this.traceLinePatternText.Size = new System.Drawing.Size(202, 23);
-            this.traceLinePatternText.TabIndex = 16;
-            this.traceLinePatternText.TextChanged += new System.EventHandler(this.tracePatternText_TextChanged);
+            this.dateTimePickerEnd.Checked = false;
+            this.dateTimePickerEnd.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(79, 191);
+            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
+            this.dateTimePickerEnd.ShowCheckBox = true;
+            this.dateTimePickerEnd.ShowUpDown = true;
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerEnd.TabIndex = 21;
             // 
-            // label7
+            // dateTimePickerStart
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 167);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(73, 15);
-            this.label7.TabIndex = 15;
-            this.label7.Text = "Line Pattern:";
+            this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePickerStart.Checked = false;
+            this.dateTimePickerStart.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerStart.Location = new System.Drawing.Point(79, 164);
+            this.dateTimePickerStart.Name = "dateTimePickerStart";
+            this.dateTimePickerStart.ShowCheckBox = true;
+            this.dateTimePickerStart.ShowUpDown = true;
+            this.dateTimePickerStart.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerStart.TabIndex = 20;
             // 
             // maxLinesStackText
             // 
@@ -372,52 +395,6 @@ namespace LogsReader
             this.useRegex.UseVisualStyleBackColor = true;
             this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
             // 
-            // dateTimePickerStart
-            // 
-            this.dateTimePickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePickerStart.Checked = false;
-            this.dateTimePickerStart.CustomFormat = "dd.MM.yyyy HH:mm:ss";
-            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerStart.Location = new System.Drawing.Point(78, 191);
-            this.dateTimePickerStart.Name = "dateTimePickerStart";
-            this.dateTimePickerStart.ShowCheckBox = true;
-            this.dateTimePickerStart.ShowUpDown = true;
-            this.dateTimePickerStart.Size = new System.Drawing.Size(202, 23);
-            this.dateTimePickerStart.TabIndex = 20;
-            // 
-            // dateTimePickerEnd
-            // 
-            this.dateTimePickerEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePickerEnd.Checked = false;
-            this.dateTimePickerEnd.CustomFormat = "dd.MM.yyyy HH:mm:ss";
-            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(78, 218);
-            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
-            this.dateTimePickerEnd.ShowCheckBox = true;
-            this.dateTimePickerEnd.ShowUpDown = true;
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(202, 23);
-            this.dateTimePickerEnd.TabIndex = 21;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 195);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(61, 15);
-            this.label8.TabIndex = 22;
-            this.label8.Text = "Date Start:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 222);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(57, 15);
-            this.label9.TabIndex = 23;
-            this.label9.Text = "Date End:";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -473,8 +450,6 @@ namespace LogsReader
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox maxLinesStackText;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox traceLinePatternText;
-        private System.Windows.Forms.Label label7;
         private DateTimePicker dateTimePickerStart;
         private DateTimePicker dateTimePickerEnd;
         private Label label8;

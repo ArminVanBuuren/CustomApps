@@ -145,7 +145,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерн для считывания значений в найденном фрагменте лога (количество строк фрагмента устанавливается в опции MaxTraceLines). Регулярное выражение работает в однострочном режиме (RegexOptions=Singleline), максимальный стек срок переводит в одну. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Description&gt; - описание; ?&lt;Message&gt; - сообщение.
+        ///   Looks up a localized string similar to Паттерн для считывания значений в найденном фрагменте лога. Регулярное выражение работает в Singleline, переводит весь стек в одну строку. Паттерны выбираются сверху вниз, от самого точного, до самого дефолтного. Обязательно использовать именованные группировки ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение (Также опциональная колонка ?&lt;Description&gt;).
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {
