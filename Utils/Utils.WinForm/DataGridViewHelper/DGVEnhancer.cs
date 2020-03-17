@@ -121,7 +121,7 @@ namespace Utils.WinForm.DataGridViewHelper
             var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
             foreach (var column in columnList)
             {
-                table.Columns.Add(column.Attribute.ColumnName, column.PropertyType);
+                var newColumn = table.Columns.Add(column.Attribute.ColumnName, column.PropertyType);
                 positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i2++, column));
             }
 
@@ -200,6 +200,7 @@ namespace Utils.WinForm.DataGridViewHelper
 
                 StretchColumnsToAllCells(grid);
                 grid.DataBindingComplete += Grid_DataBindingComplete;
+                grid.Resize += Grid_Resize;
             }
             catch (Exception ex)
             {
@@ -214,6 +215,26 @@ namespace Utils.WinForm.DataGridViewHelper
             }
         }
 
+        private static void Grid_Resize(object sender, EventArgs e)
+        {
+            if (!(sender is DataGridView grid))
+                return;
+
+            int width = grid.RowHeadersWidth;
+
+            foreach (DataGridViewColumn col in grid.Columns)
+            {
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                width += col.Width;
+            }
+
+            if (width < grid.Width)
+            {
+                grid.Columns[grid.Columns.Count - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+            grid.Resize -= Grid_Resize;
+        }
 
         private static void Grid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -227,22 +248,23 @@ namespace Utils.WinForm.DataGridViewHelper
 
         public static void StretchColumnsToAllCells(this DataGridView grid)
         {
-            for (var index = 0; index < grid.Columns.Count; index++)
+            var columns = grid.Columns.Cast<DataGridViewColumn>().Where(x => x.Visible);
+            var count = columns.Count();
+            var columnNumber = 0;
+            foreach (var column in columns)
             {
-                var column = grid.Columns[index];
-                if (index < grid.Columns.Count - 1)
-                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                else
-                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                columnNumber++;
+                column.AutoSizeMode = count > columnNumber ? DataGridViewAutoSizeColumnMode.AllCells : DataGridViewAutoSizeColumnMode.Fill;
             }
 
-            if (grid.Columns.Count >= 2)
+            if (grid.Columns.Count > 1)
             {
                 for (var t = 0; t <= grid.Columns.Count - 2; t++)
                 {
                     var column = grid.Columns[t].Width;
                     grid.Columns[t].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                     grid.Columns[t].Width = column;
+                    grid.Columns[t].Frozen = false;
                 }
             }
         }

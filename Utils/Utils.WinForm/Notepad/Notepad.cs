@@ -44,6 +44,20 @@ namespace Utils.WinForm.Notepad
 
             Closed += XmlNotepad_Closed;
             KeyDown += Notepad_KeyDown;
+
+            NotepadControlItem.OnRefresh += NotepadControlItem_OnRefresh;
+        }
+
+        private void NotepadControlItem_OnRefresh(object sender, EventArgs e)
+        {
+            if (NotepadControlItem.Current == null)
+            {
+                Text = nameof(Notepad);
+            }
+            else
+            {
+                Text = NotepadControlItem.Current is FileEditor fileEditor ? fileEditor.FilePath : NotepadControlItem.Current.HeaderName;
+            }
         }
 
         //[DllImport("user32.dll")]
@@ -108,34 +122,37 @@ namespace Utils.WinForm.Notepad
                     }
                 }
             }
-            else if (item == formatXmlF5ToolStripMenuItem && NotepadControlItem.Current != null)
+            else if (item == formatXmlF5ToolStripMenuItem)
             {
-                NotepadControlItem.Current.PrintXml();
-            }
-            else if (item == saveToolStripMenuItem && NotepadControlItem.Current != null)
-            {
-                NotepadControlItem.Current.SaveDocumnet();
-            }
-            else if (item == saveAsToolStripMenuItem && NotepadControlItem.Current != null)
-            {
-                string fileDestination;
-                using (var sfd = new SaveFileDialog())
-                {
-                    sfd.Filter = NotepadControlItem.Current.GetFileFilter();
-                    if (sfd.ShowDialog() != DialogResult.OK)
-                        return;
-
-                    fileDestination = sfd.FileName;
-                }
-
-                if (!fileDestination.IsNullOrEmpty())
-                {
-                    NotepadControlItem.Current.SaveDocumnet(fileDestination);
-                }
+                NotepadControlItem.Current?.PrintXml();
             }
             else if (item == closeToolStripMenuItem)
             {
                 Close();
+            }
+            else if (NotepadControlItem.Current != null && NotepadControlItem.Current is FileEditor fileEditor)
+            {
+                if (item == saveToolStripMenuItem)
+                {
+                    fileEditor.SaveDocumnet();
+                }
+                else if (item == saveAsToolStripMenuItem)
+                {
+                    string fileDestination;
+                    using (var sfd = new SaveFileDialog())
+                    {
+                        sfd.Filter = fileEditor.GetFileFilter();
+                        if (sfd.ShowDialog() != DialogResult.OK)
+                            return;
+
+                        fileDestination = sfd.FileName;
+                    }
+
+                    if (!fileDestination.IsNullOrEmpty())
+                    {
+                        fileEditor.SaveDocumnet(fileDestination);
+                    }
+                }
             }
         }
 

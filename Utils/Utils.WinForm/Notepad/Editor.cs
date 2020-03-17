@@ -11,45 +11,29 @@ namespace Utils.WinForm.Notepad
 {
     public class Editor : IDisposable
     {
-        static object syncWhenFileChanged { get; } = new object();
-
-        private bool _wordHighLisghts = false;
+        protected static readonly Encoding DefaultEncoding = new UTF8Encoding(false);
+        protected static readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         private bool _validateEditorOnChange = false;
-        private string _fileName = null;
+        private bool _wordHighLisghts = false;
         private string _source = null;
 
-        private readonly Encoding _defaultEncoding = new UTF8Encoding(false);
-        readonly MarkerStyle _sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
-        
-        bool _isDisposed = false;
-        FileSystemWatcher _watcher;
-
-        internal FastColoredTextBox FCTB { get; private set; }
-
         public event EventHandler OnSomethingChanged;
+        public event EventHandler SelectionChanged;
 
-        public TabPage Page { get; private set; }
+        protected FastColoredTextBox FCTB { get; set; }
 
-        public string HeaderName { get; private set; }
+        public TabPage Page { get; protected set; }
 
-        public string FilePath
-        {
-            get => _fileName;
-            private set
-            {
-                _fileName = value;
-                HeaderName = IO.GetLastNameInPath(_fileName, true);
-            }
-        }
+        public string HeaderName { get; protected set; }
 
         public string Source
         {
             get => _source;
-            private set
+            protected set
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    //var indexOfDifference = Source.Zip(FCTB.Text, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
+                    // var indexOfDifference = Source.Zip(FCTB.Text, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
                     // реплейсим Tab на Spaces, потмоу что FCTB для выравнивание не поддерживает Tab. Поэтому сразу заменяем на Spaces, для корректного компаринга.
                     _source = value.Replace('\u0009'.ToString(), new string(' ', FCTB?.TabLength ?? 2));
                 }
@@ -60,45 +44,22 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
-
-        public bool WordHighlights
-        {
-            get => _wordHighLisghts;
-            set
-            {
-                if(FCTB == null)
-                    return;
-
-                FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
-                _wordHighLisghts = value;
-                if (_wordHighLisghts)
-                {
-                    FCTB.SelectionChangedDelayed += FCTB_SelectionChangedDelayed;
-                }
-                else
-                {
-                    FCTB.SelectionChangedDelayed -= FCTB_SelectionChangedDelayed;
-                }
-            }
-        }
-
-        public Encoding Encoding
+        public virtual Encoding Encoding
         {
             get
             {
                 try
                 {
-                    return FilePath != null ? IO.GetEncoding(FilePath) : _defaultEncoding;
+                    return Encoding.GetEncoding(Source);
                 }
                 catch (Exception)
                 {
-                    return Encoding.Default;
+                    return DefaultEncoding;
                 }
             }
         }
 
-        
+        public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
 
         public string Text
         {
@@ -117,12 +78,33 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        public bool WordHighlights
+        {
+            get => _wordHighLisghts;
+            set
+            {
+                if (FCTB == null)
+                    return;
+
+                FCTB.VisibleRange.ClearStyle(SameWordsStyle);
+                _wordHighLisghts = value;
+                if (_wordHighLisghts)
+                {
+                    FCTB.SelectionChangedDelayed += FCTB_SelectionChangedDelayed;
+                }
+                else
+                {
+                    FCTB.SelectionChangedDelayed -= FCTB_SelectionChangedDelayed;
+                }
+            }
+        }
+
         public bool ValidateOnChange
         {
             get => _validateEditorOnChange;
             set
             {
-                if(_validateEditorOnChange == value)
+                if (_validateEditorOnChange == value)
                     return;
 
                 _validateEditorOnChange = value;
@@ -133,7 +115,35 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights)
+        public bool WordWrap
+        {
+            get => FCTB.WordWrap;
+            set => FCTB.WordWrap = value;
+        }
+
+        public bool Enabled
+        {
+            get => FCTB.Enabled;
+            set => FCTB.Enabled = value;
+        }
+
+        public bool ReadOnly
+        {
+            get => FCTB.ReadOnly;
+            set => FCTB.ReadOnly = value;
+        }
+
+        public int TextLength => FCTB.TextLength;
+        public int LinesCount => FCTB.LinesCount;
+        public Range Selection => FCTB.Selection;
+        public string SelectedText => FCTB.SelectedText;
+        public Language Language => FCTB.Language;
+
+        protected bool IsDisposed { get; private set; } = false;
+
+        protected Editor() { }
+
+        internal Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights)
         {
             Source = bodyText;
             HeaderName = headerName;
@@ -144,38 +154,10 @@ namespace Utils.WinForm.Notepad
             InitializePage();
         }
 
-        public Editor(string filePath, bool wordWrap, bool wordHighlights)
-        {
-            if (!File.Exists(filePath))
-                throw new ArgumentException($"File \"{filePath}\" not found!");
-
-            var langByFileExtension = InitializeFile(filePath);
-
-            InitializeFCTB(langByFileExtension, wordWrap);
-            WordHighlights = wordHighlights;
-
-            InitializePage();
-        }
-
-        Language InitializeFile(string filePath)
-        {
-            var langByExtension = GetLanguage(filePath);
-
-            FilePath = filePath;
-            Source = IO.SafeReadFile(filePath);
-
-            if (langByExtension == Language.XML && !Source.IsXml(out _))
-                MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            EnableWatcher(FilePath);
-
-            return langByExtension;
-        }
-
-        void InitializeFCTB(Language language, bool wordWrap)
+        protected void InitializeFCTB(Language language, bool wordWrap)
         {
             FCTB = new FastColoredTextBox();
-            
+
             ((ISupportInitialize)(FCTB)).BeginInit();
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
@@ -205,9 +187,16 @@ namespace Utils.WinForm.Notepad
 
             ValidateOnChange = true;
             FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
+
+            FCTB.SelectionChanged += FCTB_SelectionChanged;
         }
 
-        void InitializePage()
+        private void FCTB_SelectionChanged(object sender, EventArgs e)
+        {
+            SelectionChanged?.Invoke(sender, e);
+        }
+
+        protected void InitializePage()
         {
             Page = new TabPage
             {
@@ -221,12 +210,133 @@ namespace Utils.WinForm.Notepad
             Page.Controls.Add(FCTB);
         }
 
+        public void PrintXml()
+        {
+            try
+            {
+                if (FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
+                {
+                    FCTB.Text = document.PrintXml();
+                    SomethingChanged();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void ChangeLanguage(Language lang)
         {
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = lang;
             FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+        }
+
+        private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)
+        {
+            //if(FCTB.Language != Language.XML)
+            //    return;
+
+            FCTB.VisibleRange.ClearStyle(SameWordsStyle);
+            if (!FCTB.Selection.IsEmpty)
+                return; //user selected diapason
+
+            //get fragment around caret
+            var fragment = FCTB.Selection.GetFragment(@"\w");
+            var text = fragment.Text;
+            if (text.Length == 0)
+                return;
+
+            //highlight same words
+            var ranges = FCTB.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
+            if (ranges.Length > 1)
+                foreach (var r in ranges)
+                    r.SetStyle(SameWordsStyle);
+        }
+
+        private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SomethingChanged();
+        }
+
+        protected void SomethingChanged()
+        {
+            Page.Invoke(new MethodInvoker(delegate
+            {
+                Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
+                Page.Text = HeaderName.Trim() + new string(' ', 2);
+            }));
+
+            OnSomethingChanged?.Invoke(this, null);
+        }
+
+        public virtual void Dispose()
+        {
+            IsDisposed = true;
+            FCTB.Dispose();
+        }
+    }
+
+    public class FileEditor : Editor
+    {
+        private static readonly object syncWhenFileChanged = new object();
+        private string _fileName = null;
+        private FileSystemWatcher _watcher;
+
+
+        public string FilePath
+        {
+            get => _fileName;
+            private set
+            {
+                _fileName = value;
+                HeaderName = IO.GetLastNameInPath(_fileName, true);
+            }
+        }
+
+        public override Encoding Encoding
+        {
+            get
+            {
+                try
+                {
+                    return IO.GetEncoding(FilePath);
+                }
+                catch (Exception)
+                {
+                    return base.Encoding;
+                }
+            }
+        }
+
+        internal FileEditor(string filePath, bool wordWrap, bool wordHighlights)
+        {
+            if (!File.Exists(filePath))
+                throw new ArgumentException($"File \"{filePath}\" not found!");
+
+            var langByFileExtension = InitializeFile(filePath);
+
+            InitializeFCTB(langByFileExtension, wordWrap);
+            WordHighlights = wordHighlights;
+
+            InitializePage();
+        }
+
+        Language InitializeFile(string filePath)
+        {
+            var langByExtension = GetLanguage(filePath);
+
+            FilePath = filePath;
+            Source = IO.SafeReadFile(filePath);
+
+            if (langByExtension == Language.XML && !Source.IsXml(out _))
+                MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            EnableWatcher(FilePath);
+
+            return langByExtension;
         }
 
         static Language GetLanguage(string filePath)
@@ -292,14 +402,14 @@ namespace Utils.WinForm.Notepad
                                     return;
                                 }
 
-                                if (_isDisposed)
+                                if (IsDisposed)
                                     return;
 
                                 System.Threading.Thread.Sleep(500);
                                 tryCount++;
                             }
 
-                            if (_isDisposed)
+                            if (IsDisposed)
                                 return;
 
                             Source = File.ReadAllText(FilePath);
@@ -322,44 +432,6 @@ namespace Utils.WinForm.Notepad
         {
             FilePath = e.FullPath;
             SomethingChanged(); //  e.OldFullPath, e.FullPath
-        }
-
-        private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)
-        {
-            //if(FCTB.Language != Language.XML)
-            //    return;
-
-            FCTB.VisibleRange.ClearStyle(_sameWordsStyle);
-            if (!FCTB.Selection.IsEmpty)
-                return; //user selected diapason
-
-            //get fragment around caret
-            var fragment = FCTB.Selection.GetFragment(@"\w");
-            var text = fragment.Text;
-            if (text.Length == 0)
-                return;
-
-            //highlight same words
-            var ranges = FCTB.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
-            if (ranges.Length > 1)
-                foreach (var r in ranges)
-                    r.SetStyle(_sameWordsStyle);
-        }
-
-        public void PrintXml()
-        {
-            try
-            {
-                if (FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
-                {
-                    FCTB.Text = document.PrintXml();
-                    SomethingChanged();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         public void SaveDocumnet(string newFileDestination = null)
@@ -393,7 +465,7 @@ namespace Utils.WinForm.Notepad
 
                     lock (syncWhenFileChanged)
                     {
-                        IO.WriteFile(fileDestination, FCTB.Text, _defaultEncoding);
+                        IO.WriteFile(fileDestination, FCTB.Text, Encoding);
                     }
 
                     var newLanguage = InitializeFile(fileDestination);
@@ -434,29 +506,6 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            SomethingChanged();
-        }
-
-        void SomethingChanged()
-        {
-            Page.Invoke(new MethodInvoker(delegate
-            {
-                Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
-                Page.Text = HeaderName.Trim() + new string(' ', 2);
-            }));
-
-            OnSomethingChanged?.Invoke(this, null);
-        }
-
-        public void Dispose()
-        {
-            _isDisposed = true;
-            DisableWatcher();
-            FCTB.Dispose();
-        }
-
         void EnableWatcher(string filePath)
         {
             DisableWatcher();
@@ -485,6 +534,12 @@ namespace Utils.WinForm.Notepad
             _watcher.EnableRaisingEvents = false;
             _watcher.Dispose();
             _watcher = null;
+        }
+
+        public override void Dispose()
+        {
+            DisableWatcher();
+            base.Dispose();
         }
     }
 }

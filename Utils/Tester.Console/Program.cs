@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 //using System.Data.OleDb;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 //using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Utils;
 using Utils.CollectionHelper;
 
@@ -30,17 +32,110 @@ namespace Tester.Console
         //    return (p + pp, p);
         //}
 
+        static void LogFile()
+        {
+            var syncLock = new object();
+            Random random = new Random();
+            var date = DateTime.Now.AddDays(-30);
+            using (StreamWriter sw = new StreamWriter(@"C:\test\1_5.txt", false, Encoding.UTF8))
+            {
+                Parallel.For(1, 10000000, (i) =>
+                {
+                    string traceName;
+                    string description;
+                    string message;
+                    int item = 0;
+                    lock (syncLock)
+                        item = random.Next(1, 4);
+                    switch (item)
+                    {
+                        case 1:
+                            lock (syncLock)
+                            {
+                                date = date.AddSeconds(random.Next(0, 5));
+                                description = STRING.RandomString(random.Next(10, 20));
+                                message = $"<xmlTest>{STRING.RandomStringSimbols(random.Next(100, 1000))}</xmlTest>";
+                            }
 
+                            traceName = "Info";
+                            break;
+                        case 2:
+                            lock (syncLock)
+                            {
+                                date = date.AddSeconds(random.Next(5, 10));
+                                description = STRING.RandomString(random.Next(10, 20));
+                                message = $"{STRING.RandomStringSimbols(random.Next(100, 1000))}";
+                            }
+
+                            traceName = "Normal";
+                            break;
+                        default:
+                            //System.Console.Write($"\r{i}");
+                            lock (syncLock)
+                            {
+                                date = date.AddSeconds(random.Next(10, 20));
+                                message = $"<xmlTest>{STRING.RandomStringSimbols(random.Next(100, 1000))}</xmlTest>";
+                            }
+                            traceName = "Debug";
+                            description = string.Empty;
+                            break;
+                    }
+
+                    lock (syncLock)
+                        sw.WriteLine($"{date:dd.MM.yyyy HH:mm:ss.fff} [{traceName}] {description} {message}");
+                });
+            }
+
+            date = DateTime.Now.AddDays(-30);
+            using (StreamWriter sw = new StreamWriter(@"C:\test\1_6.txt", false, Encoding.UTF8))
+            {
+                for (int i = 0; i < 10000000; i++)
+                {
+                    string traceName;
+                    string description;
+                    string message;
+                    int item = 0;
+
+                    item = random.Next(1, 4);
+                    switch (item)
+                    {
+                        case 1:
+                            date = date.AddSeconds(random.Next(0, 5));
+                            description = STRING.RandomString(random.Next(10, 20));
+                            message = $"<xmlTest>{STRING.RandomStringSimbols(random.Next(100, 1000))}</xmlTest>";
+                            traceName = "Info";
+                            break;
+                        case 2:
+                            date = date.AddSeconds(random.Next(5, 10));
+                            description = STRING.RandomString(random.Next(10, 20));
+                            message = $"{STRING.RandomStringSimbols(random.Next(100, 1000))}";
+                            traceName = "Normal";
+                            break;
+                        default:
+                            date = date.AddSeconds(random.Next(10, 20));
+                            message = $"<xmlTest>{STRING.RandomStringSimbols(random.Next(100, 1000))}</xmlTest>";
+                            traceName = "Debug";
+                            description = string.Empty;
+                            break;
+                    }
+
+                    sw.WriteLine($"{date:dd.MM.yyyy HH:mm:ss.fff} [{traceName}] {description} {message}");
+                }
+            }
+            System.Console.ReadKey();
+        }
 
         static void Main(string[] args)
         {
             try
             {
                 var stop = new Stopwatch();
+                
 
-                var rrrr = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.IgnoreCase);
-                var match = rrrr.Match(@"C:\test\1\2.txt");
-                System.Console.ReadKey();
+
+                //var rrrr = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.IgnoreCase);
+                //var match = rrrr.Match(@"C:\test\1\2.txt");
+                //System.Console.ReadKey();
 
 
                 //var sss11 = new DoubleDictionary<string, string>();
@@ -102,7 +197,6 @@ namespace Tester.Console
                     Thread.Sleep(1000);
                     System.Console.Write($"[{input}];");
                 };
-                var cancel = new CancellationTokenSource();
                 for (var i = 0; i < 1000; i++)
                 {
                     actions.Add(i);

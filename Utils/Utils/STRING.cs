@@ -9,10 +9,11 @@ namespace Utils
 {
     public static class STRING
     {
-        private static readonly Random random = new Random();
-        const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        const string nums = "1234567890";
-        const string numsWithLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        static readonly Random random = new Random();
+        private const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string nums = "1234567890";
+        private const string numsWithLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        private const string symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}:<>./,\"'=-?\\ ";
 
         /// <summary>
         /// Возвращает рандомные буквы
@@ -42,6 +43,16 @@ namespace Utils
         public static string RandomStringNumbers(int length)
         {
             return ReturnRandomObject(numsWithLetters, length);
+        }
+
+        /// <summary>
+        /// Возвращает рандомные цифры и буквы
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomStringSimbols(int length)
+        {
+            return ReturnRandomObject(symbols, length);
         }
 
         static string ReturnRandomObject(string chars, int length)
