@@ -294,7 +294,7 @@ namespace LogsReader
     {
         XmlNode[] _traceLinePattern = new XmlNode[]
         {
-            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>)$"),
+            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*$"),
             new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>\w+)\s*(?<Message>.+)$"),
             new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
         };

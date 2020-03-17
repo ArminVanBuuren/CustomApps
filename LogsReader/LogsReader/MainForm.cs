@@ -22,6 +22,7 @@ namespace LogsReader
     {
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
+        private bool _isClosed = false;
 
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
@@ -30,7 +31,6 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _cpuUsage;
         private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
-        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _fullTrace;
 
@@ -140,19 +140,40 @@ namespace LogsReader
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-                Closing += (s, e) => { SaveSettings(); };
+                Closing += (s, e) =>
+                {
+                    _isClosed = true;
+                    SaveSettings();
+                };
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
 
-                _notepad = new NotepadControl();
-                splitContainer2.Panel2.Controls.Add(_notepad);
-                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = _notepad.AddDocument("Full Trace", string.Empty, Language.XML);
-                _notepad.Dock = DockStyle.Fill;
+                var notepad = new NotepadControl();
+                splitContainer2.Panel2.Controls.Add(notepad);
+                _message = notepad.AddDocument("Message", string.Empty, Language.XML);
+                _fullTrace = notepad.AddDocument("Full Trace", string.Empty, Language.Custom);
+                notepad.Dock = DockStyle.Fill;
+                notepad.SelectEditor(0);
+                notepad.ReadOnly = true;
 
-                var today = DateTime.Now;
-                dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
-                dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
+                var oldDateStartChecked = false;
+                var oldDateEndChecked = false;
+                dateTimePickerStart.ValueChanged += (sender, args) =>
+                {
+                    if (oldDateStartChecked || !dateTimePickerStart.Checked)
+                        return;
+                    var today = DateTime.Now;
+                    oldDateStartChecked = true;
+                    dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
+                };
+                dateTimePickerEnd.ValueChanged += (sender, args) =>
+                {
+                    if (oldDateEndChecked || !dateTimePickerEnd.Checked)
+                        return;
+                    var today = DateTime.Now;
+                    oldDateEndChecked = true;
+                    dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
+                };
 
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
@@ -168,7 +189,7 @@ namespace LogsReader
         /// <summary>
         /// Мониторинг локальных ресурсов
         /// </summary>
-        async void CalculateLocalResources()
+        void CalculateLocalResources()
         {
             try
             {
@@ -185,16 +206,15 @@ namespace LogsReader
                     };
                 }
 
-                while (true)
+                while (!_isClosed)
                 {
-                    await Task.Factory.StartNew(() =>
-                        Invoke(new MethodInvoker(delegate
-                        {
-                            checkAppCPU?.Invoke();
-                            var currentProcess = Process.GetCurrentProcess();
-                            _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
-                            _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-                        })));
+                    BeginInvoke(new MethodInvoker(delegate
+                    {
+                        checkAppCPU?.Invoke();
+                        var currentProcess = Process.GetCurrentProcess();
+                        _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
+                        _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+                    }));
                     Thread.Sleep(1000);
                 }
             }
@@ -363,7 +383,8 @@ namespace LogsReader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            _notepad.Enabled = !IsWorking;
+            _message.Enabled = !IsWorking;
+            _fullTrace.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             chooseScheme.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -583,6 +604,7 @@ namespace LogsReader
 
                 var template = ResultList[tempalteID];
                 _message.Text = template.Message;
+                _message.PrintXml();
                 _fullTrace.Text = template.EntireMessage;
             }
             catch (Exception ex)
