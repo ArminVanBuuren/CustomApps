@@ -150,20 +150,6 @@ namespace LogsReader
                 _fullTrace = _notepad.AddDocument("Full Trace", string.Empty, Language.XML);
                 _notepad.Dock = DockStyle.Fill;
 
-                //FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-                //FCTB.ClearStylesBuffer();
-                //FCTB.Range.ClearStyle(StyleIndex.All);
-                //FCTB.Language = Language.XML;
-                //FCTB.Font = new Font("Segoe UI", 9);
-                //FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
-
-                //FCTBFullsStackTrace.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
-                //FCTBFullsStackTrace.ClearStylesBuffer();
-                //FCTBFullsStackTrace.Range.ClearStyle(StyleIndex.All);
-                //FCTBFullsStackTrace.Language = Language.XML;
-                //FCTBFullsStackTrace.Font = new Font("Segoe UI", 9);
-                //FCTBFullsStackTrace.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
-
                 var today = DateTime.Now;
                 dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
                 dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
@@ -485,7 +471,7 @@ namespace LogsReader
                                     // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
                                     stackLines++;
                                     var appendFailedLog = lastResult.Message + Environment.NewLine + line;
-                                    if (IsLineMatched(appendFailedLog, fileLog, out var afterSuccessResult))
+                                    if (CurrentSettings.IsLineMatch(appendFailedLog, fileLog, out var afterSuccessResult))
                                     {
                                         // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
                                         listResult.Add(afterSuccessResult);
@@ -513,7 +499,7 @@ namespace LogsReader
                             stackLines = 1;
                         }
 
-                        if (IsLineMatched(line, fileLog, out lastResult))
+                        if (CurrentSettings.IsLineMatch(line, fileLog, out lastResult))
                         {
                             listResult.Add(lastResult);
                         }
@@ -526,7 +512,7 @@ namespace LogsReader
                                 stackLines++;
                                 lastResult.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
 
-                                if (IsLineMatched(lastResult.Message, fileLog, out var beforeResult))
+                                if (CurrentSettings.IsLineMatch(lastResult.Message, fileLog, out var beforeResult))
                                 {
                                     lastResult = beforeResult;
                                     listResult.Add(lastResult);
@@ -548,23 +534,7 @@ namespace LogsReader
             return listResult;
         }
 
-        bool IsLineMatched(string message, FileLog fileLog, out DataTemplate result)
-        {
-            var maskMatch = CurrentSettings.IsMatch(message);
-            if (maskMatch.Success)
-            {
-                result = new DataTemplate(fileLog, 
-                    maskMatch.Groups["Date"].Value, 
-                    maskMatch.Groups["TraceType"].Value, 
-                    maskMatch.Groups["Description"].Value, 
-                    maskMatch.Groups["Message"].Value, 
-                    message);
-                return true;
-            }
 
-            result = new DataTemplate(fileLog, message);
-            return false;
-        }
 
         private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {

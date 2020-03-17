@@ -213,6 +213,24 @@ namespace LogsReader
             }
         }
 
+        public bool IsLineMatch(string message, FileLog fileLog, out DataTemplate result)
+        {
+            var maskMatch = IsMatch(message);
+            if (maskMatch.Success)
+            {
+                result = new DataTemplate(fileLog,
+                    maskMatch.Groups["Date"].Value,
+                    maskMatch.Groups["TraceType"].Value,
+                    maskMatch.Groups["Description"].Value,
+                    maskMatch.Groups["Message"].Value,
+                    message);
+                return true;
+            }
+
+            result = new DataTemplate(fileLog, message);
+            return false;
+        }
+
         public Match IsMatch(string input)
         {
             foreach (var regexPatt in TraceLinePattern.RegexItem)
