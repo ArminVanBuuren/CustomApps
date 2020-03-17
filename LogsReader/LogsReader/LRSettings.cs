@@ -135,7 +135,7 @@ namespace LogsReader
         private string _servers = "mg1,mg2,mg3,mg4,mg5";
         private string _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
         private int _maxThreads = -1;
-        private int _maxTraceLines = 10;
+        private int _maxTraceLines = 50;
         private string _logsDirectory = @"C:\FORISLOG\MG";
         private TraceLinePattern _traceLinePattern = new TraceLinePattern();
 
@@ -216,7 +216,7 @@ namespace LogsReader
         public bool IsLineMatch(string message, FileLog fileLog, out DataTemplate result)
         {
             var maskMatch = IsMatch(message);
-            if (maskMatch.Success)
+            if (maskMatch != null && maskMatch.Success)
             {
                 result = new DataTemplate(fileLog,
                     maskMatch.Groups["Date"].Value,
