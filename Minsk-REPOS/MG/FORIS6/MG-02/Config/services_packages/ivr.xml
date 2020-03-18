@@ -19,7 +19,7 @@
     <receiveTemplate>
       <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{newGuid}">
         <Item customer="${customer}" action="@{switch(${action}|?,2|9.2,3|10.2)}">
-          <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ivrcode='${code}']/@crmcode}" />
+          <Product code="#{document('..\..\config\services_packages\servicepackage.xml')/packages/package[@ivrcode='${code}']/@crmcode}" />
         </Item>
       </Message>
     </receiveTemplate>

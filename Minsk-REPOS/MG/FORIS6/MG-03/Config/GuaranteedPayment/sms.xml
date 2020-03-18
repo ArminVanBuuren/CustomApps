@@ -80,7 +80,7 @@
     <deliveryTemplate>
       <set item="Content" value="Нет информации об обещанных платежах" />
       <set item="Content" conditionEx="#{${dbresult}=0 and ${count}=0}" value="Обещанные платежи не установлены." />
-      <set item="Content" conditionEx="#{${dbresult}=0 and ${count}!=0}" value="#{transform('config\GuaranteedPayment\parse.xsl')/Message/Item/@paymentslist}" />
+      <set item="Content" conditionEx="#{${dbresult}=0 and ${count}!=0}" value="#{transform('..\..\config\GuaranteedPayment\parse.xsl')/Message/Item/@paymentslist}" />
       <set item="Encoding" value="unicodefffe" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${customer}" />

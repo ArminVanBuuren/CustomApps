@@ -1320,20 +1320,26 @@ https://smart-university.ru/eng/ege/express
     </deliveryTemplate>
   </template>
   <!-- ############################  116 zadoljennost ####################### -->
-  <template procedureName="rassrochka_passport_z" persistent="true" sessionStorage="Memory" sessionLifetime="60">
+  <template procedureName="rassrochka_passport_z_" persistent="true" sessionStorage="Memory" sessionLifetime="60" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^116$" />
       <test item="${Token0}" matches="^[0-9]{1,7}$" />
       <test item="${Token1}" matches="^[0-9]{1,12}$" />
     </condition>
     <receiveTemplate>
-      <Message type="rassrochka_pasport_z" initiator="ussd" id="${guid}" session_id="@{newGuid}">
-        <Item customer="${Sender}" pass_n="${Token0}" pa_n="${Token1}" />
+      <Message type="rassrochka_pasport_z" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.lll_rassrochka_pasport_116">
+          <Attribute name="num" type="STRING" value="${Sender}" />
+          <Attribute name="passp_num" type="INT" value="${Token0}" />
+          <Attribute name="pa_num" type="STRING" value="${Token1}" />
+          <Attribute name="rez" type="STRING" />
+          <Attribute name="msg" type="STRING" />
+        </Item>
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
       <set item="Content" value=" Информация недоступна." />
-      <set item="Content" condition="//Item/@dbresult=0" value="${reply}" />
+      <set item="Content" condition="//Item/@dbresult=0" value="${msg}" />
       <set item="Sender" value="116" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />

@@ -28,7 +28,7 @@
   <SMSCenters>
     <Connection host="172.24.224.6" port="900" systemId="srvHypernet2" pass="hyper2" />
   </SMSCenters>
-  <TemplateProcessors defaultConfig="USSDTemplateProcessor.01.xml">
+  <TemplateProcessors defaultConfig="USSDTemplateProcessor.SRV.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="USSDTemplateProcessor.SRV.xml" />
   </TemplateProcessors>
   <Encodings>

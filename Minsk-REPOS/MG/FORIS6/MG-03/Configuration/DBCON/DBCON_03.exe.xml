@@ -1,6 +1,6 @@
 <Application>
   <TargetDatabase>
-    <Database forisDataKey="REP_BY" interfacePackage="" />
+    <Database forisDataKey="REP_BILL" interfacePackage="" />
   </TargetDatabase>
   <Settings>
     <Item name="ModuleType" value="DBCON" />

@@ -1206,6 +1206,44 @@
     </output>
   </template>
   <!--    DB_PayVerification              -->
+  <template procedureName="DB_PayVerification" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.IS_PAY_CLAIMED">
+          <Attribute name="dbresult" type="STRING" />
+          <Attribute name="p_Allowed" type="STRING" />
+          <Attribute name="p_Pending" type="STRING" />
+          <Attribute name="p_Maximumusd" type="STRING" />
+          <Attribute name="p_Maximumrur" type="STRING" />
+          <Attribute name="p_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="p_msisdn_o" type="STRING" />
+          <!-- number customer from IMSI-->
+          <Attribute name="p_source" type="STRING" value="9" />
+          <Attribute name="p_pending_str" type="STRING" />
+          <Attribute name="p_addon" type="STRING" value="${quick_credit}" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${dbresult}" />
+      <set item="oparam:IsAllowed" value="${p_Allowed}" />
+      <set item="oparam:Pending" value="${p_Pending}" />
+      <set item="oparam:MaxRUB" value="${p_Maximumrur}" />
+      <set item="oparam:MaxUSD" value="${p_Maximumusd}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="quick_credit" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="IsAllowed" />
+      <param name="Pending" />
+      <param name="MaxRUB" />
+      <param name="MaxUSD" />
+    </output>
+  </template>
+  <!--    DB_PayVerification              
   <template procedureName="DB_PayVerification">
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
@@ -1234,7 +1272,7 @@
       <param name="MaxRUB" />
       <param name="MaxUSD" />
     </output>
-  </template>
+  </template> -->
   <!--    DB_PayAcceptance  YandexSpeechKit             -->
   <template procedureName="DB_PayAcceptanceY">
     <receiveTemplate>

@@ -2345,7 +2345,7 @@
     </deliveryTemplate>
   </template>
   <!-- ОБЕЩАНЫЙ ПЛАТЕЖ -->
-  <template procedureName="SMS_Cancel_GuaranteedPayment" sessionLifetime="1800">
+  <!-- <template procedureName="SMS_Cancel_GuaranteedPayment" sessionLifetime="1800">
     <condition>
       <test item="${Recipient}" matches="^087013$" />
       <test item="${Content}" matches="^0$" />
@@ -2365,8 +2365,58 @@
       <set item="Sender" value="0870" />
       <set item="Recipient" value="${customer}" />
     </deliveryTemplate>
+  </template> -->
+  <template procedureName="SMS_Cancel_GuaranteedPayment" sessionLifetime="1800" handler="DBCON_01">
+    <condition>
+      <test item="${Recipient}" matches="^087013$" />
+      <test item="${Content}" matches="^0$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.mg_pack.GuaranteedPayment">
+          <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+          <Attribute name="i_summa" type="INT" value="${Content}" />
+          <Attribute name="i_source" type="STRING" value="6" />
+          <Attribute name="o_rez" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Извините, но данный запрос не может быть выполнен." />
+      <set item="Content" condition="//Item/@dbresult=0" value="${o_rez}" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="Произошла ошибка обратитесь в справочно-информационный центр." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="0870" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
   </template>
-  <template procedureName="SMS_Check_GuaranteedPayment" sessionLifetime="1800">
+  <template procedureName="SMS_GuaranteedPayment_" sessionLifetime="1800" handler="DBCON_01">
+    <condition>
+      <test item="${Recipient}" matches="^087013$" />
+      <test item="${Content}" matches="^[1-5]{1}$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.mg_pack.GuaranteedPayment">
+          <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+          <Attribute name="i_summa" type="INT" value="${Content}" />
+          <Attribute name="i_source" type="STRING" value="6" />
+          <Attribute name="o_rez" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Извините, но данный запрос не может быть выполнен." />
+      <set item="Content" condition="//Item/@dbresult=0" value="${o_rez}" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="Произошла ошибка обратитесь в справочно-информационный центр." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="0870" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+  <!--<template procedureName="SMS_Check_GuaranteedPayment" sessionLifetime="1800">
     <condition>
       <test item="${Recipient}" matches="^087013$" />
       <test item="${Content}" matches="^[1-5]{1}$" />
@@ -2432,7 +2482,7 @@
       <set item="Sender" value="0870" />
       <set item="Recipient" value="${customer}" />
     </deliveryTemplate>
-  </template>
+  </template> -->
   <template procedureName="GuaranteedPayment_SyntaxError">
     <condition>
       <test item="${Recipient}" matches="^087013$" />

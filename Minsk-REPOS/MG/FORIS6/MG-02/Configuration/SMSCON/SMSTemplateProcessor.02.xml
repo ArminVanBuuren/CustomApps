@@ -877,7 +877,7 @@
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="Content" value="Ошибка при обработке услуги &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot;." />
+      <set item="Content" value="Ошибка при обработке услуги &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot;." />
       <set item="Content" condition="//Item/@dbresult=1" value="${msg}" />
       <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен." />
       <set item="Encoding" value="unicodefffe" />
@@ -2290,12 +2290,12 @@
       </Message>
     </receiveTemplate>
     <deliveryTemplate>
-      <set item="Content" value="Ошибка при обработке услуги &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot;." />
-      <set item="Content" condition="//Item/@dbresult=0" value="Заявка на @{switch(${sCnt}|добавление,a|добавление,R|удаление,r|удаление)} услуги &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot; зарегистрирована." />
-      <set item="Content" condition="//Item/@dbresult=320203" value="Обработка услуги &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot; невозможна до завершения предыдущей операции." />
-      <set item="Content" condition="//Item/@dbresult=320204" value="В текущий момент пользование услугой &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot; не разрешено." />
-      <set item="Content" condition="//Item/@dbresult=320205" value="Услуга &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot; была добавлена ранее." />
-      <set item="Content" condition="//Item/@dbresult=320206" value="Услуга &quot;#{document('services.xml')/items/item[@id='${sSrv}']/@text}&quot; была удалена ранее." />
+      <set item="Content" value="Ошибка при обработке услуги &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot;." />
+      <set item="Content" condition="//Item/@dbresult=0" value="Заявка на @{switch(${sCnt}|добавление,a|добавление,R|удаление,r|удаление)} услуги &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot; зарегистрирована." />
+      <set item="Content" condition="//Item/@dbresult=320203" value="Обработка услуги &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot; невозможна до завершения предыдущей операции." />
+      <set item="Content" condition="//Item/@dbresult=320204" value="В текущий момент пользование услугой &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot; не разрешено." />
+      <set item="Content" condition="//Item/@dbresult=320205" value="Услуга &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot; была добавлена ранее." />
+      <set item="Content" condition="//Item/@dbresult=320206" value="Услуга &quot;#{document('..\..\Config\Common\services.xml')/items/item[@id='${sSrv}']/@text}&quot; была удалена ранее." />
       <set item="Content" condition="//Item/@dbresult=320191" value="На балансе недостаточно средств для проведения операции." />
       <set item="Content" condition="//Item/@dbresult=-1" value="Данный запрос не может быть выполнен." />
       <set item="Encoding" value="unicodefffe" />
@@ -2725,7 +2725,7 @@
   </template>
   <template procedureName="ServNumReject" persistent="false">
     <condition>
-      <test item="#{count(document('addrList.xml')//item[@addr='${Recipient}'])}" matches="^0$" />
+      <test item="#{count(document('..\..\Config\Common\addrList.xml')//item[@addr='${Recipient}'])}" matches="^0$" />
     </condition>
     <receiveTemplate>
       <Message>

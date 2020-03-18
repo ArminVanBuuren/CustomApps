@@ -21,7 +21,7 @@
     <Item name="SplitAfter" value="160" />
     <Item name="Window" value="200" />
     <Item name="WindowExceededDelay" value="60" />
-    <Item name="ResponseTimeout" value="600" />
+    <Item name="ResponseTimeout" value="1200" />
     <Item name="SuccessResponseCodes" value="0,40" />
     <Item name="FetchLimit" value="50" />
     <Item name="UtcOffset" value="12+" />

@@ -117,6 +117,8 @@
     <Content Include="FORIS6\MG-02\Config\CallCenter\CallCenter.xml" />
     <Content Include="FORIS6\MG-02\Config\closed_user_group\cug_product_id.xml" />
     <Content Include="FORIS6\MG-02\Config\closed_user_group\cug_sms.xml" />
+    <Content Include="FORIS6\MG-02\Config\Common\addrList.xml" />
+    <Content Include="FORIS6\MG-02\Config\Common\services.xml" />
     <Content Include="FORIS6\MG-02\Config\get_bms_counters\bmsgifts.xml" />
     <Content Include="FORIS6\MG-02\Config\get_bms_counters\counters.xml" />
     <Content Include="FORIS6\MG-02\Config\get_bms_counters\ivr.xml" />

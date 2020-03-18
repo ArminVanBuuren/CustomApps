@@ -4,7 +4,7 @@
     <define name="_RESPONSE_INVITEE_NUMBER" value="5005" />
     <define name="_REMOVE_FROM_GROUP_NUMBER" value="5335" />
     <define name="_GET_MEMBER_LIST_NUMBER" value="5445" />
-    <define name="_PRODUCT_TYPE_ID" value="#{document('config\closed_user_group\cug_product_id.xml')/groups/group/sms[@text='#{toupper('${token0}')}']/parent::group/@product_id}" />
+    <define name="_PRODUCT_TYPE_ID" value="#{document('..\..\config\closed_user_group\cug_product_id.xml')/groups/group/sms[@text='#{toupper('${token0}')}']/parent::group/@product_id}" />
   </macros>
   <template procedureName="InviteMember_Error" sessionStorage="Database">
     <condition>

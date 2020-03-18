@@ -7083,6 +7083,83 @@
       <param name="result" />
     </output>
   </template>
+  <!-- MIGRService + Trial -->
+  <template procedureName="MTS_MigrServiceInMTS" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
+        <Item procedureName="BILLING.mg_auth">
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_code" type="STRING" value="${sec_code}" />
+          <Attribute name="i_method" type="STRING" value="MTS_MigrServiceInMTS" />
+          <Attribute name="o_result" type="STRING" />
+          <Attribute name="o_message" type="STRING" />
+        </Item>
+        @{store(MigrServiceInMTScustomer,${customer})}
+        @{store(MigrServiceInMTSservicecode,${servicecode})}
+        @{store(MigrServiceInMTSsourceid,${sourceid})}
+        @{store(MigrServiceInMTSidservtrial,${idtrial})}
+        @{store(MigrServiceInMTSdays,${days})}
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'#{/Message/Item/Attribute[@name='o_result']/@value}'='0'}" call="MigrServiceInMTS_">
+      <set item="iparam:customer" value="${MigrServiceInMTScustomer}" />
+      <set item="iparam:servicecode" value="${MigrServiceInMTSservicecode}" />
+      <set item="iparam:sourceid" value="${MigrServiceInMTSsourceid}" />
+      <set item="iparam:idtrial" value="${MigrServiceInMTSidservtrial}" />
+      <set item="iparam:days" value="${MigrServiceInMTSdays}" />
+      <set conditionEx="0@{freeSession}" />
+    </deliveryTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_result}" />
+      <set item="oparam:result" value="${o_message}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="servicecode" />
+      <param name="sourceid" />
+      <param name="sec_code" />
+      <param name="idtrial" />
+      <param name="days" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+    </output>
+  </template>
+  <template procedureName="MigrServiceInMTS_" handler="DBCON_01">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="soapcon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.mg_pack.AddServiceWithTrial_Blocking">
+          <Attribute name="i_msisdn" type="STRING" value="${customer}" />
+          <Attribute name="i_srv_del_str" type="STRING" value="${servicecode}" />
+          <Attribute name="i_source" type="STRING" value="${sourceid}" />
+          <Attribute name="i_srv_trial" type="INT" value="0" />
+          <Attribute name="i_stv_trial_dt" type="INT" value="0" />
+          <Attribute name="o_ret_code" type="STRING" />
+          <Attribute name="o_reply" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
+          <Attribute name="o_blk" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="oparam:dbresult" value="${o_ret_code}" />
+      <set item="oparam:result" value="${o_reply}" />
+      <set item="oparam:blocking" value="${o_blk}" />
+    </deliveryTemplate>
+    <input>
+      <param name="customer" />
+      <param name="servicecode" />
+      <param name="sourceid" />
+      <param name="idtrial" />
+      <param name="days" />
+    </input>
+    <output>
+      <param name="dbresult" />
+      <param name="result" />
+      <param name="blocking" />
+    </output>
+  </template>
   <!-- ADD SERVICES + Trial -->
   <template procedureName="MTS_AddServiceWithTrial" handler="DBCON_01">
     <receiveTemplate>

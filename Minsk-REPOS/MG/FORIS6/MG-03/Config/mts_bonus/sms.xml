@@ -274,7 +274,7 @@
   <template procedureName="MTSBonusGetStatusForOrderGift" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300" smsLogTemplateId="BMSAutoInformation">
     <condition>
       <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="#{if(document('config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode != '',1,0)}" matches="1" />
+      <test item="#{if(document('..\..\config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode != '',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -285,7 +285,7 @@
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
-        @{store(sGiftCode,#{document('config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode})}
+        @{store(sGiftCode,#{document('..\..\config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'='0' and '${ParticipationStatus}'='AWC'}">
@@ -329,7 +329,7 @@
     </receiveTemplate>
     <deliveryTemplate>
       <set item="Content" value="Заказ приза с таким номером не доступен. Чтобы узнать доступное Вам вознаграждение, отправьте Бонус на 4555. Все вознаграждения www.bonus.mts.ru" />
-      <set item="Content" conditionEx="#{'${Result}'='0'}" value="#{document('config\mts_bonus\gifts.xml')/gifts/gift[@bmscode='${GiftCode}']/smstext/text()}" />
+      <set item="Content" conditionEx="#{'${Result}'='0'}" value="#{document('..\..\config\mts_bonus\gifts.xml')/gifts/gift[@bmscode='${GiftCode}']/smstext/text()}" />
       <set item="Content" conditionEx="#{'${Result}'='-771002'}" value="${ResultReason}" />
       <set item="Content" conditionEx="#{'${Result}'='-771009'}" value="У вас недостаточно баллов для заказа пакета. Покупка за баллы в салонах МТС - 3000 руб.. Узнайте доступный баланс, отправив BAL на 4555" />
       <set item="Content" conditionEx="#{'${Result}'='-771001' or '${Result}'='-771040'}" value="По техническим причинам заказ данного вознаграждения будет доступен позднее. Приносим извинения за доставленные неудобства." />

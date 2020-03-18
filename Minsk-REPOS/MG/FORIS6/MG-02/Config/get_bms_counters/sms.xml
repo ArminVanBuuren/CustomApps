@@ -3,12 +3,12 @@
     <condition>
       <test item="${Recipient}" matches="^7070$" />
       <test item="${token0}" matches="^\d{2,5}$" />
-      <test item="#{if(document('config\get_bms_counters\bmsgifts.xml')//gifts/gift/@number='${token0}',1,0)}" matches="1" />
+      <test item="#{if(document('..\..\config\get_bms_counters\bmsgifts.xml')//gifts/gift/@number='${token0}',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
       <Message type="orderbonusgiftrequest" initiator="SMSCON" id="@{setMessageId(@{newGuid})}" session_id="@{setSessionId(@{newGuid})}">
         <Item customer="${Sender}">
-          <Attribute name="giftcode" value="#{document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${content}']/@code}" />
+          <Attribute name="giftcode" value="#{document('..\..\config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${content}']/@code}" />
         </Item>
         @{store(sGCode,${content})}
       </Message>
@@ -16,7 +16,7 @@
     <deliveryTemplate>
       <set item="Content" value="Произошла ошибка при заказе подарка." />
       <set item="Content" condition="//Item/@dbresult='320301'" value="Недостаточно бонусных баллов!" />
-      <set item="Content" condition="//Item/@dbresult='0'" value="Заявка на добавление &quot;#{document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${sGCode}']/@name}&quot; принята. Стоимость: ${ordercost} бонусных баллов." />
+      <set item="Content" condition="//Item/@dbresult='0'" value="Заявка на добавление &quot;#{document('..\..\config\get_bms_counters\bmsgifts.xml')/gifts/gift[@number='${sGCode}']/@name}&quot; принята. Стоимость: ${ordercost} бонусных баллов." />
       <set item="Recipient" value="${customer}" />
       <set item="Sender" value="7070" />
       <set item="Encoding" value="unicodefffe" />

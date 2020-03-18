@@ -31,7 +31,6 @@
       <set item="RegisteredDelivery" value="false" />
     </deliveryTemplate>
   </template>
-
   <template procedureName="DeliveryRequestIssa" persistent="false">
     <retry delay="300" attempts="2" />
     <deliveryTemplate>

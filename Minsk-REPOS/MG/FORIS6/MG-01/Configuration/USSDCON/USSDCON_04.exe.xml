@@ -11,7 +11,7 @@
     <Item name="WindowExceededDelay" value="60" />
     <Item name="RegisteredDelivery" value="false" />
     <Item name="ResponseTimeout" value="800" />
-    <Item name="DefaultEncoding" value="unicodefffe" />
+    <Item name="DefaultEncoding" value="ascii" />
     <Item name="SrcTon" value="0" />
     <Item name="SrcNpi" value="1" />
     <Item name="DstTon" value="1" />

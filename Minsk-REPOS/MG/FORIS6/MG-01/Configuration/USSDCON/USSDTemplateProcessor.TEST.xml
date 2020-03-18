@@ -1,38 +1,83 @@
 <templates connector="SMS">
-  <template procedureName="gift_mts_user" sessionStorage="Database" sessionLifetime="60" handler="DBCON_01">
+  <template procedureName="rassrochka_passport_z" persistent="true" sessionStorage="Memory" sessionLifetime="60" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^839$" />
+      <test item="${Token0}" matches="^[0-9]{1,7}$" />
+      <test item="${Token1}" matches="^[0-9]{1,12}$" />
     </condition>
     <receiveTemplate>
-      <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{setSessionId(@{newGuid})}">
-        <Item procedureName="billing.mg_validateservice">
-          <Attribute name="p_msisdn" type="STRING" value="${Sender}" />
-          <Attribute name="p_service_code" type="STRING" value="FR16447" />
+      <Message type="rassrochka_pasport_z" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.billing.lll_rassrochka_pasport_116">
+          <Attribute name="num" type="STRING" value="${Sender}" />
+          <Attribute name="passp_num" type="INT" value="${Token0}" />
+          <Attribute name="pa_num" type="STRING" value="${Token1}" />
           <Attribute name="rez" type="STRING" />
+          <Attribute name="msg" type="STRING" />
         </Item>
-        @{store(storedSender,${Sender})}
-        @{store(storedRecipient,${Recipient})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate terminating="false">
-      <set item="Content" value="K sozhaleniyu, proizoshla oshibka. Poprobuyte eshe raz." />
-      <set item="Content" conditionEx="#{${rez}=0}" value="Извините, Вам недоступно участие в акции." />
-      <set item="Content" conditionEx="#{${rez}=1}" value="Запрос принят, Вам будет отправлено SMS с информацией." />
-      <set item="Sender" value="${storedRecipient}" />
-      <set item="Recipient" value="${storedSender}" />
+    <deliveryTemplate>
+      <set item="Content" value=" Информация недоступна." />
+      <set item="Content" condition="//Item/@dbresult=0" value="${msg}" />
+      <set item="Sender" value="839" />
+      <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />
     </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{${rez}=1}" connector="SMSCON_02">
-      <!--<set item="Content" value="Вам доступно участие в акции! Заходите в приложение «Мой МТС» и выбирайте Ваш подарок: безлимитные звонки на МТС или безлимитный интернет. Узнать больше: https://m.mts.by/new-user С заботой, Ваш МТС" />  -->
-      <set item="Sender" value="0884" />
-      <set item="Recipient" value="${storedSender}" />
-      <set item="Encoding" value="unicodefffe" />
-    </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{${rez}=0}" dropReply="true" />
   </template>
-  <template procedureName="Bad_request">
+  <!-- Cancel Guaranteed payment-->
+  <template procedureName="GuaranteedPayment_" handler="DBCON_01">
     <condition>
       <test item="${Recipient}" matches="^(839)$" />
+      <test item="${Content}" matches="^(([1-9]{1})|10)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.mg_pack.PersonalGuaranteedPayment">
+          <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+          <Attribute name="i_summa" type="INT" value="${Content}" />
+          <Attribute name="i_source" type="STRING" value="15" />
+          <Attribute name="o_rez" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Извините. Информация временно недоступна." />
+      <set item="Content" condition="//Item/@dbresult=0" value="${o_rez}" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="Произошла ошибка обратитесь в справочно-информационный центр." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="839" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GuaranteedPayment_cancel" handler="DBCON_01">
+    <condition>
+      <test item="${Recipient}" matches="^(839)$" />
+      <test item="${Content}" matches="^(0)$" />
+    </condition>
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
+        <Item procedureName="BILLING.mg_pack.GuaranteedPayment">
+          <Attribute name="i_msisdn" type="STRING" value="${Sender}" />
+          <Attribute name="i_summa" type="INT" value="${Content}" />
+          <Attribute name="i_source" type="STRING" value="15" />
+          <Attribute name="o_rez" type="STRING" />
+          <Attribute name="o_dbresult" type="STRING" />
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate>
+      <set item="Content" value="Извините. Информация временно недоступна." />
+      <set item="Content" condition="//Item/@dbresult=0" value="${o_rez}" />
+      <set item="Content" condition="//Item/@dbresult=-1" value="Произошла ошибка обратитесь в справочно-информационный центр." />
+      <set item="Encoding" value="unicodefffe" />
+      <set item="Sender" value="839" />
+      <set item="Recipient" value="${customer}" />
+    </deliveryTemplate>
+  </template>
+  <template procedureName="GuaranteedPayment_SyntaxError">
+    <condition>
+      <test item="${Recipient}" matches="^839$" />
     </condition>
     <receiveTemplate>
       <Message>
@@ -40,7 +85,7 @@
       </Message>
     </receiveTemplate>
     <deliveryTemplate direction="input">
-      <set item="Content" value="Ошибка. Введите корректный запрос" />
+      <set item="Content" value="Произошла ошибка!" />
       <set item="Sender" value="839" />
       <set item="Recipient" value="${customer}" />
       <set item="Encoding" value="unicodefffe" />

@@ -258,7 +258,7 @@
   <template procedureName="MTSBonusGetAccountCampaignParticipationStatusForOrderGift" handler="_BMSHND" sessionStorage="Memory" sessionLifetime="300">
     <condition>
       <test item="${Recipient}" matches="^_SMS_SERVICE_NUMBER$" />
-      <test item="#{if(document('config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode != '',1,0)}" matches="1" />
+      <test item="#{if(document('..\..\config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode != '',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
       <Message type="getaccountcampaignparticipationstatus" initiator="sms" id="${guid}" session_id="@{setSessionId(${guid})}">
@@ -269,7 +269,7 @@
           <Attribute name="ParticipationStatus" />
           <Attribute name="Result" />
         </Item>
-        @{store(sGiftCode,#{document('config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode})}
+        @{store(sGiftCode,#{document('..\..\config\mts_bonus\gifts.xml')/gifts/gift/smscode[.=StrToLowerForSmsCodes('${Content}')]/../@bmscode})}
       </Message>
     </receiveTemplate>
     <deliveryTemplate conditionEx="#{'${Result}'='0' and '${ParticipationStatus}'='AWC')}">
@@ -354,7 +354,7 @@
     </receiveTemplate>
     <deliveryTemplate>
       <set item="Content" value="По техническим причинам заказ данного вознаграждения будет доступен позднее. Приносим извинения за доставленные неудобства." />
-      <set item="Content" conditionEx="#{'${Result}'='0'}" value="#{document('config\mts_bonus\gifts.xml')/gifts/gift[@bmscode='${GiftCode}']/smstext/text()}" />
+      <set item="Content" conditionEx="#{'${Result}'='0'}" value="#{document('..\..\config\mts_bonus\gifts.xml')/gifts/gift[@bmscode='${GiftCode}']/smstext/text()}" />
       <set item="Sender" value="_SMS_SERVICE_NUMBER" />
       <set item="Recipient" value="${Msisdn}" />
       <set item="Encoding" value="unicodefffe" />

@@ -3078,12 +3078,12 @@
     <condition>
       <test item="${Recipient}" matches="^_PKG_SERVICE_NUMBER$" />
       <test item="${Content}" matches="^\s*([Aa][Dd][Dd]) \S+$" />
-      <test item="#{if(document('servicepackage.xml')//packages/package/@smscode='${token1}',1,0)}" matches="1" />
+      <test item="#{if(document('..\..\config\services_packages\servicepackage.xml')//packages/package/@smscode='${token1}',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
         <Item customer="${sender}">
-          <Service id="#{document('servicepackage.xml')/packages/package[@smscode='${token1}']/@crmcode}" action="9" />
+          <Service id="#{document('..\..\config\services_packages\servicepackage.xml')/packages/package[@smscode='${token1}']/@crmcode}" action="9" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -3102,12 +3102,12 @@
     <condition>
       <test item="${Recipient}" matches="^_PKG_SERVICE_NUMBER$" />
       <test item="${Content}" matches="^\s*([Dd][Ee][Ll]) \S+$" />
-      <test item="#{if(document('servicepackage.xml')/packages/package/@smscode='${token1}',1,0)}" matches="1" />
+      <test item="#{if(document('..\..\config\services_packages\servicepackage.xml')/packages/package/@smscode='${token1}',1,0)}" matches="1" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="smscon" id="${guid}" session_id="@{newGuid}">
         <Item customer="${sender}">
-          <Service id="#{document('servicepackage.xml')/packages/package[@smscode='${token1}']/@crmcode}" action="10" />
+          <Service id="#{document('..\..\config\services_packages\servicepackage.xml')/packages/package[@smscode='${token1}']/@crmcode}" action="10" />
         </Item>
       </Message>
     </receiveTemplate>

@@ -30,13 +30,12 @@
   <template procedureName="USSDAddServicePackage">
     <condition>
       <test item="${Recipient}" matches="^_PKG_ADD_NUMBER$" />
-      <!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="^1|true$" /-->
-      <test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${Content}'])}" matches="^1|true$" />
+      <test item="#{count(document('..\..\config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${Content}'])}" matches="^1|true$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${sender}" action="9.2">
-          <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
+          <Product code="#{document('..\..\config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
         </Item>
       </Message>
     </receiveTemplate>
@@ -56,13 +55,12 @@
   <template procedureName="USSDRemoveServicePackage">
     <condition>
       <test item="${Recipient}" matches="^_PKG_REMOVE_NUMBER$" />
-      <!--test item="#{if(document('config\services_packages\servicepackage.xml')/packages/package/@ussdcode='${token0}',1,0)}" matches="1" /-->
-      <test item="#{count(document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}'])}" matches="^1|true$" />
+      <test item="#{count(document('..\..\config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}'])}" matches="^1|true$" />
     </condition>
     <receiveTemplate>
       <Message type="serviceorder" initiator="ussd" id="${guid}" session_id="@{newGuid}">
         <Item customer="${sender}" action="10.2">
-          <Product code="#{document('config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
+          <Product code="#{document('..\..\config\services_packages\servicepackage.xml')/packages/package[@ussdcode='${token0}']/@crmcode}" />
         </Item>
       </Message>
     </receiveTemplate>

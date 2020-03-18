@@ -4,10 +4,10 @@
     <define name="_RESPONSE_INVITEE_NUMBER" value="5005" />
     <define name="_REMOVE_FROM_GROUP_NUMBER" value="5335" />
     <define name="_GET_MEMBER_LIST_NUMBER" value="5445" />
-    <define name="_PRODUCT_TYPE_ID" value="#{document('config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}']/@product_id}" />
-    <define name="_GROUP_TYPE_NAME" value="#{document('config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}']/@smscode}" />
-    <define name="_GROUP_TO_PRODUCT_TYPE" value="#{document('config\closed_user_group\product_id.xml')/groups/group[@smscode='${sGroupType}']/@product_id}" />
-    <define name="_CHECK_RECIPIENT_NUMBER" value="#{count(document('config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}'])}" />
+    <define name="_PRODUCT_TYPE_ID" value="#{document('..\..\config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}']/@product_id}" />
+    <define name="_GROUP_TYPE_NAME" value="#{document('..\..\config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}']/@smscode}" />
+    <define name="_GROUP_TO_PRODUCT_TYPE" value="#{document('..\..\config\closed_user_group\product_id.xml')/groups/group[@smscode='${sGroupType}']/@product_id}" />
+    <define name="_CHECK_RECIPIENT_NUMBER" value="#{count(document('..\..\config\closed_user_group\product_id.xml')/groups/group[@ussdcode='${Recipient}'])}" />
   </macros>
   <template procedureName="DelFromGroup_USSD">
     <condition>

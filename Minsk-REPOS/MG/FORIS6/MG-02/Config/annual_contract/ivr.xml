@@ -4,13 +4,13 @@
       <Message type="serviceorder" initiator="ivrcon" id="${guid}" session_id="@{setSessionId(${guid})}">
         @{store(sServiceCode,${servicecode})}
         <Item customer="${customer}">
-          <Service id="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${servicecode}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
-            <Attribute name="prolongation_type" value="#{document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${servicecode}']/@prolongation_type}" />
+          <Service id="#{document('..\..\config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${servicecode}']/@service_code}" action="8" needtariffication="0" enddate="" informOnImpossibility="1" createrequest="1">
+            <Attribute name="prolongation_type" value="#{document('..\..\config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${servicecode}']/@prolongation_type}" />
           </Service>
         </Item>
       </Message>
     </receiveTemplate>
-    <deliveryTemplate direction="input" conditionEx="#{count(document('config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${sServiceCode}'])=0}">
+    <deliveryTemplate direction="input" conditionEx="#{count(document('..\..\config\annual_contract\prolongation.xml')/prolongations/prolongation[@ivr_code='${sServiceCode}'])=0}">
       <set item="param:dbresult" value="320282" />
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>

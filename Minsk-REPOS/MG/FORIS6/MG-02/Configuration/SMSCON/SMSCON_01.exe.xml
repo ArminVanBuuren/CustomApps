@@ -21,7 +21,7 @@
     <Item name="SplitAfter" value="160" />
     <Item name="Window" value="0" />
     <Item name="WindowExceededDelay" value="60" />
-    <Item name="ResponseTimeout" value="600" />
+    <Item name="ResponseTimeout" value="1500" />
     <Item name="SuccessResponseCodes" value="0,40" />
     <Item name="FetchLimit" value="25" />
     <Item name="ThreadMultiplifier" value="4" />
@@ -29,7 +29,7 @@
     <Item name="UtcOffset" value="12+" />
   </Settings>
   <SMSCenters>
-    <Connection host="10.128.23.46" port="3209" systemType="499" systemId="F_MG_02" pass="" />
+    <Connection host="172.24.224.6" port="900" systemId="forismg2" pass="r45gA2eC5" />
   </SMSCenters>
   <TemplateProcessors defaultConfig="SMSTemplateProcessor.01.xml">
     <Processor dll="DefaultTemplates.dll" class="SMSTemplateProcessor" config="SMSTemplateProcessor.01.xml" />

@@ -31,19 +31,19 @@
         @{store(SOAPRequest,@{GetSOAPRequest()})}
       </Message>
     </receiveTemplate>
-    <deliveryTemplate direction="input" conditionEx="#{count(document('bmsgifts.xml')/gifts/gift[@code='${sGiftcode}'])=0}">
+    <deliveryTemplate direction="input" conditionEx="#{count(document('..\..\config\get_bms_counters\bmsgifts.xml')/gifts/gift[@code='${sGiftcode}'])=0}">
       <set item="oparam:dbresult" value="-3" />
       <!-- giftcode is not found in bmsgifts.xml -->
       <set conditionEx="0@{freeSession}" />
     </deliveryTemplate>
     <deliveryTemplate conditionEx="#{'${SOAPRequest}'=''}" connector="SMSCON_01" />
     <!-- session expired -->
-    <deliveryTemplate conditionEx="#{${dbresult}=0 and document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@needPrpReg='false']/@code='${sGiftcode}' and ${clientstatus}&gt;1}" call="BMS_OrderGift_Step2">
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and document('..\..\config\get_bms_counters\bmsgifts.xml')/gifts/gift[@needPrpReg='false']/@code='${sGiftcode}' and ${clientstatus}&gt;1}" call="BMS_OrderGift_Step2">
       <set item="iparam:customer" value="${sCustomer}" />
       <!-- there is no need of PrP registration -->
       <set item="iparam:giftcode" value="${sGiftcode}" />
     </deliveryTemplate>
-    <deliveryTemplate conditionEx="#{${dbresult}=0 and document('config\get_bms_counters\bmsgifts.xml')/gifts/gift[@needPrpReg='true']/@code='${sGiftcode}' and ${clientstatus}=PRP_REGISTERED}" call="BMS_OrderGift_Step2">
+    <deliveryTemplate conditionEx="#{${dbresult}=0 and document('..\..\config\get_bms_counters\bmsgifts.xml')/gifts/gift[@needPrpReg='true']/@code='${sGiftcode}' and ${clientstatus}=PRP_REGISTERED}" call="BMS_OrderGift_Step2">
       <set item="iparam:customer" value="${sCustomer}" />
       <!-- there is need of PrP registration -->
       <set item="iparam:giftcode" value="${sGiftcode}" />
