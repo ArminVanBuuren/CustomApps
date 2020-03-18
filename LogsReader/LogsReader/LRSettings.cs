@@ -104,7 +104,7 @@ namespace LogsReader
                 if (File.Exists(SettingsPath))
                 {
                     using (StreamReader stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
-                    using (TextReader sr = new StringReader(stream.ReadToEnd().ReplaceUnacceptableUTFToCode()))
+                    using (TextReader sr = new StringReader(XML.RemoveUnallowable(stream.ReadToEnd(), true)))
                         sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
                 }
             }
@@ -347,7 +347,7 @@ namespace LogsReader
                 case "SPA":
                     Items = new XmlNode[]
                     {
-                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)(?<TraceType>.+?)(?<Description>.+?)(?<Date>.+?)(?<Message>.*?)\d*")
+                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)\u0001(?<TraceType>.+?)\u0001(?<Description>.+?)\u0001(?<Date>.+?)\u0001(?<Message>.*?)\u0001\d*")
                     };
                     break;
             }
@@ -384,7 +384,7 @@ namespace LogsReader
                         return;
                     }
 
-                    var text = pattern.Value.ReplaceCodeToUTF();
+                    var text = pattern.Value.ReplaceUTFCodeToSymbol();
                     if (!REGEX.Verify(text))
                     {
                         MessageBox.Show($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);

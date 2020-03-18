@@ -613,7 +613,7 @@ namespace LogsReader
                 }
 
                 var template = ResultList[tempalteID];
-                _message.Text = template.Message.ReplaceUnacceptableUTFToCode(string.Empty);
+                _message.Text = XML.RemoveUnallowable(template.Message);
                 _message.PrintXml();
                 _fullTrace.Text = template.EntireMessage;
             }
