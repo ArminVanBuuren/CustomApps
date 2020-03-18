@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,7 +19,7 @@ namespace LogsReader
     public class LRSettings
     {
         private static object _sync = new object();
-        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme() };
+        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
         private bool _useRegex = true;
@@ -80,16 +81,17 @@ namespace LogsReader
                 {
                     if (File.Exists(SettingsPath))
                         File.SetAttributes(SettingsPath, FileAttributes.Normal);
-                    using (var stream = new FileStream(SettingsPath, FileMode.Create, FileAccess.ReadWrite))
+
+                    var xml = new XmlSerializer(typeof(LRSettings));
+                    using (StreamWriter sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
                     {
-                        new XmlSerializer(typeof(LRSettings)).Serialize(stream, settings);
+                        xml.Serialize(sw, settings);
                     }
                 }
             }
             catch (Exception ex)
             {
-                
-                MessageBox.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message));
+                MessageBox.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -101,14 +103,21 @@ namespace LogsReader
             {
                 if (File.Exists(SettingsPath))
                 {
-                    using (var stream = new FileStream(SettingsPath, FileMode.Open, FileAccess.Read))
-                    {
-                        sett = new XmlSerializer(typeof(LRSettings)).Deserialize(stream) as LRSettings;
-                    }
+                    using (StreamReader stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
+                    using (TextReader sr = new StringReader(stream.ReadToEnd().ReplaceUnacceptableUTFToCode()))
+                        sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
                 }
             }
             catch (Exception ex)
             {
+                var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                MessageBox.Show(string.Format(Resources.LRSettings_Deserialize_Ex,
+                        Path.GetFileName(SettingsPath),
+                        Path.GetFileName(IncorrectSettingsPath),
+                        message),
+                    "Deserialize Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
                 if (File.Exists(IncorrectSettingsPath))
                 {
                     File.SetAttributes(IncorrectSettingsPath, FileAttributes.Normal);
@@ -118,8 +127,6 @@ namespace LogsReader
                 File.SetAttributes(SettingsPath, FileAttributes.Normal);
                 File.Copy(SettingsPath, IncorrectSettingsPath);
                 File.Delete(SettingsPath);
-
-                MessageBox.Show(string.Format(Resources.LRSettings_Deserialize_Ex, SettingsPath, IncorrectSettingsPath, ex.Message));
             }
 
             return sett ?? new LRSettings();
@@ -130,13 +137,44 @@ namespace LogsReader
     public class LRSettingsScheme
     {
         public event CatchWaringHandler CatchWaring;
-        private string _schemeName = "MG";
-        private string _servers = "mg1,mg2,mg3,mg4,mg5";
-        private string _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
+
+        private string _schemeName = "TEST";
+        private string _servers = "localhost";
+        private string _types = "test";
         private int _maxThreads = -1;
         private int _maxTraceLines = 50;
-        private string _logsDirectory = @"C:\FORISLOG\MG";
+        private string _logsDirectory = @"C:\TEST";
         private TraceLinePattern _traceLinePattern = new TraceLinePattern();
+
+        public LRSettingsScheme()
+        {
+
+        }
+
+        public LRSettingsScheme(string name)
+        {
+            switch (name)
+            {
+                case "MG":
+                    _schemeName = name;
+                    _servers = "mg1,mg2,mg3,mg4,mg5";
+                    _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
+                    _maxThreads = -1;
+                    _maxTraceLines = 50;
+                    _logsDirectory = @"C:\FORISLOG\MG";
+                    _traceLinePattern = new TraceLinePattern(_schemeName);
+                    break;
+                case "SPA":
+                    _schemeName = name;
+                    _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
+                    _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
+                    _maxThreads = -1;
+                    _maxTraceLines = 50;
+                    _logsDirectory = @"C:\FORISLOG\SPA";
+                    _traceLinePattern = new TraceLinePattern(_schemeName);
+                    break;
+            }
+        }
 
         [XmlAttribute]
         public string Name
@@ -218,6 +256,7 @@ namespace LogsReader
             if (maskMatch != null && maskMatch.Success)
             {
                 result = new DataTemplate(fileLog,
+                    maskMatch.Groups["ID"].Value,
                     maskMatch.Groups["Date"].Value,
                     maskMatch.Groups["TraceType"].Value,
                     maskMatch.Groups["Description"].Value,
@@ -249,13 +288,13 @@ namespace LogsReader
             {
                 if (!TraceLinePattern.IsCorrectRegex)
                 {
-                    CatchWaring?.Invoke($"Some pattern is incorrect! Please check.", true);
+                    CatchWaring?.Invoke($"Some patterns is incorrect! Please check.", true);
                     return false;
                 }
 
                 if (TraceLinePattern.RegexItem.Count == 0)
                 {
-                    CatchWaring?.Invoke($"Not found any Regex line pattern", true);
+                    CatchWaring?.Invoke($"TraceLinePattern hasn't any regex patterns", true);
                     return false;
                 }
 
@@ -281,28 +320,40 @@ namespace LogsReader
                 return true;
             }
         }
-
-        public LRSettingsScheme()
-        {
-            TraceLinePattern = new TraceLinePattern();
-        }
     }
 
     [XmlRoot("TraceLinePattern")]
     public class TraceLinePattern
     {
-        XmlNode[] _traceLinePattern = new XmlNode[]
-        {
-            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*$"),
-            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)$"),
-            new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
-        };
+        private XmlNode[] _traceLinePattern = new XmlNode[] { };
 
         public TraceLinePattern()
         {
-            Items = _traceLinePattern;
+            
         }
 
+        public TraceLinePattern(string name)
+        {
+            switch (name)
+            {
+                case "MG":
+                    Items = new XmlNode[]
+                    {
+                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*$"),
+                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)$"),
+                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
+                    };
+                    break;
+                case "SPA":
+                    Items = new XmlNode[]
+                    {
+                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)(?<TraceType>.+?)(?<Description>.+?)(?<Date>.+?)(?<Message>.*?)\d*")
+                    };
+                    break;
+            }
+        }
+
+        [XmlIgnore]
         internal bool IsCorrectRegex { get; private set; } = false;
 
         [XmlElement("Item")]
@@ -319,21 +370,29 @@ namespace LogsReader
                         _traceLinePattern = value;
                 }
 
+                if (_traceLinePattern.Length == 0)
+                {
+                    MessageBox.Show($"Some schemes have no patterns.", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 foreach (var pattern in _traceLinePattern)
                 {
                     if (pattern == null)
                     {
-                        MessageBox.Show("One of patterns is null. Please check config.");
+                        MessageBox.Show("One of patterns is null. Please check config.", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    else if (!REGEX.Verify(pattern.Value))
+
+                    var text = pattern.Value.ReplaceCodeToUTF();
+                    if (!REGEX.Verify(text))
                     {
-                        MessageBox.Show($"Pattern [{pattern.Value}] is incorrect");
+                        MessageBox.Show($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     else
                     {
-                        RegexItem.Add(new Regex(pattern.Value, RegexOptions.Compiled | RegexOptions.Singleline));
+                        RegexItem.Add(new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline));
                     }
                 }
 

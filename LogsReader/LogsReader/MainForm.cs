@@ -183,7 +183,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), @"Initialization", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -209,19 +209,23 @@ namespace LogsReader
 
                 while (!_isClosed)
                 {
-                    BeginInvoke(new MethodInvoker(delegate
+                    if (InvokeRequired)
                     {
-                        checkAppCPU?.Invoke();
-                        var currentProcess = Process.GetCurrentProcess();
-                        _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
-                        _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-                    }));
+                        BeginInvoke(new MethodInvoker(delegate
+                        {
+                            checkAppCPU?.Invoke();
+                            var currentProcess = Process.GetCurrentProcess();
+                            _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
+                            _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+                        }));
+                    }
+
                     Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), @"System Resource Monitoring", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -297,13 +301,13 @@ namespace LogsReader
 
                     var resultOfSuccess = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result);
                     if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
                     else if (dateTimePickerStart.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value >= dateTimePickerStart.Value);
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
                     else if (dateTimePickerEnd.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace == null || x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
 
-                    ResultList = new DataTemplateCollection(resultOfSuccess.OrderBy(p => p.Date).ThenBy(p => p.FileName));
+                    ResultList = new DataTemplateCollection(resultOfSuccess);
                     var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate(x.Source, x.Error));
@@ -405,13 +409,16 @@ namespace LogsReader
                     var completed = MultiTaskingHandler.Result.Count.ToString();
                     var progress = MultiTaskingHandler.PercentOfComplete;
 
-                    Invoke(new MethodInvoker(delegate
+                    if (InvokeRequired)
                     {
-                        pgbThreads.Value = progress;
-                        _completedFilesStatus.Text = completed;
-                        _totalFilesStatus.Text = total;
-                        _findedInfo.Text = Finded.ToString();
-                    }));
+                        Invoke(new MethodInvoker(delegate
+                        {
+                            pgbThreads.Value = progress;
+                            _completedFilesStatus.Text = completed;
+                            _totalFilesStatus.Text = total;
+                            _findedInfo.Text = Finded.ToString();
+                        }));
+                    }
                     Thread.Sleep(10);
                 }
             }
@@ -425,21 +432,24 @@ namespace LogsReader
         {
             try
             {
-                Invoke(new MethodInvoker(delegate
+                if (InvokeRequired)
                 {
-                    pgbThreads.Value = 100;
-                    _findedInfo.Text = Finded.ToString();
-                    if (MultiTaskingHandler != null)
+                    Invoke(new MethodInvoker(delegate
                     {
-                        _completedFilesStatus.Text = MultiTaskingHandler.Result.Count.ToString();
-                        _totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();  
-                    }
-                    else
-                    {
-                        _completedFilesStatus.Text = @"0";
-                        _totalFilesStatus.Text = @"0";
-                    }
-                }));
+                        pgbThreads.Value = 100;
+                        _findedInfo.Text = Finded.ToString();
+                        if (MultiTaskingHandler != null)
+                        {
+                            _completedFilesStatus.Text = MultiTaskingHandler.Result.Count.ToString();
+                            _totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();
+                        }
+                        else
+                        {
+                            _completedFilesStatus.Text = @"0";
+                            _totalFilesStatus.Text = @"0";
+                        }
+                    }));
+                }
             }
             catch (Exception ex)
             {
@@ -556,16 +566,15 @@ namespace LogsReader
             return listResult;
         }
 
-
-
         private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
                 var row = ((DataGridView)sender).Rows[e.RowIndex];
-                var tempalteID = TryGetTemaplteIDOfRow(row);
+                var tempalteID = TryGetPrivateID(row);
                 if (tempalteID == -1 || ResultList == null)
                     return;
+
                 var template = ResultList[tempalteID];
 
                 if (template.IsMatched)
@@ -594,7 +603,7 @@ namespace LogsReader
                 if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
                     return;
 
-                var tempalteID = TryGetTemaplteIDOfRow(dgvFiles.SelectedRows[0]);
+                var tempalteID = TryGetPrivateID(dgvFiles.SelectedRows[0]);
 
                 if (tempalteID == -1 || ResultList == null)
                 {
@@ -604,7 +613,7 @@ namespace LogsReader
                 }
 
                 var template = ResultList[tempalteID];
-                _message.Text = template.Message;
+                _message.Text = template.Message.ReplaceUnacceptableUTFToCode(string.Empty);
                 _message.PrintXml();
                 _fullTrace.Text = template.EntireMessage;
             }
@@ -614,14 +623,14 @@ namespace LogsReader
             }
         }
 
-        static int TryGetTemaplteIDOfRow(DataGridViewRow row)
+        static int TryGetPrivateID(DataGridViewRow row)
         {
             if (row == null)
                 return -1;
 
             foreach (DataGridViewCell cell in row.Cells)
             {
-                if (!cell.OwningColumn.Name.Equals("ID", StringComparison.CurrentCultureIgnoreCase))
+                if (!cell.OwningColumn.Name.Equals("PrivateID", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
                 if (cell.Value is int value)
@@ -664,11 +673,11 @@ namespace LogsReader
             
             //заполняем список серверов из параметра
             trvMain.Nodes["trvServers"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p, StringComparer.InvariantCultureIgnoreCase))
+            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if(s.Key.IsNullOrEmptyTrim())
                     continue;
-                trvMain.Nodes["trvServers"].Nodes.Add(s.Key.ToLower());
+                trvMain.Nodes["trvServers"].Nodes.Add(s.Key.Trim().ToUpper());
             }
             trvMain.ExpandAll();
 
@@ -683,11 +692,11 @@ namespace LogsReader
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p, StringComparer.InvariantCultureIgnoreCase))
+            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if(s.Key.IsNullOrEmptyTrim())
                     continue;
-                trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.ToUpper());
+                trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.Trim().ToUpper());
             }
             trvMain.ExpandAll();
 

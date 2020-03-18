@@ -28,31 +28,31 @@ namespace LogsReader
 
     public class DataTemplateCollection : IEnumerable<DataTemplate>, IDisposable
     {
-        int _index = 0;
+        int _seqPrivateID = 0;
+        int _seqID = 0;
         private readonly Dictionary<int, DataTemplate> _values;
 
         public DataTemplateCollection(IEnumerable<DataTemplate> list)
         {
             _values = new Dictionary<int, DataTemplate>(list.Count());
-            foreach (var template in list)
-            {
-                template.ID = ++_index;
-                _values.Add(template.ID, template);
-            }
+            AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.FileName));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)
         {
             foreach (var template in list)
             {
-                template.ID = ++_index;
-                _values.Add(template.ID, template);
+                template.PrivateID = ++_seqPrivateID;
+                if (template.ID == -1)
+                    template.ID = ++_seqID;
+
+                _values.Add(template.PrivateID, template);
             }
         }
 
         public int Count => _values.Count;
 
-        public DataTemplate this[int id] => _values[id];
+        public DataTemplate this[int privateID] => _values[privateID];
 
         public void Clear()
         {
@@ -84,10 +84,12 @@ namespace LogsReader
         private string _description = null;
         private string _traceType = null;
 
-        public DataTemplate(FileLog fileLog, string date, string traceType, string description, string message, string entireMessage)
+        public DataTemplate(FileLog fileLog, string strID, string date, string traceType, string description, string message, string entireMessage)
         {
             IsMatched = true;
             _fileLog = fileLog;
+
+            ID = int.TryParse(strID, out var id) ? id : -1;
 
             Date = date;
             if (DateTime.TryParse(Date, out var dateOfTrace))
@@ -103,6 +105,8 @@ namespace LogsReader
         {
             IsMatched = false;
             _fileLog = fileLog;
+
+            ID = -1;
             _message.Append(message);
             _entireMessage.Append(message);
         }
@@ -112,18 +116,21 @@ namespace LogsReader
             IsMatched = false;
             _fileLog = fileLog;
 
+            ID = -1;
             DateOfTrace = DateTime.Now;
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
-
             TraceType = error.GetType().ToString();
             _message.Append(error);
             _entireMessage.Append(error);
         }
 
-        [DGVColumn(ColumnPosition.First, "ID")]
+        [DGVColumn(ColumnPosition.First, "PrivateID", false)]
+        public int PrivateID { get; internal set; }
+
+        [DGVColumn(ColumnPosition.After, "ID")]
         public int ID { get; internal set; }
 
-        [DGVColumn(ColumnPosition.First, "Server")]
+        [DGVColumn(ColumnPosition.After, "Server")]
         public string Server => _fileLog.Server;
 
         [DGVColumn(ColumnPosition.After, "Date")]

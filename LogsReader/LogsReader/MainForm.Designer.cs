@@ -89,7 +89,7 @@ namespace LogsReader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(970, 205);
+            this.dgvFiles.Size = new System.Drawing.Size(1011, 234);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             // 
@@ -108,14 +108,14 @@ namespace LogsReader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(283, 395);
+            this.trvMain.Size = new System.Drawing.Size(295, 482);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Location = new System.Drawing.Point(1031, 8);
+            this.btnSearch.Location = new System.Drawing.Point(1084, 8);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 3;
@@ -126,7 +126,7 @@ namespace LogsReader
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(1112, 8);
+            this.btnClear.Location = new System.Drawing.Point(1165, 8);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 3;
@@ -140,7 +140,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPattern.Location = new System.Drawing.Point(12, 8);
             this.txtPattern.Name = "txtPattern";
-            this.txtPattern.Size = new System.Drawing.Size(1013, 23);
+            this.txtPattern.Size = new System.Drawing.Size(1066, 23);
             this.txtPattern.TabIndex = 4;
             this.txtPattern.TextChanged += new System.EventHandler(this.txtPattern_TextChanged);
             // 
@@ -148,9 +148,9 @@ namespace LogsReader
             // 
             this.pgbThreads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgbThreads.Location = new System.Drawing.Point(12, 654);
+            this.pgbThreads.Location = new System.Drawing.Point(12, 741);
             this.pgbThreads.Name = "pgbThreads";
-            this.pgbThreads.Size = new System.Drawing.Size(1263, 10);
+            this.pgbThreads.Size = new System.Drawing.Size(1316, 10);
             this.pgbThreads.TabIndex = 6;
             // 
             // splitContainer1
@@ -187,8 +187,8 @@ namespace LogsReader
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 150;
-            this.splitContainer1.Size = new System.Drawing.Size(1265, 617);
-            this.splitContainer1.SplitterDistance = 287;
+            this.splitContainer1.Size = new System.Drawing.Size(1318, 704);
+            this.splitContainer1.SplitterDistance = 299;
             this.splitContainer1.TabIndex = 7;
             // 
             // label9
@@ -220,7 +220,7 @@ namespace LogsReader
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.ShowCheckBox = true;
             this.dateTimePickerEnd.ShowUpDown = true;
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(214, 23);
             this.dateTimePickerEnd.TabIndex = 21;
             // 
             // dateTimePickerStart
@@ -234,7 +234,7 @@ namespace LogsReader
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.ShowCheckBox = true;
             this.dateTimePickerStart.ShowUpDown = true;
-            this.dateTimePickerStart.Size = new System.Drawing.Size(202, 23);
+            this.dateTimePickerStart.Size = new System.Drawing.Size(214, 23);
             this.dateTimePickerStart.TabIndex = 20;
             // 
             // maxLinesStackText
@@ -243,7 +243,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxLinesStackText.Location = new System.Drawing.Point(78, 138);
             this.maxLinesStackText.Name = "maxLinesStackText";
-            this.maxLinesStackText.Size = new System.Drawing.Size(202, 23);
+            this.maxLinesStackText.Size = new System.Drawing.Size(214, 23);
             this.maxLinesStackText.TabIndex = 14;
             this.maxLinesStackText.TextChanged += new System.EventHandler(this.maxLinesStackText_TextChanged);
             this.maxLinesStackText.Leave += new System.EventHandler(this.maxLinesStackText_Leave);
@@ -263,7 +263,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logDirText.Location = new System.Drawing.Point(78, 112);
             this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(202, 23);
+            this.logDirText.Size = new System.Drawing.Size(214, 23);
             this.logDirText.TabIndex = 12;
             this.logDirText.TextChanged += new System.EventHandler(this.logDirText_TextChanged);
             // 
@@ -282,7 +282,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxThreadsText.Location = new System.Drawing.Point(78, 86);
             this.maxThreadsText.Name = "maxThreadsText";
-            this.maxThreadsText.Size = new System.Drawing.Size(202, 23);
+            this.maxThreadsText.Size = new System.Drawing.Size(214, 23);
             this.maxThreadsText.TabIndex = 10;
             this.maxThreadsText.TextChanged += new System.EventHandler(this.maxThreadsText_TextChanged);
             this.maxThreadsText.Leave += new System.EventHandler(this.maxThreadsText_Leave);
@@ -302,7 +302,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.typesText.Location = new System.Drawing.Point(78, 60);
             this.typesText.Name = "typesText";
-            this.typesText.Size = new System.Drawing.Size(202, 23);
+            this.typesText.Size = new System.Drawing.Size(214, 23);
             this.typesText.TabIndex = 8;
             this.typesText.TextChanged += new System.EventHandler(this.typesText_TextChanged);
             // 
@@ -332,7 +332,7 @@ namespace LogsReader
             this.chooseScheme.FormattingEnabled = true;
             this.chooseScheme.Location = new System.Drawing.Point(78, 8);
             this.chooseScheme.Name = "chooseScheme";
-            this.chooseScheme.Size = new System.Drawing.Size(202, 21);
+            this.chooseScheme.Size = new System.Drawing.Size(214, 21);
             this.chooseScheme.TabIndex = 5;
             this.chooseScheme.SelectedIndexChanged += new System.EventHandler(this.chooseScheme_SelectedIndexChanged);
             // 
@@ -342,7 +342,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.serversText.Location = new System.Drawing.Point(78, 34);
             this.serversText.Name = "serversText";
-            this.serversText.Size = new System.Drawing.Size(202, 23);
+            this.serversText.Size = new System.Drawing.Size(214, 23);
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.serversText_TextChanged);
             // 
@@ -366,16 +366,16 @@ namespace LogsReader
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.dgvFiles);
-            this.splitContainer2.Size = new System.Drawing.Size(974, 617);
-            this.splitContainer2.SplitterDistance = 209;
+            this.splitContainer2.Size = new System.Drawing.Size(1015, 704);
+            this.splitContainer2.SplitterDistance = 238;
             this.splitContainer2.TabIndex = 0;
             // 
             // statusStrip
             // 
             this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-            this.statusStrip.Location = new System.Drawing.Point(0, 667);
+            this.statusStrip.Location = new System.Drawing.Point(0, 754);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1289, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1342, 22);
             this.statusStrip.TabIndex = 8;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -388,7 +388,7 @@ namespace LogsReader
             // 
             this.useRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.useRegex.AutoSize = true;
-            this.useRegex.Location = new System.Drawing.Point(1192, 11);
+            this.useRegex.Location = new System.Drawing.Point(1245, 11);
             this.useRegex.Name = "useRegex";
             this.useRegex.Size = new System.Drawing.Size(79, 19);
             this.useRegex.TabIndex = 9;
@@ -400,7 +400,7 @@ namespace LogsReader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1289, 689);
+            this.ClientSize = new System.Drawing.Size(1342, 776);
             this.Controls.Add(this.useRegex);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.splitContainer1);

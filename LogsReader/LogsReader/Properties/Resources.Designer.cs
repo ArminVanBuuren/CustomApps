@@ -71,7 +71,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Config &apos;{0}&apos; is incorrect! Moved to {1}.
+        ///   Looks up a localized string similar to Config &apos;{0}&apos; is incorrect! Moved to &apos;{1}&apos;.
+        ///
         ///{2}.
         /// </summary>
         internal static string LRSettings_Deserialize_Ex {
@@ -145,7 +146,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания значений в уже найденном фрагменте лога. Паттерны выбираются сверху вниз, от самого точного, до самого дефолтного. Необходимо обязательное использование именованных группировок: ?&lt;Data&gt; - дата; ?&lt;TraceType&gt; - тип трейса; ?&lt;Message&gt; - сообщение (Также опциональная колонка ?&lt;Description&gt;). Регулярное выражение работает в Singleline, переводит весь стек лога из указанных в MaxTraceLines, в одну строку..
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;TraceType&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {
