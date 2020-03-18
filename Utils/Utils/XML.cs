@@ -896,6 +896,63 @@ namespace Utils
             }
         }
 
+        public static string RemoveUnallowable(string str, bool replaceToUTFCode = false)
+        {
+            var builder = new StringBuilder(str.Length);
+            foreach (var ch in str)
+            {
+                if (IsUnallowable(ch, out var res))
+                {
+                    if (replaceToUTFCode)
+                        builder.Append(res);
+                }
+                else
+                {
+                    builder.Append(ch);
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        static bool IsUnallowable(char input, out string code)
+        {
+            code = "";
+            switch (input)
+            {
+                case '\u0001': code = @"\u0001"; return true;
+                case '\u0002': code = @"\u0002"; return true;
+                case '\u0003': code = @"\u0003"; return true;
+                case '\u0004': code = @"\u0004"; return true;
+                case '\u0005': code = @"\u0005"; return true;
+                case '\u0006': code = @"\u0006"; return true;
+                case '\u0007': code = @"\u0007"; return true;
+                case '\u0008': code = @"\u0008"; return true;
+                case '\u000B': code = @"\u000B"; return true;
+                case '\u000C': code = @"\u000C"; return true;
+                case '\u000E': code = @"\u000E"; return true;
+                case '\u000F': code = @"\u000F"; return true;
+                case '\u0010': code = @"\u0010"; return true;
+                case '\u0011': code = @"\u0011"; return true;
+                case '\u0012': code = @"\u0012"; return true;
+                case '\u0013': code = @"\u0013"; return true;
+                case '\u0014': code = @"\u0014"; return true;
+                case '\u0015': code = @"\u0015"; return true;
+                case '\u0016': code = @"\u0016"; return true;
+                case '\u0017': code = @"\u0017"; return true;
+                case '\u0018': code = @"\u0018"; return true;
+                case '\u0019': code = @"\u0019"; return true;
+                case '\u001A': code = @"\u001A"; return true;
+                case '\u001B': code = @"\u001B"; return true;
+                case '\u001C': code = @"\u001C"; return true;
+                case '\u001D': code = @"\u001D"; return true;
+                case '\u001E': code = @"\u001E"; return true;
+                case '\u001F': code = @"\u001F"; return true;
+            }
+
+            return false;
+        }
+
         #endregion
 
         /// <summary>

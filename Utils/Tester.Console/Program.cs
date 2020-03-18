@@ -9,6 +9,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Utils;
 using Utils.CollectionHelper;
 
@@ -125,13 +127,37 @@ namespace Tester.Console
             System.Console.ReadKey();
         }
 
+        
+
+        
+
         static void Main(string[] args)
         {
             try
             {
                 var stop = new Stopwatch();
-                
 
+                
+                var testttt = @"< DateFrom >          < Value />        </ DateFrom >";
+                var ewwe = XML.RemoveUnallowable(testttt);
+                System.Console.ReadKey();
+                return;
+
+                var patt = System.Console.ReadLine();
+                var regex = new Regex(patt, RegexOptions.Compiled | RegexOptions.Multiline);
+                using (StreamReader stream = new StreamReader(@"C:\test3\1_0.txt", new UTF8Encoding(false)))
+                {
+                    var str = stream.ReadToEnd();
+                    var match = regex.Matches(str);
+                    string result = string.Empty;
+                    foreach (Match mtch in match)
+                    {
+                        if (mtch.Success)
+                            result += "{" + $"\"{mtch.Groups[2]}\", \"{mtch.Groups[1]}\"" + "}," + Environment.NewLine;
+                    }
+                }
+
+                return;
 
                 //var rrrr = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.IgnoreCase);
                 //var match = rrrr.Match(@"C:\test\1\2.txt");

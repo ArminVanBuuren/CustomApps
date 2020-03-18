@@ -200,7 +200,7 @@ namespace Utils.WinForm.DataGridViewHelper
 
                 StretchColumnsToAllCells(grid);
                 grid.DataBindingComplete += Grid_DataBindingComplete;
-                grid.Resize += Grid_Resize;
+                //grid.Resize += Grid_Resize;
             }
             catch (Exception ex)
             {
@@ -215,26 +215,26 @@ namespace Utils.WinForm.DataGridViewHelper
             }
         }
 
-        private static void Grid_Resize(object sender, EventArgs e)
-        {
-            if (!(sender is DataGridView grid))
-                return;
+        //private static void Grid_Resize(object sender, EventArgs e)
+        //{
+        //    if (!(sender is DataGridView grid))
+        //        return;
 
-            int width = grid.RowHeadersWidth;
+        //    int width = grid.RowHeadersWidth;
 
-            foreach (DataGridViewColumn col in grid.Columns)
-            {
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                width += col.Width;
-            }
+        //    foreach (DataGridViewColumn col in grid.Columns)
+        //    {
+        //        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+        //        width += col.Width;
+        //    }
 
-            if (width < grid.Width)
-            {
-                grid.Columns[grid.Columns.Count - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            }
+        //    if (width < grid.Width)
+        //    {
+        //        grid.Columns[grid.Columns.Count - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        //    }
 
-            grid.Resize -= Grid_Resize;
-        }
+        //    grid.Resize -= Grid_Resize;
+        //}
 
         private static void Grid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
