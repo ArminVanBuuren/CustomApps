@@ -139,9 +139,15 @@ namespace Utils
             return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        public static bool StringContains(this string input, string value, bool ignoreCase = true)
         {
-            return source?.IndexOf(toCheck, comp) != -1;
+            if (input.Like(value))
+                return true;
+
+            if (ignoreCase)
+                return input.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) != -1;
+            else
+                return input.IndexOf(value, StringComparison.Ordinal) != -1;
         }
 
         public static bool Contains2(this string source, string toCheck, StringComparison? comp = null)
