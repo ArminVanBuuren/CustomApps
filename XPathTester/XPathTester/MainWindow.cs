@@ -230,17 +230,19 @@ namespace XPathTester
                 ClearResultTap();
                 _xmlBodyChanged = true;
 
-                if (fctb.Text.IsXml(out var document))
+                try
                 {
+                    var document = new XmlDocument();
+                    document.LoadXml(XML.RemoveUnallowable(fctb.Text, " "));
                     XmlBody = document;
                     MainTabBrush = solidTransparent;
                 }
-                else
+                catch (Exception ex)
                 {
                     XmlBody = null;
                     MainTabBrush = solidRed;
                     IsInserted = false;
-                    AddMessageException(@"XML-Body is incorrect!");
+                    AddMessageException($"XML-Body is incorrect! {ex.Message}");
                 }
             }
             catch (Exception ex)

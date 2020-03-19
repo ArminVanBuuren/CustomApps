@@ -136,32 +136,43 @@ namespace Tester.Console
             try
             {
                 var stop = new Stopwatch();
-                string s1 = null;
-                string s2 = null;
-                var www1 = s1.Like(s2);
-                var www2 = s1.Like("");
-                var www3 = "".Like(s2);
-                
-                var testttt = @"< DateFrom >          < Value />        </ DateFrom >";
-                var ewwe = XML.RemoveUnallowable(testttt);
-                System.Console.ReadKey();
-                return;
 
-                var patt = System.Console.ReadLine();
-                var regex = new Regex(patt, RegexOptions.Compiled | RegexOptions.Multiline);
-                using (StreamReader stream = new StreamReader(@"C:\test3\1_0.txt", new UTF8Encoding(false)))
+                string sss1;
+                using (StreamReader stream = new StreamReader(@"C:\test3\1_1.txt", new UTF8Encoding(false)))
                 {
                     var str = stream.ReadToEnd();
-                    var match = regex.Matches(str);
-                    string result = string.Empty;
-                    foreach (Match mtch in match)
+                    if (str.IsXml(out var doc))
                     {
-                        if (mtch.Success)
-                            result += "{" + $"\"{mtch.Groups[2]}\", \"{mtch.Groups[1]}\"" + "}," + Environment.NewLine;
+                        sss1 = doc.PrintXml();
                     }
                 }
 
-                return;
+                //string s1 = null;
+                //string s2 = null;
+                //var www1 = s1.Like(s2);
+                //var www2 = s1.Like("");
+                //var www3 = "".Like(s2);
+
+                //var testttt = @"< DateFrom >          < Value />        </ DateFrom >";
+                //var ewwe = XML.RemoveUnallowable(testttt);
+                //System.Console.ReadKey();
+                //return;
+
+                //var patt = System.Console.ReadLine();
+                //var regex = new Regex(patt, RegexOptions.Compiled | RegexOptions.Multiline);
+                //using (StreamReader stream = new StreamReader(@"C:\test3\1_0.txt", new UTF8Encoding(false)))
+                //{
+                //    var str = stream.ReadToEnd();
+                //    var match = regex.Matches(str);
+                //    string result = string.Empty;
+                //    foreach (Match mtch in match)
+                //    {
+                //        if (mtch.Success)
+                //            result += "{" + $"\"{mtch.Groups[2]}\", \"{mtch.Groups[1]}\"" + "}," + Environment.NewLine;
+                //    }
+                //}
+
+                //return;
 
                 //var rrrr = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.IgnoreCase);
                 //var match = rrrr.Match(@"C:\test\1\2.txt");

@@ -130,11 +130,11 @@ namespace Utils
             var schemas = new XmlSchemaSet();
             var doc = XDocument.Load(docPath);
             var msg = string.Empty;
-            doc.Validate(schemas, (o, e) => { msg += e.Message + Environment.NewLine; });
+            doc.Validate(schemas, (o, e) => msg += e.Message + Environment.NewLine);
             return msg.IsNullOrEmpty();
         }
 
-        public static string NormalizeXmlValue(string xmlStringValue, XMLValueEncoder type = XMLValueEncoder.Decode)
+        public static string NormalizeXmlValueSlow(string xmlStringValue, XMLValueEncoder type = XMLValueEncoder.Decode)
         {
             var regex = type == XMLValueEncoder.Decode ? new Regex(@"\&(.+?)\;") : new Regex(@"(.+?)");
             var xf = new XmlEntityNames(type);
@@ -915,6 +915,24 @@ namespace Utils
             return builder.ToString();
         }
 
+        public static string RemoveUnallowable(string str, string replaceTo)
+        {
+            var builder = new StringBuilder(str.Length);
+            foreach (var ch in str)
+            {
+                if (IsUnallowable(ch, out var res))
+                {
+                    builder.Append(replaceTo);
+                }
+                else
+                {
+                    builder.Append(ch);
+                }
+            }
+
+            return builder.ToString();
+        }
+
         static bool IsUnallowable(char input, out string code)
         {
             code = "";
@@ -1028,7 +1046,8 @@ namespace Utils
                     case "#cdata-section":
                         source.Append(Environment.NewLine);
                         source.Append(whiteSpaces);
-                        source.Append(node.OuterXml.Trim()); break;
+                        source.Append(node.InnerText.IsXml(out var xmlCdata) ? $"<![CDATA[{xmlCdata.PrintXml()}]]>" : node.OuterXml.Trim());
+                        break;
                     default:
                         source.Append(Environment.NewLine);
                         source.Append(whiteSpaces);
