@@ -22,6 +22,8 @@ namespace LogsReader
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
         private bool _isClosed = false;
+        bool _oldDateStartChecked = false;
+        bool _oldDateEndChecked = false;
 
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
@@ -161,22 +163,20 @@ namespace LogsReader
                 notepad.SelectEditor(0);
                 notepad.ReadOnly = true;
 
-                var oldDateStartChecked = false;
-                var oldDateEndChecked = false;
                 dateTimePickerStart.ValueChanged += (sender, args) =>
                 {
-                    if (oldDateStartChecked || !dateTimePickerStart.Checked)
+                    if (_oldDateStartChecked || !dateTimePickerStart.Checked)
                         return;
                     var today = DateTime.Now;
-                    oldDateStartChecked = true;
+                    _oldDateStartChecked = true;
                     dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
                 };
                 dateTimePickerEnd.ValueChanged += (sender, args) =>
                 {
-                    if (oldDateEndChecked || !dateTimePickerEnd.Checked)
+                    if (_oldDateEndChecked || !dateTimePickerEnd.Checked)
                         return;
                     var today = DateTime.Now;
-                    oldDateEndChecked = true;
+                    _oldDateEndChecked = true;
                     dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
                 };
 
@@ -243,7 +243,7 @@ namespace LogsReader
                         ButtonStartStop_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
-                        ClearForm();
+                        ClearForm(true);
                         break;
                 }
             }
@@ -354,6 +354,7 @@ namespace LogsReader
                     ChangeFormStatus();
                     if (stop.IsRunning)
                         stop.Stop();
+                    dgvFiles.Focus();
                 }
             }
             else
@@ -433,7 +434,7 @@ namespace LogsReader
                     {
                         Invoke(new MethodInvoker(delegate
                         {
-                            pgbThreads.Value = progress;
+                            progressBar.Value = progress;
                             _completedFilesStatus.Text = completed;
                             _totalFilesStatus.Text = total;
                             _findedInfo.Text = Finded.ToString();
@@ -456,7 +457,7 @@ namespace LogsReader
                 {
                     Invoke(new MethodInvoker(delegate
                     {
-                        pgbThreads.Value = 100;
+                        progressBar.Value = 100;
                         _findedInfo.Text = Finded.ToString();
                         if (MultiTaskingHandler != null)
                         {
@@ -633,8 +634,9 @@ namespace LogsReader
                 }
 
                 var template = ResultList[tempalteID];
-                _message.Text = XML.RemoveUnallowable(template.Message);
-                _message.PrintXml();
+                var message = XML.RemoveUnallowable(template.Message, " ");
+
+                _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message;
                 _fullTrace.Text = template.EntireMessage;
             }
             catch (Exception ex)
@@ -833,23 +835,38 @@ namespace LogsReader
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            ClearForm();
+            ClearForm(true);
         }
 
-        void ClearForm()
+        void ClearForm(bool userCall = false)
         {
             dgvFiles.DataSource = null;
             dgvFiles.Refresh();
+
             ResultList?.Clear();
             ResultList = null;
+
             _message.Text = string.Empty;
             _fullTrace.Text = string.Empty;
-            pgbThreads.Value = 0;
+
+            progressBar.Value = 0;
             _completedFilesStatus.Text = @"0";
             _totalFilesStatus.Text = @"0";
+
             Finded = 0;
             _findedInfo.Text = Finded.ToString();
+
             ReportStatus(string.Empty, false);
+
+            if (userCall)
+            {
+                traceLikeText.Text = string.Empty;
+                traceNotLikeText.Text = string.Empty;
+                dateTimePickerStart.Checked = false;
+                dateTimePickerEnd.Checked = false;
+                _oldDateStartChecked = false;
+                _oldDateEndChecked = false;
+            }
         }
     }
 }

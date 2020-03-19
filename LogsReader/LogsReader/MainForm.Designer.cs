@@ -34,14 +34,14 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.trvMain = new System.Windows.Forms.TreeView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
-            this.pgbThreads = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.traceNotLikeText = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -105,13 +105,13 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(1, 271);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode7.Name = "trvServers";
+            treeNode7.Text = "Servers";
+            treeNode8.Name = "trvTypes";
+            treeNode8.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode7,
+            treeNode8});
             this.trvMain.Size = new System.Drawing.Size(295, 431);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -148,14 +148,14 @@ namespace LogsReader
             this.txtPattern.TabIndex = 4;
             this.txtPattern.TextChanged += new System.EventHandler(this.txtPattern_TextChanged);
             // 
-            // pgbThreads
+            // progressBar
             // 
-            this.pgbThreads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgbThreads.Location = new System.Drawing.Point(12, 741);
-            this.pgbThreads.Name = "pgbThreads";
-            this.pgbThreads.Size = new System.Drawing.Size(1316, 10);
-            this.pgbThreads.TabIndex = 6;
+            this.progressBar.Location = new System.Drawing.Point(12, 741);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(1316, 10);
+            this.progressBar.TabIndex = 6;
             // 
             // splitContainer1
             // 
@@ -194,7 +194,7 @@ namespace LogsReader
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Panel2MinSize = 150;
+            this.splitContainer1.Panel2MinSize = 300;
             this.splitContainer1.Size = new System.Drawing.Size(1318, 704);
             this.splitContainer1.SplitterDistance = 299;
             this.splitContainer1.TabIndex = 7;
@@ -203,7 +203,7 @@ namespace LogsReader
             // 
             this.traceNotLikeText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.traceNotLikeText.Location = new System.Drawing.Point(86, 216);
+            this.traceNotLikeText.Location = new System.Drawing.Point(86, 242);
             this.traceNotLikeText.Name = "traceNotLikeText";
             this.traceNotLikeText.Size = new System.Drawing.Size(206, 23);
             this.traceNotLikeText.TabIndex = 27;
@@ -211,7 +211,7 @@ namespace LogsReader
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 220);
+            this.label10.Location = new System.Drawing.Point(3, 246);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(82, 15);
             this.label10.TabIndex = 26;
@@ -221,7 +221,7 @@ namespace LogsReader
             // 
             this.traceLikeText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.traceLikeText.Location = new System.Drawing.Point(86, 190);
+            this.traceLikeText.Location = new System.Drawing.Point(86, 216);
             this.traceLikeText.Name = "traceLikeText";
             this.traceLikeText.Size = new System.Drawing.Size(206, 23);
             this.traceLikeText.TabIndex = 25;
@@ -229,7 +229,7 @@ namespace LogsReader
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 194);
+            this.label7.Location = new System.Drawing.Point(3, 220);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 15);
             this.label7.TabIndex = 24;
@@ -238,7 +238,7 @@ namespace LogsReader
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 168);
+            this.label9.Location = new System.Drawing.Point(3, 194);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 15);
             this.label9.TabIndex = 23;
@@ -247,7 +247,7 @@ namespace LogsReader
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 142);
+            this.label8.Location = new System.Drawing.Point(3, 168);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(61, 15);
             this.label8.TabIndex = 22;
@@ -260,7 +260,7 @@ namespace LogsReader
             this.dateTimePickerEnd.Checked = false;
             this.dateTimePickerEnd.CustomFormat = "dd.MM.yyyy HH:mm:ss";
             this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(86, 164);
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(86, 190);
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.ShowCheckBox = true;
             this.dateTimePickerEnd.ShowUpDown = true;
@@ -274,7 +274,7 @@ namespace LogsReader
             this.dateTimePickerStart.Checked = false;
             this.dateTimePickerStart.CustomFormat = "dd.MM.yyyy HH:mm:ss";
             this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerStart.Location = new System.Drawing.Point(86, 138);
+            this.dateTimePickerStart.Location = new System.Drawing.Point(86, 164);
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.ShowCheckBox = true;
             this.dateTimePickerStart.ShowUpDown = true;
@@ -324,7 +324,7 @@ namespace LogsReader
             // 
             this.maxThreadsText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxThreadsText.Location = new System.Drawing.Point(86, 242);
+            this.maxThreadsText.Location = new System.Drawing.Point(86, 138);
             this.maxThreadsText.Name = "maxThreadsText";
             this.maxThreadsText.Size = new System.Drawing.Size(206, 23);
             this.maxThreadsText.TabIndex = 10;
@@ -334,7 +334,7 @@ namespace LogsReader
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 246);
+            this.label4.Location = new System.Drawing.Point(3, 142);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 9;
@@ -448,13 +448,13 @@ namespace LogsReader
             this.Controls.Add(this.useRegex);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.pgbThreads);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.txtPattern);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSearch);
             this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.Icon = global::LogsReader.Properties.Resources.icon;
-            this.MinimumSize = new System.Drawing.Size(398, 283);
+            this.MinimumSize = new System.Drawing.Size(550, 400);
             this.Name = "MainForm";
             this.Text = "Logs Reader";
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
@@ -477,7 +477,7 @@ namespace LogsReader
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.TextBox txtPattern;
-        private System.Windows.Forms.ProgressBar pgbThreads;
+        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.StatusStrip statusStrip;
