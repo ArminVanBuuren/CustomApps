@@ -22,30 +22,7 @@ namespace LogsReader
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
 
-        private bool _useRegex = true;
-        private XmlNode[] _previousSearch = {new XmlDocument().CreateCDataSection(string.Empty)};
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
-
-        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
-        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment + Resources.LRSettings_UseRegexComment); set { } }
-
-        [XmlElement("PreviousSearch")]
-        public XmlNode[] PreviousSearch
-        {
-            get => _previousSearch;
-            set
-            {
-                if (value != null && value.Length > 0)
-                    _previousSearch = value;
-            }
-        }
-
-        [XmlAttribute("UseRegex")]
-        public bool UseRegex
-        {
-            get => _useRegex;
-            set => _useRegex = value;
-        }
 
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
@@ -148,6 +125,8 @@ namespace LogsReader
         private int _maxTraceLines = 50;
         private string _logsDirectory = @"C:\TEST";
         private TraceLinePattern _traceLinePattern = new TraceLinePattern();
+        private XmlNode[] _previousSearch = { new XmlDocument().CreateCDataSection(string.Empty) };
+        private bool _useRegex = true;
 
         public LRSettingsScheme()
         {
@@ -184,6 +163,27 @@ namespace LogsReader
         {
             get => _schemeName;
             set => _schemeName = value.IsNullOrEmptyTrim() ? _schemeName : value;
+        }
+
+        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
+        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment + Resources.LRSettings_UseRegexComment); set { } }
+
+        [XmlElement("PreviousSearch")]
+        public XmlNode[] PreviousSearch
+        {
+            get => _previousSearch;
+            set
+            {
+                if (value != null && value.Length > 0)
+                    _previousSearch = value;
+            }
+        }
+
+        [XmlAttribute("useRegex")]
+        public bool UseRegex
+        {
+            get => _useRegex;
+            set => _useRegex = value;
         }
 
         [XmlAnyElement("ServersComment")]

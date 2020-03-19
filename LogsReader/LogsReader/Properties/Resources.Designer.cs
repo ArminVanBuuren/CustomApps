@@ -61,15 +61,6 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Empty {
-            get {
-                return ResourceManager.GetString("Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Фильтр по полю Date.
         /// </summary>
         internal static string Form_DateFilterComment {
@@ -79,7 +70,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое..
+        ///   Looks up a localized string similar to Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
@@ -88,7 +79,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое..
+        ///   Looks up a localized string similar to Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
         /// </summary>
         internal static string Form_TraceNameNotLikeComment {
             get {

@@ -65,7 +65,7 @@ namespace LogsReader
         /// </summary>
         private MTFuncResult<FileLog, List<DataTemplate>> MultiTaskingHandler { get; set; }
 
-        private DataTemplateCollection ResultList { get; set; }
+        private DataTemplateCollection OverallResultList { get; set; }
 
         /// <summary>
         /// Количество совпадений по критериям поиска
@@ -182,8 +182,6 @@ namespace LogsReader
 
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
-                txtPattern.AssignValue(Settings.PreviousSearch[0].Value, txtPattern_TextChanged);
-                useRegex.Checked = Settings.UseRegex;
             }
             catch (Exception ex)
             {
@@ -243,7 +241,7 @@ namespace LogsReader
                         ButtonStartStop_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
-                        ClearForm(true);
+                        ClearForm();
                         break;
                 }
             }
@@ -276,18 +274,6 @@ namespace LogsReader
                         IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
 
-                    if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
-                    {
-                        ReportStatus(@"Date of end must be greater than date of start.", true);
-                        return;
-                    }
-
-                    if (!traceLikeText.Text.IsNullOrEmptyTrim() && !traceNotLikeText.Text.IsNullOrEmptyTrim() && traceLikeText.Text.Like(traceNotLikeText.Text))
-                    {
-                        ReportStatus(@"Value of 'Trace Like' can't be equal value of 'Trace NotLike'!", true);
-                        return;
-                    }
-
                     stop.Start();
                     IsStopPending = false;
                     IsWorking = true;
@@ -309,40 +295,21 @@ namespace LogsReader
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
-                    var resultOfSuccess = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result);
 
-                    if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-                    else if (dateTimePickerStart.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
-                    else if (dateTimePickerEnd.Checked)
-                        resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-
-                    if(!traceLikeText.Text.IsNullOrEmptyTrim() && !traceNotLikeText.Text.IsNullOrEmptyTrim())
-                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && x.TraceType.StringContains(traceLikeText.Text) && !x.TraceType.StringContains(traceNotLikeText.Text));
-                    else if (!traceLikeText.Text.IsNullOrEmptyTrim())
-                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && x.TraceType.StringContains(traceLikeText.Text));
-                    else if (!traceNotLikeText.Text.IsNullOrEmptyTrim())
-                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && !x.TraceType.StringContains(traceNotLikeText.Text));
-
-                    ResultList = new DataTemplateCollection(resultOfSuccess);
+                    OverallResultList = new DataTemplateCollection(MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result));
                     var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate(x.Source, x.Error));
                         return listErr;
                     });
-                    ResultList.AddRange(resultOfError);
+                    OverallResultList.AddRange(resultOfError);
 
-                    if (ResultList.Count <= 0)
+                    if (await AssignResult(false))
                     {
-                        ReportStatus(@"No logs found", true);
-                        return;
+                        ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
                     }
 
-                    await dgvFiles.AssignCollectionAsync(ResultList, null, true);
-
                     stop.Stop();
-                    ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
                 }
                 catch (Exception ex)
                 {
@@ -363,6 +330,78 @@ namespace LogsReader
                 MultiTaskingHandler?.Stop();
                 ReportStatus(@"Stopping...", false);
             }
+        }
+
+        private async void buttonFilter_Click(object sender, EventArgs e)
+        {
+            await AssignResult(true);
+        }
+
+        private async void buttonReset_Click(object sender, EventArgs e)
+        {
+            await AssignResult(false);
+        }
+
+        async Task<bool> AssignResult(bool applyFilter)
+        {
+            dgvFiles.DataSource = null;
+            dgvFiles.Refresh();
+            ReportStatus(string.Empty, false);
+
+            if (OverallResultList == null)
+                return false;
+
+            IEnumerable<DataTemplate> result = new List<DataTemplate>(OverallResultList);
+
+            if (!result.Any())
+            {
+                ReportStatus(@"No logs found", true);
+                return false;
+            }
+
+            if (applyFilter)
+            {
+                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
+                {
+                    ReportStatus(@"Date of end must be greater than date of start.", true);
+                    return false;
+                }
+
+                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
+                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+                else if (dateTimePickerStart.Checked)
+                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
+                else if (dateTimePickerEnd.Checked)
+                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+
+
+                var like = traceLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+
+                if (like.Any() && notLike.Any())
+                {
+                    if (!like.Except(notLike).Any())
+                    {
+                        ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace NotLike""!", true);
+                        return false;
+                    }
+                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && like.Any(p => x.TraceType.StringContains(p)) && !notLike.Any(p => x.TraceType.StringContains(p)));
+                }
+                else if (like.Any())
+                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && like.Any(p => x.TraceType.StringContains(p)));
+                else if (notLike.Any())
+                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && !notLike.Any(p => x.TraceType.StringContains(p)));
+
+                if (!result.Any())
+                {
+                    ReportStatus(@"No filter results found", true);
+                    return false;
+                }
+            }
+
+            await dgvFiles.AssignCollectionAsync(result, null, true);
+
+            return true;
         }
 
         List<FileLog> GetFileLogs(IEnumerable<TreeNode> servers, IEnumerable<TreeNode> traceTypes)
@@ -395,8 +434,6 @@ namespace LogsReader
             return kvpList;
         }
 
-        
-
         void ChangeFormStatus()
         {
             if (IsWorking)
@@ -416,8 +453,11 @@ namespace LogsReader
             maxThreadsText.Enabled = !IsWorking;
             logDirText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
+            dateTimePickerStart.Enabled = !IsWorking;
+            dateTimePickerEnd.Enabled = !IsWorking;
             traceNotLikeText.Enabled = !IsWorking;
             traceLikeText.Enabled = !IsWorking;
+            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         void CheckProgress()
@@ -593,10 +633,10 @@ namespace LogsReader
             {
                 var row = ((DataGridView)sender).Rows[e.RowIndex];
                 var tempalteID = TryGetPrivateID(row);
-                if (tempalteID == -1 || ResultList == null)
+                if (tempalteID == -1 || OverallResultList == null)
                     return;
 
-                var template = ResultList[tempalteID];
+                var template = OverallResultList[tempalteID];
 
                 if (template.IsMatched)
                 {
@@ -626,14 +666,14 @@ namespace LogsReader
 
                 var tempalteID = TryGetPrivateID(dgvFiles.SelectedRows[0]);
 
-                if (tempalteID == -1 || ResultList == null)
+                if (tempalteID == -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
                     _fullTrace.Text = string.Empty;
                     return;
                 }
 
-                var template = ResultList[tempalteID];
+                var template = OverallResultList[tempalteID];
                 var message = XML.RemoveUnallowable(template.Message, " ");
 
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message;
@@ -671,6 +711,9 @@ namespace LogsReader
                 CurrentSettings = Settings.Schemes[chooseScheme.Text];
                 CurrentSettings.CatchWaring += ReportStatus;
 
+                txtPattern.AssignValue(CurrentSettings.PreviousSearch[0].Value, txtPattern_TextChanged);
+                useRegex.Checked = CurrentSettings.UseRegex;
+
                 serversText.Text = CurrentSettings.Servers;
                 fileNames.Text = CurrentSettings.Types;
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
@@ -684,6 +727,11 @@ namespace LogsReader
             }
             finally
             {
+                trvMain.Nodes["trvServers"].Checked = false;
+                trvMain.Nodes["trvTypes"].Checked = false;
+                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
+                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
+                ClearForm();
                 ValidationCheck();
             }
         }
@@ -792,22 +840,16 @@ namespace LogsReader
             }
         }
 
-        void ReportStatus(string message, bool isError)
-        {
-            _statusInfo.Text = message;
-            _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
-        }
-
         private void txtPattern_TextChanged(object sender, EventArgs e)
         {
-            Settings.PreviousSearch[0].Value = txtPattern.Text;
+            CurrentSettings.PreviousSearch[0].Value = txtPattern.Text;
             ValidationCheck();
             SaveSettings();
         }
 
         private void useRegex_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.UseRegex = useRegex.Checked;
+            CurrentSettings.UseRegex = useRegex.Checked;
             SaveSettings();
         }
 
@@ -825,6 +867,8 @@ namespace LogsReader
                                 && !txtPattern.Text.IsNullOrEmptyTrim() 
                                 && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) 
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+
+            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         async void SaveSettings()
@@ -835,19 +879,16 @@ namespace LogsReader
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            ClearForm(true);
+            ClearForm();
         }
 
-        void ClearForm(bool userCall = false)
+        void ClearForm()
         {
             dgvFiles.DataSource = null;
             dgvFiles.Refresh();
 
-            ResultList?.Clear();
-            ResultList = null;
-
-            _message.Text = string.Empty;
-            _fullTrace.Text = string.Empty;
+            OverallResultList?.Clear();
+            OverallResultList = null;
 
             progressBar.Value = 0;
             _completedFilesStatus.Text = @"0";
@@ -857,15 +898,37 @@ namespace LogsReader
             _findedInfo.Text = Finded.ToString();
 
             ReportStatus(string.Empty, false);
+        }
 
-            if (userCall)
+        void ReportStatus(string message, bool isError)
+        {
+            _statusInfo.Text = message;
+            _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
+
+            if (message.IsNullOrEmpty())
             {
-                traceLikeText.Text = string.Empty;
-                traceNotLikeText.Text = string.Empty;
-                dateTimePickerStart.Checked = false;
-                dateTimePickerEnd.Checked = false;
-                _oldDateStartChecked = false;
-                _oldDateEndChecked = false;
+                _message.Text = string.Empty;
+                _fullTrace.Text = string.Empty;
+            }
+        }
+    }
+
+    public class MyTreeView : TreeView
+    {
+        /// <summary>
+        /// Правит баг когда ячейка выбрана, но визуально не обновляется 
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc(ref Message m)
+        {
+            // Suppress WM_LBUTTONDBLCLK
+            if (m.Msg == 0x203)
+            {
+                m.Result = IntPtr.Zero;
+            }
+            else
+            {
+                base.WndProc(ref m);
             }
         }
     }
