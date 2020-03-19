@@ -155,6 +155,7 @@ namespace LogsReader
 
                 var notepad = new NotepadControl();
                 splitContainer2.Panel2.Controls.Add(notepad);
+                notepad.WordWrap = false;
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
                 _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
                 notepad.TabsFont = this.Font;
@@ -344,8 +345,7 @@ namespace LogsReader
 
         async Task<bool> AssignResult(bool applyFilter)
         {
-            dgvFiles.DataSource = null;
-            dgvFiles.Refresh();
+            ClearDGV();
             ReportStatus(string.Empty, false);
 
             if (OverallResultList == null)
@@ -884,11 +884,10 @@ namespace LogsReader
 
         void ClearForm()
         {
-            dgvFiles.DataSource = null;
-            dgvFiles.Refresh();
-
             OverallResultList?.Clear();
             OverallResultList = null;
+
+            ClearDGV();
 
             progressBar.Value = 0;
             _completedFilesStatus.Text = @"0";
@@ -900,16 +899,19 @@ namespace LogsReader
             ReportStatus(string.Empty, false);
         }
 
+        void ClearDGV()
+        {
+            dgvFiles.DataSource = null;
+            dgvFiles.Refresh();
+            _message.Text = string.Empty;
+            _fullTrace.Text = string.Empty;
+            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+        }
+
         void ReportStatus(string message, bool isError)
         {
             _statusInfo.Text = message;
             _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
-
-            if (message.IsNullOrEmpty())
-            {
-                _message.Text = string.Empty;
-                _fullTrace.Text = string.Empty;
-            }
         }
     }
 
