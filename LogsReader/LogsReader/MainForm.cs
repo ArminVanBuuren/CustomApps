@@ -116,7 +116,7 @@ namespace LogsReader
                 statusStrip.Items.Add(_totalFilesStatus);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
                 _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
                 statusStrip.Items.Add(_findedInfo);
                 statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
@@ -130,13 +130,17 @@ namespace LogsReader
 
                 #endregion
 
-                var tooltipPrintXML = new ToolTip {InitialDelay = 50};
+                var tooltipPrintXML = new ToolTip {InitialDelay = 100};
                 tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
                 tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
-                tooltipPrintXML.SetToolTip(typesText, Resources.LRSettingsScheme_TypesComment);
+                tooltipPrintXML.SetToolTip(fileNames, Resources.LRSettingsScheme_TypesComment);
                 tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
                 tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
+                tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
+                tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
+                tooltipPrintXML.SetToolTip(dateTimePickerStart, Resources.Form_DateFilterComment);
+                tooltipPrintXML.SetToolTip(dateTimePickerEnd, Resources.Form_DateFilterComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 Closing += (s, e) =>
@@ -183,7 +187,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), @"Initialization", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.MessageShow(ex.ToString(), @"Initialization");
             }
         }
 
@@ -225,7 +229,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), @"System Resource Monitoring", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.MessageShow(ex.ToString(), @"System Resource Monitoring");
             }
         }
 
@@ -278,6 +282,12 @@ namespace LogsReader
                         return;
                     }
 
+                    if (!traceLikeText.Text.IsNullOrEmptyTrim() && !traceNotLikeText.Text.IsNullOrEmptyTrim() && traceLikeText.Text.Like(traceNotLikeText.Text))
+                    {
+                        ReportStatus(@"Value of 'Trace Like' can't be equal value of 'Trace NotLike'!", true);
+                        return;
+                    }
+
                     stop.Start();
                     IsStopPending = false;
                     IsWorking = true;
@@ -300,12 +310,20 @@ namespace LogsReader
                     await MultiTaskingHandler.StartAsync();
 
                     var resultOfSuccess = MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result);
+
                     if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
                         resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
                     else if (dateTimePickerStart.Checked)
                         resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
                     else if (dateTimePickerEnd.Checked)
                         resultOfSuccess = resultOfSuccess.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
+
+                    if(!traceLikeText.Text.IsNullOrEmptyTrim() && !traceNotLikeText.Text.IsNullOrEmptyTrim())
+                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && x.TraceType.StringContains(traceLikeText.Text) && !x.TraceType.StringContains(traceNotLikeText.Text));
+                    else if (!traceLikeText.Text.IsNullOrEmptyTrim())
+                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && x.TraceType.StringContains(traceLikeText.Text));
+                    else if (!traceNotLikeText.Text.IsNullOrEmptyTrim())
+                        resultOfSuccess = resultOfSuccess.Where(x => !x.TraceType.IsNullOrEmptyTrim() && !x.TraceType.StringContains(traceNotLikeText.Text));
 
                     ResultList = new DataTemplateCollection(resultOfSuccess);
                     var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
@@ -393,10 +411,12 @@ namespace LogsReader
             useRegex.Enabled = !IsWorking;
             chooseScheme.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
-            typesText.Enabled = !IsWorking;
+            fileNames.Enabled = !IsWorking;
             maxThreadsText.Enabled = !IsWorking;
             logDirText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
+            traceNotLikeText.Enabled = !IsWorking;
+            traceLikeText.Enabled = !IsWorking;
         }
 
         void CheckProgress()
@@ -650,7 +670,7 @@ namespace LogsReader
                 CurrentSettings.CatchWaring += ReportStatus;
 
                 serversText.Text = CurrentSettings.Servers;
-                typesText.Text = CurrentSettings.Types;
+                fileNames.Text = CurrentSettings.Types;
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
@@ -687,8 +707,8 @@ namespace LogsReader
 
         private void typesText_TextChanged(object sender, EventArgs e)
         {
-            CurrentSettings.Types = typesText.Text;
-            typesText.AssignValue(CurrentSettings.Types, typesText_TextChanged);
+            CurrentSettings.Types = fileNames.Text;
+            fileNames.AssignValue(CurrentSettings.Types, typesText_TextChanged);
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();

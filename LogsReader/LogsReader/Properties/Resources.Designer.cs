@@ -61,6 +61,42 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Empty {
+            get {
+                return ResourceManager.GetString("Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю Date.
+        /// </summary>
+        internal static string Form_DateFilterComment {
+            get {
+                return ResourceManager.GetString("Form_DateFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое..
+        /// </summary>
+        internal static string Form_TraceNameLikeComment {
+            get {
+                return ResourceManager.GetString("Form_TraceNameLikeComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое..
+        /// </summary>
+        internal static string Form_TraceNameNotLikeComment {
+            get {
+                return ResourceManager.GetString("Form_TraceNameNotLikeComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {

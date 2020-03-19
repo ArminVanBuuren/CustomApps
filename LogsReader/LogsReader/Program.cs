@@ -38,5 +38,10 @@ namespace LogsReader
                 textBox.TextChanged += handler;
             }
         }
+
+        public static void MessageShow(string msg, string caption)
+        {
+            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

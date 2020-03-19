@@ -154,4 +154,16 @@
   <data name="LRSettings_UseRegexComment" xml:space="preserve">
     <value>Поиск по регулярному выражению выполняется быстрее.</value>
   </data>
+  <data name="Empty" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Form_DateFilterComment" xml:space="preserve">
+    <value>Фильтр по полю Date</value>
+  </data>
+  <data name="Form_TraceNameLikeComment" xml:space="preserve">
+    <value>Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое.</value>
+  </data>
+  <data name="Form_TraceNameNotLikeComment" xml:space="preserve">
+    <value>Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое.</value>
+  </data>
 </root>

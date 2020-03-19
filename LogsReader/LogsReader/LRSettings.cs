@@ -19,14 +19,12 @@ namespace LogsReader
     public class LRSettings
     {
         private static object _sync = new object();
-        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
+
         private bool _useRegex = true;
-        XmlNode[] _previousSearch =
-        {
-            new XmlDocument().CreateCDataSection(string.Empty)
-        };
+        private XmlNode[] _previousSearch = {new XmlDocument().CreateCDataSection(string.Empty)};
+        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
 
         [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
         public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment + Resources.LRSettings_UseRegexComment); set { } }
@@ -58,14 +56,21 @@ namespace LogsReader
             get => _schemes;
             set
             {
-                _schemes = value ?? _schemes;
-                Schemes = _schemes.Length > 0 ? _schemes.ToDictionary(k => k.Name, v => v) : new Dictionary<string, LRSettingsScheme>();
+                try
+                {
+                    _schemes = value ?? _schemes;
+                    Schemes = _schemes.Length > 0 ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase) : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException("Schemes names must be unique!", ex);
+                }
             }
         }
 
         public LRSettings()
         {
-            Schemes = SchemeList.Length > 0 ? SchemeList.ToDictionary(k => k.Name, v => v) : new Dictionary<string, LRSettingsScheme>();
+            Schemes = SchemeList.Length > 0 ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase) : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
         }
 
         public static async Task SerializeAsync(LRSettings settings)
@@ -91,7 +96,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.MessageShow(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error");
             }
         }
 
@@ -111,12 +116,10 @@ namespace LogsReader
             catch (Exception ex)
             {
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                MessageBox.Show(string.Format(Resources.LRSettings_Deserialize_Ex,
+                Program.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
                         Path.GetFileName(SettingsPath),
                         Path.GetFileName(IncorrectSettingsPath),
-                        message),
-                    "Deserialize Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                        message), "Deserialize Error");
 
                 if (File.Exists(IncorrectSettingsPath))
                 {
@@ -180,7 +183,7 @@ namespace LogsReader
         public string Name
         {
             get => _schemeName;
-            set => _schemeName = value ?? _schemeName;
+            set => _schemeName = value.IsNullOrEmptyTrim() ? _schemeName : value;
         }
 
         [XmlAnyElement("ServersComment")]
@@ -190,27 +193,7 @@ namespace LogsReader
         public string Servers
         {
             get => _servers;
-            set => _servers = value ?? _servers;
-        }
-
-        [XmlAnyElement("TypesComment")]
-        public XmlComment TypesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment); set { } }
-
-        [XmlElement("Types")]
-        public string Types
-        {
-            get => _types;
-            set => _types = value ?? _types;
-        }
-
-        [XmlAnyElement("MaxThreadsComment")]
-        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment); set { } }
-
-        [XmlElement("MaxThreads")]
-        public int MaxThreads
-        {
-            get => _maxThreads;
-            set => _maxThreads = value <= 0 ? -1 : value;
+            set => _servers = value.IsNullOrEmptyTrim() ? _servers : value;
         }
 
         [XmlAnyElement("LogsDirectoryComment")]
@@ -220,7 +203,17 @@ namespace LogsReader
         public string LogsDirectory
         {
             get => _logsDirectory;
-            set => _logsDirectory = value ?? _logsDirectory;
+            set => _logsDirectory = value.IsNullOrEmptyTrim() ? _logsDirectory : value;
+        }
+
+        [XmlAnyElement("TypesComment")]
+        public XmlComment TypesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment); set { } }
+
+        [XmlElement("Types")]
+        public string Types
+        {
+            get => _types;
+            set => _types = value.IsNullOrEmptyTrim() ? _types : value;
         }
 
         [XmlAnyElement("MaxTraceLinesComment")]
@@ -231,6 +224,16 @@ namespace LogsReader
         {
             get => _maxTraceLines;
             set => _maxTraceLines = value <= 0 ? 1 : value;
+        }
+
+        [XmlAnyElement("MaxThreadsComment")]
+        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment); set { } }
+
+        [XmlElement("MaxThreads")]
+        public int MaxThreads
+        {
+            get => _maxThreads;
+            set => _maxThreads = value <= 0 ? -1 : value;
         }
 
         [XmlAnyElement("TraceLinePatternComment")]
@@ -325,7 +328,7 @@ namespace LogsReader
     [XmlRoot("TraceLinePattern")]
     public class TraceLinePattern
     {
-        private XmlNode[] _traceLinePattern = new XmlNode[] { };
+        private XmlNode[] _traceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<TraceType>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE") };
 
         public TraceLinePattern()
         {
@@ -339,9 +342,9 @@ namespace LogsReader
                 case "MG":
                     Items = new XmlNode[]
                     {
-                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*$"),
-                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)$"),
-                        new XmlDocument().CreateCDataSection(@"^(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)$")
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*"),
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)"),
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)")
                     };
                     break;
                 case "SPA":
@@ -372,7 +375,7 @@ namespace LogsReader
 
                 if (_traceLinePattern.Length == 0)
                 {
-                    MessageBox.Show($"Some schemes have no patterns.", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Program.MessageShow($"Some schemes have no patterns.", "TraceLinePattern Reader");
                     return;
                 }
 
@@ -380,14 +383,14 @@ namespace LogsReader
                 {
                     if (pattern == null)
                     {
-                        MessageBox.Show("One of patterns is null. Please check config.", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Program.MessageShow("One of patterns is null. Please check config.", "TraceLinePattern Reader");
                         return;
                     }
 
                     var text = pattern.Value.ReplaceUTFCodeToSymbol();
                     if (!REGEX.Verify(text))
                     {
-                        MessageBox.Show($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Program.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
                         return;
                     }
                     else
