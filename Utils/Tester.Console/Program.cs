@@ -136,7 +136,11 @@ namespace Tester.Console
             try
             {
                 var stop = new Stopwatch();
-
+                string s1 = null;
+                string s2 = null;
+                var www1 = s1.Like(s2);
+                var www2 = s1.Like("");
+                var www3 = "".Like(s2);
                 
                 var testttt = @"< DateFrom >          < Value />        </ DateFrom >";
                 var ewwe = XML.RemoveUnallowable(testttt);

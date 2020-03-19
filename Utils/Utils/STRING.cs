@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -128,7 +129,14 @@ namespace Utils
 
         public static bool Like(this string input, string value)
         {
-            return value != null && input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
+            if (input.IsNullOrEmpty() && value.IsNullOrEmpty())
+                return true;
+            else if (input.IsNullOrEmpty())
+                return false;
+            else if (value.IsNullOrEmpty())
+                return false;
+
+            return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
         }
 
         public static bool Contains(this string source, string toCheck, StringComparison comp)
