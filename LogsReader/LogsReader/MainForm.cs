@@ -527,105 +527,105 @@ namespace LogsReader
         {
             var beforeTraceLines = new Queue<string>(CurrentSettings.MaxTraceLines);
             var listResult = new List<DataTemplate>();
-            using (var inputStream = File.OpenRead(fileLog.FilePath))
+
+            // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
+            using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
             {
-                using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
+                var stackLines = 0;
+                string line;
+                DataTemplate lastResult = null;
+                while ((line = inputReader.ReadLine()) != null && !IsStopPending)
                 {
-                    var stackLines = 0;
-                    string line;
-                    DataTemplate lastResult = null;
-                    while ((line = inputReader.ReadLine()) != null && !IsStopPending)
+                    if (lastResult != null)
                     {
-                        if (lastResult != null)
+                        // если стек лога превышает допустимый размер, то лог больше не дополняется
+                        if (stackLines >= CurrentSettings.MaxTraceLines)
                         {
-                            // если стек лога превышает допустимый размер, то лог больше не дополняется
-                            if (stackLines >= CurrentSettings.MaxTraceLines)
+                            if (!lastResult.IsMatched)
+                                listResult.Add(lastResult);
+                            stackLines = 0;
+                            lastResult = null;
+                        }
+                        else
+                        {
+                            if (lastResult.IsMatched)
                             {
-                                if (!lastResult.IsMatched)
-                                    listResult.Add(lastResult);
-                                stackLines = 0;
-                                lastResult = null;
-                            }
-                            else
-                            {
-                                if (lastResult.IsMatched)
+                                // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
+                                // Иначе строка относится к другому логу и завершается дополнение
+                                if (CurrentSettings.IsMatch(line) == null)
                                 {
-                                    // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
-                                    // Иначе строка относится к другому логу и завершается дополнение
-                                    if (CurrentSettings.IsMatch(line) == null)
-                                    {
-                                        stackLines++;
-                                        lastResult.AppendMessageAfter(Environment.NewLine + line);
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        stackLines = 0;
-                                        lastResult = null;
-                                    }
-                                }
-                                else if (!lastResult.IsMatched)
-                                {
-                                    // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
                                     stackLines++;
-                                    var appendFailedLog = lastResult.Message + Environment.NewLine + line;
-                                    if (CurrentSettings.IsLineMatch(appendFailedLog, fileLog, out var afterSuccessResult))
-                                    {
-                                        // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
-                                        listResult.Add(afterSuccessResult);
-                                        lastResult = afterSuccessResult;
-                                    }
-                                    else
-                                    {
-                                        // Паттерн не сработал успешно, но лог дополняется для следующей попытки
-                                        lastResult.AppendMessageAfter(appendFailedLog);
-                                    }
+                                    lastResult.AppendMessageAfter(Environment.NewLine + line);
+                                    continue;
                                 }
-                            }
-                        }
-
-                        if (!IsMatchSearchPatternFunc.Invoke(line))
-                        {
-                            beforeTraceLines.Enqueue(line);
-                            if (beforeTraceLines.Count > CurrentSettings.MaxTraceLines)
-                                beforeTraceLines.Dequeue();
-                            continue;
-                        }
-                        else
-                        {
-                            ++Finded;
-                            stackLines = 1;
-                        }
-
-                        if (CurrentSettings.IsLineMatch(line, fileLog, out lastResult))
-                        {
-                            listResult.Add(lastResult);
-                        }
-                        else
-                        {
-                            // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-                            var reverceBeforeTraceLines = new Queue<string>(beforeTraceLines.Reverse());
-                            while (stackLines < CurrentSettings.MaxTraceLines && reverceBeforeTraceLines.Count > 0)
-                            {
-                                stackLines++;
-                                lastResult.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
-
-                                if (CurrentSettings.IsLineMatch(lastResult.Message, fileLog, out var beforeResult))
+                                else
                                 {
-                                    lastResult = beforeResult;
-                                    listResult.Add(lastResult);
-                                    break;
+                                    stackLines = 0;
+                                    lastResult = null;
+                                }
+                            }
+                            else if (!lastResult.IsMatched)
+                            {
+                                // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
+                                stackLines++;
+                                var appendFailedLog = lastResult.Message + Environment.NewLine + line;
+                                if (CurrentSettings.IsLineMatch(appendFailedLog, fileLog, out var afterSuccessResult))
+                                {
+                                    // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
+                                    listResult.Add(afterSuccessResult);
+                                    lastResult = afterSuccessResult;
+                                }
+                                else
+                                {
+                                    // Паттерн не сработал успешно, но лог дополняется для следующей попытки
+                                    lastResult.AppendMessageAfter(appendFailedLog);
                                 }
                             }
                         }
-
-                        beforeTraceLines.Clear();
                     }
 
-                    if (lastResult != null && !lastResult.IsMatched)
+                    if (!IsMatchSearchPatternFunc.Invoke(line))
+                    {
+                        beforeTraceLines.Enqueue(line);
+                        if (beforeTraceLines.Count > CurrentSettings.MaxTraceLines)
+                            beforeTraceLines.Dequeue();
+                        continue;
+                    }
+                    else
+                    {
+                        ++Finded;
+                        stackLines = 1;
+                    }
+
+                    if (CurrentSettings.IsLineMatch(line, fileLog, out lastResult))
                     {
                         listResult.Add(lastResult);
                     }
+                    else
+                    {
+                        // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
+                        var reverceBeforeTraceLines = new Queue<string>(beforeTraceLines.Reverse());
+                        while (stackLines < CurrentSettings.MaxTraceLines && reverceBeforeTraceLines.Count > 0)
+                        {
+                            stackLines++;
+                            lastResult.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
+
+                            if (CurrentSettings.IsLineMatch(lastResult.Message, fileLog, out var beforeResult))
+                            {
+                                lastResult = beforeResult;
+                                listResult.Add(lastResult);
+                                break;
+                            }
+                        }
+                    }
+
+                    beforeTraceLines.Clear();
+                }
+
+                if (lastResult != null && !lastResult.IsMatched)
+                {
+                    listResult.Add(lastResult);
                 }
             }
 
