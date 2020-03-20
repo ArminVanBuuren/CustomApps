@@ -37,10 +37,8 @@ namespace LogsReader
             _values = new Dictionary<int, DataTemplate>(list.Count());
 
             // Сортируем по дате, если она спарсилась корректно. Потому что стрингов
-            if (list.All(x => x.DateOfTrace != null))
-                AddRange(list.OrderBy(p => p.DateOfTrace).ThenBy(p => p.FileName));
-            else
-                AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.FileName));
+            AddRange(list.Where(p => p.DateOfTrace != null).OrderBy(p => p.DateOfTrace));
+            AddRange(list.Where(p => p.DateOfTrace == null).OrderBy(p => p.Date));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)
