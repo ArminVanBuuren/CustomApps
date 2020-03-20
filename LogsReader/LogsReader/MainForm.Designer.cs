@@ -34,10 +34,10 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.trvMain = new MyTreeView();
+            this.trvMain = new LogsReader.MyTreeView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
@@ -109,13 +109,13 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(1, 323);
             this.trvMain.Name = "trvMain";
-            treeNode5.Name = "trvServers";
-            treeNode5.Text = "Servers";
-            treeNode6.Name = "trvTypes";
-            treeNode6.Text = "Types";
+            treeNode3.Name = "trvServers";
+            treeNode3.Text = "Servers";
+            treeNode4.Name = "trvTypes";
+            treeNode4.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
+            treeNode3,
+            treeNode4});
             this.trvMain.Size = new System.Drawing.Size(295, 379);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -256,6 +256,7 @@ namespace LogsReader
             this.traceNotLikeText.Name = "traceNotLikeText";
             this.traceNotLikeText.Size = new System.Drawing.Size(189, 23);
             this.traceNotLikeText.TabIndex = 27;
+            this.traceNotLikeText.TextChanged += new System.EventHandler(this.traceNotLikeText_TextChanged);
             // 
             // dateTimePickerStart
             // 
@@ -302,6 +303,7 @@ namespace LogsReader
             this.traceLikeText.Name = "traceLikeText";
             this.traceLikeText.Size = new System.Drawing.Size(189, 23);
             this.traceLikeText.TabIndex = 25;
+            this.traceLikeText.TextChanged += new System.EventHandler(this.traceLikeText_TextChanged);
             // 
             // label9
             // 

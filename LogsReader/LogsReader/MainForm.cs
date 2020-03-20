@@ -51,9 +51,14 @@ namespace LogsReader
         private Func<string, bool> IsMatchSearchPatternFunc { get; set; } = null;
 
         /// <summary>
-        /// Все настройки
+        /// Юзерские настройки 
         /// </summary>
-        private LRSettings Settings { get; set; }
+        private UserSettings UserSettings { get; }
+
+        /// <summary>
+        /// Настройки схем
+        /// </summary>
+        private LRSettings Settings { get; }
 
         /// <summary>
         /// Текущая схема настроек
@@ -155,7 +160,6 @@ namespace LogsReader
 
                 var notepad = new NotepadControl();
                 splitContainer2.Panel2.Controls.Add(notepad);
-                notepad.WordWrap = false;
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
                 _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
                 notepad.TabsFont = this.Font;
@@ -181,6 +185,7 @@ namespace LogsReader
                     dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
                 };
 
+                UserSettings = new UserSettings();
                 Settings = LRSettings.Deserialize();
                 chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
             }
@@ -711,8 +716,11 @@ namespace LogsReader
                 CurrentSettings = Settings.Schemes[chooseScheme.Text];
                 CurrentSettings.CatchWaring += ReportStatus;
 
-                txtPattern.AssignValue(CurrentSettings.PreviousSearch[0].Value, txtPattern_TextChanged);
-                useRegex.Checked = CurrentSettings.UseRegex;
+                UserSettings.Scheme = chooseScheme.Text;
+                txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
+                traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
+                traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
+                useRegex.Checked = UserSettings.UseRegex;
 
                 serversText.Text = CurrentSettings.Servers;
                 fileNames.Text = CurrentSettings.Types;
@@ -842,15 +850,23 @@ namespace LogsReader
 
         private void txtPattern_TextChanged(object sender, EventArgs e)
         {
-            CurrentSettings.PreviousSearch[0].Value = txtPattern.Text;
+            UserSettings.PreviousSearch = txtPattern.Text;
             ValidationCheck();
-            SaveSettings();
         }
 
         private void useRegex_CheckedChanged(object sender, EventArgs e)
         {
-            CurrentSettings.UseRegex = useRegex.Checked;
-            SaveSettings();
+            UserSettings.UseRegex = useRegex.Checked;
+        }
+
+        private void traceLikeText_TextChanged(object sender, EventArgs e)
+        {
+            UserSettings.TraceLike = traceLikeText.Text;
+        }
+
+        private void traceNotLikeText_TextChanged(object sender, EventArgs e)
+        {
+            UserSettings.TraceNotLike = traceNotLikeText.Text;
         }
 
         void ValidationCheck()

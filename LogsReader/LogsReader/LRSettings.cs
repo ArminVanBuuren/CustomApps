@@ -5,15 +5,109 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
 using Utils;
+using Utils.Handles;
 using static Utils.ASSEMBLY;
 
 namespace LogsReader
 {
+    [Serializable]
+    public class UserSettings : IDisposable
+    {
+        private RegeditControl parentRegistry;
+
+        public UserSettings()
+        {
+            try
+            {
+                parentRegistry = new RegeditControl(ApplicationName);
+                var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
+                UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch, '\0'));
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        public string UserName { get; }
+        public string Scheme { get; set; }
+
+        public string PreviousSearch
+        {
+            get => GetValue(nameof(PreviousSearch));
+            set => SetValue(nameof(PreviousSearch), value);
+        }
+
+        public bool UseRegex
+        {
+            get
+            {
+                var resStr = GetValue(nameof(UseRegex));
+                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                    return true;
+                return res;
+            }
+            set => SetValue(nameof(UseRegex), value);
+        }
+
+        public string TraceLike
+        {
+            get => GetValue(nameof(TraceLike));
+            set => SetValue(nameof(TraceLike), value);
+        }
+
+        public string TraceNotLike
+        {
+            get => GetValue(nameof(TraceNotLike));
+            set => SetValue(nameof(TraceNotLike), value);
+        }
+
+        string GetValue(string name)
+        {
+            if (parentRegistry == null)
+                return string.Empty;
+
+            try
+            {
+                using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
+                {
+                    return (string)schemeControl?[$"{UserName}_{name}"] ?? string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        void SetValue(string name, object value)
+        {
+            if (parentRegistry == null)
+                return;
+
+            try
+            {
+                using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
+                {
+                    schemeControl[$"{UserName}_{name}"] = value;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        public void Dispose()
+        {
+            parentRegistry?.Dispose();
+        }
+    }
+
     public delegate void CatchWaringHandler(string message, bool isError);
     [Serializable, XmlRoot("Settings")]
     public class LRSettings
@@ -26,6 +120,10 @@ namespace LogsReader
 
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
+
+        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
+        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_UseRegexComment); set { } }
+
 
         [XmlElement("Scheme", IsNullable = false)]
         public LRSettingsScheme[] SchemeList
@@ -125,8 +223,6 @@ namespace LogsReader
         private int _maxTraceLines = 50;
         private string _logsDirectory = @"C:\TEST";
         private TraceLinePattern _traceLinePattern = new TraceLinePattern();
-        private XmlNode[] _previousSearch = { new XmlDocument().CreateCDataSection(string.Empty) };
-        private bool _useRegex = true;
 
         public LRSettingsScheme()
         {
@@ -163,27 +259,6 @@ namespace LogsReader
         {
             get => _schemeName;
             set => _schemeName = value.IsNullOrEmptyTrim() ? _schemeName : value;
-        }
-
-        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
-        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_PreviousSearchComment + Resources.LRSettings_UseRegexComment); set { } }
-
-        [XmlElement("PreviousSearch")]
-        public XmlNode[] PreviousSearch
-        {
-            get => _previousSearch;
-            set
-            {
-                if (value != null && value.Length > 0)
-                    _previousSearch = value;
-            }
-        }
-
-        [XmlAttribute("useRegex")]
-        public bool UseRegex
-        {
-            get => _useRegex;
-            set => _useRegex = value;
         }
 
         [XmlAnyElement("ServersComment")]
