@@ -85,9 +85,9 @@ namespace LogsReader
         private readonly StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
         private string _description = null;
-        private string _traceType = null;
+        private string _trace = null;
 
-        public DataTemplate(FileLog fileLog, string strID, string date, string traceType, string description, string message, string entireMessage)
+        public DataTemplate(FileLog fileLog, string strID, string date, string trace, string description, string message, string entireMessage)
         {
             IsMatched = true;
             _fileLog = fileLog;
@@ -98,7 +98,7 @@ namespace LogsReader
             if (DateTime.TryParse(Date, out var dateOfTrace))
                 DateOfTrace = dateOfTrace;
 
-            TraceType = traceType;
+            Trace = trace;
             Description = description;
             _message.Append(message);
             _entireMessage.Append(entireMessage);
@@ -122,7 +122,7 @@ namespace LogsReader
             ID = -1;
             DateOfTrace = DateTime.Now;
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
-            TraceType = error.GetType().ToString();
+            Trace = error.GetType().ToString();
             _message.Append(error);
             _entireMessage.Append(error);
         }
@@ -148,11 +148,11 @@ namespace LogsReader
 
         public DateTime? DateOfTrace { get; }
 
-        [DGVColumn(ColumnPosition.After, "TraceType")]
-        public string TraceType
+        [DGVColumn(ColumnPosition.After, "Trace")]
+        public string Trace
         {
-            get => _traceType;
-            private set => _traceType = value?.Replace(Environment.NewLine, string.Empty).Trim();
+            get => _trace;
+            private set => _trace = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
         [DGVColumn(ColumnPosition.After, "Description")]

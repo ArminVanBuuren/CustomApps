@@ -70,7 +70,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        ///   Looks up a localized string similar to Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
@@ -79,7 +79,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        ///   Looks up a localized string similar to Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
         /// </summary>
         internal static string Form_TraceNameNotLikeComment {
             get {
@@ -173,7 +173,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;TraceType&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;Trace&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {

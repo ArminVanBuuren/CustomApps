@@ -336,7 +336,7 @@ namespace LogsReader
                 result = new DataTemplate(fileLog,
                     maskMatch.Groups["ID"].Value,
                     maskMatch.Groups["Date"].Value,
-                    maskMatch.Groups["TraceType"].Value,
+                    maskMatch.Groups["Trace"].Value,
                     maskMatch.Groups["Description"].Value,
                     maskMatch.Groups["Message"].Value,
                     message);
@@ -384,9 +384,9 @@ namespace LogsReader
                         CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
                         return false;
                     }
-                    if (groups.All(x => x != "TraceType"))
+                    if (groups.All(x => x != "Trace"))
                     {
-                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<TraceType>' in TraceLinePattern", true);
+                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Trace>' in TraceLinePattern", true);
                         return false;
                     }
                     if (groups.All(x => x != "Message"))
@@ -403,7 +403,7 @@ namespace LogsReader
     [XmlRoot("TraceLinePattern")]
     public class TraceLinePattern
     {
-        private XmlNode[] _traceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<TraceType>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE") };
+        private XmlNode[] _traceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<Trace>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE") };
 
         public TraceLinePattern()
         {
@@ -417,15 +417,15 @@ namespace LogsReader
                 case "MG":
                     Items = new XmlNode[]
                     {
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*"),
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)"),
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<TraceType>\[.+?\])\s*(?<Message>.+)")
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*"),
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)"),
+                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Message>.+)")
                     };
                     break;
                 case "SPA":
                     Items = new XmlNode[]
                     {
-                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)\u0001(?<TraceType>.+?)\u0001(?<Description>.+?)\u0001(?<Date>.+?)\u0001(?<Message>.*?)\u0001\d*")
+                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)\u0001(?<Trace>.+?)\u0001(?<Description>.+?)\u0001(?<Date>.+?)\u0001(?<Message>.*?)\u0001\d*")
                     };
                     break;
             }

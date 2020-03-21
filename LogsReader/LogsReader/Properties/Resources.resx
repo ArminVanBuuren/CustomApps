@@ -134,7 +134,7 @@
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
-    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;TraceType&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку.</value>
+    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;Trace&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку.</value>
   </data>
   <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
     <value>Типы файлов. Указать через запятую.</value>
@@ -158,9 +158,9 @@
     <value>Фильтр по полю Date</value>
   </data>
   <data name="Form_TraceNameLikeComment" xml:space="preserve">
-    <value>Фильтр по полю TraceType на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
+    <value>Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
   </data>
   <data name="Form_TraceNameNotLikeComment" xml:space="preserve">
-    <value>Фильтр по полю TraceType на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
+    <value>Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
   </data>
 </root>

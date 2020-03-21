@@ -184,14 +184,23 @@ namespace LogsReader
                     _oldDateEndChecked = true;
                     dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
                 };
-
-                UserSettings = new UserSettings();
-                Settings = LRSettings.Deserialize();
-                chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
             }
             catch (Exception ex)
             {
                 Program.MessageShow(ex.ToString(), @"Initialization");
+            }
+            finally
+            {
+                try
+                {
+                    UserSettings = new UserSettings();
+                    Settings = LRSettings.Deserialize();
+                    chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Program.MessageShow(ex.ToString(), @"Load config");
+                }
             }
         }
 
@@ -390,12 +399,12 @@ namespace LogsReader
                         ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace NotLike""!", true);
                         return false;
                     }
-                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && like.Any(p => x.TraceType.StringContains(p)) && !notLike.Any(p => x.TraceType.StringContains(p)));
+                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)) && !notLike.Any(p => x.Trace.StringContains(p)));
                 }
                 else if (like.Any())
-                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && like.Any(p => x.TraceType.StringContains(p)));
+                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)));
                 else if (notLike.Any())
-                    result = result.Where(x => !x.TraceType.IsNullOrEmptyTrim() && !notLike.Any(p => x.TraceType.StringContains(p)));
+                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
 
                 if (!result.Any())
                 {
@@ -409,7 +418,7 @@ namespace LogsReader
             return true;
         }
 
-        List<FileLog> GetFileLogs(IEnumerable<TreeNode> servers, IEnumerable<TreeNode> traceTypes)
+        List<FileLog> GetFileLogs(IEnumerable<TreeNode> servers, IEnumerable<TreeNode> traces)
         {
             var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsDirectory);
             var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
@@ -424,7 +433,7 @@ namespace LogsReader
                 var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
                 foreach (var fileLog in files.Select(x => new FileLog(serverNode.Text, x)))
                 {
-                    if(traceTypes.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
+                    if(traces.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
             }
@@ -636,24 +645,30 @@ namespace LogsReader
         {
             try
             {
-                var row = ((DataGridView)sender).Rows[e.RowIndex];
-                var tempalteID = TryGetPrivateID(row);
-                if (tempalteID == -1 || OverallResultList == null)
+                var row = ((DataGridView) sender).Rows[e.RowIndex];
+                var tempaltePrivateID = TryGetPrivateID(row);
+                if (tempaltePrivateID <= -1 || OverallResultList == null)
                     return;
 
-                var template = OverallResultList[tempalteID];
+                var template = OverallResultList[tempaltePrivateID];
 
                 if (template.IsMatched)
                 {
+                    if (template.DateOfTrace == null)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Yellow;
+                        foreach (DataGridViewCell cell2 in row.Cells)
+                            cell2.ToolTipText = "Date value is incorrect";
+                        return;
+                    }
+
                     row.DefaultCellStyle.BackColor = Color.White;
                 }
                 else
                 {
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
-                    {
-                        cell2.ToolTipText = "Doesn't match regex pattern for trace line";
-                    }
+                        cell2.ToolTipText = "Doesn't match by \"TraceLinePattern\"";
                 }
             }
             catch (Exception ex)
