@@ -182,7 +182,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Data&gt;; &lt;Trace&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Date&gt;; &lt;Trace&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {
