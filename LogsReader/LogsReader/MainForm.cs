@@ -144,10 +144,11 @@ namespace LogsReader
                 tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
                 tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
-                tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
-                tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
                 tooltipPrintXML.SetToolTip(dateTimePickerStart, Resources.Form_DateFilterComment);
                 tooltipPrintXML.SetToolTip(dateTimePickerEnd, Resources.Form_DateFilterComment);
+                tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
+                tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
+                tooltipPrintXML.SetToolTip(msgFilterText, Resources.Form_MessageFilterComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 Closing += (s, e) =>
@@ -409,8 +410,9 @@ namespace LogsReader
                     result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
 
 
-                if(!msgFilterText.Text.IsNullOrEmptyTrim())
-                    result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && x.Message.StringContains(msgFilterText.Text));
+                var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim() ? new string[] { } : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                if (msgFilter.Any())
+                    result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && msgFilter.Any(p => x.Message.StringContains(p)));
 
                 if (!result.Any())
                 {
@@ -477,6 +479,7 @@ namespace LogsReader
             dateTimePickerEnd.Enabled = !IsWorking;
             traceNotLikeText.Enabled = !IsWorking;
             traceLikeText.Enabled = !IsWorking;
+            msgFilterText.Enabled = !IsWorking;
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 

@@ -163,4 +163,7 @@
   <data name="Form_TraceNameNotLikeComment" xml:space="preserve">
     <value>Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
   </data>
+  <data name="Form_MessageFilterComment" xml:space="preserve">
+    <value>Фильтр по полю Message на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную.</value>
+  </data>
 </root>

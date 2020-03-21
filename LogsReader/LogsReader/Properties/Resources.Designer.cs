@@ -70,6 +70,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю Message на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        /// </summary>
+        internal static string Form_MessageFilterComment {
+            get {
+                return ResourceManager.GetString("Form_MessageFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
