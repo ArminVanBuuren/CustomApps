@@ -36,9 +36,9 @@ namespace LogsReader
         {
             _values = new Dictionary<int, DataTemplate>(list.Count());
 
-            // Сортируем по дате, если она спарсилась корректно. Потому что стрингов
-            AddRange(list.Where(p => p.DateOfTrace != null).OrderBy(p => p.DateOfTrace));
-            AddRange(list.Where(p => p.DateOfTrace == null).OrderBy(p => p.Date));
+            // Сортируем по дате, если она спарсилась корректно, затем то что не спарсилось
+            AddRange(list.Where(p => p.DateOfTrace != null).OrderBy(p => p.DateOfTrace).ThenBy(p => p.FileName).ThenBy(p => p.ID));
+            AddRange(list.Where(p => p.DateOfTrace == null).OrderBy(p => p.Date).ThenBy(p => p.FileName).ThenBy(p => p.ID));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)
@@ -165,10 +165,7 @@ namespace LogsReader
         [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
         public bool IsMatched { get; private set; }
 
-        public string Message
-        {
-            get => _message.ToString();
-        }
+        public string Message => _message.ToString();
 
         public string EntireMessage
         {

@@ -34,16 +34,17 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.trvMain = new LogsReader.MyTreeView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.msgFilterText = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonFilter = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -70,6 +71,7 @@ namespace LogsReader
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
+            this.trvMain = new LogsReader.MyTreeView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -100,25 +102,6 @@ namespace LogsReader
             this.dgvFiles.Size = new System.Drawing.Size(1011, 234);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
-            // 
-            // trvMain
-            // 
-            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(1, 323);
-            this.trvMain.Name = "trvMain";
-            treeNode3.Name = "trvServers";
-            treeNode3.Text = "Servers";
-            treeNode4.Name = "trvTypes";
-            treeNode4.Text = "Types";
-            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
-            this.trvMain.Size = new System.Drawing.Size(295, 379);
-            this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // btnSearch
             // 
@@ -200,6 +183,8 @@ namespace LogsReader
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.msgFilterText);
+            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.buttonReset);
             this.groupBox1.Controls.Add(this.buttonFilter);
             this.groupBox1.Controls.Add(this.label8);
@@ -210,17 +195,36 @@ namespace LogsReader
             this.groupBox1.Controls.Add(this.traceLikeText);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Location = new System.Drawing.Point(6, 163);
+            this.groupBox1.Location = new System.Drawing.Point(6, 167);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(286, 154);
+            this.groupBox1.Size = new System.Drawing.Size(286, 177);
             this.groupBox1.TabIndex = 28;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter";
             // 
+            // msgFilterText
+            // 
+            this.msgFilterText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.msgFilterText.Location = new System.Drawing.Point(89, 120);
+            this.msgFilterText.Name = "msgFilterText";
+            this.msgFilterText.Size = new System.Drawing.Size(189, 23);
+            this.msgFilterText.TabIndex = 31;
+            this.msgFilterText.TextChanged += new System.EventHandler(this.msgFilterText_TextChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 124);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(56, 15);
+            this.label11.TabIndex = 30;
+            this.label11.Text = "Message:";
+            // 
             // buttonReset
             // 
             this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReset.Location = new System.Drawing.Point(217, 122);
+            this.buttonReset.Location = new System.Drawing.Point(217, 149);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(61, 23);
             this.buttonReset.TabIndex = 29;
@@ -231,7 +235,7 @@ namespace LogsReader
             // buttonFilter
             // 
             this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFilter.Location = new System.Drawing.Point(150, 122);
+            this.buttonFilter.Location = new System.Drawing.Point(150, 149);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(61, 23);
             this.buttonFilter.TabIndex = 28;
@@ -337,7 +341,7 @@ namespace LogsReader
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 116);
+            this.label6.Location = new System.Drawing.Point(3, 115);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 15);
             this.label6.TabIndex = 13;
@@ -376,7 +380,7 @@ namespace LogsReader
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 142);
+            this.label4.Location = new System.Drawing.Point(3, 141);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 9;
@@ -482,6 +486,25 @@ namespace LogsReader
             this.useRegex.UseVisualStyleBackColor = true;
             this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
             // 
+            // trvMain
+            // 
+            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trvMain.CheckBoxes = true;
+            this.trvMain.Location = new System.Drawing.Point(1, 350);
+            this.trvMain.Name = "trvMain";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
+            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
+            this.trvMain.Size = new System.Drawing.Size(295, 352);
+            this.trvMain.TabIndex = 2;
+            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -550,6 +573,8 @@ namespace LogsReader
         private GroupBox groupBox1;
         private Button buttonFilter;
         private Button buttonReset;
+        private TextBox msgFilterText;
+        private Label label11;
     }
 }
 

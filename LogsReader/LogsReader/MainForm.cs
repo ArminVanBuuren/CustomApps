@@ -255,6 +255,9 @@ namespace LogsReader
                     case Keys.F5 when btnSearch.Enabled && !IsWorking:
                         ButtonStartStop_Click(this, EventArgs.Empty);
                         break;
+                    case Keys.Escape when btnSearch.Enabled && IsWorking:
+                        ButtonStartStop_Click(this, EventArgs.Empty);
+                        break;
                     case Keys.F6 when btnClear.Enabled:
                         ClearForm();
                         break;
@@ -391,7 +394,6 @@ namespace LogsReader
 
                 var like = traceLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-
                 if (like.Any() && notLike.Any())
                 {
                     if (!like.Except(notLike).Any())
@@ -405,6 +407,10 @@ namespace LogsReader
                     result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)));
                 else if (notLike.Any())
                     result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
+
+
+                if(!msgFilterText.Text.IsNullOrEmptyTrim())
+                    result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && x.Message.StringContains(msgFilterText.Text));
 
                 if (!result.Any())
                 {
@@ -453,7 +459,7 @@ namespace LogsReader
             if (IsWorking)
                 ClearForm();
 
-            btnSearch.Text = IsWorking ? @"Stop" : @"Search [F5]";
+            btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
             btnClear.Enabled = !IsWorking;
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
@@ -735,6 +741,7 @@ namespace LogsReader
                 txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
                 traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
                 traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
+                msgFilterText.AssignValue(UserSettings.Message, msgFilterText_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
 
                 serversText.Text = CurrentSettings.Servers;
@@ -882,6 +889,11 @@ namespace LogsReader
         private void traceNotLikeText_TextChanged(object sender, EventArgs e)
         {
             UserSettings.TraceNotLike = traceNotLikeText.Text;
+        }
+
+        private void msgFilterText_TextChanged(object sender, EventArgs e)
+        {
+            UserSettings.Message = msgFilterText.Text;
         }
 
         void ValidationCheck()

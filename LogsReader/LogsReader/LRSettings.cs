@@ -23,9 +23,9 @@ namespace LogsReader
         {
             try
             {
-                parentRegistry = new RegeditControl(ApplicationName);
                 var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
                 UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch, '\0'));
+                parentRegistry = new RegeditControl(ApplicationName);
             }
             catch (Exception)
             {
@@ -66,6 +66,12 @@ namespace LogsReader
             set => SetValue(nameof(TraceNotLike), value);
         }
 
+        public string Message
+        {
+            get => GetValue(nameof(Message));
+            set => SetValue(nameof(Message), value);
+        }
+
         string GetValue(string name)
         {
             if (parentRegistry == null)
@@ -75,7 +81,7 @@ namespace LogsReader
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
                 {
-                    return (string)schemeControl?[$"{UserName}_{name}"] ?? string.Empty;
+                    return (string)schemeControl[$"{UserName}_{name}"] ?? string.Empty;
                 }
             }
             catch (Exception)
