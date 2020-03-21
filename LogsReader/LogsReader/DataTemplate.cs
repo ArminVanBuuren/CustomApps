@@ -16,6 +16,7 @@ namespace LogsReader
             FilePath = filePath;
             FileName = Path.GetFileName(FilePath);
         }
+
         public string Server { get; }
         public string FileName { get; }
         public string FilePath { get; }

@@ -81,7 +81,7 @@ namespace LogsReader
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
                 {
-                    return (string)schemeControl[$"{UserName}_{name}"] ?? string.Empty;
+                    return (string) schemeControl[$"{UserName}_{name}"] ?? string.Empty;
                 }
             }
             catch (Exception)
@@ -115,6 +115,7 @@ namespace LogsReader
     }
 
     public delegate void CatchWaringHandler(string message, bool isError);
+
     [Serializable, XmlRoot("Settings")]
     public class LRSettings
     {
@@ -122,13 +123,17 @@ namespace LogsReader
         static string SettingsPath => $"{ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
 
-        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
+        private LRSettingsScheme[] _schemes = new[] {new LRSettingsScheme("MG"), new LRSettingsScheme("SPA")};
 
         [XmlIgnore]
         public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
         [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
-        public XmlComment PreviousSearchComment { get => new XmlDocument().CreateComment(Resources.LRSettings_UseRegexComment); set { } }
+        public XmlComment PreviousSearchComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettings_UseRegexComment);
+            set { }
+        }
 
 
         [XmlElement("Scheme", IsNullable = false)]
@@ -140,7 +145,9 @@ namespace LogsReader
                 try
                 {
                     _schemes = value ?? _schemes;
-                    Schemes = _schemes.Length > 0 ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase) : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
+                    Schemes = _schemes.Length > 0
+                        ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
+                        : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
                 }
                 catch (ArgumentException ex)
                 {
@@ -151,12 +158,14 @@ namespace LogsReader
 
         public LRSettings()
         {
-            Schemes = SchemeList.Length > 0 ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase) : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
+            Schemes = SchemeList.Length > 0
+                ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
+                : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
         }
 
         public static async Task SerializeAsync(LRSettings settings)
         {
-            await Task.Factory.StartNew((input) => Serialize((LRSettings)input), settings);
+            await Task.Factory.StartNew((input) => Serialize((LRSettings) input), settings);
         }
 
         public static void Serialize(LRSettings settings)
@@ -198,9 +207,9 @@ namespace LogsReader
             {
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 Program.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
-                        Path.GetFileName(SettingsPath),
-                        Path.GetFileName(IncorrectSettingsPath),
-                        message), "Deserialize Error");
+                    Path.GetFileName(SettingsPath),
+                    Path.GetFileName(IncorrectSettingsPath),
+                    message), "Deserialize Error");
 
                 if (File.Exists(IncorrectSettingsPath))
                 {
@@ -268,7 +277,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("ServersComment")]
-        public XmlComment ServersComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_ServersComment); set { } }
+        public XmlComment ServersComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_ServersComment);
+            set { }
+        }
 
         [XmlElement("Servers")]
         public string Servers
@@ -278,7 +291,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("LogsDirectoryComment")]
-        public XmlComment LogsDirectoryComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_LogsDirectoryComment); set { } }
+        public XmlComment LogsDirectoryComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_LogsDirectoryComment);
+            set { }
+        }
 
         [XmlElement("LogsDirectory")]
         public string LogsDirectory
@@ -288,7 +305,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("TypesComment")]
-        public XmlComment TypesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment); set { } }
+        public XmlComment TypesComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment);
+            set { }
+        }
 
         [XmlElement("Types")]
         public string Types
@@ -298,7 +319,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("MaxTraceLinesComment")]
-        public XmlComment MaxTraceLinesComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxTraceLinesComment); set { } }
+        public XmlComment MaxTraceLinesComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxTraceLinesComment);
+            set { }
+        }
 
         [XmlElement("MaxTraceLines")]
         public int MaxTraceLines
@@ -308,7 +333,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("MaxThreadsComment")]
-        public XmlComment MaxThreadsComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment); set { } }
+        public XmlComment MaxThreadsComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment);
+            set { }
+        }
 
         [XmlElement("MaxThreads")]
         public int MaxThreads
@@ -318,7 +347,11 @@ namespace LogsReader
         }
 
         [XmlAnyElement("TraceLinePatternComment")]
-        public XmlComment TraceLinePatternComment { get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceLinePatternComment); set { } }
+        public XmlComment TraceLinePatternComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceLinePatternComment);
+            set { }
+        }
 
         [XmlElement]
         public TraceLinePattern TraceLinePattern
@@ -390,17 +423,20 @@ namespace LogsReader
                         CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
                         return false;
                     }
+
                     if (groups.All(x => x != "Trace"))
                     {
                         CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Trace>' in TraceLinePattern", true);
                         return false;
                     }
+
                     if (groups.All(x => x != "Message"))
                     {
                         CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Message>' in TraceLinePattern", true);
                         return false;
                     }
                 }
+
                 return true;
             }
         }
@@ -409,11 +445,11 @@ namespace LogsReader
     [XmlRoot("TraceLinePattern")]
     public class TraceLinePattern
     {
-        private XmlNode[] _traceLinePattern = new XmlNode[] { new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<Trace>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE") };
+        private XmlNode[] _traceLinePattern = new XmlNode[] {new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<Trace>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE")};
 
         public TraceLinePattern()
         {
-            
+
         }
 
         public TraceLinePattern(string name)

@@ -309,8 +309,9 @@ namespace LogsReader
                         return;
                     }
 
+                    var maxThreads = CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads;
                     // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads, ThreadPriority.Lowest);
+                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, maxThreads, ThreadPriority.Lowest);
                     new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
                     await MultiTaskingHandler.StartAsync();
 
@@ -393,8 +394,12 @@ namespace LogsReader
                     result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
 
 
-                var like = traceLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim() ? new string[]{} : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                var like = traceLikeText.Text.IsNullOrEmptyTrim()
+                    ? new string[] { }
+                    : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim()
+                    ? new string[] { }
+                    : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 if (like.Any() && notLike.Any())
                 {
                     if (!like.Except(notLike).Any())
@@ -402,6 +407,7 @@ namespace LogsReader
                         ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace NotLike""!", true);
                         return false;
                     }
+
                     result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)) && !notLike.Any(p => x.Trace.StringContains(p)));
                 }
                 else if (like.Any())
@@ -410,7 +416,9 @@ namespace LogsReader
                     result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
 
 
-                var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim() ? new string[] { } : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim()
+                    ? new string[] { }
+                    : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 if (msgFilter.Any())
                     result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && msgFilter.Any(p => x.Message.StringContains(p)));
 
@@ -431,7 +439,7 @@ namespace LogsReader
             var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsDirectory);
             var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
             var kvpList = new List<FileLog>();
-            
+
             foreach (var serverNode in servers)
             {
                 var serverDir = string.Format(logsDirFormat, serverNode.Text);
@@ -441,7 +449,7 @@ namespace LogsReader
                 var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
                 foreach (var fileLog in files.Select(x => new FileLog(serverNode.Text, x)))
                 {
-                    if(traces.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
+                    if (traces.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
             }
@@ -503,6 +511,7 @@ namespace LogsReader
                             _findedInfo.Text = Finded.ToString();
                         }));
                     }
+
                     Thread.Sleep(10);
                 }
             }
@@ -773,15 +782,16 @@ namespace LogsReader
         {
             CurrentSettings.Servers = serversText.Text;
             serversText.AssignValue(CurrentSettings.Servers, serversText_TextChanged);
-            
+
             //заполняем список серверов из параметра
             trvMain.Nodes["trvServers"].Nodes.Clear();
             foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
-                if(s.Key.IsNullOrEmptyTrim())
+                if (s.Key.IsNullOrEmptyTrim())
                     continue;
                 trvMain.Nodes["trvServers"].Nodes.Add(s.Key.Trim().ToUpper());
             }
+
             trvMain.ExpandAll();
 
             ValidationCheck();
@@ -797,10 +807,11 @@ namespace LogsReader
             trvMain.Nodes["trvTypes"].Nodes.Clear();
             foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
-                if(s.Key.IsNullOrEmptyTrim())
+                if (s.Key.IsNullOrEmptyTrim())
                     continue;
                 trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.Trim().ToUpper());
             }
+
             trvMain.ExpandAll();
 
             ValidationCheck();
@@ -905,13 +916,13 @@ namespace LogsReader
             logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
 
             var settIsCorrect = CurrentSettings.IsCorrect;
-            if(settIsCorrect)
+            if (settIsCorrect)
                 ReportStatus(string.Empty, false);
 
             btnSearch.Enabled = isCorrectPath
                                 && settIsCorrect
-                                && !txtPattern.Text.IsNullOrEmptyTrim() 
-                                && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked) 
+                                && !txtPattern.Text.IsNullOrEmptyTrim()
+                                && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
