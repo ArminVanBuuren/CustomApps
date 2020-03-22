@@ -22,8 +22,9 @@ namespace LogsReader
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
         private bool _isClosed = false;
-        bool _oldDateStartChecked = false;
-        bool _oldDateEndChecked = false;
+        private bool _oldDateStartChecked = false;
+        private bool _oldDateEndChecked = false;
+        private bool _settingsLoaded = false;
 
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
@@ -58,7 +59,7 @@ namespace LogsReader
         /// <summary>
         /// Настройки схем
         /// </summary>
-        private LRSettings Settings { get; }
+        private LRSettings AllSettings { get; }
 
         /// <summary>
         /// Текущая схема настроек
@@ -92,6 +93,7 @@ namespace LogsReader
         public MainForm()
         {
             InitializeComponent();
+            dgvFiles.AutoGenerateColumns = false;
 
             try
             {
@@ -155,6 +157,7 @@ namespace LogsReader
                 {
                     _isClosed = true;
                     SaveSettings();
+                    SaveInterfaceParams();
                 };
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
@@ -195,13 +198,74 @@ namespace LogsReader
                 try
                 {
                     UserSettings = new UserSettings();
-                    Settings = LRSettings.Deserialize();
-                    chooseScheme.DataSource = Settings.Schemes.Keys.ToList();
+                    AllSettings = LRSettings.Deserialize();
+                    chooseScheme.DataSource = AllSettings.Schemes.Keys.ToList();
                 }
                 catch (Exception ex)
                 {
                     Program.MessageShow(ex.ToString(), @"Load config");
                 }
+            }
+        }
+
+        public void ApplySettings()
+        {
+            try
+            {
+                if (!IsMdiChild)
+                {
+                    try
+                    {
+                        WindowState = Settings.Default.FormState;
+                        if (WindowState != FormWindowState.Maximized &&
+                            (Settings.Default.FormSize.Height < 100 ||
+                             Settings.Default.FormSize.Width < 100 ||
+                             Settings.Default.FormLocation.X < 0 ||
+                             Settings.Default.FormLocation.Y < 0))
+                            WindowState = FormWindowState.Maximized;
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+
+
+                int i = 0;
+                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                {
+                    dgvFiles.Columns[i].Width = Settings.Default["COL" + i] != null ? (int) Settings.Default["COL" + i] : 80;
+                    i++;
+                }
+
+                _settingsLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        private void SaveInterfaceParams()
+        {
+            try
+            {
+                int i = 0;
+                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                {
+                    Settings.Default["COL" + i] = dgvFiles.Columns[i].Width;
+                    i++;
+                }
+
+                Settings.Default.FormLocation = Location;
+                Settings.Default.FormSize = Size;
+                Settings.Default.FormState = WindowState;
+
+                Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
 
@@ -277,6 +341,9 @@ namespace LogsReader
                 var stop = new Stopwatch();
                 try
                 {
+                    if (_settingsLoaded)
+                        SaveInterfaceParams();
+
                     if (useRegex.Checked)
                     {
                         if (!REGEX.Verify(txtPattern.Text))
@@ -298,6 +365,7 @@ namespace LogsReader
                     IsWorking = true;
                     ChangeFormStatus();
                     ReportStatus(@"Working...", false);
+                    Cursor = Cursors.WaitCursor;
 
                     var kvpList = await Task<List<FileLog>>.Factory.StartNew(() => GetFileLogs(
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked),
@@ -341,6 +409,7 @@ namespace LogsReader
                     ChangeFormStatus();
                     if (stop.IsRunning)
                         stop.Stop();
+                    Cursor = Cursors.Default;
                     dgvFiles.Focus();
                 }
             }
@@ -429,7 +498,7 @@ namespace LogsReader
                 }
             }
 
-            await dgvFiles.AssignCollectionAsync(result, null, true);
+            await dgvFiles.AssignCollectionAsync(result, null);
 
             return true;
         }
@@ -723,6 +792,16 @@ namespace LogsReader
             }
         }
 
+        private void dgvFiles_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var hti = dgvFiles.HitTest(e.X, e.Y);
+                dgvFiles.ClearSelection();
+                dgvFiles.Rows[hti.RowIndex].Selected = true;
+            }
+        }
+
         static int TryGetPrivateID(DataGridViewRow row)
         {
             if (row == null)
@@ -746,7 +825,7 @@ namespace LogsReader
             {
                 if (CurrentSettings != null)
                     CurrentSettings.CatchWaring -= ReportStatus;
-                CurrentSettings = Settings.Schemes[chooseScheme.Text];
+                CurrentSettings = AllSettings.Schemes[chooseScheme.Text];
                 CurrentSettings.CatchWaring += ReportStatus;
 
                 UserSettings.Scheme = chooseScheme.Text;
@@ -777,7 +856,7 @@ namespace LogsReader
                 ValidationCheck();
             }
         }
-
+            
         private void serversText_TextChanged(object sender, EventArgs e)
         {
             CurrentSettings.Servers = serversText.Text;
@@ -930,8 +1009,8 @@ namespace LogsReader
 
         async void SaveSettings()
         {
-            if (Settings != null)
-                await LRSettings.SerializeAsync(Settings);
+            if (AllSettings != null)
+                await LRSettings.SerializeAsync(AllSettings);
         }
 
         private void btnClear_Click(object sender, EventArgs e)

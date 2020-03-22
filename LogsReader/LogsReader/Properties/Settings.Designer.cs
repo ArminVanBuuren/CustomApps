@@ -8,22 +8,150 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LogsReader.Properties
-{
-
-
+namespace LogsReader.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int COL2 {
+            get {
+                return ((int)(this["COL2"]));
+            }
+            set {
+                this["COL2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int COL3 {
+            get {
+                return ((int)(this["COL3"]));
+            }
+            set {
+                this["COL3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("135")]
+        public int COL4 {
+            get {
+                return ((int)(this["COL4"]));
+            }
+            set {
+                this["COL4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public int COL5 {
+            get {
+                return ((int)(this["COL5"]));
+            }
+            set {
+                this["COL5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("210")]
+        public int COL6 {
+            get {
+                return ((int)(this["COL6"]));
+            }
+            set {
+                this["COL6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("900")]
+        public int COL7 {
+            get {
+                return ((int)(this["COL7"]));
+            }
+            set {
+                this["COL7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState FormState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["FormState"]));
+            }
+            set {
+                this["FormState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point FormLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["FormLocation"]));
+            }
+            set {
+                this["FormLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1358, 815")]
+        public global::System.Drawing.Size FormSize {
+            get {
+                return ((global::System.Drawing.Size)(this["FormSize"]));
+            }
+            set {
+                this["FormSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int COL0 {
+            get {
+                return ((int)(this["COL0"]));
+            }
+            set {
+                this["COL0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int COL1 {
+            get {
+                return ((int)(this["COL1"]));
+            }
+            set {
+                this["COL1"] = value;
             }
         }
     }

@@ -34,8 +34,8 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
@@ -72,6 +72,14 @@ namespace LogsReader
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
             this.trvMain = new LogsReader.MyTreeView();
+            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -89,10 +97,20 @@ namespace LogsReader
             this.dgvFiles.AllowUserToDeleteRows = false;
             this.dgvFiles.AllowUserToOrderColumns = true;
             this.dgvFiles.AllowUserToResizeRows = false;
-            this.dgvFiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvFiles.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PrivateID,
+            this.IsMatched,
+            this.ID,
+            this.Server,
+            this.Date,
+            this.FileName,
+            this.Trace,
+            this.Description});
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvFiles.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dgvFiles.Location = new System.Drawing.Point(0, 0);
             this.dgvFiles.MultiSelect = false;
             this.dgvFiles.Name = "dgvFiles";
@@ -102,6 +120,7 @@ namespace LogsReader
             this.dgvFiles.Size = new System.Drawing.Size(1011, 234);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
+            this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
             // 
             // btnSearch
             // 
@@ -418,6 +437,7 @@ namespace LogsReader
             // 
             this.chooseScheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.chooseScheme.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.chooseScheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.chooseScheme.FormattingEnabled = true;
             this.chooseScheme.Location = new System.Drawing.Point(86, 8);
@@ -494,18 +514,91 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(1, 350);
             this.trvMain.Name = "trvMain";
-            treeNode13.Name = "trvServers";
-            treeNode13.Text = "Servers";
-            treeNode14.Name = "trvTypes";
-            treeNode14.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode13,
-            treeNode14});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(295, 352);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
-            // MainForm
+            // PrivateID
+            // 
+            this.PrivateID.DataPropertyName = "PrivateID";
+            this.PrivateID.HeaderText = "PrivateID";
+            this.PrivateID.MinimumWidth = 10;
+            this.PrivateID.Name = "PrivateID";
+            this.PrivateID.ReadOnly = true;
+            this.PrivateID.Visible = false;
+            this.PrivateID.Width = 10;
+            // 
+            // IsMatched
+            // 
+            this.IsMatched.HeaderText = "IsMatched";
+            this.IsMatched.MinimumWidth = 10;
+            this.IsMatched.Name = "IsMatched";
+            this.IsMatched.ReadOnly = true;
+            this.IsMatched.Visible = false;
+            this.IsMatched.Width = 10;
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 40;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 60;
+            // 
+            // Server
+            // 
+            this.Server.DataPropertyName = "Server";
+            this.Server.HeaderText = "Server";
+            this.Server.MinimumWidth = 40;
+            this.Server.Name = "Server";
+            this.Server.ReadOnly = true;
+            this.Server.Width = 120;
+            // 
+            // Date
+            // 
+            this.Date.DataPropertyName = "Date";
+            this.Date.HeaderText = "Date";
+            this.Date.MinimumWidth = 40;
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            this.Date.Width = 160;
+            // 
+            // FileName
+            // 
+            this.FileName.DataPropertyName = "FileName";
+            this.FileName.HeaderText = "FileName";
+            this.FileName.MinimumWidth = 40;
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            this.FileName.Width = 200;
+            // 
+            // Trace
+            // 
+            this.Trace.DataPropertyName = "Trace";
+            this.Trace.HeaderText = "Trace";
+            this.Trace.MinimumWidth = 40;
+            this.Trace.Name = "Trace";
+            this.Trace.ReadOnly = true;
+            this.Trace.Width = 120;
+            // 
+            // Description
+            // 
+            this.Description.DataPropertyName = "Description";
+            this.Description.HeaderText = "Description";
+            this.Description.MinimumWidth = 40;
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.Width = 340;
+            // 
+            // LogsReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -520,7 +613,7 @@ namespace LogsReader
             this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.Icon = global::LogsReader.Properties.Resources.icon;
             this.MinimumSize = new System.Drawing.Size(550, 500);
-            this.Name = "MainForm";
+            this.Name = "LogsReaderForm";
             this.Text = "Logs Reader";
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -575,6 +668,14 @@ namespace LogsReader
         private Button buttonReset;
         private TextBox msgFilterText;
         private Label label11;
+        private DataGridViewTextBoxColumn PrivateID;
+        private DataGridViewTextBoxColumn IsMatched;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn Server;
+        private DataGridViewTextBoxColumn Date;
+        private DataGridViewTextBoxColumn FileName;
+        private DataGridViewTextBoxColumn Trace;
+        private DataGridViewTextBoxColumn Description;
     }
 }
 

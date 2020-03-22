@@ -19,7 +19,10 @@ namespace LogsReader
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            var logsReader  = new MainForm();
+            logsReader.ApplySettings();
+            Application.Run(logsReader);
         }
 
         public static void AssignValue<T>(this TextBox textBox, T value, EventHandler handler)
