@@ -49,7 +49,7 @@ namespace Utils
             //}
         }
 
-        public static string SafeReadFile(string path, bool convertToLower = false)
+        public static string SafeReadFile(string path)
         {
             if (!File.Exists(path))
                 return null;
@@ -66,7 +66,7 @@ namespace Utils
             string context;
             using (var sr = new StreamReader(path))
             {
-                context = convertToLower ? sr.ReadToEnd().ToLower() : sr.ReadToEnd();
+                context = sr.ReadToEnd();
             }
             return context;
         }

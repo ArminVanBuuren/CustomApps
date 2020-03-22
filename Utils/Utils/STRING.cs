@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -79,14 +78,7 @@ namespace Utils
 
         public static bool IsNullOrEmptyTrim(this string value)
         {
-            return string.IsNullOrWhiteSpace(value);
-        }
-
-        public static string ToStringIsNullOrEmptyTrim(this string value)
-        {
-            if (value == null)
-                return "Null";
-            return string.IsNullOrWhiteSpace(value) ? "Empty" : value;
+            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value.TrimWhiteSpaces());
         }
 
         public static bool IsNumber(this string value)
@@ -97,10 +89,9 @@ namespace Utils
         public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
         {
             if (input != null && suffixToRemove != null && input.EndsWith(suffixToRemove, comparisonType))
-            {
                 return input.Substring(0, input.Length - suffixToRemove.Length);
-            }
-            else return input;
+            else
+                return input;
         }
 
         /// <summary>
@@ -119,12 +110,19 @@ namespace Utils
             return input.Trim('\r', '\n', '\t', ' ');
         }
 
-        public static bool StringEquals(this string param1, string param2, bool ignoreCase)
+        public static bool StringEquals(this string input, string value, bool ignoreCase = true)
         {
+            if (input.IsNullOrEmpty() && value.IsNullOrEmpty())
+                return true;
+            else if (input.IsNullOrEmpty())
+                return false;
+            else if (value.IsNullOrEmpty())
+                return false;
+
             if (ignoreCase)
-                return param1.Like(param2);
+                return input.Like(value);
             else
-                return param1.Equals(param2);
+                return input.Equals(value);
         }
 
         public static bool Like(this string input, string value)
@@ -141,8 +139,12 @@ namespace Utils
 
         public static bool StringContains(this string input, string value, bool ignoreCase = true)
         {
-            if (input.Like(value))
+            if (input.IsNullOrEmpty() && value.IsNullOrEmpty())
                 return true;
+            else if (input.IsNullOrEmpty())
+                return false;
+            else if (value.IsNullOrEmpty())
+                return false;
 
             if (ignoreCase)
                 return input.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) != -1;
@@ -150,18 +152,18 @@ namespace Utils
                 return input.IndexOf(value, StringComparison.Ordinal) != -1;
         }
 
-        public static bool Contains2(this string source, string toCheck, StringComparison? comp = null)
+        public static bool StringContains(this string input, string value, StringComparison? comp = null)
         {
-            int[] c = new int[toCheck.Length];
+            int[] c = new int[value.Length];
             if (comp != null)
             {
-                for (int y = 0; y < toCheck.Length; y++)
-                    c[y] += ((source.Length - source.Replace(toCheck, string.Empty, comp.Value).Length) / toCheck.Length > 0 ? 1 : 0);
+                for (int y = 0; y < value.Length; y++)
+                    c[y] += ((input.Length - input.Replace(value, string.Empty, comp.Value).Length) / value.Length > 0 ? 1 : 0);
             }
             else
             {
-                for (int y = 0; y < toCheck.Length; y++)
-                    c[y] += ((source.Length - source.Replace(toCheck, string.Empty).Length) / toCheck.Length > 0 ? 1 : 0);
+                for (int y = 0; y < value.Length; y++)
+                    c[y] += ((input.Length - input.Replace(value, string.Empty).Length) / value.Length > 0 ? 1 : 0);
             }
 
             var total = c.Sum();
@@ -181,9 +183,7 @@ namespace Utils
         /// <returns>A string that is equivalent to the current string except that all instances of <paramref name="oldValue"/> are replaced with <paramref name="newValue"/>. 
         /// If <paramref name="oldValue"/> is not found in the current instance, the method returns the current instance unchanged.</returns>
         [DebuggerStepThrough]
-        public static string Replace(this string str,
-            string oldValue, string @newValue,
-            StringComparison comparisonType)
+        public static string Replace(this string str, string oldValue, string @newValue, StringComparison comparisonType)
         {
 
             // Check inputs.

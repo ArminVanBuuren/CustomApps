@@ -102,9 +102,9 @@ namespace Utils
             return xmldoc != null;
         }
 
-        public static XmlDocument LoadXml(string path, bool convertToLower = false)
+        public static XmlDocument LoadXml(string path, bool convertToLowerCase = false)
         {
-            var contextSource = IO.SafeReadFile(path, convertToLower);
+            var contextSource = convertToLowerCase ? IO.SafeReadFile(path).ToLower() : IO.SafeReadFile(path);
             return LoadXmlCommon(contextSource);
         }
 

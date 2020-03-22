@@ -11,8 +11,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.Win32;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.Handles;
 
 //using TeleSharp.TL;
 //using TLSharp.Core;
@@ -137,15 +139,51 @@ namespace Tester.Console
             {
                 var stop = new Stopwatch();
 
-                string sss1;
-                using (StreamReader stream = new StreamReader(@"C:\test3\1_1.txt", new UTF8Encoding(false)))
-                {
-                    var str = stream.ReadToEnd();
-                    if (str.IsXml(out var doc))
-                    {
-                        sss1 = doc.PrintXml();
-                    }
-                }
+                var qq  = IO.IsFileReady(@"C:\test4\1_0.txt");
+                var qq1 = IO.SafeReadFile(@"C:\test4\1_0.txt");
+                var ff = false;
+                //using (var regControl = new RegeditControl("TEST123"))
+                //{
+                //    //var user = Environment.UserName;
+                //    //regControl[$"{user}_prevSearch"] = "test";
+
+                //    using (var schemeControl = new RegeditControl("Inner1", regControl))
+                //    {
+                //        schemeControl["Prop1"] = "111";
+                //    }
+
+                //    //regControl[$"{Environment.UserName}_useRegex", RegistryValueKind.String] = true;
+                //    //regControl.Add("Prop1", "test");
+                //    foreach (var key in regControl)
+                //    {
+
+                //    }
+
+
+
+                //    //if (!description.Equals(regControl["Description"]))
+                //    //{
+                //    //    regControl["Description"] = description;
+                //    //}
+
+                //    //RegeditKey = regControl["Key"]?.ToString();
+                //    //if (RegeditKey.IsNullOrEmptyTrim())
+                //    //{
+                //    //    RegeditKey = Guid.NewGuid().ToString("D");
+                //    //    regControl["Key"] = RegeditKey;
+                //    //}
+                //}
+
+
+                //string sss1;
+                //using (StreamReader stream = new StreamReader(@"C:\test3\1_1.txt", new UTF8Encoding(false)))
+                //{
+                //    var str = stream.ReadToEnd();
+                //    if (str.IsXml(out var doc))
+                //    {
+                //        sss1 = doc.PrintXml();
+                //    }
+                //}
 
                 //string s1 = null;
                 //string s2 = null;
@@ -153,7 +191,7 @@ namespace Tester.Console
                 //var www2 = s1.Like("");
                 //var www3 = "".Like(s2);
 
-                //var testttt = @"< DateFrom >          < Value />        </ DateFrom >";
+                //var testttt = @"<DateFrom>          <Value />        </DateFrom>";
                 //var ewwe = XML.RemoveUnallowable(testttt);
                 //System.Console.ReadKey();
                 //return;
@@ -199,17 +237,17 @@ namespace Tester.Console
 
 
 
-                //stop.Start();
-                //var lines = IO.CountLinesReader(@"C:\test\1_1.txt");
-                //stop.Stop();
-                //System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
-                //stop.Reset();
+                stop.Start();
+                var lines = IO.CountLinesReader(@"C:\test\1_1.txt");
+                stop.Stop();
+                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                stop.Reset();
 
-                //stop.Start();
-                //lines = IO.CountLinesSmarter(@"C:\test\1_1.txt");
-                //stop.Stop();
-                //System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
-                //stop.Reset();
+                stop.Start();
+                lines = IO.CountLinesSmarter(@"C:\test\1_1.txt");
+                stop.Stop();
+                System.Console.WriteLine($"lines={lines} - {stop.ElapsedMilliseconds}");
+                stop.Reset();
 
                 //var d111 = new MTFuncCallBackList<string, int>();
                 //d111.Add(new MTFuncCallBack<string, int>("1", 1));
