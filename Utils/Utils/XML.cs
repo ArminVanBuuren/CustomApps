@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -110,7 +111,7 @@ namespace Utils
 
         static XmlDocument LoadXmlCommon(string contextSource)
         {
-            if (string.IsNullOrEmpty(contextSource) || !contextSource.TrimStart().StartsWith("<"))
+            if (string.IsNullOrEmpty(contextSource) || !contextSource.TrimStart().StartsWith("<") || XML.IsUnallowable(contextSource))
                 return null;
 
             try
@@ -915,10 +916,10 @@ namespace Utils
             return builder.ToString();
         }
 
-        public static string RemoveUnallowable(string str, string replaceTo)
+        public static string RemoveUnallowable(string input, string replaceTo)
         {
-            var builder = new StringBuilder(str.Length);
-            foreach (var ch in str)
+            var builder = new StringBuilder(input.Length);
+            foreach (var ch in input)
             {
                 if (IsUnallowable(ch, out var res))
                 {
@@ -931,6 +932,19 @@ namespace Utils
             }
 
             return builder.ToString();
+        }
+
+        public static bool IsUnallowable(string input)
+        {
+            foreach (var ch in input)
+            {
+                if (IsUnallowable(ch, out var res))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         static bool IsUnallowable(char input, out string code)

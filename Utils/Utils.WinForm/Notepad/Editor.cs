@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BigMath.Utils;
 using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
@@ -44,20 +45,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public virtual Encoding Encoding
-        {
-            get
-            {
-                try
-                {
-                    return Encoding.GetEncoding(Source);
-                }
-                catch (Exception)
-                {
-                    return DefaultEncoding;
-                }
-            }
-        }
+        public virtual Encoding Encoding => DefaultEncoding;
 
         public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
 
@@ -269,11 +257,14 @@ namespace Utils.WinForm.Notepad
 
         protected void SomethingChanged()
         {
-            Page.Invoke(new MethodInvoker(delegate
+            if (Page.InvokeRequired)
             {
-                Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
-                Page.Text = HeaderName.Trim() + new string(' ', 2);
-            }));
+                Page.BeginInvoke(new MethodInvoker(delegate
+                {
+                    Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
+                    Page.Text = HeaderName.Trim() + new string(' ', 2);
+                }));
+            }
 
             OnSomethingChanged?.Invoke(this, null);
         }

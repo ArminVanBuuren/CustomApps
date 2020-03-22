@@ -266,13 +266,16 @@ namespace XPathTester
 
         void ButtonFind_Click(object sender, EventArgs e)
         {
+            if (XmlBody == null)
+                return;
+
             ClearResultTap();
 
-            if (XmlBody == null)
-            {
-                AddMessageException(@"XML-Body is incorrect!");
-                return;
-            }
+            //if (XmlBody == null)
+            //{
+            //    AddMessageException(@"XML-Body is incorrect!");
+            //    return;
+            //}
 
             if (string.IsNullOrEmpty(XPathText.Text))
             {
