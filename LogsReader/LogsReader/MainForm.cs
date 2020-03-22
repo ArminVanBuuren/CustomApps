@@ -33,6 +33,7 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _cpuUsage;
         private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
+        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _fullTrace;
 
@@ -162,15 +163,15 @@ namespace LogsReader
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
 
-                var notepad = new NotepadControl();
-                splitContainer2.Panel2.Controls.Add(notepad);
-                _message = notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
-                notepad.TabsFont = this.Font;
-                notepad.TextFont = new Font("Segoe UI", 10F);
-                notepad.Dock = DockStyle.Fill;
-                notepad.SelectEditor(0);
-                notepad.ReadOnly = true;
+                _notepad = new NotepadControl();
+                splitContainer2.Panel2.Controls.Add(_notepad);
+                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
+                _fullTrace = _notepad.AddDocument("Full Trace", string.Empty);
+                _notepad.TabsFont = this.Font;
+                _notepad.TextFont = new Font("Segoe UI", 10F);
+                _notepad.Dock = DockStyle.Fill;
+                _notepad.SelectEditor(0);
+                _notepad.ReadOnly = true;
 
                 dateTimePickerStart.ValueChanged += (sender, args) =>
                 {
@@ -365,7 +366,6 @@ namespace LogsReader
                     IsWorking = true;
                     ChangeFormStatus();
                     ReportStatus(@"Working...", false);
-                    Cursor = Cursors.WaitCursor;
 
                     var kvpList = await Task<List<FileLog>>.Factory.StartNew(() => GetFileLogs(
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked),
@@ -385,7 +385,7 @@ namespace LogsReader
 
 
                     OverallResultList = new DataTemplateCollection(MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result));
-                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null && x.Error.GetType() != typeof(OperationCanceledException)).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate(x.Source, x.Error));
                         return listErr;
@@ -409,7 +409,6 @@ namespace LogsReader
                     ChangeFormStatus();
                     if (stop.IsRunning)
                         stop.Stop();
-                    Cursor = Cursors.Default;
                     dgvFiles.Focus();
                 }
             }
@@ -536,7 +535,20 @@ namespace LogsReader
         void ChangeFormStatus()
         {
             if (IsWorking)
+            {
+                dgvFiles.Cursor = Cursors.WaitCursor;
+                _notepad.Cursor = Cursors.WaitCursor;
+                trvMain.Cursor = Cursors.WaitCursor;
+                groupBox1.Cursor = Cursors.WaitCursor;
                 ClearForm();
+            }
+            else
+            {
+                dgvFiles.Cursor = Cursors.Default;
+                _notepad.Cursor = Cursors.Default;
+                trvMain.Cursor = Cursors.Default;
+                groupBox1.Cursor = Cursors.Default;
+            }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
             btnClear.Enabled = !IsWorking;
