@@ -152,7 +152,7 @@ namespace Utils
                 return input.IndexOf(value, StringComparison.Ordinal) != -1;
         }
 
-        public static bool StringContains(this string input, string value, StringComparison? comp = null)
+        public static bool StringContains2(this string input, string value, StringComparison? comp = null)
         {
             int[] c = new int[value.Length];
             if (comp != null)
