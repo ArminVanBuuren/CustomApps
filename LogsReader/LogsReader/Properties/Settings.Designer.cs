@@ -37,7 +37,7 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int COL3 {
             get {
                 return ((int)(this["COL3"]));
@@ -61,7 +61,7 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        [global::System.Configuration.DefaultSettingValueAttribute("270")]
         public int COL5 {
             get {
                 return ((int)(this["COL5"]));

@@ -385,7 +385,7 @@ namespace LogsReader
 
 
                     OverallResultList = new DataTemplateCollection(MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result));
-                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null && x.Error.GetType() != typeof(OperationCanceledException)).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
                     {
                         listErr.Add(new DataTemplate(x.Source, x.Error));
                         return listErr;

@@ -6,13 +6,13 @@
       <Value Profile="(Default)">40</Value>
     </Setting>
     <Setting Name="COL3" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">80</Value>
+      <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="COL4" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">135</Value>
     </Setting>
     <Setting Name="COL5" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">250</Value>
+      <Value Profile="(Default)">270</Value>
     </Setting>
     <Setting Name="COL6" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">210</Value>
