@@ -396,10 +396,10 @@ namespace LogsReader
 
                 var like = traceLikeText.Text.IsNullOrEmptyTrim()
                     ? new string[] { }
-                    : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                    : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim()
                     ? new string[] { }
-                    : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                    : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 if (like.Any() && notLike.Any())
                 {
                     if (!like.Except(notLike).Any())
@@ -418,7 +418,7 @@ namespace LogsReader
 
                 var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim()
                     ? new string[] { }
-                    : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+                    : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 if (msgFilter.Any())
                     result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && msgFilter.Any(p => x.Message.StringContains(p)));
 
@@ -785,7 +785,7 @@ namespace LogsReader
 
             //заполняем список серверов из параметра
             trvMain.Nodes["trvServers"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
+            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if (s.Key.IsNullOrEmptyTrim())
                     continue;
@@ -805,7 +805,7 @@ namespace LogsReader
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
+            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if (s.Key.IsNullOrEmptyTrim())
                     continue;
