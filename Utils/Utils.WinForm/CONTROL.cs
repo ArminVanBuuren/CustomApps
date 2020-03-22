@@ -10,6 +10,7 @@ namespace Utils.WinForm
             if (uiElement == null)
                 throw new ArgumentNullException(nameof(uiElement));
 
+            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
             if (uiElement.InvokeRequired)
             {
                 if (forceSynchronous)

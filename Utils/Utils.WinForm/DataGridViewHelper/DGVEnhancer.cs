@@ -145,7 +145,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 table.Rows.Add(dr);
             }
 
-
+            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
             if (grid.InvokeRequired)
             {
                 grid.BeginInvoke(new MethodInvoker(delegate

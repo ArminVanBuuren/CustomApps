@@ -257,6 +257,7 @@ namespace Utils.WinForm.Notepad
 
         protected void SomethingChanged()
         {
+            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
             if (Page.InvokeRequired)
             {
                 Page.BeginInvoke(new MethodInvoker(delegate
@@ -264,6 +265,11 @@ namespace Utils.WinForm.Notepad
                     Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
                     Page.Text = HeaderName.Trim() + new string(' ', 2);
                 }));
+            }
+            else
+            {
+                Page.ForeColor = IsContentChanged ? Color.Red : Color.Green;
+                Page.Text = HeaderName.Trim() + new string(' ', 2);
             }
 
             OnSomethingChanged?.Invoke(this, null);
