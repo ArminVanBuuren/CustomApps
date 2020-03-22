@@ -430,10 +430,7 @@ namespace Utils
                     try
                     {
                         if (mt.CancelToken.IsCancellationRequested)
-                        {
-                            callbackItem = new MTCallBack<Action, bool>(inputAction, new OperationCanceledException("The operation was canceled before it could be completed.", mt.CancelToken));
                             return;
-                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = mt.Priority;
@@ -476,7 +473,8 @@ namespace Utils
 
                         try
                         {
-                            callback?.Invoke(callbackItem);
+                            if (callback != null && callbackItem != null)
+                                callback.Invoke(callbackItem);
                         }
                         catch (Exception)
                         {
@@ -588,10 +586,7 @@ namespace Utils
                     try
                     {
                         if (mt.CancelToken.IsCancellationRequested)
-                        {
-                            callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, new OperationCanceledException("The operation was canceled before it could be completed.", mt.CancelToken));
                             return;
-                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = mt.Priority;
@@ -634,7 +629,8 @@ namespace Utils
 
                         try
                         {
-                            callback?.Invoke(callbackItem);
+                            if (callback != null && callbackItem != null)
+                                callback.Invoke(callbackItem);
                         }
                         catch (Exception)
                         {
@@ -745,10 +741,7 @@ namespace Utils
                     try
                     {
                         if (mt.CancelToken.IsCancellationRequested)
-                        {
-                            callbackItem = new MTCallBack<TSource, bool>(inputItem, new OperationCanceledException("The operation was canceled before it could be completed.", mt.CancelToken));
                             return;
-                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = mt.Priority;
@@ -792,7 +785,8 @@ namespace Utils
 
                         try
                         {
-                            callback?.Invoke(callbackItem);
+                            if (callback != null && callbackItem != null)
+                                callback.Invoke(callbackItem);
                         }
                         catch (Exception)
                         {
@@ -904,10 +898,7 @@ namespace Utils
                     try
                     {
                         if (mt.CancelToken.IsCancellationRequested)
-                        {
-                            callbackItem = new MTCallBack<TSource, TResult>(inputItem, new OperationCanceledException("The operation was canceled before it could be completed.", mt.CancelToken));
                             return;
-                        }
 
                         if (mt.Priority != ThreadPriority.Normal)
                             Thread.CurrentThread.Priority = mt.Priority;
@@ -950,7 +941,8 @@ namespace Utils
 
                         try
                         {
-                            callback?.Invoke(callbackItem);
+                            if (callback != null && callbackItem != null)
+                                callback.Invoke(callbackItem);
                         }
                         catch (Exception)
                         {
