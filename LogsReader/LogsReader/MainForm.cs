@@ -536,18 +536,12 @@ namespace LogsReader
         {
             if (IsWorking)
             {
-                dgvFiles.Cursor = Cursors.WaitCursor;
-                _notepad.Cursor = Cursors.WaitCursor;
-                trvMain.Cursor = Cursors.WaitCursor;
-                groupBox1.Cursor = Cursors.WaitCursor;
+                splitContainer1.Cursor = Cursors.WaitCursor;
                 ClearForm();
             }
             else
             {
-                dgvFiles.Cursor = Cursors.Default;
-                _notepad.Cursor = Cursors.Default;
-                trvMain.Cursor = Cursors.Default;
-                groupBox1.Cursor = Cursors.Default;
+                splitContainer1.Cursor = Cursors.Default;
             }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
