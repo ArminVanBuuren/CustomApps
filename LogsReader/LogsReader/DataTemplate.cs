@@ -128,9 +128,6 @@ namespace LogsReader
             _entireMessage.Append(error);
         }
 
-        [DGVColumn(ColumnPosition.First, "PrivateID", false)]
-        public int PrivateID { get; internal set; }
-
         [DGVColumn(ColumnPosition.After, "ID")]
         public int ID { get; internal set; }
 
@@ -162,6 +159,9 @@ namespace LogsReader
             get => _description;
             private set => _description = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
+
+        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
+        public int PrivateID { get; internal set; }
 
         [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
         public bool IsMatched { get; private set; }
