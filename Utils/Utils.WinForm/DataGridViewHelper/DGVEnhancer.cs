@@ -14,8 +14,6 @@ namespace Utils.WinForm.DataGridViewHelper
     {
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
-
-        const BindingFlags PropertyFlags = BindingFlags.Instance | BindingFlags.Public;
         private const int WM_SETREDRAW = 11;
 
         public static void SetRedraw(this DataGridView dgv, bool value)
@@ -54,14 +52,14 @@ namespace Utils.WinForm.DataGridViewHelper
 
         class DGVColumn
         {
-            public int ID { get; }
+            public int ClassPosition { get; }
 
-            public DGVColumn(int id, string propName, DGVColumnAttribute gridColumnattr, Type propType)
+            public DGVColumn(int classPosition, string propName, DGVColumnAttribute gridColumnattr, Type propType)
             {
-                ID = id;
+                ClassPosition = classPosition;
                 Attribute = gridColumnattr;
                 PropertyName = propName;
-                PropertyType = propType;
+                PropertyType = propType ?? typeof(object);
             }
 
             public DGVColumnAttribute Attribute { get; }
@@ -87,58 +85,73 @@ namespace Utils.WinForm.DataGridViewHelper
             if (data == null)
                 throw new ArgumentException(nameof(data));
 
-            var typeParameterType = typeof(T);
-            var props = typeParameterType.GetProperties(PropertyFlags);
+            var table = new DataTable();
+            var columnList = new Dictionary<string, DGVColumn>();
+            var positionOfColumns = new Dictionary<string, KeyValuePair<int, DGVColumn>>();
 
-
-            var i1 = 0;
-            var columnList = new List<DGVColumn>();
-            foreach (var prop in props)
+            var classPosition = 0;
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
             {
-                var attrs = prop.GetCustomAttributes(true);
+                var attrs = property.GetCustomAttributes(true);
                 foreach (var attr in attrs)
                 {
                     if (attr is DGVColumnAttribute columnAttr)
                     {
-                        columnList.Add(new DGVColumn(i1++, prop.Name, columnAttr, prop.PropertyType));
+                        columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
                     }
                 }
             }
 
-            columnList = columnList.OrderBy(p => p.Attribute.Visible).ThenBy(p => p.Attribute.Position).ThenBy(p => p.ID).ToList();
-
-            var table = new DataTable();
-
-            //var sortedColumns = new LinkedList<DGVColumn>();
-            //LinkedListNode<DGVColumn> last = null;
-            //foreach (var column in columnList)
-            //{
-            //    var current = new LinkedListNode<DGVColumn>(column);
-            //    SwitchPosition(sortedColumns, column.Attribute.Position, current, ref last);
-            //}
-
-
-            var i2 = 0;
-            var positionOfColumn = new Dictionary<string, KeyValuePair<int, DGVColumn>>(StringComparer.CurrentCultureIgnoreCase);
-            foreach (var column in columnList)
+            if (grid.ColumnCount == 0)
             {
-                table.Columns.Add(column.Attribute.ColumnName, column.PropertyType);
-                positionOfColumn.Add(column.PropertyName, new KeyValuePair<int, DGVColumn>(i2++, column));
+                columnList = columnList.OrderBy(p => p.Value.Attribute.Position).ThenBy(p => p.Value.ClassPosition).ToDictionary(p => p.Key, p => p.Value);
+
+                //var sortedColumns = new LinkedList<DGVColumn>();
+                //LinkedListNode<DGVColumn> last = null;
+                //foreach (var column in columnList)
+                //{
+                //    var current = new LinkedListNode<DGVColumn>(column);
+                //    SwitchPosition(sortedColumns, column.Attribute.Position, current, ref last);
+                //}
+
+                var columnPosition = 0;
+                foreach (var newColumn in columnList.Values)
+                {
+                    table.Columns.Add(newColumn.Attribute.ColumnName, newColumn.PropertyType);
+                    positionOfColumns.Add(newColumn.PropertyName, new KeyValuePair<int, DGVColumn>(columnPosition++, newColumn));
+                }
+            }
+            else
+            {
+                int position = 0;
+                foreach (DataGridViewColumn column in grid.Columns)
+                {
+                    var propertyName = column.DataPropertyName.IsNullOrEmpty() ? column.Name : column.DataPropertyName;
+
+                    if (!columnList.TryGetValue(propertyName, out var newColumn))
+                    {
+                        var headerName = column.HeaderText.IsNullOrEmpty() ? column.Name : column.HeaderText;
+                        newColumn = new DGVColumn(position, propertyName, new DGVColumnAttribute(ColumnPosition.After, headerName, column.Visible), column.ValueType);
+                    }
+
+                    table.Columns.Add(newColumn.Attribute.ColumnName, newColumn.PropertyType);
+                    positionOfColumns.Add(newColumn.PropertyName, new KeyValuePair<int, DGVColumn>(position, newColumn));
+                    position++;
+                }
             }
 
-            var columnsCount = positionOfColumn.Count;
+
             foreach (var instance in data)
             {
-                var tp = instance.GetType();
-                var props2 = tp.GetProperties(PropertyFlags);
                 DataRow dr = table.NewRow();
 
-                foreach (var prop in props2)
+                foreach (var property in properties)
                 {
-                    if (positionOfColumn.TryGetValue(prop.Name, out var pos))
+                    if (positionOfColumns.TryGetValue(property.Name, out var result))
                     {
-                        var result = prop.GetValue(instance, null);
-                        dr[pos.Key] = result;
+                        var resultValue = property.GetValue(instance, null);
+                        dr[result.Key] = resultValue;
                     }
                 }
 
@@ -150,12 +163,12 @@ namespace Utils.WinForm.DataGridViewHelper
             {
                 grid.BeginInvoke(new MethodInvoker(delegate
                 {
-                    grid.AssignToDataGridView(table, columnList, cellPadding, stretchColumnsToAllCells);
+                    grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells);
                 }));
             }
             else
             {
-                grid.AssignToDataGridView(table, columnList, cellPadding, stretchColumnsToAllCells);
+                grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells);
             }
         }
 
