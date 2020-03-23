@@ -114,8 +114,6 @@ namespace LogsReader
         }
     }
 
-    public delegate void CatchWaringHandler(string message, bool isError);
-
     [Serializable, XmlRoot("Settings")]
     public class LRSettings
     {
@@ -229,7 +227,7 @@ namespace LogsReader
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {
-        public event CatchWaringHandler CatchWaring;
+        public event ReportStatusHandler ReportStatus;
 
         private string _schemeName = "TEST";
         private string _servers = "localhost";
@@ -405,13 +403,13 @@ namespace LogsReader
             {
                 if (!TraceLinePattern.IsCorrectRegex)
                 {
-                    CatchWaring?.Invoke($"Some patterns is incorrect! Please check.", true);
+                    ReportStatus?.Invoke($"Some patterns is incorrect! Please check.", true);
                     return false;
                 }
 
                 if (TraceLinePattern.RegexItem.Count == 0)
                 {
-                    CatchWaring?.Invoke($"TraceLinePattern hasn't any regex patterns", true);
+                    ReportStatus?.Invoke($"TraceLinePattern hasn't any regex patterns", true);
                     return false;
                 }
 
@@ -420,19 +418,19 @@ namespace LogsReader
                     var groups = rgPatt.GetGroupNames();
                     if (groups.All(x => x != "Date"))
                     {
-                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
+                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
                         return false;
                     }
 
                     if (groups.All(x => x != "Trace"))
                     {
-                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Trace>' in TraceLinePattern", true);
+                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Trace>' in TraceLinePattern", true);
                         return false;
                     }
 
                     if (groups.All(x => x != "Message"))
                     {
-                        CatchWaring?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Message>' in TraceLinePattern", true);
+                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Message>' in TraceLinePattern", true);
                         return false;
                     }
                 }

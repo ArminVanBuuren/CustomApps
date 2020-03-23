@@ -17,6 +17,8 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader
 {
+    public delegate void ReportStatusHandler(string message, bool isError);
+
     public sealed partial class MainForm : Form
     {
         private readonly object _syncRootFinded = new object();
@@ -830,9 +832,9 @@ namespace LogsReader
             try
             {
                 if (CurrentSettings != null)
-                    CurrentSettings.CatchWaring -= ReportStatus;
+                    CurrentSettings.ReportStatus -= ReportStatus;
                 CurrentSettings = AllSettings.Schemes[chooseScheme.Text];
-                CurrentSettings.CatchWaring += ReportStatus;
+                CurrentSettings.ReportStatus += ReportStatus;
 
                 UserSettings.Scheme = chooseScheme.Text;
                 txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
