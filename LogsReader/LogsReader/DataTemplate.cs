@@ -85,7 +85,6 @@ namespace LogsReader
         private readonly StringBuilder _message = new StringBuilder();
         private readonly StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
-        private string _description = null;
         private string _trace = null;
 
         public DataTemplate(FileLog fileLog, string strID, string date, string trace, string description, string message, string entireMessage)
@@ -153,12 +152,7 @@ namespace LogsReader
             private set => _trace = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
-        [DGVColumn(ColumnPosition.After, "Description")]
-        public string Description
-        {
-            get => _description;
-            private set => _description = value?.Replace(Environment.NewLine, string.Empty).Trim();
-        }
+        public string Description { get; private set; }
 
         [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
         public int PrivateID { get; internal set; }

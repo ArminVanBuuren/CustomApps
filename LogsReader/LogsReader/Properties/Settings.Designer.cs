@@ -73,25 +73,13 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("210")]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
         public int COL4 {
             get {
                 return ((int)(this["COL4"]));
             }
             set {
                 this["COL4"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("900")]
-        public int COL5 {
-            get {
-                return ((int)(this["COL5"]));
-            }
-            set {
-                this["COL5"] = value;
             }
         }
         

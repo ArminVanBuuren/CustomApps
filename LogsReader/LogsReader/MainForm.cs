@@ -319,14 +319,14 @@ namespace LogsReader
             {
                 switch (e.KeyCode)
                 {
+                    case Keys.F4 when btnClear.Enabled:
+                        ClearForm();
+                        break;
                     case Keys.F5 when btnSearch.Enabled && !IsWorking:
                         ButtonStartStop_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when btnSearch.Enabled && IsWorking:
                         ButtonStartStop_Click(this, EventArgs.Empty);
-                        break;
-                    case Keys.F6 when btnClear.Enabled:
-                        ClearForm();
                         break;
                 }
             }
@@ -473,7 +473,7 @@ namespace LogsReader
                 {
                     if (!like.Except(notLike).Any())
                     {
-                        ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace NotLike""!", true);
+                        ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace Not Like""!", true);
                         return false;
                     }
 
@@ -545,13 +545,14 @@ namespace LogsReader
                 splitContainer1.Cursor = Cursors.Default;
             }
 
-            btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
+            btnSearch.Text = IsWorking ? @"      Stop [Esc]" : @"      Search [F5]";
             btnClear.Enabled = !IsWorking;
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
             _message.Enabled = !IsWorking;
             _fullTrace.Enabled = !IsWorking;
+            descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             chooseScheme.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -790,6 +791,7 @@ namespace LogsReader
                 var template = OverallResultList[tempalteID];
                 var message = XML.RemoveUnallowable(template.Message, " ");
 
+                descriptionText.Text = template.Description;
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message;
                 _fullTrace.Text = template.EntireMessage;
             }
@@ -1051,6 +1053,7 @@ namespace LogsReader
                 dgvFiles.DataSource = null;
                 dgvFiles.Rows.Clear();
                 dgvFiles.Refresh();
+                descriptionText.Text = string.Empty;
                 _message.Text = string.Empty;
                 _fullTrace.Text = string.Empty;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;

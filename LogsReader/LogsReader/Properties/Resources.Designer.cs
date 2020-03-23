@@ -61,6 +61,16 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filter {
+            get {
+                object obj = ResourceManager.GetObject("filter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фильтр по полю Date.
         /// </summary>
         internal static string Form_DateFilterComment {
@@ -196,6 +206,56 @@ namespace LogsReader.Properties {
         internal static string LRSettingsScheme_TypesComment {
             get {
                 return ResourceManager.GetString("LRSettingsScheme_TypesComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Navigation_Left {
+            get {
+                object obj = ResourceManager.GetObject("Navigation_Left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Navigation_Right {
+            get {
+                object obj = ResourceManager.GetObject("Navigation_Right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Search {
+            get {
+                object obj = ResourceManager.GetObject("Search", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Symbol_Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Symbol_Refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Symbol_Refresh_3 {
+            get {
+                object obj = ResourceManager.GetObject("Symbol_Refresh_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

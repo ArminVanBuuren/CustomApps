@@ -15,10 +15,7 @@
       <Value Profile="(Default)">270</Value>
     </Setting>
     <Setting Name="COL4" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">210</Value>
-    </Setting>
-    <Setting Name="COL5" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">900</Value>
+      <Value Profile="(Default)">400</Value>
     </Setting>
     <Setting Name="FormState" Type="System.Windows.Forms.FormWindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
