@@ -26,6 +26,30 @@ namespace LogsReader.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int COL0 {
+            get {
+                return ((int)(this["COL0"]));
+            }
+            set {
+                this["COL0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int COL1 {
+            get {
+                return ((int)(this["COL1"]));
+            }
+            set {
+                this["COL1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("135")]
         public int COL2 {
             get {
                 return ((int)(this["COL2"]));
@@ -37,7 +61,7 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("270")]
         public int COL3 {
             get {
                 return ((int)(this["COL3"]));
@@ -49,7 +73,7 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("135")]
+        [global::System.Configuration.DefaultSettingValueAttribute("210")]
         public int COL4 {
             get {
                 return ((int)(this["COL4"]));
@@ -61,37 +85,13 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("270")]
+        [global::System.Configuration.DefaultSettingValueAttribute("900")]
         public int COL5 {
             get {
                 return ((int)(this["COL5"]));
             }
             set {
                 this["COL5"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("210")]
-        public int COL6 {
-            get {
-                return ((int)(this["COL6"]));
-            }
-            set {
-                this["COL6"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("900")]
-        public int COL7 {
-            get {
-                return ((int)(this["COL7"]));
-            }
-            set {
-                this["COL7"] = value;
             }
         }
         
@@ -134,24 +134,24 @@ namespace LogsReader.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int COL0 {
+        public int COL6 {
             get {
-                return ((int)(this["COL0"]));
+                return ((int)(this["COL6"]));
             }
             set {
-                this["COL0"] = value;
+                this["COL6"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int COL1 {
+        public int COL7 {
             get {
-                return ((int)(this["COL1"]));
+                return ((int)(this["COL7"]));
             }
             set {
-                this["COL1"] = value;
+                this["COL7"] = value;
             }
         }
     }

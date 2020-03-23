@@ -2,22 +2,22 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LogsReader.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="COL2" Type="System.Int32" Scope="User">
+    <Setting Name="COL0" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">40</Value>
     </Setting>
-    <Setting Name="COL3" Type="System.Int32" Scope="User">
+    <Setting Name="COL1" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="COL4" Type="System.Int32" Scope="User">
+    <Setting Name="COL2" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">135</Value>
     </Setting>
-    <Setting Name="COL5" Type="System.Int32" Scope="User">
+    <Setting Name="COL3" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">270</Value>
     </Setting>
-    <Setting Name="COL6" Type="System.Int32" Scope="User">
+    <Setting Name="COL4" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">210</Value>
     </Setting>
-    <Setting Name="COL7" Type="System.Int32" Scope="User">
+    <Setting Name="COL5" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">900</Value>
     </Setting>
     <Setting Name="FormState" Type="System.Windows.Forms.FormWindowState" Scope="User">
@@ -29,10 +29,10 @@
     <Setting Name="FormSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">1358, 815</Value>
     </Setting>
-    <Setting Name="COL0" Type="System.Int32" Scope="User">
+    <Setting Name="COL6" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="COL1" Type="System.Int32" Scope="User">
+    <Setting Name="COL7" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
