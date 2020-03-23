@@ -35,7 +35,6 @@ namespace LogsReader
         private readonly ToolStripStatusLabel _cpuUsage;
         private readonly ToolStripStatusLabel _threadsUsage;
         private readonly ToolStripStatusLabel _ramUsage;
-        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _fullTrace;
 
@@ -165,15 +164,15 @@ namespace LogsReader
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
 
-                _notepad = new NotepadControl();
-                splitContainer2.Panel2.Controls.Add(_notepad);
-                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = _notepad.AddDocument("Full Trace", string.Empty);
-                _notepad.TabsFont = this.Font;
-                _notepad.TextFont = new Font("Segoe UI", 10F);
-                _notepad.Dock = DockStyle.Fill;
-                _notepad.SelectEditor(0);
-                _notepad.ReadOnly = true;
+                var notepad = new NotepadControl();
+                splitContainer2.Panel2.Controls.Add(notepad);
+                _message = notepad.AddDocument("Message", string.Empty, Language.XML);
+                _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
+                notepad.TabsFont = this.Font;
+                notepad.TextFont = new Font("Segoe UI", 10F);
+                notepad.Dock = DockStyle.Fill;
+                notepad.SelectEditor(0);
+                notepad.ReadOnly = true;
 
                 dateTimePickerStart.ValueChanged += (sender, args) =>
                 {
