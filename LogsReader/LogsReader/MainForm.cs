@@ -1039,15 +1039,25 @@ namespace LogsReader
             _findedInfo.Text = Finded.ToString();
 
             ReportStatus(string.Empty, false);
+
+            STREAM.GarbageCollect();
         }
 
         void ClearDGV()
         {
-            dgvFiles.DataSource = null;
-            dgvFiles.Refresh();
-            _message.Text = string.Empty;
-            _fullTrace.Text = string.Empty;
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            try
+            {
+                dgvFiles.DataSource = null;
+                dgvFiles.Rows.Clear();
+                dgvFiles.Refresh();
+                _message.Text = string.Empty;
+                _fullTrace.Text = string.Empty;
+                buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
+            }
         }
 
         void ReportStatus(string message, bool isError)
