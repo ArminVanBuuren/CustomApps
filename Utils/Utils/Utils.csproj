@@ -179,6 +179,7 @@
     <Compile Include="SERIALIZATION.cs" />
     <Compile Include="Handles\SerialHelper.cs" />
     <Compile Include="SERVER.cs" />
+    <Compile Include="STREAM.cs" />
     <Compile Include="STRING.cs" />
     <Compile Include="AppUpdater\FileBuildInfo.cs" />
     <Compile Include="AppUpdater\ApplicationUpdater.cs" />
