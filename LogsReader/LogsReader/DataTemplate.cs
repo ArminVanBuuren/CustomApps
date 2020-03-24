@@ -36,10 +36,7 @@ namespace LogsReader
         public DataTemplateCollection(IEnumerable<DataTemplate> list)
         {
             _values = new Dictionary<int, DataTemplate>(list.Count());
-
-            // Сортируем по дате, если она спарсилась корректно, затем то что не спарсилось
-            AddRange(list.Where(p => p.DateOfTrace != null).OrderBy(p => p.DateOfTrace).ThenBy(p => p.FileName).ThenBy(p => p.ID));
-            AddRange(list.Where(p => p.DateOfTrace == null).OrderBy(p => p.Date).ThenBy(p => p.FileName).ThenBy(p => p.ID));
+            AddRange(list.OrderByDescending(p => p.Date).ThenByDescending(p => p.FileName).ThenBy(p => p.ID));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)
@@ -94,9 +91,15 @@ namespace LogsReader
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
-            Date = date;
-            if (DateTime.TryParse(Date, out var dateOfTrace))
+            if (DateTime.TryParse(date, out var dateOfTrace))
+            {
                 DateOfTrace = dateOfTrace;
+                Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
+            }
+            else
+            {
+                Date = date;
+            }
 
             Trace = trace;
             Description = description;
@@ -133,6 +136,13 @@ namespace LogsReader
         [DGVColumn(ColumnPosition.After, "Server")]
         public string Server => _fileLog.Server;
 
+        [DGVColumn(ColumnPosition.After, "Trace")]
+        public string Trace
+        {
+            get => _trace;
+            private set => _trace = value?.Replace(Environment.NewLine, string.Empty).Trim();
+        }
+
         [DGVColumn(ColumnPosition.After, "Date")]
         public string Date
         {
@@ -144,13 +154,6 @@ namespace LogsReader
         public string FileName => _fileLog.FileName;
 
         public DateTime? DateOfTrace { get; }
-
-        [DGVColumn(ColumnPosition.After, "Trace")]
-        public string Trace
-        {
-            get => _trace;
-            private set => _trace = value?.Replace(Environment.NewLine, string.Empty).Trim();
-        }
 
         public string Description { get; private set; }
 

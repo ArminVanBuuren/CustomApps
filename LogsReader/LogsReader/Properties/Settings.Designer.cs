@@ -25,66 +25,6 @@ namespace LogsReader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("40")]
-        public int COL0 {
-            get {
-                return ((int)(this["COL0"]));
-            }
-            set {
-                this["COL0"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public int COL1 {
-            get {
-                return ((int)(this["COL1"]));
-            }
-            set {
-                this["COL1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("135")]
-        public int COL2 {
-            get {
-                return ((int)(this["COL2"]));
-            }
-            set {
-                this["COL2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("270")]
-        public int COL3 {
-            get {
-                return ((int)(this["COL3"]));
-            }
-            set {
-                this["COL3"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("400")]
-        public int COL4 {
-            get {
-                return ((int)(this["COL4"]));
-            }
-            set {
-                this["COL4"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public global::System.Windows.Forms.FormWindowState FormState {
             get {
@@ -116,30 +56,6 @@ namespace LogsReader.Properties {
             }
             set {
                 this["FormSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int COL6 {
-            get {
-                return ((int)(this["COL6"]));
-            }
-            set {
-                this["COL6"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int COL7 {
-            get {
-                return ((int)(this["COL7"]));
-            }
-            set {
-                this["COL7"] = value;
             }
         }
     }

@@ -134,7 +134,7 @@
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
-    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Обязательные именованные группировки: &lt;Date&gt;; &lt;Trace&gt;; &lt;Message&gt;. Опциональные группировки: &lt;ID&gt;; &lt;Description&gt;. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку.</value>
+    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку.</value>
   </data>
   <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
     <value>Типы файлов. Указать через запятую.</value>

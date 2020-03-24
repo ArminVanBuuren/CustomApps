@@ -1,212 +1,195 @@
-﻿using FastColoredTextBoxNS;
+﻿using LogsReader.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using LogsReader.Properties;
 using Utils;
-using Utils.WinForm.DataGridViewHelper;
-using Utils.WinForm.Notepad;
 
 namespace LogsReader
 {
-    public delegate void ReportStatusHandler(string message, bool isError);
-
-    public sealed partial class MainForm : Form
+    public partial class MainForm : Form
     {
-        private readonly object _syncRootFinded = new object();
-        private int _finded = 0;
-        private bool _isClosed = false;
-        private bool _oldDateStartChecked = false;
-        private bool _oldDateEndChecked = false;
-        private bool _settingsLoaded = false;
-
-        private readonly ToolStripStatusLabel _statusInfo;
-        private readonly ToolStripStatusLabel _findedInfo;
-        private readonly ToolStripStatusLabel _completedFilesStatus;
-        private readonly ToolStripStatusLabel _totalFilesStatus;
-        private readonly ToolStripStatusLabel _cpuUsage;
-        private readonly ToolStripStatusLabel _threadsUsage;
-        private readonly ToolStripStatusLabel _ramUsage;
-        private readonly Editor _message;
-        private readonly Editor _fullTrace;
-
-        /// <summary>
-        /// Статус выполнения поиска
-        /// </summary>
-        private bool IsWorking { get; set; } = false;
-
-        /// <summary>
-        /// Запрос на ожидание остановки выполнения поиска
-        /// </summary>
-        private bool IsStopPending { get; set; } = false;
-
-        /// <summary>
-        /// Функция на валидацию по критерию поиска в строке лога
-        /// </summary>
-        private Func<string, bool> IsMatchSearchPatternFunc { get; set; } = null;
-
-        /// <summary>
-        /// Юзерские настройки 
-        /// </summary>
-        private UserSettings UserSettings { get; }
-
+        private LogsReaderForm _current;
         /// <summary>
         /// Настройки схем
         /// </summary>
-        private LRSettings AllSettings { get; }
+        public LRSettings AllSettings { get; }
 
-        /// <summary>
-        /// Текущая схема настроек
-        /// </summary>
-        private LRSettingsScheme CurrentSettings { get; set; }
+        public Dictionary<TabPage, LogsReaderForm> AllForms { get; }
 
-        /// <summary>
-        /// Основной обработчик для работы в асинхронном режиме
-        /// </summary>
-        private MTFuncResult<FileLog, List<DataTemplate>> MultiTaskingHandler { get; set; }
-
-        private DataTemplateCollection OverallResultList { get; set; }
-
-        /// <summary>
-        /// Количество совпадений по критериям поиска
-        /// </summary>
-        private int Finded
+        public LogsReaderForm CurrentForm
         {
             get
             {
-                lock (_syncRootFinded)
-                    return _finded;
-            }
-            set
-            {
-                lock (_syncRootFinded)
-                    _finded = value;
+                if (InvokeRequired)
+                {
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
+                            _current = current;
+                    }));
+                }
+                else
+                {
+                    if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
+                        _current = current;
+                }
+
+                return _current;
             }
         }
+
+        public bool IsClosed { get; private set; } = false;
 
         public MainForm()
         {
             InitializeComponent();
-            dgvFiles.AutoGenerateColumns = false;
 
             try
             {
-                #region Set StatusStrip
-
-                var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
-                var statusStripItemsPaddingMiddle = new Padding(-3, 3, 0, 2);
-
-                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = new Padding(7, 3, 0, 2)});
-                _cpuUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 3, 0, 2)};
-                statusStrip.Items.Add(_cpuUsage);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _threadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_threadsUsage);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = new Padding(-4, 3, 0, 2)};
-                statusStrip.Items.Add(_ramUsage);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_completedFilesStatus);
-                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_totalFilesStatus);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = this.Font, Margin = statusStripItemsPaddingStart};
-                statusStrip.Items.Add(_statusInfo);
-
-                var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
-                thread.Start();
-
-                #endregion
-
-                var tooltipPrintXML = new ToolTip {InitialDelay = 100};
-                tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
-                tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
-                tooltipPrintXML.SetToolTip(fileNames, Resources.LRSettingsScheme_TypesComment);
-                tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
-                tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
-                tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
-                tooltipPrintXML.SetToolTip(dateTimePickerStart, Resources.Form_DateFilterComment);
-                tooltipPrintXML.SetToolTip(dateTimePickerEnd, Resources.Form_DateFilterComment);
-                tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
-                tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
-                tooltipPrintXML.SetToolTip(msgFilterText, Resources.Form_MessageFilterComment);
-
-                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+                KeyPreview = true;
+                KeyDown += MainForm_KeyDown;
                 Closing += (s, e) =>
                 {
-                    _isClosed = true;
+                    IsClosed = true;
                     SaveSettings();
                     SaveInterfaceParams();
                 };
-                KeyPreview = true;
-                KeyDown += MainForm_KeyDown;
 
-                var notepad = new NotepadControl();
-                splitContainer2.Panel2.Controls.Add(notepad);
-                _message = notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
-                notepad.TabsFont = this.Font;
-                notepad.TextFont = new Font("Segoe UI", 10F);
-                notepad.Dock = DockStyle.Fill;
-                notepad.SelectEditor(0);
-                notepad.ReadOnly = true;
+                AllSettings = LRSettings.Deserialize();
+                AllForms = new Dictionary<TabPage, LogsReaderForm>(AllSettings.SchemeList.Length);
 
-                dateTimePickerStart.ValueChanged += (sender, args) =>
+                foreach (var scheme in AllSettings.SchemeList)
                 {
-                    if (_oldDateStartChecked || !dateTimePickerStart.Checked)
-                        return;
-                    var today = DateTime.Now;
-                    _oldDateStartChecked = true;
-                    dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
-                };
-                dateTimePickerEnd.ValueChanged += (sender, args) =>
-                {
-                    if (_oldDateEndChecked || !dateTimePickerEnd.Checked)
-                        return;
-                    var today = DateTime.Now;
-                    _oldDateEndChecked = true;
-                    dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
-                };
+                    try
+                    {
+                        var logsReader = new LogsReaderForm();
+                        logsReader.LoadLogsReader(scheme);
+                        logsReader.Dock = DockStyle.Fill;
+                        logsReader.OnSaveScheme += SaveSettings;
+
+                        var page = new TabPage
+                        {
+                            Text = scheme.Name,
+                            UseVisualStyleBackColor = false,
+                            Font = new Font("Segoe UI", 8.5F),
+                            Margin = new Padding(0),
+                            Padding = new Padding(0)
+                        };
+                        page.Controls.Add(logsReader);
+
+                        AddPage(page);
+                        AllForms.Add(page, logsReader);
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex.ToString()}", @"Load scheme");
+                    }
+                }
+
+                var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                thread.Start();
             }
             catch (Exception ex)
             {
                 Program.MessageShow(ex.ToString(), @"Initialization");
             }
-            finally
+        }
+
+        //async void LoadFormAsync()
+        //{
+        //    await Task.Factory.StartNew(LoadForm);
+        //}
+
+        //void LoadForm()
+        //{
+        //    try
+        //    {
+                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Program.MessageShow(ex.ToString(), @"Load config");
+        //    }
+        //}
+
+        void AddPage(TabPage page)
+        {
+            if (InvokeRequired)
+                BeginInvoke(new MethodInvoker(() => MainTabControl.TabPages.Add(page)));
+            else
+                MainTabControl.TabPages.Add(page);
+        }
+
+        void SelectTab(int index)
+        {
+            if (InvokeRequired)
+                BeginInvoke(new MethodInvoker(() =>
+                {
+                    if (MainTabControl.TabCount > 0 && MainTabControl.TabCount >= index + 1)
+                        MainTabControl.SelectedIndex = index;
+                }));
+            else
             {
-                try
+                if (MainTabControl.TabCount > 0 && MainTabControl.TabCount >= index + 1)
+                    MainTabControl.SelectedIndex = index;
+            }
+        }
+
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            CurrentForm?.LogsReaderKeyDown(sender, e);
+        }
+
+        /// <summary>
+        /// Мониторинг локальных ресурсов
+        /// </summary>
+        void CalculateLocalResources()
+        {
+            try
+            {
+                var curProcName = SERVER.ObtainCurrentProcessName();
+                PerformanceCounter appCPU = null;
+                if (curProcName != null)
                 {
-                    UserSettings = new UserSettings();
-                    AllSettings = LRSettings.Deserialize();
-                    chooseScheme.DataSource = AllSettings.Schemes.Keys.ToList();
+                    appCPU = new PerformanceCounter("Process", "% Processor Time", curProcName, true);
+                    appCPU.NextValue();
                 }
-                catch (Exception ex)
+
+                while (!IsClosed)
                 {
-                    Program.MessageShow(ex.ToString(), @"Load config");
+                    if (InvokeRequired)
+                    {
+                        BeginInvoke(new MethodInvoker(delegate
+                        {
+                            if(AllForms == null || AllForms.Count == 0)
+                                return;
+
+                            double percent = 0;
+                            if (appCPU != null)
+                                double.TryParse(appCPU.NextValue().ToString(), out percent);
+                            var cpuUsage = $"{(int)(percent / Environment.ProcessorCount),3}%";
+                            var currentProcess = Process.GetCurrentProcess();
+                            var threadsUsage = $"{currentProcess.Threads.Count,-2}";
+                            var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+
+                            foreach (var form in AllForms.Values)
+                            {
+                                form.CPUUsage.Text = cpuUsage;
+                                form.ThreadsUsage.Text = threadsUsage;
+                                form.RAMUsage.Text = ramUsage;
+                            }
+                        }));
+                    }
+                    Thread.Sleep(1000);
                 }
+            }
+            catch (Exception ex)
+            {
+                Program.MessageShow(ex.ToString(), @"System Resource Monitoring");
             }
         }
 
@@ -219,11 +202,8 @@ namespace LogsReader
                     try
                     {
                         WindowState = Settings.Default.FormState;
-                        if (WindowState != FormWindowState.Maximized &&
-                            (Settings.Default.FormSize.Height < 100 ||
-                             Settings.Default.FormSize.Width < 100 ||
-                             Settings.Default.FormLocation.X < 0 ||
-                             Settings.Default.FormLocation.Y < 0))
+                        if (WindowState != FormWindowState.Maximized && (Settings.Default.FormSize.Height < 100 || Settings.Default.FormSize.Width < 100 ||
+                                                                         Settings.Default.FormLocation.X < 0 || Settings.Default.FormLocation.Y < 0))
                             WindowState = FormWindowState.Maximized;
                     }
                     catch
@@ -233,14 +213,14 @@ namespace LogsReader
                 }
 
 
-                int i = 0;
-                foreach (DataGridViewColumn column in dgvFiles.Columns)
-                {
-                    dgvFiles.Columns[i].Width = Settings.Default["COL" + i] != null ? (int) Settings.Default["COL" + i] : 80;
-                    i++;
-                }
+                //int i = 0;
+                //foreach (DataGridViewColumn column in dgvFiles.Columns)
+                //{
+                //    dgvFiles.Columns[i].Width = Settings.Default["COL" + i] != null ? (int)Settings.Default["COL" + i] : 80;
+                //    i++;
+                //}
 
-                _settingsLoaded = true;
+                //_settingsLoaded = true;
             }
             catch (Exception ex)
             {
@@ -252,12 +232,12 @@ namespace LogsReader
         {
             try
             {
-                int i = 0;
-                foreach (DataGridViewColumn column in dgvFiles.Columns)
-                {
-                    Settings.Default["COL" + i] = dgvFiles.Columns[i].Width;
-                    i++;
-                }
+                //int i = 0;
+                //foreach (DataGridViewColumn column in dgvFiles.Columns)
+                //{
+                //    Settings.Default["COL" + i] = dgvFiles.Columns[i].Width;
+                //    i++;
+                //}
 
                 Settings.Default.FormLocation = Location;
                 Settings.Default.FormSize = Size;
@@ -271,823 +251,16 @@ namespace LogsReader
             }
         }
 
-        /// <summary>
-        /// Мониторинг локальных ресурсов
-        /// </summary>
-        void CalculateLocalResources()
-        {
-            try
-            {
-                Action checkAppCPU = null;
-                var curProcName = SERVER.ObtainCurrentProcessName();
-                if (curProcName != null)
-                {
-                    var appCPU = new PerformanceCounter("Process", "% Processor Time", curProcName, true);
-                    appCPU.NextValue();
-                    checkAppCPU = () =>
-                    {
-                        double.TryParse(appCPU.NextValue().ToString(), out var cpuResult);
-                        _cpuUsage.Text = $"{(int) (cpuResult / Environment.ProcessorCount),3}%";
-                    };
-                }
-
-                while (!_isClosed)
-                {
-                    if (InvokeRequired)
-                    {
-                        BeginInvoke(new MethodInvoker(delegate
-                        {
-                            checkAppCPU?.Invoke();
-                            var currentProcess = Process.GetCurrentProcess();
-                            _threadsUsage.Text = $"{currentProcess.Threads.Count,-2}";
-                            _ramUsage.Text = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-                        }));
-                    }
-
-                    Thread.Sleep(1000);
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.MessageShow(ex.ToString(), @"System Resource Monitoring");
-            }
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.F4 when btnClear.Enabled:
-                        ClearForm();
-                        break;
-                    case Keys.F5 when btnSearch.Enabled && !IsWorking:
-                        ButtonStartStop_Click(this, EventArgs.Empty);
-                        break;
-                    case Keys.Escape when btnSearch.Enabled && IsWorking:
-                        ButtonStartStop_Click(this, EventArgs.Empty);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, true);
-            }
-        }
-
-        private async void ButtonStartStop_Click(object sender, EventArgs e)
-        {
-            if (!IsWorking)
-            {
-                var stop = new Stopwatch();
-                try
-                {
-                    if (_settingsLoaded)
-                        SaveInterfaceParams();
-
-                    if (useRegex.Checked)
-                    {
-                        if (!REGEX.Verify(txtPattern.Text))
-                        {
-                            ReportStatus(@"Regular expression for search pattern is incorrect! Please check.", true);
-                            return;
-                        }
-
-                        var searchPattern = new Regex(txtPattern.Text, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                        IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
-                    }
-                    else
-                    {
-                        IsMatchSearchPatternFunc = (input) => input.IndexOf(txtPattern.Text, StringComparison.OrdinalIgnoreCase) != -1;
-                    }
-
-                    stop.Start();
-                    IsStopPending = false;
-                    IsWorking = true;
-                    ChangeFormStatus();
-                    ReportStatus(@"Working...", false);
-
-                    var kvpList = await Task<List<FileLog>>.Factory.StartNew(() => GetFileLogs(
-                        trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked),
-                        trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked)));
-
-                    if (kvpList.Count <= 0)
-                    {
-                        ReportStatus(@"No files logs found", true);
-                        return;
-                    }
-
-                    var maxThreads = CurrentSettings.MaxThreads <= 0 ? kvpList.Count : CurrentSettings.MaxThreads;
-                    // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-                    MultiTaskingHandler = new MTFuncResult<FileLog, List<DataTemplate>>(ReadData, kvpList, maxThreads, ThreadPriority.Lowest);
-                    new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
-                    await MultiTaskingHandler.StartAsync();
-
-
-                    OverallResultList = new DataTemplateCollection(MultiTaskingHandler.Result.CallBackList.Where(x => x.Result != null).SelectMany(x => x.Result));
-                    var resultOfError = MultiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
-                    {
-                        listErr.Add(new DataTemplate(x.Source, x.Error));
-                        return listErr;
-                    });
-                    OverallResultList.AddRange(resultOfError);
-
-                    if (await AssignResult(false))
-                    {
-                        ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
-                    }
-
-                    stop.Stop();
-                }
-                catch (Exception ex)
-                {
-                    ReportStatus(ex.Message, true);
-                }
-                finally
-                {
-                    IsWorking = false;
-                    ChangeFormStatus();
-                    if (stop.IsRunning)
-                        stop.Stop();
-                    dgvFiles.Focus();
-                }
-            }
-            else
-            {
-                IsStopPending = true;
-                MultiTaskingHandler?.Stop();
-                ReportStatus(@"Stopping...", false);
-            }
-        }
-
-        private async void buttonFilter_Click(object sender, EventArgs e)
-        {
-            await AssignResult(true);
-        }
-
-        private async void buttonReset_Click(object sender, EventArgs e)
-        {
-            await AssignResult(false);
-        }
-
-        async Task<bool> AssignResult(bool applyFilter)
-        {
-            ClearDGV();
-            ReportStatus(string.Empty, false);
-
-            if (OverallResultList == null)
-                return false;
-
-            IEnumerable<DataTemplate> result = new List<DataTemplate>(OverallResultList);
-
-            if (!result.Any())
-            {
-                ReportStatus(@"No logs found", true);
-                return false;
-            }
-
-            if (applyFilter)
-            {
-                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
-                {
-                    ReportStatus(@"Date of end must be greater than date of start.", true);
-                    return false;
-                }
-
-                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-                else if (dateTimePickerStart.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
-                else if (dateTimePickerEnd.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-
-
-                var like = traceLikeText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                if (like.Any() && notLike.Any())
-                {
-                    if (!like.Except(notLike).Any())
-                    {
-                        ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace Not Like""!", true);
-                        return false;
-                    }
-
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)) && !notLike.Any(p => x.Trace.StringContains(p)));
-                }
-                else if (like.Any())
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)));
-                else if (notLike.Any())
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
-
-
-                var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                if (msgFilter.Any())
-                    result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && msgFilter.Any(p => x.Message.StringContains(p)));
-
-                if (!result.Any())
-                {
-                    ReportStatus(@"No filter results found", true);
-                    return false;
-                }
-            }
-
-            await dgvFiles.AssignCollectionAsync(result, null);
-
-            return true;
-        }
-
-        List<FileLog> GetFileLogs(IEnumerable<TreeNode> servers, IEnumerable<TreeNode> traces)
-        {
-            var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsDirectory);
-            var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
-            var kvpList = new List<FileLog>();
-
-            foreach (var serverNode in servers)
-            {
-                var serverDir = string.Format(logsDirFormat, serverNode.Text);
-                if (!Directory.Exists(serverDir))
-                    continue;
-
-                var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
-                foreach (var fileLog in files.Select(x => new FileLog(serverNode.Text, x)))
-                {
-                    if (traces.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
-                        kvpList.Add(fileLog);
-                }
-            }
-
-            //var stop = new Stopwatch();
-            //stop.Start();
-            //var getCountLines = new MTFuncResult<FileLog, long>((input) => IO.CountLinesReader(input.FilePath), kvpList, kvpList.Count, ThreadPriority.Lowest);
-            //getCountLines.Start();
-            //var lines = getCountLines.Result.Values.Select(x => x.Result).Sum(x => x);
-            //stop.Stop();
-
-            return kvpList;
-        }
-
-        void ChangeFormStatus()
-        {
-            if (IsWorking)
-            {
-                splitContainer1.Cursor = Cursors.WaitCursor;
-                ClearForm();
-            }
-            else
-            {
-                splitContainer1.Cursor = Cursors.Default;
-            }
-
-            btnSearch.Text = IsWorking ? @"      Stop [Esc]" : @"      Search [F5]";
-            btnClear.Enabled = !IsWorking;
-            trvMain.Enabled = !IsWorking;
-            txtPattern.Enabled = !IsWorking;
-            dgvFiles.Enabled = !IsWorking;
-            _message.Enabled = !IsWorking;
-            _fullTrace.Enabled = !IsWorking;
-            descriptionText.Enabled = !IsWorking;
-            useRegex.Enabled = !IsWorking;
-            chooseScheme.Enabled = !IsWorking;
-            serversText.Enabled = !IsWorking;
-            fileNames.Enabled = !IsWorking;
-            maxThreadsText.Enabled = !IsWorking;
-            logDirText.Enabled = !IsWorking;
-            maxLinesStackText.Enabled = !IsWorking;
-            dateTimePickerStart.Enabled = !IsWorking;
-            dateTimePickerEnd.Enabled = !IsWorking;
-            traceNotLikeText.Enabled = !IsWorking;
-            traceLikeText.Enabled = !IsWorking;
-            msgFilterText.Enabled = !IsWorking;
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
-        }
-
-        void CheckProgress()
-        {
-            try
-            {
-                var total = MultiTaskingHandler?.Source.Count.ToString();
-                while (IsWorking && MultiTaskingHandler != null && !MultiTaskingHandler.IsCompleted)
-                {
-                    var completed = MultiTaskingHandler.Result.Count.ToString();
-                    var progress = MultiTaskingHandler.PercentOfComplete;
-
-                    if (InvokeRequired)
-                    {
-                        Invoke(new MethodInvoker(delegate
-                        {
-                            progressBar.Value = progress;
-                            _completedFilesStatus.Text = completed;
-                            _totalFilesStatus.Text = total;
-                            _findedInfo.Text = Finded.ToString();
-                        }));
-                    }
-
-                    Thread.Sleep(10);
-                }
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-        }
-
-        void ProcessCompleted(IAsyncResult asyncResult)
-        {
-            try
-            {
-                if (InvokeRequired)
-                {
-                    Invoke(new MethodInvoker(delegate
-                    {
-                        progressBar.Value = 100;
-                        _findedInfo.Text = Finded.ToString();
-                        if (MultiTaskingHandler != null)
-                        {
-                            _completedFilesStatus.Text = MultiTaskingHandler.Result.Count.ToString();
-                            _totalFilesStatus.Text = MultiTaskingHandler.Source.Count().ToString();
-                        }
-                        else
-                        {
-                            _completedFilesStatus.Text = @"0";
-                            _totalFilesStatus.Text = @"0";
-                        }
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-        }
-
-        private List<DataTemplate> ReadData(FileLog fileLog)
-        {
-            var beforeTraceLines = new Queue<string>(CurrentSettings.MaxTraceLines);
-            var listResult = new List<DataTemplate>();
-
-            // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
-            using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
-            {
-                var stackLines = 0;
-                string line;
-                DataTemplate lastResult = null;
-                while ((line = inputReader.ReadLine()) != null && !IsStopPending)
-                {
-                    if (lastResult != null)
-                    {
-                        // если стек лога превышает допустимый размер, то лог больше не дополняется
-                        if (stackLines >= CurrentSettings.MaxTraceLines)
-                        {
-                            if (!lastResult.IsMatched)
-                                listResult.Add(lastResult);
-                            stackLines = 0;
-                            lastResult = null;
-                        }
-                        else
-                        {
-                            if (lastResult.IsMatched)
-                            {
-                                // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
-                                // Иначе строка относится к другому логу и завершается дополнение
-                                if (CurrentSettings.IsMatch(line) == null)
-                                {
-                                    stackLines++;
-                                    lastResult.AppendMessageAfter(Environment.NewLine + line);
-                                    continue;
-                                }
-                                else
-                                {
-                                    stackLines = 0;
-                                    lastResult = null;
-                                }
-                            }
-                            else if (!lastResult.IsMatched)
-                            {
-                                // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
-                                stackLines++;
-                                var appendFailedLog = lastResult.Message + Environment.NewLine + line;
-                                if (CurrentSettings.IsLineMatch(appendFailedLog, fileLog, out var afterSuccessResult))
-                                {
-                                    // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
-                                    listResult.Add(afterSuccessResult);
-                                    lastResult = afterSuccessResult;
-                                }
-                                else
-                                {
-                                    // Паттерн не сработал успешно, но лог дополняется для следующей попытки
-                                    lastResult.AppendMessageAfter(appendFailedLog);
-                                }
-                            }
-                        }
-                    }
-
-                    if (!IsMatchSearchPatternFunc.Invoke(line))
-                    {
-                        beforeTraceLines.Enqueue(line);
-                        if (beforeTraceLines.Count > CurrentSettings.MaxTraceLines)
-                            beforeTraceLines.Dequeue();
-                        continue;
-                    }
-                    else
-                    {
-                        ++Finded;
-                        stackLines = 1;
-                    }
-
-                    if (CurrentSettings.IsLineMatch(line, fileLog, out lastResult))
-                    {
-                        listResult.Add(lastResult);
-                    }
-                    else
-                    {
-                        // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-                        var reverceBeforeTraceLines = new Queue<string>(beforeTraceLines.Reverse());
-                        while (stackLines < CurrentSettings.MaxTraceLines && reverceBeforeTraceLines.Count > 0)
-                        {
-                            stackLines++;
-                            lastResult.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
-
-                            if (CurrentSettings.IsLineMatch(lastResult.Message, fileLog, out var beforeResult))
-                            {
-                                lastResult = beforeResult;
-                                listResult.Add(lastResult);
-                                break;
-                            }
-                        }
-                    }
-
-                    beforeTraceLines.Clear();
-                }
-
-                if (lastResult != null && !lastResult.IsMatched)
-                {
-                    listResult.Add(lastResult);
-                }
-            }
-
-            return listResult;
-        }
-
-        private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                var row = ((DataGridView) sender).Rows[e.RowIndex];
-                var tempaltePrivateID = TryGetPrivateID(row);
-                if (tempaltePrivateID <= -1 || OverallResultList == null)
-                    return;
-
-                var template = OverallResultList[tempaltePrivateID];
-
-                if (template.IsMatched)
-                {
-                    if (template.DateOfTrace == null)
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Yellow;
-                        foreach (DataGridViewCell cell2 in row.Cells)
-                            cell2.ToolTipText = "Date value is incorrect";
-                        return;
-                    }
-
-                    row.DefaultCellStyle.BackColor = Color.White;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightPink;
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                        cell2.ToolTipText = "Doesn't match by \"TraceLinePattern\"";
-                }
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, true);
-            }
-        }
-
-        private void dgvFiles_SelectionChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
-                    return;
-
-                var tempalteID = TryGetPrivateID(dgvFiles.SelectedRows[0]);
-
-                if (tempalteID == -1 || OverallResultList == null)
-                {
-                    _message.Text = string.Empty;
-                    _fullTrace.Text = string.Empty;
-                    return;
-                }
-
-                var template = OverallResultList[tempalteID];
-                var message = XML.RemoveUnallowable(template.Message, " ");
-
-                descriptionText.Text = template.Description;
-                _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message;
-                _fullTrace.Text = template.EntireMessage;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, true);
-            }
-        }
-
-        private void dgvFiles_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var hti = dgvFiles.HitTest(e.X, e.Y);
-                dgvFiles.ClearSelection();
-                dgvFiles.Rows[hti.RowIndex].Selected = true;
-            }
-        }
-
-        static int TryGetPrivateID(DataGridViewRow row)
-        {
-            if (row == null)
-                return -1;
-
-            foreach (DataGridViewCell cell in row.Cells)
-            {
-                if (!cell.OwningColumn.Name.Equals("PrivateID", StringComparison.CurrentCultureIgnoreCase))
-                    continue;
-
-                if (cell.Value is int value)
-                    return value;
-            }
-
-            return -1;
-        }
-
-        private void chooseScheme_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (CurrentSettings != null)
-                    CurrentSettings.ReportStatus -= ReportStatus;
-                CurrentSettings = AllSettings.Schemes[chooseScheme.Text];
-                CurrentSettings.ReportStatus += ReportStatus;
-
-                UserSettings.Scheme = chooseScheme.Text;
-                txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
-                traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
-                traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
-                msgFilterText.AssignValue(UserSettings.Message, msgFilterText_TextChanged);
-                useRegex.Checked = UserSettings.UseRegex;
-
-                serversText.Text = CurrentSettings.Servers;
-                fileNames.Text = CurrentSettings.Types;
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-                logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
-                maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-                btnSearch.Enabled = CurrentSettings.IsCorrect;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, true);
-            }
-            finally
-            {
-                trvMain.Nodes["trvServers"].Checked = false;
-                trvMain.Nodes["trvTypes"].Checked = false;
-                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
-                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
-                ClearForm();
-                ValidationCheck();
-            }
-        }
-            
-        private void serversText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.Servers = serversText.Text;
-            serversText.AssignValue(CurrentSettings.Servers, serversText_TextChanged);
-
-            //заполняем список серверов из параметра
-            trvMain.Nodes["trvServers"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
-            {
-                if (s.Key.IsNullOrEmptyTrim())
-                    continue;
-                trvMain.Nodes["trvServers"].Nodes.Add(s.Key.Trim().ToUpper());
-            }
-
-            trvMain.ExpandAll();
-
-            ValidationCheck();
-            SaveSettings();
-        }
-
-        private void typesText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.Types = fileNames.Text;
-            fileNames.AssignValue(CurrentSettings.Types, typesText_TextChanged);
-
-            //заполняем список типов из параметра
-            trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
-            {
-                if (s.Key.IsNullOrEmptyTrim())
-                    continue;
-                trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.Trim().ToUpper());
-            }
-
-            trvMain.ExpandAll();
-
-            ValidationCheck();
-            SaveSettings();
-        }
-
-        private void maxThreadsText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(maxThreadsText.Text, out var res))
-                MaxThreadsTextSave(res);
-        }
-
-        private void maxThreadsText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(maxThreadsText.Text, out var res))
-                res = -1;
-            MaxThreadsTextSave(res);
-        }
-
-        void MaxThreadsTextSave(int res)
-        {
-            CurrentSettings.MaxThreads = res;
-            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-            SaveSettings();
-        }
-
-        private void logDirText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.LogsDirectory = logDirText.Text;
-            logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
-            ValidationCheck();
-            SaveSettings();
-        }
-
-        private void maxLinesStackText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(maxLinesStackText.Text, out var res))
-                MaxLinesStackTextSave(res);
-        }
-
-        private void maxLinesStackText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(maxLinesStackText.Text, out var res))
-                res = -1;
-
-            MaxLinesStackTextSave(res);
-        }
-
-        void MaxLinesStackTextSave(int res)
-        {
-            CurrentSettings.MaxTraceLines = res;
-            maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-            SaveSettings();
-        }
-
-        private void trvMain_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            if (e.Node.Level == 0)
-                CheckTreeViewNode(e.Node, e.Node.Checked);
-            ValidationCheck();
-        }
-
-        private static void CheckTreeViewNode(TreeNode node, bool isChecked)
-        {
-            foreach (TreeNode item in node.Nodes)
-            {
-                item.Checked = isChecked;
-                if (item.Nodes.Count > 0)
-                    CheckTreeViewNode(item, isChecked);
-            }
-        }
-
-        private void txtPattern_TextChanged(object sender, EventArgs e)
-        {
-            UserSettings.PreviousSearch = txtPattern.Text;
-            ValidationCheck();
-        }
-
-        private void useRegex_CheckedChanged(object sender, EventArgs e)
-        {
-            UserSettings.UseRegex = useRegex.Checked;
-        }
-
-        private void traceLikeText_TextChanged(object sender, EventArgs e)
-        {
-            UserSettings.TraceLike = traceLikeText.Text;
-        }
-
-        private void traceNotLikeText_TextChanged(object sender, EventArgs e)
-        {
-            UserSettings.TraceNotLike = traceNotLikeText.Text;
-        }
-
-        private void msgFilterText_TextChanged(object sender, EventArgs e)
-        {
-            UserSettings.Message = msgFilterText.Text;
-        }
-
-        void ValidationCheck()
-        {
-            var isCorrectPath = IO.CHECK_PATH.IsMatch(logDirText.Text);
-            logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
-
-            var settIsCorrect = CurrentSettings.IsCorrect;
-            if (settIsCorrect)
-                ReportStatus(string.Empty, false);
-
-            btnSearch.Enabled = isCorrectPath
-                                && settIsCorrect
-                                && !txtPattern.Text.IsNullOrEmptyTrim()
-                                && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
-                                && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
-
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
-        }
-
-        async void SaveSettings()
+        async void SaveSettings(object sender, EventArgs args)
         {
             if (AllSettings != null)
                 await LRSettings.SerializeAsync(AllSettings);
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        void SaveSettings()
         {
-            ClearForm();
-        }
-
-        void ClearForm()
-        {
-            OverallResultList?.Clear();
-            OverallResultList = null;
-
-            ClearDGV();
-
-            progressBar.Value = 0;
-            _completedFilesStatus.Text = @"0";
-            _totalFilesStatus.Text = @"0";
-
-            Finded = 0;
-            _findedInfo.Text = Finded.ToString();
-
-            ReportStatus(string.Empty, false);
-
-            STREAM.GarbageCollect();
-        }
-
-        void ClearDGV()
-        {
-            try
-            {
-                dgvFiles.DataSource = null;
-                dgvFiles.Rows.Clear();
-                dgvFiles.Refresh();
-                descriptionText.Text = string.Empty;
-                _message.Text = string.Empty;
-                _fullTrace.Text = string.Empty;
-                buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, true);
-            }
-        }
-
-        void ReportStatus(string message, bool isError)
-        {
-            _statusInfo.Text = message;
-            _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
-        }
-    }
-
-    public class MyTreeView : TreeView
-    {
-        /// <summary>
-        /// Правит баг когда ячейка выбрана, но визуально не обновляется 
-        /// </summary>
-        /// <param name="m"></param>
-        protected override void WndProc(ref Message m)
-        {
-            // Suppress WM_LBUTTONDBLCLK
-            if (m.Msg == 0x203)
-            {
-                m.Result = IntPtr.Zero;
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
+            if (AllSettings != null)
+                LRSettings.Serialize(AllSettings);
         }
     }
 }

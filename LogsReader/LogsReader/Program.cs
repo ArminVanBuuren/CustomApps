@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace LogsReader
 {
@@ -20,9 +14,9 @@ namespace LogsReader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var logsReader  = new MainForm();
-            logsReader.ApplySettings();
-            Application.Run(logsReader);
+            var mainForm  = new MainForm();
+            mainForm.ApplySettings();
+            Application.Run(mainForm);
         }
 
         public static void AssignValue<T>(this TextBox textBox, T value, EventHandler handler)

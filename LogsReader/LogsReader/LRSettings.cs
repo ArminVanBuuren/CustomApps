@@ -19,10 +19,11 @@ namespace LogsReader
     {
         private RegeditControl parentRegistry;
 
-        public UserSettings()
+        public UserSettings(string schemeName)
         {
             try
             {
+                Scheme = schemeName;
                 var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
                 UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch, '\0'));
                 parentRegistry = new RegeditControl(ApplicationName);
@@ -33,8 +34,8 @@ namespace LogsReader
             }
         }
 
+        public string Scheme { get; }
         public string UserName { get; }
-        public string Scheme { get; set; }
 
         public string PreviousSearch
         {
@@ -143,7 +144,7 @@ namespace LogsReader
                 try
                 {
                     _schemes = value ?? _schemes;
-                    Schemes = _schemes.Length > 0
+                    Schemes = _schemes != null && _schemes.Length > 0
                         ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
                         : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
                 }
@@ -156,7 +157,7 @@ namespace LogsReader
 
         public LRSettings()
         {
-            Schemes = SchemeList.Length > 0
+            Schemes = SchemeList != null && SchemeList.Length > 0
                 ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
                 : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
         }
@@ -227,8 +228,6 @@ namespace LogsReader
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {
-        public event ReportStatusHandler ReportStatus;
-
         private string _schemeName = "TEST";
         private string _servers = "localhost";
         private string _types = "test";
@@ -237,12 +236,14 @@ namespace LogsReader
         private string _logsDirectory = @"C:\TEST";
         private TraceLinePattern _traceLinePattern = new TraceLinePattern();
 
+        public event ReportStatusHandler ReportStatus;
+
         public LRSettingsScheme()
         {
 
         }
 
-        public LRSettingsScheme(string name)
+        internal LRSettingsScheme(string name)
         {
             switch (name)
             {
@@ -271,7 +272,9 @@ namespace LogsReader
         public string Name
         {
             get => _schemeName;
-            set => _schemeName = value.IsNullOrEmptyTrim() ? _schemeName : value;
+            set => _schemeName = value.IsNullOrEmptyTrim()
+                ? _schemeName
+                : Regex.Replace(value, @"\s+", "");
         }
 
         [XmlAnyElement("ServersComment")]
@@ -367,26 +370,30 @@ namespace LogsReader
 
         public bool IsLineMatch(string message, FileLog fileLog, out DataTemplate result)
         {
-            var maskMatch = IsMatch(message);
-            if (maskMatch != null && maskMatch.Success)
+            foreach (var item in TraceLinePattern.Items)
             {
-                result = new DataTemplate(fileLog,
-                    maskMatch.Groups["ID"].Value,
-                    maskMatch.Groups["Date"].Value,
-                    maskMatch.Groups["Trace"].Value,
-                    maskMatch.Groups["Description"].Value,
-                    maskMatch.Groups["Message"].Value,
-                    message);
-                return true;
+                var match = item.RegexItem.Match(message);
+                if (match.Success)
+                {
+                    result = new DataTemplate(fileLog,
+                        match.GetValueByReplacement(item.ID),
+                        match.GetValueByReplacement(item.Date),
+                        match.GetValueByReplacement(item.Trace),
+                        match.GetValueByReplacement(item.Description),
+                        match.GetValueByReplacement(item.Message),
+                        message);
+                    return true;
+                }
             }
 
             result = new DataTemplate(fileLog, message);
             return false;
         }
 
+        
         public Match IsMatch(string input)
         {
-            foreach (var regexPatt in TraceLinePattern.RegexItem)
+            foreach (var regexPatt in TraceLinePattern.Items.Select(x => x.RegexItem))
             {
                 var match = regexPatt.Match(input);
                 if (match.Success)
@@ -403,36 +410,8 @@ namespace LogsReader
             {
                 if (!TraceLinePattern.IsCorrectRegex)
                 {
-                    ReportStatus?.Invoke($"Some patterns is incorrect! Please check.", true);
+                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex pattern in 'TraceLinePattern' node. Please check.", true);
                     return false;
-                }
-
-                if (TraceLinePattern.RegexItem.Count == 0)
-                {
-                    ReportStatus?.Invoke($"TraceLinePattern hasn't any regex patterns", true);
-                    return false;
-                }
-
-                foreach (var rgPatt in TraceLinePattern.RegexItem)
-                {
-                    var groups = rgPatt.GetGroupNames();
-                    if (groups.All(x => x != "Date"))
-                    {
-                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Date>' in TraceLinePattern", true);
-                        return false;
-                    }
-
-                    if (groups.All(x => x != "Trace"))
-                    {
-                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Trace>' in TraceLinePattern", true);
-                        return false;
-                    }
-
-                    if (groups.All(x => x != "Message"))
-                    {
-                        ReportStatus?.Invoke($"Scheme '{Name}' has incorrect '{rgPatt}' pattern. Not found group '?<Message>' in TraceLinePattern", true);
-                        return false;
-                    }
                 }
 
                 return true;
@@ -443,41 +422,73 @@ namespace LogsReader
     [XmlRoot("TraceLinePattern")]
     public class TraceLinePattern
     {
-        private XmlNode[] _traceLinePattern = new XmlNode[] {new XmlDocument().CreateCDataSection(@"DATE=(?<Date>.+?)\s*TRACE=(?<Trace>.+?)\s*MESSAGE=(?<Message>.+)\s*END_TRACE")};
+        private TraceLinePatternItem[] _traceLinePattern = new TraceLinePatternItem[] { new TraceLinePatternItem() };
 
         public TraceLinePattern()
         {
 
         }
 
-        public TraceLinePattern(string name)
+        internal TraceLinePattern(string name)
         {
             switch (name)
             {
                 case "MG":
-                    Items = new XmlNode[]
+                    Items = new[]
                     {
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Description>.*?)(?<Message>\<.+\>).*"),
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Description>.+?)\s+(?<Message>.+)"),
-                        new XmlDocument().CreateCDataSection(@"(?<Date>.+?)\s*(?<Trace>\[.+?\])\s*(?<Message>.+)")
+                        new TraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>).*") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
+                        new TraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
+                        new TraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", Trace = "$2", Message = "$3"}
                     };
                     break;
                 case "SPA":
-                    Items = new XmlNode[]
+                    Items = new[]
                     {
-                        new XmlDocument().CreateCDataSection(@"(?<ID>\d+?)\u0001(?<Trace>.+?)\u0001(?<Description>.+?)\u0001(?<Date>.+?)\u0001(?<Message>.*?)\u0001\d*")
+                        new TraceLinePatternItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
+                            {ID = "$1", Trace = "$2", Description = "$3", Date = "$4.$6", Message = "$5"}
                     };
                     break;
             }
         }
 
         [XmlIgnore]
-        internal bool IsCorrectRegex { get; private set; } = false;
+        internal bool IsCorrectRegex => _traceLinePattern != null && _traceLinePattern.Length > 0 && _traceLinePattern.All(x => x.IsCorrectRegex);
 
         [XmlElement("Item")]
-        public XmlNode[] Items
+        public TraceLinePatternItem[] Items
         {
             get => _traceLinePattern;
+            set
+            {
+                if (value != null)
+                {
+                    if (value.Length > 0)
+                        _traceLinePattern = value;
+                }
+            }
+        }
+    }
+
+    [XmlRoot("Item")]
+    public class TraceLinePatternItem
+    {
+        private XmlNode[] _item = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
+
+        public TraceLinePatternItem()
+        {
+            CDataContent = _item;
+        }
+
+        internal TraceLinePatternItem(string regexPattern)
+        {
+            CDataContent = new XmlNode[] {new XmlDocument().CreateCDataSection(regexPattern)};
+        }
+
+
+        [XmlText]
+        public XmlNode[] CDataContent
+        {
+            get => _item;
             set
             {
                 IsCorrectRegex = false;
@@ -485,40 +496,45 @@ namespace LogsReader
                 if (value != null)
                 {
                     if (value.Length > 0)
-                        _traceLinePattern = value;
+                    {
+                        if (value[0].NodeType == XmlNodeType.CDATA)
+                            _item = value;
+                        else
+                            _item = new XmlNode[] {new XmlDocument().CreateCDataSection(value[0].Value)};
+                    }
                 }
 
-                if (_traceLinePattern.Length == 0)
+                if (_item == null || _item.Length == 0)
+                    return;
+
+                var text = _item[0].Value.ReplaceUTFCodeToSymbol();
+                if (!REGEX.Verify(text))
                 {
-                    Program.MessageShow($"Some schemes have no patterns.", "TraceLinePattern Reader");
+                    Program.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
                     return;
                 }
-
-                foreach (var pattern in _traceLinePattern)
+                else
                 {
-                    if (pattern == null)
-                    {
-                        Program.MessageShow("One of patterns is null. Please check config.", "TraceLinePattern Reader");
-                        return;
-                    }
-
-                    var text = pattern.Value.ReplaceUTFCodeToSymbol();
-                    if (!REGEX.Verify(text))
-                    {
-                        Program.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
-                        return;
-                    }
-                    else
-                    {
-                        RegexItem.Add(new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline));
-                    }
+                    RegexItem = new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline);
+                    GroupNames = RegexItem.GetGroupNames();
                 }
 
                 IsCorrectRegex = true;
             }
         }
 
+        [XmlIgnore] internal bool IsCorrectRegex { get; set; }
+
         [XmlIgnore]
-        public List<Regex> RegexItem { get; private set; } = new List<Regex>();
+        public Regex RegexItem { get; private set; }
+
+        [XmlIgnore]
+        public string[] GroupNames { get; private set; }
+
+        [XmlAttribute] public string ID { get; set; } = string.Empty;
+        [XmlAttribute] public string Date { get; set; } = string.Empty;
+        [XmlAttribute] public string Trace { get; set; } = string.Empty;
+        [XmlAttribute] public string Description { get; set; } = string.Empty;
+        [XmlAttribute] public string Message { get; set; } = string.Empty;
     }
 }
