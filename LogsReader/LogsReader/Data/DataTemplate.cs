@@ -1,81 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using Utils.WinForm.DataGridViewHelper;
 
-namespace LogsReader
+namespace LogsReader.Data
 {
-    public class FileLog
-    {
-        public FileLog(string server, string filePath)
-        {
-            Server = server;
-            FilePath = filePath;
-            FileName = Path.GetFileName(FilePath);
-        }
-
-        public string Server { get; }
-        public string FileName { get; }
-        public string FilePath { get; }
-
-        public override string ToString()
-        {
-            return $"\\{Server}\\{FilePath}";
-        }
-    }
-
-    public class DataTemplateCollection : IEnumerable<DataTemplate>, IDisposable
-    {
-        int _seqPrivateID = 0;
-        int _seqID = 0;
-        private readonly Dictionary<int, DataTemplate> _values;
-
-        public DataTemplateCollection(IEnumerable<DataTemplate> list)
-        {
-            _values = new Dictionary<int, DataTemplate>(list.Count());
-            AddRange(list.OrderByDescending(p => p.Date).ThenByDescending(p => p.FileName).ThenBy(p => p.ID));
-        }
-
-        public void AddRange(IEnumerable<DataTemplate> list)
-        {
-            foreach (var template in list)
-            {
-                template.PrivateID = ++_seqPrivateID;
-                if (template.ID == -1)
-                    template.ID = ++_seqID;
-
-                _values.Add(template.PrivateID, template);
-            }
-        }
-
-        public int Count => _values.Count;
-
-        public DataTemplate this[int privateID] => _values[privateID];
-
-        public void Clear()
-        {
-            _values.Clear();
-        }
-
-        public IEnumerator<DataTemplate> GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
-
-        public void Dispose()
-        {
-            Clear();
-        }
-    }
-
     public class DataTemplate
     {
         private readonly FileLog _fileLog;
@@ -130,6 +58,12 @@ namespace LogsReader
             _entireMessage.Append(error);
         }
 
+        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
+        public int PrivateID { get; internal set; }
+
+        [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
+        public bool IsMatched { get; private set; }
+
         [DGVColumn(ColumnPosition.After, "ID")]
         public int ID { get; internal set; }
 
@@ -156,12 +90,6 @@ namespace LogsReader
         public DateTime? DateOfTrace { get; }
 
         public string Description { get; private set; }
-
-        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
-        public int PrivateID { get; internal set; }
-
-        [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
-        public bool IsMatched { get; private set; }
 
         public string Message => _message.ToString();
 

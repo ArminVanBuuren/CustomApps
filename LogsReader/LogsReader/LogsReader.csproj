@@ -57,7 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataTemplate.cs" />
+    <Compile Include="Data\DataTemplate.cs" />
+    <Compile Include="Data\DataTemplateCollection.cs" />
+    <Compile Include="Data\FileLog.cs" />
     <Compile Include="LogsReaderForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -72,8 +74,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LRSettings.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Config\LRSettings.cs" />
+    <Compile Include="Config\LRSettingsScheme.cs" />
+    <Compile Include="Config\LRTraceLinePattern.cs" />
+    <Compile Include="Config\UserSettings.cs" />
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="LogsReaderForm.resx">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
     </EmbeddedResource>

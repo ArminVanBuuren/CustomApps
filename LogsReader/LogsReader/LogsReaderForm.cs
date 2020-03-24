@@ -11,20 +11,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Properties;
+using LogsReader.Config;
+using LogsReader.Data;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 
+
 namespace LogsReader
 {
-    public delegate void ReportStatusHandler(string message, bool isError);
-
     public sealed partial class LogsReaderForm : UserControl
     {
         private readonly object _syncRootFinded = new object();
         private int _finded = 0;
         private bool _oldDateStartChecked = false;
         private bool _oldDateEndChecked = false;
+        private bool _settingsLoaded = false;
 
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
@@ -38,7 +40,7 @@ namespace LogsReader
         /// <summary>
         /// Сохранить изменения в конфиг
         /// </summary>
-        public event EventHandler OnSaveScheme;
+        public event EventHandler OnSchemeChanged;
 
         public ToolStripStatusLabel CPUUsage { get; }
         public ToolStripStatusLabel ThreadsUsage { get; }
@@ -146,7 +148,7 @@ namespace LogsReader
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
                 var notepad = new NotepadControl();
-                splitContainer2.Panel2.Controls.Add(notepad);
+                MainSplitContainer.Panel2.Controls.Add(notepad);
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
                 _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
                 notepad.TabsFont = this.Font;
@@ -174,11 +176,11 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Program.MessageShow(ex.ToString(), @"Initialization");
+                Utils.MessageShow(ex.ToString(), @"Initialization");
             }
         }
 
-        public void LoadLogsReader(LRSettingsScheme scheme)
+        public void LoadForm(LRSettingsScheme scheme)
         {
             try
             {
@@ -201,12 +203,65 @@ namespace LogsReader
             }
             finally
             {
+                ApplySettings();
                 trvMain.Nodes["trvServers"].Checked = false;
                 trvMain.Nodes["trvTypes"].Checked = false;
                 CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
                 CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
                 ClearForm();
                 ValidationCheck();
+            }
+        }
+
+        public void ApplySettings()
+        {
+            try
+            {
+                int i = 0;
+                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                {
+                    var valueStr = UserSettings.GetValue("COL" + i);
+                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value < 1000)
+                        dgvFiles.Columns[i].Width = value;
+
+                    i++;
+                }
+
+                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
+                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
+                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
+            }
+            finally
+            {
+                _settingsLoaded = true;
+            }
+        }
+
+        public void SaveInterfaceParams()
+        {
+            try
+            {
+                if (!_settingsLoaded)
+                    return;
+
+                int i = 0;
+                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                {
+                    UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
+                    i++;
+                }
+
+                UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, true);
             }
         }
 
@@ -744,7 +799,7 @@ namespace LogsReader
             trvMain.ExpandAll();
 
             ValidationCheck();
-            OnSaveScheme?.Invoke(this, EventArgs.Empty);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void typesText_TextChanged(object sender, EventArgs e)
@@ -764,7 +819,7 @@ namespace LogsReader
             trvMain.ExpandAll();
 
             ValidationCheck();
-            OnSaveScheme?.Invoke(this, EventArgs.Empty);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void maxThreadsText_TextChanged(object sender, EventArgs e)
@@ -784,7 +839,7 @@ namespace LogsReader
         {
             CurrentSettings.MaxThreads = res;
             maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-            OnSaveScheme?.Invoke(this, EventArgs.Empty);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void logDirText_TextChanged(object sender, EventArgs e)
@@ -792,7 +847,7 @@ namespace LogsReader
             CurrentSettings.LogsDirectory = logDirText.Text;
             logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
             ValidationCheck();
-            OnSaveScheme?.Invoke(this, EventArgs.Empty);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void maxLinesStackText_TextChanged(object sender, EventArgs e)
@@ -813,7 +868,7 @@ namespace LogsReader
         {
             CurrentSettings.MaxTraceLines = res;
             maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-            OnSaveScheme?.Invoke(this, EventArgs.Empty);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void trvMain_AfterCheck(object sender, TreeViewEventArgs e)
@@ -877,8 +932,6 @@ namespace LogsReader
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
-
-
         private void btnClear_Click(object sender, EventArgs e)
         {
             ClearForm();
@@ -886,6 +939,8 @@ namespace LogsReader
 
         void ClearForm()
         {
+            SaveInterfaceParams();
+
             OverallResultList?.Clear();
             OverallResultList = null;
 
@@ -925,26 +980,6 @@ namespace LogsReader
         {
             _statusInfo.Text = message;
             _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
-        }
-    }
-
-    public class MyTreeView : TreeView
-    {
-        /// <summary>
-        /// Правит баг когда ячейка выбрана, но визуально не обновляется 
-        /// </summary>
-        /// <param name="m"></param>
-        protected override void WndProc(ref Message m)
-        {
-            // Suppress WM_LBUTTONDBLCLK
-            if (m.Msg == 0x203)
-            {
-                m.Result = IntPtr.Zero;
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
         }
     }
 }

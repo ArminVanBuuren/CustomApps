@@ -18,27 +18,5 @@ namespace LogsReader
             mainForm.ApplySettings();
             Application.Run(mainForm);
         }
-
-        public static void AssignValue<T>(this TextBox textBox, T value, EventHandler handler)
-        {
-            try
-            {
-                textBox.TextChanged -= handler;
-                textBox.Text = value.ToString();
-            }
-            catch (Exception)
-            {
-                //ignored
-            }
-            finally
-            {
-                textBox.TextChanged += handler;
-            }
-        }
-
-        public static void MessageShow(string msg, string caption)
-        {
-            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
     }
 }

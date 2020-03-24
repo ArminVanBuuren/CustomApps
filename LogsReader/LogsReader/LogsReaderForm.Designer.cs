@@ -34,8 +34,8 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
@@ -53,8 +53,8 @@ namespace LogsReader
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.maxThreadsText = new System.Windows.Forms.TextBox();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.EnumSplitContainer = new System.Windows.Forms.SplitContainer();
             this.descriptionText = new System.Windows.Forms.RichTextBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
@@ -73,27 +73,27 @@ namespace LogsReader
             this.msgFilterText = new System.Windows.Forms.TextBox();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
             this.filterPanel = new System.Windows.Forms.Panel();
-            this.trvMain = new LogsReader.MyTreeView();
+            this.trvMain = new LogsReader.TreeViewImproved();
+            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
             this.ParentSplitContainer.Panel2.SuspendLayout();
             this.ParentSplitContainer.SuspendLayout();
             this.SchemePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
+            this.MainSplitContainer.Panel1.SuspendLayout();
+            this.MainSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
+            this.EnumSplitContainer.Panel1.SuspendLayout();
+            this.EnumSplitContainer.Panel2.SuspendLayout();
+            this.EnumSplitContainer.SuspendLayout();
             this.groupBoxFilter.SuspendLayout();
             this.filterPanel.SuspendLayout();
             this.SuspendLayout();
@@ -108,13 +108,13 @@ namespace LogsReader
             this.dgvFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PrivateID,
+            this.IsMatched,
             this.ID,
             this.Server,
             this.Trace,
             this.Date,
-            this.FileName,
-            this.PrivateID,
-            this.IsMatched});
+            this.FileName});
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dgvFiles.Location = new System.Drawing.Point(0, 0);
@@ -123,7 +123,7 @@ namespace LogsReader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(436, 351);
+            this.dgvFiles.Size = new System.Drawing.Size(525, 350);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
@@ -186,9 +186,9 @@ namespace LogsReader
             // 
             // ParentSplitContainer.Panel2
             // 
-            this.ParentSplitContainer.Panel2.Controls.Add(this.splitContainer2);
+            this.ParentSplitContainer.Panel2.Controls.Add(this.MainSplitContainer);
             this.ParentSplitContainer.Size = new System.Drawing.Size(940, 403);
-            this.ParentSplitContainer.SplitterDistance = 202;
+            this.ParentSplitContainer.SplitterDistance = 175;
             this.ParentSplitContainer.TabIndex = 31;
             // 
             // SchemePanel
@@ -207,7 +207,7 @@ namespace LogsReader
             this.SchemePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SchemePanel.Location = new System.Drawing.Point(0, 0);
             this.SchemePanel.Name = "SchemePanel";
-            this.SchemePanel.Size = new System.Drawing.Size(198, 399);
+            this.SchemePanel.Size = new System.Drawing.Size(171, 399);
             this.SchemePanel.TabIndex = 15;
             // 
             // label1
@@ -225,7 +225,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxLinesStackText.Location = new System.Drawing.Point(85, 84);
             this.maxLinesStackText.Name = "maxLinesStackText";
-            this.maxLinesStackText.Size = new System.Drawing.Size(110, 23);
+            this.maxLinesStackText.Size = new System.Drawing.Size(83, 23);
             this.maxLinesStackText.TabIndex = 14;
             this.maxLinesStackText.TextChanged += new System.EventHandler(this.maxLinesStackText_TextChanged);
             this.maxLinesStackText.Leave += new System.EventHandler(this.maxLinesStackText_Leave);
@@ -236,7 +236,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.serversText.Location = new System.Drawing.Point(85, 6);
             this.serversText.Name = "serversText";
-            this.serversText.Size = new System.Drawing.Size(110, 23);
+            this.serversText.Size = new System.Drawing.Size(83, 23);
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.serversText_TextChanged);
             // 
@@ -264,7 +264,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logDirText.Location = new System.Drawing.Point(85, 32);
             this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(110, 23);
+            this.logDirText.Size = new System.Drawing.Size(83, 23);
             this.logDirText.TabIndex = 12;
             this.logDirText.TextChanged += new System.EventHandler(this.logDirText_TextChanged);
             // 
@@ -274,7 +274,7 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fileNames.Location = new System.Drawing.Point(85, 58);
             this.fileNames.Name = "fileNames";
-            this.fileNames.Size = new System.Drawing.Size(110, 23);
+            this.fileNames.Size = new System.Drawing.Size(83, 23);
             this.fileNames.TabIndex = 8;
             this.fileNames.TextChanged += new System.EventHandler(this.typesText_TextChanged);
             // 
@@ -302,44 +302,44 @@ namespace LogsReader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxThreadsText.Location = new System.Drawing.Point(85, 110);
             this.maxThreadsText.Name = "maxThreadsText";
-            this.maxThreadsText.Size = new System.Drawing.Size(110, 23);
+            this.maxThreadsText.Size = new System.Drawing.Size(83, 23);
             this.maxThreadsText.TabIndex = 10;
             this.maxThreadsText.TextChanged += new System.EventHandler(this.maxThreadsText_TextChanged);
             this.maxThreadsText.Leave += new System.EventHandler(this.maxThreadsText_Leave);
             // 
-            // splitContainer2
+            // MainSplitContainer
             // 
-            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
+            this.MainSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.MainSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.MainSplitContainer.Name = "MainSplitContainer";
             // 
-            // splitContainer2.Panel1
+            // MainSplitContainer.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(734, 403);
-            this.splitContainer2.SplitterDistance = 440;
-            this.splitContainer2.TabIndex = 0;
+            this.MainSplitContainer.Panel1.Controls.Add(this.EnumSplitContainer);
+            this.MainSplitContainer.Size = new System.Drawing.Size(761, 403);
+            this.MainSplitContainer.SplitterDistance = 529;
+            this.MainSplitContainer.TabIndex = 0;
             // 
-            // splitContainer3
+            // EnumSplitContainer
             // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.EnumSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EnumSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.EnumSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.EnumSplitContainer.Name = "EnumSplitContainer";
+            this.EnumSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer3.Panel1
+            // EnumSplitContainer.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.dgvFiles);
+            this.EnumSplitContainer.Panel1.Controls.Add(this.dgvFiles);
             // 
-            // splitContainer3.Panel2
+            // EnumSplitContainer.Panel2
             // 
-            this.splitContainer3.Panel2.Controls.Add(this.descriptionText);
-            this.splitContainer3.Size = new System.Drawing.Size(436, 399);
-            this.splitContainer3.SplitterDistance = 351;
-            this.splitContainer3.TabIndex = 2;
+            this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
+            this.EnumSplitContainer.Size = new System.Drawing.Size(525, 399);
+            this.EnumSplitContainer.SplitterDistance = 350;
+            this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
             // 
@@ -348,7 +348,7 @@ namespace LogsReader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(436, 44);
+            this.descriptionText.Size = new System.Drawing.Size(525, 45);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 
@@ -543,61 +543,16 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(2, 139);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode19.Name = "trvServers";
+            treeNode19.Text = "Servers";
+            treeNode20.Name = "trvTypes";
+            treeNode20.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(350, 358);
+            treeNode19,
+            treeNode20});
+            this.trvMain.Size = new System.Drawing.Size(323, 358);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
-            // 
-            // ID
-            // 
-            this.ID.DataPropertyName = "ID";
-            this.ID.HeaderText = "ID";
-            this.ID.MinimumWidth = 40;
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 60;
-            // 
-            // Server
-            // 
-            this.Server.DataPropertyName = "Server";
-            this.Server.HeaderText = "Server";
-            this.Server.MinimumWidth = 40;
-            this.Server.Name = "Server";
-            this.Server.ReadOnly = true;
-            this.Server.Width = 120;
-            // 
-            // Trace
-            // 
-            this.Trace.DataPropertyName = "Trace";
-            this.Trace.HeaderText = "Trace";
-            this.Trace.MinimumWidth = 40;
-            this.Trace.Name = "Trace";
-            this.Trace.ReadOnly = true;
-            this.Trace.Width = 120;
-            // 
-            // Date
-            // 
-            this.Date.DataPropertyName = "Date";
-            this.Date.HeaderText = "Date";
-            this.Date.MinimumWidth = 40;
-            this.Date.Name = "Date";
-            this.Date.ReadOnly = true;
-            this.Date.Width = 160;
-            // 
-            // FileName
-            // 
-            this.FileName.DataPropertyName = "FileName";
-            this.FileName.HeaderText = "FileName";
-            this.FileName.MinimumWidth = 40;
-            this.FileName.Name = "FileName";
-            this.FileName.ReadOnly = true;
-            this.FileName.Width = 200;
             // 
             // PrivateID
             // 
@@ -619,6 +574,51 @@ namespace LogsReader
             this.IsMatched.Visible = false;
             this.IsMatched.Width = 10;
             // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 40;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 45;
+            // 
+            // Server
+            // 
+            this.Server.DataPropertyName = "Server";
+            this.Server.HeaderText = "Server";
+            this.Server.MinimumWidth = 40;
+            this.Server.Name = "Server";
+            this.Server.ReadOnly = true;
+            this.Server.Width = 80;
+            // 
+            // Trace
+            // 
+            this.Trace.DataPropertyName = "Trace";
+            this.Trace.HeaderText = "Trace";
+            this.Trace.MinimumWidth = 40;
+            this.Trace.Name = "Trace";
+            this.Trace.ReadOnly = true;
+            this.Trace.Width = 140;
+            // 
+            // Date
+            // 
+            this.Date.DataPropertyName = "Date";
+            this.Date.HeaderText = "Date";
+            this.Date.MinimumWidth = 40;
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            this.Date.Width = 140;
+            // 
+            // FileName
+            // 
+            this.FileName.DataPropertyName = "FileName";
+            this.FileName.HeaderText = "FileName";
+            this.FileName.MinimumWidth = 40;
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            this.FileName.Width = 500;
+            // 
             // LogsReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -638,13 +638,13 @@ namespace LogsReader
             this.ParentSplitContainer.ResumeLayout(false);
             this.SchemePanel.ResumeLayout(false);
             this.SchemePanel.PerformLayout();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
+            this.MainSplitContainer.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
+            this.MainSplitContainer.ResumeLayout(false);
+            this.EnumSplitContainer.Panel1.ResumeLayout(false);
+            this.EnumSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).EndInit();
+            this.EnumSplitContainer.ResumeLayout(false);
             this.groupBoxFilter.ResumeLayout(false);
             this.groupBoxFilter.PerformLayout();
             this.filterPanel.ResumeLayout(false);
@@ -656,13 +656,13 @@ namespace LogsReader
 
         #endregion
         private System.Windows.Forms.DataGridView dgvFiles;
-        private MyTreeView trvMain;
+        private TreeViewImproved trvMain;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.TextBox txtPattern;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.SplitContainer ParentSplitContainer;
-        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.SplitContainer MainSplitContainer;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.CheckBox useRegex;
@@ -689,17 +689,17 @@ namespace LogsReader
         private Label label11;
         private TextBox msgFilterText;
         private GroupBox groupBoxFilter;
-        private SplitContainer splitContainer3;
+        private SplitContainer EnumSplitContainer;
         private RichTextBox descriptionText;
         private Panel SchemePanel;
         private Panel filterPanel;
+        private DataGridViewTextBoxColumn PrivateID;
+        private DataGridViewTextBoxColumn IsMatched;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Server;
         private DataGridViewTextBoxColumn Trace;
         private DataGridViewTextBoxColumn Date;
         private DataGridViewTextBoxColumn FileName;
-        private DataGridViewTextBoxColumn PrivateID;
-        private DataGridViewTextBoxColumn IsMatched;
     }
 }
 

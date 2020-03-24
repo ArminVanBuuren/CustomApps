@@ -1,10 +1,11 @@
-﻿using LogsReader.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using LogsReader.Config;
+using LogsReader.Properties;
 using Utils;
 
 namespace LogsReader
@@ -54,7 +55,11 @@ namespace LogsReader
                 Closing += (s, e) =>
                 {
                     IsClosed = true;
-                    SaveSettings();
+                    if (AllSettings != null)
+                        LRSettings.Serialize(AllSettings);
+                    if (AllForms != null)
+                        foreach (var form in AllForms.Values)
+                            form.SaveInterfaceParams();
                     SaveInterfaceParams();
                 };
 
@@ -66,9 +71,9 @@ namespace LogsReader
                     try
                     {
                         var logsReader = new LogsReaderForm();
-                        logsReader.LoadLogsReader(scheme);
+                        logsReader.LoadForm(scheme);
                         logsReader.Dock = DockStyle.Fill;
-                        logsReader.OnSaveScheme += SaveSettings;
+                        logsReader.OnSchemeChanged += SaveSchemas;
 
                         var page = new TabPage
                         {
@@ -80,12 +85,12 @@ namespace LogsReader
                         };
                         page.Controls.Add(logsReader);
 
-                        AddPage(page);
+                        MainTabControl.TabPages.Add(page);
                         AllForms.Add(page, logsReader);
                     }
                     catch (Exception ex)
                     {
-                        Program.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex.ToString()}", @"Load scheme");
+                        Utils.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex.ToString()}", @"Load scheme");
                     }
                 }
 
@@ -94,50 +99,9 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Program.MessageShow(ex.ToString(), @"Initialization");
+                Utils.MessageShow(ex.ToString(), @"Initialization");
             }
         }
-
-        //async void LoadFormAsync()
-        //{
-        //    await Task.Factory.StartNew(LoadForm);
-        //}
-
-        //void LoadForm()
-        //{
-        //    try
-        //    {
-                
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Program.MessageShow(ex.ToString(), @"Load config");
-        //    }
-        //}
-
-        void AddPage(TabPage page)
-        {
-            if (InvokeRequired)
-                BeginInvoke(new MethodInvoker(() => MainTabControl.TabPages.Add(page)));
-            else
-                MainTabControl.TabPages.Add(page);
-        }
-
-        void SelectTab(int index)
-        {
-            if (InvokeRequired)
-                BeginInvoke(new MethodInvoker(() =>
-                {
-                    if (MainTabControl.TabCount > 0 && MainTabControl.TabCount >= index + 1)
-                        MainTabControl.SelectedIndex = index;
-                }));
-            else
-            {
-                if (MainTabControl.TabCount > 0 && MainTabControl.TabCount >= index + 1)
-                    MainTabControl.SelectedIndex = index;
-            }
-        }
-
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -189,7 +153,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Program.MessageShow(ex.ToString(), @"System Resource Monitoring");
+                Utils.MessageShow(ex.ToString(), @"System Resource Monitoring");
             }
         }
 
@@ -199,28 +163,18 @@ namespace LogsReader
             {
                 if (!IsMdiChild)
                 {
-                    try
-                    {
-                        WindowState = Settings.Default.FormState;
-                        if (WindowState != FormWindowState.Maximized && (Settings.Default.FormSize.Height < 100 || Settings.Default.FormSize.Width < 100 ||
-                                                                         Settings.Default.FormLocation.X < 0 || Settings.Default.FormLocation.Y < 0))
-                            WindowState = FormWindowState.Maximized;
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
+                    WindowState = Settings.Default.FormState;
+                    if (WindowState != FormWindowState.Maximized &&
+                        (Settings.Default.FormSize.Height < 100 ||
+                         Settings.Default.FormSize.Width < 100 ||
+                         Settings.Default.FormLocation.X < 0 ||
+                         Settings.Default.FormLocation.Y < 0))
+                        WindowState = FormWindowState.Maximized;
+                    else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
+                        Size = Settings.Default.FormSize;
+
+                    Location = Settings.Default.FormLocation;
                 }
-
-
-                //int i = 0;
-                //foreach (DataGridViewColumn column in dgvFiles.Columns)
-                //{
-                //    dgvFiles.Columns[i].Width = Settings.Default["COL" + i] != null ? (int)Settings.Default["COL" + i] : 80;
-                //    i++;
-                //}
-
-                //_settingsLoaded = true;
             }
             catch (Exception ex)
             {
@@ -228,17 +182,16 @@ namespace LogsReader
             }
         }
 
-        private void SaveInterfaceParams()
+        async void SaveSchemas(object sender, EventArgs args)
+        {
+            if (AllSettings != null)
+                await LRSettings.SerializeAsync(AllSettings);
+        }
+
+        void SaveInterfaceParams()
         {
             try
             {
-                //int i = 0;
-                //foreach (DataGridViewColumn column in dgvFiles.Columns)
-                //{
-                //    Settings.Default["COL" + i] = dgvFiles.Columns[i].Width;
-                //    i++;
-                //}
-
                 Settings.Default.FormLocation = Location;
                 Settings.Default.FormSize = Size;
                 Settings.Default.FormState = WindowState;
@@ -249,18 +202,6 @@ namespace LogsReader
             {
                 // ignored
             }
-        }
-
-        async void SaveSettings(object sender, EventArgs args)
-        {
-            if (AllSettings != null)
-                await LRSettings.SerializeAsync(AllSettings);
-        }
-
-        void SaveSettings()
-        {
-            if (AllSettings != null)
-                LRSettings.Serialize(AllSettings);
         }
     }
 }

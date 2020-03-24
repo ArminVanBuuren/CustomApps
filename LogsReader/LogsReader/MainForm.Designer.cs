@@ -40,7 +40,7 @@ namespace LogsReader
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1710, 818);
+            this.MainTabControl.Size = new System.Drawing.Size(1770, 935);
             this.MainTabControl.TabIndex = 0;
             // 
             // MainForm
