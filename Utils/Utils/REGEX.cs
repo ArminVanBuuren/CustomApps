@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Utils
@@ -25,6 +26,50 @@ namespace Utils
             }
 
             return result;
+        }
+
+        public static string GetValueByReplacement(this Match match, string format)
+        {
+            var builder = new StringBuilder();
+            int opened = 0;
+            foreach (var ch in format)
+            {
+                if (ch == '$')
+                {
+                    if (opened == 0)
+                    {
+                        opened++;
+                        continue;
+                    }
+                    else
+                    {
+                        builder.Append('$');
+                        continue;
+                    }
+                }
+
+                if (opened == 1)
+                {
+                    if (int.TryParse(ch.ToString(), out var res))
+                    {
+                        opened = 0;
+                        builder.Append(match.Groups[res.ToString()]);
+                        continue;
+                    }
+                    else
+                    {
+                        opened = 0;
+                        builder.Append('$');
+                    }
+                }
+
+                builder.Append(ch);
+            }
+
+            if (opened > 0)
+                builder.Append('$');
+
+            return builder.ToString();
         }
 
         public static bool Verify(string testPattern)

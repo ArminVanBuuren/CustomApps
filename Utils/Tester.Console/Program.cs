@@ -139,6 +139,8 @@ namespace Tester.Console
             {
                 var stop = new Stopwatch();
 
+                //double.TryParse("100.032332", out var test11);
+
                 var qq  = IO.IsFileReady(@"C:\test4\1_0.txt");
                 var qq1 = IO.SafeReadFile(@"C:\test4\1_0.txt");
                 var ff = false;
