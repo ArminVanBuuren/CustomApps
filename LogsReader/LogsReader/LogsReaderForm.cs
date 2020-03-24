@@ -346,7 +346,7 @@ namespace LogsReader
                         listErr.Add(new DataTemplate(x.Source, x.Error));
                         return listErr;
                     });
-                    OverallResultList.AddRange(resultOfError.OrderByDescending(x => x.DateOfTrace));
+                    OverallResultList.AddRange(resultOfError.OrderBy(x => x.DateOfTrace));
 
                     if (await AssignResult(false))
                     {

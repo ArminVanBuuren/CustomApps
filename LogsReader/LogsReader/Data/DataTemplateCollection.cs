@@ -14,7 +14,8 @@ namespace LogsReader.Data
         public DataTemplateCollection(IEnumerable<DataTemplate> list)
         {
             _values = new Dictionary<int, DataTemplate>(list.Count());
-            AddRange(list.OrderByDescending(p => p.Date).ThenByDescending(p => p.FileName).ThenBy(p => p.ID));
+            //AddRange(list.OrderByDescending(p => p.Date).ThenByDescending(p => p.FileName).ThenBy(p => p.ID));
+            AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.FileName).ThenBy(p => p.ID));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)

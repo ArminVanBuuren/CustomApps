@@ -192,7 +192,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Регулярное выражение работает в Singleline, переводит весь стек лога в одну строку..
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает в Singleline, т.е. переводит весь стек лога в одну строку..
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
             get {
