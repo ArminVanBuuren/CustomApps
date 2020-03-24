@@ -34,8 +34,8 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,7 +51,7 @@ namespace LogsReader
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.trvMain = new LogsReader.TreeViewImproved();
+            this.trvMain = new TreeViewImproved();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.serversText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -123,7 +123,7 @@ namespace LogsReader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(525, 326);
+            this.dgvFiles.Size = new System.Drawing.Size(525, 346);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
@@ -292,13 +292,13 @@ namespace LogsReader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(2, 139);
             this.trvMain.Name = "trvMain";
-            treeNode7.Name = "trvServers";
-            treeNode7.Text = "Servers";
-            treeNode8.Name = "trvTypes";
-            treeNode8.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(166, 260);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
@@ -422,7 +422,7 @@ namespace LogsReader
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
             this.EnumSplitContainer.Size = new System.Drawing.Size(525, 399);
-            this.EnumSplitContainer.SplitterDistance = 326;
+            this.EnumSplitContainer.SplitterDistance = 346;
             this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
@@ -432,7 +432,7 @@ namespace LogsReader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(525, 69);
+            this.descriptionText.Size = new System.Drawing.Size(525, 49);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 

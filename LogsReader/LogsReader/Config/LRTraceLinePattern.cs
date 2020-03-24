@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -7,9 +8,11 @@ using Utils;
 namespace LogsReader.Config
 {
     [XmlRoot("TraceLinePattern")]
-    public class LRTraceLinePattern
+    public class LRTraceLinePattern : TraceLinePattern
     {
-        private LRTraceLinePatternItem[] _traceLinePattern = new LRTraceLinePatternItem[] { new LRTraceLinePatternItem() };
+        private LRTraceLinePatternItem[] _traceLinePattern = new LRTraceLinePatternItem[] {new LRTraceLinePatternItem()};
+        private XmlNode[] _startLineWith = new XmlNode[] {new XmlDocument().CreateCDataSection(string.Empty)};
+        private XmlNode[] _endLineWith = new XmlNode[] {new XmlDocument().CreateCDataSection(string.Empty) };
 
         public LRTraceLinePattern()
         {
@@ -38,16 +41,23 @@ namespace LogsReader.Config
                 case "MGA":
                     Items = new[]
                     {
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)\s+\[\d+\]\n[-]{49,}(.+?)(\<.+?\>\s*)(\n\s*[-]{49,})")
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)(\<.+?\>\s*)(\n\s*[-]{49,})")
                             {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)\s+\[\d+\]\n[-]{49,}(.+?)(\n\s*[-]{49,})")
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)(\n\s*[-]{49,})")
                             {Date = "$1", Trace = "$2", Message = "$3"}
                     };
+                    StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
+                    EndWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^[-]{49,}\s*$") };
                     break;
             }
         }
 
-        [XmlIgnore] internal bool IsCorrectRegex => _traceLinePattern != null && _traceLinePattern.Length > 0 && _traceLinePattern.All(x => x.IsCorrectRegex);
+        [XmlIgnore]
+        internal override bool IsCorrectRegex
+        {
+            get => _traceLinePattern != null && _traceLinePattern.Length > 0 && _traceLinePattern.All(x => x.IsCorrectRegex);
+            set { }
+        }
 
         [XmlElement("Item")]
         public LRTraceLinePatternItem[] Items
@@ -62,10 +72,28 @@ namespace LogsReader.Config
                 }
             }
         }
+
+        [XmlElement("StartLineWith")]
+        public XmlNode[] StartWith
+        {
+            get => _startLineWith;
+            set => StartLineWith = GetCDataNode(value, false, out _startLineWith);
+        }
+
+        [XmlIgnore] internal Regex StartLineWith { get; private set; }
+
+        [XmlElement("EndLineWith")]
+        public XmlNode[] EndWith
+        {
+            get => _endLineWith;
+            set => EndLineWith = GetCDataNode(value, false, out _endLineWith);
+        }
+
+        [XmlIgnore] internal Regex EndLineWith { get; private set; }
     }
 
     [XmlRoot("Item")]
-    public class LRTraceLinePatternItem
+    public class LRTraceLinePatternItem : TraceLinePattern
     {
         private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
 
@@ -86,38 +114,17 @@ namespace LogsReader.Config
             get => _cdataItem;
             set
             {
+                RegexItem = GetCDataNode(value, true, out _cdataItem);
+                if (RegexItem != null)
+                {
+                    IsCorrectRegex = true;
+                    return;
+                }
                 IsCorrectRegex = false;
-
-                if (value != null)
-                {
-                    if (value.Length > 0)
-                    {
-                        if (value[0].NodeType == XmlNodeType.CDATA)
-                            _cdataItem = value;
-                        else
-                            _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection(value[0].Value) };
-                    }
-                }
-
-                if (_cdataItem == null || _cdataItem.Length == 0)
-                    return;
-
-                var text = _cdataItem[0].Value.ReplaceUTFCodeToSymbol();
-                if (!REGEX.Verify(text))
-                {
-                    Utils.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
-                    return;
-                }
-                else
-                {
-                    RegexItem = new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline);
-                }
-
-                IsCorrectRegex = true;
             }
         }
 
-        [XmlIgnore] internal bool IsCorrectRegex { get; set; }
+        [XmlIgnore] internal override bool IsCorrectRegex { get; set; }
         [XmlIgnore] internal Regex RegexItem { get; private set; }
 
         [XmlAttribute] public string ID { get; set; } = string.Empty;
@@ -125,5 +132,43 @@ namespace LogsReader.Config
         [XmlAttribute] public string Trace { get; set; } = string.Empty;
         [XmlAttribute] public string Description { get; set; } = string.Empty;
         [XmlAttribute] public string Message { get; set; } = string.Empty;
+    }
+
+    [Serializable]
+    public abstract class TraceLinePattern
+    {
+        internal abstract bool IsCorrectRegex { get; set; }
+
+        protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult)
+        {
+            cdataResult = null;
+            if (input != null)
+            {
+                if (input.Length > 0)
+                {
+                    if (input[0].NodeType == XmlNodeType.CDATA)
+                        cdataResult = input;
+                    else
+                        cdataResult = new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
+                }
+            }
+
+            if (cdataResult == null || cdataResult.Length == 0)
+                return null;
+
+            var text = cdataResult[0].Value.ReplaceUTFCodeToSymbol();
+            if (text.IsNullOrEmptyTrim() && !isMandatory)
+                return null;
+
+            if (!REGEX.Verify(text))
+            {
+                Utils.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
+                return null;
+            }
+            else
+            {
+                return new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline);
+            }
+        }
     }
 }

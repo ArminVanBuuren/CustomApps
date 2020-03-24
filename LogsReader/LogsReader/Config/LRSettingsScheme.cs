@@ -51,7 +51,7 @@ namespace LogsReader.Config
                 case "MGA":
                     _schemeName = name;
                     _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
-                    _types = "fast,slow";
+                    _types = "fast,slow,test";
                     _maxThreads = -1;
                     _maxTraceLines = 300;
                     _logsDirectory = @"C:\FORISLOG\MGAdapter";

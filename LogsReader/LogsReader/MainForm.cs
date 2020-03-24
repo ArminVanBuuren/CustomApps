@@ -92,7 +92,7 @@ namespace LogsReader
                     }
                     catch (Exception ex)
                     {
-                        Utils.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex.ToString()}", @"Load scheme");
+                        Utils.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", @"Load scheme");
                     }
                 }
 
@@ -110,7 +110,7 @@ namespace LogsReader
             TabPage page = MainTabControl.TabPages[e.Index];
             if (page == MainTabControl.SelectedTab)
             {
-                RenderTabPage(page, e, Color.DarkGoldenrod, Color.White);
+                RenderTabPage(page, e, Color.FromArgb(0, 200, 205), Color.White);
             }
             else
             {

@@ -60,6 +60,7 @@
     <Compile Include="Data\DataTemplate.cs" />
     <Compile Include="Data\DataTemplateCollection.cs" />
     <Compile Include="Data\FileLog.cs" />
+    <Compile Include="LogsReader.cs" />
     <Compile Include="LogsReaderForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
