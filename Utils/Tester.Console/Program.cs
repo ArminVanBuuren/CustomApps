@@ -139,10 +139,18 @@ namespace Tester.Console
             {
                 var stop = new Stopwatch();
 
+                string context = string.Empty;
+                using (var sr = new StreamReader(@"C:\test\1_1.txt"))
+                {
+                    context = sr.ReadToEnd();
+                }
+                var test2 = new Regex(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)\s+\[\d+\]\n[-]{49,}(.+?)(\<.+?\>\s*)($|\n\s*[-]{49,})", RegexOptions.Singleline);
+                var ddd  = test2.Matches(context);
+
                 //double.TryParse("100.032332", out var test11);
 
                 var qq  = IO.IsFileReady(@"C:\test4\1_0.txt");
-                var qq1 = IO.SafeReadFile(@"C:\test4\1_0.txt");
+                
                 var ff = false;
                 //using (var regControl = new RegeditControl("TEST123"))
                 //{
