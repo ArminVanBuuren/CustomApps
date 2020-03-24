@@ -35,6 +35,15 @@ namespace LogsReader.Config
                             {ID = "$1", Trace = "$2", Description = "$3", Date = "$4.$6", Message = "$5"}
                     };
                     break;
+                case "MGA":
+                    Items = new[]
+                    {
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)\s+\[\d+\]\n[-]{49,}(.+?)(\<.+?\>\s*)(\n\s*[-]{49,})")
+                            {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)\s+\[\d+\]\n[-]{49,}(.+?)(\n\s*[-]{49,})")
+                            {Date = "$1", Trace = "$2", Message = "$3"}
+                    };
+                    break;
             }
         }
 

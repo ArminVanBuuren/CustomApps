@@ -62,6 +62,8 @@ namespace LogsReader
                             form.SaveInterfaceParams();
                     SaveInterfaceParams();
                 };
+                MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+                MainTabControl.DrawItem += MainTabControl_DrawItem;
 
                 AllSettings = LRSettings.Deserialize();
                 AllForms = new Dictionary<TabPage, LogsReaderForm>(AllSettings.SchemeList.Length);
@@ -101,6 +103,29 @@ namespace LogsReader
             {
                 Utils.MessageShow(ex.ToString(), @"Initialization");
             }
+        }
+
+        private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabPage page = MainTabControl.TabPages[e.Index];
+            if (page == MainTabControl.SelectedTab)
+            {
+                RenderTabPage(page, e, Color.DarkGoldenrod, Color.White);
+            }
+            else
+            {
+                RenderTabPage(page, e, Color.DimGray, Color.White);
+            }
+        }
+
+        void RenderTabPage(TabPage page, DrawItemEventArgs e, Color fore, Color text)
+        {
+            e.Graphics.FillRectangle(new SolidBrush(fore), e.Bounds);
+
+            Rectangle paddedBounds = e.Bounds;
+            int yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
+            paddedBounds.Offset(1, yOffset);
+            TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, text);
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)

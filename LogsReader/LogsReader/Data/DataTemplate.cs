@@ -19,7 +19,7 @@ namespace LogsReader.Data
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
-            if (DateTime.TryParse(date, out var dateOfTrace))
+            if (DateTime.TryParse(date.Replace(",", "."), out var dateOfTrace))
             {
                 DateOfTrace = dateOfTrace;
                 Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
@@ -30,7 +30,7 @@ namespace LogsReader.Data
             }
 
             Trace = trace;
-            Description = description;
+            Description = description.Trim();
             _message.Append(message);
             _entireMessage.Append(entireMessage);
         }
@@ -113,6 +113,14 @@ namespace LogsReader.Data
         {
             _message.Append(str);
             _entireMessage.Append(str);
+        }
+
+        public void MergeDataTemplates(DataTemplate input)
+        {
+            _message.Clear();
+            _message.Append(input.Message);
+            _entireMessage.Clear();
+            _entireMessage.Append(input.EntireMessage);
         }
     }
 }

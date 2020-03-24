@@ -44,8 +44,17 @@ namespace LogsReader.Config
                     _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
                     _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
                     _maxThreads = -1;
-                    _maxTraceLines = 50;
+                    _maxTraceLines = 20;
                     _logsDirectory = @"C:\FORISLOG\SPA";
+                    _traceLinePattern = new LRTraceLinePattern(_schemeName);
+                    break;
+                case "MGA":
+                    _schemeName = name;
+                    _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
+                    _types = "fast,slow";
+                    _maxThreads = -1;
+                    _maxTraceLines = 300;
+                    _logsDirectory = @"C:\FORISLOG\MGAdapter";
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;
             }
@@ -151,12 +160,14 @@ namespace LogsReader.Config
             }
         }
 
-        public bool IsLineMatch(string message, FileLog fileLog, out DataTemplate result)
+        public bool IsLineMatch(string input, FileLog fileLog, out DataTemplate result)
         {
+            // замена \r чинит баг с корректным парсингом
+            var message = input.Replace("\r", string.Empty);
             foreach (var item in TraceLinePattern.Items)
             {
                 var match = item.RegexItem.Match(message);
-                if (match.Success)
+                if (match.Success && match.Value.Length == message.Length)
                 {
                     result = new DataTemplate(fileLog,
                         match.GetValueByReplacement(item.ID),
@@ -176,10 +187,12 @@ namespace LogsReader.Config
 
         public Match IsMatch(string input)
         {
+            // замена \r чинит баг с корректным парсингом
+            var message = input.Replace("\r", string.Empty);
             foreach (var regexPatt in TraceLinePattern.Items.Select(x => x.RegexItem))
             {
-                var match = regexPatt.Match(input);
-                if (match.Success)
+                var match = regexPatt.Match(message);
+                if (match.Success && match.Value.Length == message.Length)
                     return match;
             }
 

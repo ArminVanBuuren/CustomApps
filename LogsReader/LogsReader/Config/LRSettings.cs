@@ -18,7 +18,7 @@ namespace LogsReader.Config
         static string SettingsPath => $"{ASSEMBLY.ApplicationFilePath}.xml";
         static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
 
-        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA") };
+        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
 
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 

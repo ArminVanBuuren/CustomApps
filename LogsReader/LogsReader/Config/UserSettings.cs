@@ -17,7 +17,7 @@ namespace LogsReader.Config
             {
                 Scheme = schemeName;
                 var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
-                UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch, '\0'));
+                UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch.ToString(), string.Empty));
                 parentRegistry = new RegeditControl(ASSEMBLY.ApplicationName);
             }
             catch (Exception)

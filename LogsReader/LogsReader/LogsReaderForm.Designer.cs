@@ -34,9 +34,16 @@ namespace LogsReader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
+            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
@@ -44,6 +51,7 @@ namespace LogsReader
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.trvMain = new LogsReader.TreeViewImproved();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.serversText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -73,14 +81,6 @@ namespace LogsReader
             this.msgFilterText = new System.Windows.Forms.TextBox();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
             this.filterPanel = new System.Windows.Forms.Panel();
-            this.trvMain = new LogsReader.TreeViewImproved();
-            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -123,10 +123,75 @@ namespace LogsReader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(525, 350);
+            this.dgvFiles.Size = new System.Drawing.Size(525, 326);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
+            // 
+            // PrivateID
+            // 
+            this.PrivateID.DataPropertyName = "PrivateID";
+            this.PrivateID.HeaderText = "PrivateID";
+            this.PrivateID.MinimumWidth = 10;
+            this.PrivateID.Name = "PrivateID";
+            this.PrivateID.ReadOnly = true;
+            this.PrivateID.Visible = false;
+            this.PrivateID.Width = 10;
+            // 
+            // IsMatched
+            // 
+            this.IsMatched.DataPropertyName = "IsMatched";
+            this.IsMatched.HeaderText = "IsMatched";
+            this.IsMatched.MinimumWidth = 10;
+            this.IsMatched.Name = "IsMatched";
+            this.IsMatched.ReadOnly = true;
+            this.IsMatched.Visible = false;
+            this.IsMatched.Width = 10;
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 40;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 45;
+            // 
+            // Server
+            // 
+            this.Server.DataPropertyName = "Server";
+            this.Server.HeaderText = "Server";
+            this.Server.MinimumWidth = 40;
+            this.Server.Name = "Server";
+            this.Server.ReadOnly = true;
+            this.Server.Width = 80;
+            // 
+            // Trace
+            // 
+            this.Trace.DataPropertyName = "Trace";
+            this.Trace.HeaderText = "Trace";
+            this.Trace.MinimumWidth = 40;
+            this.Trace.Name = "Trace";
+            this.Trace.ReadOnly = true;
+            this.Trace.Width = 140;
+            // 
+            // Date
+            // 
+            this.Date.DataPropertyName = "Date";
+            this.Date.HeaderText = "Date";
+            this.Date.MinimumWidth = 40;
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            this.Date.Width = 140;
+            // 
+            // FileName
+            // 
+            this.FileName.DataPropertyName = "FileName";
+            this.FileName.HeaderText = "FileName";
+            this.FileName.MinimumWidth = 40;
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            this.FileName.Width = 500;
             // 
             // btnSearch
             // 
@@ -218,6 +283,25 @@ namespace LogsReader
             this.label1.Size = new System.Drawing.Size(47, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "Servers:";
+            // 
+            // trvMain
+            // 
+            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trvMain.CheckBoxes = true;
+            this.trvMain.Location = new System.Drawing.Point(2, 139);
+            this.trvMain.Name = "trvMain";
+            treeNode7.Name = "trvServers";
+            treeNode7.Text = "Servers";
+            treeNode8.Name = "trvTypes";
+            treeNode8.Text = "Types";
+            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode7,
+            treeNode8});
+            this.trvMain.Size = new System.Drawing.Size(166, 260);
+            this.trvMain.TabIndex = 2;
+            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // maxLinesStackText
             // 
@@ -338,7 +422,7 @@ namespace LogsReader
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
             this.EnumSplitContainer.Size = new System.Drawing.Size(525, 399);
-            this.EnumSplitContainer.SplitterDistance = 350;
+            this.EnumSplitContainer.SplitterDistance = 326;
             this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
@@ -348,7 +432,7 @@ namespace LogsReader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(525, 45);
+            this.descriptionText.Size = new System.Drawing.Size(525, 69);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 
@@ -534,90 +618,6 @@ namespace LogsReader
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(940, 95);
             this.filterPanel.TabIndex = 30;
-            // 
-            // trvMain
-            // 
-            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 139);
-            this.trvMain.Name = "trvMain";
-            treeNode19.Name = "trvServers";
-            treeNode19.Text = "Servers";
-            treeNode20.Name = "trvTypes";
-            treeNode20.Text = "Types";
-            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode19,
-            treeNode20});
-            this.trvMain.Size = new System.Drawing.Size(323, 358);
-            this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
-            // 
-            // PrivateID
-            // 
-            this.PrivateID.DataPropertyName = "PrivateID";
-            this.PrivateID.HeaderText = "PrivateID";
-            this.PrivateID.MinimumWidth = 10;
-            this.PrivateID.Name = "PrivateID";
-            this.PrivateID.ReadOnly = true;
-            this.PrivateID.Visible = false;
-            this.PrivateID.Width = 10;
-            // 
-            // IsMatched
-            // 
-            this.IsMatched.DataPropertyName = "IsMatched";
-            this.IsMatched.HeaderText = "IsMatched";
-            this.IsMatched.MinimumWidth = 10;
-            this.IsMatched.Name = "IsMatched";
-            this.IsMatched.ReadOnly = true;
-            this.IsMatched.Visible = false;
-            this.IsMatched.Width = 10;
-            // 
-            // ID
-            // 
-            this.ID.DataPropertyName = "ID";
-            this.ID.HeaderText = "ID";
-            this.ID.MinimumWidth = 40;
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 45;
-            // 
-            // Server
-            // 
-            this.Server.DataPropertyName = "Server";
-            this.Server.HeaderText = "Server";
-            this.Server.MinimumWidth = 40;
-            this.Server.Name = "Server";
-            this.Server.ReadOnly = true;
-            this.Server.Width = 80;
-            // 
-            // Trace
-            // 
-            this.Trace.DataPropertyName = "Trace";
-            this.Trace.HeaderText = "Trace";
-            this.Trace.MinimumWidth = 40;
-            this.Trace.Name = "Trace";
-            this.Trace.ReadOnly = true;
-            this.Trace.Width = 140;
-            // 
-            // Date
-            // 
-            this.Date.DataPropertyName = "Date";
-            this.Date.HeaderText = "Date";
-            this.Date.MinimumWidth = 40;
-            this.Date.Name = "Date";
-            this.Date.ReadOnly = true;
-            this.Date.Width = 140;
-            // 
-            // FileName
-            // 
-            this.FileName.DataPropertyName = "FileName";
-            this.FileName.HeaderText = "FileName";
-            this.FileName.MinimumWidth = 40;
-            this.FileName.Name = "FileName";
-            this.FileName.ReadOnly = true;
-            this.FileName.Width = 500;
             // 
             // LogsReaderForm
             // 

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -229,7 +230,6 @@ namespace LogsReader
 
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -257,7 +257,6 @@ namespace LogsReader
 
                 UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
                 UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -330,6 +329,12 @@ namespace LogsReader
                     if (kvpList.Count <= 0)
                     {
                         ReportStatus(@"No files logs found", true);
+                        return;
+                    }
+
+                    if(IsStopPending)
+                    {
+                        ReportStatus(@"Stopped", true);
                         return;
                     }
 
@@ -466,6 +471,9 @@ namespace LogsReader
 
             foreach (var serverNode in servers)
             {
+                if (IsStopPending)
+                    return kvpList;
+
                 var serverDir = string.Format(logsDirFormat, serverNode.Text);
                 if (!Directory.Exists(serverDir))
                     continue;
@@ -473,6 +481,9 @@ namespace LogsReader
                 var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
                 foreach (var fileLog in files.Select(x => new FileLog(serverNode.Text, x)))
                 {
+                    if (IsStopPending)
+                        return kvpList;
+
                     if (traces.Any(x => fileLog.FileName.IndexOf(x.Text, StringComparison.CurrentCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
@@ -609,12 +620,13 @@ namespace LogsReader
                         {
                             if (lastResult.IsMatched)
                             {
+                                var appendedToEntireMessage = lastResult.EntireMessage + Environment.NewLine + line;
                                 // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
                                 // Иначе строка относится к другому логу и завершается дополнение
-                                if (CurrentSettings.IsMatch(line) == null)
+                                if (CurrentSettings.IsMatch(line) == null && CurrentSettings.IsLineMatch(appendedToEntireMessage, fileLog, out var newResult))
                                 {
                                     stackLines++;
-                                    lastResult.AppendMessageAfter(Environment.NewLine + line);
+                                    lastResult.MergeDataTemplates(newResult);
                                     continue;
                                 }
                                 else
@@ -627,17 +639,14 @@ namespace LogsReader
                             {
                                 // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
                                 stackLines++;
-                                var appendFailedLog = lastResult.Message + Environment.NewLine + line;
-                                if (CurrentSettings.IsLineMatch(appendFailedLog, fileLog, out var afterSuccessResult))
+                                lastResult.AppendMessageAfter(Environment.NewLine + line);
+                                if (CurrentSettings.IsLineMatch(lastResult.Message, fileLog, out var afterSuccessResult))
                                 {
                                     // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
                                     listResult.Add(afterSuccessResult);
                                     lastResult = afterSuccessResult;
-                                }
-                                else
-                                {
-                                    // Паттерн не сработал успешно, но лог дополняется для следующей попытки
-                                    lastResult.AppendMessageAfter(appendFailedLog);
+                                    beforeTraceLines.Clear();
+                                    continue;
                                 }
                             }
                         }
@@ -654,6 +663,11 @@ namespace LogsReader
                     {
                         ++Finded;
                         stackLines = 1;
+
+                        if (lastResult != null && !lastResult.IsMatched)
+                        {
+                            listResult.Add(lastResult);
+                        }
                     }
 
                     if (CurrentSettings.IsLineMatch(line, fileLog, out lastResult))
@@ -746,7 +760,7 @@ namespace LogsReader
                 var message = XML.RemoveUnallowable(template.Message, " ");
 
                 descriptionText.Text = template.Description;
-                _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message;
+                _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.Trim('\r', '\n');
                 _fullTrace.Text = template.EntireMessage;
             }
             catch (Exception ex)

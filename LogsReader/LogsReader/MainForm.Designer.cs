@@ -36,11 +36,11 @@ namespace LogsReader
             // MainTabControl
             // 
             this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.MainTabControl.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1770, 935);
+            this.MainTabControl.Size = new System.Drawing.Size(1710, 818);
             this.MainTabControl.TabIndex = 0;
             // 
             // MainForm
