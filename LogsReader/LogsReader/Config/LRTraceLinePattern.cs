@@ -42,7 +42,7 @@ namespace LogsReader.Config
                 case "MGA":
                     Items = new[]
                     {
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)[-]{49,}")
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+)($|[-]{49,})")
                             {Date = "$1", Trace = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
