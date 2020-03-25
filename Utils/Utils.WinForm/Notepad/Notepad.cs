@@ -34,6 +34,12 @@ namespace Utils.WinForm.Notepad
             set => NotepadControlItem.SizingGrip = value;
         }
 
+        public bool UserCanCloseTabItem
+        {
+            get => NotepadControlItem.UserCanCloseTabItem;
+            set => NotepadControlItem.UserCanCloseTabItem = value;
+        }
+
         public Notepad(string filePath = null, bool wordWrap = false)
         {
             InitializeComponent();
