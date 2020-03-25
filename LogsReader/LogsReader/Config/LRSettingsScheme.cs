@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
-using LogsReader.Data;
 using LogsReader.Properties;
 using Utils;
 
@@ -158,45 +157,6 @@ namespace LogsReader.Config
                         _traceLinePattern = value;
                 }
             }
-        }
-
-        public bool IsLineMatch(string input, FileLog fileLog, out DataTemplate result)
-        {
-            // замена \r чинит баг с корректным парсингом
-            var message = input.Replace("\r", string.Empty);
-            foreach (var item in TraceLinePattern.Items)
-            {
-                var match = item.RegexItem.Match(message);
-                if (match.Success && match.Value.Length == message.Length)
-                {
-                    result = new DataTemplate(fileLog,
-                        match.GetValueByReplacement(item.ID),
-                        match.GetValueByReplacement(item.Date),
-                        match.GetValueByReplacement(item.Trace),
-                        match.GetValueByReplacement(item.Description),
-                        match.GetValueByReplacement(item.Message),
-                        message);
-                    return true;
-                }
-            }
-
-            result = new DataTemplate(fileLog, message);
-            return false;
-        }
-
-
-        public Match IsMatch(string input)
-        {
-            // замена \r чинит баг с корректным парсингом
-            var message = input.Replace("\r", string.Empty);
-            foreach (var regexPatt in TraceLinePattern.Items.Select(x => x.RegexItem))
-            {
-                var match = regexPatt.Match(message);
-                if (match.Success && match.Value.Length == message.Length)
-                    return match;
-            }
-
-            return null;
         }
 
         [XmlIgnore]

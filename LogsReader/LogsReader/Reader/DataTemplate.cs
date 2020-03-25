@@ -2,17 +2,17 @@
 using System.Text;
 using Utils.WinForm.DataGridViewHelper;
 
-namespace LogsReader.Data
+namespace LogsReader.Reader
 {
     public class DataTemplate
     {
-        private readonly FileLog _fileLog;
+        private readonly TraceReader _fileLog;
         private readonly StringBuilder _message = new StringBuilder();
         private readonly StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
         private string _trace = null;
 
-        public DataTemplate(FileLog fileLog, string strID, string date, string trace, string description, string message, string entireMessage)
+        public DataTemplate(TraceReader fileLog, string strID, string date, string trace, string description, string message, string entireMessage)
         {
             IsMatched = true;
             _fileLog = fileLog;
@@ -35,7 +35,7 @@ namespace LogsReader.Data
             _entireMessage.Append(entireMessage);
         }
 
-        public DataTemplate(FileLog fileLog, string message)
+        public DataTemplate(TraceReader fileLog, string message)
         {
             IsMatched = false;
             _fileLog = fileLog;
@@ -45,7 +45,7 @@ namespace LogsReader.Data
             _entireMessage.Append(message);
         }
 
-        public DataTemplate(FileLog fileLog, Exception error)
+        public DataTemplate(TraceReader fileLog, Exception error)
         {
             IsMatched = false;
             _fileLog = fileLog;

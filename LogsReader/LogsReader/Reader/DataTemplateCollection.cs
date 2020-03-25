@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LogsReader.Data
+namespace LogsReader.Reader
 {
     public class DataTemplateCollection : IEnumerable<DataTemplate>, IDisposable
     {

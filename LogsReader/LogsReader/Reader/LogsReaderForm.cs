@@ -1,20 +1,18 @@
-﻿using FastColoredTextBoxNS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using LogsReader.Properties;
+using FastColoredTextBoxNS;
 using LogsReader.Config;
-using LogsReader.Data;
+using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 
-
-namespace LogsReader
+namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl
     {
@@ -58,7 +56,7 @@ namespace LogsReader
 
         public DataTemplateCollection OverallResultList { get; private set; }
 
-        public LogsReader MainReader { get; private set; }
+        public Reader.LogsReader MainReader { get; private set; }
 
 
         public LogsReaderForm()
@@ -274,7 +272,7 @@ namespace LogsReader
                 var stop = new Stopwatch();
                 try
                 {
-                    MainReader = new LogsReader(CurrentSettings, 
+                    MainReader = new Reader.LogsReader(CurrentSettings, 
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         txtPattern.Text, 

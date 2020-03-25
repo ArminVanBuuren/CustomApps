@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
+using LogsReader.Reader;
 using Utils;
 
 namespace LogsReader

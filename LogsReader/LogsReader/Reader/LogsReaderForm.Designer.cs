@@ -1,10 +1,6 @@
-﻿using FastColoredTextBoxNS;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using LogsReader.Properties;
+﻿using System.Windows.Forms;
 
-namespace LogsReader
+namespace LogsReader.Reader
 {
     sealed partial class LogsReaderForm
     {

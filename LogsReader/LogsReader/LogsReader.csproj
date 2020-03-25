@@ -57,14 +57,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataTemplate.cs" />
-    <Compile Include="Data\DataTemplateCollection.cs" />
-    <Compile Include="Data\FileLog.cs" />
-    <Compile Include="LogsReader.cs" />
-    <Compile Include="LogsReaderForm.cs">
+    <Compile Include="Reader\DataTemplate.cs" />
+    <Compile Include="Reader\DataTemplateCollection.cs" />
+    <Compile Include="Reader\TraceReader.cs" />
+    <Compile Include="Reader\LogsReader.cs" />
+    <Compile Include="Reader\LogsReaderForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="LogsReaderForm.Designer.cs">
+    <Compile Include="Reader\LogsReaderForm.Designer.cs">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -75,13 +75,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reader\TraceReaderSimple.cs" />
+    <Compile Include="Reader\TraceReaderStartWith.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
     <Compile Include="Config\LRSettingsScheme.cs" />
     <Compile Include="Config\LRTraceLinePattern.cs" />
     <Compile Include="Config\UserSettings.cs" />
     <Compile Include="Utils.cs" />
-    <EmbeddedResource Include="LogsReaderForm.resx">
+    <EmbeddedResource Include="Reader\LogsReaderForm.resx">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">

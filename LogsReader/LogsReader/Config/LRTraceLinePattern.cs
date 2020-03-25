@@ -11,8 +11,8 @@ namespace LogsReader.Config
     public class LRTraceLinePattern : TraceLinePattern
     {
         private LRTraceLinePatternItem[] _traceLinePattern = new LRTraceLinePatternItem[] {new LRTraceLinePatternItem()};
-        private XmlNode[] _startLineWith = new XmlNode[] {new XmlDocument().CreateCDataSection(string.Empty)};
-        private XmlNode[] _endLineWith = new XmlNode[] {new XmlDocument().CreateCDataSection(string.Empty) };
+        private XmlNode[] _startLineWith = null;
+        private XmlNode[] _endLineWith = null;
 
         public LRTraceLinePattern()
         {
@@ -47,7 +47,7 @@ namespace LogsReader.Config
                             {Date = "$1", Trace = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
-                    EndWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^[-]{49,}\s*$") };
+                    //EndWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^[-]{49,}\s*$") };
                     break;
             }
         }
