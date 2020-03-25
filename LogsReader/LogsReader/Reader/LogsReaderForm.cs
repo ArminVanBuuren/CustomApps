@@ -353,6 +353,7 @@ namespace LogsReader.Reader
         async Task<bool> AssignResult(bool applyFilter)
         {
             ClearDGV();
+            ClearErrorStatus();
 
             if (OverallResultList == null)
                 return false;
@@ -686,7 +687,7 @@ namespace LogsReader.Reader
 
             var settIsCorrect = CurrentSettings.IsCorrect;
             if (settIsCorrect)
-                ReportStatus(string.Empty, false);
+                ClearErrorStatus();
 
             btnSearch.Enabled = isCorrectPath
                                 && settIsCorrect
@@ -739,10 +740,20 @@ namespace LogsReader.Reader
             }
         }
 
+        private bool _isLastWasError = false;
         void ReportStatus(string message, bool isError)
         {
             _statusInfo.Text = message;
             _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
+            _isLastWasError = isError;
+        }
+
+        void ClearErrorStatus()
+        {
+            if (!_isLastWasError)
+                return;
+            _statusInfo.Text = string.Empty;
+            _statusInfo.ForeColor = Color.Black;
         }
     }
 }
