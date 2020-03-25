@@ -353,7 +353,6 @@ namespace LogsReader.Reader
         async Task<bool> AssignResult(bool applyFilter)
         {
             ClearDGV();
-            ReportStatus(string.Empty, false);
 
             if (OverallResultList == null)
                 return false;

@@ -1180,7 +1180,8 @@ namespace SPAFilter
                         WindowState = _notepadWindowsState,
                         WordWrap = _notepadWordWrap,
                         WordHighlights = _notepadWordHighlights,
-                        SizingGrip = true
+                        SizingGrip = true,
+                        UserCanCloseTabItem = true
                     };
                     _notepad.Closed += _notepad_Closed;
                     _notepad.Show();
