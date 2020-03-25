@@ -22,6 +22,8 @@ namespace Utils
             }
         }
 
+        public static string CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version.ToString();
+
         public static string GetDirectory(this Assembly assembly)
         {
             //string codeBase = Assembly.GetExecutingAssembly().CodeBase;
