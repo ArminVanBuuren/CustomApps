@@ -50,7 +50,7 @@ namespace LogsReader.Reader
                 if (!REGEX.Verify(findMessage))
                     throw new ArgumentException($"Pattern \"{findMessage}\" is incorrect for use as regular expression! Please check.");
 
-                var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase, new TimeSpan(0, 0, 5));
                 IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
             }
             else

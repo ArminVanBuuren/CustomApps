@@ -302,8 +302,12 @@ namespace LogsReader.Reader
                 }
                 finally
                 {
-                    MainReader.OnProcessReport -= ReportStatusOfProcess;
-                    MainReader.Dispose();
+                    if (MainReader != null)
+                    {
+                        MainReader.OnProcessReport -= ReportStatusOfProcess;
+                        MainReader.Dispose();
+                    }
+
                     MainReader = null;
                     IsWorking = false;
                     ChangeFormStatus();
