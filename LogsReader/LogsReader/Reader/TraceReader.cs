@@ -12,9 +12,7 @@ namespace LogsReader.Reader
     {
         private readonly LogsReader _mainReader;
 
-        protected abstract Queue<string> PastTraceLines { get; }
-
-        protected abstract int MaxTraceLines { get; }
+        protected Queue<string> PastTraceLines { get; }
 
         protected DataTemplate Found { get; set; }
 
@@ -25,9 +23,9 @@ namespace LogsReader.Reader
         /// </summary>
         public LRSettingsScheme CurrentSettings => _mainReader.CurrentSettings;
 
-        public bool IsStopPending => _mainReader.IsStopPending;
+        protected int MaxTraceLines => CurrentSettings.MaxTraceLines;
 
-        public LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
+        protected LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
 
         public string Server { get; }
         public string FileName { get; }
@@ -43,7 +41,10 @@ namespace LogsReader.Reader
         protected TraceReader(string server, string filePath, LogsReader mainReader)
         {
             _mainReader = mainReader;
+
             FoundResults = new List<DataTemplate>();
+            PastTraceLines = new Queue<string>(MaxTraceLines);
+
             Server = server;
             FilePath = filePath;
             FileName = Path.GetFileName(FilePath);
@@ -84,12 +85,6 @@ namespace LogsReader.Reader
             var message = input.Replace("\r", string.Empty);
             foreach (var item in PatternItems)
             {
-                if (IsStopPending)
-                {
-                    result = new DataTemplate(this, message);
-                    return false;
-                }
-
                 Match match;
                 try
                 {
@@ -132,9 +127,6 @@ namespace LogsReader.Reader
             var message = input.Replace("\r", string.Empty);
             foreach (var regexPatt in PatternItems.Select(x => x.RegexItem))
             {
-                if (IsStopPending)
-                    return null;
-
                 Match match;
                 try
                 {

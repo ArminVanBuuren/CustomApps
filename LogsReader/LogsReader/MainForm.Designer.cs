@@ -54,7 +54,6 @@ namespace LogsReader
             this.Icon = global::LogsReader.Properties.Resources.icon;
             this.MinimumSize = new System.Drawing.Size(114, 39);
             this.Name = "MainForm";
-            this.Text = "Logs Reader";
             this.ResumeLayout(false);
 
         }

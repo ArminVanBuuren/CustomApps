@@ -51,7 +51,7 @@ namespace LogsReader.Config
                     _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
                     _types = "fast,slow,test";
                     _maxThreads = -1;
-                    _maxTraceLines = 300;
+                    _maxTraceLines = 20000;
                     _logsDirectory = @"C:\FORISLOG\MGAdapter";
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;

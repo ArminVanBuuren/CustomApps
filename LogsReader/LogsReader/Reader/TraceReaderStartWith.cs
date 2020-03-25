@@ -6,17 +6,12 @@ namespace LogsReader.Reader
 {
     public class TraceReaderStartWith : TraceReader
     {
-        protected sealed override int MaxTraceLines { get; }
-        protected override Queue<string> PastTraceLines { get; }
-
         public Regex StartLineWith => CurrentSettings.TraceLinePattern.StartLineWith;
 
         //public Regex EndLineWith => CurrentSettings.TraceLinePattern.EndLineWith;
 
         public TraceReaderStartWith(string server, string filePath, LogsReader mainReader) : base(server, filePath, mainReader)
         {
-            MaxTraceLines = 20000;
-            PastTraceLines = new Queue<string>(MaxTraceLines);
         }
 
         public override void ReadLine(string line)

@@ -51,6 +51,7 @@ namespace LogsReader
 
             try
             {
+                Text = $"Logs Reader {ASSEMBLY.CurrentVersion}";
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) =>
@@ -97,7 +98,7 @@ namespace LogsReader
                     }
                 }
 
-                var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
                 thread.Start();
             }
             catch (Exception ex)
