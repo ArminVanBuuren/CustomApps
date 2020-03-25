@@ -11,7 +11,7 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-    public delegate void ReportProcessStatusHandler(int numberOfFound, int percentOfProgeress, int filesCompleted, int totalFiles);
+    public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
     public class LogsReader : IDisposable
     {
@@ -31,7 +31,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Количество совпадений по критериям поиска
         /// </summary>
-        public int NumberOfFound => KvpList?.Sum(x => x.NumberOfFound) ?? 0;
+        public int CountMatches => KvpList?.Sum(x => x.CountMatches) ?? 0;
 
         public List<TraceReader> KvpList { get; private set; }
 
@@ -85,7 +85,7 @@ namespace LogsReader.Reader
             ResultsOfSuccess = KvpList.SelectMany(x => x.FoundResults);
             ResultsOfError = _multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
             {
-                listErr.Add(new DataTemplate(x.Source, x.Error));
+                listErr.Add(new DataTemplate(x.Source, string.Empty, x.Error));
                 return listErr;
             });
         }
@@ -176,7 +176,7 @@ namespace LogsReader.Reader
                 var total = _multiTaskingHandler.Source.Count;
                 while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted)
                 {
-                    OnProcessReport?.Invoke(NumberOfFound, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
+                    OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
                     Thread.Sleep(10);
                 }
             }
@@ -190,7 +190,7 @@ namespace LogsReader.Reader
         {
             try
             {
-                OnProcessReport?.Invoke(NumberOfFound, 100, _multiTaskingHandler.Result.Count, _multiTaskingHandler.Source.Count());
+                OnProcessReport?.Invoke(CountMatches, 100, _multiTaskingHandler.Result.Count, _multiTaskingHandler.Source.Count());
             }
             catch (Exception ex)
             {

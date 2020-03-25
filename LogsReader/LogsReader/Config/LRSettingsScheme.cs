@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
@@ -43,7 +42,7 @@ namespace LogsReader.Config
                     _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
                     _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
                     _maxThreads = -1;
-                    _maxTraceLines = 20;
+                    _maxTraceLines = 5;
                     _logsDirectory = @"C:\FORISLOG\SPA";
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;

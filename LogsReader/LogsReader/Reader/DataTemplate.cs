@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
+using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
@@ -7,12 +9,12 @@ namespace LogsReader.Reader
     public class DataTemplate
     {
         private readonly TraceReader _fileLog;
-        private readonly StringBuilder _message = new StringBuilder();
         private readonly StringBuilder _entireMessage = new StringBuilder();
         private string _date = null;
         private string _trace = null;
+        private string _message = string.Empty;
 
-        public DataTemplate(TraceReader fileLog, string strID, string date, string trace, string description, string message, string entireMessage)
+        internal DataTemplate(TraceReader fileLog, string strID, string date, string trace, string description, string message, string entireTrace)
         {
             IsMatched = true;
             _fileLog = fileLog;
@@ -31,21 +33,20 @@ namespace LogsReader.Reader
 
             Trace = trace;
             Description = description.Trim();
-            _message.Append(message);
-            _entireMessage.Append(entireMessage);
+            Message = message;
+            EntireTrace = entireTrace;
         }
 
-        public DataTemplate(TraceReader fileLog, string message)
+        internal DataTemplate(TraceReader fileLog, string entireTrace)
         {
             IsMatched = false;
             _fileLog = fileLog;
 
             ID = -1;
-            _message.Append(message);
-            _entireMessage.Append(message);
+            EntireTrace = entireTrace;
         }
 
-        public DataTemplate(TraceReader fileLog, Exception error)
+        internal DataTemplate(TraceReader fileLog, string entireTrace, Exception error)
         {
             IsMatched = false;
             _fileLog = fileLog;
@@ -53,9 +54,18 @@ namespace LogsReader.Reader
             ID = -1;
             DateOfTrace = DateTime.Now;
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
+
             Trace = error.GetType().ToString();
-            _message.Append(error);
-            _entireMessage.Append(error);
+            Description = error.Message;
+            if (error is RegexMatchTimeoutException errorRegex)
+            {
+                Message = $"Timeout while executing pattern: \"{errorRegex.Pattern}\".\r\nTimeout: {errorRegex.MatchTimeout.ToReadableString()}\r\nInput:\r\n{errorRegex.Input}";
+            }
+            else
+            {
+                Message = error.ToString();
+            }
+            EntireTrace = entireTrace;
         }
 
         [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
@@ -91,36 +101,41 @@ namespace LogsReader.Reader
 
         public string Description { get; private set; }
 
-        public string Message => _message.ToString();
-
-        public string EntireMessage
+        public string Message
         {
-            get
+            get => _message.IsNullOrEmpty() ? EntireTrace : _message;
+            private set => _message = value;
+        }
+
+        public string EntireTrace
+        {
+            get => _entireMessage.ToString();
+            private set
             {
-                if (!IsMatched && _entireMessage.Length == 0)
-                    return Message;
-                return _entireMessage.ToString();
+                _entireMessage.Clear();
+                _entireMessage.Append(value);
+                CountOfLines = value.Split('\n').Length;
             }
         }
 
-        public void AppendMessageBefore(string str)
+        public int CountOfLines { get; private set; } = 1;
+
+        internal void AppendPastLine(string line)
         {
-            _message.Insert(0, str);
-            _entireMessage.Insert(0, str);
+            _entireMessage.Insert(0, line + Environment.NewLine);
+            CountOfLines++;
         }
 
-        public void AppendMessageAfter(string str)
+        internal void AppendNextLine(string line)
         {
-            _message.Append(str);
-            _entireMessage.Append(str);
+            _entireMessage.Append(Environment.NewLine + line);
+            CountOfLines++;
         }
 
-        public void MergeDataTemplates(DataTemplate input)
+        internal void MergeDataTemplates(DataTemplate input)
         {
-            _message.Clear();
-            _message.Append(input.Message);
-            _entireMessage.Clear();
-            _entireMessage.Append(input.EntireMessage);
+            Message = input.Message;
+            EntireTrace = input.EntireTrace;
         }
     }
 }

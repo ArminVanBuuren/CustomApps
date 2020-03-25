@@ -30,6 +30,7 @@ namespace LogsReader.Config
                         new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
                         new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", Trace = "$2", Message = "$3"}
                     };
+                    StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
                     break;
                 case "SPA":
                     Items = new[]
@@ -41,9 +42,7 @@ namespace LogsReader.Config
                 case "MGA":
                     Items = new[]
                     {
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)(\<.+?\>\s*)(\n\s*[-]{49,})")
-                            {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)(\n\s*[-]{49,})")
+                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+?)[-]{49,}")
                             {Date = "$1", Trace = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
@@ -137,6 +136,8 @@ namespace LogsReader.Config
     [Serializable]
     public abstract class TraceLinePattern
     {
+        public static TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 15);
+
         internal abstract bool IsCorrectRegex { get; set; }
 
         protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult)
@@ -167,7 +168,7 @@ namespace LogsReader.Config
             }
             else
             {
-                return new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline);
+                return new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline, MATCH_TIMEOUT);
             }
         }
     }

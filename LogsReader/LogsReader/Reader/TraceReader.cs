@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using LogsReader.Config;
 using Utils;
@@ -13,16 +12,9 @@ namespace LogsReader.Reader
     {
         private readonly LogsReader _mainReader;
 
-
-        public string Server { get; }
-        public string FileName { get; }
-        public string FilePath { get; }
-
         protected abstract Queue<string> PastTraceLines { get; }
 
         protected abstract int MaxTraceLines { get; }
-
-        protected int FoundStackLines { get; set; } = 0;
 
         protected DataTemplate Found { get; set; }
 
@@ -37,14 +29,14 @@ namespace LogsReader.Reader
 
         public LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
 
-        public Regex StartLineWith => CurrentSettings.TraceLinePattern.StartLineWith;
-
-        public Regex EndLineWith => CurrentSettings.TraceLinePattern.EndLineWith;
+        public string Server { get; }
+        public string FileName { get; }
+        public string FilePath { get; }
 
         /// <summary>
         /// Количество совпадений по критериям поиска
         /// </summary>
-        public int NumberOfFound { get; protected set; } = 0;
+        public int CountMatches { get; protected set; } = 0;
 
         public List<DataTemplate> FoundResults { get; }
 
@@ -61,19 +53,61 @@ namespace LogsReader.Reader
 
         public void Commit()
         {
-            if (Found != null && !Found.IsMatched)
+            if (Found == null)
+                return;
+
+            try
             {
-                FoundResults.Add(Found);
+                if (IsTraceMatch(Found.EntireTrace, out var result, true))
+                    AddResult(result);
+                else
+                    AddResult(Found);
+            }
+            catch (Exception ex)
+            {
+                AddResult(new DataTemplate(this, Found.EntireTrace, ex));
+            }
+            finally
+            {
+                Found = null;
             }
         }
 
-        protected bool IsLineMatch(string input, out DataTemplate result)
+        protected void AddResult(DataTemplate item)
+        {
+            FoundResults.Add(item);
+        }
+
+        protected bool IsTraceMatch(string input, out DataTemplate result, bool throwException = false)
         {
             // замена \r чинит баг с некорректным парсингом
             var message = input.Replace("\r", string.Empty);
             foreach (var item in PatternItems)
             {
-                var match = item.RegexItem.Match(message);
+                if (IsStopPending)
+                {
+                    result = new DataTemplate(this, message);
+                    return false;
+                }
+
+                Match match;
+                try
+                {
+                    match = item.RegexItem.Match(message);
+                }
+                catch (Exception ex)
+                {
+                    if (throwException)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        result = new DataTemplate(this, input, ex);
+                        return false;
+                    }
+                }
+                
                 if (match.Success && match.Value.Length == message.Length)
                 {
                     result = new DataTemplate(this,
@@ -92,13 +126,25 @@ namespace LogsReader.Reader
         }
 
 
-        protected Match IsMatch(string input)
+        protected Match IsLineMatch(string input)
         {
             // замена \r чинит баг с некорректным парсингом
             var message = input.Replace("\r", string.Empty);
             foreach (var regexPatt in PatternItems.Select(x => x.RegexItem))
             {
-                var match = regexPatt.Match(message);
+                if (IsStopPending)
+                    return null;
+
+                Match match;
+                try
+                {
+                    match = regexPatt.Match(message);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                
                 if (match.Success && match.Value.Length == message.Length)
                     return match;
             }

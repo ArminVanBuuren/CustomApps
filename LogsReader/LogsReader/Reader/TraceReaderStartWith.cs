@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace LogsReader.Reader
 {
@@ -10,6 +8,10 @@ namespace LogsReader.Reader
     {
         protected sealed override int MaxTraceLines { get; }
         protected override Queue<string> PastTraceLines { get; }
+
+        public Regex StartLineWith => CurrentSettings.TraceLinePattern.StartLineWith;
+
+        //public Regex EndLineWith => CurrentSettings.TraceLinePattern.EndLineWith;
 
         public TraceReaderStartWith(string server, string filePath, LogsReader mainReader) : base(server, filePath, mainReader)
         {
@@ -22,45 +24,20 @@ namespace LogsReader.Reader
             if (Found != null)
             {
                 // если стек лога превышает допустимый размер, то лог больше не дополняется
-                if (FoundStackLines >= MaxTraceLines)
+                if (Found.CountOfLines >= MaxTraceLines)
                 {
-                    if (!Found.IsMatched)
-                        FoundResults.Add(Found);
-                    FoundStackLines = 0;
-                    Found = null;
+                    Commit();
                 }
                 else
                 {
-                    if (Found.IsMatched)
+                    if (!StartLineWith.IsMatch(line))
                     {
-                        var appendedToEntireMessage = Found.EntireMessage + Environment.NewLine + line;
-                        // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
-                        // Иначе строка относится к другому логу и завершается дополнение
-                        if (IsMatch(line) == null && IsLineMatch(appendedToEntireMessage, out var newResult))
-                        {
-                            FoundStackLines++;
-                            Found.MergeDataTemplates(newResult);
-                            return;
-                        }
-                        else
-                        {
-                            FoundStackLines = 0;
-                            Found = null;
-                        }
+                        Found.AppendNextLine(line);
+                        return;
                     }
-                    else if (!Found.IsMatched)
+                    else
                     {
-                        // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
-                        FoundStackLines++;
-                        Found.AppendMessageAfter(Environment.NewLine + line);
-                        if (IsLineMatch(Found.Message, out var afterSuccessResult))
-                        {
-                            // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
-                            FoundResults.Add(afterSuccessResult);
-                            Found = afterSuccessResult;
-                            PastTraceLines.Clear();
-                            return;
-                        }
+                        Commit();
                     }
                 }
             }
@@ -74,22 +51,20 @@ namespace LogsReader.Reader
             }
             else
             {
-                ++NumberOfFound;
-                FoundStackLines = 1;
+                ++CountMatches;
                 Commit();
             }
 
 
-            Found = new DataTemplate(this, string.Empty);
-            if (!CurrentSettings.TraceLinePattern.StartLineWith.IsMatch(line))
+            Found = new DataTemplate(this, line);
+            if (!StartLineWith.IsMatch(Found.EntireTrace))
             {
                 // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-                var reverceBeforeTraceLines = new Queue<string>(PastTraceLines.Reverse());
-                while (FoundStackLines < MaxTraceLines && reverceBeforeTraceLines.Count > 0)
+                var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+                while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
                 {
-                    FoundStackLines++;
-                    Found.AppendMessageBefore(reverceBeforeTraceLines.Dequeue() + Environment.NewLine);
-                    if (CurrentSettings.TraceLinePattern.StartLineWith.IsMatch(Found.EntireMessage))
+                    Found.AppendPastLine(revercePastTraceLines.Dequeue());
+                    if (StartLineWith.IsMatch(Found.EntireTrace))
                         break;
                 }
             }

@@ -319,13 +319,13 @@ namespace LogsReader.Reader
             }
         }
 
-        void ReportStatusOfProcess(int numberOfFound, int percentOfProgeress, int filesCompleted, int totalFiles)
+        void ReportStatusOfProcess(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
             if (InvokeRequired)
             {
                 Invoke(new MethodInvoker(delegate
                 {
-                    _findedInfo.Text = numberOfFound.ToString();
+                    _findedInfo.Text = countMatches.ToString();
                     progressBar.Value = percentOfProgeress;
                     _completedFilesStatus.Text = filesCompleted.ToString();
                     _totalFilesStatus.Text = totalFiles.ToString();
@@ -333,7 +333,7 @@ namespace LogsReader.Reader
             }
             else
             {
-                _findedInfo.Text = numberOfFound.ToString();
+                _findedInfo.Text = countMatches.ToString();
                 progressBar.Value = percentOfProgeress;
                 _completedFilesStatus.Text = filesCompleted.ToString();
                 _totalFilesStatus.Text = totalFiles.ToString();
@@ -513,7 +513,7 @@ namespace LogsReader.Reader
 
                 descriptionText.Text = template.Description;
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.Trim('\r', '\n');
-                _fullTrace.Text = template.EntireMessage;
+                _fullTrace.Text = template.EntireTrace;
             }
             catch (Exception ex)
             {
