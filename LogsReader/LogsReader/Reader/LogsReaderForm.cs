@@ -388,7 +388,7 @@ namespace LogsReader.Reader
                         await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.Trace, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
-                        progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.Rows.Count);
+                        progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
                     }
                     writer.Close();
                 }
@@ -513,6 +513,7 @@ namespace LogsReader.Reader
             }
 
             await dgvFiles.AssignCollectionAsync(result, null);
+            buttonExport.Enabled = dgvFiles.RowCount > 0;
 
             return true;
         }
@@ -548,7 +549,8 @@ namespace LogsReader.Reader
             traceNotLikeText.Enabled = !IsWorking;
             traceLikeText.Enabled = !IsWorking;
             msgFilterText.Enabled = !IsWorking;
-            buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            buttonExport.Enabled = dgvFiles.RowCount > 0;
+            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -773,7 +775,8 @@ namespace LogsReader.Reader
                                 && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
-            buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            buttonExport.Enabled = dgvFiles.RowCount > 0;
+            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -810,7 +813,8 @@ namespace LogsReader.Reader
                 descriptionText.Text = string.Empty;
                 _message.Text = string.Empty;
                 _fullTrace.Text = string.Empty;
-                buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+                buttonExport.Enabled = false;
+                buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
             }
             catch (Exception ex)
             {
