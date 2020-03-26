@@ -7,8 +7,6 @@ using System.Windows.Forms;
 
 namespace LogsReader
 {
-    public delegate void ReportStatusHandler(string message, bool isError);
-
     public static class Utils
     {
         public static void AssignValue<T>(this TextBox textBox, T value, EventHandler handler)
@@ -31,27 +29,6 @@ namespace LogsReader
         public static void MessageShow(string msg, string caption, bool isError = true)
         {
             MessageBox.Show(msg, caption, MessageBoxButtons.OK, isError ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
-        }
-    }
-
-    public class TreeViewImproved : TreeView
-    {
-        /// <inheritdoc />
-        /// <summary>
-        /// Правит баг когда ячейка выбрана, но визуально не обновляется 
-        /// </summary>
-        /// <param name="m"></param>
-        protected override void WndProc(ref Message m)
-        {
-            // Suppress WM_LBUTTONDBLCLK
-            if (m.Msg == 0x203)
-            {
-                m.Result = IntPtr.Zero;
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
         }
     }
 }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
@@ -56,7 +58,7 @@ namespace LogsReader.Reader
 
         public DataTemplateCollection OverallResultList { get; private set; }
 
-        public Reader.LogsReader MainReader { get; private set; }
+        public LogsReaderPerformer MainReader { get; private set; }
 
 
         public LogsReaderForm()
@@ -254,6 +256,9 @@ namespace LogsReader.Reader
                     case Keys.F6 when btnClear.Enabled:
                         ClearForm();
                         break;
+                    case Keys.S when e.Control && buttonExport.Enabled:
+                        buttonExport_Click(this, EventArgs.Empty);
+                        break;
                     case Keys.F7 when buttonFilter.Enabled:
                         buttonFilter_Click(this, EventArgs.Empty);
                         break;
@@ -278,7 +283,7 @@ namespace LogsReader.Reader
                 var stop = new Stopwatch();
                 try
                 {
-                    MainReader = new Reader.LogsReader(CurrentSettings, 
+                    MainReader = new LogsReaderPerformer(CurrentSettings, 
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         txtPattern.Text, 
@@ -348,6 +353,86 @@ namespace LogsReader.Reader
                 _completedFilesStatus.Text = filesCompleted.ToString();
                 _totalFilesStatus.Text = totalFiles.ToString();
             }
+        }
+
+        private async void buttonExport_Click(object sender, EventArgs e)
+        {
+            if (IsWorking)
+                return;
+
+            string fileName = string.Empty;
+            try
+            { 
+                string desctination;
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = @"CSV files (*.csv)|*.csv";
+                    if (sfd.ShowDialog() != DialogResult.OK)
+                        return;
+                    desctination = sfd.FileName;
+                }
+
+                btnSearch.Enabled = btnClear.Enabled = buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = false;
+                ReportStatus(@"Exporting...", false);
+                fileName = Path.GetFileName(desctination);
+
+                int i = 0;
+                progressBar.Value = 0;
+                using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
+                {
+                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "Trace", "Date", "Description", "Message"}));
+                    foreach (DataGridViewRow row in dgvFiles.Rows)
+                    {
+                        var privateID = (int) row.Cells["PrivateID"].Value;
+                        var template = OverallResultList[privateID];
+                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.Trace, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
+                        writer.Flush();
+
+                        progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.Rows.Count);
+                    }
+                    writer.Close();
+                }
+
+                ReportStatus($"Successfully exported to file \"{fileName}\"", false);
+            }
+            catch (Exception ex)
+            {
+                ReportStatus($"Unable to save file \"{fileName}\". {ex.Message}", true);
+            }
+            finally
+            {
+                progressBar.Value = 100;
+                btnClear.Enabled = true;
+                ValidationCheck(false);
+                dgvFiles.Focus();
+            }
+        }
+
+        static string GetCSVRow(IReadOnlyCollection<string> @params)
+        {
+            var builder = new StringBuilder(@params.Count);
+            foreach (var param in @params)
+            {
+                if (param.IsNullOrEmpty())
+                {
+                    builder.Append(";");
+                }
+                else if (param.StartsWith("\"") && param.EndsWith("\"") && param.IndexOf("\"", 1, param.Length - 2, StringComparison.Ordinal) != -1)
+                {
+                    var test = param.Substring(1, param.Length - 2).Replace("\"", "\"\"");
+                    builder.Append($"\"{test}\";");
+                }
+                else if (param.Contains("\""))
+                {
+                    builder.Append($"\"{param.Replace("\"", "\"\"")}\";");
+                }
+                else
+                {
+                    builder.Append($"{param};");
+                }
+            }
+
+            return builder.ToString();
         }
 
         private async void buttonFilter_Click(object sender, EventArgs e)
@@ -463,7 +548,7 @@ namespace LogsReader.Reader
             traceNotLikeText.Enabled = !IsWorking;
             traceLikeText.Enabled = !IsWorking;
             msgFilterText.Enabled = !IsWorking;
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -471,11 +556,11 @@ namespace LogsReader.Reader
             try
             {
                 var row = ((DataGridView) sender).Rows[e.RowIndex];
-                var tempaltePrivateID = TryGetPrivateID(row);
-                if (tempaltePrivateID <= -1 || OverallResultList == null)
+                var privateID = (int)row.Cells["PrivateID"].Value;
+                if (privateID <= -1 || OverallResultList == null)
                     return;
 
-                var template = OverallResultList[tempaltePrivateID];
+                var template = OverallResultList[privateID];
 
                 if (template.IsMatched)
                 {
@@ -509,16 +594,16 @@ namespace LogsReader.Reader
                 if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
                     return;
 
-                var tempalteID = TryGetPrivateID(dgvFiles.SelectedRows[0]);
+                var privateID = (int)dgvFiles.SelectedRows[0].Cells["PrivateID"].Value;
 
-                if (tempalteID == -1 || OverallResultList == null)
+                if (privateID == -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
                     _fullTrace.Text = string.Empty;
                     return;
                 }
 
-                var template = OverallResultList[tempalteID];
+                var template = OverallResultList[privateID];
                 var message = XML.RemoveUnallowable(template.Message, " ");
 
                 descriptionText.Text = template.Description;
@@ -539,23 +624,6 @@ namespace LogsReader.Reader
                 dgvFiles.ClearSelection();
                 dgvFiles.Rows[hti.RowIndex].Selected = true;
             }
-        }
-
-        static int TryGetPrivateID(DataGridViewRow row)
-        {
-            if (row == null)
-                return -1;
-
-            foreach (DataGridViewCell cell in row.Cells)
-            {
-                if (!cell.OwningColumn.Name.Equals("PrivateID", StringComparison.CurrentCultureIgnoreCase))
-                    continue;
-
-                if (cell.Value is int value)
-                    return value;
-            }
-
-            return -1;
         }
     
         private void serversText_TextChanged(object sender, EventArgs e)
@@ -690,13 +758,13 @@ namespace LogsReader.Reader
             UserSettings.Message = msgFilterText.Text;
         }
 
-        void ValidationCheck()
+        void ValidationCheck(bool clearStatus = true)
         {
             var isCorrectPath = IO.CHECK_PATH.IsMatch(logDirText.Text);
             logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
 
             var settIsCorrect = CurrentSettings.IsCorrect;
-            if (settIsCorrect)
+            if (settIsCorrect && clearStatus)
                 ClearErrorStatus();
 
             btnSearch.Enabled = isCorrectPath
@@ -705,7 +773,7 @@ namespace LogsReader.Reader
                                 && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -742,7 +810,7 @@ namespace LogsReader.Reader
                 descriptionText.Text = string.Empty;
                 _message.Text = string.Empty;
                 _fullTrace.Text = string.Empty;
-                buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+                buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
             }
             catch (Exception ex)
             {

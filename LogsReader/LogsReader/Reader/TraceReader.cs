@@ -10,7 +10,7 @@ namespace LogsReader.Reader
 {
     public abstract class TraceReader
     {
-        private readonly LogsReader _mainReader;
+        private readonly LogsReaderPerformer _mainReader;
 
         protected Queue<string> PastTraceLines { get; }
 
@@ -38,7 +38,7 @@ namespace LogsReader.Reader
 
         public List<DataTemplate> FoundResults { get; }
 
-        protected TraceReader(string server, string filePath, LogsReader mainReader)
+        protected TraceReader(string server, string filePath, LogsReaderPerformer mainReader)
         {
             _mainReader = mainReader;
 

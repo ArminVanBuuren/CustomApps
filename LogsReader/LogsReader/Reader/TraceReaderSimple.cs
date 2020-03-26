@@ -7,7 +7,7 @@ namespace LogsReader.Reader
     public class TraceReaderSimple : TraceReader
     {
 
-        public TraceReaderSimple(string server, string filePath, LogsReader mainReader) : base(server, filePath, mainReader)
+        public TraceReaderSimple(string server, string filePath, LogsReaderPerformer mainReader) : base(server, filePath, mainReader)
         {
 
         }

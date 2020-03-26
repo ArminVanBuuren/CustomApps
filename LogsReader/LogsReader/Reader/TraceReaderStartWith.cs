@@ -10,7 +10,7 @@ namespace LogsReader.Reader
 
         //public Regex EndLineWith => CurrentSettings.TraceLinePattern.EndLineWith;
 
-        public TraceReaderStartWith(string server, string filePath, LogsReader mainReader) : base(server, filePath, mainReader)
+        public TraceReaderStartWith(string server, string filePath, LogsReaderPerformer mainReader) : base(server, filePath, mainReader)
         {
         }
 

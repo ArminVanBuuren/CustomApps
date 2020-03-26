@@ -60,7 +60,7 @@
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
     <Compile Include="Reader\TraceReader.cs" />
-    <Compile Include="Reader\LogsReader.cs" />
+    <Compile Include="Reader\LogsReaderPerformer.cs" />
     <Compile Include="Reader\LogsReaderForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -77,6 +77,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader\TraceReaderSimple.cs" />
     <Compile Include="Reader\TraceReaderStartWith.cs" />
+    <Compile Include="Reader\CustomTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
     <Compile Include="Config\LRSettingsScheme.cs" />
@@ -140,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Symbol Refresh 3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\export.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,6 +6,8 @@ using Utils;
 
 namespace LogsReader.Config
 {
+    public delegate void ReportStatusHandler(string message, bool isError);
+
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {

@@ -13,7 +13,7 @@ namespace LogsReader.Reader
 {
     public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
-    public class LogsReader : IDisposable
+    public class LogsReaderPerformer : IDisposable
     {
         private readonly IEnumerable<string> _servers;
         private readonly IEnumerable<string> _traces;
@@ -43,7 +43,7 @@ namespace LogsReader.Reader
         public IEnumerable<DataTemplate> ResultsOfSuccess { get; private set; }
         public IEnumerable<DataTemplate> ResultsOfError { get; private set; }
 
-        public LogsReader(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, string findMessage, bool useRegex)
+        public LogsReaderPerformer(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, string findMessage, bool useRegex)
         {
             if (useRegex)
             {
