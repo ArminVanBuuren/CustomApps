@@ -69,7 +69,7 @@ namespace LogsReader.Config
                 lock (_sync)
                 {
                     if (File.Exists(SettingsPath))
-                        File.SetAttributes(SettingsPath, FileAttributes.Normal);
+                        IO.SetAllAccessPermissions(SettingsPath);
 
                     var xml = new XmlSerializer(typeof(LRSettings));
                     using (StreamWriter sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))

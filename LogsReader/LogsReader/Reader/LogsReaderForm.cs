@@ -73,7 +73,7 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 var autor = new ToolStripButton("?") {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-                autor.Click += (sender, args) => { Utils.MessageShow(@"Hello! This is a universal application for searching and parsing applications logs, as well as convenient viewing.", ASSEMBLY.Company, false); };
+                autor.Click += (sender, args) => { Utils.MessageShow(@"Hello! This is a universal application for searching and parsing applications logs, as well as convenient viewing.", $"© {ASSEMBLY.Company}", false); };
                 statusStrip.Items.Add(autor);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
