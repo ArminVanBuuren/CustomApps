@@ -208,6 +208,28 @@ namespace Utils
             }
         }
 
+        public static bool SetAllAccessPermissions(string filePath)
+        {
+            try
+            {
+                File.SetAttributes(filePath, FileAttributes.Normal);
+                var dInfo = new DirectoryInfo(filePath);
+                var dSecurity = dInfo.GetAccessControl();
+                dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
+                dInfo.SetAccessControl(dSecurity);
+
+                var access = File.GetAccessControl(filePath);
+                var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                access.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.ReadAndExecute, AccessControlType.Allow));
+                File.SetAccessControl(filePath, access);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Add all access permissions to file
         /// </summary>

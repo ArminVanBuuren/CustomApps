@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -9,20 +10,15 @@ namespace Utils
     public static class ASSEMBLY
     {
         //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
-        public static string ApplicationName => Assembly.GetEntryAssembly()?.GetName().Name;
-        public static string ApplicationPath => Assembly.GetEntryAssembly()?.Location;
-        //public static string ApplicationDirectory => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().GetName().Name);
+        public static string ApplicationName => CurrentAssembly.GetName().Name;
+        public static string ApplicationPath => CurrentAssembly.Location;
+        //public static string ApplicationDirectory => Path.Combine(Path.GetDirectoryName(CurrentAssembly.Location), CurrentAssembly.GetName().Name);
         public static string ApplicationDirectory => Path.GetDirectoryName(ApplicationPath);
-        public static string ApplicationFilePath
-        {
-            get
-            {
-                var processModule = System.Diagnostics.Process.GetCurrentProcess().MainModule;
-                return processModule?.FileName;
-            }
-        }
+        public static string ApplicationFilePath => Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
+        public static string CurrentVersion => CurrentAssembly.GetName().Version.ToString();
+        public static string Company => ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(CurrentAssembly, typeof(AssemblyCompanyAttribute), false))?.Company ?? string.Empty;
 
-        public static string CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version.ToString();
+        public static Assembly CurrentAssembly => Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
 
         public static string GetDirectory(this Assembly assembly)
         {
@@ -77,7 +73,6 @@ namespace Utils
 
             return null;
         }
-
 
         public static string GetPropertiesToString(object @object, BindingFlags flags)
         {
