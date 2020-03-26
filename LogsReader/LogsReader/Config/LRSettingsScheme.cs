@@ -31,7 +31,7 @@ namespace LogsReader.Config
                 case "MG":
                     _schemeName = name;
                     _servers = "mg1,mg2,mg3,mg4,mg5";
-                    _types = "crm,soap,sms,ivr,email,wcf,dispatcher";
+                    _types = "crm,soap,sms,ivr,email,wcf,dbcon,dispatcher";
                     _maxThreads = -1;
                     _maxTraceLines = 50;
                     _logsDirectory = @"C:\FORISLOG\MG";
