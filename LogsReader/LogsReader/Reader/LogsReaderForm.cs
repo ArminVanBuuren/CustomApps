@@ -70,6 +70,7 @@ namespace LogsReader.Reader
 
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
+                var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 var autor = new ToolStripButton("?") {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
                 autor.Click += (sender, args) => { Utils.MessageShow(@"Hello! This is a universal application for searching and parsing applications logs, as well as convenient viewing.", ASSEMBLY.Company, false); };
@@ -77,32 +78,32 @@ namespace LogsReader.Reader
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = statusStripItemsPaddingStart });
-                CPUUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 0, 2)};
+                CPUUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 1, 2)};
                 statusStrip.Items.Add(CPUUsage);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                ThreadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                ThreadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(ThreadsUsage);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                RAMUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = new Padding(-4, 2, 0, 2)};
+                RAMUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd };
                 statusStrip.Items.Add(RAMUsage);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
                 statusStrip.Items.Add(_completedFilesStatus);
-                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle });
+                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_totalFilesStatus);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
                 statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingMiddle});
+                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd});
 
                 statusStrip.Items.Add(new ToolStripSeparator());
                 _statusInfo = new ToolStripStatusLabel("") {Font = this.Font, Margin = statusStripItemsPaddingStart};
