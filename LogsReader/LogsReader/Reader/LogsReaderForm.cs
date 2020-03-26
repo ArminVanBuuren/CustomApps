@@ -814,7 +814,7 @@ namespace LogsReader.Reader
                 _message.Text = string.Empty;
                 _fullTrace.Text = string.Empty;
                 buttonExport.Enabled = false;
-                buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+                buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
             }
             catch (Exception ex)
             {
