@@ -11,12 +11,19 @@ namespace LogsReader
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            var mainForm  = new MainForm();
-            mainForm.ApplySettings();
-            Application.Run(mainForm);
+                var mainForm = new MainForm();
+                mainForm.ApplySettings();
+                Application.Run(mainForm);
+            }
+            catch (Exception ex)
+            {
+                Utils.MessageShow(ex.ToString(), @"Run");
+            }
         }
     }
 }

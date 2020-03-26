@@ -62,10 +62,10 @@ namespace LogsReader.Reader
         public LogsReaderForm()
         {
             InitializeComponent();
-            dgvFiles.AutoGenerateColumns = false;
-
             try
             {
+                dgvFiles.AutoGenerateColumns = false;
+
                 #region Set StatusStrip
 
                 var statusStripItemsPaddingStart = new Padding(0, 3, 0, 2);
@@ -306,9 +306,9 @@ namespace LogsReader.Reader
                     {
                         MainReader.OnProcessReport -= ReportStatusOfProcess;
                         MainReader.Dispose();
+                        MainReader = null;
                     }
 
-                    MainReader = null;
                     IsWorking = false;
                     ChangeFormStatus();
                     if (stop.IsRunning)
