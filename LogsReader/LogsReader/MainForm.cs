@@ -196,11 +196,12 @@ namespace LogsReader
                          Settings.Default.FormSize.Width < 100 ||
                          Settings.Default.FormLocation.X < 0 ||
                          Settings.Default.FormLocation.Y < 0))
-                        WindowState = FormWindowState.Maximized;
+                    { WindowState = FormWindowState.Maximized; return; }
                     else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
                         Size = Settings.Default.FormSize;
 
-                    Location = Settings.Default.FormLocation;
+                    CenterToScreen();
+                    //Location = Settings.Default.FormLocation;
                 }
             }
             catch (Exception ex)

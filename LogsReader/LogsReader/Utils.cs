@@ -28,9 +28,9 @@ namespace LogsReader
             }
         }
 
-        public static void MessageShow(string msg, string caption)
+        public static void MessageShow(string msg, string caption, bool isError = true)
         {
-            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(msg, caption, MessageBoxButtons.OK, isError ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
         }
     }
 
