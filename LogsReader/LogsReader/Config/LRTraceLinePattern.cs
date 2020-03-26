@@ -81,14 +81,14 @@ namespace LogsReader.Config
 
         [XmlIgnore] internal Regex StartLineWith { get; private set; }
 
-        [XmlElement("EndLineWith")]
-        public XmlNode[] EndWith
-        {
-            get => _endLineWith;
-            set => EndLineWith = GetCDataNode(value, false, out _endLineWith);
-        }
+        //[XmlElement("EndLineWith")]
+        //public XmlNode[] EndWith
+        //{
+        //    get => _endLineWith;
+        //    set => EndLineWith = GetCDataNode(value, false, out _endLineWith);
+        //}
 
-        [XmlIgnore] internal Regex EndLineWith { get; private set; }
+        //[XmlIgnore] internal Regex EndLineWith { get; private set; }
     }
 
     [XmlRoot("Item")]
