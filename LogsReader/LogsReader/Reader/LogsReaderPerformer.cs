@@ -202,80 +202,80 @@ namespace LogsReader.Reader
         {
             switch (Path.GetExtension(fileName))
             {
-                case ".aif": return false;
-                case ".cda": return false;
-                case ".mid": return false;
-                case ".mp3": return false;
-                case ".mpa": return false;
-                case ".ogg": return false;
-                case ".wav": return false;
-                case ".wma": return false;
-                case ".wpl": return false;
-                case ".7z": return false;
-                case ".arj": return false;
-                case ".deb": return false;
-                case ".pkg": return false;
-                case ".rar": return false;
-                case ".rpm": return false;
-                case ".tar.gz": return false;
-                case ".z": return false;
-                case ".zip": return false;
-                case ".bin": return false;
-                case ".dmg": return false;
-                case ".iso": return false;
-                case ".toast": return false;
-                case ".vcd": return false;
-                case ".mdb": return false;
-                case ".dat": return false;
-                case ".exe": return false;
-                case ".dll": return false;
-                case ".ai": return false;
-                case ".bmp": return false;
-                case ".gif": return false;
-                case ".ico": return false;
-                case ".jpeg": return false;
-                case ".png": return false;
-                case ".ps": return false;
-                case ".psd": return false;
-                case ".svg": return false;
-                case ".tif": return false;
-                case ".ods": return false;
-                case ".xls": return false;
-                case ".xlsm": return false;
-                case ".xlsx": return false;
-                case ".bak": return false;
-                case ".cab": return false;
-                case ".cfg": return false;
-                case ".cpl": return false;
-                case ".cur": return false;
-                case ".dmp": return false;
-                case ".drv": return false;
-                case ".icns": return false;
-                case ".ini": return false;
-                case ".lnk": return false;
-                case ".msi": return false;
-                case ".sys": return false;
-                case ".tmp": return false;
-                case ".3g2": return false;
-                case ".3gp": return false;
-                case ".avi": return false;
-                case ".flv": return false;
-                case ".h264": return false;
-                case ".m4v": return false;
-                case ".mkv": return false;
-                case ".mov": return false;
-                case ".mp4": return false;
-                case ".mpg": return false;
-                case ".rm": return false;
-                case ".swf": return false;
-                case ".vob": return false;
-                case ".wmv": return false;
-                case ".doc": return false;
-                case ".odt": return false;
-                case ".pdf": return false;
-                case ".rtf": return false;
-                case ".tex": return false;
-                case ".txt": return false;
+                case ".aif":
+                case ".cda":
+                case ".mid":
+                case ".mp3":
+                case ".mpa":
+                case ".ogg":
+                case ".wav":
+                case ".wma":
+                case ".wpl":
+                case ".7z":
+                case ".arj":
+                case ".deb":
+                case ".pkg":
+                case ".rar":
+                case ".rpm":
+                case ".tar.gz":
+                case ".z":
+                case ".zip":
+                case ".bin":
+                case ".dmg":
+                case ".iso":
+                case ".toast":
+                case ".vcd":
+                case ".mdb":
+                case ".dat":
+                case ".exe":
+                case ".dll":
+                case ".ai":
+                case ".bmp":
+                case ".gif":
+                case ".ico":
+                case ".jpeg":
+                case ".png":
+                case ".ps":
+                case ".psd":
+                case ".svg":
+                case ".tif":
+                case ".ods":
+                case ".xls":
+                case ".xlsm":
+                case ".xlsx":
+                case ".bak":
+                case ".cab":
+                case ".cfg":
+                case ".cpl":
+                case ".cur":
+                case ".dmp":
+                case ".drv":
+                case ".icns":
+                case ".ini":
+                case ".lnk":
+                case ".msi":
+                case ".sys":
+                case ".tmp":
+                case ".3g2":
+                case ".3gp":
+                case ".avi":
+                case ".flv":
+                case ".h264":
+                case ".m4v":
+                case ".mkv":
+                case ".mov":
+                case ".mp4":
+                case ".mpg":
+                case ".rm":
+                case ".swf":
+                case ".vob":
+                case ".wmv":
+                case ".doc":
+                case ".odt":
+                case ".pdf":
+                case ".rtf":
+                case ".tex":
+                case ".txt":
                 case ".wpd": return false;
             }
 
