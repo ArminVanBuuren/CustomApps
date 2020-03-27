@@ -64,10 +64,13 @@ namespace LogsReader.Reader
 
             try
             {
-                if (IsTraceMatch(Found.EntireTrace, out var result, Found, true))
-                    AddResult(result);
-                else
-                    AddResult(Found);
+                if (!Found.IsMatched)
+                {
+                    if (IsTraceMatch(Found.EntireTrace, out var result, Found, true))
+                        AddResult(result);
+                    else
+                        AddResult(Found);
+                }
             }
             catch (Exception ex)
             {
