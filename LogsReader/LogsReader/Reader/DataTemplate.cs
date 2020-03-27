@@ -14,8 +14,9 @@ namespace LogsReader.Reader
         private string _trace = null;
         private string _message = string.Empty;
 
-        internal DataTemplate(TraceReader fileLog, string strID, string date, string trace, string description, string message, string entireTrace)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string strID, string date, string trace, string description, string message, string entireTrace)
         {
+            FoundLineID = foundLineID;
             IsMatched = true;
             _fileLog = fileLog;
 
@@ -37,8 +38,9 @@ namespace LogsReader.Reader
             EntireTrace = entireTrace;
         }
 
-        internal DataTemplate(TraceReader fileLog, string entireTrace)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string entireTrace)
         {
+            FoundLineID = foundLineID;
             IsMatched = false;
             _fileLog = fileLog;
 
@@ -46,8 +48,9 @@ namespace LogsReader.Reader
             EntireTrace = entireTrace;
         }
 
-        internal DataTemplate(TraceReader fileLog, string entireTrace, Exception error)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string entireTrace, Exception error)
         {
+            FoundLineID = foundLineID;
             IsMatched = false;
             _fileLog = fileLog;
 
@@ -67,6 +70,8 @@ namespace LogsReader.Reader
             }
             EntireTrace = entireTrace;
         }
+
+        public int FoundLineID { get; }
 
         [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
         public int PrivateID { get; internal set; }

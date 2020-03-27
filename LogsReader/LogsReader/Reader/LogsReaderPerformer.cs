@@ -55,7 +55,7 @@ namespace LogsReader.Reader
             }
             else
             {
-                IsMatchSearchPatternFunc = (input) => input.IndexOf(findMessage, StringComparison.OrdinalIgnoreCase) != -1;
+                IsMatchSearchPatternFunc = (input) => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
             }
 
             CurrentSettings = settings;
@@ -85,7 +85,7 @@ namespace LogsReader.Reader
             ResultsOfSuccess = KvpList.SelectMany(x => x.FoundResults);
             ResultsOfError = _multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
             {
-                listErr.Add(new DataTemplate(x.Source, string.Empty, x.Error));
+                listErr.Add(new DataTemplate(x.Source, -1, string.Empty, x.Error));
                 return listErr;
             });
         }
@@ -117,7 +117,7 @@ namespace LogsReader.Reader
                     if (IsStopPending)
                         return kvpList;
 
-                    if (_traces.Any(x => fileLog.FileName.IndexOf(x, StringComparison.CurrentCultureIgnoreCase) != -1))
+                    if (_traces.Any(x => fileLog.FileName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
             }

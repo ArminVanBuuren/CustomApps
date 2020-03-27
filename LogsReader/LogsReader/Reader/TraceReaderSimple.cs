@@ -14,6 +14,8 @@ namespace LogsReader.Reader
 
         public override void ReadLine(string line)
         {
+            Lines++;
+
             if (Found != null)
             {
                 // если стек лога превышает допустимый размер, то лог больше не дополняется
@@ -44,7 +46,7 @@ namespace LogsReader.Reader
                     {
                         // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
                         Found.AppendNextLine(line);
-                        if (IsTraceMatch(Found.EntireTrace, out var afterSuccessResult))
+                        if (IsTraceMatch(Found.EntireTrace, out var afterSuccessResult, Found))
                         {
                             // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
                             AddResult(afterSuccessResult);

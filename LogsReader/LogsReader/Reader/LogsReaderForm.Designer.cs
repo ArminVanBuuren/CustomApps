@@ -32,13 +32,6 @@ namespace LogsReader.Reader
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
@@ -77,6 +70,13 @@ namespace LogsReader.Reader
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
             this.trvMain = new LogsReader.Reader.CustomTreeView();
+            this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -123,71 +123,6 @@ namespace LogsReader.Reader
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
-            // 
-            // PrivateID
-            // 
-            this.PrivateID.DataPropertyName = "PrivateID";
-            this.PrivateID.HeaderText = "PrivateID";
-            this.PrivateID.MinimumWidth = 10;
-            this.PrivateID.Name = "PrivateID";
-            this.PrivateID.ReadOnly = true;
-            this.PrivateID.Visible = false;
-            this.PrivateID.Width = 10;
-            // 
-            // IsMatched
-            // 
-            this.IsMatched.DataPropertyName = "IsMatched";
-            this.IsMatched.HeaderText = "IsMatched";
-            this.IsMatched.MinimumWidth = 10;
-            this.IsMatched.Name = "IsMatched";
-            this.IsMatched.ReadOnly = true;
-            this.IsMatched.Visible = false;
-            this.IsMatched.Width = 10;
-            // 
-            // ID
-            // 
-            this.ID.DataPropertyName = "ID";
-            this.ID.HeaderText = "ID";
-            this.ID.MinimumWidth = 40;
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 45;
-            // 
-            // Server
-            // 
-            this.Server.DataPropertyName = "Server";
-            this.Server.HeaderText = "Server";
-            this.Server.MinimumWidth = 40;
-            this.Server.Name = "Server";
-            this.Server.ReadOnly = true;
-            this.Server.Width = 80;
-            // 
-            // Trace
-            // 
-            this.Trace.DataPropertyName = "Trace";
-            this.Trace.HeaderText = "Trace";
-            this.Trace.MinimumWidth = 40;
-            this.Trace.Name = "Trace";
-            this.Trace.ReadOnly = true;
-            this.Trace.Width = 140;
-            // 
-            // Date
-            // 
-            this.Date.DataPropertyName = "Date";
-            this.Date.HeaderText = "Date";
-            this.Date.MinimumWidth = 40;
-            this.Date.Name = "Date";
-            this.Date.ReadOnly = true;
-            this.Date.Width = 140;
-            // 
-            // FileName
-            // 
-            this.FileName.DataPropertyName = "FileName";
-            this.FileName.HeaderText = "FileName";
-            this.FileName.MinimumWidth = 40;
-            this.FileName.Name = "FileName";
-            this.FileName.ReadOnly = true;
-            this.FileName.Width = 500;
             // 
             // btnSearch
             // 
@@ -629,6 +564,71 @@ namespace LogsReader.Reader
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
+            // PrivateID
+            // 
+            this.PrivateID.DataPropertyName = "PrivateID";
+            this.PrivateID.HeaderText = "PrivateID";
+            this.PrivateID.MinimumWidth = 10;
+            this.PrivateID.Name = "PrivateID";
+            this.PrivateID.ReadOnly = true;
+            this.PrivateID.Visible = false;
+            this.PrivateID.Width = 10;
+            // 
+            // IsMatched
+            // 
+            this.IsMatched.DataPropertyName = "IsMatched";
+            this.IsMatched.HeaderText = "IsMatched";
+            this.IsMatched.MinimumWidth = 10;
+            this.IsMatched.Name = "IsMatched";
+            this.IsMatched.ReadOnly = true;
+            this.IsMatched.Visible = false;
+            this.IsMatched.Width = 10;
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 40;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 45;
+            // 
+            // Server
+            // 
+            this.Server.DataPropertyName = "Server";
+            this.Server.HeaderText = "Server";
+            this.Server.MinimumWidth = 40;
+            this.Server.Name = "Server";
+            this.Server.ReadOnly = true;
+            this.Server.Width = 80;
+            // 
+            // Trace
+            // 
+            this.Trace.DataPropertyName = "Trace";
+            this.Trace.HeaderText = "Trace";
+            this.Trace.MinimumWidth = 40;
+            this.Trace.Name = "Trace";
+            this.Trace.ReadOnly = true;
+            this.Trace.Width = 140;
+            // 
+            // Date
+            // 
+            this.Date.DataPropertyName = "Date";
+            this.Date.HeaderText = "Date";
+            this.Date.MinimumWidth = 40;
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            this.Date.Width = 140;
+            // 
+            // FileName
+            // 
+            this.FileName.DataPropertyName = "FileName";
+            this.FileName.HeaderText = "FileName";
+            this.FileName.MinimumWidth = 40;
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            this.FileName.Width = 1000;
+            // 
             // LogsReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -703,6 +703,7 @@ namespace LogsReader.Reader
         private System.Windows.Forms.RichTextBox descriptionText;
         private System.Windows.Forms.Panel SchemePanel;
         private System.Windows.Forms.Panel filterPanel;
+        private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrivateID;
         private System.Windows.Forms.DataGridViewTextBoxColumn IsMatched;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
@@ -710,7 +711,6 @@ namespace LogsReader.Reader
         private System.Windows.Forms.DataGridViewTextBoxColumn Trace;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
-        private System.Windows.Forms.Button buttonExport;
     }
 }
 

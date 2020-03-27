@@ -36,6 +36,8 @@ namespace LogsReader.Reader
         /// </summary>
         public int CountMatches { get; protected set; } = 0;
 
+        public int Lines { get; protected set; } = 0;
+
         public List<DataTemplate> FoundResults { get; }
 
         protected TraceReader(string server, string filePath, LogsReaderPerformer mainReader)
@@ -47,7 +49,10 @@ namespace LogsReader.Reader
 
             Server = server;
             FilePath = filePath;
-            FileName = Path.GetFileName(FilePath);
+
+            var logsPathWithoutRoot = CurrentSettings.LogsDirectory.Replace(Path.GetPathRoot(CurrentSettings.LogsDirectory), string.Empty, StringComparison.InvariantCultureIgnoreCase);
+            var filePathWithoutRoot = FilePath.Replace(Path.GetPathRoot(FilePath), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');
+            FileName = filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
         }
 
         public abstract void ReadLine(string line);
@@ -59,14 +64,14 @@ namespace LogsReader.Reader
 
             try
             {
-                if (IsTraceMatch(Found.EntireTrace, out var result, true))
+                if (IsTraceMatch(Found.EntireTrace, out var result, Found, true))
                     AddResult(result);
                 else
                     AddResult(Found);
             }
             catch (Exception ex)
             {
-                AddResult(new DataTemplate(this, Found.EntireTrace, ex));
+                AddResult(new DataTemplate(this, Lines, Found.EntireTrace, ex));
             }
             finally
             {
@@ -79,7 +84,7 @@ namespace LogsReader.Reader
             FoundResults.Add(item);
         }
 
-        protected bool IsTraceMatch(string input, out DataTemplate result, bool throwException = false)
+        protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
         {
             // замена \r чинит баг с некорректным парсингом
             var message = input.Replace("\r", string.Empty);
@@ -98,7 +103,7 @@ namespace LogsReader.Reader
                     }
                     else
                     {
-                        result = new DataTemplate(this, input, ex);
+                        result = new DataTemplate(this, failed?.FoundLineID ?? Lines, input, ex);
                         return false;
                     }
                 }
@@ -106,6 +111,7 @@ namespace LogsReader.Reader
                 if (match.Success && match.Value.Length == message.Length)
                 {
                     result = new DataTemplate(this,
+                        failed?.FoundLineID ?? Lines,
                         match.GetValueByReplacement(item.ID),
                         match.GetValueByReplacement(item.Date),
                         match.GetValueByReplacement(item.Trace),
@@ -116,7 +122,7 @@ namespace LogsReader.Reader
                 }
             }
 
-            result = new DataTemplate(this, message);
+            result = new DataTemplate(this, Lines, message);
             return false;
         }
 
