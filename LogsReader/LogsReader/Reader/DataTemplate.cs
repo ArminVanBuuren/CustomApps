@@ -100,7 +100,7 @@ namespace LogsReader.Reader
         }
 
         [DGVColumn(ColumnPosition.After, "FileName")]
-        public string FileName => _fileLog.FileName;
+        public string FileName => _fileLog.FileNamePartial;
 
         public DateTime? DateOfTrace { get; }
 

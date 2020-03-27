@@ -29,6 +29,7 @@ namespace LogsReader.Reader
 
         public string Server { get; }
         public string FileName { get; }
+        public string FileNamePartial { get; }
         public string FilePath { get; }
 
         /// <summary>
@@ -49,10 +50,11 @@ namespace LogsReader.Reader
 
             Server = server;
             FilePath = filePath;
+            FileName = Path.GetFileName(FilePath);
 
             var logsPathWithoutRoot = CurrentSettings.LogsDirectory.Replace(Path.GetPathRoot(CurrentSettings.LogsDirectory), string.Empty, StringComparison.InvariantCultureIgnoreCase);
             var filePathWithoutRoot = FilePath.Replace(Path.GetPathRoot(FilePath), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');
-            FileName = filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
+            FileNamePartial = filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
         }
 
         public abstract void ReadLine(string line);

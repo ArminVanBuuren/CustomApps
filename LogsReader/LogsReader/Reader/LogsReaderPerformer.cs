@@ -117,7 +117,7 @@ namespace LogsReader.Reader
                     if (IsStopPending)
                         return kvpList;
 
-                    if (_traces.Any(x => fileLog.FileName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
+                    if (IsAllowedExtension(fileLog.FileName) && _traces.Any(x => fileLog.FileName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
             }
@@ -196,6 +196,90 @@ namespace LogsReader.Reader
             {
                 // ignored
             }
+        }
+
+        static bool IsAllowedExtension(string fileName)
+        {
+            switch (Path.GetExtension(fileName))
+            {
+                case ".aif": return false;
+                case ".cda": return false;
+                case ".mid": return false;
+                case ".mp3": return false;
+                case ".mpa": return false;
+                case ".ogg": return false;
+                case ".wav": return false;
+                case ".wma": return false;
+                case ".wpl": return false;
+                case ".7z": return false;
+                case ".arj": return false;
+                case ".deb": return false;
+                case ".pkg": return false;
+                case ".rar": return false;
+                case ".rpm": return false;
+                case ".tar.gz": return false;
+                case ".z": return false;
+                case ".zip": return false;
+                case ".bin": return false;
+                case ".dmg": return false;
+                case ".iso": return false;
+                case ".toast": return false;
+                case ".vcd": return false;
+                case ".mdb": return false;
+                case ".dat": return false;
+                case ".exe": return false;
+                case ".dll": return false;
+                case ".ai": return false;
+                case ".bmp": return false;
+                case ".gif": return false;
+                case ".ico": return false;
+                case ".jpeg": return false;
+                case ".png": return false;
+                case ".ps": return false;
+                case ".psd": return false;
+                case ".svg": return false;
+                case ".tif": return false;
+                case ".ods": return false;
+                case ".xls": return false;
+                case ".xlsm": return false;
+                case ".xlsx": return false;
+                case ".bak": return false;
+                case ".cab": return false;
+                case ".cfg": return false;
+                case ".cpl": return false;
+                case ".cur": return false;
+                case ".dmp": return false;
+                case ".drv": return false;
+                case ".icns": return false;
+                case ".ini": return false;
+                case ".lnk": return false;
+                case ".msi": return false;
+                case ".sys": return false;
+                case ".tmp": return false;
+                case ".3g2": return false;
+                case ".3gp": return false;
+                case ".avi": return false;
+                case ".flv": return false;
+                case ".h264": return false;
+                case ".m4v": return false;
+                case ".mkv": return false;
+                case ".mov": return false;
+                case ".mp4": return false;
+                case ".mpg": return false;
+                case ".rm": return false;
+                case ".swf": return false;
+                case ".vob": return false;
+                case ".wmv": return false;
+                case ".doc": return false;
+                case ".odt": return false;
+                case ".pdf": return false;
+                case ".rtf": return false;
+                case ".tex": return false;
+                case ".txt": return false;
+                case ".wpd": return false;
+            }
+
+            return true;
         }
 
         public void Dispose()
