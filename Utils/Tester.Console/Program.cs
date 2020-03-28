@@ -129,14 +129,85 @@ namespace Tester.Console
             System.Console.ReadKey();
         }
 
-        
 
-        
+        public class getTimeInRangeFunction 
+        {
+
+            public static object Invoke(string xsltContext, object[] args, string docContext)
+            {
+                try
+                {
+                    string sTimeZone = args[0].ToString();
+                    Int32 timeZone;
+                    if (Int32.TryParse(sTimeZone, out timeZone))
+                    {
+                        timeZone = Convert.ToInt32(sTimeZone);
+                    }
+                    else
+                    {
+                        timeZone = 0;
+                    }
+                    string sFrom = args[1].ToString();
+                    string sTo = args[2].ToString();
+                    int spreadMinutes = (args.Length > 3) ? Convert.ToInt32(args[3].ToString()) : 120;
+                    //default value of spread is 120 minutes
+
+                    DateTime now = DateTime.Now;
+                    DateTime dFrom = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                    dFrom = dFrom + stringToTimeSpan(sFrom);
+                    dFrom = dFrom + TimeSpan.FromMinutes(timeZone);
+                    DateTime dTo = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+                    dTo = dTo + stringToTimeSpan(sTo);
+                    dTo = dTo + TimeSpan.FromMinutes(timeZone);
+                    var ааа = TimeSpan.FromMinutes(1);
+
+                    if (now >= dFrom && now <= dTo) return "";
+
+                    Random randomShift = new Random();
+                    if (now < dFrom)
+                        return timespanToString(dFrom - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    if (now > dFrom)
+                        return
+                            timespanToString(dFrom.AddDays(1) - now + TimeSpan.FromMinutes(randomShift.Next(spreadMinutes)));
+                    return "";
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+            }
+
+            static string timespanToString(TimeSpan timespan)
+            {
+                return String.Format("0000{0:00}{1:00}{2:00}{3:00}000R", timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds);
+            }
+
+            static TimeSpan stringToTimeSpan(string span)
+            {
+                Regex rx = new Regex(@"((?<days>(\d+))\.)?(?<hours>(\d{1,2})):(?<mins>(\d{1,2}))");
+                Match match = rx.Match(span);
+                GroupCollection groups = match.Groups;
+                Int32 days = 0;
+                try
+                {
+                    days = Convert.ToInt32(groups["days"].Value);
+                }
+                catch
+                {
+                    days = 0;
+                }
+                TimeSpan timeSpan = new TimeSpan(days, Convert.ToInt32(groups["hours"].Value), Convert.ToInt32(groups["mins"].Value), 0);
+                return timeSpan;
+            }
+        }
+
 
         static void Main(string[] args)
         {
             try
             {
+                var res11111 = getTimeInRangeFunction.Invoke(null, new []{"0","09:00", "20:00"},null);
+
                 var stop = new Stopwatch();
 
                 string context = string.Empty;
