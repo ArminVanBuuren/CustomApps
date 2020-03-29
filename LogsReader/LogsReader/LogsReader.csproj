@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Reader\DataFilter.cs" />
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
     <Compile Include="Reader\TraceReader.cs" />

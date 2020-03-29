@@ -613,7 +613,7 @@ namespace LogsReader.Reader
             this.alreadyUseFilter.Name = "alreadyUseFilter";
             this.alreadyUseFilter.Size = new System.Drawing.Size(117, 19);
             this.alreadyUseFilter.TabIndex = 33;
-            this.alreadyUseFilter.Text = "Already Use Filter";
+            this.alreadyUseFilter.Text = "Use When Search";
             this.alreadyUseFilter.UseVisualStyleBackColor = true;
             this.alreadyUseFilter.CheckedChanged += new System.EventHandler(this.alreadyUseFilter_CheckedChanged);
             // 

@@ -48,7 +48,6 @@ namespace LogsReader.Reader
             }
             else
             {
-                ++CountMatches;
                 Commit();
             }
 

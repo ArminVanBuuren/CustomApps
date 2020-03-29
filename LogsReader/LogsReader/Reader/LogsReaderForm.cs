@@ -298,19 +298,14 @@ namespace LogsReader.Reader
                 var stop = new Stopwatch();
                 try
                 {
-                    if (alreadyUseFilter.Checked && dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
-                    {
-                        ReportStatus($"End date must be greater than start date.", true);
-                        return;
-                    }
+                    var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
                     MainReader = new LogsReaderPerformer(CurrentSettings, 
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         txtPattern.Text, 
                         useRegex.Checked,
-                        alreadyUseFilter.Checked && dateTimePickerStart.Checked ? dateTimePickerStart.Value : DateTime.MinValue,
-                        alreadyUseFilter.Checked && dateTimePickerEnd.Checked ? dateTimePickerEnd.Value : DateTime.MaxValue);
+                        filter);
                     MainReader.OnProcessReport += ReportStatusOfProcess;
 
                     stop.Start();
@@ -323,7 +318,7 @@ namespace LogsReader.Reader
                     OverallResultList = new DataTemplateCollection(MainReader.ResultsOfSuccess);
                     OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.DateOfTrace));
 
-                    if (await AssignResult(alreadyUseFilter.Checked))
+                    if (await AssignResult(filter))
                     {
                         ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
                     }
@@ -460,15 +455,24 @@ namespace LogsReader.Reader
 
         private async void buttonFilter_Click(object sender, EventArgs e)
         {
-            await AssignResult(true);
+            await AssignResult(GetFilter());
+        }
+
+        DataFilter GetFilter()
+        {
+            return new DataFilter(dateTimePickerStart.Checked ? dateTimePickerStart.Value : DateTime.MinValue,
+                dateTimePickerEnd.Checked ? dateTimePickerEnd.Value : DateTime.MaxValue,
+                traceLikeText.Text,
+                traceNotLikeText.Text,
+                msgFilterText.Text);
         }
 
         private async void buttonReset_Click(object sender, EventArgs e)
         {
-            await AssignResult(false);
+            await AssignResult(null);
         }
 
-        async Task<bool> AssignResult(bool applyFilter)
+        async Task<bool> AssignResult(DataFilter filter)
         {
             ClearDGV();
             ClearErrorStatus();
@@ -484,49 +488,9 @@ namespace LogsReader.Reader
                 return false;
             }
 
-            if (applyFilter)
+            if (filter != null)
             {
-                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
-                {
-                    ReportStatus(@"Date of end must be greater than date of start.", true);
-                    return false;
-                }
-
-                if (dateTimePickerStart.Checked && dateTimePickerEnd.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-                else if (dateTimePickerStart.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value >= dateTimePickerStart.Value);
-                else if (dateTimePickerEnd.Checked)
-                    result = result.Where(x => x.DateOfTrace != null && x.DateOfTrace.Value <= dateTimePickerEnd.Value);
-
-
-                var like = traceLikeText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : traceLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                var notLike = traceNotLikeText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : traceNotLikeText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                if (like.Any() && notLike.Any())
-                {
-                    if (!like.Except(notLike).Any())
-                    {
-                        ReportStatus(@"Value of ""Trace Like"" can't be equal value of ""Trace Not Like""!", true);
-                        return false;
-                    }
-
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)) && !notLike.Any(p => x.Trace.StringContains(p)));
-                }
-                else if (like.Any())
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && like.Any(p => x.Trace.StringContains(p)));
-                else if (notLike.Any())
-                    result = result.Where(x => !x.Trace.IsNullOrEmptyTrim() && !notLike.Any(p => x.Trace.StringContains(p)));
-
-
-                var msgFilter = msgFilterText.Text.IsNullOrEmptyTrim()
-                    ? new string[] { }
-                    : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-                if (msgFilter.Any())
-                    result = result.Where(x => !x.EntireTrace.IsNullOrEmptyTrim() && msgFilter.Any(p => x.EntireTrace.StringContains(p)));
+                result = filter.FilterCollection(result);
 
                 if (!result.Any())
                 {

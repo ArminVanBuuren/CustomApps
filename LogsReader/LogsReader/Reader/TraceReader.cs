@@ -23,6 +23,8 @@ namespace LogsReader.Reader
         /// </summary>
         public LRSettingsScheme CurrentSettings => _mainReader.CurrentSettings;
 
+        private DataFilter Filter => _mainReader.Filter;
+
         protected int MaxTraceLines => CurrentSettings.MaxTraceLines;
 
         protected LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
@@ -86,6 +88,10 @@ namespace LogsReader.Reader
 
         protected void AddResult(DataTemplate item)
         {
+            if(Filter != null && !Filter.IsAllowed(item))
+                return;
+            
+            ++CountMatches;
             FoundResults.Add(item);
         }
 
