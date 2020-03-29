@@ -26,9 +26,9 @@ namespace LogsReader.Config
                 case "MG":
                     Items = new[]
                     {
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", Trace = "$2", Description = "$3$5", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", Trace = "$2", Message = "$3"}
+                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
+                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
+                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
                     break;
@@ -36,14 +36,14 @@ namespace LogsReader.Config
                     Items = new[]
                     {
                         new LRTraceLinePatternItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
-                            {ID = "$1", Trace = "$2", Description = "$3", Date = "$4.$6", Message = "$5"}
+                            {ID = "$1", TraceName = "$2", Description = "$3", Date = "$4.$6", Message = "$5"}
                     };
                     break;
                 case "MGA":
                     Items = new[]
                     {
                         new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+)($|[-]{49,})")
-                            {Date = "$1", Trace = "$2", Message = "$3"}
+                            {Date = "$1", TraceName = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
                     //EndWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^[-]{49,}\s*$") };
@@ -128,7 +128,7 @@ namespace LogsReader.Config
 
         [XmlAttribute] public string ID { get; set; } = string.Empty;
         [XmlAttribute] public string Date { get; set; } = string.Empty;
-        [XmlAttribute] public string Trace { get; set; } = string.Empty;
+        [XmlAttribute] public string TraceName { get; set; } = string.Empty;
         [XmlAttribute] public string Description { get; set; } = string.Empty;
         [XmlAttribute] public string Message { get; set; } = string.Empty;
     }

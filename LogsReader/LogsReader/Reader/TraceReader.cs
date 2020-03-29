@@ -70,7 +70,7 @@ namespace LogsReader.Reader
             {
                 if (!Found.IsMatched)
                 {
-                    if (IsTraceMatch(Found.EntireTrace, out var result, Found, true))
+                    if (IsTraceMatch(Found.TraceMessage, out var result, Found, true))
                         AddResult(result);
                     else
                         AddResult(Found);
@@ -78,7 +78,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                AddResult(new DataTemplate(this, Lines, Found.EntireTrace, ex));
+                AddResult(new DataTemplate(this, Lines, Found.TraceMessage, ex));
             }
             finally
             {
@@ -98,13 +98,13 @@ namespace LogsReader.Reader
         protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
         {
             // замена \r чинит баг с некорректным парсингом
-            var message = input.Replace("\r", string.Empty);
+            var traceMessage = input.Replace("\r", string.Empty);
             foreach (var item in PatternItems)
             {
                 Match match;
                 try
                 {
-                    match = item.RegexItem.Match(message);
+                    match = item.RegexItem.Match(traceMessage);
                 }
                 catch (Exception ex)
                 {
@@ -119,21 +119,21 @@ namespace LogsReader.Reader
                     }
                 }
                 
-                if (match.Success && match.Value.Length == message.Length)
+                if (match.Success && match.Value.Length == traceMessage.Length)
                 {
                     result = new DataTemplate(this,
                         failed?.FoundLineID ?? Lines,
                         match.GetValueByReplacement(item.ID),
                         match.GetValueByReplacement(item.Date),
-                        match.GetValueByReplacement(item.Trace),
+                        match.GetValueByReplacement(item.TraceName),
                         match.GetValueByReplacement(item.Description),
                         match.GetValueByReplacement(item.Message),
-                        message);
+                        traceMessage);
                     return true;
                 }
             }
 
-            result = new DataTemplate(this, Lines, message);
+            result = new DataTemplate(this, Lines, traceMessage);
             return false;
         }
 
@@ -141,20 +141,20 @@ namespace LogsReader.Reader
         protected Match IsLineMatch(string input)
         {
             // замена \r чинит баг с некорректным парсингом
-            var message = input.Replace("\r", string.Empty);
+            var traceMessage = input.Replace("\r", string.Empty);
             foreach (var regexPatt in PatternItems.Select(x => x.RegexItem))
             {
                 Match match;
                 try
                 {
-                    match = regexPatt.Match(message);
+                    match = regexPatt.Match(traceMessage);
                 }
                 catch (Exception)
                 {
                     return null;
                 }
                 
-                if (match.Success && match.Value.Length == message.Length)
+                if (match.Success && match.Value.Length == traceMessage.Length)
                     return match;
             }
 

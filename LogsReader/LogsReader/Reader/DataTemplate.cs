@@ -9,12 +9,12 @@ namespace LogsReader.Reader
     public class DataTemplate
     {
         private readonly TraceReader _fileLog;
-        private readonly StringBuilder _entireMessage = new StringBuilder();
+        private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _date = null;
-        private string _trace = null;
+        private string _traceName = null;
         private string _message = string.Empty;
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string strID, string date, string trace, string description, string message, string entireTrace)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
         {
             FoundLineID = foundLineID;
             IsMatched = true;
@@ -32,23 +32,23 @@ namespace LogsReader.Reader
                 Date = date;
             }
 
-            Trace = trace;
+            TraceName = traceName;
             Description = description.Trim();
             Message = message;
-            EntireTrace = entireTrace;
+            TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string entireTrace)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string traceMessage)
         {
             FoundLineID = foundLineID;
             IsMatched = false;
             _fileLog = fileLog;
 
             ID = -1;
-            EntireTrace = entireTrace;
+            TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string entireTrace, Exception error)
+        internal DataTemplate(TraceReader fileLog, int foundLineID, string traceMessage, Exception error)
         {
             FoundLineID = foundLineID;
             IsMatched = false;
@@ -58,7 +58,7 @@ namespace LogsReader.Reader
             DateOfTrace = DateTime.Now;
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
 
-            Trace = error.GetType().ToString();
+            TraceName = error.GetType().ToString();
             Description = error.Message;
             if (error is RegexMatchTimeoutException errorRegex)
             {
@@ -68,7 +68,7 @@ namespace LogsReader.Reader
             {
                 Message = error.ToString();
             }
-            EntireTrace = entireTrace;
+            TraceMessage = traceMessage;
         }
 
         public int FoundLineID { get; }
@@ -85,11 +85,11 @@ namespace LogsReader.Reader
         [DGVColumn(ColumnPosition.After, "Server")]
         public string Server => _fileLog.Server;
 
-        [DGVColumn(ColumnPosition.After, "Trace")]
-        public string Trace
+        [DGVColumn(ColumnPosition.After, "Trace name")]
+        public string TraceName
         {
-            get => _trace;
-            private set => _trace = value?.Replace(Environment.NewLine, string.Empty).Trim();
+            get => _traceName;
+            private set => _traceName = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
         [DGVColumn(ColumnPosition.After, "Date")]
@@ -99,8 +99,8 @@ namespace LogsReader.Reader
             private set => _date = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
-        [DGVColumn(ColumnPosition.After, "FileName")]
-        public string FileName => _fileLog.FileNamePartial;
+        [DGVColumn(ColumnPosition.After, "File")]
+        public string File => _fileLog.FileNamePartial;
 
         public DateTime? DateOfTrace { get; }
 
@@ -108,17 +108,17 @@ namespace LogsReader.Reader
 
         public string Message
         {
-            get => _message.IsNullOrEmpty() ? EntireTrace : _message;
+            get => _message.IsNullOrEmpty() ? TraceMessage : _message;
             private set => _message = value;
         }
 
-        public string EntireTrace
+        public string TraceMessage
         {
-            get => _entireMessage.ToString();
+            get => _traceMessage.ToString();
             private set
             {
-                _entireMessage.Clear();
-                _entireMessage.Append(value);
+                _traceMessage.Clear();
+                _traceMessage.Append(value);
                 CountOfLines = value.Split('\n').Length;
             }
         }
@@ -127,20 +127,20 @@ namespace LogsReader.Reader
 
         internal void AppendPastLine(string line)
         {
-            _entireMessage.Insert(0, line + Environment.NewLine);
+            _traceMessage.Insert(0, line + Environment.NewLine);
             CountOfLines++;
         }
 
         internal void AppendNextLine(string line)
         {
-            _entireMessage.Append(Environment.NewLine + line);
+            _traceMessage.Append(Environment.NewLine + line);
             CountOfLines++;
         }
 
         internal void MergeDataTemplates(DataTemplate input)
         {
             Message = input.Message;
-            EntireTrace = input.EntireTrace;
+            TraceMessage = input.TraceMessage;
         }
     }
 }

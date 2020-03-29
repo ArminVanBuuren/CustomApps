@@ -30,7 +30,7 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _completedFilesStatus;
         private readonly ToolStripStatusLabel _totalFilesStatus;
         private readonly Editor _message;
-        private readonly Editor _fullTrace;
+        private readonly Editor _traceMessage;
         
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(maxThreadsText, Resources.LRSettingsScheme_MaxThreadsComment);
                 tooltipPrintXML.SetToolTip(logDirText, Resources.LRSettingsScheme_LogsDirectoryComment);
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
-                tooltipPrintXML.SetToolTip(dateTimePickerStart, Resources.Form_DateFilterComment);
-                tooltipPrintXML.SetToolTip(dateTimePickerEnd, Resources.Form_DateFilterComment);
-                tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
-                tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
-                tooltipPrintXML.SetToolTip(msgFilterText, Resources.Form_MessageFilterComment);
+                tooltipPrintXML.SetToolTip(dateStartFilter, Resources.Form_DateFilterComment);
+                tooltipPrintXML.SetToolTip(dateEndFilter, Resources.Form_DateFilterComment);
+                tooltipPrintXML.SetToolTip(traceNameLikeFilter, Resources.Form_TraceNameLikeComment);
+                tooltipPrintXML.SetToolTip(traceNameNotLikeFilter, Resources.Form_TraceNameNotLikeComment);
+                tooltipPrintXML.SetToolTip(traceMessageFilter, Resources.Form_MessageFilterComment);
                 tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
@@ -135,32 +135,32 @@ namespace LogsReader.Reader
                 var notepad = new NotepadControl();
                 MainSplitContainer.Panel2.Controls.Add(notepad);
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
-                _fullTrace = notepad.AddDocument("Full Trace", string.Empty);
+                _traceMessage = notepad.AddDocument("Trace", string.Empty);
                 notepad.TabsFont = this.Font;
                 notepad.TextFont = new Font("Segoe UI", 10F);
                 notepad.Dock = DockStyle.Fill;
                 notepad.SelectEditor(0);
                 notepad.ReadOnly = true;
 
-                dateTimePickerStart.ValueChanged += (sender, args) =>
+                dateStartFilter.ValueChanged += (sender, args) =>
                 {
                     if (UserSettings != null)
-                        UserSettings.DateStartChecked = dateTimePickerStart.Checked;
+                        UserSettings.DateStartChecked = dateStartFilter.Checked;
 
-                    if (_oldDateStartChecked || !dateTimePickerStart.Checked)
+                    if (_oldDateStartChecked || !dateStartFilter.Checked)
                         return;
                     _oldDateStartChecked = true;
-                    dateTimePickerStart.Value = _getStartDate.Invoke();
+                    dateStartFilter.Value = _getStartDate.Invoke();
                 };
-                dateTimePickerEnd.ValueChanged += (sender, args) =>
+                dateEndFilter.ValueChanged += (sender, args) =>
                 {
                     if (UserSettings != null)
-                        UserSettings.DateEndChecked = dateTimePickerEnd.Checked;
+                        UserSettings.DateEndChecked = dateEndFilter.Checked;
 
-                    if (_oldDateEndChecked || !dateTimePickerEnd.Checked)
+                    if (_oldDateEndChecked || !dateEndFilter.Checked)
                         return;
                     _oldDateEndChecked = true;
-                    dateTimePickerEnd.Value = _getEndDate.Invoke();
+                    dateEndFilter.Value = _getEndDate.Invoke();
                 };
             }
             catch (Exception ex)
@@ -178,15 +178,15 @@ namespace LogsReader.Reader
                 UserSettings = new UserSettings(CurrentSettings.Name);
 
                 txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
-                dateTimePickerStart.Checked = UserSettings.DateStartChecked;
-                if(dateTimePickerStart.Checked)
-                    dateTimePickerStart.Value = _getStartDate.Invoke();
-                dateTimePickerEnd.Checked = UserSettings.DateEndChecked;
-                if (dateTimePickerEnd.Checked)
-                    dateTimePickerEnd.Value = _getEndDate.Invoke();
-                traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
-                traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
-                msgFilterText.AssignValue(UserSettings.Message, msgFilterText_TextChanged);
+                dateStartFilter.Checked = UserSettings.DateStartChecked;
+                if(dateStartFilter.Checked)
+                    dateStartFilter.Value = _getStartDate.Invoke();
+                dateEndFilter.Checked = UserSettings.DateEndChecked;
+                if (dateEndFilter.Checked)
+                    dateEndFilter.Value = _getEndDate.Invoke();
+                traceNameLikeFilter.AssignValue(UserSettings.TraceLike, traceNameLikeFilter_TextChanged);
+                traceNameNotLikeFilter.AssignValue(UserSettings.TraceNotLike, traceNameNotLikeFilter_TextChanged);
+                traceMessageFilter.AssignValue(UserSettings.Message, traceMessageFilter_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
                 //alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
 
@@ -266,7 +266,7 @@ namespace LogsReader.Reader
                 switch (e.KeyCode)
                 {
                     case Keys.F5 when btnSearch.Enabled && !IsWorking:
-                        ButtonStartStop_Click(this, EventArgs.Empty);
+                        btnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
                         ClearForm();
@@ -281,7 +281,7 @@ namespace LogsReader.Reader
                         buttonReset_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when btnSearch.Enabled && IsWorking:
-                        ButtonStartStop_Click(this, EventArgs.Empty);
+                        btnSearch_Click(this, EventArgs.Empty);
                         break;
                 }
             }
@@ -291,7 +291,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private async void ButtonStartStop_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             if (!IsWorking)
             {
@@ -398,12 +398,12 @@ namespace LogsReader.Reader
                 progressBar.Value = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
-                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "Trace", "Date", "Description", "Message"}));
+                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "Trace name", "Date", "Description", "Message"}));
                     foreach (DataGridViewRow row in dgvFiles.Rows)
                     {
                         var privateID = (int) row.Cells["PrivateID"].Value;
                         var template = OverallResultList[privateID];
-                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.Trace, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
+                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.TraceName, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
                         progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
@@ -460,11 +460,11 @@ namespace LogsReader.Reader
 
         DataFilter GetFilter()
         {
-            return new DataFilter(dateTimePickerStart.Checked ? dateTimePickerStart.Value : DateTime.MinValue,
-                dateTimePickerEnd.Checked ? dateTimePickerEnd.Value : DateTime.MaxValue,
-                traceLikeText.Text,
-                traceNotLikeText.Text,
-                msgFilterText.Text);
+            return new DataFilter(dateStartFilter.Checked ? dateStartFilter.Value : DateTime.MinValue,
+                dateEndFilter.Checked ? dateEndFilter.Value : DateTime.MaxValue,
+                traceNameLikeFilter.Text,
+                traceNameNotLikeFilter.Text,
+                traceMessageFilter.Text);
         }
 
         private async void buttonReset_Click(object sender, EventArgs e)
@@ -501,7 +501,7 @@ namespace LogsReader.Reader
 
             await dgvFiles.AssignCollectionAsync(result, null);
 
-            //var traces = OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+            //var traces = OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
             //var beforeLike = traceLikeText.Text;
             //var beforeNotLike = traceLikeText.Text;
             //traceLikeText.Items.Clear();
@@ -536,7 +536,7 @@ namespace LogsReader.Reader
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
             _message.Enabled = !IsWorking;
-            _fullTrace.Enabled = !IsWorking;
+            _traceMessage.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -544,11 +544,11 @@ namespace LogsReader.Reader
             maxThreadsText.Enabled = !IsWorking;
             logDirText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
-            dateTimePickerStart.Enabled = !IsWorking;
-            dateTimePickerEnd.Enabled = !IsWorking;
-            traceNotLikeText.Enabled = !IsWorking;
-            traceLikeText.Enabled = !IsWorking;
-            msgFilterText.Enabled = !IsWorking;
+            dateStartFilter.Enabled = !IsWorking;
+            dateEndFilter.Enabled = !IsWorking;
+            traceNameNotLikeFilter.Enabled = !IsWorking;
+            traceNameLikeFilter.Enabled = !IsWorking;
+            traceMessageFilter.Enabled = !IsWorking;
             alreadyUseFilter.Enabled = !IsWorking;
             buttonExport.Enabled = dgvFiles.RowCount > 0;
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
@@ -602,7 +602,7 @@ namespace LogsReader.Reader
                 if (privateID == -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
-                    _fullTrace.Text = string.Empty;
+                    _traceMessage.Text = string.Empty;
                     return;
                 }
 
@@ -611,7 +611,7 @@ namespace LogsReader.Reader
 
                 descriptionText.Text = template.Description;
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.Trim('\r', '\n');
-                _fullTrace.Text = template.EntireTrace;
+                _traceMessage.Text = template.TraceMessage;
             }
             catch (Exception ex)
             {
@@ -754,7 +754,7 @@ namespace LogsReader.Reader
 
         private bool _isChanged = false;
         private string _traceLikeBefore = string.Empty;
-        private void traceLikeText_TextChanged(object sender, EventArgs e)
+        private void traceNameLikeFilter_TextChanged(object sender, EventArgs e)
         {
             //if (_isChanged)
             //    return;
@@ -786,7 +786,7 @@ namespace LogsReader.Reader
             //{
             //    traceLikeText.Text = UserSettings.TraceLike;
             //}
-            UserSettings.TraceLike = traceLikeText.Text;
+            UserSettings.TraceLike = traceNameLikeFilter.Text;
 
 
             //var test1 = traceLikeText.Text;
@@ -811,9 +811,9 @@ namespace LogsReader.Reader
             //traceLikeText.TextChanged -= traceLikeText_TextChanged;
             //traceLikeText.SelectionChangeCommitted -= TraceLikeText_SelectionChangeCommitted;
 
-            //traceLikeText.DataSource = OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+            //traceLikeText.DataSource = OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
             //traceLikeText.Items.Clear();
-            //traceLikeText.Items.AddRange(OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToArray());
+            //traceLikeText.Items.AddRange(OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToArray());
             //traceLikeText.DisplayMember = UserSettings.TraceLike;
 
             //traceLikeText.Text = null;
@@ -835,14 +835,14 @@ namespace LogsReader.Reader
 
         }
 
-        private void traceNotLikeText_TextChanged(object sender, EventArgs e)
+        private void traceNameNotLikeFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceNotLike = traceNotLikeText.Text;
+            UserSettings.TraceNotLike = traceNameNotLikeFilter.Text;
         }
 
-        private void msgFilterText_TextChanged(object sender, EventArgs e)
+        private void traceMessageFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.Message = msgFilterText.Text;
+            UserSettings.Message = traceMessageFilter.Text;
         }
 
         private void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
@@ -904,7 +904,7 @@ namespace LogsReader.Reader
                 dgvFiles.Refresh();
                 descriptionText.Text = string.Empty;
                 _message.Text = string.Empty;
-                _fullTrace.Text = string.Empty;
+                _traceMessage.Text = string.Empty;
                 buttonExport.Enabled = false;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
             }

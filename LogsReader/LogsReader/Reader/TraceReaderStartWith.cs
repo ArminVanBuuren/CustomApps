@@ -53,14 +53,14 @@ namespace LogsReader.Reader
 
 
             Found = new DataTemplate(this, Lines, line);
-            if (!StartLineWith.IsMatch(Found.EntireTrace))
+            if (!StartLineWith.IsMatch(Found.TraceMessage))
             {
                 // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
                 var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
                 while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
                 {
                     Found.AppendPastLine(revercePastTraceLines.Dequeue());
-                    if (StartLineWith.IsMatch(Found.EntireTrace))
+                    if (StartLineWith.IsMatch(Found.TraceMessage))
                         break;
                 }
             }

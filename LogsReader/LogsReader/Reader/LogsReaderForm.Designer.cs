@@ -36,9 +36,9 @@ namespace LogsReader.Reader
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Trace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
@@ -46,6 +46,7 @@ namespace LogsReader.Reader
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.trvMain = new LogsReader.Reader.CustomTreeView();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.serversText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -63,21 +64,20 @@ namespace LogsReader.Reader
             this.useRegex = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.traceLikeText = new System.Windows.Forms.TextBox();
-            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.traceNameLikeFilter = new System.Windows.Forms.TextBox();
+            this.dateEndFilter = new System.Windows.Forms.DateTimePicker();
             this.label10 = new System.Windows.Forms.Label();
-            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
-            this.traceNotLikeText = new System.Windows.Forms.TextBox();
+            this.dateStartFilter = new System.Windows.Forms.DateTimePicker();
+            this.traceNameNotLikeFilter = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.buttonFilter = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.msgFilterText = new System.Windows.Forms.TextBox();
+            this.traceMessageFilter = new System.Windows.Forms.TextBox();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
-            this.trvMain = new LogsReader.Reader.CustomTreeView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -109,9 +109,9 @@ namespace LogsReader.Reader
             this.IsMatched,
             this.ID,
             this.Server,
-            this.Trace,
+            this.TraceName,
             this.Date,
-            this.FileName});
+            this.File});
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dgvFiles.Location = new System.Drawing.Point(0, 0);
@@ -163,14 +163,14 @@ namespace LogsReader.Reader
             this.Server.ReadOnly = true;
             this.Server.Width = 80;
             // 
-            // Trace
+            // TraceName
             // 
-            this.Trace.DataPropertyName = "Trace";
-            this.Trace.HeaderText = "Trace";
-            this.Trace.MinimumWidth = 40;
-            this.Trace.Name = "Trace";
-            this.Trace.ReadOnly = true;
-            this.Trace.Width = 140;
+            this.TraceName.DataPropertyName = "TraceName";
+            this.TraceName.HeaderText = "Trace name";
+            this.TraceName.MinimumWidth = 40;
+            this.TraceName.Name = "TraceName";
+            this.TraceName.ReadOnly = true;
+            this.TraceName.Width = 140;
             // 
             // Date
             // 
@@ -181,14 +181,14 @@ namespace LogsReader.Reader
             this.Date.ReadOnly = true;
             this.Date.Width = 140;
             // 
-            // FileName
+            // File
             // 
-            this.FileName.DataPropertyName = "FileName";
-            this.FileName.HeaderText = "FileName";
-            this.FileName.MinimumWidth = 40;
-            this.FileName.Name = "FileName";
-            this.FileName.ReadOnly = true;
-            this.FileName.Width = 1000;
+            this.File.DataPropertyName = "File";
+            this.File.HeaderText = "File";
+            this.File.MinimumWidth = 40;
+            this.File.Name = "File";
+            this.File.ReadOnly = true;
+            this.File.Width = 1000;
             // 
             // btnSearch
             // 
@@ -201,7 +201,7 @@ namespace LogsReader.Reader
             this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "      Search [F5]";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.ButtonStartStop_Click);
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // btnClear
             // 
@@ -280,6 +280,25 @@ namespace LogsReader.Reader
             this.label1.Size = new System.Drawing.Size(47, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "Servers:";
+            // 
+            // trvMain
+            // 
+            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trvMain.CheckBoxes = true;
+            this.trvMain.Location = new System.Drawing.Point(2, 139);
+            this.trvMain.Name = "trvMain";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
+            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
+            this.trvMain.Size = new System.Drawing.Size(166, 260);
+            this.trvMain.TabIndex = 2;
+            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // maxLinesStackText
             // 
@@ -445,9 +464,9 @@ namespace LogsReader.Reader
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(236, 18);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(62, 15);
+            this.label7.Size = new System.Drawing.Size(97, 15);
             this.label7.TabIndex = 24;
-            this.label7.Text = "Trace Like:";
+            this.label7.Text = "Trace-name Like:";
             // 
             // label9
             // 
@@ -458,54 +477,54 @@ namespace LogsReader.Reader
             this.label9.TabIndex = 23;
             this.label9.Text = "Date End:";
             // 
-            // traceLikeText
+            // traceNameLikeFilter
             // 
-            this.traceLikeText.Location = new System.Drawing.Point(326, 15);
-            this.traceLikeText.Name = "traceLikeText";
-            this.traceLikeText.Size = new System.Drawing.Size(328, 23);
-            this.traceLikeText.TabIndex = 25;
-            this.traceLikeText.TextChanged += new System.EventHandler(this.traceLikeText_TextChanged);
+            this.traceNameLikeFilter.Location = new System.Drawing.Point(364, 15);
+            this.traceNameLikeFilter.Name = "traceNameLikeFilter";
+            this.traceNameLikeFilter.Size = new System.Drawing.Size(308, 23);
+            this.traceNameLikeFilter.TabIndex = 25;
+            this.traceNameLikeFilter.TextChanged += new System.EventHandler(this.traceNameLikeFilter_TextChanged);
             // 
-            // dateTimePickerEnd
+            // dateEndFilter
             // 
-            this.dateTimePickerEnd.Checked = false;
-            this.dateTimePickerEnd.CustomFormat = "dd.MM.yyyy HH:mm:ss";
-            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(74, 44);
-            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
-            this.dateTimePickerEnd.ShowCheckBox = true;
-            this.dateTimePickerEnd.ShowUpDown = true;
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(156, 23);
-            this.dateTimePickerEnd.TabIndex = 21;
+            this.dateEndFilter.Checked = false;
+            this.dateEndFilter.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateEndFilter.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateEndFilter.Location = new System.Drawing.Point(74, 44);
+            this.dateEndFilter.Name = "dateEndFilter";
+            this.dateEndFilter.ShowCheckBox = true;
+            this.dateEndFilter.ShowUpDown = true;
+            this.dateEndFilter.Size = new System.Drawing.Size(156, 23);
+            this.dateEndFilter.TabIndex = 21;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(236, 47);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(85, 15);
+            this.label10.Size = new System.Drawing.Size(124, 15);
             this.label10.TabIndex = 26;
-            this.label10.Text = "Trace Not Like:";
+            this.label10.Text = "Trace-name NOT Like:";
             // 
-            // dateTimePickerStart
+            // dateStartFilter
             // 
-            this.dateTimePickerStart.Checked = false;
-            this.dateTimePickerStart.CustomFormat = "dd.MM.yyyy HH:mm:ss";
-            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerStart.Location = new System.Drawing.Point(74, 15);
-            this.dateTimePickerStart.Name = "dateTimePickerStart";
-            this.dateTimePickerStart.ShowCheckBox = true;
-            this.dateTimePickerStart.ShowUpDown = true;
-            this.dateTimePickerStart.Size = new System.Drawing.Size(156, 23);
-            this.dateTimePickerStart.TabIndex = 20;
+            this.dateStartFilter.Checked = false;
+            this.dateStartFilter.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            this.dateStartFilter.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateStartFilter.Location = new System.Drawing.Point(74, 15);
+            this.dateStartFilter.Name = "dateStartFilter";
+            this.dateStartFilter.ShowCheckBox = true;
+            this.dateStartFilter.ShowUpDown = true;
+            this.dateStartFilter.Size = new System.Drawing.Size(156, 23);
+            this.dateStartFilter.TabIndex = 20;
             // 
-            // traceNotLikeText
+            // traceNameNotLikeFilter
             // 
-            this.traceNotLikeText.Location = new System.Drawing.Point(326, 43);
-            this.traceNotLikeText.Name = "traceNotLikeText";
-            this.traceNotLikeText.Size = new System.Drawing.Size(328, 23);
-            this.traceNotLikeText.TabIndex = 27;
-            this.traceNotLikeText.TextChanged += new System.EventHandler(this.traceNotLikeText_TextChanged);
+            this.traceNameNotLikeFilter.Location = new System.Drawing.Point(364, 44);
+            this.traceNameNotLikeFilter.Name = "traceNameNotLikeFilter";
+            this.traceNameNotLikeFilter.Size = new System.Drawing.Size(308, 23);
+            this.traceNameNotLikeFilter.TabIndex = 27;
+            this.traceNameNotLikeFilter.TextChanged += new System.EventHandler(this.traceNameNotLikeFilter_TextChanged);
             // 
             // label8
             // 
@@ -545,21 +564,21 @@ namespace LogsReader.Reader
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(660, 18);
+            this.label11.Location = new System.Drawing.Point(678, 18);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(56, 15);
+            this.label11.Size = new System.Drawing.Size(38, 15);
             this.label11.TabIndex = 30;
-            this.label11.Text = "Message:";
+            this.label11.Text = "Trace:";
             // 
-            // msgFilterText
+            // traceMessageFilter
             // 
-            this.msgFilterText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.traceMessageFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.msgFilterText.Location = new System.Drawing.Point(722, 15);
-            this.msgFilterText.Name = "msgFilterText";
-            this.msgFilterText.Size = new System.Drawing.Size(440, 23);
-            this.msgFilterText.TabIndex = 31;
-            this.msgFilterText.TextChanged += new System.EventHandler(this.msgFilterText_TextChanged);
+            this.traceMessageFilter.Location = new System.Drawing.Point(722, 15);
+            this.traceMessageFilter.Name = "traceMessageFilter";
+            this.traceMessageFilter.Size = new System.Drawing.Size(440, 23);
+            this.traceMessageFilter.TabIndex = 31;
+            this.traceMessageFilter.TextChanged += new System.EventHandler(this.traceMessageFilter_TextChanged);
             // 
             // groupBoxFilter
             // 
@@ -567,16 +586,16 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFilter.Controls.Add(this.alreadyUseFilter);
             this.groupBoxFilter.Controls.Add(this.buttonExport);
-            this.groupBoxFilter.Controls.Add(this.msgFilterText);
+            this.groupBoxFilter.Controls.Add(this.traceMessageFilter);
             this.groupBoxFilter.Controls.Add(this.label11);
             this.groupBoxFilter.Controls.Add(this.buttonReset);
             this.groupBoxFilter.Controls.Add(this.buttonFilter);
             this.groupBoxFilter.Controls.Add(this.label8);
-            this.groupBoxFilter.Controls.Add(this.traceNotLikeText);
-            this.groupBoxFilter.Controls.Add(this.dateTimePickerStart);
+            this.groupBoxFilter.Controls.Add(this.traceNameNotLikeFilter);
+            this.groupBoxFilter.Controls.Add(this.dateStartFilter);
             this.groupBoxFilter.Controls.Add(this.label10);
-            this.groupBoxFilter.Controls.Add(this.dateTimePickerEnd);
-            this.groupBoxFilter.Controls.Add(this.traceLikeText);
+            this.groupBoxFilter.Controls.Add(this.dateEndFilter);
+            this.groupBoxFilter.Controls.Add(this.traceNameLikeFilter);
             this.groupBoxFilter.Controls.Add(this.label9);
             this.groupBoxFilter.Controls.Add(this.label7);
             this.groupBoxFilter.Location = new System.Drawing.Point(2, 19);
@@ -622,25 +641,6 @@ namespace LogsReader.Reader
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(1173, 95);
             this.filterPanel.TabIndex = 30;
-            // 
-            // trvMain
-            // 
-            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 139);
-            this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
-            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(166, 260);
-            this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // LogsReaderForm
             // 
@@ -701,30 +701,30 @@ namespace LogsReader.Reader
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox traceLikeText;
-        private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
+        private System.Windows.Forms.TextBox traceNameLikeFilter;
+        private System.Windows.Forms.DateTimePicker dateEndFilter;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.DateTimePicker dateTimePickerStart;
-        private System.Windows.Forms.TextBox traceNotLikeText;
+        private System.Windows.Forms.DateTimePicker dateStartFilter;
+        private System.Windows.Forms.TextBox traceNameNotLikeFilter;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button buttonFilter;
         private System.Windows.Forms.Button buttonReset;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox msgFilterText;
+        private System.Windows.Forms.TextBox traceMessageFilter;
         private System.Windows.Forms.GroupBox groupBoxFilter;
         private System.Windows.Forms.SplitContainer EnumSplitContainer;
         private System.Windows.Forms.RichTextBox descriptionText;
         private System.Windows.Forms.Panel SchemePanel;
         private System.Windows.Forms.Panel filterPanel;
         private System.Windows.Forms.Button buttonExport;
+        private System.Windows.Forms.CheckBox alreadyUseFilter;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrivateID;
         private System.Windows.Forms.DataGridViewTextBoxColumn IsMatched;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Server;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Trace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TraceName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
-        private System.Windows.Forms.CheckBox alreadyUseFilter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn File;
     }
 }
 

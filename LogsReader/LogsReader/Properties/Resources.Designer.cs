@@ -81,7 +81,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Взаимодействовать настройки фильтра сразу вместе с поиском..
+        ///   Looks up a localized string similar to Применить фильтр сразу вместе с поиском.
         /// </summary>
         internal static string Form_AlreadyUseFilterComment {
             get {
@@ -90,7 +90,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Date.
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Date&quot;.
         /// </summary>
         internal static string Form_DateFilterComment {
             get {
@@ -99,7 +99,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Message на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_MessageFilterComment {
             get {
@@ -108,7 +108,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
@@ -117,7 +117,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameNotLikeComment {
             get {
@@ -136,7 +136,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Config &apos;{0}&apos; is incorrect! Moved to &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Config &quot;{0}&quot; is incorrect! Moved to &quot;{1}&quot;.
         ///
         ///{2}.
         /// </summary>
@@ -156,7 +156,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to save config to path=[{0}].
+        ///   Looks up a localized string similar to Unable to save config to path &quot;{0}&quot;.
         ///{1}.
         /// </summary>
         internal static string LRSettings_Serialize_Ex {

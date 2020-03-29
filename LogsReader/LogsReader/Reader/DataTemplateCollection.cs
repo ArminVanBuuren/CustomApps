@@ -15,9 +15,9 @@ namespace LogsReader.Reader
         {
             _values = new Dictionary<int, DataTemplate>(list.Count());
             if (list.All(x => x.ID != -1))
-                AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.FileName).ThenBy(p => p.ID));
+                AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.File).ThenBy(p => p.ID));
             else
-                AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.FileName).ThenBy(p => p.FoundLineID));
+                AddRange(list.OrderBy(p => p.Date).ThenBy(p => p.File).ThenBy(p => p.FoundLineID));
         }
 
         public void AddRange(IEnumerable<DataTemplate> list)

@@ -29,10 +29,10 @@ namespace LogsReader.Reader
                 {
                     if (Found.IsMatched)
                     {
-                        var appendedToEntireTrace = Found.EntireTrace + Environment.NewLine + line;
+                        var appendedToTraceMessage = Found.TraceMessage + Environment.NewLine + line;
                         // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
                         // Иначе строка относится к другому логу и завершается дополнение
-                        if (IsLineMatch(line) == null && IsTraceMatch(appendedToEntireTrace, out var newResult))
+                        if (IsLineMatch(line) == null && IsTraceMatch(appendedToTraceMessage, out var newResult))
                         {
                             Found.MergeDataTemplates(newResult);
                             return;
@@ -46,7 +46,7 @@ namespace LogsReader.Reader
                     {
                         // Если предыдущий фрагмент лога не спарсился удачано, то выполняются новые попытки спарсить лог
                         Found.AppendNextLine(line);
-                        if (IsTraceMatch(Found.EntireTrace, out var afterSuccessResult, Found))
+                        if (IsTraceMatch(Found.TraceMessage, out var afterSuccessResult, Found))
                         {
                             // Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
                             AddResult(afterSuccessResult);
@@ -85,7 +85,7 @@ namespace LogsReader.Reader
                 {
                     Found.AppendPastLine(revercePastTraceLines.Dequeue());
 
-                    if (IsTraceMatch(Found.EntireTrace, out var beforeResult))
+                    if (IsTraceMatch(Found.TraceMessage, out var beforeResult))
                     {
                         Found = beforeResult;
                         AddResult(Found);

@@ -13,17 +13,17 @@ namespace LogsReader.Reader
     {
         private readonly Func<DataTemplate, bool> _checkStartDate;
         private readonly Func<DataTemplate, bool> _checkEndDate;
-        private readonly Func<DataTemplate, bool> _checkLike;
-        private readonly Func<DataTemplate, bool> _checkNotLike;
-        private readonly Func<DataTemplate, bool> _checkMessage;
+        private readonly Func<DataTemplate, bool> _checkTraceNameLike;
+        private readonly Func<DataTemplate, bool> _checkTraceNameNotLike;
+        private readonly Func<DataTemplate, bool> _checkTraceMessage;
 
         DateTime StartDate { get; }
         DateTime EndDate { get; }
-        List<string> Like { get; }
-        List<string> NotLike { get; }
-        List<string> Message { get; }
+        List<string> TraceNameLikeList { get; }
+        List<string> TraceNameNotLikeList { get; }
+        List<string> TraceMessageList { get; }
 
-        public DataFilter(DateTime startDate, DateTime endDate, string traceLike, string traceNotLike, string message)
+        public DataFilter(DateTime startDate, DateTime endDate, string traceNameLike, string traceNameNotLike, string traceMessage)
         {
             if (startDate > endDate)
                 throw new Exception(@"Date of end must be greater than date of start.");
@@ -47,46 +47,47 @@ namespace LogsReader.Reader
             
 
             #region фильтр по полю Trace
-            Like = traceLike.IsNullOrEmptyTrim()
+            TraceNameLikeList = traceNameLike.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
-            NotLike = traceNotLike.IsNullOrEmptyTrim()
+                : traceNameLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+
+            TraceNameNotLikeList = traceNameNotLike.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceNotLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceNameNotLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
 
-            if (Like.Count > 0 && NotLike.Count > 0 && !Like.Except(NotLike).Any())
-                throw new Exception(@"Items in  ""Trace Like"" can't be equal items in ""Trace Not Like""! Please remove the same items.");
+            if (TraceNameLikeList.Count > 0 && TraceNameNotLikeList.Count > 0 && !TraceNameLikeList.Except(TraceNameNotLikeList).Any())
+                throw new Exception(@"Items in ""Trace-name Like"" cannot contain items in ""Trace-name NOT Like""! Please remove the same.");
 
-            if (Like.Any())
-                _checkLike = (input) => !input.Trace.IsNullOrEmptyTrim() && Like.Any(p => input.Trace.StringContains(p));
+            if (TraceNameLikeList.Any())
+                _checkTraceNameLike = (input) => !input.TraceName.IsNullOrEmptyTrim() && TraceNameLikeList.Any(p => input.TraceName.StringContains(p));
             else
-                _checkLike = (input) => true;
+                _checkTraceNameLike = (input) => true;
 
-            if (NotLike.Any())
-                _checkNotLike = (input) => !input.Trace.IsNullOrEmptyTrim() && !NotLike.Any(p => input.Trace.StringContains(p));
+            if (TraceNameNotLikeList.Any())
+                _checkTraceNameNotLike = (input) => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameNotLikeList.Any(p => input.TraceName.StringContains(p));
             else
-                _checkNotLike = (input) => true;
+                _checkTraceNameNotLike = (input) => true;
             #endregion
 
 
             #region фильтр по полю Message
-            Message = message.IsNullOrEmptyTrim()
+            TraceMessageList = traceMessage.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : message.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
-            if (Message.Any())
-                _checkMessage = (input) => !input.EntireTrace.IsNullOrEmptyTrim() && Message.Any(p => input.EntireTrace.StringContains(p));
+                : traceMessage.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+            if (TraceMessageList.Any())
+                _checkTraceMessage = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageList.Any(p => input.TraceMessage.StringContains(p));
             else
-                _checkMessage = (input) => true;
+                _checkTraceMessage = (input) => true;
             #endregion
         }
 
         public IEnumerable<DataTemplate> FilterCollection(IEnumerable<DataTemplate> input)
         {
-            return input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkLike(x) && _checkNotLike(x) && _checkMessage(x));
+            return input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameLike(x) && _checkTraceNameNotLike(x) && _checkTraceMessage(x));
         }
 
         /// <summary>
-        /// Корявенько работает, т.к. дата lastwrite не совпадает с датой записи из файла
+        /// Корявенько работает, т.к. дата lastwrite иногда не совпадает с датой записи из файле
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -108,7 +109,7 @@ namespace LogsReader.Reader
 
         public bool IsAllowed(DataTemplate input)
         {
-            return _checkStartDate(input) && _checkEndDate(input) && _checkLike(input) && _checkNotLike(input) && _checkMessage(input);
+            return _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameLike(input) && _checkTraceNameNotLike(input) && _checkTraceMessage(input);
         }
     }
 }
