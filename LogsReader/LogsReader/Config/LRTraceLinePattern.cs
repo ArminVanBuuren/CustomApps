@@ -12,7 +12,7 @@ namespace LogsReader.Config
     {
         private LRTraceLinePatternItem[] _traceLinePattern = new LRTraceLinePatternItem[] {new LRTraceLinePatternItem()};
         private XmlNode[] _startLineWith = null;
-        private XmlNode[] _endLineWith = null;
+        //private XmlNode[] _endLineWith = null;
 
         public LRTraceLinePattern()
         {
@@ -26,7 +26,7 @@ namespace LogsReader.Config
                 case "MG":
                     Items = new[]
                     {
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>).*") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
+                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", Trace = "$2", Description = "$3$5", Message = "$4"},
                         new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", Trace = "$2", Description = "$3", Message = "$4"},
                         new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", Trace = "$2", Message = "$3"}
                     };

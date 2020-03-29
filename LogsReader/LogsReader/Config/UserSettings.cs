@@ -47,6 +47,28 @@ namespace LogsReader.Config
             set => SetValue(nameof(UseRegex), value);
         }
 
+        public bool DateStartChecked
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(DateStartChecked)), out var result))
+                    return result;
+                return false;
+            }
+            set => SetValue(nameof(DateStartChecked), value);
+        }
+
+        public bool DateEndChecked
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(DateEndChecked)), out var result))
+                    return result;
+                return false;
+            }
+            set => SetValue(nameof(DateEndChecked), value);
+        }
+
         public string TraceLike
         {
             get => GetValue(nameof(TraceLike));
@@ -63,6 +85,17 @@ namespace LogsReader.Config
         {
             get => GetValue(nameof(Message));
             set => SetValue(nameof(Message), value);
+        }
+
+        public bool AlreadyUseFilter
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(AlreadyUseFilter)), out var result))
+                    return result;
+                return true;
+            }
+            set => SetValue(nameof(AlreadyUseFilter), value);
         }
 
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)

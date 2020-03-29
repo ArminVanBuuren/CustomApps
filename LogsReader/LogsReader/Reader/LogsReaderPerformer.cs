@@ -18,6 +18,8 @@ namespace LogsReader.Reader
         private readonly IEnumerable<string> _servers;
         private readonly IEnumerable<string> _traces;
         private MTActionResult<TraceReader> _multiTaskingHandler = null;
+        private DateTime _startDate;
+        private DateTime _endDate;
 
         public event ReportProcessStatusHandler OnProcessReport;
 
@@ -43,7 +45,7 @@ namespace LogsReader.Reader
         public IEnumerable<DataTemplate> ResultsOfSuccess { get; private set; }
         public IEnumerable<DataTemplate> ResultsOfError { get; private set; }
 
-        public LogsReaderPerformer(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, string findMessage, bool useRegex)
+        public LogsReaderPerformer(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, string findMessage, bool useRegex, DateTime startDate, DateTime endDate)
         {
             if (useRegex)
             {
@@ -59,6 +61,8 @@ namespace LogsReader.Reader
             }
 
             CurrentSettings = settings;
+            _startDate = startDate;
+            _endDate = endDate;
             _servers = servers;
             _traces = traces;
             Reset();
@@ -117,7 +121,18 @@ namespace LogsReader.Reader
                     if (IsStopPending)
                         return kvpList;
 
-                    if (IsAllowedExtension(fileLog.FileName) && _traces.Any(x => fileLog.FileName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
+                    if(!IsAllowedExtension(fileLog.File.Name))
+                        continue;
+
+                    // если фильтр даты начала больше даты последней записи в файл, то пропускаем
+                    if (DateTime.Compare(_startDate, fileLog.File.LastAccessTime) > 0)
+                        continue;
+
+                    // если фильтр даты конца меньше даты создания файла, то пропускаем
+                    if (DateTime.Compare(_endDate, fileLog.File.CreationTime) < 0)
+                        continue;
+
+                    if (_traces.Any(x => fileLog.File.Name.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
                         kvpList.Add(fileLog);
                 }
             }

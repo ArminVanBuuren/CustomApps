@@ -28,9 +28,9 @@ namespace LogsReader.Reader
         protected LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
 
         public string Server { get; }
-        public string FileName { get; }
         public string FileNamePartial { get; }
         public string FilePath { get; }
+        public FileInfo File { get; }
 
         /// <summary>
         /// Количество совпадений по критериям поиска
@@ -50,7 +50,7 @@ namespace LogsReader.Reader
 
             Server = server;
             FilePath = filePath;
-            FileName = Path.GetFileName(FilePath);
+            File = new FileInfo(filePath);
 
             var logsPathWithoutRoot = CurrentSettings.LogsDirectory.Replace(Path.GetPathRoot(CurrentSettings.LogsDirectory), string.Empty, StringComparison.InvariantCultureIgnoreCase);
             var filePathWithoutRoot = FilePath.Replace(Path.GetPathRoot(FilePath), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');

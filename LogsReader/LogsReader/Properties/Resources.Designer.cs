@@ -81,6 +81,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Взаимодействовать поиск вместе с настройками фильтра. При включенном режиме, дата начала и дата конца сравнивается с датой создания и изменения файла..
+        /// </summary>
+        internal static string Form_AlreadyUseFilterComment {
+            get {
+                return ResourceManager.GetString("Form_AlreadyUseFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фильтр по полю Date.
         /// </summary>
         internal static string Form_DateFilterComment {
@@ -90,7 +99,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Message на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        ///   Looks up a localized string similar to Фильтр по полю Message на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_MessageFilterComment {
             get {
@@ -99,7 +108,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        ///   Looks up a localized string similar to Фильтр по полю Trace на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
@@ -108,7 +117,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную..
+        ///   Looks up a localized string similar to Фильтр по полю Trace на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameNotLikeComment {
             get {

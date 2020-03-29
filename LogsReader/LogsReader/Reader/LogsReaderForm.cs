@@ -18,6 +18,9 @@ namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl
     {
+        private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+        private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+
         private bool _oldDateStartChecked = false;
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
@@ -125,6 +128,7 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(traceLikeText, Resources.Form_TraceNameLikeComment);
                 tooltipPrintXML.SetToolTip(traceNotLikeText, Resources.Form_TraceNameNotLikeComment);
                 tooltipPrintXML.SetToolTip(msgFilterText, Resources.Form_MessageFilterComment);
+                tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
@@ -140,19 +144,23 @@ namespace LogsReader.Reader
 
                 dateTimePickerStart.ValueChanged += (sender, args) =>
                 {
+                    if (UserSettings != null)
+                        UserSettings.DateStartChecked = dateTimePickerStart.Checked;
+
                     if (_oldDateStartChecked || !dateTimePickerStart.Checked)
                         return;
-                    var today = DateTime.Now;
                     _oldDateStartChecked = true;
-                    dateTimePickerStart.Value = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0);
+                    dateTimePickerStart.Value = _getStartDate.Invoke();
                 };
                 dateTimePickerEnd.ValueChanged += (sender, args) =>
                 {
+                    if (UserSettings != null)
+                        UserSettings.DateEndChecked = dateTimePickerEnd.Checked;
+
                     if (_oldDateEndChecked || !dateTimePickerEnd.Checked)
                         return;
-                    var today = DateTime.Now;
                     _oldDateEndChecked = true;
-                    dateTimePickerEnd.Value = new DateTime(today.Year, today.Month, today.Day, 23, 59, 59);
+                    dateTimePickerEnd.Value = _getEndDate.Invoke();
                 };
             }
             catch (Exception ex)
@@ -168,12 +176,19 @@ namespace LogsReader.Reader
                 CurrentSettings = scheme;
                 CurrentSettings.ReportStatus += ReportStatus;
                 UserSettings = new UserSettings(CurrentSettings.Name);
-                
+
                 txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
+                dateTimePickerStart.Checked = UserSettings.DateStartChecked;
+                if(dateTimePickerStart.Checked)
+                    dateTimePickerStart.Value = _getStartDate.Invoke();
+                dateTimePickerEnd.Checked = UserSettings.DateEndChecked;
+                if (dateTimePickerEnd.Checked)
+                    dateTimePickerEnd.Value = _getEndDate.Invoke();
                 traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
                 traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
                 msgFilterText.AssignValue(UserSettings.Message, msgFilterText_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
+                alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
 
                 serversText.Text = CurrentSettings.Servers;
                 fileNames.Text = CurrentSettings.Types;
@@ -283,11 +298,19 @@ namespace LogsReader.Reader
                 var stop = new Stopwatch();
                 try
                 {
+                    if (alreadyUseFilter.Checked && dateTimePickerStart.Checked && dateTimePickerEnd.Checked && dateTimePickerStart.Value > dateTimePickerEnd.Value)
+                    {
+                        ReportStatus($"End date must be greater than start date.", true);
+                        return;
+                    }
+
                     MainReader = new LogsReaderPerformer(CurrentSettings, 
                         trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
                         txtPattern.Text, 
-                        useRegex.Checked);
+                        useRegex.Checked,
+                        alreadyUseFilter.Checked && dateTimePickerStart.Checked ? dateTimePickerStart.Value : DateTime.MinValue,
+                        alreadyUseFilter.Checked && dateTimePickerEnd.Checked ? dateTimePickerEnd.Value : DateTime.MaxValue);
                     MainReader.OnProcessReport += ReportStatusOfProcess;
 
                     stop.Start();
@@ -300,7 +323,7 @@ namespace LogsReader.Reader
                     OverallResultList = new DataTemplateCollection(MainReader.ResultsOfSuccess);
                     OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.DateOfTrace));
 
-                    if (await AssignResult(false))
+                    if (await AssignResult(alreadyUseFilter.Checked))
                     {
                         ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
                     }
@@ -503,7 +526,7 @@ namespace LogsReader.Reader
                     ? new string[] { }
                     : msgFilterText.Text.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
                 if (msgFilter.Any())
-                    result = result.Where(x => !x.Message.IsNullOrEmptyTrim() && msgFilter.Any(p => x.Message.StringContains(p)));
+                    result = result.Where(x => !x.EntireTrace.IsNullOrEmptyTrim() && msgFilter.Any(p => x.EntireTrace.StringContains(p)));
 
                 if (!result.Any())
                 {
@@ -513,8 +536,21 @@ namespace LogsReader.Reader
             }
 
             await dgvFiles.AssignCollectionAsync(result, null);
-            buttonExport.Enabled = dgvFiles.RowCount > 0;
 
+            //var traces = OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
+            //var beforeLike = traceLikeText.Text;
+            //var beforeNotLike = traceLikeText.Text;
+            //traceLikeText.Items.Clear();
+            //traceLikeText.Items.AddRange(traces.ToArray());
+            //traceNotLikeText.Items.Clear();
+            //traceNotLikeText.Items.AddRange(traces.ToArray());
+
+            //traceLikeText.Text = beforeLike;
+            //traceLikeText.DisplayMember = beforeLike;
+            //traceNotLikeText.Text = beforeNotLike;
+            //traceNotLikeText.DisplayMember = beforeNotLike;
+
+            buttonExport.Enabled = dgvFiles.RowCount > 0;
             return true;
         }
 
@@ -549,6 +585,7 @@ namespace LogsReader.Reader
             traceNotLikeText.Enabled = !IsWorking;
             traceLikeText.Enabled = !IsWorking;
             msgFilterText.Enabled = !IsWorking;
+            alreadyUseFilter.Enabled = !IsWorking;
             buttonExport.Enabled = dgvFiles.RowCount > 0;
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
@@ -745,9 +782,93 @@ namespace LogsReader.Reader
             UserSettings.UseRegex = useRegex.Checked;
         }
 
+        private void traceLikeText_Enter(object sender, EventArgs e)
+        {
+            //traceLikeText.
+            
+        }
+
+        private bool _isChanged = false;
+        private string _traceLikeBefore = string.Empty;
         private void traceLikeText_TextChanged(object sender, EventArgs e)
         {
+            //if (_isChanged)
+            //    return;
+
+            //if (traceLikeText.SelectedIndex != -1)
+            //{
+            //    _isChanged = true;
+            //    traceLikeText.BeginUpdate();
+            //    traceLikeText.TextChanged -= traceLikeText_TextChanged;
+            //    traceLikeText.SelectionChangeCommitted -= TraceLikeText_SelectionChangeCommitted;
+
+            //    traceLikeText.SelectedIndex = -1;
+            //    //traceLikeText.SelectedText = UserSettings.TraceLike;
+            //    //traceLikeText.SelectedText = UserSettings.TraceLike;
+            //    //traceLikeText.SelectedValue = UserSettings.TraceLike;
+            //    //traceLikeText.ValueMember = UserSettings.TraceLike;
+            //    traceLikeText.DisplayMember = UserSettings.TraceLike;
+
+            //    traceLikeText.TextChanged += traceLikeText_TextChanged;
+            //    traceLikeText.SelectionChangeCommitted += TraceLikeText_SelectionChangeCommitted;
+            //    _isChanged = false;
+            //    traceLikeText.EndUpdate();
+            //    return;
+            //}
+
+            //_traceLikeBefore = UserSettings.TraceLike;
+
+            //if (traceLikeText.SelectedIndex == -1)
+            //{
+            //    traceLikeText.Text = UserSettings.TraceLike;
+            //}
             UserSettings.TraceLike = traceLikeText.Text;
+
+
+            //var test1 = traceLikeText.Text;
+            //var test2 = traceLikeText.SelectedText;
+            //var test3 = traceLikeText.SelectedValue;
+            //var test4 = traceLikeText.SelectedItem;
+            //var test5 = traceLikeText.ValueMember;
+            //var test6 = traceLikeText.DisplayMember;
+        }
+
+        private void TraceLikeText_SelectionChangeCommitted(object sender, System.EventArgs e)
+        {
+            //if (_isChanged)
+            //    return;
+
+
+            //var before = traceLikeText.SelectedText.Split(',').ToList();
+            //before.Add(traceLikeText.SelectedItem.ToString());
+            //UserSettings.TraceLike = string.Join(",", before.GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key));
+
+            //traceLikeText.BeginUpdate();
+            //traceLikeText.TextChanged -= traceLikeText_TextChanged;
+            //traceLikeText.SelectionChangeCommitted -= TraceLikeText_SelectionChangeCommitted;
+
+            //traceLikeText.DataSource = OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+            //traceLikeText.Items.Clear();
+            //traceLikeText.Items.AddRange(OverallResultList.Select(x => x.Trace.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToArray());
+            //traceLikeText.DisplayMember = UserSettings.TraceLike;
+
+            //traceLikeText.Text = null;
+            //traceLikeText.Text = UserSettings.TraceLike;
+            //traceLikeText.TextChanged += traceLikeText_TextChanged;
+            //traceLikeText.SelectionChangeCommitted += TraceLikeText_SelectionChangeCommitted;
+            //traceLikeText.EndUpdate();
+
+            //traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
+
+            //traceLikeText.
+            //traceLikeText.Text = UserSettings.TraceLike;
+            //traceLikeText.SelectedValue = UserSettings.TraceLike;
+            //traceLikeText.ValueMember = UserSettings.TraceLike;
+            //traceLikeText.DisplayMember = UserSettings.TraceLike;
+
+
+            //traceLikeText.AssignComboBox(UserSettings.TraceLike, traceLikeText_TextChanged, traceLikeText_SelectedIndexChanged);
+
         }
 
         private void traceNotLikeText_TextChanged(object sender, EventArgs e)
@@ -758,6 +879,11 @@ namespace LogsReader.Reader
         private void msgFilterText_TextChanged(object sender, EventArgs e)
         {
             UserSettings.Message = msgFilterText.Text;
+        }
+
+        private void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            UserSettings.AlreadyUseFilter = alreadyUseFilter.Checked;
         }
 
         void ValidationCheck(bool clearStatus = true)
@@ -807,6 +933,8 @@ namespace LogsReader.Reader
         {
             try
             {
+                //traceLikeText.DataSource = null;
+                //traceNotLikeText.DataSource = null;
                 dgvFiles.DataSource = null;
                 dgvFiles.Rows.Clear();
                 dgvFiles.Refresh();
