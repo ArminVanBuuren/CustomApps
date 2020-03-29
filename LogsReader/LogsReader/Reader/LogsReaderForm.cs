@@ -188,7 +188,7 @@ namespace LogsReader.Reader
                 traceNotLikeText.AssignValue(UserSettings.TraceNotLike, traceNotLikeText_TextChanged);
                 msgFilterText.AssignValue(UserSettings.Message, msgFilterText_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
-                alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
+                //alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
 
                 serversText.Text = CurrentSettings.Servers;
                 fileNames.Text = CurrentSettings.Types;
@@ -847,7 +847,7 @@ namespace LogsReader.Reader
 
         private void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
         {
-            UserSettings.AlreadyUseFilter = alreadyUseFilter.Checked;
+            //UserSettings.AlreadyUseFilter = alreadyUseFilter.Checked;
         }
 
         void ValidationCheck(bool clearStatus = true)

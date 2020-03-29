@@ -87,17 +87,6 @@ namespace LogsReader.Config
             set => SetValue(nameof(Message), value);
         }
 
-        public bool AlreadyUseFilter
-        {
-            get
-            {
-                if (bool.TryParse(GetValue(nameof(AlreadyUseFilter)), out var result))
-                    return result;
-                return false;
-            }
-            set => SetValue(nameof(AlreadyUseFilter), value);
-        }
-
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)
         {
             var vlueStr = GetValue(name);
