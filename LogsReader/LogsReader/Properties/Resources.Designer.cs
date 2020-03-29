@@ -81,7 +81,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Взаимодействовать поиск вместе с настройками фильтра. При включенном режиме, дата начала и дата конца сравнивается с датой создания и изменения файла..
+        ///   Looks up a localized string similar to Взаимодействовать поиск вместе с настройками фильтра. При включенном режиме, поиск сравнивает даты фильтра с датой создания и изменения файла..
         /// </summary>
         internal static string Form_AlreadyUseFilterComment {
             get {
