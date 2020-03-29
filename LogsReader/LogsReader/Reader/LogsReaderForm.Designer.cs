@@ -46,7 +46,6 @@ namespace LogsReader.Reader
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.trvMain = new LogsReader.Reader.CustomTreeView();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.serversText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -78,6 +77,7 @@ namespace LogsReader.Reader
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.trvMain = new LogsReader.Reader.CustomTreeView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -280,25 +280,6 @@ namespace LogsReader.Reader
             this.label1.Size = new System.Drawing.Size(47, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "Servers:";
-            // 
-            // trvMain
-            // 
-            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 139);
-            this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
-            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(166, 260);
-            this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // maxLinesStackText
             // 
@@ -607,8 +588,6 @@ namespace LogsReader.Reader
             // alreadyUseFilter
             // 
             this.alreadyUseFilter.AutoSize = true;
-            this.alreadyUseFilter.Checked = true;
-            this.alreadyUseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alreadyUseFilter.Location = new System.Drawing.Point(722, 47);
             this.alreadyUseFilter.Name = "alreadyUseFilter";
             this.alreadyUseFilter.Size = new System.Drawing.Size(131, 19);
@@ -643,6 +622,25 @@ namespace LogsReader.Reader
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(1173, 95);
             this.filterPanel.TabIndex = 30;
+            // 
+            // trvMain
+            // 
+            this.trvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trvMain.CheckBoxes = true;
+            this.trvMain.Location = new System.Drawing.Point(2, 139);
+            this.trvMain.Name = "trvMain";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
+            this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
+            this.trvMain.Size = new System.Drawing.Size(166, 260);
+            this.trvMain.TabIndex = 2;
+            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
             // LogsReaderForm
             // 

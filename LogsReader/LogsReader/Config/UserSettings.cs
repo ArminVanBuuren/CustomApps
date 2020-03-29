@@ -93,7 +93,7 @@ namespace LogsReader.Config
             {
                 if (bool.TryParse(GetValue(nameof(AlreadyUseFilter)), out var result))
                     return result;
-                return true;
+                return false;
             }
             set => SetValue(nameof(AlreadyUseFilter), value);
         }
