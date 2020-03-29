@@ -20,7 +20,7 @@ namespace Utils.ConditionEx.Base
                     return _dynamicValue;
 
                 var input = _base?.DynamicObject != null ? _base.DynamicObject.GetValue.Invoke(Source) : Source;
-                var type = TYPES.GetTypeParam(input);
+                var type = CODE.GetTypeParam(input);
 
                 switch (type)
                 {

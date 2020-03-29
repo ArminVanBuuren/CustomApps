@@ -1,9 +1,11 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.CSharp;
 
 namespace Utils
 {
@@ -18,7 +20,7 @@ namespace Utils
         MathEx = 16
     }
 
-    public static class TYPES
+    public static class CODE
     {
         public static TypeParam GetTypeParam(string input)
         {
@@ -171,6 +173,40 @@ namespace Utils
             //    continue;
             //}
 
+        }
+
+    //    public static MethodInfo CreateFunction(string simpleMethod)
+    //    {
+    //        string code = @"
+    //    using System;
+    //    namespace UserFunctions
+    //    {
+    //        public class BinaryFunction
+    //        {
+    //            public static double Function(double x, double y)
+    //            {
+    //                return func_xy;
+    //            }
+    //        }
+    //    }
+    //";
+
+    //        string finalCode = code.Replace("func_xy", function);
+
+    //        CSharpCodeProvider provider = new CSharpCodeProvider();
+    //        CompilerResults results = provider.CompileAssemblyFromSource(new CompilerParameters(), finalCode);
+
+    //        Type binaryFunction = results.CompiledAssembly.GetType("UserFunctions.BinaryFunction");
+    //        return binaryFunction.GetMethod("Function");
+    //    }
+
+        public static MethodInfo Create(string code, string methodName)
+        {
+            CSharpCodeProvider provider = new CSharpCodeProvider();
+            CompilerResults results = provider.CompileAssemblyFromSource(new CompilerParameters(), code);
+
+            Type binaryFunction = results.CompiledAssembly.GetType("Utils.BinaryFunction");
+            return binaryFunction.GetMethod(methodName);
         }
     }
 }

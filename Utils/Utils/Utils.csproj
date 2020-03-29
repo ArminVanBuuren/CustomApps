@@ -204,7 +204,7 @@
     <Compile Include="Ionic.Zlib\ZlibConstants.cs" />
     <Compile Include="Ionic.Zlib\ZlibStream.cs" />
     <Compile Include="TIME.cs" />
-    <Compile Include="TYPES.cs" />
+    <Compile Include="CODE.cs" />
     <Compile Include="UNIVERSAL.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="Handles\WebDownload.cs">
