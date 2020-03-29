@@ -2,11 +2,12 @@
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
+using LogsReader.Reader;
 using Utils;
 
 namespace LogsReader.Config
 {
-    public delegate void ReportStatusHandler(string message, bool isError);
+    public delegate void ReportStatusHandler(string message, ReportStatusType type);
 
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
@@ -167,7 +168,7 @@ namespace LogsReader.Config
             {
                 if (!TraceLinePattern.IsCorrectRegex)
                 {
-                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex pattern in 'TraceLinePattern' node. Please check.", true);
+                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex pattern in 'TraceLinePattern' node. Please check.", ReportStatusType.Error);
                     return false;
                 }
 

@@ -111,7 +111,7 @@ namespace LogsReader.Reader
                 statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd});
 
                 statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = this.Font, Margin = statusStripItemsPaddingStart};
+                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
                 statusStrip.Items.Add(_statusInfo);
 
                 #endregion
@@ -228,7 +228,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
             finally
             {
@@ -255,7 +255,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
         }
 
@@ -287,7 +287,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
         }
 
@@ -311,7 +311,7 @@ namespace LogsReader.Reader
                     stop.Start();
                     IsWorking = true;
                     ChangeFormStatus();
-                    ReportStatus(@"Working...", false);
+                    ReportStatus(@"Working...", ReportStatusType.Success);
 
                     await MainReader.StartAsync();
 
@@ -320,14 +320,14 @@ namespace LogsReader.Reader
 
                     if (await AssignResult(filter))
                     {
-                        ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", false);
+                        ReportStatus($"Finished in {stop.Elapsed.ToReadableString()}", ReportStatusType.Success);
                     }
 
                     stop.Stop();
                 }
                 catch (Exception ex)
                 {
-                    ReportStatus(ex.Message, true);
+                    ReportStatus(ex.Message, ReportStatusType.Error);
                 }
                 finally
                 {
@@ -348,7 +348,7 @@ namespace LogsReader.Reader
             else
             {
                 MainReader?.Stop();
-                ReportStatus(@"Stopping...", false);
+                ReportStatus(@"Stopping...", ReportStatusType.Success);
             }
         }
 
@@ -391,19 +391,19 @@ namespace LogsReader.Reader
                 }
 
                 btnSearch.Enabled = btnClear.Enabled = buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = false;
-                ReportStatus(@"Exporting...", false);
+                ReportStatus(@"Exporting...", ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
                 int i = 0;
                 progressBar.Value = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
-                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "Trace name", "Date", "Description", "Message"}));
+                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "File", "Trace name", "Date", "Description", "Message"}));
                     foreach (DataGridViewRow row in dgvFiles.Rows)
                     {
                         var privateID = (int) row.Cells["PrivateID"].Value;
                         var template = OverallResultList[privateID];
-                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.TraceName, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
+                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
                         progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
@@ -411,11 +411,11 @@ namespace LogsReader.Reader
                     writer.Close();
                 }
 
-                ReportStatus($"Successfully exported to file \"{fileName}\"", false);
+                ReportStatus($"Successfully exported to file \"{fileName}\"", ReportStatusType.Success);
             }
             catch (Exception ex)
             {
-                ReportStatus($"Unable to save file \"{fileName}\". {ex.Message}", true);
+                ReportStatus($"Unable to save file \"{fileName}\". {ex.Message}", ReportStatusType.Error);
             }
             finally
             {
@@ -455,7 +455,14 @@ namespace LogsReader.Reader
 
         private async void buttonFilter_Click(object sender, EventArgs e)
         {
-            await AssignResult(GetFilter());
+            try
+            {
+                await AssignResult(GetFilter());
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, ReportStatusType.Error);
+            }
         }
 
         DataFilter GetFilter()
@@ -484,7 +491,7 @@ namespace LogsReader.Reader
 
             if (!result.Any())
             {
-                ReportStatus(@"No logs found", true);
+                ReportStatus(@"No logs found", ReportStatusType.Warning);
                 return false;
             }
 
@@ -494,7 +501,7 @@ namespace LogsReader.Reader
 
                 if (!result.Any())
                 {
-                    ReportStatus(@"No filter results found", true);
+                    ReportStatus(@"No filter results found", ReportStatusType.Warning);
                     return false;
                 }
             }
@@ -586,7 +593,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
         }
 
@@ -615,7 +622,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
         }
 
@@ -888,7 +895,7 @@ namespace LogsReader.Reader
             _totalFilesStatus.Text = @"0";
             _findedInfo.Text = @"0";
 
-            ReportStatus(string.Empty, false);
+            ReportStatus(string.Empty, ReportStatusType.Success);
 
             STREAM.GarbageCollect();
         }
@@ -910,24 +917,42 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, true);
+                ReportStatus(ex.Message, ReportStatusType.Error);
             }
         }
 
         private bool _isLastWasError = false;
-        void ReportStatus(string message, bool isError)
+        void ReportStatus(string message, ReportStatusType type)
         {
-            _statusInfo.Text = message;
-            _statusInfo.ForeColor = !isError ? Color.Black : Color.Red;
-            _isLastWasError = isError;
+            if (!message.IsNullOrEmpty())
+            {
+                _statusInfo.BackColor = type == ReportStatusType.Error ? Color.Red : type == ReportStatusType.Warning ? Color.Yellow : Color.Green;
+                _statusInfo.ForeColor = type == ReportStatusType.Warning ? Color.Black : Color.White;
+                _statusInfo.Text = message;
+            }
+            else
+            {
+                _statusInfo.BackColor = SystemColors.Control;
+                _statusInfo.ForeColor = Color.Black;
+                _statusInfo.Text = string.Empty;
+            }
+            _isLastWasError = type == ReportStatusType.Error || type == ReportStatusType.Warning;
         }
 
         void ClearErrorStatus()
         {
             if (!_isLastWasError)
                 return;
-            _statusInfo.Text = string.Empty;
+            _statusInfo.BackColor = SystemColors.Control;
             _statusInfo.ForeColor = Color.Black;
+            _statusInfo.Text = string.Empty;
         }
+    }
+
+    public enum ReportStatusType
+    {
+        Success = 0,
+        Warning = 1,
+        Error = 2
     }
 }
