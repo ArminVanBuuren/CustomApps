@@ -118,7 +118,11 @@ namespace Utils.WinForm.DataGridViewHelper
                 var columnPosition = 0;
                 foreach (var newColumn in columnList.Values)
                 {
-                    table.Columns.Add(newColumn.Attribute.ColumnName, newColumn.PropertyType);
+                    var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
+                    {
+                        Caption = newColumn.Attribute.ColumnName.IsNullOrEmptyTrim() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
+                    };
+                    table.Columns.Add(dataColumn);
                     positionOfColumns.Add(newColumn.PropertyName, new KeyValuePair<int, DGVColumn>(columnPosition++, newColumn));
                 }
             }
@@ -135,7 +139,12 @@ namespace Utils.WinForm.DataGridViewHelper
                         newColumn = new DGVColumn(position, propertyName, new DGVColumnAttribute(ColumnPosition.After, headerName, column.Visible), column.ValueType);
                     }
 
-                    table.Columns.Add(newColumn.Attribute.ColumnName, newColumn.PropertyType);
+                    var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
+                    {
+                        Caption = newColumn.Attribute.ColumnName.IsNullOrEmptyTrim() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
+                    };
+                    table.Columns.Add(dataColumn);
+
                     positionOfColumns.Add(newColumn.PropertyName, new KeyValuePair<int, DGVColumn>(position, newColumn));
                     position++;
                 }
