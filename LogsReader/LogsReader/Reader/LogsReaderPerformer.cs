@@ -125,7 +125,7 @@ namespace LogsReader.Reader
                         continue;
 
                     // если фильтр даты начала больше даты последней записи в файл, то пропускаем
-                    if (DateTime.Compare(_startDate, fileLog.File.LastAccessTime) > 0)
+                    if (DateTime.Compare(_startDate, fileLog.File.LastWriteTime) > 0)
                         continue;
 
                     // если фильтр даты конца меньше даты создания файла, то пропускаем
