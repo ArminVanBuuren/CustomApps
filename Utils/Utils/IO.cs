@@ -313,7 +313,7 @@ namespace Utils
 
             for (var i = 0; i < Math.Min(firstPathParts.Length, secondPathParts.Length); i++)
             {
-                if (!firstPathParts[i].Equals(secondPathParts[i], StringComparison.CurrentCultureIgnoreCase))
+                if (!firstPathParts[i].Equals(secondPathParts[i], StringComparison.InvariantCultureIgnoreCase))
                 {
                     break;
                 }
@@ -509,7 +509,7 @@ namespace Utils
                     var j = 0;
                     for (j = 0; j <= modules.Count - 1; j++)
                     {
-                        if (modules[j].FileName.IndexOf(file, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        if (modules[j].FileName.IndexOf(file, StringComparison.InvariantCultureIgnoreCase) != -1)
                         {
                             myProcessArray.Add(modules[j].FileName, myProcess);
                             break;

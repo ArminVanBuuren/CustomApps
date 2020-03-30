@@ -137,9 +137,9 @@ namespace Utils.ConditionEx
                 case ")": return LogicalGroupType.BracketIsClose;
             }
 
-            if(str.Equals("and", StringComparison.CurrentCultureIgnoreCase))
+            if(str.Equals("and", StringComparison.InvariantCultureIgnoreCase))
                 return LogicalGroupType.And;
-            else if(str.Equals("or", StringComparison.CurrentCultureIgnoreCase))
+            else if(str.Equals("or", StringComparison.InvariantCultureIgnoreCase))
                 return LogicalGroupType.Or;
 
             return LogicalGroupType.NaN;

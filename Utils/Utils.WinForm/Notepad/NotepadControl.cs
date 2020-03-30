@@ -278,7 +278,7 @@ namespace Utils.WinForm.Notepad
             var existEditor = ListOfEditors.FirstOrDefault(x => x.Value?.HeaderName != null
                                                                 && x.Value?.Source != null
                                                                 && !(x.Value is FileEditor)
-                                                                && x.Value.HeaderName.Equals(headerName, StringComparison.CurrentCultureIgnoreCase)
+                                                                && x.Value.HeaderName.Equals(headerName, StringComparison.InvariantCultureIgnoreCase)
                                                                 && x.Value.Source.Equals(bodyText));
 
             if (existEditor.Key != null && existEditor.Value != null)
@@ -304,7 +304,7 @@ namespace Utils.WinForm.Notepad
 
             var existFileEditor = ListOfEditors.FirstOrDefault(x => x.Value is FileEditor fileEditor
                                                                     && fileEditor?.FilePath != null
-                                                                    && fileEditor.FilePath.Equals(filePath, StringComparison.CurrentCultureIgnoreCase));
+                                                                    && fileEditor.FilePath.Equals(filePath, StringComparison.InvariantCultureIgnoreCase));
 
             if (existFileEditor.Key != null && existFileEditor.Value != null)
             {

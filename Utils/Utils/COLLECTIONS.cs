@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Utils
 {
@@ -71,6 +72,70 @@ namespace Utils
                     yield return element;
                 }
             }
+        }
+
+        public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string memberName)
+        {
+            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var pi = typeof(T).GetProperty(memberName);
+            if(pi == null)
+                throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
+
+            return (IOrderedQueryable<T>)query.Provider.CreateQuery(
+                Expression.Call(
+                    typeof(Queryable),
+                    "OrderBy",
+                    new Type[] { typeof(T), pi.PropertyType },
+                    query.Expression,
+                    Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams))
+            );
+        }
+
+        public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string memberName)
+        {
+            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var pi = typeof(T).GetProperty(memberName);
+
+            return (IOrderedQueryable<T>)query.Provider.CreateQuery(
+                Expression.Call(
+                    typeof(Queryable),
+                    "OrderByDescending",
+                    new Type[] { typeof(T), pi.PropertyType },
+                    query.Expression,
+                    Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams))
+            );
+        }
+
+        public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string memberName)
+        {
+            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var pi = typeof(T).GetProperty(memberName);
+            if (pi == null)
+                throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
+
+            return (IOrderedQueryable<T>)query.Provider.CreateQuery(
+                Expression.Call(
+                    typeof(Queryable),
+                    "ThenBy",
+                    new Type[] { typeof(T), pi.PropertyType },
+                    query.Expression,
+                    Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams))
+            );
+        }
+
+        public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string memberName)
+        {
+            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var pi = typeof(T).GetProperty(memberName);
+
+            return (IOrderedQueryable<T>)query.Provider.CreateQuery(
+                Expression.Call(
+                    typeof(Queryable),
+                    "ThenByDescending",
+                    new Type[] { typeof(T), pi.PropertyType },
+                    query.Expression,
+                    Expression.Lambda(Expression.Property(typeParams[0], pi), typeParams))
+            );
         }
     }
 }

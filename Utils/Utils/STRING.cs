@@ -67,7 +67,7 @@ namespace Utils
 
         public static bool IsNullOrEmptyTrim(this string value)
         {
-            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value.TrimWhiteSpaces());
+            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || value.TrimWhiteSpaces().Length <= 0;
         }
 
         public static bool IsNumber(this string value)
@@ -75,7 +75,7 @@ namespace Utils
             return int.TryParse(value, out _);
         }
 
-        public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
+        public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase)
         {
             if (input != null && suffixToRemove != null && input.EndsWith(suffixToRemove, comparisonType))
                 return input.Substring(0, input.Length - suffixToRemove.Length);
@@ -91,7 +91,7 @@ namespace Utils
         /// <returns></returns>
         public static bool IsObjectsSimilar(string param1, string param2)
         {
-            return param1.IndexOf(param2, StringComparison.CurrentCultureIgnoreCase) != -1 || param2.IndexOf(param1, StringComparison.CurrentCultureIgnoreCase) != -1;
+            return param1.IndexOf(param2, StringComparison.InvariantCultureIgnoreCase) != -1 || param2.IndexOf(param1, StringComparison.InvariantCultureIgnoreCase) != -1;
         }
 
         public static string TrimWhiteSpaces(this string input)
@@ -114,6 +114,26 @@ namespace Utils
                 return input.Equals(value);
         }
 
+        public static bool LikeAny(this string input, out string result, params string[] @params)
+        {
+            result = null;
+            foreach (var param in @params)
+            {
+                if (input.Like(param))
+                {
+                    result = param;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool LikeAny(this string input, params string[] @params)
+        {
+            return @params.Any(input.Like);
+        }
+
         public static bool Like(this string input, string value)
         {
             if (input.IsNullOrEmpty() && value.IsNullOrEmpty())
@@ -123,7 +143,7 @@ namespace Utils
             else if (value.IsNullOrEmpty())
                 return false;
 
-            return input.Equals(value, StringComparison.CurrentCultureIgnoreCase);
+            return input.Equals(value, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool StringContains(this string input, string value, bool ignoreCase = true)
@@ -136,7 +156,7 @@ namespace Utils
                 return false;
 
             if (ignoreCase)
-                return input.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) != -1;
+                return input.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) != -1;
             else
                 return input.IndexOf(value, StringComparison.Ordinal) != -1;
         }

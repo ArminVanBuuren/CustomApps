@@ -61,7 +61,7 @@ namespace Utils.Media.MediaCapture.Encoder
             var severalNames = encoderName.Split('|');
             foreach (var encName in severalNames)
             {
-                var result2 = encoders.Where(p => p.Key.IndexOf(encName, StringComparison.CurrentCultureIgnoreCase) != -1);
+                var result2 = encoders.Where(p => p.Key.IndexOf(encName, StringComparison.InvariantCultureIgnoreCase) != -1);
                 if (result2.Any())
                     return result2.FirstOrDefault().Value;
             }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 
@@ -175,38 +176,49 @@ namespace Utils
 
         }
 
-    //    public static MethodInfo CreateFunction(string simpleMethod)
-    //    {
-    //        string code = @"
-    //    using System;
-    //    namespace UserFunctions
-    //    {
-    //        public class BinaryFunction
-    //        {
-    //            public static double Function(double x, double y)
-    //            {
-    //                return func_xy;
-    //            }
-    //        }
-    //    }
-    //";
-
-    //        string finalCode = code.Replace("func_xy", function);
-
-    //        CSharpCodeProvider provider = new CSharpCodeProvider();
-    //        CompilerResults results = provider.CompileAssemblyFromSource(new CompilerParameters(), finalCode);
-
-    //        Type binaryFunction = results.CompiledAssembly.GetType("UserFunctions.BinaryFunction");
-    //        return binaryFunction.GetMethod("Function");
-    //    }
-
-        public static MethodInfo Create(string code, string methodName)
+        public static Type CreateClass(string sourceCode, string typeClassName, IEnumerable<string> assemblies = null)
         {
-            CSharpCodeProvider provider = new CSharpCodeProvider();
-            CompilerResults results = provider.CompileAssemblyFromSource(new CompilerParameters(), code);
+            var provider = new CSharpCodeProvider();
 
-            Type binaryFunction = results.CompiledAssembly.GetType("Utils.BinaryFunction");
-            return binaryFunction.GetMethod(methodName);
+            var parameters = new CompilerParameters
+            {
+                GenerateInMemory = true //, GenerateExecutable = true
+            };
+            parameters.ReferencedAssemblies.Add("System.dll");
+            if (assemblies != null)
+            {
+                foreach (var assembly in assemblies)
+                {
+                    parameters.ReferencedAssemblies.Add(assembly);
+                }
+            }
+
+            var results = provider.CompileAssemblyFromSource(parameters, sourceCode);
+
+            if (results.Errors.HasErrors)
+            {
+                var sb = new StringBuilder();
+                foreach (CompilerError error in results.Errors)
+                    sb.AppendLine($"Error ({error.ErrorNumber}): {error.ErrorText}");
+                throw new InvalidOperationException(sb.ToString());
+            }
+
+            return results.CompiledAssembly.GetType(typeClassName);
         }
+
+        public static MethodInfo CreateMethod(string staticMethodCode, string methodName, IEnumerable<string> assemblies = null)
+        {
+            const string code = @"using System;
+                                  namespace Utils
+                                  {{
+                                      public class CODE_SIMPLE_FUNCTION
+                                      {{
+                                          {0}
+                                      }}
+                                  }}";
+            var simpleFunc = CreateClass(string.Format(code, staticMethodCode), "Utils.CODE_SIMPLE_FUNCTION", assemblies);
+            return simpleFunc.GetMethod(methodName);
+        }
+
     }
 }

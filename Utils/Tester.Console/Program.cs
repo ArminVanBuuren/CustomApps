@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 //using System.Data.OleDb;
 using System.Diagnostics;
@@ -201,11 +202,19 @@ namespace Tester.Console
             }
         }
 
-
         static void Main(string[] args)
         {
             try
             {
+                SortedDictionary<DateTime, string> _result = new SortedDictionary<DateTime, string>();
+                _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty1");
+                _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty3");
+                _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty2");
+
+
+                var method = CODE.CreateMethod(@"public static void Test(){System.Console.WriteLine(""Test"");}", "Test");
+                method.Invoke(null, null);
+
                 var res11111 = getTimeInRangeFunction.Invoke(null, new []{"0","09:00", "20:00"},null);
 
                 var stop = new Stopwatch();
@@ -516,7 +525,7 @@ namespace Tester.Console
 
         static string GetResult(string input)
         {
-            if (input.IndexOf("${random}", StringComparison.CurrentCultureIgnoreCase) == -1)
+            if (input.IndexOf("${random}", StringComparison.InvariantCultureIgnoreCase) == -1)
                 return input;
 
             var res = new Random().Next(0, 9);

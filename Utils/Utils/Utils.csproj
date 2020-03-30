@@ -99,6 +99,7 @@
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />
     <Compile Include="CollectionHelper\DoubleDictionary.cs" />
+    <Compile Include="CollectionHelper\DuplicateKeyComparer.cs" />
     <Compile Include="CollectionHelper\HashtableComparer.cs" />
     <Compile Include="CollectionHelper\PriorityQueue.cs" />
     <Compile Include="COLLECTIONS.cs" />

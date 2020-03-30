@@ -112,13 +112,13 @@ namespace Utils.UIControls.Main
         //            double width = e.GetPosition(mainWindow).X;
         //            double height = e.GetPosition(mainWindow).Y;
         //            senderRect.CaptureMouse();
-        //            if (senderRect.Name.Equals("Right", StringComparison.CurrentCultureIgnoreCase))
+        //            if (senderRect.Name.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
         //            {
         //                width += 5;
         //                if (width > 0)
         //                    mainWindow.Width = width;
         //            }
-        //            if (senderRect.Name.Equals("Left", StringComparison.CurrentCultureIgnoreCase))
+        //            if (senderRect.Name.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
         //            {
         //                width -= 5;
         //                mainWindow.Left += width;
@@ -128,13 +128,13 @@ namespace Utils.UIControls.Main
         //                    mainWindow.Width = width;
         //                }
         //            }
-        //            if (senderRect.Name.Equals("Bottom", StringComparison.CurrentCultureIgnoreCase))
+        //            if (senderRect.Name.Equals("Bottom", StringComparison.InvariantCultureIgnoreCase))
         //            {
         //                height += 5;
         //                if (height > 0)
         //                    mainWindow.Height = height;
         //            }
-        //            if (senderRect.Name.Equals("Top", StringComparison.CurrentCultureIgnoreCase))
+        //            if (senderRect.Name.Equals("Top", StringComparison.InvariantCultureIgnoreCase))
         //            {
         //                height -= 5;
         //                mainWindow.Top += height;

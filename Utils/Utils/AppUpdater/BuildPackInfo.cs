@@ -90,7 +90,7 @@ namespace Utils.AppUpdater
 
         internal static Dictionary<string, FileBuildInfo> GetLocalVersions(string assembliesDirPath, string runningAppLocation = null)
         {
-            var localVersions = new Dictionary<string, FileBuildInfo>(StringComparer.CurrentCultureIgnoreCase);
+            var localVersions = new Dictionary<string, FileBuildInfo>(StringComparer.InvariantCultureIgnoreCase);
             foreach (var file in Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories))
             {
                 var localFileInfo = new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation));

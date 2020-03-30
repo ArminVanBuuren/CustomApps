@@ -72,23 +72,29 @@ namespace Utils
             return builder.ToString();
         }
 
-        public static bool Verify(string testPattern)
+        public static bool Verify(string testPattern, out Exception error)
         {
-            if ((testPattern != null) && (testPattern.Trim().Length > 0))
+            error = null;
+            if (testPattern.IsNullOrEmptyTrim())
             {
-                try
-                {
-                    Regex.Match("", testPattern);
-                    return true;
-                }
-                catch (ArgumentException)
-                {
-                    return false; // BAD PATTERN: Syntax error
-                }
-            }
-            else
-            {
+                error = new ArgumentException("Regex pattern cannot be empty.");
                 return false; //BAD PATTERN: Pattern is null or blank
+            }
+
+            try
+            {
+                Regex.Match("", testPattern);
+                return true;
+            }
+            catch (ArgumentException ex)
+            {
+                error = ex;
+                return false; // BAD PATTERN: Syntax error
+            }
+            catch (Exception ex)
+            {
+                error = ex;
+                return false;
             }
         }
 
@@ -111,13 +117,13 @@ namespace Utils
 
         static RegexOptions GetRegOptionsEnum(string str)
         {
-            if(str.Equals("multiline", StringComparison.CurrentCultureIgnoreCase))
+            if(str.Equals("multiline", StringComparison.InvariantCultureIgnoreCase))
                 return RegexOptions.Multiline;
-            else if (str.Equals("ignorecase", StringComparison.CurrentCultureIgnoreCase))
+            else if (str.Equals("ignorecase", StringComparison.InvariantCultureIgnoreCase))
                 return RegexOptions.IgnoreCase;
-            else if (str.Equals("singleline", StringComparison.CurrentCultureIgnoreCase))
+            else if (str.Equals("singleline", StringComparison.InvariantCultureIgnoreCase))
                 return RegexOptions.Singleline;
-            else if (str.Equals("righttoleft", StringComparison.CurrentCultureIgnoreCase))
+            else if (str.Equals("righttoleft", StringComparison.InvariantCultureIgnoreCase))
                 return RegexOptions.RightToLeft;
             return RegexOptions.None;
         }

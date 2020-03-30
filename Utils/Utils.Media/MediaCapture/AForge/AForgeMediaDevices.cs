@@ -48,7 +48,7 @@ namespace Utils.Media.MediaCapture.AForge
                 return GetOptimalQuality(orderByBestQuolity);
             }
 
-            var result2 = VideoDevices.Values.Where(p => p.DeviceName.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1);
+            var result2 = VideoDevices.Values.Where(p => p.DeviceName.IndexOf(name, StringComparison.InvariantCultureIgnoreCase) != -1);
             if (result2.Any())
             {
                 var orderByBestQuolity = result2.OrderByDescending(p => p.Height).ToList();
