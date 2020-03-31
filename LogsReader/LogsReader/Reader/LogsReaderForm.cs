@@ -129,6 +129,7 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(traceNameNotLikeFilter, Resources.Form_TraceNameNotLikeComment);
                 tooltipPrintXML.SetToolTip(traceMessageFilter, Resources.Form_MessageFilterComment);
                 tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
+                tooltipPrintXML.SetToolTip(rowsLimitText, Resources.LRSettingsScheme_RowsLimitCommentComment);
 
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
@@ -308,7 +309,7 @@ namespace LogsReader.Reader
                         txtPattern.Text, 
                         useRegex.Checked,
                         filter);
-                    MainReader.OnProcessReport += ReportStatusOfProcess;
+                    MainReader.OnProcessReport += ReportProcessStatus;
 
                     stop.Start();
                     IsWorking = true;
@@ -335,7 +336,7 @@ namespace LogsReader.Reader
                 {
                     if (MainReader != null)
                     {
-                        MainReader.OnProcessReport -= ReportStatusOfProcess;
+                        MainReader.OnProcessReport -= ReportProcessStatus;
                         MainReader.Dispose();
                         MainReader = null;
                     }
@@ -354,7 +355,7 @@ namespace LogsReader.Reader
             }
         }
 
-        void ReportStatusOfProcess(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
+        void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
             if (InvokeRequired)
             {
@@ -509,19 +510,6 @@ namespace LogsReader.Reader
             }
 
             await dgvFiles.AssignCollectionAsync(result, null);
-
-            //var traces = OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key);
-            //var beforeLike = traceLikeText.Text;
-            //var beforeNotLike = traceLikeText.Text;
-            //traceLikeText.Items.Clear();
-            //traceLikeText.Items.AddRange(traces.ToArray());
-            //traceNotLikeText.Items.Clear();
-            //traceNotLikeText.Items.AddRange(traces.ToArray());
-
-            //traceLikeText.Text = beforeLike;
-            //traceLikeText.DisplayMember = beforeLike;
-            //traceNotLikeText.Text = beforeNotLike;
-            //traceNotLikeText.DisplayMember = beforeNotLike;
 
             buttonExport.Enabled = dgvFiles.RowCount > 0;
             return true;
@@ -687,7 +675,6 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-
         private void maxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var value))
@@ -776,93 +763,9 @@ namespace LogsReader.Reader
             UserSettings.UseRegex = useRegex.Checked;
         }
 
-        private void traceLikeText_Enter(object sender, EventArgs e)
-        {
-            //traceLikeText.
-            
-        }
-
-        private bool _isChanged = false;
-        private string _traceLikeBefore = string.Empty;
         private void traceNameLikeFilter_TextChanged(object sender, EventArgs e)
         {
-            //if (_isChanged)
-            //    return;
-
-            //if (traceLikeText.SelectedIndex != -1)
-            //{
-            //    _isChanged = true;
-            //    traceLikeText.BeginUpdate();
-            //    traceLikeText.TextChanged -= traceLikeText_TextChanged;
-            //    traceLikeText.SelectionChangeCommitted -= TraceLikeText_SelectionChangeCommitted;
-
-            //    traceLikeText.SelectedIndex = -1;
-            //    //traceLikeText.SelectedText = UserSettings.TraceLike;
-            //    //traceLikeText.SelectedText = UserSettings.TraceLike;
-            //    //traceLikeText.SelectedValue = UserSettings.TraceLike;
-            //    //traceLikeText.ValueMember = UserSettings.TraceLike;
-            //    traceLikeText.DisplayMember = UserSettings.TraceLike;
-
-            //    traceLikeText.TextChanged += traceLikeText_TextChanged;
-            //    traceLikeText.SelectionChangeCommitted += TraceLikeText_SelectionChangeCommitted;
-            //    _isChanged = false;
-            //    traceLikeText.EndUpdate();
-            //    return;
-            //}
-
-            //_traceLikeBefore = UserSettings.TraceLike;
-
-            //if (traceLikeText.SelectedIndex == -1)
-            //{
-            //    traceLikeText.Text = UserSettings.TraceLike;
-            //}
             UserSettings.TraceLike = traceNameLikeFilter.Text;
-
-
-            //var test1 = traceLikeText.Text;
-            //var test2 = traceLikeText.SelectedText;
-            //var test3 = traceLikeText.SelectedValue;
-            //var test4 = traceLikeText.SelectedItem;
-            //var test5 = traceLikeText.ValueMember;
-            //var test6 = traceLikeText.DisplayMember;
-        }
-
-        private void TraceLikeText_SelectionChangeCommitted(object sender, System.EventArgs e)
-        {
-            //if (_isChanged)
-            //    return;
-
-
-            //var before = traceLikeText.SelectedText.Split(',').ToList();
-            //before.Add(traceLikeText.SelectedItem.ToString());
-            //UserSettings.TraceLike = string.Join(",", before.GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key));
-
-            //traceLikeText.BeginUpdate();
-            //traceLikeText.TextChanged -= traceLikeText_TextChanged;
-            //traceLikeText.SelectionChangeCommitted -= TraceLikeText_SelectionChangeCommitted;
-
-            //traceLikeText.DataSource = OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
-            //traceLikeText.Items.Clear();
-            //traceLikeText.Items.AddRange(OverallResultList.Select(x => x.TraceName.Trim()).GroupBy(x => x, StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToArray());
-            //traceLikeText.DisplayMember = UserSettings.TraceLike;
-
-            //traceLikeText.Text = null;
-            //traceLikeText.Text = UserSettings.TraceLike;
-            //traceLikeText.TextChanged += traceLikeText_TextChanged;
-            //traceLikeText.SelectionChangeCommitted += TraceLikeText_SelectionChangeCommitted;
-            //traceLikeText.EndUpdate();
-
-            //traceLikeText.AssignValue(UserSettings.TraceLike, traceLikeText_TextChanged);
-
-            //traceLikeText.
-            //traceLikeText.Text = UserSettings.TraceLike;
-            //traceLikeText.SelectedValue = UserSettings.TraceLike;
-            //traceLikeText.ValueMember = UserSettings.TraceLike;
-            //traceLikeText.DisplayMember = UserSettings.TraceLike;
-
-
-            //traceLikeText.AssignComboBox(UserSettings.TraceLike, traceLikeText_TextChanged, traceLikeText_SelectedIndexChanged);
-
         }
 
         private void traceNameNotLikeFilter_TextChanged(object sender, EventArgs e)
@@ -873,11 +776,6 @@ namespace LogsReader.Reader
         private void traceMessageFilter_TextChanged(object sender, EventArgs e)
         {
             UserSettings.Message = traceMessageFilter.Text;
-        }
-
-        private void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
-        {
-            //UserSettings.AlreadyUseFilter = alreadyUseFilter.Checked;
         }
 
         void ValidationCheck(bool clearStatus = true)
@@ -927,8 +825,6 @@ namespace LogsReader.Reader
         {
             try
             {
-                //traceLikeText.DataSource = null;
-                //traceNotLikeText.DataSource = null;
                 dgvFiles.DataSource = null;
                 dgvFiles.Rows.Clear();
                 dgvFiles.Refresh();

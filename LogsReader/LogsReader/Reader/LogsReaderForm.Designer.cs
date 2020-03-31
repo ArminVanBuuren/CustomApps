@@ -637,7 +637,6 @@ namespace LogsReader.Reader
             this.alreadyUseFilter.TabIndex = 33;
             this.alreadyUseFilter.Text = "Use when searching";
             this.alreadyUseFilter.UseVisualStyleBackColor = true;
-            this.alreadyUseFilter.CheckedChanged += new System.EventHandler(this.alreadyUseFilter_CheckedChanged);
             // 
             // buttonExport
             // 

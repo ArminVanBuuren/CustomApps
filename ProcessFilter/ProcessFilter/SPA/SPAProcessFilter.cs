@@ -360,11 +360,13 @@ namespace SPAFilter.SPA
         {
             await Task.Factory.StartNew(() =>
             {
+                List<ServiceActivator> lastActivatorList;
                 lock (ACTIVATORS_SYNC)
+                    lastActivatorList = new List<ServiceActivator>(_activators.Values);
+
+                var result = MultiTasking.Run((inputFile) =>
                 {
-                    var lastActivatorList = new List<ServiceActivator>(_activators.Values);
-                    
-                    var result = MultiTasking.Run((inputFile) =>
+                    lock (ACTIVATORS_SYNC)
                     {
                         if (_activators.ContainsKey(inputFile))
                         {
@@ -374,16 +376,17 @@ namespace SPAFilter.SPA
                         {
                             _activators.Add(inputFile, new ServiceActivator(inputFile));
                         }
-                    }, filePathList, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
-
-                    ReloadActivators(lastActivatorList);
-
-                    var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
-                    if (!errors.IsNullOrEmptyTrim())
-                    {
-                        MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }, filePathList, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
+
+                ReloadActivators(lastActivatorList);
+
+                var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
+                if (!errors.IsNullOrEmptyTrim())
+                {
+                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
             });
         }
 

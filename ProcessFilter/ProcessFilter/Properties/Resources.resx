@@ -141,21 +141,6 @@
   <data name="Form_PrintXMLFiles_Successfully" xml:space="preserve">
     <value>Successfully completed.</value>
   </data>
-  <data name="Form_Status_Processes" xml:space="preserve">
-    <value>Processes: {0}</value>
-  </data>
-  <data name="Form_Status_HostTypes" xml:space="preserve">
-    <value>HostTypes: {0}</value>
-  </data>
-  <data name="Form_Status_Operations" xml:space="preserve">
-    <value>Operations: {0}</value>
-  </data>
-  <data name="Form_Status_Scenarios" xml:space="preserve">
-    <value>Scenarios: {0}</value>
-  </data>
-  <data name="Form_Status_Commands" xml:space="preserve">
-    <value>Commands: {0}</value>
-  </data>
   <data name="Form_GenerateSC_NotFoundAnyOperations" xml:space="preserve">
     <value>No operations found</value>
   </data>

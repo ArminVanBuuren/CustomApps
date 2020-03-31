@@ -51,6 +51,12 @@ namespace SPAFilter
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private SPAProcessFilter _spaFilter;
 
+        private ToolStripStatusLabel BPCount;
+        private ToolStripStatusLabel OperationsCount;
+        private ToolStripStatusLabel ScenariosCount;
+        private ToolStripStatusLabel CommandsCount;
+        private ToolStripStatusLabel NEElementsCount;
+
         ApplicationUpdater AppUpdater { get; set; }
         IUpdater Updater { get; set; }
 
@@ -294,7 +300,39 @@ namespace SPAFilter
             _spaFilter = new SPAProcessFilter();
 
             InitializeComponent();
-            
+
+            var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
+            var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
+
+            var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
+            autor.Click += (sender, args) => { MessageBox.Show(@"Hello! This app was created for comfortable configuration of SPA :)", $"© {ASSEMBLY.Company}", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); };
+            statusStrip.Items.Add(autor);
+
+            statusStrip.Items.Add(new ToolStripStatusLabel("Processes:") { Margin = statusStripItemsPaddingStart });
+            BPCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(BPCount);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("HostTypes:") { Margin = statusStripItemsPaddingStart });
+            NEElementsCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(NEElementsCount);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("Operations:") { Margin = statusStripItemsPaddingStart });
+            OperationsCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(OperationsCount);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("Scenarios:") { Margin = statusStripItemsPaddingStart });
+            ScenariosCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(ScenariosCount);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(new ToolStripStatusLabel("Commands:") { Margin = statusStripItemsPaddingStart });
+            CommandsCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(CommandsCount);
+
+
             var tooltipPrintXML = new ToolTip
             {
                 InitialDelay = 50
@@ -608,9 +646,9 @@ namespace SPAFilter
         bool GetCurrentDataGridView(out DataGridView focusedGrid)
         {
             focusedGrid = null;
-            if (tabControl1.SelectedTab.HasChildren)
+            if (mainTabControl.SelectedTab.HasChildren)
             {
-                focusedGrid = tabControl1.SelectedTab.Controls.OfType<DataGridView>().FirstOrDefault();
+                focusedGrid = mainTabControl.SelectedTab.Controls.OfType<DataGridView>().FirstOrDefault();
             }
 
             return focusedGrid != null;
@@ -1242,11 +1280,11 @@ namespace SPAFilter
         {
             try
             {
-                BPCount.Text = string.Format(Resources.Form_Status_Processes, (_spaFilter.Processes?.Count ?? 0).ToString());
-                NEElementsCount.Text = string.Format(Resources.Form_Status_HostTypes, (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString());
-                OperationsCount.Text = string.Format(Resources.Form_Status_Operations, (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString());
-                ScenariosCount.Text = string.Format(Resources.Form_Status_Scenarios, (_spaFilter.Scenarios?.Count ?? 0).ToString());
-                CommandsCount.Text = string.Format(Resources.Form_Status_Commands, (_spaFilter.Commands?.Count ?? 0).ToString());
+                BPCount.Text = (_spaFilter.Processes?.Count ?? 0).ToString();
+                NEElementsCount.Text = (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString();
+                OperationsCount.Text = (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString();
+                ScenariosCount.Text = (_spaFilter.Scenarios?.Count ?? 0).ToString();
+                CommandsCount.Text = (_spaFilter.Commands?.Count ?? 0).ToString();
 
                 FilterButton.Enabled = _spaFilter.IsEnabledFilter;
                 PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
@@ -1330,7 +1368,7 @@ namespace SPAFilter
             }
         }
 
-        static bool GetCellItemSelectedRows(DataGridView grid, out List<string> result, string name = "File Path")
+        static bool GetCellItemSelectedRows(DataGridView grid, out List<string> result, string name = "FilePath")
         {
             result = new List<string>();
             if (grid.SelectedRows.Count > 0)
@@ -1374,11 +1412,6 @@ namespace SPAFilter
         {
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-
-
-
-
-
 
 
         //private void AddActivatorButton_Paint(object sender, PaintEventArgs e)

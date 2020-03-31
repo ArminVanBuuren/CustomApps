@@ -216,51 +216,6 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Commands: {0}.
-        /// </summary>
-        internal static string Form_Status_Commands {
-            get {
-                return ResourceManager.GetString("Form_Status_Commands", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to HostTypes: {0}.
-        /// </summary>
-        internal static string Form_Status_HostTypes {
-            get {
-                return ResourceManager.GetString("Form_Status_HostTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Operations: {0}.
-        /// </summary>
-        internal static string Form_Status_Operations {
-            get {
-                return ResourceManager.GetString("Form_Status_Operations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processes: {0}.
-        /// </summary>
-        internal static string Form_Status_Processes {
-            get {
-                return ResourceManager.GetString("Form_Status_Processes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Scenarios: {0}.
-        /// </summary>
-        internal static string Form_Status_Scenarios {
-            get {
-                return ResourceManager.GetString("Form_Status_Scenarios", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to To search for a specified pattern, you can use % symbol. Example: %Assign%.
         /// </summary>
         internal static string Form_ToolTip_SearchPattern {
