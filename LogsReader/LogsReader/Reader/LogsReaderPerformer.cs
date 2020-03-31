@@ -30,7 +30,11 @@ namespace LogsReader.Reader
                 }
                 else
                 {
-                    return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
+                    if (x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial))
+                    {
+                        return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
+                    }
+                    return string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
                 }
             }
             else
