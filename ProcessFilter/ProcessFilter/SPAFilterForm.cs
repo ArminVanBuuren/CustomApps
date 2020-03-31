@@ -1224,11 +1224,6 @@ namespace SPAFilter
                     _notepad.Closed += _notepad_Closed;
                     _notepad.Show();
                 }
-                else
-                {
-                    _notepad.Focus();
-                    _notepad.Activate();
-                }
 
                 if (name == null)
                     _notepad.AddFileDocument(source);
@@ -1238,6 +1233,11 @@ namespace SPAFilter
             catch (Exception ex)
             {
                 ShowError(ex.Message);
+            }
+            finally
+            {
+                _notepad?.Activate();
+                _notepad?.Focus();
             }
         }
 
