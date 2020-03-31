@@ -99,7 +99,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_MessageFilterComment {
             get {
@@ -108,7 +108,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
@@ -117,7 +117,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятную. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameNotLikeComment {
             get {
@@ -202,7 +202,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденому фрагменту, указывается вместе с Description..
+        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description..
         /// </summary>
         internal static string LRSettingsScheme_OrderByComment {
             get {
@@ -211,7 +211,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование памяти..
+        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование виртуальной памяти..
         /// </summary>
         internal static string LRSettingsScheme_RowsLimitCommentComment {
             get {
