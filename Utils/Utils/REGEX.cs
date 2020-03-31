@@ -72,14 +72,10 @@ namespace Utils
             return builder.ToString();
         }
 
-        public static bool Verify(string testPattern, out Exception error)
+        public static bool Verify(string testPattern)
         {
-            error = null;
             if (testPattern.IsNullOrEmptyTrim())
-            {
-                error = new ArgumentException("Regex pattern cannot be empty.");
                 return false; //BAD PATTERN: Pattern is null or blank
-            }
 
             try
             {
@@ -88,12 +84,10 @@ namespace Utils
             }
             catch (ArgumentException ex)
             {
-                error = ex;
                 return false; // BAD PATTERN: Syntax error
             }
             catch (Exception ex)
             {
-                error = ex;
                 return false;
             }
         }
