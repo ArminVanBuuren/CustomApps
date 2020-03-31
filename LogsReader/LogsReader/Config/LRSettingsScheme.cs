@@ -15,8 +15,10 @@ namespace LogsReader.Config
         private string _schemeName = "TEST";
         private string _servers = "localhost";
         private string _types = "test";
-        private int _maxThreads = -1;
+        private string _orderBy = "Date, File, FoundLineID";
         private int _maxTraceLines = 50;
+        private int _maxThreads = -1;
+        private int _rowsLimit = 99999;
         private string _logsDirectory = @"C:\TEST";
         private LRTraceLinePattern _traceLinePattern = new LRTraceLinePattern();
 
@@ -34,28 +36,29 @@ namespace LogsReader.Config
                 case "MG":
                     _schemeName = name;
                     _servers = "mg1,mg2,mg3,mg4,mg5";
-                    _types = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
-                    _maxThreads = -1;
-                    _maxTraceLines = 50;
                     _logsDirectory = @"C:\FORISLOG\MG";
+                    _types = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
+                    _maxTraceLines = 50;
+                    _maxThreads = -1;
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;
                 case "SPA":
                     _schemeName = name;
                     _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
-                    _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
-                    _maxThreads = -1;
-                    _maxTraceLines = 1;
                     _logsDirectory = @"C:\FORISLOG\SPA";
+                    _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
+                    _maxTraceLines = 1;
+                    _maxThreads = -1;
+                    _orderBy = "File desc, ID desc";
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;
                 case "MGA":
                     _schemeName = name;
                     _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
-                    _types = "fast,slow,test";
-                    _maxThreads = -1;
-                    _maxTraceLines = 20000;
                     _logsDirectory = @"C:\FORISLOG\MGAdapter";
+                    _types = "fast,slow,test";
+                    _maxTraceLines = 20000;
+                    _maxThreads = -1;
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;
             }
@@ -138,6 +141,35 @@ namespace LogsReader.Config
         {
             get => _maxThreads;
             set => _maxThreads = value <= 0 ? -1 : value;
+        }
+
+        [XmlAnyElement("RowsLimitComment")]
+        public XmlComment RowsLimitComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_RowsLimitCommentComment);
+            set { }
+        }
+
+        [XmlElement("RowsLimit")]
+        public int RowsLimit
+        {
+            get => _rowsLimit;
+            set => _rowsLimit = value <= 0 ? 9999 : value;
+        }
+
+
+        [XmlAnyElement("OrderByComment")]
+        public XmlComment OrderByComment
+        {
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_OrderByComment);
+            set { }
+        }
+
+        [XmlElement("OrderBy")]
+        public string OrderBy
+        {
+            get => _orderBy;
+            set => _orderBy = value.IsNullOrEmptyTrim() ? _orderBy : value;
         }
 
         [XmlAnyElement("TraceLinePatternComment")]

@@ -191,4 +191,10 @@
   <data name="Form_AlreadyUseFilterComment" xml:space="preserve">
     <value>Применить фильтр сразу вместе с поиском</value>
   </data>
+  <data name="LRSettingsScheme_OrderByComment" xml:space="preserve">
+    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденому фрагменту, указывается вместе с Description.</value>
+  </data>
+  <data name="LRSettingsScheme_RowsLimitCommentComment" xml:space="preserve">
+    <value>Ограничение по количеству строк. Сокращает использование памяти.</value>
+  </data>
 </root>

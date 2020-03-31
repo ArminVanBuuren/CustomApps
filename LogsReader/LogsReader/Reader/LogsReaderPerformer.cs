@@ -13,8 +13,41 @@ namespace LogsReader.Reader
 {
     public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
+    public class DuplicateTemplateComparer : IComparer<DataTemplate>
+    {
+        public int Compare(DataTemplate x, DataTemplate y)
+        {
+            var xDate = x.DateOfTrace ?? DateTime.MinValue;
+            var yDate = y.DateOfTrace ?? DateTime.MinValue;
+
+            int result = xDate.CompareTo(yDate);
+
+            if (result == 0)
+            {
+                if (x.ParentReader.FilePath.Equals(y.ParentReader.FilePath))
+                {
+                    return x.FoundLineID.CompareTo(y.FoundLineID);
+                }
+                else
+                {
+                    return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+    }
+
     public class LogsReaderPerformer : IDisposable
     {
+        private readonly object _syncRootMatches = new object();
+        private int _countMatches = 0;
+
+        private readonly object _syncRootResult = new object();
+        private readonly SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DuplicateTemplateComparer());
+
         private readonly IEnumerable<string> _servers;
         private readonly IEnumerable<string> _traces;
         private MTActionResult<TraceReader> _multiTaskingHandler = null;
@@ -31,7 +64,19 @@ namespace LogsReader.Reader
         /// <summary>
         /// Количество совпадений по критериям поиска
         /// </summary>
-        public int CountMatches => KvpList?.Sum(x => x.CountMatches) ?? 0;
+        public int CountMatches
+        {
+            get
+            {
+                lock (_syncRootMatches)
+                    return _countMatches;
+            }
+            internal set
+            {
+                lock (_syncRootMatches)
+                    _countMatches = value;
+            }
+        }
 
         public List<TraceReader> KvpList { get; private set; }
 
@@ -40,7 +85,7 @@ namespace LogsReader.Reader
         /// </summary>
         public LRSettingsScheme CurrentSettings { get; }
 
-        public IEnumerable<DataTemplate> ResultsOfSuccess { get; private set; }
+        public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
         public IEnumerable<DataTemplate> ResultsOfError { get; private set; }
 
         public DataFilter Filter { get; }
@@ -80,12 +125,10 @@ namespace LogsReader.Reader
 
             // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
             var maxThreads = CurrentSettings.MaxThreads <= 0 ? KvpList.Count : CurrentSettings.MaxThreads;
-            _multiTaskingHandler = new MTActionResult<TraceReader>(ReadData, KvpList, maxThreads, ThreadPriority.Lowest);
+            _multiTaskingHandler = new MTActionResult<TraceReader>(ReadData, KvpList.OrderByDescending(x => x.File.LastWriteTime).ThenByDescending(x => x.File.CreationTime), maxThreads, ThreadPriority.Lowest);
             new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
             await _multiTaskingHandler.StartAsync();
 
-
-            ResultsOfSuccess = KvpList.SelectMany(x => x.FoundResults);
             ResultsOfError = _multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
             {
                 listErr.Add(new DataTemplate(x.Source, -1, string.Empty, x.Error));
@@ -142,6 +185,7 @@ namespace LogsReader.Reader
         {
             try
             {
+                fileLog.OnFound += AddResult;
                 // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
                 using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
@@ -156,6 +200,34 @@ namespace LogsReader.Reader
             finally
             {
                 fileLog.Commit();
+                fileLog.OnFound -= AddResult;
+            }
+        }
+
+        protected void AddResult(DataTemplate item)
+        {
+            if (Filter != null && !Filter.IsAllowed(item))
+                return;
+
+            if (item.Error == null)
+                ++CountMatches;
+
+            lock (_syncRootResult)
+            {
+                var dateCurrent = item?.DateOfTrace ?? DateTime.MinValue;
+                if (_result.Count >= CurrentSettings.RowsLimit)
+                {
+                    var latest = _result.First().Key;
+                    if (latest.DateOfTrace == null || latest.DateOfTrace > dateCurrent)
+                        return;
+
+                    _result.Remove(latest);
+                    _result.Add(item, item);
+                }
+                else
+                {
+                    _result.Add(item, item);
+                }
             }
         }
 
@@ -171,7 +243,8 @@ namespace LogsReader.Reader
             KvpList?.Clear();
             _multiTaskingHandler?.Stop();
             _multiTaskingHandler = null;
-            ResultsOfSuccess = null;
+            CountMatches = 0;
+            _result.Clear();
             ResultsOfError = null;
         }
 

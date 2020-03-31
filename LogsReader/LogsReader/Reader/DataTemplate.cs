@@ -8,17 +8,17 @@ namespace LogsReader.Reader
 {
     public class DataTemplate
     {
-        private readonly TraceReader _fileLog;
         private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _date = null;
+        private string _description = null;
         private string _traceName = null;
         private string _message = string.Empty;
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
         {
             FoundLineID = foundLineID;
             IsMatched = true;
-            _fileLog = fileLog;
+            ParentReader = traceReader;
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
@@ -33,31 +33,32 @@ namespace LogsReader.Reader
             }
 
             TraceName = traceName;
-            Description = description.Trim();
+            Description = description;
             Message = message;
             TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string traceMessage)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage)
         {
             FoundLineID = foundLineID;
             IsMatched = false;
-            _fileLog = fileLog;
+            ParentReader = traceReader;
 
             ID = -1;
             TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader fileLog, int foundLineID, string traceMessage, Exception error)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, Exception error)
         {
             FoundLineID = foundLineID;
             IsMatched = false;
-            _fileLog = fileLog;
+            ParentReader = traceReader;
 
             ID = -1;
             DateOfTrace = DateTime.Now;
             Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
 
+            Error = error;
             TraceName = error.GetType().ToString();
             Description = error.Message;
             if (error is RegexMatchTimeoutException errorRegex)
@@ -71,7 +72,11 @@ namespace LogsReader.Reader
             TraceMessage = traceMessage;
         }
 
-        public int FoundLineID { get; }
+        public TraceReader ParentReader { get; }
+
+        public long FoundLineID { get; }
+
+        public Exception Error { get; }
 
         [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
         public int PrivateID { get; internal set; }
@@ -83,7 +88,7 @@ namespace LogsReader.Reader
         public int ID { get; internal set; }
 
         [DGVColumn(ColumnPosition.After, "Server")]
-        public string Server => _fileLog.Server;
+        public string Server => ParentReader.Server;
 
         [DGVColumn(ColumnPosition.After, "Trace name")]
         public string TraceName
@@ -100,11 +105,15 @@ namespace LogsReader.Reader
         }
 
         [DGVColumn(ColumnPosition.After, "File")]
-        public string File => _fileLog.FileNamePartial;
+        public string File => ParentReader.FileNamePartial;
 
         public DateTime? DateOfTrace { get; }
 
-        public string Description { get; private set; }
+        public string Description
+        {
+            get => ($"FoundLineID:{FoundLineID}\r\n{_description}").Trim();
+            private set => _description = value;
+        }
 
         public string Message
         {
@@ -141,6 +150,11 @@ namespace LogsReader.Reader
         {
             Message = input.Message;
             TraceMessage = input.TraceMessage;
+        }
+
+        public override string ToString()
+        {
+            return $"{File} | {TraceName}";
         }
     }
 }

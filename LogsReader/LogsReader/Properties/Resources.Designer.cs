@@ -202,6 +202,24 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденому фрагменту, указывается вместе с Description..
+        /// </summary>
+        internal static string LRSettingsScheme_OrderByComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_OrderByComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование памяти..
+        /// </summary>
+        internal static string LRSettingsScheme_RowsLimitCommentComment {
+            get {
+                return ResourceManager.GetString("LRSettingsScheme_RowsLimitCommentComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую..
         /// </summary>
         internal static string LRSettingsScheme_ServersComment {

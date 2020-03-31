@@ -8,6 +8,8 @@ using Utils;
 
 namespace LogsReader.Reader
 {
+    public delegate void FoundDataTemplate(DataTemplate item);
+
     public abstract class TraceReader
     {
         private readonly LogsReaderPerformer _mainReader;
@@ -16,14 +18,14 @@ namespace LogsReader.Reader
 
         protected DataTemplate Found { get; set; }
 
+        public event FoundDataTemplate OnFound;
+
         public Func<string, bool> IsMatchSearchPatternFunc => _mainReader.IsMatchSearchPatternFunc;
 
         /// <summary>
         /// Текущая схема настроек
         /// </summary>
         public LRSettingsScheme CurrentSettings => _mainReader.CurrentSettings;
-
-        private DataFilter Filter => _mainReader.Filter;
 
         protected int MaxTraceLines => CurrentSettings.MaxTraceLines;
 
@@ -34,20 +36,12 @@ namespace LogsReader.Reader
         public string FilePath { get; }
         public FileInfo File { get; }
 
-        /// <summary>
-        /// Количество совпадений по критериям поиска
-        /// </summary>
-        public int CountMatches { get; protected set; } = 0;
-
-        public int Lines { get; protected set; } = 0;
-
-        public List<DataTemplate> FoundResults { get; }
+        public long Lines { get; protected set; } = 0;
 
         protected TraceReader(string server, string filePath, LogsReaderPerformer mainReader)
         {
             _mainReader = mainReader;
 
-            FoundResults = new List<DataTemplate>();
             PastTraceLines = new Queue<string>(MaxTraceLines);
 
             Server = server;
@@ -78,7 +72,9 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                AddResult(new DataTemplate(this, Lines, Found.TraceMessage, ex));
+                if (!Found.IsMatched)
+                    AddResult(new DataTemplate(this, Lines, Found.TraceMessage, ex));
+                throw;
             }
             finally
             {
@@ -88,11 +84,7 @@ namespace LogsReader.Reader
 
         protected void AddResult(DataTemplate item)
         {
-            if(Filter != null && !Filter.IsAllowed(item))
-                return;
-            
-            ++CountMatches;
-            FoundResults.Add(item);
+            OnFound?.Invoke(item);
         }
 
         protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)

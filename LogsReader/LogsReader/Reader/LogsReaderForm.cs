@@ -191,10 +191,12 @@ namespace LogsReader.Reader
                 //alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
 
                 serversText.Text = CurrentSettings.Servers;
-                fileNames.Text = CurrentSettings.Types;
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
+                fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
+                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
+                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, rowsLimitText_TextChanged);
+
                 btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
             finally
@@ -315,7 +317,7 @@ namespace LogsReader.Reader
 
                     await MainReader.StartAsync();
 
-                    OverallResultList = new DataTemplateCollection(MainReader.ResultsOfSuccess);
+                    OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
                     OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.DateOfTrace));
 
                     if (await AssignResult(filter))
@@ -549,6 +551,7 @@ namespace LogsReader.Reader
             serversText.Enabled = !IsWorking;
             fileNames.Enabled = !IsWorking;
             maxThreadsText.Enabled = !IsWorking;
+            rowsLimitText.Enabled = !IsWorking;
             logDirText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
             dateStartFilter.Enabled = !IsWorking;
@@ -656,6 +659,14 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        private void logDirText_TextChanged(object sender, EventArgs e)
+        {
+            CurrentSettings.LogsDirectory = logDirText.Text;
+            logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
+            ValidationCheck();
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         private void typesText_TextChanged(object sender, EventArgs e)
         {
             CurrentSettings.Types = fileNames.Text;
@@ -676,52 +687,64 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void maxThreadsText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(maxThreadsText.Text, out var res))
-                MaxThreadsTextSave(res);
-        }
-
-        private void maxThreadsText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(maxThreadsText.Text, out var res))
-                res = -1;
-            MaxThreadsTextSave(res);
-        }
-
-        void MaxThreadsTextSave(int res)
-        {
-            CurrentSettings.MaxThreads = res;
-            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void logDirText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.LogsDirectory = logDirText.Text;
-            logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
-            ValidationCheck();
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
 
         private void maxLinesStackText_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(maxLinesStackText.Text, out var res))
-                MaxLinesStackTextSave(res);
+            if (int.TryParse(maxLinesStackText.Text, out var value))
+                MaxLinesStackTextSave(value);
         }
 
         private void maxLinesStackText_Leave(object sender, EventArgs e)
         {
-            if (!int.TryParse(maxLinesStackText.Text, out var res))
-                res = -1;
-
-            MaxLinesStackTextSave(res);
+            if (!int.TryParse(maxLinesStackText.Text, out var value))
+                value = -1;
+            MaxLinesStackTextSave(value);
         }
 
-        void MaxLinesStackTextSave(int res)
+        void MaxLinesStackTextSave(int value)
         {
-            CurrentSettings.MaxTraceLines = res;
+            CurrentSettings.MaxTraceLines = value;
             maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void maxThreadsText_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(maxThreadsText.Text, out var value))
+                MaxThreadsTextSave(value);
+        }
+
+        private void maxThreadsText_Leave(object sender, EventArgs e)
+        {
+            if (!int.TryParse(maxThreadsText.Text, out var value))
+                value = -1;
+            MaxThreadsTextSave(value);
+        }
+
+        void MaxThreadsTextSave(int value)
+        {
+            CurrentSettings.MaxThreads = value;
+            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void rowsLimitText_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(rowsLimitText.Text, out var value))
+                RowsLimitTextSave(value);
+        }
+
+        private void rowsLimitText_Leave(object sender, EventArgs e)
+        {
+            if (!int.TryParse(rowsLimitText.Text, out var value))
+                value = -1;
+            RowsLimitTextSave(value);
+        }
+
+        void RowsLimitTextSave(int value)
+        {
+            CurrentSettings.RowsLimit = value;
+            rowsLimitText.AssignValue(CurrentSettings.RowsLimit, rowsLimitText_TextChanged);
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 

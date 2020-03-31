@@ -29,8 +29,8 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,6 +45,8 @@ namespace LogsReader.Reader
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rowsLimitText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.trvMain = new LogsReader.Reader.CustomTreeView();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
@@ -255,6 +257,8 @@ namespace LogsReader.Reader
             // 
             // SchemePanel
             // 
+            this.SchemePanel.Controls.Add(this.label2);
+            this.SchemePanel.Controls.Add(this.rowsLimitText);
             this.SchemePanel.Controls.Add(this.label1);
             this.SchemePanel.Controls.Add(this.trvMain);
             this.SchemePanel.Controls.Add(this.maxLinesStackText);
@@ -272,6 +276,26 @@ namespace LogsReader.Reader
             this.SchemePanel.Size = new System.Drawing.Size(171, 399);
             this.SchemePanel.TabIndex = 15;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(4, 139);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(68, 15);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Rows Limit:";
+            // 
+            // rowsLimitText
+            // 
+            this.rowsLimitText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rowsLimitText.Location = new System.Drawing.Point(85, 136);
+            this.rowsLimitText.Name = "rowsLimitText";
+            this.rowsLimitText.Size = new System.Drawing.Size(83, 23);
+            this.rowsLimitText.TabIndex = 16;
+            this.rowsLimitText.TextChanged += new System.EventHandler(this.rowsLimitText_TextChanged);
+            this.rowsLimitText.Leave += new System.EventHandler(this.rowsLimitText_Leave);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -287,16 +311,16 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 139);
+            this.trvMain.Location = new System.Drawing.Point(2, 162);
             this.trvMain.Name = "trvMain";
-            treeNode5.Name = "trvServers";
-            treeNode5.Text = "Servers";
-            treeNode6.Name = "trvTypes";
-            treeNode6.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
-            this.trvMain.Size = new System.Drawing.Size(166, 260);
+            treeNode1,
+            treeNode2});
+            this.trvMain.Size = new System.Drawing.Size(166, 237);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
             // 
@@ -725,6 +749,8 @@ namespace LogsReader.Reader
         private System.Windows.Forms.DataGridViewTextBoxColumn TraceName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn File;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox rowsLimitText;
     }
 }
 
