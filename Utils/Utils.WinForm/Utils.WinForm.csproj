@@ -164,6 +164,7 @@
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="Notepad\Editor.cs" />
+    <Compile Include="Notepad\FileEditor.cs" />
     <Compile Include="Notepad\NotepadControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

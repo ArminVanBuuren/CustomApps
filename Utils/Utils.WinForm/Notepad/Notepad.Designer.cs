@@ -130,8 +130,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(1035, 648);
-            this.Controls.Add(this.MainMenuStrip);
             this.Controls.Add(this.NotepadControlItem);
+            this.Controls.Add(this.MainMenuStrip);
             this.Name = "Notepad";
             this.Text = "Notepad";
             this.MainMenuStrip.ResumeLayout(false);
