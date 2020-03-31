@@ -275,6 +275,11 @@ namespace Utils.WinForm.Notepad
             OnSomethingChanged?.Invoke(this, null);
         }
 
+        public void Focus()
+        {
+            FCTB.Focus();
+        }
+
         public virtual void Dispose()
         {
             IsDisposed = true;

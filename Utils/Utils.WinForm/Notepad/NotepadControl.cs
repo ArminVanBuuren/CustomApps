@@ -523,6 +523,10 @@ namespace Utils.WinForm.Notepad
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
         }
 
+        public new void Focus()
+        {
+            Current.Focus();
+        }
 
         public void Clear()
         {

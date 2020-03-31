@@ -110,12 +110,17 @@
             // NotepadControlItem
             // 
             this.NotepadControlItem.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.NotepadControlItem.Location = new System.Drawing.Point(0, 24);
+            this.NotepadControlItem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NotepadControlItem.Location = new System.Drawing.Point(0, 0);
             this.NotepadControlItem.Name = "NotepadControlItem";
+            this.NotepadControlItem.ReadOnly = false;
             this.NotepadControlItem.SelectedIndex = -1;
-            this.NotepadControlItem.Size = new System.Drawing.Size(1035, 624);
+            this.NotepadControlItem.Size = new System.Drawing.Size(1035, 648);
             this.NotepadControlItem.SizingGrip = false;
             this.NotepadControlItem.TabIndex = 3;
+            this.NotepadControlItem.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.NotepadControlItem.TextFont = new System.Drawing.Font("Segoe UI", 9F);
+            this.NotepadControlItem.UserCanCloseTabItem = false;
             this.NotepadControlItem.WordHighlights = false;
             this.NotepadControlItem.WordWrap = true;
             // 

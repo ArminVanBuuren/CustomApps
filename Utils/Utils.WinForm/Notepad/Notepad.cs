@@ -182,6 +182,10 @@ namespace Utils.WinForm.Notepad
             NotepadControlItem.AddDocument(headerName, bodyText, language);
         }
 
+        public new void Focus()
+        {
+            NotepadControlItem.Focus();
+        }
 
         private void XmlNotepad_Closed(object sender, EventArgs e)
         {
