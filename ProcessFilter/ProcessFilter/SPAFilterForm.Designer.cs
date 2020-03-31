@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace SPAFilter
 {
@@ -624,6 +625,7 @@ namespace SPAFilter
             this.progressBar.Size = new System.Drawing.Size(905, 9);
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
+            progressBar.Dock = DockStyle.Bottom;
             // 
             // SPAFilterForm
             // 
@@ -631,10 +633,10 @@ namespace SPAFilter
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 534);
             this.Controls.Add(this.mainTabControl);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panelTop);
-            this.Controls.Add(this.progressBar);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 39);
