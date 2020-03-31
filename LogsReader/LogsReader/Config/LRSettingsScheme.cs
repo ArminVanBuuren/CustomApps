@@ -18,7 +18,7 @@ namespace LogsReader.Config
         private string _orderBy = "Date, File, FoundLineID";
         private int _maxTraceLines = 50;
         private int _maxThreads = -1;
-        private int _rowsLimit = 9999;
+        private int _rowsLimit = 999;
         private string _logsDirectory = @"C:\TEST";
         private LRTraceLinePattern _traceLinePattern = new LRTraceLinePattern();
 
