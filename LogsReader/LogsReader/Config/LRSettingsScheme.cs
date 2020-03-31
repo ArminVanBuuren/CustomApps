@@ -49,7 +49,7 @@ namespace LogsReader.Config
                     _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
                     _maxTraceLines = 1;
                     _maxThreads = -1;
-                    _orderBy = "File desc, ID desc";
+                    _orderBy = "Date desc, ID";
                     _traceLinePattern = new LRTraceLinePattern(_schemeName);
                     break;
                 case "MGA":
