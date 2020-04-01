@@ -176,7 +176,7 @@ namespace LogsReader
                                 form.ThreadsUsage.Text = threadsUsage;
                                 form.RAMUsage.Text = ramUsage;
 
-                                if (form.Progress > 0 && form.Progress < 100)
+                                if ((form.Progress > 0 && form.Progress < 100) || (form.Progress == 0 && form.IsWorking))
                                 {
                                     inProgress++;
                                     progressItems += form.Progress;
