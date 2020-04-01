@@ -120,6 +120,7 @@ namespace LogsReader.Reader
                 #endregion
 
                 var tooltipPrintXML = new ToolTip {InitialDelay = 100};
+                tooltipPrintXML.SetToolTip(txtPattern, Resources.Form_SearchComment);
                 tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
                 tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
                 tooltipPrintXML.SetToolTip(fileNames, Resources.LRSettingsScheme_TypesComment);
@@ -637,7 +638,7 @@ namespace LogsReader.Reader
 
             //заполняем список серверов из параметра
             trvMain.Nodes["trvServers"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
+            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if (s.Key.IsNullOrEmptyTrim())
                     continue;
@@ -665,7 +666,7 @@ namespace LogsReader.Reader
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.CurrentCultureIgnoreCase).OrderBy(p => p.Key))
+            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if (s.Key.IsNullOrEmptyTrim())
                     continue;

@@ -134,11 +134,11 @@
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
-    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline.
+    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline и CultureInvariant. Таймаут выполнения - 15 секунд.
         Паттерн StartLineWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки.</value>
   </data>
   <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
-    <value>Типы файлов. Указать через запятую.</value>
+    <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
   </data>
   <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
     <value>Config "{0}" is incorrect! Moved to "{1}".
@@ -192,9 +192,12 @@
     <value>Применить фильтр сразу вместе с поиском</value>
   </data>
   <data name="LRSettingsScheme_OrderByComment" xml:space="preserve">
-    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description.</value>
+    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую в выражении можно указать несколько полей сортировки, а также использовать операцию descending.</value>
   </data>
   <data name="LRSettingsScheme_RowsLimitCommentComment" xml:space="preserve">
     <value>Ограничение по количеству строк. Сокращает использование виртуальной памяти.</value>
+  </data>
+  <data name="Form_SearchComment" xml:space="preserve">
+    <value>Используется инвариантная культура, без учета регистра. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>
   </data>
 </root>

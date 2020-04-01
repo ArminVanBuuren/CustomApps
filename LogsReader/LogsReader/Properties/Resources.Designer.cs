@@ -108,6 +108,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Используется инвариантная культура, без учета регистра. При использовании поиска по Regex - таймаут выполнения 1 секунда..
+        /// </summary>
+        internal static string Form_SearchComment {
+            get {
+                return ResourceManager.GetString("Form_SearchComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
@@ -202,7 +211,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description..
+        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую в выражении можно указать несколько полей сортировки, а также использовать операцию descending..
         /// </summary>
         internal static string LRSettingsScheme_OrderByComment {
             get {
@@ -229,7 +238,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline.
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline и CultureInvariant. Таймаут выполнения - 15 секунд.
         ///        Паттерн StartLineWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки..
         /// </summary>
         internal static string LRSettingsScheme_TraceLinePatternComment {
@@ -239,7 +248,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Типы файлов. Указать через запятую..
+        ///   Looks up a localized string similar to Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн..
         /// </summary>
         internal static string LRSettingsScheme_TypesComment {
             get {

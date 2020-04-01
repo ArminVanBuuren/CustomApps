@@ -89,7 +89,7 @@ namespace LogsReader.Reader
 
         protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
         {
-            // замена \r чинит баг с некорректным парсингом
+            // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
             foreach (var item in PatternItems)
             {
@@ -132,7 +132,7 @@ namespace LogsReader.Reader
 
         protected Match IsLineMatch(string input)
         {
-            // замена \r чинит баг с некорректным парсингом
+            // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
             foreach (var regexPatt in PatternItems.Select(x => x.RegexItem))
             {

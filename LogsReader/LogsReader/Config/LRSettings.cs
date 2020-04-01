@@ -16,7 +16,7 @@ namespace LogsReader.Config
     {
         private static object _sync = new object();
         static string SettingsPath => $"{ASSEMBLY.ApplicationFilePath}.xml";
-        static string IncorrectSettingsPath => $"{SettingsPath}_incorrect.bak";
+        static string FailedSettingsPath => $"{SettingsPath}_failed.bak";
 
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
 
@@ -40,8 +40,8 @@ namespace LogsReader.Config
                 {
                     _schemes = value ?? _schemes;
                     Schemes = _schemes != null && _schemes.Length > 0
-                        ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
-                        : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
+                        ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
+                        : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
                 }
                 catch (ArgumentException ex)
                 {
@@ -53,8 +53,8 @@ namespace LogsReader.Config
         public LRSettings()
         {
             Schemes = SchemeList != null && SchemeList.Length > 0
-                ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.CurrentCultureIgnoreCase)
-                : new Dictionary<string, LRSettingsScheme>(StringComparer.CurrentCultureIgnoreCase);
+                ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
+                : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public static async Task SerializeAsync(LRSettings settings)
@@ -102,17 +102,17 @@ namespace LogsReader.Config
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 Utils.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
                     Path.GetFileName(SettingsPath),
-                    Path.GetFileName(IncorrectSettingsPath),
+                    Path.GetFileName(FailedSettingsPath),
                     message), "Deserialize Error");
 
-                if (File.Exists(IncorrectSettingsPath))
+                if (File.Exists(FailedSettingsPath))
                 {
-                    File.SetAttributes(IncorrectSettingsPath, FileAttributes.Normal);
-                    File.Delete(IncorrectSettingsPath);
+                    File.SetAttributes(FailedSettingsPath, FileAttributes.Normal);
+                    File.Delete(FailedSettingsPath);
                 }
 
                 File.SetAttributes(SettingsPath, FileAttributes.Normal);
-                File.Copy(SettingsPath, IncorrectSettingsPath);
+                File.Copy(SettingsPath, FailedSettingsPath);
                 File.Delete(SettingsPath);
             }
 

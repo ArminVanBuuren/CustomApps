@@ -16,8 +16,8 @@ namespace LogsReader.Reader
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
         {
-            FoundLineID = foundLineID;
             IsMatched = true;
+            FoundLineID = foundLineID;
             ParentReader = traceReader;
 
             ID = int.TryParse(strID, out var id) ? id : -1;
@@ -40,8 +40,8 @@ namespace LogsReader.Reader
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage)
         {
-            FoundLineID = foundLineID;
             IsMatched = false;
+            FoundLineID = foundLineID;
             ParentReader = traceReader;
 
             ID = -1;
@@ -50,8 +50,8 @@ namespace LogsReader.Reader
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, Exception error)
         {
-            FoundLineID = foundLineID;
             IsMatched = false;
+            FoundLineID = foundLineID;
             ParentReader = traceReader;
 
             ID = -1;
@@ -111,7 +111,7 @@ namespace LogsReader.Reader
 
         public string Description
         {
-            get => ($"FoundLineID:{FoundLineID}\r\n{_description}").Trim();
+            get => $"FoundLineID:{FoundLineID}\r\n{_description}".Trim();
             private set => _description = value;
         }
 

@@ -49,11 +49,11 @@ namespace LogsReader.Reader
             #region фильтр по полю Trace
             TraceNameLikeList = traceNameLike.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceNameLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceNameLike.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
 
             TraceNameNotLikeList = traceNameNotLike.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceNameNotLike.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceNameNotLike.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
 
             if (TraceNameLikeList.Count > 0 && TraceNameNotLikeList.Count > 0 && !TraceNameLikeList.Except(TraceNameNotLikeList).Any())
                 throw new Exception(@"Items in ""Trace-name Like"" cannot contain items in ""Trace-name NOT Like""! Please remove the same.");
@@ -73,7 +73,7 @@ namespace LogsReader.Reader
             #region фильтр по полю Message
             TraceMessageList = traceMessage.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceMessage.Split(',').GroupBy(p => p.Trim(), StringComparer.CurrentCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceMessage.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
             if (TraceMessageList.Any())
                 _checkTraceMessage = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageList.Any(p => input.TraceMessage.StringContains(p));
             else

@@ -144,15 +144,8 @@ namespace LogsReader.Config
         {
             cdataResult = null;
             if (input != null)
-            {
                 if (input.Length > 0)
-                {
-                    if (input[0].NodeType == XmlNodeType.CDATA)
-                        cdataResult = input;
-                    else
-                        cdataResult = new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
-                }
-            }
+                    cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
 
             if (cdataResult == null || cdataResult.Length == 0)
                 return null;
@@ -168,7 +161,7 @@ namespace LogsReader.Config
             }
             else
             {
-                return new Regex(text, RegexOptions.Compiled | RegexOptions.Singleline, MATCH_TIMEOUT);
+                return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, MATCH_TIMEOUT);
             }
         }
     }

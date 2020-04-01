@@ -8,11 +8,7 @@ namespace LogsReader.Reader
     {
         public Regex StartLineWith => CurrentSettings.TraceLinePattern.StartLineWith;
 
-        //public Regex EndLineWith => CurrentSettings.TraceLinePattern.EndLineWith;
-
-        public TraceReaderStartWith(string server, string filePath, LogsReaderPerformer mainReader) : base(server, filePath, mainReader)
-        {
-        }
+        public TraceReaderStartWith(string server, string filePath, LogsReaderPerformer mainReader) : base(server, filePath, mainReader) { }
 
         public override void ReadLine(string line)
         {

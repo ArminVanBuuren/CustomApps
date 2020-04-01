@@ -13,44 +13,13 @@ namespace LogsReader.Reader
 {
     public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
-    public class DuplicateTemplateComparer : IComparer<DataTemplate>
-    {
-        public int Compare(DataTemplate x, DataTemplate y)
-        {
-            var xDate = x.DateOfTrace ?? DateTime.MinValue;
-            var yDate = y.DateOfTrace ?? DateTime.MinValue;
-
-            int result = xDate.CompareTo(yDate);
-
-            if (result == 0)
-            {
-                if (x.ParentReader.FilePath.Equals(y.ParentReader.FilePath))
-                {
-                    return x.FoundLineID.CompareTo(y.FoundLineID);
-                }
-                else
-                {
-                    if (x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial))
-                    {
-                        return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
-                    }
-                    return string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
-                }
-            }
-            else
-            {
-                return result;
-            }
-        }
-    }
-
     public class LogsReaderPerformer : IDisposable
     {
         private readonly object _syncRootMatches = new object();
         private int _countMatches = 0;
 
         private readonly object _syncRootResult = new object();
-        private readonly SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DuplicateTemplateComparer());
+        private readonly SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 
         private readonly IEnumerable<string> _servers;
         private readonly IEnumerable<string> _traces;
@@ -101,7 +70,7 @@ namespace LogsReader.Reader
                 if (!REGEX.Verify(findMessage))
                     throw new ArgumentException($"Pattern \"{findMessage}\" is incorrect for use as regular expression! Please check.");
 
-                var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase, new TimeSpan(0, 0, 5));
+                var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, new TimeSpan(0, 0, 1));
                 IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
             }
             else
