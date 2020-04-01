@@ -305,9 +305,10 @@ namespace SPAFilter
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
             var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { MessageBox.Show(@"Hello! This app was created for comfortable configuration of SPA :)", $"© {ASSEMBLY.Company}", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); };
+            autor.Click += (sender, args) => { MessageBox.Show(@"Hello! This app was created for comfortable SPA configuration.", $"© {ASSEMBLY.Company}", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); };
             statusStrip.Items.Add(autor);
 
+            statusStrip.Items.Add(new ToolStripSeparator());
             statusStrip.Items.Add(new ToolStripStatusLabel("Processes:") { Margin = statusStripItemsPaddingStart });
             BPCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
             statusStrip.Items.Add(BPCount);
@@ -1221,6 +1222,7 @@ namespace SPAFilter
                         SizingGrip = true,
                         UserCanCloseTabItem = true
                     };
+                    _notepad.CenterToScreen();
                     _notepad.Closed += _notepad_Closed;
                     _notepad.Show();
                 }

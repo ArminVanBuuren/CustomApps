@@ -100,7 +100,7 @@ namespace SPAFilter
             this.ProcessesTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ProcessesTextBox.Location = new System.Drawing.Point(76, 11);
             this.ProcessesTextBox.Name = "ProcessesTextBox";
-            this.ProcessesTextBox.Size = new System.Drawing.Size(742, 23);
+            this.ProcessesTextBox.Size = new System.Drawing.Size(744, 23);
             this.ProcessesTextBox.TabIndex = 1;
             // 
             // ROBPOperationTextBox
@@ -110,7 +110,7 @@ namespace SPAFilter
             this.ROBPOperationTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ROBPOperationTextBox.Location = new System.Drawing.Point(138, 40);
             this.ROBPOperationTextBox.Name = "ROBPOperationTextBox";
-            this.ROBPOperationTextBox.Size = new System.Drawing.Size(680, 23);
+            this.ROBPOperationTextBox.Size = new System.Drawing.Size(682, 23);
             this.ROBPOperationTextBox.TabIndex = 2;
             // 
             // label1
@@ -226,7 +226,7 @@ namespace SPAFilter
             this.mainTabControl.Location = new System.Drawing.Point(3, 180);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(915, 329);
+            this.mainTabControl.Size = new System.Drawing.Size(915, 320);
             this.mainTabControl.TabIndex = 14;
             // 
             // ServiceInstances
@@ -237,7 +237,7 @@ namespace SPAFilter
             this.ServiceInstances.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ServiceInstances.Location = new System.Drawing.Point(4, 24);
             this.ServiceInstances.Name = "ServiceInstances";
-            this.ServiceInstances.Size = new System.Drawing.Size(907, 301);
+            this.ServiceInstances.Size = new System.Drawing.Size(907, 292);
             this.ServiceInstances.TabIndex = 5;
             this.ServiceInstances.Text = "Service Instances";
             // 
@@ -302,7 +302,7 @@ namespace SPAFilter
             this.dataGridServiceInstances.ReadOnly = true;
             this.dataGridServiceInstances.RowHeadersVisible = false;
             this.dataGridServiceInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridServiceInstances.Size = new System.Drawing.Size(908, 278);
+            this.dataGridServiceInstances.Size = new System.Drawing.Size(908, 269);
             this.dataGridServiceInstances.TabIndex = 6;
             this.dataGridServiceInstances.DoubleClick += new System.EventHandler(this.DataGridServiceInstances_DoubleClick);
             // 
@@ -313,7 +313,7 @@ namespace SPAFilter
             this.Processes.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Processes.Location = new System.Drawing.Point(4, 24);
             this.Processes.Name = "Processes";
-            this.Processes.Size = new System.Drawing.Size(940, 301);
+            this.Processes.Size = new System.Drawing.Size(907, 292);
             this.Processes.TabIndex = 0;
             this.Processes.Text = "Processes";
             // 
@@ -331,7 +331,7 @@ namespace SPAFilter
             this.dataGridProcesses.ReadOnly = true;
             this.dataGridProcesses.RowHeadersVisible = false;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcesses.Size = new System.Drawing.Size(940, 301);
+            this.dataGridProcesses.Size = new System.Drawing.Size(907, 292);
             this.dataGridProcesses.TabIndex = 0;
             this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -342,7 +342,7 @@ namespace SPAFilter
             this.Operations.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Operations.Location = new System.Drawing.Point(4, 24);
             this.Operations.Name = "Operations";
-            this.Operations.Size = new System.Drawing.Size(940, 301);
+            this.Operations.Size = new System.Drawing.Size(907, 292);
             this.Operations.TabIndex = 1;
             this.Operations.Text = "Operations";
             // 
@@ -360,7 +360,7 @@ namespace SPAFilter
             this.dataGridOperations.ReadOnly = true;
             this.dataGridOperations.RowHeadersVisible = false;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperations.Size = new System.Drawing.Size(940, 301);
+            this.dataGridOperations.Size = new System.Drawing.Size(907, 292);
             this.dataGridOperations.TabIndex = 0;
             this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridOperationsResult_CellDoubleClick);
             // 
@@ -371,7 +371,7 @@ namespace SPAFilter
             this.Scenarios.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Scenarios.Location = new System.Drawing.Point(4, 24);
             this.Scenarios.Name = "Scenarios";
-            this.Scenarios.Size = new System.Drawing.Size(940, 301);
+            this.Scenarios.Size = new System.Drawing.Size(907, 292);
             this.Scenarios.TabIndex = 2;
             this.Scenarios.Text = "Scenarios";
             // 
@@ -389,7 +389,7 @@ namespace SPAFilter
             this.dataGridScenarios.ReadOnly = true;
             this.dataGridScenarios.RowHeadersVisible = false;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenarios.Size = new System.Drawing.Size(940, 301);
+            this.dataGridScenarios.Size = new System.Drawing.Size(907, 292);
             this.dataGridScenarios.TabIndex = 5;
             this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridScenariosResult_CellDoubleClick);
             // 
@@ -400,7 +400,7 @@ namespace SPAFilter
             this.Commands.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Commands.Location = new System.Drawing.Point(4, 24);
             this.Commands.Name = "Commands";
-            this.Commands.Size = new System.Drawing.Size(940, 301);
+            this.Commands.Size = new System.Drawing.Size(907, 292);
             this.Commands.TabIndex = 3;
             this.Commands.Text = "Commands";
             // 
@@ -418,7 +418,7 @@ namespace SPAFilter
             this.dataGridCommands.ReadOnly = true;
             this.dataGridCommands.RowHeadersVisible = false;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommands.Size = new System.Drawing.Size(940, 301);
+            this.dataGridCommands.Size = new System.Drawing.Size(907, 292);
             this.dataGridCommands.TabIndex = 1;
             this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridCommandsResult_CellMouseDoubleClick);
             // 
@@ -435,7 +435,7 @@ namespace SPAFilter
             this.GenerateSC.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.GenerateSC.Location = new System.Drawing.Point(4, 24);
             this.GenerateSC.Name = "GenerateSC";
-            this.GenerateSC.Size = new System.Drawing.Size(940, 301);
+            this.GenerateSC.Size = new System.Drawing.Size(907, 292);
             this.GenerateSC.TabIndex = 4;
             this.GenerateSC.Text = "Generate SC";
             // 
@@ -536,9 +536,9 @@ namespace SPAFilter
             // PrintXMLButton
             // 
             this.PrintXMLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintXMLButton.Location = new System.Drawing.Point(725, 57);
+            this.PrintXMLButton.Location = new System.Drawing.Point(736, 57);
             this.PrintXMLButton.Name = "PrintXMLButton";
-            this.PrintXMLButton.Size = new System.Drawing.Size(93, 23);
+            this.PrintXMLButton.Size = new System.Drawing.Size(84, 23);
             this.PrintXMLButton.TabIndex = 14;
             this.PrintXMLButton.Text = global::SPAFilter.Properties.Resources.Form_PrintXMLFiles_Button;
             this.PrintXMLButton.UseVisualStyleBackColor = true;
@@ -561,7 +561,7 @@ namespace SPAFilter
             this.ServiceCatalogTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ServiceCatalogTextBox.Location = new System.Drawing.Point(138, 67);
             this.ServiceCatalogTextBox.Name = "ServiceCatalogTextBox";
-            this.ServiceCatalogTextBox.Size = new System.Drawing.Size(680, 23);
+            this.ServiceCatalogTextBox.Size = new System.Drawing.Size(682, 23);
             this.ServiceCatalogTextBox.TabIndex = 33;
             // 
             // ServiceCatalogOpenButton
@@ -618,14 +618,12 @@ namespace SPAFilter
             // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(8, 491);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(3, 500);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(905, 9);
+            this.progressBar.Size = new System.Drawing.Size(915, 9);
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
-            progressBar.Dock = DockStyle.Bottom;
             // 
             // SPAFilterForm
             // 
@@ -639,7 +637,7 @@ namespace SPAFilter
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(500, 39);
+            this.MinimumSize = new System.Drawing.Size(530, 39);
             this.Name = "SPAFilterForm";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
