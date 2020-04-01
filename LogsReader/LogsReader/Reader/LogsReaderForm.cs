@@ -63,7 +63,7 @@ namespace LogsReader.Reader
 
         public int Progress
         {
-            get => progressBar.Value;
+            get => IsWorking ? progressBar.Value : 100;
             private set => progressBar.Value = value;
         }
 
