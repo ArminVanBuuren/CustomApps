@@ -1398,11 +1398,11 @@ namespace SPAFilter
 
             foreach (DataGridViewCell cell in row.Cells)
             {
-                if (!cell.OwningColumn.Name.Like(cellName) || !cell.OwningColumn.HeaderText.Like(cellName))
-                    continue;
-
-                result = cell.Value;
-                return true;
+                if (cell.OwningColumn.Name.Like(cellName) || cell.OwningColumn.HeaderText.Like(cellName))
+                {
+                    result = cell.Value;
+                    return true;
+                }
             }
 
             return false;
