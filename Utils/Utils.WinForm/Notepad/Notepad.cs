@@ -182,6 +182,11 @@ namespace Utils.WinForm.Notepad
             NotepadControlItem.AddDocument(headerName, bodyText, language);
         }
 
+        public new void CenterToScreen()
+        {
+            base.CenterToScreen();
+        }
+
         public new void Focus()
         {
             NotepadControlItem.Focus();
