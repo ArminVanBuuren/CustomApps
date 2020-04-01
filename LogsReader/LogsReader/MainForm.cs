@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
 using LogsReader.Reader;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
 
 namespace LogsReader
@@ -167,12 +168,26 @@ namespace LogsReader
                             var threadsUsage = $"{currentProcess.Threads.Count,-2}";
                             var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
 
+                            int inProgress = 0;
+                            int progressItems = 0;
                             foreach (var form in AllForms.Values)
                             {
                                 form.CPUUsage.Text = cpuUsage;
                                 form.ThreadsUsage.Text = threadsUsage;
                                 form.RAMUsage.Text = ramUsage;
+
+                                if (form.Progress > 0 && form.Progress < 100)
+                                {
+                                    inProgress++;
+                                    progressItems += form.Progress;
+                                }
                             }
+
+                            if (inProgress == 0)
+                                TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+                            else
+                                TaskbarManager.Instance.SetProgressValue(progressItems, inProgress * 100);
+
                         }));
                     }
                     Thread.Sleep(1000);

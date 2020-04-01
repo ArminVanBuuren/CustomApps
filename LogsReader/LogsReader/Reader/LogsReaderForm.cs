@@ -47,7 +47,6 @@ namespace LogsReader.Reader
         /// </summary>
         public bool IsWorking { get; private set; } = false;
 
-
         /// <summary>
         /// Юзерские настройки 
         /// </summary>
@@ -58,11 +57,15 @@ namespace LogsReader.Reader
         /// </summary>
         public LRSettingsScheme CurrentSettings { get; private set; }
 
-
         public DataTemplateCollection OverallResultList { get; private set; }
 
         public LogsReaderPerformer MainReader { get; private set; }
 
+        public int Progress
+        {
+            get => progressBar.Value;
+            private set => progressBar.Value = value;
+        }
 
         public LogsReaderForm()
         {
@@ -362,7 +365,7 @@ namespace LogsReader.Reader
                 Invoke(new MethodInvoker(delegate
                 {
                     _findedInfo.Text = countMatches.ToString();
-                    progressBar.Value = percentOfProgeress;
+                    Progress = percentOfProgeress;
                     _completedFilesStatus.Text = filesCompleted.ToString();
                     _totalFilesStatus.Text = totalFiles.ToString();
                 }));
@@ -370,7 +373,7 @@ namespace LogsReader.Reader
             else
             {
                 _findedInfo.Text = countMatches.ToString();
-                progressBar.Value = percentOfProgeress;
+                Progress = percentOfProgeress;
                 _completedFilesStatus.Text = filesCompleted.ToString();
                 _totalFilesStatus.Text = totalFiles.ToString();
             }
@@ -398,7 +401,7 @@ namespace LogsReader.Reader
                 fileName = Path.GetFileName(desctination);
 
                 int i = 0;
-                progressBar.Value = 0;
+                Progress = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
                     await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "File", "Trace name", "Date", "Description", "Message"}));
@@ -409,7 +412,7 @@ namespace LogsReader.Reader
                         await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
-                        progressBar.Value = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
+                        Progress = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
                     }
                     writer.Close();
                 }
@@ -422,7 +425,7 @@ namespace LogsReader.Reader
             }
             finally
             {
-                progressBar.Value = 100;
+                Progress = 100;
                 btnClear.Enabled = true;
                 ValidationCheck(false);
                 dgvFiles.Focus();
@@ -811,7 +814,7 @@ namespace LogsReader.Reader
 
             ClearDGV();
 
-            progressBar.Value = 0;
+            Progress = 0;
             _completedFilesStatus.Text = @"0";
             _totalFilesStatus.Text = @"0";
             _findedInfo.Text = @"0";
