@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Utils;
 
 namespace SPAFilter.SPA.Components.SRI
 {
@@ -19,7 +20,7 @@ namespace SPAFilter.SPA.Components.SRI
             if (xName == null || yName == null)
                 return false;
 
-            return xName.Equals(yName, StringComparison.CurrentCultureIgnoreCase);
+            return xName.Like(yName);
         }
 
         public int GetHashCode(XmlNode obj)

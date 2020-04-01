@@ -666,7 +666,7 @@ namespace SPAFilter
                     if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
                         return;
 
-                    var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Equals(p.Name, StringComparison.CurrentCultureIgnoreCase)));
+                    var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Like(p.Name)));
                     foreach (var operation in scOperations)
                     {
                         if (operation is CatalogOperation catalogOperation)
@@ -1398,7 +1398,7 @@ namespace SPAFilter
 
             foreach (DataGridViewCell cell in row.Cells)
             {
-                if (!cell.OwningColumn.Name.Equals(cellName, StringComparison.CurrentCultureIgnoreCase))
+                if (!cell.OwningColumn.Name.Like(cellName) || !cell.OwningColumn.HeaderText.Like(cellName))
                     continue;
 
                 result = cell.Value;

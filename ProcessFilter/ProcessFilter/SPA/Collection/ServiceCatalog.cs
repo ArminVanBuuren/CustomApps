@@ -128,7 +128,7 @@ namespace SPAFilter.SPA.Collection
 
             // вытаскиваем из предыдущего списка все с типом subscription
             var subscriptionRFSCFSsList = allRFSCFSsList
-                .Where(p => p.Key.Attributes != null && p.Key.Attributes["base"] == null && p.Key.Attributes["processType"] != null && p.Key.Attributes["processType"].Value.Equals("Subscription", StringComparison.CurrentCultureIgnoreCase))
+                .Where(p => p.Key.Attributes != null && p.Key.Attributes["base"] == null && p.Key.Attributes["processType"] != null && p.Key.Attributes["processType"].Value.Like("Subscription"))
                 .ToDictionary(p => p.Key, p => p.Value);
 
             // исключаем все subscription, чтобы заново не обрабатывать
@@ -222,9 +222,9 @@ namespace SPAFilter.SPA.Collection
 
                 if (hostType.IsNullOrEmptyTrim())
                     throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
-                if (processType.Equals("CancelHostType", StringComparison.CurrentCultureIgnoreCase))
+                if (processType.Like("CancelHostType"))
                     continue;
-                if(AllRFS.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is RFSOperation) && ((RFSOperation)p.Bindings.Base).RFSName.Equals(rfsName, StringComparison.CurrentCultureIgnoreCase)))
+                if(AllRFS.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is RFSOperation operation) && operation.RFSName.Like(rfsName)))
                     throw new Exception($"{rfsName} already exist.");
 
                 

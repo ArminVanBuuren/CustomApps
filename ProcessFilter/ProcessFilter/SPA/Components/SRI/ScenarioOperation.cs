@@ -85,7 +85,7 @@ namespace SPAFilter.SPA.Components.SRI
             if (!catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                 return;
 
-            foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Equals(type, StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Like(type)))
             {
                 rfs.ChildCFSList.Clear();
                 rfs.IncludedToScenarios.Add(this);
@@ -106,7 +106,7 @@ namespace SPAFilter.SPA.Components.SRI
             Preload(scenarioNode, scenarioName, catalog);
 
             var isDropped = scenarioNode.Attributes?["sendType"]?.Value;
-            if (isDropped != null && isDropped.Equals("Drop", StringComparison.CurrentCultureIgnoreCase))
+            if (isDropped != null && isDropped.Like("Drop"))
                 IsDropped = true;
 
             var scenariosRFSs = XPATH.Select(navigator, $"/Configuration/ScenarioList/Scenario[@name='{ScenarioName}']/RFS");
@@ -220,7 +220,7 @@ namespace SPAFilter.SPA.Components.SRI
                         notExistRFS.ChildRFSList.AddRange(notExistRFS.ChildRFSList);
                         rfsOperationList.Add(notExistRFS);
 
-                        if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
+                        if (useType != null && useType.Like("Mandatory"))
                             result.MandatoryList.Add(notExistRFS);
                         else
                             result.ChildList.Add(notExistRFS);
@@ -230,7 +230,7 @@ namespace SPAFilter.SPA.Components.SRI
                 {
                     foreach (var rfs in currentScenarioRFS)
                     {
-                        if (useType != null && useType.Equals("Mandatory", StringComparison.CurrentCultureIgnoreCase))
+                        if (useType != null && useType.Like("Mandatory"))
                             result.MandatoryList.Add(rfs);
                         else
                             result.ChildList.Add(rfs);

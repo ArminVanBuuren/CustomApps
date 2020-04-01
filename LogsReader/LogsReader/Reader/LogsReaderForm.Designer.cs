@@ -622,9 +622,9 @@ namespace LogsReader.Reader
             this.groupBoxFilter.Controls.Add(this.traceNameLikeFilter);
             this.groupBoxFilter.Controls.Add(this.label9);
             this.groupBoxFilter.Controls.Add(this.label7);
-            this.groupBoxFilter.Location = new System.Drawing.Point(2, 19);
+            this.groupBoxFilter.Location = new System.Drawing.Point(2, 20);
             this.groupBoxFilter.Name = "groupBoxFilter";
-            this.groupBoxFilter.Size = new System.Drawing.Size(1294, 76);
+            this.groupBoxFilter.Size = new System.Drawing.Size(1294, 75);
             this.groupBoxFilter.TabIndex = 28;
             this.groupBoxFilter.TabStop = false;
             // 

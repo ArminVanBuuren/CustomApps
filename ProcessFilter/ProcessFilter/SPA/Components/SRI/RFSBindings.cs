@@ -124,7 +124,7 @@ namespace SPAFilter.SPA.Components.SRI
 
                         AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
 
-                        if (isMarker != null && isMarker.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                        if (isMarker != null && isMarker.Like("true"))
                         {
                             isMarkesCFSList.Add(cfsName);
                         }

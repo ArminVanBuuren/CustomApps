@@ -19,14 +19,14 @@ namespace SPAFilter.SPA.SC
             navigator.Select( "//RegisteredList/*", out var getServices);
             navigator.Select( "//RegisteredList/@HaltMode", out var getHaltMode);
             navigator.Select( "//RegisteredList/@Type", out var getType);
-            var isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Equals("CancelOperation", StringComparison.CurrentCultureIgnoreCase));
-            var isAny = getType != null && getType.Count > 0 && getType.First().Value.Equals("AnyOfListed", StringComparison.CurrentCultureIgnoreCase);
+            var isDependency = getHaltMode != null && getHaltMode.Count > 0 && (getHaltMode.First().Value.Like("CancelOperation"));
+            var isAny = getType != null && getType.Count > 0 && getType.First().Value.Like("AnyOfListed");
 
             if (getServices != null)
             {
                 foreach (var srv in getServices)
                 {
-                    if (srv.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
+                    if (srv.NodeName.Like("Include"))
                         continue;
 
                     if (isAttributeContains(srv, "Type", "Restricted"))
@@ -55,10 +55,10 @@ namespace SPAFilter.SPA.SC
 
             foreach (XmlAttribute attr in xmlResult.Node.Attributes)
             {
-                if (!attr.Name.Equals(attributeName, StringComparison.CurrentCultureIgnoreCase))
+                if (!attr.Name.Like(attributeName))
                     continue;
 
-                if (attr.Value.Equals(typeValue, StringComparison.CurrentCultureIgnoreCase))
+                if (attr.Value.Like(typeValue))
                 {
                     return true;
                 }

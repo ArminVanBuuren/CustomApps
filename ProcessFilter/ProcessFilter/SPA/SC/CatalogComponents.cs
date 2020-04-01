@@ -56,7 +56,7 @@ namespace SPAFilter.SPA.SC
 
         static void RemovePrefix(ref string operationName, string prefix)
         {
-            if (operationName.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+            if (operationName.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
             {
                 operationName = operationName.Substring(prefix.Length, operationName.Length - prefix.Length);
             }
@@ -69,7 +69,7 @@ namespace SPAFilter.SPA.SC
 
             foreach (var res in result)
             {
-                if (res.NodeName.Equals("Include", StringComparison.CurrentCultureIgnoreCase))
+                if (res.NodeName.Like("Include"))
                     continue;
 
                 if (BindingServices.isAttributeContains(res, "Type", "Restricted"))
@@ -87,7 +87,7 @@ namespace SPAFilter.SPA.SC
             foreach (var existhostOp in _hostOperations)
             {
                 //string xmlTEMP = string.Join("\r\n\r\n", newHostOp.XML_BODY) + "\r\n\r\n" + string.Join("\r\n\r\n", existhostOp.XML_BODY);
-                if (existhostOp.HostOperationName.Equals(newHostOp.HostOperationName, StringComparison.CurrentCultureIgnoreCase))
+                if (existhostOp.HostOperationName.Like(newHostOp.HostOperationName))
                 {
                     foreach (var srvCode in newServices.Values)
                     {
@@ -106,7 +106,7 @@ namespace SPAFilter.SPA.SC
                     return true;
                 }
 
-                if (!existhostOp.HostType.Equals(newHostOp.HostType, StringComparison.CurrentCultureIgnoreCase))
+                if (!existhostOp.HostType.Like(newHostOp.HostType))
                     continue;
 
                 var serviceForRemove = new List<string>();

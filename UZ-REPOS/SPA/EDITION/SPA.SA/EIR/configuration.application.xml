@@ -1,4 +1,4 @@
-<Configuration>
+﻿<Configuration>
   <serviceInstances>
     <serviceInstance hardwareID="EI:EIR">
       <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">

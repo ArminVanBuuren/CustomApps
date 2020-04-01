@@ -67,7 +67,7 @@ namespace SPAFilter.SPA
             if (!(obj is DriveTemplate objRes))
                 return false;
 
-            if (!objRes.FilePath.IsNullOrEmptyTrim() && !this.FilePath.IsNullOrEmptyTrim() && objRes.FilePath.Equals(this.FilePath, StringComparison.CurrentCultureIgnoreCase))
+            if (!objRes.FilePath.IsNullOrEmptyTrim() && !this.FilePath.IsNullOrEmptyTrim() && objRes.FilePath.Like(this.FilePath))
                 return true;
 
             return RuntimeHelpers.Equals(this, obj);

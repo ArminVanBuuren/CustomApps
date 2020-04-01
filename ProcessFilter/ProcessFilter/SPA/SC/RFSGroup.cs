@@ -18,7 +18,7 @@ namespace SPAFilter.SPA.SC
             DependenceRFSList = listOfRFS;
             foreach (var rfsName in DependenceRFSList)
             {
-                if (rfsName.StartsWith("RFS_", StringComparison.CurrentCultureIgnoreCase))
+                if (rfsName.StartsWith("RFS_", StringComparison.InvariantCultureIgnoreCase))
                     Name += "_" + rfsName.Substring(4, rfsName.Length - 4);
                 else
                     Name += "_" + rfsName;

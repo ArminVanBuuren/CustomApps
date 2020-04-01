@@ -25,7 +25,7 @@ namespace SPAFilter.SPA.Components
 
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
 
-        public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.CurrentCultureIgnoreCase);
+        public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.InvariantCultureIgnoreCase);
 
         [DGVColumn(ColumnPosition.Last, "IsCorrect", false)]
         public bool IsCorrect { get; internal set; } = false;

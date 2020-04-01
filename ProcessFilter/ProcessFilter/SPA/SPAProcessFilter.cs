@@ -22,7 +22,7 @@ namespace SPAFilter.SPA
     {
         //readonly object BP_OP_SYNC = new object();
         readonly object ACTIVATORS_SYNC = new object();
-        readonly Dictionary<string, ServiceActivator> _activators = new Dictionary<string, ServiceActivator>(StringComparer.CurrentCultureIgnoreCase);
+        readonly Dictionary<string, ServiceActivator> _activators = new Dictionary<string, ServiceActivator>(StringComparer.InvariantCultureIgnoreCase);
 
         public string ProcessPath { get; private set; }
         public string ROBPHostTypesPath { get; private set; }
@@ -59,12 +59,12 @@ namespace SPAFilter.SPA
                 {
                     if (filterProcess[0] == '%' || filterProcess[filterProcess.Length - 1] == '%')
                     {
-                        var filterProcessLike = filterProcess.Replace("%", "");
-                        bpFilter = (bp) => bp.Name.IndexOf(filterProcessLike, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        var filterProcessContains = filterProcess.Replace("%", "");
+                        bpFilter = (bp) => bp.Name.StringContains(filterProcessContains);
                     }
                     else
                     {
-                        bpFilter = (bp) => bp.Name.Equals(filterProcess, StringComparison.CurrentCultureIgnoreCase);
+                        bpFilter = (bp) => bp.Name.Like(filterProcess);
                     }
                 }
 
@@ -79,12 +79,12 @@ namespace SPAFilter.SPA
                 {
                     if (filterHT[0] == '%' || filterHT[filterHT.Length - 1] == '%')
                     {
-                        var filterNELike = filterHT.Replace("%", "");
-                        htFilter = (ht) => ht.Name.IndexOf(filterNELike, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        var filterNEContains = filterHT.Replace("%", "");
+                        htFilter = (ht) => ht.Name.StringContains(filterNEContains);
                     }
                     else
                     {
-                        htFilter = (ht) => ht.Name.Equals(filterHT, StringComparison.CurrentCultureIgnoreCase);
+                        htFilter = (ht) => ht.Name.Like(filterHT);
                     }
                 }
 
@@ -92,12 +92,12 @@ namespace SPAFilter.SPA
                 {
                     if (filterOp[0] == '%' || filterOp[filterOp.Length - 1] == '%')
                     {
-                        var filterOPLike = filterOp.Replace("%", "");
-                        opFilter = (op) => op.Name.IndexOf(filterOPLike, StringComparison.CurrentCultureIgnoreCase) != -1;
+                        var filterOPContains = filterOp.Replace("%", "");
+                        opFilter = (op) => op.Name.StringContains(filterOPContains);
                     }
                     else
                     {
-                        opFilter = (op) => op.Name.Equals(filterOp, StringComparison.CurrentCultureIgnoreCase);
+                        opFilter = (op) => op.Name.Like(filterOp);
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace SPAFilter.SPA
                 #region Mark or Exclude Processes
 
                 var fileteredOperations = HostTypes.Operations;
-                var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
+                var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
                 if (htFilter == null && opFilter == null)
                 {
                     // Если не установленно никаких фильтрров по операциям или хостам
@@ -167,7 +167,7 @@ namespace SPAFilter.SPA
                     ReloadActivators(_activators.Values);
                 }
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
-                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.CurrentCultureIgnoreCase);
+                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
 
                 // Проверка на существование сценария для операции. Ищем несуществующие сценарии.
                 foreach (var operation in fileteredOperations.Except(scenarios.Values, new SAComparer()).Cast<IOperation>())
@@ -685,7 +685,7 @@ namespace SPAFilter.SPA
         {
             var files = Directory.GetFiles(dirPath, mask, SearchOption.TopDirectoryOnly).ToList();
             files.Sort(StringComparer.CurrentCulture);
-            return files.Where(x => x.EndsWith(mask.Trim().Trim('*'), StringComparison.CurrentCultureIgnoreCase)).ToList();
+            return files.Where(x => x.EndsWith(mask.Trim().Trim('*'), StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
     }
 }

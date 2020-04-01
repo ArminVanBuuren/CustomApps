@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SPAFilter.SPA.Components;
+using Utils;
 
 namespace SPAFilter.SPA
 {
@@ -8,7 +9,7 @@ namespace SPAFilter.SPA
     {
         public bool Equals(ISAComponent x, ISAComponent y)
         {
-            return x != null && y != null && x.Name.Equals(y.Name, StringComparison.CurrentCultureIgnoreCase) && x.HostTypeName.Equals(y.HostTypeName, StringComparison.CurrentCultureIgnoreCase);
+            return x != null && y != null && x.Name.Like(y.Name) && x.HostTypeName.Like(y.HostTypeName);
         }
 
 
