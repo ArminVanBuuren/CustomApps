@@ -7,8 +7,8 @@ namespace LogsReader.Reader
     {
         public int Compare(DataTemplate x, DataTemplate y)
         {
-            var xDate = x.DateOfTrace ?? DateTime.MinValue;
-            var yDate = y.DateOfTrace ?? DateTime.MinValue;
+            var xDate = x.Date ?? DateTime.MinValue;
+            var yDate = y.Date ?? DateTime.MinValue;
 
             int result = xDate.CompareTo(yDate);
 

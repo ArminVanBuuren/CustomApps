@@ -176,10 +176,10 @@ namespace LogsReader.Reader
             // 
             // Date
             // 
-            this.Date.DataPropertyName = "Date";
+            this.Date.DataPropertyName = "DateOfTrace";
             this.Date.HeaderText = "Date";
             this.Date.MinimumWidth = 40;
-            this.Date.Name = "Date";
+            this.Date.Name = "DateOfTrace";
             this.Date.ReadOnly = true;
             this.Date.Width = 140;
             // 

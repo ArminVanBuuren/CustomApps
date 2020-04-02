@@ -202,7 +202,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceLinePattern. Лишние строки отсекаются..
+        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse. Лишние строки отсекаются..
         /// </summary>
         internal static string LRSettingsScheme_MaxTraceLinesComment {
             get {
@@ -220,7 +220,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование виртуальной памяти..
+        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование оперативной памяти..
         /// </summary>
         internal static string LRSettingsScheme_RowsLimitCommentComment {
             get {
@@ -239,11 +239,11 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline и CultureInvariant. Таймаут выполнения - 15 секунд.
-        ///        Паттерн StartLineWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки..
+        ///        Паттерн StartTraceWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки..
         /// </summary>
-        internal static string LRSettingsScheme_TraceLinePatternComment {
+        internal static string LRSettingsScheme_TraceParseComment {
             get {
-                return ResourceManager.GetString("LRSettingsScheme_TraceLinePatternComment", resourceCulture);
+                return ResourceManager.GetString("LRSettingsScheme_TraceParseComment", resourceCulture);
             }
         }
         

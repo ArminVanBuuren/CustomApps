@@ -29,7 +29,7 @@ namespace LogsReader.Reader
 
         protected int MaxTraceLines => CurrentSettings.MaxTraceLines;
 
-        protected LRTraceLinePatternItem[] PatternItems => CurrentSettings.TraceLinePattern.Items;
+        protected LRTraceParseItem[] TraceParsePatterns => CurrentSettings.TraceParse.Patterns;
 
         public string Server { get; }
         public string FileNamePartial { get; }
@@ -91,7 +91,7 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var item in PatternItems)
+            foreach (var item in TraceParsePatterns)
             {
                 Match match;
                 try
@@ -134,7 +134,7 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var regexPatt in PatternItems.Select(x => x.RegexItem))
+            foreach (var regexPatt in TraceParsePatterns.Select(x => x.RegexItem))
             {
                 Match match;
                 try

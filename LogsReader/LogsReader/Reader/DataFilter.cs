@@ -31,7 +31,7 @@ namespace LogsReader.Reader
             #region фильтр по дате начала
             StartDate = startDate;
             if (StartDate > DateTime.MinValue)
-                _checkStartDate = (input) => input.DateOfTrace != null && input.DateOfTrace.Value >= StartDate;
+                _checkStartDate = (input) => input.Date != null && input.Date.Value >= StartDate;
             else
                 _checkStartDate = (input) => true;
             #endregion
@@ -40,7 +40,7 @@ namespace LogsReader.Reader
             #region фильтр по дате конца
             EndDate = endDate;
             if (EndDate < DateTime.MaxValue)
-                _checkEndDate = (input) => input.DateOfTrace != null && input.DateOfTrace.Value <= EndDate;
+                _checkEndDate = (input) => input.Date != null && input.Date.Value <= EndDate;
             else
                 _checkEndDate = (input) => true;
             #endregion

@@ -6,7 +6,7 @@ namespace LogsReader.Reader
 {
     public class TraceReaderStartWith : TraceReader
     {
-        public Regex StartLineWith => CurrentSettings.TraceLinePattern.StartLineWith;
+        public Regex StartTraceWith => CurrentSettings.TraceParse.StartTraceWith;
 
         public TraceReaderStartWith(string server, string filePath, LogsReaderPerformer mainReader) : base(server, filePath, mainReader) { }
 
@@ -23,7 +23,7 @@ namespace LogsReader.Reader
                 }
                 else
                 {
-                    if (!StartLineWith.IsMatch(line))
+                    if (!StartTraceWith.IsMatch(line))
                     {
                         Found.AppendNextLine(line);
                         return;
@@ -49,14 +49,14 @@ namespace LogsReader.Reader
 
 
             Found = new DataTemplate(this, Lines, line);
-            if (!StartLineWith.IsMatch(Found.TraceMessage))
+            if (!StartTraceWith.IsMatch(Found.TraceMessage))
             {
                 // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
                 var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
                 while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
                 {
                     Found.AppendPastLine(revercePastTraceLines.Dequeue());
-                    if (StartLineWith.IsMatch(Found.TraceMessage))
+                    if (StartTraceWith.IsMatch(Found.TraceMessage))
                         break;
                 }
             }

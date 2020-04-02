@@ -20,7 +20,7 @@ namespace LogsReader.Config
         private int _maxThreads = -1;
         private int _rowsLimit = 999;
         private string _logsDirectory = @"C:\TEST";
-        private LRTraceLinePattern _traceLinePattern = new LRTraceLinePattern();
+        private LRTraceParse _traceParce = new LRTraceParse();
 
         public event ReportStatusHandler ReportStatus;
 
@@ -40,7 +40,7 @@ namespace LogsReader.Config
                     _types = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
                     _maxTraceLines = 50;
                     _maxThreads = -1;
-                    _traceLinePattern = new LRTraceLinePattern(_schemeName);
+                    _traceParce = new LRTraceParse(_schemeName);
                     break;
                 case "SPA":
                     _schemeName = name;
@@ -49,8 +49,8 @@ namespace LogsReader.Config
                     _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
                     _maxTraceLines = 1;
                     _maxThreads = -1;
-                    _orderBy = "Date desc, ID";
-                    _traceLinePattern = new LRTraceLinePattern(_schemeName);
+                    _orderBy = "Date desc, ID desc";
+                    _traceParce = new LRTraceParse(_schemeName);
                     break;
                 case "MGA":
                     _schemeName = name;
@@ -59,7 +59,7 @@ namespace LogsReader.Config
                     _types = "fast,slow,test";
                     _maxTraceLines = 20000;
                     _maxThreads = -1;
-                    _traceLinePattern = new LRTraceLinePattern(_schemeName);
+                    _traceParce = new LRTraceParse(_schemeName);
                     break;
             }
         }
@@ -172,23 +172,23 @@ namespace LogsReader.Config
             set => _orderBy = value.IsNullOrEmptyTrim() ? _orderBy : value;
         }
 
-        [XmlAnyElement("TraceLinePatternComment")]
-        public XmlComment TraceLinePatternComment
+        [XmlAnyElement("TraceParseComment")]
+        public XmlComment TraceParseComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceLinePatternComment);
+            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceParseComment);
             set { }
         }
 
         [XmlElement]
-        public LRTraceLinePattern TraceLinePattern
+        public LRTraceParse TraceParse
         {
-            get => _traceLinePattern;
+            get => _traceParce;
             set
             {
                 if (value != null)
                 {
-                    if (value.Items.Length > 0)
-                        _traceLinePattern = value;
+                    if (value.Patterns.Length > 0)
+                        _traceParce = value;
                 }
             }
         }
@@ -198,9 +198,9 @@ namespace LogsReader.Config
         {
             get
             {
-                if (!TraceLinePattern.IsCorrectRegex)
+                if (!TraceParse.IsCorrectRegex)
                 {
-                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex pattern in 'TraceLinePattern' node. Please check.", ReportStatusType.Error);
+                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex patterns in 'TraceParse' node. Please check.", ReportStatusType.Error);
                     return false;
                 }
 

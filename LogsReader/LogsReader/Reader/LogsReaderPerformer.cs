@@ -116,7 +116,7 @@ namespace LogsReader.Reader
             var kvpList = new List<TraceReader>();
 
             Func<string, string, TraceReader> _getTraceReader;
-            if (CurrentSettings.TraceLinePattern.StartLineWith != null)
+            if (CurrentSettings.TraceParse.StartTraceWith != null)
                 _getTraceReader = (server, filePath) => new TraceReaderStartWith(server, filePath, this);
             else
                 _getTraceReader = (server, filePath) => new TraceReaderSimple(server, filePath, this);
@@ -187,11 +187,11 @@ namespace LogsReader.Reader
 
             lock (_syncRootResult)
             {
-                var dateCurrent = item?.DateOfTrace ?? DateTime.MinValue;
+                var dateCurrent = item?.Date ?? DateTime.MinValue;
                 if (_result.Count >= CurrentSettings.RowsLimit)
                 {
                     var latest = _result.First().Key;
-                    if (latest.DateOfTrace == null || latest.DateOfTrace > dateCurrent)
+                    if (latest.Date == null || latest.Date > dateCurrent)
                         return;
 
                     _result.Remove(latest);

@@ -321,7 +321,7 @@ namespace LogsReader.Reader
                     await MainReader.StartAsync();
 
                     OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
-                    OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.DateOfTrace));
+                    OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
                     if (await AssignResult(filter))
                     {
@@ -408,7 +408,7 @@ namespace LogsReader.Reader
                     {
                         var privateID = (int) row.Cells["PrivateID"].Value;
                         var template = OverallResultList[privateID];
-                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.Date, template.Description, $"\"{template.Message.Trim()}\""}));
+                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
                         Progress = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
@@ -567,7 +567,7 @@ namespace LogsReader.Reader
 
                 if (template.IsMatched)
                 {
-                    if (template.DateOfTrace == null)
+                    if (template.Date == null)
                     {
                         row.DefaultCellStyle.BackColor = Color.Yellow;
                         foreach (DataGridViewCell cell2 in row.Cells)
@@ -581,7 +581,7 @@ namespace LogsReader.Reader
                 {
                     row.DefaultCellStyle.BackColor = Color.LightPink;
                     foreach (DataGridViewCell cell2 in row.Cells)
-                        cell2.ToolTipText = "Doesn't match by \"TraceLinePattern\"";
+                        cell2.ToolTipText = "Doesn't match by \"TraceParse\" patterns";
                 }
             }
             catch (Exception ex)

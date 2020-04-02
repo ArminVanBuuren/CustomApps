@@ -128,14 +128,14 @@
     <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
   <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
-    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceLinePattern. Лишние строки отсекаются.</value>
+    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse. Лишние строки отсекаются.</value>
   </data>
   <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
-  <data name="LRSettingsScheme_TraceLinePatternComment" xml:space="preserve">
+  <data name="LRSettingsScheme_TraceParseComment" xml:space="preserve">
     <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опцией Singleline и CultureInvariant. Таймаут выполнения - 15 секунд.
-        Паттерн StartLineWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки.</value>
+        Паттерн StartTraceWith улучшает скорость поиска, т.к. определяется начало и точные грани трассировки.</value>
   </data>
   <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
     <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
@@ -195,7 +195,7 @@
     <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую в выражении можно указать несколько полей сортировки, а также использовать операцию descending.</value>
   </data>
   <data name="LRSettingsScheme_RowsLimitCommentComment" xml:space="preserve">
-    <value>Ограничение по количеству строк. Сокращает использование виртуальной памяти.</value>
+    <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>
   </data>
   <data name="Form_SearchComment" xml:space="preserve">
     <value>Используется инвариантная культура, без учета регистра. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>

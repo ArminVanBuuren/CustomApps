@@ -7,46 +7,45 @@ using Utils;
 
 namespace LogsReader.Config
 {
-    [XmlRoot("TraceLinePattern")]
-    public class LRTraceLinePattern : TraceLinePattern
+    [XmlRoot("TraceParse")]
+    public class LRTraceParse : TraceParse
     {
-        private LRTraceLinePatternItem[] _traceLinePattern = new LRTraceLinePatternItem[] {new LRTraceLinePatternItem()};
-        private XmlNode[] _startLineWith = null;
-        //private XmlNode[] _endLineWith = null;
+        private LRTraceParseItem[] _traceParsePatterns = new LRTraceParseItem[] {new LRTraceParseItem()};
+        private XmlNode[] _startTraceWith = null;
+        private XmlNode[] _endTraceWith = null;
 
-        public LRTraceLinePattern()
+        public LRTraceParse()
         {
 
         }
 
-        internal LRTraceLinePattern(string name)
+        internal LRTraceParse(string name)
         {
             switch (name)
             {
                 case "MG":
-                    Items = new[]
+                    Patterns = new[]
                     {
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
-                        new LRTraceLinePatternItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
+                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
+                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
+                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
                     break;
                 case "SPA":
-                    Items = new[]
+                    Patterns = new[]
                     {
-                        new LRTraceLinePatternItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
+                        new LRTraceParseItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
                             {ID = "$1", TraceName = "$2", Description = "$3", Date = "$4.$6", Message = "$5"}
                     };
                     break;
                 case "MGA":
-                    Items = new[]
+                    Patterns = new[]
                     {
-                        new LRTraceLinePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\n[-]{49,}(.+)($|[-]{49,})")
+                        new LRTraceParseItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?[-]{49,}(.+)")
                             {Date = "$1", TraceName = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)") };
-                    //EndWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^[-]{49,}\s*$") };
                     break;
             }
         }
@@ -54,54 +53,54 @@ namespace LogsReader.Config
         [XmlIgnore]
         internal override bool IsCorrectRegex
         {
-            get => _traceLinePattern != null && _traceLinePattern.Length > 0 && _traceLinePattern.All(x => x.IsCorrectRegex);
+            get => _traceParsePatterns != null && _traceParsePatterns.Length > 0 && _traceParsePatterns.All(x => x.IsCorrectRegex);
             set { }
         }
 
-        [XmlElement("Item")]
-        public LRTraceLinePatternItem[] Items
+        [XmlElement("Pattern")]
+        public LRTraceParseItem[] Patterns
         {
-            get => _traceLinePattern;
+            get => _traceParsePatterns;
             set
             {
                 if (value != null)
                 {
                     if (value.Length > 0)
-                        _traceLinePattern = value;
+                        _traceParsePatterns = value;
                 }
             }
         }
 
-        [XmlElement("StartLineWith")]
+        [XmlElement("StartTraceWith")]
         public XmlNode[] StartWith
         {
-            get => _startLineWith;
-            set => StartLineWith = GetCDataNode(value, false, out _startLineWith);
+            get => _startTraceWith;
+            set => StartTraceWith = GetCDataNode(value, false, out _startTraceWith);
         }
 
-        [XmlIgnore] internal Regex StartLineWith { get; private set; }
+        [XmlIgnore] internal Regex StartTraceWith { get; private set; }
 
-        //[XmlElement("EndLineWith")]
-        //public XmlNode[] EndWith
-        //{
-        //    get => _endLineWith;
-        //    set => EndLineWith = GetCDataNode(value, false, out _endLineWith);
-        //}
+        [XmlElement("EndTraceWith")]
+        public XmlNode[] EndWith
+        {
+            get => _endTraceWith;
+            set => EndTraceWith = GetCDataNode(value, false, out _endTraceWith);
+        }
 
-        //[XmlIgnore] internal Regex EndLineWith { get; private set; }
+        [XmlIgnore] internal Regex EndTraceWith { get; private set; }
     }
 
-    [XmlRoot("Item")]
-    public class LRTraceLinePatternItem : TraceLinePattern
+    [XmlRoot("Pattern")]
+    public class LRTraceParseItem : TraceParse
     {
         private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
 
-        public LRTraceLinePatternItem()
+        public LRTraceParseItem()
         {
             CDataItem = _cdataItem;
         }
 
-        internal LRTraceLinePatternItem(string regexPattern)
+        internal LRTraceParseItem(string regexPattern)
         {
             CDataItem = new XmlNode[] { new XmlDocument().CreateCDataSection(regexPattern) };
         }
@@ -134,7 +133,7 @@ namespace LogsReader.Config
     }
 
     [Serializable]
-    public abstract class TraceLinePattern
+    public abstract class TraceParse
     {
         public static TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 15);
 
@@ -156,7 +155,7 @@ namespace LogsReader.Config
 
             if (!REGEX.Verify(text))
             {
-                Util.MessageShow($"Pattern \"{text}\" is incorrect", "TraceLinePattern Reader");
+                Util.MessageShow($"Pattern \"{text}\" is incorrect", "TraceParse Reader");
                 return null;
             }
             else

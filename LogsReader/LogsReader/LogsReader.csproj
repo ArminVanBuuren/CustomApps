@@ -85,7 +85,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
     <Compile Include="Config\LRSettingsScheme.cs" />
-    <Compile Include="Config\LRTraceLinePattern.cs" />
+    <Compile Include="Config\LRTraceParse.cs" />
     <Compile Include="Config\UserSettings.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="Reader\LogsReaderForm.resx">

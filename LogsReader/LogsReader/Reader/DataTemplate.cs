@@ -24,12 +24,12 @@ namespace LogsReader.Reader
 
             if (DateTime.TryParse(date.Replace(",", "."), out var dateOfTrace))
             {
-                DateOfTrace = dateOfTrace;
-                Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
+                Date = dateOfTrace;
+                DateOfTrace = Date.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
             }
             else
             {
-                Date = date;
+                DateOfTrace = date;
             }
 
             TraceName = traceName;
@@ -55,8 +55,8 @@ namespace LogsReader.Reader
             ParentReader = traceReader;
 
             ID = -1;
-            DateOfTrace = DateTime.Now;
-            Date = DateOfTrace.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
+            Date = DateTime.Now;
+            DateOfTrace = Date.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
 
             Error = error;
             TraceName = error.GetType().ToString();
@@ -98,16 +98,16 @@ namespace LogsReader.Reader
         }
 
         [DGVColumn(ColumnPosition.After, "Date")]
-        public string Date
+        public string DateOfTrace
         {
             get => _date;
             private set => _date = value?.Replace(Environment.NewLine, string.Empty).Trim();
         }
 
+        public DateTime? Date { get; }
+
         [DGVColumn(ColumnPosition.After, "File")]
         public string File => ParentReader.FileNamePartial;
-
-        public DateTime? DateOfTrace { get; }
 
         public string Description
         {
