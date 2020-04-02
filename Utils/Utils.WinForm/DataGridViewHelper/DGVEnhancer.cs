@@ -72,15 +72,27 @@ namespace Utils.WinForm.DataGridViewHelper
             }
         }
 
+        public static async Task<DataTable> ToTableAsync<T>(this IEnumerable<T> data)
+        {
+            return await Task.Factory.StartNew(data.ToTable);
+        }
+
+        public static DataTable ToTable<T>(this IEnumerable<T> data)
+        {
+            return GetTableAndAssignCollection(null, data, null, false);
+        }
+
         public static async Task AssignCollectionAsync<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
         {
-            await Task.Factory.StartNew(() =>
-            {
-                grid.AssignCollection(data, cellPadding, stretchColumnsToAllCells);
-            });
+            await Task.Factory.StartNew(() => { GetTableAndAssignCollection(grid, data, cellPadding, stretchColumnsToAllCells); });
         }
 
         public static void AssignCollection<T>(this DataGridView grid, IEnumerable<T> data, Padding? cellPadding = null, bool stretchColumnsToAllCells = false)
+        {
+            GetTableAndAssignCollection(grid, data, cellPadding, stretchColumnsToAllCells);
+        }
+
+        static DataTable GetTableAndAssignCollection<T>(DataGridView grid, IEnumerable<T> data, Padding? cellPadding, bool stretchColumnsToAllCells)
         {
             if (data == null)
                 throw new ArgumentException(nameof(data));
@@ -103,7 +115,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 }
             }
 
-            if (grid.ColumnCount == 0)
+            if (grid == null || grid.ColumnCount == 0)
             {
                 columnList = columnList.OrderBy(p => p.Value.Attribute.Position).ThenBy(p => p.Value.ClassPosition).ToDictionary(p => p.Key, p => p.Value);
                 var columnPosition = 0;
@@ -125,10 +137,7 @@ namespace Utils.WinForm.DataGridViewHelper
                     var propertyName = column.DataPropertyName.IsNullOrEmpty() ? column.Name : column.DataPropertyName;
 
                     if (!columnList.TryGetValue(propertyName, out var newColumn))
-                    {
-                        var headerName = column.HeaderText.IsNullOrEmpty() ? column.Name : column.HeaderText;
-                        newColumn = new DGVColumn(position, propertyName, new DGVColumnAttribute(ColumnPosition.After, headerName, column.Visible), column.ValueType);
-                    }
+                        throw new Exception($"DataPropertyName or Name \"{propertyName}\" of DatagridView columns is incorrect. Property \"{propertyName}\" in class \"{typeof(T)}\" doesn't have attribute \"{nameof(DGVColumn)}\"");
 
                     var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
                     {
@@ -158,18 +167,20 @@ namespace Utils.WinForm.DataGridViewHelper
                 table.Rows.Add(dr);
             }
 
-            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
-            if (grid.InvokeRequired)
+            if (grid != null)
             {
-                grid.BeginInvoke(new MethodInvoker(delegate
+                // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
+                if (grid.InvokeRequired)
+                {
+                    grid.BeginInvoke(new MethodInvoker(delegate { grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells); }));
+                }
+                else
                 {
                     grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells);
-                }));
+                }
             }
-            else
-            {
-                grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells);
-            }
+
+            return table;
         }
 
         static void AssignToDataGridView(this DataGridView grid, DataTable table, IEnumerable<DGVColumn> columnList, Padding? cellPadding, bool stretchColumnsToAllCells)
