@@ -73,6 +73,7 @@ namespace LogsReader.Reader
             try
             {
                 dgvFiles.AutoGenerateColumns = false;
+                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
                 #region Set StatusStrip
 
@@ -81,7 +82,7 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 var autor = new ToolStripButton("?") {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-                autor.Click += (sender, args) => { Utils.MessageShow(@"Hello! This is a universal application for searching and parsing applications logs, as well as convenient viewing.", $"© {ASSEMBLY.Company}", false); };
+                autor.Click += (sender, args) => { Util.MessageShow(@"Hello! This is a universal application for searching and parsing applications logs, as well as convenient viewing.", $"© {ASSEMBLY.Company}", false); };
                 statusStrip.Items.Add(autor);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
@@ -135,8 +136,6 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
                 tooltipPrintXML.SetToolTip(rowsLimitText, Resources.LRSettingsScheme_RowsLimitCommentComment);
 
-                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-
                 var notepad = new NotepadControl();
                 MainSplitContainer.Panel2.Controls.Add(notepad);
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
@@ -170,7 +169,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                Utils.MessageShow(ex.ToString(), @"Initialization");
+                Util.MessageShow(ex.ToString(), @"Initialization");
             }
         }
 
@@ -193,7 +192,6 @@ namespace LogsReader.Reader
                 traceNameNotLikeFilter.AssignValue(UserSettings.TraceNotLike, traceNameNotLikeFilter_TextChanged);
                 traceMessageFilter.AssignValue(UserSettings.Message, traceMessageFilter_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
-                //alreadyUseFilter.Checked = UserSettings.AlreadyUseFilter;
 
                 serversText.Text = CurrentSettings.Servers;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);

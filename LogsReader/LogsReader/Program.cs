@@ -22,7 +22,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Utils.MessageShow(ex.ToString(), @"Run");
+                Util.MessageShow(ex.ToString(), @"Run");
             }
         }
     }

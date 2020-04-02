@@ -95,7 +95,7 @@ namespace LogsReader
                     }
                     catch (Exception ex)
                     {
-                        Utils.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", @"Load scheme");
+                        Util.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", @"Load scheme");
                     }
                 }
 
@@ -104,7 +104,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Utils.MessageShow(ex.ToString(), @"Initialization");
+                Util.MessageShow(ex.ToString(), @"Initialization");
             }
         }
 
@@ -195,7 +195,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Utils.MessageShow(ex.ToString(), @"System Resource Monitoring");
+                Util.MessageShow(ex.ToString(), @"System Resource Monitoring");
             }
         }
 

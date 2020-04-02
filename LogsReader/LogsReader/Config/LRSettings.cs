@@ -80,7 +80,7 @@ namespace LogsReader.Config
             }
             catch (Exception ex)
             {
-                Utils.MessageShow(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error");
+                Util.MessageShow(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error");
             }
         }
 
@@ -100,7 +100,7 @@ namespace LogsReader.Config
             catch (Exception ex)
             {
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                Utils.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
+                Util.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
                     Path.GetFileName(SettingsPath),
                     Path.GetFileName(FailedSettingsPath),
                     message), "Deserialize Error");
