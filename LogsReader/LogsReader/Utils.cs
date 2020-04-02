@@ -22,30 +22,6 @@ namespace LogsReader
             }
         }
 
-        //public static void AssignComboBox<T>(this ComboBox combobox, T value, EventHandler textChangeHandler, EventHandler selectChangedHandler)
-        //{
-        //    try
-        //    {
-        //        //combobox.TextChanged -= textChangeHandler;
-        //        //combobox.SelectedIndexChanged -= selectChangedHandler;
-
-        //        combobox.BeginUpdate();
-        //        combobox.ValueMember = value.ToString();
-        //        combobox.DisplayMember = value.ToString();
-        //        combobox.Text = value.ToString();
-        //        combobox.EndUpdate();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        //ignored
-        //    }
-        //    finally
-        //    {
-        //        //combobox.TextChanged += textChangeHandler;
-        //        //combobox.SelectedIndexChanged += selectChangedHandler;
-        //    }
-        //}
-
         public static void MessageShow(string msg, string caption, bool isError = true)
         {
             MessageBox.Show(msg, caption, MessageBoxButtons.OK, isError ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
