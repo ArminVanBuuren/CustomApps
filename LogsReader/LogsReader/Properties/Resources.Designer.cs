@@ -184,7 +184,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Путь к папке с логами.
+        ///   Looks up a localized string similar to Путь к папке с логами. Поиск файлов происходит по всем директориям..
         /// </summary>
         internal static string LRSettingsScheme_LogsDirectoryComment {
             get {
@@ -202,7 +202,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse. Лишние строки отсекаются..
+        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse..
         /// </summary>
         internal static string LRSettingsScheme_MaxTraceLinesComment {
             get {

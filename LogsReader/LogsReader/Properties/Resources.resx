@@ -122,13 +122,13 @@
     <value>..\Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LRSettingsScheme_LogsDirectoryComment" xml:space="preserve">
-    <value>Путь к папке с логами</value>
+    <value>Путь к папке с логами. Поиск файлов происходит по всем директориям.</value>
   </data>
   <data name="LRSettingsScheme_MaxThreadsComment" xml:space="preserve">
     <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
   <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
-    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse. Лишние строки отсекаются.</value>
+    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse.</value>
   </data>
   <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
     <value>Сервера для поиска. Указать через запятую.</value>
