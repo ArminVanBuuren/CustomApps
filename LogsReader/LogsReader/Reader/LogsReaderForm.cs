@@ -626,10 +626,12 @@ namespace LogsReader.Reader
                 var message = XML.RemoveUnallowable(template.Message, " ");
 
                 descriptionText.Text = template.Description;
+
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.TrimWhiteSpaces();
                 _message.IsChanged = false;
                 _message.ClearUndo();
                 _message.DelayedEventsInterval = 10;
+
                 _traceMessage.Text = template.TraceMessage;
                 _traceMessage.IsChanged = false;
                 _traceMessage.ClearUndo();
