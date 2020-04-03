@@ -139,7 +139,23 @@ namespace LogsReader.Reader
                 var notepad = new NotepadControl();
                 MainSplitContainer.Panel2.Controls.Add(notepad);
                 _message = notepad.AddDocument("Message", string.Empty, Language.XML);
+                _message.BackBrush = null;
+                _message.BorderStyle = BorderStyle.FixedSingle;
+                _message.Cursor = Cursors.IBeam;
+                _message.DelayedEventsInterval = 1000;
+                _message.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+                _message.IsReplaceMode = false;
+                _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+
                 _traceMessage = notepad.AddDocument("Trace", string.Empty);
+                _traceMessage.BackBrush = null;
+                _traceMessage.BorderStyle = BorderStyle.FixedSingle;
+                _traceMessage.Cursor = Cursors.IBeam;
+                _traceMessage.DelayedEventsInterval = 1000;
+                _traceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+                _traceMessage.IsReplaceMode = false;
+                _traceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+
                 notepad.TabsFont = this.Font;
                 notepad.TextFont = new Font("Segoe UI", 10F);
                 notepad.Dock = DockStyle.Fill;
@@ -611,7 +627,13 @@ namespace LogsReader.Reader
 
                 descriptionText.Text = template.Description;
                 _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.TrimWhiteSpaces();
+                _message.IsChanged = false;
+                _message.ClearUndo();
+                _message.DelayedEventsInterval = 10;
                 _traceMessage.Text = template.TraceMessage;
+                _traceMessage.IsChanged = false;
+                _traceMessage.ClearUndo();
+                _traceMessage.DelayedEventsInterval = 10;
             }
             catch (Exception ex)
             {
