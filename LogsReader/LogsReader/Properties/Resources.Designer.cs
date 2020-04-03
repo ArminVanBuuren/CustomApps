@@ -135,6 +135,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Необходимо выбрать сервера и типы файлов.
+        /// </summary>
+        internal static string Form_trvMainComment {
+            get {
+                return ResourceManager.GetString("Form_trvMainComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {

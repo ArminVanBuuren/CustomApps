@@ -135,6 +135,8 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(traceMessageFilter, Resources.Form_MessageFilterComment);
                 tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
                 tooltipPrintXML.SetToolTip(rowsLimitText, Resources.LRSettingsScheme_RowsLimitCommentComment);
+                tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
+                tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
                 var notepad = new NotepadControl();
                 MainSplitContainer.Panel2.Controls.Add(notepad);
@@ -197,24 +199,25 @@ namespace LogsReader.Reader
                 CurrentSettings.ReportStatus += ReportStatus;
                 UserSettings = new UserSettings(CurrentSettings.Name);
 
-                txtPattern.AssignValue(UserSettings.PreviousSearch, txtPattern_TextChanged);
+                txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
                 dateStartFilter.Checked = UserSettings.DateStartChecked;
                 if(dateStartFilter.Checked)
                     dateStartFilter.Value = _getStartDate.Invoke();
                 dateEndFilter.Checked = UserSettings.DateEndChecked;
                 if (dateEndFilter.Checked)
                     dateEndFilter.Value = _getEndDate.Invoke();
-                traceNameLikeFilter.AssignValue(UserSettings.TraceLike, traceNameLikeFilter_TextChanged);
-                traceNameNotLikeFilter.AssignValue(UserSettings.TraceNotLike, traceNameNotLikeFilter_TextChanged);
-                traceMessageFilter.AssignValue(UserSettings.Message, traceMessageFilter_TextChanged);
+                traceNameLikeFilter.AssignValue(UserSettings.TraceLike, TraceNameLikeFilter_TextChanged);
+                traceNameNotLikeFilter.AssignValue(UserSettings.TraceNotLike, TraceNameNotLikeFilter_TextChanged);
+                traceMessageFilter.AssignValue(UserSettings.Message, TraceMessageFilter_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
 
                 serversText.Text = CurrentSettings.Servers;
-                logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
+                logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
-                maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
-                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, rowsLimitText_TextChanged);
+                maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
+                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
+                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+                orderByText.AssignValue(CurrentSettings.OrderBy, OrderByText_TextChanged);
 
                 btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
@@ -287,13 +290,13 @@ namespace LogsReader.Reader
                 switch (e.KeyCode)
                 {
                     case Keys.F5 when btnSearch.Enabled && !IsWorking:
-                        btnSearch_Click(this, EventArgs.Empty);
+                        BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
                         ClearForm();
                         break;
                     case Keys.S when e.Control && buttonExport.Enabled:
-                        buttonExport_Click(this, EventArgs.Empty);
+                        ButtonExport_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F7 when buttonFilter.Enabled:
                         buttonFilter_Click(this, EventArgs.Empty);
@@ -302,7 +305,7 @@ namespace LogsReader.Reader
                         buttonReset_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when btnSearch.Enabled && IsWorking:
-                        btnSearch_Click(this, EventArgs.Empty);
+                        BtnSearch_Click(this, EventArgs.Empty);
                         break;
                 }
             }
@@ -312,7 +315,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private async void btnSearch_Click(object sender, EventArgs e)
+        private async void BtnSearch_Click(object sender, EventArgs e)
         {
             if (!IsWorking)
             {
@@ -394,7 +397,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private async void buttonExport_Click(object sender, EventArgs e)
+        private async void ButtonExport_Click(object sender, EventArgs e)
         {
             if (IsWorking)
                 return;
@@ -606,7 +609,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private void dgvFiles_SelectionChanged(object sender, EventArgs e)
+        private void DgvFiles_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
@@ -643,7 +646,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private void dgvFiles_MouseDown(object sender, MouseEventArgs e)
+        private void DgvFiles_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -653,10 +656,10 @@ namespace LogsReader.Reader
             }
         }
     
-        private void serversText_TextChanged(object sender, EventArgs e)
+        private void ServersText_TextChanged(object sender, EventArgs e)
         {
             CurrentSettings.Servers = serversText.Text;
-            serversText.AssignValue(CurrentSettings.Servers, serversText_TextChanged);
+            serversText.AssignValue(CurrentSettings.Servers, ServersText_TextChanged);
 
             //заполняем список серверов из параметра
             trvMain.Nodes["trvServers"].Nodes.Clear();
@@ -673,18 +676,18 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void logDirText_TextChanged(object sender, EventArgs e)
+        private void LogDirText_TextChanged(object sender, EventArgs e)
         {
             CurrentSettings.LogsDirectory = logDirText.Text;
-            logDirText.AssignValue(CurrentSettings.LogsDirectory, logDirText_TextChanged);
+            logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
             ValidationCheck();
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void typesText_TextChanged(object sender, EventArgs e)
+        private void TypesText_TextChanged(object sender, EventArgs e)
         {
             CurrentSettings.Types = fileNames.Text;
-            fileNames.AssignValue(CurrentSettings.Types, typesText_TextChanged);
+            fileNames.AssignValue(CurrentSettings.Types, TypesText_TextChanged);
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();
@@ -701,13 +704,20 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void maxLinesStackText_TextChanged(object sender, EventArgs e)
+        private void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Level == 0)
+                CheckTreeViewNode(e.Node, e.Node.Checked);
+            ValidationCheck();
+        }
+
+        private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var value))
                 MaxLinesStackTextSave(value);
         }
 
-        private void maxLinesStackText_Leave(object sender, EventArgs e)
+        private void MaxLinesStackText_Leave(object sender, EventArgs e)
         {
             if (!int.TryParse(maxLinesStackText.Text, out var value))
                 value = -1;
@@ -717,17 +727,17 @@ namespace LogsReader.Reader
         void MaxLinesStackTextSave(int value)
         {
             CurrentSettings.MaxTraceLines = value;
-            maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, maxLinesStackText_TextChanged);
+            maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void maxThreadsText_TextChanged(object sender, EventArgs e)
+        private void MaxThreadsText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxThreadsText.Text, out var value))
                 MaxThreadsTextSave(value);
         }
 
-        private void maxThreadsText_Leave(object sender, EventArgs e)
+        private void MaxThreadsText_Leave(object sender, EventArgs e)
         {
             if (!int.TryParse(maxThreadsText.Text, out var value))
                 value = -1;
@@ -737,17 +747,17 @@ namespace LogsReader.Reader
         void MaxThreadsTextSave(int value)
         {
             CurrentSettings.MaxThreads = value;
-            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, maxThreadsText_TextChanged);
+            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void rowsLimitText_TextChanged(object sender, EventArgs e)
+        private void RowsLimitText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(rowsLimitText.Text, out var value))
                 RowsLimitTextSave(value);
         }
 
-        private void rowsLimitText_Leave(object sender, EventArgs e)
+        private void RowsLimitText_Leave(object sender, EventArgs e)
         {
             if (!int.TryParse(rowsLimitText.Text, out var value))
                 value = -1;
@@ -757,15 +767,14 @@ namespace LogsReader.Reader
         void RowsLimitTextSave(int value)
         {
             CurrentSettings.RowsLimit = value;
-            rowsLimitText.AssignValue(CurrentSettings.RowsLimit, rowsLimitText_TextChanged);
+            rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void trvMain_AfterCheck(object sender, TreeViewEventArgs e)
+        private void OrderByText_TextChanged(object sender, EventArgs e)
         {
-            if (e.Node.Level == 0)
-                CheckTreeViewNode(e.Node, e.Node.Checked);
-            ValidationCheck();
+            CurrentSettings.OrderBy = orderByText.Text;
+            fileNames.AssignValue(CurrentSettings.OrderBy, OrderByText_TextChanged);
         }
 
         private static void CheckTreeViewNode(TreeNode node, bool isChecked)
@@ -778,28 +787,28 @@ namespace LogsReader.Reader
             }
         }
 
-        private void txtPattern_TextChanged(object sender, EventArgs e)
+        private void TxtPattern_TextChanged(object sender, EventArgs e)
         {
             UserSettings.PreviousSearch = txtPattern.Text;
             ValidationCheck();
         }
 
-        private void useRegex_CheckedChanged(object sender, EventArgs e)
+        private void UseRegex_CheckedChanged(object sender, EventArgs e)
         {
             UserSettings.UseRegex = useRegex.Checked;
         }
 
-        private void traceNameLikeFilter_TextChanged(object sender, EventArgs e)
+        private void TraceNameLikeFilter_TextChanged(object sender, EventArgs e)
         {
             UserSettings.TraceLike = traceNameLikeFilter.Text;
         }
 
-        private void traceNameNotLikeFilter_TextChanged(object sender, EventArgs e)
+        private void TraceNameNotLikeFilter_TextChanged(object sender, EventArgs e)
         {
             UserSettings.TraceNotLike = traceNameNotLikeFilter.Text;
         }
 
-        private void traceMessageFilter_TextChanged(object sender, EventArgs e)
+        private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
         {
             UserSettings.Message = traceMessageFilter.Text;
         }
@@ -823,7 +832,7 @@ namespace LogsReader.Reader
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             ClearForm();
         }

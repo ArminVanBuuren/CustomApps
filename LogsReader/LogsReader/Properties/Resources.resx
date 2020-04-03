@@ -200,4 +200,7 @@
   <data name="Form_SearchComment" xml:space="preserve">
     <value>Используется инвариантная культура, без учета регистра. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>
   </data>
+  <data name="Form_trvMainComment" xml:space="preserve">
+    <value>Необходимо выбрать сервера и типы файлов</value>
+  </data>
 </root>

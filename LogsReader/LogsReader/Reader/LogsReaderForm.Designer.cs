@@ -29,15 +29,15 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateOfTrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
@@ -80,6 +80,8 @@ namespace LogsReader.Reader
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.orderByText = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -112,7 +114,7 @@ namespace LogsReader.Reader
             this.ID,
             this.Server,
             this.TraceName,
-            this.Date,
+            this.DateOfTrace,
             this.File});
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.ControlLight;
@@ -124,8 +126,8 @@ namespace LogsReader.Reader
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvFiles.Size = new System.Drawing.Size(525, 346);
             this.dgvFiles.TabIndex = 1;
-            this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
-            this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvFiles_MouseDown);
+            this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
+            this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
             // 
             // PrivateID
             // 
@@ -174,14 +176,14 @@ namespace LogsReader.Reader
             this.TraceName.ReadOnly = true;
             this.TraceName.Width = 140;
             // 
-            // Date
+            // DateOfTrace
             // 
-            this.Date.DataPropertyName = "DateOfTrace";
-            this.Date.HeaderText = "Date";
-            this.Date.MinimumWidth = 40;
-            this.Date.Name = "DateOfTrace";
-            this.Date.ReadOnly = true;
-            this.Date.Width = 140;
+            this.DateOfTrace.DataPropertyName = "DateOfTrace";
+            this.DateOfTrace.HeaderText = "Date";
+            this.DateOfTrace.MinimumWidth = 40;
+            this.DateOfTrace.Name = "DateOfTrace";
+            this.DateOfTrace.ReadOnly = true;
+            this.DateOfTrace.Width = 140;
             // 
             // File
             // 
@@ -203,7 +205,7 @@ namespace LogsReader.Reader
             this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "      Search [F5]";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // btnClear
             // 
@@ -216,7 +218,7 @@ namespace LogsReader.Reader
             this.btnClear.TabIndex = 3;
             this.btnClear.Text = "      Clear [F6]";
             this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // txtPattern
             // 
@@ -226,7 +228,7 @@ namespace LogsReader.Reader
             this.txtPattern.Name = "txtPattern";
             this.txtPattern.Size = new System.Drawing.Size(1012, 23);
             this.txtPattern.TabIndex = 4;
-            this.txtPattern.TextChanged += new System.EventHandler(this.txtPattern_TextChanged);
+            this.txtPattern.TextChanged += new System.EventHandler(this.TxtPattern_TextChanged);
             // 
             // progressBar
             // 
@@ -257,6 +259,8 @@ namespace LogsReader.Reader
             // 
             // SchemePanel
             // 
+            this.SchemePanel.Controls.Add(this.label12);
+            this.SchemePanel.Controls.Add(this.orderByText);
             this.SchemePanel.Controls.Add(this.label2);
             this.SchemePanel.Controls.Add(this.rowsLimitText);
             this.SchemePanel.Controls.Add(this.label1);
@@ -293,8 +297,8 @@ namespace LogsReader.Reader
             this.rowsLimitText.Name = "rowsLimitText";
             this.rowsLimitText.Size = new System.Drawing.Size(83, 23);
             this.rowsLimitText.TabIndex = 16;
-            this.rowsLimitText.TextChanged += new System.EventHandler(this.rowsLimitText_TextChanged);
-            this.rowsLimitText.Leave += new System.EventHandler(this.rowsLimitText_Leave);
+            this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
+            this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
             // 
             // label1
             // 
@@ -311,18 +315,18 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 162);
+            this.trvMain.Location = new System.Drawing.Point(2, 188);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode5.Name = "trvServers";
+            treeNode5.Text = "Servers";
+            treeNode6.Name = "trvTypes";
+            treeNode6.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(166, 237);
+            treeNode5,
+            treeNode6});
+            this.trvMain.Size = new System.Drawing.Size(166, 208);
             this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvMain_AfterCheck);
+            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
             // 
             // maxLinesStackText
             // 
@@ -332,8 +336,8 @@ namespace LogsReader.Reader
             this.maxLinesStackText.Name = "maxLinesStackText";
             this.maxLinesStackText.Size = new System.Drawing.Size(83, 23);
             this.maxLinesStackText.TabIndex = 14;
-            this.maxLinesStackText.TextChanged += new System.EventHandler(this.maxLinesStackText_TextChanged);
-            this.maxLinesStackText.Leave += new System.EventHandler(this.maxLinesStackText_Leave);
+            this.maxLinesStackText.TextChanged += new System.EventHandler(this.MaxLinesStackText_TextChanged);
+            this.maxLinesStackText.Leave += new System.EventHandler(this.MaxLinesStackText_Leave);
             // 
             // serversText
             // 
@@ -343,7 +347,7 @@ namespace LogsReader.Reader
             this.serversText.Name = "serversText";
             this.serversText.Size = new System.Drawing.Size(83, 23);
             this.serversText.TabIndex = 4;
-            this.serversText.TextChanged += new System.EventHandler(this.serversText_TextChanged);
+            this.serversText.TextChanged += new System.EventHandler(this.ServersText_TextChanged);
             // 
             // label6
             // 
@@ -371,7 +375,7 @@ namespace LogsReader.Reader
             this.logDirText.Name = "logDirText";
             this.logDirText.Size = new System.Drawing.Size(83, 23);
             this.logDirText.TabIndex = 12;
-            this.logDirText.TextChanged += new System.EventHandler(this.logDirText_TextChanged);
+            this.logDirText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
             // 
             // fileNames
             // 
@@ -381,7 +385,7 @@ namespace LogsReader.Reader
             this.fileNames.Name = "fileNames";
             this.fileNames.Size = new System.Drawing.Size(83, 23);
             this.fileNames.TabIndex = 8;
-            this.fileNames.TextChanged += new System.EventHandler(this.typesText_TextChanged);
+            this.fileNames.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
             // 
             // label5
             // 
@@ -409,8 +413,8 @@ namespace LogsReader.Reader
             this.maxThreadsText.Name = "maxThreadsText";
             this.maxThreadsText.Size = new System.Drawing.Size(83, 23);
             this.maxThreadsText.TabIndex = 10;
-            this.maxThreadsText.TextChanged += new System.EventHandler(this.maxThreadsText_TextChanged);
-            this.maxThreadsText.Leave += new System.EventHandler(this.maxThreadsText_Leave);
+            this.maxThreadsText.TextChanged += new System.EventHandler(this.MaxThreadsText_TextChanged);
+            this.maxThreadsText.Leave += new System.EventHandler(this.MaxThreadsText_Leave);
             // 
             // MainSplitContainer
             // 
@@ -481,7 +485,7 @@ namespace LogsReader.Reader
             this.useRegex.TabIndex = 9;
             this.useRegex.Text = "Use Regex";
             this.useRegex.UseVisualStyleBackColor = true;
-            this.useRegex.CheckedChanged += new System.EventHandler(this.useRegex_CheckedChanged);
+            this.useRegex.CheckedChanged += new System.EventHandler(this.UseRegex_CheckedChanged);
             // 
             // label7
             // 
@@ -507,7 +511,7 @@ namespace LogsReader.Reader
             this.traceNameLikeFilter.Name = "traceNameLikeFilter";
             this.traceNameLikeFilter.Size = new System.Drawing.Size(437, 23);
             this.traceNameLikeFilter.TabIndex = 25;
-            this.traceNameLikeFilter.TextChanged += new System.EventHandler(this.traceNameLikeFilter_TextChanged);
+            this.traceNameLikeFilter.TextChanged += new System.EventHandler(this.TraceNameLikeFilter_TextChanged);
             // 
             // dateEndFilter
             // 
@@ -548,7 +552,7 @@ namespace LogsReader.Reader
             this.traceNameNotLikeFilter.Name = "traceNameNotLikeFilter";
             this.traceNameNotLikeFilter.Size = new System.Drawing.Size(437, 23);
             this.traceNameNotLikeFilter.TabIndex = 27;
-            this.traceNameNotLikeFilter.TextChanged += new System.EventHandler(this.traceNameNotLikeFilter_TextChanged);
+            this.traceNameNotLikeFilter.TextChanged += new System.EventHandler(this.TraceNameNotLikeFilter_TextChanged);
             // 
             // label8
             // 
@@ -602,7 +606,7 @@ namespace LogsReader.Reader
             this.traceMessageFilter.Name = "traceMessageFilter";
             this.traceMessageFilter.Size = new System.Drawing.Size(437, 23);
             this.traceMessageFilter.TabIndex = 31;
-            this.traceMessageFilter.TextChanged += new System.EventHandler(this.traceMessageFilter_TextChanged);
+            this.traceMessageFilter.TextChanged += new System.EventHandler(this.TraceMessageFilter_TextChanged);
             // 
             // groupBoxFilter
             // 
@@ -649,7 +653,7 @@ namespace LogsReader.Reader
             this.buttonExport.TabIndex = 32;
             this.buttonExport.Text = "      Export [Ctrl+S]";
             this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            this.buttonExport.Click += new System.EventHandler(this.ButtonExport_Click);
             // 
             // filterPanel
             // 
@@ -664,6 +668,25 @@ namespace LogsReader.Reader
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(1299, 95);
             this.filterPanel.TabIndex = 30;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(4, 165);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 15);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "Order By:";
+            // 
+            // orderByText
+            // 
+            this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.orderByText.Location = new System.Drawing.Point(85, 162);
+            this.orderByText.Name = "orderByText";
+            this.orderByText.Size = new System.Drawing.Size(83, 23);
+            this.orderByText.TabIndex = 18;
+            this.orderByText.TextChanged += new System.EventHandler(this.OrderByText_TextChanged);
             // 
             // LogsReaderForm
             // 
@@ -750,6 +773,9 @@ namespace LogsReader.Reader
         private System.Windows.Forms.DataGridViewTextBoxColumn File;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox rowsLimitText;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateOfTrace;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox orderByText;
     }
 }
 
