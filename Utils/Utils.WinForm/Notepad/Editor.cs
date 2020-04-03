@@ -133,6 +133,54 @@ namespace Utils.WinForm.Notepad
         public string SelectedText => FCTB.SelectedText;
         public Language Language => FCTB.Language;
 
+        public bool IsChanged
+        {
+            get => FCTB.IsChanged;
+            set => FCTB.IsChanged = value;
+        }
+
+        public int DelayedEventsInterval
+        {
+            get => FCTB.DelayedEventsInterval;
+            set => FCTB.DelayedEventsInterval = value;
+        }
+
+        public Brush BackBrush
+        {
+            get => FCTB.BackBrush;
+            set => FCTB.BackBrush = value;
+        }
+
+        public BorderStyle BorderStyle
+        {
+            get => FCTB.BorderStyle;
+            set => FCTB.BorderStyle = value;
+        }
+
+        public Cursor Cursor
+        {
+            get => FCTB.Cursor;
+            set => FCTB.Cursor = value;
+        }
+
+        public Color DisabledColor
+        {
+            get => FCTB.DisabledColor;
+            set => FCTB.DisabledColor = value;
+        }
+
+        public bool IsReplaceMode
+        {
+            get => FCTB.IsReplaceMode;
+            set => FCTB.IsReplaceMode = value;
+        }
+
+        public virtual Color SelectionColor
+        {
+            get => FCTB.SelectionColor;
+            set => FCTB.SelectionColor = value;
+        }
+
         protected bool IsDisposed { get; private set; } = false;
 
         protected Editor() { }
@@ -218,6 +266,11 @@ namespace Utils.WinForm.Notepad
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ClearUndo()
+        {
+            FCTB.ClearUndo();
         }
 
         public void ChangeLanguage(Language lang)

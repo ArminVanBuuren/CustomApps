@@ -122,6 +122,12 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        public bool IsChanged
+        {
+            get => Current.IsChanged;
+            set => Current.IsChanged = value;
+        }
+
         public NotepadControl()
         {
             InitializeComponent();
