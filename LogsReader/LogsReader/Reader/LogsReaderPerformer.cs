@@ -172,7 +172,12 @@ namespace LogsReader.Reader
             }
             finally
             {
-                fileLog.Commit();
+                try { fileLog.Commit(); }
+                catch
+                {
+                    // ignored
+                }
+
                 fileLog.OnFound -= AddResult;
             }
         }
