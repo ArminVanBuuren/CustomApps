@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using FastColoredTextBoxNS;
 using Utils;
 using Utils.Handles;
 
@@ -85,6 +86,28 @@ namespace LogsReader.Config
         {
             get => GetValue(nameof(Message));
             set => SetValue(nameof(Message), value);
+        }
+
+        public Language MessageLanguage
+        {
+            get
+            {
+                if (Language.TryParse(GetValue(nameof(MessageLanguage)), out Language langResult))
+                    return langResult;
+                return Language.XML;
+            }
+            set => SetValue(nameof(MessageLanguage), value);
+        }
+
+        public Language TraceLanguage
+        {
+            get
+            {
+                if (Language.TryParse(GetValue(nameof(TraceLanguage)), out Language langResult))
+                    return langResult;
+                return Language.Custom;
+            }
+            set => SetValue(nameof(TraceLanguage), value);
         }
 
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)

@@ -26,14 +26,11 @@ namespace LogsReader.Reader
         {
             IQueryable<DataTemplate> result = input.AsQueryable();
             int i = 0;
-            foreach (var orderItem in _settings.OrderBy.Split(',').Where(x => !x.IsNullOrEmptyTrim()).Select(x => x.Trim()))
+            foreach (var orderItem in _settings.OrderByItems)
             {
-                var orderStatement = orderItem.Split(' ');
-                var isDescending = orderStatement.Length > 1 && (orderStatement[1].LikeAny("desc", "descending"));
-
-                if (orderStatement[0].LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+                if (orderItem.Key.LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
                 {
-                    result = isDescending
+                    result = orderItem.Value
                         ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>)result).ThenByDescending(param)
                         : i == 0 ? result.OrderBy(param) : ((IOrderedQueryable<DataTemplate>)result).ThenBy(param);
                     i++;

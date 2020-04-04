@@ -29,6 +29,7 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
         private readonly ToolStripStatusLabel _totalFilesStatus;
+        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
         
@@ -74,6 +75,7 @@ namespace LogsReader.Reader
             {
                 dgvFiles.AutoGenerateColumns = false;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+                orderByText.GotFocus += OrderByText_GotFocus;
 
                 #region Set StatusStrip
 
@@ -138,9 +140,9 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
                 tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
-                var notepad = new NotepadControl();
-                MainSplitContainer.Panel2.Controls.Add(notepad);
-                _message = notepad.AddDocument("Message", string.Empty, Language.XML);
+                _notepad = new NotepadControl();
+                MainSplitContainer.Panel2.Controls.Add(_notepad);
+                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -148,8 +150,9 @@ namespace LogsReader.Reader
                 _message.DisabledColor = Color.FromArgb(100, 171, 171, 171);
                 _message.IsReplaceMode = false;
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+                _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = notepad.AddDocument("Trace", string.Empty);
+                _traceMessage = _notepad.AddDocument("Trace", string.Empty);
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -157,12 +160,13 @@ namespace LogsReader.Reader
                 _traceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
                 _traceMessage.IsReplaceMode = false;
                 _traceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+                _traceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
-                notepad.TabsFont = this.Font;
-                notepad.TextFont = new Font("Segoe UI", 10F);
-                notepad.Dock = DockStyle.Fill;
-                notepad.SelectEditor(0);
-                notepad.ReadOnly = true;
+                _notepad.TabsFont = this.Font;
+                _notepad.TextFont = new Font("Segoe UI", 10F);
+                _notepad.Dock = DockStyle.Fill;
+                _notepad.SelectEditor(0);
+                _notepad.ReadOnly = true;
 
                 dateStartFilter.ValueChanged += (sender, args) =>
                 {
@@ -211,13 +215,20 @@ namespace LogsReader.Reader
                 traceMessageFilter.AssignValue(UserSettings.Message, TraceMessageFilter_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
 
+                var langMessage = UserSettings.MessageLanguage;
+                var langTrace = UserSettings.TraceLanguage;
+                if (_message.Language != langMessage)
+                   _message.ChangeLanguage(langMessage);
+                if (_traceMessage.Language != langTrace)
+                    _traceMessage.ChangeLanguage(langTrace);
+
                 serversText.Text = CurrentSettings.Servers;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-                orderByText.AssignValue(CurrentSettings.OrderBy, OrderByText_TextChanged);
+                orderByText.Text = CurrentSettings.OrderBy;
 
                 btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
@@ -553,8 +564,7 @@ namespace LogsReader.Reader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            _message.Enabled = !IsWorking;
-            _traceMessage.Enabled = !IsWorking;
+            _notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -569,6 +579,7 @@ namespace LogsReader.Reader
             traceNameLikeFilter.Enabled = !IsWorking;
             traceMessageFilter.Enabled = !IsWorking;
             alreadyUseFilter.Enabled = !IsWorking;
+            orderByText.Enabled = !IsWorking;
             buttonExport.Enabled = dgvFiles.RowCount > 0;
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
         }
@@ -630,7 +641,7 @@ namespace LogsReader.Reader
 
                 descriptionText.Text = template.Description;
 
-                _message.Text = message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.TrimWhiteSpaces();
+                _message.Text = (_message.Language == Language.XML || _message.Language == Language.HTML) && message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.TrimWhiteSpaces();
                 _message.IsChanged = false;
                 _message.ClearUndo();
                 _message.DelayedEventsInterval = 10;
@@ -771,10 +782,18 @@ namespace LogsReader.Reader
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OrderByText_TextChanged(object sender, EventArgs e)
+        private void OrderByText_Leave(object sender, EventArgs e)
         {
             CurrentSettings.OrderBy = orderByText.Text;
-            fileNames.AssignValue(CurrentSettings.OrderBy, OrderByText_TextChanged);
+            ValidationCheck(CurrentSettings.OrderBy.Equals(orderByText.Text, StringComparison.InvariantCultureIgnoreCase));
+            orderByText.Text = CurrentSettings.OrderBy;
+            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OrderByText_GotFocus(object sender, EventArgs e)
+        {
+            LRSettingsScheme.CheckOrderByItem(orderByText.Text);
+            ValidationCheck(CurrentSettings.OrderBy.Equals(orderByText.Text, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static void CheckTreeViewNode(TreeNode node, bool isChecked)
@@ -811,6 +830,16 @@ namespace LogsReader.Reader
         private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
         {
             UserSettings.Message = traceMessageFilter.Text;
+        }
+
+        private void Message_LanguageChanged(object sender, EventArgs e)
+        {
+            UserSettings.MessageLanguage = _message.Language;
+        }
+
+        private void TraceMessage_LanguageChanged(object sender, EventArgs e)
+        {
+            UserSettings.TraceLanguage = _traceMessage.Language;
         }
 
         void ValidationCheck(bool clearStatus = true)

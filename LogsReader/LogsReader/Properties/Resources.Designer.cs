@@ -220,7 +220,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую в выражении можно указать несколько полей сортировки, а также использовать операцию descending..
+        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc..
         /// </summary>
         internal static string LRSettingsScheme_OrderByComment {
             get {

@@ -29,8 +29,8 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,6 +45,8 @@ namespace LogsReader.Reader
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SchemePanel = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.orderByText = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.rowsLimitText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -80,8 +82,6 @@ namespace LogsReader.Reader
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.orderByText = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
             this.ParentSplitContainer.Panel1.SuspendLayout();
@@ -280,6 +280,25 @@ namespace LogsReader.Reader
             this.SchemePanel.Size = new System.Drawing.Size(171, 399);
             this.SchemePanel.TabIndex = 15;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(4, 165);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 15);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "Order By:";
+            // 
+            // orderByText
+            // 
+            this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.orderByText.Location = new System.Drawing.Point(85, 162);
+            this.orderByText.Name = "orderByText";
+            this.orderByText.Size = new System.Drawing.Size(83, 23);
+            this.orderByText.TabIndex = 18;
+            this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -317,13 +336,13 @@ namespace LogsReader.Reader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(2, 188);
             this.trvMain.Name = "trvMain";
-            treeNode5.Name = "trvServers";
-            treeNode5.Text = "Servers";
-            treeNode6.Name = "trvTypes";
-            treeNode6.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(166, 208);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
@@ -668,25 +687,6 @@ namespace LogsReader.Reader
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(1299, 95);
             this.filterPanel.TabIndex = 30;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(4, 165);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(56, 15);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "Order By:";
-            // 
-            // orderByText
-            // 
-            this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.orderByText.Location = new System.Drawing.Point(85, 162);
-            this.orderByText.Name = "orderByText";
-            this.orderByText.Size = new System.Drawing.Size(83, 23);
-            this.orderByText.TabIndex = 18;
-            this.orderByText.TextChanged += new System.EventHandler(this.OrderByText_TextChanged);
             // 
             // LogsReaderForm
             // 

@@ -192,7 +192,7 @@
     <value>Применить фильтр сразу вместе с поиском</value>
   </data>
   <data name="LRSettingsScheme_OrderByComment" xml:space="preserve">
-    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую в выражении можно указать несколько полей сортировки, а также использовать операцию descending.</value>
+    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
   </data>
   <data name="LRSettingsScheme_RowsLimitCommentComment" xml:space="preserve">
     <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>

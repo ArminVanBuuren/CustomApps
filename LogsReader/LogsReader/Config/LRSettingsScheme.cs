@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
@@ -24,10 +27,7 @@ namespace LogsReader.Config
 
         public event ReportStatusHandler ReportStatus;
 
-        public LRSettingsScheme()
-        {
-
-        }
+        public LRSettingsScheme() { }
 
         internal LRSettingsScheme(string name)
         {
@@ -169,7 +169,50 @@ namespace LogsReader.Config
         public string OrderBy
         {
             get => _orderBy;
-            set => _orderBy = value.IsNullOrEmptyTrim() ? _orderBy : value;
+            set
+            {
+                if (value.IsNullOrEmptyTrim())
+                    return;
+
+                Dictionary<string, bool> result = null;
+                try
+                {
+                    result = CheckOrderByItem(value);
+                }
+                catch (ArgumentException)
+                {
+                    ReportStatus?.Invoke($"Columns must be unique", ReportStatusType.Error);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    ReportStatus?.Invoke(ex.Message, ReportStatusType.Error);
+                    return;
+                }
+
+                OrderByItems = result;
+                _orderBy = string.Join(", ", OrderByItems.Select(x => $"{x.Key}" + (x.Value ? " desc" : "")));
+            }
+        }
+
+        [XmlIgnore]
+        public Dictionary<string, bool> OrderByItems { get; private set; }
+
+        internal static Dictionary<string, bool> CheckOrderByItem(string value)
+        {
+            var result = new Dictionary<string, bool>();
+            foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrEmptyTrim()).Select(x => x.Trim()))
+            {
+                var orderStatement = orderItem.Split(' ');
+                var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
+                
+                if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+                    throw new Exception($"OrderBy item '{orderItem}' is incorrect! Please check.");
+
+                result.Add(orderItem2, isDescending);
+            }
+
+            return result;
         }
 
         [XmlAnyElement("TraceParseComment")]
