@@ -47,10 +47,7 @@ namespace LogsReader.Reader
             Server = server;
             FilePath = filePath;
             File = new FileInfo(filePath);
-
-            var logsPathWithoutRoot = CurrentSettings.LogsDirectory.Replace(Path.GetPathRoot(CurrentSettings.LogsDirectory), string.Empty, StringComparison.InvariantCultureIgnoreCase);
-            var filePathWithoutRoot = FilePath.Replace(Path.GetPathRoot(FilePath), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');
-            FileNamePartial = filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
+            FileNamePartial = IO.GetPartialPath(FilePath, CurrentSettings.LogsDirectory);
         }
 
         public abstract void ReadLine(string line);
