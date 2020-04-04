@@ -9,11 +9,13 @@ using LogsReader.Properties;
 using LogsReader.Reader;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
+using Utils.WinForm;
 
 namespace LogsReader
 {
     public partial class MainForm : Form
     {
+        private int _countOfLastProcess = 0;
         private LogsReaderForm _current;
         /// <summary>
         /// Настройки схем
@@ -71,6 +73,9 @@ namespace LogsReader
                         return;
                     foreach (var form in AllForms)
                         form.Value.ApplySettings();
+
+                    var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                    thread.Start();
                 };
 
 
@@ -107,9 +112,6 @@ namespace LogsReader
                         Util.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", @"Load scheme");
                     }
                 }
-
-                var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
-                thread.Start();
             }
             catch (Exception ex)
             {
@@ -160,52 +162,99 @@ namespace LogsReader
                     appCPU.NextValue();
                 }
 
+                var taskBarNotify = TaskbarManager.IsPlatformSupported
+                    ? (Action<int, int>) ((inProgress, progressItems) =>
+                    {
+                        if (inProgress == 0)
+                        {
+                            TaskbarManager.Instance.SetOverlayIcon(null, "");
+                            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+                        }
+                        else
+                        {
+                            SetTaskBarOverlay(inProgress);
+                            TaskbarManager.Instance.SetProgressValue(progressItems, inProgress * 100);
+                        }
+                    })
+                    : null;
+
+                void Monitoring()
+                {
+                    if (AllForms == null || AllForms.Count == 0)
+                        return;
+
+                    double percent = 0;
+                    if (appCPU != null)
+                        double.TryParse(appCPU.NextValue().ToString(), out percent);
+                    var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
+                    var currentProcess = Process.GetCurrentProcess();
+                    var threadsUsage = $"{currentProcess.Threads.Count,-2}";
+                    var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+
+                    int inProgress = 0;
+                    int progressItems = 0;
+                    foreach (var form in AllForms.Values)
+                    {
+                        form.CPUUsage.Text = cpuUsage;
+                        form.ThreadsUsage.Text = threadsUsage;
+                        form.RAMUsage.Text = ramUsage;
+
+                        if ((form.Progress > 0 && form.Progress < 100) || (form.Progress == 0 && form.IsWorking))
+                        {
+                            inProgress++;
+                            progressItems += form.Progress;
+                        }
+                    }
+
+                    if (_countOfLastProcess > 0 && inProgress == 0)
+                        FlashWindow.Flash(this);
+
+                    taskBarNotify?.Invoke(inProgress, progressItems);
+                    _countOfLastProcess = inProgress;
+                }
+
                 while (!IsClosed)
                 {
                     if (InvokeRequired)
-                    {
-                        BeginInvoke(new MethodInvoker(delegate
-                        {
-                            if(AllForms == null || AllForms.Count == 0)
-                                return;
+                        Invoke(new MethodInvoker(Monitoring));
+                    else
+                        Monitoring();
 
-                            double percent = 0;
-                            if (appCPU != null)
-                                double.TryParse(appCPU.NextValue().ToString(), out percent);
-                            var cpuUsage = $"{(int)(percent / Environment.ProcessorCount),3}%";
-                            var currentProcess = Process.GetCurrentProcess();
-                            var threadsUsage = $"{currentProcess.Threads.Count,-2}";
-                            var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-
-                            int inProgress = 0;
-                            int progressItems = 0;
-                            foreach (var form in AllForms.Values)
-                            {
-                                form.CPUUsage.Text = cpuUsage;
-                                form.ThreadsUsage.Text = threadsUsage;
-                                form.RAMUsage.Text = ramUsage;
-
-                                if ((form.Progress > 0 && form.Progress < 100) || (form.Progress == 0 && form.IsWorking))
-                                {
-                                    inProgress++;
-                                    progressItems += form.Progress;
-                                }
-                            }
-
-                            if (inProgress == 0)
-                                TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
-                            else
-                                TaskbarManager.Instance.SetProgressValue(progressItems, inProgress * 100);
-
-                        }));
-                    }
                     Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
             {
                 Util.MessageShow(ex.ToString(), @"System Resource Monitoring");
+
+                void Clear()
+                {
+                    if (AllForms == null || AllForms.Count == 0)
+                        return;
+                    foreach (var form in AllForms.Values)
+                    {
+                        form.CPUUsage.Text = string.Empty;
+                        form.ThreadsUsage.Text = string.Empty;
+                        form.RAMUsage.Text = string.Empty;
+                    }
+                }
+
+                if (InvokeRequired)
+                    Invoke(new MethodInvoker(Clear));
+                else
+                    Clear();
             }
+        }
+
+        private static void SetTaskBarOverlay(int countItem)
+        {
+            var bmp = new Bitmap(32, 32);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.FillEllipse(Brushes.Red, new Rectangle(new Point(4, 4), new Size(27, 27)));
+                g.DrawString(countItem.ToString(), new Font("Sans serif", 16, GraphicsUnit.Point), Brushes.White, new Rectangle(new Point(countItem <= 9 ? 8 : 1, 5), bmp.Size));
+            }
+            TaskbarManager.Instance.SetOverlayIcon(Icon.FromHandle(bmp.GetHicon()), "");
         }
 
         public void ApplySettings()
