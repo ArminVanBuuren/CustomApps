@@ -155,7 +155,7 @@ namespace LogsReader.Config
 
             if (!REGEX.Verify(text))
             {
-                Util.MessageShow($"Pattern \"{text}\" is incorrect", "TraceParse Reader");
+                Util.MessageShow($"Pattern \"{text}\" is incorrect!", "TraceParse Reader");
                 return null;
             }
             else
