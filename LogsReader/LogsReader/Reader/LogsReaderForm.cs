@@ -228,6 +228,7 @@ namespace LogsReader.Reader
                 _notepad.WordHighlights = UserSettings.WordHighlights;
 
                 serversText.Text = CurrentSettings.Servers;
+                _notepad.DefaultEncoding = CurrentSettings.Encoding;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
