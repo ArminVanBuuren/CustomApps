@@ -12,7 +12,6 @@ namespace Utils.WinForm.Notepad
 {
     public class Editor : IDisposable
     {
-        protected static readonly Encoding DefaultEncoding = new UTF8Encoding(false);
         protected static readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         private bool _validateEditorOnChange = false;
         private bool _wordHighLisghts = false;
@@ -22,7 +21,7 @@ namespace Utils.WinForm.Notepad
         public event EventHandler SelectionChanged;
         public event EventHandler LanguageChanged;
 
-        protected FastColoredTextBox FCTB { get; set; }
+        protected internal FastColoredTextBox FCTB { get; set; }
 
         public TabPage Page { get; protected set; }
 
@@ -46,7 +45,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public virtual Encoding Encoding => DefaultEncoding;
+        public virtual Encoding Encoding { get; protected set; } = null;
 
         public bool IsContentChanged => !FCTB.Text.Equals(Source, StringComparison.Ordinal);
 
@@ -234,7 +233,7 @@ namespace Utils.WinForm.Notepad
             FCTB.SelectionChanged += FCTB_SelectionChanged;
         }
 
-        private void FCTB_SelectionChanged(object sender, EventArgs e)
+        protected virtual void FCTB_SelectionChanged(object sender, EventArgs e)
         {
             SelectionChanged?.Invoke(sender, e);
         }
@@ -260,7 +259,7 @@ namespace Utils.WinForm.Notepad
                 if (FCTB.Language == Language.XML && FCTB.Text.IsXml(out var document))
                 {
                     FCTB.Text = document.PrintXml();
-                    SomethingChanged();
+                    CheckOnSomethingChanged();
                 }
             }
             catch (Exception ex)
@@ -312,10 +311,10 @@ namespace Utils.WinForm.Notepad
 
         private void Fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SomethingChanged();
+            CheckOnSomethingChanged();
         }
 
-        protected void SomethingChanged()
+        protected void CheckOnSomethingChanged(bool isChanged = false)
         {
             // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
             if (Page.InvokeRequired)
@@ -332,7 +331,8 @@ namespace Utils.WinForm.Notepad
                 Page.Text = HeaderName.Trim() + new string(' ', 2);
             }
 
-            OnSomethingChanged?.Invoke(this, null);
+            if (IsContentChanged || isChanged)
+                OnSomethingChanged?.Invoke(this, null);
         }
 
         public void Focus()

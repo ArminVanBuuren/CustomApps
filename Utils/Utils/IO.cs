@@ -33,29 +33,42 @@ namespace Utils
             }
 
             // Analyze the BOM
-            if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
-            if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
-            if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
-            if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
-            if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return Encoding.UTF32;
-            return Encoding.UTF8;
+            if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
+                return Encoding.UTF7;
+            if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
+                return Encoding.UTF8; // BOM is EF BB BF. But you can't rely on this. Lots of UTF-8 files don't have a BOM, especially if they originated on non-Windows systems. But you can safely assume that if a file validates as UTF-8, it is UTF-8. False positives are rare.
+            if ((bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) || (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0))
+                return Encoding.UTF32; // BOM is 00 00 FE FF (for BE) or FF FE 00 00 (for LE). But UTF-32 is easy to detect even without a BOM. This is because the Unicode code point range is restricted to U+10FFFF, and thus UTF-32 units always have the pattern 00 {00-10} xx xx (for BE) or xx xx {00-10} 00 (for LE). If the data has a length that's a multiple of 4, and follows one of these patterns, you can safely assume it's UTF-32. False positives are nearly impossible due to the rarity of 00 bytes in byte-oriented encodings.
+            if (bom[0] == 0xff && bom[1] == 0xfe)
+                return Encoding.Unicode; //UTF-16LE
+            if (bom[0] == 0xfe && bom[1] == 0xff)
+                return Encoding.BigEndianUnicode; //UTF-16BE
+            if (bom[0] == 0 && bom[1] == 0) 
+                return Encoding.ASCII; // US-ASCII (No BOM, but you don't need one. ASCII can be easily identified by the lack of bytes in the 80-FF range.)
 
-            //using (var reader = new StreamReader(filename, Encoding.Default, true))
-            //{
-            //    if (reader.Peek() >= 0) // you need this!
-            //        reader.Read();
+            using (var reader = new StreamReader(filename, Encoding.Default, true))
+            {
+                if (reader.Peek() >= 0) // you need this!
+                    reader.Read();
 
-            //    return reader.CurrentEncoding;
-            //}
+                return reader.CurrentEncoding;
+            }
         }
 
-        public static string SafeReadFile(string path)
+        public static string GetPartialPath(string path, string excludePath)
         {
-            if (!File.Exists(path))
+            var logsPathWithoutRoot = excludePath.Replace(Path.GetPathRoot(excludePath), string.Empty, StringComparison.InvariantCultureIgnoreCase);
+            var filePathWithoutRoot = path.Replace(Path.GetPathRoot(path), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');
+            return filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
+        }
+
+        public static string SafeReadFile(string filePath, Encoding encoding = null)
+        {
+            if (!File.Exists(filePath))
                 return null;
 
             var attempts = 0;
-            while (!IsFileReady(path))
+            while (!IsFileReady(filePath))
             {
                 attempts++;
                 System.Threading.Thread.Sleep(500);
@@ -64,7 +77,7 @@ namespace Utils
             }
 
             string context;
-            using (var sr = new StreamReader(path))
+            using (var sr = new StreamReader(filePath, encoding ?? GetEncoding(filePath)))
             {
                 context = sr.ReadToEnd();
             }

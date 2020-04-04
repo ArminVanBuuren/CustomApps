@@ -32,6 +32,8 @@ namespace Utils.WinForm.Notepad
 
         public event EventHandler OnRefresh;
         public event EventHandler LanguageChanged;
+        public event EventHandler WordWrapStateChanged;
+        public event EventHandler WordHighlightsStateChanged;
 
         Dictionary<TabPage, Editor> ListOfEditors { get; } = new Dictionary<TabPage, Editor>();
 
@@ -129,6 +131,8 @@ namespace Utils.WinForm.Notepad
             set => Current.IsChanged = value;
         }
 
+        public Encoding DefaultEncoding { get; set; } = Encoding.Default;
+
         public NotepadControl()
         {
             InitializeComponent();
@@ -152,10 +156,14 @@ namespace Utils.WinForm.Notepad
             _wordWrapping = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap", Checked = true, Padding = new Padding(10, 0, 0, 0)};
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
+                if(ListOfEditors.Values.All(x => x.WordWrap == WordWrap))
+                    return;
+
                 foreach (var editor in ListOfEditors.Values.Where(p => p.WordWrap != WordWrap))
                 {
                     editor.WordWrap = WordWrap;
                 }
+                WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
             statusStrip.Items.Add(wordWrapToolStrip);
@@ -165,10 +173,14 @@ namespace Utils.WinForm.Notepad
             _wordHighlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(10, 0, 0, 0) };
             _wordHighlights.CheckStateChanged += (s, e) =>
             {
+                if (ListOfEditors.Values.All(x => x.WordHighlights == WordHighlights))
+                    return;
+
                 foreach (var editor in ListOfEditors.Values.Where(p => p.WordHighlights != WordHighlights))
                 {
                     editor.WordHighlights = WordHighlights;
                 }
+                WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordHighlightsToolStrip = new ToolStripControlHost(_wordHighlights);
             statusStrip.Items.Add(wordHighlightsToolStrip);
@@ -256,7 +268,6 @@ namespace Utils.WinForm.Notepad
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TabControlObj.Focus();
             if (sender is ToolStripComboBox comboBoxLanguages && comboBoxLanguages.SelectedItem is Language lang && Current != null && Current.Language != lang)
             {
                 bool isChanged = Current.ChangeLanguage(lang);
@@ -351,6 +362,27 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        public void ReplaceEditor(Editor removeEditor, Editor newEditor)
+        {
+            try
+            {
+                if (ListOfEditors.ContainsKey(removeEditor.Page))
+                {
+                    ListOfEditors.Remove(removeEditor.Page);
+                    TabControlObj.TabPages.Remove(removeEditor.Page);
+                    removeEditor.OnSomethingChanged -= EditorOnSomethingChanged;
+                    removeEditor.SelectionChanged -= RefreshFormStatus;
+                    removeEditor.Dispose();
+                }
+
+                InitializePage(newEditor);
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
         void InitializePage(Editor editor)
         {
             var index = TabControlObj.TabPages.Count;
@@ -367,6 +399,7 @@ namespace Utils.WinForm.Notepad
             Current = editor;
 
             RefreshFormStatus(this, null);
+            OnRefresh?.Invoke(this, EventArgs.Empty);
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
@@ -444,7 +477,7 @@ namespace Utils.WinForm.Notepad
             _currentLineInfo.Text = (Current.Selection.FromLine + 1).ToString();
             _currentPosition.Text = (Current.Selection.FromX + 1).ToString();
             _selectedInfo.Text = $"{Current.SelectedText.Length}|{(Current.SelectedText.Length > 0 ? Current.SelectedText.Split('\n').Length : 0)}";
-            _encodingInfo.Text = Current.Encoding.EncodingName;
+            _encodingInfo.Text = Current.Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
 
             //_listOfLanguages.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
             _listOfLanguages.Text = Current.Language.ToString();

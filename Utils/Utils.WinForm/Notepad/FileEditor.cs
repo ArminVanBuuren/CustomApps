@@ -21,29 +21,14 @@ namespace Utils.WinForm.Notepad
             private set
             {
                 _fileName = value;
-                HeaderName = IO.GetLastNameInPath(_fileName, true);
+                HeaderName = Path.GetFileName(_fileName);
+                if (File.Exists(FilePath))
+                    Encoding = IO.GetEncoding(FilePath);
+                EnableWatcher();
             }
         }
 
-        public override Encoding Encoding
-        {
-            get
-            {
-                try
-                {
-                    return IO.GetEncoding(FilePath);
-                }
-                catch (Exception)
-                {
-                    return base.Encoding;
-                }
-            }
-        }
-
-        internal FileEditor(Editor editor)
-        {
-            //todo: when save
-        }
+        public override Encoding Encoding { get; protected set; }
 
         internal FileEditor(string filePath, bool wordWrap, bool wordHighlights)
         {
@@ -58,17 +43,34 @@ namespace Utils.WinForm.Notepad
             InitializePage();
         }
 
+        FileEditor(Editor editor)
+        {
+            Source = editor.Text;
+
+            InitializeFCTB(editor.Language, editor.WordWrap);
+            WordHighlights = editor.WordHighlights;
+
+            InitializePage();
+        }
+
+        public static FileEditor ConvertToFileEditor(Editor editor, Encoding encoding)
+        {
+            var newEditor = new FileEditor(editor)
+            {
+                Encoding = encoding
+            };
+            return newEditor;
+        }
+
         Language InitializeFile(string filePath)
         {
             var langByExtension = GetLanguage(filePath);
 
             FilePath = filePath;
-            Source = IO.SafeReadFile(filePath);
+            Source = IO.SafeReadFile(filePath, Encoding);
 
             if (langByExtension == Language.XML && !Source.IsXml(out _))
                 MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            EnableWatcher(FilePath);
 
             return langByExtension;
         }
@@ -110,7 +112,7 @@ namespace Utils.WinForm.Notepad
             return fileFilter;
         }
 
-        private void OnForeignFileChanged(object source, FileSystemEventArgs e)
+        private void FileOnForeignChanged(object source, FileSystemEventArgs e)
         {
             try
             {
@@ -119,7 +121,7 @@ namespace Utils.WinForm.Notepad
                     case WatcherChangeTypes.Deleted:
                         MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
-                        SomethingChanged();
+                        CheckOnSomethingChanged();
                         return;
                     case WatcherChangeTypes.Created:
                     case WatcherChangeTypes.Changed:
@@ -132,7 +134,7 @@ namespace Utils.WinForm.Notepad
                                 {
                                     if (tryCount >= 5)
                                     {
-                                        MessageBox.Show($"File \"{FilePath}\" сhanged. Current process cannot access the file because it is being used by another process", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MessageBox.Show($"File \"{FilePath}\" was сhanged. Current process cannot access to the file because it is being used by another process.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
 
@@ -146,10 +148,10 @@ namespace Utils.WinForm.Notepad
                                 if (IsDisposed)
                                     return;
 
-                                Source = File.ReadAllText(FilePath);
+                                Source = IO.SafeReadFile(FilePath, Encoding);
                             }
 
-                            SomethingChanged();
+                            CheckOnSomethingChanged();
 
                             break;
                         }
@@ -165,10 +167,10 @@ namespace Utils.WinForm.Notepad
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             FilePath = e.FullPath;
-            SomethingChanged(); //  e.OldFullPath, e.FullPath
+            CheckOnSomethingChanged(true); //  e.OldFullPath, e.FullPath
         }
 
-        public void SaveDocumnet(string newFileDestination = null)
+        public void SaveDocument(string newFileDestination = null)
         {
             try
             {
@@ -197,42 +199,26 @@ namespace Utils.WinForm.Notepad
                     if (fileDestination.IsNullOrEmpty())
                         return;
 
-                    lock (syncWhenFileChanged)
-                    {
-                        IO.WriteFile(fileDestination, FCTB.Text, Encoding);
-                    }
-
+                    SaveFile(fileDestination);
                     var newLanguage = InitializeFile(fileDestination);
                     ChangeLanguage(newLanguage);
-
-                    EnableWatcher(FilePath);
-
-                    SomethingChanged();
                 }
                 else
                 {
                     if (newFileDestination != null)
                     {
-                        lock (syncWhenFileChanged)
-                        {
-                            IO.WriteFile(newFileDestination, FCTB.Text);
-                        }
-
+                        SaveFile(newFileDestination);
                         var newLanguage = InitializeFile(newFileDestination);
                         ChangeLanguage(newLanguage);
-
-                        EnableWatcher(FilePath);
-
-                        SomethingChanged();
                     }
                     else
                     {
-                        lock (syncWhenFileChanged)
-                        {
-                            IO.WriteFile(FilePath, FCTB.Text);
-                        }
+                        Source = FCTB.Text;
+                        SaveFile(FilePath, true);
                     }
                 }
+
+                CheckOnSomethingChanged();
             }
             catch (Exception ex)
             {
@@ -240,18 +226,39 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        void EnableWatcher(string filePath)
+        void SaveFile(string destinationFile, bool enableWatcher = false)
+        {
+            try
+            {
+                DisableWatcher();
+                lock (syncWhenFileChanged)
+                {
+                    IO.WriteFile(destinationFile, FCTB.Text, Encoding);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (enableWatcher)
+                    EnableWatcher();
+            }
+        }
+
+        void EnableWatcher()
         {
             DisableWatcher();
 
             _watcher = new FileSystemWatcher();
-            var paths = filePath.Split('\\');
-            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1));
+            var paths = FilePath.Split('\\');
+            _watcher.Path = string.Join("\\", paths.Take(paths.Length - 1)) + "\\";
             _watcher.Filter = paths[paths.Length - 1];
             _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            _watcher.Changed += OnForeignFileChanged;
-            _watcher.Created += OnForeignFileChanged;
-            _watcher.Deleted += OnForeignFileChanged;
+            _watcher.Changed += FileOnForeignChanged;
+            _watcher.Created += FileOnForeignChanged;
+            _watcher.Deleted += FileOnForeignChanged;
             _watcher.Renamed += OnFileRenamed;
             _watcher.EnableRaisingEvents = true;
         }
@@ -261,9 +268,9 @@ namespace Utils.WinForm.Notepad
             if (_watcher == null)
                 return;
 
-            _watcher.Changed -= OnForeignFileChanged;
-            _watcher.Created -= OnForeignFileChanged;
-            _watcher.Deleted -= OnForeignFileChanged;
+            _watcher.Changed -= FileOnForeignChanged;
+            _watcher.Created -= FileOnForeignChanged;
+            _watcher.Deleted -= FileOnForeignChanged;
             _watcher.Renamed -= OnFileRenamed;
             _watcher.EnableRaisingEvents = false;
             _watcher.Dispose();

@@ -40,7 +40,7 @@ namespace Utils.WinForm.Notepad
             set => NotepadControlItem.UserCanCloseTabItem = value;
         }
 
-        public Notepad(string filePath = null, bool wordWrap = false)
+        public Notepad()
         {
             InitializeComponent();
 
@@ -100,8 +100,7 @@ namespace Utils.WinForm.Notepad
 
         private async void FileToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            await Task.Factory.StartNew(() =>
-                Invoke(new MethodInvoker(delegate { PerformCommand(e.ClickedItem); })));
+            await Task.Factory.StartNew(() => Invoke(new MethodInvoker(delegate { PerformCommand(e.ClickedItem); })));
         }
 
         void PerformCommand(ToolStripItem item)
@@ -136,30 +135,49 @@ namespace Utils.WinForm.Notepad
             {
                 Close();
             }
-            else if (NotepadControlItem.Current != null && NotepadControlItem.Current is FileEditor fileEditor)
+            else if (NotepadControlItem.Current != null)
             {
-                if (item == saveToolStripMenuItem)
+                if (NotepadControlItem.Current is FileEditor fileEditor)
                 {
-                    fileEditor.SaveDocumnet();
-                }
-                else if (item == saveAsToolStripMenuItem)
-                {
-                    string fileDestination;
-                    using (var sfd = new SaveFileDialog())
+                    if (item == saveToolStripMenuItem)
                     {
-                        sfd.Filter = fileEditor.GetFileFilter();
-                        if (sfd.ShowDialog() != DialogResult.OK)
-                            return;
-
-                        fileDestination = sfd.FileName;
+                        fileEditor.SaveDocument();
                     }
-
-                    if (!fileDestination.IsNullOrEmpty())
+                    else if (item == saveAsToolStripMenuItem)
                     {
-                        fileEditor.SaveDocumnet(fileDestination);
+                        SaveAsFileEditor(fileEditor);
+                    }
+                }
+                else
+                {
+                    var newFileEditor = FileEditor.ConvertToFileEditor(NotepadControlItem.Current, NotepadControlItem.DefaultEncoding);
+                    if(SaveAsFileEditor(newFileEditor))
+                    {
+                        NotepadControlItem.ReplaceEditor(NotepadControlItem.Current, newFileEditor);
                     }
                 }
             }
+        }
+
+        static bool SaveAsFileEditor(FileEditor fileEditor)
+        {
+            string fileDestination;
+            using (var sfd = new SaveFileDialog())
+            {
+                sfd.Filter = fileEditor.GetFileFilter();
+                if (sfd.ShowDialog() != DialogResult.OK)
+                    return false;
+
+                fileDestination = sfd.FileName;
+            }
+
+            if (!fileDestination.IsNullOrEmpty())
+            {
+                fileEditor.SaveDocument(fileDestination);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
