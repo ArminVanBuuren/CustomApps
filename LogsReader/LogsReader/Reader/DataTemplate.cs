@@ -12,7 +12,6 @@ namespace LogsReader.Reader
         private string _date = null;
         private string _description = null;
         private string _traceName = null;
-        private string _message = string.Empty;
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
         {
@@ -115,11 +114,7 @@ namespace LogsReader.Reader
             private set => _description = value;
         }
 
-        public string Message
-        {
-            get => _message.IsNullOrEmpty() ? TraceMessage : _message;
-            private set => _message = value;
-        }
+        public string Message { get; private set; } = string.Empty;
 
         public string TraceMessage
         {
