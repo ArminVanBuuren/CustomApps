@@ -167,6 +167,8 @@ namespace LogsReader.Reader
                 _notepad.Dock = DockStyle.Fill;
                 _notepad.SelectEditor(0);
                 _notepad.ReadOnly = true;
+                _notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
+                _notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
                 dateStartFilter.ValueChanged += (sender, args) =>
                 {
@@ -222,6 +224,9 @@ namespace LogsReader.Reader
                 if (_traceMessage.Language != langTrace)
                     _traceMessage.ChangeLanguage(langTrace);
 
+                _notepad.WordWrap = UserSettings.WordWrap;
+                _notepad.WordHighlights = UserSettings.WordHighlights;
+
                 serversText.Text = CurrentSettings.Servers;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
@@ -234,12 +239,11 @@ namespace LogsReader.Reader
             }
             finally
             {
-                ApplySettings();
                 trvMain.Nodes["trvServers"].Checked = false;
                 trvMain.Nodes["trvTypes"].Checked = false;
                 CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
                 CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
-                ClearForm();
+                ClearForm(true);
                 ValidationCheck();
             }
         }
@@ -260,6 +264,7 @@ namespace LogsReader.Reader
 
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
+                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -287,6 +292,7 @@ namespace LogsReader.Reader
 
                 UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
                 UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -628,7 +634,6 @@ namespace LogsReader.Reader
                     return;
 
                 var privateID = (int)dgvFiles.SelectedRows[0].Cells["PrivateID"].Value;
-
                 if (privateID == -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
@@ -637,11 +642,18 @@ namespace LogsReader.Reader
                 }
 
                 var template = OverallResultList[privateID];
-                var message = XML.RemoveUnallowable(template.Message, " ");
 
                 descriptionText.Text = template.Description;
 
-                _message.Text = (_message.Language == Language.XML || _message.Language == Language.HTML) && message.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : message.TrimWhiteSpaces();
+                if (_message.Language == Language.XML || _message.Language == Language.HTML)
+                {
+                    var messageXML = XML.RemoveUnallowable(template.Message, " ");
+                    _message.Text = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
+                }
+                else
+                {
+                    _message.Text = template.Message.TrimWhiteSpaces();
+                }
                 _message.IsChanged = false;
                 _message.ClearUndo();
                 _message.DelayedEventsInterval = 10;
@@ -834,12 +846,26 @@ namespace LogsReader.Reader
 
         private void Message_LanguageChanged(object sender, EventArgs e)
         {
+            var prev = UserSettings.MessageLanguage;
             UserSettings.MessageLanguage = _message.Language;
+            if((prev == Language.HTML || prev == Language.XML) && (_message.Language == Language.XML || _message.Language == Language.HTML))
+                return;
+            DgvFiles_SelectionChanged(this, EventArgs.Empty);
         }
 
         private void TraceMessage_LanguageChanged(object sender, EventArgs e)
         {
             UserSettings.TraceLanguage = _traceMessage.Language;
+        }
+
+        private void Notepad_WordWrapStateChanged(object sender, EventArgs e)
+        {
+            UserSettings.WordWrap = _notepad.WordWrap;
+        }
+
+        private void Notepad_WordHighlightsStateChanged(object sender, EventArgs e)
+        {
+            UserSettings.WordHighlights = _notepad.WordHighlights;
         }
 
         void ValidationCheck(bool clearStatus = true)
@@ -866,9 +892,10 @@ namespace LogsReader.Reader
             ClearForm();
         }
 
-        void ClearForm()
+        void ClearForm(bool isLoading = false)
         {
-            SaveInterfaceParams();
+            if (!isLoading)
+                SaveInterfaceParams();
 
             OverallResultList?.Clear();
             OverallResultList = null;

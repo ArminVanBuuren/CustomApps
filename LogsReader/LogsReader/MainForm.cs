@@ -65,6 +65,15 @@ namespace LogsReader
                             form.SaveInterfaceParams();
                     SaveInterfaceParams();
                 };
+                Shown += (s, e) =>
+                {
+                    if (AllForms == null)
+                        return;
+                    foreach (var form in AllForms)
+                        form.Value.ApplySettings();
+                };
+
+
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 

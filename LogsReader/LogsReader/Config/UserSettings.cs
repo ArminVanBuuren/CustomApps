@@ -110,6 +110,29 @@ namespace LogsReader.Config
             set => SetValue(nameof(TraceLanguage), value);
         }
 
+        public bool WordWrap
+        {
+            get
+            {
+                var resStr = GetValue(nameof(WordWrap));
+                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                    return true;
+                return res;
+            }
+            set => SetValue(nameof(WordWrap), value);
+        }
+
+        public bool WordHighlights
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(WordHighlights)), out var res))
+                    return res;
+                return false;
+            }
+            set => SetValue(nameof(WordHighlights), value);
+        }
+
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)
         {
             var vlueStr = GetValue(name);

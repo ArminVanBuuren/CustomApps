@@ -124,7 +124,7 @@ namespace LogsReader.Reader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(525, 346);
+            this.dgvFiles.Size = new System.Drawing.Size(525, 343);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -466,7 +466,7 @@ namespace LogsReader.Reader
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
             this.EnumSplitContainer.Size = new System.Drawing.Size(525, 399);
-            this.EnumSplitContainer.SplitterDistance = 346;
+            this.EnumSplitContainer.SplitterDistance = 343;
             this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
@@ -476,7 +476,7 @@ namespace LogsReader.Reader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(525, 49);
+            this.descriptionText.Size = new System.Drawing.Size(525, 52);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 
