@@ -90,7 +90,7 @@ namespace LogsReader.Config
                 }
                 catch (Exception ex)
                 {
-                    Util.MessageShow(ex.Message, "Encoding");
+                    Util.MessageShow(ex.Message, $"Scheme=\"{Name}\" - encoding");
                     return;
                 }
 
@@ -209,12 +209,18 @@ namespace LogsReader.Config
                 }
                 catch (ArgumentException)
                 {
-                    ReportStatus?.Invoke($"Columns must be unique", ReportStatusType.Error);
+                    if (ReportStatus == null)
+                        Util.MessageShow("Columns must be unique", $"Scheme=\"{Name}\" - OrderBy");
+                    else
+                        ReportStatus.Invoke("Columns must be unique", ReportStatusType.Error);
                     return;
                 }
                 catch (Exception ex)
                 {
-                    ReportStatus?.Invoke(ex.Message, ReportStatusType.Error);
+                    if (ReportStatus == null)
+                        Util.MessageShow(ex.Message, $"Scheme=\"{Name}\" - OrderBy");
+                    else
+                        ReportStatus.Invoke(ex.Message, ReportStatusType.Error);
                     return;
                 }
 

@@ -234,8 +234,6 @@ namespace LogsReader.Reader
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
                 orderByText.Text = CurrentSettings.OrderBy;
-
-                btnSearch.Enabled = CurrentSettings.IsCorrect;
             }
             finally
             {
@@ -879,7 +877,7 @@ namespace LogsReader.Reader
 
             btnSearch.Enabled = isCorrectPath
                                 && settIsCorrect
-                                && !txtPattern.Text.IsNullOrEmptyTrim()
+                                && !txtPattern.Text.IsNullOrEmpty()
                                 && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
                                 && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
