@@ -20,6 +20,7 @@ namespace Utils.WinForm.Notepad
 
         public event EventHandler OnSomethingChanged;
         public event EventHandler SelectionChanged;
+        public event EventHandler LanguageChanged;
 
         protected FastColoredTextBox FCTB { get; set; }
 
@@ -273,12 +274,18 @@ namespace Utils.WinForm.Notepad
             FCTB.ClearUndo();
         }
 
-        public void ChangeLanguage(Language lang)
+        public bool ChangeLanguage(Language lang)
         {
+            bool isChanged = FCTB.Language != lang;
+
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = lang;
             FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+
+            if (isChanged)
+                LanguageChanged?.Invoke(this, EventArgs.Empty);
+            return isChanged;
         }
 
         private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)

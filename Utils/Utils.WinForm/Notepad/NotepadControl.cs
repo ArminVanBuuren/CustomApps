@@ -31,6 +31,7 @@ namespace Utils.WinForm.Notepad
         private Font _textFont = new Font("Segoe UI", 9F);
 
         public event EventHandler OnRefresh;
+        public event EventHandler LanguageChanged;
 
         Dictionary<TabPage, Editor> ListOfEditors { get; } = new Dictionary<TabPage, Editor>();
 
@@ -258,7 +259,9 @@ namespace Utils.WinForm.Notepad
             //TabControlObj.Focus();
             if (sender is ToolStripComboBox comboBoxLanguages && comboBoxLanguages.SelectedItem is Language lang && Current != null && Current.Language != lang)
             {
-                Current.ChangeLanguage(lang);
+                bool isChanged = Current.ChangeLanguage(lang);
+                if (isChanged)
+                    LanguageChanged?.Invoke(Current, EventArgs.Empty);
             }
         }
 
