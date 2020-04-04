@@ -938,7 +938,7 @@ namespace LogsReader.Reader
             {
                 _statusInfo.BackColor = type == ReportStatusType.Error ? Color.Red : type == ReportStatusType.Warning ? Color.Yellow : Color.Green;
                 _statusInfo.ForeColor = type == ReportStatusType.Warning ? Color.Black : Color.White;
-                _statusInfo.Text = message;
+                _statusInfo.Text = message.Replace("\r", "").Replace("\n", " ");
             }
             else
             {

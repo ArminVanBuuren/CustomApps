@@ -161,7 +161,7 @@ namespace LogsReader.Reader
                 fileLog.OnFound += AddResult;
                 // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
                 using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (var inputReader = new StreamReader(inputStream, Encoding.GetEncoding("windows-1251")))
+                using (var inputReader = new StreamReader(inputStream, CurrentSettings.Encoding))
                 {
                     string line;
                     while ((line = inputReader.ReadLine()) != null && !IsStopPending)

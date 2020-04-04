@@ -153,7 +153,7 @@
 {1}</value>
   </data>
   <data name="LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Поиск по регулярному выражению выполняется быстрее.</value>
+    <value>Поиск по регулярному выражению выполняется быстрее. Атрибут "encoding" используется при считывании лог файлов.</value>
   </data>
   <data name="Form_DateFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Date"</value>

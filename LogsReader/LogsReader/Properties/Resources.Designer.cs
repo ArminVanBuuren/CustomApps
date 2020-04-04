@@ -184,7 +184,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее..
+        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее. Атрибут &quot;encoding&quot; используется при считывании лог файлов..
         /// </summary>
         internal static string LRSettings_UseRegexComment {
             get {

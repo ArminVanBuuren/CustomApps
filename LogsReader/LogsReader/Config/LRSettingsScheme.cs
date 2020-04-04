@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -64,7 +65,7 @@ namespace LogsReader.Config
             }
         }
 
-        [XmlAttribute]
+        [XmlAttribute("name")]
         public string Name
         {
             get => _schemeName;
@@ -72,6 +73,33 @@ namespace LogsReader.Config
                 ? _schemeName
                 : Regex.Replace(value, @"\s+", "");
         }
+
+        [XmlAttribute("encoding")]
+        public string EncodingName
+        {
+            get => Encoding.HeaderName;
+            set
+            {
+                if(value.IsNullOrEmptyTrim())
+                    return;
+
+                Encoding enc = null;
+                try
+                {
+                    enc = Encoding.GetEncoding(value);
+                }
+                catch (Exception ex)
+                {
+                    Util.MessageShow(ex.Message, "Encoding");
+                    return;
+                }
+
+                Encoding = enc;
+            }
+        }
+
+        [XmlIgnore]
+        public Encoding Encoding { get; private set; } = Encoding.GetEncoding("windows-1251");
 
         [XmlAnyElement("ServersComment")]
         public XmlComment ServersComment
