@@ -224,8 +224,10 @@ namespace LogsReader.Reader
                 if (_traceMessage.Language != langTrace)
                     _traceMessage.ChangeLanguage(langTrace);
 
-                _notepad.WordWrap = UserSettings.WordWrap;
-                _notepad.WordHighlights = UserSettings.WordHighlights;
+                _message.WordWrap = UserSettings.MessageWordWrap;
+                _message.Highlights = UserSettings.MessageHighlights;
+                _traceMessage.WordWrap = UserSettings.TraceWordWrap;
+                _traceMessage.Highlights = UserSettings.TraceHighlights;
 
                 serversText.Text = CurrentSettings.Servers;
                 _notepad.DefaultEncoding = CurrentSettings.Encoding;
@@ -632,7 +634,7 @@ namespace LogsReader.Reader
                 if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
                     return;
 
-                var privateID = (int)dgvFiles.SelectedRows[0].Cells["PrivateID"].Value;
+                var privateID = (int) dgvFiles.SelectedRows[0].Cells["PrivateID"].Value;
                 if (privateID == -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
@@ -653,6 +655,7 @@ namespace LogsReader.Reader
                 {
                     _message.Text = template.Message.TrimWhiteSpaces();
                 }
+
                 _message.IsChanged = false;
                 _message.ClearUndo();
                 _message.DelayedEventsInterval = 10;
@@ -665,6 +668,10 @@ namespace LogsReader.Reader
             catch (Exception ex)
             {
                 ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+            finally
+            {
+                dgvFiles.Focus();
             }
         }
 
@@ -859,12 +866,24 @@ namespace LogsReader.Reader
 
         private void Notepad_WordWrapStateChanged(object sender, EventArgs e)
         {
-            UserSettings.WordWrap = _notepad.WordWrap;
+            if (!(sender is Editor editor))
+                return;
+
+            if (editor == _message)
+                UserSettings.MessageWordWrap = editor.WordWrap;
+            else if (editor == _traceMessage)
+                UserSettings.TraceWordWrap = editor.WordWrap;
         }
 
         private void Notepad_WordHighlightsStateChanged(object sender, EventArgs e)
         {
-            UserSettings.WordHighlights = _notepad.WordHighlights;
+            if (!(sender is Editor editor))
+                return;
+
+            if (editor == _message)
+                UserSettings.MessageHighlights = editor.Highlights;
+            else if (editor == _traceMessage)
+                UserSettings.TraceHighlights = editor.Highlights;
         }
 
         void ValidationCheck(bool clearStatus = true)

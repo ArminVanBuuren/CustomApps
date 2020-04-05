@@ -99,6 +99,29 @@ namespace LogsReader.Config
             set => SetValue(nameof(MessageLanguage), value);
         }
 
+        public bool MessageWordWrap
+        {
+            get
+            {
+                var resStr = GetValue(nameof(MessageWordWrap));
+                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                    return true;
+                return res;
+            }
+            set => SetValue(nameof(MessageWordWrap), value);
+        }
+
+        public bool MessageHighlights
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(MessageHighlights)), out var res))
+                    return res;
+                return false;
+            }
+            set => SetValue(nameof(MessageHighlights), value);
+        }
+
         public Language TraceLanguage
         {
             get
@@ -110,27 +133,27 @@ namespace LogsReader.Config
             set => SetValue(nameof(TraceLanguage), value);
         }
 
-        public bool WordWrap
+        public bool TraceWordWrap
         {
             get
             {
-                var resStr = GetValue(nameof(WordWrap));
+                var resStr = GetValue(nameof(TraceWordWrap));
                 if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
                     return true;
                 return res;
             }
-            set => SetValue(nameof(WordWrap), value);
+            set => SetValue(nameof(TraceWordWrap), value);
         }
 
-        public bool WordHighlights
+        public bool TraceHighlights
         {
             get
             {
-                if (bool.TryParse(GetValue(nameof(WordHighlights)), out var res))
+                if (bool.TryParse(GetValue(nameof(TraceHighlights)), out var res))
                     return res;
                 return false;
             }
-            set => SetValue(nameof(WordHighlights), value);
+            set => SetValue(nameof(TraceHighlights), value);
         }
 
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)
