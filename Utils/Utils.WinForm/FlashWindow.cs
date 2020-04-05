@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Utils.WinForm
 {
@@ -86,7 +87,7 @@ namespace Utils.WinForm
         /// </summary>
         /// <param name="form">The Form (Window) to Flash.</param>
         /// <returns></returns>
-        public static bool Flash(System.Windows.Forms.Form form)
+        public static bool Flash(Form form)
         {
             // Make sure we're running under Windows 2000 or later
             if (Win2000OrLater)
@@ -114,7 +115,7 @@ namespace Utils.WinForm
         /// <param name="form">The Form (Window) to Flash.</param>
         /// <param name="count">The number of times to Flash.</param>
         /// <returns></returns>
-        public static bool Flash(System.Windows.Forms.Form form, uint count)
+        public static bool Flash(Form form, uint count)
         {
             if (Win2000OrLater)
             {
@@ -129,7 +130,7 @@ namespace Utils.WinForm
         /// </summary>
         /// <param name="form">The Form (Window) to Flash.</param>
         /// <returns></returns>
-        public static bool Start(System.Windows.Forms.Form form)
+        public static bool Start(Form form)
         {
             if (Win2000OrLater)
             {
@@ -144,7 +145,7 @@ namespace Utils.WinForm
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        public static bool Stop(System.Windows.Forms.Form form)
+        public static bool Stop(Form form)
         {
             if (Win2000OrLater)
             {

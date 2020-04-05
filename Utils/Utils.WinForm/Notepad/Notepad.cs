@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
@@ -16,16 +14,28 @@ namespace Utils.WinForm.Notepad
 
         public bool WindowIsClosed { get; private set; } = false;
 
+        public Encoding DefaultEncoding
+        {
+            get => NotepadControlItem.DefaultEncoding;
+            set => NotepadControlItem.DefaultEncoding = value;
+        }
+
         public bool WordWrap
         {
             get => NotepadControlItem.WordWrap;
             set => NotepadControlItem.WordWrap = value;
         }
 
-        public bool WordHighlights
+        public bool Highlights
         {
-            get => NotepadControlItem.WordHighlights;
-            set => NotepadControlItem.WordHighlights = value;
+            get => NotepadControlItem.Highlights;
+            set => NotepadControlItem.Highlights = value;
+        }
+
+        public bool ReadOnly
+        {
+            get => NotepadControlItem.ReadOnly;
+            set => NotepadControlItem.ReadOnly = value;
         }
 
         public bool SizingGrip
@@ -34,10 +44,40 @@ namespace Utils.WinForm.Notepad
             set => NotepadControlItem.SizingGrip = value;
         }
 
-        public bool UserCanCloseTabItem
+        public Font TextFont
         {
-            get => NotepadControlItem.UserCanCloseTabItem;
-            set => NotepadControlItem.UserCanCloseTabItem = value;
+            get => NotepadControlItem.TextFont;
+            set => NotepadControlItem.TextFont = value;
+        }
+
+        public Color TextForeColor
+        {
+            get => NotepadControlItem.TextForeColor;
+            set => NotepadControlItem.TextForeColor = value;
+        }
+
+        public int SelectedIndex
+        {
+            get => NotepadControlItem.SelectedIndex;
+            set => NotepadControlItem.SelectedIndex = value;
+        }
+
+        public Font TabsFont
+        {
+            get => NotepadControlItem.TabsFont;
+            set => NotepadControlItem.TabsFont = value;
+        }
+
+        public Color TabsForeColor
+        {
+            get => NotepadControlItem.TabsForeColor;
+            set => NotepadControlItem.TabsForeColor = value;
+        }
+
+        public bool AllowUserCloseItems
+        {
+            get => NotepadControlItem.AllowUserCloseItems;
+            set => NotepadControlItem.AllowUserCloseItems = value;
         }
 
         public Notepad()
@@ -62,7 +102,7 @@ namespace Utils.WinForm.Notepad
             }
             else
             {
-                Text = NotepadControlItem.Current is FileEditor fileEditor ? fileEditor.FilePath : NotepadControlItem.Current.HeaderName;
+                Text = NotepadControlItem.Current?.Key is FileEditor fileEditor ? fileEditor.FilePath : NotepadControlItem.Current?.Key.HeaderName;
             }
         }
 
@@ -129,7 +169,7 @@ namespace Utils.WinForm.Notepad
             }
             else if (item == formatXmlF5ToolStripMenuItem)
             {
-                NotepadControlItem.Current?.PrintXml();
+                NotepadControlItem.Current?.Key.PrintXml();
             }
             else if (item == closeToolStripMenuItem)
             {
@@ -137,7 +177,7 @@ namespace Utils.WinForm.Notepad
             }
             else if (NotepadControlItem.Current != null)
             {
-                if (NotepadControlItem.Current is FileEditor fileEditor)
+                if (NotepadControlItem.Current?.Key is FileEditor fileEditor)
                 {
                     if (item == saveToolStripMenuItem)
                     {
@@ -150,10 +190,10 @@ namespace Utils.WinForm.Notepad
                 }
                 else
                 {
-                    var newFileEditor = FileEditor.ConvertToFileEditor(NotepadControlItem.Current, NotepadControlItem.DefaultEncoding);
+                    var newFileEditor = FileEditor.ConvertToFileEditor(NotepadControlItem.Current?.Key, NotepadControlItem.DefaultEncoding);
                     if(SaveAsFileEditor(newFileEditor))
                     {
-                        NotepadControlItem.ReplaceEditor(NotepadControlItem.Current, newFileEditor);
+                        NotepadControlItem.ReplaceEditor(NotepadControlItem.Current?.Key, newFileEditor);
                     }
                 }
             }

@@ -38,7 +38,6 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NotepadControlItem = new Utils.WinForm.Notepad.NotepadControl();
             this.MainMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NotepadControlItem)).BeginInit();
             this.SuspendLayout();
             // 
             // MainMenuStrip
@@ -120,8 +119,8 @@
             this.NotepadControlItem.TabIndex = 3;
             this.NotepadControlItem.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.NotepadControlItem.TextFont = new System.Drawing.Font("Segoe UI", 9F);
-            this.NotepadControlItem.UserCanCloseTabItem = false;
-            this.NotepadControlItem.WordHighlights = false;
+            this.NotepadControlItem.AllowUserCloseItems = false;
+            this.NotepadControlItem.Highlights = false;
             this.NotepadControlItem.WordWrap = true;
             // 
             // Notepad
@@ -136,7 +135,6 @@
             this.Text = "Notepad";
             this.MainMenuStrip.ResumeLayout(false);
             this.MainMenuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NotepadControlItem)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

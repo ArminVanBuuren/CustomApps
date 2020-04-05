@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Utils.WinForm.Notepad;
+
 //using Utils.WinForm.Notepad;
 
 namespace Tester.WinForm
@@ -16,7 +18,10 @@ namespace Tester.WinForm
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+                //Application.Run(new Form1());
+
+                var notepad = new Notepad {AllowUserCloseItems = true};
+                Application.Run(notepad);
             }
             catch (Exception e)
             {

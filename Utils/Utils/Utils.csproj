@@ -120,6 +120,7 @@
     <Compile Include="Crypto\AES.cs" />
     <Compile Include="Crypto\DH.cs" />
     <Compile Include="ASYNC.cs" />
+    <Compile Include="EVENT.cs" />
     <Compile Include="Handles\Address.cs" />
     <Compile Include="Handles\CollectionSizes.cs" />
     <Compile Include="Handles\ResourceHelper.cs" />

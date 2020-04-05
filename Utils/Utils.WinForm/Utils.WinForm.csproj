@@ -164,8 +164,18 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
-    <Compile Include="Notepad\Editor.cs" />
-    <Compile Include="Notepad\FileEditor.cs" />
+    <Compile Include="Notepad\Editor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Notepad\Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Notepad\FileEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Notepad\FileEditor.Designer.cs">
+      <DependentUpon>FileEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notepad\NotepadControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -177,9 +187,6 @@
     </Compile>
     <Compile Include="Notepad\Notepad.Designer.cs">
       <DependentUpon>Notepad.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notepad\SimpleEditor.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -7,7 +7,7 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    public class FileEditor : Editor
+    public partial class FileEditor : Editor
     {
         private static readonly object syncWhenFileChanged = new object();
         private string _fileName = null;
@@ -29,27 +29,28 @@ namespace Utils.WinForm.Notepad
 
         public override Encoding Encoding { get; protected set; }
 
-        internal FileEditor(string filePath, bool wordWrap, bool wordHighlights)
+        protected FileEditor() : base()
+        {
+            InitializeComponent();
+        }
+
+        internal FileEditor(string filePath, bool wordWrap, bool wordHighlights) : this()
         {
             if (!File.Exists(filePath))
                 throw new ArgumentException($"File \"{filePath}\" not found!");
 
             var langByFileExtension = InitializeFile(filePath);
 
-            InitializeFCTB(langByFileExtension, wordWrap);
-            WordHighlights = wordHighlights;
-
-            InitializePage();
+            Initialize(langByFileExtension, wordWrap);
+            Highlights = wordHighlights;
         }
 
-        FileEditor(Editor editor)
+        FileEditor(Editor editor) : this()
         {
             Source = editor.Text;
 
-            InitializeFCTB(editor.Language, editor.WordWrap);
-            WordHighlights = editor.WordHighlights;
-
-            InitializePage();
+            Initialize(editor.Language, editor.WordWrap);
+            Highlights = editor.Highlights;
         }
 
         public static FileEditor ConvertToFileEditor(Editor editor, Encoding encoding)
@@ -120,7 +121,7 @@ namespace Utils.WinForm.Notepad
                     case WatcherChangeTypes.Deleted:
                         MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
-                        CheckOnSomethingChanged();
+                        SomethingChanged();
                         return;
                     case WatcherChangeTypes.Created:
                     case WatcherChangeTypes.Changed:
@@ -150,7 +151,7 @@ namespace Utils.WinForm.Notepad
                                 Source = IO.SafeReadFile(FilePath, Encoding);
                             }
 
-                            CheckOnSomethingChanged();
+                            SomethingChanged();
 
                             break;
                         }
@@ -166,7 +167,7 @@ namespace Utils.WinForm.Notepad
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             FilePath = e.FullPath;
-            CheckOnSomethingChanged(true); //  e.OldFullPath, e.FullPath
+            SomethingChanged(true); //  e.OldFullPath, e.FullPath
         }
 
         public void SaveDocument(string newFileDestination = null)
@@ -217,7 +218,7 @@ namespace Utils.WinForm.Notepad
                     }
                 }
 
-                CheckOnSomethingChanged();
+                SomethingChanged();
             }
             catch (Exception ex)
             {

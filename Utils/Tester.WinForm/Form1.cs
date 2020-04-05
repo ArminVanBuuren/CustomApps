@@ -7,6 +7,7 @@ using Utils.Media.MediaCapture.AForge;
 using Utils.Media.MediaCapture.Encoder;
 using Utils.Media.MediaCapture.NAudio;
 using Utils.Media.MediaCapture.Screen;
+using Utils.WinForm.Notepad;
 
 namespace Tester.WinForm
 {
@@ -20,8 +21,8 @@ namespace Tester.WinForm
 
             InitializeComponent();
             
-            var aforgeDevices = new AForgeMediaDevices();
-            var camDevices = new EncoderMediaDevices();
+            //var aforgeDevices = new AForgeMediaDevices();
+            //var camDevices = new EncoderMediaDevices();
 
             //while (true)
             //{
@@ -36,11 +37,13 @@ namespace Tester.WinForm
             //    Thread.Sleep(5000);
             //}
 
-            ScreenCapture();
+            //ScreenCapture();
 
             //NAudioCapture();
 
             //AForgeCaptureProcess(aforgeDevices);
+
+            
         }
 
         //private int count = 0;

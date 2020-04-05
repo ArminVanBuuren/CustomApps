@@ -1,54 +1,113 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Design;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-    public partial class NotepadControl : UserControl, ISupportInitialize
+    public partial class NotepadControl : UserControl, IEnumerable<KeyValuePair<Editor, TabPage>>
     {
-        readonly ToolStripLabel _contentLengthInfo;
-        readonly ToolStripLabel _contentLinesInfo;
-        readonly ToolStripLabel _currentLineInfo;
-        readonly ToolStripLabel _currentPosition;
-        readonly ToolStripLabel _selectedInfo;
-        readonly ToolStripLabel _encodingInfo;
-        readonly ToolStripComboBox _listOfLanguages;
-        readonly CheckBox _wordWrapping;
-        readonly CheckBox _wordHighlights;
-
-        private bool _userCanCloseTabItem = false;
+        private bool _wordWrap = false;
+        private bool _highlights = false;
+        private bool _sizingGrip = false;
+        private bool _allowUserCloseItems = false;
         private bool _readOnly = false;
+
         private int _lastSelectedPage = 0;
         private Font _textFont = new Font("Segoe UI", 9F);
+        private Encoding _encoding = Encoding.Default;
+        private Color _tabsForeColor = Color.Green;
+        private Color _textForeColor = Color.Black;
 
         public event EventHandler OnRefresh;
         public event EventHandler LanguageChanged;
         public event EventHandler WordWrapStateChanged;
         public event EventHandler WordHighlightsStateChanged;
 
-        Dictionary<TabPage, Editor> ListOfEditors { get; } = new Dictionary<TabPage, Editor>();
+        Dictionary<Editor, TabPage> ListOfEditors { get; } = new Dictionary<Editor, TabPage>();
 
-        internal Editor Current { get; private set; } = null;
+        public KeyValuePair<Editor, TabPage>? Current { get; private set; } = null;
+
+        public Encoding DefaultEncoding
+        {
+            get => _encoding;
+            set
+            {
+                _encoding = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => !Equals(x.DefaultEncoding, _encoding)))
+                    editor.DefaultEncoding = _encoding;
+            }
+        }
 
         public bool WordWrap
         {
-            get => _wordWrapping.Checked;
-            set => _wordWrapping.Checked = value;
+            get => _wordWrap;
+            set
+            {
+                _wordWrap = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => x.WordWrap != _wordWrap))
+                    editor.WordWrap = _wordWrap;
+            }
         }
 
-        public bool WordHighlights
+        public bool Highlights
         {
-            get => _wordHighlights.Checked;
-            set => _wordHighlights.Checked = value;
+            get => _highlights;
+            set
+            {
+                _highlights = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => x.Highlights != _highlights))
+                    editor.Highlights = _highlights;
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get => _readOnly;
+            set
+            {
+                _readOnly = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => x.ReadOnly != _readOnly))
+                    editor.ReadOnly = _readOnly;
+            }
+        }
+
+        public bool SizingGrip
+        {
+            get => _sizingGrip;
+            set
+            {
+                _sizingGrip = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => x.SizingGrip != _sizingGrip))
+                    editor.SizingGrip = _sizingGrip;
+            }
+        }
+
+        public Font TextFont
+        {
+            get => _textFont;
+            set
+            {
+                _textFont = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => !Equals(x.Font, _textFont)))
+                    editor.Font = _textFont;
+            }
+        }
+
+        public Color TextForeColor
+        {
+            get => _textForeColor;
+            set
+            {
+                _textForeColor = value;
+                foreach (var editor in ListOfEditors.Keys.Where(x => x.ForeColor != _textForeColor))
+                    editor.ForeColor = _textForeColor;
+            }
         }
 
         public int SelectedIndex
@@ -57,22 +116,33 @@ namespace Utils.WinForm.Notepad
             set => TabControlObj.SelectedIndex = value;
         }
 
-        public bool SizingGrip
+        public Font TabsFont
         {
-            get => statusStrip.SizingGrip;
-            set => statusStrip.SizingGrip = value;
+            get => TabControlObj.Font;
+            set => TabControlObj.Font = value;
         }
 
-        public bool UserCanCloseTabItem
+        public Color TabsForeColor
         {
-            get => _userCanCloseTabItem;
+            get => _tabsForeColor;
             set
             {
-                if(_userCanCloseTabItem == value)
+                _tabsForeColor = value;
+                foreach (var tabPage in ListOfEditors.Values.Where(x => x.ForeColor != _tabsForeColor))
+                    tabPage.ForeColor = _tabsForeColor;
+            }
+        }
+
+        public bool AllowUserCloseItems
+        {
+            get => _allowUserCloseItems;
+            set
+            {
+                if(_allowUserCloseItems == value)
                     return;
 
-                _userCanCloseTabItem = value;
-                if (_userCanCloseTabItem)
+                _allowUserCloseItems = value;
+                if (_allowUserCloseItems)
                 {
                     TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
                     TabControlObj.MouseClick += TabControlObj_MouseClick;
@@ -91,48 +161,6 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        public bool ReadOnly
-        {
-            get => _readOnly;
-            set
-            {
-                if(_readOnly == value)
-                    return;
-
-                _readOnly = value;
-                foreach (var editor in ListOfEditors.Values)
-                    editor.ReadOnly = _readOnly;
-            }
-        }
-
-        public Font TabsFont
-        {
-            get => TabControlObj.Font;
-            set => TabControlObj.Font = value;
-        }
-
-        public Font TextFont
-        {
-            get => _textFont;
-            set
-            {
-                if(Equals(_textFont, value))
-                    return;
-
-                _textFont = value;
-                foreach (var editor in ListOfEditors.Values)
-                    editor.Font = _textFont;
-            }
-        }
-
-        public bool IsChanged
-        {
-            get => Current.IsChanged;
-            set => Current.IsChanged = value;
-        }
-
-        public Encoding DefaultEncoding { get; set; } = Encoding.Default;
-
         public NotepadControl()
         {
             InitializeComponent();
@@ -142,69 +170,6 @@ namespace Utils.WinForm.Notepad
             TabControlObj.BackColor = Color.White;
             TabControlObj.Deselected += TabControlObj_Deselected;
             TabControlObj.Selecting += RefreshForm;
-
-            _listOfLanguages = new ToolStripComboBox {BackColor = SystemColors.Control};
-            foreach (Language lang in Enum.GetValues(typeof(Language)))
-            {
-                _listOfLanguages.Items.Add(lang);
-            }
-            _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
-            statusStrip.Items.Add(_listOfLanguages);
-            _listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
-            statusStrip.Items.Add(new ToolStripSeparator());
-
-            _wordWrapping = new CheckBox {BackColor = Color.Transparent, Text = @"Wrap", Checked = true, Padding = new Padding(10, 0, 0, 0)};
-            _wordWrapping.CheckStateChanged += (s, e) =>
-            {
-                if(ListOfEditors.Values.All(x => x.WordWrap == WordWrap))
-                    return;
-
-                foreach (var editor in ListOfEditors.Values.Where(p => p.WordWrap != WordWrap))
-                {
-                    editor.WordWrap = WordWrap;
-                }
-                WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
-            };
-            var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
-            statusStrip.Items.Add(wordWrapToolStrip);
-            statusStrip.Items.Add(new ToolStripSeparator());
-
-
-            _wordHighlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(10, 0, 0, 0) };
-            _wordHighlights.CheckStateChanged += (s, e) =>
-            {
-                if (ListOfEditors.Values.All(x => x.WordHighlights == WordHighlights))
-                    return;
-
-                foreach (var editor in ListOfEditors.Values.Where(p => p.WordHighlights != WordHighlights))
-                {
-                    editor.WordHighlights = WordHighlights;
-                }
-                WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
-            };
-            var wordHighlightsToolStrip = new ToolStripControlHost(_wordHighlights);
-            statusStrip.Items.Add(wordHighlightsToolStrip);
-            statusStrip.Items.Add(new ToolStripSeparator());
-
-            _encodingInfo = GetStripLabel("");
-            statusStrip.Items.Add(_encodingInfo);
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(GetStripLabel("length:"));
-            _contentLengthInfo = GetStripLabel("");
-            statusStrip.Items.Add(_contentLengthInfo);
-            statusStrip.Items.Add(GetStripLabel("lines:"));
-            _contentLinesInfo = GetStripLabel("");
-            statusStrip.Items.Add(_contentLinesInfo);
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(GetStripLabel("Ln:"));
-            _currentLineInfo = GetStripLabel("");
-            statusStrip.Items.Add(_currentLineInfo);
-            statusStrip.Items.Add(GetStripLabel("Col:"));
-            _currentPosition = GetStripLabel("");
-            statusStrip.Items.Add(_currentPosition);
-            statusStrip.Items.Add(GetStripLabel("Sel:"));
-            _selectedInfo = GetStripLabel("");
-            statusStrip.Items.Add(_selectedInfo);
         }
 
         private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
@@ -265,25 +230,6 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-
-        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (sender is ToolStripComboBox comboBoxLanguages && comboBoxLanguages.SelectedItem is Language lang && Current != null && Current.Language != lang)
-            {
-                bool isChanged = Current.ChangeLanguage(lang);
-                if (isChanged)
-                    LanguageChanged?.Invoke(Current, EventArgs.Empty);
-            }
-        }
-
-        static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
-        {
-            return new ToolStripLabel(text)
-            {
-                BackColor = Color.Transparent
-            };
-        }
-
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
@@ -295,20 +241,19 @@ namespace Utils.WinForm.Notepad
             if (headerName.Length > 70)
                 throw new Exception("Header name is too longer");
 
-            var existEditor = ListOfEditors.FirstOrDefault(x => x.Value?.HeaderName != null
-                                                                && x.Value?.Source != null
-                                                                && !(x.Value is FileEditor)
-                                                                && x.Value.HeaderName.Equals(headerName, StringComparison.InvariantCultureIgnoreCase)
-                                                                && x.Value.Source.Equals(bodyText));
+            var existEditor = ListOfEditors.FirstOrDefault(x => x.Key?.HeaderName != null
+                                                                && x.Key?.Source != null
+                                                                && !(x.Key is FileEditor)
+                                                                && x.Key.HeaderName.Equals(headerName, StringComparison.InvariantCultureIgnoreCase)
+                                                                && x.Key.Source.Equals(bodyText));
 
             if (existEditor.Key != null && existEditor.Value != null)
             {
-                TabControlObj.SelectedTab = existEditor.Key;
-                return existEditor.Value;
+                TabControlObj.SelectedTab = existEditor.Value;
+                return existEditor.Key;
             }
 
-            var editor = new Editor(headerName, bodyText, WordWrap, language, WordHighlights);
-            AssignOptions(editor);
+            var editor = new Editor(headerName, bodyText, WordWrap, language, Highlights);
             InitializePage(editor);
             return editor;
         }
@@ -322,26 +267,19 @@ namespace Utils.WinForm.Notepad
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
 
-            var existFileEditor = ListOfEditors.FirstOrDefault(x => x.Value is FileEditor fileEditor
-                                                                    && fileEditor?.FilePath != null
+            var existFileEditor = ListOfEditors.FirstOrDefault(x => x.Key is FileEditor fileEditor
+                                                                    && fileEditor.FilePath != null
                                                                     && fileEditor.FilePath.Equals(filePath, StringComparison.InvariantCultureIgnoreCase));
 
             if (existFileEditor.Key != null && existFileEditor.Value != null)
             {
-                TabControlObj.SelectedTab = existFileEditor.Key;
-                return existFileEditor.Value;
+                TabControlObj.SelectedTab = existFileEditor.Value;
+                return existFileEditor.Key;
             }
 
-            var newFileEditor = new FileEditor(filePath, WordWrap, WordHighlights);
-            AssignOptions(newFileEditor);
+            var newFileEditor = new FileEditor(filePath, WordWrap, Highlights);
             InitializePage(newFileEditor);
             return newFileEditor;
-        }
-
-        void AssignOptions(Editor editor)
-        {
-            editor.Font = TextFont;
-            editor.ReadOnly = ReadOnly;
         }
 
         public void SelectEditor(int tabIndex)
@@ -355,9 +293,9 @@ namespace Utils.WinForm.Notepad
 
         public void SelectEditor(Editor editor)
         {
-            if (ListOfEditors.TryGetValue(editor.Page, out var editor2) && editor == editor2)
+            if (ListOfEditors.TryGetValue(editor, out var tabPage) && tabPage != TabControlObj.SelectedTab)
             {
-                TabControlObj.SelectedTab = editor.Page;
+                TabControlObj.SelectedTab = tabPage;
                 RefreshForm(null, null);
             }
         }
@@ -366,15 +304,7 @@ namespace Utils.WinForm.Notepad
         {
             try
             {
-                if (ListOfEditors.ContainsKey(removeEditor.Page))
-                {
-                    ListOfEditors.Remove(removeEditor.Page);
-                    TabControlObj.TabPages.Remove(removeEditor.Page);
-                    removeEditor.OnSomethingChanged -= EditorOnSomethingChanged;
-                    removeEditor.SelectionChanged -= RefreshFormStatus;
-                    removeEditor.Dispose();
-                }
-
+                FinnalizePage(removeEditor);
                 InitializePage(newEditor);
             }
             catch (Exception ex)
@@ -386,26 +316,71 @@ namespace Utils.WinForm.Notepad
         void InitializePage(Editor editor)
         {
             var index = TabControlObj.TabPages.Count;
-            TabControlObj.TabPages.Add(editor.Page);
+
+            var page = new TabPage
+            {
+                Text = editor.HeaderName + new string(' ', 2),
+                UseVisualStyleBackColor = true,
+                ForeColor = TabsForeColor,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            page.Controls.Add(editor);
+
+            TabControlObj.TabPages.Add(page);
             if (TabControlObj.TabPages.Count == index)
                 TabControlObj.TabPages.Insert(index, editor.HeaderName);
 
             TabControlObj.SelectedIndex = index;
 
-            editor.SelectionChanged += RefreshFormStatus;
+            editor.Dock = DockStyle.Fill;
+            editor.ForeColor = TextForeColor;
+            editor.WordWrap = WordWrap;
+            editor.Highlights = Highlights;
+            editor.ReadOnly = ReadOnly;
+            editor.SizingGrip = SizingGrip;
+            editor.Font = TextFont;
+            editor.DefaultEncoding = DefaultEncoding;
+            editor.LanguageChanged += (sender, args) => { LanguageChanged?.Invoke(sender, args); };
+            editor.WordWrapStateChanged += (sender, args) => { WordWrapStateChanged?.Invoke(sender, args); };
+            editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
             editor.OnSomethingChanged += EditorOnSomethingChanged;
 
-            ListOfEditors.Add(editor.Page, editor);
-            Current = editor;
+            Current = new KeyValuePair<Editor, TabPage>(editor, page);
+            ListOfEditors.Add(editor, page);
 
-            RefreshFormStatus(this, null);
-            OnRefresh?.Invoke(this, EventArgs.Empty);
+            if (TabControlObj.TabCount == 1)
+                RefreshForm(this, null);
+        }
+
+        int FinnalizePage(Editor removeEditor)
+        {
+            if (removeEditor == null || !ListOfEditors.TryGetValue(removeEditor, out var tabPage))
+                return -1;
+
+            var prevSelectedIndex = TabControlObj.SelectedIndex;
+            TabControlObj.TabPages.Remove(tabPage);
+            ListOfEditors.Remove(removeEditor);
+            removeEditor.Dispose();
+            return prevSelectedIndex;
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
         {
-            if (!(sender is Editor editor))
+            if (!(sender is Editor editor) || !ListOfEditors.TryGetValue(editor, out var tabPage))
                 return;
+
+            void RefreshTabPage()
+            {
+                tabPage.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
+                tabPage.Text = editor.HeaderName.Trim() + new string(' ', 1);
+            }
+
+            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
+            if (InvokeRequired)
+                tabPage.BeginInvoke(new MethodInvoker(RefreshTabPage));
+            else
+                RefreshTabPage();
 
             RefreshForm(null, null);
         }
@@ -427,7 +402,6 @@ namespace Utils.WinForm.Notepad
                 if (TabControlObj.TabPages.Count == 0)
                 {
                     Current = null;
-                    RefreshFormStatus(this, null);
                     return;
                 }
 
@@ -437,11 +411,11 @@ namespace Utils.WinForm.Notepad
                 if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
                     return;
 
-                if (!ListOfEditors.TryGetValue(TabControlObj.SelectedTab, out var editor))
+                var editor = TabControlObj.SelectedTab.Controls[0];
+                if (!(editor is Editor editor2))
                     return;
 
-                Current = editor;
-                RefreshFormStatus(this, null);
+                Current = new KeyValuePair<Editor, TabPage>(editor2, TabControlObj.SelectedTab);
             }
             catch (Exception ex)
             {
@@ -457,31 +431,6 @@ namespace Utils.WinForm.Notepad
         {
             if (e.TabPageIndex != -1)
                 _lastSelectedPage = e.TabPageIndex;
-        }
-
-        private void RefreshFormStatus(object sender, EventArgs e)
-        {
-            if (Current == null)
-            {
-                _contentLengthInfo.Text = @"0";
-                _contentLinesInfo.Text = @"0";
-                _currentLineInfo.Text = @"0";
-                _currentPosition.Text = @"0";
-                _selectedInfo.Text = @"0|0";
-                _encodingInfo.Text = "";
-                return;
-            }
-
-            _contentLengthInfo.Text = Current.TextLength.ToString();
-            _contentLinesInfo.Text = Current.LinesCount.ToString();
-            _currentLineInfo.Text = (Current.Selection.FromLine + 1).ToString();
-            _currentPosition.Text = (Current.Selection.FromX + 1).ToString();
-            _selectedInfo.Text = $"{Current.SelectedText.Length}|{(Current.SelectedText.Length > 0 ? Current.SelectedText.Split('\n').Length : 0)}";
-            _encodingInfo.Text = Current.Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
-
-            //_listOfLanguages.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
-            _listOfLanguages.Text = Current.Language.ToString();
-            //_listOfLanguages.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
         }
 
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
@@ -507,20 +456,15 @@ namespace Utils.WinForm.Notepad
 
         void CloseTab(int tabIndex, bool calcSelectionTab = true)
         {
-            var page = TabControlObj.TabPages[tabIndex];
-            if (page == null)
+            var tabPage = TabControlObj.TabPages[tabIndex];
+            if (tabPage == null)
                 return;
 
-            if (ListOfEditors.TryGetValue(page, out var editor))
-            {
-                ListOfEditors.Remove(page);
-                editor.OnSomethingChanged -= EditorOnSomethingChanged;
-                editor.SelectionChanged -= RefreshFormStatus;
-                editor.Dispose();
-            }
+            var editor = tabPage.Controls[0];
+            if(!(editor is Editor editor2))
+                return;
 
-            var prevSelectedIndex = TabControlObj.SelectedIndex;
-            TabControlObj.TabPages.Remove(page);
+            var prevSelectedIndex = FinnalizePage(editor2);
 
             if(!calcSelectionTab)
                 return;
@@ -555,7 +499,7 @@ namespace Utils.WinForm.Notepad
             var tabPage = TabControlObj.TabPages[e.Index];
             var tabRect = TabControlObj.GetTabRect(e.Index);
 
-            if (UserCanCloseTabItem)
+            if (AllowUserCloseItems)
             {
                 tabRect.Inflate(-2, -2);
                 var closeImage = Properties.Resources.Close;
@@ -567,29 +511,23 @@ namespace Utils.WinForm.Notepad
 
         public new void Focus()
         {
-            Current.Focus();
+            Current?.Key.Focus();
         }
 
         public void Clear()
         {
-            foreach (var editor in ListOfEditors.Values)
-            {
+            foreach (var editor in ListOfEditors.Keys)
                 editor.Dispose();
-            }
+        }
+        
+        public IEnumerator<KeyValuePair<Editor, TabPage>> GetEnumerator()
+        {
+            return ListOfEditors.GetEnumerator();
         }
 
-        public void BeginInit()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            // ignored
-        }
-
-        public void EndInit()
-        {
-            //OnTextChanged();
-            //Selection.Start = Place.Empty;
-            //DoCaretVisible();
-            //IsChanged = false;
-            //ClearUndo();
+            return ListOfEditors.Keys.GetEnumerator();
         }
     }
 }
