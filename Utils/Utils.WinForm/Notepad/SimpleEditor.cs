@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -17,18 +15,18 @@ namespace Utils.WinForm.Notepad
         private bool isDisposed = false;
         private Encoding _default = Encoding.Default;
 
-        private FastColoredTextBox FCTB;
-        private StatusStrip statusStrip;
+        private readonly FastColoredTextBox FCTB;
+        private readonly StatusStrip statusStrip;
 
-        ToolStripLabel _contentLengthInfo;
-        ToolStripLabel _contentLinesInfo;
-        ToolStripLabel _currentLineInfo;
-        ToolStripLabel _currentPosition;
-        ToolStripLabel _selectedInfo;
-        ToolStripLabel _encodingInfo;
-        ToolStripComboBox _listOfLanguages;
-        CheckBox _wordWrapping;
-        CheckBox _highlights;
+        readonly ToolStripLabel _contentLengthInfo;
+        readonly ToolStripLabel _contentLinesInfo;
+        readonly ToolStripLabel _currentLineInfo;
+        readonly ToolStripLabel _currentPosition;
+        readonly ToolStripLabel _selectedInfo;
+        readonly ToolStripLabel _encodingInfo;
+        readonly ToolStripComboBox _listOfLanguages;
+        readonly CheckBox _wordWrapping;
+        readonly CheckBox _highlights;
 
 
         public event EventHandler OnSomethingChanged;
