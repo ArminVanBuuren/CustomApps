@@ -1218,9 +1218,9 @@ namespace SPAFilter
                         Location = _notepadLocation.Location,
                         WindowState = _notepadWindowsState,
                         WordWrap = _notepadWordWrap,
-                        WordHighlights = _notepadWordHighlights,
+                        Highlights = _notepadWordHighlights,
                         SizingGrip = true,
-                        UserCanCloseTabItem = true
+                        AllowUserCloseItems = true
                     };
                     _notepad.CenterToScreen();
                     _notepad.Closed += _notepad_Closed;
@@ -1252,7 +1252,7 @@ namespace SPAFilter
             {
                 _notepadLocation = new FormLocation(notepad);
                 _notepadWordWrap = notepad.WordWrap;
-                _notepadWordHighlights = notepad.WordHighlights;
+                _notepadWordHighlights = notepad.Highlights;
                 _notepadWindowsState = notepad.WindowState;
             }
             catch (Exception)
