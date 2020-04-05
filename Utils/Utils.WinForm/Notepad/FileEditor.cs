@@ -7,7 +7,6 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-
     public class FileEditor : Editor
     {
         private static readonly object syncWhenFileChanged = new object();
@@ -95,7 +94,7 @@ namespace Utils.WinForm.Notepad
         public string GetFileFilter()
         {
             var fileFilter = string.Empty;
-            switch (FCTB.Language)
+            switch (Language)
             {
                 case Language.XML: fileFilter = "XML files (*.xml)|*.xml"; break;
                 case Language.CSharp: fileFilter = "CSharp files (*.cs)|*.cs"; break;
@@ -177,7 +176,7 @@ namespace Utils.WinForm.Notepad
                 if (!IsContentChanged && newFileDestination == null && FilePath != null)
                     return;
 
-                if (FCTB.Language == Language.XML && !FCTB.Text.IsXml(out _))
+                if (Language == Language.XML && !Text.IsXml(out _))
                 {
                     var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     if (saveFailedXmlFile == DialogResult.Cancel)
@@ -213,7 +212,7 @@ namespace Utils.WinForm.Notepad
                     }
                     else
                     {
-                        Source = FCTB.Text;
+                        Source = Text;
                         SaveFile(FilePath, true);
                     }
                 }
@@ -233,7 +232,7 @@ namespace Utils.WinForm.Notepad
                 DisableWatcher();
                 lock (syncWhenFileChanged)
                 {
-                    IO.WriteFile(destinationFile, FCTB.Text, Encoding);
+                    IO.WriteFile(destinationFile, Text, Encoding);
                 }
             }
             catch (Exception)
