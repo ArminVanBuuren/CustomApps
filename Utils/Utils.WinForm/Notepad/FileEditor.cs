@@ -28,7 +28,7 @@ namespace Utils.WinForm.Notepad
                 _filePath = value;
                 HeaderName = Path.GetFileName(_filePath);
 
-                Source = IO.SafeReadFile(_filePath, Encoding);
+                Text = IO.SafeReadFile(_filePath, Encoding);
                 Encoding = IO.GetEncoding(_filePath);
 
                 var langByExtension = GetLanguage(_filePath);

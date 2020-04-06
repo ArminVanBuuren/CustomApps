@@ -319,7 +319,7 @@ namespace Utils.WinForm.Notepad
         {
             var index = TabControlObj.TabPages.Count;
 
-            var page = new TabPage
+            var tabPage = new TabPage
             {
                 Text = editor.HeaderName + new string(' ', 2),
                 UseVisualStyleBackColor = true,
@@ -327,9 +327,9 @@ namespace Utils.WinForm.Notepad
                 Margin = new Padding(0),
                 Padding = new Padding(0)
             };
-            page.Controls.Add(editor);
+            tabPage.Controls.Add(editor);
 
-            TabControlObj.TabPages.Add(page);
+            TabControlObj.TabPages.Add(tabPage);
             if (TabControlObj.TabPages.Count == index)
                 TabControlObj.TabPages.Insert(index, editor.HeaderName);
 
@@ -348,8 +348,8 @@ namespace Utils.WinForm.Notepad
             editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
             editor.OnSomethingChanged += EditorOnSomethingChanged;
 
-            Current = new KeyValuePair<Editor, TabPage>(editor, page);
-            ListOfEditors.Add(editor, page);
+            Current = new KeyValuePair<Editor, TabPage>(editor, tabPage);
+            ListOfEditors.Add(editor, tabPage);
 
             if (TabControlObj.TabCount == 1)
                 RefreshForm(this, null);
@@ -374,8 +374,8 @@ namespace Utils.WinForm.Notepad
 
             void RefreshTabPage()
             {
-                tabPage.ForeColor = editor.IsContentChanged ? Color.Red : Color.Green;
-                tabPage.Text = editor.HeaderName.Trim() + new string(' ', 1);
+                tabPage.ForeColor = editor.IsContentChanged ? Color.Red : TabsForeColor;
+                tabPage.Text = editor.HeaderName.Trim() + new string(' ', 2);
             }
 
             // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
@@ -505,7 +505,7 @@ namespace Utils.WinForm.Notepad
             {
                 tabRect.Inflate(-2, -2);
                 var closeImage = Properties.Resources.Close;
-                e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) - 1, (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
+                e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) - 2, (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
             }
 
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
