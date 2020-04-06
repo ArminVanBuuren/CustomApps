@@ -23,7 +23,8 @@ namespace XPathTester
 
         private bool _xmlBodyChanged = false;
         private int _prevSortedColumn = -1;
-        private XPathCollection _strLines;
+
+        public XPathCollection Result { get; private set; }
 
         public XmlDocument XmlBody { get; private set; }
 
@@ -97,22 +98,25 @@ namespace XPathTester
         {
             try
             {
-                IEnumerable<DGVXPathResult> OrderedItems = null;
+                if (Result == null)
+                    return;
+
+                IEnumerable<DGVXPathResult> orderedItems = null;
                 if (_prevSortedColumn != e.ColumnIndex)
                 {
                     switch (e.ColumnIndex)
                     {
                         case 0:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID descending select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.ID descending select p;
                             break;
                         case 1:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType descending select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeType descending select p;
                             break;
                         case 2:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName descending select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeName descending select p;
                             break;
                         case 3:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value descending select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.Value descending select p;
                             break;
                     }
 
@@ -123,24 +127,24 @@ namespace XPathTester
                     switch (e.ColumnIndex)
                     {
                         case 0:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.ID select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.ID select p;
                             break;
                         case 1:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeType select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeType select p;
                             break;
                         case 2:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.NodeName select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeName select p;
                             break;
                         case 3:
-                            OrderedItems = from p in _strLines.AsEnumerable() orderby p.Value select p;
+                            orderedItems = from p in Result.AsEnumerable() orderby p.Value select p;
                             break;
                     }
 
                     _prevSortedColumn = -1;
                 }
 
-                if (OrderedItems != null)
-                    UpdateResultDataGrid(OrderedItems);
+                Result = new XPathCollection(orderedItems);
+                UpdateResultDataGrid(Result);
             }
             catch (Exception ex)
             {
@@ -170,10 +174,10 @@ namespace XPathTester
 
         private async void XpathResultDataGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (xpathResultDataGrid.CurrentRow?.Cells.Count < 5)
+            if(Result == null)
                 return;
 
-            if (xpathResultDataGrid.CurrentRow?.Cells[4].Value is XmlNode node && XmlBody != null)
+            if (xpathResultDataGrid.CurrentRow?.Cells[0].Value is int id)
             {
                 try
                 {
@@ -183,7 +187,7 @@ namespace XPathTester
                     xpathResultDataGrid.CellMouseDoubleClick -= XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
-                    var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, node));
+                    var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, Result[id].Node));
                     if (xmlObject == null)
                         return;
 
@@ -259,12 +263,6 @@ namespace XPathTester
 
             ClearResultTap();
 
-            //if (XmlBody == null)
-            //{
-            //    AddMessageException(@"XML-Body is incorrect!");
-            //    return;
-            //}
-
             if (string.IsNullOrEmpty(XPathText.Text))
             {
                 ReportStatus(@"XPath expression is empty!");
@@ -278,7 +276,8 @@ namespace XPathTester
 
                 if (XmlBody.CreateNavigator().Select(getNodeNamesValue, out var result))
                 {
-                    UpdateResultDataGrid(new XPathCollection(result));
+                    Result = new XPathCollection(result);
+                    UpdateResultDataGrid(Result);
                 }
                 else
                 {

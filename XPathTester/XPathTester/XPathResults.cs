@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
@@ -19,17 +20,24 @@ namespace XPathTester
         [DGVColumn(ColumnPosition.Last, "Value")]
         public string Value { get; set; }
 
-        [DGVColumn(ColumnPosition.Last, "Node", false)]
         public XmlNode Node { get; set; }
     }
 
-    internal class XPathCollection : List<DGVXPathResult>
+    public class XPathCollection : IEnumerable<DGVXPathResult>
     {
+        private readonly Dictionary<int, DGVXPathResult> _values = new Dictionary<int, DGVXPathResult>();
+
+        public XPathCollection(IEnumerable<DGVXPathResult> source)
+        {
+            foreach (var item in source)
+                _values.Add(item.ID, item);
+        }
+
         public XPathCollection(IEnumerable<XPathResult> source)
         {
             foreach (var result in source)
             {
-                Add(new DGVXPathResult()
+                _values.Add(result.ID, new DGVXPathResult()
                 {
                     ID = result.ID,
                     NodeType = result.NodeType,
@@ -38,6 +46,18 @@ namespace XPathTester
                     Node = result.Node
                 });
             }
+        }
+
+        public DGVXPathResult this[int id] => _values[id];
+
+        public IEnumerator<DGVXPathResult> GetEnumerator()
+        {
+            return _values.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _values.Values.GetEnumerator();
         }
     }
 }
