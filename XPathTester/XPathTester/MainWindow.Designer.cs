@@ -57,7 +57,7 @@ namespace XPathTester
             | System.Windows.Forms.AnchorStyles.Right)));
             this.XPathText.Location = new System.Drawing.Point(42, 8);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(1057, 20);
+            this.XPathText.Size = new System.Drawing.Size(1132, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -72,7 +72,7 @@ namespace XPathTester
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(1105, 7);
+            this.buttonFind.Location = new System.Drawing.Point(1180, 7);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(66, 21);
             this.buttonFind.TabIndex = 2;
@@ -99,7 +99,7 @@ namespace XPathTester
             this.editor.Name = "editor";
             this.editor.ReadOnly = false;
             this.editor.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.editor.Size = new System.Drawing.Size(908, 666);
+            this.editor.Size = new System.Drawing.Size(1014, 666);
             this.editor.SizingGrip = true;
             this.editor.TabIndex = 0;
             this.editor.WordWrap = true;
@@ -124,7 +124,7 @@ namespace XPathTester
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
             this.xpathResultDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.xpathResultDataGrid.Size = new System.Drawing.Size(353, 666);
+            this.xpathResultDataGrid.Size = new System.Drawing.Size(322, 666);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
             // Column1
@@ -142,7 +142,7 @@ namespace XPathTester
             // buttonPrettyPrint
             // 
             this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrettyPrint.Location = new System.Drawing.Point(1177, 7);
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(1252, 7);
             this.buttonPrettyPrint.Name = "buttonPrettyPrint";
             this.buttonPrettyPrint.Size = new System.Drawing.Size(87, 21);
             this.buttonPrettyPrint.TabIndex = 7;
@@ -166,8 +166,8 @@ namespace XPathTester
             // 
             this.splitContainer1.Panel2.Controls.Add(this.editor);
             this.splitContainer1.Panel2MinSize = 41;
-            this.splitContainer1.Size = new System.Drawing.Size(1273, 670);
-            this.splitContainer1.SplitterDistance = 357;
+            this.splitContainer1.Size = new System.Drawing.Size(1348, 670);
+            this.splitContainer1.SplitterDistance = 326;
             this.splitContainer1.TabIndex = 9;
             // 
             // panel1
@@ -180,14 +180,14 @@ namespace XPathTester
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.MinimumSize = new System.Drawing.Size(250, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1273, 34);
+            this.panel1.Size = new System.Drawing.Size(1348, 34);
             this.panel1.TabIndex = 11;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1273, 704);
+            this.ClientSize = new System.Drawing.Size(1348, 704);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
