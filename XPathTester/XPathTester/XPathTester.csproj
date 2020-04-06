@@ -55,7 +55,7 @@
       <HintPath>..\..\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm">
-      <HintPath>..\..\Utils\Utils.WinForm\bin\Debug\Utils.WinForm.dll</HintPath>
+      <HintPath>..\..\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
