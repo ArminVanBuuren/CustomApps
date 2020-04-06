@@ -26,8 +26,6 @@ namespace Utils.WinForm.Notepad
         readonly CheckBox _wordWrapping;
         readonly CheckBox _highlights;
 
-
-        public event EventHandler OnSomethingChanged;
         public event EventHandler KeyPressed;
         public event EventHandler Pasting;
         public event EventHandler TextChangedDelayed;
@@ -282,13 +280,13 @@ namespace Utils.WinForm.Notepad
 
             RefreshForm();
 
-            FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(sender, args); };
-            FCTB.Pasting += (sender, args) => { Pasting?.Invoke(sender, args); };
-            FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(sender, args); };
-            FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(sender, args); };
-            FCTB.TextChanged += (sender, args) => { TextChanged?.Invoke(this, args); };
-            FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(sender, args); };
-            FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(sender, args); };
+            FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(this, args); };
+            FCTB.Pasting += (sender, args) => { Pasting?.Invoke(this, args); };
+            FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(this, args); };
+            FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(this, args); };
+            FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
+            FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
+            FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
         }
 
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
@@ -362,10 +360,9 @@ namespace Utils.WinForm.Notepad
                     r.SetStyle(SameWordsStyle);
         }
 
-        protected void SomethingChanged(bool isChanged = false)
+        protected virtual void TextChangedChanged(Editor editor, TextChangedEventArgs args)
         {
-            if (IsContentChanged || isChanged)
-                OnSomethingChanged?.Invoke(this, null);
+
         }
 
         public void DoSelectionVisible()

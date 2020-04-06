@@ -306,8 +306,9 @@ namespace Utils.WinForm.Notepad
         {
             try
             {
+                removeEditor.DelegateAllEvents(newEditor);
                 FinnalizePage(removeEditor);
-                InitializePage(newEditor);
+                InitializePage(newEditor, true);
             }
             catch (Exception ex)
             {
@@ -315,7 +316,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        void InitializePage(Editor editor)
+        void InitializePage(Editor editor, bool convertToFileEditor = false)
         {
             var index = TabControlObj.TabPages.Count;
 
@@ -343,10 +344,17 @@ namespace Utils.WinForm.Notepad
             editor.SizingGrip = SizingGrip;
             editor.Font = TextFont;
             editor.DefaultEncoding = DefaultEncoding;
-            editor.LanguageChanged += (sender, args) => { LanguageChanged?.Invoke(sender, args); };
-            editor.WordWrapStateChanged += (sender, args) => { WordWrapStateChanged?.Invoke(sender, args); };
-            editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
-            editor.OnSomethingChanged += EditorOnSomethingChanged;
+
+            // в конвертируемом FileEditor уже делегируются прошлые эвенты от класса Editor
+            if (!convertToFileEditor)
+            {
+                editor.LanguageChanged += (sender, args) => { LanguageChanged?.Invoke(sender, args); };
+                editor.WordWrapStateChanged += (sender, args) => { WordWrapStateChanged?.Invoke(sender, args); };
+                editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
+            }
+
+            if (editor is FileEditor fileEditor)
+                fileEditor.FileChanged += EditorOnSomethingChanged;
 
             Current = new KeyValuePair<Editor, TabPage>(editor, tabPage);
             ListOfEditors.Add(editor, tabPage);
@@ -376,6 +384,7 @@ namespace Utils.WinForm.Notepad
             {
                 tabPage.ForeColor = editor.IsContentChanged ? Color.Red : TabsForeColor;
                 tabPage.Text = editor.HeaderName.Trim() + new string(' ', 2);
+                RefreshForm(null, null);
             }
 
             // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
@@ -383,8 +392,6 @@ namespace Utils.WinForm.Notepad
                 tabPage.BeginInvoke(new MethodInvoker(RefreshTabPage));
             else
                 RefreshTabPage();
-
-            RefreshForm(null, null);
         }
 
         [DllImport("user32.dll")]

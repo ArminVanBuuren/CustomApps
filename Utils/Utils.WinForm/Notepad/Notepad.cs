@@ -191,7 +191,7 @@ namespace Utils.WinForm.Notepad
                 else
                 {
                     var newFileEditor = FileEditor.ConvertToFileEditor(NotepadControlItem.Current?.Key, NotepadControlItem.DefaultEncoding);
-                    if(SaveAsFileEditor(newFileEditor))
+                    if (SaveAsFileEditor(newFileEditor))
                     {
                         NotepadControlItem.ReplaceEditor(NotepadControlItem.Current?.Key, newFileEditor);
                     }

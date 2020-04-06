@@ -7,12 +7,34 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
+    public class FileEditorEventArgs : EventArgs
+    {
+        internal FileEditorEventArgs(FileEditor editor, WatcherChangeTypes type)
+        {
+            ChangeType = type;
+            NewFilePath = OldFilePath = editor.FilePath;
+            NewText = OldText = editor.Text;
+            NewSource = OldSource = editor.Source;
+        }
+
+        public string OldFilePath { get; internal set; }
+        public string NewFilePath { get; internal set; }
+
+        public string OldSource { get; internal set; }
+        public string NewSource { get; internal set; }
+
+        public string OldText { get; internal set; }
+        public string NewText { get; internal set; }
+        public WatcherChangeTypes ChangeType { get; }
+    }
+
     public partial class FileEditor : Editor
     {
         private static readonly object syncWhenFileChanged = new object();
         private string _filePath = null;
         private FileSystemWatcher _watcher;
 
+        public event EventHandler FileChanged;
 
         public string FilePath
         {
@@ -32,8 +54,6 @@ namespace Utils.WinForm.Notepad
                 Encoding = IO.GetEncoding(_filePath);
 
                 var langByExtension = GetLanguage(_filePath);
-                if (langByExtension == Language.XML && !Source.IsXml(out _))
-                    MessageBox.Show($"Xml file \"{_filePath}\" is incorrect!", @"Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ChangeLanguage(langByExtension);
 
                 EnableWatcher();
@@ -49,10 +69,11 @@ namespace Utils.WinForm.Notepad
 
         FileEditor(Editor editor) : this()
         {
-            Source = editor.Text;
+            base.Source = editor.Text;
+            base.Text = editor.Text;
             ChangeLanguage(editor.Language);
-            WordWrap = editor.WordWrap;
-            Highlights = editor.Highlights;
+            base.WordWrap = editor.WordWrap;
+            base.Highlights = editor.Highlights;
         }
 
         public static FileEditor ConvertToFileEditor(Editor editor, Encoding encoding)
@@ -63,7 +84,6 @@ namespace Utils.WinForm.Notepad
             };
             return newEditor;
         }
-
 
         static Language GetLanguage(string filePath)
         {
@@ -106,16 +126,17 @@ namespace Utils.WinForm.Notepad
         {
             try
             {
+                var oldSource = Source;
                 switch (e.ChangeType)
                 {
                     case WatcherChangeTypes.Deleted:
                         MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
-                        SomethingChanged();
+                        FileChanged?.Invoke(this, new FileEditorEventArgs(this, e.ChangeType) {OldSource = oldSource });
                         return;
                     case WatcherChangeTypes.Created:
                     case WatcherChangeTypes.Changed:
-                        {
+                    {
                             lock (syncWhenFileChanged)
                             {
                                 var tryCount = 0;
@@ -141,8 +162,7 @@ namespace Utils.WinForm.Notepad
                                 Source = IO.SafeReadFile(FilePath, Encoding);
                             }
 
-                            SomethingChanged();
-
+                            FileChanged?.Invoke(this, new FileEditorEventArgs(this, e.ChangeType) { OldSource = oldSource });
                             break;
                         }
                 }
@@ -157,7 +177,12 @@ namespace Utils.WinForm.Notepad
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             FilePath = e.FullPath;
-            SomethingChanged(true); //  e.OldFullPath, e.FullPath
+            FileChanged?.Invoke(this, new FileEditorEventArgs(this, e.ChangeType) {OldFilePath = e.OldFullPath});
+        }
+
+        protected override void TextChangedChanged(Editor editor, TextChangedEventArgs args)
+        {
+            FileChanged?.Invoke(this, new FileEditorEventArgs(this, WatcherChangeTypes.Changed));
         }
 
         public void SaveDocument(string newFileDestination = null)
@@ -167,6 +192,11 @@ namespace Utils.WinForm.Notepad
                 if (!IsContentChanged && newFileDestination == null && FilePath != null)
                     return;
 
+                var oldFilePath = FilePath;
+                var oldSource = Source;
+                var oldText = Text;
+                WatcherChangeTypes type = WatcherChangeTypes.All;
+
                 if (Language == Language.XML && !Text.IsXml(out _))
                 {
                     var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
@@ -174,39 +204,37 @@ namespace Utils.WinForm.Notepad
                         return;
                 }
 
-                if (FilePath == null && newFileDestination == null)
+                if (FilePath.IsNullOrEmpty() && newFileDestination.IsNullOrEmpty())
                 {
-                    string fileDestination = null;
                     using (var sfd = new SaveFileDialog())
                     {
                         sfd.Filter = GetFileFilter();
                         if (sfd.ShowDialog() != DialogResult.OK)
                             return;
 
-                        fileDestination = sfd.FileName;
+                        newFileDestination = sfd.FileName;
                     }
 
-                    if (fileDestination.IsNullOrEmpty())
+                    if (newFileDestination.IsNullOrEmpty())
                         return;
 
-                    SaveFile(fileDestination);
-                    FilePath = fileDestination;
+                    type = WatcherChangeTypes.Created;
+                }
+
+                if (newFileDestination != null)
+                {
+                    SaveFile(newFileDestination);
+                    FilePath = newFileDestination;
+                    type = type == WatcherChangeTypes.All ? WatcherChangeTypes.Renamed : type;
                 }
                 else
                 {
-                    if (newFileDestination != null)
-                    {
-                        SaveFile(newFileDestination);
-                        FilePath = newFileDestination;
-                    }
-                    else
-                    {
-                        Source = Text;
-                        SaveFile(FilePath, true);
-                    }
+                    Source = Text;
+                    SaveFile(FilePath, true);
+                    type = WatcherChangeTypes.Changed;
                 }
 
-                SomethingChanged();
+                FileChanged?.Invoke(this, new FileEditorEventArgs(this, type) {OldFilePath = oldFilePath, OldSource = oldSource, OldText = oldText});
             }
             catch (Exception ex)
             {
