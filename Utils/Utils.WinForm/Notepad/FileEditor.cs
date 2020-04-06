@@ -10,46 +10,48 @@ namespace Utils.WinForm.Notepad
     public partial class FileEditor : Editor
     {
         private static readonly object syncWhenFileChanged = new object();
-        private string _fileName = null;
+        private string _filePath = null;
         private FileSystemWatcher _watcher;
 
 
         public string FilePath
         {
-            get => _fileName;
-            private set
+            get => _filePath;
+            set
             {
-                _fileName = value;
-                HeaderName = Path.GetFileName(_fileName);
-                if (File.Exists(FilePath))
-                    Encoding = IO.GetEncoding(FilePath);
+                if (!File.Exists(value))
+                {
+                    MessageBox.Show($"File \"{value}\" not found!", @"Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                _filePath = value;
+                HeaderName = Path.GetFileName(_filePath);
+
+                Source = IO.SafeReadFile(_filePath, Encoding);
+                Encoding = IO.GetEncoding(_filePath);
+
+                var langByExtension = GetLanguage(_filePath);
+                if (langByExtension == Language.XML && !Source.IsXml(out _))
+                    MessageBox.Show($"Xml file \"{_filePath}\" is incorrect!", @"Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ChangeLanguage(langByExtension);
+
                 EnableWatcher();
             }
         }
 
         public override Encoding Encoding { get; protected set; }
 
-        protected FileEditor() : base()
+        public FileEditor() : base()
         {
             InitializeComponent();
-        }
-
-        internal FileEditor(string filePath, bool wordWrap, bool wordHighlights) : this()
-        {
-            if (!File.Exists(filePath))
-                throw new ArgumentException($"File \"{filePath}\" not found!");
-
-            var langByFileExtension = InitializeFile(filePath);
-
-            Initialize(langByFileExtension, wordWrap);
-            Highlights = wordHighlights;
         }
 
         FileEditor(Editor editor) : this()
         {
             Source = editor.Text;
-
-            Initialize(editor.Language, editor.WordWrap);
+            ChangeLanguage(editor.Language);
+            WordWrap = editor.WordWrap;
             Highlights = editor.Highlights;
         }
 
@@ -62,18 +64,6 @@ namespace Utils.WinForm.Notepad
             return newEditor;
         }
 
-        Language InitializeFile(string filePath)
-        {
-            var langByExtension = GetLanguage(filePath);
-
-            FilePath = filePath;
-            Source = IO.SafeReadFile(filePath, Encoding);
-
-            if (langByExtension == Language.XML && !Source.IsXml(out _))
-                MessageBox.Show($"Xml file \"{filePath}\" is incorrect!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            return langByExtension;
-        }
 
         static Language GetLanguage(string filePath)
         {
@@ -200,16 +190,14 @@ namespace Utils.WinForm.Notepad
                         return;
 
                     SaveFile(fileDestination);
-                    var newLanguage = InitializeFile(fileDestination);
-                    ChangeLanguage(newLanguage);
+                    FilePath = fileDestination;
                 }
                 else
                 {
                     if (newFileDestination != null)
                     {
                         SaveFile(newFileDestination);
-                        var newLanguage = InitializeFile(newFileDestination);
-                        ChangeLanguage(newLanguage);
+                        FilePath = newFileDestination;
                     }
                     else
                     {

@@ -1,73 +1,43 @@
 ﻿using System.Collections.Generic;
+using System.Xml;
 using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace XPathTester
 {
-    class XPathCollection : List<XPathResult>
+    public class DGVXPathResult
     {
-        public XPathCollection(IEnumerable<XPathResult> source): base(source)
+        [DGVColumn(ColumnPosition.Last, "ID")]
+        public int ID { get; set; }
+
+        [DGVColumn(ColumnPosition.Last, "NodeType")]
+        public string NodeType { get; set; }
+
+        [DGVColumn(ColumnPosition.Last, "NodeName")]
+        public string NodeName { get; set; }
+
+        [DGVColumn(ColumnPosition.Last, "Value")]
+        public string Value { get; set; }
+
+        [DGVColumn(ColumnPosition.Last, "Node", false)]
+        public XmlNode Node { get; set; }
+    }
+
+    internal class XPathCollection : List<DGVXPathResult>
+    {
+        public XPathCollection(IEnumerable<XPathResult> source)
         {
-            MaxWidthId = "ID";
-            MaxWidthNodeType = "NodeType";
-            MaxWidthNodeName = "NodeName";
-            CalcColumnsName();
-        }
-
-        public new void Add(XPathResult item)
-        {
-            if (item.ID.ToString().Length > MaxWidthId.Length)
-                MaxWidthId = item.ID.ToString();
-
-            if (item.NodeType.Length > MaxWidthNodeType.Length)
-                MaxWidthNodeType = item.NodeType;
-
-            if (item.NodeName.Length > MaxWidthNodeName.Length)
-                MaxWidthNodeName = item.NodeName;
-
-            base.Add(item);
-        }
-
-        public new void AddRange(IEnumerable<XPathResult> items)
-        {
-            base.AddRange(items);
-            CalcColumnsName();
-        }
-
-        void CalcColumnsName()
-        {
-            foreach (var xpathResult in this)
+            foreach (var result in source)
             {
-                if (xpathResult.ID.ToString().Length > MaxWidthId.Length)
-                    MaxWidthId = xpathResult.ID.ToString();
-
-                if (xpathResult.NodeType.Length > MaxWidthNodeType.Length)
-                    MaxWidthNodeType = xpathResult.NodeType;
-
-                if (xpathResult.NodeName.Length > MaxWidthNodeName.Length)
-                    MaxWidthNodeName = xpathResult.NodeName;
+                Add(new DGVXPathResult()
+                {
+                    ID = result.ID,
+                    NodeType = result.NodeType,
+                    NodeName = result.NodeName,
+                    Value = result.Value,
+                    Node = result.Node
+                });
             }
         }
-
-        public void ModifyValueToNodeName()
-        {
-            MaxWidthNodeType = "NodeType";
-
-            foreach (var xpathResult in this)
-            {
-                xpathResult.Value = xpathResult.NodeName;
-
-                xpathResult.NodeName = "Empty";
-
-                xpathResult.NodeType = xpathResult.NodeName.GetType().Name;
-                if (xpathResult.NodeType.Length > MaxWidthNodeType.Length)
-                    MaxWidthNodeType = xpathResult.NodeType;
-            }
-        }
-
-        public string MaxWidthId { get; private set; }
-
-        public string MaxWidthNodeType { get; private set; }
-
-        public string MaxWidthNodeName { get; private set; }
     }
 }

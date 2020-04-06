@@ -253,7 +253,9 @@ namespace Utils.WinForm.Notepad
                 return existEditor.Key;
             }
 
-            var editor = new Editor(headerName, bodyText, WordWrap, language, Highlights);
+            var editor = new Editor {HeaderName = headerName, Text = bodyText};
+            editor.ChangeLanguage(language);
+
             InitializePage(editor);
             return editor;
         }
@@ -277,7 +279,7 @@ namespace Utils.WinForm.Notepad
                 return existFileEditor.Key;
             }
 
-            var newFileEditor = new FileEditor(filePath, WordWrap, Highlights);
+            var newFileEditor = new FileEditor {FilePath = filePath};
             InitializePage(newFileEditor);
             return newFileEditor;
         }

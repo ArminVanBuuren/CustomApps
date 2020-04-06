@@ -15,7 +15,6 @@ namespace Utils.WinForm.Notepad
         private Encoding _default = Encoding.Default;
 
         private readonly FastColoredTextBox FCTB;
-        private readonly StatusStrip statusStrip;
 
         readonly ToolStripLabel _contentLengthInfo;
         readonly ToolStripLabel _contentLinesInfo;
@@ -37,8 +36,10 @@ namespace Utils.WinForm.Notepad
         public event EventHandler LanguageChanged;
         public event EventHandler WordWrapStateChanged;
         public event EventHandler WordHighlightsStateChanged;
+        public event EventHandler SelectionChanged;
+        public event EventHandler SelectionChangedDelayed;
 
-        public string HeaderName { get; protected set; }
+        public string HeaderName { get; set; }
 
         public string Source
         {
@@ -88,11 +89,12 @@ namespace Utils.WinForm.Notepad
                 }
             }
         }
+        public StatusStrip StatusStrip { get; }
 
         public bool SizingGrip
         {
-            get => statusStrip.SizingGrip;
-            set => statusStrip.SizingGrip = value;
+            get => StatusStrip.SizingGrip;
+            set => StatusStrip.SizingGrip = value;
         }
 
         public bool WordWrap
@@ -169,7 +171,11 @@ namespace Utils.WinForm.Notepad
 
         public int TextLength => FCTB.TextLength;
         public int LinesCount => FCTB.LinesCount;
-        public Range Selection => FCTB.Selection;
+        public Range Selection
+        {
+            get => FCTB.Selection;
+            set => FCTB.Selection = value;
+        }
         public string SelectedText => FCTB.SelectedText;
         public Language Language => FCTB.Language;
 
@@ -179,7 +185,7 @@ namespace Utils.WinForm.Notepad
             private set => _isDisposed = value;
         }
 
-        protected Editor()
+        public Editor()
         {
             InitializeComponent();
 
@@ -200,16 +206,16 @@ namespace Utils.WinForm.Notepad
                 Dock = DockStyle.Fill
             };
 
-            statusStrip = new StatusStrip { Cursor = Cursors.Default, ForeColor = Color.Black };
+            StatusStrip = new StatusStrip { Cursor = Cursors.Default, ForeColor = Color.Black };
 
             Controls.Add(FCTB);
-            Controls.Add(statusStrip);
+            Controls.Add(StatusStrip);
 
             _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control, Padding = new Padding(0, 2, 0, 0) };
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
-            statusStrip.Items.Add(_listOfLanguages);
+            StatusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
             {
                 if (_listOfLanguages.SelectedItem is Language lang && FCTB.Language != lang)
@@ -220,7 +226,7 @@ namespace Utils.WinForm.Notepad
                 }
             };
 
-            statusStrip.Items.Add(new ToolStripSeparator());
+            StatusStrip.Items.Add(new ToolStripSeparator());
             _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 0, 0, 0) };
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
@@ -231,9 +237,9 @@ namespace Utils.WinForm.Notepad
                 WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
-            statusStrip.Items.Add(wordWrapToolStrip);
+            StatusStrip.Items.Add(wordWrapToolStrip);
 
-            statusStrip.Items.Add(new ToolStripSeparator());
+            StatusStrip.Items.Add(new ToolStripSeparator());
             _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 0, 0, 0) };
             _highlights.CheckStateChanged += (s, e) =>
             {
@@ -245,39 +251,44 @@ namespace Utils.WinForm.Notepad
                 WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var highlightsToolStrip = new ToolStripControlHost(_highlights);
-            statusStrip.Items.Add(highlightsToolStrip);
+            StatusStrip.Items.Add(highlightsToolStrip);
 
-            statusStrip.Items.Add(new ToolStripSeparator());
+            StatusStrip.Items.Add(new ToolStripSeparator());
             _encodingInfo = GetStripLabel("");
-            statusStrip.Items.Add(_encodingInfo);
+            StatusStrip.Items.Add(_encodingInfo);
 
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(GetStripLabel("length:"));
+            StatusStrip.Items.Add(new ToolStripSeparator());
+            StatusStrip.Items.Add(GetStripLabel("length:"));
             _contentLengthInfo = GetStripLabel("");
-            statusStrip.Items.Add(_contentLengthInfo);
-            statusStrip.Items.Add(GetStripLabel("lines:"));
+            StatusStrip.Items.Add(_contentLengthInfo);
+            StatusStrip.Items.Add(GetStripLabel("lines:"));
             _contentLinesInfo = GetStripLabel("");
-            statusStrip.Items.Add(_contentLinesInfo);
+            StatusStrip.Items.Add(_contentLinesInfo);
 
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(GetStripLabel("Ln:"));
+            StatusStrip.Items.Add(new ToolStripSeparator());
+            StatusStrip.Items.Add(GetStripLabel("Ln:"));
             _currentLineInfo = GetStripLabel("");
-            statusStrip.Items.Add(_currentLineInfo);
-            statusStrip.Items.Add(GetStripLabel("Col:"));
+            StatusStrip.Items.Add(_currentLineInfo);
+            StatusStrip.Items.Add(GetStripLabel("Col:"));
             _currentPosition = GetStripLabel("");
-            statusStrip.Items.Add(_currentPosition);
-            statusStrip.Items.Add(GetStripLabel("Sel:"));
+            StatusStrip.Items.Add(_currentPosition);
+            StatusStrip.Items.Add(GetStripLabel("Sel:"));
             _selectedInfo = GetStripLabel("");
-            statusStrip.Items.Add(_selectedInfo);
-        }
+            StatusStrip.Items.Add(_selectedInfo);
 
-        protected internal Editor(string headerName, string bodyText, bool wordWrap, Language language, bool wordHighlights) : this()
-        {
-            Source = bodyText;
-            HeaderName = headerName;
+            FCTB.ClearStylesBuffer();
+            FCTB.Range.ClearStyle(StyleIndex.All);
+            FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
 
-            Initialize(language, wordWrap);
-            Highlights = wordHighlights;
+            RefreshForm();
+
+            FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(sender, args); };
+            FCTB.Pasting += (sender, args) => { Pasting?.Invoke(sender, args); };
+            FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(sender, args); };
+            FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(sender, args); };
+            FCTB.TextChanged += (sender, args) => { TextChanged?.Invoke(this, args); };
+            FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(sender, args); };
+            FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(sender, args); };
         }
 
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
@@ -289,25 +300,6 @@ namespace Utils.WinForm.Notepad
             };
         }
 
-        protected void Initialize(Language language, bool wordWrap)
-        {
-            FCTB.ClearStylesBuffer();
-            FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.WordWrap = wordWrap;
-            FCTB.Language = language;
-            FCTB.Text = Source;
-            FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
-
-            FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(sender, args); };
-            FCTB.Pasting += (sender, args) => { Pasting?.Invoke(sender, args); };
-            FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(sender, args); };
-            FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(sender, args); };
-            FCTB.TextChanged += (sender, args) => { TextChanged?.Invoke(this, args); };
-            FCTB.SelectionChanged += (sender, args) => { RefreshForm(); };
-
-            RefreshForm();
-        }
-        
         internal void RefreshForm()
         {
             _contentLengthInfo.Text = TextLength.ToString();
@@ -374,6 +366,33 @@ namespace Utils.WinForm.Notepad
         {
             if (IsContentChanged || isChanged)
                 OnSomethingChanged?.Invoke(this, null);
+        }
+
+        public void DoSelectionVisible()
+        {
+            FCTB.DoSelectionVisible();
+        }
+
+        /// <summary>
+        /// Get range of text
+        /// </summary>
+        /// <param name="fromPos">Absolute start position</param>
+        /// <param name="toPos">Absolute finish position</param>
+        /// <returns>Range</returns>
+        public Range GetRange(int fromPos, int toPos)
+        {
+            return FCTB.GetRange(fromPos, toPos);
+        }
+
+        /// <summary>
+        /// Get range of text
+        /// </summary>
+        /// <param name="fromPlace">Line and char position</param>
+        /// <param name="toPlace">Line and char position</param>
+        /// <returns>Range</returns>
+        public Range GetRange(Place fromPlace, Place toPlace)
+        {
+            return FCTB.GetRange(fromPlace, toPlace);
         }
 
         public new void Focus()
