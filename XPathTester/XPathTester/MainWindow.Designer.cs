@@ -38,11 +38,13 @@ namespace XPathTester
             this.buttonFind = new System.Windows.Forms.Button();
             this.editor = new Utils.WinForm.Notepad.Editor();
             this.xpathResultDataGrid = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonPrettyPrint = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NodeType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NodeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -57,7 +59,7 @@ namespace XPathTester
             | System.Windows.Forms.AnchorStyles.Right)));
             this.XPathText.Location = new System.Drawing.Point(42, 8);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(1132, 20);
+            this.XPathText.Size = new System.Drawing.Size(1314, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -72,7 +74,7 @@ namespace XPathTester
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(1180, 7);
+            this.buttonFind.Location = new System.Drawing.Point(1362, 7);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(66, 21);
             this.buttonFind.TabIndex = 2;
@@ -99,7 +101,7 @@ namespace XPathTester
             this.editor.Name = "editor";
             this.editor.ReadOnly = false;
             this.editor.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.editor.Size = new System.Drawing.Size(1014, 666);
+            this.editor.Size = new System.Drawing.Size(1229, 666);
             this.editor.SizingGrip = true;
             this.editor.TabIndex = 0;
             this.editor.WordWrap = true;
@@ -111,12 +113,16 @@ namespace XPathTester
             this.xpathResultDataGrid.AllowUserToDeleteRows = false;
             this.xpathResultDataGrid.AllowUserToOrderColumns = true;
             this.xpathResultDataGrid.AllowUserToResizeRows = false;
-            this.xpathResultDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.xpathResultDataGrid.BackgroundColor = System.Drawing.Color.White;
-            this.xpathResultDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.xpathResultDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.xpathResultDataGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Sunken;
             this.xpathResultDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             this.xpathResultDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.xpathResultDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.NodeType,
+            this.NodeName,
+            this.Value});
             this.xpathResultDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xpathResultDataGrid.ImeMode = System.Windows.Forms.ImeMode.On;
             this.xpathResultDataGrid.Location = new System.Drawing.Point(0, 0);
@@ -124,25 +130,13 @@ namespace XPathTester
             this.xpathResultDataGrid.ReadOnly = true;
             this.xpathResultDataGrid.RowHeadersVisible = false;
             this.xpathResultDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.xpathResultDataGrid.Size = new System.Drawing.Size(322, 666);
+            this.xpathResultDataGrid.Size = new System.Drawing.Size(289, 666);
             this.xpathResultDataGrid.TabIndex = 3;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             // 
             // buttonPrettyPrint
             // 
             this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrettyPrint.Location = new System.Drawing.Point(1252, 7);
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(1434, 7);
             this.buttonPrettyPrint.Name = "buttonPrettyPrint";
             this.buttonPrettyPrint.Size = new System.Drawing.Size(87, 21);
             this.buttonPrettyPrint.TabIndex = 7;
@@ -166,8 +160,8 @@ namespace XPathTester
             // 
             this.splitContainer1.Panel2.Controls.Add(this.editor);
             this.splitContainer1.Panel2MinSize = 41;
-            this.splitContainer1.Size = new System.Drawing.Size(1348, 670);
-            this.splitContainer1.SplitterDistance = 326;
+            this.splitContainer1.Size = new System.Drawing.Size(1530, 670);
+            this.splitContainer1.SplitterDistance = 293;
             this.splitContainer1.TabIndex = 9;
             // 
             // panel1
@@ -180,14 +174,54 @@ namespace XPathTester
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.MinimumSize = new System.Drawing.Size(250, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1348, 34);
+            this.panel1.Size = new System.Drawing.Size(1530, 34);
             this.panel1.TabIndex = 11;
+            // 
+            // ID
+            // 
+            this.ID.FillWeight = 8.418125F;
+            this.ID.HeaderText = "ID";
+            this.ID.DataPropertyName = "ID";
+            this.ID.MinimumWidth = 25;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 30;
+            // 
+            // NodeType
+            // 
+            this.NodeType.FillWeight = 12.70355F;
+            this.NodeType.HeaderText = "NodeType";
+            this.NodeType.DataPropertyName = "NodeType";
+            this.NodeType.MinimumWidth = 65;
+            this.NodeType.Name = "NodeType";
+            this.NodeType.ReadOnly = true;
+            this.NodeType.Width = 75;
+            // 
+            // NodeName
+            // 
+            this.NodeName.FillWeight = 9.335174F;
+            this.NodeName.HeaderText = "NodeName";
+            this.NodeName.DataPropertyName = "NodeName";
+            this.NodeName.MinimumWidth = 65;
+            this.NodeName.Name = "NodeName";
+            this.NodeName.ReadOnly = true;
+            this.NodeName.Width = 75;
+            // 
+            // Value
+            // 
+            this.Value.FillWeight = 369.5432F;
+            this.Value.HeaderText = "Value";
+            this.Value.DataPropertyName = "Value";
+            this.Value.MinimumWidth = 250;
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            this.Value.Width = 400;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1348, 704);
+            this.ClientSize = new System.Drawing.Size(1530, 704);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -212,10 +246,12 @@ namespace XPathTester
         private System.Windows.Forms.Button buttonFind;
         private Editor editor;
         private System.Windows.Forms.DataGridView xpathResultDataGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.Button buttonPrettyPrint;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private Panel panel1;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn NodeType;
+        private DataGridViewTextBoxColumn NodeName;
+        private DataGridViewTextBoxColumn Value;
     }
 }

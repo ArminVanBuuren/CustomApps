@@ -30,16 +30,14 @@ namespace XPathTester
 
         public bool IsInserted { get; private set; } = false;
         
-        private Brush MainTabBrush { get; set; } = new SolidBrush(Color.Transparent);
 
         public MainWindow()
         {
             InitializeComponent();
 
+            xpathResultDataGrid.AutoGenerateColumns = false;
             xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
             xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
-            xpathResultDataGrid.KeyDown += XpathResultDataGrid_KeyDown;
-            xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
             KeyPreview = true;
@@ -183,8 +181,6 @@ namespace XPathTester
                 {
                     editor.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
                     xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.KeyDown -= XpathResultDataGrid_KeyDown;
-                    xpathResultDataGrid.CellMouseDoubleClick -= XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
                     var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, Result[id].Node));
@@ -205,8 +201,6 @@ namespace XPathTester
                 {
                     editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
                     xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.KeyDown += XpathResultDataGrid_KeyDown;
-                    xpathResultDataGrid.CellMouseDoubleClick += XpathResultDataGrid_CellMouseDoubleClick;
                     xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
                 }
             }
@@ -227,12 +221,10 @@ namespace XPathTester
                     var document = new XmlDocument();
                     document.LoadXml(XML.RemoveUnallowable(editor.Text, " "));
                     XmlBody = document;
-                    MainTabBrush = solidTransparent;
                 }
                 catch (Exception ex)
                 {
                     XmlBody = null;
-                    MainTabBrush = solidRed;
                     IsInserted = false;
                     ReportStatus($"XML-Body is incorrect! {ex.Message}");
                 }

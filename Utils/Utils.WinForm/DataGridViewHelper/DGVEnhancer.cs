@@ -196,7 +196,6 @@ namespace Utils.WinForm.DataGridViewHelper
                     grid.RowHeadersVisible = false;
 
                     grid.DataSource = null;
-                    grid.Columns.Clear();
                     grid.Rows.Clear();
                     grid.ClearSelection();
                 }
