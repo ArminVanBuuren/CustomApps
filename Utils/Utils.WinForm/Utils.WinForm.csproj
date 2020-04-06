@@ -211,6 +211,12 @@
     <EmbeddedResource Include="FastColoredTextBox\ReplaceForm.resx">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Notepad\Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notepad\FileEditor.resx">
+      <DependentUpon>FileEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Notepad\NotepadControl.resx">
       <DependentUpon>NotepadControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -39,7 +39,7 @@
             this.TabControlObj.Location = new System.Drawing.Point(0, 0);
             this.TabControlObj.Name = "TabControlObj";
             this.TabControlObj.SelectedIndex = 0;
-            this.TabControlObj.Size = new System.Drawing.Size(150, 150);
+            this.TabControlObj.Size = new System.Drawing.Size(1361, 714);
             this.TabControlObj.TabIndex = 0;
             // 
             // NotepadControl
@@ -49,6 +49,7 @@
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Controls.Add(this.TabControlObj);
             this.Name = "NotepadControl";
+            this.Size = new System.Drawing.Size(1361, 714);
             this.ResumeLayout(false);
 
         }
