@@ -257,7 +257,7 @@ namespace LogsReader.Reader
 
         static bool IsAllowedExtension(string fileName)
         {
-            switch (Path.GetExtension(fileName))
+            switch (Path.GetExtension(fileName)?.ToLower())
             {
                 case ".aif":
                 case ".cda":
@@ -330,9 +330,6 @@ namespace LogsReader.Reader
                 case ".doc":
                 case ".odt":
                 case ".pdf":
-                case ".rtf":
-                case ".tex":
-                case ".txt":
                 case ".wpd": return false;
             }
 
