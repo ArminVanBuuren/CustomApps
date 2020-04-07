@@ -79,9 +79,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader\TraceReaderSimple.cs" />
     <Compile Include="Reader\TraceReaderStartWith.cs" />
-    <Compile Include="Reader\CustomTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
     <Compile Include="Config\LRSettingsScheme.cs" />

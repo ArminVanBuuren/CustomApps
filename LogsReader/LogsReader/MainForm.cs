@@ -54,7 +54,7 @@ namespace LogsReader
 
             try
             {
-                Text = $"Logs Reader {ASSEMBLY.CurrentVersion}";
+                base.Text = $"Logs Reader {ASSEMBLY.CurrentVersion}";
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) =>

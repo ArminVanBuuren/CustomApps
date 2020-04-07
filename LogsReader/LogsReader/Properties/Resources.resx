@@ -128,7 +128,7 @@
     <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
   <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
-    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из TraceParse.</value>
+    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из "TraceParse".</value>
   </data>
   <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
     <value>Сервера для поиска. Указать через запятую.</value>

@@ -210,9 +210,9 @@ namespace LogsReader.Config
                 catch (ArgumentException)
                 {
                     if (ReportStatus == null)
-                        Util.MessageShow("Columns must be unique", $"Scheme=\"{Name}\" - OrderBy");
+                        Util.MessageShow("Columns must be unique!", $"Scheme=\"{Name}\" - OrderBy");
                     else
-                        ReportStatus.Invoke("Columns must be unique", ReportStatusType.Error);
+                        ReportStatus.Invoke("Columns must be unique!", ReportStatusType.Error);
                     return;
                 }
                 catch (Exception ex)

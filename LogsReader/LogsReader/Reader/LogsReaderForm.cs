@@ -253,14 +253,11 @@ namespace LogsReader.Reader
         {
             try
             {
-                int i = 0;
-                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                for (var i = 0; i < dgvFiles.Columns.Count; i++)
                 {
                     var valueStr = UserSettings.GetValue("COL" + i);
-                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value < 1000)
-                        dgvFiles.Columns[i].Width = value;
-
-                    i++;
+                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
+                        dgvFiles.Columns[i].Width = value;       
                 }
 
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
@@ -284,11 +281,9 @@ namespace LogsReader.Reader
                 if (!_settingsLoaded)
                     return;
 
-                int i = 0;
-                foreach (DataGridViewColumn column in dgvFiles.Columns)
+                for (var i = 0; i < dgvFiles.Columns.Count; i++)
                 {
                     UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
-                    i++;
                 }
 
                 UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
