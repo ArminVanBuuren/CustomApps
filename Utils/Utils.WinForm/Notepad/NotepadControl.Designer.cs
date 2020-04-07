@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.TabControlObj = new System.Windows.Forms.TabControl();
+            this._tabControl = new System.Windows.Forms.TabControl();
             this.SuspendLayout();
             // 
             // TabControlObj
             // 
-            this.TabControlObj.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.TabControlObj.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TabControlObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TabControlObj.Location = new System.Drawing.Point(0, 0);
-            this.TabControlObj.Name = "TabControlObj";
-            this.TabControlObj.SelectedIndex = 0;
-            this.TabControlObj.Size = new System.Drawing.Size(1361, 714);
-            this.TabControlObj.TabIndex = 0;
+            this._tabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this._tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this._tabControl.Location = new System.Drawing.Point(0, 0);
+            this._tabControl.Name = "TabControl";
+            this._tabControl.SelectedIndex = 0;
+            this._tabControl.Size = new System.Drawing.Size(1361, 714);
+            this._tabControl.TabIndex = 0;
             // 
             // NotepadControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(this.TabControlObj);
+            this.Controls.Add(this._tabControl);
             this.Name = "NotepadControl";
             this.Size = new System.Drawing.Size(1361, 714);
             this.ResumeLayout(false);
@@ -55,7 +55,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl TabControlObj;
     }
 }

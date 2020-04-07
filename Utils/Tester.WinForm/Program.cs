@@ -22,6 +22,7 @@ namespace Tester.WinForm
                 //Application.Run(new Form1());
 
                 var notepad = new Notepad {AllowUserCloseItems = true};
+                notepad.SizingGrip = true;
                 Application.Run(notepad);
             }
             catch (Exception e)

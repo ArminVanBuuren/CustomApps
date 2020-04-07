@@ -18,7 +18,7 @@ namespace XPathTester
         private readonly object sync = new object();
         private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
         private readonly SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
-        private readonly ToolStripStatusLabel _statusInfo;
+        private readonly ToolStripLabel _statusInfo;
         private readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
         private bool _xmlBodyChanged = false;
@@ -36,6 +36,7 @@ namespace XPathTester
             InitializeComponent();
 
             xpathResultDataGrid.AutoGenerateColumns = false;
+            xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
             xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
             xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
             xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
@@ -45,9 +46,8 @@ namespace XPathTester
             
             editor.SizingGrip = true;
             editor.ChangeLanguage(Language.XML);
-            editor.StatusStrip.Items.Add(new ToolStripSeparator());
-            _statusInfo = new ToolStripStatusLabel("") { Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = new Padding(0, 2, 0, 2) };
-            editor.StatusStrip.Items.Add(_statusInfo);
+            _statusInfo = editor.AddToolStripLabel();
+            _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
             editor.KeyDown += XmlBodyRichTextBox_KeyDown;
             editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
         }
@@ -180,6 +180,7 @@ namespace XPathTester
                 try
                 {
                     editor.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.MouseClick -= XpathResultDataGrid_SelectionChanged;
                     xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
                     xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
@@ -200,6 +201,7 @@ namespace XPathTester
                 finally
                 {
                     editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                    xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                     xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                     xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
                 }
@@ -253,13 +255,13 @@ namespace XPathTester
             if (XmlBody == null)
                 return;
 
-            ClearResultTap();
-
             if (string.IsNullOrEmpty(XPathText.Text))
             {
                 ReportStatus(@"XPath expression is empty!");
                 return;
             }
+
+            ClearResultTap();
 
             try
             {

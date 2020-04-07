@@ -130,7 +130,7 @@ namespace Utils.WinForm.Notepad
                 switch (e.ChangeType)
                 {
                     case WatcherChangeTypes.Deleted:
-                        MessageBox.Show($"File \"{FilePath}\" deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
                         FileChanged?.Invoke(this, new FileEditorEventArgs(this, e.ChangeType) {OldSource = oldSource });
                         return;

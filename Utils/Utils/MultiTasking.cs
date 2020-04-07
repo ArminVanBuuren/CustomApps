@@ -309,11 +309,11 @@ namespace Utils
     [Serializable]
     public class MTCallbackTimeoutException : Exception
     {
-        public MTCallbackTimeoutException():base("Exception when wait callback")
+        public MTCallbackTimeoutException():base("Exception when waiting callback")
         {
 
         }
-        public MTCallbackTimeoutException(Exception ex) : base("Exception when wait callback", ex)
+        public MTCallbackTimeoutException(Exception ex) : base("Exception when waiting callback", ex)
         {
 
         }

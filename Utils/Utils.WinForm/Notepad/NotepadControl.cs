@@ -23,6 +23,7 @@ namespace Utils.WinForm.Notepad
         private Encoding _encoding = Encoding.Default;
         private Color _tabsForeColor = Color.Green;
         private Color _textForeColor = Color.Black;
+        private TabControl _tabControl;
 
         public event EventHandler OnRefresh;
         public event EventHandler LanguageChanged;
@@ -112,14 +113,14 @@ namespace Utils.WinForm.Notepad
 
         public int SelectedIndex
         {
-            get => TabControlObj.SelectedIndex;
-            set => TabControlObj.SelectedIndex = value;
+            get => _tabControl.SelectedIndex;
+            set => _tabControl.SelectedIndex = value;
         }
 
         public Font TabsFont
         {
-            get => TabControlObj.Font;
-            set => TabControlObj.Font = value;
+            get => _tabControl.Font;
+            set => _tabControl.Font = value;
         }
 
         public Color TabsForeColor
@@ -138,38 +139,44 @@ namespace Utils.WinForm.Notepad
             get => _allowUserCloseItems;
             set
             {
-                if(_allowUserCloseItems == value)
+                if (_allowUserCloseItems == value)
                     return;
 
                 _allowUserCloseItems = value;
                 if (_allowUserCloseItems)
                 {
-                    TabControlObj.DrawMode = TabDrawMode.OwnerDrawFixed;
-                    TabControlObj.MouseClick += TabControlObj_MouseClick;
-                    TabControlObj.MouseDown += TabControl1_MouseDown;
-                    TabControlObj.HandleCreated += TabControlObj_HandleCreated;
-                    TabControlObj.DrawItem += TabControl1_DrawItem;
+                    _tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+                    _tabControl.MouseClick += TabControlObj_MouseClick;
+                    _tabControl.MouseDown += TabControl1_MouseDown;
+                    _tabControl.HandleCreated += TabControlObj_HandleCreated;
+                    _tabControl.DrawItem += TabControl1_DrawItem;
                 }
                 else
                 {
-                    TabControlObj.DrawMode = TabDrawMode.Normal;
-                    TabControlObj.MouseClick -= TabControlObj_MouseClick;
-                    TabControlObj.MouseDown -= TabControl1_MouseDown;
-                    TabControlObj.HandleCreated -= TabControlObj_HandleCreated;
-                    TabControlObj.DrawItem -= TabControl1_DrawItem;
+                    _tabControl.DrawMode = TabDrawMode.Normal;
+                    _tabControl.MouseClick -= TabControlObj_MouseClick;
+                    _tabControl.MouseDown -= TabControl1_MouseDown;
+                    _tabControl.HandleCreated -= TabControlObj_HandleCreated;
+                    _tabControl.DrawItem -= TabControl1_DrawItem;
                 }
             }
+        }
+
+        public override Color BackColor
+        {
+            get => _tabControl.BackColor;
+            set => _tabControl.BackColor = value;
         }
 
         public NotepadControl()
         {
             InitializeComponent();
 
-            TabControlObj.DrawMode = TabDrawMode.Normal;
-            TabControlObj.Padding = new Point(12, 4);
-            TabControlObj.BackColor = Color.White;
-            TabControlObj.Deselected += TabControlObj_Deselected;
-            TabControlObj.Selecting += RefreshForm;
+            _tabControl.DrawMode = TabDrawMode.Normal;
+            _tabControl.Padding = new Point(12, 4);
+            _tabControl.BackColor = Color.White;
+            _tabControl.Deselected += TabControlObj_Deselected;
+            _tabControl.Selecting += RefreshForm;
         }
 
         private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
@@ -178,23 +185,23 @@ namespace Utils.WinForm.Notepad
             {
                 try
                 {
-                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    for (var i = 0; i < _tabControl.TabCount; ++i)
                     {
-                        if (TabControlObj.GetTabRect(i).Contains(e.Location))
+                        if (_tabControl.GetTabRect(i).Contains(e.Location))
                         {
-                            TabControlObj.SelectedIndex = i;
+                            _tabControl.SelectedIndex = i;
                         }
                     }
 
                     var closeMenuStrip = new ContextMenuStrip
                     {
-                        Tag = TabControlObj.TabPages[TabControlObj.SelectedIndex]
+                        Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
                     };
                     closeMenuStrip.Items.Add("Close");
                     closeMenuStrip.Items.Add("Close All But This");
                     closeMenuStrip.Items.Add("Close All Documents");
                     closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
-                    closeMenuStrip.Show(TabControlObj, e.Location);
+                    closeMenuStrip.Show(_tabControl, e.Location);
                 }
                 catch (Exception ex)
                 {
@@ -208,24 +215,26 @@ namespace Utils.WinForm.Notepad
             switch (e.ClickedItem.Text)
             {
                 case "Close":
-                    CloseTab(TabControlObj.SelectedIndex);
+                    CloseTab(_tabControl.SelectedIndex);
                     break;
                 case "Close All But This":
-                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    for (var i = 0; i < _tabControl.TabCount; ++i)
                     {
-                        if (TabControlObj.SelectedIndex == i)
+                        if (_tabControl.SelectedIndex == i)
                             continue;
 
                         CloseTab(i, false);
                         i--;
                     }
+
                     break;
                 case "Close All Documents":
-                    for (var i = 0; i < TabControlObj.TabCount; ++i)
+                    for (var i = 0; i < _tabControl.TabCount; ++i)
                     {
                         CloseTab(i, false);
                         i--;
                     }
+
                     break;
             }
         }
@@ -239,7 +248,7 @@ namespace Utils.WinForm.Notepad
         public Editor AddDocument(string headerName, string bodyText, Language language = Language.Custom)
         {
             if (headerName.Length > 70)
-                throw new Exception("Header name is too longer");
+                throw new Exception("Header name is too long");
 
             var existEditor = ListOfEditors.FirstOrDefault(x => x.Key?.HeaderName != null
                                                                 && x.Key?.Source != null
@@ -249,7 +258,7 @@ namespace Utils.WinForm.Notepad
 
             if (existEditor.Key != null && existEditor.Value != null)
             {
-                TabControlObj.SelectedTab = existEditor.Value;
+                _tabControl.SelectedTab = existEditor.Value;
                 return existEditor.Key;
             }
 
@@ -275,7 +284,7 @@ namespace Utils.WinForm.Notepad
 
             if (existFileEditor.Key != null && existFileEditor.Value != null)
             {
-                TabControlObj.SelectedTab = existFileEditor.Value;
+                _tabControl.SelectedTab = existFileEditor.Value;
                 return existFileEditor.Key;
             }
 
@@ -286,18 +295,18 @@ namespace Utils.WinForm.Notepad
 
         public void SelectEditor(int tabIndex)
         {
-            if (TabControlObj.TabCount - 1 >= tabIndex)
+            if (_tabControl.TabCount - 1 >= tabIndex)
             {
-                TabControlObj.SelectedIndex = tabIndex;
+                _tabControl.SelectedIndex = tabIndex;
                 RefreshForm(null, null);
             }
         }
 
         public void SelectEditor(Editor editor)
         {
-            if (ListOfEditors.TryGetValue(editor, out var tabPage) && tabPage != TabControlObj.SelectedTab)
+            if (ListOfEditors.TryGetValue(editor, out var tabPage) && tabPage != _tabControl.SelectedTab)
             {
-                TabControlObj.SelectedTab = tabPage;
+                _tabControl.SelectedTab = tabPage;
                 RefreshForm(null, null);
             }
         }
@@ -318,7 +327,7 @@ namespace Utils.WinForm.Notepad
 
         void InitializePage(Editor editor, bool convertToFileEditor = false)
         {
-            var index = TabControlObj.TabPages.Count;
+            var index = _tabControl.TabPages.Count;
 
             var tabPage = new TabPage
             {
@@ -330,11 +339,11 @@ namespace Utils.WinForm.Notepad
             };
             tabPage.Controls.Add(editor);
 
-            TabControlObj.TabPages.Add(tabPage);
-            if (TabControlObj.TabPages.Count == index)
-                TabControlObj.TabPages.Insert(index, editor.HeaderName);
+            _tabControl.TabPages.Add(tabPage);
+            if (_tabControl.TabPages.Count == index)
+                _tabControl.TabPages.Insert(index, editor.HeaderName);
 
-            TabControlObj.SelectedIndex = index;
+            _tabControl.SelectedIndex = index;
 
             editor.Dock = DockStyle.Fill;
             editor.ForeColor = TextForeColor;
@@ -359,7 +368,7 @@ namespace Utils.WinForm.Notepad
             Current = new KeyValuePair<Editor, TabPage>(editor, tabPage);
             ListOfEditors.Add(editor, tabPage);
 
-            if (TabControlObj.TabCount == 1)
+            if (_tabControl.TabCount == 1)
                 RefreshForm(this, null);
         }
 
@@ -368,8 +377,8 @@ namespace Utils.WinForm.Notepad
             if (removeEditor == null || !ListOfEditors.TryGetValue(removeEditor, out var tabPage))
                 return -1;
 
-            var prevSelectedIndex = TabControlObj.SelectedIndex;
-            TabControlObj.TabPages.Remove(tabPage);
+            var prevSelectedIndex = _tabControl.SelectedIndex;
+            _tabControl.TabPages.Remove(tabPage);
             ListOfEditors.Remove(removeEditor);
             removeEditor.Dispose();
             return prevSelectedIndex;
@@ -401,30 +410,30 @@ namespace Utils.WinForm.Notepad
 
         private void TabControlObj_HandleCreated(object sender, EventArgs e)
         {
-            SendMessage(TabControlObj.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
+            SendMessage(_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
         }
 
         private void RefreshForm(object sender, TabControlCancelEventArgs e)
         {
             try
             {
-                if (TabControlObj.TabPages.Count == 0)
+                if (_tabControl.TabPages.Count == 0)
                 {
                     Current = null;
                     return;
                 }
 
-                if (TabControlObj.SelectedTab == null && _lastSelectedPage <= TabControlObj.TabCount - 1)
-                    TabControlObj.SelectedIndex = _lastSelectedPage;
+                if (_tabControl.SelectedTab == null && _lastSelectedPage <= _tabControl.TabCount - 1)
+                    _tabControl.SelectedIndex = _lastSelectedPage;
 
-                if (TabControlObj.SelectedTab == null || TabControlObj.SelectedTab.Controls.Count == 0)
+                if (_tabControl.SelectedTab == null || _tabControl.SelectedTab.Controls.Count == 0)
                     return;
 
-                var editor = TabControlObj.SelectedTab.Controls[0];
+                var editor = _tabControl.SelectedTab.Controls[0];
                 if (!(editor is Editor editor2))
                     return;
 
-                Current = new KeyValuePair<Editor, TabPage>(editor2, TabControlObj.SelectedTab);
+                Current = new KeyValuePair<Editor, TabPage>(editor2, _tabControl.SelectedTab);
             }
             catch (Exception ex)
             {
@@ -444,9 +453,9 @@ namespace Utils.WinForm.Notepad
 
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
         {
-            for (var i = 0; i < TabControlObj.TabPages.Count; i++)
+            for (var i = 0; i < _tabControl.TabPages.Count; i++)
             {
-                var tabRect = TabControlObj.GetTabRect(i);
+                var tabRect = _tabControl.GetTabRect(i);
                 tabRect.Inflate(-2, -2);
                 var closeImage = Properties.Resources.Close;
                 var imageRect = new Rectangle(
@@ -465,48 +474,48 @@ namespace Utils.WinForm.Notepad
 
         void CloseTab(int tabIndex, bool calcSelectionTab = true)
         {
-            var tabPage = TabControlObj.TabPages[tabIndex];
+            var tabPage = _tabControl.TabPages[tabIndex];
             if (tabPage == null)
                 return;
 
             var editor = tabPage.Controls[0];
-            if(!(editor is Editor editor2))
+            if (!(editor is Editor editor2))
                 return;
 
             var prevSelectedIndex = FinnalizePage(editor2);
 
-            if(!calcSelectionTab)
+            if (!calcSelectionTab)
                 return;
 
-            if (TabControlObj.TabPages.Count > 0)
+            if (_tabControl.TabPages.Count > 0)
             {
                 if (prevSelectedIndex == tabIndex && _lastSelectedPage > tabIndex)
                 {
-                    TabControlObj.SelectedIndex = _lastSelectedPage - 1;
+                    _tabControl.SelectedIndex = _lastSelectedPage - 1;
                 }
                 else if (prevSelectedIndex == tabIndex && _lastSelectedPage < tabIndex)
                 {
-                    TabControlObj.SelectedIndex = _lastSelectedPage;
+                    _tabControl.SelectedIndex = _lastSelectedPage;
                 }
                 else if (prevSelectedIndex > tabIndex)
                 {
-                    TabControlObj.SelectedIndex = prevSelectedIndex - 1;
+                    _tabControl.SelectedIndex = prevSelectedIndex - 1;
                 }
                 else if (prevSelectedIndex < tabIndex)
                 {
-                    TabControlObj.SelectedIndex = prevSelectedIndex;
+                    _tabControl.SelectedIndex = prevSelectedIndex;
                 }
                 else if (tabIndex > 0)
                 {
-                    TabControlObj.SelectedIndex = tabIndex - 1;
+                    _tabControl.SelectedIndex = tabIndex - 1;
                 }
             }
         }
 
         private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            var tabPage = TabControlObj.TabPages[e.Index];
-            var tabRect = TabControlObj.GetTabRect(e.Index);
+            var tabPage = _tabControl.TabPages[e.Index];
+            var tabRect = _tabControl.GetTabRect(e.Index);
 
             if (AllowUserCloseItems)
             {
@@ -528,7 +537,7 @@ namespace Utils.WinForm.Notepad
             foreach (var editor in ListOfEditors.Keys)
                 editor.Dispose();
         }
-        
+
         public IEnumerator<KeyValuePair<Editor, TabPage>> GetEnumerator()
         {
             return ListOfEditors.GetEnumerator();

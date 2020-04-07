@@ -15,6 +15,7 @@ namespace Utils.WinForm.Notepad
         private Encoding _default = Encoding.Default;
 
         private readonly FastColoredTextBox FCTB;
+        private readonly StatusStrip _statusStrip;
 
         readonly ToolStripLabel _contentLengthInfo;
         readonly ToolStripLabel _contentLinesInfo;
@@ -87,12 +88,11 @@ namespace Utils.WinForm.Notepad
                 }
             }
         }
-        public StatusStrip StatusStrip { get; }
 
         public bool SizingGrip
         {
-            get => StatusStrip.SizingGrip;
-            set => StatusStrip.SizingGrip = value;
+            get => _statusStrip.SizingGrip;
+            set => _statusStrip.SizingGrip = value;
         }
 
         public bool WordWrap
@@ -204,16 +204,20 @@ namespace Utils.WinForm.Notepad
                 Dock = DockStyle.Fill
             };
 
-            StatusStrip = new StatusStrip { Cursor = Cursors.Default, ForeColor = Color.Black };
-
+            _statusStrip = new StatusStrip
+            {
+                Cursor = Cursors.Default,
+                ForeColor = Color.Black,
+                LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
+            };
             Controls.Add(FCTB);
-            Controls.Add(StatusStrip);
+            Controls.Add(_statusStrip);
 
-            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control, Padding = new Padding(0, 2, 0, 0) };
+            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control, Padding = new Padding(0, 2, 0, 0)};
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
-            StatusStrip.Items.Add(_listOfLanguages);
+            _statusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
             {
                 if (_listOfLanguages.SelectedItem is Language lang && FCTB.Language != lang)
@@ -224,8 +228,8 @@ namespace Utils.WinForm.Notepad
                 }
             };
 
-            StatusStrip.Items.Add(new ToolStripSeparator());
-            _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 0, 0, 0) };
+            _statusStrip.Items.Add(GetSeparator());
+            _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 3, 0, 0) };
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
                 if (WordWrap == _wordWrapping.Checked)
@@ -235,10 +239,10 @@ namespace Utils.WinForm.Notepad
                 WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
-            StatusStrip.Items.Add(wordWrapToolStrip);
+            _statusStrip.Items.Add(wordWrapToolStrip);
 
-            StatusStrip.Items.Add(new ToolStripSeparator());
-            _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 0, 0, 0) };
+            _statusStrip.Items.Add(GetSeparator());
+            _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 3, 0, 0) };
             _highlights.CheckStateChanged += (s, e) =>
             {
                 FCTB.VisibleRange.ClearStyle(SameWordsStyle);
@@ -249,30 +253,30 @@ namespace Utils.WinForm.Notepad
                 WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var highlightsToolStrip = new ToolStripControlHost(_highlights);
-            StatusStrip.Items.Add(highlightsToolStrip);
+            _statusStrip.Items.Add(highlightsToolStrip);
 
-            StatusStrip.Items.Add(new ToolStripSeparator());
+            _statusStrip.Items.Add(GetSeparator());
             _encodingInfo = GetStripLabel("");
-            StatusStrip.Items.Add(_encodingInfo);
+            _statusStrip.Items.Add(_encodingInfo);
 
-            StatusStrip.Items.Add(new ToolStripSeparator());
-            StatusStrip.Items.Add(GetStripLabel("length:"));
+            _statusStrip.Items.Add(GetSeparator());
+            _statusStrip.Items.Add(GetStripLabel("length:"));
             _contentLengthInfo = GetStripLabel("");
-            StatusStrip.Items.Add(_contentLengthInfo);
-            StatusStrip.Items.Add(GetStripLabel("lines:"));
+            _statusStrip.Items.Add(_contentLengthInfo);
+            _statusStrip.Items.Add(GetStripLabel("lines:"));
             _contentLinesInfo = GetStripLabel("");
-            StatusStrip.Items.Add(_contentLinesInfo);
+            _statusStrip.Items.Add(_contentLinesInfo);
 
-            StatusStrip.Items.Add(new ToolStripSeparator());
-            StatusStrip.Items.Add(GetStripLabel("Ln:"));
+            _statusStrip.Items.Add(GetSeparator());
+            _statusStrip.Items.Add(GetStripLabel("Ln:"));
             _currentLineInfo = GetStripLabel("");
-            StatusStrip.Items.Add(_currentLineInfo);
-            StatusStrip.Items.Add(GetStripLabel("Col:"));
+            _statusStrip.Items.Add(_currentLineInfo);
+            _statusStrip.Items.Add(GetStripLabel("Col:"));
             _currentPosition = GetStripLabel("");
-            StatusStrip.Items.Add(_currentPosition);
-            StatusStrip.Items.Add(GetStripLabel("Sel:"));
+            _statusStrip.Items.Add(_currentPosition);
+            _statusStrip.Items.Add(GetStripLabel("Sel:"));
             _selectedInfo = GetStripLabel("");
-            StatusStrip.Items.Add(_selectedInfo);
+            _statusStrip.Items.Add(_selectedInfo);
 
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
@@ -289,12 +293,26 @@ namespace Utils.WinForm.Notepad
             FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
         }
 
+        public ToolStripLabel AddToolStripLabel(string text = "")
+        {
+            _statusStrip.Items.Add(GetSeparator());
+            var lable = GetStripLabel(text);
+            _statusStrip.Items.Add(lable);
+            return lable;
+        }
+
+        static ToolStripSeparator GetSeparator()
+        {
+            return new ToolStripSeparator() {Margin = new Padding(0, 2, 0, 0)};
+        }
+
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
         {
-            return new ToolStripLabel(text)
+            return new ToolStripStatusLabel(text)
             {
                 BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 0)
+                Margin = new Padding(0, 6, 0, 0),
+                Padding = new Padding(0,0,0,0)
             };
         }
 
