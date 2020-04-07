@@ -1685,6 +1685,10 @@
     <None Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_90_ANTIFRAUD\Sitronics.Foris.Mobile.snk" />
     <None Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_90_ANTIFRAUD\Web.Config" />
     <None Include="EDITION\MG-02\Configuration\WEB_SERVICES\WEB_90_ANTIFRAUD\web.config.upgrade" />
+    <None Include="EDITION\MG-02\Config\Service\FAR79C1.tmp" />
+    <None Include="EDITION\MG-02\Config\Service\FAR79C2.tmp" />
+    <None Include="EDITION\MG-02\Config\Service\FAR79C3.tmp" />
+    <None Include="EDITION\MG-02\Config\Service\FAR79C4.tmp" />
     <None Include="EDITION\MG-02\Dispatcher\01\Dispatcher.exe.config" />
     <None Include="EDITION\MG-02\Dispatcher\01\Dispatcher.exe.config.upgrade" />
     <None Include="EDITION\MG-02\Dispatcher\02\Dispatcher.exe.config" />
@@ -1727,6 +1731,10 @@
     <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\Web.Config" />
     <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\web.config.upgrade" />
     <None Include="EDITION\MG-03\Configuration\WEB_SERVICES\WEB_90_WHIRL\WebService.wsdl" />
+    <None Include="EDITION\MG-03\Config\Service\FAR79C1.tmp" />
+    <None Include="EDITION\MG-03\Config\Service\FAR79C2.tmp" />
+    <None Include="EDITION\MG-03\Config\Service\FAR79C3.tmp" />
+    <None Include="EDITION\MG-03\Config\Service\FAR79C4.tmp" />
     <None Include="EDITION\MG-03\Dispatcher\01\Dispatcher.exe.config" />
     <None Include="EDITION\MG-03\Dispatcher\01\Dispatcher.exe.config.upgrade" />
     <None Include="EDITION\MG-03\Dispatcher\02\Dispatcher.exe.config" />
@@ -1761,6 +1769,10 @@
     <None Include="EDITION\MG-04\Configuration\WEB_SERVICES\WEB_82_USSD\Web.Config" />
     <None Include="EDITION\MG-04\Configuration\WEB_SERVICES\WEB_82_USSD\web.config.upgrade" />
     <None Include="EDITION\MG-04\Configuration\WEB_SERVICES\WEB_82_USSD\WebService.wsdl" />
+    <None Include="EDITION\MG-04\Config\Service\FAR79C1.tmp" />
+    <None Include="EDITION\MG-04\Config\Service\FAR79C2.tmp" />
+    <None Include="EDITION\MG-04\Config\Service\FAR79C3.tmp" />
+    <None Include="EDITION\MG-04\Config\Service\FAR79C4.tmp" />
     <None Include="EDITION\MG-04\Dispatcher\01\Dispatcher.exe.config" />
     <None Include="EDITION\MG-04\Dispatcher\01\Dispatcher.exe.config.upgrade" />
     <None Include="EDITION\MG-04\Dispatcher\02\Dispatcher.exe.config" />

@@ -240,9 +240,9 @@ tplist               - Компонент выполняет проверки п
     info_getacceptor_uz="Vvedite nomer abonenta v formate:&#xA;99897XXXXXXX"
     info_getacceptor_en="Enter a number in the format:&#xA;99897XXXXXXX"
 
-    info_getamount_ru="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
-    info_getamount_uz="Vvedite summu perevoda. Dostupnaya summa - ot 1 do 5 y.e."
-    info_getamount_en="Enter the amount of the transfer. Available amount - from 1 to 5 units."
+    info_getamount_ru="Vvedite summu perevoda. Dostupnaya summa - ot 0.5 do 5 y.e."
+    info_getamount_uz="Vvedite summu perevoda. Dostupnaya summa - ot 0.5 do 5 y.e."
+    info_getamount_en="Enter the amount of the transfer. Available amount - from 0.5 to 5 units."
     >
     <soapcon value="_PTPMONEYTR"/>
     <ussdcon value="*2*3*1"/>
@@ -444,9 +444,9 @@ tplist               - Компонент выполняет проверки п
     info_320206_uz="Vada qilingan to^lov uchun qarzingiz yo^q."
     info_320206_en="You have no debt for the Promised payment."
 
-    info_330124_ru="Usluga Obeshanniy platezh aktivna. 3,5 y.e budet avtomaticheski spisano s vashego scheta cherez 3 dnya posle aktivacii"
-    info_330124_uz="Va^da qilingan to^lov xizmati faol. Xizmat faollashtirilganidan 3 kun o^tib hisobingizdan avtomatik ravishda 3,5 sh.b. yechib olinadi. So^rov ro^yxatga olindi"
-    info_330124_en="Promised payment service is active. 3,5 units will be automatically charged-off from your account after 3 days from activation"
+    info_330124_ru="Usluga Obeshanniy platezh aktivna. Sredstva za ispol^zovanie uslugi budut spisani s vashego scheta cherez 3 dnya posle aktivacii"
+    info_330124_uz="Va^da qilingan to^lov xizmati faol. Xizmat faollashtirilganidan 3 kun o^tib hisobingizdan avtomatik ravishda yechib olinadi. So^rov ro^yxatga olindi"
+    info_330124_en="Promised payment service is active. Money will be automatically charged-off from your account after 3 days from activation"
 
     info_inprogress_ru="Slishkom chastiy zapros."
     info_inprogress_uz="Slishkom chastiy zapros."

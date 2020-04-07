@@ -1955,6 +1955,56 @@
       <param name="storelog" />
     </output>
   </template>
+  <template procedureName="GuaranteedPaymentAmount" sessionStorage="Memory" sessionLifetime="300">
+    <receiveTemplate>
+      <Message type="verificationrequest" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="@{setSessionId(GrntPay_${customer})}">
+        <Item customer="${customer}">
+          <Attribute name="checkivrservice" value="0" />
+          <Attribute name="checkblocks" value="0" />
+        </Item>
+        @{store(sCustomer,${customer})}
+        @{store(sService,_GRNTPAY)}
+        @{store(sModule,_CURRENT_MODULE)}
+        @{store(sLang,_GET_MOD_LANGUAGE)}
+        @{store(sAmount,${amount})}
+      </Message>
+    </receiveTemplate>
+    <!--deliveryTemplate conditionEx="false@{store(sLang,_INLANGUAGE)}"/-->
+    <deliveryTemplate conditionEx="false@{store(sInProgress,#{if(number(_GET_SECONDS)-number(${sStartSecond})&lt;number(_ALLSERVICE_TIMETOPROGRESS) and number(_GET_SECONDS)-number(${sStartSecond})&gt;0,'true','false')})}" />
+    <deliveryTemplate conditionEx="#{'${dbresult}'!='0'}" call="ALLServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,${dbresult})}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{'_ALLSERVICE_NAME'='' or '${sCustomer}'=''}" call="ALLServiceStringFormat">
+      <set conditionEx="0@{store(sDbresult,329990)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{matches('${sInProgress}','_IF_TRUE')}" call="ALLServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set conditionEx="0@{store(sDbresult,inprogress)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{((_ALLSERVICE_CUSTLST_CNT&gt;0 and not(matches('_ALLSERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) or (_ALLSERVICE_CUSTLST_CNT=0 and matches('_ALLSERVICE_CUSTLST_ISAVAIL','_IF_TRUE'))) and '_ALLSERVICE_CUSTLST_NOTAVAILINFO'!=''}" call="ALLServiceStringFormat">
+      <set item="iparam:content" value="_ALLSERVICE_CUSTLST_NOTAVAILINFO" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{not(matches('_ALLSERVICE_REDIRECT','_REDIRECT_TO_CURRENT')) and '_ALLSERVICE_REDIRECT'!=''}" call="ALLServiceStringFormat" terminating="false">
+      <set conditionEx="0@{store(sDbresult,redirect)}" />
+      <set item="iparam:content" value="" />
+    </deliveryTemplate>
+    <deliveryTemplate conditionEx="#{('_ALLSERVICE_TP_NOTAVAILINFO'!='' or matches('_ALLSERVICE_CHECKBLOCK','_IF_TRUE')) and not(matches('${sIsBindVerfAval}','_IF_TRUE'))}" call="ALLServiceCheckVerify" />
+    <deliveryTemplate conditionEx="#{'_ALLSERVICE_AVAIL_BAL'!='' and not(matches('${sIsBindBalAval}','_IF_TRUE'))}" call="ALLServiceCheckBindingBal" />
+    <deliveryTemplate conditionEx="#{_ALLSERVICE_SRVBIND_CNT&gt;0 and not(matches('${sIsBindSrvAval}','_IF_TRUE'))}" call="ALLServiceCheckBindingSrv" />
+    <deliveryTemplate call="CheckCustomerTypeGP" />
+    <input>
+      <param name="customer" />
+      <param name="lang" />
+      <param name="amount" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
   <template procedureName="CheckCustomerTypeGP" handler="_DBCON" sessionStorage="Memory" sessionLifetime="30" persistent="false">
     <receiveTemplate>
       <Message type="dummyrequest" process="dispatcher" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
@@ -2011,6 +2061,7 @@
         </Item>
       </Message>
     </receiveTemplate>
+    <deliveryTemplate conditionEx="#{'${sAmount}'!='' and '${dbresult}'='0'}" call="GuaranteedPaymentAmount_Step3" />
     <deliveryTemplate conditionEx="#{${dbresult}=0}" call="GuaranteedPayment_Step3" />
     <deliveryTemplate call="ALLServiceStringFormat">
       <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
@@ -2031,6 +2082,30 @@
         <Item customer="${sCustomer}">
           <Service id="guaranteedpayment" action="7">
             <Attribute name="amount" value="300" />
+            <Attribute name="currency" value="840" />
+          </Service>
+        </Item>
+      </Message>
+    </receiveTemplate>
+    <deliveryTemplate call="ALLServiceStringFormat">
+      <set conditionEx="0@{store(SlowAsync,_WAIT_IFASYNC_INPROCESS)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'='0'}" value="@{store(sDbresult,success)}" />
+      <set item="iparam:content" conditionEx="#{'${dbresult}'!='0'}" value="@{store(sDbresult,${dbresult})}" />
+    </deliveryTemplate>
+    <input>
+      <param name="storelog" />
+    </input>
+    <output>
+      <param name="content" />
+      <param name="storelog" />
+    </output>
+  </template>
+  <template procedureName="GuaranteedPaymentAmount_Step3" sessionStorage="Memory" sessionLifetime="300" persistent="false">
+    <receiveTemplate>
+      <Message type="serviceorder" initiator="_CURRENT_INITIATOR" id="@{newGuid}" session_id="${SessionId}">
+        <Item customer="${sCustomer}">
+          <Service id="guaranteedpayment" action="7">
+            <Attribute name="amount" value="${sAmount}" />
             <Attribute name="currency" value="840" />
           </Service>
         </Item>

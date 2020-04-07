@@ -1472,7 +1472,7 @@ tplist               - Компонент выполняет проверки п
     service_name_en="Internet-3000"
     >
     <soapcon value="MB3000M1"/>
-    <ivrcon value="18008"/>
+    <ivrcon value="11554"/>
     <dealerussd value="*019*3"/>
     <dealerussd value="*019*3*confirm"/>
     <dealerussd value="*019*3*1"/>
@@ -1952,6 +1952,14 @@ tplist               - Компонент выполняет проверки п
     service_name_en="Internet-300 Promo"
     >
     <soapcon value="FRMBPACKMSK3"/>
+  </Service>
+  <Service service_code="FRMBPACKMSK3000" datefrom="20150105" dateto="" group="2"
+
+    service_name_ru="Internet-3000 Promo"
+    service_name_uz="Internet-3000 Promo"
+    service_name_en="Internet-3000 Promo"
+    >
+    <soapcon value="FRMBPACKMSK3000"/>
   </Service>
   <Service service_code="FRMBPACKMSKN100" datefrom="20150105" dateto="" group="2"
 

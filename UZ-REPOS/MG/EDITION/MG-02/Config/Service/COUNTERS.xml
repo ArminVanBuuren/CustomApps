@@ -1199,133 +1199,109 @@ Created by Vladimir Khovanskiy
     getbalance_name_ru="1200"
     getbalance_name_uz="1200"
     getbalance_name_en="1200"
-
-    checktpcounters_name_ru="GPRS 1200 MB"
-    checktpcounters_name_uz="GPRS 1200 MB"
-    checktpcounters_name_en="GPRS 1200 MB"
     >
   </Counter>
   <Counter counter_code="MB100U" group="1"
 
-    getcounters_name_ru="Internet 180"
-    getcounters_name_uz="Internet 180"
-    getcounters_name_en="Internet 180"
+    getcounters_name_ru="Internet 300"
+    getcounters_name_uz="Internet 300"
+    getcounters_name_en="Internet 300"
 
-    getbalance_name_ru="180"
-    getbalance_name_uz="180"
-    getbalance_name_en="180"
-
-    checktpcounters_name_ru="Internet 100"
-    checktpcounters_name_uz="Internet 100"
-    checktpcounters_name_en="Internet 100"
+    getbalance_name_ru="300"
+    getbalance_name_uz="300"
+    getbalance_name_en="300"
     >
   </Counter>
   <Counter counter_code="MB300U" group="1"
 
-    getcounters_name_ru="Internet 900"
-    getcounters_name_uz="Internet 900"
-    getcounters_name_en="Internet 900"
+    getcounters_name_ru="Internet 1000"
+    getcounters_name_uz="Internet 1000"
+    getcounters_name_en="Internet 1000"
 
-    getbalance_name_ru="900"
-    getbalance_name_uz="900"
-    getbalance_name_en="900"
-
-    checktpcounters_name_ru="Internet 300"
-    checktpcounters_name_uz="Internet 300"
-    checktpcounters_name_en="Internet 300"
+    getbalance_name_ru="1000"
+    getbalance_name_uz="1000"
+    getbalance_name_en="1000"
     >
   </Counter>
   <Counter counter_code="MB500U" group="1"
 
-    getcounters_name_ru="Internet 1500"
-    getcounters_name_uz="Internet 1500"
-    getcounters_name_en="Internet 1500"
+    getcounters_name_ru="Internet 1800"
+    getcounters_name_uz="Internet 1800"
+    getcounters_name_en="Internet 1800"
 
-    getbalance_name_ru="1500"
-    getbalance_name_uz="1500"
-    getbalance_name_en="1500"
-
-    checktpcounters_name_ru="Internet 500"
-    checktpcounters_name_uz="Internet 500"
-    checktpcounters_name_en="Internet 500"
+    getbalance_name_ru="1800"
+    getbalance_name_uz="1800"
+    getbalance_name_en="1800"
     >
   </Counter>
   <Counter counter_code="MB1000U" group="1"
 
-    getcounters_name_ru="Internet 3500"
-    getcounters_name_uz="Internet 3500"
-    getcounters_name_en="Internet 3500"
+    getcounters_name_ru="Internet 4000"
+    getcounters_name_uz="Internet 4000"
+    getcounters_name_en="Internet 4000"
 
-    getbalance_name_ru="3500"
-    getbalance_name_uz="3500"
-    getbalance_name_en="3500"
+    getbalance_name_ru="4000"
+    getbalance_name_uz="4000"
+    getbalance_name_en="4000"
     >
   </Counter>
   <Counter counter_code="MB2000U" group="1"
 
-    getcounters_name_ru="Internet 8000"
-    getcounters_name_uz="Internet 8000"
-    getcounters_name_en="Internet 8000"
+    getcounters_name_ru="Internet 10000"
+    getcounters_name_uz="Internet 10000"
+    getcounters_name_en="Internet 10000"
 
-    getbalance_name_ru="8000"
-    getbalance_name_uz="8000"
-    getbalance_name_en="8000"
+    getbalance_name_ru="10000"
+    getbalance_name_uz="10000"
+    getbalance_name_en="10000"
     >
   </Counter>
   <Counter counter_code="MB3000U" group="1"
 
-    getcounters_name_ru="Internet 11500"
-    getcounters_name_uz="Internet 11500"
-    getcounters_name_en="Internet 11500"
+    getcounters_name_ru="Internet 14500"
+    getcounters_name_uz="Internet 14500"
+    getcounters_name_en="Internet 14500"
 
-    getbalance_name_ru="11500"
-    getbalance_name_uz="11500"
-    getbalance_name_en="11500"
+    getbalance_name_ru="14500"
+    getbalance_name_uz="14500"
+    getbalance_name_en="14500"
     >
   </Counter>
   <Counter counter_code="MB5000U" group="1"
 
-    getcounters_name_ru="Internet 17000"
-    getcounters_name_uz="Internet 17000"
-    getcounters_name_en="Internet 17000"
+    getcounters_name_ru="Internet 21000"
+    getcounters_name_uz="Internet 21000"
+    getcounters_name_en="Internet 21000"
 
-    getbalance_name_ru="17000"
-    getbalance_name_uz="17000"
-    getbalance_name_en="17000"
-
-    checktpcounters_name_ru="Internet 5000"
-    checktpcounters_name_uz="Internet 5000"
-    checktpcounters_name_en="Internet 5000"
+    getbalance_name_ru="21000"
+    getbalance_name_uz="21000"
+    getbalance_name_en="21000"
     >
   </Counter>
   <Counter counter_code="MB10000U" group="1"
 
-    getcounters_name_ru="Internet 28000"
-    getcounters_name_uz="Internet 28000"
-    getcounters_name_en="Internet 28000"
+    getcounters_name_ru="Internet 34000"
+    getcounters_name_uz="Internet 34000"
+    getcounters_name_en="Internet 34000"
 
-    getbalance_name_ru="28000"
-    getbalance_name_uz="28000"
-    getbalance_name_en="28000"
-
-    checktpcounters_name_ru="Internet 10000"
-    checktpcounters_name_uz="Internet 10000"
-    checktpcounters_name_en="Internet 10000"
+    getbalance_name_ru="34000"
+    getbalance_name_uz="34000"
+    getbalance_name_en="34000"
     >
   </Counter>
   <Counter counter_code="MB1500U" group="1"
 
-    getcounters_name_ru="Internet 3000 Ultra"
-    getcounters_name_uz="Internet 3000 Ultra"
-    getcounters_name_en="Internet 3000 Ultra"
+    getcounters_name_ru="Internet 6000 Ultra"
+    getcounters_name_uz="Internet 6000 Ultra"
+    getcounters_name_en="Internet 6000 Ultra"
 
-    getbalance_name_ru="3000"
-    getbalance_name_uz="3000"
-    getbalance_name_en="3000"
+    getbalance_name_ru="6000"
+    getbalance_name_uz="6000"
+    getbalance_name_en="6000"
 
-    checktpcounters_name_ru="Internet 2000 Ultra"
-    checktpcounters_name_uz="Internet 2000 Ultra"
-    checktpcounters_name_en="Internet 2000 Ultra"
+    checktpcounters_name_ru="Internet 6000 Ultra"
+    checktpcounters_name_uz="Internet 6000 Ultra"
+    checktpcounters_name_en="Internet 6000 Ultra"
     >
   </Counter>
   <Counter counter_code="MB15U" group="1"
@@ -1562,24 +1538,24 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB30000U" group="1"
 
-    getcounters_name_ru="60000"
-    getcounters_name_uz="60000"
-    getcounters_name_en="60000"
+    getcounters_name_ru="70000"
+    getcounters_name_uz="70000"
+    getcounters_name_en="70000"
 
-    getbalance_name_ru="60000"
-    getbalance_name_uz="60000"
-    getbalance_name_en="60000"
+    getbalance_name_ru="70000"
+    getbalance_name_uz="70000"
+    getbalance_name_en="70000"
     >
   </Counter>
   <Counter counter_code="MB50000U" group="1"
 
-    getcounters_name_ru="100000"
-    getcounters_name_uz="100000"
-    getcounters_name_en="100000"
+    getcounters_name_ru="120000"
+    getcounters_name_uz="120000"
+    getcounters_name_en="120000"
 
-    getbalance_name_ru="100000"
-    getbalance_name_uz="100000"
-    getbalance_name_en="100000"
+    getbalance_name_ru="120000"
+    getbalance_name_uz="120000"
+    getbalance_name_en="120000"
     >
   </Counter>
   <Counter counter_code="MBM2M100" group="1"
@@ -1727,101 +1703,101 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB900U" group="1"
 
-    getcounters_name_ru="2000"
-    getcounters_name_uz="2000"
-    getcounters_name_en="2000"
+    getcounters_name_ru="2500"
+    getcounters_name_uz="2500"
+    getcounters_name_en="2500"
 
-    getbalance_name_ru="2000"
-    getbalance_name_uz="2000"
-    getbalance_name_en="2000"
+    getbalance_name_ru="2500"
+    getbalance_name_uz="2500"
+    getbalance_name_en="2500"
     >
   </Counter>
   <Counter counter_code="MB1500UN" group="1"
 
-    getcounters_name_ru="4000"
-    getcounters_name_uz="4000"
-    getcounters_name_en="4000"
+    getcounters_name_ru="5000"
+    getcounters_name_uz="5000"
+    getcounters_name_en="5000"
 
-    getbalance_name_ru="4000"
-    getbalance_name_uz="4000"
-    getbalance_name_en="4000"
+    getbalance_name_ru="5000"
+    getbalance_name_uz="5000"
+    getbalance_name_en="5000"
     >
   </Counter>
   <Counter counter_code="MB2400U" group="1"
 
-    getcounters_name_ru="6500"
-    getcounters_name_uz="6500"
-    getcounters_name_en="6500"
+    getcounters_name_ru="7500"
+    getcounters_name_uz="7500"
+    getcounters_name_en="7500"
 
-    getbalance_name_ru="6500"
-    getbalance_name_uz="6500"
-    getbalance_name_en="6500"
+    getbalance_name_ru="7500"
+    getbalance_name_uz="7500"
+    getbalance_name_en="7500"
     >
   </Counter>
   <Counter counter_code="MB3400U" group="1"
 
-    getcounters_name_ru="10000"
-    getcounters_name_uz="10000"
-    getcounters_name_en="10000"
+    getcounters_name_ru="12000"
+    getcounters_name_uz="12000"
+    getcounters_name_en="12000"
 
-    getbalance_name_ru="10000"
-    getbalance_name_uz="10000"
-    getbalance_name_en="10000"
+    getbalance_name_ru="12000"
+    getbalance_name_uz="12000"
+    getbalance_name_en="12000"
     >
   </Counter>
   <Counter counter_code="MB5000UN" group="1"
 
-    getcounters_name_ru="14000"
-    getcounters_name_uz="14000"
-    getcounters_name_en="14000"
+    getcounters_name_ru="17000"
+    getcounters_name_uz="17000"
+    getcounters_name_en="17000"
 
-    getbalance_name_ru="14000"
-    getbalance_name_uz="14000"
-    getbalance_name_en="14000"
+    getbalance_name_ru="17000"
+    getbalance_name_uz="17000"
+    getbalance_name_en="17000"
     >
   </Counter>
   <Counter counter_code="MB8000U" group="1"
 
-    getcounters_name_ru="20000"
-    getcounters_name_uz="20000"
-    getcounters_name_en="20000"
+    getcounters_name_ru="25000"
+    getcounters_name_uz="25000"
+    getcounters_name_en="25000"
 
-    getbalance_name_ru="20000"
-    getbalance_name_uz="20000"
-    getbalance_name_en="20000"
+    getbalance_name_ru="25000"
+    getbalance_name_uz="25000"
+    getbalance_name_en="25000"
     >
   </Counter>
   <Counter counter_code="MB18000U" group="1"
 
-    getcounters_name_ru="32000"
-    getcounters_name_uz="32000"
-    getcounters_name_en="32000"
+    getcounters_name_ru="40000"
+    getcounters_name_uz="40000"
+    getcounters_name_en="40000"
 
-    getbalance_name_ru="32000"
-    getbalance_name_uz="32000"
-    getbalance_name_en="32000"
+    getbalance_name_ru="40000"
+    getbalance_name_uz="40000"
+    getbalance_name_en="40000"
     >
   </Counter>
   <Counter counter_code="MB33000U" group="1"
 
-    getcounters_name_ru="70000"
-    getcounters_name_uz="70000"
-    getcounters_name_en="70000"
+    getcounters_name_ru="80000"
+    getcounters_name_uz="80000"
+    getcounters_name_en="80000"
 
-    getbalance_name_ru="70000"
-    getbalance_name_uz="70000"
-    getbalance_name_en="70000"
+    getbalance_name_ru="80000"
+    getbalance_name_uz="80000"
+    getbalance_name_en="80000"
     >
   </Counter>
   <Counter counter_code="MB55000U" group="1"
 
-    getcounters_name_ru="110000"
-    getcounters_name_uz="110000"
-    getcounters_name_en="110000"
+    getcounters_name_ru="130000"
+    getcounters_name_uz="130000"
+    getcounters_name_en="130000"
 
-    getbalance_name_ru="110000"
-    getbalance_name_uz="110000"
-    getbalance_name_en="110000"
+    getbalance_name_ru="130000"
+    getbalance_name_uz="130000"
+    getbalance_name_en="130000"
     >
   </Counter>
   <Counter counter_code="MB555" group="1"
@@ -2023,68 +1999,68 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB12000S" group="1"
 
-    getcounters_name_ru="12000"
-    getcounters_name_uz="12000"
-    getcounters_name_en="12000"
+    getcounters_name_ru="16000"
+    getcounters_name_uz="16000"
+    getcounters_name_en="16000"
 
-    getbalance_name_ru="12000"
-    getbalance_name_uz="12000"
-    getbalance_name_en="12000"
+    getbalance_name_ru="16000"
+    getbalance_name_uz="16000"
+    getbalance_name_en="16000"
     >
   </Counter>
   <Counter counter_code="MB18000S" group="1"
 
-    getcounters_name_ru="18000"
-    getcounters_name_uz="18000"
-    getcounters_name_en="18000"
+    getcounters_name_ru="25000"
+    getcounters_name_uz="25000"
+    getcounters_name_en="25000"
 
-    getbalance_name_ru="18000"
-    getbalance_name_uz="18000"
-    getbalance_name_en="18000"
+    getbalance_name_ru="25000"
+    getbalance_name_uz="25000"
+    getbalance_name_en="25000"
     >
   </Counter>
   <Counter counter_code="MB3000S" group="1"
 
-    getcounters_name_ru="3000"
-    getcounters_name_uz="3000"
-    getcounters_name_en="3000"
+    getcounters_name_ru="4000"
+    getcounters_name_uz="4000"
+    getcounters_name_en="4000"
 
-    getbalance_name_ru="3000"
-    getbalance_name_uz="3000"
-    getbalance_name_en="3000"
+    getbalance_name_ru="4000"
+    getbalance_name_uz="4000"
+    getbalance_name_en="4000"
     >
   </Counter>
   <Counter counter_code="MB30000S" group="1"
 
-    getcounters_name_ru="30000"
-    getcounters_name_uz="30000"
-    getcounters_name_en="30000"
+    getcounters_name_ru="45000"
+    getcounters_name_uz="45000"
+    getcounters_name_en="45000"
 
-    getbalance_name_ru="30000"
-    getbalance_name_uz="30000"
-    getbalance_name_en="30000"
+    getbalance_name_ru="45000"
+    getbalance_name_uz="45000"
+    getbalance_name_en="45000"
     >
   </Counter>
   <Counter counter_code="MB6000S" group="1"
 
-    getcounters_name_ru="6000"
-    getcounters_name_uz="6000"
-    getcounters_name_en="6000"
+    getcounters_name_ru="8000"
+    getcounters_name_uz="8000"
+    getcounters_name_en="8000"
 
-    getbalance_name_ru="6000"
-    getbalance_name_uz="6000"
-    getbalance_name_en="6000"
+    getbalance_name_ru="8000"
+    getbalance_name_uz="8000"
+    getbalance_name_en="8000"
     >
   </Counter>
   <Counter counter_code="MB9000S" group="1"
 
-    getcounters_name_ru="9000"
-    getcounters_name_uz="9000"
-    getcounters_name_en="9000"
+    getcounters_name_ru="11000"
+    getcounters_name_uz="11000"
+    getcounters_name_en="11000"
 
-    getbalance_name_ru="9000"
-    getbalance_name_uz="9000"
-    getbalance_name_en="9000"
+    getbalance_name_ru="11000"
+    getbalance_name_uz="11000"
+    getbalance_name_en="11000"
     >
   </Counter>
   <Counter counter_code="MB4000IY" group="1"
@@ -2122,13 +2098,13 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB1000S" group="1"
 
-    getcounters_name_ru="1000"
-    getcounters_name_uz="1000"
-    getcounters_name_en="1000"
+    getcounters_name_ru="1500"
+    getcounters_name_uz="1500"
+    getcounters_name_en="1500"
 
-    getbalance_name_ru="1000"
-    getbalance_name_uz="1000"
-    getbalance_name_en="1000"
+    getbalance_name_ru="1500"
+    getbalance_name_uz="1500"
+    getbalance_name_en="1500"
     >
   </Counter>
   <Counter counter_code="MB300KS" group="1"
@@ -2819,7 +2795,19 @@ Created by Vladimir Khovanskiy
 
   >
   </Counter>
+  <Counter counter_code="MB1KUG" group="1"
 
+    getcounters_name_ru="1"
+    getcounters_name_uz="1"
+    getcounters_name_en="1"
+
+    getbalance_name_ru="1"
+    getbalance_name_uz="1"
+    getbalance_name_en="1"
+
+  >
+  </Counter>
+  
 
 
 
@@ -6463,65 +6451,65 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB100U" group="17"
 
-    getcounters_name_ru="180"
-    getcounters_name_uz="180"
-    getcounters_name_en="180"
+    getcounters_name_ru="300"
+    getcounters_name_uz="300"
+    getcounters_name_en="300"
     >
   </Counter>
   <Counter counter_code="MB300U" group="17"
 
-    getcounters_name_ru="900"
-    getcounters_name_uz="900"
-    getcounters_name_en="900"
+    getcounters_name_ru="1000"
+    getcounters_name_uz="1000"
+    getcounters_name_en="1000"
     >
   </Counter>
   <Counter counter_code="MB500U" group="17"
 
-    getcounters_name_ru="1500"
-    getcounters_name_uz="1500"
-    getcounters_name_en="1500"
+    getcounters_name_ru="1800"
+    getcounters_name_uz="1800"
+    getcounters_name_en="1800"
     >
   </Counter>
   <Counter counter_code="MB1000U" group="17"
 
-    getcounters_name_ru="3500"
-    getcounters_name_uz="3500"
-    getcounters_name_en="3500"
+    getcounters_name_ru="4000"
+    getcounters_name_uz="4000"
+    getcounters_name_en="4000"
     >
   </Counter>
   <Counter counter_code="MB2000U" group="17"
 
-    getcounters_name_ru="8000"
-    getcounters_name_uz="8000"
-    getcounters_name_en="8000"
+    getcounters_name_ru="10000"
+    getcounters_name_uz="10000"
+    getcounters_name_en="10000"
     >
   </Counter>
   <Counter counter_code="MB3000U" group="17"
 
-    getcounters_name_ru="11500"
-    getcounters_name_uz="11500"
-    getcounters_name_en="11500"
+    getcounters_name_ru="14500"
+    getcounters_name_uz="14500"
+    getcounters_name_en="14500"
     >
   </Counter>
   <Counter counter_code="MB5000U" group="17"
 
-    getcounters_name_ru="17000"
-    getcounters_name_uz="17000"
-    getcounters_name_en="17000"
+    getcounters_name_ru="21000"
+    getcounters_name_uz="21000"
+    getcounters_name_en="21000"
     >
   </Counter>
   <Counter counter_code="MB10000U" group="17"
 
-    getcounters_name_ru="28000"
-    getcounters_name_uz="28000"
-    getcounters_name_en="28000"
+    getcounters_name_ru="34000"
+    getcounters_name_uz="34000"
+    getcounters_name_en="34000"
     >
   </Counter>
   <Counter counter_code="MB1500U" group="17"
 
-    getcounters_name_ru="3000"
-    getcounters_name_uz="3000"
-    getcounters_name_en="3000"
+    getcounters_name_ru="6000"
+    getcounters_name_uz="6000"
+    getcounters_name_en="6000"
     >
   </Counter>
   <Counter counter_code="MB15U" group="17"
@@ -6631,16 +6619,16 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB30000U" group="17"
 
-    getcounters_name_ru="60000"
-    getcounters_name_uz="60000"
-    getcounters_name_en="60000"
+    getcounters_name_ru="70000"
+    getcounters_name_uz="70000"
+    getcounters_name_en="70000"
     >
   </Counter>
   <Counter counter_code="MB50000U" group="17"
 
-    getcounters_name_ru="100000"
-    getcounters_name_uz="100000"
-    getcounters_name_en="100000"
+    getcounters_name_ru="120000"
+    getcounters_name_uz="120000"
+    getcounters_name_en="120000"
     >
   </Counter>
   <Counter counter_code="MBM2M100" group="17"
@@ -6891,65 +6879,65 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB900U" group="17"
 
-    getcounters_name_ru="2000"
-    getcounters_name_uz="2000"
-    getcounters_name_en="2000"
+    getcounters_name_ru="2500"
+    getcounters_name_uz="2500"
+    getcounters_name_en="2500"
     >
   </Counter>
   <Counter counter_code="MB1500UN" group="17"
 
-    getcounters_name_ru="4000"
-    getcounters_name_uz="4000"
-    getcounters_name_en="4000"
+    getcounters_name_ru="5000"
+    getcounters_name_uz="5000"
+    getcounters_name_en="5000"
     >
   </Counter>
   <Counter counter_code="MB2400U" group="17"
 
-    getcounters_name_ru="6500"
-    getcounters_name_uz="6500"
-    getcounters_name_en="6500"
+    getcounters_name_ru="7500"
+    getcounters_name_uz="7500"
+    getcounters_name_en="7500"
     >
   </Counter>
   <Counter counter_code="MB3400U" group="17"
 
-    getcounters_name_ru="10000"
-    getcounters_name_uz="10000"
-    getcounters_name_en="10000"
+    getcounters_name_ru="12000"
+    getcounters_name_uz="12000"
+    getcounters_name_en="12000"
     >
   </Counter>
   <Counter counter_code="MB5000UN" group="17"
 
-    getcounters_name_ru="14000"
-    getcounters_name_uz="14000"
-    getcounters_name_en="14000"
+    getcounters_name_ru="17000"
+    getcounters_name_uz="17000"
+    getcounters_name_en="17000"
     >
   </Counter>
   <Counter counter_code="MB8000U" group="17"
 
-    getcounters_name_ru="20000"
-    getcounters_name_uz="20000"
-    getcounters_name_en="20000"
+    getcounters_name_ru="25000"
+    getcounters_name_uz="25000"
+    getcounters_name_en="25000"
     >
   </Counter>
   <Counter counter_code="MB18000U" group="17"
 
-    getcounters_name_ru="32000"
-    getcounters_name_uz="32000"
-    getcounters_name_en="32000"
+    getcounters_name_ru="40000"
+    getcounters_name_uz="40000"
+    getcounters_name_en="40000"
     >
   </Counter>
   <Counter counter_code="MB33000U" group="17"
 
-    getcounters_name_ru="70000"
-    getcounters_name_uz="70000"
-    getcounters_name_en="70000"
+    getcounters_name_ru="80000"
+    getcounters_name_uz="80000"
+    getcounters_name_en="80000"
     >
   </Counter>
   <Counter counter_code="MB55000U" group="17"
 
-    getcounters_name_ru="110000"
-    getcounters_name_uz="110000"
-    getcounters_name_en="110000"
+    getcounters_name_ru="130000"
+    getcounters_name_uz="130000"
+    getcounters_name_en="130000"
     >
   </Counter>
   <Counter counter_code="MB2500CA" group="17"
@@ -7080,44 +7068,44 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB12000S" group="17"
 
-    getcounters_name_ru="12000"
-    getcounters_name_uz="12000"
-    getcounters_name_en="12000"
+    getcounters_name_ru="16000"
+    getcounters_name_uz="16000"
+    getcounters_name_en="16000"
     >
   </Counter>
   <Counter counter_code="MB18000S" group="17"
 
-    getcounters_name_ru="18000"
-    getcounters_name_uz="18000"
-    getcounters_name_en="18000"
+    getcounters_name_ru="25000"
+    getcounters_name_uz="25000"
+    getcounters_name_en="25000"
     >
   </Counter>
   <Counter counter_code="MB3000S" group="17"
 
-    getcounters_name_ru="3000"
-    getcounters_name_uz="3000"
-    getcounters_name_en="3000"
+    getcounters_name_ru="4000"
+    getcounters_name_uz="4000"
+    getcounters_name_en="4000"
     >
   </Counter>
   <Counter counter_code="MB30000S" group="17"
 
-    getcounters_name_ru="30000"
-    getcounters_name_uz="30000"
-    getcounters_name_en="30000"
+    getcounters_name_ru="45000"
+    getcounters_name_uz="45000"
+    getcounters_name_en="45000"
     >
   </Counter>
   <Counter counter_code="MB6000S" group="17"
 
-    getcounters_name_ru="6000"
-    getcounters_name_uz="6000"
-    getcounters_name_en="6000"
+    getcounters_name_ru="8000"
+    getcounters_name_uz="8000"
+    getcounters_name_en="8000"
     >
   </Counter>
   <Counter counter_code="MB9000S" group="17"
 
-    getcounters_name_ru="9000"
-    getcounters_name_uz="9000"
-    getcounters_name_en="9000"
+    getcounters_name_ru="11000"
+    getcounters_name_uz="11000"
+    getcounters_name_en="11000"
     >
   </Counter>
   <Counter counter_code="MB4000IY" group="17"
@@ -7143,9 +7131,9 @@ Created by Vladimir Khovanskiy
   </Counter>
   <Counter counter_code="MB1000S" group="17"
 
-    getcounters_name_ru="1000"
-    getcounters_name_uz="1000"
-    getcounters_name_en="1000"
+    getcounters_name_ru="1500"
+    getcounters_name_uz="1500"
+    getcounters_name_en="1500"
     >
   </Counter>
   <Counter counter_code="MB300KS" group="17"
@@ -7592,7 +7580,6 @@ Created by Vladimir Khovanskiy
 
   >
   </Counter>
-
 
 
 
