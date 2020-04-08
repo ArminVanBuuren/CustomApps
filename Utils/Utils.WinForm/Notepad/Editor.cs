@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -345,18 +346,34 @@ namespace Utils.WinForm.Notepad
             FCTB.ClearUndo();
         }
 
-        public bool ChangeLanguage(Language lang)
+        public bool ChangeLanguage(Language language)
         {
-            bool isChanged = FCTB.Language != lang;
+            if (_listOfLanguages.Items.Cast<Language>().All(x => x != language))
+                return false;
+
+            bool isChanged = FCTB.Language != language;
 
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.Language = lang;
+            FCTB.Language = language;
             FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
             if (isChanged)
                 LanguageChanged?.Invoke(this, EventArgs.Empty);
             return isChanged;
+        }
+
+        public void SetLanguages(IEnumerable<Language> list, Language @default)
+        {
+            if(!list.Any())
+                throw new Exception("No languages found");
+            if (list.All(x => x != @default))
+                throw new Exception("The default language must be in language list");
+            _listOfLanguages.Items.Clear();
+            foreach (Language lang in list.GroupBy(p => p).Select(x => x.Key))
+                _listOfLanguages.Items.Add(lang);
+            _listOfLanguages.SelectedItem = @default;
+            ChangeLanguage(@default);
         }
 
         private void FCTB_SelectionChangedDelayed(object sender, EventArgs e)
