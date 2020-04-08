@@ -78,6 +78,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader\TraceReaderSimple.cs" />
+    <Compile Include="Reader\TraceReaderEndWith.cs" />
+    <Compile Include="Reader\TraceReaderStartWithEndWith.cs" />
     <Compile Include="Reader\TraceReaderStartWith.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />

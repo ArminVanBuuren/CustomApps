@@ -115,8 +115,12 @@ namespace LogsReader.Reader
             var kvpList = new List<TraceReader>();
 
             Func<string, string, TraceReader> _getTraceReader;
-            if (CurrentSettings.TraceParse.StartTraceWith != null)
+            if (CurrentSettings.TraceParse.StartTraceWith != null && CurrentSettings.TraceParse.EndTraceWith != null)
+                _getTraceReader = (server, filePath) => new TraceReaderStartWithEndWith(server, filePath, this);
+            else if (CurrentSettings.TraceParse.StartTraceWith != null)
                 _getTraceReader = (server, filePath) => new TraceReaderStartWith(server, filePath, this);
+            else if (CurrentSettings.TraceParse.EndTraceWith != null)
+                _getTraceReader = (server, filePath) => new TraceReaderEndWith(server, filePath, this);
             else
                 _getTraceReader = (server, filePath) => new TraceReaderSimple(server, filePath, this);
 

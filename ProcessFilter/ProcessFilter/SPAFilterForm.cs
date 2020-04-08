@@ -301,6 +301,8 @@ namespace SPAFilter
 
             InitializeComponent();
 
+            base.Text = $"{base.Text} {ASSEMBLY.CurrentVersion}";
+
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
