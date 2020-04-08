@@ -224,6 +224,7 @@ namespace SPAFilter
             this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTabControl.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mainTabControl.Location = new System.Drawing.Point(3, 180);
+            this.mainTabControl.MinimumSize = new System.Drawing.Size(450, 0);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
             this.mainTabControl.Size = new System.Drawing.Size(915, 320);
@@ -612,6 +613,7 @@ namespace SPAFilter
             this.panelTop.Controls.Add(this.ServiceCatalogOpenButton);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(3, 3);
+            this.panelTop.MinimumSize = new System.Drawing.Size(300, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(915, 92);
             this.panelTop.TabIndex = 38;
@@ -637,7 +639,6 @@ namespace SPAFilter
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(530, 39);
             this.Name = "SPAFilterForm";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
