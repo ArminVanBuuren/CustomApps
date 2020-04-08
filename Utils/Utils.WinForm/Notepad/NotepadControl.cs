@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -24,6 +26,7 @@ namespace Utils.WinForm.Notepad
         private Color _tabsForeColor = Color.Green;
         private Color _textForeColor = Color.Black;
         private TabControl _tabControl;
+        private ContextMenuStrip _closeMenuStrip;
 
         public event EventHandler OnRefresh;
         public event EventHandler LanguageChanged;
@@ -181,32 +184,43 @@ namespace Utils.WinForm.Notepad
 
         private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                try
-                {
-                    for (var i = 0; i < _tabControl.TabCount; ++i)
-                    {
-                        if (_tabControl.GetTabRect(i).Contains(e.Location))
-                        {
-                            _tabControl.SelectedIndex = i;
-                        }
-                    }
+            if (e.Button != MouseButtons.Right)
+                return;
 
-                    var closeMenuStrip = new ContextMenuStrip
-                    {
-                        Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
-                    };
-                    closeMenuStrip.Items.Add("Close");
-                    closeMenuStrip.Items.Add("Close All But This");
-                    closeMenuStrip.Items.Add("Close All Documents");
-                    closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
-                    closeMenuStrip.Show(_tabControl, e.Location);
-                }
-                catch (Exception ex)
+            try
+            {
+                for (var i = 0; i < _tabControl.TabCount; ++i)
                 {
-                    // ignored
+                    if (_tabControl.GetTabRect(i).Contains(e.Location))
+                    {
+                        _tabControl.SelectedIndex = i;
+                    }
                 }
+
+                var tabPage = _tabControl.TabPages[_tabControl.SelectedIndex];
+                if (tabPage == null)
+                    return;
+
+                _closeMenuStrip = new ContextMenuStrip
+                {
+                    Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
+                };
+                _closeMenuStrip.Items.Add("Close");
+                _closeMenuStrip.Items.Add("Close All But This");
+                _closeMenuStrip.Items.Add("Close All Documents");
+                if (tabPage.Controls[0] is FileEditor fileEditor)
+                {
+                    _closeMenuStrip.Items.Add(new ToolStripSeparator());
+                    _closeMenuStrip.Items.Add("Copy Full Path");
+                    _closeMenuStrip.Items.Add("Open Containig Folder");
+                }
+
+                _closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
+                _closeMenuStrip.Show(_tabControl, e.Location);
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
 
@@ -236,7 +250,20 @@ namespace Utils.WinForm.Notepad
                     }
 
                     break;
+                case "Copy Full Path" when _tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
+                                           _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor:
+                    Clipboard.SetText(fileEditor.FilePath);
+                    break;
+                case "Open Containig Folder" when _tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
+                                                  _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor:
+                    var directoryPath = File.Exists(fileEditor.FilePath) ? Path.GetDirectoryName(fileEditor.FilePath) : null;
+                    if (directoryPath != null)
+                        Process.Start(directoryPath);
+                    break;
             }
+
+            if (_closeMenuStrip != null)
+                _closeMenuStrip.ItemClicked -= CloseMenuStrip_ItemClicked;
         }
 
         /// <summary>
@@ -247,7 +274,7 @@ namespace Utils.WinForm.Notepad
         /// <param name="language"></param>
         public Editor AddDocument(string headerName, string bodyText, Language language = Language.Custom)
         {
-            if (headerName.Length > 70)
+            if (headerName.Length > 100)
                 throw new Exception("Header name is too long");
 
             var existEditor = ListOfEditors.FirstOrDefault(x => x.Key?.HeaderName != null

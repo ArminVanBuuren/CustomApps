@@ -98,6 +98,7 @@ namespace XPathTester
             this.editor.IsChanged = false;
             this.editor.IsReplaceMode = false;
             this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.MinimumSize = new System.Drawing.Size(705, 0);
             this.editor.Name = "editor";
             this.editor.ReadOnly = false;
             this.editor.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
@@ -179,9 +180,9 @@ namespace XPathTester
             // 
             // ID
             // 
+            this.ID.DataPropertyName = "ID";
             this.ID.FillWeight = 8.418125F;
             this.ID.HeaderText = "ID";
-            this.ID.DataPropertyName = "ID";
             this.ID.MinimumWidth = 25;
             this.ID.Name = "ID";
             this.ID.ReadOnly = true;
@@ -189,9 +190,9 @@ namespace XPathTester
             // 
             // NodeType
             // 
+            this.NodeType.DataPropertyName = "NodeType";
             this.NodeType.FillWeight = 12.70355F;
             this.NodeType.HeaderText = "NodeType";
-            this.NodeType.DataPropertyName = "NodeType";
             this.NodeType.MinimumWidth = 65;
             this.NodeType.Name = "NodeType";
             this.NodeType.ReadOnly = true;
@@ -199,9 +200,9 @@ namespace XPathTester
             // 
             // NodeName
             // 
+            this.NodeName.DataPropertyName = "NodeName";
             this.NodeName.FillWeight = 9.335174F;
             this.NodeName.HeaderText = "NodeName";
-            this.NodeName.DataPropertyName = "NodeName";
             this.NodeName.MinimumWidth = 65;
             this.NodeName.Name = "NodeName";
             this.NodeName.ReadOnly = true;
@@ -209,13 +210,13 @@ namespace XPathTester
             // 
             // Value
             // 
+            this.Value.DataPropertyName = "Value";
             this.Value.FillWeight = 369.5432F;
             this.Value.HeaderText = "Value";
-            this.Value.DataPropertyName = "Value";
-            this.Value.MinimumWidth = 250;
+            this.Value.MinimumWidth = 350;
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
-            this.Value.Width = 400;
+            this.Value.Width = 1000;
             // 
             // MainWindow
             // 
