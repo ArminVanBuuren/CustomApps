@@ -35,6 +35,8 @@ namespace XPathTester
         {
             InitializeComponent();
 
+            base.Text = $"{base.Text} {ASSEMBLY.CurrentVersion}";
+
             xpathResultDataGrid.AutoGenerateColumns = false;
             xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
             xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
