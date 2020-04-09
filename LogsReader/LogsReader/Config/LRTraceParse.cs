@@ -135,7 +135,7 @@ namespace LogsReader.Config
     [Serializable]
     public abstract class TraceParse
     {
-        public static TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 15);
+        public static TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 10);
 
         internal abstract bool IsCorrectRegex { get; set; }
 
