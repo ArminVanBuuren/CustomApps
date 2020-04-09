@@ -81,7 +81,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Применить фильтр сразу вместе с поиском.
+        ///   Looks up a localized string similar to Применить фильтр во время поиска.
         /// </summary>
         internal static string Form_AlreadyUseFilterComment {
             get {
@@ -99,7 +99,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_MessageFilterComment {
             get {
@@ -108,7 +108,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Используется инвариантная культура, без учета регистра. При использовании поиска по Regex - таймаут выполнения 1 секунда..
+        ///   Looks up a localized string similar to Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда..
         /// </summary>
         internal static string Form_SearchComment {
             get {
@@ -117,7 +117,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на совпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
         internal static string Form_TraceNameLikeComment {
             get {
