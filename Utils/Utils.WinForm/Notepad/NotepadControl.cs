@@ -320,15 +320,13 @@ namespace Utils.WinForm.Notepad
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
-        /// <param name="headerName"></param>
-        /// <param name="bodyText"></param>
-        /// <param name="language"></param>
-        public async Task<Editor> AddDocumentAsync(string headerName, string bodyText, Language language = Language.Custom)
+        /// <param name="document"></param>
+        public async Task<Editor> AddDocumentAsync(BlankDocument document)
         {
             return await Task<Editor>.Factory.StartNew(() =>
             {
                 Editor result = null;
-                this.SafeInvoke(() => { result = AddDocument(headerName, bodyText, language); });
+                this.SafeInvoke(() => { result = AddDocument(document); });
                 return result;
             });
         }
@@ -336,19 +334,17 @@ namespace Utils.WinForm.Notepad
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
-        /// <param name="headerName"></param>
-        /// <param name="bodyText"></param>
-        /// <param name="language"></param>
-        public Editor AddDocument(string headerName, string bodyText, Language language = Language.Custom)
+        /// <param name="document"></param>
+        public Editor AddDocument(BlankDocument document)
         {
-            if (headerName.Length > 100)
+            if (document.HeaderName.Length > 100)
                 throw new Exception("Header name is too long");
 
             var existEditor = ListOfEditors.FirstOrDefault(x => x.Key?.HeaderName != null
                                                                 && x.Key?.Source != null
                                                                 && !(x.Key is FileEditor)
-                                                                && x.Key.HeaderName.Equals(headerName, StringComparison.InvariantCultureIgnoreCase)
-                                                                && x.Key.Source.Equals(bodyText));
+                                                                && x.Key.HeaderName.Equals(document.HeaderName, StringComparison.InvariantCultureIgnoreCase)
+                                                                && x.Key.Source.Equals(document.BodyText));
 
             if (existEditor.Key != null && existEditor.Value != null)
             {
@@ -356,8 +352,8 @@ namespace Utils.WinForm.Notepad
                 return existEditor.Key;
             }
 
-            var editor = new Editor {HeaderName = headerName, Text = bodyText};
-            editor.ChangeLanguage(language);
+            var editor = new Editor {HeaderName = document.HeaderName, Text = document.BodyText };
+            editor.ChangeLanguage(document.Language);
 
             InitializePage(editor);
             return editor;
