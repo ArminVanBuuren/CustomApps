@@ -167,18 +167,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 table.Rows.Add(dr);
             }
 
-            if (grid != null)
-            {
-                // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
-                if (grid.InvokeRequired)
-                {
-                    grid.BeginInvoke(new MethodInvoker(delegate { grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells); }));
-                }
-                else
-                {
-                    grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells);
-                }
-            }
+            grid?.SafeInvoke(() => { grid.AssignToDataGridView(table, columnList.Values, cellPadding, stretchColumnsToAllCells); });
 
             return table;
         }

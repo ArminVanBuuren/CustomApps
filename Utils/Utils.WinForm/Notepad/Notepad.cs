@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -140,7 +141,10 @@ namespace Utils.WinForm.Notepad
 
         private async void FileToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            await Task.Factory.StartNew(() => Invoke(new MethodInvoker(delegate { PerformCommand(e.ClickedItem); })));
+            await Task.Factory.StartNew(() =>
+            {
+                this.SafeInvoke(() => { PerformCommand(e.ClickedItem); }, true);
+            });
         }
 
         void PerformCommand(ToolStripItem item)
@@ -221,12 +225,14 @@ namespace Utils.WinForm.Notepad
         }
 
         /// <summary>
-        /// Добавить фаловый документ
+        /// Добавить текстовый контент
         /// </summary>
-        /// <param name="filePath"></param>
-        public void AddFileDocument(string filePath)
+        /// <param name="headerName"></param>
+        /// <param name="bodyText"></param>
+        /// <param name="language"></param>
+        public async Task AddDocumentAsync(string headerName, string bodyText, Language language = Language.Custom)
         {
-            NotepadControlItem.AddDocument(filePath);
+            await NotepadControlItem.AddDocumentAsync(headerName, bodyText, language);
         }
 
         /// <summary>
@@ -238,6 +244,42 @@ namespace Utils.WinForm.Notepad
         public void AddDocument(string headerName, string bodyText, Language language = Language.Custom)
         {
             NotepadControlItem.AddDocument(headerName, bodyText, language);
+        }
+
+        /// <summary>
+        /// Добавить фаловый документ
+        /// </summary>
+        /// <param name="filePath"></param>
+        public async Task AddFileDocumentAsync(string filePath)
+        {
+            await NotepadControlItem.AddFileDocumentAsync(filePath);
+        }
+
+        /// <summary>
+        /// Добавить фаловый документ
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void AddFileDocument(string filePath)
+        {
+            NotepadControlItem.AddFileDocument(filePath);
+        }
+
+        /// <summary>
+        /// Добавить фаловый документ
+        /// </summary>
+        /// <param name="filePathList"></param>
+        public async Task AddFileDocumentListAsync(IEnumerable<string> filePathList)
+        {
+            await NotepadControlItem.AddFileDocumentListAsync(filePathList);
+        }
+
+        /// <summary>
+        /// Добавить фаловый документ
+        /// </summary>
+        /// <param name="filePathList"></param>
+        public void AddFileDocumentList(IEnumerable<string> filePathList)
+        {
+            NotepadControlItem.AddFileDocumentList(filePathList);
         }
 
         public new void CenterToScreen()

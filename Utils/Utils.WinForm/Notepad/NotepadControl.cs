@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -35,7 +36,7 @@ namespace Utils.WinForm.Notepad
 
         Dictionary<Editor, TabPage> ListOfEditors { get; } = new Dictionary<Editor, TabPage>();
 
-        public KeyValuePair<Editor, TabPage>? Current { get; private set; } = null;
+        internal KeyValuePair<Editor, TabPage>? Current { get; private set; } = null;
 
         public Encoding DefaultEncoding
         {
@@ -182,6 +183,8 @@ namespace Utils.WinForm.Notepad
             _tabControl.Selecting += RefreshForm;
         }
 
+        #region Inner - AllowUserCloseItems
+
         private void TabControlObj_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right)
@@ -266,6 +269,70 @@ namespace Utils.WinForm.Notepad
                 _closeMenuStrip.ItemClicked -= CloseMenuStrip_ItemClicked;
         }
 
+        private void TabControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            for (var i = 0; i < _tabControl.TabPages.Count; i++)
+            {
+                var tabRect = _tabControl.GetTabRect(i);
+                tabRect.Inflate(-2, -2);
+                var closeImage = Properties.Resources.Close;
+                var imageRect = new Rectangle(
+                    (tabRect.Right - closeImage.Width),
+                    tabRect.Top + (tabRect.Height - closeImage.Height) / 2,
+                    closeImage.Width,
+                    closeImage.Height);
+
+                if (e != null && imageRect.Contains(e.Location))
+                {
+                    CloseTab(i);
+                    break;
+                }
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+
+        private const int TCM_SETMINTABWIDTH = 0x1300 + 49;
+
+        private void TabControlObj_HandleCreated(object sender, EventArgs e)
+        {
+            SendMessage(_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr)16);
+        }
+
+        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var tabPage = _tabControl.TabPages[e.Index];
+            var tabRect = _tabControl.GetTabRect(e.Index);
+
+            if (AllowUserCloseItems)
+            {
+                tabRect.Inflate(-2, -2);
+                var closeImage = Properties.Resources.Close;
+                e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) - 2, (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
+            }
+
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Добавить текстовый контент
+        /// </summary>
+        /// <param name="headerName"></param>
+        /// <param name="bodyText"></param>
+        /// <param name="language"></param>
+        public async Task<Editor> AddDocumentAsync(string headerName, string bodyText, Language language = Language.Custom)
+        {
+            return await Task<Editor>.Factory.StartNew(() =>
+            {
+                Editor result = null;
+                this.SafeInvoke(() => { result = AddDocument(headerName, bodyText, language); });
+                return result;
+            });
+        }
+
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
@@ -300,7 +367,21 @@ namespace Utils.WinForm.Notepad
         /// Добавить файловый документ
         /// </summary>
         /// <param name="filePath"></param>
-        public Editor AddDocument(string filePath)
+        public async Task<Editor> AddFileDocumentAsync(string filePath)
+        {
+            return await Task<Editor>.Factory.StartNew(() =>
+            {
+                Editor result = null;
+                this.SafeInvoke(() => { result = AddFileDocument(filePath); });
+                return result;
+            });
+        }
+
+        /// <summary>
+        /// Добавить файловый документ
+        /// </summary>
+        /// <param name="filePath"></param>
+        public Editor AddFileDocument(string filePath)
         {
             if (filePath.IsNullOrEmptyTrim())
                 throw new ArgumentNullException(nameof(filePath));
@@ -318,6 +399,27 @@ namespace Utils.WinForm.Notepad
             var newFileEditor = new FileEditor {FilePath = filePath};
             InitializePage(newFileEditor);
             return newFileEditor;
+        }
+
+        /// <summary>
+        /// Добавить список файлов
+        /// </summary>
+        public async Task<IEnumerable<Editor>> AddFileDocumentListAsync(IEnumerable<string> filePathList)
+        {
+            return await Task<IEnumerable<Editor>>.Factory.StartNew(() =>
+            {
+                IEnumerable<Editor> result = null;
+                this.SafeInvoke(() => { result = AddFileDocumentList(filePathList); });
+                return result;
+            });
+        }
+
+        /// <summary>
+        /// Добавить список файлов
+        /// </summary>
+        public IEnumerable<Editor> AddFileDocumentList(IEnumerable<string> filePathList)
+        {
+            return filePathList.Select(AddFileDocument);
         }
 
         public void SelectEditor(int tabIndex)
@@ -338,6 +440,11 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        /// <summary>
+        /// Заменяем эдиторы, и делегируем новому эдитору все эвенты от старого
+        /// </summary>
+        /// <param name="removeEditor"></param>
+        /// <param name="newEditor"></param>
         public void ReplaceEditor(Editor removeEditor, Editor newEditor)
         {
             try
@@ -423,21 +530,7 @@ namespace Utils.WinForm.Notepad
                 RefreshForm(null, null);
             }
 
-            // InvokeRequired всегда вернет true, если это работает контекст чужого потока 
-            if (InvokeRequired)
-                tabPage.BeginInvoke(new MethodInvoker(RefreshTabPage));
-            else
-                RefreshTabPage();
-        }
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
-
-        private const int TCM_SETMINTABWIDTH = 0x1300 + 49;
-
-        private void TabControlObj_HandleCreated(object sender, EventArgs e)
-        {
-            SendMessage(_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr) 16);
+            tabPage.SafeInvoke(RefreshTabPage);
         }
 
         private void RefreshForm(object sender, TabControlCancelEventArgs e)
@@ -476,27 +569,6 @@ namespace Utils.WinForm.Notepad
         {
             if (e.TabPageIndex != -1)
                 _lastSelectedPage = e.TabPageIndex;
-        }
-
-        private void TabControl1_MouseDown(object sender, MouseEventArgs e)
-        {
-            for (var i = 0; i < _tabControl.TabPages.Count; i++)
-            {
-                var tabRect = _tabControl.GetTabRect(i);
-                tabRect.Inflate(-2, -2);
-                var closeImage = Properties.Resources.Close;
-                var imageRect = new Rectangle(
-                    (tabRect.Right - closeImage.Width),
-                    tabRect.Top + (tabRect.Height - closeImage.Height) / 2,
-                    closeImage.Width,
-                    closeImage.Height);
-
-                if (e != null && imageRect.Contains(e.Location))
-                {
-                    CloseTab(i);
-                    break;
-                }
-            }
         }
 
         void CloseTab(int tabIndex, bool calcSelectionTab = true)
@@ -539,21 +611,6 @@ namespace Utils.WinForm.Notepad
             }
         }
 
-        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            var tabPage = _tabControl.TabPages[e.Index];
-            var tabRect = _tabControl.GetTabRect(e.Index);
-
-            if (AllowUserCloseItems)
-            {
-                tabRect.Inflate(-2, -2);
-                var closeImage = Properties.Resources.Close;
-                e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) - 2, (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
-            }
-
-            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, tabPage.BackColor, TextFormatFlags.VerticalCenter);
-        }
-
         public new void Focus()
         {
             Current?.Key.Focus();
@@ -561,8 +618,13 @@ namespace Utils.WinForm.Notepad
 
         public void Clear()
         {
-            foreach (var editor in ListOfEditors.Keys)
-                editor.Dispose();
+            _tabControl.TabPages.Clear();
+            foreach (var item in ListOfEditors)
+            {
+                item.Key.Dispose();
+                item.Value.Dispose();
+            }
+            ListOfEditors.Clear();
         }
 
         public IEnumerator<KeyValuePair<Editor, TabPage>> GetEnumerator()
