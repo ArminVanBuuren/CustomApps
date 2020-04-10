@@ -329,7 +329,7 @@ namespace Utils.WinForm.Notepad
 
         public IEnumerable<Editor> AddDocumentList(IEnumerable<BlankDocument> documentList)
         {
-            return documentList.Select(AddDocument);
+            return new List<Editor>(documentList.Select(AddDocument));
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace Utils.WinForm.Notepad
         /// </summary>
         public IEnumerable<Editor> AddFileDocumentList(IEnumerable<string> filePathList)
         {
-            return filePathList.Select(AddFileDocument);
+            return new List<Editor>(filePathList.Select(AddFileDocument));
         }
 
         /// <summary>

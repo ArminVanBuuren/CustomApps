@@ -5,7 +5,7 @@ namespace Utils.WinForm
 {
     public static class CONTROL
     {
-        public static void SafeInvoke(this Control uiElement, Action action, bool forceSynchronous = false)
+        public static void SafeInvoke(this Control uiElement, Action action, bool forceSynchronous = true)
         {
             if (uiElement == null)
                 throw new ArgumentNullException(nameof(uiElement));

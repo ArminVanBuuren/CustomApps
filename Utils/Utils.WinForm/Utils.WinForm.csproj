@@ -175,10 +175,13 @@
     <Compile Include="Notepad\Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Notepad\FileEditor.cs" />
+    <Compile Include="Notepad\FileEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Notepad\FileEditor.Designer.cs">
       <DependentUpon>FileEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Notepad\FileEditorEventArgs.cs" />
     <Compile Include="Notepad\NotepadControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

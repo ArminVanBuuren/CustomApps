@@ -369,6 +369,7 @@ namespace Utils.WinForm.Notepad
                 throw new Exception("No languages found");
             if (list.All(x => x != @default))
                 throw new Exception("The default language must be in language list");
+
             _listOfLanguages.Items.Clear();
             foreach (Language lang in list.GroupBy(p => p).Select(x => x.Key))
                 _listOfLanguages.Items.Add(lang);

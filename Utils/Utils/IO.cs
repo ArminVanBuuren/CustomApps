@@ -45,14 +45,14 @@ namespace Utils
                 return Encoding.BigEndianUnicode; //UTF-16BE
             if (bom[0] == 0 && bom[1] == 0) 
                 return Encoding.ASCII; // US-ASCII (No BOM, but you don't need one. ASCII can be easily identified by the lack of bytes in the 80-FF range.)
+            return Encoding.UTF8;
+            //using (var reader = new StreamReader(filename, Encoding.Default, true))
+            //{
+            //    if (reader.Peek() >= 0) // you need this!
+            //        reader.Read();
 
-            using (var reader = new StreamReader(filename, Encoding.Default, true))
-            {
-                if (reader.Peek() >= 0) // you need this!
-                    reader.Read();
-
-                return reader.CurrentEncoding;
-            }
+            //    return reader.CurrentEncoding;
+            //}
         }
 
         public static string GetPartialPath(string path, string excludePath)

@@ -143,7 +143,7 @@ namespace Utils.WinForm.Notepad
         {
             await Task.Factory.StartNew(() =>
             {
-                this.SafeInvoke(() => { PerformCommand(e.ClickedItem); }, true);
+                this.SafeInvoke(() => { PerformCommand(e.ClickedItem); });
             });
         }
 
