@@ -317,6 +317,21 @@ namespace Utils.WinForm.Notepad
 
         #endregion
 
+        public async Task<IEnumerable<Editor>> AddDocumentListAsync(IEnumerable<BlankDocument> documentList)
+        {
+            return await Task<IEnumerable<Editor>>.Factory.StartNew(() =>
+            {
+                IEnumerable<Editor> result = null;
+                this.SafeInvoke(() => { result = AddDocumentList(documentList); });
+                return result;
+            });
+        }
+
+        public IEnumerable<Editor> AddDocumentList(IEnumerable<BlankDocument> documentList)
+        {
+            return documentList.Select(AddDocument);
+        }
+
         /// <summary>
         /// Добавить текстовый контент
         /// </summary>
@@ -360,6 +375,27 @@ namespace Utils.WinForm.Notepad
         }
 
         /// <summary>
+        /// Добавить список файлов
+        /// </summary>
+        public async Task<IEnumerable<Editor>> AddFileDocumentListAsync(IEnumerable<string> filePathList)
+        {
+            return await Task<IEnumerable<Editor>>.Factory.StartNew(() =>
+            {
+                IEnumerable<Editor> result = null;
+                this.SafeInvoke(() => { result = AddFileDocumentList(filePathList); });
+                return result;
+            });
+        }
+
+        /// <summary>
+        /// Добавить список файлов
+        /// </summary>
+        public IEnumerable<Editor> AddFileDocumentList(IEnumerable<string> filePathList)
+        {
+            return filePathList.Select(AddFileDocument);
+        }
+
+        /// <summary>
         /// Добавить файловый документ
         /// </summary>
         /// <param name="filePath"></param>
@@ -395,27 +431,6 @@ namespace Utils.WinForm.Notepad
             var newFileEditor = new FileEditor {FilePath = filePath};
             InitializePage(newFileEditor);
             return newFileEditor;
-        }
-
-        /// <summary>
-        /// Добавить список файлов
-        /// </summary>
-        public async Task<IEnumerable<Editor>> AddFileDocumentListAsync(IEnumerable<string> filePathList)
-        {
-            return await Task<IEnumerable<Editor>>.Factory.StartNew(() =>
-            {
-                IEnumerable<Editor> result = null;
-                this.SafeInvoke(() => { result = AddFileDocumentList(filePathList); });
-                return result;
-            });
-        }
-
-        /// <summary>
-        /// Добавить список файлов
-        /// </summary>
-        public IEnumerable<Editor> AddFileDocumentList(IEnumerable<string> filePathList)
-        {
-            return filePathList.Select(AddFileDocument);
         }
 
         public void SelectEditor(int tabIndex)

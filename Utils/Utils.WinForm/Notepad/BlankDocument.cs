@@ -4,8 +4,8 @@ namespace Utils.WinForm.Notepad
 {
     public class BlankDocument
     {
-        public string HeaderName { get; set; }
-        public string BodyText { get; set; }
+        public string HeaderName { get; set; } = string.Empty;
+        public string BodyText { get; set; } = string.Empty;
         public Language Language { get; set; } = Language.Custom;
     }
 }
