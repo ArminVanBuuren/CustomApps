@@ -5,6 +5,12 @@ using System.Windows.Forms;
 
 namespace SPAFilter
 {
+    public enum ReportStatusType
+    {
+        Informaton,
+        Warning,
+        Error
+    }
     static class Program
     {
         /// <summary>
@@ -36,6 +42,16 @@ namespace SPAFilter
                 mainControl = new SPAFilterForm();
 
             Application.Run(mainControl);
+        }
+
+        public static void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null)
+        {
+            MessageBox.Show(message,
+                caption ?? type.ToString("G"), 
+                MessageBoxButtons.OK, 
+                type, 
+                MessageBoxDefaultButton.Button1,
+                MessageBoxOptions.DefaultDesktopOnly);
         }
     }
 }

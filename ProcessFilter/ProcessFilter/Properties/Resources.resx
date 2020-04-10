@@ -148,7 +148,7 @@
     <value>Please filter files</value>
   </data>
   <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
-    <value>Configuration application is incorrect</value>
+    <value>Configuration application is incorrect or collision scenarios found</value>
   </data>
   <data name="Form_GridView_IsSubScenario" xml:space="preserve">
     <value>Subscenario</value>
@@ -160,7 +160,7 @@
     <value>Scenario has some commands which don't exist</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommandsInSub" xml:space="preserve">
-    <value>Subscenario has some commands which don't exist</value>
+    <value>Sub-scenario has some commands which don't exist</value>
   </data>
   <data name="Form_GridView_NotFoundSomeOPs" xml:space="preserve">
     <value>Business process has some operations which don't exist</value>

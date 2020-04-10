@@ -10,18 +10,12 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class ServiceInstance : DriveTemplate, ISAComponent
     {
-        const string NOT_FOUND_ATTRIBUTE = "Attributes \"{0}\" not found in {1}";
-        const string NOT_FOUND_DIR = "Directory \"{0}\" not found when initializing {1}";
-        const string NOT_FOUND_FILE = "File \"{0}\" not found when initializing {1}";
-        const string INVALID_XML = "Xml file \"{0}\" is invalid";
-
         [DGVColumn(ColumnPosition.After, "HardwareID")]
         public string HardwareID { get; private set; }
 
-        public string HostTypeName { get; }
+        public string HostTypeName { get; private set; }
 
         public override string Name { get; set; }
-
 
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
 
@@ -30,58 +24,69 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Last, "IsCorrect", false)]
         public bool IsCorrect { get; internal set; } = false;
 
-        public ServiceInstance(string filePath, XmlNode node) :base(filePath)
-        {
-            var activatorDirPath = Path.GetDirectoryName(filePath);
-            var serviceInstanceNode = node.Clone();
+        public ServiceActivator Parent { get; }
+        public XmlNode InstanceNode { get; }
 
-            HardwareID = serviceInstanceNode.Attributes?["hardwareID"]?.Value;
+        public ServiceInstance(ServiceActivator parent, XmlNode node) :base(parent.FilePath)
+        {
+            Parent = parent;
+            InstanceNode = node.Clone();
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            var activatorDirPath = Path.GetDirectoryName(FilePath);
+            Scenarios.Clear();
+            Commands.Clear();
+
+            HardwareID = InstanceNode.Attributes?["hardwareID"]?.Value;
             if (HardwareID == null)
             {
-                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "hardwareID", "serviceInstance node"));
+                ShowError("Attribute:'@hardwareID' not found in serviceInstance");
                 return;
             }
 
             HostTypeName = HardwareID.Split(':')[0];
 
-            var scenarioConfigNode = serviceInstanceNode.SelectSingleNode("//fileScenarioSource") ?? serviceInstanceNode.SelectSingleNode("//config");
-            var scenarios = scenarioConfigNode?.Attributes?["dir"]?.Value;
+            var scenarioConfigNode = InstanceNode.SelectSingleNode("//fileScenarioSource") ?? InstanceNode.SelectSingleNode("//config");
+            var scenarios = scenarioConfigNode?.Attributes?["dir"]?.Value ?? InstanceNode.SelectSingleNode("//scenarios")?.InnerText;
             if (scenarios == null)
             {
-                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "dir", "\"fileScenarioSource\" node"));
+                ShowError("Attribute:'@dir' not found in \"fileScenarioSource\". Or 'scenarios' node not found.");
                 return;
             }
             var scenariosPath = GetDir(activatorDirPath, scenarios);
             if (!Directory.Exists(scenariosPath))
             {
-                ShowError(string.Format(NOT_FOUND_DIR, scenarios, "\"fileScenarioSource\" node"));
+                ShowError($"Directory:\"{scenarios}\" not found. Final path:\"{scenariosPath}\"");
                 return;
             }
 
-            var dict = serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config") ?? serviceInstanceNode.SelectSingleNode("//context/object[@name='dictionary']/fileDictionarySource");
-            var dictionary = dict?.Attributes?["path"]?.Value;
-            var dictionaryXML = dict?.Attributes?["xml"]?.Value;
-            if (dictionary == null || dictionaryXML == null)
+            var dict = InstanceNode.SelectSingleNode("//context/object[@name='dictionary']/config") ?? InstanceNode.SelectSingleNode("//context/object[@name='dictionary']/fileDictionarySource");
+            var dictionaryPath = dict?.Attributes?["path"]?.Value ?? Path.GetDirectoryName(InstanceNode.SelectSingleNode("//dictionary")?.InnerText);
+            var dictionaryXML = dict?.Attributes?["xml"]?.Value ?? Path.GetFileName(InstanceNode.SelectSingleNode("//dictionary")?.InnerText);
+            if (dictionaryPath == null || dictionaryXML == null)
             {
-                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "path or xml", "object-\"dictionary\" node"));
+                ShowError("Attributes:'@path'\\'@xml' not found. Or \"dictionary\" node not found.");
                 return;
             }
-            var dictionaryPath = GetDir(activatorDirPath, dictionary);
-            if (dictionaryPath == null)
+            var dictionaryFilePath = GetDir(activatorDirPath, dictionaryPath);
+            if (dictionaryFilePath == null)
             {
-                ShowError(string.Format(NOT_FOUND_DIR, dictionary, "object-\"dictionary\" node"));
+                ShowError($"Directory:\"{dictionaryPath}\" not found");
                 return;
             }
-            dictionaryPath = Path.Combine(dictionaryPath, dictionaryXML);
-            if (!File.Exists(dictionaryPath))
+            dictionaryFilePath = Path.Combine(dictionaryFilePath, dictionaryXML);
+            if (!File.Exists(dictionaryFilePath))
             {
-                ShowError(string.Format(NOT_FOUND_FILE, dictionaryPath, "object-\"dictionary\" node"));
+                ShowError($"File:\"{dictionaryFilePath}\" not found");
                 return;
             }
 
-            if (!XML.IsFileXml(dictionaryPath, out var dictionaryConfig))
+            if (!XML.IsFileXml(dictionaryFilePath, out var dictionaryConfig))
             {
-                ShowError(string.Format(INVALID_XML, dictionaryPath));
+                ShowError($"Xml file:\"{dictionaryFilePath}\" is invalid");
                 return;
             }
 
@@ -89,20 +94,20 @@ namespace SPAFilter.SPA.Components
             var commandsMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value ?? "*.xml";
             if (commandsRoot == null)
             {
-                ShowError(string.Format(NOT_FOUND_ATTRIBUTE, "Root", $"dictionary=\"{dictionaryPath}\""));
+                ShowError($"Attribute:'@Root' not found in file dictionary:\"{dictionaryFilePath}\"");
                 return;
             }
-            var commandsDir = GetDir(activatorDirPath, commandsRoot);
+            var commandsDir = GetDir(activatorDirPath, Path.Combine(dictionaryPath, commandsRoot));
             if (commandsDir == null)
             {
-                ShowError(string.Format(NOT_FOUND_DIR, commandsRoot, $"dictionary=\"{dictionaryPath}\""));
+                ShowError($"Directory:\"{commandsRoot}\" not found when initializing file dictionary:\"{dictionaryFilePath}\"");
                 return;
             }
             if (commandsDir == activatorDirPath)
                 commandsDir = Path.Combine(commandsDir, commandsRoot);
             if (!Directory.Exists(commandsDir))
             {
-                ShowError(string.Format(NOT_FOUND_DIR, commandsDir, $"dictionary=\"{dictionaryPath}\""));
+                ShowError($"Directory:\"{commandsDir}\" not found when initializing file dictionary:\"{dictionaryFilePath}\"");
                 return;
             }
 
@@ -119,14 +124,27 @@ namespace SPAFilter.SPA.Components
             IsCorrect = true;
         }
 
-        static string GetDir(string basePath, string rootPath)
+        public static string GetDir(string basePath, string rootPath)
         {
-            return Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateFirstMatchPath(rootPath, basePath);
+            if (Path.IsPathRooted(rootPath))
+                return rootPath;
+            else
+                return IO.EvaluateFirstMatchPath(rootPath, basePath);
         }
 
         void ShowError(string message)
         {
-            MessageBox.Show($"{(!HardwareID.IsNullOrEmpty() ? $"[{HardwareID}]={FilePath}" : FilePath)}\r\n\r\n{message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Program.ReportMessage($"{(!HardwareID.IsNullOrEmpty() ? $"[{HardwareID}]={FilePath}" : FilePath)}\r\n\r\n{message}");
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj) && obj is ServiceInstance instance && HardwareID.Equals(instance.HardwareID);
+        }
+
+        public override string ToString()
+        {
+            return HardwareID;
         }
     }
 }

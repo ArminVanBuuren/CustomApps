@@ -27,8 +27,6 @@ namespace SPAFilter.SPA.Components.SRI
         internal virtual RFSBindings Bindings { get; } = null;
         public virtual string Body { get; } = string.Empty;
 
-        protected CatalogOperation() { }
-
         internal static void AppendXmlNode(StringBuilder builder, string parentNodeName, IEnumerable<XmlNode> collection)
         {
             builder.Append("<");

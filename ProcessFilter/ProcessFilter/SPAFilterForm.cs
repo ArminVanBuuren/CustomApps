@@ -236,7 +236,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ShowError(ex.ToString());
+                Program.ReportMessage(ex.ToString());
             }
             finally
             {
@@ -307,7 +307,7 @@ namespace SPAFilter
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
             var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { MessageBox.Show(@"Hello! This app was created for comfortable SPA configuration.", $"© {ASSEMBLY.Company}", MessageBoxButtons.OK, MessageBoxIcon.Asterisk); };
+            autor.Click += (sender, args) => { Program.ReportMessage(@"Hello! This app was created for comfortable SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
             statusStrip.Items.Add(autor);
 
             statusStrip.Items.Add(new ToolStripSeparator());
@@ -603,20 +603,22 @@ namespace SPAFilter
                         break;
                     case Keys.Enter:
                     {
-                        if(!GetCurrentDataGridView(out var grid))
+                        if (!GetCurrentDataGridView(out var grid))
                             return;
                         CallAndCheckDataGridKey(grid);
                         break;
                     }
                     case Keys.Delete:
                     {
-                        if (!GetCurrentDataGridView(out var grid) || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) || !GetCellItemSelectedRows(grid, out var filesPath))
+                        if (!GetCurrentDataGridView(out var grid) || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) ||
+                            !GetCellItemSelectedRows(grid, out var filesPath))
                             return;
 
                         if (filesPath.Count == 0)
                             return;
 
-                        var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")),
+                            @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                         if (userResult != DialogResult.OK)
                             return;
@@ -627,13 +629,14 @@ namespace SPAFilter
                                 File.Delete(filePath);
                         }
 
-                        if (IsFiltered)
+                        if (grid == dataGridServiceInstances)
+                        {
+                            await AssignServiceInstances(_spaFilter.RemoveActivatorAsync(filesPath));
+                            RefreshStatus();
+                        }
+                        else if (IsFiltered)
                         {
                             FilterButton_Click(this, EventArgs.Empty);
-                        }
-                        else if (grid == dataGridServiceInstances)
-                        {
-                            await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
                         }
 
                         break;
@@ -642,7 +645,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
         }
 
@@ -670,28 +673,19 @@ namespace SPAFilter
                         return;
 
                     var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Like(p.Name)));
-                    foreach (var operation in scOperations)
-                    {
-                        if (operation is CatalogOperation catalogOperation)
-                        {
-                            OpenEditor(catalogOperation.Body, catalogOperation.Name);
-                        }
-                    }
+                    OpenEditor(scOperations.Cast<CatalogOperation>().Select(x => new BlankDocument() { HeaderName = x.Name, BodyText = x.Body, Language = Language.XML}), null);
                 }
                 else
                 {
-                    if (!GetCellItemSelectedRows(grid, out var filesPath))
+                    if (!GetCellItemSelectedRows(grid, out var filePathList))
                         return;
 
-                    foreach (var filePath in filesPath)
-                    {
-                        OpenEditor(filePath);
-                    }
+                    OpenEditor(null, filePathList);
                 }
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
         }
 
@@ -879,7 +873,7 @@ namespace SPAFilter
                                     ROBPOperationTextBox.BackColor = Color.White;
                                     break;
                             }
-                            await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                            await AssignServiceInstances(_spaFilter.RefreshActivatorsAsync());
                         }
                         catch (Exception)
                         {
@@ -912,17 +906,22 @@ namespace SPAFilter
                         await AssignServiceInstances(_spaFilter.AssignActivatorAsync(fileConfig.ToList()));
                         UpdateLastPath(fileConfig.Last());
                         break;
-                    case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listFiles):
-                        await AssignServiceInstances(_spaFilter.RemoveActivatorAsync(listFiles));
+                    case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listOfIDs, "ID"):
+                        await AssignServiceInstances(_spaFilter.RemoveInstanceAsync(listOfIDs.Select(x =>
+                        {
+                            if (int.TryParse(x, out var xNum))
+                                return xNum;
+                            return -1;
+                        }).Where(x => x != -1)));
                         break;
                     case SPAProcessFilterType.ReloadActivators:
-                        await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                        await AssignServiceInstances(_spaFilter.RefreshActivatorsAsync());
                         break;
                 }
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
 
                 ClearDataGrid();
 
@@ -1063,7 +1062,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
             finally
             {
@@ -1106,7 +1105,7 @@ namespace SPAFilter
 
             if (fileOperationsCount == 0)
             {
-                MessageBox.Show(Resources.Form_GenerateSC_NotFoundAnyOperations, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Program.ReportMessage(Resources.Form_GenerateSC_NotFoundAnyOperations, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1137,12 +1136,12 @@ namespace SPAFilter
 
                 if (!fileResult.IsNullOrEmpty() && File.Exists(fileResult))
                 {
-                    OpenEditor(fileResult);
+                    OpenEditor(null, new List<string>(){ fileResult });
                 }
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
             finally
             {
@@ -1155,7 +1154,7 @@ namespace SPAFilter
             var filesNumber = _spaFilter.WholeDriveItemsCount;
             if (filesNumber <= 0)
             {
-                MessageBox.Show(Resources.Form_GenerateSC_NotFileredROBPOps, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Program.ReportMessage(Resources.Form_GenerateSC_NotFileredROBPOps, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1179,18 +1178,18 @@ namespace SPAFilter
                         if (stringErrors.Length > 0)
                         {
                             var warning = string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2));
-                            MessageBox.Show($"{result}\r\n{warning}", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            Program.ReportMessage($"{result}\r\n{warning}", MessageBoxIcon.Warning);
                         }
                         else
                         {
-                            MessageBox.Show($"{Resources.Form_PrintXMLFiles_Successfully} {result}", @"OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Program.ReportMessage($"{Resources.Form_PrintXMLFiles_Successfully} {result}", MessageBoxIcon.Information);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
             finally
             {
@@ -1206,8 +1205,11 @@ namespace SPAFilter
             _spaFilter.PrintXMLAbort();
         }
 
-        void OpenEditor(string source, string name = null)
+        async void OpenEditor(IEnumerable<BlankDocument> documentList, IEnumerable<string> filesList)
         {
+            if ((documentList != null && !documentList.Any()) || (filesList != null && !filesList.Any()))
+                return;
+
             try
             {
                 if (_notepad == null || _notepad.WindowIsClosed)
@@ -1229,14 +1231,14 @@ namespace SPAFilter
                     _notepad.Show();
                 }
 
-                if (name == null)
-                    _notepad.AddFileDocument(source);
+                if(documentList != null)
+                    await _notepad.AddDocumentListAsync(documentList);
                 else
-                    _notepad.AddDocument(name, source, Language.XML);
+                    await _notepad.AddFileDocumentListAsync(filesList);
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
             }
             finally
             {
@@ -1341,7 +1343,7 @@ namespace SPAFilter
             }
             catch(Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
                 return false;
             }
         }
@@ -1367,7 +1369,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                Program.ReportMessage(ex.Message);
                 return false;
             }
         }
@@ -1387,7 +1389,7 @@ namespace SPAFilter
             }
             else
             {
-                MessageBox.Show(Resources.Form_GridView_NotSelectedAnyRows, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Program.ReportMessage(Resources.Form_GridView_NotSelectedAnyRows, MessageBoxIcon.Warning);
                 return false;
             }
             return result.Count > 0;
@@ -1410,11 +1412,6 @@ namespace SPAFilter
             }
 
             return false;
-        }
-
-        static void ShowError(string message, string caption = @"Error")
-        {
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 

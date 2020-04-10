@@ -88,7 +88,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration application is incorrect.
+        ///   Looks up a localized string similar to Configuration application is incorrect or collision scenarios found.
         /// </summary>
         internal static string Form_GridView_IncorrectConfig {
             get {
@@ -124,7 +124,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subscenario has some commands which don&apos;t exist.
+        ///   Looks up a localized string similar to Sub-scenario has some commands which don&apos;t exist.
         /// </summary>
         internal static string Form_GridView_NotFoundSomeCommandsInSub {
             get {

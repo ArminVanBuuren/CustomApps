@@ -8,7 +8,7 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class ServiceActivator : DriveTemplate
     {
-        public List<ServiceInstance> Instances { get; } = new List<ServiceInstance>();
+        internal List<ServiceInstance> Instances { get; } = new List<ServiceInstance>();
 
         public ServiceActivator(string filePath) : base(filePath)
         {
@@ -16,33 +16,23 @@ namespace SPAFilter.SPA.Components
 
             foreach (var serviceInstance in serviceInstances)
             {
-                Instances.Add(new ServiceInstance(FilePath, serviceInstance.Node));
+                Instances.Add(new ServiceInstance(this, serviceInstance.Node));
             }
         }
 
         public void Refresh()
         {
-            List<XPathResult> serviceInstances;
-            try
+            foreach (var instance in Instances)
             {
-                serviceInstances = LoadConfig();
-            }
-            catch (Exception ex)
-            {
-                foreach (var instance in Instances)
+                try
+                {
+                    instance.Refresh();
+                }
+                catch (Exception ex)
                 {
                     instance.IsCorrect = false;
+                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"[{instance.HardwareID}]={FilePath}");
                 }
-
-                MessageBox.Show(ex.Message, FilePath, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-
-            Instances.Clear();
-            foreach (var serviceInstance in serviceInstances)
-            {
-                Instances.Add(new ServiceInstance(FilePath, serviceInstance.Node));
             }
         }
 
@@ -60,6 +50,11 @@ namespace SPAFilter.SPA.Components
                 throw new Exception($"Activator config \"{FilePath}\" is incorrect");
 
             return serviceInstances;
+        }
+
+        public override string ToString()
+        {
+            return string.Join(";", Instances);
         }
     }
 }

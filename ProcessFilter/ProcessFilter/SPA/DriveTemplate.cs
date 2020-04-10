@@ -11,7 +11,7 @@ namespace SPAFilter.SPA
     {
         private readonly FileInfo _fileInfo;
 
-        [DGVColumn(ColumnPosition.Before, "Size [Kb]")]
+        [DGVColumn(ColumnPosition.Before, "Size[Kb]")]
         public virtual double FileSize
         {
             get
@@ -67,7 +67,7 @@ namespace SPAFilter.SPA
             if (!(obj is DriveTemplate objRes))
                 return false;
 
-            if (!objRes.FilePath.IsNullOrEmptyTrim() && !this.FilePath.IsNullOrEmptyTrim() && objRes.FilePath.Like(this.FilePath))
+            if (objRes.FilePath.Like(this.FilePath))
                 return true;
 
             return RuntimeHelpers.Equals(this, obj);

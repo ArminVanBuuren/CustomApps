@@ -1,4 +1,5 @@
-﻿using Utils.WinForm.DataGridViewHelper;
+﻿using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.ROBP
 {
@@ -25,6 +26,13 @@ namespace SPAFilter.SPA.Components.ROBP
             }
 
             HostTypeName = parentElement.Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ROBPOperation operation)
+                return Name.Like(operation.Name) && HostTypeName.Equals(operation.HostTypeName);
+            return base.Equals(obj);
         }
     }
 }

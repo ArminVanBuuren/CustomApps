@@ -164,7 +164,7 @@ namespace SPAFilter.SPA
                 // обновляются свойства Scenarios и Commands
                 lock (ACTIVATORS_SYNC)
                 {
-                    ReloadActivators(_activators.Values);
+                    Refresh(_activators.Values);
                 }
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
                 var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
@@ -200,7 +200,7 @@ namespace SPAFilter.SPA
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.ReportMessage(ex.Message);
             }
         }
 
@@ -379,12 +379,13 @@ namespace SPAFilter.SPA
                     }
                 }, filePathList, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
 
-                ReloadActivators(lastActivatorList);
+                lock (ACTIVATORS_SYNC)
+                    Refresh(lastActivatorList);
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Program.ReportMessage(errors);
                 }
 
             });
@@ -404,11 +405,32 @@ namespace SPAFilter.SPA
                         }
                     }
 
-                    ReloadActivators(_activators.Values);
+                    Refresh(_activators.Values);
                 }
             });
         }
 
+        public async Task RemoveInstanceAsync(IEnumerable<int> instancesID)
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                lock (ACTIVATORS_SYNC)
+                {
+                    foreach (var id in instancesID)
+                    {
+                        foreach (var instance in ServiceInstances.Where(p => p.ID == id).ToList())
+                        {
+                            instance.Parent.Instances.Remove(instance);
+                        }
+                    }
+
+                    foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
+                        _activators.Remove(activator.FilePath);
+
+                    Refresh(_activators.Values);
+                }
+            });
+        }
 
         public async Task ReloadActivatorsAsync()
         {
@@ -416,7 +438,21 @@ namespace SPAFilter.SPA
             {
                 lock (ACTIVATORS_SYNC)
                 {
-                    ReloadActivators(_activators.Values);
+                    foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
+                        _activators.Remove(fileActivator);
+
+                    Refresh(_activators.Values);
+                }
+            });
+        }
+
+        public async Task RefreshActivatorsAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                lock (ACTIVATORS_SYNC)
+                {
+                    Refresh(_activators.Values);
                 }
             });
         }
@@ -424,7 +460,7 @@ namespace SPAFilter.SPA
         /// <summary>
         /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
         /// </summary>
-        void ReloadActivators(IEnumerable<ServiceActivator> activators)
+        void Refresh(IEnumerable<ServiceActivator> activators)
         {
             if (activators != null && activators.Any())
             {
@@ -433,7 +469,7 @@ namespace SPAFilter.SPA
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    MessageBox.Show(errors, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Program.ReportMessage(errors);
                 }
             }
 
@@ -458,26 +494,19 @@ namespace SPAFilter.SPA
             // Если имеются два инстанса например: "FP:AM и FP:SCP" которые имеют разные каталоги сценариев и при этом общие названия файлов
             // то возникает коллизия и нужно выбрать какой то один инстанс.
             // В отличии от "FP:SCP1 и FP:SCP2" которые имеют общий каталог сценариев, тогда коллизий не будет.
-            var intersectInstancesStr = string.Empty;
-            var instancesWithSameHost = allInstances.GroupBy(x => x.HostTypeName.ToLower()).Where(p => p.Count() > 1).ToList();
-            foreach (var instance in instancesWithSameHost)
+            var sameHostScenarios = allInstances.SelectMany(x => x.Scenarios).GroupBy(x => $"{x.HostTypeName.ToLowerInvariant()}=[{x.Name.ToLowerInvariant()}]").Where(p => p.Count() > 1).ToList();
+            var hrdrIDs = sameHostScenarios.SelectMany(x => x).GroupBy(x => x.Parent.HardwareID).Select(x => x.Key).ToList();
+            var instances = allInstances.Where(x => hrdrIDs.Any(h => h == x.HardwareID)).ToList();
+
+            foreach (var instance in instances)
+                instance.IsCorrect = false;
+
+            if (sameHostScenarios.Count > 0 && instances.Count > 0)
             {
-                var sameScenarios = instance.SelectMany(x => x.Scenarios).GroupBy(x => x.FilePath.ToLower()).SelectMany(x => x).GroupBy(p => p.Name.ToLower()).Where(t => t.Count() > 1).ToList();
-                if (sameScenarios.Any())
-                {
-                    var intersectInstances = sameScenarios.SelectMany(x => x).GroupBy(x => x.Parent).Select(p => p.Key).ToList();
-                    foreach (var instance2 in intersectInstances)
-                    {
-                        instance2.IsCorrect = false;
-                    }
-
-                    intersectInstancesStr += $"\"{string.Join(",", intersectInstances.Select(x => x.HardwareID))}\"; ";
-                }
+                Program.ReportMessage(
+                    $"When initializing instances:'{string.Join(";", hrdrIDs)}' - {sameHostScenarios.Count} scenario collisions were found!\r\nFor correct work of a filter, please choose only one instance or several instances with different scenarios.",
+                     MessageBoxIcon.Warning);
             }
-
-            if (!string.IsNullOrEmpty(intersectInstancesStr))
-                MessageBox.Show($"Scenario collisions found when instances: {intersectInstancesStr.Trim().Trim(';')} were initialized.\r\nChoose only one instance or several with a common configuration.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
 
             foreach (var instance in allInstances.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
             {
@@ -588,7 +617,7 @@ namespace SPAFilter.SPA
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.ReportMessage(ex.Message);
                 return null;
             }
             finally
