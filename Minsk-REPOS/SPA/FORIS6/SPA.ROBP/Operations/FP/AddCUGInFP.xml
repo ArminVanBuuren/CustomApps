@@ -1,0 +1,16 @@
+<OperationData Name="AddCUGInFP" NEType="FP" NEAlias="FP" Broadcast="true">
+  <Request Name="ExtendedRequestMessage">
+    <AdditionalData>
+      <ProvisionList HaltMode="CancelOperation" Type="AnyOfListed" Copy="CopyListed">
+        <Include groupName="CUGList" />
+      </ProvisionList>
+      <RegisteredList Type="Optional" Copy="CopyAll" />
+      <BalanceStorage Type="Optional">
+        <HostTypeCode Type="Optional" />
+        <HostId Type="Optional" />
+        <HostCode Type="Optional" />
+      </BalanceStorage>
+    </AdditionalData>
+  </Request>
+  <Response Name="ExtendedResponseMessage" />
+</OperationData>

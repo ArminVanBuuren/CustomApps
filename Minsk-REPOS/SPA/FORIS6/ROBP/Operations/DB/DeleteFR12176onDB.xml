@@ -1,8 +1,0 @@
-<OperationData Name="DeleteFR12176onDB" NEType="DB" NEAlias="DB">
-  <Request Name="RequestMessage">
-    <AdditionalData Executable="True">
-      <WithdrawalList Type="Optional" />
-    </AdditionalData>
-  </Request>
-  <Response Name="ResponseMessage" />
-</OperationData>

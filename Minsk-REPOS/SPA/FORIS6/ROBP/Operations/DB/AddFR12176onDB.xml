@@ -1,9 +1,0 @@
-<OperationData Name="AddFR12176onDB" NEType="DB" NEAlias="DB">
-  <Request Name="RequestMessage">
-    <AdditionalData Executable="True">
-      <SourceType Type="Optional" />
-      <ProvisionList Type="Optional" />
-    </AdditionalData>
-  </Request>
-  <Response Name="ResponseMessage" />
-</OperationData>
