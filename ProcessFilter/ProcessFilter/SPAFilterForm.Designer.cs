@@ -77,6 +77,8 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton = new System.Windows.Forms.RadioButton();
             this.panelTop = new System.Windows.Forms.Panel();
             this.progressBar = new SPAFilter.CustomProgressBar();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mainTabControl.SuspendLayout();
             this.ServiceInstances.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -263,7 +265,9 @@ namespace SPAFilter
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addServiceInstancesButton,
             this.removeServiceInstancesButton,
+            this.toolStripSeparator1,
             this.refreshServiceInstancesButton,
+            this.toolStripSeparator2,
             this.reloadServiceInstancesButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -311,6 +315,7 @@ namespace SPAFilter
             this.reloadServiceInstancesButton.Name = "reloadServiceInstancesButton";
             this.reloadServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
             this.reloadServiceInstancesButton.Text = "Reload";
+            this.reloadServiceInstancesButton.Click += new System.EventHandler(this.ReloadActivatorButton_Click);
             // 
             // dataGridServiceInstances
             // 
@@ -675,6 +680,16 @@ namespace SPAFilter
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // SPAFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -763,6 +778,8 @@ namespace SPAFilter
         private System.Windows.Forms.DataGridView dataGridOperations;
         private Button ServiceCatalogOpenButton;
         private ToolStripButton reloadServiceInstancesButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripSeparator toolStripSeparator2;
     }
 }
 

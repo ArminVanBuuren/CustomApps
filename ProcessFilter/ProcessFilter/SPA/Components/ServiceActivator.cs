@@ -31,12 +31,30 @@ namespace SPAFilter.SPA.Components
                 catch (Exception ex)
                 {
                     instance.IsCorrect = false;
-                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"[{instance.HardwareID}]={FilePath}");
+                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"{FilePath} \\ [{instance.HardwareID}]");
                 }
             }
         }
 
-        List<XPathResult> LoadConfig()
+        public void Reload()
+        {
+            var serviceInstances = LoadConfig();
+            Instances.Clear();
+
+            foreach (var instance in serviceInstances)
+            {
+                try
+                {
+                    Instances.Add(new ServiceInstance(this, instance.Node));
+                }
+                catch (Exception ex)
+                {
+                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"{FilePath} \\ {instance}");
+                }
+            }
+        }
+
+        IEnumerable<XPathResult> LoadConfig()
         {
             if (!File.Exists(FilePath))
                 throw new Exception($"File \"{FilePath}\" not found");

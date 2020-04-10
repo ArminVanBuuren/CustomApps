@@ -31,7 +31,8 @@ namespace SPAFilter
         SCOperations = 2,
         AddActivators = 4,
         RemoveActivators = 8,
-        ReloadActivators = 16
+        RefreshActivators = 16,
+        ReloadActivators = 32
     }
 
     [Serializable]
@@ -843,6 +844,11 @@ namespace SPAFilter
 
         private async void RefreshActivatorButton_Click(object sender, EventArgs e)
         {
+            await AssignAsync(SPAProcessFilterType.RefreshActivators);
+        }
+
+        private async void ReloadActivatorButton_Click(object sender, EventArgs e)
+        {
             await AssignAsync(SPAProcessFilterType.ReloadActivators);
         }
 
@@ -925,8 +931,11 @@ namespace SPAFilter
                             return -1;
                         }).Where(x => x != -1)));
                         break;
-                    case SPAProcessFilterType.ReloadActivators:
+                    case SPAProcessFilterType.RefreshActivators:
                         await AssignServiceInstances(_spaFilter.RefreshActivatorsAsync());
+                        break;
+                    case SPAProcessFilterType.ReloadActivators:
+                        await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
                         break;
                 }
             }

@@ -453,6 +453,23 @@ namespace SPAFilter.SPA
             });
         }
 
+        public async Task ReloadActivatorsAsync()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                lock (ACTIVATORS_SYNC)
+                {
+                    if (_activators != null)
+                    {
+                        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
+                            _activators.Remove(fileActivator);
+
+                        Reload(_activators.Values);
+                    }
+                }
+            });
+        }
+
         /// <summary>
         /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
         /// </summary>
@@ -461,6 +478,25 @@ namespace SPAFilter.SPA
             if (activators != null && activators.Any())
             {
                 var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
+
+                var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
+                if (!errors.IsNullOrEmptyTrim())
+                {
+                    Program.ReportMessage(errors);
+                }
+            }
+
+            LoadActivators();
+        }
+
+        /// <summary>
+        /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
+        /// </summary>
+        void Reload(IEnumerable<ServiceActivator> activators)
+        {
+            if (activators != null && activators.Any())
+            {
+                var result = MultiTasking.Run((sa) => sa.Reload(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
