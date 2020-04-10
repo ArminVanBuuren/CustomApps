@@ -104,6 +104,7 @@ namespace SPAFilter
                     addServiceInstancesButton.Enabled = !_IsInProgress;
                     removeServiceInstancesButton.Enabled = !_IsInProgress;
                     refreshServiceInstancesButton.Enabled = !_IsInProgress;
+                    reloadServiceInstancesButton.Enabled = !_IsInProgress;
 
                     dataGridProcesses.Visible = !_IsInProgress;
                     dataGridOperations.Visible = !_IsInProgress;
@@ -344,6 +345,16 @@ namespace SPAFilter
             tooltipPrintXML.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
+            tooltipPrintXML.SetToolTip(ProcessesButtonOpen, "Open folder with Business Processes");
+            tooltipPrintXML.SetToolTip(ROBPOperationButtonOpen, "Open folder with Operations");
+            tooltipPrintXML.SetToolTip(ServiceCatalogOpenButton, "Open Service catalog file");
+            tooltipPrintXML.SetToolTip(FilterButton, "Get all matches by filter");
+            tooltipPrintXML.SetToolTip(ExportSCPath, "Export folder path");
+            tooltipPrintXML.SetToolTip(RootSCExportPathButton, "Open export folder path");
+            var xslxDesc = $"of RD services for fill CFS description. Columns names and orders must be like:\r\n'{string.Join("','", SPAProcessFilter.MandatoryXslxColumns)}'";
+            tooltipPrintXML.SetToolTip(OpenSCXlsx, "Excel file path " + xslxDesc);
+            tooltipPrintXML.SetToolTip(OpenSevExelButton, "Get excel file " + xslxDesc);
+            tooltipPrintXML.SetToolTip(ButtonGenerateSC, "Generate Service catalog by Operations");
         }
 
         void PostInit()
@@ -964,6 +975,7 @@ namespace SPAFilter
                 addServiceInstancesButton.Enabled = false;
                 removeServiceInstancesButton.Enabled = false;
                 refreshServiceInstancesButton.Enabled = false;
+                reloadServiceInstancesButton.Enabled = false;
 
                 await getInstances;
                 await AssignServiceInstances();
@@ -979,6 +991,7 @@ namespace SPAFilter
                 addServiceInstancesButton.Enabled = true;
                 removeServiceInstancesButton.Enabled = true;
                 refreshServiceInstancesButton.Enabled = true;
+                reloadServiceInstancesButton.Enabled = true;
 
                 ClearDataGrid(true);
                 RefreshStatus();
@@ -1159,6 +1172,10 @@ namespace SPAFilter
             }
 
             if (IsInProgress)
+                return;
+
+            var userResult = MessageBox.Show(string.Format(Resources.Form_PrintXMLFiles_Question, filesNumber), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (userResult != DialogResult.OK)
                 return;
 
             try

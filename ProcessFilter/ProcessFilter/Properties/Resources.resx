@@ -172,7 +172,7 @@
     <value>Please select a row</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Pretty print filtered XML files</value>
+    <value>Pretty print all filtered XML files</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
@@ -185,5 +185,29 @@
   </data>
   <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
     <value>{0} out of {1} xml files were printed.</value>
+  </data>
+  <data name="Form_PrintXMLFiles_Question" xml:space="preserve">
+    <value>Do you really want to print all {0} xml files?</value>
+  </data>
+  <data name="file7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\file7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="filter6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filter6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folder2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folder2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="generate4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\generate4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xls1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\xls1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xml8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\xml8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

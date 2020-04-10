@@ -120,10 +120,20 @@
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>133, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PrintXMLButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAQlJREFUSEtj
+        GF5AYv98Bak981wowZJ758hDjUMFEMPnfAfi/xTi71gtkdo71w2LYvIw0CyosQgwsiyQ3Du3AEg/RReH
+        YwoteC61b646kP6LJo7AJFrwBojhqUt6z5w2EIaKgeTQ1RNtwQ8g7pDdO1NZas/sS1Cxv1DXPweJQeTm
+        dAAxSC1CLxEWHAQbtHdOCZD9AS6+e85Oyd1zg+F8kBxIDcTSg3Bxci0AGw60BMYHy5FpAQijBxFa5FIW
+        RMgYFJG/kCIXJv4LKoesFoJJtACE/0ntnKkBpHGnfWRMugWznwDDOge7HBZMhg9Iw8PTAlAlAZSkQoUz
+        +5vU7plyUGNRAU2rzCEKGBgAvm57zWgROGgAAAAASUVORK5CYII=
+</value>
+  </data>
   <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAMDAAAAEAIACoJQAAFgAAACgAAAAwAAAAYAAAAAEAIAAAAAAAACQAAMMOAADDDgAAAAAAAAAA

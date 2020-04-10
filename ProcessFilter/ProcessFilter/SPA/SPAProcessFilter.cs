@@ -377,7 +377,7 @@ namespace SPAFilter.SPA
                             _activators.Add(inputFile, new ServiceActivator(inputFile));
                         }
                     }
-                }, filePathList, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
+                }, filePathList, new MultiTaskingTemplate(filePathList.Count(), ThreadPriority.Lowest));
 
                 lock (ACTIVATORS_SYNC)
                     Refresh(lastActivatorList);
@@ -432,27 +432,23 @@ namespace SPAFilter.SPA
             });
         }
 
-        public async Task ReloadActivatorsAsync()
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lock (ACTIVATORS_SYNC)
-                {
-                    foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
-                        _activators.Remove(fileActivator);
-
-                    Refresh(_activators.Values);
-                }
-            });
-        }
-
         public async Task RefreshActivatorsAsync()
         {
             await Task.Factory.StartNew(() =>
             {
                 lock (ACTIVATORS_SYNC)
                 {
-                    Refresh(_activators.Values);
+                    if (ServiceInstances != null)
+                        foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
+                            _activators.Remove(activator.FilePath);
+
+                    if (_activators != null)
+                    {
+                        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
+                            _activators.Remove(fileActivator);
+
+                        Refresh(_activators.Values);
+                    }
                 }
             });
         }
@@ -464,7 +460,7 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(10, ThreadPriority.Lowest));
+                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
@@ -504,7 +500,7 @@ namespace SPAFilter.SPA
             if (sameHostScenarios.Count > 0 && instances.Count > 0)
             {
                 Program.ReportMessage(
-                    $"When initializing instances:'{string.Join(";", hrdrIDs)}' - {sameHostScenarios.Count} scenario collisions were found!\r\nFor correct work of a filter, please choose only one instance or several instances with different scenarios.",
+                    $"When initializing instances:'{string.Join(";", hrdrIDs)}' - {sameHostScenarios.Count} scenario collisions were found!\r\nFor correct work of a filter, please choose only one instance (host type) or several instances (host types) with different scenarios.",
                      MessageBoxIcon.Warning);
             }
 
@@ -539,7 +535,7 @@ namespace SPAFilter.SPA
             resultCommands = CollectionTemplate<Command>.ToCollection(allCommands);
         }
 
-        private readonly string[] mandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
+        public static readonly string[] MandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
         public async Task<DataTable> GetRDServicesFromXslxAsync(FileInfo file, CustomProgressCalculation progressCalc)
         {
@@ -561,7 +557,7 @@ namespace SPAFilter.SPA
 
                 var myWorksheet = xslPackage.Workbook.Worksheets.First();
                 var totalRows = myWorksheet.Dimension.End.Row;
-                var totalColumns = mandatoryXslxColumns.Length;
+                var totalColumns = MandatoryXslxColumns.Length;
 
                 progressCalc.EndReadXslxFile(totalRows);
 
@@ -574,18 +570,18 @@ namespace SPAFilter.SPA
                 foreach (var columnName in columnsNames)
                 {
                     var columnNameUp = columnName.ToUpper();
-                    if (mandatoryXslxColumns[i++] != columnNameUp)
+                    if (MandatoryXslxColumns[i++] != columnNameUp)
                     {
-                        throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{file.Name}'.\r\n\r\nColumns names and orders must be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+                        throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{file.Name}'.\r\n\r\nColumns names and orders must be like:\r\n'{string.Join("','", MandatoryXslxColumns)}'");
                     }
 
                     serviceTable.Columns.Add(columnNameUp, typeof(string));
-                    if (i == mandatoryXslxColumns.Length)
+                    if (i == MandatoryXslxColumns.Length)
                         break;
                 }
 
-                if (i != mandatoryXslxColumns.Length)
-                    throw new Exception($"Wrong file '{file.Name}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", mandatoryXslxColumns)}'");
+                if (i != MandatoryXslxColumns.Length)
+                    throw new Exception($"Wrong file '{file.Name}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", MandatoryXslxColumns)}'");
 
                 for (var rowNum = 2; rowNum <= totalRows; rowNum++)
                 {

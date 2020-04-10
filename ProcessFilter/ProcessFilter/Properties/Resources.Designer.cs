@@ -61,6 +61,36 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap file7 {
+            get {
+                object obj = ResourceManager.GetObject("file7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filter6 {
+            get {
+                object obj = ResourceManager.GetObject("filter6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder2 {
+            get {
+                object obj = ResourceManager.GetObject("folder2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please filter files.
         /// </summary>
         internal static string Form_GenerateSC_NotFileredROBPOps {
@@ -189,6 +219,15 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you really want to print all {0} xml files?.
+        /// </summary>
+        internal static string Form_PrintXMLFiles_Question {
+            get {
+                return ResourceManager.GetString("Form_PrintXMLFiles_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} out of {1} xml files were printed..
         /// </summary>
         internal static string Form_PrintXMLFiles_Result {
@@ -207,7 +246,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pretty print filtered XML files.
+        ///   Looks up a localized string similar to Pretty print all filtered XML files.
         /// </summary>
         internal static string Form_PrintXMLFiles_ToolTip {
             get {
@@ -221,6 +260,16 @@ namespace SPAFilter.Properties {
         internal static string Form_ToolTip_SearchPattern {
             get {
                 return ResourceManager.GetString("Form_ToolTip_SearchPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap generate4 {
+            get {
+                object obj = ResourceManager.GetObject("generate4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -260,6 +309,36 @@ namespace SPAFilter.Properties {
         internal static System.Drawing.Bitmap icons8_synchronize_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_synchronize_20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap reload {
+            get {
+                object obj = ResourceManager.GetObject("reload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap xls1 {
+            get {
+                object obj = ResourceManager.GetObject("xls1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap xml8 {
+            get {
+                object obj = ResourceManager.GetObject("xml8", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
