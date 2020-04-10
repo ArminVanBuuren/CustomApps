@@ -346,16 +346,15 @@ namespace SPAFilter
             tooltipPrintXML.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
             tooltipPrintXML.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
-            tooltipPrintXML.SetToolTip(ProcessesButtonOpen, "Open folder with Business Processes");
-            tooltipPrintXML.SetToolTip(ROBPOperationButtonOpen, "Open folder with Operations");
-            tooltipPrintXML.SetToolTip(ServiceCatalogOpenButton, "Open Service catalog file");
-            tooltipPrintXML.SetToolTip(FilterButton, "Get all matches by filter");
-            tooltipPrintXML.SetToolTip(ExportSCPath, "Export folder path");
-            tooltipPrintXML.SetToolTip(RootSCExportPathButton, "Open export folder path");
-            var xslxDesc = $"of RD services for fill CFS description. Columns names and orders must be like:\r\n'{string.Join("','", SPAProcessFilter.MandatoryXslxColumns)}'";
-            tooltipPrintXML.SetToolTip(OpenSCXlsx, "Excel file path " + xslxDesc);
-            tooltipPrintXML.SetToolTip(OpenSevExelButton, "Get excel file " + xslxDesc);
-            tooltipPrintXML.SetToolTip(ButtonGenerateSC, "Generate Service catalog by Operations");
+            tooltipPrintXML.SetToolTip(ProcessesButtonOpen, Resources.Form_ToolTip_ProcessesButtonOpen);
+            tooltipPrintXML.SetToolTip(ROBPOperationButtonOpen, Resources.Form_ToolTip_ROBPOperationButtonOpen);
+            tooltipPrintXML.SetToolTip(ServiceCatalogOpenButton, Resources.Form_ToolTip_ServiceCatalogOpenButton);
+            tooltipPrintXML.SetToolTip(FilterButton, Resources.Form_ToolTip_FilterButton);
+            tooltipPrintXML.SetToolTip(ExportSCPath, Resources.Form_ToolTip_ExportSCPath);
+            tooltipPrintXML.SetToolTip(RootSCExportPathButton, Resources.Form_ToolTip_RootSCExportPathButton);
+            tooltipPrintXML.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
+            tooltipPrintXML.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
+            tooltipPrintXML.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
         }
 
         void PostInit()

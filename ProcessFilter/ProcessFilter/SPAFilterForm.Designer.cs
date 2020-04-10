@@ -49,7 +49,9 @@ namespace SPAFilter
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.addServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
             this.removeServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.refreshServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
             this.dataGridServiceInstances = new System.Windows.Forms.DataGridView();
             this.Processes = new System.Windows.Forms.TabPage();
@@ -77,8 +79,6 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton = new System.Windows.Forms.RadioButton();
             this.panelTop = new System.Windows.Forms.Panel();
             this.progressBar = new SPAFilter.CustomProgressBar();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mainTabControl.SuspendLayout();
             this.ServiceInstances.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -296,6 +296,11 @@ namespace SPAFilter
             this.removeServiceInstancesButton.ToolTipText = "Remove configuration from Service Instances list";
             this.removeServiceInstancesButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // refreshServiceInstancesButton
             // 
             this.refreshServiceInstancesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -306,6 +311,11 @@ namespace SPAFilter
             this.refreshServiceInstancesButton.Text = "Refresh";
             this.refreshServiceInstancesButton.ToolTipText = "Refresh";
             this.refreshServiceInstancesButton.Click += new System.EventHandler(this.RefreshActivatorButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // reloadServiceInstancesButton
             // 
@@ -455,7 +465,7 @@ namespace SPAFilter
             // 
             // GenerateSC
             // 
-            this.GenerateSC.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.GenerateSC.BackColor = System.Drawing.Color.DarkGray;
             this.GenerateSC.Controls.Add(this.RootSCExportPathButton);
             this.GenerateSC.Controls.Add(this.label9);
             this.GenerateSC.Controls.Add(this.ExportSCPath);
@@ -476,9 +486,9 @@ namespace SPAFilter
             this.RootSCExportPathButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.RootSCExportPathButton.Image = global::SPAFilter.Properties.Resources.folder2;
             this.RootSCExportPathButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.RootSCExportPathButton.Location = new System.Drawing.Point(824, 16);
+            this.RootSCExportPathButton.Location = new System.Drawing.Point(800, 16);
             this.RootSCExportPathButton.Name = "RootSCExportPathButton";
-            this.RootSCExportPathButton.Size = new System.Drawing.Size(82, 23);
+            this.RootSCExportPathButton.Size = new System.Drawing.Size(104, 23);
             this.RootSCExportPathButton.TabIndex = 30;
             this.RootSCExportPathButton.Text = "     Root";
             this.RootSCExportPathButton.UseVisualStyleBackColor = false;
@@ -487,9 +497,11 @@ namespace SPAFilter
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label9.Location = new System.Drawing.Point(13, 20);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 15);
+            this.label9.Size = new System.Drawing.Size(71, 15);
             this.label9.TabIndex = 29;
             this.label9.Text = "Export Path:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -498,9 +510,9 @@ namespace SPAFilter
             // 
             this.ExportSCPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExportSCPath.Location = new System.Drawing.Point(84, 16);
+            this.ExportSCPath.Location = new System.Drawing.Point(90, 16);
             this.ExportSCPath.Name = "ExportSCPath";
-            this.ExportSCPath.Size = new System.Drawing.Size(734, 23);
+            this.ExportSCPath.Size = new System.Drawing.Size(704, 23);
             this.ExportSCPath.TabIndex = 28;
             this.ExportSCPath.TextChanged += new System.EventHandler(this.ExportSCPath_TextChanged);
             // 
@@ -510,22 +522,22 @@ namespace SPAFilter
             this.OpenSevExelButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.OpenSevExelButton.Image = global::SPAFilter.Properties.Resources.xls1;
             this.OpenSevExelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.OpenSevExelButton.Location = new System.Drawing.Point(824, 43);
+            this.OpenSevExelButton.Location = new System.Drawing.Point(800, 43);
             this.OpenSevExelButton.Name = "OpenSevExelButton";
             this.OpenSevExelButton.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.OpenSevExelButton.Size = new System.Drawing.Size(82, 23);
+            this.OpenSevExelButton.Size = new System.Drawing.Size(104, 23);
             this.OpenSevExelButton.TabIndex = 27;
-            this.OpenSevExelButton.Text = "Open xlsx";
-            this.OpenSevExelButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.OpenSevExelButton.Text = "     Open xlsx";
             this.OpenSevExelButton.UseVisualStyleBackColor = false;
             this.OpenSevExelButton.Click += new System.EventHandler(this.OpenRDServiceExelButton_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.Location = new System.Drawing.Point(13, 48);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 15);
+            this.label5.Size = new System.Drawing.Size(53, 15);
             this.label5.TabIndex = 26;
             this.label5.Text = "Services:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -537,10 +549,10 @@ namespace SPAFilter
             this.ButtonGenerateSC.Enabled = false;
             this.ButtonGenerateSC.Image = global::SPAFilter.Properties.Resources.generate4;
             this.ButtonGenerateSC.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonGenerateSC.Location = new System.Drawing.Point(806, 70);
+            this.ButtonGenerateSC.Location = new System.Drawing.Point(800, 70);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
             this.ButtonGenerateSC.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(100, 23);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 23);
             this.ButtonGenerateSC.TabIndex = 26;
             this.ButtonGenerateSC.Text = "Generate SC";
             this.ButtonGenerateSC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -551,9 +563,9 @@ namespace SPAFilter
             // 
             this.OpenSCXlsx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.OpenSCXlsx.Location = new System.Drawing.Point(84, 43);
+            this.OpenSCXlsx.Location = new System.Drawing.Point(90, 43);
             this.OpenSCXlsx.Name = "OpenSCXlsx";
-            this.OpenSCXlsx.Size = new System.Drawing.Size(734, 23);
+            this.OpenSCXlsx.Size = new System.Drawing.Size(704, 23);
             this.OpenSCXlsx.TabIndex = 0;
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
@@ -679,16 +691,6 @@ namespace SPAFilter
             this.progressBar.Size = new System.Drawing.Size(915, 9);
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // SPAFilterForm
             // 

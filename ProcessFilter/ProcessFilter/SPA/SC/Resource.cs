@@ -1,5 +1,4 @@
-﻿using System;
-using Utils;
+﻿using Utils;
 
 namespace SPAFilter.SPA.SC
 {

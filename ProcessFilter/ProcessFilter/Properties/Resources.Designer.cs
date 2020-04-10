@@ -255,11 +255,94 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate Service catalog by Operations.
+        /// </summary>
+        internal static string Form_ToolTip_ButtonGenerateSC {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_ButtonGenerateSC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export folder path.
+        /// </summary>
+        internal static string Form_ToolTip_ExportSCPath {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_ExportSCPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get all matches by filter.
+        /// </summary>
+        internal static string Form_ToolTip_FilterButton {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_FilterButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel file path of RD services for fill CFS description. Columns names and orders must be like:
+        ///&apos;{0}&apos;.
+        /// </summary>
+        internal static string Form_ToolTip_OpenSCXlsx {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_OpenSCXlsx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get excel file of RD services for fill CFS description. Columns names and orders must be like:
+        ///&apos;{0}&apos;.
+        /// </summary>
+        internal static string Form_ToolTip_OpenSevExelButton {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_OpenSevExelButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder with Business Processes.
+        /// </summary>
+        internal static string Form_ToolTip_ProcessesButtonOpen {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_ProcessesButtonOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder with Operations.
+        /// </summary>
+        internal static string Form_ToolTip_ROBPOperationButtonOpen {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_ROBPOperationButtonOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open export folder path.
+        /// </summary>
+        internal static string Form_ToolTip_RootSCExportPathButton {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_RootSCExportPathButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To search for a specified pattern, you can use % symbol. Example: %Assign%.
         /// </summary>
         internal static string Form_ToolTip_SearchPattern {
             get {
                 return ResourceManager.GetString("Form_ToolTip_SearchPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Service catalog file.
+        /// </summary>
+        internal static string Form_ToolTip_ServiceCatalogOpenButton {
+            get {
+                return ResourceManager.GetString("Form_ToolTip_ServiceCatalogOpenButton", resourceCulture);
             }
         }
         

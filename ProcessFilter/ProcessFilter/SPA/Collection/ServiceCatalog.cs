@@ -10,7 +10,7 @@ using Utils.CollectionHelper;
 
 namespace SPAFilter.SPA.Collection
 {
-    class CFS
+    internal class CFS
     {
         public bool IsOneTime { get; } = false;
 

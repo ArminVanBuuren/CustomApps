@@ -721,7 +721,7 @@ namespace SPAFilter.SPA
                 var attempts = 0;
                 while (!IO.IsFileReady(filePath))
                 {
-                    System.Threading.Thread.Sleep(500);
+                    Thread.Sleep(500);
                     attempts++;
                     if (attempts > 3)
                         return;
