@@ -116,6 +116,7 @@ namespace SPAFilter
                     ProcessesComboBox.Enabled = !_IsInProgress;
                     NetSettComboBox.Enabled = !_IsInProgress;
                     OperationComboBox.Enabled = !_IsInProgress;
+                    showFailed.Enabled = !_IsInProgress;
                 }
             }
         }
@@ -309,7 +310,7 @@ namespace SPAFilter
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
             var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { Program.ReportMessage(@"Hello! This app was created for comfortable SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
+            autor.Click += (sender, args) => { Program.ReportMessage(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
             statusStrip.Items.Add(autor);
 
             statusStrip.Items.Add(new ToolStripSeparator());
