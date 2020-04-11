@@ -148,7 +148,7 @@
     <value>Please filter files</value>
   </data>
   <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
-    <value>Configuration application is incorrect or collision scenarios found</value>
+    <value>Configuration application is incorrect or scenario collisions were found. Please check same instances (host types).</value>
   </data>
   <data name="Form_GridView_IsSubScenario" xml:space="preserve">
     <value>Subscenario</value>

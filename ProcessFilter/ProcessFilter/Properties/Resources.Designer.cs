@@ -118,7 +118,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration application is incorrect or collision scenarios found.
+        ///   Looks up a localized string similar to Configuration application is incorrect or scenario collisions were found. Please check same instances (host types)..
         /// </summary>
         internal static string Form_GridView_IncorrectConfig {
             get {

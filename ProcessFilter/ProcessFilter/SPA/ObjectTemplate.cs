@@ -7,6 +7,7 @@ namespace SPAFilter.SPA
         [DGVColumn(ColumnPosition.First, "ID")]
         public int ID { get; set; } = 0;
 
+        // Свойство Name должно быть виртуальным, т.к. мы переопределяем место в датагриде по аттрибутам
         [DGVColumn(ColumnPosition.After, "Name")]
         public virtual string Name { get; set; }
 

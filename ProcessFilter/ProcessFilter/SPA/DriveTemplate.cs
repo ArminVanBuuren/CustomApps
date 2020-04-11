@@ -12,7 +12,7 @@ namespace SPAFilter.SPA
         private readonly FileInfo _fileInfo;
 
         [DGVColumn(ColumnPosition.Before, "Size[Kb]")]
-        public virtual double FileSize
+        public double FileSize
         {
             get
             {
@@ -20,6 +20,30 @@ namespace SPAFilter.SPA
                     return Math.Round(((double)_fileInfo.Length / 1024), 2);
 
                 return -1;
+            }
+        }
+
+        [DGVColumn(ColumnPosition.After, "CreationTime")]
+        public string CreationTime
+        {
+            get
+            {
+                if (_fileInfo != null && _fileInfo.Exists)
+                    return _fileInfo.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
+
+                return DateTime.MinValue.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+        }
+
+        [DGVColumn(ColumnPosition.After, "LastWriteTime")]
+        public string LastWriteTime
+        {
+            get
+            {
+                if (_fileInfo != null && _fileInfo.Exists)
+                    return _fileInfo.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");
+
+                return DateTime.MinValue.ToString("dd.MM.yyyy HH:mm:ss");
             }
         }
 
@@ -67,7 +91,7 @@ namespace SPAFilter.SPA
             if (!(obj is DriveTemplate objRes))
                 return false;
 
-            if (objRes.FilePath.Like(this.FilePath))
+            if (objRes.FilePath.Like(FilePath))
                 return true;
 
             return RuntimeHelpers.Equals(this, obj);

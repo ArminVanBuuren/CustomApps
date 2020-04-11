@@ -19,29 +19,36 @@ namespace SPAFilter
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            SPAFilterForm mainControl = null;
-            if (File.Exists(SPAFilterForm.SavedDataPath))
+            try
             {
-                try
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                SPAFilterForm mainControl = null;
+                if (File.Exists(SPAFilterForm.SavedDataPath))
                 {
-                    using (Stream stream = new FileStream(SPAFilterForm.SavedDataPath, FileMode.Open, FileAccess.Read))
+                    try
                     {
-                        mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
+                        using (Stream stream = new FileStream(SPAFilterForm.SavedDataPath, FileMode.Open, FileAccess.Read))
+                        {
+                            mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        File.Delete(SPAFilterForm.SavedDataPath);
                     }
                 }
-                catch (Exception)
-                {
-                    File.Delete(SPAFilterForm.SavedDataPath);
-                }
+
+                if (mainControl == null)
+                    mainControl = new SPAFilterForm();
+
+                Application.Run(mainControl);
             }
-
-            if (mainControl == null)
-                mainControl = new SPAFilterForm();
-
-            Application.Run(mainControl);
+            catch (Exception ex)
+            {
+                ReportMessage(ex.ToString());
+            }
         }
 
         public static void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null)
