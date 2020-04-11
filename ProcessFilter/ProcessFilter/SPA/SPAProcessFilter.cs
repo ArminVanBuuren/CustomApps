@@ -270,7 +270,7 @@ namespace SPAFilter.SPA
                 throw new Exception("You must select a folder with exported ROBP's host type directories.");
 
             FilterProcesses(bpFilter);
-            HostTypes = new CollectionHostType(); 
+            HostTypes = new CollectionHostType();
             var allBPOperations = Processes.AllOperationsNames;
 
             foreach (var hostTypeDir in hostTypesDir)

@@ -38,6 +38,12 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.Last, "AllCommandsExist", false)]
         public bool AllCommandsExist { get; private set; } = true;
 
+        /// <summary>
+        /// Проверка на существование комманд в сценарии
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "IsCorrectXML", false)]
+        public bool IsCorrectXML { get; private set; } = true;
+
         class ParceScenario
         {
             public string ParentPath { get; set; }
@@ -97,7 +103,10 @@ namespace SPAFilter.SPA.Components
         {
             var document = XML.LoadXml(FilePath);
             if (document == null)
+            {
+                IsCorrectXML = false;
                 return;
+            }
 
             var commands = EvaluateXPath(document, @"//parameterslist/param[@name='Command']/@value | //parameterslist/param[@name='ServicesCommand']/@value | //parameterslist/param[@name='ParametersCommand']/@value");
             var subScenarios = EvaluateXPath(document, @"//parameterslist/param[@name='Scenario']/@value");

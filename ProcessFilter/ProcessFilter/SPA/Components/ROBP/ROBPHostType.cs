@@ -16,11 +16,12 @@ namespace SPAFilter.SPA.Components.ROBP
             files.Sort(StringComparer.CurrentCulture);
             foreach (var robpOperation in files)
             {
+                var isFailed = false;
                 var document = XML.LoadXml(robpOperation);
                 if (document == null || document.SelectNodes(@"/OperationData")?.Count == 0)
-                    continue;
+                    isFailed = true;
 
-                Operations.Add(new ROBPOperation(robpOperation, this));
+                Operations.Add(new ROBPOperation(robpOperation, this, isFailed));
             }
         }
     }

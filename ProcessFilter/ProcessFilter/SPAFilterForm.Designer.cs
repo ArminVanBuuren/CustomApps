@@ -345,7 +345,7 @@ namespace SPAFilter
             this.Processes.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Processes.Location = new System.Drawing.Point(4, 24);
             this.Processes.Name = "Processes";
-            this.Processes.Size = new System.Drawing.Size(907, 298);
+            this.Processes.Size = new System.Drawing.Size(904, 298);
             this.Processes.TabIndex = 0;
             this.Processes.Text = "Processes";
             // 
@@ -363,7 +363,7 @@ namespace SPAFilter
             this.dataGridProcesses.ReadOnly = true;
             this.dataGridProcesses.RowHeadersVisible = false;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcesses.Size = new System.Drawing.Size(907, 298);
+            this.dataGridProcesses.Size = new System.Drawing.Size(904, 298);
             this.dataGridProcesses.TabIndex = 0;
             this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -374,7 +374,7 @@ namespace SPAFilter
             this.Operations.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Operations.Location = new System.Drawing.Point(4, 24);
             this.Operations.Name = "Operations";
-            this.Operations.Size = new System.Drawing.Size(907, 298);
+            this.Operations.Size = new System.Drawing.Size(904, 298);
             this.Operations.TabIndex = 1;
             this.Operations.Text = "Operations";
             // 
@@ -392,7 +392,7 @@ namespace SPAFilter
             this.dataGridOperations.ReadOnly = true;
             this.dataGridOperations.RowHeadersVisible = false;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperations.Size = new System.Drawing.Size(907, 298);
+            this.dataGridOperations.Size = new System.Drawing.Size(904, 298);
             this.dataGridOperations.TabIndex = 0;
             this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridOperationsResult_CellDoubleClick);
             // 
@@ -403,7 +403,7 @@ namespace SPAFilter
             this.Scenarios.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Scenarios.Location = new System.Drawing.Point(4, 24);
             this.Scenarios.Name = "Scenarios";
-            this.Scenarios.Size = new System.Drawing.Size(907, 298);
+            this.Scenarios.Size = new System.Drawing.Size(904, 298);
             this.Scenarios.TabIndex = 2;
             this.Scenarios.Text = "Scenarios";
             // 
@@ -421,7 +421,7 @@ namespace SPAFilter
             this.dataGridScenarios.ReadOnly = true;
             this.dataGridScenarios.RowHeadersVisible = false;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenarios.Size = new System.Drawing.Size(907, 298);
+            this.dataGridScenarios.Size = new System.Drawing.Size(904, 298);
             this.dataGridScenarios.TabIndex = 5;
             this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridScenariosResult_CellDoubleClick);
             // 
@@ -432,7 +432,7 @@ namespace SPAFilter
             this.Commands.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Commands.Location = new System.Drawing.Point(4, 24);
             this.Commands.Name = "Commands";
-            this.Commands.Size = new System.Drawing.Size(907, 298);
+            this.Commands.Size = new System.Drawing.Size(904, 298);
             this.Commands.TabIndex = 3;
             this.Commands.Text = "Commands";
             // 
@@ -450,7 +450,7 @@ namespace SPAFilter
             this.dataGridCommands.ReadOnly = true;
             this.dataGridCommands.RowHeadersVisible = false;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommands.Size = new System.Drawing.Size(907, 298);
+            this.dataGridCommands.Size = new System.Drawing.Size(904, 298);
             this.dataGridCommands.TabIndex = 1;
             this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridCommandsResult_CellMouseDoubleClick);
             // 
@@ -528,9 +528,9 @@ namespace SPAFilter
             this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.Location = new System.Drawing.Point(13, 48);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 15);
+            this.label5.Size = new System.Drawing.Size(72, 15);
             this.label5.TabIndex = 26;
-            this.label5.Text = "Services:";
+            this.label5.Text = "RD Services:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ButtonGenerateSC
@@ -561,7 +561,7 @@ namespace SPAFilter
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
             // groupBox1
-            // 
+            //
             this.groupBox1.Controls.Add(this.showFailed);
             this.groupBox1.Controls.Add(this.PrintXMLButton);
             this.groupBox1.Controls.Add(this.OperationComboBox);

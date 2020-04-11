@@ -463,7 +463,7 @@ namespace SPAFilter
             }
             else
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
+                row.DefaultCellStyle.BackColor = Color.Yellow;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
                     cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
@@ -512,18 +512,31 @@ namespace SPAFilter
         private static void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var row = ((DataGridView)sender).Rows[e.RowIndex];
-            TryGetCellValue(row, "IsScenarioExist", out var cell);
-            if (cell != null && cell is bool cellValue && cellValue)
+            TryGetCellValue(row, "IsScenarioExist", out var cellIsScenarioExist);
+            TryGetCellValue(row, "IsFailed", out var cellIsFailed);
+
+            var isScenarioExist = cellIsScenarioExist != null && cellIsScenarioExist is bool cellValue1 && cellValue1;
+            var isFailed = cellIsFailed != null && cellIsFailed is bool cellValue2 && cellValue2;
+
+            if (isFailed)
             {
-                row.DefaultCellStyle.BackColor = Color.White;
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+                foreach (DataGridViewCell cell2 in row.Cells)
+                {
+                    cell2.ToolTipText = Resources.Form_GridView_IncorrectROBPOperation;
+                }
             }
-            else
+            else if (!isScenarioExist)
             {
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell2 in row.Cells)
                 {
                     cell2.ToolTipText = Resources.Form_GridView_NotFoundSomeScenarios;
                 }
+            }
+            else
+            {
+                row.DefaultCellStyle.BackColor = Color.White;
             }
         }
 
@@ -532,10 +545,21 @@ namespace SPAFilter
             var row = ((DataGridView)sender).Rows[e.RowIndex];
             TryGetCellValue(row, "IsSubScenario", out var cellIsSubScenario);
             TryGetCellValue(row, "AllCommandsExist", out var cellAllCommandsExist);
+            TryGetCellValue(row, "IsCorrectXML", out var cellIsCorrectXML);
             
             var isSubScenario = cellIsSubScenario != null && cellIsSubScenario is bool cellValue && cellValue;
             var allCommandsExist = cellAllCommandsExist != null && cellAllCommandsExist is bool cellValue2 && cellValue2;
-            if (isSubScenario && !allCommandsExist)
+            var isCorrectXML = cellIsCorrectXML != null && cellIsCorrectXML is bool cellValue3 && cellValue3;
+
+            if (!isCorrectXML)
+            {
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+                foreach (DataGridViewCell cell3 in row.Cells)
+                {
+                    cell3.ToolTipText = Resources.Form_GridView_XMLFileIsIncorrect;
+                }
+            }
+            else if (isSubScenario && !allCommandsExist)
             {
                 row.DefaultCellStyle.BackColor = Color.LightPink;
                 foreach (DataGridViewCell cell3 in row.Cells)

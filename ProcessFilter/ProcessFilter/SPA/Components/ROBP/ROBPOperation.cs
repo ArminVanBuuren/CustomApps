@@ -17,7 +17,13 @@ namespace SPAFilter.SPA.Components.ROBP
         [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
         public bool IsScenarioExist { get; set; } = true;
 
-        public ROBPOperation(string path, IObjectTemplate parentElement) : base(path)
+        /// <summary>
+        /// Проверка на корректность операции
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, "IsFailed", false)]
+        public bool IsFailed { get; set; } = false;
+
+        public ROBPOperation(string path, IObjectTemplate parentElement, bool isFailed) : base(path)
         {
             if (GetNameWithId(Name, out var newName, out var newId))
             {
@@ -26,6 +32,7 @@ namespace SPAFilter.SPA.Components.ROBP
             }
 
             HostTypeName = parentElement.Name;
+            IsFailed = isFailed;
         }
 
         public override bool Equals(object obj)

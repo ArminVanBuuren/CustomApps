@@ -239,4 +239,10 @@
   <data name="Form_ToolTip_ServiceCatalogOpenButton" xml:space="preserve">
     <value>Open Service catalog file</value>
   </data>
+  <data name="Form_GridView_XMLFileIsIncorrect" xml:space="preserve">
+    <value>Xml file is incorrect!</value>
+  </data>
+  <data name="Form_GridView_IncorrectROBPOperation" xml:space="preserve">
+    <value>Incorrect ROBP operation</value>
+  </data>
 </root>

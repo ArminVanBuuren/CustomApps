@@ -127,6 +127,15 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect ROBP operation.
+        /// </summary>
+        internal static string Form_GridView_IncorrectROBPOperation {
+            get {
+                return ResourceManager.GetString("Form_GridView_IncorrectROBPOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subscenario.
         /// </summary>
         internal static string Form_GridView_IsSubScenario {
@@ -186,6 +195,15 @@ namespace SPAFilter.Properties {
         internal static string Form_GridView_NotSelectedAnyRows {
             get {
                 return ResourceManager.GetString("Form_GridView_NotSelectedAnyRows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xml file is incorrect!.
+        /// </summary>
+        internal static string Form_GridView_XMLFileIsIncorrect {
+            get {
+                return ResourceManager.GetString("Form_GridView_XMLFileIsIncorrect", resourceCulture);
             }
         }
         

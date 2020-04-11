@@ -24,26 +24,30 @@ namespace SPAFilter.SPA
         }
 
         [DGVColumn(ColumnPosition.After, "CreationTime")]
-        public string CreationTime
+        public string CreationTimeString => CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
+
+        public DateTime CreationTime
         {
             get
             {
                 if (_fileInfo != null && _fileInfo.Exists)
-                    return _fileInfo.CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
+                    return _fileInfo.CreationTime;
 
-                return DateTime.MinValue.ToString("dd.MM.yyyy HH:mm:ss");
+                return DateTime.MinValue;
             }
         }
 
         [DGVColumn(ColumnPosition.After, "LastWriteTime")]
-        public string LastWriteTime
+        public string LastWriteTimeString => LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");
+
+        public DateTime LastWriteTime
         {
             get
             {
                 if (_fileInfo != null && _fileInfo.Exists)
-                    return _fileInfo.LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");
+                    return _fileInfo.LastWriteTime;
 
-                return DateTime.MinValue.ToString("dd.MM.yyyy HH:mm:ss");
+                return DateTime.MinValue;
             }
         }
 
