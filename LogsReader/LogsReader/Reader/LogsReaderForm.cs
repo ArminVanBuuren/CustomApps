@@ -142,7 +142,7 @@ namespace LogsReader.Reader
 
                 _notepad = new NotepadControl();
                 MainSplitContainer.Panel2.Controls.Add(_notepad);
-                _message = _notepad.AddDocument("Message", string.Empty, Language.XML);
+                _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -152,7 +152,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = _notepad.AddDocument("Trace", string.Empty);
+                _traceMessage = _notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
