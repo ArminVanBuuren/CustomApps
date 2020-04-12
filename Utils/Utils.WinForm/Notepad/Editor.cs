@@ -184,6 +184,9 @@ namespace Utils.WinForm.Notepad
             get => _coloredOnlyVisible;
             set
             {
+                if(_coloredOnlyVisible == value)
+                    return;
+
                 _coloredOnlyVisible = value;
                 FCTB.ClearStylesBuffer();
                 FCTB.Range.ClearStyle(StyleIndex.All);
