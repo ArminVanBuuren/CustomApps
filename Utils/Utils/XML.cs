@@ -111,7 +111,11 @@ namespace Utils
 
         static XmlDocument LoadXmlCommon(string contextSource)
         {
-            if (string.IsNullOrEmpty(contextSource) || !contextSource.TrimStart().StartsWith("<") || XML.IsUnallowable(contextSource))
+            if (string.IsNullOrEmpty(contextSource))
+                return null;
+
+            var source = contextSource.TrimWhiteSpaces();
+            if (!source.StartsWith("<") || !source.EndsWith(">") || XML.IsUnallowable(contextSource))
                 return null;
 
             try

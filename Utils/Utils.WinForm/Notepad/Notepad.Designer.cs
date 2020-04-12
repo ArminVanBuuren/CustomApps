@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Notepad));
             this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +51,7 @@
             this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MainMenuStrip.Name = "MainMenuStrip";
             this.MainMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 21);
+            this.MainMenuStrip.Size = new System.Drawing.Size(1035, 23);
             this.MainMenuStrip.TabIndex = 2;
             this.MainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -72,7 +73,7 @@
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.newToolStripMenuItem.Text = "New                     Сtrl+N";
+            this.newToolStripMenuItem.Text = "New                        Сtrl+N";
             this.newToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.newToolStripMenuItem.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
             // 
@@ -80,19 +81,19 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.openToolStripMenuItem.Text = "Open                   Ctrl+O";
+            this.openToolStripMenuItem.Text = "Open                      Ctrl+O";
             // 
             // formatXmlF5ToolStripMenuItem
             // 
             this.formatXmlF5ToolStripMenuItem.Name = "formatXmlF5ToolStripMenuItem";
             this.formatXmlF5ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.formatXmlF5ToolStripMenuItem.Text = "Format Xml          F5";
+            this.formatXmlF5ToolStripMenuItem.Text = "XML Pretty Print     F5";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.saveToolStripMenuItem.Text = "Save                     Ctrl+S";
+            this.saveToolStripMenuItem.Text = "Save                        Ctrl+S";
             // 
             // saveAsToolStripMenuItem
             // 
@@ -104,23 +105,25 @@
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.closeToolStripMenuItem.Text = "Close                    Alt+F4";
+            this.closeToolStripMenuItem.Text = "Close                       Alt+F4";
             // 
             // NotepadControlItem
             // 
-            this.NotepadControlItem.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.NotepadControlItem.AllowUserCloseItems = false;
+            this.NotepadControlItem.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("NotepadControlItem.DefaultEncoding")));
             this.NotepadControlItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NotepadControlItem.Location = new System.Drawing.Point(0, 0);
+            this.NotepadControlItem.Highlights = false;
+            this.NotepadControlItem.Location = new System.Drawing.Point(0, 23);
             this.NotepadControlItem.Name = "NotepadControlItem";
             this.NotepadControlItem.ReadOnly = false;
             this.NotepadControlItem.SelectedIndex = -1;
-            this.NotepadControlItem.Size = new System.Drawing.Size(1035, 648);
+            this.NotepadControlItem.Size = new System.Drawing.Size(1035, 625);
             this.NotepadControlItem.SizingGrip = false;
             this.NotepadControlItem.TabIndex = 3;
             this.NotepadControlItem.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.NotepadControlItem.TabsForeColor = System.Drawing.Color.Green;
             this.NotepadControlItem.TextFont = new System.Drawing.Font("Segoe UI", 9F);
-            this.NotepadControlItem.AllowUserCloseItems = false;
-            this.NotepadControlItem.Highlights = false;
+            this.NotepadControlItem.TextForeColor = System.Drawing.Color.Black;
             this.NotepadControlItem.WordWrap = true;
             // 
             // Notepad

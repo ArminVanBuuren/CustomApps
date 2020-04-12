@@ -38,13 +38,13 @@ namespace XPathTester
             this.buttonFind = new System.Windows.Forms.Button();
             this.editor = new Utils.WinForm.Notepad.Editor();
             this.xpathResultDataGrid = new System.Windows.Forms.DataGridView();
-            this.buttonPrettyPrint = new System.Windows.Forms.Button();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NodeType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NodeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonPrettyPrint = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -59,7 +59,7 @@ namespace XPathTester
             | System.Windows.Forms.AnchorStyles.Right)));
             this.XPathText.Location = new System.Drawing.Point(42, 8);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(1314, 20);
+            this.XPathText.Size = new System.Drawing.Size(1290, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -74,11 +74,14 @@ namespace XPathTester
             // buttonFind
             // 
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFind.Location = new System.Drawing.Point(1362, 7);
+            this.buttonFind.Image = global::XPathTester.Properties.Resources.find;
+            this.buttonFind.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonFind.Location = new System.Drawing.Point(1338, 7);
             this.buttonFind.Name = "buttonFind";
-            this.buttonFind.Size = new System.Drawing.Size(66, 21);
+            this.buttonFind.Size = new System.Drawing.Size(73, 21);
             this.buttonFind.TabIndex = 2;
-            this.buttonFind.Text = "Find [F5]";
+            this.buttonFind.Text = "Test [F5]";
+            this.buttonFind.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonFind.UseVisualStyleBackColor = true;
             this.buttonFind.Click += new System.EventHandler(this.ButtonFind_Click);
             // 
@@ -134,50 +137,6 @@ namespace XPathTester
             this.xpathResultDataGrid.Size = new System.Drawing.Size(289, 666);
             this.xpathResultDataGrid.TabIndex = 3;
             // 
-            // buttonPrettyPrint
-            // 
-            this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrettyPrint.Location = new System.Drawing.Point(1434, 7);
-            this.buttonPrettyPrint.Name = "buttonPrettyPrint";
-            this.buttonPrettyPrint.Size = new System.Drawing.Size(87, 21);
-            this.buttonPrettyPrint.TabIndex = 7;
-            this.buttonPrettyPrint.Text = "XML Print [F6]";
-            this.buttonPrettyPrint.UseVisualStyleBackColor = true;
-            this.buttonPrettyPrint.Click += new System.EventHandler(this.ButtonPrettyPrint_Click);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 34);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.xpathResultDataGrid);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.editor);
-            this.splitContainer1.Panel2MinSize = 41;
-            this.splitContainer1.Size = new System.Drawing.Size(1530, 670);
-            this.splitContainer1.SplitterDistance = 293;
-            this.splitContainer1.TabIndex = 9;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.XPathText);
-            this.panel1.Controls.Add(this.buttonPrettyPrint);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.buttonFind);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.MinimumSize = new System.Drawing.Size(250, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1530, 34);
-            this.panel1.TabIndex = 11;
-            // 
             // ID
             // 
             this.ID.DataPropertyName = "ID";
@@ -217,6 +176,53 @@ namespace XPathTester
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
             this.Value.Width = 1000;
+            // 
+            // buttonPrettyPrint
+            // 
+            this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPrettyPrint.Image = global::XPathTester.Properties.Resources.xml8;
+            this.buttonPrettyPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(1417, 7);
+            this.buttonPrettyPrint.Name = "buttonPrettyPrint";
+            this.buttonPrettyPrint.Size = new System.Drawing.Size(110, 21);
+            this.buttonPrettyPrint.TabIndex = 7;
+            this.buttonPrettyPrint.Text = "Pretty Print [F6]";
+            this.buttonPrettyPrint.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonPrettyPrint.UseVisualStyleBackColor = true;
+            this.buttonPrettyPrint.Click += new System.EventHandler(this.ButtonPrettyPrint_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 34);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.xpathResultDataGrid);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.editor);
+            this.splitContainer1.Panel2MinSize = 41;
+            this.splitContainer1.Size = new System.Drawing.Size(1530, 670);
+            this.splitContainer1.SplitterDistance = 293;
+            this.splitContainer1.TabIndex = 9;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.XPathText);
+            this.panel1.Controls.Add(this.buttonPrettyPrint);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.buttonFind);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.MinimumSize = new System.Drawing.Size(250, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1530, 34);
+            this.panel1.TabIndex = 11;
             // 
             // MainWindow
             // 
