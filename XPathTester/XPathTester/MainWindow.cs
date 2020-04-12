@@ -21,15 +21,11 @@ namespace XPathTester
         private readonly ToolStripLabel _statusInfo;
         private readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
-        private bool _xmlBodyChanged = false;
         private int _prevSortedColumn = -1;
 
         public XPathCollection Result { get; private set; }
 
         public XmlDocument XmlBody { get; private set; }
-
-        public bool IsInserted { get; private set; } = false;
-        
 
         public MainWindow()
         {
@@ -50,7 +46,6 @@ namespace XPathTester
             editor.SetLanguages(new [] { Language.XML, Language.HTML }, Language.XML);
             _statusInfo = editor.AddToolStripLabel();
             _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-            editor.KeyDown += XmlBodyRichTextBox_KeyDown;
             editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
         }
 
@@ -72,19 +67,6 @@ namespace XPathTester
                     ButtonPrettyPrint_Click(this, EventArgs.Empty);
                     e.SuppressKeyPress = true;
                     break;
-            }
-        }
-
-        
-        private void XmlBodyRichTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            // флаг то что текст был проинсертин в окно CNTR+V, чтобы можно было сразу корреткно отформатировать
-            if (e.Control && KeyIsDown(Keys.ControlKey) && KeyIsDown(Keys.V))
-            {
-                lock (sync)
-                {
-                    IsInserted = true;
-                }
             }
         }
 
@@ -184,34 +166,34 @@ namespace XPathTester
 
         void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
         {
-            try
+            lock (sync)
             {
-                if (_xmlBodyChanged)
+                if (editor.Text.IsNullOrEmpty())
+                {
+                    XmlBody = null;
                     return;
-
-                ClearResultTap();
-                _xmlBodyChanged = true;
+                }
 
                 try
                 {
-                    var document = new XmlDocument();
-                    document.LoadXml(XML.RemoveUnallowable(editor.Text, " "));
-                    XmlBody = document;
+                    ClearResultTap();
+
+                    try
+                    {
+                        var document = new XmlDocument();
+                        document.LoadXml(XML.RemoveUnallowable(editor.Text, " "));
+                        XmlBody = document;
+                    }
+                    catch (Exception ex)
+                    {
+                        XmlBody = null;
+                        ReportStatus($"XML-Body is incorrect! {ex.Message}");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    XmlBody = null;
-                    IsInserted = false;
-                    ReportStatus($"XML-Body is incorrect! {ex.Message}");
+                    ReportStatus(ex.Message);
                 }
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message);
-            }
-            finally
-            {
-                _xmlBodyChanged = false;
             }
         }
 
@@ -222,7 +204,6 @@ namespace XPathTester
 
             editor.Text = XmlBody.PrintXml();
         }
-
 
         void ButtonFind_Click(object sender, EventArgs e)
         {
@@ -249,7 +230,7 @@ namespace XPathTester
                 }
                 else
                 {
-                    ReportStatus("No data found", false);
+                    ReportStatus("No data found", null);
                 }
             }
             catch (Exception ex)
@@ -271,12 +252,12 @@ namespace XPathTester
             _prevSortedColumn = -1;
         }
 
-        void ReportStatus(string message, bool isException = true)
+        void ReportStatus(string message, bool? isException = true)
         {
             if (!message.IsNullOrEmpty())
             {
-                _statusInfo.BackColor = isException ? Color.Red : Color.Green;
-                _statusInfo.ForeColor = Color.White;
+                _statusInfo.BackColor = isException == null ? Color.Yellow : isException.Value ? Color.Red : Color.Green;
+                _statusInfo.ForeColor = isException == null ? Color.Black : Color.White;
                 _statusInfo.Text = message.Replace("\r", "").Replace("\n", " ");
             }
             else

@@ -292,6 +292,11 @@ namespace Utils.WinForm.Notepad
             FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
             FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
             FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
+            FCTB.VisibleRangeChangedDelayed += (sender, args) => 
+            {
+                FCTB.VisibleRange.ClearStyle(StyleIndex.All);
+                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
+            };
         }
 
         public ToolStripLabel AddToolStripLabel(string text = "")
@@ -353,10 +358,12 @@ namespace Utils.WinForm.Notepad
 
             bool isChanged = FCTB.Language != language;
 
-            FCTB.ClearStylesBuffer();
-            FCTB.Range.ClearStyle(StyleIndex.All);
+            //FCTB.ClearStylesBuffer();
+            //FCTB.Range.ClearStyle(StyleIndex.All);
+            FCTB.VisibleRange.ClearStyle(StyleIndex.All);
             FCTB.Language = language;
-            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+            //FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
 
             if (isChanged)
                 LanguageChanged?.Invoke(this, EventArgs.Empty);
