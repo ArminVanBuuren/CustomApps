@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -74,9 +73,6 @@ namespace SPAFilter
                 lock (sync2)
                 {
                     _IsInProgress = value;
-
-                    //if (_IsInProgress && _notepad != null && !_notepad.WindowIsClosed)
-                    //    _notepad.Close();
 
                     FilterButton.Enabled = !_IsInProgress;
                     if(PrintXMLButton.Text != Resources.Form_PrintXMLFiles_Cancel)
@@ -416,10 +412,7 @@ namespace SPAFilter
                 return;
 
             if (args.Control == null)
-            {
                 args.Result = UpdateBuildResult.Cancel;
-                return;
-            }
         }
 
         private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
@@ -564,19 +557,6 @@ namespace SPAFilter
 
         //    foreach (DataGridViewRow row in dataGridProcesses.Rows)
         //    {
-        //        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
-        //        if (privateID == -1)
-        //            continue;
-
-        //        var template = Filter.Processes[privateID];
-        //        if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
-        //        }
-        //        else if (!ROBPOperationsRadioButton.Checked && !template.HasCatalogCall)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
-        //        }
         //        else
         //        {
         //            HideNotFailed(row);
@@ -587,86 +567,10 @@ namespace SPAFilter
         //        currencyManager.ResumeBinding();
         //}
 
-        //public void FormattingOperations()
+        //void HideNotFailed(DataGridViewRow row)
         //{
-        //    if (Filter == null)
-        //        return;
-
-        //    CurrencyManager currencyManager = (CurrencyManager) BindingContext[dataGridOperations.DataSource];
         //    if (showFailed.Checked)
-        //    {
-        //        dataGridOperations.CurrentCell = null;
-        //        currencyManager.SuspendBinding();
-        //    }
-
-        //    foreach (DataGridViewRow row in dataGridOperations.Rows)
-        //    {
-        //        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
-        //        if (privateID == -1)
-        //            continue;
-
-        //        var template = Filter.HostTypes.Operations[privateID];
-        //        if (!template.IsScenarioExist)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
-        //        }
-        //        else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
-        //        }
-        //        else
-        //        {
-        //            HideNotFailed(row);
-        //        }
-        //    }
-
-        //    if (showFailed.Checked)
-        //        currencyManager.ResumeBinding();
-        //}
-
-        //public void FormattingScenarios()
-        //{
-        //    if (Filter == null)
-        //        return;
-
-        //    CurrencyManager currencyManager = (CurrencyManager)BindingContext[dataGridScenarios.DataSource];
-        //    if (showFailed.Checked)
-        //    {
-        //        dataGridScenarios.CurrentCell = null;
-        //        currencyManager.SuspendBinding();
-        //    }
-
-        //    foreach (DataGridViewRow row in dataGridScenarios.Rows)
-        //    {
-        //        var privateID = (int)(row.Cells["PrivateID"]?.Value ?? -1);
-        //        if (privateID == -1)
-        //            continue;
-
-        //        var template = Filter.Scenarios[privateID];
-        //        if (!template.IsCorrectXML)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
-        //        }
-        //        else if (template.IsSubScenario && !template.AllCommandsExist)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommandsInSub);
-        //        }
-        //        else if (!template.AllCommandsExist)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommands);
-        //        }
-        //        else if (template.IsSubScenario)
-        //        {
-        //            SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
-        //        }
-        //        else
-        //        {
-        //            HideNotFailed(row);
-        //        }
-        //    }
-
-        //    if (showFailed.Checked)
-        //        currencyManager.ResumeBinding();
+        //        row.Visible = false;
         //}
 
         void SetFailedRow(DataGridViewRow row, string toolTipMessage, Color? color = null)
@@ -675,17 +579,6 @@ namespace SPAFilter
             foreach (DataGridViewCell cell in row.Cells)
                 cell.ToolTipText = toolTipMessage;
         }
-
-        //void HideNotFailed(DataGridViewRow row)
-        //{
-        //    if (showFailed.Checked)
-        //        row.Visible = false;
-        //}
-
-        //private void showFailed_CheckedChanged(object sender, EventArgs e)
-        //{
-
-        //}
 
         #endregion
 
@@ -1070,20 +963,16 @@ namespace SPAFilter
                 switch (type)
                 {
                     case SPAProcessFilterType.Processes:
-                        //ProcessesTextBox.Text = string.Empty;
-                        //ProcessesTextBox.BackColor = Color.PaleVioletRed;
                         ProcessesTextBox.BackColor = Color.LightPink;
                         ProcessesComboBox.DataSource = null;
                         ProcessesComboBox.Text = null;
                         ProcessesComboBox.DisplayMember = null;
                         break;
                     case SPAProcessFilterType.ROBPOperations:
-                        //ROBPOperationTextBox.Text = string.Empty;
                         ROBPOperationTextBox.BackColor = Color.LightPink;
                         ClearOperationsComboBox();
                         break;
                     case SPAProcessFilterType.SCOperations:
-                        //ServiceCatalogTextBox.Text = string.Empty;
                         ServiceCatalogTextBox.BackColor = Color.LightPink;
                         ClearOperationsComboBox();
                         break;

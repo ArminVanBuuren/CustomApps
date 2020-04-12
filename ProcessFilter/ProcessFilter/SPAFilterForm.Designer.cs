@@ -215,12 +215,11 @@ namespace SPAFilter
             // 
             this.FilterButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FilterButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.FilterButton.Image = global::SPAFilter.Properties.Resources.filter6;
+            this.FilterButton.Image = global::SPAFilter.Properties.Resources.find;
             this.FilterButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FilterButton.Location = new System.Drawing.Point(723, 49);
+            this.FilterButton.Location = new System.Drawing.Point(732, 49);
             this.FilterButton.Name = "FilterButton";
-            this.FilterButton.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.FilterButton.Size = new System.Drawing.Size(83, 23);
+            this.FilterButton.Size = new System.Drawing.Size(74, 23);
             this.FilterButton.TabIndex = 13;
             this.FilterButton.Text = "Get [F5]";
             this.FilterButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -535,17 +534,16 @@ namespace SPAFilter
             // ButtonGenerateSC
             // 
             this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonGenerateSC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ButtonGenerateSC.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ButtonGenerateSC.Enabled = false;
             this.ButtonGenerateSC.Image = global::SPAFilter.Properties.Resources.generate4;
             this.ButtonGenerateSC.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonGenerateSC.Location = new System.Drawing.Point(797, 70);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
             this.ButtonGenerateSC.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 23);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 27);
             this.ButtonGenerateSC.TabIndex = 26;
-            this.ButtonGenerateSC.Text = "Generate SC";
-            this.ButtonGenerateSC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ButtonGenerateSC.Text = "      Generate SC";
             this.ButtonGenerateSC.UseVisualStyleBackColor = false;
             this.ButtonGenerateSC.Click += new System.EventHandler(this.ButtonGenerateSC_Click);
             // 

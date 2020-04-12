@@ -150,9 +150,9 @@
     <None Include="Resources\xml8.png" />
     <None Include="Resources\xls1.png" />
     <None Include="Resources\file7.png" />
-    <None Include="Resources\filter6.png" />
     <None Include="Resources\folder2.png" />
     <None Include="Resources\generate4.png" />
+    <None Include="Resources\find.png" />
     <Content Include="Resources\icons8-minus-20.png" />
     <Content Include="Resources\icons8-plus-20.png" />
     <Content Include="Resources\icons8-synchronize-20.png" />
