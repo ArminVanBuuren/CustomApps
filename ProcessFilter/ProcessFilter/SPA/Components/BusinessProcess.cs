@@ -16,13 +16,11 @@ namespace SPAFilter.SPA.Components
         /// <summary>
         /// Если ли ли вызов сервис каталога
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "HasCatalogCall", false)]
         public bool HasCatalogCall { get; }
 
         /// <summary>
         /// Все операции которые прописаны в бизнесспроцессе существуют
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "AllOperationsExist", false)]
         public bool AllOperationsExist { get; internal set; } = true;
 
         BusinessProcess(string filePath, List<string> operations, bool hasCatalogCall) : base(filePath)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -50,14 +51,14 @@ namespace SPAFilter
         private bool _notepadWordHighlights = true;
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
-        private SPAProcessFilter _spaFilter;
-
+        
         private ToolStripStatusLabel BPCount;
         private ToolStripStatusLabel OperationsCount;
         private ToolStripStatusLabel ScenariosCount;
         private ToolStripStatusLabel CommandsCount;
         private ToolStripStatusLabel NEElementsCount;
 
+        private SPAProcessFilter Filter { get; set; }
         ApplicationUpdater AppUpdater { get; set; }
         IUpdater Updater { get; set; }
 
@@ -116,7 +117,6 @@ namespace SPAFilter
                     ProcessesComboBox.Enabled = !_IsInProgress;
                     NetSettComboBox.Enabled = !_IsInProgress;
                     OperationComboBox.Enabled = !_IsInProgress;
-                    showFailed.Enabled = !_IsInProgress;
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace SPAFilter
             if(configurationApplicationList == null)
                 return;
 
-            await AssignServiceInstances(_spaFilter.AssignActivatorAsync(configurationApplicationList));
+            await AssignServiceInstances(Filter.AssignActivatorAsync(configurationApplicationList));
         }
 
         void ISerializable.GetObjectData(SerializationInfo propertyBag, StreamingContext context)
@@ -284,9 +284,9 @@ namespace SPAFilter
 
             propertyBag.AddValue("GGHHTTDD", ROBPOperationsRadioButton.Checked);
 
-            if (_spaFilter.ServiceInstances != null)
+            if (Filter.ServiceInstances != null)
             {
-                var filesConfigs = _spaFilter.ServiceInstances.Select(x => x.FilePath).Distinct().ToList();
+                var filesConfigs = Filter.ServiceInstances.Select(x => x.FilePath).Distinct().ToList();
                 propertyBag.AddValue("WWWERT", filesConfigs);
             }
 
@@ -300,7 +300,7 @@ namespace SPAFilter
 
         void PreInit()
         {
-            _spaFilter = new SPAProcessFilter();
+            Filter = new SPAProcessFilter();
 
             InitializeComponent();
 
@@ -405,6 +405,10 @@ namespace SPAFilter
             RefreshStatus();
         }
 
+
+
+
+
         #region Application Update
 
         private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
@@ -453,15 +457,12 @@ namespace SPAFilter
 
         #region Check warning rows
 
-        private static void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            var row = ((DataGridView)sender).Rows[e.RowIndex];
-            TryGetCellValue(row, "IsCorrect", out var cell);
-            if (cell != null && cell is bool cellValue && cellValue)
-            {
-                row.DefaultCellStyle.BackColor = Color.White;
-            }
-            else
+            if(!GetPrivateID(sender, e.RowIndex, out var row, out var privateID))
+                return;
+
+            if (!Filter.ServiceInstances[privateID].IsCorrect)
             {
                 row.DefaultCellStyle.BackColor = Color.Yellow;
                 foreach (DataGridViewCell cell2 in row.Cells)
@@ -473,121 +474,209 @@ namespace SPAFilter
 
         private void DataGridProcesses_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            var row = ((DataGridView)sender).Rows[e.RowIndex];
-            if (ROBPOperationsRadioButton.Checked)
+            if (!GetPrivateID(sender, e.RowIndex, out var row, out var privateID))
+                return;
+
+            var template = Filter.Processes[privateID];
+            if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
             {
-                TryGetCellValue(row, "AllOperationsExist", out var cell);
-                if (cell != null && cell is bool cellValue && cellValue)
-                {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightPink;
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                    {
-                        cell2.ToolTipText = Resources.Form_GridView_NotFoundSomeOPs;
-                    }
-                }
+                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
             }
-            else
+            else if (!ROBPOperationsRadioButton.Checked && !template.HasCatalogCall)
             {
-                TryGetCellValue(row, "HasCatalogCall", out var cell);
-                if (cell != null && cell is bool cellValue && cellValue)
-                {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightPink;
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                    {
-                        cell2.ToolTipText = Resources.Form_GridView_NotFoundServiceCatalogCall;
-                    }
-                }
+                SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
             }
         }
 
-
-        private static void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            var row = ((DataGridView)sender).Rows[e.RowIndex];
-            TryGetCellValue(row, "IsScenarioExist", out var cellIsScenarioExist);
-            TryGetCellValue(row, "IsFailed", out var cellIsFailed);
+            if (!GetPrivateID(sender, e.RowIndex, out var row, out var privateID))
+                return;
 
-            var isScenarioExist = cellIsScenarioExist != null && cellIsScenarioExist is bool cellValue1 && cellValue1;
-            var isFailed = cellIsFailed != null && cellIsFailed is bool cellValue2 && cellValue2;
-
-            if (isFailed)
+            var template = Filter.HostTypes.Operations[privateID];
+            if (!template.IsScenarioExist)
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell2 in row.Cells)
-                {
-                    cell2.ToolTipText = Resources.Form_GridView_IncorrectROBPOperation;
-                }
+                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
             }
-            else if (!isScenarioExist)
+            else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell2 in row.Cells)
-                {
-                    cell2.ToolTipText = Resources.Form_GridView_NotFoundSomeScenarios;
-                }
-            }
-            else
-            {
-                row.DefaultCellStyle.BackColor = Color.White;
+                SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
             }
         }
-
-        private static void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            var row = ((DataGridView)sender).Rows[e.RowIndex];
-            TryGetCellValue(row, "IsSubScenario", out var cellIsSubScenario);
-            TryGetCellValue(row, "AllCommandsExist", out var cellAllCommandsExist);
-            TryGetCellValue(row, "IsCorrectXML", out var cellIsCorrectXML);
-            
-            var isSubScenario = cellIsSubScenario != null && cellIsSubScenario is bool cellValue && cellValue;
-            var allCommandsExist = cellAllCommandsExist != null && cellAllCommandsExist is bool cellValue2 && cellValue2;
-            var isCorrectXML = cellIsCorrectXML != null && cellIsCorrectXML is bool cellValue3 && cellValue3;
+            if (!GetPrivateID(sender, e.RowIndex, out var row, out var privateID))
+                return;
 
-            if (!isCorrectXML)
+            var template = Filter.Scenarios[privateID];
+            if (!template.IsCorrectXML)
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell3 in row.Cells)
-                {
-                    cell3.ToolTipText = Resources.Form_GridView_XMLFileIsIncorrect;
-                }
+                SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
             }
-            else if (isSubScenario && !allCommandsExist)
+            else if (template.IsSubScenario && !template.AllCommandsExist)
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell3 in row.Cells)
-                {
-                    cell3.ToolTipText = Resources.Form_GridView_NotFoundSomeCommandsInSub;
-                }
+                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommandsInSub);
             }
-            else if (!allCommandsExist)
+            else if (!template.AllCommandsExist)
             {
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-                foreach (DataGridViewCell cell3 in row.Cells)
-                {
-                    cell3.ToolTipText = Resources.Form_GridView_NotFoundSomeCommands;
-                }
+                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommands);
             }
-            else if (isSubScenario)
+            else if (template.IsSubScenario)
             {
-                row.DefaultCellStyle.BackColor = Color.Aqua;
-                foreach (DataGridViewCell cell3 in row.Cells)
-                {
-                    cell3.ToolTipText = Resources.Form_GridView_IsSubScenario;
-                }
-            }
-            else
-            {
-                row.DefaultCellStyle.BackColor = Color.White;
+                SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
             }
         }
+
+        bool GetPrivateID(object sender, int rowIndex, out DataGridViewRow row, out int privateID)
+        {
+            if (Filter == null)
+            {
+                row = null;
+                privateID = -1;
+                return false;
+            }
+
+            row = ((DataGridView)sender).Rows[rowIndex];
+            privateID = (int)(row.Cells["PrivateID"]?.Value ?? -1);
+            return privateID != -1;
+        }
+
+        //public void FormattingProcess()
+        //{
+        //    if (Filter == null)
+        //        return;
+
+        //    CurrencyManager currencyManager = (CurrencyManager) BindingContext[dataGridProcesses.DataSource];
+        //    if (showFailed.Checked)
+        //    {
+        //        dataGridProcesses.CurrentCell = null;
+        //        currencyManager.SuspendBinding();
+        //    }
+
+        //    foreach (DataGridViewRow row in dataGridProcesses.Rows)
+        //    {
+        //        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
+        //        if (privateID == -1)
+        //            continue;
+
+        //        var template = Filter.Processes[privateID];
+        //        if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
+        //        }
+        //        else if (!ROBPOperationsRadioButton.Checked && !template.HasCatalogCall)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
+        //        }
+        //        else
+        //        {
+        //            HideNotFailed(row);
+        //        }
+        //    }
+
+        //    if (showFailed.Checked)
+        //        currencyManager.ResumeBinding();
+        //}
+
+        //public void FormattingOperations()
+        //{
+        //    if (Filter == null)
+        //        return;
+
+        //    CurrencyManager currencyManager = (CurrencyManager) BindingContext[dataGridOperations.DataSource];
+        //    if (showFailed.Checked)
+        //    {
+        //        dataGridOperations.CurrentCell = null;
+        //        currencyManager.SuspendBinding();
+        //    }
+
+        //    foreach (DataGridViewRow row in dataGridOperations.Rows)
+        //    {
+        //        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
+        //        if (privateID == -1)
+        //            continue;
+
+        //        var template = Filter.HostTypes.Operations[privateID];
+        //        if (!template.IsScenarioExist)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
+        //        }
+        //        else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
+        //        }
+        //        else
+        //        {
+        //            HideNotFailed(row);
+        //        }
+        //    }
+
+        //    if (showFailed.Checked)
+        //        currencyManager.ResumeBinding();
+        //}
+
+        //public void FormattingScenarios()
+        //{
+        //    if (Filter == null)
+        //        return;
+
+        //    CurrencyManager currencyManager = (CurrencyManager)BindingContext[dataGridScenarios.DataSource];
+        //    if (showFailed.Checked)
+        //    {
+        //        dataGridScenarios.CurrentCell = null;
+        //        currencyManager.SuspendBinding();
+        //    }
+
+        //    foreach (DataGridViewRow row in dataGridScenarios.Rows)
+        //    {
+        //        var privateID = (int)(row.Cells["PrivateID"]?.Value ?? -1);
+        //        if (privateID == -1)
+        //            continue;
+
+        //        var template = Filter.Scenarios[privateID];
+        //        if (!template.IsCorrectXML)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
+        //        }
+        //        else if (template.IsSubScenario && !template.AllCommandsExist)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommandsInSub);
+        //        }
+        //        else if (!template.AllCommandsExist)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommands);
+        //        }
+        //        else if (template.IsSubScenario)
+        //        {
+        //            SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
+        //        }
+        //        else
+        //        {
+        //            HideNotFailed(row);
+        //        }
+        //    }
+
+        //    if (showFailed.Checked)
+        //        currencyManager.ResumeBinding();
+        //}
+
+        void SetFailedRow(DataGridViewRow row, string toolTipMessage, Color? color = null)
+        {
+            row.DefaultCellStyle.BackColor = color ?? Color.LightPink;
+            foreach (DataGridViewCell cell in row.Cells)
+                cell.ToolTipText = toolTipMessage;
+        }
+
+        //void HideNotFailed(DataGridViewRow row)
+        //{
+        //    if (showFailed.Checked)
+        //        row.Visible = false;
+        //}
+
+        //private void showFailed_CheckedChanged(object sender, EventArgs e)
+        //{
+
+        //}
 
         #endregion
 
@@ -667,7 +756,7 @@ namespace SPAFilter
 
                         if (grid == dataGridServiceInstances)
                         {
-                            await AssignServiceInstances(_spaFilter.RemoveActivatorAsync(filesPath));
+                            await AssignServiceInstances(Filter.RemoveActivatorAsync(filesPath));
                             RefreshStatus();
                         }
                         else if (IsFiltered)
@@ -708,8 +797,8 @@ namespace SPAFilter
                     if (!GetCellItemSelectedRows(dataGridOperations, out var scOperationNames, "Operation"))
                         return;
 
-                    var scOperations = _spaFilter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Like(p.Name)));
-                    OpenEditor(scOperations.Cast<CatalogOperation>().Select(x => new BlankDocument() { HeaderName = x.Name, BodyText = x.Body, Language = Language.XML}), null);
+                    var scOperations = Filter.HostTypes.Operations.Where(p => scOperationNames.Any(x => x.Like(p.Name)));
+                    OpenEditor(scOperations.OfType<CatalogOperation>().Select(x => new BlankDocument() { HeaderName = x.Name, BodyText = x.Body, Language = Language.XML}), null);
                 }
                 else
                 {
@@ -883,9 +972,9 @@ namespace SPAFilter
                 switch (type)
                 {
                     case SPAProcessFilterType.Processes:
-                        await _spaFilter.AssignProcessesAsync(ProcessesTextBox.Text);
+                        await Filter.AssignProcessesAsync(ProcessesTextBox.Text);
 
-                        ProcessesComboBox.DataSource = _spaFilter.Processes.Select(p => p.Name).ToList();
+                        ProcessesComboBox.DataSource = Filter.Processes.Select(p => p.Name).ToList();
                         ProcessesComboBox.Text = null;
                         ProcessesComboBox.DisplayMember = null;
 
@@ -904,17 +993,17 @@ namespace SPAFilter
                             switch (type)
                             {
                                 case SPAProcessFilterType.SCOperations:
-                                    await _spaFilter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
+                                    await Filter.AssignSCOperationsAsync(ServiceCatalogTextBox.Text);
                                     UpdateLastPath(ServiceCatalogTextBox.Text);
                                     ServiceCatalogTextBox.BackColor = Color.White;
                                     break;
                                 case SPAProcessFilterType.ROBPOperations:
-                                    await _spaFilter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
+                                    await Filter.AssignROBPOperationsAsync(ROBPOperationTextBox.Text);
                                     UpdateLastPath(ROBPOperationTextBox.Text);
                                     ROBPOperationTextBox.BackColor = Color.White;
                                     break;
                             }
-                            await AssignServiceInstances(_spaFilter.RefreshActivatorsAsync());
+                            await AssignServiceInstances(Filter.RefreshActivatorsAsync());
                         }
                         catch (Exception)
                         {
@@ -926,12 +1015,12 @@ namespace SPAFilter
                         }
                        
 
-                        if (_spaFilter.HostTypes != null)
+                        if (Filter.HostTypes != null)
                         {
-                            NetSettComboBox.DataSource = _spaFilter.HostTypes.HostTypeNames;
+                            NetSettComboBox.DataSource = Filter.HostTypes.HostTypeNames;
                             NetSettComboBox.Text = null;
                             NetSettComboBox.DisplayMember = null;
-                            OperationComboBox.DataSource = _spaFilter.HostTypes.OperationNames;
+                            OperationComboBox.DataSource = Filter.HostTypes.OperationNames;
                             OperationComboBox.Text = null;
                             OperationComboBox.DisplayMember = null;
                         }
@@ -944,11 +1033,11 @@ namespace SPAFilter
 
                         break;
                     case SPAProcessFilterType.AddActivators when OpenFile(@"(configuration.application.xml) | *.xml", true, out var fileConfig):
-                        await AssignServiceInstances(_spaFilter.AssignActivatorAsync(fileConfig.ToList()));
+                        await AssignServiceInstances(Filter.AssignActivatorAsync(fileConfig.ToList()));
                         UpdateLastPath(fileConfig.Last());
                         break;
-                    case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listOfIDs, "ID"):
-                        await AssignServiceInstances(_spaFilter.RemoveInstanceAsync(listOfIDs.Select(x =>
+                    case SPAProcessFilterType.RemoveActivators when GetCellItemSelectedRows(dataGridServiceInstances, out var listOfPrivateIDs, "PrivateID"):
+                        await AssignServiceInstances(Filter.RemoveInstanceAsync(listOfPrivateIDs.Select(x =>
                         {
                             if (int.TryParse(x, out var xNum))
                                 return xNum;
@@ -956,10 +1045,10 @@ namespace SPAFilter
                         }).Where(x => x != -1)));
                         break;
                     case SPAProcessFilterType.RefreshActivators:
-                        await AssignServiceInstances(_spaFilter.RefreshActivatorsAsync());
+                        await AssignServiceInstances(Filter.RefreshActivatorsAsync());
                         break;
                     case SPAProcessFilterType.ReloadActivators:
-                        await AssignServiceInstances(_spaFilter.ReloadActivatorsAsync());
+                        await AssignServiceInstances(Filter.ReloadActivatorsAsync());
                         break;
                 }
             }
@@ -1037,9 +1126,9 @@ namespace SPAFilter
             dataGridServiceInstances.DataSource = null;
             dataGridServiceInstances.Refresh();
 
-            if (_spaFilter.ServiceInstances != null)
+            if (Filter.ServiceInstances != null)
             {
-                await dataGridServiceInstances.AssignCollectionAsync(_spaFilter.ServiceInstances, new Padding(0, 0, 15, 0), true);
+                await dataGridServiceInstances.AssignCollectionAsync(Filter.ServiceInstances, new Padding(0, 0, 15, 0), true);
             }
         }
 
@@ -1070,22 +1159,22 @@ namespace SPAFilter
 
                 using (var progressCalc = new ProgressCalculationAsync(progressBar, 9))
                 {
-                    await _spaFilter.DataFilterAsync(filterProcess, filterHT, filterOp, progressCalc);
+                    await Filter.DataFilterAsync(filterProcess, filterHT, filterOp, progressCalc);
 
                     await AssignServiceInstances();
 
-                    await dataGridProcesses.AssignCollectionAsync(_spaFilter.Processes, null, true);
+                    await dataGridProcesses.AssignCollectionAsync(Filter.Processes, null, true);
 
                     if (ROBPOperationsRadioButton.Checked)
-                        await dataGridOperations.AssignCollectionAsync(_spaFilter.HostTypes.Operations.OfType<ROBPOperation>(), null, true);
+                        await dataGridOperations.AssignCollectionAsync(Filter.HostTypes.Operations.OfType<ROBPOperation>(), null, true);
                     else
-                        await dataGridOperations.AssignCollectionAsync(_spaFilter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
+                        await dataGridOperations.AssignCollectionAsync(Filter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
 
                     progressCalc.Append(1);
 
-                    if (_spaFilter.Scenarios != null)
+                    if (Filter.Scenarios != null)
                     {
-                        await dataGridScenarios.AssignCollectionAsync(_spaFilter.Scenarios, null, true);
+                        await dataGridScenarios.AssignCollectionAsync(Filter.Scenarios, null, true);
                     }
                     else
                     {
@@ -1093,9 +1182,9 @@ namespace SPAFilter
                         dataGridScenarios.Refresh();
                     }
 
-                    if (_spaFilter.Commands != null)
+                    if (Filter.Commands != null)
                     {
-                        await dataGridCommands.AssignCollectionAsync(_spaFilter.Commands, null, true);
+                        await dataGridCommands.AssignCollectionAsync(Filter.Commands, null, true);
                     }
                     else
                     {
@@ -1147,7 +1236,7 @@ namespace SPAFilter
             if (IsInProgress)
                 return;
 
-            var fileOperationsCount = _spaFilter.HostTypes.DriveOperationsCount;
+            var fileOperationsCount = Filter.HostTypes.DriveOperationsCount;
 
             if (fileOperationsCount == 0)
             {
@@ -1168,15 +1257,15 @@ namespace SPAFilter
                     var file = new FileInfo(OpenSCXlsx.Text);
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount, file))
                     {
-                        var rdServices = await _spaFilter.GetRDServicesFromXslxAsync(file, progrAsync);
-                        fileResult = await _spaFilter.GetServiceCatalogAsync(rdServices, ExportSCPath.Text, progrAsync);
+                        var rdServices = await Filter.GetRDServicesFromXslxAsync(file, progrAsync);
+                        fileResult = await Filter.GetServiceCatalogAsync(rdServices, ExportSCPath.Text, progrAsync);
                     }
                 }
                 else
                 {
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount))
                     {
-                        fileResult = await _spaFilter.GetServiceCatalogAsync(null, ExportSCPath.Text, progrAsync);
+                        fileResult = await Filter.GetServiceCatalogAsync(null, ExportSCPath.Text, progrAsync);
                     }
                 }
 
@@ -1197,7 +1286,7 @@ namespace SPAFilter
 
         private async void PrintXMLButton_Click(object sender, EventArgs e)
         {
-            var filesNumber = _spaFilter.WholeDriveItemsCount;
+            var filesNumber = Filter.WholeDriveItemsCount;
             if (filesNumber <= 0)
             {
                 Program.ReportMessage(Resources.Form_GenerateSC_NotFileredROBPOps, MessageBoxIcon.Warning);
@@ -1222,7 +1311,7 @@ namespace SPAFilter
                 {
                     using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
                     {
-                        await _spaFilter.PrintXMLAsync(progrAsync, stringErrors);
+                        await Filter.PrintXMLAsync(progrAsync, stringErrors);
 
                         var result = string.Format(Resources.Form_PrintXMLFiles_Result, progrAsync.CurrentProgressIterator, filesNumber);
                         if (stringErrors.Length > 0)
@@ -1252,7 +1341,7 @@ namespace SPAFilter
 
         private void PrintXMLButton_Click_Cancel(object sender, EventArgs e)
         {
-            _spaFilter.PrintXMLAbort();
+            Filter.PrintXMLAbort();
         }
 
         async void OpenEditor(IEnumerable<BlankDocument> documentList, IEnumerable<string> filesList)
@@ -1336,15 +1425,15 @@ namespace SPAFilter
         {
             try
             {
-                BPCount.Text = (_spaFilter.Processes?.Count ?? 0).ToString();
-                NEElementsCount.Text = (_spaFilter.HostTypes?.HostTypeNames?.Count ?? 0).ToString();
-                OperationsCount.Text = (_spaFilter.HostTypes?.OperationsCount ?? 0).ToString();
-                ScenariosCount.Text = (_spaFilter.Scenarios?.Count ?? 0).ToString();
-                CommandsCount.Text = (_spaFilter.Commands?.Count ?? 0).ToString();
+                BPCount.Text = (Filter.Processes?.Count ?? 0).ToString();
+                NEElementsCount.Text = (Filter.HostTypes?.HostTypeNames?.Count() ?? 0).ToString();
+                OperationsCount.Text = (Filter.HostTypes?.OperationsCount ?? 0).ToString();
+                ScenariosCount.Text = (Filter.Scenarios?.Count ?? 0).ToString();
+                CommandsCount.Text = (Filter.Commands?.Count ?? 0).ToString();
 
-                FilterButton.Enabled = _spaFilter.IsEnabledFilter;
-                PrintXMLButton.Enabled = _spaFilter.WholeDriveItemsCount > 0 && IsFiltered;
-                ButtonGenerateSC.Enabled = _spaFilter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
+                FilterButton.Enabled = Filter.IsEnabledFilter;
+                PrintXMLButton.Enabled = Filter.WholeDriveItemsCount > 0 && IsFiltered;
+                ButtonGenerateSC.Enabled = Filter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
             }
             catch (Exception)
             {
@@ -1463,7 +1552,6 @@ namespace SPAFilter
 
             return false;
         }
-
 
         //private void AddActivatorButton_Paint(object sender, PaintEventArgs e)
         //{

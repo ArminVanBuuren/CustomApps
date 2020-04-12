@@ -2,7 +2,8 @@
 {
     public interface IObjectTemplate
     {
-        string Name { get; set; }
+        int PrivateID { get; set; }
         int ID { get; set; }
+        string Name { get; set; }
     }
 }

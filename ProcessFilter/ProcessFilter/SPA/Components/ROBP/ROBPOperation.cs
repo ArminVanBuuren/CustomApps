@@ -14,13 +14,11 @@ namespace SPAFilter.SPA.Components.ROBP
         /// <summary>
         /// Сценарий для этой операции существует
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
         public bool IsScenarioExist { get; set; } = true;
 
         /// <summary>
         /// Проверка на корректность операции
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "IsFailed", false)]
         public bool IsFailed { get; set; } = false;
 
         public ROBPOperation(string path, IObjectTemplate parentElement, bool isFailed) : base(path)

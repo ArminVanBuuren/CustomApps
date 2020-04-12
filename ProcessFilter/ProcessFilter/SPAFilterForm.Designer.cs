@@ -77,7 +77,6 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton = new System.Windows.Forms.RadioButton();
             this.panelTop = new System.Windows.Forms.Panel();
             this.progressBar = new SPAFilter.CustomProgressBar();
-            this.showFailed = new System.Windows.Forms.CheckBox();
             this.mainTabControl.SuspendLayout();
             this.ServiceInstances.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -561,8 +560,7 @@ namespace SPAFilter
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
             // groupBox1
-            //
-            this.groupBox1.Controls.Add(this.showFailed);
+            // 
             this.groupBox1.Controls.Add(this.PrintXMLButton);
             this.groupBox1.Controls.Add(this.OperationComboBox);
             this.groupBox1.Controls.Add(this.label7);
@@ -684,16 +682,6 @@ namespace SPAFilter
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
             // 
-            // showFailed
-            // 
-            this.showFailed.AutoSize = true;
-            this.showFailed.Location = new System.Drawing.Point(521, 52);
-            this.showFailed.Name = "showFailed";
-            this.showFailed.Size = new System.Drawing.Size(113, 19);
-            this.showFailed.TabIndex = 15;
-            this.showFailed.Text = "Show only failed";
-            this.showFailed.UseVisualStyleBackColor = true;
-            // 
             // SPAFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -782,7 +770,6 @@ namespace SPAFilter
         private System.Windows.Forms.DataGridView dataGridOperations;
         private Button ServiceCatalogOpenButton;
         private ToolStripButton reloadServiceInstancesButton;
-        private CheckBox showFailed;
     }
 }
 

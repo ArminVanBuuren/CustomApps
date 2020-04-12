@@ -438,7 +438,9 @@ namespace LogsReader.Reader
                     await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "File", "Trace name", "Date", "Description", "Message"}));
                     foreach (DataGridViewRow row in dgvFiles.Rows)
                     {
-                        var privateID = (int) row.Cells["PrivateID"].Value;
+                        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
+                        if(privateID <= -1)
+                            continue;
                         var template = OverallResultList[privateID];
                         await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
@@ -591,7 +593,7 @@ namespace LogsReader.Reader
             try
             {
                 var row = ((DataGridView) sender).Rows[e.RowIndex];
-                var privateID = (int)row.Cells["PrivateID"].Value;
+                var privateID = (int)(row.Cells["PrivateID"]?.Value ?? -1);
                 if (privateID <= -1 || OverallResultList == null)
                     return;
 
@@ -629,8 +631,8 @@ namespace LogsReader.Reader
                 if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
                     return;
 
-                var privateID = (int) dgvFiles.SelectedRows[0].Cells["PrivateID"].Value;
-                if (privateID == -1 || OverallResultList == null)
+                var privateID = (int) (dgvFiles.SelectedRows[0].Cells["PrivateID"]?.Value ?? -1);
+                if (privateID <= -1 || OverallResultList == null)
                 {
                     _message.Text = string.Empty;
                     _traceMessage.Text = string.Empty;

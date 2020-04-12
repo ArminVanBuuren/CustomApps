@@ -139,21 +139,19 @@ namespace SPAFilter.SPA
                 {
                     // наоборот удаляем процессы, если был установлен фильтр по операциям или хостам
                     var isCatalog = HostTypes is ServiceCatalog;
-                    for (var index = 0; index < Processes.Count; index++)
+                    foreach (var process in Processes.Select(x => x).ToList())
                     {
-                        var process = Processes[index];
-                        if(isCatalog && process.HasCatalogCall)
+                        if (isCatalog && process.HasCatalogCall)
                             continue;
 
                         if (process.Operations.Any(x => operationsDictionary.ContainsKey(x)))
                             continue;
 
-                        Processes.RemoveAt(index);
-                        index--;
+                        Processes.Remove(process);
                     }
                 }
 
-                Processes.InitSequence();
+                Processes.ResetPublicID();
 
                 #endregion
 
@@ -189,11 +187,8 @@ namespace SPAFilter.SPA
                 scenarios2.AddRange(filteredSubScenarios);
                 scenarios2 = scenarios2.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name).ToList();
                 
-                Scenarios = CollectionTemplate<Scenario>.ToCollection(scenarios2, false);
-                Scenarios.InitSequence();
-
-                Commands = CollectionTemplate<Command>.ToCollection(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath));
-
+                Scenarios = new CollectionTemplate<Scenario>(scenarios2);
+                Commands = new CollectionTemplate<Command>(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath));
                 #endregion
 
                 progressCalc.Append(1);
@@ -312,7 +307,7 @@ namespace SPAFilter.SPA
             }
         }
 
-        static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IReadOnlyDictionary<string, string> allBPOperations, bool anyHasCatalogCall)
+        static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
         {
             // не менять порядок проверок!
             if (neFilter != null && !neFilter.Invoke(hostType))
@@ -326,15 +321,9 @@ namespace SPAFilter.SPA
                 if (opFilter == null)
                     opFilter = (op) => true;
 
-                for (var index = 0; index < hostType.Operations.Count; index++)
-                {
-                    var operation = hostType.Operations[index];
+                foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
-                    {
-                        hostType.Operations.RemoveAt(index);
-                        index--;
-                    }
-                }
+                        hostType.Operations.Remove(operation);
             }
             else if (!anyHasCatalogCall)
             {
@@ -344,15 +333,9 @@ namespace SPAFilter.SPA
             else if (opFilter != null)
             {
                 // удаляем операции которые не попали под имя указынные в фильтре операций
-                for (var index = 0; index < hostType.Operations.Count; index++)
-                {
-                    var operation = hostType.Operations[index];
+                foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!opFilter.Invoke(operation))
-                    {
-                        hostType.Operations.RemoveAt(index);
-                        index--;
-                    }
-                }
+                        hostType.Operations.Remove(operation);
             }
         }
 
@@ -410,18 +393,16 @@ namespace SPAFilter.SPA
             });
         }
 
-        public async Task RemoveInstanceAsync(IEnumerable<int> instancesID)
+        public async Task RemoveInstanceAsync(IEnumerable<int> instancesPrivateID)
         {
             await Task.Factory.StartNew(() =>
             {
                 lock (ACTIVATORS_SYNC)
                 {
-                    foreach (var id in instancesID)
+                    foreach (var privateID in instancesPrivateID)
                     {
-                        foreach (var instance in ServiceInstances.Where(p => p.ID == id).ToList())
-                        {
-                            instance.Parent.Instances.Remove(instance);
-                        }
+                        var instance = ServiceInstances[privateID];
+                        instance.Parent.Instances.Remove(instance);
                     }
 
                     foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
@@ -547,7 +528,6 @@ namespace SPAFilter.SPA
                 intsances.Add(instance);
             }
 
-            intsances.InitSequence();
             return intsances;
         }
 
@@ -567,8 +547,8 @@ namespace SPAFilter.SPA
                 }
             }
 
-            resultScenarios = CollectionTemplate<Scenario>.ToCollection(allScenarios);
-            resultCommands = CollectionTemplate<Command>.ToCollection(allCommands);
+            resultScenarios = new CollectionTemplate<Scenario>(allScenarios);
+            resultCommands = new CollectionTemplate<Command>(allCommands);
         }
 
         public static readonly string[] MandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };

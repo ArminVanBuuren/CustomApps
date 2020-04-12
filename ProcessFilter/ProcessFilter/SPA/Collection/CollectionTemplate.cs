@@ -1,35 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SPAFilter.SPA.Collection
 {
-    public class CollectionTemplate<T> : List<T> where T : class, IObjectTemplate
+    public class CollectionTemplate<T> : IEnumerable<T>, IDisposable where T : class, IObjectTemplate
     {
-        public List<string> ItemsName => this.Select(x => x.Name).ToList();
+        private readonly object sync = new object();
 
-        public void InitSequence()
+        private int _seqPrivateID = 0;
+        int _seqID = 0;
+
+        readonly Dictionary<int, T> _collection;
+
+        public List<string> ItemsName => _collection.Values.Select(x => x.Name).ToList();
+
+        public CollectionTemplate()
         {
-            var i = 0;
-            foreach (var template in this)
+            _collection = new Dictionary<int, T>(50);
+        }
+
+        public CollectionTemplate(IEnumerable<T> collection)
+        {
+            _collection = new Dictionary<int, T>(collection.Count());
+            AddCollection(collection);
+        }
+
+        public virtual void AddRange(IEnumerable<T> collection)
+        {
+            AddCollection(collection);
+        }
+
+        void AddCollection(IEnumerable<T> collection)
+        {
+            foreach (var template in collection)
+                Add(template);
+        }
+
+        public virtual void Add(T template)
+        {
+            lock (sync)
             {
-                template.ID = ++i;
+                template.PrivateID = ++_seqPrivateID;
+                template.ID = ++_seqID;
+                _collection.Add(template.ID, template);
             }
         }
 
-        public static CollectionTemplate<T> ToCollection(IEnumerable<T> input, bool initSequence = true)
+        public void ResetPublicID()
         {
-            var collection = new CollectionTemplate<T>();
-            collection.AddRange(input);
-            if (initSequence)
-                collection.InitSequence();
-            return collection;
+            lock (sync)
+            {
+                _seqID = 0;
+                foreach (var template in this)
+                    template.ID = ++_seqID;
+            }
         }
 
-        public CollectionTemplate<T> Clone()
+        public int Count => _collection.Count;
+
+        public T this[int PrivateID] => _collection[PrivateID];
+
+        public void Remove(T template)
         {
-            var clone = new CollectionTemplate<T>();
-            clone.AddRange(this);
-            return clone;
+            lock (sync)
+                _collection.Remove(template.PrivateID);
+        }
+
+        public void Clear()
+        {
+            lock (sync)
+                _collection.Clear();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            lock (sync)
+                return _collection.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            lock (sync)
+                return _collection.Values.GetEnumerator();
+        }
+
+        public void Dispose()
+        {
+            Clear();
         }
     }
 }

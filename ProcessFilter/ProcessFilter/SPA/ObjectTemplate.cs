@@ -4,6 +4,9 @@ namespace SPAFilter.SPA
 {
     public abstract class ObjectTemplate : IObjectTemplate
     {
+        [DGVColumn(ColumnPosition.First, "PrivateID", false)]
+        public int PrivateID { get; set; }
+
         [DGVColumn(ColumnPosition.First, "ID")]
         public int ID { get; set; } = 0;
 

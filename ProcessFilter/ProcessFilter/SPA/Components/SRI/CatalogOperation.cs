@@ -21,7 +21,6 @@ namespace SPAFilter.SPA.Components.SRI
         /// <summary>
         /// Если сценарий для этой операции существует
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "IsScenarioExist", false)]
         public bool IsScenarioExist { get; set; } = true;
 
         internal virtual RFSBindings Bindings { get; } = null;

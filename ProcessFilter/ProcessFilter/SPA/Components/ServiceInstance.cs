@@ -21,7 +21,6 @@ namespace SPAFilter.SPA.Components
 
         public Dictionary<string, Command> Commands { get; } = new Dictionary<string, Command>(StringComparer.InvariantCultureIgnoreCase);
 
-        [DGVColumn(ColumnPosition.Last, "IsCorrect", false)]
         public bool IsCorrect { get; internal set; } = false;
 
         public ServiceActivator Parent { get; }

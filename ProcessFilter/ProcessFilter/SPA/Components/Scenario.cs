@@ -29,19 +29,16 @@ namespace SPAFilter.SPA.Components
         /// <summary>
         /// Указывает является ли текущий сценарий вложенным
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "IsSubScenario", false)]
         public bool IsSubScenario { get; }
 
         /// <summary>
         /// Проверка на существование комманд в сценарии
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "AllCommandsExist", false)]
         public bool AllCommandsExist { get; private set; } = true;
 
         /// <summary>
         /// Проверка на существование комманд в сценарии
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "IsCorrectXML", false)]
         public bool IsCorrectXML { get; private set; } = true;
 
         class ParceScenario
