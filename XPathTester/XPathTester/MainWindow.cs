@@ -56,7 +56,8 @@ namespace XPathTester
 
         private void XpathResultDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            xpathResultDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = xpathResultDataGrid.BackgroundColor;
+            if (xpathResultDataGrid.RowCount > 0)
+                xpathResultDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = xpathResultDataGrid.BackgroundColor;
         }
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
@@ -101,49 +102,20 @@ namespace XPathTester
                 if (Result == null)
                     return;
 
-                IEnumerable<DGVXPathResult> orderedItems = null;
-                if (_prevSortedColumn != e.ColumnIndex)
-                {
-                    switch (e.ColumnIndex)
-                    {
-                        case 0:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.ID descending select p;
-                            break;
-                        case 1:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeType descending select p;
-                            break;
-                        case 2:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeName descending select p;
-                            break;
-                        case 3:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.Value descending select p;
-                            break;
-                    }
+                var columnName = xpathResultDataGrid.Columns[e.ColumnIndex].Name;
+                var result = Result.AsQueryable();
 
+                if (_prevSortedColumn == e.ColumnIndex)
+                {
+                    Result = new XPathCollection(result.OrderBy(columnName));
                     _prevSortedColumn = e.ColumnIndex;
                 }
                 else
                 {
-                    switch (e.ColumnIndex)
-                    {
-                        case 0:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.ID select p;
-                            break;
-                        case 1:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeType select p;
-                            break;
-                        case 2:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.NodeName select p;
-                            break;
-                        case 3:
-                            orderedItems = from p in Result.AsEnumerable() orderby p.Value select p;
-                            break;
-                    }
-
+                    Result = new XPathCollection(result.OrderByDescending(columnName));
                     _prevSortedColumn = -1;
                 }
 
-                Result = new XPathCollection(orderedItems);
                 UpdateResultDataGrid(Result);
             }
             catch (Exception ex)
