@@ -658,14 +658,9 @@ namespace LogsReader.Reader
                 {
                     _message.Text = template.Message.TrimWhiteSpaces();
                 }
-
-                _message.IsChanged = false;
-                _message.ClearUndo();
                 _message.DelayedEventsInterval = 10;
 
                 _traceMessage.Text = template.TraceMessage;
-                _traceMessage.IsChanged = false;
-                _traceMessage.ClearUndo();
                 _traceMessage.DelayedEventsInterval = 10;
             }
             catch (Exception ex)
