@@ -217,12 +217,12 @@ namespace SPAFilter
             this.FilterButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.FilterButton.Image = global::SPAFilter.Properties.Resources.filter6;
             this.FilterButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FilterButton.Location = new System.Drawing.Point(717, 49);
+            this.FilterButton.Location = new System.Drawing.Point(723, 49);
             this.FilterButton.Name = "FilterButton";
             this.FilterButton.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.FilterButton.Size = new System.Drawing.Size(89, 23);
+            this.FilterButton.Size = new System.Drawing.Size(83, 23);
             this.FilterButton.TabIndex = 13;
-            this.FilterButton.Text = "Filter [F5]";
+            this.FilterButton.Text = "Get [F5]";
             this.FilterButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.FilterButton.UseVisualStyleBackColor = false;
             this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);

@@ -14,10 +14,8 @@ namespace SPAFilter.SPA.Components
         {
             var serviceInstances = LoadConfig();
 
-            foreach (var serviceInstance in serviceInstances)
-            {
-                Instances.Add(new ServiceInstance(this, serviceInstance.Node));
-            }
+            foreach (var instanceXml in serviceInstances)
+                Add(instanceXml);
         }
 
         public void Refresh()
@@ -31,7 +29,7 @@ namespace SPAFilter.SPA.Components
                 catch (Exception ex)
                 {
                     instance.IsCorrect = false;
-                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"{FilePath} \\ [{instance.HardwareID}]");
+                    Program.ReportMessage(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ [{instance.HardwareID}]", false);
                 }
             }
         }
@@ -39,19 +37,26 @@ namespace SPAFilter.SPA.Components
         public void Reload()
         {
             var serviceInstances = LoadConfig();
+
             Instances.Clear();
 
-            foreach (var instance in serviceInstances)
+            foreach (var instanceXml in serviceInstances)
             {
                 try
                 {
-                    Instances.Add(new ServiceInstance(this, instance.Node));
+                    Add(instanceXml);
                 }
                 catch (Exception ex)
                 {
-                    Program.ReportMessage(ex.Message, MessageBoxIcon.Error, $"{FilePath} \\ {instance}");
+                    Program.ReportMessage(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ {instanceXml}", false);
                 }
             }
+        }
+
+        void Add(XPathResult instanceXml)
+        {
+            var instance = new ServiceInstance(this, instanceXml.Node);
+            Instances.Add(instance);
         }
 
         IEnumerable<XPathResult> LoadConfig()

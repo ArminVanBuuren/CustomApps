@@ -304,6 +304,9 @@ namespace SPAFilter
 
             InitializeComponent();
 
+            // Gets or sets a value indicating whether to catch calls on the wrong thread that access a control's Handle property when an application is being debugged.
+            Control.CheckForIllegalCrossThreadCalls = false;
+
             base.Text = $"{base.Text} {ASSEMBLY.CurrentVersion}";
 
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
@@ -405,10 +408,6 @@ namespace SPAFilter
             RefreshStatus();
         }
 
-
-
-
-
         #region Application Update
 
         private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
@@ -462,13 +461,14 @@ namespace SPAFilter
             if(!GetPrivateID(sender, e.RowIndex, out var row, out var privateID))
                 return;
 
-            if (!Filter.ServiceInstances[privateID].IsCorrect)
+            var template = Filter.ServiceInstances[privateID];
+            if (template == null || template.IsCorrect)
+                return;
+
+            row.DefaultCellStyle.BackColor = Color.Yellow;
+            foreach (DataGridViewCell cell2 in row.Cells)
             {
-                row.DefaultCellStyle.BackColor = Color.Yellow;
-                foreach (DataGridViewCell cell2 in row.Cells)
-                {
-                    cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
-                }
+                cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
             }
         }
 
@@ -478,6 +478,9 @@ namespace SPAFilter
                 return;
 
             var template = Filter.Processes[privateID];
+            if(template == null)
+                return;
+
             if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
             {
                 SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
@@ -494,6 +497,9 @@ namespace SPAFilter
                 return;
 
             var template = Filter.HostTypes.Operations[privateID];
+            if (template == null)
+                return;
+
             if (!template.IsScenarioExist)
             {
                 SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
@@ -509,6 +515,9 @@ namespace SPAFilter
                 return;
 
             var template = Filter.Scenarios[privateID];
+            if (template == null)
+                return;
+
             if (!template.IsCorrectXML)
             {
                 SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
@@ -770,7 +779,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
         }
 
@@ -810,7 +819,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
         }
 
@@ -1054,7 +1063,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
 
                 ClearDataGrid();
 
@@ -1155,7 +1164,7 @@ namespace SPAFilter
                 var filterHT = NetSettComboBox.Text;
                 var filterOp = OperationComboBox.Text;
 
-                ClearDataGrid();
+                ClearDataGrid(true);
 
                 using (var progressCalc = new ProgressCalculationAsync(progressBar, 9))
                 {
@@ -1197,7 +1206,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
             finally
             {
@@ -1276,7 +1285,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
             finally
             {
@@ -1328,7 +1337,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
             finally
             {
@@ -1377,7 +1386,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
             }
             finally
             {
@@ -1404,9 +1413,9 @@ namespace SPAFilter
             }
         }
 
-        void ClearDataGrid(bool onlyOperations = false)
+        void ClearDataGrid(bool allData = false)
         {
-            if (onlyOperations)
+            if (allData)
             {
                 dataGridProcesses.DataSource = null;
                 dataGridProcesses.Refresh();
@@ -1482,7 +1491,7 @@ namespace SPAFilter
             }
             catch(Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
                 return false;
             }
         }
@@ -1508,7 +1517,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                Program.ReportMessage(ex.ToString());
                 return false;
             }
         }

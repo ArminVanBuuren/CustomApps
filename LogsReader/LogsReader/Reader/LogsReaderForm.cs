@@ -442,6 +442,9 @@ namespace LogsReader.Reader
                         if(privateID <= -1)
                             continue;
                         var template = OverallResultList[privateID];
+                        if(template == null)
+                            continue;
+
                         await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, template.Description, $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
@@ -598,6 +601,8 @@ namespace LogsReader.Reader
                     return;
 
                 var template = OverallResultList[privateID];
+                if (template == null)
+                    return;
 
                 if (template.IsMatched)
                 {
@@ -628,18 +633,19 @@ namespace LogsReader.Reader
         {
             try
             {
-                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
+                _message.Text = string.Empty;
+                _traceMessage.Text = string.Empty;
+
+                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0 || OverallResultList == null)
                     return;
 
                 var privateID = (int) (dgvFiles.SelectedRows[0].Cells["PrivateID"]?.Value ?? -1);
-                if (privateID <= -1 || OverallResultList == null)
-                {
-                    _message.Text = string.Empty;
-                    _traceMessage.Text = string.Empty;
+                if (privateID <= -1)
                     return;
-                }
 
-                var template = OverallResultList[privateID];
+                var template = OverallResultList?[privateID];
+                if (template == null)
+                    return;
 
                 descriptionText.Text = template.Description;
 

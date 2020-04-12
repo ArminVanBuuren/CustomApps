@@ -60,7 +60,7 @@ namespace SPAFilter.SPA.Collection
 
         public int Count => _collection.Count;
 
-        public T this[int PrivateID] => _collection[PrivateID];
+        public T this[int PrivateID] => _collection.TryGetValue(PrivateID, out var template) ? template : default(T);
 
         public void Remove(T template)
         {

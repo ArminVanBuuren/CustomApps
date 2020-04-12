@@ -195,7 +195,7 @@ namespace SPAFilter.SPA
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                ReportMessage(ex.ToString(), "Filter");
             }
         }
 
@@ -368,9 +368,8 @@ namespace SPAFilter.SPA
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    Program.ReportMessage(errors);
+                    ReportMessage(errors, "Add activator");
                 }
-
             });
         }
 
@@ -463,7 +462,7 @@ namespace SPAFilter.SPA
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    Program.ReportMessage(errors);
+                    ReportMessage(errors, "Refresh");
                 }
             }
 
@@ -482,7 +481,7 @@ namespace SPAFilter.SPA
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    Program.ReportMessage(errors);
+                    ReportMessage(errors, "Reload");
                 }
             }
 
@@ -516,9 +515,9 @@ namespace SPAFilter.SPA
 
             if (sameHostScenarios.Count > 0 && instances.Count > 0)
             {
-                Program.ReportMessage(
+                ReportMessage(
                     $"When initializing instances:'{string.Join(";", hrdrIDs)}' - {sameHostScenarios.Count} scenario collisions were found!\r\nFor correct work of a filter, please choose only one instance (host type) or several instances (host types) with different scenarios.",
-                     MessageBoxIcon.Warning);
+                     "Get Service Instances", MessageBoxIcon.Warning);
             }
 
             foreach (var instance in allInstances.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
@@ -629,7 +628,7 @@ namespace SPAFilter.SPA
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.Message);
+                ReportMessage(ex.ToString(), "Get Service Catalog");
                 return null;
             }
             finally
@@ -727,6 +726,11 @@ namespace SPAFilter.SPA
             var files = Directory.GetFiles(dirPath, mask, SearchOption.TopDirectoryOnly).ToList();
             files.Sort(StringComparer.CurrentCulture);
             return files.Where(x => x.EndsWith(mask.Trim().Trim('*'), StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        void ReportMessage(string message, string caption = null, MessageBoxIcon icon = MessageBoxIcon.Error)
+        {
+            Program.ReportMessage(message, icon, caption, false);
         }
     }
 }

@@ -133,7 +133,7 @@ namespace SPAFilter.SPA.Components
 
         void ShowError(string message)
         {
-            Program.ReportMessage($"{(!HardwareID.IsNullOrEmpty() ? $"[{HardwareID}]={FilePath}" : FilePath)}\r\n\r\n{message}");
+            Program.ReportMessage(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
         }
 
         public override bool Equals(object obj)

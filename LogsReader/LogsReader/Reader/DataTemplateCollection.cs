@@ -64,7 +64,7 @@ namespace LogsReader.Reader
 
         public int Count => _values.Count;
 
-        public DataTemplate this[int privateID] => _values[privateID];
+        public DataTemplate this[int privateID] => _values.TryGetValue(privateID, out var result) ? result : null;
 
         public void Clear()
         {

@@ -5,12 +5,8 @@ using System.Windows.Forms;
 
 namespace SPAFilter
 {
-    public enum ReportStatusType
-    {
-        Informaton,
-        Warning,
-        Error
-    }
+    public delegate void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null);
+
     static class Program
     {
         /// <summary>
@@ -47,18 +43,20 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ReportMessage(ex.ToString());
+                ReportMessage(ex.ToString(), MessageBoxIcon.Error, "Initialization Form", false);
             }
         }
 
-        public static void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null)
+        public static void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null, bool isForm = true)
         {
-            MessageBox.Show(message,
-                caption ?? type.ToString("G"), 
-                MessageBoxButtons.OK, 
-                type, 
-                MessageBoxDefaultButton.Button1,
-                MessageBoxOptions.DefaultDesktopOnly);
+            if (isForm)
+            {
+                int num = (int) MessageBox.Show(message, caption ?? type.ToString("G"), MessageBoxButtons.OK, type);
+            }
+            else
+            {
+                int num = (int)MessageBox.Show(message, caption ?? type.ToString("G"), MessageBoxButtons.OK, type, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            }
         }
     }
 }
