@@ -57,6 +57,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Reader\DataFilter.cs" />
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
@@ -95,14 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -131,25 +131,11 @@
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Navigation Left.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Navigation Right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\filter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Symbol Refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Symbol Refresh 3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\export.png" />
+    <None Include="Resources\filter17.png" />
+    <None Include="Resources\save2.png" />
+    <None Include="Resources\reset2.png" />
+    <None Include="Resources\clear1.png" />
+    <None Include="Resources\find.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

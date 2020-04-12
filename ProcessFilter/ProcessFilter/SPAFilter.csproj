@@ -151,8 +151,8 @@
     <None Include="Resources\xls1.png" />
     <None Include="Resources\file7.png" />
     <None Include="Resources\folder2.png" />
-    <None Include="Resources\generate4.png" />
     <None Include="Resources\find.png" />
+    <None Include="Resources\generatesc.png" />
     <Content Include="Resources\icons8-minus-20.png" />
     <Content Include="Resources\icons8-plus-20.png" />
     <Content Include="Resources\icons8-synchronize-20.png" />

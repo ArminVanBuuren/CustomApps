@@ -138,7 +138,7 @@ namespace SPAFilter
             this.ROBPOperationButtonOpen.TabIndex = 6;
             this.ROBPOperationButtonOpen.Text = "Open";
             this.ROBPOperationButtonOpen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ROBPOperationButtonOpen.UseVisualStyleBackColor = false;
+            this.ROBPOperationButtonOpen.UseVisualStyleBackColor = true;
             // 
             // ProcessesButtonOpen
             // 
@@ -153,7 +153,7 @@ namespace SPAFilter
             this.ProcessesButtonOpen.TabIndex = 5;
             this.ProcessesButtonOpen.Text = "Open";
             this.ProcessesButtonOpen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ProcessesButtonOpen.UseVisualStyleBackColor = false;
+            this.ProcessesButtonOpen.UseVisualStyleBackColor = true;
             // 
             // OperationComboBox
             // 
@@ -223,7 +223,7 @@ namespace SPAFilter
             this.FilterButton.TabIndex = 13;
             this.FilterButton.Text = "Get [F5]";
             this.FilterButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.FilterButton.UseVisualStyleBackColor = false;
+            this.FilterButton.UseVisualStyleBackColor = true;
             this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
             // 
             // mainTabControl
@@ -480,7 +480,7 @@ namespace SPAFilter
             this.RootSCExportPathButton.Size = new System.Drawing.Size(104, 23);
             this.RootSCExportPathButton.TabIndex = 30;
             this.RootSCExportPathButton.Text = "     Root";
-            this.RootSCExportPathButton.UseVisualStyleBackColor = false;
+            this.RootSCExportPathButton.UseVisualStyleBackColor = true;
             this.RootSCExportPathButton.Click += new System.EventHandler(this.RootSCExportPathButton_Click);
             // 
             // label9
@@ -517,7 +517,7 @@ namespace SPAFilter
             this.OpenSevExelButton.Size = new System.Drawing.Size(104, 23);
             this.OpenSevExelButton.TabIndex = 27;
             this.OpenSevExelButton.Text = "     Open xlsx";
-            this.OpenSevExelButton.UseVisualStyleBackColor = false;
+            this.OpenSevExelButton.UseVisualStyleBackColor = true;
             this.OpenSevExelButton.Click += new System.EventHandler(this.OpenRDServiceExelButton_Click);
             // 
             // label5
@@ -536,15 +536,14 @@ namespace SPAFilter
             this.ButtonGenerateSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonGenerateSC.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ButtonGenerateSC.Enabled = false;
-            this.ButtonGenerateSC.Image = global::SPAFilter.Properties.Resources.generate4;
+            this.ButtonGenerateSC.Image = global::SPAFilter.Properties.Resources.generatesc;
             this.ButtonGenerateSC.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonGenerateSC.Location = new System.Drawing.Point(797, 70);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
-            this.ButtonGenerateSC.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 27);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 24);
             this.ButtonGenerateSC.TabIndex = 26;
             this.ButtonGenerateSC.Text = "      Generate SC";
-            this.ButtonGenerateSC.UseVisualStyleBackColor = false;
+            this.ButtonGenerateSC.UseVisualStyleBackColor = true;
             this.ButtonGenerateSC.Click += new System.EventHandler(this.ButtonGenerateSC_Click);
             // 
             // OpenSCXlsx
@@ -589,7 +588,7 @@ namespace SPAFilter
             this.PrintXMLButton.TabIndex = 14;
             this.PrintXMLButton.Text = "Pretty print";
             this.PrintXMLButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PrintXMLButton.UseVisualStyleBackColor = false;
+            this.PrintXMLButton.UseVisualStyleBackColor = true;
             this.PrintXMLButton.Click += new System.EventHandler(this.PrintXMLButton_Click);
             // 
             // statusStrip
@@ -627,7 +626,7 @@ namespace SPAFilter
             this.ServiceCatalogOpenButton.TabIndex = 34;
             this.ServiceCatalogOpenButton.Text = "Open";
             this.ServiceCatalogOpenButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ServiceCatalogOpenButton.UseVisualStyleBackColor = false;
+            this.ServiceCatalogOpenButton.UseVisualStyleBackColor = true;
             // 
             // ROBPOperationsRadioButton
             // 

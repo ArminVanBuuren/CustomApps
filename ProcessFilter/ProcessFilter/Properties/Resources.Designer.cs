@@ -367,9 +367,9 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap generate4 {
+        internal static System.Drawing.Bitmap generatesc {
             get {
-                object obj = ResourceManager.GetObject("generate4", resourceCulture);
+                object obj = ResourceManager.GetObject("generatesc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

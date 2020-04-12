@@ -197,26 +197,30 @@ namespace LogsReader.Reader
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Image = global::LogsReader.Properties.Resources.Search;
+            this.btnSearch.BackColor = System.Drawing.SystemColors.Control;
+            this.btnSearch.Image = global::LogsReader.Properties.Resources.find;
             this.btnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSearch.Location = new System.Drawing.Point(1128, 2);
+            this.btnSearch.Location = new System.Drawing.Point(1130, 2);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(91, 24);
+            this.btnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.btnSearch.Size = new System.Drawing.Size(88, 24);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "      Search [F5]";
+            this.btnSearch.Text = "Search [F5]";
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Image = global::LogsReader.Properties.Resources.Symbol_Refresh_3;
+            this.btnClear.Image = global::LogsReader.Properties.Resources.clear1;
             this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClear.Location = new System.Drawing.Point(1225, 2);
+            this.btnClear.Location = new System.Drawing.Point(1224, 2);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(87, 24);
+            this.btnClear.Size = new System.Drawing.Size(88, 24);
             this.btnClear.TabIndex = 3;
-            this.btnClear.Text = "      Clear [F6]";
+            this.btnClear.Text = "Clear [F6]";
+            this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
@@ -226,7 +230,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPattern.Location = new System.Drawing.Point(3, 3);
             this.txtPattern.Name = "txtPattern";
-            this.txtPattern.Size = new System.Drawing.Size(1034, 23);
+            this.txtPattern.Size = new System.Drawing.Size(1039, 23);
             this.txtPattern.TabIndex = 4;
             this.txtPattern.TextChanged += new System.EventHandler(this.TxtPattern_TextChanged);
             // 
@@ -498,7 +502,7 @@ namespace LogsReader.Reader
             // 
             this.useRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.useRegex.AutoSize = true;
-            this.useRegex.Location = new System.Drawing.Point(1043, 6);
+            this.useRegex.Location = new System.Drawing.Point(1048, 6);
             this.useRegex.Name = "useRegex";
             this.useRegex.Size = new System.Drawing.Size(79, 19);
             this.useRegex.TabIndex = 9;
@@ -585,26 +589,29 @@ namespace LogsReader.Reader
             // buttonFilter
             // 
             this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFilter.Image = global::LogsReader.Properties.Resources.filter;
+            this.buttonFilter.Image = global::LogsReader.Properties.Resources.filter17;
             this.buttonFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonFilter.Location = new System.Drawing.Point(1126, 44);
+            this.buttonFilter.Location = new System.Drawing.Point(1128, 44);
             this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(91, 24);
+            this.buttonFilter.Padding = new System.Windows.Forms.Padding(3, 0, 2, 0);
+            this.buttonFilter.Size = new System.Drawing.Size(88, 24);
             this.buttonFilter.TabIndex = 28;
-            this.buttonFilter.Text = "      Filter [F7]";
+            this.buttonFilter.Text = "Filter [F7]";
+            this.buttonFilter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
             // buttonReset
             // 
             this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReset.Image = global::LogsReader.Properties.Resources.Symbol_Refresh;
+            this.buttonReset.Image = global::LogsReader.Properties.Resources.reset2;
             this.buttonReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReset.Location = new System.Drawing.Point(1223, 44);
+            this.buttonReset.Location = new System.Drawing.Point(1222, 44);
             this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(87, 24);
+            this.buttonReset.Size = new System.Drawing.Size(88, 24);
             this.buttonReset.TabIndex = 29;
-            this.buttonReset.Text = "      Reset [F8]";
+            this.buttonReset.Text = "Reset [F8]";
+            this.buttonReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
@@ -665,13 +672,15 @@ namespace LogsReader.Reader
             // buttonExport
             // 
             this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExport.Image = global::LogsReader.Properties.Resources.export;
+            this.buttonExport.Image = global::LogsReader.Properties.Resources.save2;
             this.buttonExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExport.Location = new System.Drawing.Point(1010, 44);
             this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(110, 24);
+            this.buttonExport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.buttonExport.Size = new System.Drawing.Size(112, 24);
             this.buttonExport.TabIndex = 32;
-            this.buttonExport.Text = "      Export [Ctrl+S]";
+            this.buttonExport.Text = "Export [Ctrl+S]";
+            this.buttonExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.ButtonExport_Click);
             // 

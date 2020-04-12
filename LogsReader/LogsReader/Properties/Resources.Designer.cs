@@ -63,9 +63,9 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap export {
+        internal static System.Drawing.Bitmap clear1 {
             get {
-                object obj = ResourceManager.GetObject("export", resourceCulture);
+                object obj = ResourceManager.GetObject("clear1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,19 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filter {
+        internal static System.Drawing.Bitmap filter17 {
             get {
-                object obj = ResourceManager.GetObject("filter", resourceCulture);
+                object obj = ResourceManager.GetObject("filter17", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap find {
+            get {
+                object obj = ResourceManager.GetObject("find", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -268,9 +278,9 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Navigation_Left {
+        internal static System.Drawing.Bitmap reset2 {
             get {
-                object obj = ResourceManager.GetObject("Navigation_Left", resourceCulture);
+                object obj = ResourceManager.GetObject("reset2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -278,39 +288,9 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Navigation_Right {
+        internal static System.Drawing.Bitmap save2 {
             get {
-                object obj = ResourceManager.GetObject("Navigation_Right", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Search {
-            get {
-                object obj = ResourceManager.GetObject("Search", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Symbol_Refresh {
-            get {
-                object obj = ResourceManager.GetObject("Symbol_Refresh", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Symbol_Refresh_3 {
-            get {
-                object obj = ResourceManager.GetObject("Symbol_Refresh_3", resourceCulture);
+                object obj = ResourceManager.GetObject("save2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

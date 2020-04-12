@@ -566,7 +566,7 @@ namespace LogsReader.Reader
                 ParentSplitContainer.Cursor = Cursors.Default;
             }
 
-            btnSearch.Text = IsWorking ? @"      Stop [Esc]" : @"      Search [F5]";
+            btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
             btnClear.Enabled = !IsWorking;
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
