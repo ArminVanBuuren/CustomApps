@@ -82,6 +82,7 @@ namespace Utils.WinForm.Notepad
                 try
                 {
                     FCTB.Text = Source = value;
+                    FCTB.IsChanged = false;
                     FCTB.ClearUndo();
                 }
                 catch (Exception)
