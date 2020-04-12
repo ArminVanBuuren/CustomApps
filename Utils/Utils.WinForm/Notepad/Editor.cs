@@ -13,6 +13,7 @@ namespace Utils.WinForm.Notepad
         protected static readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         private string _source = null;
         private bool _isDisposed = false;
+        private bool _coloredOnlyVisible = false;
         private Encoding _default = Encoding.Default;
 
         private readonly FastColoredTextBox FCTB;
@@ -178,6 +179,27 @@ namespace Utils.WinForm.Notepad
         public string SelectedText => FCTB.SelectedText;
         public Language Language => FCTB.Language;
 
+        public bool ColoredOnlyVisible
+        {
+            get => _coloredOnlyVisible;
+            set
+            {
+                _coloredOnlyVisible = value;
+                FCTB.ClearStylesBuffer();
+                FCTB.Range.ClearStyle(StyleIndex.All);
+                if (_coloredOnlyVisible)
+                {
+                    FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
+                    FCTB.VisibleRangeChangedDelayed += FctbOnVisibleRangeChangedDelayed;
+                }
+                else
+                {
+                    FCTB.VisibleRangeChangedDelayed -= FctbOnVisibleRangeChangedDelayed;
+                    FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
+                }
+            }
+        }
+
         protected new bool IsDisposed
         {
             get => base.IsDisposed && _isDisposed;
@@ -292,11 +314,12 @@ namespace Utils.WinForm.Notepad
             FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
             FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
             FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
-            FCTB.VisibleRangeChangedDelayed += (sender, args) => 
-            {
-                FCTB.VisibleRange.ClearStyle(StyleIndex.All);
-                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
-            };
+        }
+
+        private void FctbOnVisibleRangeChangedDelayed(object sender, EventArgs e)
+        {
+            FCTB.VisibleRange.ClearStyle(StyleIndex.All);
+            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
         }
 
         public ToolStripLabel AddToolStripLabel(string text = "")
@@ -358,12 +381,13 @@ namespace Utils.WinForm.Notepad
 
             bool isChanged = FCTB.Language != language;
 
-            //FCTB.ClearStylesBuffer();
-            //FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.VisibleRange.ClearStyle(StyleIndex.All);
+            FCTB.ClearStylesBuffer();
+            FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.Language = language;
-            //FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
-            FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
+            if (ColoredOnlyVisible)
+                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
+            else
+                FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.Range));
 
             if (isChanged)
                 LanguageChanged?.Invoke(this, EventArgs.Empty);
