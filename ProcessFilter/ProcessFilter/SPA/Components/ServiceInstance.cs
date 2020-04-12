@@ -141,6 +141,11 @@ namespace SPAFilter.SPA.Components
             return base.Equals(obj) && obj is ServiceInstance instance && HardwareID.Equals(instance.HardwareID);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override string ToString()
         {
             return HardwareID;

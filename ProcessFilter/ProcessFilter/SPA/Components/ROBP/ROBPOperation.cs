@@ -39,5 +39,10 @@ namespace SPAFilter.SPA.Components.ROBP
                 return Name.Like(operation.Name) && HostTypeName.Equals(operation.HostTypeName);
             return base.Equals(obj);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
