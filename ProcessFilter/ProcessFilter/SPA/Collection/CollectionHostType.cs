@@ -10,7 +10,7 @@ namespace SPAFilter.SPA.Collection
 
         private readonly List<string> _hostTypeNames;
         private readonly List<string> _operationNames;
-        private CollectionTemplate<IOperation> _operations;
+        private readonly CollectionTemplate<IOperation> _operations;
 
         public IReadOnlyCollection<string> HostTypeNames
         {
