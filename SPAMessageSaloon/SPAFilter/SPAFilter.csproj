@@ -144,7 +144,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj">
+      <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>
+      <Name>SPAMessageSaloon.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="icons8.ico" />
     <None Include="Resources\reload.png" />

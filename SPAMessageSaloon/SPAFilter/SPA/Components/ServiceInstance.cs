@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
@@ -133,7 +134,7 @@ namespace SPAFilter.SPA.Components
 
         void ShowError(string message)
         {
-            Program.ReportMessage(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
+            ReportMessage.Show(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
         }
 
         public override bool Equals(object obj)

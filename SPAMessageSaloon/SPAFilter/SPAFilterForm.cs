@@ -13,6 +13,7 @@ using SPAFilter.Properties;
 using SPAFilter.SPA;
 using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SRI;
+using SPAMessageSaloon.Common;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
@@ -235,7 +236,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
             finally
             {
@@ -309,7 +310,7 @@ namespace SPAFilter
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
             var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { Program.ReportMessage(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
+            autor.Click += (sender, args) => { ReportMessage.Show(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
             statusStrip.Items.Add(autor);
 
             statusStrip.Items.Add(new ToolStripSeparator());
@@ -672,7 +673,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
         }
 
@@ -712,7 +713,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
         }
 
@@ -956,7 +957,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
 
                 ClearDataGrid();
 
@@ -1095,7 +1096,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
             finally
             {
@@ -1138,7 +1139,7 @@ namespace SPAFilter
 
             if (fileOperationsCount == 0)
             {
-                Program.ReportMessage(Resources.Form_GenerateSC_NotFoundAnyOperations, MessageBoxIcon.Warning);
+                ReportMessage.Show(Resources.Form_GenerateSC_NotFoundAnyOperations, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1174,7 +1175,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
             finally
             {
@@ -1187,7 +1188,7 @@ namespace SPAFilter
             var filesNumber = Filter.WholeDriveItemsCount;
             if (filesNumber <= 0)
             {
-                Program.ReportMessage(Resources.Form_GenerateSC_NotFileredROBPOps, MessageBoxIcon.Warning);
+                ReportMessage.Show(Resources.Form_GenerateSC_NotFileredROBPOps, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1215,18 +1216,18 @@ namespace SPAFilter
                         if (stringErrors.Length > 0)
                         {
                             var warning = string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2));
-                            Program.ReportMessage($"{result}\r\n{warning}", MessageBoxIcon.Warning);
+                            ReportMessage.Show($"{result}\r\n{warning}", MessageBoxIcon.Warning);
                         }
                         else
                         {
-                            Program.ReportMessage($"{Resources.Form_PrintXMLFiles_Successfully} {result}", MessageBoxIcon.Information);
+                            ReportMessage.Show($"{Resources.Form_PrintXMLFiles_Successfully} {result}", MessageBoxIcon.Information);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
             finally
             {
@@ -1275,7 +1276,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
             }
             finally
             {
@@ -1380,7 +1381,7 @@ namespace SPAFilter
             }
             catch(Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
                 return false;
             }
         }
@@ -1406,7 +1407,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                Program.ReportMessage(ex.ToString());
+                ReportMessage.Show(ex);
                 return false;
             }
         }
@@ -1426,7 +1427,7 @@ namespace SPAFilter
             }
             else
             {
-                Program.ReportMessage(Resources.Form_GridView_NotSelectedAnyRows, MessageBoxIcon.Warning);
+                ReportMessage.Show(Resources.Form_GridView_NotSelectedAnyRows, MessageBoxIcon.Warning);
                 return false;
             }
             return result.Count > 0;

@@ -730,7 +730,7 @@ namespace SPAFilter.SPA
 
         void ReportMessage(string message, string caption = null, MessageBoxIcon icon = MessageBoxIcon.Error)
         {
-            Program.ReportMessage(message, icon, caption, false);
+            SPAMessageSaloon.Common.ReportMessage.Show(message, icon, caption, false);
         }
     }
 }

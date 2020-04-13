@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using SPAMessageSaloon.Common;
 using Utils;
 
 namespace LogsReader.Config
@@ -155,7 +157,7 @@ namespace LogsReader.Config
 
             if (!REGEX.Verify(text))
             {
-                Util.MessageShow($"Pattern \"{text}\" is incorrect!", "TraceParse Reader");
+                ReportMessage.Show($"Pattern \"{text}\" is incorrect!",MessageBoxIcon.Error, "TraceParse Reader");
                 return null;
             }
             else

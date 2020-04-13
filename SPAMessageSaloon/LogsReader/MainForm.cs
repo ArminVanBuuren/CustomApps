@@ -8,6 +8,7 @@ using LogsReader.Config;
 using LogsReader.Properties;
 using LogsReader.Reader;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm;
 
@@ -109,13 +110,13 @@ namespace LogsReader
                     }
                     catch (Exception ex)
                     {
-                        Util.MessageShow($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", @"Load scheme");
+                        ReportMessage.Show($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", MessageBoxIcon.Error, @"Load scheme");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Util.MessageShow(ex.ToString(), @"Initialization");
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"Initialization");
             }
         }
 
@@ -225,7 +226,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Util.MessageShow(ex.ToString(), @"System Resource Monitoring");
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"System Resource Monitoring");
 
                 void Clear()
                 {

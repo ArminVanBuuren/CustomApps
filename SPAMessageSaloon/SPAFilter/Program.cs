@@ -2,11 +2,10 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using SPAMessageSaloon.Common;
 
 namespace SPAFilter
 {
-    public delegate void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null);
-
     static class Program
     {
         /// <summary>
@@ -43,19 +42,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ReportMessage(ex.ToString(), MessageBoxIcon.Error, "Initialization Form", false);
-            }
-        }
-
-        public static void ReportMessage(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null, bool isForm = true)
-        {
-            if (isForm)
-            {
-                int num = (int) MessageBox.Show(message, caption ?? type.ToString("G"), MessageBoxButtons.OK, type);
-            }
-            else
-            {
-                int num = (int)MessageBox.Show(message, caption ?? type.ToString("G"), MessageBoxButtons.OK, type, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, "Initialization Form", false);
             }
         }
     }

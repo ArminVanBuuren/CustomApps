@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
 using LogsReader.Reader;
+using SPAMessageSaloon.Common;
 using Utils;
 
 namespace LogsReader.Config
@@ -90,7 +92,7 @@ namespace LogsReader.Config
                 }
                 catch (Exception ex)
                 {
-                    Util.MessageShow(ex.Message, $"Scheme=\"{Name}\" - encoding");
+                    ReportMessage.Show(ex.Message, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - encoding");
                     return;
                 }
 
@@ -210,7 +212,7 @@ namespace LogsReader.Config
                 catch (ArgumentException)
                 {
                     if (ReportStatus == null)
-                        Util.MessageShow("Columns must be unique!", $"Scheme=\"{Name}\" - OrderBy");
+                        ReportMessage.Show("Columns must be unique!", MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
                     else
                         ReportStatus.Invoke("Columns must be unique!", ReportStatusType.Error);
                     return;
@@ -218,7 +220,7 @@ namespace LogsReader.Config
                 catch (Exception ex)
                 {
                     if (ReportStatus == null)
-                        Util.MessageShow(ex.Message, $"Scheme=\"{Name}\" - OrderBy");
+                        ReportMessage.Show(ex.Message, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
                     else
                         ReportStatus.Invoke(ex.Message, ReportStatusType.Error);
                     return;

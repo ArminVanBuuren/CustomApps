@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SPAMessageSaloon.Common;
 
 namespace LogsReader
 {
@@ -22,7 +23,7 @@ namespace LogsReader
             }
             catch (Exception ex)
             {
-                Util.MessageShow(ex.ToString(), @"Run");
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"Run");
             }
         }
     }

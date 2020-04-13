@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using LogsReader.Properties;
+using SPAMessageSaloon.Common;
 using Utils;
 
 namespace LogsReader.Config
@@ -80,7 +82,7 @@ namespace LogsReader.Config
             }
             catch (Exception ex)
             {
-                Util.MessageShow(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), "Serialize Error");
+                ReportMessage.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error, "Serialize Error");
             }
         }
 
@@ -100,10 +102,10 @@ namespace LogsReader.Config
             catch (Exception ex)
             {
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                Util.MessageShow(string.Format(Resources.LRSettings_Deserialize_Ex,
+                ReportMessage.Show(string.Format(Resources.LRSettings_Deserialize_Ex,
                     Path.GetFileName(SettingsPath),
                     Path.GetFileName(FailedSettingsPath),
-                    message), "Deserialize Error");
+                    message), MessageBoxIcon.Error, "Deserialize Error");
 
                 if (File.Exists(FailedSettingsPath))
                 {

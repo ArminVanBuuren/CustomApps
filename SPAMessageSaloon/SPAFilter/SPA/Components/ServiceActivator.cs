@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using SPAMessageSaloon.Common;
 using Utils;
 
 namespace SPAFilter.SPA.Components
@@ -29,7 +30,7 @@ namespace SPAFilter.SPA.Components
                 catch (Exception ex)
                 {
                     instance.IsCorrect = false;
-                    Program.ReportMessage(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ [{instance.HardwareID}]", false);
+                    ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ [{instance.HardwareID}]", false);
                 }
             }
         }
@@ -48,7 +49,7 @@ namespace SPAFilter.SPA.Components
                 }
                 catch (Exception ex)
                 {
-                    Program.ReportMessage(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ {instanceXml}", false);
+                    ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, $"{FilePath} \\ {instanceXml}", false);
                 }
             }
         }

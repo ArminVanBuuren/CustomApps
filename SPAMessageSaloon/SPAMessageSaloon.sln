@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPathTester", "XPathTester\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMessageSaloon", "SPAMessageSaloon\SPAMessageSaloon.csproj", "{6B055C49-DCE2-4209-BEAE-D998E31DA315}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMessageSaloon.Common", "SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj", "{CA12905A-D287-4CBB-A91D-358614B24D8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6B055C49-DCE2-4209-BEAE-D998E31DA315}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B055C49-DCE2-4209-BEAE-D998E31DA315}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B055C49-DCE2-4209-BEAE-D998E31DA315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

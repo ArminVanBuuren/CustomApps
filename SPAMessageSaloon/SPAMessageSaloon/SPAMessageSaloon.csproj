@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\leaves.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,6 +47,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Utils">
+      <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainForm.cs">
@@ -51,6 +57,9 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MDIManagerButton.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +101,45 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\leaves.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogsReader\LogsReader.csproj">
+      <Project>{72ab6c0c-0702-4307-b210-03387cbe2bb8}</Project>
+      <Name>LogsReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPAFilter\SPAFilter.csproj">
+      <Project>{2d965102-2cc6-4c82-ad78-dab5ed41dd32}</Project>
+      <Name>SPAFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj">
+      <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>
+      <Name>SPAMessageSaloon.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XPathTester\XPathTester.csproj">
+      <Project>{1e6d3446-094b-4451-aff1-4d3c0f82c90b}</Project>
+      <Name>XPathTester</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconLogsReader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconsXpath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconsSpaFilter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
