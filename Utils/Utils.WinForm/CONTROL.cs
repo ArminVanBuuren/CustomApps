@@ -5,6 +5,23 @@ namespace Utils.WinForm
 {
     public static class CONTROL
     {
+        public static void AssignValue<T>(this Control textBox, T value, EventHandler handler)
+        {
+            try
+            {
+                textBox.TextChanged -= handler;
+                textBox.Text = value.ToString();
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
+            finally
+            {
+                textBox.TextChanged += handler;
+            }
+        }
+
         public static void SafeInvoke(this Control uiElement, Action action, bool forceSynchronous = true)
         {
             if (uiElement == null)
