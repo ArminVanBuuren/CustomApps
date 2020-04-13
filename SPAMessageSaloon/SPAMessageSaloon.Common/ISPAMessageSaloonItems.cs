@@ -8,6 +8,9 @@
 
     public interface ISPAMessageSaloonItems
     {
+        int ActiveProcessesCount { get; }
+        int ActiveTotalProgress { get; }
+
         void ChangeLanguage(NationalLanguage language);
     }
 }

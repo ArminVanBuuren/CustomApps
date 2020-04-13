@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using FastColoredTextBoxNS;
+using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
 namespace XPathTester
 {
-    public partial class MainWindow : Form
+    public partial class MainWindow : Form, ISPAMessageSaloonItems
     {
         private readonly object sync = new object();
         private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
@@ -26,6 +27,10 @@ namespace XPathTester
         public XPathCollection Result { get; private set; }
 
         public XmlDocument XmlBody { get; private set; }
+
+        public int ActiveProcessesCount => 0;
+
+        public int ActiveTotalProgress => 0;
 
         public MainWindow()
         {
@@ -266,6 +271,11 @@ namespace XPathTester
                 _statusInfo.ForeColor = Color.Black;
                 _statusInfo.Text = string.Empty;
             }
+        }
+
+        public void ChangeLanguage(NationalLanguage language)
+        {
+            
         }
     }
 }

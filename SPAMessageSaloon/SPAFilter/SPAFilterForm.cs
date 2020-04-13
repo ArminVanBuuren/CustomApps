@@ -37,7 +37,7 @@ namespace SPAFilter
     }
 
     [Serializable]
-    public partial class SPAFilterForm : Form, ISerializable
+    public partial class SPAFilterForm : Form, ISPAMessageSaloonItems, ISerializable
     {
         readonly object _sync = new object();
 
@@ -51,7 +51,8 @@ namespace SPAFilter
         private bool _notepadWordHighlights = true;
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
-        
+        private ProgressCalculationAsync _progressMonitor;
+
         private ToolStripStatusLabel BPCount;
         private ToolStripStatusLabel OperationsCount;
         private ToolStripStatusLabel ScenariosCount;
@@ -152,6 +153,10 @@ namespace SPAFilter
                 }
             }
         }
+
+        public int ActiveProcessesCount => _progressMonitor != null ? 1 : 0;
+
+        public int ActiveTotalProgress => _progressMonitor?.PercentComplete ?? 0;
 
         public SPAFilterForm()
         {
@@ -1056,9 +1061,9 @@ namespace SPAFilter
 
                 ClearDataGrid(true);
 
-                using (var progressCalc = new ProgressCalculationAsync(progressBar, 9))
+                using (_progressMonitor = new ProgressCalculationAsync(progressBar, 9))
                 {
-                    await Filter.DataFilterAsync(filterProcess, filterHT, filterOp, progressCalc);
+                    await Filter.DataFilterAsync(filterProcess, filterHT, filterOp, _progressMonitor);
 
                     await AssignServiceInstances();
 
@@ -1069,7 +1074,7 @@ namespace SPAFilter
                     else
                         await dataGridOperations.AssignCollectionAsync(Filter.HostTypes.Operations.OfType<CatalogOperation>(), null, true);
 
-                    progressCalc.Append(1);
+                    _progressMonitor.Append(1);
 
                     if (Filter.Scenarios != null)
                     {
@@ -1100,6 +1105,7 @@ namespace SPAFilter
             }
             finally
             {
+                _progressMonitor = null;
                 IsInProgress = false;
                 RefreshStatus();
             }
@@ -1208,11 +1214,11 @@ namespace SPAFilter
 
                 using (var stringErrors = new CustomStringBuilder())
                 {
-                    using (var progrAsync = new ProgressCalculationAsync(progressBar, filesNumber))
+                    using (_progressMonitor = new ProgressCalculationAsync(progressBar, filesNumber))
                     {
-                        await Filter.PrintXMLAsync(progrAsync, stringErrors);
+                        await Filter.PrintXMLAsync(_progressMonitor, stringErrors);
 
-                        var result = string.Format(Resources.Form_PrintXMLFiles_Result, progrAsync.CurrentProgressIterator, filesNumber);
+                        var result = string.Format(Resources.Form_PrintXMLFiles_Result, _progressMonitor.CurrentProgressIterator, filesNumber);
                         if (stringErrors.Length > 0)
                         {
                             var warning = string.Format(Resources.Form_PrintXMLFiles_Error, stringErrors.Lines, stringErrors.ToString(2));
@@ -1231,6 +1237,7 @@ namespace SPAFilter
             }
             finally
             {
+                _progressMonitor = null;
                 PrintXMLButton.Text = Resources.Form_PrintXMLFiles_Button;
                 PrintXMLButton.Click += PrintXMLButton_Click;
                 PrintXMLButton.Click -= PrintXMLButton_Click_Cancel;
@@ -1450,6 +1457,11 @@ namespace SPAFilter
             }
 
             return false;
+        }
+
+        public void ChangeLanguage(NationalLanguage language)
+        {
+            
         }
 
         //private void AddActivatorButton_Paint(object sender, PaintEventArgs e)
