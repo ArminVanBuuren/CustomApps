@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Utils.Messaging")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Utils.Messaging")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vladimir Khovanskiy")]
 [assembly: AssemblyProduct("Utils.Messaging")]

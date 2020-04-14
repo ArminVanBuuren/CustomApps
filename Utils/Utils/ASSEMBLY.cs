@@ -7,18 +7,42 @@ using System.Text;
 
 namespace Utils
 {
+    public class AssemblyInfo
+    {
+        public string ApplicationName => CurrentAssembly.GetName().Name;
+        public string ApplicationPath => CurrentAssembly.Location;
+        public string ApplicationDirectory => AppDomain.CurrentDomain.BaseDirectory; //Path.GetDirectoryName(ApplicationPath);
+        public string ProcessFilePath => Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
+        public string ApplicationFilePath => CurrentAssembly.GetDirectory();
+        public string CurrentVersion => CurrentAssembly.GetName().Version.ToString();
+        public string Company => ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(CurrentAssembly, typeof(AssemblyCompanyAttribute), false))?.Company ?? string.Empty;
+        public Assembly CurrentAssembly { get; }
+
+        //public static Assembly CurrentAssembly => Assembly.GetCallingAssembly(); //Assembly.GetEntryAssembly(); //Assembly.GetExecutingAssembly(); 
+
+        public AssemblyInfo(object input)
+        {
+            var type = input.GetType();
+            CurrentAssembly = type.Assembly;
+        }
+
+        public AssemblyInfo(Type type)
+        {
+            CurrentAssembly = type.Assembly;
+        }
+
+        public AssemblyInfo(Assembly assembly)
+        {
+            CurrentAssembly = assembly;
+        }
+    }
+
     public static class ASSEMBLY
     {
-        //ApplicationName = Assembly.GetCallingAssembly().GetName().Name;
-        public static string ApplicationName => CurrentAssembly.GetName().Name;
-        public static string ApplicationPath => CurrentAssembly.Location;
-        //public static string ApplicationDirectory => Path.Combine(Path.GetDirectoryName(CurrentAssembly.Location), CurrentAssembly.GetName().Name);
-        public static string ApplicationDirectory => Path.GetDirectoryName(ApplicationPath);
-        public static string ApplicationFilePath => Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
-        public static string CurrentVersion => CurrentAssembly.GetName().Version.ToString();
-        public static string Company => ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(CurrentAssembly, typeof(AssemblyCompanyAttribute), false))?.Company ?? string.Empty;
-
-        public static Assembly CurrentAssembly => Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+        public static AssemblyInfo GetAssemblyInfo(this Assembly input)
+        {
+            return new AssemblyInfo(input);
+        }
 
         public static string GetDirectory(this Assembly assembly)
         {

@@ -34,5 +34,10 @@ namespace Utils
         {
             return string.IsNullOrEmpty(value) ? @default : value;
         }
+
+        public static AssemblyInfo GetAssemblyInfo(this object input)
+        {
+            return new AssemblyInfo(input);
+        }
     }
 }

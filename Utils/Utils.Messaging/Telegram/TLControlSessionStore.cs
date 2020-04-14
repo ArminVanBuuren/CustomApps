@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Win32;
 using TLSharp.Core;
 using Utils.Handles;
@@ -9,7 +10,7 @@ namespace Utils.Messaging.Telegram
     {
         public Session Load(string sessionUserId)
         {
-            using (var regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+            using (var regedit = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
             {
                 if (regedit[sessionUserId] != null)
                 {
@@ -25,7 +26,7 @@ namespace Utils.Messaging.Telegram
 
         public void Save(Session session)
         {
-            using (var regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+            using (var regedit = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
             {
                 regedit[session.SessionUserId, RegistryValueKind.Binary] = session.ToBytes();
             }
