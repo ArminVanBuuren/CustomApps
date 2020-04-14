@@ -63,7 +63,7 @@ namespace SPAFilter
         ApplicationUpdater AppUpdater { get; set; }
         IUpdater Updater { get; set; }
 
-        public static string SavedDataPath => $"{ApplicationFilePath}.bin";
+        public static string SavedDataPath { get; }
 
         private bool IsInititializating { get; set; } = true;
 
@@ -157,6 +157,11 @@ namespace SPAFilter
         public int ActiveProcessesCount => _progressMonitor != null ? 1 : 0;
 
         public int ActiveTotalProgress => _progressMonitor?.PercentComplete ?? 0;
+
+        static SPAFilterForm()
+        {
+            SavedDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SPAFilter)}.bin");
+        }
 
         public SPAFilterForm()
         {

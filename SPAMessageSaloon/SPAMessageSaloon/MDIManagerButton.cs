@@ -35,7 +35,7 @@ namespace SPAMessageSaloon
         void MDIManagerButton_Click(object sender, EventArgs e)
         {
             if (this.Parent == null) return;
-            foreach (MDIManagerButton btn in this.Parent.Items)
+            foreach (MDIManagerButton btn in this.Parent.Items.OfType<MDIManagerButton>())
             {
                 btn.BorderStyle = Border3DStyle.Flat;
                 btn.BackColor = SystemColors.ButtonFace;

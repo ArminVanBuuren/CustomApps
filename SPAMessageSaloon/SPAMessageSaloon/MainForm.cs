@@ -14,6 +14,9 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
 using Utils.WinForm;
+using LogsReader;
+using SPAFilter;
+using XPathTester;
 
 namespace SPAMessageSaloon
 {
@@ -30,6 +33,7 @@ namespace SPAMessageSaloon
         public MainForm()
         {
             InitializeComponent();
+            IsMdiContainer = true;
 
             try
             {
@@ -45,21 +49,22 @@ namespace SPAMessageSaloon
                         MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}");
                 };
                 statusStrip.Items.Add(autor);
-
                 statusStrip.Items.Add(new ToolStripSeparator());
+
                 statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
                 CPUUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 1, 2)};
                 statusStrip.Items.Add(CPUUsage);
-
                 statusStrip.Items.Add(new ToolStripSeparator());
+
                 statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
                 ThreadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(ThreadsUsage);
-
                 statusStrip.Items.Add(new ToolStripSeparator());
+
                 statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
                 RAMUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(RAMUsage);
+                statusStrip.Items.Add(new ToolStripSeparator());
 
 
                 Closing += (sender, args) => { IsClosed = true; };
@@ -222,19 +227,19 @@ namespace SPAMessageSaloon
             return new CultureInfo("en-US");
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
         {
-
+            ShowMdiForm(() => new LogsReaderMainForm());
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void toolStripSpaFilterButton_Click(object sender, EventArgs e)
         {
-
+            ShowMdiForm(() => new SPAFilterForm());
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void toolStripXPathButton_Click(object sender, EventArgs e)
         {
-
+            ShowMdiForm(() => new XPathTesterForm());
         }
 
         private void ApplyResources()
@@ -244,18 +249,26 @@ namespace SPAMessageSaloon
 
         public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISPAMessageSaloonItems
         {
-            if (!newInstance && ActivateMdiForm(out T form))
+            try
+            {
+                if (!newInstance && ActivateMdiForm(out T form))
+                    return form;
+
+                form = formMaker.Invoke();
+                if (form == null)
+                    return null;
+
+                form.MdiParent = this;
+                form.Load += MDIManagerButton_Load;
+                form.Show();
+
                 return form;
-
-            form = formMaker();
-            if (form == null)
+            }
+            catch (Exception ex)
+            {
+                ReportMessage.Show(ex);
                 return null;
-
-            form.MdiParent = this;
-            form.Load += MDIManagerButton_Load;
-            form.Show();
-
-            return form;
+            }
         }
 
         private bool ActivateMdiForm<T>(out T form) where T : Form

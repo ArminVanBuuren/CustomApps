@@ -17,8 +17,14 @@ namespace LogsReader.Config
     public class LRSettings
     {
         private static object _sync = new object();
-        static string SettingsPath => $"{ASSEMBLY.ApplicationFilePath}.xml";
-        static string FailedSettingsPath => $"{SettingsPath}_failed.bak";
+        private static string SettingsPath { get; }
+        private static string FailedSettingsPath { get; }
+
+        static LRSettings()
+        {
+            SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(LogsReader)}.xml");
+            FailedSettingsPath = $"{SettingsPath}_failed.bak";
+        }
 
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
 

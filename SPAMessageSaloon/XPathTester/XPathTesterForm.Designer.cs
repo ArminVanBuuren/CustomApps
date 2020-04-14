@@ -4,7 +4,7 @@ using Utils.WinForm.Notepad;
 
 namespace XPathTester
 {
-    partial class MainWindow
+    partial class XPathTesterForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@ namespace XPathTester
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XPathTesterForm));
             this.XPathText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFind = new System.Windows.Forms.Button();

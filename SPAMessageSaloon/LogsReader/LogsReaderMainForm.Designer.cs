@@ -2,7 +2,7 @@
 
 namespace LogsReader
 {
-    partial class MainForm
+    partial class LogsReaderMainForm
     {
         /// <summary>
         /// Required designer variable.

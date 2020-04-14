@@ -15,7 +15,7 @@ using Utils.WinForm;
 
 namespace LogsReader
 {
-    public partial class MainForm : Form, ISPAMessageSaloonItems
+    public partial class LogsReaderMainForm : Form, ISPAMessageSaloonItems
     {
         private LogsReaderForm _current;
         /// <summary>
@@ -42,7 +42,7 @@ namespace LogsReader
 
         public int ActiveTotalProgress => AllForms.Values.Where(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking)).Sum(x => x.Progress);
 
-        public MainForm()
+        public LogsReaderMainForm()
         {
             InitializeComponent();
 
@@ -73,13 +73,13 @@ namespace LogsReader
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 
                 AllSettings = LRSettings.Deserialize();
-                AllForms = new Dictionary<TabPage, LogsReaderForm>(AllSettings.SchemeList.Length);
+                AllForms = new Dictionary<TabPage, Reader.LogsReaderForm>(AllSettings.SchemeList.Length);
 
                 foreach (var scheme in AllSettings.SchemeList)
                 {
                     try
                     {
-                        var logsReader = new LogsReaderForm();
+                        var logsReader = new Reader.LogsReaderForm();
                         logsReader.LoadForm(scheme);
                         logsReader.Dock = DockStyle.Fill;
                         logsReader.OnSchemeChanged += SaveSchemas;

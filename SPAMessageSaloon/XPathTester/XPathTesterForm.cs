@@ -14,7 +14,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace XPathTester
 {
-    public partial class MainWindow : Form, ISPAMessageSaloonItems
+    public partial class XPathTesterForm : Form, ISPAMessageSaloonItems
     {
         private readonly object sync = new object();
         private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
@@ -32,7 +32,7 @@ namespace XPathTester
 
         public int ActiveTotalProgress => 0;
 
-        public MainWindow()
+        public XPathTesterForm()
         {
             InitializeComponent();
 

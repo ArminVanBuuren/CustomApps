@@ -36,9 +36,9 @@
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.russianToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLogsReaderButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSpaFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripXPathButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,9 +54,9 @@
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSplitButton1,
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
+            this.toolStripLogsReaderButton,
+            this.toolStripSpaFilterButton,
+            this.toolStripXPathButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1202, 25);
@@ -104,35 +104,35 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.aboutToolStripMenuItem.Text = "About";
             // 
-            // toolStripButton1
+            // toolStripLogsReaderButton
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::SPAMessageSaloon.Properties.Resources.iconLogsReader;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "Logs Reader";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripLogsReaderButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripLogsReaderButton.Image = global::SPAMessageSaloon.Properties.Resources.iconLogsReader;
+            this.toolStripLogsReaderButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripLogsReaderButton.Name = "toolStripLogsReaderButton";
+            this.toolStripLogsReaderButton.Size = new System.Drawing.Size(23, 22);
+            this.toolStripLogsReaderButton.Text = "Logs Reader";
+            this.toolStripLogsReaderButton.Click += new System.EventHandler(this.toolStripLogsReaderButton_Click);
             // 
-            // toolStripButton2
+            // toolStripSpaFilterButton
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::SPAMessageSaloon.Properties.Resources.iconsSpaFilter;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "SPA Filter";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.toolStripSpaFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSpaFilterButton.Image = global::SPAMessageSaloon.Properties.Resources.iconsSpaFilter;
+            this.toolStripSpaFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSpaFilterButton.Name = "toolStripSpaFilterButton";
+            this.toolStripSpaFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.toolStripSpaFilterButton.Text = "SPA Filter";
+            this.toolStripSpaFilterButton.Click += new System.EventHandler(this.toolStripSpaFilterButton_Click);
             // 
-            // toolStripButton3
+            // toolStripXPathButton
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = global::SPAMessageSaloon.Properties.Resources.iconsXpath;
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "XPath Tester";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.toolStripXPathButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripXPathButton.Image = global::SPAMessageSaloon.Properties.Resources.iconsXpath;
+            this.toolStripXPathButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripXPathButton.Name = "toolStripXPathButton";
+            this.toolStripXPathButton.Size = new System.Drawing.Size(23, 22);
+            this.toolStripXPathButton.Text = "XPath Tester";
+            this.toolStripXPathButton.Click += new System.EventHandler(this.toolStripXPathButton_Click);
             // 
             // MainForm
             // 
@@ -160,9 +160,9 @@
         private System.Windows.Forms.ToolStripMenuItem englishToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem russianToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton toolStripLogsReaderButton;
+        private System.Windows.Forms.ToolStripButton toolStripSpaFilterButton;
+        private System.Windows.Forms.ToolStripButton toolStripXPathButton;
     }
 }
 
