@@ -277,8 +277,8 @@ namespace SPAMessageSaloon
 
         private void russianToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            englishToolStripMenuItem.Checked = true;
-            russianToolStripMenuItem.Checked = false;
+            englishToolStripMenuItem.Checked = false;
+            russianToolStripMenuItem.Checked = true;
 
             CultureInfo info = this.GetCultureInfo();
             if (info != null)
@@ -290,8 +290,8 @@ namespace SPAMessageSaloon
 
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            englishToolStripMenuItem.Checked = false;
-            russianToolStripMenuItem.Checked = true;
+            englishToolStripMenuItem.Checked = true;
+            russianToolStripMenuItem.Checked = false;
 
             CultureInfo info = this.GetCultureInfo();
             if (info != null)
