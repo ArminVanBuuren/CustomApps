@@ -34,6 +34,7 @@ namespace SPAMessageSaloon
         {
             InitializeComponent();
             IsMdiContainer = true;
+            base.Text = $"SPA Message Saloon {this.GetAssemblyInfo().CurrentVersion}";
 
             try
             {
@@ -46,7 +47,7 @@ namespace SPAMessageSaloon
                 autor.Click += (sender, args) =>
                 {
                     ReportMessage.Show(@"Hello! Thanks.",
-                        MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}");
+                        MessageBoxIcon.Asterisk, $"© {this.GetAssemblyInfo().Company}");
                 };
                 statusStrip.Items.Add(autor);
                 statusStrip.Items.Add(new ToolStripSeparator());
@@ -244,7 +245,7 @@ namespace SPAMessageSaloon
 
         private void ApplyResources()
         {
-            base.Text = $"SPA Message Saloon {ASSEMBLY.CurrentVersion}";
+            
         }
 
         public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISPAMessageSaloonItems
@@ -260,6 +261,7 @@ namespace SPAMessageSaloon
 
                 form.MdiParent = this;
                 form.Load += MDIManagerButton_Load;
+                form.WindowState = FormWindowState.Maximized;
                 form.Show();
 
                 return form;

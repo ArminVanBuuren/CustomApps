@@ -19,7 +19,7 @@ namespace LogsReader.Config
                 Scheme = schemeName;
                 var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
                 UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch.ToString(), string.Empty));
-                parentRegistry = new RegeditControl(ASSEMBLY.ApplicationName);
+                parentRegistry = new RegeditControl(this.GetAssemblyInfo().ApplicationName);
             }
             catch (Exception)
             {
@@ -70,22 +70,38 @@ namespace LogsReader.Config
             set => SetValue(nameof(DateEndChecked), value);
         }
 
-        public string TraceLike
+        public string TraceNameFilter
         {
-            get => GetValue(nameof(TraceLike));
-            set => SetValue(nameof(TraceLike), value);
+            get => GetValue(nameof(TraceNameFilter));
+            set => SetValue(nameof(TraceNameFilter), value);
         }
 
-        public string TraceNotLike
+        public bool TraceNameFilterContains
         {
-            get => GetValue(nameof(TraceNotLike));
-            set => SetValue(nameof(TraceNotLike), value);
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(TraceNameFilterContains)), out var result))
+                    return result;
+                return true;
+            }
+            set => SetValue(nameof(TraceNameFilterContains), value);
         }
 
-        public string Message
+        public string MessageFilter
         {
-            get => GetValue(nameof(Message));
-            set => SetValue(nameof(Message), value);
+            get => GetValue(nameof(MessageFilter));
+            set => SetValue(nameof(MessageFilter), value);
+        }
+
+        public bool MessageFilterContains
+        {
+            get
+            {
+                if (bool.TryParse(GetValue(nameof(MessageFilterContains)), out var result))
+                    return result;
+                return true;
+            }
+            set => SetValue(nameof(MessageFilterContains), value);
         }
 
         public Language MessageLanguage

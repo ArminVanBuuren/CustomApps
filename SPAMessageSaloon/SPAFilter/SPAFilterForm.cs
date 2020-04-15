@@ -21,7 +21,6 @@ using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
 using Utils.WinForm.Handles;
-using static Utils.ASSEMBLY;
 
 namespace SPAFilter
 {
@@ -304,6 +303,8 @@ namespace SPAFilter
 
             propertyBag.AddValue("UUPPDD", Updater);
         }
+        
+
 
         void PreInit()
         {
@@ -314,13 +315,13 @@ namespace SPAFilter
             // Gets or sets a value indicating whether to catch calls on the wrong thread that access a control's Handle property when an application is being debugged.
             Control.CheckForIllegalCrossThreadCalls = false;
 
-            base.Text = $"{base.Text} {ASSEMBLY.CurrentVersion}";
+            base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
 
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
             var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { ReportMessage.Show(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {ASSEMBLY.Company}"); };
+            autor.Click += (sender, args) => { ReportMessage.Show(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {this.GetAssemblyInfo().Company}"); };
             statusStrip.Items.Add(autor);
 
             statusStrip.Items.Add(new ToolStripSeparator());
@@ -373,6 +374,7 @@ namespace SPAFilter
             try
             {
                 var currentPackUpdaterName = Updater?.ProjectBuildPack.Name;
+                var executingAssembly = Assembly.GetExecutingAssembly();
                 AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), currentPackUpdaterName, 900);
                 AppUpdater.OnFetch += AppUpdater_OnFetch;
                 AppUpdater.OnUpdate += AppUpdater_OnUpdate;

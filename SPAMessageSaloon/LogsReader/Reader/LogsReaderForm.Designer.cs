@@ -68,17 +68,17 @@ namespace LogsReader.Reader
             this.useRegex = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.traceNameLikeFilter = new System.Windows.Forms.TextBox();
+            this.traceNameFilter = new System.Windows.Forms.TextBox();
             this.dateEndFilter = new System.Windows.Forms.DateTimePicker();
-            this.label10 = new System.Windows.Forms.Label();
             this.dateStartFilter = new System.Windows.Forms.DateTimePicker();
-            this.traceNameNotLikeFilter = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.buttonFilter = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.traceMessageFilter = new System.Windows.Forms.TextBox();
             this.groupBoxFilter = new System.Windows.Forms.GroupBox();
+            this.traceMessageFilterComboBox = new System.Windows.Forms.ComboBox();
+            this.traceNameFilterComboBox = new System.Windows.Forms.ComboBox();
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
@@ -124,7 +124,7 @@ namespace LogsReader.Reader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(525, 343);
+            this.dgvFiles.Size = new System.Drawing.Size(405, 380);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -156,7 +156,7 @@ namespace LogsReader.Reader
             this.ID.MinimumWidth = 30;
             this.ID.Name = "ID";
             this.ID.ReadOnly = true;
-            this.ID.Width = 40;
+            this.ID.Width = 30;
             // 
             // Server
             // 
@@ -165,16 +165,16 @@ namespace LogsReader.Reader
             this.Server.MinimumWidth = 40;
             this.Server.Name = "Server";
             this.Server.ReadOnly = true;
-            this.Server.Width = 80;
+            this.Server.Width = 50;
             // 
             // TraceName
             // 
             this.TraceName.DataPropertyName = "TraceName";
-            this.TraceName.HeaderText = "Trace name";
+            this.TraceName.HeaderText = "TraceName";
             this.TraceName.MinimumWidth = 40;
             this.TraceName.Name = "TraceName";
             this.TraceName.ReadOnly = true;
-            this.TraceName.Width = 140;
+            this.TraceName.Width = 80;
             // 
             // DateOfTrace
             // 
@@ -200,10 +200,10 @@ namespace LogsReader.Reader
             this.btnSearch.BackColor = System.Drawing.SystemColors.Control;
             this.btnSearch.Image = global::LogsReader.Properties.Resources.find;
             this.btnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSearch.Location = new System.Drawing.Point(1130, 2);
+            this.btnSearch.Location = new System.Drawing.Point(685, 2);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.btnSearch.Size = new System.Drawing.Size(88, 24);
+            this.btnSearch.Size = new System.Drawing.Size(90, 24);
             this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "Search [F5]";
             this.btnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -215,9 +215,9 @@ namespace LogsReader.Reader
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClear.Image = global::LogsReader.Properties.Resources.clear1;
             this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClear.Location = new System.Drawing.Point(1224, 2);
+            this.btnClear.Location = new System.Drawing.Point(781, 2);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(88, 24);
+            this.btnClear.Size = new System.Drawing.Size(87, 24);
             this.btnClear.TabIndex = 3;
             this.btnClear.Text = "Clear [F6]";
             this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -230,16 +230,16 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPattern.Location = new System.Drawing.Point(3, 3);
             this.txtPattern.Name = "txtPattern";
-            this.txtPattern.Size = new System.Drawing.Size(1039, 23);
+            this.txtPattern.Size = new System.Drawing.Size(585, 23);
             this.txtPattern.TabIndex = 4;
             this.txtPattern.TextChanged += new System.EventHandler(this.TxtPattern_TextChanged);
             // 
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 498);
+            this.progressBar.Location = new System.Drawing.Point(0, 557);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1321, 10);
+            this.progressBar.Size = new System.Drawing.Size(871, 10);
             this.progressBar.TabIndex = 6;
             // 
             // ParentSplitContainer
@@ -257,7 +257,7 @@ namespace LogsReader.Reader
             // ParentSplitContainer.Panel2
             // 
             this.ParentSplitContainer.Panel2.Controls.Add(this.MainSplitContainer);
-            this.ParentSplitContainer.Size = new System.Drawing.Size(1321, 403);
+            this.ParentSplitContainer.Size = new System.Drawing.Size(871, 462);
             this.ParentSplitContainer.SplitterDistance = 175;
             this.ParentSplitContainer.TabIndex = 31;
             // 
@@ -281,7 +281,7 @@ namespace LogsReader.Reader
             this.SchemePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SchemePanel.Location = new System.Drawing.Point(0, 0);
             this.SchemePanel.Name = "SchemePanel";
-            this.SchemePanel.Size = new System.Drawing.Size(171, 399);
+            this.SchemePanel.Size = new System.Drawing.Size(171, 458);
             this.SchemePanel.TabIndex = 15;
             // 
             // label12
@@ -347,7 +347,7 @@ namespace LogsReader.Reader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode3,
             treeNode4});
-            this.trvMain.Size = new System.Drawing.Size(166, 208);
+            this.trvMain.Size = new System.Drawing.Size(166, 270);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
             // 
@@ -450,8 +450,9 @@ namespace LogsReader.Reader
             // MainSplitContainer.Panel1
             // 
             this.MainSplitContainer.Panel1.Controls.Add(this.EnumSplitContainer);
-            this.MainSplitContainer.Size = new System.Drawing.Size(1142, 403);
-            this.MainSplitContainer.SplitterDistance = 529;
+            this.MainSplitContainer.Panel1.Controls.Add(this.statusStrip);
+            this.MainSplitContainer.Size = new System.Drawing.Size(692, 462);
+            this.MainSplitContainer.SplitterDistance = 409;
             this.MainSplitContainer.TabIndex = 0;
             // 
             // EnumSplitContainer
@@ -469,8 +470,8 @@ namespace LogsReader.Reader
             // EnumSplitContainer.Panel2
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-            this.EnumSplitContainer.Size = new System.Drawing.Size(525, 399);
-            this.EnumSplitContainer.SplitterDistance = 343;
+            this.EnumSplitContainer.Size = new System.Drawing.Size(405, 436);
+            this.EnumSplitContainer.SplitterDistance = 380;
             this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
@@ -480,16 +481,17 @@ namespace LogsReader.Reader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(525, 52);
+            this.descriptionText.Size = new System.Drawing.Size(405, 52);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 
             // statusStrip
             // 
             this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-            this.statusStrip.Location = new System.Drawing.Point(0, 508);
+            this.statusStrip.Location = new System.Drawing.Point(0, 436);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1321, 22);
+            this.statusStrip.Size = new System.Drawing.Size(405, 22);
+            this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 8;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -502,7 +504,7 @@ namespace LogsReader.Reader
             // 
             this.useRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.useRegex.AutoSize = true;
-            this.useRegex.Location = new System.Drawing.Point(1048, 6);
+            this.useRegex.Location = new System.Drawing.Point(596, 6);
             this.useRegex.Name = "useRegex";
             this.useRegex.Size = new System.Drawing.Size(79, 19);
             this.useRegex.TabIndex = 9;
@@ -515,26 +517,28 @@ namespace LogsReader.Reader
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(236, 18);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(97, 15);
+            this.label7.Size = new System.Drawing.Size(70, 15);
             this.label7.TabIndex = 24;
-            this.label7.Text = "Trace-name Like:";
+            this.label7.Text = "TraceName:";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 47);
+            this.label9.Location = new System.Drawing.Point(7, 48);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 15);
             this.label9.TabIndex = 23;
             this.label9.Text = "Date End:";
             // 
-            // traceNameLikeFilter
+            // traceNameFilter
             // 
-            this.traceNameLikeFilter.Location = new System.Drawing.Point(364, 15);
-            this.traceNameLikeFilter.Name = "traceNameLikeFilter";
-            this.traceNameLikeFilter.Size = new System.Drawing.Size(437, 23);
-            this.traceNameLikeFilter.TabIndex = 25;
-            this.traceNameLikeFilter.TextChanged += new System.EventHandler(this.TraceNameLikeFilter_TextChanged);
+            this.traceNameFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.traceNameFilter.Location = new System.Drawing.Point(403, 15);
+            this.traceNameFilter.Name = "traceNameFilter";
+            this.traceNameFilter.Size = new System.Drawing.Size(183, 23);
+            this.traceNameFilter.TabIndex = 25;
+            this.traceNameFilter.TextChanged += new System.EventHandler(this.TraceNameFilter_TextChanged);
             // 
             // dateEndFilter
             // 
@@ -548,15 +552,6 @@ namespace LogsReader.Reader
             this.dateEndFilter.Size = new System.Drawing.Size(156, 23);
             this.dateEndFilter.TabIndex = 21;
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(236, 47);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(124, 15);
-            this.label10.TabIndex = 26;
-            this.label10.Text = "Trace-name NOT Like:";
-            // 
             // dateStartFilter
             // 
             this.dateStartFilter.Checked = false;
@@ -568,14 +563,6 @@ namespace LogsReader.Reader
             this.dateStartFilter.ShowUpDown = true;
             this.dateStartFilter.Size = new System.Drawing.Size(156, 23);
             this.dateStartFilter.TabIndex = 20;
-            // 
-            // traceNameNotLikeFilter
-            // 
-            this.traceNameNotLikeFilter.Location = new System.Drawing.Point(364, 44);
-            this.traceNameNotLikeFilter.Name = "traceNameNotLikeFilter";
-            this.traceNameNotLikeFilter.Size = new System.Drawing.Size(437, 23);
-            this.traceNameNotLikeFilter.TabIndex = 27;
-            this.traceNameNotLikeFilter.TextChanged += new System.EventHandler(this.TraceNameNotLikeFilter_TextChanged);
             // 
             // label8
             // 
@@ -591,10 +578,10 @@ namespace LogsReader.Reader
             this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonFilter.Image = global::LogsReader.Properties.Resources.filter17;
             this.buttonFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonFilter.Location = new System.Drawing.Point(1128, 44);
+            this.buttonFilter.Location = new System.Drawing.Point(592, 15);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Padding = new System.Windows.Forms.Padding(3, 0, 2, 0);
-            this.buttonFilter.Size = new System.Drawing.Size(88, 24);
+            this.buttonFilter.Size = new System.Drawing.Size(85, 23);
             this.buttonFilter.TabIndex = 28;
             this.buttonFilter.Text = "Filter [F7]";
             this.buttonFilter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -606,9 +593,9 @@ namespace LogsReader.Reader
             this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonReset.Image = global::LogsReader.Properties.Resources.reset2;
             this.buttonReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReset.Location = new System.Drawing.Point(1222, 44);
+            this.buttonReset.Location = new System.Drawing.Point(592, 44);
             this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(88, 24);
+            this.buttonReset.Size = new System.Drawing.Size(85, 23);
             this.buttonReset.TabIndex = 29;
             this.buttonReset.Text = "Reset [F8]";
             this.buttonReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -618,7 +605,7 @@ namespace LogsReader.Reader
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(807, 18);
+            this.label11.Location = new System.Drawing.Point(236, 48);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(38, 15);
             this.label11.TabIndex = 30;
@@ -628,9 +615,9 @@ namespace LogsReader.Reader
             // 
             this.traceMessageFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.traceMessageFilter.Location = new System.Drawing.Point(851, 15);
+            this.traceMessageFilter.Location = new System.Drawing.Point(403, 44);
             this.traceMessageFilter.Name = "traceMessageFilter";
-            this.traceMessageFilter.Size = new System.Drawing.Size(459, 23);
+            this.traceMessageFilter.Size = new System.Drawing.Size(183, 23);
             this.traceMessageFilter.TabIndex = 31;
             this.traceMessageFilter.TextChanged += new System.EventHandler(this.TraceMessageFilter_TextChanged);
             // 
@@ -639,6 +626,8 @@ namespace LogsReader.Reader
             this.groupBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFilter.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBoxFilter.Controls.Add(this.traceMessageFilterComboBox);
+            this.groupBoxFilter.Controls.Add(this.traceNameFilterComboBox);
             this.groupBoxFilter.Controls.Add(this.alreadyUseFilter);
             this.groupBoxFilter.Controls.Add(this.buttonExport);
             this.groupBoxFilter.Controls.Add(this.traceMessageFilter);
@@ -646,23 +635,54 @@ namespace LogsReader.Reader
             this.groupBoxFilter.Controls.Add(this.buttonReset);
             this.groupBoxFilter.Controls.Add(this.buttonFilter);
             this.groupBoxFilter.Controls.Add(this.label8);
-            this.groupBoxFilter.Controls.Add(this.traceNameNotLikeFilter);
             this.groupBoxFilter.Controls.Add(this.dateStartFilter);
-            this.groupBoxFilter.Controls.Add(this.label10);
             this.groupBoxFilter.Controls.Add(this.dateEndFilter);
-            this.groupBoxFilter.Controls.Add(this.traceNameLikeFilter);
+            this.groupBoxFilter.Controls.Add(this.traceNameFilter);
             this.groupBoxFilter.Controls.Add(this.label9);
             this.groupBoxFilter.Controls.Add(this.label7);
             this.groupBoxFilter.Location = new System.Drawing.Point(2, 20);
             this.groupBoxFilter.Name = "groupBoxFilter";
-            this.groupBoxFilter.Size = new System.Drawing.Size(1316, 75);
+            this.groupBoxFilter.Size = new System.Drawing.Size(866, 75);
             this.groupBoxFilter.TabIndex = 28;
             this.groupBoxFilter.TabStop = false;
             // 
+            // traceMessageFilterComboBox
+            // 
+            this.traceMessageFilterComboBox.FormattingEnabled = true;
+            this.traceMessageFilterComboBox.Items.AddRange(new object[] {
+            "Contains",
+            "Not Contains"});
+            this.traceMessageFilterComboBox.Location = new System.Drawing.Point(306, 45);
+            this.traceMessageFilterComboBox.MaxDropDownItems = 2;
+            this.traceMessageFilterComboBox.Name = "traceMessageFilterComboBox";
+            this.traceMessageFilterComboBox.Size = new System.Drawing.Size(91, 21);
+            this.traceMessageFilterComboBox.Sorted = true;
+            this.traceMessageFilterComboBox.TabIndex = 35;
+            this.traceMessageFilterComboBox.Text = "Contains";
+            this.traceMessageFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.traceMessageFilterComboBox_SelectedIndexChanged);
+            this.traceMessageFilterComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
+            // 
+            // traceNameFilterComboBox
+            // 
+            this.traceNameFilterComboBox.FormattingEnabled = true;
+            this.traceNameFilterComboBox.Items.AddRange(new object[] {
+            "Contains",
+            "Not Contains"});
+            this.traceNameFilterComboBox.Location = new System.Drawing.Point(306, 16);
+            this.traceNameFilterComboBox.MaxDropDownItems = 2;
+            this.traceNameFilterComboBox.Name = "traceNameFilterComboBox";
+            this.traceNameFilterComboBox.Size = new System.Drawing.Size(91, 21);
+            this.traceNameFilterComboBox.Sorted = true;
+            this.traceNameFilterComboBox.TabIndex = 34;
+            this.traceNameFilterComboBox.Text = "Contains";
+            this.traceNameFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.traceNameFilterComboBox_SelectedIndexChanged);
+            this.traceNameFilterComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
+            // 
             // alreadyUseFilter
             // 
+            this.alreadyUseFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.alreadyUseFilter.AutoSize = true;
-            this.alreadyUseFilter.Location = new System.Drawing.Point(851, 47);
+            this.alreadyUseFilter.Location = new System.Drawing.Point(685, 48);
             this.alreadyUseFilter.Name = "alreadyUseFilter";
             this.alreadyUseFilter.Size = new System.Drawing.Size(158, 19);
             this.alreadyUseFilter.TabIndex = 33;
@@ -674,10 +694,10 @@ namespace LogsReader.Reader
             this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonExport.Image = global::LogsReader.Properties.Resources.save2;
             this.buttonExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExport.Location = new System.Drawing.Point(1010, 44);
+            this.buttonExport.Location = new System.Drawing.Point(683, 15);
             this.buttonExport.Name = "buttonExport";
             this.buttonExport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.buttonExport.Size = new System.Drawing.Size(112, 24);
+            this.buttonExport.Size = new System.Drawing.Size(112, 23);
             this.buttonExport.TabIndex = 32;
             this.buttonExport.Text = "Export [Ctrl+S]";
             this.buttonExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -694,9 +714,9 @@ namespace LogsReader.Reader
             this.filterPanel.Controls.Add(this.groupBoxFilter);
             this.filterPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.filterPanel.Location = new System.Drawing.Point(0, 0);
-            this.filterPanel.MinimumSize = new System.Drawing.Size(1321, 95);
+            this.filterPanel.MinimumSize = new System.Drawing.Size(871, 95);
             this.filterPanel.Name = "filterPanel";
-            this.filterPanel.Size = new System.Drawing.Size(1321, 95);
+            this.filterPanel.Size = new System.Drawing.Size(871, 95);
             this.filterPanel.TabIndex = 30;
             // 
             // LogsReaderForm
@@ -706,11 +726,10 @@ namespace LogsReader.Reader
             this.Controls.Add(this.ParentSplitContainer);
             this.Controls.Add(this.filterPanel);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.statusStrip);
             this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.MinimumSize = new System.Drawing.Size(0, 25);
             this.Name = "LogsReaderForm";
-            this.Size = new System.Drawing.Size(1321, 530);
+            this.Size = new System.Drawing.Size(871, 567);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.ParentSplitContainer.Panel1.ResumeLayout(false);
             this.ParentSplitContainer.Panel2.ResumeLayout(false);
@@ -719,6 +738,7 @@ namespace LogsReader.Reader
             this.SchemePanel.ResumeLayout(false);
             this.SchemePanel.PerformLayout();
             this.MainSplitContainer.Panel1.ResumeLayout(false);
+            this.MainSplitContainer.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
             this.MainSplitContainer.ResumeLayout(false);
             this.EnumSplitContainer.Panel1.ResumeLayout(false);
@@ -730,7 +750,6 @@ namespace LogsReader.Reader
             this.filterPanel.ResumeLayout(false);
             this.filterPanel.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -758,11 +777,9 @@ namespace LogsReader.Reader
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox traceNameLikeFilter;
+        private System.Windows.Forms.TextBox traceNameFilter;
         private System.Windows.Forms.DateTimePicker dateEndFilter;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.DateTimePicker dateStartFilter;
-        private System.Windows.Forms.TextBox traceNameNotLikeFilter;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button buttonFilter;
         private System.Windows.Forms.Button buttonReset;
@@ -780,6 +797,8 @@ namespace LogsReader.Reader
         private System.Windows.Forms.TextBox rowsLimitText;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox orderByText;
+        private System.Windows.Forms.ComboBox traceNameFilterComboBox;
+        private System.Windows.Forms.ComboBox traceMessageFilterComboBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrivateID;
         private System.Windows.Forms.DataGridViewTextBoxColumn IsMatched;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;

@@ -44,9 +44,9 @@
             // 
             // statusStrip
             // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 630);
+            this.statusStrip.Location = new System.Drawing.Point(0, 764);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1202, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1360, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -59,7 +59,7 @@
             this.toolStripXPathButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1202, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1360, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -138,7 +138,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1202, 652);
+            this.ClientSize = new System.Drawing.Size(1360, 786);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -158,13 +158,10 @@
   <data name="Form_DateFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Date"</value>
   </data>
-  <data name="Form_TraceNameLikeComment" xml:space="preserve">
+  <data name="Form_TraceNameFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Trace name". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
   </data>
-  <data name="Form_TraceNameNotLikeComment" xml:space="preserve">
-    <value>Фильтр по полю "Trace name" на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
-  </data>
-  <data name="Form_MessageFilterComment" xml:space="preserve">
+  <data name="Form_TraceFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Trace". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
   </data>
   <data name="Form_AlreadyUseFilterComment" xml:space="preserve">

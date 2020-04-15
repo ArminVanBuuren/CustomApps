@@ -10,77 +10,78 @@ namespace LogsReader.Reader
     {
         private readonly Func<DataTemplate, bool> _checkStartDate;
         private readonly Func<DataTemplate, bool> _checkEndDate;
-        private readonly Func<DataTemplate, bool> _checkTraceNameLike;
-        private readonly Func<DataTemplate, bool> _checkTraceNameNotLike;
-        private readonly Func<DataTemplate, bool> _checkTraceMessage;
+        private readonly Func<DataTemplate, bool> _checkTraceNameFilter;
+        private readonly Func<DataTemplate, bool> _checkTraceMessageFilter;
 
         DateTime StartDate { get; }
         DateTime EndDate { get; }
-        List<string> TraceNameLikeList { get; }
-        List<string> TraceNameNotLikeList { get; }
-        List<string> TraceMessageList { get; }
+        List<string> TraceNameFilterList { get; }
+        List<string> TraceMessageFilterList { get; }
 
-        public DataFilter(DateTime startDate, DateTime endDate, string traceNameLike, string traceNameNotLike, string traceMessage)
+        public DataFilter(DateTime startDate, DateTime endDate, string traceNameFilter, bool traceNameContains, string traceMessageFilter, bool traceMessageContains)
         {
             if (startDate > endDate)
                 throw new Exception(@"Date of end must be greater than date of start.");
 
             #region фильтр по дате начала
+
             StartDate = startDate;
             if (StartDate > DateTime.MinValue)
                 _checkStartDate = (input) => input.Date != null && input.Date.Value >= StartDate;
             else
                 _checkStartDate = (input) => true;
+
             #endregion
 
 
             #region фильтр по дате конца
+
             EndDate = endDate;
             if (EndDate < DateTime.MaxValue)
                 _checkEndDate = (input) => input.Date != null && input.Date.Value <= EndDate;
             else
                 _checkEndDate = (input) => true;
+
             #endregion
-            
+
 
             #region фильтр по полю Trace
-            TraceNameLikeList = traceNameLike.IsNullOrEmptyTrim()
+
+            TraceNameFilterList = traceNameFilter.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceNameLike.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceNameFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
 
-            TraceNameNotLikeList = traceNameNotLike.IsNullOrEmptyTrim()
-                ? new List<string>()
-                : traceNameNotLike.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
-
-            if (TraceNameLikeList.Count > 0 && TraceNameNotLikeList.Count > 0 && !TraceNameLikeList.Except(TraceNameNotLikeList).Any())
-                throw new Exception(@"Items in ""Trace-name Like"" cannot contain items in ""Trace-name NOT Like""! Please remove the same.");
-
-            if (TraceNameLikeList.Any())
-                _checkTraceNameLike = (input) => !input.TraceName.IsNullOrEmptyTrim() && TraceNameLikeList.Any(p => input.TraceName.StringContains(p));
+            if (TraceNameFilterList.Any())
+                if (traceNameContains)
+                    _checkTraceNameFilter = (input) => !input.TraceName.IsNullOrEmptyTrim() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
+                else
+                    _checkTraceNameFilter = (input) => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
             else
-                _checkTraceNameLike = (input) => true;
+                _checkTraceNameFilter = (input) => true;
 
-            if (TraceNameNotLikeList.Any())
-                _checkTraceNameNotLike = (input) => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameNotLikeList.Any(p => input.TraceName.StringContains(p));
-            else
-                _checkTraceNameNotLike = (input) => true;
             #endregion
 
 
             #region фильтр по полю Message
-            TraceMessageList = traceMessage.IsNullOrEmptyTrim()
+
+            TraceMessageFilterList = traceMessageFilter.IsNullOrEmptyTrim()
                 ? new List<string>()
-                : traceMessage.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
-            if (TraceMessageList.Any())
-                _checkTraceMessage = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageList.Any(p => input.TraceMessage.StringContains(p));
+                : traceMessageFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key)
+                    .ToList();
+            if (TraceMessageFilterList.Any())
+                if (traceMessageContains)
+                    _checkTraceMessageFilter = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+                else
+                    _checkTraceMessageFilter = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
             else
-                _checkTraceMessage = (input) => true;
+                _checkTraceMessageFilter = (input) => true;
+
             #endregion
         }
 
         public IEnumerable<DataTemplate> FilterCollection(IEnumerable<DataTemplate> input)
         {
-            return input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameLike(x) && _checkTraceNameNotLike(x) && _checkTraceMessage(x));
+            return input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameFilter(x) && _checkTraceMessageFilter(x));
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace LogsReader.Reader
 
         public bool IsAllowed(DataTemplate input)
         {
-            return _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameLike(input) && _checkTraceNameNotLike(input) && _checkTraceMessage(input);
+            return _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameFilter(input) && _checkTraceMessageFilter(input);
         }
     }
 }

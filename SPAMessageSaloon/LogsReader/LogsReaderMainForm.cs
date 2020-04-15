@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
 using LogsReader.Reader;
-using Microsoft.WindowsAPICodePack.Taskbar;
 using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm;
@@ -18,6 +17,7 @@ namespace LogsReader
     public partial class LogsReaderMainForm : Form, ISPAMessageSaloonItems
     {
         private LogsReaderForm _current;
+
         /// <summary>
         /// Настройки схем
         /// </summary>
@@ -32,7 +32,7 @@ namespace LogsReader
                 return this.SafeInvoke(() =>
                 {
                     if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
-                        return current;
+                        _current = current;
                     return _current;
                 });
             }
@@ -48,7 +48,7 @@ namespace LogsReader
 
             try
             {
-                base.Text = $"Logs Reader {ASSEMBLY.CurrentVersion}";
+                base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) =>

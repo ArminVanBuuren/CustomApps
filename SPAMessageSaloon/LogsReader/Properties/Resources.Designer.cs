@@ -109,15 +109,6 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
-        /// </summary>
-        internal static string Form_MessageFilterComment {
-            get {
-                return ResourceManager.GetString("Form_MessageFilterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда..
         /// </summary>
         internal static string Form_SearchComment {
@@ -127,20 +118,20 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
-        internal static string Form_TraceNameLikeComment {
+        internal static string Form_TraceFilterComment {
             get {
-                return ResourceManager.GetString("Form_TraceNameLikeComment", resourceCulture);
+                return ResourceManager.GetString("Form_TraceFilterComment", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot; на несовпадение. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
         /// </summary>
-        internal static string Form_TraceNameNotLikeComment {
+        internal static string Form_TraceNameFilterComment {
             get {
-                return ResourceManager.GetString("Form_TraceNameNotLikeComment", resourceCulture);
+                return ResourceManager.GetString("Form_TraceNameFilterComment", resourceCulture);
             }
         }
         

@@ -89,7 +89,7 @@ namespace LogsReader.Reader
         [DGVColumn(ColumnPosition.After, "Server")]
         public string Server => ParentReader.Server;
 
-        [DGVColumn(ColumnPosition.After, "Trace name")]
+        [DGVColumn(ColumnPosition.After, "TraceName")]
         public string TraceName
         {
             get => _traceName;

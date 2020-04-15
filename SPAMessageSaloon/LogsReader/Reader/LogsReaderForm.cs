@@ -81,7 +81,6 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
                 _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
                 statusStrip.Items.Add(_completedFilesStatus);
@@ -111,16 +110,19 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(maxLinesStackText, Resources.LRSettingsScheme_MaxTraceLinesComment);
                 tooltipPrintXML.SetToolTip(dateStartFilter, Resources.Form_DateFilterComment);
                 tooltipPrintXML.SetToolTip(dateEndFilter, Resources.Form_DateFilterComment);
-                tooltipPrintXML.SetToolTip(traceNameLikeFilter, Resources.Form_TraceNameLikeComment);
-                tooltipPrintXML.SetToolTip(traceNameNotLikeFilter, Resources.Form_TraceNameNotLikeComment);
-                tooltipPrintXML.SetToolTip(traceMessageFilter, Resources.Form_MessageFilterComment);
+                tooltipPrintXML.SetToolTip(traceNameFilter, Resources.Form_TraceNameFilterComment);
+                tooltipPrintXML.SetToolTip(traceMessageFilter, Resources.Form_TraceFilterComment);
                 tooltipPrintXML.SetToolTip(alreadyUseFilter, Resources.Form_AlreadyUseFilterComment);
                 tooltipPrintXML.SetToolTip(rowsLimitText, Resources.LRSettingsScheme_RowsLimitCommentComment);
                 tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
                 tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
-                _notepad = new NotepadControl();
+                _notepad = new NotepadControl
+                {
+                    BorderStyle = BorderStyle.None
+                };
                 MainSplitContainer.Panel2.Controls.Add(_notepad);
+                MainSplitContainer.Panel2.BorderStyle = BorderStyle.None;
                 _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
@@ -185,16 +187,17 @@ namespace LogsReader.Reader
                 UserSettings = new UserSettings(CurrentSettings.Name);
 
                 txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
+                useRegex.Checked = UserSettings.UseRegex;
                 dateStartFilter.Checked = UserSettings.DateStartChecked;
                 if(dateStartFilter.Checked)
                     dateStartFilter.Value = _getStartDate.Invoke();
                 dateEndFilter.Checked = UserSettings.DateEndChecked;
                 if (dateEndFilter.Checked)
                     dateEndFilter.Value = _getEndDate.Invoke();
-                traceNameLikeFilter.AssignValue(UserSettings.TraceLike, TraceNameLikeFilter_TextChanged);
-                traceNameNotLikeFilter.AssignValue(UserSettings.TraceNotLike, TraceNameNotLikeFilter_TextChanged);
-                traceMessageFilter.AssignValue(UserSettings.Message, TraceMessageFilter_TextChanged);
-                useRegex.Checked = UserSettings.UseRegex;
+                traceNameFilter.AssignValue(UserSettings.TraceNameFilter, TraceNameFilter_TextChanged);
+                traceNameFilterComboBox.AssignValue(UserSettings.TraceNameFilterContains ? "Contains" : "Not Contains", traceNameFilterComboBox_SelectedIndexChanged);
+                traceMessageFilter.AssignValue(UserSettings.MessageFilter, TraceMessageFilter_TextChanged);
+                traceMessageFilterComboBox.AssignValue(UserSettings.MessageFilterContains ? "Contains" : "Not Contains", traceMessageFilterComboBox_SelectedIndexChanged);
 
                 var langMessage = UserSettings.MessageLanguage;
                 var langTrace = UserSettings.TraceLanguage;
@@ -490,9 +493,10 @@ namespace LogsReader.Reader
         {
             return new DataFilter(dateStartFilter.Checked ? dateStartFilter.Value : DateTime.MinValue,
                 dateEndFilter.Checked ? dateEndFilter.Value : DateTime.MaxValue,
-                traceNameLikeFilter.Text,
-                traceNameNotLikeFilter.Text,
-                traceMessageFilter.Text);
+                traceNameFilter.Text,
+                traceNameFilterComboBox.Text.Like("Contains"),
+                traceMessageFilter.Text,
+                traceMessageFilterComboBox.Text.Like("Contains"));
         }
 
         private async void buttonReset_Click(object sender, EventArgs e)
@@ -537,12 +541,12 @@ namespace LogsReader.Reader
         {
             if (IsWorking)
             {
-                ParentSplitContainer.Cursor = Cursors.WaitCursor;
+                MainSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
             }
             else
             {
-                ParentSplitContainer.Cursor = Cursors.Default;
+                MainSplitContainer.Cursor = Cursors.Default;
             }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
@@ -561,8 +565,9 @@ namespace LogsReader.Reader
             maxLinesStackText.Enabled = !IsWorking;
             dateStartFilter.Enabled = !IsWorking;
             dateEndFilter.Enabled = !IsWorking;
-            traceNameNotLikeFilter.Enabled = !IsWorking;
-            traceNameLikeFilter.Enabled = !IsWorking;
+            traceNameFilterComboBox.Enabled = !IsWorking;
+            traceNameFilter.Enabled = !IsWorking;
+            traceMessageFilterComboBox.Enabled = !IsWorking;
             traceMessageFilter.Enabled = !IsWorking;
             alreadyUseFilter.Enabled = !IsWorking;
             orderByText.Enabled = !IsWorking;
@@ -812,19 +817,29 @@ namespace LogsReader.Reader
             UserSettings.UseRegex = useRegex.Checked;
         }
 
-        private void TraceNameLikeFilter_TextChanged(object sender, EventArgs e)
+        private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            UserSettings.TraceLike = traceNameLikeFilter.Text;
+            e.Handled = true;
         }
 
-        private void TraceNameNotLikeFilter_TextChanged(object sender, EventArgs e)
+        private void TraceNameFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceNotLike = traceNameNotLikeFilter.Text;
+            UserSettings.TraceNameFilter = traceNameFilter.Text;
+        }
+
+        private void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UserSettings.TraceNameFilterContains = traceNameFilterComboBox.Text.Like("Contains");
         }
 
         private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.Message = traceMessageFilter.Text;
+            UserSettings.MessageFilter = traceMessageFilter.Text;
+        }
+
+        private void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UserSettings.MessageFilterContains = traceMessageFilterComboBox.Text.Like("Contains");
         }
 
         private void Message_LanguageChanged(object sender, EventArgs e)
