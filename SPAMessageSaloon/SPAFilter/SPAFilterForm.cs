@@ -59,8 +59,7 @@ namespace SPAFilter
         private ToolStripStatusLabel NEElementsCount;
 
         private SPAProcessFilter Filter { get; set; }
-        ApplicationUpdater AppUpdater { get; set; }
-        IUpdater Updater { get; set; }
+
 
         public static string SavedDataPath { get; }
 
@@ -240,8 +239,6 @@ namespace SPAFilter
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
                 _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
-
-                Updater = (IUpdater)TryGetSerializationValue(allSavedParams, "UUPPDD", null);
             }
             catch (Exception ex)
             {
@@ -300,8 +297,6 @@ namespace SPAFilter
             propertyBag.AddValue("RRTTGGBB", _notepadWordHighlights);
             propertyBag.AddValue("RRTTDD", _notepadLocation);
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
-
-            propertyBag.AddValue("UUPPDD", Updater);
         }
         
 
@@ -366,22 +361,6 @@ namespace SPAFilter
 
         void PostInit()
         {
-            try
-            {
-                var currentPackUpdaterName = Updater?.ProjectBuildPack.Name;
-                var executingAssembly = Assembly.GetExecutingAssembly();
-                AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), currentPackUpdaterName, 900);
-                AppUpdater.OnFetch += AppUpdater_OnFetch;
-                AppUpdater.OnUpdate += AppUpdater_OnUpdate;
-                AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
-                AppUpdater.Start();
-                AppUpdater.CheckUpdates();
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
             KeyDown += ProcessFilterForm_KeyDown;
 
@@ -411,49 +390,6 @@ namespace SPAFilter
 
             RefreshStatus();
         }
-
-        #region Application Update
-
-        private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
-        {
-            if (args == null)
-                return;
-
-            if (args.Control == null)
-                args.Result = UpdateBuildResult.Cancel;
-        }
-
-        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
-        {
-            try
-            {
-                if (args?.Control?.ProjectBuildPack == null)
-                {
-                    AppUpdater.Refresh();
-                    return;
-                }
-
-                Updater = args.Control;
-                Updater.SecondsMoveDelay = 1;
-                Updater.SecondsRunDelay = 3;
-
-                if (Updater.ProjectBuildPack.NeedRestartApplication)
-                    SaveData();
-
-                AppUpdater.DoUpdate(Updater);
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-        }
-
-        private static void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
-        {
-
-        }
-
-        #endregion
 
         #region Check warning rows
 
@@ -1357,7 +1293,7 @@ namespace SPAFilter
             _lastDirPath = Directory.Exists(path) ? path : File.Exists(path) ? Path.GetDirectoryName(path) : _lastDirPath;
         }
 
-        void SaveData()
+        public void SaveData()
         {
             if (IsInititializating)
                 return;

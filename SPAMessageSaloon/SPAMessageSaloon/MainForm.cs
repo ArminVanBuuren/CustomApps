@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ using Utils;
 using Utils.WinForm;
 using LogsReader;
 using SPAFilter;
+using Utils.AppUpdater;
+using Utils.AppUpdater.Updater;
+using Utils.Handles;
 using XPathTester;
 
 namespace SPAMessageSaloon
@@ -30,6 +34,22 @@ namespace SPAMessageSaloon
         public ToolStripStatusLabel ThreadsUsage { get; }
         public ToolStripStatusLabel RAMUsage { get; }
 
+        ApplicationUpdater AppUpdater { get; set; }
+
+        private string LastUpdatePackage
+        {
+            get
+            {
+                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    return (string) reg[nameof(LastUpdatePackage)] ?? null;
+            }
+            set
+            {
+                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    reg[nameof(LastUpdatePackage)] = value;
+            }
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -38,6 +58,20 @@ namespace SPAMessageSaloon
 
             try
             {
+                try
+                {
+                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
+                    AppUpdater.OnFetch += AppUpdater_OnFetch;
+                    AppUpdater.OnUpdate += AppUpdater_OnUpdate;
+                    AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
+                    AppUpdater.Start();
+                    AppUpdater.CheckUpdates();
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
@@ -84,6 +118,56 @@ namespace SPAMessageSaloon
                 CenterToScreen();
             }
         }
+
+        #region Application Update
+
+        private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
+        {
+            if (args == null)
+                return;
+
+            if (args.Control == null)
+                args.Result = UpdateBuildResult.Cancel;
+        }
+
+        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
+        {
+            try
+            {
+                if (args?.Control?.ProjectBuildPack == null)
+                {
+                    AppUpdater.Refresh();
+                    return;
+                }
+
+                var updater = args.Control;
+                updater.SecondsMoveDelay = 1;
+                updater.SecondsRunDelay = 5;
+
+                if (updater.ProjectBuildPack.NeedRestartApplication)
+                    SaveData(updater);
+
+                AppUpdater.DoUpdate(updater);
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        private static void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
+        {
+
+        }
+
+        public void SaveData(IUpdater updater)
+        {
+            LastUpdatePackage = updater?.ProjectBuildPack.Name;
+            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
+                form.SaveData();
+        }
+
+        #endregion
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -294,7 +378,5 @@ namespace SPAMessageSaloon
             button.Click += (S, E) => { ((MDIManagerButton) S).mdiForm.Activate(); };
             ((sender as Form)?.MdiParent as MainForm)?.statusStrip.Items.Add(button);
         }
-
-
     }
 }

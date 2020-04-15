@@ -31,7 +31,6 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
         private readonly ToolStripStatusLabel _totalFilesStatus;
-        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
         
@@ -117,13 +116,7 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
                 tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
-                _notepad = new NotepadControl
-                {
-                    BorderStyle = BorderStyle.None
-                };
-                MainSplitContainer.Panel2.Controls.Add(_notepad);
-                MainSplitContainer.Panel2.BorderStyle = BorderStyle.None;
-                _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
+                _message = notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -133,7 +126,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = _notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
+                _traceMessage = notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -143,13 +136,9 @@ namespace LogsReader.Reader
                 _traceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _traceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
-                _notepad.TabsFont = this.Font;
-                _notepad.TextFont = new Font("Segoe UI", 10F);
-                _notepad.Dock = DockStyle.Fill;
-                _notepad.SelectEditor(0);
-                _notepad.ReadOnly = true;
-                _notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
-                _notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
+                notepad.SelectEditor(0);
+                notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
+                notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
                 dateStartFilter.ValueChanged += (sender, args) =>
                 {
@@ -212,7 +201,7 @@ namespace LogsReader.Reader
                 _traceMessage.Highlights = UserSettings.TraceHighlights;
 
                 serversText.Text = CurrentSettings.Servers;
-                _notepad.DefaultEncoding = CurrentSettings.Encoding;
+                notepad.DefaultEncoding = CurrentSettings.Encoding;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
@@ -541,12 +530,12 @@ namespace LogsReader.Reader
         {
             if (IsWorking)
             {
-                MainSplitContainer.Cursor = Cursors.WaitCursor;
+                ParentSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
             }
             else
             {
-                MainSplitContainer.Cursor = Cursors.Default;
+                ParentSplitContainer.Cursor = Cursors.Default;
             }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
@@ -554,7 +543,7 @@ namespace LogsReader.Reader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            _notepad.Enabled = !IsWorking;
+            notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;

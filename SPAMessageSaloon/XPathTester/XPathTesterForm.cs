@@ -277,5 +277,10 @@ namespace XPathTester
         {
             
         }
+
+        public void SaveData()
+        {
+            
+        }
     }
 }

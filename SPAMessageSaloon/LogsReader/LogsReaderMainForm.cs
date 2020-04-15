@@ -51,15 +51,7 @@ namespace LogsReader
                 base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
-                Closing += (s, e) =>
-                {
-                    if (AllSettings != null)
-                        LRSettings.Serialize(AllSettings);
-                    if (AllForms != null)
-                        foreach (var form in AllForms.Values)
-                            form.SaveInterfaceParams();
-                    SaveInterfaceParams();
-                };
+                Closing += (s, e) => { SaveData(); };
                 Shown += (s, e) =>
                 {
                     if (AllForms == null)
@@ -169,10 +161,16 @@ namespace LogsReader
                 await LRSettings.SerializeAsync(AllSettings);
         }
 
-        void SaveInterfaceParams()
+        public void SaveData()
         {
             try
             {
+                if (AllSettings != null)
+                    LRSettings.Serialize(AllSettings);
+                if (AllForms != null)
+                    foreach (var form in AllForms.Values)
+                        form.SaveInterfaceParams();
+
                 Settings.Default.FormLocation = Location;
                 Settings.Default.FormSize = Size;
                 Settings.Default.FormState = WindowState;
