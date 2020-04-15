@@ -320,11 +320,6 @@ namespace SPAFilter
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-            var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-            autor.Click += (sender, args) => { ReportMessage.Show(@"Hello! This app was created for fix and improve SPA configuration.", MessageBoxIcon.Asterisk, $"© {this.GetAssemblyInfo().Company}"); };
-            statusStrip.Items.Add(autor);
-
-            statusStrip.Items.Add(new ToolStripSeparator());
             statusStrip.Items.Add(new ToolStripStatusLabel("Processes:") { Margin = statusStripItemsPaddingStart });
             BPCount = new ToolStripStatusLabel() { Margin = statusStripItemsPaddingEnd };
             statusStrip.Items.Add(BPCount);
