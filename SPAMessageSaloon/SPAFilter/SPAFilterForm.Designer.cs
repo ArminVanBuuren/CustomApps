@@ -597,6 +597,7 @@ namespace SPAFilter
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStrip.Size = new System.Drawing.Size(912, 22);
+            this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 27;
             this.statusStrip.Text = "statusStrip1";
             // 

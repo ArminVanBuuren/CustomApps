@@ -47,7 +47,7 @@ namespace XPathTester
             KeyPreview = true;
             KeyDown += XPathWindow_KeyDown;
             
-            editor.SizingGrip = true;
+            editor.SizingGrip = false;
             editor.SetLanguages(new [] { Language.XML, Language.HTML }, Language.XML);
             _statusInfo = editor.AddToolStripLabel();
             _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
