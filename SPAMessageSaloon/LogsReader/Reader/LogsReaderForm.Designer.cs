@@ -126,7 +126,7 @@ namespace LogsReader.Reader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(431, 345);
+            this.dgvFiles.Size = new System.Drawing.Size(447, 345);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -249,7 +249,7 @@ namespace LogsReader.Reader
             this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
             this.statusStrip.Location = new System.Drawing.Point(0, 405);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(605, 22);
+            this.statusStrip.Size = new System.Drawing.Size(680, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 8;
             this.statusStrip.Text = "statusStrip1";
@@ -269,7 +269,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.orderByText.Location = new System.Drawing.Point(84, 161);
             this.orderByText.Name = "orderByText";
-            this.orderByText.Size = new System.Drawing.Size(75, 23);
+            this.orderByText.Size = new System.Drawing.Size(134, 23);
             this.orderByText.TabIndex = 18;
             this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
             // 
@@ -288,7 +288,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rowsLimitText.Location = new System.Drawing.Point(84, 135);
             this.rowsLimitText.Name = "rowsLimitText";
-            this.rowsLimitText.Size = new System.Drawing.Size(75, 23);
+            this.rowsLimitText.Size = new System.Drawing.Size(134, 23);
             this.rowsLimitText.TabIndex = 16;
             this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
             this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
@@ -317,7 +317,7 @@ namespace LogsReader.Reader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(158, 211);
+            this.trvMain.Size = new System.Drawing.Size(217, 211);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
             // 
@@ -327,7 +327,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxLinesStackText.Location = new System.Drawing.Point(84, 83);
             this.maxLinesStackText.Name = "maxLinesStackText";
-            this.maxLinesStackText.Size = new System.Drawing.Size(75, 23);
+            this.maxLinesStackText.Size = new System.Drawing.Size(134, 23);
             this.maxLinesStackText.TabIndex = 14;
             this.maxLinesStackText.TextChanged += new System.EventHandler(this.MaxLinesStackText_TextChanged);
             this.maxLinesStackText.Leave += new System.EventHandler(this.MaxLinesStackText_Leave);
@@ -338,7 +338,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.serversText.Location = new System.Drawing.Point(84, 5);
             this.serversText.Name = "serversText";
-            this.serversText.Size = new System.Drawing.Size(75, 23);
+            this.serversText.Size = new System.Drawing.Size(134, 23);
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.ServersText_TextChanged);
             // 
@@ -366,7 +366,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logDirText.Location = new System.Drawing.Point(84, 31);
             this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(75, 23);
+            this.logDirText.Size = new System.Drawing.Size(134, 23);
             this.logDirText.TabIndex = 12;
             this.logDirText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
             // 
@@ -376,7 +376,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fileNames.Location = new System.Drawing.Point(84, 57);
             this.fileNames.Name = "fileNames";
-            this.fileNames.Size = new System.Drawing.Size(75, 23);
+            this.fileNames.Size = new System.Drawing.Size(134, 23);
             this.fileNames.TabIndex = 8;
             this.fileNames.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
             // 
@@ -404,7 +404,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
             this.maxThreadsText.Location = new System.Drawing.Point(84, 109);
             this.maxThreadsText.Name = "maxThreadsText";
-            this.maxThreadsText.Size = new System.Drawing.Size(75, 23);
+            this.maxThreadsText.Size = new System.Drawing.Size(134, 23);
             this.maxThreadsText.TabIndex = 10;
             this.maxThreadsText.TextChanged += new System.EventHandler(this.MaxThreadsText_TextChanged);
             this.maxThreadsText.Leave += new System.EventHandler(this.MaxThreadsText_Leave);
@@ -425,7 +425,7 @@ namespace LogsReader.Reader
             // EnumSplitContainer.Panel2
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-            this.EnumSplitContainer.Size = new System.Drawing.Size(435, 405);
+            this.EnumSplitContainer.Size = new System.Drawing.Size(451, 405);
             this.EnumSplitContainer.SplitterDistance = 349;
             this.EnumSplitContainer.TabIndex = 2;
             // 
@@ -436,7 +436,7 @@ namespace LogsReader.Reader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(431, 48);
+            this.descriptionText.Size = new System.Drawing.Size(447, 48);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
             // 
@@ -450,7 +450,7 @@ namespace LogsReader.Reader
             this.notepad.Name = "notepad";
             this.notepad.ReadOnly = true;
             this.notepad.SelectedIndex = -1;
-            this.notepad.Size = new System.Drawing.Size(462, 423);
+            this.notepad.Size = new System.Drawing.Size(387, 423);
             this.notepad.SizingGrip = false;
             this.notepad.TabIndex = 0;
             this.notepad.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -690,12 +690,13 @@ namespace LogsReader.Reader
             // 
             this.ParentSplitContainer.Panel1.Controls.Add(this.MainSplitContainer);
             this.ParentSplitContainer.Panel1.Controls.Add(this.statusStrip);
+            this.ParentSplitContainer.Panel1MinSize = 250;
             // 
             // ParentSplitContainer.Panel2
             // 
             this.ParentSplitContainer.Panel2.Controls.Add(this.notepad);
             this.ParentSplitContainer.Size = new System.Drawing.Size(1075, 427);
-            this.ParentSplitContainer.SplitterDistance = 605;
+            this.ParentSplitContainer.SplitterDistance = 680;
             this.ParentSplitContainer.TabIndex = 32;
             // 
             // MainSplitContainer
@@ -723,12 +724,13 @@ namespace LogsReader.Reader
             this.MainSplitContainer.Panel1.Controls.Add(this.label3);
             this.MainSplitContainer.Panel1.Controls.Add(this.serversText);
             this.MainSplitContainer.Panel1.Controls.Add(this.label6);
+            this.MainSplitContainer.Panel1MinSize = 120;
             // 
             // MainSplitContainer.Panel2
             // 
             this.MainSplitContainer.Panel2.Controls.Add(this.EnumSplitContainer);
-            this.MainSplitContainer.Size = new System.Drawing.Size(605, 405);
-            this.MainSplitContainer.SplitterDistance = 166;
+            this.MainSplitContainer.Size = new System.Drawing.Size(680, 405);
+            this.MainSplitContainer.SplitterDistance = 225;
             this.MainSplitContainer.TabIndex = 0;
             // 
             // LogsReaderForm
@@ -762,6 +764,7 @@ namespace LogsReader.Reader
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
             this.MainSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion

@@ -120,9 +120,9 @@ namespace SPAFilter
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label1.Location = new System.Drawing.Point(9, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 15);
+            this.label1.Size = new System.Drawing.Size(58, 15);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Processes:";
+            this.label1.Text = "Processes";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ROBPOperationButtonOpen
@@ -179,9 +179,9 @@ namespace SPAFilter
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label6.Location = new System.Drawing.Point(6, 52);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(60, 15);
+            this.label6.Size = new System.Drawing.Size(57, 15);
             this.label6.TabIndex = 8;
-            this.label6.Text = "HostType:";
+            this.label6.Text = "HostType";
             // 
             // label7
             // 
@@ -189,9 +189,9 @@ namespace SPAFilter
             this.label7.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label7.Location = new System.Drawing.Point(458, 25);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 15);
+            this.label7.Size = new System.Drawing.Size(60, 15);
             this.label7.TabIndex = 7;
-            this.label7.Text = "Operation:";
+            this.label7.Text = "Operation";
             // 
             // ProcessesComboBox
             // 
@@ -207,9 +207,9 @@ namespace SPAFilter
             this.label8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label8.Location = new System.Drawing.Point(5, 25);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(50, 15);
+            this.label8.Size = new System.Drawing.Size(47, 15);
             this.label8.TabIndex = 11;
-            this.label8.Text = "Process:";
+            this.label8.Text = "Process";
             // 
             // FilterButton
             // 
@@ -490,9 +490,9 @@ namespace SPAFilter
             this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label9.Location = new System.Drawing.Point(13, 20);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 15);
+            this.label9.Size = new System.Drawing.Size(68, 15);
             this.label9.TabIndex = 29;
-            this.label9.Text = "Export Path:";
+            this.label9.Text = "Export Path";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ExportSCPath
@@ -526,9 +526,9 @@ namespace SPAFilter
             this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.Location = new System.Drawing.Point(13, 48);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 15);
+            this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 26;
-            this.label5.Text = "RD Services:";
+            this.label5.Text = "RD Services";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ButtonGenerateSC
@@ -634,12 +634,12 @@ namespace SPAFilter
             this.ROBPOperationsRadioButton.AutoSize = true;
             this.ROBPOperationsRadioButton.Checked = true;
             this.ROBPOperationsRadioButton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.ROBPOperationsRadioButton.Location = new System.Drawing.Point(12, 43);
+            this.ROBPOperationsRadioButton.Location = new System.Drawing.Point(12, 41);
             this.ROBPOperationsRadioButton.Name = "ROBPOperationsRadioButton";
-            this.ROBPOperationsRadioButton.Size = new System.Drawing.Size(119, 19);
+            this.ROBPOperationsRadioButton.Size = new System.Drawing.Size(116, 19);
             this.ROBPOperationsRadioButton.TabIndex = 35;
             this.ROBPOperationsRadioButton.TabStop = true;
-            this.ROBPOperationsRadioButton.Text = "ROBP Operations:";
+            this.ROBPOperationsRadioButton.Text = "ROBP Operations";
             this.ROBPOperationsRadioButton.UseVisualStyleBackColor = true;
             // 
             // ServiceCatalogRadioButton
@@ -648,9 +648,9 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ServiceCatalogRadioButton.Location = new System.Drawing.Point(12, 68);
             this.ServiceCatalogRadioButton.Name = "ServiceCatalogRadioButton";
-            this.ServiceCatalogRadioButton.Size = new System.Drawing.Size(109, 19);
+            this.ServiceCatalogRadioButton.Size = new System.Drawing.Size(106, 19);
             this.ServiceCatalogRadioButton.TabIndex = 36;
-            this.ServiceCatalogRadioButton.Text = "Service Catalog:";
+            this.ServiceCatalogRadioButton.Text = "Service Catalog";
             this.ServiceCatalogRadioButton.UseVisualStyleBackColor = true;
             // 
             // panelTop

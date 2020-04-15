@@ -20,6 +20,7 @@ using SPAFilter;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
 using Utils.Handles;
+using Utils.UIControls.Main;
 using XPathTester;
 
 namespace SPAMessageSaloon
@@ -76,13 +77,8 @@ namespace SPAMessageSaloon
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                var autor = new ToolStripButton("?")
-                    {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte) 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
-                autor.Click += (sender, args) =>
-                {
-                    ReportMessage.Show(@"Hello! Thanks.",
-                        MessageBoxIcon.Asterisk, $"© {this.GetAssemblyInfo().Company}");
-                };
+                var autor = new ToolStripButton("?") {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte) 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
+                autor.Click += (sender, args) => { Presenter.ShowOwner(); };
                 statusStrip.Items.Add(autor);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
@@ -377,6 +373,11 @@ namespace SPAMessageSaloon
             MDIManagerButton button = new MDIManagerButton(sender as Form) {BackColor = Color.White};
             button.Click += (S, E) => { ((MDIManagerButton) S).mdiForm.Activate(); };
             ((sender as Form)?.MdiParent as MainForm)?.statusStrip.Items.Add(button);
+        }
+
+        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
+        {
+            toolStripSplitButton1.ShowDropDown();
         }
     }
 }
