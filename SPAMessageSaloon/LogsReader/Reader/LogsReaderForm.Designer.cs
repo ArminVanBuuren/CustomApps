@@ -31,8 +31,8 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderForm));
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -91,6 +91,7 @@ namespace LogsReader.Reader
             this.radStatusStrip = new Telerik.WinControls.UI.RadStatusStrip();
             this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
             this.notepad = new Utils.WinForm.Notepad.NotepadControl();
+            this.radThemeManager1 = new Telerik.WinControls.RadThemeManager();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnClear)).BeginInit();
@@ -340,13 +341,13 @@ namespace LogsReader.Reader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(0, 188);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode3.Name = "trvServers";
+            treeNode3.Text = "Servers";
+            treeNode4.Name = "trvTypes";
+            treeNode4.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode3,
+            treeNode4});
             this.trvMain.Size = new System.Drawing.Size(193, 214);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
@@ -1013,6 +1014,7 @@ namespace LogsReader.Reader
         private Telerik.WinControls.UI.SplitPanel dgvPanel;
         private Telerik.WinControls.UI.SplitPanel descriptionPanel;
         private NotepadControl notepad;
+        private Telerik.WinControls.RadThemeManager radThemeManager1;
     }
 }
 

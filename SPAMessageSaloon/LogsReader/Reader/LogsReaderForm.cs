@@ -23,6 +23,8 @@ namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl
     {
+        const string STATUS_TEMPLATE = "Files  completed:  {0}  of  {1}  |  Overall  found {2,-2} matches  |";
+
         private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
@@ -30,10 +32,8 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
 
-        private readonly RadLabelElement _statusInfo;
-        private readonly RadLabelElement _findedInfo;
-        private readonly RadLabelElement _completedFilesStatus;
-        private readonly RadLabelElement _totalFilesStatus;
+        private readonly RadLabel _processInfo;
+        private readonly RadLabel _statusInfo;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
         
@@ -83,34 +83,13 @@ namespace LogsReader.Reader
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 orderByText.GotFocus += OrderByText_GotFocus;
 
-                #region Set StatusStrip
+                _processInfo = new RadLabel() {Text = string.Format(STATUS_TEMPLATE, 0,0,0), Font = this.Font, Padding = new Padding(5, 2, 0, 0), Dock = DockStyle.Left, BackColor = Color.Transparent };
+                _statusInfo = new RadLabel() {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Padding = Padding = new Padding(0, 2, 0, 0), Dock = DockStyle.Left, BackColor = Color.Transparent};
+                radStatusStrip.Controls.Add(_statusInfo);
+                radStatusStrip.Controls.Add(_processInfo);
+                radStatusStrip.Padding = new Padding(0);
 
-                var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
-                var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
-                var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                
-
-                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"Files completed:", Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                radStatusStrip.Items.Add(_completedFilesStatus);
-                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"of", Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-                _totalFilesStatus = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingEnd };
-                radStatusStrip.Items.Add(_totalFilesStatus);
-
-                radStatusStrip.Items.Add(new CommandBarSeparator());
-                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"Overall found", Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _findedInfo = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                radStatusStrip.Items.Add(_findedInfo);
-                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"matches", Font = this.Font, Margin = statusStripItemsPaddingEnd });
-
-                radStatusStrip.Items.Add(new CommandBarSeparator());
-                _statusInfo = new RadLabelElement() {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
-                radStatusStrip.Items.Add(_statusInfo);
-
-                #endregion
-
-                
                 var tooltipPrintXML = new ToolTip {InitialDelay = 50};
                 tooltipPrintXML.SetToolTip(txtPattern, Resources.Form_SearchComment);
                 tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
@@ -374,23 +353,7 @@ namespace LogsReader.Reader
 
         void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(delegate
-                {
-                    _findedInfo.Text = countMatches.ToString();
-                    Progress = percentOfProgeress;
-                    _completedFilesStatus.Text = filesCompleted.ToString();
-                    _totalFilesStatus.Text = totalFiles.ToString();
-                }));
-            }
-            else
-            {
-                _findedInfo.Text = countMatches.ToString();
-                Progress = percentOfProgeress;
-                _completedFilesStatus.Text = filesCompleted.ToString();
-                _totalFilesStatus.Text = totalFiles.ToString();
-            }
+            this.SafeInvoke(() => { _processInfo.Text = string.Format(STATUS_TEMPLATE, filesCompleted.ToString(), totalFiles.ToString(), countMatches.ToString()); });
         }
 
         private async void ButtonExport_Click(object sender, EventArgs e)
@@ -914,10 +877,8 @@ namespace LogsReader.Reader
             ClearDGV();
 
             Progress = 0;
-            _completedFilesStatus.Text = @"0";
-            _totalFilesStatus.Text = @"0";
-            _findedInfo.Text = @"0";
-
+            _processInfo.Text = string.Format(STATUS_TEMPLATE, 0, 0, 0);
+            
             ReportStatus(string.Empty, ReportStatusType.Success);
 
             STREAM.GarbageCollect();
