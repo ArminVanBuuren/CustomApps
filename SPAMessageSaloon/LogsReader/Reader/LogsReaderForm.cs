@@ -11,7 +11,9 @@ using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
 using SPAMessageSaloon.Common;
+using Telerik.WinControls;
 using Telerik.WinControls.UI;
+using Telerik.WinControls.UI.Docking;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
@@ -32,7 +34,6 @@ namespace LogsReader.Reader
         private readonly RadLabelElement _findedInfo;
         private readonly RadLabelElement _completedFilesStatus;
         private readonly RadLabelElement _totalFilesStatus;
-        private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
         
@@ -69,15 +70,13 @@ namespace LogsReader.Reader
 
         public int Progress
         {
-            get => IsWorking ? progressBar.Value : 100;
-            private set => progressBar.Value = value;
+            get => IsWorking ? progressBar.Value1 : 100;
+            private set => progressBar.Value1 = value;
         }
 
         public LogsReaderForm()
         {
             InitializeComponent();
-            progressBar.Visible = false;
-
             try
             {
                 dgvFiles.AutoGenerateColumns = false;
@@ -111,7 +110,8 @@ namespace LogsReader.Reader
 
                 #endregion
 
-                var tooltipPrintXML = new ToolTip {InitialDelay = 100};
+                
+                var tooltipPrintXML = new ToolTip {InitialDelay = 50};
                 tooltipPrintXML.SetToolTip(txtPattern, Resources.Form_SearchComment);
                 tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
                 tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
@@ -128,12 +128,7 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
                 tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
-                _notepad = new NotepadControl
-                {
-                    BorderStyle = BorderStyle.None
-                };
-                splitPanel2.Controls.Add(_notepad);
-                _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
+                _message = notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -143,7 +138,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = _notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
+                _traceMessage = notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -153,13 +148,9 @@ namespace LogsReader.Reader
                 _traceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _traceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
-                _notepad.TabsFont = this.Font;
-                _notepad.TextFont = new Font("Segoe UI", 10F);
-                _notepad.Dock = DockStyle.Fill;
-                _notepad.SelectEditor(0);
-                _notepad.ReadOnly = true;
-                _notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
-                _notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
+                notepad.SelectEditor(0);
+                notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
+                notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
                 dateStartFilter.ValueChanged += (sender, args) =>
                 {
@@ -222,7 +213,7 @@ namespace LogsReader.Reader
                 _traceMessage.Highlights = UserSettings.TraceHighlights;
 
                 serversText.Text = CurrentSettings.Servers;
-                _notepad.DefaultEncoding = CurrentSettings.Encoding;
+                notepad.DefaultEncoding = CurrentSettings.Encoding;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
@@ -252,9 +243,9 @@ namespace LogsReader.Reader
                         dgvFiles.Columns[i].Width = value;       
                 }
 
-                //MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                //ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
-                //EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+                schemePanel.SizeInfo.AbsoluteSize = new Size(UserSettings.GetValue(nameof(schemePanel), 10, 2000, schemePanel.Size.Width), schemePanel.Size.Height);
+                mainPanel.SizeInfo.AbsoluteSize = new Size(UserSettings.GetValue(nameof(mainPanel), 10, 2000, mainPanel.Size.Width), mainPanel.Size.Height);
+                descriptionPanel.SizeInfo.AbsoluteSize = new Size(descriptionPanel.Size.Width, UserSettings.GetValue(nameof(descriptionPanel), 10, 2000, descriptionPanel.Size.Height));
             }
             catch (Exception ex)
             {
@@ -278,9 +269,9 @@ namespace LogsReader.Reader
                     UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
                 }
 
-                //UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
-                //UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
-                //UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(schemePanel), schemePanel.Size.Width);
+                UserSettings.SetValue(nameof(mainPanel), mainPanel.Size.Width);
+                UserSettings.SetValue(nameof(descriptionPanel), descriptionPanel.Size.Height);
             }
             catch (Exception ex)
             {
@@ -564,7 +555,7 @@ namespace LogsReader.Reader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            _notepad.Enabled = !IsWorking;
+            notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
