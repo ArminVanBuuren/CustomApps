@@ -11,6 +11,7 @@ using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
 using SPAMessageSaloon.Common;
+using Telerik.WinControls.UI;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
@@ -27,10 +28,10 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
 
-        private readonly ToolStripStatusLabel _statusInfo;
-        private readonly ToolStripStatusLabel _findedInfo;
-        private readonly ToolStripStatusLabel _completedFilesStatus;
-        private readonly ToolStripStatusLabel _totalFilesStatus;
+        private readonly RadLabelElement _statusInfo;
+        private readonly RadLabelElement _findedInfo;
+        private readonly RadLabelElement _completedFilesStatus;
+        private readonly RadLabelElement _totalFilesStatus;
         private readonly NotepadControl _notepad;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
@@ -89,22 +90,24 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_completedFilesStatus);
-                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd };
-                statusStrip.Items.Add(_totalFilesStatus);
+                
 
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd });
+                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"Files completed:", Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _completedFilesStatus = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                radStatusStrip.Items.Add(_completedFilesStatus);
+                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"of", Font = this.Font, Margin = statusStripItemsPaddingMiddle });
+                _totalFilesStatus = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                radStatusStrip.Items.Add(_totalFilesStatus);
 
-                statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
-                statusStrip.Items.Add(_statusInfo);
+                radStatusStrip.Items.Add(new CommandBarSeparator());
+                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"Overall found", Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _findedInfo = new RadLabelElement() {Text = @"0", Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+                radStatusStrip.Items.Add(_findedInfo);
+                radStatusStrip.Items.Add(new RadLabelElement() {Text = @"matches", Font = this.Font, Margin = statusStripItemsPaddingEnd });
+
+                radStatusStrip.Items.Add(new CommandBarSeparator());
+                _statusInfo = new RadLabelElement() {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
+                radStatusStrip.Items.Add(_statusInfo);
 
                 #endregion
 
@@ -129,8 +132,7 @@ namespace LogsReader.Reader
                 {
                     BorderStyle = BorderStyle.None
                 };
-                MainSplitContainer.Panel2.Controls.Add(_notepad);
-                MainSplitContainer.Panel2.BorderStyle = BorderStyle.None;
+                splitPanel2.Controls.Add(_notepad);
                 _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
@@ -250,9 +252,9 @@ namespace LogsReader.Reader
                         dgvFiles.Columns[i].Width = value;       
                 }
 
-                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
-                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+                //MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
+                //ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
+                //EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -276,9 +278,9 @@ namespace LogsReader.Reader
                     UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
                 }
 
-                UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
+                //UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
+                //UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
+                //UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -549,12 +551,12 @@ namespace LogsReader.Reader
         {
             if (IsWorking)
             {
-                MainSplitContainer.Cursor = Cursors.WaitCursor;
+                MainRadSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
             }
             else
             {
-                MainSplitContainer.Cursor = Cursors.Default;
+                MainRadSplitContainer.Cursor = Cursors.Default;
             }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";

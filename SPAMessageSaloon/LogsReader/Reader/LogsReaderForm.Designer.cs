@@ -43,8 +43,6 @@ namespace LogsReader.Reader
             this.btnClear = new System.Windows.Forms.Button();
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.SchemePanel = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.orderByText = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -60,10 +58,7 @@ namespace LogsReader.Reader
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.maxThreadsText = new System.Windows.Forms.TextBox();
-            this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.EnumSplitContainer = new System.Windows.Forms.SplitContainer();
             this.descriptionText = new System.Windows.Forms.RichTextBox();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusTextLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.useRegex = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -82,21 +77,37 @@ namespace LogsReader.Reader
             this.alreadyUseFilter = new System.Windows.Forms.CheckBox();
             this.buttonExport = new System.Windows.Forms.Button();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.ParentRadSplitContainer = new Telerik.WinControls.UI.RadSplitContainer();
+            this.splitPanel1 = new Telerik.WinControls.UI.SplitPanel();
+            this.MainRadSplitContainer = new Telerik.WinControls.UI.RadSplitContainer();
+            this.splitPanel3 = new Telerik.WinControls.UI.SplitPanel();
+            this.splitPanel4 = new Telerik.WinControls.UI.SplitPanel();
+            this.EnumRadSplitContainer = new Telerik.WinControls.UI.RadSplitContainer();
+            this.splitPanel5 = new Telerik.WinControls.UI.SplitPanel();
+            this.splitPanel6 = new Telerik.WinControls.UI.SplitPanel();
+            this.radStatusStrip = new Telerik.WinControls.UI.RadStatusStrip();
+            this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).BeginInit();
-            this.ParentSplitContainer.Panel1.SuspendLayout();
-            this.ParentSplitContainer.Panel2.SuspendLayout();
-            this.ParentSplitContainer.SuspendLayout();
-            this.SchemePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
-            this.MainSplitContainer.Panel1.SuspendLayout();
-            this.MainSplitContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
-            this.EnumSplitContainer.Panel1.SuspendLayout();
-            this.EnumSplitContainer.Panel2.SuspendLayout();
-            this.EnumSplitContainer.SuspendLayout();
             this.groupBoxFilter.SuspendLayout();
             this.filterPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ParentRadSplitContainer)).BeginInit();
+            this.ParentRadSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).BeginInit();
+            this.splitPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainRadSplitContainer)).BeginInit();
+            this.MainRadSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).BeginInit();
+            this.splitPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel4)).BeginInit();
+            this.splitPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.EnumRadSplitContainer)).BeginInit();
+            this.EnumRadSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel5)).BeginInit();
+            this.splitPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel6)).BeginInit();
+            this.splitPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvFiles
@@ -124,7 +135,7 @@ namespace LogsReader.Reader
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(381, 301);
+            this.dgvFiles.Size = new System.Drawing.Size(421, 535);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
             this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -237,58 +248,17 @@ namespace LogsReader.Reader
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 675);
+            this.progressBar.Location = new System.Drawing.Point(0, 805);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(1251, 10);
             this.progressBar.TabIndex = 6;
             // 
-            // ParentSplitContainer
-            // 
-            this.ParentSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ParentSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.ParentSplitContainer.Location = new System.Drawing.Point(0, 95);
-            this.ParentSplitContainer.Name = "ParentSplitContainer";
-            // 
-            // ParentSplitContainer.Panel1
-            // 
-            this.ParentSplitContainer.Panel1.Controls.Add(this.SchemePanel);
-            // 
-            // ParentSplitContainer.Panel2
-            // 
-            this.ParentSplitContainer.Panel2.Controls.Add(this.MainSplitContainer);
-            this.ParentSplitContainer.Size = new System.Drawing.Size(727, 50);
-            this.ParentSplitContainer.SplitterDistance = 175;
-            this.ParentSplitContainer.TabIndex = 31;
-            // 
-            // SchemePanel
-            // 
-            this.SchemePanel.Controls.Add(this.label12);
-            this.SchemePanel.Controls.Add(this.orderByText);
-            this.SchemePanel.Controls.Add(this.label2);
-            this.SchemePanel.Controls.Add(this.rowsLimitText);
-            this.SchemePanel.Controls.Add(this.label1);
-            this.SchemePanel.Controls.Add(this.trvMain);
-            this.SchemePanel.Controls.Add(this.maxLinesStackText);
-            this.SchemePanel.Controls.Add(this.serversText);
-            this.SchemePanel.Controls.Add(this.label6);
-            this.SchemePanel.Controls.Add(this.label3);
-            this.SchemePanel.Controls.Add(this.logDirText);
-            this.SchemePanel.Controls.Add(this.fileNames);
-            this.SchemePanel.Controls.Add(this.label5);
-            this.SchemePanel.Controls.Add(this.label4);
-            this.SchemePanel.Controls.Add(this.maxThreadsText);
-            this.SchemePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SchemePanel.Location = new System.Drawing.Point(0, 0);
-            this.SchemePanel.Name = "SchemePanel";
-            this.SchemePanel.Size = new System.Drawing.Size(171, 46);
-            this.SchemePanel.TabIndex = 15;
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(4, 165);
+            this.label12.Location = new System.Drawing.Point(3, 164);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(56, 15);
+            this.label12.Size = new System.Drawing.Size(55, 13);
             this.label12.TabIndex = 17;
             this.label12.Text = "Order By:";
             // 
@@ -296,18 +266,18 @@ namespace LogsReader.Reader
             // 
             this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.orderByText.Location = new System.Drawing.Point(85, 162);
+            this.orderByText.Location = new System.Drawing.Point(84, 161);
             this.orderByText.Name = "orderByText";
-            this.orderByText.Size = new System.Drawing.Size(83, 23);
+            this.orderByText.Size = new System.Drawing.Size(129, 23);
             this.orderByText.TabIndex = 18;
             this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 139);
+            this.label2.Location = new System.Drawing.Point(3, 138);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 15);
+            this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 15;
             this.label2.Text = "Rows Limit:";
             // 
@@ -315,9 +285,9 @@ namespace LogsReader.Reader
             // 
             this.rowsLimitText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rowsLimitText.Location = new System.Drawing.Point(85, 136);
+            this.rowsLimitText.Location = new System.Drawing.Point(84, 135);
             this.rowsLimitText.Name = "rowsLimitText";
-            this.rowsLimitText.Size = new System.Drawing.Size(83, 23);
+            this.rowsLimitText.Size = new System.Drawing.Size(129, 23);
             this.rowsLimitText.TabIndex = 16;
             this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
             this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
@@ -325,9 +295,9 @@ namespace LogsReader.Reader
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 10);
+            this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 15);
+            this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Servers:";
             // 
@@ -337,7 +307,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvMain.CheckBoxes = true;
-            this.trvMain.Location = new System.Drawing.Point(2, 188);
+            this.trvMain.Location = new System.Drawing.Point(0, 190);
             this.trvMain.Name = "trvMain";
             treeNode1.Name = "trvServers";
             treeNode1.Text = "Servers";
@@ -346,7 +316,7 @@ namespace LogsReader.Reader
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.trvMain.Size = new System.Drawing.Size(166, 0);
+            this.trvMain.Size = new System.Drawing.Size(221, 494);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
             // 
@@ -354,9 +324,9 @@ namespace LogsReader.Reader
             // 
             this.maxLinesStackText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxLinesStackText.Location = new System.Drawing.Point(85, 84);
+            this.maxLinesStackText.Location = new System.Drawing.Point(84, 83);
             this.maxLinesStackText.Name = "maxLinesStackText";
-            this.maxLinesStackText.Size = new System.Drawing.Size(83, 23);
+            this.maxLinesStackText.Size = new System.Drawing.Size(129, 23);
             this.maxLinesStackText.TabIndex = 14;
             this.maxLinesStackText.TextChanged += new System.EventHandler(this.MaxLinesStackText_TextChanged);
             this.maxLinesStackText.Leave += new System.EventHandler(this.MaxLinesStackText_Leave);
@@ -365,27 +335,27 @@ namespace LogsReader.Reader
             // 
             this.serversText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.serversText.Location = new System.Drawing.Point(85, 6);
+            this.serversText.Location = new System.Drawing.Point(84, 5);
             this.serversText.Name = "serversText";
-            this.serversText.Size = new System.Drawing.Size(83, 23);
+            this.serversText.Size = new System.Drawing.Size(129, 23);
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.ServersText_TextChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(4, 87);
+            this.label6.Location = new System.Drawing.Point(3, 86);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 15);
+            this.label6.Size = new System.Drawing.Size(60, 13);
             this.label6.TabIndex = 13;
             this.label6.Text = "Max Lines:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 62);
+            this.label3.Location = new System.Drawing.Point(3, 61);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 15);
+            this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "File Types:";
             // 
@@ -393,9 +363,9 @@ namespace LogsReader.Reader
             // 
             this.logDirText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logDirText.Location = new System.Drawing.Point(85, 32);
+            this.logDirText.Location = new System.Drawing.Point(84, 31);
             this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(83, 23);
+            this.logDirText.Size = new System.Drawing.Size(129, 23);
             this.logDirText.TabIndex = 12;
             this.logDirText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
             // 
@@ -403,27 +373,27 @@ namespace LogsReader.Reader
             // 
             this.fileNames.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileNames.Location = new System.Drawing.Point(85, 58);
+            this.fileNames.Location = new System.Drawing.Point(84, 57);
             this.fileNames.Name = "fileNames";
-            this.fileNames.Size = new System.Drawing.Size(83, 23);
+            this.fileNames.Size = new System.Drawing.Size(129, 23);
             this.fileNames.TabIndex = 8;
             this.fileNames.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 36);
+            this.label5.Location = new System.Drawing.Point(3, 35);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 15);
+            this.label5.Size = new System.Drawing.Size(68, 13);
             this.label5.TabIndex = 11;
             this.label5.Text = "Logs folder:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 113);
+            this.label4.Location = new System.Drawing.Point(3, 112);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 15);
+            this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 9;
             this.label4.Text = "Max Threads:";
             // 
@@ -431,47 +401,12 @@ namespace LogsReader.Reader
             // 
             this.maxThreadsText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxThreadsText.Location = new System.Drawing.Point(85, 110);
+            this.maxThreadsText.Location = new System.Drawing.Point(84, 109);
             this.maxThreadsText.Name = "maxThreadsText";
-            this.maxThreadsText.Size = new System.Drawing.Size(83, 23);
+            this.maxThreadsText.Size = new System.Drawing.Size(129, 23);
             this.maxThreadsText.TabIndex = 10;
             this.maxThreadsText.TextChanged += new System.EventHandler(this.MaxThreadsText_TextChanged);
             this.maxThreadsText.Leave += new System.EventHandler(this.MaxThreadsText_Leave);
-            // 
-            // MainSplitContainer
-            // 
-            this.MainSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.MainSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.MainSplitContainer.Name = "MainSplitContainer";
-            // 
-            // MainSplitContainer.Panel1
-            // 
-            this.MainSplitContainer.Panel1.Controls.Add(this.EnumSplitContainer);
-            this.MainSplitContainer.Panel1.Controls.Add(this.statusStrip);
-            this.MainSplitContainer.Size = new System.Drawing.Size(548, 50);
-            this.MainSplitContainer.SplitterDistance = 385;
-            this.MainSplitContainer.TabIndex = 0;
-            // 
-            // EnumSplitContainer
-            // 
-            this.EnumSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnumSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.EnumSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.EnumSplitContainer.Name = "EnumSplitContainer";
-            this.EnumSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // EnumSplitContainer.Panel1
-            // 
-            this.EnumSplitContainer.Panel1.Controls.Add(this.dgvFiles);
-            // 
-            // EnumSplitContainer.Panel2
-            // 
-            this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-            this.EnumSplitContainer.Size = new System.Drawing.Size(381, 24);
-            this.EnumSplitContainer.SplitterDistance = 301;
-            this.EnumSplitContainer.TabIndex = 2;
             // 
             // descriptionText
             // 
@@ -480,19 +415,9 @@ namespace LogsReader.Reader
             this.descriptionText.Location = new System.Drawing.Point(0, 0);
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(381, 52);
+            this.descriptionText.Size = new System.Drawing.Size(421, 145);
             this.descriptionText.TabIndex = 0;
             this.descriptionText.Text = "";
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-            this.statusStrip.Location = new System.Drawing.Point(0, 24);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(381, 22);
-            this.statusStrip.SizingGrip = false;
-            this.statusStrip.TabIndex = 8;
-            this.statusStrip.Text = "statusStrip1";
             // 
             // StatusTextLable
             // 
@@ -721,36 +646,206 @@ namespace LogsReader.Reader
             this.filterPanel.Size = new System.Drawing.Size(1251, 95);
             this.filterPanel.TabIndex = 30;
             // 
+            // ParentRadSplitContainer
+            // 
+            this.ParentRadSplitContainer.Controls.Add(this.splitPanel1);
+            this.ParentRadSplitContainer.Controls.Add(this.splitPanel2);
+            this.ParentRadSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParentRadSplitContainer.Location = new System.Drawing.Point(0, 95);
+            this.ParentRadSplitContainer.Name = "ParentRadSplitContainer";
+            // 
+            // 
+            // 
+            this.ParentRadSplitContainer.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.ParentRadSplitContainer.Size = new System.Drawing.Size(1251, 710);
+            this.ParentRadSplitContainer.TabIndex = 32;
+            this.ParentRadSplitContainer.TabStop = false;
+            // 
+            // splitPanel1
+            // 
+            this.splitPanel1.Controls.Add(this.MainRadSplitContainer);
+            this.splitPanel1.Controls.Add(this.radStatusStrip);
+            this.splitPanel1.Location = new System.Drawing.Point(0, 0);
+            this.splitPanel1.Name = "splitPanel1";
+            // 
+            // 
+            // 
+            this.splitPanel1.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel1.Size = new System.Drawing.Size(648, 710);
+            this.splitPanel1.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0.01995164F, 0F);
+            this.splitPanel1.SizeInfo.SplitterCorrection = new System.Drawing.Size(17, 0);
+            this.splitPanel1.TabIndex = 0;
+            this.splitPanel1.TabStop = false;
+            this.splitPanel1.Text = "splitPanel1";
+            // 
+            // MainRadSplitContainer
+            // 
+            this.MainRadSplitContainer.Controls.Add(this.splitPanel3);
+            this.MainRadSplitContainer.Controls.Add(this.splitPanel4);
+            this.MainRadSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainRadSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.MainRadSplitContainer.Name = "MainRadSplitContainer";
+            // 
+            // 
+            // 
+            this.MainRadSplitContainer.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.MainRadSplitContainer.Size = new System.Drawing.Size(648, 684);
+            this.MainRadSplitContainer.TabIndex = 0;
+            this.MainRadSplitContainer.TabStop = false;
+            // 
+            // splitPanel3
+            // 
+            this.splitPanel3.Controls.Add(this.label12);
+            this.splitPanel3.Controls.Add(this.trvMain);
+            this.splitPanel3.Controls.Add(this.orderByText);
+            this.splitPanel3.Controls.Add(this.label1);
+            this.splitPanel3.Controls.Add(this.label2);
+            this.splitPanel3.Controls.Add(this.maxThreadsText);
+            this.splitPanel3.Controls.Add(this.rowsLimitText);
+            this.splitPanel3.Controls.Add(this.label4);
+            this.splitPanel3.Controls.Add(this.label5);
+            this.splitPanel3.Controls.Add(this.maxLinesStackText);
+            this.splitPanel3.Controls.Add(this.fileNames);
+            this.splitPanel3.Controls.Add(this.serversText);
+            this.splitPanel3.Controls.Add(this.logDirText);
+            this.splitPanel3.Controls.Add(this.label6);
+            this.splitPanel3.Controls.Add(this.label3);
+            this.splitPanel3.Location = new System.Drawing.Point(0, 0);
+            this.splitPanel3.Name = "splitPanel3";
+            // 
+            // 
+            // 
+            this.splitPanel3.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel3.Size = new System.Drawing.Size(223, 684);
+            this.splitPanel3.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1541176F, 0F);
+            this.splitPanel3.SizeInfo.SplitterCorrection = new System.Drawing.Size(-67, 0);
+            this.splitPanel3.TabIndex = 0;
+            this.splitPanel3.TabStop = false;
+            this.splitPanel3.Text = "splitPanel3";
+            // 
+            // splitPanel4
+            // 
+            this.splitPanel4.Controls.Add(this.EnumRadSplitContainer);
+            this.splitPanel4.Location = new System.Drawing.Point(227, 0);
+            this.splitPanel4.Name = "splitPanel4";
+            // 
+            // 
+            // 
+            this.splitPanel4.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel4.Size = new System.Drawing.Size(421, 684);
+            this.splitPanel4.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0.1541176F, 0F);
+            this.splitPanel4.SizeInfo.SplitterCorrection = new System.Drawing.Size(67, 0);
+            this.splitPanel4.TabIndex = 1;
+            this.splitPanel4.TabStop = false;
+            this.splitPanel4.Text = "splitPanel4";
+            // 
+            // EnumRadSplitContainer
+            // 
+            this.EnumRadSplitContainer.Controls.Add(this.splitPanel5);
+            this.EnumRadSplitContainer.Controls.Add(this.splitPanel6);
+            this.EnumRadSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EnumRadSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.EnumRadSplitContainer.Name = "EnumRadSplitContainer";
+            this.EnumRadSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // 
+            // 
+            this.EnumRadSplitContainer.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.EnumRadSplitContainer.Size = new System.Drawing.Size(421, 684);
+            this.EnumRadSplitContainer.TabIndex = 0;
+            this.EnumRadSplitContainer.TabStop = false;
+            // 
+            // splitPanel5
+            // 
+            this.splitPanel5.Controls.Add(this.dgvFiles);
+            this.splitPanel5.Location = new System.Drawing.Point(0, 0);
+            this.splitPanel5.Name = "splitPanel5";
+            // 
+            // 
+            // 
+            this.splitPanel5.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel5.Size = new System.Drawing.Size(421, 535);
+            this.splitPanel5.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0F, 0.2861272F);
+            this.splitPanel5.SizeInfo.SplitterCorrection = new System.Drawing.Size(0, 99);
+            this.splitPanel5.TabIndex = 0;
+            this.splitPanel5.TabStop = false;
+            this.splitPanel5.Text = "splitPanel5";
+            // 
+            // splitPanel6
+            // 
+            this.splitPanel6.Controls.Add(this.descriptionText);
+            this.splitPanel6.Location = new System.Drawing.Point(0, 539);
+            this.splitPanel6.Name = "splitPanel6";
+            // 
+            // 
+            // 
+            this.splitPanel6.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel6.Size = new System.Drawing.Size(421, 145);
+            this.splitPanel6.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0F, -0.2861272F);
+            this.splitPanel6.SizeInfo.SplitterCorrection = new System.Drawing.Size(0, -99);
+            this.splitPanel6.TabIndex = 1;
+            this.splitPanel6.TabStop = false;
+            this.splitPanel6.Text = "splitPanel6";
+            // 
+            // radStatusStrip
+            // 
+            this.radStatusStrip.Location = new System.Drawing.Point(0, 684);
+            this.radStatusStrip.Name = "radStatusStrip";
+            this.radStatusStrip.Size = new System.Drawing.Size(648, 26);
+            this.radStatusStrip.SizingGrip = false;
+            this.radStatusStrip.TabIndex = 1;
+            // 
+            // splitPanel2
+            // 
+            this.splitPanel2.Location = new System.Drawing.Point(652, 0);
+            this.splitPanel2.Name = "splitPanel2";
+            // 
+            // 
+            // 
+            this.splitPanel2.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel2.Size = new System.Drawing.Size(599, 710);
+            this.splitPanel2.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.01995164F, 0F);
+            this.splitPanel2.SizeInfo.SplitterCorrection = new System.Drawing.Size(-35, 0);
+            this.splitPanel2.TabIndex = 1;
+            this.splitPanel2.TabStop = false;
+            this.splitPanel2.Text = "splitPanel2";
+            // 
             // LogsReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ParentSplitContainer);
+            this.Controls.Add(this.ParentRadSplitContainer);
             this.Controls.Add(this.filterPanel);
             this.Controls.Add(this.progressBar);
             this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.MinimumSize = new System.Drawing.Size(0, 25);
             this.Name = "LogsReaderForm";
-            this.Size = new System.Drawing.Size(1251, 685);
+            this.Size = new System.Drawing.Size(1251, 815);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
-            this.ParentSplitContainer.Panel1.ResumeLayout(false);
-            this.ParentSplitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).EndInit();
-            this.ParentSplitContainer.ResumeLayout(false);
-            this.SchemePanel.ResumeLayout(false);
-            this.SchemePanel.PerformLayout();
-            this.MainSplitContainer.Panel1.ResumeLayout(false);
-            this.MainSplitContainer.Panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
-            this.MainSplitContainer.ResumeLayout(false);
-            this.EnumSplitContainer.Panel1.ResumeLayout(false);
-            this.EnumSplitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).EndInit();
-            this.EnumSplitContainer.ResumeLayout(false);
             this.groupBoxFilter.ResumeLayout(false);
             this.groupBoxFilter.PerformLayout();
             this.filterPanel.ResumeLayout(false);
             this.filterPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ParentRadSplitContainer)).EndInit();
+            this.ParentRadSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).EndInit();
+            this.splitPanel1.ResumeLayout(false);
+            this.splitPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainRadSplitContainer)).EndInit();
+            this.MainRadSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).EndInit();
+            this.splitPanel3.ResumeLayout(false);
+            this.splitPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel4)).EndInit();
+            this.splitPanel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.EnumRadSplitContainer)).EndInit();
+            this.EnumRadSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel5)).EndInit();
+            this.splitPanel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel6)).EndInit();
+            this.splitPanel6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -762,9 +857,6 @@ namespace LogsReader.Reader
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.TextBox txtPattern;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.SplitContainer ParentSplitContainer;
-        private System.Windows.Forms.SplitContainer MainSplitContainer;
-        private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel StatusTextLable;
         private System.Windows.Forms.CheckBox useRegex;
         private System.Windows.Forms.Label label1;
@@ -788,9 +880,7 @@ namespace LogsReader.Reader
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox traceMessageFilter;
         private System.Windows.Forms.GroupBox groupBoxFilter;
-        private System.Windows.Forms.SplitContainer EnumSplitContainer;
         private System.Windows.Forms.RichTextBox descriptionText;
-        private System.Windows.Forms.Panel SchemePanel;
         private System.Windows.Forms.Panel filterPanel;
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.CheckBox alreadyUseFilter;
@@ -808,6 +898,16 @@ namespace LogsReader.Reader
         private System.Windows.Forms.DataGridViewTextBoxColumn TraceName;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateOfTrace;
         private System.Windows.Forms.DataGridViewTextBoxColumn File;
+        private Telerik.WinControls.UI.RadSplitContainer ParentRadSplitContainer;
+        private Telerik.WinControls.UI.SplitPanel splitPanel1;
+        private Telerik.WinControls.UI.SplitPanel splitPanel2;
+        private Telerik.WinControls.UI.RadSplitContainer MainRadSplitContainer;
+        private Telerik.WinControls.UI.SplitPanel splitPanel3;
+        private Telerik.WinControls.UI.SplitPanel splitPanel4;
+        private Telerik.WinControls.UI.RadStatusStrip radStatusStrip;
+        private Telerik.WinControls.UI.RadSplitContainer EnumRadSplitContainer;
+        private Telerik.WinControls.UI.SplitPanel splitPanel5;
+        private Telerik.WinControls.UI.SplitPanel splitPanel6;
     }
 }
 
