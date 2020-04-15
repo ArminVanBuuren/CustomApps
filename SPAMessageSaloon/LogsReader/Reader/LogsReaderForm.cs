@@ -11,6 +11,9 @@ using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
 using SPAMessageSaloon.Common;
+using Telerik.WinControls;
+using Telerik.WinControls.UI;
+using Telerik.WinControls.UI.Docking;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
@@ -20,6 +23,8 @@ namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl
     {
+        const string STATUS_TEMPLATE = "Files  completed:  {0}  of  {1}  |  Overall  found {2,-2} matches  |";
+
         private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
@@ -27,11 +32,8 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
 
-        private readonly ToolStripStatusLabel _statusInfo;
-        private readonly ToolStripStatusLabel _findedInfo;
-        private readonly ToolStripStatusLabel _completedFilesStatus;
-        private readonly ToolStripStatusLabel _totalFilesStatus;
-        private readonly NotepadControl _notepad;
+        private readonly RadLabel _processInfo;
+        private readonly RadLabel _statusInfo;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
         
@@ -68,47 +70,27 @@ namespace LogsReader.Reader
 
         public int Progress
         {
-            get => IsWorking ? progressBar.Value : 100;
-            private set => progressBar.Value = value;
+            get => IsWorking ? progressBar.Value1 : 100;
+            private set => progressBar.Value1 = value;
         }
 
         public LogsReaderForm()
         {
             InitializeComponent();
-            progressBar.Visible = false;
-
             try
             {
                 dgvFiles.AutoGenerateColumns = false;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 orderByText.GotFocus += OrderByText_GotFocus;
 
-                #region Set StatusStrip
+                _processInfo = new RadLabel() {Text = string.Format(STATUS_TEMPLATE, 0,0,0), Font = this.Font, Padding = new Padding(5, 2, 0, 0), Dock = DockStyle.Left, BackColor = Color.Transparent };
+                _statusInfo = new RadLabel() {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Padding = Padding = new Padding(0, 2, 0, 0), Dock = DockStyle.Left, BackColor = Color.Transparent};
+                radStatusStrip.Controls.Add(_statusInfo);
+                radStatusStrip.Controls.Add(_processInfo);
+                radStatusStrip.Padding = new Padding(0);
 
-                var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
-                var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
-                var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                statusStrip.Items.Add(_completedFilesStatus);
-                statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd };
-                statusStrip.Items.Add(_totalFilesStatus);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd });
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
-                statusStrip.Items.Add(_statusInfo);
-
-                #endregion
-
-                var tooltipPrintXML = new ToolTip {InitialDelay = 100};
+                var tooltipPrintXML = new ToolTip {InitialDelay = 50};
                 tooltipPrintXML.SetToolTip(txtPattern, Resources.Form_SearchComment);
                 tooltipPrintXML.SetToolTip(useRegex, Resources.LRSettings_UseRegexComment);
                 tooltipPrintXML.SetToolTip(serversText, Resources.LRSettingsScheme_ServersComment);
@@ -125,13 +107,7 @@ namespace LogsReader.Reader
                 tooltipPrintXML.SetToolTip(orderByText, Resources.LRSettingsScheme_OrderByComment);
                 tooltipPrintXML.SetToolTip(trvMain, Resources.Form_trvMainComment);
 
-                _notepad = new NotepadControl
-                {
-                    BorderStyle = BorderStyle.None
-                };
-                MainSplitContainer.Panel2.Controls.Add(_notepad);
-                MainSplitContainer.Panel2.BorderStyle = BorderStyle.None;
-                _message = _notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
+                _message = notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -141,7 +117,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = _notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
+                _traceMessage = notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -151,13 +127,9 @@ namespace LogsReader.Reader
                 _traceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _traceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
-                _notepad.TabsFont = this.Font;
-                _notepad.TextFont = new Font("Segoe UI", 10F);
-                _notepad.Dock = DockStyle.Fill;
-                _notepad.SelectEditor(0);
-                _notepad.ReadOnly = true;
-                _notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
-                _notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
+                notepad.SelectEditor(0);
+                notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
+                notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
                 dateStartFilter.ValueChanged += (sender, args) =>
                 {
@@ -220,7 +192,7 @@ namespace LogsReader.Reader
                 _traceMessage.Highlights = UserSettings.TraceHighlights;
 
                 serversText.Text = CurrentSettings.Servers;
-                _notepad.DefaultEncoding = CurrentSettings.Encoding;
+                notepad.DefaultEncoding = CurrentSettings.Encoding;
                 logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
                 fileNames.Text = CurrentSettings.Types;
                 maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
@@ -250,9 +222,9 @@ namespace LogsReader.Reader
                         dgvFiles.Columns[i].Width = value;       
                 }
 
-                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
-                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+                schemePanel.SizeInfo.AbsoluteSize = new Size(UserSettings.GetValue(nameof(schemePanel), 10, 2000, schemePanel.Size.Width), schemePanel.Size.Height);
+                mainPanel.SizeInfo.AbsoluteSize = new Size(UserSettings.GetValue(nameof(mainPanel), 10, 2000, mainPanel.Size.Width), mainPanel.Size.Height);
+                descriptionPanel.SizeInfo.AbsoluteSize = new Size(descriptionPanel.Size.Width, UserSettings.GetValue(nameof(descriptionPanel), 10, 2000, descriptionPanel.Size.Height));
             }
             catch (Exception ex)
             {
@@ -276,9 +248,9 @@ namespace LogsReader.Reader
                     UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
                 }
 
-                UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(schemePanel), schemePanel.Size.Width);
+                UserSettings.SetValue(nameof(mainPanel), mainPanel.Size.Width);
+                UserSettings.SetValue(nameof(descriptionPanel), descriptionPanel.Size.Height);
             }
             catch (Exception ex)
             {
@@ -381,23 +353,7 @@ namespace LogsReader.Reader
 
         void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(delegate
-                {
-                    _findedInfo.Text = countMatches.ToString();
-                    Progress = percentOfProgeress;
-                    _completedFilesStatus.Text = filesCompleted.ToString();
-                    _totalFilesStatus.Text = totalFiles.ToString();
-                }));
-            }
-            else
-            {
-                _findedInfo.Text = countMatches.ToString();
-                Progress = percentOfProgeress;
-                _completedFilesStatus.Text = filesCompleted.ToString();
-                _totalFilesStatus.Text = totalFiles.ToString();
-            }
+            this.SafeInvoke(() => { _processInfo.Text = string.Format(STATUS_TEMPLATE, filesCompleted.ToString(), totalFiles.ToString(), countMatches.ToString()); });
         }
 
         private async void ButtonExport_Click(object sender, EventArgs e)
@@ -549,12 +505,12 @@ namespace LogsReader.Reader
         {
             if (IsWorking)
             {
-                MainSplitContainer.Cursor = Cursors.WaitCursor;
+                MainRadSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
             }
             else
             {
-                MainSplitContainer.Cursor = Cursors.Default;
+                MainRadSplitContainer.Cursor = Cursors.Default;
             }
 
             btnSearch.Text = IsWorking ? @"Stop [Esc]" : @"Search [F5]";
@@ -562,7 +518,7 @@ namespace LogsReader.Reader
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
-            _notepad.Enabled = !IsWorking;
+            notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
@@ -921,10 +877,8 @@ namespace LogsReader.Reader
             ClearDGV();
 
             Progress = 0;
-            _completedFilesStatus.Text = @"0";
-            _totalFilesStatus.Text = @"0";
-            _findedInfo.Text = @"0";
-
+            _processInfo.Text = string.Format(STATUS_TEMPLATE, 0, 0, 0);
+            
             ReportStatus(string.Empty, ReportStatusType.Success);
 
             STREAM.GarbageCollect();
