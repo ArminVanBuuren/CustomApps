@@ -176,11 +176,14 @@ namespace Utils.WinForm.Notepad
         {
             InitializeComponent();
 
+            this.BorderStyle = BorderStyle.None;
+
             _tabControl.DrawMode = TabDrawMode.Normal;
             _tabControl.Padding = new Point(12, 4);
             _tabControl.BackColor = Color.White;
             _tabControl.Deselected += TabControlObj_Deselected;
             _tabControl.Selecting += RefreshForm;
+            _tabControl.DrawItem += TabControlOnDrawItem;
         }
 
         #region Inner - AllowUserCloseItems
@@ -298,6 +301,13 @@ namespace Utils.WinForm.Notepad
         private void TabControlObj_HandleCreated(object sender, EventArgs e)
         {
             SendMessage(_tabControl.Handle, TCM_SETMINTABWIDTH, IntPtr.Zero, (IntPtr)16);
+        }
+
+        private void TabControlOnDrawItem(object sender, DrawItemEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Pen p = new Pen(Color.Transparent, 0);
+            g.DrawRectangle(p, this._tabControl.SelectedTab.Bounds);
         }
 
         private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
@@ -480,7 +490,8 @@ namespace Utils.WinForm.Notepad
                 UseVisualStyleBackColor = true,
                 ForeColor = TabsForeColor,
                 Margin = new Padding(0),
-                Padding = new Padding(0)
+                Padding = new Padding(0),
+                BorderStyle = BorderStyle.None
             };
             tabPage.Controls.Add(editor);
 
@@ -490,6 +501,7 @@ namespace Utils.WinForm.Notepad
 
             _tabControl.SelectedIndex = index;
 
+            editor.BorderStyle = BorderStyle.None;
             editor.Dock = DockStyle.Fill;
             editor.ForeColor = TextForeColor;
             editor.WordWrap = WordWrap;

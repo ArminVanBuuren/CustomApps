@@ -214,6 +214,8 @@ namespace Utils.WinForm.Notepad
         {
             InitializeComponent();
 
+            BorderStyle = BorderStyle.None;
+
             FCTB = new FastColoredTextBox
             {
                 AutoCompleteBracketsList = new[] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''},
@@ -228,7 +230,8 @@ namespace Utils.WinForm.Notepad
                 ImeMode = ImeMode.Off,
                 TabLength = 2,
                 Zoom = 100,
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None
             };
 
             _statusStrip = new StatusStrip
