@@ -40,7 +40,7 @@ namespace LogsReader
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1401, 752);
+            this.MainTabControl.Size = new System.Drawing.Size(1067, 512);
             this.MainTabControl.TabIndex = 0;
             // 
             // LogsReaderMainForm
@@ -48,7 +48,7 @@ namespace LogsReader
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1401, 752);
+            this.ClientSize = new System.Drawing.Size(1067, 512);
             this.Controls.Add(this.MainTabControl);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = global::LogsReader.Properties.Resources.icon;
