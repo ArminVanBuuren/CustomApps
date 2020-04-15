@@ -29,8 +29,8 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -256,7 +256,7 @@ namespace LogsReader.Reader
             // ParentSplitContainer.Panel2
             // 
             this.ParentSplitContainer.Panel2.Controls.Add(this.MainSplitContainer);
-            this.ParentSplitContainer.Size = new System.Drawing.Size(988, 50);
+            this.ParentSplitContainer.Size = new System.Drawing.Size(727, 50);
             this.ParentSplitContainer.SplitterDistance = 175;
             this.ParentSplitContainer.TabIndex = 31;
             // 
@@ -339,13 +339,13 @@ namespace LogsReader.Reader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(2, 188);
             this.trvMain.Name = "trvMain";
-            treeNode3.Name = "trvServers";
-            treeNode3.Text = "Servers";
-            treeNode4.Name = "trvTypes";
-            treeNode4.Text = "Types";
+            treeNode1.Name = "trvServers";
+            treeNode1.Text = "Servers";
+            treeNode2.Name = "trvTypes";
+            treeNode2.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
+            treeNode1,
+            treeNode2});
             this.trvMain.Size = new System.Drawing.Size(166, 0);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
@@ -441,6 +441,7 @@ namespace LogsReader.Reader
             // MainSplitContainer
             // 
             this.MainSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.MainSplitContainer.Location = new System.Drawing.Point(0, 0);
             this.MainSplitContainer.Name = "MainSplitContainer";
@@ -449,7 +450,7 @@ namespace LogsReader.Reader
             // 
             this.MainSplitContainer.Panel1.Controls.Add(this.EnumSplitContainer);
             this.MainSplitContainer.Panel1.Controls.Add(this.statusStrip);
-            this.MainSplitContainer.Size = new System.Drawing.Size(809, 383);
+            this.MainSplitContainer.Size = new System.Drawing.Size(548, 50);
             this.MainSplitContainer.SplitterDistance = 385;
             this.MainSplitContainer.TabIndex = 0;
             // 
@@ -468,7 +469,7 @@ namespace LogsReader.Reader
             // EnumSplitContainer.Panel2
             // 
             this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-            this.EnumSplitContainer.Size = new System.Drawing.Size(381, 357);
+            this.EnumSplitContainer.Size = new System.Drawing.Size(381, 24);
             this.EnumSplitContainer.SplitterDistance = 301;
             this.EnumSplitContainer.TabIndex = 2;
             // 
@@ -486,7 +487,7 @@ namespace LogsReader.Reader
             // statusStrip
             // 
             this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-            this.statusStrip.Location = new System.Drawing.Point(0, 357);
+            this.statusStrip.Location = new System.Drawing.Point(0, 24);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(381, 22);
             this.statusStrip.SizingGrip = false;
