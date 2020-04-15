@@ -44,7 +44,13 @@ namespace LogsReader.Reader
         /// <summary>
         /// Статус выполнения поиска
         /// </summary>
-        public bool IsWorking { get; private set; } = false;
+        public bool IsWorking
+        {
+            //get => progressBar.Visible;
+            //private set => progressBar.Visible = value;
+            get;
+            private set;
+        }
 
         /// <summary>
         /// Юзерские настройки 
@@ -69,6 +75,8 @@ namespace LogsReader.Reader
         public LogsReaderForm()
         {
             InitializeComponent();
+            progressBar.Visible = false;
+
             try
             {
                 dgvFiles.AutoGenerateColumns = false;
@@ -82,20 +90,20 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 statusStrip.Items.Add(new ToolStripStatusLabel("Files completed:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
                 statusStrip.Items.Add(_completedFilesStatus);
                 statusStrip.Items.Add(new ToolStripStatusLabel("of") {Font = this.Font, Margin = statusStripItemsPaddingMiddle });
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
+                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd };
                 statusStrip.Items.Add(_totalFilesStatus);
 
                 statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                statusStrip.Items.Add(new ToolStripStatusLabel("Overall found") {Font = this.Font, Margin = statusStripItemsPaddingStart });
                 _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
                 statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd});
+                statusStrip.Items.Add(new ToolStripStatusLabel("matches") {Font = this.Font, Margin = statusStripItemsPaddingEnd });
 
                 statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
+                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
                 statusStrip.Items.Add(_statusInfo);
 
                 #endregion
@@ -242,8 +250,8 @@ namespace LogsReader.Reader
                         dgvFiles.Columns[i].Width = value;       
                 }
 
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
+                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
@@ -268,8 +276,8 @@ namespace LogsReader.Reader
                     UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
                 }
 
-                UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
                 UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
                 UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
