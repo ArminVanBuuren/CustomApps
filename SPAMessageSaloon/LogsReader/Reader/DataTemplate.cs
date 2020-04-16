@@ -62,7 +62,7 @@ namespace LogsReader.Reader
             Description = error.Message;
             if (error is RegexMatchTimeoutException errorRegex)
             {
-                Message = $"Timeout while executing pattern: \"{errorRegex.Pattern}\".\r\nTimeout: {errorRegex.MatchTimeout.ToReadableString()}\r\nInput:\r\n{errorRegex.Input}";
+                Message = string.Format(Properties.Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
             }
             else
             {

@@ -157,7 +157,7 @@ namespace LogsReader.Config
 
             if (!REGEX.Verify(text))
             {
-                ReportMessage.Show($"Pattern \"{text}\" is incorrect!",MessageBoxIcon.Error, "TraceParse Reader");
+                ReportMessage.Show(string.Format(Properties.Resources.Txt_LRTraceParse_ErrPattern, text), MessageBoxIcon.Error, "TraceParse Reader");
                 return null;
             }
             else

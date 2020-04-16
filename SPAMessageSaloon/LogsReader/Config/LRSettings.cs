@@ -30,10 +30,10 @@ namespace LogsReader.Config
 
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
-        [XmlAnyElement(nameof(Resources.LRSettings_PreviousSearchComment))]
+        [XmlAnyElement(nameof(Resources.Txt_LRSettings_PreviousSearchComment))]
         public XmlComment PreviousSearchComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettings_UseRegexComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettings_UseRegexComment);
             set { }
         }
 
@@ -53,7 +53,7 @@ namespace LogsReader.Config
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new ArgumentException("Schemes names must be unique!", ex);
+                    throw new ArgumentException(Properties.Resources.Txt_LRSettings_ErrUnique, ex);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace LogsReader.Config
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(string.Format(Resources.LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error, "Serialize Error");
+                ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrSerialize);
             }
         }
 
@@ -108,10 +108,10 @@ namespace LogsReader.Config
             catch (Exception ex)
             {
                 var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                ReportMessage.Show(string.Format(Resources.LRSettings_Deserialize_Ex,
+                ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Deserialize_Ex,
                     Path.GetFileName(SettingsPath),
                     Path.GetFileName(FailedSettingsPath),
-                    message), MessageBoxIcon.Error, "Deserialize Error");
+                    message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
 
                 if (File.Exists(FailedSettingsPath))
                 {

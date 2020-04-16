@@ -25,40 +25,69 @@ using XPathTester;
 
 namespace SPAMessageSaloon
 {
+    public enum NationalLanguage
+    {
+        English = 0,
+        Russian = 1
+    }
+
+
     public partial class MainForm : Form
     {
+        private NationalLanguage _language;
         private int _countOfLastProcess = 0;
+
+        public ToolStripStatusLabel _cpuUsage;
+        public ToolStripStatusLabel _threadsUsage;
+        public ToolStripStatusLabel _ramUsage;
 
         public bool IsClosed { get; private set; } = false;
 
-        public ToolStripStatusLabel CPUUsage { get; }
-        public ToolStripStatusLabel ThreadsUsage { get; }
-        public ToolStripStatusLabel RAMUsage { get; }
-
-        public NationalLanguage Language { get; private set; } = NationalLanguage.English;
-
         ApplicationUpdater AppUpdater { get; set; }
+
+        public NationalLanguage Language
+        {
+            get => _language;
+            private set
+            {
+                try
+                {
+                    _language = value;
+                    SetRegeditValue(nameof(Language), value);
+
+                    var culture = value == NationalLanguage.Russian ? new CultureInfo("ru-RU") : new CultureInfo("en-US");
+
+                    CultureInfo.DefaultThreadCurrentCulture = culture;
+                    CultureInfo.DefaultThreadCurrentUICulture = culture;
+                    Thread.CurrentThread.CurrentCulture = culture;
+                    Thread.CurrentThread.CurrentUICulture = culture;
+
+                    languageToolStripMenuItem.Text = Properties.Resources.Txt_Language;
+                    aboutToolStripMenuItem.Text = Properties.Resources.Txt_About;
+
+                    foreach (var form in MdiChildren.OfType<ISaloonForm>())
+                        form.ApplySettings();
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            }
+        }
 
         private string LastUpdatePackage
         {
-            get
-            {
-                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                    return (string) reg[nameof(LastUpdatePackage)] ?? null;
-            }
-            set
-            {
-                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                    reg[nameof(LastUpdatePackage)] = value;
-            }
+            get => GetRegeditValue(nameof(LastUpdatePackage))?.ToString();
+            set => SetRegeditValue(nameof(LastUpdatePackage), value);
         }
 
         public MainForm()
         {
             InitializeComponent();
-            IsMdiContainer = true;
-            base.Text = $"SPA Message Saloon {this.GetAssemblyInfo().CurrentVersion}";
+        }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
             try
             {
                 try
@@ -75,35 +104,51 @@ namespace SPAMessageSaloon
                     // ignored
                 }
 
+                IsMdiContainer = true;
+                base.Text = $"SPA Message Saloon {this.GetAssemblyInfo().CurrentVersion}";
+
+                ToolStripManager.LoadSettings(this);
+                InitializeToolbarsMenu();
+
+                if (!NationalLanguage.TryParse(GetRegeditValue(nameof(Language))?.ToString(), out NationalLanguage lang))
+                    lang = NationalLanguage.English;
+                switch (lang)
+                {
+                    case NationalLanguage.Russian:
+                        russianToolStripMenuItem_Click(this, null); break;
+                    default:
+                        englishToolStripMenuItem_Click(this, null); break;
+                }
+
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
                 var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                var autor = new ToolStripButton("?") {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte) 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
-                autor.Click += (sender, args) => { Presenter.ShowOwner(); };
+                var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
+                autor.Click += (s, args) => { Presenter.ShowOwner(); STREAM.GarbageCollect(); };
                 statusStrip.Items.Add(autor);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                CPUUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 1, 2)};
-                statusStrip.Items.Add(CPUUsage);
+                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _cpuUsage = new ToolStripStatusLabel("    ") { Font = this.Font, Margin = new Padding(-7, 2, 1, 2) };
+                statusStrip.Items.Add(_cpuUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                ThreadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
-                statusStrip.Items.Add(ThreadsUsage);
+                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _threadsUsage = new ToolStripStatusLabel("  ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                statusStrip.Items.Add(_threadsUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                RAMUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
-                statusStrip.Items.Add(RAMUsage);
+                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _ramUsage = new ToolStripStatusLabel("       ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
 
-                Closing += (sender, args) => { IsClosed = true; };
-                Shown += (s, e) =>
+                Closing += (s, args) => { IsClosed = true; };
+                Shown += (s, args) =>
                 {
-                    var thread = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
+                    var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
                     thread.Start();
                 };
             }
@@ -161,20 +206,14 @@ namespace SPAMessageSaloon
         public void SaveData(IUpdater updater)
         {
             LastUpdatePackage = updater?.ProjectBuildPack.Name;
-            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
+            foreach (var form in MdiChildren.OfType<ISaloonForm>())
                 form.SaveData();
         }
 
         #endregion
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            ToolStripManager.LoadSettings(this);
-            InitializeToolbarsMenu();
-        }
-
         /// <summary>
-        /// Мониторинг локальных ресурсов
+        /// Мониторинг системных ресурсов
         /// </summary>
         void CalculateLocalResources()
         {
@@ -214,13 +253,13 @@ namespace SPAMessageSaloon
                     var threadsUsage = $"{currentProcess.Threads.Count,-2}";
                     var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
 
-                    CPUUsage.Text = cpuUsage;
-                    ThreadsUsage.Text = threadsUsage;
-                    RAMUsage.Text = ramUsage;
+                    _cpuUsage.Text = cpuUsage;
+                    _threadsUsage.Text = threadsUsage;
+                    _ramUsage.Text = ramUsage;
 
                     int processCount = 0;
                     int totalProgress = 0;
-                    foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
+                    foreach (var form in MdiChildren.OfType<ISaloonForm>())
                     {
                         processCount += form.ActiveProcessesCount;
                         totalProgress += form.ActiveTotalProgress;
@@ -245,7 +284,7 @@ namespace SPAMessageSaloon
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"System Resource Monitoring");
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_SystemResourceMonitoring);
             }
         }
 
@@ -282,8 +321,6 @@ namespace SPAMessageSaloon
             englishToolStripMenuItem.Checked = false;
             russianToolStripMenuItem.Checked = true;
             Language = NationalLanguage.Russian;
-            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
-                form.SetLanguage(Language);
         }
 
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
@@ -291,8 +328,6 @@ namespace SPAMessageSaloon
             englishToolStripMenuItem.Checked = true;
             russianToolStripMenuItem.Checked = false;
             Language = NationalLanguage.English;
-            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
-                form.SetLanguage(Language);
         }
 
         private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
@@ -310,12 +345,7 @@ namespace SPAMessageSaloon
             ShowMdiForm(() => new XPathTesterForm());
         }
 
-        private void ApplyResources()
-        {
-            
-        }
-
-        public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISPAMessageSaloonItems
+        public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISaloonForm
         {
             try
             {
@@ -327,7 +357,6 @@ namespace SPAMessageSaloon
                     return null;
 
                 form.MdiParent = this;
-                form.SetLanguage(Language);
                 form.WindowState = FormWindowState.Maximized;
                 form.Load += MDIManagerButton_Load;
                 form.Show();
@@ -356,7 +385,7 @@ namespace SPAMessageSaloon
             return false;
         }
 
-        private void MDIManagerButton_Load(object sender, EventArgs e)
+        private static void MDIManagerButton_Load(object sender, EventArgs e)
         {
             MDIManagerButton button = new MDIManagerButton(sender as Form) {BackColor = Color.White};
             button.Click += (S, E) => { ((MDIManagerButton) S).mdiForm.Activate(); };
@@ -366,6 +395,18 @@ namespace SPAMessageSaloon
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
             toolStripSplitButton1.ShowDropDown();
+        }
+
+        object GetRegeditValue(string name)
+        {
+            using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                return (string)reg[name] ?? null;
+        }
+
+        void SetRegeditValue(string name, object value)
+        {
+            using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                reg[name] = value;
         }
     }
 }

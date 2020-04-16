@@ -129,5 +129,32 @@ namespace SPAMessageSaloon.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string Txt_About {
+            get {
+                return ResourceManager.GetString("Txt_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string Txt_Language {
+            get {
+                return ResourceManager.GetString("Txt_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Resource Monitoring.
+        /// </summary>
+        internal static string Txt_SystemResourceMonitoring {
+            get {
+                return ResourceManager.GetString("Txt_SystemResourceMonitoring", resourceCulture);
+            }
+        }
     }
 }

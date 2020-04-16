@@ -1,16 +1,21 @@
-﻿namespace SPAMessageSaloon.Common
-{
-    public enum NationalLanguage
-    {
-        English = 0,
-        Russian = 1
-    }
+﻿using System;
+using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
 
-    public interface ISPAMessageSaloonItems
+namespace SPAMessageSaloon.Common
+{
+    public interface ISaloonForm : IUserForm
     {
         int ActiveProcessesCount { get; }
+
         int ActiveTotalProgress { get; }
-        void SetLanguage(NationalLanguage language);
+    }
+
+    public interface IUserForm
+    {
+        void ApplySettings();
+
         void SaveData();
     }
 }

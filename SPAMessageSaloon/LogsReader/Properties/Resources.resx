@@ -121,62 +121,62 @@
   <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LRSettingsScheme_LogsDirectoryComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_LogsDirectory" xml:space="preserve">
     <value>Путь к папке с логами. Поиск файлов происходит по всем директориям.</value>
   </data>
-  <data name="LRSettingsScheme_MaxThreadsComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_MaxThreads" xml:space="preserve">
     <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
-  <data name="LRSettingsScheme_MaxTraceLinesComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_MaxTraceLines" xml:space="preserve">
     <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из "TraceParse".</value>
   </data>
-  <data name="LRSettingsScheme_ServersComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
-  <data name="LRSettingsScheme_TraceParseComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
     <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
         Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке.</value>
   </data>
-  <data name="LRSettingsScheme_TypesComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
     <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
   </data>
-  <data name="LRSettings_Deserialize_Ex" xml:space="preserve">
+  <data name="Txt_LRSettings_Deserialize_Ex" xml:space="preserve">
     <value>Config "{0}" is incorrect! Moved to "{1}".
 
 {2}</value>
   </data>
-  <data name="LRSettings_PreviousSearchComment" xml:space="preserve">
+  <data name="Txt_LRSettings_PreviousSearchComment" xml:space="preserve">
     <value>Предыдущее значение поиска. </value>
   </data>
-  <data name="LRSettings_Serialize_Ex" xml:space="preserve">
+  <data name="Txt_LRSettings_Serialize_Ex" xml:space="preserve">
     <value>Unable to save config to path "{0}".
 {1}</value>
   </data>
-  <data name="LRSettings_UseRegexComment" xml:space="preserve">
+  <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
     <value>Поиск по регулярному выражению выполняется быстрее. Атрибут "encoding" используется при считывании лог файлов.</value>
   </data>
-  <data name="Form_DateFilterComment" xml:space="preserve">
+  <data name="Txt_Form_DateFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Date"</value>
   </data>
-  <data name="Form_TraceNameFilterComment" xml:space="preserve">
+  <data name="Txt_Form_TraceNameFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Trace name". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
   </data>
-  <data name="Form_TraceFilterComment" xml:space="preserve">
+  <data name="Txt_Form_TraceFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Trace". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
   </data>
-  <data name="Form_AlreadyUseFilterComment" xml:space="preserve">
+  <data name="Txt_Form_AlreadyUseFilterComment" xml:space="preserve">
     <value>Применить фильтр во время поиска</value>
   </data>
-  <data name="LRSettingsScheme_OrderByComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
     <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
   </data>
-  <data name="LRSettingsScheme_RowsLimitCommentComment" xml:space="preserve">
+  <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>
   </data>
-  <data name="Form_SearchComment" xml:space="preserve">
+  <data name="Txt_Form_SearchComment" xml:space="preserve">
     <value>Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>
   </data>
-  <data name="Form_trvMainComment" xml:space="preserve">
+  <data name="Txt_Form_trvMainComment" xml:space="preserve">
     <value>Необходимо выбрать сервера и типы файлов</value>
   </data>
   <data name="clear1" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -193,5 +193,150 @@
   </data>
   <data name="save2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\save2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_DataFilter_ErrDate" xml:space="preserve">
+    <value>Date of end must be greater than date of start.</value>
+  </data>
+  <data name="Txt_DataTemplate_ErrTimeout" xml:space="preserve">
+    <value>Timeout while executing pattern: "{0}".
+Timeout: {1}
+Input:
+{2}</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Contains" xml:space="preserve">
+    <value>Contains</value>
+  </data>
+  <data name="Txt_LogsReaderForm_FilesCompleted_1" xml:space="preserve">
+    <value>Files completed:</value>
+  </data>
+  <data name="Txt_LogsReaderForm_FilesCompleted_2" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NotContains" xml:space="preserve">
+    <value>Not Contains</value>
+  </data>
+  <data name="Txt_LogsReaderForm_OverallFound_1" xml:space="preserve">
+    <value>Overall found</value>
+  </data>
+  <data name="Txt_LogsReaderForm_OverallFound_2" xml:space="preserve">
+    <value>matches</value>
+  </data>
+  <data name="Txt_LRSettingsScheme_ErrOrderBy" xml:space="preserve">
+    <value>OrderBy item '{0}' is incorrect! Please check.</value>
+  </data>
+  <data name="Txt_LRSettingsScheme_ErrRegex" xml:space="preserve">
+    <value>Scheme '{0}' has incorrect Regex patterns in 'TraceParse' node. Please check.</value>
+  </data>
+  <data name="Txt_LRSettingsScheme_ErrUnique" xml:space="preserve">
+    <value>Columns must be unique!</value>
+  </data>
+  <data name="Txt_LRSettings_ErrDeserialize" xml:space="preserve">
+    <value>Deserialize Error</value>
+  </data>
+  <data name="Txt_LRSettings_ErrSerialize" xml:space="preserve">
+    <value>Serialize Error</value>
+  </data>
+  <data name="Txt_LRSettings_ErrUnique" xml:space="preserve">
+    <value>Schemes names must be unique!</value>
+  </data>
+  <data name="Txt_LRTraceParse_ErrPattern" xml:space="preserve">
+    <value>Pattern "{0}" is incorrect!</value>
+  </data>
+  <data name="Txt_Main_ErrLoadScheme" xml:space="preserve">
+    <value>Failed to load schema "{0}"
+{1}</value>
+  </data>
+  <data name="Txt_Main_LoadScheme" xml:space="preserve">
+    <value>Load scheme</value>
+  </data>
+  <data name="Txt_Initialization" xml:space="preserve">
+    <value>Initialization</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Clear" xml:space="preserve">
+    <value>Clear [F6]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_DateValueIsIncorrect" xml:space="preserve">
+    <value>Date value is incorrect</value>
+  </data>
+  <data name="Txt_LogsReaderForm_DoesntMatchByPattern" xml:space="preserve">
+    <value>Doesn't match by "TraceParse" patterns</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ErrExport" xml:space="preserve">
+    <value>Unable to save file "{0}". {1}</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Export" xml:space="preserve">
+    <value>Export [Ctrl+S]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Exporting" xml:space="preserve">
+    <value>Exporting...</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Filter" xml:space="preserve">
+    <value>Filter [F7]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_FilteTypes" xml:space="preserve">
+    <value>File Types</value>
+  </data>
+  <data name="Txt_LogsReaderForm_FinishedIn" xml:space="preserve">
+    <value>Finished in {0}</value>
+  </data>
+  <data name="Txt_LogsReaderForm_LogsFolder" xml:space="preserve">
+    <value>Logs folder</value>
+  </data>
+  <data name="Txt_LogsReaderForm_MaxLines" xml:space="preserve">
+    <value>Max Lines</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NoFilterResultsFound" xml:space="preserve">
+    <value>No filter results found</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NoLogsFound" xml:space="preserve">
+    <value>No logs found</value>
+  </data>
+  <data name="Txt_LogsReaderForm_OrderBy" xml:space="preserve">
+    <value>Order By</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Reset" xml:space="preserve">
+    <value>Reset [F8]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_RowsLimit" xml:space="preserve">
+    <value>Rows Limit</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Search" xml:space="preserve">
+    <value>Search [F5]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Servers" xml:space="preserve">
+    <value>Servers</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Stop" xml:space="preserve">
+    <value>Stop [Esc]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Stopping" xml:space="preserve">
+    <value>Stopping...</value>
+  </data>
+  <data name="Txt_LogsReaderForm_SuccessExport" xml:space="preserve">
+    <value>Successfully exported to file "{0}"</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Types" xml:space="preserve">
+    <value>Types</value>
+  </data>
+  <data name="Txt_LogsReaderForm_UseFilterWhenSearching" xml:space="preserve">
+    <value>Use filter when searching</value>
+  </data>
+  <data name="Txt_LogsReaderForm_UseRegex" xml:space="preserve">
+    <value>Use Regex</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Working" xml:space="preserve">
+    <value>Working...</value>
+  </data>
+  <data name="Txt_LogsReaderPerformer_IncorrectSearchPattern" xml:space="preserve">
+    <value>Pattern "{0}" is incorrect for use as regular expression! Please check.</value>
+  </data>
+  <data name="Txt_LogsReaderPerformer_NoFilesLogsFound" xml:space="preserve">
+    <value>No files logs found</value>
+  </data>
+  <data name="Txt_LogsReaderPerformer_SessionAlreadyCompleted" xml:space="preserve">
+    <value>Current session already completed!</value>
+  </data>
+  <data name="Txt_LogsReaderPerformer_SessionStopped" xml:space="preserve">
+    <value>Session was stopped</value>
   </data>
 </root>

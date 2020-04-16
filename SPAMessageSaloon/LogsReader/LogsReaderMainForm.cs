@@ -14,7 +14,7 @@ using Utils.WinForm;
 
 namespace LogsReader
 {
-    public partial class LogsReaderMainForm : Form, ISPAMessageSaloonItems
+    public partial class LogsReaderMainForm : Form, ISaloonForm
     {
         private LogsReaderForm _current;
 
@@ -52,13 +52,7 @@ namespace LogsReader
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) => { SaveData(); };
-                Shown += (s, e) =>
-                {
-                    if (AllForms == null)
-                        return;
-                    foreach (var form in AllForms)
-                        form.Value.ApplySettings();
-                };
+                Shown += (s, e) => { ApplySettings(); };
 
 
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -71,9 +65,10 @@ namespace LogsReader
                 {
                     try
                     {
-                        var logsReader = new Reader.LogsReaderForm();
-                        logsReader.LoadForm(scheme);
-                        logsReader.Dock = DockStyle.Fill;
+                        var logsReader = new LogsReaderForm(scheme)
+                        {
+                            Dock = DockStyle.Fill
+                        };
                         logsReader.OnSchemeChanged += SaveSchemas;
 
                         var page = new TabPage
@@ -91,13 +86,17 @@ namespace LogsReader
                     }
                     catch (Exception ex)
                     {
-                        ReportMessage.Show($"Failed to load schema \"{scheme.Name}\"\r\n{ex}", MessageBoxIcon.Error, @"Load scheme");
+                        ReportMessage.Show(string.Format(Properties.Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Properties.Resources.Txt_Main_LoadScheme);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"Initialization");
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_Initialization);
+            }
+            finally
+            {
+                CenterToScreen();
             }
         }
 
@@ -144,10 +143,12 @@ namespace LogsReader
                     { WindowState = FormWindowState.Maximized; return; }
                     else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
                         Size = Settings.Default.FormSize;
-
-                    CenterToScreen();
-                    //Location = Settings.Default.FormLocation;
                 }
+
+                if (AllForms == null)
+                    return;
+                foreach (var form in AllForms)
+                    form.Value.ApplySettings();
             }
             catch (Exception ex)
             {
@@ -169,7 +170,7 @@ namespace LogsReader
                     LRSettings.Serialize(AllSettings);
                 if (AllForms != null)
                     foreach (var form in AllForms.Values)
-                        form.SaveInterfaceParams();
+                        form.SaveData();
 
                 Settings.Default.FormLocation = Location;
                 Settings.Default.FormSize = Size;
@@ -181,11 +182,6 @@ namespace LogsReader
             {
                 // ignored
             }
-        }
-
-        public void SetLanguage(NationalLanguage language)
-        {
-            
         }
     }
 }

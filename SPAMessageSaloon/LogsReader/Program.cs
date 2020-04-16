@@ -16,10 +16,7 @@ namespace LogsReader
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                var mainForm = new LogsReaderMainForm();
-                mainForm.ApplySettings();
-                Application.Run(mainForm);
+                Application.Run(new LogsReaderMainForm());
             }
             catch (Exception ex)
             {

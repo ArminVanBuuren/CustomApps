@@ -1,4 +1,5 @@
 ﻿
+using LogsReader.Properties;
 using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
@@ -31,8 +32,6 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Types");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderForm));
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -207,7 +206,7 @@ namespace LogsReader.Reader
             this.btnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.btnSearch.Size = new System.Drawing.Size(90, 24);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "Search [F5]";
+            this.btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
             this.btnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
@@ -221,7 +220,7 @@ namespace LogsReader.Reader
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(87, 24);
             this.btnClear.TabIndex = 3;
-            this.btnClear.Text = "Clear [F6]";
+            this.btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
             this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
@@ -261,7 +260,7 @@ namespace LogsReader.Reader
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(56, 15);
             this.label12.TabIndex = 17;
-            this.label12.Text = "Order By:";
+            this.label12.Text = Resources.Txt_LogsReaderForm_OrderBy;
             // 
             // orderByText
             // 
@@ -280,7 +279,7 @@ namespace LogsReader.Reader
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 15);
             this.label2.TabIndex = 15;
-            this.label2.Text = "Rows Limit:";
+            this.label2.Text = Resources.Txt_LogsReaderForm_RowsLimit;
             // 
             // rowsLimitText
             // 
@@ -300,7 +299,7 @@ namespace LogsReader.Reader
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 15);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Servers:";
+            this.label1.Text = Resources.Txt_LogsReaderForm_Servers;
             // 
             // trvMain
             // 
@@ -310,13 +309,13 @@ namespace LogsReader.Reader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(1, 187);
             this.trvMain.Name = "trvMain";
-            treeNode33.Name = "trvServers";
-            treeNode33.Text = "Servers";
-            treeNode34.Name = "trvTypes";
-            treeNode34.Text = "Types";
+            treeNode3.Name = "trvServers";
+            treeNode3.Text = Resources.Txt_LogsReaderForm_Servers;
+            treeNode4.Name = "trvTypes";
+            treeNode4.Text = Resources.Txt_LogsReaderForm_Types;
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode33,
-            treeNode34});
+            treeNode3,
+            treeNode4});
             this.trvMain.Size = new System.Drawing.Size(217, 211);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
@@ -349,7 +348,7 @@ namespace LogsReader.Reader
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 15);
             this.label6.TabIndex = 13;
-            this.label6.Text = "Max Lines:";
+            this.label6.Text = Resources.Txt_LogsReaderForm_MaxLines;
             // 
             // label3
             // 
@@ -358,7 +357,7 @@ namespace LogsReader.Reader
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(61, 15);
             this.label3.TabIndex = 7;
-            this.label3.Text = "File Types:";
+            this.label3.Text = Resources.Txt_LogsReaderForm_FilteTypes;
             // 
             // logDirText
             // 
@@ -387,7 +386,7 @@ namespace LogsReader.Reader
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 11;
-            this.label5.Text = "Logs folder:";
+            this.label5.Text = Resources.Txt_LogsReaderForm_LogsFolder;
             // 
             // label4
             // 
@@ -467,7 +466,7 @@ namespace LogsReader.Reader
             this.useRegex.Name = "useRegex";
             this.useRegex.Size = new System.Drawing.Size(79, 19);
             this.useRegex.TabIndex = 9;
-            this.useRegex.Text = "Use Regex";
+            this.useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
             this.useRegex.UseVisualStyleBackColor = true;
             this.useRegex.CheckedChanged += new System.EventHandler(this.UseRegex_CheckedChanged);
             // 
@@ -542,7 +541,7 @@ namespace LogsReader.Reader
             this.buttonFilter.Padding = new System.Windows.Forms.Padding(3, 0, 2, 0);
             this.buttonFilter.Size = new System.Drawing.Size(85, 23);
             this.buttonFilter.TabIndex = 28;
-            this.buttonFilter.Text = "Filter [F7]";
+            this.buttonFilter.Text = Resources.Txt_LogsReaderForm_Filter;
             this.buttonFilter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
@@ -556,7 +555,7 @@ namespace LogsReader.Reader
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(85, 23);
             this.buttonReset.TabIndex = 29;
-            this.buttonReset.Text = "Reset [F8]";
+            this.buttonReset.Text = Resources.Txt_LogsReaderForm_Reset;
             this.buttonReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
@@ -611,9 +610,6 @@ namespace LogsReader.Reader
             this.traceMessageFilterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.traceMessageFilterComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.traceMessageFilterComboBox.FormattingEnabled = true;
-            this.traceMessageFilterComboBox.Items.AddRange(new object[] {
-            "Contains",
-            "Not Contains"});
             this.traceMessageFilterComboBox.Location = new System.Drawing.Point(306, 45);
             this.traceMessageFilterComboBox.MaxDropDownItems = 2;
             this.traceMessageFilterComboBox.Name = "traceMessageFilterComboBox";
@@ -628,9 +624,6 @@ namespace LogsReader.Reader
             this.traceNameFilterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.traceNameFilterComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.traceNameFilterComboBox.FormattingEnabled = true;
-            this.traceNameFilterComboBox.Items.AddRange(new object[] {
-            "Contains",
-            "Not Contains"});
             this.traceNameFilterComboBox.Location = new System.Drawing.Point(306, 16);
             this.traceNameFilterComboBox.MaxDropDownItems = 2;
             this.traceNameFilterComboBox.Name = "traceNameFilterComboBox";
@@ -648,7 +641,7 @@ namespace LogsReader.Reader
             this.alreadyUseFilter.Name = "alreadyUseFilter";
             this.alreadyUseFilter.Size = new System.Drawing.Size(158, 19);
             this.alreadyUseFilter.TabIndex = 33;
-            this.alreadyUseFilter.Text = "Use filter when searching";
+            this.alreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
             this.alreadyUseFilter.UseVisualStyleBackColor = true;
             // 
             // buttonExport
@@ -661,7 +654,7 @@ namespace LogsReader.Reader
             this.buttonExport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.buttonExport.Size = new System.Drawing.Size(112, 23);
             this.buttonExport.TabIndex = 32;
-            this.buttonExport.Text = "Export [Ctrl+S]";
+            this.buttonExport.Text = Resources.Txt_LogsReaderForm_Export;
             this.buttonExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.ButtonExport_Click);

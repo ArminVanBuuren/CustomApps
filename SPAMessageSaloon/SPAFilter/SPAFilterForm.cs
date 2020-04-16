@@ -36,7 +36,7 @@ namespace SPAFilter
     }
 
     [Serializable]
-    public partial class SPAFilterForm : Form, ISPAMessageSaloonItems, ISerializable
+    public partial class SPAFilterForm : Form, ISaloonForm, ISerializable
     {
         readonly object _sync = new object();
 
@@ -298,8 +298,6 @@ namespace SPAFilter
             propertyBag.AddValue("RRTTDD", _notepadLocation);
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
         }
-        
-
 
         void PreInit()
         {
@@ -389,6 +387,14 @@ namespace SPAFilter
             IsInititializating = false;
 
             RefreshStatus();
+
+            ApplySettings();
+            CenterToScreen();
+        }
+
+        public void ApplySettings()
+        {
+
         }
 
         #region Check warning rows
@@ -1395,11 +1401,6 @@ namespace SPAFilter
             }
 
             return false;
-        }
-
-        public void SetLanguage(NationalLanguage language)
-        {
-            
         }
 
         //private void AddActivatorButton_Paint(object sender, PaintEventArgs e)

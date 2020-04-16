@@ -92,7 +92,7 @@ namespace LogsReader.Config
                 }
                 catch (Exception ex)
                 {
-                    ReportMessage.Show(ex.Message, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - encoding");
+                    ReportMessage.Show(ex.Message, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - @encoding");
                     return;
                 }
 
@@ -106,7 +106,7 @@ namespace LogsReader.Config
         [XmlAnyElement("ServersComment")]
         public XmlComment ServersComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_ServersComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_Servers);
             set { }
         }
 
@@ -120,7 +120,7 @@ namespace LogsReader.Config
         [XmlAnyElement("LogsDirectoryComment")]
         public XmlComment LogsDirectoryComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_LogsDirectoryComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
             set { }
         }
 
@@ -134,7 +134,7 @@ namespace LogsReader.Config
         [XmlAnyElement("TypesComment")]
         public XmlComment TypesComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TypesComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_Types);
             set { }
         }
 
@@ -148,7 +148,7 @@ namespace LogsReader.Config
         [XmlAnyElement("MaxTraceLinesComment")]
         public XmlComment MaxTraceLinesComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxTraceLinesComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_MaxTraceLines);
             set { }
         }
 
@@ -162,7 +162,7 @@ namespace LogsReader.Config
         [XmlAnyElement("MaxThreadsComment")]
         public XmlComment MaxThreadsComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_MaxThreadsComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_MaxThreads);
             set { }
         }
 
@@ -176,7 +176,7 @@ namespace LogsReader.Config
         [XmlAnyElement("RowsLimitComment")]
         public XmlComment RowsLimitComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_RowsLimitCommentComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_RowsLimit);
             set { }
         }
 
@@ -191,7 +191,7 @@ namespace LogsReader.Config
         [XmlAnyElement("OrderByComment")]
         public XmlComment OrderByComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_OrderByComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_OrderBy);
             set { }
         }
 
@@ -212,9 +212,9 @@ namespace LogsReader.Config
                 catch (ArgumentException)
                 {
                     if (ReportStatus == null)
-                        ReportMessage.Show("Columns must be unique!", MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
+                        ReportMessage.Show(Properties.Resources.Txt_LRSettingsScheme_ErrUnique, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
                     else
-                        ReportStatus.Invoke("Columns must be unique!", ReportStatusType.Error);
+                        ReportStatus.Invoke(Properties.Resources.Txt_LRSettingsScheme_ErrUnique, ReportStatusType.Error);
                     return;
                 }
                 catch (Exception ex)
@@ -243,7 +243,7 @@ namespace LogsReader.Config
                 var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
                 
                 if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
-                    throw new Exception($"OrderBy item '{orderItem}' is incorrect! Please check.");
+                    throw new Exception(string.Format(Properties.Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
 
                 result.Add(orderItem2, isDescending);
             }
@@ -254,7 +254,7 @@ namespace LogsReader.Config
         [XmlAnyElement("TraceParseComment")]
         public XmlComment TraceParseComment
         {
-            get => new XmlDocument().CreateComment(Resources.LRSettingsScheme_TraceParseComment);
+            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_TraceParse);
             set { }
         }
 
@@ -279,7 +279,7 @@ namespace LogsReader.Config
             {
                 if (!TraceParse.IsCorrectRegex)
                 {
-                    ReportStatus?.Invoke($"Scheme '{Name}' has incorrect Regex patterns in 'TraceParse' node. Please check.", ReportStatusType.Error);
+                    ReportStatus?.Invoke(string.Format(Properties.Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
                     return false;
                 }
 

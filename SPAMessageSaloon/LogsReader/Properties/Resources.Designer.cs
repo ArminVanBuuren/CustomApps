@@ -91,178 +91,12 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Применить фильтр во время поиска.
-        /// </summary>
-        internal static string Form_AlreadyUseFilterComment {
-            get {
-                return ResourceManager.GetString("Form_AlreadyUseFilterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Date&quot;.
-        /// </summary>
-        internal static string Form_DateFilterComment {
-            get {
-                return ResourceManager.GetString("Form_DateFilterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда..
-        /// </summary>
-        internal static string Form_SearchComment {
-            get {
-                return ResourceManager.GetString("Form_SearchComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
-        /// </summary>
-        internal static string Form_TraceFilterComment {
-            get {
-                return ResourceManager.GetString("Form_TraceFilterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
-        /// </summary>
-        internal static string Form_TraceNameFilterComment {
-            get {
-                return ResourceManager.GetString("Form_TraceNameFilterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Необходимо выбрать сервера и типы файлов.
-        /// </summary>
-        internal static string Form_trvMainComment {
-            get {
-                return ResourceManager.GetString("Form_trvMainComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Config &quot;{0}&quot; is incorrect! Moved to &quot;{1}&quot;.
-        ///
-        ///{2}.
-        /// </summary>
-        internal static string LRSettings_Deserialize_Ex {
-            get {
-                return ResourceManager.GetString("LRSettings_Deserialize_Ex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Предыдущее значение поиска. .
-        /// </summary>
-        internal static string LRSettings_PreviousSearchComment {
-            get {
-                return ResourceManager.GetString("LRSettings_PreviousSearchComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to save config to path &quot;{0}&quot;.
-        ///{1}.
-        /// </summary>
-        internal static string LRSettings_Serialize_Ex {
-            get {
-                return ResourceManager.GetString("LRSettings_Serialize_Ex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее. Атрибут &quot;encoding&quot; используется при считывании лог файлов..
-        /// </summary>
-        internal static string LRSettings_UseRegexComment {
-            get {
-                return ResourceManager.GetString("LRSettings_UseRegexComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Путь к папке с логами. Поиск файлов происходит по всем директориям..
-        /// </summary>
-        internal static string LRSettingsScheme_LogsDirectoryComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_LogsDirectoryComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов..
-        /// </summary>
-        internal static string LRSettingsScheme_MaxThreadsComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_MaxThreadsComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из &quot;TraceParse&quot;..
-        /// </summary>
-        internal static string LRSettingsScheme_MaxTraceLinesComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_MaxTraceLinesComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc..
-        /// </summary>
-        internal static string LRSettingsScheme_OrderByComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_OrderByComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование оперативной памяти..
-        /// </summary>
-        internal static string LRSettingsScheme_RowsLimitCommentComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_RowsLimitCommentComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую..
-        /// </summary>
-        internal static string LRSettingsScheme_ServersComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_ServersComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
-        ///        Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке..
-        /// </summary>
-        internal static string LRSettingsScheme_TraceParseComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_TraceParseComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн..
-        /// </summary>
-        internal static string LRSettingsScheme_TypesComment {
-            get {
-                return ResourceManager.GetString("LRSettingsScheme_TypesComment", resourceCulture);
             }
         }
         
@@ -283,6 +117,599 @@ namespace LogsReader.Properties {
             get {
                 object obj = ResourceManager.GetObject("save2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date of end must be greater than date of start..
+        /// </summary>
+        internal static string Txt_DataFilter_ErrDate {
+            get {
+                return ResourceManager.GetString("Txt_DataFilter_ErrDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout while executing pattern: &quot;{0}&quot;.
+        ///Timeout: {1}
+        ///Input:
+        ///{2}.
+        /// </summary>
+        internal static string Txt_DataTemplate_ErrTimeout {
+            get {
+                return ResourceManager.GetString("Txt_DataTemplate_ErrTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Применить фильтр во время поиска.
+        /// </summary>
+        internal static string Txt_Form_AlreadyUseFilterComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_AlreadyUseFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Date&quot;.
+        /// </summary>
+        internal static string Txt_Form_DateFilterComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_DateFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда..
+        /// </summary>
+        internal static string Txt_Form_SearchComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_SearchComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        /// </summary>
+        internal static string Txt_Form_TraceFilterComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_TraceFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        /// </summary>
+        internal static string Txt_Form_TraceNameFilterComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_TraceNameFilterComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Необходимо выбрать сервера и типы файлов.
+        /// </summary>
+        internal static string Txt_Form_trvMainComment {
+            get {
+                return ResourceManager.GetString("Txt_Form_trvMainComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initialization.
+        /// </summary>
+        internal static string Txt_Initialization {
+            get {
+                return ResourceManager.GetString("Txt_Initialization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear [F6].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Clear {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Contains {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Contains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date value is incorrect.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_DateValueIsIncorrect {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_DateValueIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doesn&apos;t match by &quot;TraceParse&quot; patterns.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_DoesntMatchByPattern {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_DoesntMatchByPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save file &quot;{0}&quot;. {1}.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_ErrExport {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_ErrExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export [Ctrl+S].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Export {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting....
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Exporting {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Exporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files completed:.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_FilesCompleted_1 {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_FilesCompleted_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to of.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_FilesCompleted_2 {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_FilesCompleted_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter [F7].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Filter {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Types.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_FilteTypes {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_FilteTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished in {0}.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_FinishedIn {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_FinishedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logs folder.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_LogsFolder {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_LogsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Lines.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_MaxLines {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_MaxLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No filter results found.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_NoFilterResultsFound {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NoFilterResultsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No logs found.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_NoLogsFound {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NoLogsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Contains.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_NotContains {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NotContains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order By.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_OrderBy {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_OrderBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overall found.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_OverallFound_1 {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to matches.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_OverallFound_2 {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset [F8].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Reset {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rows Limit.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_RowsLimit {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_RowsLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search [F5].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Search {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servers.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Servers {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop [Esc].
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Stop {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopping....
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Stopping {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Stopping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully exported to file &quot;{0}&quot;.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_SuccessExport {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_SuccessExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Types {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Types", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use filter when searching.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_UseFilterWhenSearching {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_UseFilterWhenSearching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Regex.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_UseRegex {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_UseRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working....
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Working {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Working", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern &quot;{0}&quot; is incorrect for use as regular expression! Please check..
+        /// </summary>
+        internal static string Txt_LogsReaderPerformer_IncorrectSearchPattern {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderPerformer_IncorrectSearchPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No files logs found.
+        /// </summary>
+        internal static string Txt_LogsReaderPerformer_NoFilesLogsFound {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderPerformer_NoFilesLogsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current session already completed!.
+        /// </summary>
+        internal static string Txt_LogsReaderPerformer_SessionAlreadyCompleted {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderPerformer_SessionAlreadyCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session was stopped.
+        /// </summary>
+        internal static string Txt_LogsReaderPerformer_SessionStopped {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderPerformer_SessionStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Config &quot;{0}&quot; is incorrect! Moved to &quot;{1}&quot;.
+        ///
+        ///{2}.
+        /// </summary>
+        internal static string Txt_LRSettings_Deserialize_Ex {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_Deserialize_Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deserialize Error.
+        /// </summary>
+        internal static string Txt_LRSettings_ErrDeserialize {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_ErrDeserialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serialize Error.
+        /// </summary>
+        internal static string Txt_LRSettings_ErrSerialize {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_ErrSerialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schemes names must be unique!.
+        /// </summary>
+        internal static string Txt_LRSettings_ErrUnique {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Предыдущее значение поиска. .
+        /// </summary>
+        internal static string Txt_LRSettings_PreviousSearchComment {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_PreviousSearchComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save config to path &quot;{0}&quot;.
+        ///{1}.
+        /// </summary>
+        internal static string Txt_LRSettings_Serialize_Ex {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_Serialize_Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее. Атрибут &quot;encoding&quot; используется при считывании лог файлов..
+        /// </summary>
+        internal static string Txt_LRSettings_UseRegexComment {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_UseRegexComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OrderBy item &apos;{0}&apos; is incorrect! Please check..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_ErrOrderBy {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrOrderBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheme &apos;{0}&apos; has incorrect Regex patterns in &apos;TraceParse&apos; node. Please check..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_ErrRegex {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Columns must be unique!.
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_ErrUnique {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Путь к папке с логами. Поиск файлов происходит по всем директориям..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_LogsDirectory {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_LogsDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_MaxThreads {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_MaxThreads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из &quot;TraceParse&quot;..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_MaxTraceLines {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_MaxTraceLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_OrderBy {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_OrderBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование оперативной памяти..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_RowsLimit {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_RowsLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_Servers {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_Servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
+        ///        Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_TraceParse {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_TraceParse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн..
+        /// </summary>
+        internal static string Txt_LRSettingsScheme_Types {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_Types", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern &quot;{0}&quot; is incorrect!.
+        /// </summary>
+        internal static string Txt_LRTraceParse_ErrPattern {
+            get {
+                return ResourceManager.GetString("Txt_LRTraceParse_ErrPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load schema &quot;{0}&quot;
+        ///{1}.
+        /// </summary>
+        internal static string Txt_Main_ErrLoadScheme {
+            get {
+                return ResourceManager.GetString("Txt_Main_ErrLoadScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load scheme.
+        /// </summary>
+        internal static string Txt_Main_LoadScheme {
+            get {
+                return ResourceManager.GetString("Txt_Main_LoadScheme", resourceCulture);
             }
         }
     }

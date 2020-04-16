@@ -91,7 +91,6 @@
     <Compile Include="Config\LRSettingsScheme.cs" />
     <Compile Include="Config\LRTraceParse.cs" />
     <Compile Include="Config\UserSettings.cs" />
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reader\LogsReaderForm.resx">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
     </EmbeddedResource>

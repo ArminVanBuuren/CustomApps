@@ -21,7 +21,7 @@ namespace LogsReader.Reader
         public DataFilter(DateTime startDate, DateTime endDate, string traceNameFilter, bool traceNameContains, string traceMessageFilter, bool traceMessageContains)
         {
             if (startDate > endDate)
-                throw new Exception(@"Date of end must be greater than date of start.");
+                throw new Exception(Properties.Resources.Txt_DataFilter_ErrDate);
 
             #region фильтр по дате начала
 

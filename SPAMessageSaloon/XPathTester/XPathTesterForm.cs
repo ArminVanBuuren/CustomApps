@@ -14,7 +14,7 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace XPathTester
 {
-    public partial class XPathTesterForm : Form, ISPAMessageSaloonItems
+    public partial class XPathTesterForm : Form, ISaloonForm
     {
         private readonly object sync = new object();
         private readonly ToolStripLabel _statusInfo;
@@ -49,6 +49,9 @@ namespace XPathTester
             _statusInfo = editor.AddToolStripLabel();
             _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
             editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+
+            ApplySettings();
+            CenterToScreen();
         }
 
         private void XpathResultDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
@@ -278,9 +281,9 @@ namespace XPathTester
             }
         }
 
-        public void SetLanguage(NationalLanguage language)
+        public void ApplySettings()
         {
-            
+
         }
 
         public void SaveData()

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using LogsReader.Config;
+using LogsReader.Properties;
 using Utils;
 
 namespace LogsReader.Reader
@@ -67,7 +68,7 @@ namespace LogsReader.Reader
             if (useRegex)
             {
                 if (!REGEX.Verify(findMessage))
-                    throw new ArgumentException($"Pattern \"{findMessage}\" is incorrect for use as regular expression! Please check.");
+                    throw new ArgumentException(string.Format(Resources.Txt_LogsReaderPerformer_IncorrectSearchPattern, findMessage));
 
                 var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, new TimeSpan(0, 0, 1));
                 IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
@@ -87,13 +88,13 @@ namespace LogsReader.Reader
         public async Task StartAsync()
         {
             if (IsStopPending)
-                throw new Exception(@"Session was stopped");
+                throw new Exception(Resources.Txt_LogsReaderPerformer_SessionStopped);
             if (_multiTaskingHandler != null && _multiTaskingHandler.IsCompleted)
-                throw new Exception(@"Current session already completed!");
+                throw new Exception(Resources.Txt_LogsReaderPerformer_SessionAlreadyCompleted);
 
             KvpList = await Task<List<TraceReader>>.Factory.StartNew(GetFileLogs);
             if (KvpList == null || KvpList.Count <= 0)
-                throw new Exception(@"No files logs found");
+                throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
             // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
             var maxThreads = CurrentSettings.MaxThreads <= 0 ? KvpList.Count : CurrentSettings.MaxThreads;
