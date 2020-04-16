@@ -101,6 +101,51 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 0.
+        /// </summary>
+        internal static string LogsReaderForm_alreadyUseFilter_rightPadding {
+            get {
+                return ResourceManager.GetString("LogsReaderForm_alreadyUseFilter_rightPadding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 90.
+        /// </summary>
+        internal static string LogsReaderForm_btnClear_Width {
+            get {
+                return ResourceManager.GetString("LogsReaderForm_btnClear_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 110.
+        /// </summary>
+        internal static string LogsReaderForm_buttonExport_Width {
+            get {
+                return ResourceManager.GetString("LogsReaderForm_buttonExport_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5.
+        /// </summary>
+        internal static string LogsReaderForm_buttonFilter_rightPadding {
+            get {
+                return ResourceManager.GetString("LogsReaderForm_buttonFilter_rightPadding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5.
+        /// </summary>
+        internal static string LogsReaderForm_buttonReset_rightPadding {
+            get {
+                return ResourceManager.GetString("LogsReaderForm_buttonReset_rightPadding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap reset2 {
@@ -121,7 +166,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date of end must be greater than date of start..
+        ///   Looks up a localized string similar to Date of end filter must be greater than date of start.
         /// </summary>
         internal static string Txt_DataFilter_ErrDate {
             get {
@@ -132,7 +177,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Timeout while executing pattern: &quot;{0}&quot;.
         ///Timeout: {1}
-        ///Input:
+        ///Input data:
         ///{2}.
         /// </summary>
         internal static string Txt_DataTemplate_ErrTimeout {
@@ -331,6 +376,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Threads.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_MaxThreads {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_MaxThreads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No filter results found.
         /// </summary>
         internal static string Txt_LogsReaderForm_NoFilterResultsFound {
@@ -417,6 +471,15 @@ namespace LogsReader.Properties {
         internal static string Txt_LogsReaderForm_Servers {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servers.
+        /// </summary>
+        internal static string Txt_LogsReaderForm_Servers2 {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Servers2", resourceCulture);
             }
         }
         
@@ -586,7 +649,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OrderBy item &apos;{0}&apos; is incorrect! Please check..
+        ///   Looks up a localized string similar to OrderBy item - &apos;{0}&apos; is incorrect! Please check..
         /// </summary>
         internal static string Txt_LRSettingsScheme_ErrOrderBy {
             get {

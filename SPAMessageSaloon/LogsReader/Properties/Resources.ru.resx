@@ -141,15 +141,15 @@
     <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
   </data>
   <data name="Txt_LRSettings_Deserialize_Ex" xml:space="preserve">
-    <value>Config "{0}" is incorrect! Moved to "{1}".
+    <value>Некорректный конфиг файл "{0}" ! Перемещен в "{1}".
 
 {2}</value>
   </data>
   <data name="Txt_LRSettings_PreviousSearchComment" xml:space="preserve">
-    <value>Предыдущее значение поиска. </value>
+    <value>Предыдущее значение поиска</value>
   </data>
   <data name="Txt_LRSettings_Serialize_Ex" xml:space="preserve">
-    <value>Unable to save config to path "{0}".
+    <value>Невозможно сохранить конфиг в "{0}".
 {1}</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
@@ -195,169 +195,148 @@
     <value>..\Resources\save2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_DataFilter_ErrDate" xml:space="preserve">
-    <value>Date of end filter must be greater than date of start</value>
+    <value>Фильтр по дате окончания должен быть больше даты начала</value>
   </data>
   <data name="Txt_DataTemplate_ErrTimeout" xml:space="preserve">
-    <value>Timeout while executing pattern: "{0}".
-Timeout: {1}
-Input data:
+    <value>Таймаут выполнения паттерна: "{0}".
+Таймаут: {1}
+Входные данные:
 {2}</value>
   </data>
   <data name="Txt_LogsReaderForm_Contains" xml:space="preserve">
-    <value>Contains</value>
+    <value>Содержит</value>
   </data>
   <data name="Txt_LogsReaderForm_FilesCompleted_1" xml:space="preserve">
-    <value>Files completed:</value>
+    <value>Обработано файлов:</value>
   </data>
   <data name="Txt_LogsReaderForm_FilesCompleted_2" xml:space="preserve">
-    <value>of</value>
+    <value>из</value>
   </data>
   <data name="Txt_LogsReaderForm_NotContains" xml:space="preserve">
-    <value>Not Contains</value>
+    <value>Не содержит</value>
   </data>
   <data name="Txt_LogsReaderForm_OverallFound_1" xml:space="preserve">
-    <value>Overall found</value>
+    <value>Всего найдено</value>
   </data>
   <data name="Txt_LogsReaderForm_OverallFound_2" xml:space="preserve">
-    <value>matches</value>
+    <value>совпадений</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrOrderBy" xml:space="preserve">
-    <value>OrderBy item - '{0}' is incorrect! Please check.</value>
+    <value>Поле OrderBy - '{0}' - некорректно!</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrRegex" xml:space="preserve">
-    <value>Scheme '{0}' has incorrect Regex patterns in 'TraceParse' node. Please check.</value>
+    <value>Схема '{0}' в ноде 'TraceParse' - имеет некорректный Regex паттерн</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrUnique" xml:space="preserve">
-    <value>Columns must be unique!</value>
+    <value>Столбцы должны быть уникальными!</value>
   </data>
   <data name="Txt_LRSettings_ErrDeserialize" xml:space="preserve">
-    <value>Deserialize Error</value>
+    <value>Ошибка при чтении конфига</value>
   </data>
   <data name="Txt_LRSettings_ErrSerialize" xml:space="preserve">
-    <value>Serialize Error</value>
+    <value>Ошибка при попытке сохранить конфиг</value>
   </data>
   <data name="Txt_LRSettings_ErrUnique" xml:space="preserve">
-    <value>Schemes names must be unique!</value>
+    <value>Имена схем должны быть уникальными!</value>
   </data>
   <data name="Txt_LRTraceParse_ErrPattern" xml:space="preserve">
-    <value>Pattern "{0}" is incorrect!</value>
+    <value>Некорректный паттерн "{0}" !</value>
   </data>
   <data name="Txt_Main_ErrLoadScheme" xml:space="preserve">
-    <value>Failed to load schema "{0}"
+    <value>Ошибка при загрузке схемы "{0}"
 {1}</value>
   </data>
   <data name="Txt_Main_LoadScheme" xml:space="preserve">
-    <value>Load scheme</value>
+    <value>Загрузка схемы</value>
   </data>
   <data name="Txt_Initialization" xml:space="preserve">
-    <value>Initialization</value>
+    <value>Инициализация</value>
   </data>
   <data name="Txt_LogsReaderForm_Clear" xml:space="preserve">
-    <value>Clear [F6]</value>
+    <value>Очистить [F6]</value>
   </data>
   <data name="Txt_LogsReaderForm_DateValueIsIncorrect" xml:space="preserve">
-    <value>Date value is incorrect</value>
+    <value>Некорректное значение даты</value>
   </data>
   <data name="Txt_LogsReaderForm_DoesntMatchByPattern" xml:space="preserve">
-    <value>Doesn't match by "TraceParse" patterns</value>
+    <value>Невозможно спарсить по паттернам "TraceParse"</value>
   </data>
   <data name="Txt_LogsReaderForm_ErrExport" xml:space="preserve">
-    <value>Unable to save file "{0}". {1}</value>
+    <value>Невозможно сохранить файл "{0}". {1}</value>
   </data>
   <data name="Txt_LogsReaderForm_Export" xml:space="preserve">
-    <value>Export [Ctrl+S]</value>
+    <value>Экспорт [Ctrl+S]</value>
   </data>
   <data name="Txt_LogsReaderForm_Exporting" xml:space="preserve">
-    <value>Exporting...</value>
+    <value>Экспорт...</value>
   </data>
   <data name="Txt_LogsReaderForm_Filter" xml:space="preserve">
-    <value>Filter [F7]</value>
-  </data>
-  <data name="Txt_LogsReaderForm_FilteTypes" xml:space="preserve">
-    <value>File Types</value>
+    <value>Фильтр [F7]</value>
   </data>
   <data name="Txt_LogsReaderForm_FinishedIn" xml:space="preserve">
-    <value>Finished in {0}</value>
-  </data>
-  <data name="Txt_LogsReaderForm_LogsFolder" xml:space="preserve">
-    <value>Logs folder</value>
-  </data>
-  <data name="Txt_LogsReaderForm_MaxLines" xml:space="preserve">
-    <value>Max Lines</value>
+    <value>Завершено за {0}</value>
   </data>
   <data name="Txt_LogsReaderForm_NoFilterResultsFound" xml:space="preserve">
-    <value>No filter results found</value>
+    <value>Фильтр не дал результатов</value>
   </data>
   <data name="Txt_LogsReaderForm_NoLogsFound" xml:space="preserve">
-    <value>No logs found</value>
-  </data>
-  <data name="Txt_LogsReaderForm_OrderBy" xml:space="preserve">
-    <value>Order By</value>
+    <value>Логи не найдены</value>
   </data>
   <data name="Txt_LogsReaderForm_Reset" xml:space="preserve">
-    <value>Reset [F8]</value>
-  </data>
-  <data name="Txt_LogsReaderForm_RowsLimit" xml:space="preserve">
-    <value>Rows Limit</value>
+    <value>Сброс [F8]</value>
   </data>
   <data name="Txt_LogsReaderForm_Search" xml:space="preserve">
-    <value>Search [F5]</value>
-  </data>
-  <data name="Txt_LogsReaderForm_Servers" xml:space="preserve">
-    <value>Servers</value>
+    <value>Поиск [F5]</value>
   </data>
   <data name="Txt_LogsReaderForm_Stop" xml:space="preserve">
-    <value>Stop [Esc]</value>
+    <value>Стоп [Esc]</value>
   </data>
   <data name="Txt_LogsReaderForm_Stopping" xml:space="preserve">
-    <value>Stopping...</value>
+    <value>Остановка...</value>
   </data>
   <data name="Txt_LogsReaderForm_SuccessExport" xml:space="preserve">
-    <value>Successfully exported to file "{0}"</value>
+    <value>Успешно экспортировано в "{0}"</value>
   </data>
   <data name="Txt_LogsReaderForm_Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Типы</value>
   </data>
   <data name="Txt_LogsReaderForm_UseFilterWhenSearching" xml:space="preserve">
-    <value>Use filter when searching</value>
+    <value>Применить c поиском</value>
   </data>
   <data name="Txt_LogsReaderForm_UseRegex" xml:space="preserve">
-    <value>Use Regex</value>
+    <value>По Regex</value>
   </data>
   <data name="Txt_LogsReaderForm_Working" xml:space="preserve">
-    <value>Working...</value>
+    <value>Поиск...</value>
   </data>
   <data name="Txt_LogsReaderPerformer_IncorrectSearchPattern" xml:space="preserve">
-    <value>Pattern "{0}" is incorrect for use as regular expression! Please check.</value>
+    <value>Паттерн "{0}" для поиска по регулярному выражению - некорректный!</value>
   </data>
   <data name="Txt_LogsReaderPerformer_NoFilesLogsFound" xml:space="preserve">
-    <value>No files logs found</value>
+    <value>Лог файлы не найдены</value>
   </data>
   <data name="Txt_LogsReaderPerformer_SessionAlreadyCompleted" xml:space="preserve">
-    <value>Current session already completed!</value>
+    <value>Текущая сессия уже завершена!</value>
   </data>
   <data name="Txt_LogsReaderPerformer_SessionStopped" xml:space="preserve">
-    <value>Session was stopped</value>
+    <value>Сессия остановлена</value>
   </data>
   <data name="LogsReaderForm_alreadyUseFilter_rightPadding" xml:space="preserve">
-    <value>0</value>
+    <value>8</value>
   </data>
   <data name="LogsReaderForm_btnClear_Width" xml:space="preserve">
-    <value>90</value>
-  </data>
-  <data name="LogsReaderForm_buttonExport_Width" xml:space="preserve">
     <value>110</value>
   </data>
+  <data name="LogsReaderForm_buttonExport_Width" xml:space="preserve">
+    <value>124</value>
+  </data>
   <data name="LogsReaderForm_buttonFilter_rightPadding" xml:space="preserve">
-    <value>5</value>
+    <value>0</value>
   </data>
   <data name="LogsReaderForm_buttonReset_rightPadding" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="Txt_LogsReaderForm_MaxThreads" xml:space="preserve">
-    <value>Max Threads</value>
+    <value>0</value>
   </data>
   <data name="Txt_LogsReaderForm_Servers2" xml:space="preserve">
-    <value>Servers</value>
+    <value>Сервера</value>
   </data>
 </root>

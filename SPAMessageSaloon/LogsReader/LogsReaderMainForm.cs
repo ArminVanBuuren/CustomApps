@@ -23,7 +23,7 @@ namespace LogsReader
         /// </summary>
         public LRSettings AllSettings { get; }
 
-        public Dictionary<TabPage, LogsReaderForm> AllForms { get; }
+        public Dictionary<TabPage, LogsReaderForm> AllForms { get; } = new Dictionary<TabPage, LogsReaderForm>(15);
 
         public LogsReaderForm CurrentForm
         {
@@ -52,14 +52,18 @@ namespace LogsReader
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) => { SaveData(); };
-                Shown += (s, e) => { ApplySettings(); };
+                Shown += (s, e) =>
+                {
+                    ApplySettings();
+                    foreach (var logsReader in AllForms.Values)
+                        logsReader.OnSchemeChanged += SaveSchemas;
+                };
 
 
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 
                 AllSettings = LRSettings.Deserialize();
-                AllForms = new Dictionary<TabPage, Reader.LogsReaderForm>(AllSettings.SchemeList.Length);
 
                 foreach (var scheme in AllSettings.SchemeList)
                 {
@@ -69,7 +73,6 @@ namespace LogsReader
                         {
                             Dock = DockStyle.Fill
                         };
-                        logsReader.OnSchemeChanged += SaveSchemas;
 
                         var page = new TabPage
                         {
@@ -98,6 +101,12 @@ namespace LogsReader
             {
                 CenterToScreen();
             }
+        }
+
+        async void SaveSchemas(object sender, EventArgs args)
+        {
+            if (AllSettings != null)
+                await LRSettings.SerializeAsync(AllSettings);
         }
 
         private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)
@@ -145,21 +154,15 @@ namespace LogsReader
                         Size = Settings.Default.FormSize;
                 }
 
-                if (AllForms == null)
-                    return;
                 foreach (var form in AllForms)
+                {
                     form.Value.ApplySettings();
+                }
             }
             catch (Exception ex)
             {
                 // ignored
             }
-        }
-
-        async void SaveSchemas(object sender, EventArgs args)
-        {
-            if (AllSettings != null)
-                await LRSettings.SerializeAsync(AllSettings);
         }
 
         public void SaveData()
@@ -168,14 +171,15 @@ namespace LogsReader
             {
                 if (AllSettings != null)
                     LRSettings.Serialize(AllSettings);
-                if (AllForms != null)
-                    foreach (var form in AllForms.Values)
-                        form.SaveData();
+
+                foreach (var logsReader in AllForms.Values)
+                {
+                    logsReader.SaveData();
+                }
 
                 Settings.Default.FormLocation = Location;
                 Settings.Default.FormSize = Size;
                 Settings.Default.FormState = WindowState;
-
                 Settings.Default.Save();
             }
             catch (Exception ex)

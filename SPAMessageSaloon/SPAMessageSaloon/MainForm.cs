@@ -41,8 +41,6 @@ namespace SPAMessageSaloon
         public ToolStripStatusLabel _threadsUsage;
         public ToolStripStatusLabel _ramUsage;
 
-        public bool IsClosed { get; private set; } = false;
-
         ApplicationUpdater AppUpdater { get; set; }
 
         public NationalLanguage Language
@@ -145,7 +143,6 @@ namespace SPAMessageSaloon
                 statusStrip.Items.Add(new ToolStripSeparator());
 
 
-                Closing += (s, args) => { IsClosed = true; };
                 Shown += (s, args) =>
                 {
                     var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
@@ -272,13 +269,9 @@ namespace SPAMessageSaloon
                     _countOfLastProcess = processCount;
                 }
 
-                while (!IsClosed)
+                while (!IsDisposed)
                 {
-                    if (InvokeRequired)
-                        Invoke(new MethodInvoker(Monitoring));
-                    else
-                        Monitoring();
-
+                    this.SafeInvoke(Monitoring);
                     Thread.Sleep(1000);
                 }
             }
@@ -308,12 +301,6 @@ namespace SPAMessageSaloon
                     strip.AllowItemReorder = true;
                 }
             }
-        }
-
-        private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (Form childForm in MdiChildren)
-                childForm.Close();
         }
 
         private void russianToolStripMenuItem_Click(object sender, EventArgs e)

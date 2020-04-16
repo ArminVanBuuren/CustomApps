@@ -98,11 +98,14 @@ namespace LogsReader.Config
 
             try
             {
-                if (File.Exists(SettingsPath))
+                lock (_sync)
                 {
-                    using (StreamReader stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
-                    using (TextReader sr = new StringReader(XML.RemoveUnallowable(stream.ReadToEnd(), true)))
-                        sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
+                    if (File.Exists(SettingsPath))
+                    {
+                        using (StreamReader stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
+                        using (TextReader sr = new StringReader(XML.RemoveUnallowable(stream.ReadToEnd(), true)))
+                            sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
+                    }
                 }
             }
             catch (Exception ex)

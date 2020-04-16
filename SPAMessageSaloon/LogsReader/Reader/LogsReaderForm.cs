@@ -27,6 +27,8 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
 
+        readonly TreeNode treeNode3 = new TreeNode("Servers");
+        readonly TreeNode treeNode4 = new TreeNode("Types");
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -35,12 +37,9 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _filtersCompleted2;
         private readonly ToolStripStatusLabel _overallFound1;
         private readonly ToolStripStatusLabel _overallFound2;
-        private ToolTip _tooltip;
+        private readonly ToolTip _tooltip;
         private readonly Editor _message;
         private readonly Editor _traceMessage;
-
-        readonly TreeNode treeNode3 = new TreeNode("Servers");
-        readonly TreeNode treeNode4 = new TreeNode("Types");
 
 
         /// <summary>
@@ -83,6 +82,10 @@ namespace LogsReader.Reader
                 CurrentSettings.ReportStatus += ReportStatus;
                 UserSettings = new UserSettings(CurrentSettings.Name);
 
+                treeNode3.Name = "trvServers";
+                treeNode4.Name = "trvTypes";
+                trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {treeNode3, treeNode4});
+
                 dgvFiles.AutoGenerateColumns = false;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 orderByText.GotFocus += OrderByText_GotFocus;
@@ -94,17 +97,17 @@ namespace LogsReader.Reader
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 _filtersCompleted1 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingStart};
-                _completedFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                _filtersCompleted2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                _totalFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                _filtersCompleted2 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_filtersCompleted1);
                 statusStrip.Items.Add(_completedFilesStatus);
                 statusStrip.Items.Add(_filtersCompleted2);
                 statusStrip.Items.Add(_totalFilesStatus);
 
                 _overallFound1 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingStart};
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-                _overallFound2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
+                _overallFound2 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(new ToolStripSeparator());
                 statusStrip.Items.Add(_overallFound1);
                 statusStrip.Items.Add(_findedInfo);
@@ -117,9 +120,9 @@ namespace LogsReader.Reader
                 #endregion
 
                 _tooltip = new ToolTip {InitialDelay = 50};
-                
 
-                _message = notepad.AddDocument(new BlankDocument() { HeaderName = "Message", Language = Language.XML });
+
+                _message = notepad.AddDocument(new BlankDocument() {HeaderName = "Message", Language = Language.XML});
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -129,7 +132,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = notepad.AddDocument(new BlankDocument() { HeaderName = "Trace" });
+                _traceMessage = notepad.AddDocument(new BlankDocument() {HeaderName = "Trace"});
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -168,12 +171,20 @@ namespace LogsReader.Reader
             {
                 ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
             }
+            finally
+            {
+                ClearForm(false);
+                ValidationCheck();
+            }
         }
 
         public void ApplySettings()
         {
             try
             {
+                treeNode3.Text = Resources.Txt_LogsReaderForm_Servers2;
+                treeNode4.Text = Resources.Txt_LogsReaderForm_Types;
+
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
                 _overallFound1.Text = Resources.Txt_LogsReaderForm_OverallFound_1;
@@ -206,21 +217,26 @@ namespace LogsReader.Reader
                 _tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
                 _tooltip.SetToolTip(trvMain, Resources.Txt_Form_trvMainComment);
 
-                btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
-                btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
+                
                 label12.Text = Resources.Txt_LogsReaderForm_OrderBy;
                 label2.Text = Resources.Txt_LogsReaderForm_RowsLimit;
                 label1.Text = Resources.Txt_LogsReaderForm_Servers;
-                treeNode3.Text = Resources.Txt_LogsReaderForm_Servers;
-                treeNode4.Text = Resources.Txt_LogsReaderForm_Types;
                 label6.Text = Resources.Txt_LogsReaderForm_MaxLines;
                 label3.Text = Resources.Txt_LogsReaderForm_FilteTypes;
                 label5.Text = Resources.Txt_LogsReaderForm_LogsFolder;
                 useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
+
+                btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
+                btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
+                btnClear.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_btnClear_Width), btnClear.Height);
                 buttonFilter.Text = Resources.Txt_LogsReaderForm_Filter;
+                buttonFilter.Padding = new Padding(3,0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
                 buttonReset.Text = Resources.Txt_LogsReaderForm_Reset;
-                alreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
+                buttonReset.Padding = new Padding(2, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonReset_rightPadding), 0);
                 buttonExport.Text = Resources.Txt_LogsReaderForm_Export;
+                buttonExport.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_buttonExport_Width), buttonExport.Height);
+                alreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
+                alreadyUseFilter.Padding = new Padding(0,0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
 
                 txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
                 useRegex.Checked = UserSettings.UseRegex;
@@ -276,7 +292,6 @@ namespace LogsReader.Reader
                 trvMain.Nodes["trvTypes"].Checked = false;
                 CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
                 CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
-                ClearForm(true);
                 ValidationCheck();
                 _settingsLoaded = true;
             }
@@ -928,9 +943,9 @@ namespace LogsReader.Reader
             ClearForm();
         }
 
-        void ClearForm(bool isLoading = false)
+        void ClearForm(bool saveData = true)
         {
-            if (!isLoading)
+            if (saveData)
                 SaveData();
 
             OverallResultList?.Clear();
