@@ -128,7 +128,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 5.
+        ///   Looks up a localized string similar to 7.
         /// </summary>
         internal static string LogsReaderForm_buttonFilter_rightPadding {
             get {

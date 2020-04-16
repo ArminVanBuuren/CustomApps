@@ -258,9 +258,6 @@ namespace SPAMessageSaloon
                     var threadsUsage = $"{currentProcess.Threads.Count,-2}";
                     var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
 
-                    if(_cpuUsage.IsDisposed || _threadsUsage.IsDisposed || _ramUsage.IsDisposed)
-                        return;
-
                     _cpuUsage.Text = cpuUsage;
                     _threadsUsage.Text = threadsUsage;
                     _ramUsage.Text = ramUsage;
@@ -269,6 +266,8 @@ namespace SPAMessageSaloon
                     int totalProgress = 0;
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
                     {
+                        if(form is Form child && child.IsDisposed)
+                            continue;
                         processCount += form.ActiveProcessesCount;
                         totalProgress += form.ActiveTotalProgress;
                     }
