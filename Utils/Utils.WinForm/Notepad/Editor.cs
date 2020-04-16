@@ -239,15 +239,18 @@ namespace Utils.WinForm.Notepad
                 Cursor = Cursors.Default,
                 ForeColor = Color.Black,
                 LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
+                ,Padding = new Padding(0, 2, 0, 0)
             };
             Controls.Add(FCTB);
             Controls.Add(_statusStrip);
 
-            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control, Padding = new Padding(0, 2, 0, 0)};
+            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control
+                //, Padding = new Padding(0, 2, 0, 0)
+                };
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
-            _listOfLanguages.BackColor = Color.White;
-            _listOfLanguages.FlatStyle = FlatStyle.Flat;
+            //_listOfLanguages.BackColor = Color.FromArgb(235, 235, 235);
+            //_listOfLanguages.FlatStyle = FlatStyle.Flat;
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
             _statusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
@@ -261,7 +264,7 @@ namespace Utils.WinForm.Notepad
             };
 
             _statusStrip.Items.Add(GetSeparator());
-            _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 3, 0, 0) };
+            _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 2, 0, 0) };
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
                 if (WordWrap == _wordWrapping.Checked)
@@ -274,7 +277,7 @@ namespace Utils.WinForm.Notepad
             _statusStrip.Items.Add(wordWrapToolStrip);
 
             _statusStrip.Items.Add(GetSeparator());
-            _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 3, 0, 0) };
+            _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 2, 0, 0) };
             _highlights.CheckStateChanged += (s, e) =>
             {
                 FCTB.VisibleRange.ClearStyle(SameWordsStyle);
@@ -341,7 +344,7 @@ namespace Utils.WinForm.Notepad
 
         static ToolStripSeparator GetSeparator()
         {
-            return new ToolStripSeparator() {Margin = new Padding(0, 2, 0, 0)};
+            return new ToolStripSeparator() {Margin = new Padding(0, 1, 0, 0)};
         }
 
         static ToolStripLabel GetStripLabel(string text, int leftPadding = 0, int rightPadding = 0)
@@ -349,7 +352,7 @@ namespace Utils.WinForm.Notepad
             return new ToolStripStatusLabel(text)
             {
                 BackColor = Color.Transparent,
-                Margin = new Padding(0, 6, 0, 0),
+                Margin = new Padding(0, 5, 0, 0),
                 Padding = new Padding(0,0,0,0)
             };
         }
