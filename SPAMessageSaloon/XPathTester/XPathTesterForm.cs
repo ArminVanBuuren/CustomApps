@@ -17,10 +17,7 @@ namespace XPathTester
     public partial class XPathTesterForm : Form, ISPAMessageSaloonItems
     {
         private readonly object sync = new object();
-        private readonly SolidBrush solidRed = new SolidBrush(Color.PaleVioletRed);
-        private readonly SolidBrush solidTransparent = new SolidBrush(Color.Transparent);
         private readonly ToolStripLabel _statusInfo;
-        private readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
         private int _prevSortedColumn = -1;
 
@@ -176,6 +173,7 @@ namespace XPathTester
                 if (editor.Text.IsNullOrEmpty())
                 {
                     XmlBody = null;
+                    ReportStatus(string.Empty);
                     return;
                 }
 
@@ -183,10 +181,17 @@ namespace XPathTester
                 {
                     ClearResultTap();
 
-                    try
+                    var source = editor.Text;
+                    if (!source.StartsWith("<") || !source.EndsWith(">"))
                     {
+                        ReportStatus($"XML-Body is incorrect!");
+                        return;
+                    }
+
+                    try
+                    {   
                         var document = new XmlDocument();
-                        document.LoadXml(XML.RemoveUnallowable(editor.Text, " "));
+                        document.LoadXml(XML.RemoveUnallowable(source, " "));
                         XmlBody = document;
                     }
                     catch (Exception ex)
