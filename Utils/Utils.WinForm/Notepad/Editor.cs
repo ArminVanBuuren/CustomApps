@@ -246,6 +246,7 @@ namespace Utils.WinForm.Notepad
             _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control, Padding = new Padding(0, 2, 0, 0)};
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
+            _listOfLanguages.FlatStyle = FlatStyle.Popup;
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
             _statusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
