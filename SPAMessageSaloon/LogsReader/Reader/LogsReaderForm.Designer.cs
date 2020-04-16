@@ -31,8 +31,8 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Servers");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Types");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Servers");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Types");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderForm));
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -310,13 +310,13 @@ namespace LogsReader.Reader
             this.trvMain.CheckBoxes = true;
             this.trvMain.Location = new System.Drawing.Point(1, 187);
             this.trvMain.Name = "trvMain";
-            treeNode1.Name = "trvServers";
-            treeNode1.Text = "Servers";
-            treeNode2.Name = "trvTypes";
-            treeNode2.Text = "Types";
+            treeNode7.Name = "trvServers";
+            treeNode7.Text = "Servers";
+            treeNode8.Name = "trvTypes";
+            treeNode8.Text = "Types";
             this.trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode7,
+            treeNode8});
             this.trvMain.Size = new System.Drawing.Size(217, 211);
             this.trvMain.TabIndex = 2;
             this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
@@ -607,6 +607,8 @@ namespace LogsReader.Reader
             // 
             // traceMessageFilterComboBox
             // 
+            this.traceMessageFilterComboBox.BackColor = System.Drawing.SystemColors.Window;
+            this.traceMessageFilterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.traceMessageFilterComboBox.FormattingEnabled = true;
             this.traceMessageFilterComboBox.Items.AddRange(new object[] {
             "Contains",
@@ -617,12 +619,12 @@ namespace LogsReader.Reader
             this.traceMessageFilterComboBox.Size = new System.Drawing.Size(91, 21);
             this.traceMessageFilterComboBox.Sorted = true;
             this.traceMessageFilterComboBox.TabIndex = 35;
-            this.traceMessageFilterComboBox.Text = "Contains";
             this.traceMessageFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.traceMessageFilterComboBox_SelectedIndexChanged);
             this.traceMessageFilterComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
             // 
             // traceNameFilterComboBox
             // 
+            this.traceNameFilterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.traceNameFilterComboBox.FormattingEnabled = true;
             this.traceNameFilterComboBox.Items.AddRange(new object[] {
             "Contains",
@@ -633,7 +635,6 @@ namespace LogsReader.Reader
             this.traceNameFilterComboBox.Size = new System.Drawing.Size(91, 21);
             this.traceNameFilterComboBox.Sorted = true;
             this.traceNameFilterComboBox.TabIndex = 34;
-            this.traceNameFilterComboBox.Text = "Contains";
             this.traceNameFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.traceNameFilterComboBox_SelectedIndexChanged);
             this.traceNameFilterComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
             // 
