@@ -55,10 +55,18 @@ namespace SPAMessageSaloon
 
                     var culture = value == NationalLanguage.Russian ? new CultureInfo("ru-RU") : new CultureInfo("en-US");
 
+
                     CultureInfo.DefaultThreadCurrentCulture = culture;
                     CultureInfo.DefaultThreadCurrentUICulture = culture;
+
                     Thread.CurrentThread.CurrentCulture = culture;
                     Thread.CurrentThread.CurrentUICulture = culture;
+                    Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy HH:mm:ss.fff";
+                    Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = "dd.MM.yyyy HH:mm:ss.fff";
+
+                    CultureInfo.DefaultThreadCurrentCulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
+                    CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
+                    
 
                     languageToolStripMenuItem.Text = Properties.Resources.Txt_Language;
                     aboutToolStripMenuItem.Text = Properties.Resources.Txt_About;
@@ -249,6 +257,9 @@ namespace SPAMessageSaloon
                     var currentProcess = Process.GetCurrentProcess();
                     var threadsUsage = $"{currentProcess.Threads.Count,-2}";
                     var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+
+                    if(_cpuUsage.IsDisposed || _threadsUsage.IsDisposed || _ramUsage.IsDisposed)
+                        return;
 
                     _cpuUsage.Text = cpuUsage;
                     _threadsUsage.Text = threadsUsage;
