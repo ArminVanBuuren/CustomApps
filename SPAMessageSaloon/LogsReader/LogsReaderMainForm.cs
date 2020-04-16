@@ -183,7 +183,7 @@ namespace LogsReader
             }
         }
 
-        public void ChangeLanguage(NationalLanguage language)
+        public void SetLanguage(NationalLanguage language)
         {
             
         }

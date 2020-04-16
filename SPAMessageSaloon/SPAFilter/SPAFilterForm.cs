@@ -1397,7 +1397,7 @@ namespace SPAFilter
             return false;
         }
 
-        public void ChangeLanguage(NationalLanguage language)
+        public void SetLanguage(NationalLanguage language)
         {
             
         }

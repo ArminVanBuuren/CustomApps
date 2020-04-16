@@ -10,7 +10,7 @@
     {
         int ActiveProcessesCount { get; }
         int ActiveTotalProgress { get; }
-        void ChangeLanguage(NationalLanguage language);
+        void SetLanguage(NationalLanguage language);
         void SaveData();
     }
 }

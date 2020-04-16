@@ -35,6 +35,8 @@ namespace SPAMessageSaloon
         public ToolStripStatusLabel ThreadsUsage { get; }
         public ToolStripStatusLabel RAMUsage { get; }
 
+        public NationalLanguage Language { get; private set; } = NationalLanguage.English;
+
         ApplicationUpdater AppUpdater { get; set; }
 
         private string LastUpdatePackage
@@ -279,33 +281,18 @@ namespace SPAMessageSaloon
         {
             englishToolStripMenuItem.Checked = false;
             russianToolStripMenuItem.Checked = true;
-
-            CultureInfo info = this.GetCultureInfo();
-            if (info != null)
-            {
-                Thread.CurrentThread.CurrentUICulture = info;
-                ApplyResources();
-            }
+            Language = NationalLanguage.Russian;
+            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
+                form.SetLanguage(Language);
         }
 
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
         {
             englishToolStripMenuItem.Checked = true;
             russianToolStripMenuItem.Checked = false;
-
-            CultureInfo info = this.GetCultureInfo();
-            if (info != null)
-            {
-                Thread.CurrentThread.CurrentUICulture = info;
-                ApplyResources();
-            }
-        }
-
-        private CultureInfo GetCultureInfo()
-        {
-            if (this.russianToolStripMenuItem.Checked)
-                return new CultureInfo("ru-RU");
-            return new CultureInfo("en-US");
+            Language = NationalLanguage.English;
+            foreach (var form in MdiChildren.OfType<ISPAMessageSaloonItems>())
+                form.SetLanguage(Language);
         }
 
         private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
@@ -340,8 +327,9 @@ namespace SPAMessageSaloon
                     return null;
 
                 form.MdiParent = this;
-                form.Load += MDIManagerButton_Load;
+                form.SetLanguage(Language);
                 form.WindowState = FormWindowState.Maximized;
+                form.Load += MDIManagerButton_Load;
                 form.Show();
 
                 return form;
