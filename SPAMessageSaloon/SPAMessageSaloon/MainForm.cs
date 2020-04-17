@@ -1,26 +1,21 @@
 ﻿using SPAMessageSaloon.Common;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
-using Utils.WinForm;
-using LogsReader;
-using SPAFilter;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Updater;
 using Utils.Handles;
 using Utils.UIControls.Main;
+using Utils.WinForm;
+using LogsReader;
+using SPAFilter;
 using XPathTester;
 
 namespace SPAMessageSaloon
@@ -127,7 +122,6 @@ namespace SPAMessageSaloon
                 }
 
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
-                var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
@@ -208,14 +202,21 @@ namespace SPAMessageSaloon
 
         }
 
+        #endregion
+
         public void SaveData(IUpdater updater)
         {
-            LastUpdatePackage = updater?.ProjectBuildPack.Name;
-            foreach (var form in MdiChildren.OfType<ISaloonForm>())
-                form.SaveData();
+            try
+            {
+                LastUpdatePackage = updater?.ProjectBuildPack.Name;
+                foreach (var form in MdiChildren.OfType<ISaloonForm>())
+                    form.SaveData();
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
         }
-
-        #endregion
 
         /// <summary>
         /// Мониторинг системных ресурсов
@@ -305,12 +306,8 @@ namespace SPAMessageSaloon
         private void InitializeToolbarsMenu()
         {
             foreach (Control ctrl in toolStrip.Controls)
-            {
                 if (ctrl is ToolStrip strip && !(ctrl is MenuStrip))
-                {
                     strip.AllowItemReorder = true;
-                }
-            }
         }
 
         private void russianToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,7 +366,7 @@ namespace SPAMessageSaloon
 
         private bool ActivateMdiForm<T>(out T form) where T : Form
         {
-            foreach (Form f in this.MdiChildren)
+            foreach (Form f in MdiChildren)
             {
                 form = f as T;
                 if (form != null)
@@ -394,10 +391,15 @@ namespace SPAMessageSaloon
             toolStripSplitButton1.ShowDropDown();
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         object GetRegeditValue(string name)
         {
             using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                return (string)reg[name] ?? null;
+                return (string)reg[name];
         }
 
         void SetRegeditValue(string name, object value)
