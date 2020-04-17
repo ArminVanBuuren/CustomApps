@@ -274,7 +274,7 @@
     <value>Фильтр [F7]</value>
   </data>
   <data name="Txt_LogsReaderForm_FinishedIn" xml:space="preserve">
-    <value>Завершено за {0}</value>
+    <value>Завершено. Время выполнения: {0}</value>
   </data>
   <data name="Txt_LogsReaderForm_NoFilterResultsFound" xml:space="preserve">
     <value>Фильтр не дал результатов</value>
