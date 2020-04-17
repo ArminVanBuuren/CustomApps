@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using SPAFilter.Properties;
 using SPAMessageSaloon.Common;
 using Utils;
 
@@ -63,15 +64,15 @@ namespace SPAFilter.SPA.Components
         IEnumerable<XPathResult> LoadConfig()
         {
             if (!File.Exists(FilePath))
-                throw new Exception($"File \"{FilePath}\" not found");
+                throw new Exception(string.Format(Resources.FileNotFound, FilePath));
 
             if (!XML.IsFileXml(FilePath, out var activatorConfig))
-                throw new Exception($"Xml file \"{FilePath}\" is invalid");
+                throw new Exception(string.Format(Resources.InvalidXml, FilePath));
 
             var activatorConfigNavigator = activatorConfig.CreateNavigator();
             var serviceInstances = XPATH.Select(activatorConfigNavigator, @"/Configuration/serviceInstances/serviceInstance");
             if (serviceInstances == null || serviceInstances.Count == 0)
-                throw new Exception($"Activator config \"{FilePath}\" is incorrect");
+                throw new Exception(string.Format(Resources.ServiceActivator_ConfigInvalid, FilePath));
 
             return serviceInstances;
         }

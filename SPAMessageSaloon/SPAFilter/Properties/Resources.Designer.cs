@@ -61,12 +61,116 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory: &quot;{0}&quot; not found.
+        /// </summary>
+        internal static string DirectoryNotFound {
+            get {
+                return ResourceManager.GetString("DirectoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap file7 {
             get {
                 object obj = ResourceManager.GetObject("file7", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &quot;{0}&quot; not found.
+        /// </summary>
+        internal static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activator &quot;{0}&quot; already exist..
+        /// </summary>
+        internal static string Filter_ActivatorAlreadyExist {
+            get {
+                return ResourceManager.GetString("Filter_ActivatorAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add activator.
+        /// </summary>
+        internal static string Filter_AddActivator {
+            get {
+                return ResourceManager.GetString("Filter_AddActivator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can create Service Catalog only with ROBP operations..
+        /// </summary>
+        internal static string Filter_GenerateSCWithoutOperations {
+            get {
+                return ResourceManager.GetString("Filter_GenerateSCWithoutOperations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When initializing instances:&apos;{0}&apos; - {1} scenario collisions were found!
+        ///For correct work of a filter, please choose only one instance (host types) or several instances (host types) with different scenarios..
+        /// </summary>
+        internal static string Filter_InitializeActivatorsWarning {
+            get {
+                return ResourceManager.GetString("Filter_InitializeActivatorsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong file &apos;{0}&apos;. Missing some required columns. 
+        ///Columns names should be like:
+        ///&apos;{1}&apos;.
+        /// </summary>
+        internal static string Filter_MissingColumn {
+            get {
+                return ResourceManager.GetString("Filter_MissingColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter is not enabled!.
+        /// </summary>
+        internal static string Filter_NotEnabled {
+            get {
+                return ResourceManager.GetString("Filter_NotEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No worksheet found.
+        /// </summary>
+        internal static string Filter_NoWorksheetFound {
+            get {
+                return ResourceManager.GetString("Filter_NoWorksheetFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a folder with exported ROBP&apos;s host type directories..
+        /// </summary>
+        internal static string Filter_ROBPOperationdDirInvalid {
+            get {
+                return ResourceManager.GetString("Filter_ROBPOperationdDirInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong column name before &apos;{0}&apos; from file &apos;{1}&apos;.
+        ///Columns names and orders must be like:
+        ///&apos;{2}&apos;.
+        /// </summary>
+        internal static string Filter_WrongColumnStatement {
+            get {
+                return ResourceManager.GetString("Filter_WrongColumnStatement", resourceCulture);
             }
         }
         
@@ -109,7 +213,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to delete selected {0} ?.
+        ///   Looks up a localized string similar to Do you want to delete selected file(s) ?.
         /// </summary>
         internal static string Form_GridView_DeleteSelected {
             get {
@@ -118,7 +222,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration application is incorrect or scenario collisions were found. Please check same instances (host types)..
+        ///   Looks up a localized string similar to Configuration application is incorrect or scenario collisions were found. Please check instances with same host types..
         /// </summary>
         internal static string Form_GridView_IncorrectConfig {
             get {
@@ -273,7 +377,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate Service catalog by Operations.
+        ///   Looks up a localized string similar to Generate Service catalog by ROBP operations.
         /// </summary>
         internal static string Form_ToolTip_ButtonGenerateSC {
             get {
@@ -415,12 +519,201 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xml file &quot;{0}&quot; is invalid.
+        /// </summary>
+        internal static string InvalidXml {
+            get {
+                return ResourceManager.GetString("InvalidXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap reload {
             get {
                 object obj = ResourceManager.GetObject("reload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activator config &quot;{0}&quot; is incorrect.
+        /// </summary>
+        internal static string ServiceActivator_ConfigInvalid {
+            get {
+                return ResourceManager.GetString("ServiceActivator_ConfigInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} already exist..
+        /// </summary>
+        internal static string ServiceCatalog_AlreadyExist {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_AlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service Catalog is invalid. &apos;{0}&apos; already exist..
+        /// </summary>
+        internal static string ServiceCatalog_DoubleScenario {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_DoubleScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some scenarios are invalid. No attributes found..
+        /// </summary>
+        internal static string ServiceCatalog_InvalidScenario {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_InvalidScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xml file &quot;{0}&quot; is invalid.
+        /// </summary>
+        internal static string ServiceCatalog_InvalidXml {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_InvalidXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is invalid. Attribute &quot;hostType&quot; not found..
+        /// </summary>
+        internal static string ServiceCatalog_NoHostTypeAttr {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NoHostTypeAttr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service Catalog is invalid. {0} doesn&apos;t have attribute \&quot;name\&quot; or value is empty..
+        /// </summary>
+        internal static string ServiceCatalog_NoNameAttribute {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NoNameAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service Catalog is invalid. No RFS found..
+        /// </summary>
+        internal static string ServiceCatalog_NoRFSFound {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NoRFSFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found {0}.
+        /// </summary>
+        internal static string ServiceCatalog_NotFound {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service Catalog is invalid. Attribute \&quot;scenarioPrefix\&quot; not found..
+        /// </summary>
+        internal static string ServiceCatalog_NotFoundScenarioPrefix {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NotFoundScenarioPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is invalid. Attribute &quot;type&quot; not found in scenario &quot;{1}&quot;.
+        /// </summary>
+        internal static string ServiceCatalog_NotFoundTyoeAttribute {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_NotFoundTyoeAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some RFS are invalid. No attributes found..
+        /// </summary>
+        internal static string ServiceCatalog_RFSNoAttributes {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_RFSNoAttributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario &quot;{0}&quot; is invalid. Not found any RFS..
+        /// </summary>
+        internal static string ServiceCatalog_ScenarioNotFoundRFS {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_ScenarioNotFoundRFS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario &quot;{0}&quot; has RFS with different hostTypes - &quot;{1}&quot;.
+        /// </summary>
+        internal static string ServiceCatalog_ScenarioWithDifferentHostType {
+            get {
+                return ResourceManager.GetString("ServiceCatalog_ScenarioWithDifferentHostType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attributes: &apos;@path&apos; | &apos;@xml&apos; not found. Or &quot;dictionary&quot; node not found..
+        /// </summary>
+        internal static string ServiceInstance_AttributesPathXmlNotFound {
+            get {
+                return ResourceManager.GetString("ServiceInstance_AttributesPathXmlNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute: &apos;@Root&apos; not found in file dictionary: &quot;{0}&quot;.
+        /// </summary>
+        internal static string ServiceInstance_AttributesRootNotFound {
+            get {
+                return ResourceManager.GetString("ServiceInstance_AttributesRootNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory: &quot;{0}&quot; not found. Final path: &quot;{1}&quot;.
+        /// </summary>
+        internal static string ServiceInstance_DirNotFound {
+            get {
+                return ResourceManager.GetString("ServiceInstance_DirNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory: &quot;{0}&quot; not found when initializing file dictionary: &quot;{1}&quot;.
+        /// </summary>
+        internal static string ServiceInstance_DirNotFoundWithDescription {
+            get {
+                return ResourceManager.GetString("ServiceInstance_DirNotFoundWithDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute: &apos;@hardwareID&apos; not found in serviceInstance.
+        /// </summary>
+        internal static string ServiceInstance_NotFoundHardwareID {
+            get {
+                return ResourceManager.GetString("ServiceInstance_NotFoundHardwareID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute: &apos;@dir&apos; not found in &quot;fileScenarioSource&quot;. Or &apos;scenarios&apos; node not found..
+        /// </summary>
+        internal static string ServiceInstance_NotFoundScenriosDir {
+            get {
+                return ResourceManager.GetString("ServiceInstance_NotFoundScenriosDir", resourceCulture);
             }
         }
         

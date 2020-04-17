@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
+using SPAFilter.Properties;
 using SPAFilter.SPA.Components;
 using SPAFilter.SPA.Components.SRI;
 using Utils;
@@ -106,19 +107,19 @@ namespace SPAFilter.SPA.Collection
         public ServiceCatalog(string filePath)
         {
             if (!XML.IsFileXml(filePath, out var document))
-                throw new Exception($"Xml file \"{filePath}\" is invalid");
+                throw new Exception(string.Format(Resources.ServiceCatalog_InvalidXml, filePath));
 
             var navigator = document.CreateNavigator();
 
             if (!navigator.SelectFirst(@"/Configuration/@scenarioPrefix", out var prefix))
-                throw new Exception("Service Catalog is invalid. Attribute \"scenarioPrefix\" not found.");
+                throw new Exception(Resources.ServiceCatalog_NotFoundScenarioPrefix);
             Prefix = prefix.Value;
 
             AllRFS = new DoubleDictionary<string, RFSOperation>();
             AllScenarios = new Dictionary<string, ScenarioOperation>();
 
             if(!navigator.Select(@"/Configuration/RFSList/RFS", out var rfsList))
-                throw new Exception("Service Catalog is invalid. No RFS found.");
+                throw new Exception(Resources.ServiceCatalog_NoRFSFound);
 
             // вытаскиевам по списку все RFS и все CFS которые включают в себя текущий RFS
             var allRFSCFSsList = rfsList
@@ -144,10 +145,10 @@ namespace SPAFilter.SPA.Collection
                 {
                     var scenarioName = scenario.Node.Attributes?["name"]?.Value;
                     if (string.IsNullOrEmpty(scenarioName))
-                        throw new Exception("Service Catalog is invalid. Scenario doesn't have attribute \"name\" or value is empty.");
+                        throw new Exception(string.Format(Resources.ServiceCatalog_NoNameAttribute, "Scenario"));
                     if (AllScenarios.ContainsKey(scenarioName))
-                        throw new Exception($"Service Catalog is invalid. {scenarioName} already exist.");
-
+                        throw new Exception(string.Format(Resources.ServiceCatalog_DoubleScenario, scenarioName));
+                    
                     var scenarioOp = new ScenarioOperation(scenario.Node, scenarioName, navigator, this);
                     AllScenarios.Add(scenarioName, scenarioOp);
                 }
@@ -190,7 +191,7 @@ namespace SPAFilter.SPA.Collection
             foreach (var rfsCFSs in collection)
             {
                 if (rfsCFSs.Key.Attributes == null)
-                    throw new Exception("Some RFS are invalid. No attributes found.");
+                    throw new Exception(Resources.ServiceCatalog_RFSNoAttributes);
 
                 var rfsName = string.Empty;
                 var baseRFSName = string.Empty;
@@ -221,12 +222,11 @@ namespace SPAFilter.SPA.Collection
                 }
 
                 if (hostType.IsNullOrEmptyTrim())
-                    throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
+                    throw new Exception(string.Format(Resources.ServiceCatalog_NoHostTypeAttr, rfsName));
                 if (processType.Like("CancelHostType"))
                     continue;
                 if(AllRFS.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is RFSOperation operation) && operation.RFSName.Like(rfsName)))
-                    throw new Exception($"{rfsName} already exist.");
-
+                    throw new Exception(string.Format(Resources.ServiceCatalog_AlreadyExist, rfsName));
                 
                 var defaultLinkTypes = new List<string> { "Add", "Remove" };
                 var cfsList = new DistinctList<XmlNode>();
@@ -448,7 +448,7 @@ namespace SPAFilter.SPA.Collection
 
                 var scenarioName = childNode.Attributes?["name"]?.Value;
                 if (string.IsNullOrEmpty(scenarioName))
-                    throw new Exception("Service Catalog is invalid. Scenario doesn't have attribute \"name\" or value is empty.");
+                    throw new Exception(Resources.ServiceCatalog_NoNameAttribute);
 
                 if (!AllScenarios.ContainsKey(scenarioName))
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
+using SPAFilter.Properties;
 using Utils;
 using Utils.CollectionHelper;
 
@@ -77,12 +78,12 @@ namespace SPAFilter.SPA.Components.SRI
             try
             {
                 if(!navigator.SelectFirst($"/Configuration/RFSList/RFS[@name='{rfsName}']", out var rfs))
-                    throw new Exception($"Not found {rfsName}");
-
+                    throw new Exception(string.Format(Resources.ServiceCatalog_NotFound, rfsName));
+                
                 var rfsHostType = rfs.Node.Attributes?["hostType"]?.Value;
                 if (rfsHostType == null)
-                    throw new Exception($"{rfsName} is invalid. Attribute \"hostType\" not found.");
-
+                    throw new Exception(string.Format(Resources.ServiceCatalog_NoHostTypeAttr, rfsName));
+                
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/HostTypeList/HostType[@name='{rfsHostType}']"), HostTypeList);
 
                 foreach (XmlNode rfsChild in rfs.Node.ChildNodes)
@@ -120,8 +121,8 @@ namespace SPAFilter.SPA.Components.SRI
                         var isMarker = cfs.Node.Attributes?["isMarker"]?.Value;
 
                         if (cfsName == null)
-                            throw new Exception("Some CFS are invalid. Attribute \"name\" not found.");
-
+                            throw new Exception(string.Format(Resources.ServiceCatalog_NoNameAttribute, "CFS"));
+                        
                         AddXmlNode(XPATH.Select(navigator, $"/Configuration/CFSGroupList/CFSGroup[CFS[@name='{cfsName}']]"), CFSGroupList);
 
                         if (isMarker != null && isMarker.Like("true"))
@@ -208,8 +209,6 @@ namespace SPAFilter.SPA.Components.SRI
                     }
                 }
                 AddXmlNode(XPATH.Select(navigator, $"/Configuration/HandlerList/Handler[Configuration/RFS[@name='{rfsName}']]"), HandlerList);
-
-                
 
                 //AddXmlNode(XPATH.Select(navigator, $"/Configuration/RFSGroupList/RFSGroup[RFS[@name='{rfsName}']]"), RFSGroupList);
                 //CFSList = new DistinctList<XmlNode>(CFSList.OrderBy(p => p.Attributes?["name"]?.Value), new CatalogItemEqualityComparer());

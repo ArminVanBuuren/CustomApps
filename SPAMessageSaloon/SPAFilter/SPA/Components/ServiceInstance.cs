@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SPAFilter.Properties;
 using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
@@ -43,7 +44,7 @@ namespace SPAFilter.SPA.Components
             HardwareID = InstanceNode.Attributes?["hardwareID"]?.Value;
             if (HardwareID == null)
             {
-                ShowError("Attribute:'@hardwareID' not found in serviceInstance");
+                ShowError(Resources.ServiceInstance_NotFoundHardwareID);
                 return;
             }
 
@@ -53,13 +54,13 @@ namespace SPAFilter.SPA.Components
             var scenarios = scenarioConfigNode?.Attributes?["dir"]?.Value ?? InstanceNode.SelectSingleNode("//scenarios")?.InnerText;
             if (scenarios == null)
             {
-                ShowError("Attribute:'@dir' not found in \"fileScenarioSource\". Or 'scenarios' node not found.");
+                ShowError(Resources.ServiceInstance_NotFoundScenriosDir);
                 return;
             }
             var scenariosPath = GetDir(activatorDirPath, scenarios);
             if (!Directory.Exists(scenariosPath))
             {
-                ShowError($"Directory:\"{scenarios}\" not found. Final path:\"{scenariosPath}\"");
+                ShowError(string.Format(Resources.ServiceInstance_DirNotFound, scenarios, scenariosPath));
                 return;
             }
 
@@ -68,25 +69,25 @@ namespace SPAFilter.SPA.Components
             var dictionaryXML = dict?.Attributes?["xml"]?.Value ?? Path.GetFileName(InstanceNode.SelectSingleNode("//dictionary")?.InnerText);
             if (dictionaryPath == null || dictionaryXML == null)
             {
-                ShowError("Attributes:'@path'\\'@xml' not found. Or \"dictionary\" node not found.");
+                ShowError(Resources.ServiceInstance_AttributesPathXmlNotFound);
                 return;
             }
             var dictionaryFilePath = GetDir(activatorDirPath, dictionaryPath);
             if (dictionaryFilePath == null)
             {
-                ShowError($"Directory:\"{dictionaryPath}\" not found");
+                ShowError(string.Format(Resources.DirectoryNotFound, dictionaryPath));
                 return;
             }
             dictionaryFilePath = Path.Combine(dictionaryFilePath, dictionaryXML);
             if (!File.Exists(dictionaryFilePath))
             {
-                ShowError($"File:\"{dictionaryFilePath}\" not found");
+                ShowError(string.Format(Resources.FileNotFound, dictionaryFilePath));
                 return;
             }
 
             if (!XML.IsFileXml(dictionaryFilePath, out var dictionaryConfig))
             {
-                ShowError($"Xml file:\"{dictionaryFilePath}\" is invalid");
+                ShowError(string.Format(Resources.InvalidXml, dictionaryFilePath));
                 return;
             }
 
@@ -94,20 +95,20 @@ namespace SPAFilter.SPA.Components
             var commandsMask = dictionaryConfig.SelectSingleNode(@"/Dictionary/CommandsList/@Mask")?.Value ?? "*.xml";
             if (commandsRoot == null)
             {
-                ShowError($"Attribute:'@Root' not found in file dictionary:\"{dictionaryFilePath}\"");
+                ShowError(string.Format(Resources.ServiceInstance_AttributesRootNotFound, dictionaryFilePath));
                 return;
             }
             var commandsDir = GetDir(activatorDirPath, Path.Combine(dictionaryPath, commandsRoot));
             if (commandsDir == null)
             {
-                ShowError($"Directory:\"{commandsRoot}\" not found when initializing file dictionary:\"{dictionaryFilePath}\"");
+                ShowError(string.Format(Resources.ServiceInstance_DirNotFoundWithDescription, commandsRoot, dictionaryFilePath));
                 return;
             }
             if (commandsDir == activatorDirPath)
                 commandsDir = Path.Combine(commandsDir, commandsRoot);
             if (!Directory.Exists(commandsDir))
             {
-                ShowError($"Directory:\"{commandsDir}\" not found when initializing file dictionary:\"{dictionaryFilePath}\"");
+                ShowError(string.Format(Resources.ServiceInstance_DirNotFoundWithDescription, commandsRoot, dictionaryFilePath));
                 return;
             }
 

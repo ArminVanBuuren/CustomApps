@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using SPAFilter.Properties;
 using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.CollectionHelper;
@@ -80,7 +81,7 @@ namespace SPAFilter.SPA.Components.SRI
             var type = scenarioNode.Attributes?["type"]?.Value;
 
             if(type.IsNullOrEmpty())
-                throw new Exception($"{rfsName} is invalid. Attribute \"type\" not found in scenario \"{ScenarioName}\"");
+                throw new Exception(string.Format(Resources.ServiceCatalog_NotFoundTyoeAttribute, rfsName, ScenarioName));
 
             if (!catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
                 return;
@@ -244,7 +245,7 @@ namespace SPAFilter.SPA.Components.SRI
         void Preload(XmlNode scenarioNode, string scenarioName, ServiceCatalog catalog)
         {
             if (scenarioNode.Attributes == null || scenarioNode.Attributes.Count == 0)
-                throw new Exception("Some scenarios are invalid. No attributes found.");
+                throw new Exception(Resources.ServiceCatalog_InvalidScenario);
 
             ScenarioName = scenarioName;
             Name = $"{catalog.Prefix}{ScenarioName}";
@@ -254,13 +255,13 @@ namespace SPAFilter.SPA.Components.SRI
         void PostLoad()
         {
             var scenarioHostType = RFSList.Select(x => x.HostTypeName).Distinct().ToList();
-
+            
             if (scenarioHostType.Count == 0)
-                throw new Exception($"Scenario \"{ScenarioName}\" is invalid. Not found any RFS.");
-
+                throw new Exception(string.Format(Resources.ServiceCatalog_ScenarioNotFoundRFS, ScenarioName));
+            
             // по идее хост должен быть один, но если каталог криво настроили то могут быть несколько хостов в одном сценарии
             if (scenarioHostType.Count > 1)
-                throw new Exception($"Scenario \"{ScenarioName}\" has RFS with different hostTypes - \"{string.Join(",", scenarioHostType)}\"");
+                throw new Exception(string.Format(Resources.ServiceCatalog_ScenarioWithDifferentHostType, ScenarioName, string.Join(",", scenarioHostType)));
 
             HostTypeName = scenarioHostType.First();
         }

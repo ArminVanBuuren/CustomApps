@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OfficeOpenXml;
+using SPAFilter.Properties;
 using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components;
 using SPAFilter.SPA.Components.ROBP;
@@ -49,7 +50,7 @@ namespace SPAFilter.SPA
             try
             {
                 if(!IsEnabledFilter)
-                    throw new Exception("Filter is not enabled!");
+                    throw new Exception(Resources.Filter_NotEnabled);
 
                 Func<BusinessProcess, bool> bpFilter = null;
 
@@ -231,7 +232,7 @@ namespace SPAFilter.SPA
         void FilterProcesses(Func<BusinessProcess, bool> bpFilter)
         {
             if (!Directory.Exists(ProcessPath))
-                throw new Exception($"Directory \"{ProcessPath}\" not found!");
+                throw new Exception(string.Format(Resources.DirectoryNotFound, ProcessPath));
 
             Processes = new CollectionBusinessProcess();
             foreach (var file in GetFiles(ProcessPath))
@@ -258,11 +259,11 @@ namespace SPAFilter.SPA
         void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
         {
             if (!Directory.Exists(ROBPHostTypesPath))
-                throw new Exception($"Directory \"{ROBPHostTypesPath}\" not found!");
+                throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath));
 
             var hostTypesDir = GetDirectories(ROBPHostTypesPath);
             if (hostTypesDir.Count == 0)
-                throw new Exception("You must select a folder with exported ROBP's host type directories.");
+                throw new Exception(Resources.Filter_ROBPOperationdDirInvalid);
 
             FilterProcesses(bpFilter);
             HostTypes = new CollectionHostType();
@@ -293,7 +294,7 @@ namespace SPAFilter.SPA
         void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
         {
             if (!File.Exists(SCPath))
-                throw new Exception($"File \"{SCPath}\" not found");
+                throw new Exception(string.Format(Resources.FileNotFound, SCPath));
 
             FilterProcesses(bpFilter);
             HostTypes = new ServiceCatalog(SCPath);
@@ -353,7 +354,7 @@ namespace SPAFilter.SPA
                     {
                         if (_activators.ContainsKey(inputFile))
                         {
-                            throw new Exception($"Activator \"{inputFile}\" already exist.");
+                            throw new Exception(string.Format(Resources.Filter_ActivatorAlreadyExist, inputFile));
                         }
                         else
                         {
@@ -368,7 +369,7 @@ namespace SPAFilter.SPA
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrEmptyTrim())
                 {
-                    ReportMessage(errors, "Add activator");
+                    ReportMessage(errors, Resources.Filter_AddActivator);
                 }
             });
         }
@@ -515,9 +516,7 @@ namespace SPAFilter.SPA
 
             if (sameHostScenarios.Count > 0 && instances.Count > 0)
             {
-                ReportMessage(
-                    $"When initializing instances:'{string.Join(";", hrdrIDs)}' - {sameHostScenarios.Count} scenario collisions were found!\r\nFor correct work of a filter, please choose only one instance (host type) or several instances (host types) with different scenarios.",
-                     "Get Service Instances", MessageBoxIcon.Warning);
+                ReportMessage(string.Format(Resources.Filter_InitializeActivatorsWarning, string.Join(";", hrdrIDs), sameHostScenarios.Count), "Get Service Instances", MessageBoxIcon.Warning);
             }
 
             foreach (var instance in allInstances.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name))
@@ -568,7 +567,7 @@ namespace SPAFilter.SPA
                 progressCalc.BeginReadXslxFile();
 
                 if(xslPackage.Workbook.Worksheets.Count == 0)
-                    throw new Exception("No worksheet found");
+                    throw new Exception(Resources.Filter_NoWorksheetFound);
 
                 var myWorksheet = xslPackage.Workbook.Worksheets.First();
                 var totalRows = myWorksheet.Dimension.End.Row;
@@ -587,16 +586,16 @@ namespace SPAFilter.SPA
                     var columnNameUp = columnName.ToUpper();
                     if (MandatoryXslxColumns[i++] != columnNameUp)
                     {
-                        throw new Exception($"Wrong column name before \'{columnNameUp}\' from file '{file.Name}'.\r\n\r\nColumns names and orders must be like:\r\n'{string.Join("','", MandatoryXslxColumns)}'");
+                        throw new Exception(string.Format(Resources.Filter_WrongColumnStatement, columnNameUp, file.Name, string.Join("','", MandatoryXslxColumns)));
                     }
 
                     serviceTable.Columns.Add(columnNameUp, typeof(string));
                     if (i == MandatoryXslxColumns.Length)
                         break;
                 }
-
+                
                 if (i != MandatoryXslxColumns.Length)
-                    throw new Exception($"Wrong file '{file.Name}'. Missing some required columns. \r\nColumns names should be like:\r\n'{string.Join("','", MandatoryXslxColumns)}'");
+                    throw new Exception(string.Format(Resources.Filter_MissingColumn, file.Name, string.Join("','", MandatoryXslxColumns)));
 
                 for (var rowNum = 2; rowNum <= totalRows; rowNum++)
                 {
@@ -621,7 +620,7 @@ namespace SPAFilter.SPA
             try
             {
                 if (HostTypes == null || HostTypes is ServiceCatalog)
-                    throw new Exception("You can create Service Catalog only with ROBP operations.");
+                    throw new Exception(Resources.Filter_GenerateSCWithoutOperations);
 
                 var sc = new ServiceCatalogBuilder(HostTypes, rdServices, progressCalc);
                 return sc.Save(exportFilePath);

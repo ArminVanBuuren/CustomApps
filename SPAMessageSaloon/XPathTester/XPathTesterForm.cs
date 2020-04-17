@@ -201,7 +201,7 @@ namespace XPathTester
                     catch (Exception ex)
                     {
                         XmlBody = null;
-                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $" {ex.Message}"));
+                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $". {ex.Message}"));
                     }
                 }
                 catch (Exception ex)
@@ -284,7 +284,7 @@ namespace XPathTester
 
         public void ApplySettings()
         {
-
+            ReportStatus(string.Empty);
         }
 
         public void SaveData()

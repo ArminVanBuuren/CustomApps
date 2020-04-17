@@ -51,6 +51,7 @@ namespace SPAFilter
         private FormLocation _notepadLocation = FormLocation.Default;
         private FormWindowState _notepadWindowsState = FormWindowState.Maximized;
         private ProgressCalculationAsync _progressMonitor;
+        private ToolTip _tooltip;
 
         private ToolStripStatusLabel BPCount;
         private ToolStripStatusLabel OperationsCount;
@@ -338,23 +339,8 @@ namespace SPAFilter
             statusStrip.Items.Add(CommandsCount);
 
 
-            var tooltipPrintXML = new ToolTip
-            {
-                InitialDelay = 50
-            };
-            tooltipPrintXML.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
-            tooltipPrintXML.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
-            tooltipPrintXML.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
-            tooltipPrintXML.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
-            tooltipPrintXML.SetToolTip(ProcessesButtonOpen, Resources.Form_ToolTip_ProcessesButtonOpen);
-            tooltipPrintXML.SetToolTip(ROBPOperationButtonOpen, Resources.Form_ToolTip_ROBPOperationButtonOpen);
-            tooltipPrintXML.SetToolTip(ServiceCatalogOpenButton, Resources.Form_ToolTip_ServiceCatalogOpenButton);
-            tooltipPrintXML.SetToolTip(FilterButton, Resources.Form_ToolTip_FilterButton);
-            tooltipPrintXML.SetToolTip(ExportSCPath, Resources.Form_ToolTip_ExportSCPath);
-            tooltipPrintXML.SetToolTip(RootSCExportPathButton, Resources.Form_ToolTip_RootSCExportPathButton);
-            tooltipPrintXML.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
-            tooltipPrintXML.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
-            tooltipPrintXML.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
+            _tooltip = new ToolTip { InitialDelay = 50 };
+            ApplySettings();
         }
 
         void PostInit()
@@ -394,7 +380,20 @@ namespace SPAFilter
 
         public void ApplySettings()
         {
-
+            _tooltip.RemoveAll();
+            _tooltip.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
+            _tooltip.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
+            _tooltip.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
+            _tooltip.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
+            _tooltip.SetToolTip(ProcessesButtonOpen, Resources.Form_ToolTip_ProcessesButtonOpen);
+            _tooltip.SetToolTip(ROBPOperationButtonOpen, Resources.Form_ToolTip_ROBPOperationButtonOpen);
+            _tooltip.SetToolTip(ServiceCatalogOpenButton, Resources.Form_ToolTip_ServiceCatalogOpenButton);
+            _tooltip.SetToolTip(FilterButton, Resources.Form_ToolTip_FilterButton);
+            _tooltip.SetToolTip(ExportSCPath, Resources.Form_ToolTip_ExportSCPath);
+            _tooltip.SetToolTip(RootSCExportPathButton, Resources.Form_ToolTip_RootSCExportPathButton);
+            _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
+            _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
+            _tooltip.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
         }
 
         #region Check warning rows
@@ -594,9 +593,7 @@ namespace SPAFilter
                         if (filesPath.Count == 0)
                             return;
 
-                        var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected, (filesPath.Count == 1 ? $"file" : $"{filesPath.Count} files")),
-                            @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-
+                        var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                         if (userResult != DialogResult.OK)
                             return;
 
@@ -1423,6 +1420,5 @@ namespace SPAFilter
         //    button.FlatStyle = FlatStyle.Flat;
         //    button.FlatAppearance.BorderSize = 0;
         //}
-
     }
 }

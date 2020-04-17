@@ -131,63 +131,63 @@
     <value>..\resources\icons8-synchronize-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_GridView_DeleteSelected" xml:space="preserve">
-    <value>Do you want to delete selected file(s) ?</value>
+    <value>Вы действительно хотите удалить выбранные файлы?</value>
   </data>
   <data name="Form_PrintXMLFiles_Error" xml:space="preserve">
-    <value>Some ({0}) errors found:
+    <value>Найдены ({0}) ошибки:
 
 {1}</value>
   </data>
   <data name="Form_PrintXMLFiles_Successfully" xml:space="preserve">
-    <value>Successfully completed.</value>
+    <value>Успешно завершено.</value>
   </data>
   <data name="Form_GenerateSC_NotFoundAnyOperations" xml:space="preserve">
-    <value>No operations found</value>
+    <value>Операции не найдены</value>
   </data>
   <data name="Form_GenerateSC_NotFileredROBPOps" xml:space="preserve">
-    <value>Please filter files</value>
+    <value>Пожалуйста выполните фильтр</value>
   </data>
   <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
-    <value>Configuration application is incorrect or scenario collisions were found. Please check instances with same host types.</value>
+    <value>Неверная конфигурация или обнаружены коллиции сценариев. Пожалуйста проверьте инстансы с одинаковыми типами хостов.</value>
   </data>
   <data name="Form_GridView_IsSubScenario" xml:space="preserve">
-    <value>Subscenario</value>
+    <value>Вложенный сценарий</value>
   </data>
   <data name="Form_GridView_NotFoundServiceCatalogCall" xml:space="preserve">
-    <value>Business process doesn't have service catalog call</value>
+    <value>Бизнесс процесс не вызывает Сервис Каталог</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommands" xml:space="preserve">
-    <value>Scenario has some commands which don't exist</value>
+    <value>Сценарий содержит команды которые не существуют</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommandsInSub" xml:space="preserve">
-    <value>Sub-scenario has some commands which don't exist</value>
+    <value>Вложенный сценарий содержит команды которые не существуют</value>
   </data>
   <data name="Form_GridView_NotFoundSomeOPs" xml:space="preserve">
-    <value>Business process has some operations which don't exist</value>
+    <value>Бизнес процесс содержит операции которые не существуют</value>
   </data>
   <data name="Form_GridView_NotFoundSomeScenarios" xml:space="preserve">
-    <value>Scenario for this operation doesn't exist</value>
+    <value>Сценарий для данной операции не существует</value>
   </data>
   <data name="Form_GridView_NotSelectedAnyRows" xml:space="preserve">
-    <value>Please select a row</value>
+    <value>Пожалуйста выберите строку</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Pretty print all filtered XML files</value>
+    <value>Форматировать все отфильтрованные XML файлы.</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
-    <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
+    <value>Для поиска по содержанию, вы можете использовать символ %. Пример: %Assign%</value>
   </data>
   <data name="Form_PrintXMLFiles_Button" xml:space="preserve">
     <value>Pretty print</value>
   </data>
   <data name="Form_PrintXMLFiles_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </data>
   <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
-    <value>{0} out of {1} xml files were printed.</value>
+    <value>{0} из {1} xml файлов были отформатированны.</value>
   </data>
   <data name="Form_PrintXMLFiles_Question" xml:space="preserve">
-    <value>Do you really want to print all {0} xml files?</value>
+    <value>Вы действительно хотите отформатировать все {0} xml файлы?</value>
   </data>
   <data name="file7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\file7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,39 +205,39 @@
     <value>..\Resources\xml8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_ToolTip_ButtonGenerateSC" xml:space="preserve">
-    <value>Generate Service catalog by ROBP operations</value>
+    <value>Сгенерировать cервис rаталог по ROBP операциям.</value>
   </data>
   <data name="Form_ToolTip_ExportSCPath" xml:space="preserve">
-    <value>Export folder path</value>
+    <value>Экспорт</value>
   </data>
   <data name="Form_ToolTip_FilterButton" xml:space="preserve">
-    <value>Get all matches by filter</value>
+    <value>Выполнить фильтр</value>
   </data>
   <data name="Form_ToolTip_OpenSCXlsx" xml:space="preserve">
-    <value>Excel file path of RD services for fill CFS description. Columns names and orders must be like:
+    <value>Путь к файлу Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
 '{0}'</value>
   </data>
   <data name="Form_ToolTip_OpenSevExelButton" xml:space="preserve">
-    <value>Get excel file of RD services for fill CFS description. Columns names and orders must be like:
+    <value>Открыть файл Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
 '{0}'</value>
   </data>
   <data name="Form_ToolTip_ProcessesButtonOpen" xml:space="preserve">
-    <value>Open folder with Business Processes</value>
+    <value>Открыть директорию с файлами Бизнесс процессов</value>
   </data>
   <data name="Form_ToolTip_ROBPOperationButtonOpen" xml:space="preserve">
-    <value>Open folder with Operations</value>
+    <value>Открыть директорию с папками Операций</value>
   </data>
   <data name="Form_ToolTip_RootSCExportPathButton" xml:space="preserve">
-    <value>Open export folder path</value>
+    <value>Открыть директорию для экспорта</value>
   </data>
   <data name="Form_ToolTip_ServiceCatalogOpenButton" xml:space="preserve">
-    <value>Open Service catalog file</value>
+    <value>Открыть файл Сервис каталога</value>
   </data>
   <data name="Form_GridView_XMLFileIsIncorrect" xml:space="preserve">
-    <value>Xml file is incorrect!</value>
+    <value>Некорректный Xml файл!</value>
   </data>
   <data name="Form_GridView_IncorrectROBPOperation" xml:space="preserve">
-    <value>Incorrect ROBP operation</value>
+    <value>Некорректная ROBP операция</value>
   </data>
   <data name="find" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\find.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -246,104 +246,104 @@
     <value>..\Resources\generatesc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DirectoryNotFound" xml:space="preserve">
-    <value>Directory: "{0}" not found</value>
+    <value>Диреетория: "{0}" не найдена</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
-    <value>File "{0}" not found</value>
+    <value>Файл "{0}" не найден</value>
   </data>
   <data name="Filter_ActivatorAlreadyExist" xml:space="preserve">
-    <value>Activator "{0}" already exist.</value>
+    <value>Активатор "{0}" уже существует</value>
   </data>
   <data name="Filter_AddActivator" xml:space="preserve">
-    <value>Add activator</value>
+    <value>Добавление активатора</value>
   </data>
   <data name="Filter_GenerateSCWithoutOperations" xml:space="preserve">
-    <value>You can create Service Catalog only with ROBP operations.</value>
+    <value>Вы можете создать Сервис Каталог только с ROBP операциями</value>
   </data>
   <data name="Filter_InitializeActivatorsWarning" xml:space="preserve">
-    <value>When initializing instances:'{0}' - {1} scenario collisions were found!
-For correct work of a filter, please choose only one instance (host types) or several instances (host types) with different scenarios.</value>
+    <value>При инициализации инстансов:'{0}' - были обнаружены {1} коллизии сценариев.
+Для корректной работы фильтра, выберите только один экземпляр (тип хоста) или несколько экземпляров, но с разными сценариями.</value>
   </data>
   <data name="Filter_MissingColumn" xml:space="preserve">
-    <value>Wrong file '{0}'. Missing some required columns. 
-Columns names should be like:
+    <value>Ошибка считывании файла '{0}'. Отсутсвуют обязательные столбцы. 
+Имена столбцов и их позиция в документе должна быть:
 '{1}'</value>
   </data>
   <data name="Filter_NotEnabled" xml:space="preserve">
-    <value>Filter is not enabled!</value>
+    <value>Данные фильтра некорректны!</value>
   </data>
   <data name="Filter_NoWorksheetFound" xml:space="preserve">
-    <value>No worksheet found</value>
+    <value>Документ не найден</value>
   </data>
   <data name="Filter_ROBPOperationdDirInvalid" xml:space="preserve">
-    <value>You must select a folder with exported ROBP's host type directories.</value>
+    <value>Вы должны выбрать каталог с типами хостов в которых присутсвуют ROBP операции</value>
   </data>
   <data name="Filter_WrongColumnStatement" xml:space="preserve">
-    <value>Wrong column name before '{0}' from file '{1}'.
-Columns names and orders must be like:
+    <value>Некорректный столбец перед '{0}' из файла '{1}'.
+Имена столбцов и их позиция в документе должна быть:
 '{2}'</value>
   </data>
   <data name="InvalidXml" xml:space="preserve">
-    <value>Xml file "{0}" is invalid</value>
+    <value>Ошибка при чтении Xml файла "{0}"</value>
   </data>
   <data name="ServiceActivator_ConfigInvalid" xml:space="preserve">
-    <value>Activator config "{0}" is incorrect</value>
+    <value>Ошибка при чтении конфига "{0}"</value>
   </data>
   <data name="ServiceCatalog_AlreadyExist" xml:space="preserve">
-    <value>{0} already exist.</value>
+    <value>{0} уже существует.</value>
   </data>
   <data name="ServiceCatalog_DoubleScenario" xml:space="preserve">
-    <value>Service Catalog is invalid. '{0}' already exist.</value>
+    <value>Ошибка при чтении Сервис каталога. Сценарий '{0}' уже существует</value>
   </data>
   <data name="ServiceCatalog_InvalidScenario" xml:space="preserve">
-    <value>Some scenarios are invalid. No attributes found.</value>
+    <value>Ошибка при чтении сценариев, не найдены аттрибуты.</value>
   </data>
   <data name="ServiceCatalog_InvalidXml" xml:space="preserve">
-    <value>Xml file "{0}" is invalid</value>
+    <value>Ошибка при чтении Xml файла "{0}"</value>
   </data>
   <data name="ServiceCatalog_NoHostTypeAttr" xml:space="preserve">
-    <value>{0} is invalid. Attribute "hostType" not found.</value>
+    <value>Некорректный {0}. Не найден аттриюут "hostType"</value>
   </data>
   <data name="ServiceCatalog_NoNameAttribute" xml:space="preserve">
-    <value>Service Catalog is invalid. {0} doesn't have attribute \"name\" or value is empty.</value>
+    <value>Ошибка при чтении Сервис каталога.  {0} не имеет аттрибута "name" или значение пустое.</value>
   </data>
   <data name="ServiceCatalog_NoRFSFound" xml:space="preserve">
-    <value>Service Catalog is invalid. No RFS found.</value>
+    <value>Ошибка при чтении Сервис каталога. Не найдены RFS.</value>
   </data>
   <data name="ServiceCatalog_NotFound" xml:space="preserve">
-    <value>Not found {0}</value>
+    <value>Не найден {0}</value>
   </data>
   <data name="ServiceCatalog_NotFoundScenarioPrefix" xml:space="preserve">
-    <value>Service Catalog is invalid. Attribute \"scenarioPrefix\" not found.</value>
+    <value>Ошибка при чтении Сервис каталога. Не найден аттрибут "scenarioPrefix".</value>
   </data>
   <data name="ServiceCatalog_NotFoundTyoeAttribute" xml:space="preserve">
-    <value>{0} is invalid. Attribute "type" not found in scenario "{1}"</value>
+    <value>Ошибка {0}. Не найден аттрибут "type" в сценарии "{1}"</value>
   </data>
   <data name="ServiceCatalog_RFSNoAttributes" xml:space="preserve">
-    <value>Some RFS are invalid. No attributes found.</value>
+    <value>Ошибка при чтении RFS. Аттрибуты не найдены.</value>
   </data>
   <data name="ServiceCatalog_ScenarioNotFoundRFS" xml:space="preserve">
-    <value>Scenario "{0}" is invalid. Not found any RFS.</value>
+    <value>Ошибка чтения "{0}" сценария. Не найден ни один RFS.</value>
   </data>
   <data name="ServiceCatalog_ScenarioWithDifferentHostType" xml:space="preserve">
-    <value>Scenario "{0}" has RFS with different hostTypes - "{1}"</value>
+    <value>Сценарий "{0}" содержит RFS с разными типами хостов - "{1}"</value>
   </data>
   <data name="ServiceInstance_AttributesPathXmlNotFound" xml:space="preserve">
-    <value>Attributes: '@path' | '@xml' not found. Or "dictionary" node not found.</value>
+    <value>Не найдены аттрибуты: '@path' | '@xml'. Или нода с именем "dictionary" не найдена.</value>
   </data>
   <data name="ServiceInstance_AttributesRootNotFound" xml:space="preserve">
-    <value>Attribute: '@Root' not found in file dictionary: "{0}"</value>
+    <value>Не найден аттрибут: '@Root' в словаре: "{0}"</value>
   </data>
   <data name="ServiceInstance_DirNotFound" xml:space="preserve">
-    <value>Directory: "{0}" not found. Final path: "{1}"</value>
+    <value>Не найдена директория: "{0}". Конечный путь: "{1}"</value>
   </data>
   <data name="ServiceInstance_DirNotFoundWithDescription" xml:space="preserve">
-    <value>Directory: "{0}" not found when initializing file dictionary: "{1}"</value>
+    <value>Не найдена директория: "{0}" при инициализации словаря: "{1}"</value>
   </data>
   <data name="ServiceInstance_NotFoundHardwareID" xml:space="preserve">
-    <value>Attribute: '@hardwareID' not found in serviceInstance</value>
+    <value>Не найден аттрибут: '@hardwareID' в конфигурации serviceInstance</value>
   </data>
   <data name="ServiceInstance_NotFoundScenriosDir" xml:space="preserve">
-    <value>Attribute: '@dir' not found in "fileScenarioSource". Or 'scenarios' node not found.</value>
+    <value>Не найден аттрибут: '@dir' в ноде "fileScenarioSource". Или нода с именем 'scenarios' не найдена.</value>
   </data>
 </root>
