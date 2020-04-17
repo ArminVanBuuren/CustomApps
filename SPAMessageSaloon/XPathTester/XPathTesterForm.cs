@@ -11,6 +11,7 @@ using FastColoredTextBoxNS;
 using SPAMessageSaloon.Common;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
+using XPathTester.Properties;
 
 namespace XPathTester
 {
@@ -187,7 +188,7 @@ namespace XPathTester
                     var source = editor.Text;
                     if (!source.StartsWith("<") || !source.EndsWith(">"))
                     {
-                        ReportStatus($"XML-Body is incorrect!");
+                        ReportStatus(string.Format(Resources.XmlIsIncorrect, string.Empty));
                         return;
                     }
 
@@ -200,7 +201,7 @@ namespace XPathTester
                     catch (Exception ex)
                     {
                         XmlBody = null;
-                        ReportStatus($"XML-Body is incorrect! {ex.Message}");
+                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $" {ex.Message}"));
                     }
                 }
                 catch (Exception ex)
@@ -225,7 +226,7 @@ namespace XPathTester
 
             if (string.IsNullOrEmpty(XPathText.Text))
             {
-                ReportStatus(@"XPath expression is empty!");
+                ReportStatus(Resources.XPathIsEmpty);
                 return;
             }
 
@@ -243,7 +244,7 @@ namespace XPathTester
                 }
                 else
                 {
-                    ReportStatus("No data found", null);
+                    ReportStatus(Resources.NoDataFound, null);
                 }
             }
             catch (Exception ex)

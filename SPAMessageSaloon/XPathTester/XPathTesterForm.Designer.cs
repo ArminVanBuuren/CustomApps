@@ -57,9 +57,9 @@ namespace XPathTester
             // 
             this.XPathText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.XPathText.Location = new System.Drawing.Point(42, 8);
+            this.XPathText.Location = new System.Drawing.Point(42, 7);
             this.XPathText.Name = "XPathText";
-            this.XPathText.Size = new System.Drawing.Size(1290, 20);
+            this.XPathText.Size = new System.Drawing.Size(1117, 20);
             this.XPathText.TabIndex = 0;
             // 
             // label1
@@ -76,9 +76,10 @@ namespace XPathTester
             this.buttonFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonFind.Image = global::XPathTester.Properties.Resources.find;
             this.buttonFind.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonFind.Location = new System.Drawing.Point(1338, 7);
+            this.buttonFind.Location = new System.Drawing.Point(1165, 7);
             this.buttonFind.Name = "buttonFind";
-            this.buttonFind.Size = new System.Drawing.Size(73, 21);
+            this.buttonFind.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.buttonFind.Size = new System.Drawing.Size(76, 21);
             this.buttonFind.TabIndex = 2;
             this.buttonFind.Text = "Test [F5]";
             this.buttonFind.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -90,6 +91,7 @@ namespace XPathTester
             this.editor.AutoScroll = true;
             this.editor.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             this.editor.BackBrush = null;
+            this.editor.ColoredOnlyVisible = false;
             this.editor.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("editor.DefaultEncoding")));
             this.editor.DelayedEventsInterval = 100;
             this.editor.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
@@ -105,7 +107,7 @@ namespace XPathTester
             this.editor.Name = "editor";
             this.editor.ReadOnly = false;
             this.editor.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.editor.Size = new System.Drawing.Size(1229, 666);
+            this.editor.Size = new System.Drawing.Size(1061, 666);
             this.editor.SizingGrip = true;
             this.editor.TabIndex = 0;
             this.editor.WordWrap = true;
@@ -182,7 +184,7 @@ namespace XPathTester
             this.buttonPrettyPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonPrettyPrint.Image = global::XPathTester.Properties.Resources.xml8;
             this.buttonPrettyPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonPrettyPrint.Location = new System.Drawing.Point(1417, 7);
+            this.buttonPrettyPrint.Location = new System.Drawing.Point(1247, 7);
             this.buttonPrettyPrint.Name = "buttonPrettyPrint";
             this.buttonPrettyPrint.Size = new System.Drawing.Size(110, 21);
             this.buttonPrettyPrint.TabIndex = 7;
@@ -207,7 +209,7 @@ namespace XPathTester
             // 
             this.splitContainer1.Panel2.Controls.Add(this.editor);
             this.splitContainer1.Panel2MinSize = 41;
-            this.splitContainer1.Size = new System.Drawing.Size(1530, 670);
+            this.splitContainer1.Size = new System.Drawing.Size(1362, 670);
             this.splitContainer1.SplitterDistance = 293;
             this.splitContainer1.TabIndex = 9;
             // 
@@ -221,18 +223,18 @@ namespace XPathTester
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.MinimumSize = new System.Drawing.Size(250, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1530, 34);
+            this.panel1.Size = new System.Drawing.Size(1362, 34);
             this.panel1.TabIndex = 11;
             // 
-            // MainWindow
+            // XPathTesterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1530, 704);
+            this.ClientSize = new System.Drawing.Size(1362, 704);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "MainWindow";
+            this.Name = "XPathTesterForm";
             this.Text = "XPath Tester";
             ((System.ComponentModel.ISupportInitialize)(this.xpathResultDataGrid)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);

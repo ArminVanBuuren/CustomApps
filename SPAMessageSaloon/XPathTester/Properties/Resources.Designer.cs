@@ -81,12 +81,39 @@ namespace XPathTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No data found.
+        /// </summary>
+        internal static string NoDataFound {
+            get {
+                return ResourceManager.GetString("NoDataFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap xml8 {
             get {
                 object obj = ResourceManager.GetObject("xml8", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML-Body is incorrect!{0}.
+        /// </summary>
+        internal static string XmlIsIncorrect {
+            get {
+                return ResourceManager.GetString("XmlIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XPath expression is empty!.
+        /// </summary>
+        internal static string XPathIsEmpty {
+            get {
+                return ResourceManager.GetString("XPathIsEmpty", resourceCulture);
             }
         }
     }
