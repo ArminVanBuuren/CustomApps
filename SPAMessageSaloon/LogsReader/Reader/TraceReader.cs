@@ -27,7 +27,7 @@ namespace LogsReader.Reader
         /// </summary>
         public LRSettingsScheme CurrentSettings => _mainReader.CurrentSettings;
 
-        protected int MaxTraceLines => CurrentSettings.MaxTraceLines;
+        protected int MaxTraceLines => CurrentSettings.MaxLines;
 
         protected LRTraceParseItem[] TraceParsePatterns => CurrentSettings.TraceParse.Patterns;
 
@@ -47,7 +47,7 @@ namespace LogsReader.Reader
             Server = server;
             FilePath = filePath;
             File = new FileInfo(filePath);
-            FileNamePartial = IO.GetPartialPath(FilePath, CurrentSettings.LogsDirectory);
+            FileNamePartial = IO.GetPartialPath(FilePath, CurrentSettings.LogsFolder);
         }
 
         public abstract void ReadLine(string line);

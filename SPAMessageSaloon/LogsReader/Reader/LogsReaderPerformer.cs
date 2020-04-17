@@ -111,7 +111,7 @@ namespace LogsReader.Reader
 
         List<TraceReader> GetFileLogs()
         {
-            var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsDirectory);
+            var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsFolder);
             var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
             var kvpList = new List<TraceReader>();
 

@@ -57,8 +57,8 @@ namespace LogsReader.Reader
             this.serversText = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.logDirText = new System.Windows.Forms.TextBox();
-            this.fileNames = new System.Windows.Forms.TextBox();
+            this.logFolderText = new System.Windows.Forms.TextBox();
+            this.fileTypes = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.maxThreadsText = new System.Windows.Forms.TextBox();
@@ -355,23 +355,23 @@ namespace LogsReader.Reader
             // 
             // logDirText
             // 
-            this.logDirText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.logFolderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logDirText.Location = new System.Drawing.Point(84, 31);
-            this.logDirText.Name = "logDirText";
-            this.logDirText.Size = new System.Drawing.Size(134, 23);
-            this.logDirText.TabIndex = 12;
-            this.logDirText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
+            this.logFolderText.Location = new System.Drawing.Point(84, 31);
+            this.logFolderText.Name = "logDirText";
+            this.logFolderText.Size = new System.Drawing.Size(134, 23);
+            this.logFolderText.TabIndex = 12;
+            this.logFolderText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
             // 
             // fileNames
             // 
-            this.fileNames.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.fileTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileNames.Location = new System.Drawing.Point(84, 57);
-            this.fileNames.Name = "fileNames";
-            this.fileNames.Size = new System.Drawing.Size(134, 23);
-            this.fileNames.TabIndex = 8;
-            this.fileNames.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
+            this.fileTypes.Location = new System.Drawing.Point(84, 57);
+            this.fileTypes.Name = "fileNames";
+            this.fileTypes.Size = new System.Drawing.Size(134, 23);
+            this.fileTypes.TabIndex = 8;
+            this.fileTypes.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
             // 
             // label5
             // 
@@ -706,9 +706,9 @@ namespace LogsReader.Reader
             this.MainSplitContainer.Panel1.Controls.Add(this.label4);
             this.MainSplitContainer.Panel1.Controls.Add(this.rowsLimitText);
             this.MainSplitContainer.Panel1.Controls.Add(this.label5);
-            this.MainSplitContainer.Panel1.Controls.Add(this.fileNames);
+            this.MainSplitContainer.Panel1.Controls.Add(this.fileTypes);
             this.MainSplitContainer.Panel1.Controls.Add(this.trvMain);
-            this.MainSplitContainer.Panel1.Controls.Add(this.logDirText);
+            this.MainSplitContainer.Panel1.Controls.Add(this.logFolderText);
             this.MainSplitContainer.Panel1.Controls.Add(this.maxLinesStackText);
             this.MainSplitContainer.Panel1.Controls.Add(this.label3);
             this.MainSplitContainer.Panel1.Controls.Add(this.serversText);
@@ -768,11 +768,11 @@ namespace LogsReader.Reader
         private System.Windows.Forms.CheckBox useRegex;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox serversText;
-        private System.Windows.Forms.TextBox fileNames;
+        private System.Windows.Forms.TextBox fileTypes;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox maxThreadsText;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox logDirText;
+        private System.Windows.Forms.TextBox logFolderText;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox maxLinesStackText;
         private System.Windows.Forms.Label label6;

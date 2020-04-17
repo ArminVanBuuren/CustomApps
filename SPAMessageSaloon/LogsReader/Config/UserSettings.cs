@@ -87,21 +87,21 @@ namespace LogsReader.Config
             set => SetValue(nameof(TraceNameFilterContains), value);
         }
 
-        public string MessageFilter
+        public string TraceMessageFilter
         {
-            get => GetValue(nameof(MessageFilter));
-            set => SetValue(nameof(MessageFilter), value);
+            get => GetValue(nameof(TraceMessageFilter));
+            set => SetValue(nameof(TraceMessageFilter), value);
         }
 
-        public bool MessageFilterContains
+        public bool TraceMessageFilterContains
         {
             get
             {
-                if (bool.TryParse(GetValue(nameof(MessageFilterContains)), out var result))
+                if (bool.TryParse(GetValue(nameof(TraceMessageFilterContains)), out var result))
                     return result;
                 return true;
             }
-            set => SetValue(nameof(MessageFilterContains), value);
+            set => SetValue(nameof(TraceMessageFilterContains), value);
         }
 
         public Language MessageLanguage

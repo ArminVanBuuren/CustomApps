@@ -128,7 +128,7 @@
     <value>Maximum amount of threads. If the value is -1 then amount of threads corresponds to the ammount of processing files.</value>
   </data>
   <data name="Txt_LRSettingsScheme_MaxTraceLines" xml:space="preserve">
-    <value>Maximum amount of lines for the found trace. Whole trace must be parsed by the "TraceParse" patterns.</value>
+    <value>Maximum amount of lines for trace stack. Whole trace must be parsed by the "TraceParse" patterns.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
     <value>Servers for search. Specify with a comma.</value>

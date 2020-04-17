@@ -128,7 +128,7 @@
     <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
   </data>
   <data name="Txt_LRSettingsScheme_MaxTraceLines" xml:space="preserve">
-    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из "TraceParse".</value>
+    <value>Максимальное количество строк для фрагмента трассировки. Весь фрагмент должен парсится паттернами из "TraceParse".</value>
   </data>
   <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
     <value>Сервера для поиска. Указать через запятую.</value>
@@ -325,7 +325,7 @@
     <value>8</value>
   </data>
   <data name="LogsReaderForm_btnClear_Width" xml:space="preserve">
-    <value>110</value>
+    <value>112</value>
   </data>
   <data name="LogsReaderForm_buttonExport_Width" xml:space="preserve">
     <value>124</value>

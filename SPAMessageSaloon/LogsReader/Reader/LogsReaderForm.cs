@@ -226,15 +226,15 @@ namespace LogsReader.Reader
                 traceMessageFilterComboBox.Items.Clear();
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
-                traceMessageFilterComboBox.AssignValue(UserSettings.MessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains, traceMessageFilterComboBox_SelectedIndexChanged);
+                traceMessageFilterComboBox.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains, traceMessageFilterComboBox_SelectedIndexChanged);
 
                 _tooltip.RemoveAll();
                 _tooltip.SetToolTip(txtPattern, Resources.Txt_Form_SearchComment);
                 _tooltip.SetToolTip(useRegex, Resources.Txt_LRSettings_UseRegexComment);
                 _tooltip.SetToolTip(serversText, Resources.Txt_LRSettingsScheme_Servers);
-                _tooltip.SetToolTip(fileNames, Resources.Txt_LRSettingsScheme_Types);
+                _tooltip.SetToolTip(fileTypes, Resources.Txt_LRSettingsScheme_Types);
                 _tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
-                _tooltip.SetToolTip(logDirText, Resources.Txt_LRSettingsScheme_LogsDirectory);
+                _tooltip.SetToolTip(logFolderText, Resources.Txt_LRSettingsScheme_LogsDirectory);
                 _tooltip.SetToolTip(maxLinesStackText, Resources.Txt_LRSettingsScheme_MaxTraceLines);
                 _tooltip.SetToolTip(dateStartFilter, Resources.Txt_Form_DateFilterComment);
                 _tooltip.SetToolTip(dateEndFilter, Resources.Txt_Form_DateFilterComment);
@@ -275,7 +275,7 @@ namespace LogsReader.Reader
                 if (dateEndFilter.Checked)
                     dateEndFilter.Value = _getEndDate.Invoke();
                 traceNameFilter.AssignValue(UserSettings.TraceNameFilter, TraceNameFilter_TextChanged);
-                traceMessageFilter.AssignValue(UserSettings.MessageFilter, TraceMessageFilter_TextChanged);
+                traceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TraceMessageFilter_TextChanged);
 
                 var langMessage = UserSettings.MessageLanguage;
                 var langTrace = UserSettings.TraceLanguage;
@@ -291,9 +291,9 @@ namespace LogsReader.Reader
 
                 serversText.Text = CurrentSettings.Servers;
                 notepad.DefaultEncoding = CurrentSettings.Encoding;
-                logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
-                fileNames.Text = CurrentSettings.Types;
-                maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
+                logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
+                fileTypes.Text = CurrentSettings.FileTypes;
+                maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
                 orderByText.Text = CurrentSettings.OrderBy;
@@ -612,10 +612,10 @@ namespace LogsReader.Reader
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
             serversText.Enabled = !IsWorking;
-            fileNames.Enabled = !IsWorking;
+            fileTypes.Enabled = !IsWorking;
             maxThreadsText.Enabled = !IsWorking;
             rowsLimitText.Enabled = !IsWorking;
-            logDirText.Enabled = !IsWorking;
+            logFolderText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
             dateStartFilter.Enabled = !IsWorking;
             dateEndFilter.Enabled = !IsWorking;
@@ -743,20 +743,20 @@ namespace LogsReader.Reader
 
         private void LogDirText_TextChanged(object sender, EventArgs e)
         {
-            CurrentSettings.LogsDirectory = logDirText.Text;
-            logDirText.AssignValue(CurrentSettings.LogsDirectory, LogDirText_TextChanged);
+            CurrentSettings.LogsFolder = logFolderText.Text;
+            logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
             ValidationCheck();
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void TypesText_TextChanged(object sender, EventArgs e)
         {
-            CurrentSettings.Types = fileNames.Text;
-            fileNames.AssignValue(CurrentSettings.Types, TypesText_TextChanged);
+            CurrentSettings.FileTypes = fileTypes.Text;
+            fileTypes.AssignValue(CurrentSettings.FileTypes, TypesText_TextChanged);
 
             //заполняем список типов из параметра
             trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Types.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
+            foreach (var s in CurrentSettings.FileTypes.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
             {
                 if (s.Key.IsNullOrEmptyTrim())
                     continue;
@@ -791,8 +791,8 @@ namespace LogsReader.Reader
 
         void MaxLinesStackTextSave(int value)
         {
-            CurrentSettings.MaxTraceLines = value;
-            maxLinesStackText.AssignValue(CurrentSettings.MaxTraceLines, MaxLinesStackText_TextChanged);
+            CurrentSettings.MaxLines = value;
+            maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -888,12 +888,12 @@ namespace LogsReader.Reader
 
         private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.MessageFilter = traceMessageFilter.Text;
+            UserSettings.TraceMessageFilter = traceMessageFilter.Text;
         }
 
         private void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UserSettings.MessageFilterContains = traceMessageFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains);
+            UserSettings.TraceMessageFilterContains = traceMessageFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains);
         }
 
         private void Message_LanguageChanged(object sender, EventArgs e)
@@ -934,8 +934,8 @@ namespace LogsReader.Reader
 
         void ValidationCheck(bool clearStatus = true)
         {
-            var isCorrectPath = IO.CHECK_PATH.IsMatch(logDirText.Text);
-            logDirText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+            var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
+            logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
 
             var settIsCorrect = CurrentSettings.IsCorrect;
             if (settIsCorrect && clearStatus)

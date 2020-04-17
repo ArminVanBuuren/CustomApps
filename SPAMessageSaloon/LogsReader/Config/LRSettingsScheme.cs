@@ -20,12 +20,12 @@ namespace LogsReader.Config
     {
         private string _schemeName = "TEST";
         private string _servers = "localhost";
-        private string _types = "test";
+        private string _fileTypes = "test";
         private string _orderBy = "Date, File, FoundLineID";
-        private int _maxTraceLines = 50;
+        private int _maxLines = 50;
         private int _maxThreads = -1;
         private int _rowsLimit = 999;
-        private string _logsDirectory = @"C:\TEST";
+        private string _logsFolder = @"C:\TEST";
         private LRTraceParse _traceParce = new LRTraceParse();
 
         public event ReportStatusHandler ReportStatus;
@@ -39,18 +39,18 @@ namespace LogsReader.Config
                 case "MG":
                     _schemeName = name;
                     _servers = "mg1,mg2,mg3,mg4,mg5";
-                    _logsDirectory = @"C:\FORISLOG\MG";
-                    _types = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
-                    _maxTraceLines = 50;
+                    _logsFolder = @"C:\FORISLOG\MG";
+                    _fileTypes = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
+                    _maxLines = 50;
                     _maxThreads = -1;
                     _traceParce = new LRTraceParse(_schemeName);
                     break;
                 case "SPA":
                     _schemeName = name;
                     _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
-                    _logsDirectory = @"C:\FORISLOG\SPA";
-                    _types = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
-                    _maxTraceLines = 1;
+                    _logsFolder = @"C:\FORISLOG\SPA";
+                    _fileTypes = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
+                    _maxLines = 1;
                     _maxThreads = -1;
                     _orderBy = "Date desc, ID desc";
                     _traceParce = new LRTraceParse(_schemeName);
@@ -58,9 +58,9 @@ namespace LogsReader.Config
                 case "MGA":
                     _schemeName = name;
                     _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
-                    _logsDirectory = @"C:\FORISLOG\MGAdapter";
-                    _types = "fast,slow,test";
-                    _maxTraceLines = 20000;
+                    _logsFolder = @"C:\FORISLOG\MGAdapter";
+                    _fileTypes = "fast,slow,test";
+                    _maxLines = 20000;
                     _maxThreads = -1;
                     _traceParce = new LRTraceParse(_schemeName);
                     break;
@@ -117,46 +117,46 @@ namespace LogsReader.Config
             set => _servers = value.IsNullOrEmptyTrim() ? _servers : value;
         }
 
-        [XmlAnyElement("LogsDirectoryComment")]
-        public XmlComment LogsDirectoryComment
+        [XmlAnyElement("LogsFolderComment")]
+        public XmlComment LogsFolderComment
         {
             get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
             set { }
         }
 
-        [XmlElement("LogsDirectory")]
-        public string LogsDirectory
+        [XmlElement("LogsFolder")]
+        public string LogsFolder
         {
-            get => _logsDirectory;
-            set => _logsDirectory = value.IsNullOrEmptyTrim() ? _logsDirectory : value;
+            get => _logsFolder;
+            set => _logsFolder = value.IsNullOrEmptyTrim() ? _logsFolder : value;
         }
 
-        [XmlAnyElement("TypesComment")]
-        public XmlComment TypesComment
+        [XmlAnyElement("FileTypesComment")]
+        public XmlComment FileTypesComment
         {
             get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_Types);
             set { }
         }
 
-        [XmlElement("Types")]
-        public string Types
+        [XmlElement("FileTypes")]
+        public string FileTypes
         {
-            get => _types;
-            set => _types = value.IsNullOrEmptyTrim() ? _types : value;
+            get => _fileTypes;
+            set => _fileTypes = value.IsNullOrEmptyTrim() ? _fileTypes : value;
         }
 
-        [XmlAnyElement("MaxTraceLinesComment")]
-        public XmlComment MaxTraceLinesComment
+        [XmlAnyElement("MaxLinesComment")]
+        public XmlComment MaxLinesComment
         {
             get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_MaxTraceLines);
             set { }
         }
 
-        [XmlElement("MaxTraceLines")]
-        public int MaxTraceLines
+        [XmlElement("MaxLines")]
+        public int MaxLines
         {
-            get => _maxTraceLines;
-            set => _maxTraceLines = value <= 0 ? 1 : value;
+            get => _maxLines;
+            set => _maxLines = value <= 0 ? 1 : value;
         }
 
         [XmlAnyElement("MaxThreadsComment")]
