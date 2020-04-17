@@ -56,9 +56,11 @@ namespace LogsReader
                 {
                     ApplySettings();
                     foreach (var logsReader in AllForms.Values)
+                    {
+                        logsReader.ApplyFormSettings();
                         logsReader.OnSchemeChanged += SaveSchemas;
+                    }
                 };
-
 
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
@@ -154,10 +156,8 @@ namespace LogsReader
                         Size = Settings.Default.FormSize;
                 }
 
-                foreach (var form in AllForms)
-                {
-                    form.Value.ApplySettings();
-                }
+                foreach (var logsReader in AllForms.Values)
+                    logsReader.ApplySettings();
             }
             catch (Exception ex)
             {

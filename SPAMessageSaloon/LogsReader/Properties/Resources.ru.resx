@@ -159,7 +159,7 @@
     <value>Фильтр по полю "Date"</value>
   </data>
   <data name="Txt_Form_TraceNameFilterComment" xml:space="preserve">
-    <value>Фильтр по полю "Trace name". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
+    <value>Фильтр по полю "TraceName". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
   </data>
   <data name="Txt_Form_TraceFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Trace". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
@@ -334,7 +334,7 @@
     <value>0</value>
   </data>
   <data name="LogsReaderForm_buttonReset_rightPadding" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="Txt_LogsReaderForm_Servers2" xml:space="preserve">
     <value>Сервера</value>

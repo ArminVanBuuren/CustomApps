@@ -166,7 +166,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date of end filter must be greater than date of start.
+        ///   Looks up a localized string similar to Date of end must be greater than date of start.
         /// </summary>
         internal static string Txt_DataFilter_ErrDate {
             get {
@@ -187,7 +187,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Применить фильтр во время поиска.
+        ///   Looks up a localized string similar to Search with filter.
         /// </summary>
         internal static string Txt_Form_AlreadyUseFilterComment {
             get {
@@ -196,7 +196,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Date&quot;.
+        ///   Looks up a localized string similar to &quot;Date&quot; filter.
         /// </summary>
         internal static string Txt_Form_DateFilterComment {
             get {
@@ -205,7 +205,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда..
+        ///   Looks up a localized string similar to Use options of invariant culture and ignoring the case. When Regex option of  search is used timeout of completing is 1 second..
         /// </summary>
         internal static string Txt_Form_SearchComment {
             get {
@@ -214,7 +214,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to &quot;Trace&quot; filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored..
         /// </summary>
         internal static string Txt_Form_TraceFilterComment {
             get {
@@ -223,7 +223,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Фильтр по полю &quot;Trace name&quot;. Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается..
+        ///   Looks up a localized string similar to &quot;TraceName&quot; filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored..
         /// </summary>
         internal static string Txt_Form_TraceNameFilterComment {
             get {
@@ -232,7 +232,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Необходимо выбрать сервера и типы файлов.
+        ///   Looks up a localized string similar to Server(s) and type(s) of the files must be chosen..
         /// </summary>
         internal static string Txt_Form_trvMainComment {
             get {
@@ -621,7 +621,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Предыдущее значение поиска. .
+        ///   Looks up a localized string similar to Previous search value.
         /// </summary>
         internal static string Txt_LRSettings_PreviousSearchComment {
             get {
@@ -640,7 +640,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поиск по регулярному выражению выполняется быстрее. Атрибут &quot;encoding&quot; используется при считывании лог файлов..
+        ///   Looks up a localized string similar to Regex search is being completed faster. &quot;Encoding&quot; atributte is used when reading log files..
         /// </summary>
         internal static string Txt_LRSettings_UseRegexComment {
             get {
@@ -676,7 +676,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Путь к папке с логами. Поиск файлов происходит по всем директориям..
+        ///   Looks up a localized string similar to Directory path. File search is being made by all directories..
         /// </summary>
         internal static string Txt_LRSettingsScheme_LogsDirectory {
             get {
@@ -685,7 +685,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов..
+        ///   Looks up a localized string similar to Maximum amount of threads. If the value is -1 then amount of threads corresponds to the ammount of processing files..
         /// </summary>
         internal static string Txt_LRSettingsScheme_MaxThreads {
             get {
@@ -694,7 +694,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из &quot;TraceParse&quot;..
+        ///   Looks up a localized string similar to Maximum amount of lines for the found trace. Whole trace must be parsed by the &quot;TraceParse&quot; patterns..
         /// </summary>
         internal static string Txt_LRSettingsScheme_MaxTraceLines {
             get {
@@ -703,7 +703,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сортировка по полям: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc..
+        ///   Looks up a localized string similar to Sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - the number of the line in file by found trace is written with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
         /// </summary>
         internal static string Txt_LRSettingsScheme_OrderBy {
             get {
@@ -712,7 +712,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ограничение по количеству строк. Сокращает использование оперативной памяти..
+        ///   Looks up a localized string similar to The limit on the count of lines. Reduces RAM usage..
         /// </summary>
         internal static string Txt_LRSettingsScheme_RowsLimit {
             get {
@@ -721,7 +721,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сервера для поиска. Указать через запятую..
+        ///   Looks up a localized string similar to Servers for search. Specify with a comma..
         /// </summary>
         internal static string Txt_LRSettingsScheme_Servers {
             get {
@@ -730,8 +730,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
-        ///        Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке..
+        ///   Looks up a localized string similar to Patterns for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///        Optional patterns: StartTraceWith and EndTraceWith - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting..
         /// </summary>
         internal static string Txt_LRSettingsScheme_TraceParse {
             get {
@@ -740,7 +740,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн..
+        ///   Looks up a localized string similar to File types, specify with a comma. A search on the content of the file name, extension included..
         /// </summary>
         internal static string Txt_LRSettingsScheme_Types {
             get {

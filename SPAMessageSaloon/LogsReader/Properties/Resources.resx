@@ -122,23 +122,23 @@
     <value>..\Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_LRSettingsScheme_LogsDirectory" xml:space="preserve">
-    <value>Путь к папке с логами. Поиск файлов происходит по всем директориям.</value>
+    <value>Directory path. File search is being made by all directories.</value>
   </data>
   <data name="Txt_LRSettingsScheme_MaxThreads" xml:space="preserve">
-    <value>Максимальное количество потоков. Если установить значение -1, то количество потоков будет соответствовать количеству обрабатываемых файлов.</value>
+    <value>Maximum amount of threads. If the value is -1 then amount of threads corresponds to the ammount of processing files.</value>
   </data>
   <data name="Txt_LRSettingsScheme_MaxTraceLines" xml:space="preserve">
-    <value>Максимальное количество строк для найденного фрагмента. Весь фрагмент должен парсится паттернами из "TraceParse".</value>
+    <value>Maximum amount of lines for the found trace. Whole trace must be parsed by the "TraceParse" patterns.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
-    <value>Сервера для поиска. Указать через запятую.</value>
+    <value>Servers for search. Specify with a comma.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
-    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
-        Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке.</value>
+    <value>Patterns for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        Optional patterns: StartTraceWith and EndTraceWith - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
-    <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
+    <value>File types, specify with a comma. A search on the content of the file name, extension included.</value>
   </data>
   <data name="Txt_LRSettings_Deserialize_Ex" xml:space="preserve">
     <value>Config "{0}" is incorrect! Moved to "{1}".
@@ -146,38 +146,38 @@
 {2}</value>
   </data>
   <data name="Txt_LRSettings_PreviousSearchComment" xml:space="preserve">
-    <value>Предыдущее значение поиска. </value>
+    <value>Previous search value</value>
   </data>
   <data name="Txt_LRSettings_Serialize_Ex" xml:space="preserve">
     <value>Unable to save config to path "{0}".
 {1}</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Поиск по регулярному выражению выполняется быстрее. Атрибут "encoding" используется при считывании лог файлов.</value>
+    <value>Regex search is being completed faster. "Encoding" atributte is used when reading log files.</value>
   </data>
   <data name="Txt_Form_DateFilterComment" xml:space="preserve">
-    <value>Фильтр по полю "Date"</value>
+    <value>"Date" filter</value>
   </data>
   <data name="Txt_Form_TraceNameFilterComment" xml:space="preserve">
-    <value>Фильтр по полю "Trace name". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
+    <value>"TraceName" filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored.</value>
   </data>
   <data name="Txt_Form_TraceFilterComment" xml:space="preserve">
-    <value>Фильтр по полю "Trace". Опция отключается если значение пустое. Несколько фильтров необходимо указать через запятую. Регистр не учитывается.</value>
+    <value>"Trace" filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored.</value>
   </data>
   <data name="Txt_Form_AlreadyUseFilterComment" xml:space="preserve">
-    <value>Применить фильтр во время поиска</value>
+    <value>Search with filter</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
+    <value>Sorting by fields: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - the number of the line in file by found trace is written with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
-    <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>
+    <value>The limit on the count of lines. Reduces RAM usage.</value>
   </data>
   <data name="Txt_Form_SearchComment" xml:space="preserve">
-    <value>Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>
+    <value>Use options of invariant culture and ignoring the case. When Regex option of  search is used timeout of completing is 1 second.</value>
   </data>
   <data name="Txt_Form_trvMainComment" xml:space="preserve">
-    <value>Необходимо выбрать сервера и типы файлов</value>
+    <value>Server(s) and type(s) of the files must be chosen.</value>
   </data>
   <data name="clear1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clear1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -195,7 +195,7 @@
     <value>..\Resources\save2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_DataFilter_ErrDate" xml:space="preserve">
-    <value>Date of end filter must be greater than date of start</value>
+    <value>Date of end must be greater than date of start</value>
   </data>
   <data name="Txt_DataTemplate_ErrTimeout" xml:space="preserve">
     <value>Timeout while executing pattern: "{0}".

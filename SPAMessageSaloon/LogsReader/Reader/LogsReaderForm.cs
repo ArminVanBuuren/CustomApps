@@ -178,6 +178,34 @@ namespace LogsReader.Reader
             }
         }
 
+        public void ApplyFormSettings()
+        {
+            try
+            {
+                for (var i = 0; i < dgvFiles.Columns.Count; i++)
+                {
+                    var valueStr = UserSettings.GetValue("COL" + i);
+                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
+                        dgvFiles.Columns[i].Width = value;
+                }
+
+                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
+                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
+                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+            finally
+            {
+                trvMain.Nodes["trvServers"].Checked = false;
+                trvMain.Nodes["trvTypes"].Checked = false;
+                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
+                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
+            }
+        }
+
         public void ApplySettings()
         {
             try
@@ -269,18 +297,6 @@ namespace LogsReader.Reader
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
                 orderByText.Text = CurrentSettings.OrderBy;
-
-
-                for (var i = 0; i < dgvFiles.Columns.Count; i++)
-                {
-                    var valueStr = UserSettings.GetValue("COL" + i);
-                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
-                        dgvFiles.Columns[i].Width = value;       
-                }
-
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
-                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -288,10 +304,7 @@ namespace LogsReader.Reader
             }
             finally
             {
-                trvMain.Nodes["trvServers"].Checked = false;
-                trvMain.Nodes["trvTypes"].Checked = false;
-                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
-                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
+                ReportStatus(string.Empty, ReportStatusType.Success);
                 ValidationCheck();
                 _settingsLoaded = true;
             }

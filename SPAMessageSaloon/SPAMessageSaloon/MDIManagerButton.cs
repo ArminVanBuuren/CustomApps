@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace SPAMessageSaloon
 {
-    class MDIManagerButton : ToolStripStatusLabel
+    internal class MDIManagerButton : ToolStripStatusLabel
     {
         public Form mdiForm { get; private set; }
         public event EventHandler MClick;
@@ -21,10 +21,10 @@ namespace SPAMessageSaloon
         {
             mdiForm = form;
             mdiForm.FormClosed += (s, e) => { this.Owner.Items.Remove(this); };
-            mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + "    "; };
+            mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"    "; };
             mdiForm.Activated += (s, e) => { this.MDIManagerButton_Click(this, null); };
 
-            this.Text = mdiForm.Text + "    ";
+            base.Text = mdiForm.Text + @"    ";
             MouseUp += new MouseEventHandler(MDIManagerButton_MouseUp);
             MouseMove += new MouseEventHandler(MDIManagerButton_MouseMove);
             Paint += new PaintEventHandler(MDIManagerButton_Paint);
@@ -48,15 +48,11 @@ namespace SPAMessageSaloon
         {
             switch (e.Button)
             {
-
                 case MouseButtons.Left:
                     if (mouseOnCloseBtn)
-                    {
                         mdiForm.Close();
-                    }
                     else
-                        if (MClick != null)
-                        MClick(sender, e);
+                        MClick?.Invoke(sender, e);
                     break;
             }
         }
