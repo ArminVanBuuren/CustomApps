@@ -352,7 +352,7 @@ Input data:
     <value>7</value>
   </data>
   <data name="LogsReaderForm_buttonReset_rightPadding" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="Txt_LogsReaderForm_MaxThreads" xml:space="preserve">
     <value>Max Threads</value>
