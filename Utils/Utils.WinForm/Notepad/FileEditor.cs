@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
@@ -22,7 +23,7 @@ namespace Utils.WinForm.Notepad
             {
                 if (!File.Exists(value))
                 {
-                    MessageBox.Show($"File \"{value}\" not found!", @"Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(string.Format(Resources.FileNotFound, value), @"Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -109,7 +110,7 @@ namespace Utils.WinForm.Notepad
                 switch (e.ChangeType)
                 {
                     case WatcherChangeTypes.Deleted:
-                        MessageBox.Show($"File \"{FilePath}\" was deleted.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(string.Format(Resources.FileWasDeleted, FilePath), "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Source = string.Empty;
                         FileChanged?.Invoke(this, new FileEditorEventArgs(this, e.ChangeType) {OldSource = oldSource });
                         return;
@@ -124,7 +125,8 @@ namespace Utils.WinForm.Notepad
                                 {
                                     if (tryCount >= 5)
                                     {
-                                        MessageBox.Show($"File \"{FilePath}\" was сhanged. Current process cannot access to the file because it is being used by another process.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        
+                                        MessageBox.Show(string.Format(Resources.FileWasChangedAndNotAccess, FilePath), @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
 
@@ -178,7 +180,7 @@ namespace Utils.WinForm.Notepad
 
                 if (Language == Language.XML && !Text.IsXml(out _))
                 {
-                    var saveFailedXmlFile = MessageBox.Show(@"Xml is incorrect! Save anyway?", @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    var saveFailedXmlFile = MessageBox.Show(Resources.IncorrectXmlAndQuestion, @"Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     if (saveFailedXmlFile == DialogResult.Cancel)
                         return;
                 }

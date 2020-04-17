@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -1463,7 +1462,8 @@ namespace Utils
         {
             if (string.IsNullOrEmpty(xml))
             {
-                if (!exceptional) return string.Empty;
+                if (!exceptional)
+                    return string.Empty;
                 throw new ArgumentException("Can not be null or empty", nameof(xml));
             }
 

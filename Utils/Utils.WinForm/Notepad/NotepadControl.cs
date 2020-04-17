@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FastColoredTextBoxNS;
+using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
@@ -211,14 +211,14 @@ namespace Utils.WinForm.Notepad
                 {
                     Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
                 };
-                _closeMenuStrip.Items.Add("Close");
-                _closeMenuStrip.Items.Add("Close All But This");
-                _closeMenuStrip.Items.Add("Close All Documents");
+                _closeMenuStrip.Items.Add(Resources.Txt_Close);
+                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllButThis);
+                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllDocuments);
                 if (tabPage.Controls[0] is FileEditor fileEditor)
                 {
                     _closeMenuStrip.Items.Add(new ToolStripSeparator());
-                    _closeMenuStrip.Items.Add("Copy Full Path");
-                    _closeMenuStrip.Items.Add("Open Containig Folder");
+                    _closeMenuStrip.Items.Add(Resources.Txt_CopyFullPath);
+                    _closeMenuStrip.Items.Add(Resources.Txt_OpenContainingFolder);
                 }
 
                 _closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
@@ -232,40 +232,40 @@ namespace Utils.WinForm.Notepad
 
         private void CloseMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            switch (e.ClickedItem.Text)
+            if (e.ClickedItem.Text == Resources.Txt_Close)
             {
-                case "Close":
-                    CloseTab(_tabControl.SelectedIndex);
-                    break;
-                case "Close All But This":
-                    for (var i = 0; i < _tabControl.TabCount; ++i)
-                    {
-                        if (_tabControl.SelectedIndex == i)
-                            continue;
+                CloseTab(_tabControl.SelectedIndex);
+            }
+            else if (e.ClickedItem.Text == Resources.Txt_CloseAllButThis)
+            {
+                for (var i = 0; i < _tabControl.TabCount; ++i)
+                {
+                    if (_tabControl.SelectedIndex == i)
+                        continue;
 
-                        CloseTab(i, false);
-                        i--;
-                    }
-
-                    break;
-                case "Close All Documents":
-                    for (var i = 0; i < _tabControl.TabCount; ++i)
-                    {
-                        CloseTab(i, false);
-                        i--;
-                    }
-
-                    break;
-                case "Copy Full Path" when _tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
-                                           _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor:
-                    Clipboard.SetText(fileEditor.FilePath);
-                    break;
-                case "Open Containig Folder" when _tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
-                                                  _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor:
-                    var directoryPath = File.Exists(fileEditor.FilePath) ? Path.GetDirectoryName(fileEditor.FilePath) : null;
-                    if (directoryPath != null)
-                        Process.Start(directoryPath);
-                    break;
+                    CloseTab(i, false);
+                    i--;
+                }
+            }
+            else if (e.ClickedItem.Text == Resources.Txt_CloseAllDocuments)
+            {
+                for (var i = 0; i < _tabControl.TabCount; ++i)
+                {
+                    CloseTab(i, false);
+                    i--;
+                }
+            }
+            else if (e.ClickedItem.Text == Resources.Txt_CopyFullPath && (_tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
+                                                                _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor1))
+            {
+                Clipboard.SetText(fileEditor1.FilePath);
+            }
+            else if (e.ClickedItem.Text == Resources.Txt_OpenContainingFolder && (_tabControl.SelectedIndex >= 0 && _tabControl.TabPages.Count > _tabControl.SelectedIndex &&
+                                                                       _tabControl.TabPages[_tabControl.SelectedIndex].Controls[0] is FileEditor fileEditor2))
+            {
+                var directoryPath = File.Exists(fileEditor2.FilePath) ? Path.GetDirectoryName(fileEditor2.FilePath) : null;
+                if (directoryPath != null)
+                    Process.Start(directoryPath);
             }
 
             if (_closeMenuStrip != null)
@@ -363,7 +363,7 @@ namespace Utils.WinForm.Notepad
         public Editor AddDocument(BlankDocument document)
         {
             if (document.HeaderName.Length > 100)
-                throw new Exception("Header name is too long");
+                throw new Exception(Resources.HaderNameIsTooLong);
 
             var existEditor = ListOfEditors.FirstOrDefault(x => x.Key?.HeaderName != null
                                                                 && x.Key?.Source != null

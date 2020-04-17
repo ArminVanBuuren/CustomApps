@@ -46,7 +46,7 @@ namespace Utils
                 _threads[i] = new Thread(() =>
                 {
                     foreach (Task t in _tasks.GetConsumingEnumerable())
-                        base.TryExecuteTask(t);
+                        TryExecuteTask(t);
                 })
                 {
                     Name = $"PriorityScheduler: {i}",

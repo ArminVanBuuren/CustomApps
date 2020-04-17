@@ -169,7 +169,7 @@ namespace Utils.CollectionHelper
         /// <param name="item"></param>
         public void Insert(int index, T item)
         {
-            throw new System.NotSupportedException();
+            throw new NotSupportedException();
         }
     }
 }

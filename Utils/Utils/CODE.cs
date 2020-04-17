@@ -79,10 +79,10 @@ namespace Utils
             var potentialContext = CreateInstance(classType, constructor);
 
             if (potentialContext == null)
-                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Class=[{className}] Not Initialized!");
+                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Class=[{className}] not initialized!");
 
             if (!(potentialContext is T context))
-                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Type Of Class=[{className}] Must Be Inherited From ScriptTemplate, Current=[{potentialContext.GetType()}]");
+                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Type of class=[{className}] must be inherited from ScriptTemplate, Current=[{potentialContext.GetType()}]");
 
             return context;
         }
@@ -113,7 +113,7 @@ namespace Utils
                 return false;
 
             if (findedType.Count > 1)
-                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Can't Identify [{className}]. Because In Namespace=[{@namespace}] More Than One!\n{string.Join(Environment.NewLine, findedType)}");
+                throw new Exception($"Assembly=[{pluginAssembly.ManifestModule.Name}]; Can't identify [{className}]. Because in namespace=[{@namespace}] more than one!\n{string.Join(Environment.NewLine, findedType)}");
 
             tp = findedType[0];
             return true;

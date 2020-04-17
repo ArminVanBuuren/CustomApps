@@ -117,44 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\notepad\resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ApplicationUpdater_ErrCommitAndPull" xml:space="preserve">
+    <value>Error when trying commit and pull!</value>
   </data>
-  <data name="Close" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\notepad\resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ApplicationUpdater_ErrFetch" xml:space="preserve">
+    <value>Error when fetching pack of builds!</value>
   </data>
-  <data name="FileNotFound" xml:space="preserve">
-    <value>File "{0}" not found!</value>
+  <data name="ApplicationUpdater_ErrServerGetStatus" xml:space="preserve">
+    <value>Exception when get status from server. HttpStatus=[{0:G}] Uri=[{1}]</value>
   </data>
-  <data name="FileWasChangedAndNotAccess" xml:space="preserve">
-    <value>File "{0}" was сhanged. Current process cannot access to the file because it is being used by another process.</value>
+  <data name="ApplicationUpdater_ErrUpdateInterval" xml:space="preserve">
+    <value>Check update interval must be more than one second.</value>
   </data>
-  <data name="FileWasDeleted" xml:space="preserve">
-    <value>File "{0}" was deleted.</value>
+  <data name="ApplicationUpdater_IncorrectControl" xml:space="preserve">
+    <value>Incoming control '{0}' is incorrect.</value>
   </data>
-  <data name="HaderNameIsTooLong" xml:space="preserve">
-    <value>Header name is too long</value>
+  <data name="ApplicationUpdater_NoBuildsFound" xml:space="preserve">
+    <value>No builds found for update.</value>
   </data>
-  <data name="icons8_xml_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\notepad\resources\icons8-xml-48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ApplicationUpdater_NotExpected" xml:space="preserve">
+    <value>{0} does not expect an update.</value>
   </data>
-  <data name="IncorrectXmlAndQuestion" xml:space="preserve">
-    <value>Xml is incorrect! Save anyway?</value>
+  <data name="day" xml:space="preserve">
+    <value>day</value>
   </data>
-  <data name="Txt_Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="days2" xml:space="preserve">
+    <value>days</value>
   </data>
-  <data name="Txt_CloseAllButThis" xml:space="preserve">
-    <value>Close All But This</value>
+  <data name="days5" xml:space="preserve">
+    <value>days</value>
   </data>
-  <data name="Txt_CloseAllDocuments" xml:space="preserve">
-    <value>Close All Documents</value>
+  <data name="hour" xml:space="preserve">
+    <value>hour</value>
   </data>
-  <data name="Txt_CopyFullPath" xml:space="preserve">
-    <value>Copy Full Path</value>
+  <data name="hours2" xml:space="preserve">
+    <value>hours</value>
   </data>
-  <data name="Txt_OpenContainingFolder" xml:space="preserve">
-    <value>Open Containing Folder</value>
+  <data name="hours5" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="minute" xml:space="preserve">
+    <value>minute</value>
+  </data>
+  <data name="minutes2" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="minutes5" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="second" xml:space="preserve">
+    <value>second</value>
+  </data>
+  <data name="seconds2" xml:space="preserve">
+    <value>seconds</value>
+  </data>
+  <data name="seconds5" xml:space="preserve">
+    <value>seconds</value>
   </data>
 </root>

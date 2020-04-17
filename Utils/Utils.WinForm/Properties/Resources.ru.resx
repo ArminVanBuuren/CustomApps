@@ -125,36 +125,36 @@
     <value>..\notepad\resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
-    <value>File "{0}" not found!</value>
+    <value>Файл "{0}" не найден!</value>
   </data>
   <data name="FileWasChangedAndNotAccess" xml:space="preserve">
-    <value>File "{0}" was сhanged. Current process cannot access to the file because it is being used by another process.</value>
+    <value>Файл "{0}" был изменен. Текущий процесс не может получить доступ к файлу, потому что он используется другим процессом.</value>
   </data>
   <data name="FileWasDeleted" xml:space="preserve">
-    <value>File "{0}" was deleted.</value>
+    <value>Файл "{0}" был удален.</value>
   </data>
   <data name="HaderNameIsTooLong" xml:space="preserve">
-    <value>Header name is too long</value>
+    <value>Заголовок слишком длинный</value>
   </data>
   <data name="icons8_xml_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\notepad\resources\icons8-xml-48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IncorrectXmlAndQuestion" xml:space="preserve">
-    <value>Xml is incorrect! Save anyway?</value>
+    <value>Некорректный Xml файл! Все равно сохранить?</value>
   </data>
   <data name="Txt_Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Закрыть</value>
   </data>
   <data name="Txt_CloseAllButThis" xml:space="preserve">
-    <value>Close All But This</value>
+    <value>Закрыть все кроме этой</value>
   </data>
   <data name="Txt_CloseAllDocuments" xml:space="preserve">
-    <value>Close All Documents</value>
+    <value>Закрыть все документы</value>
   </data>
   <data name="Txt_CopyFullPath" xml:space="preserve">
-    <value>Copy Full Path</value>
+    <value>Скопировать полный путь</value>
   </data>
   <data name="Txt_OpenContainingFolder" xml:space="preserve">
-    <value>Open Containing Folder</value>
+    <value>Открыть связанную папку</value>
   </data>
 </root>

@@ -1,12 +1,23 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Utils;
 using Utils.WinForm.Notepad;
 
-//using Utils.WinForm.Notepad;
-
 namespace Tester.WinForm
 {
+    class Test
+    {
+        public Test()
+        {
+            var source = CultureInfo.DefaultThreadCurrentCulture;
+            var source1 = CultureInfo.DefaultThreadCurrentUICulture;
+            var source2 = Thread.CurrentThread.CurrentCulture;
+            var source3 = Thread.CurrentThread.CurrentUICulture;
+        }
+    }
     static class Program
     {
         /// <summary>
@@ -17,6 +28,21 @@ namespace Tester.WinForm
         {
             try
             {
+                var source = CultureInfo.DefaultThreadCurrentCulture;
+                var source1 = CultureInfo.DefaultThreadCurrentUICulture;
+                var source2 = Thread.CurrentThread.CurrentCulture;
+                var source3 = Thread.CurrentThread.CurrentUICulture;
+
+                var culture = new CultureInfo("en-US");
+
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
+                //Thread.CurrentThread.CurrentCulture = culture;
+                //Thread.CurrentThread.CurrentUICulture = culture;
+
+                Task.Factory.StartNew(() => new Test());
+                //var test = new Test();
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 //Application.Run(new Form1());

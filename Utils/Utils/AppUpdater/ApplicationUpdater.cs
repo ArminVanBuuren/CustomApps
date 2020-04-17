@@ -5,6 +5,7 @@ using System.Net.Cache;
 using System.Reflection;
 using System.Timers;
 using Utils.AppUpdater.Updater;
+using Utils.Properties;
 
 namespace Utils.AppUpdater
 {
@@ -80,10 +81,10 @@ namespace Utils.AppUpdater
         /// <param name="uriProject">URI пути к удаленному серверу для выкачивания обновления</param>
         public ApplicationUpdater(Assembly runningApp, string prevPackName, int checkUpdatesIntervalSec = 600, string uriProject = null)
         {
-            if(runningApp == null)
+            if (runningApp == null)
                 throw new ArgumentNullException(nameof(runningApp));
             if (checkUpdatesIntervalSec <= 0)
-                throw new ArgumentException($"Check update interval must be more than one second.");
+                throw new ArgumentException(Resources.ApplicationUpdater_ErrUpdateInterval);
 
             RunningApp = runningApp;
             ProjectName = RunningApp.GetName().Name;
@@ -134,7 +135,7 @@ namespace Utils.AppUpdater
                     }
                     else
                     {
-                        throw new Exception($"Exception when get status from server. HttpStatus=[{responceHttpCode:G}] Uri=[{versionsInfo.AbsoluteUri}]");
+                        throw new Exception(string.Format(Resources.ApplicationUpdater_ErrServerGetStatus, responceHttpCode, versionsInfo.AbsoluteUri));
                     }
                 }
             }
@@ -176,7 +177,7 @@ namespace Utils.AppUpdater
 
                 if (e.Error != null || control.Status != UploaderStatus.Fetched)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, e.Error, "Error when fetching pack of builds!"));
+                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, e.Error, Resources.ApplicationUpdater_ErrFetch));
                     control.Dispose();
                     ReturnBackStatus(); // если возникли какие то ошибки при скачивании пакета с обновлениями
                 }
@@ -193,7 +194,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, "Error when trying commit and pull!"));
+                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, Resources.ApplicationUpdater_ErrCommitAndPull));
                 control?.Dispose();
                 ReturnBackStatus();
             }
@@ -285,13 +286,13 @@ namespace Utils.AppUpdater
                 throw new ArgumentNullException(nameof(control));
 
             if (control.Count == 0)
-                throw new ArgumentException("No builds found for update.");
-
+                throw new ArgumentException(Resources.ApplicationUpdater_NoBuildsFound);
+            
             if (!(control is BuildUpdaterCollection))
-                throw new ArgumentException($"Incoming control '{nameof(IUpdater)}' is incorrect.");
-
+                throw new ArgumentException(string.Format(Resources.ApplicationUpdater_IncorrectControl, control.GetType()));
+            
             if(Status != AutoUpdaterStatus.Processing || control.Status != UploaderStatus.Fetched)
-                throw new Exception($"{nameof(ApplicationUpdater)} does not expect an update.");
+                throw new Exception(string.Format(Resources.ApplicationUpdater_NotExpected, nameof(ApplicationUpdater)));
 
             try
             {
@@ -300,7 +301,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, "Error when trying commit and pull!"));
+                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, Resources.ApplicationUpdater_ErrCommitAndPull));
                 control.Dispose();
                 ReturnBackStatus();
             }

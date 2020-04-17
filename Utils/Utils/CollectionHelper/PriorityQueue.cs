@@ -77,8 +77,6 @@ namespace Utils.CollectionHelper
             return Count == 0;
         }
 
-
-
         private void PropagateUp(int k)
         {
             while (k > 1 && Less(AtIndex(k / 2), AtIndex(k)))

@@ -137,7 +137,7 @@ namespace Utils.AppUpdater
                 throw new FormatException("buildNumber string was not in a correct format");
 
             if (version < 0)
-                throw new ArgumentOutOfRangeException(nameof(input), "Versions must be greater than or equal to zero");
+                throw new ArgumentOutOfRangeException(nameof(input), @"Versions must be greater than or equal to zero");
 
             return version;
         }

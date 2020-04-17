@@ -81,12 +81,102 @@ namespace Utils.WinForm.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File &quot;{0}&quot; not found!.
+        /// </summary>
+        internal static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &quot;{0}&quot; was сhanged. Current process cannot access to the file because it is being used by another process..
+        /// </summary>
+        internal static string FileWasChangedAndNotAccess {
+            get {
+                return ResourceManager.GetString("FileWasChangedAndNotAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &quot;{0}&quot; was deleted..
+        /// </summary>
+        internal static string FileWasDeleted {
+            get {
+                return ResourceManager.GetString("FileWasDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Header name is too long.
+        /// </summary>
+        internal static string HaderNameIsTooLong {
+            get {
+                return ResourceManager.GetString("HaderNameIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icons8_xml_48 {
             get {
                 object obj = ResourceManager.GetObject("icons8_xml_48", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xml is incorrect! Save anyway?.
+        /// </summary>
+        internal static string IncorrectXmlAndQuestion {
+            get {
+                return ResourceManager.GetString("IncorrectXmlAndQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Txt_Close {
+            get {
+                return ResourceManager.GetString("Txt_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All But This.
+        /// </summary>
+        internal static string Txt_CloseAllButThis {
+            get {
+                return ResourceManager.GetString("Txt_CloseAllButThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All Documents.
+        /// </summary>
+        internal static string Txt_CloseAllDocuments {
+            get {
+                return ResourceManager.GetString("Txt_CloseAllDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Full Path.
+        /// </summary>
+        internal static string Txt_CopyFullPath {
+            get {
+                return ResourceManager.GetString("Txt_CopyFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Containing Folder.
+        /// </summary>
+        internal static string Txt_OpenContainingFolder {
+            get {
+                return ResourceManager.GetString("Txt_OpenContainingFolder", resourceCulture);
             }
         }
     }
