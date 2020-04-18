@@ -164,13 +164,13 @@
     <value>Файл</value>
   </data>
   <data name="Notepad_New" xml:space="preserve">
-    <value>Создать                  Сtrl+N</value>
+    <value>Создать                 Сtrl+N</value>
   </data>
   <data name="Notepad_Open" xml:space="preserve">
-    <value>Открыть                 Ctrl+O</value>
+    <value>Открыть                Ctrl+O</value>
   </data>
   <data name="Notepad_Save" xml:space="preserve">
-    <value>Сохранить             Ctrl+S</value>
+    <value>Сохранить            Ctrl+S</value>
   </data>
   <data name="Notepad_SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
