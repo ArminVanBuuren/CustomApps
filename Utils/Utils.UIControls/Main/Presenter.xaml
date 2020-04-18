@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:main="clr-namespace:Utils.UIControls.Main"
     Style="{DynamicResource VSUIWindowStyle}"
-    Title="Vladimir Khovanskiy" 
+    Title="© Vladimir Khovanskiy" 
     ResizeMode="NoResize"
     FontFamily="Segoe UI"
     FontSize="11"
