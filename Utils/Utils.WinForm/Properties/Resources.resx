@@ -157,4 +157,22 @@
   <data name="Txt_OpenContainingFolder" xml:space="preserve">
     <value>Open Containing Folder</value>
   </data>
+  <data name="Notepad_CLose" xml:space="preserve">
+    <value>Close                       Alt+F4</value>
+  </data>
+  <data name="Notepad_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Notepad_New" xml:space="preserve">
+    <value>New                        Сtrl+N</value>
+  </data>
+  <data name="Notepad_Open" xml:space="preserve">
+    <value>Open                      Ctrl+O</value>
+  </data>
+  <data name="Notepad_Save" xml:space="preserve">
+    <value>Save                        Ctrl+S</value>
+  </data>
+  <data name="Notepad_SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
 </root>

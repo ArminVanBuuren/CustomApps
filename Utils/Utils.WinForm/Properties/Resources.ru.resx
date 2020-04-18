@@ -146,15 +146,33 @@
     <value>Закрыть</value>
   </data>
   <data name="Txt_CloseAllButThis" xml:space="preserve">
-    <value>Закрыть все кроме этой</value>
+    <value>Закрыть все, кроме этой</value>
   </data>
   <data name="Txt_CloseAllDocuments" xml:space="preserve">
     <value>Закрыть все документы</value>
   </data>
   <data name="Txt_CopyFullPath" xml:space="preserve">
-    <value>Скопировать полный путь</value>
+    <value>Копировать полный путь</value>
   </data>
   <data name="Txt_OpenContainingFolder" xml:space="preserve">
-    <value>Открыть связанную папку</value>
+    <value>Открыть содержащую папку</value>
+  </data>
+  <data name="Notepad_CLose" xml:space="preserve">
+    <value>Закрыть                 Alt+F4</value>
+  </data>
+  <data name="Notepad_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Notepad_New" xml:space="preserve">
+    <value>Создать                  Сtrl+N</value>
+  </data>
+  <data name="Notepad_Open" xml:space="preserve">
+    <value>Открыть                 Ctrl+O</value>
+  </data>
+  <data name="Notepad_Save" xml:space="preserve">
+    <value>Сохранить             Ctrl+S</value>
+  </data>
+  <data name="Notepad_SaveAs" xml:space="preserve">
+    <value>Сохранить как</value>
   </data>
 </root>

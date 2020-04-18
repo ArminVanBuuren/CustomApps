@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
@@ -311,6 +312,16 @@ namespace Utils.WinForm.Notepad
         {
             NotepadControlItem.Clear();
             WindowIsClosed = true;
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileToolStripMenuItem.Text = Resources.Notepad_File;
+            newToolStripMenuItem.Text = Resources.Notepad_New;
+            openToolStripMenuItem.Text = Resources.Notepad_Open;
+            saveToolStripMenuItem.Text = Resources.Notepad_Save;
+            saveAsToolStripMenuItem.Text = Resources.Notepad_SaveAs;
+            closeToolStripMenuItem.Text = Resources.Notepad_CLose;
         }
     }
 }

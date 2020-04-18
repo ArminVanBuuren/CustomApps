@@ -136,6 +136,60 @@ namespace Utils.WinForm.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close                       Alt+F4.
+        /// </summary>
+        internal static string Notepad_CLose {
+            get {
+                return ResourceManager.GetString("Notepad_CLose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        internal static string Notepad_File {
+            get {
+                return ResourceManager.GetString("Notepad_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New                        Сtrl+N.
+        /// </summary>
+        internal static string Notepad_New {
+            get {
+                return ResourceManager.GetString("Notepad_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open                      Ctrl+O.
+        /// </summary>
+        internal static string Notepad_Open {
+            get {
+                return ResourceManager.GetString("Notepad_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save                        Ctrl+S.
+        /// </summary>
+        internal static string Notepad_Save {
+            get {
+                return ResourceManager.GetString("Notepad_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As.
+        /// </summary>
+        internal static string Notepad_SaveAs {
+            get {
+                return ResourceManager.GetString("Notepad_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Txt_Close {

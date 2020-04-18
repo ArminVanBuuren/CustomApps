@@ -1,4 +1,6 @@
-﻿namespace Utils.WinForm.Notepad
+﻿using Utils.WinForm.Properties;
+
+namespace Utils.WinForm.Notepad
 {
     partial class Notepad
     {
@@ -67,45 +69,46 @@
             this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 17);
-            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Text = Resources.Notepad_File;
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.newToolStripMenuItem.Text = "New                        Сtrl+N";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.newToolStripMenuItem.Text = Resources.Notepad_New;
             this.newToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.newToolStripMenuItem.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.openToolStripMenuItem.Text = "Open                      Ctrl+O";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.openToolStripMenuItem.Text = Resources.Notepad_Open;
             // 
             // formatXmlF5ToolStripMenuItem
             // 
             this.formatXmlF5ToolStripMenuItem.Name = "formatXmlF5ToolStripMenuItem";
-            this.formatXmlF5ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.formatXmlF5ToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.formatXmlF5ToolStripMenuItem.Text = "XML Pretty Print     F5";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.saveToolStripMenuItem.Text = "Save                        Ctrl+S";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.saveToolStripMenuItem.Text = Resources.Notepad_Save;
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.saveAsToolStripMenuItem.Text = Resources.Notepad_SaveAs;
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.closeToolStripMenuItem.Text = "Close                       Alt+F4";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.closeToolStripMenuItem.Text = Resources.Notepad_CLose;
             // 
             // NotepadControlItem
             // 
