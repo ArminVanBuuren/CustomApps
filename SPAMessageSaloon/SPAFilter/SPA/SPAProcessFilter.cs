@@ -232,7 +232,7 @@ namespace SPAFilter.SPA
         void FilterProcesses(Func<BusinessProcess, bool> bpFilter)
         {
             if (!Directory.Exists(ProcessPath))
-                throw new Exception(string.Format(Resources.DirectoryNotFound, ProcessPath));
+                throw new Exception(string.Format(Resources.DirectoryNotFound, ProcessPath, "Process"));
 
             Processes = new CollectionBusinessProcess();
             foreach (var file in GetFiles(ProcessPath))
@@ -259,7 +259,7 @@ namespace SPAFilter.SPA
         void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
         {
             if (!Directory.Exists(ROBPHostTypesPath))
-                throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath));
+                throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath, "Operations"));
 
             var hostTypesDir = GetDirectories(ROBPHostTypesPath);
             if (hostTypesDir.Count == 0)

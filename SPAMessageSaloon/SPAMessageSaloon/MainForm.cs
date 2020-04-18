@@ -251,6 +251,9 @@ namespace SPAMessageSaloon
 
                 void Monitoring()
                 {
+                    if (this.IsDisposed || _cpuUsage.IsDisposed || _threadsUsage.IsDisposed || _ramUsage.IsDisposed)
+                        return;
+
                     double percent = 0;
                     if (appCPU != null)
                         double.TryParse(appCPU.NextValue().ToString(), out percent);
@@ -280,7 +283,7 @@ namespace SPAMessageSaloon
                     _countOfLastProcess = processCount;
                 }
 
-                while (!IsDisposed)
+                while (!this.IsDisposed)
                 {
                     this.SafeInvoke(Monitoring);
                     Thread.Sleep(1000);
@@ -331,7 +334,7 @@ namespace SPAMessageSaloon
 
         private void toolStripSpaFilterButton_Click(object sender, EventArgs e)
         {
-            ShowMdiForm(() => new SPAFilterForm());
+            ShowMdiForm(SPAFilterForm.GetControl);
         }
 
         private void toolStripXPathButton_Click(object sender, EventArgs e)
@@ -351,7 +354,13 @@ namespace SPAMessageSaloon
                     return null;
 
                 form.MdiParent = this;
-                form.WindowState = FormWindowState.Maximized;
+                //  form.WindowState = FormWindowState.Maximized;
+
+                form.TopLevel = false;
+                form.ControlBox = false;
+                form.Dock = DockStyle.Fill;
+                form.FormBorderStyle = FormBorderStyle.None;
+
                 form.Load += MDIManagerButton_Load;
                 form.Show();
 

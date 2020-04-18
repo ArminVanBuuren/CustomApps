@@ -23,9 +23,7 @@ namespace SPAFilter.SPA
             }
         }
 
-        [DGVColumn(ColumnPosition.After, "CreationTime")]
-        public string CreationTimeString => CreationTime.ToString("dd.MM.yyyy HH:mm:ss");
-
+        [DGVColumn(ColumnPosition.After, "CreationTime", "dd.MM.yyyy HH:mm:ss")]
         public DateTime CreationTime
         {
             get
@@ -37,9 +35,7 @@ namespace SPAFilter.SPA
             }
         }
 
-        [DGVColumn(ColumnPosition.After, "LastWriteTime")]
-        public string LastWriteTimeString => LastWriteTime.ToString("dd.MM.yyyy HH:mm:ss");
-
+        [DGVColumn(ColumnPosition.After, "LastWriteTime", "dd.MM.yyyy HH:mm:ss")]
         public DateTime LastWriteTime
         {
             get

@@ -103,7 +103,6 @@ namespace XPathTester
             this.editor.IsChanged = false;
             this.editor.IsReplaceMode = false;
             this.editor.Location = new System.Drawing.Point(0, 0);
-            this.editor.MinimumSize = new System.Drawing.Size(705, 0);
             this.editor.Name = "editor";
             this.editor.ReadOnly = false;
             this.editor.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));

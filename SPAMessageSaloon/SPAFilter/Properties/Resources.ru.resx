@@ -148,13 +148,13 @@
     <value>Пожалуйста выполните фильтр</value>
   </data>
   <data name="Form_GridView_IncorrectConfig" xml:space="preserve">
-    <value>Неверная конфигурация или обнаружены коллиции сценариев. Пожалуйста проверьте инстансы с одинаковыми типами хостов.</value>
+    <value>Неверная конфигурация или обнаружены коллизии сценариев. Пожалуйста, проверьте инстансы с одинаковыми типами хостов.</value>
   </data>
   <data name="Form_GridView_IsSubScenario" xml:space="preserve">
     <value>Вложенный сценарий</value>
   </data>
   <data name="Form_GridView_NotFoundServiceCatalogCall" xml:space="preserve">
-    <value>Бизнесс процесс не вызывает Сервис Каталог</value>
+    <value>Бизнес процесс не вызывает Сервис Каталог</value>
   </data>
   <data name="Form_GridView_NotFoundSomeCommands" xml:space="preserve">
     <value>Сценарий содержит команды которые не существуют</value>
@@ -184,7 +184,7 @@
     <value>Отменить</value>
   </data>
   <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
-    <value>{0} из {1} xml файлов были отформатированны.</value>
+    <value>{0} из {1} xml файлов были отформатированы.</value>
   </data>
   <data name="Form_PrintXMLFiles_Question" xml:space="preserve">
     <value>Вы действительно хотите отформатировать все {0} xml файлы?</value>
@@ -222,7 +222,7 @@
 '{0}'</value>
   </data>
   <data name="Form_ToolTip_ProcessesButtonOpen" xml:space="preserve">
-    <value>Открыть директорию с файлами Бизнесс процессов</value>
+    <value>Открыть директорию с файлами Бизнес процессов</value>
   </data>
   <data name="Form_ToolTip_ROBPOperationButtonOpen" xml:space="preserve">
     <value>Открыть директорию с папками Операций</value>
@@ -246,7 +246,7 @@
     <value>..\Resources\generatesc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DirectoryNotFound" xml:space="preserve">
-    <value>Диреетория: "{0}" не найдена</value>
+    <value>Директория '{1}': "{0}" не найдена</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
     <value>Файл "{0}" не найден</value>
@@ -261,11 +261,11 @@
     <value>Вы можете создать Сервис Каталог только с ROBP операциями</value>
   </data>
   <data name="Filter_InitializeActivatorsWarning" xml:space="preserve">
-    <value>При инициализации инстансов:'{0}' - были обнаружены {1} коллизии сценариев.
-Для корректной работы фильтра, выберите только один экземпляр (тип хоста) или несколько экземпляров, но с разными сценариями.</value>
+    <value>При инициализации инстансов:'{0}' были обнаружены коллизии сценариев. {1} из них дублируются.
+Для корректной работы фильтра, выберите только один экземпляр (тип хоста).</value>
   </data>
   <data name="Filter_MissingColumn" xml:space="preserve">
-    <value>Ошибка считывании файла '{0}'. Отсутсвуют обязательные столбцы. 
+    <value>Ошибка при считывании файла '{0}'. Отсутствуют обязательные столбцы. 
 Имена столбцов и их позиция в документе должна быть:
 '{1}'</value>
   </data>
@@ -276,7 +276,7 @@
     <value>Документ не найден</value>
   </data>
   <data name="Filter_ROBPOperationdDirInvalid" xml:space="preserve">
-    <value>Вы должны выбрать каталог с типами хостов в которых присутсвуют ROBP операции</value>
+    <value>Вы должны выбрать каталог с типами хостов в которых присутствуют ROBP операции</value>
   </data>
   <data name="Filter_WrongColumnStatement" xml:space="preserve">
     <value>Некорректный столбец перед '{0}' из файла '{1}'.
@@ -296,16 +296,16 @@
     <value>Ошибка при чтении Сервис каталога. Сценарий '{0}' уже существует</value>
   </data>
   <data name="ServiceCatalog_InvalidScenario" xml:space="preserve">
-    <value>Ошибка при чтении сценариев, не найдены аттрибуты.</value>
+    <value>Ошибка при чтении сценариев, не найдены атрибуты.</value>
   </data>
   <data name="ServiceCatalog_InvalidXml" xml:space="preserve">
     <value>Ошибка при чтении Xml файла "{0}"</value>
   </data>
   <data name="ServiceCatalog_NoHostTypeAttr" xml:space="preserve">
-    <value>Некорректный {0}. Не найден аттриюут "hostType"</value>
+    <value>Некорректный {0}. Не найден атрибут "hostType"</value>
   </data>
   <data name="ServiceCatalog_NoNameAttribute" xml:space="preserve">
-    <value>Ошибка при чтении Сервис каталога.  {0} не имеет аттрибута "name" или значение пустое.</value>
+    <value>Ошибка при чтении Сервис каталога.  {0} не имеет атрибута "name" или значение пустое.</value>
   </data>
   <data name="ServiceCatalog_NoRFSFound" xml:space="preserve">
     <value>Ошибка при чтении Сервис каталога. Не найдены RFS.</value>
@@ -314,13 +314,13 @@
     <value>Не найден {0}</value>
   </data>
   <data name="ServiceCatalog_NotFoundScenarioPrefix" xml:space="preserve">
-    <value>Ошибка при чтении Сервис каталога. Не найден аттрибут "scenarioPrefix".</value>
+    <value>Ошибка при чтении Сервис каталога. Не найден атрибут "scenarioPrefix".</value>
   </data>
   <data name="ServiceCatalog_NotFoundTyoeAttribute" xml:space="preserve">
-    <value>Ошибка {0}. Не найден аттрибут "type" в сценарии "{1}"</value>
+    <value>Ошибка {0}. Не найден атрибут "type" в сценарии "{1}"</value>
   </data>
   <data name="ServiceCatalog_RFSNoAttributes" xml:space="preserve">
-    <value>Ошибка при чтении RFS. Аттрибуты не найдены.</value>
+    <value>Ошибка при чтении RFS. Атрибуты не найдены.</value>
   </data>
   <data name="ServiceCatalog_ScenarioNotFoundRFS" xml:space="preserve">
     <value>Ошибка чтения "{0}" сценария. Не найден ни один RFS.</value>
@@ -329,10 +329,10 @@
     <value>Сценарий "{0}" содержит RFS с разными типами хостов - "{1}"</value>
   </data>
   <data name="ServiceInstance_AttributesPathXmlNotFound" xml:space="preserve">
-    <value>Не найдены аттрибуты: '@path' | '@xml'. Или нода с именем "dictionary" не найдена.</value>
+    <value>Не найдены атрибуты: '@path' | '@xml'. Или нода с именем "dictionary" не найдена.</value>
   </data>
   <data name="ServiceInstance_AttributesRootNotFound" xml:space="preserve">
-    <value>Не найден аттрибут: '@Root' в словаре: "{0}"</value>
+    <value>Не найден атрибут: '@Root' в словаре: "{0}"</value>
   </data>
   <data name="ServiceInstance_DirNotFound" xml:space="preserve">
     <value>Не найдена директория: "{0}". Конечный путь: "{1}"</value>
@@ -341,10 +341,10 @@
     <value>Не найдена директория: "{0}" при инициализации словаря: "{1}"</value>
   </data>
   <data name="ServiceInstance_NotFoundHardwareID" xml:space="preserve">
-    <value>Не найден аттрибут: '@hardwareID' в конфигурации serviceInstance</value>
+    <value>Не найден атрибут: '@hardwareID' в конфигурации serviceInstance</value>
   </data>
   <data name="ServiceInstance_NotFoundScenriosDir" xml:space="preserve">
-    <value>Не найден аттрибут: '@dir' в ноде "fileScenarioSource". Или нода с именем 'scenarios' не найдена.</value>
+    <value>Не найден атрибут: '@dir' в ноде "fileScenarioSource". Или нода с именем 'scenarios' не найдена.</value>
   </data>
   <data name="Form_ExportPath" xml:space="preserve">
     <value>Экспорт</value>
@@ -380,6 +380,6 @@
     <value>Удалить инстанс из списка</value>
   </data>
   <data name="Form_Get" xml:space="preserve">
-    <value>     Получить</value>
+    <value>     Фильтр F5</value>
   </data>
 </root>

@@ -75,7 +75,7 @@ namespace SPAFilter.SPA.Components
             var dictionaryFilePath = GetDir(activatorDirPath, dictionaryPath);
             if (dictionaryFilePath == null)
             {
-                ShowError(string.Format(Resources.DirectoryNotFound, dictionaryPath));
+                ShowError(string.Format(Resources.DirectoryNotFound, dictionaryPath, "Dictionary"));
                 return;
             }
             dictionaryFilePath = Path.Combine(dictionaryFilePath, dictionaryXML);

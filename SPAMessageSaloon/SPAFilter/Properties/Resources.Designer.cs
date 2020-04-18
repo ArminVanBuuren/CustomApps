@@ -61,7 +61,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Directory: &quot;{0}&quot; not found.
+        ///   Looks up a localized string similar to {1} directory: &quot;{0}&quot; not found.
         /// </summary>
         internal static string DirectoryNotFound {
             get {
@@ -117,7 +117,7 @@ namespace SPAFilter.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to When initializing instances:&apos;{0}&apos; - {1} scenario collisions were found!
-        ///For correct work of a filter, please choose only one instance (host types) or several instances (host types) with different scenarios..
+        ///For correct work of a filter, please choose only one instance (host type)..
         /// </summary>
         internal static string Filter_InitializeActivatorsWarning {
             get {

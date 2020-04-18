@@ -138,10 +138,10 @@
         Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
-    <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая экстеншн.</value>
+    <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая расширение.</value>
   </data>
   <data name="Txt_LRSettings_Deserialize_Ex" xml:space="preserve">
-    <value>Некорректный конфиг файл "{0}" ! Перемещен в "{1}".
+    <value>Ошибка при чтении конфигурационного файла "{0}" ! Перемещен в "{1}".
 
 {2}</value>
   </data>
@@ -149,7 +149,7 @@
     <value>Предыдущее значение поиска</value>
   </data>
   <data name="Txt_LRSettings_Serialize_Ex" xml:space="preserve">
-    <value>Невозможно сохранить конфиг в "{0}".
+    <value>Невозможно сохранить конфигурацию в "{0}".
 {1}</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
@@ -231,10 +231,10 @@
     <value>Столбцы должны быть уникальными!</value>
   </data>
   <data name="Txt_LRSettings_ErrDeserialize" xml:space="preserve">
-    <value>Ошибка при чтении конфига</value>
+    <value>Ошибка при чтении конфигурационного файла</value>
   </data>
   <data name="Txt_LRSettings_ErrSerialize" xml:space="preserve">
-    <value>Ошибка при попытке сохранить конфиг</value>
+    <value>Ошибка при попытке сохранить конфигурацию</value>
   </data>
   <data name="Txt_LRSettings_ErrUnique" xml:space="preserve">
     <value>Имена схем должны быть уникальными!</value>
@@ -301,7 +301,7 @@
     <value>Типы</value>
   </data>
   <data name="Txt_LogsReaderForm_UseFilterWhenSearching" xml:space="preserve">
-    <value>Применить c поиском</value>
+    <value>Применить с поиском</value>
   </data>
   <data name="Txt_LogsReaderForm_UseRegex" xml:space="preserve">
     <value>По Regex</value>

@@ -177,7 +177,7 @@ namespace SPAFilter
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.label6.Location = new System.Drawing.Point(6, 52);
+            this.label6.Location = new System.Drawing.Point(6, 54);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 15);
             this.label6.TabIndex = 8;
@@ -187,7 +187,7 @@ namespace SPAFilter
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.label7.Location = new System.Drawing.Point(458, 25);
+            this.label7.Location = new System.Drawing.Point(458, 27);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(60, 15);
             this.label7.TabIndex = 7;
@@ -205,7 +205,7 @@ namespace SPAFilter
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.label8.Location = new System.Drawing.Point(5, 25);
+            this.label8.Location = new System.Drawing.Point(5, 27);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(47, 15);
             this.label8.TabIndex = 11;
@@ -640,7 +640,7 @@ namespace SPAFilter
             // 
             this.ServiceCatalogRadioButton.AutoSize = true;
             this.ServiceCatalogRadioButton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.ServiceCatalogRadioButton.Location = new System.Drawing.Point(12, 68);
+            this.ServiceCatalogRadioButton.Location = new System.Drawing.Point(12, 69);
             this.ServiceCatalogRadioButton.Name = "ServiceCatalogRadioButton";
             this.ServiceCatalogRadioButton.Size = new System.Drawing.Size(106, 19);
             this.ServiceCatalogRadioButton.TabIndex = 36;

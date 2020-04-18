@@ -159,7 +159,31 @@ namespace SPAFilter
             SavedDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SPAFilter)}.bin");
         }
 
-        public SPAFilterForm()
+        public static SPAFilterForm GetControl()
+        {
+            SPAFilterForm mainControl = null;
+            if (File.Exists(SPAFilterForm.SavedDataPath))
+            {
+                try
+                {
+                    using (Stream stream = new FileStream(SPAFilterForm.SavedDataPath, FileMode.Open, FileAccess.Read))
+                    {
+                        mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
+                    }
+                }
+                catch (Exception)
+                {
+                    File.Delete(SPAFilterForm.SavedDataPath);
+                }
+            }
+
+            if (mainControl == null)
+                mainControl = new SPAFilterForm();
+
+            return mainControl;
+        }
+
+        SPAFilterForm()
         {
             IsInititializating = false;
             PreInit();
@@ -236,7 +260,7 @@ namespace SPAFilter
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
                 _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
-                _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Maximized);
+                _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Normal);
             }
             catch (Exception ex)
             {
