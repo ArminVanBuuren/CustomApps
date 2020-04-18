@@ -195,6 +195,42 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Activator Instances.
+        /// </summary>
+        internal static string Form_AddActivator {
+            get {
+                return ResourceManager.GetString("Form_AddActivator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Path.
+        /// </summary>
+        internal static string Form_ExportPath {
+            get {
+                return ResourceManager.GetString("Form_ExportPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        internal static string Form_Filter {
+            get {
+                return ResourceManager.GetString("Form_Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate SC.
+        /// </summary>
+        internal static string Form_GenerateSC {
+            get {
+                return ResourceManager.GetString("Form_GenerateSC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please filter files.
         /// </summary>
         internal static string Form_GenerateSC_NotFileredROBPOps {
@@ -209,6 +245,24 @@ namespace SPAFilter.Properties {
         internal static string Form_GenerateSC_NotFoundAnyOperations {
             get {
                 return ResourceManager.GetString("Form_GenerateSC_NotFoundAnyOperations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to       Generate SC.
+        /// </summary>
+        internal static string Form_GenerateSC2 {
+            get {
+                return ResourceManager.GetString("Form_GenerateSC2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to      Filter [F5].
+        /// </summary>
+        internal static string Form_Get {
+            get {
+                return ResourceManager.GetString("Form_Get", resourceCulture);
             }
         }
         
@@ -312,6 +366,15 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to      Open xlsx.
+        /// </summary>
+        internal static string Form_OpenXksx {
+            get {
+                return ResourceManager.GetString("Form_OpenXksx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pretty print.
         /// </summary>
         internal static string Form_PrintXMLFiles_Button {
@@ -373,6 +436,51 @@ namespace SPAFilter.Properties {
         internal static string Form_PrintXMLFiles_ToolTip {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RD Services.
+        /// </summary>
+        internal static string Form_RDServices {
+            get {
+                return ResourceManager.GetString("Form_RDServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string Form_Refresh {
+            get {
+                return ResourceManager.GetString("Form_Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        internal static string Form_Reload {
+            get {
+                return ResourceManager.GetString("Form_Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove instance.
+        /// </summary>
+        internal static string Form_RemoveInstance {
+            get {
+                return ResourceManager.GetString("Form_RemoveInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to      Root.
+        /// </summary>
+        internal static string Form_Root {
+            get {
+                return ResourceManager.GetString("Form_Root", resourceCulture);
             }
         }
         

@@ -346,4 +346,40 @@ Columns names and orders must be like:
   <data name="ServiceInstance_NotFoundScenriosDir" xml:space="preserve">
     <value>Attribute: '@dir' not found in "fileScenarioSource". Or 'scenarios' node not found.</value>
   </data>
+  <data name="Form_ExportPath" xml:space="preserve">
+    <value>Export Path</value>
+  </data>
+  <data name="Form_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Form_OpenXksx" xml:space="preserve">
+    <value>     Open xlsx</value>
+  </data>
+  <data name="Form_RDServices" xml:space="preserve">
+    <value>RD Services</value>
+  </data>
+  <data name="Form_Root" xml:space="preserve">
+    <value>     Root</value>
+  </data>
+  <data name="Form_GenerateSC" xml:space="preserve">
+    <value>Generate SC</value>
+  </data>
+  <data name="Form_GenerateSC2" xml:space="preserve">
+    <value>      Generate SC</value>
+  </data>
+  <data name="Form_AddActivator" xml:space="preserve">
+    <value>Add Activator Instances</value>
+  </data>
+  <data name="Form_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Form_Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Form_RemoveInstance" xml:space="preserve">
+    <value>Remove instance</value>
+  </data>
+  <data name="Form_Get" xml:space="preserve">
+    <value>     Filter [F5]</value>
+  </data>
 </root>

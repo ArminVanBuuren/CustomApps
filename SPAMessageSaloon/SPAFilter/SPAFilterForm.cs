@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -15,8 +14,6 @@ using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SRI;
 using SPAMessageSaloon.Common;
 using Utils;
-using Utils.AppUpdater;
-using Utils.AppUpdater.Updater;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
@@ -394,6 +391,19 @@ namespace SPAFilter
             _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
             _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
             _tooltip.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
+
+            FilterButton.Text = Resources.Form_Get;
+            addServiceInstancesButton.Text = Resources.Form_AddActivator;
+            removeServiceInstancesButton.Text = Resources.Form_RemoveInstance;
+            refreshServiceInstancesButton.Text = Resources.Form_Refresh;
+            reloadServiceInstancesButton.Text = Resources.Form_Reload;
+            GenerateSC.Text = Resources.Form_GenerateSC;
+            ButtonGenerateSC.Text = Resources.Form_GenerateSC2;
+            RootSCExportPathButton.Text = Resources.Form_Root;
+            OpenSevExelButton.Text = Resources.Form_OpenXksx;
+            groupBox1.Text = Resources.Form_Filter;
+            label9.Text = Resources.Form_ExportPath;
+            label5.Text = Resources.Form_RDServices;
         }
 
         #region Check warning rows

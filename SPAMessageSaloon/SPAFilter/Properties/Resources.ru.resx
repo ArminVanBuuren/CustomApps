@@ -346,4 +346,40 @@
   <data name="ServiceInstance_NotFoundScenriosDir" xml:space="preserve">
     <value>Не найден аттрибут: '@dir' в ноде "fileScenarioSource". Или нода с именем 'scenarios' не найдена.</value>
   </data>
+  <data name="Form_ExportPath" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="Form_Filter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="Form_OpenXksx" xml:space="preserve">
+    <value>     Открыть xlsx</value>
+  </data>
+  <data name="Form_RDServices" xml:space="preserve">
+    <value>RD сервисы</value>
+  </data>
+  <data name="Form_Root" xml:space="preserve">
+    <value>     Указать</value>
+  </data>
+  <data name="Form_GenerateSC" xml:space="preserve">
+    <value>Создать SC</value>
+  </data>
+  <data name="Form_AddActivator" xml:space="preserve">
+    <value>Добавить инстансы активатора</value>
+  </data>
+  <data name="Form_GenerateSC2" xml:space="preserve">
+    <value>      Создать SC</value>
+  </data>
+  <data name="Form_Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Form_Reload" xml:space="preserve">
+    <value>Перезагрузить</value>
+  </data>
+  <data name="Form_RemoveInstance" xml:space="preserve">
+    <value>Удалить инстанс</value>
+  </data>
+  <data name="Form_Get" xml:space="preserve">
+    <value>     Получить</value>
+  </data>
 </root>

@@ -217,12 +217,12 @@ namespace SPAFilter
             this.FilterButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.FilterButton.Image = global::SPAFilter.Properties.Resources.find;
             this.FilterButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FilterButton.Location = new System.Drawing.Point(732, 49);
+            this.FilterButton.Location = new System.Drawing.Point(710, 49);
             this.FilterButton.Name = "FilterButton";
-            this.FilterButton.Size = new System.Drawing.Size(74, 23);
+            this.FilterButton.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.FilterButton.Size = new System.Drawing.Size(92, 23);
             this.FilterButton.TabIndex = 13;
-            this.FilterButton.Text = "Get [F5]";
-            this.FilterButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.FilterButton.Text = "     Filter [F5]";
             this.FilterButton.UseVisualStyleBackColor = true;
             this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
             // 
@@ -278,7 +278,6 @@ namespace SPAFilter
             this.addServiceInstancesButton.Margin = new System.Windows.Forms.Padding(4, 1, 2, 2);
             this.addServiceInstancesButton.Name = "addServiceInstancesButton";
             this.addServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
-            this.addServiceInstancesButton.Text = "Add configuration to Service Instances list";
             this.addServiceInstancesButton.Click += new System.EventHandler(this.AddActivatorButton_Click);
             // 
             // removeServiceInstancesButton
@@ -289,8 +288,6 @@ namespace SPAFilter
             this.removeServiceInstancesButton.Margin = new System.Windows.Forms.Padding(0, 1, 3, 2);
             this.removeServiceInstancesButton.Name = "removeServiceInstancesButton";
             this.removeServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
-            this.removeServiceInstancesButton.Text = "Remove configuration from Service Instances list";
-            this.removeServiceInstancesButton.ToolTipText = "Remove configuration from Service Instances list";
             this.removeServiceInstancesButton.Click += new System.EventHandler(this.RemoveActivatorButton_Click);
             // 
             // refreshServiceInstancesButton
@@ -301,8 +298,6 @@ namespace SPAFilter
             this.refreshServiceInstancesButton.Margin = new System.Windows.Forms.Padding(0, 1, 3, 2);
             this.refreshServiceInstancesButton.Name = "refreshServiceInstancesButton";
             this.refreshServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
-            this.refreshServiceInstancesButton.Text = "Refresh";
-            this.refreshServiceInstancesButton.ToolTipText = "Refresh";
             this.refreshServiceInstancesButton.Click += new System.EventHandler(this.RefreshActivatorButton_Click);
             // 
             // reloadServiceInstancesButton
@@ -313,7 +308,6 @@ namespace SPAFilter
             this.reloadServiceInstancesButton.Margin = new System.Windows.Forms.Padding(0, 1, 2, 2);
             this.reloadServiceInstancesButton.Name = "reloadServiceInstancesButton";
             this.reloadServiceInstancesButton.Size = new System.Drawing.Size(23, 22);
-            this.reloadServiceInstancesButton.Text = "Reload";
             this.reloadServiceInstancesButton.Click += new System.EventHandler(this.ReloadActivatorButton_Click);
             // 
             // dataGridServiceInstances
@@ -488,7 +482,7 @@ namespace SPAFilter
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label9.Location = new System.Drawing.Point(13, 20);
+            this.label9.Location = new System.Drawing.Point(13, 19);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(68, 15);
             this.label9.TabIndex = 29;
@@ -524,7 +518,7 @@ namespace SPAFilter
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(13, 48);
+            this.label5.Location = new System.Drawing.Point(13, 47);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 26;
@@ -582,9 +576,9 @@ namespace SPAFilter
             this.PrintXMLButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.PrintXMLButton.Image = ((System.Drawing.Image)(resources.GetObject("PrintXMLButton.Image")));
             this.PrintXMLButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.PrintXMLButton.Location = new System.Drawing.Point(811, 49);
+            this.PrintXMLButton.Location = new System.Drawing.Point(808, 49);
             this.PrintXMLButton.Name = "PrintXMLButton";
-            this.PrintXMLButton.Size = new System.Drawing.Size(96, 23);
+            this.PrintXMLButton.Size = new System.Drawing.Size(99, 23);
             this.PrintXMLButton.TabIndex = 14;
             this.PrintXMLButton.Text = "Pretty print";
             this.PrintXMLButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
