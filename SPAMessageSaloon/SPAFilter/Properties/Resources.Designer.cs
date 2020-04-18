@@ -467,7 +467,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove instance.
+        ///   Looks up a localized string similar to Remove instance from list.
         /// </summary>
         internal static string Form_RemoveInstance {
             get {

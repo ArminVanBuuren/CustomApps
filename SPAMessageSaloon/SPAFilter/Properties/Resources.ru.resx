@@ -377,7 +377,7 @@
     <value>Перезагрузить</value>
   </data>
   <data name="Form_RemoveInstance" xml:space="preserve">
-    <value>Удалить инстанс</value>
+    <value>Удалить инстанс из списка</value>
   </data>
   <data name="Form_Get" xml:space="preserve">
     <value>     Получить</value>

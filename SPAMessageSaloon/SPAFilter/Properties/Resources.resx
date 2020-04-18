@@ -377,7 +377,7 @@ Columns names and orders must be like:
     <value>Reload</value>
   </data>
   <data name="Form_RemoveInstance" xml:space="preserve">
-    <value>Remove instance</value>
+    <value>Remove instance from list</value>
   </data>
   <data name="Form_Get" xml:space="preserve">
     <value>     Filter [F5]</value>
