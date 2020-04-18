@@ -200,6 +200,9 @@ namespace Utils.WinForm.DataGridViewHelper
                     if(!column.Attribute.Visible)
                         dgvColumn.Visible = false;
 
+                    if (!column.Attribute.Format.IsNullOrEmptyTrim())
+                        dgvColumn.DefaultCellStyle.Format = column.Attribute.Format;
+
                     if (!dgvColumn.HeaderText.Equals(column.Attribute.ColumnName))
                         dgvColumn.HeaderText = column.Attribute.ColumnName;
                 }

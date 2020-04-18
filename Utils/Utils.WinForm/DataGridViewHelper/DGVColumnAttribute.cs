@@ -21,8 +21,17 @@ namespace Utils.WinForm.DataGridViewHelper
             Visible = visible;
         }
 
+        public DGVColumnAttribute(ColumnPosition pos, string columnName, string format, bool visible = true)
+        {
+            Position = pos;
+            ColumnName = columnName;
+            Format = format;
+            Visible = visible;
+        }
+
         public ColumnPosition Position { get; }
-        public bool Visible { get; }
         public string ColumnName { get; }
+        public string Format { get; } = string.Empty;
+        public bool Visible { get; }
     }
 }
