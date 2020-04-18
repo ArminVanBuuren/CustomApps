@@ -231,7 +231,8 @@ namespace Utils.WinForm.Notepad
                 TabLength = 2,
                 Zoom = 100,
                 Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.None
+                BorderStyle = BorderStyle.None,
+                MinimumSize = new Size(100, 0)
             };
 
             _statusStrip = new StatusStrip
@@ -242,17 +243,15 @@ namespace Utils.WinForm.Notepad
                 Padding = new Padding(0, 2, 0, 0),
                 MinimumSize = new Size(710, 0)
             };
+
             Controls.Add(FCTB);
             Controls.Add(_statusStrip);
 
-            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control
-                //, Padding = new Padding(0, 2, 0, 0)
-                };
+            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control };
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
-            //_listOfLanguages.BackColor = Color.FromArgb(235, 235, 235);
-            //_listOfLanguages.FlatStyle = FlatStyle.Flat;
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
+            _listOfLanguages.Size = new Size(100, _listOfLanguages.Size.Height);
             _statusStrip.Items.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
             {
