@@ -238,8 +238,9 @@ namespace Utils.WinForm.Notepad
             {
                 Cursor = Cursors.Default,
                 ForeColor = Color.Black,
-                LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
-                ,Padding = new Padding(0, 2, 0, 0)
+                LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow,
+                Padding = new Padding(0, 2, 0, 0),
+                MinimumSize = new Size(710, 0)
             };
             Controls.Add(FCTB);
             Controls.Add(_statusStrip);
