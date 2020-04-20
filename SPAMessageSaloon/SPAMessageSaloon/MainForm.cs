@@ -16,6 +16,7 @@ using Utils.UIControls.Main;
 using Utils.WinForm;
 using LogsReader;
 using SPAFilter;
+using SPAMessageSaloon.Properties;
 using XPathTester;
 
 namespace SPAMessageSaloon
@@ -144,20 +145,56 @@ namespace SPAMessageSaloon
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
+                Thread monitoring = null;
 
+                Closing += (o, args) =>
+                {
+                    try
+                    {
+                        Settings.Default.FormLocation = Location;
+                        Settings.Default.FormSize = Size;
+                        Settings.Default.FormState = WindowState;
+                        Settings.Default.Save();
+                        monitoring?.Abort();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                };
                 Shown += (s, args) =>
                 {
-                    var thread = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
-                    thread.Start();
+                    try
+                    {
+                        if (!IsMdiChild)
+                        {
+                            WindowState = Settings.Default.FormState;
+                            if (WindowState != FormWindowState.Maximized &&
+                                (Settings.Default.FormSize.Height < 100 ||
+                                 Settings.Default.FormSize.Width < 100 ||
+                                 Settings.Default.FormLocation.X < 0 ||
+                                 Settings.Default.FormLocation.Y < 0))
+                            {
+                                WindowState = FormWindowState.Maximized;
+                            }
+                            else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
+                                Size = Settings.Default.FormSize;
+                        }
+
+                        CenterToScreen();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+
+                    monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                    monitoring.Start();
                 };
             }
             catch (Exception ex)
             {
                 ReportMessage.Show(ex);
-            }
-            finally
-            {
-                CenterToScreen();
             }
         }
 

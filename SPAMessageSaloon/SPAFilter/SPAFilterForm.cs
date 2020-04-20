@@ -103,6 +103,7 @@ namespace SPAFilter
                     refreshServiceInstancesButton.Enabled = !_IsInProgress;
                     reloadServiceInstancesButton.Enabled = !_IsInProgress;
 
+                    ChangeEnablingDGV(dataGridServiceInstances, !_IsInProgress);
                     dataGridProcesses.Visible = !_IsInProgress;
                     dataGridOperations.Visible = !_IsInProgress;
                     dataGridScenarios.Visible = !_IsInProgress;
@@ -114,6 +115,13 @@ namespace SPAFilter
                     OperationComboBox.Enabled = !_IsInProgress;
                 }
             }
+        }
+
+        void ChangeEnablingDGV(DataGridView grid, bool enabled)
+        {
+            foreach (var dgvChild in grid.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
+                dgvChild.Enabled = enabled;
+            grid.Enabled = enabled;
         }
 
         private bool IsFiltered { get; set; } = false;

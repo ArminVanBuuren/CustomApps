@@ -383,8 +383,8 @@ namespace LogsReader.Reader
 
                     stop.Start();
                     IsWorking = true;
-                    ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
                     ChangeFormStatus();
+                    ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 
                     await MainReader.StartAsync();
 
@@ -596,7 +596,11 @@ namespace LogsReader.Reader
             btnClear.Enabled = !IsWorking;
             trvMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
+
+            foreach (var dgvChild in dgvFiles.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
+                dgvChild.Enabled = !IsWorking;
             dgvFiles.Enabled = !IsWorking;
+
             notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
@@ -625,6 +629,9 @@ namespace LogsReader.Reader
             }
             else
             {
+                //foreach (var pb in ParentSplitContainer.Controls.OfType<Control>())
+                //    pb.Enabled = true;
+
                 ParentSplitContainer.Cursor = Cursors.Default;
                 dgvFiles.Focus();
             }
