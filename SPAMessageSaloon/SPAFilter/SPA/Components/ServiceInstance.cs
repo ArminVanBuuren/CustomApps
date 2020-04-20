@@ -12,7 +12,6 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class ServiceInstance : DriveTemplate, ISAComponent
     {
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName => $"{HardwareID}_{FilePath}";
 
         [DGVColumn(ColumnPosition.First, "HardwareID")]

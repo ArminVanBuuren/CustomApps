@@ -7,8 +7,8 @@ namespace SPAFilter.SPA.Components.SRI
 {
     public abstract class CatalogOperation : ObjectTemplate, IOperation
     {
-        // Обязательно сделать override в этом классе, т.к. коллекция каталожных операций в основной форме будет приводится именно к типу CatalogOperation, свойство UniqueName должен быть виден
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        // Обязательно сделать override в этом классе, т.к. коллекция каталожных операций в основной форме будет приводится именно к типу CatalogOperation
+        // И свойство UniqueName должен быть видно
         public override string UniqueName { get; protected set; }
 
         [DGVColumn(ColumnPosition.First, "HostType")]

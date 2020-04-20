@@ -26,34 +26,28 @@ namespace SPAFilter.SPA
         [DGVColumn(ColumnPosition.After, "Name")]
         public virtual string Name { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is ObjectTemplate objRes))
-                return false;
-
-            if (objRes.UniqueName.Like(UniqueName))
-                return true;
-
-            return RuntimeHelpers.Equals(this, obj);
-        }
-
         public int CompareTo(object obj)
         {
             if (obj == null)
                 return 1;
 
-            if (!(obj is ObjectTemplate objRes))
-                return 1;
+            return Equals(obj) ? 0 : 1;
+        }
 
-            if (ReferenceEquals(this, objRes))
-                return 0;
+        public override bool Equals(object input)
+        {
+            if (!(input is IObjectTemplate inputTemplate))
+                return false;
 
-            return Equals(objRes) ? 0 : 1;
+            if (UniqueName.Equals(inputTemplate.UniqueName))
+                return true;
+
+            return false;
         }
 
         public override int GetHashCode()
         {
-            return !UniqueName.IsNullOrEmptyTrim() ? UniqueName.ToLower().GetHashCode() : RuntimeHelpers.GetHashCode(this);
+            return UniqueName.GetHashCode();
         }
 
         public override string ToString()

@@ -9,7 +9,6 @@ namespace SPAFilter.SPA.Components.ROBP
 {
     public sealed class ROBPHostType : DriveTemplate, IHostType
     {
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName
         {
             get => FilePath;

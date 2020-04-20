@@ -14,7 +14,6 @@ namespace SPAFilter.SPA.Components.SRI
         private readonly XPathNavigator _navigator;
         private RFSBindings _bindings;
 
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName { get; protected set; }
 
         public string RFSName { get; }

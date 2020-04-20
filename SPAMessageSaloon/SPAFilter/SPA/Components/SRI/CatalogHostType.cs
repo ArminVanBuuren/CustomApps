@@ -6,7 +6,6 @@ namespace SPAFilter.SPA.Components.SRI
 {
     public sealed class CatalogHostType : ObjectTemplate, IHostType
     {
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName
         {
             get => Name;

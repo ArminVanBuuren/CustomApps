@@ -1338,7 +1338,7 @@ namespace SPAFilter
             {
                 BPCount.Text = (Filter.Processes?.Count ?? 0).ToString();
                 NEElementsCount.Text = (Filter.HostTypes?.HostTypeNames?.Count() ?? 0).ToString();
-                OperationsCount.Text = (Filter.HostTypes?.OperationsCount ?? 0).ToString();
+                OperationsCount.Text = (Filter.HostTypes?.Operations.Count ?? 0).ToString();
                 ScenariosCount.Text = (Filter.Scenarios?.Count ?? 0).ToString();
                 CommandsCount.Text = (Filter.Commands?.Count ?? 0).ToString();
 

@@ -159,6 +159,7 @@ namespace SPAFilter.SPA
                 }
 
                 Processes.ResetPublicID();
+                HostTypes.Operations.ResetPublicID();
 
                 #endregion
 
@@ -279,8 +280,9 @@ namespace SPAFilter.SPA
             {
                 var robpHostType = new ROBPHostType(hostTypeDir);
                 HostTypes.Add(robpHostType);
-                FilterOperations(HostTypes, robpHostType, htFilter, opFilter, allBPOperations, false);
+                FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
             }
+            HostTypes.Commit();
         }
 
         public async Task AssignSCOperationsAsync(string serviceCatalogFilePath)
@@ -310,17 +312,18 @@ namespace SPAFilter.SPA
 
             foreach (var hostType in HostTypes.ToList())
             {
-                FilterOperations(HostTypes, hostType, neFilter, opFilter, null, anyHasCatalogCall);
+                FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
             }
+            HostTypes.Commit();
         }
 
-        static void FilterOperations(CollectionHostType parentHostTypes, IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
+        static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
         {
             // не менять порядок проверок!
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
                 // если фильтруются операции по другому хосту
-                parentHostTypes.ClearOperations(hostType);
+                hostType.Operations.Clear();
             }
             else if (allBPOperations != null)
             {
@@ -330,19 +333,19 @@ namespace SPAFilter.SPA
 
                 foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
-                        parentHostTypes.Remove(operation);
+                        hostType.Operations.Remove(operation);
             }
             else if (!anyHasCatalogCall)
             {
                 // если ни в одном бизнесс процессе нет вызова каталога, то все операции удалются
-                parentHostTypes.ClearOperations(hostType);
+                hostType.Operations.Clear();
             }
             else if (opFilter != null)
             {
                 // удаляем операции которые не попали под имя указынные в фильтре операций
                 foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!opFilter.Invoke(operation))
-                        parentHostTypes.Remove(operation);
+                        hostType.Operations.Remove(operation);
             }
         }
 

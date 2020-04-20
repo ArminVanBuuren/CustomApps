@@ -16,7 +16,6 @@ namespace SPAFilter.SPA.Components.SRI
     {
         private RFSBindings _bindings;
 
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName
         {
             get => Name;

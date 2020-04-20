@@ -11,7 +11,6 @@ namespace SPAFilter.SPA
     {
         private readonly FileInfo _fileInfo;
 
-        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
         public override string UniqueName
         {
             get => FilePath;
