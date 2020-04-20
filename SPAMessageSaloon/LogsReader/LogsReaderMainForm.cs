@@ -42,6 +42,7 @@ namespace LogsReader
             try
             {
                 base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
+
                 KeyPreview = true;
                 KeyDown += MainForm_KeyDown;
                 Closing += (s, e) => { SaveData(); };
