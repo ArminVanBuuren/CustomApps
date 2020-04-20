@@ -163,19 +163,17 @@ namespace Utils
             return lineCount;
         }
 
-        public static void WriteFile(string path, string content, Encoding encoding = null)
+        public static void WriteFile(string path, string content, bool append = false, Encoding encoding = null)
         {
             if (encoding == null && File.Exists(path))
-                File.WriteAllText(path, content, GetEncoding(path));
+                using (var writetext = new StreamWriter(path, append, GetEncoding(path)))
+                    writetext.Write(content);
             else if (encoding != null)
-                File.WriteAllText(path, content, encoding);
+                using (var writetext = new StreamWriter(path, append, encoding))
+                    writetext.Write(content);
             else
-                File.WriteAllText(path, content);
-
-            //using (var writetext = new StreamWriter(path, false, GetEncoding(path)))
-            //{
-            //    writetext.Write(content);
-            //}
+                using (var writetext = new StreamWriter(path, append))
+                    writetext.Write(content);
         }
 
         /// <summary>

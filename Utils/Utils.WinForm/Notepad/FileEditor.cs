@@ -230,7 +230,7 @@ namespace Utils.WinForm.Notepad
                 DisableWatcher();
                 lock (syncWhenFileChanged)
                 {
-                    IO.WriteFile(destinationFile, Text, Encoding);
+                    IO.WriteFile(destinationFile, Text, false, Encoding);
                 }
             }
             catch (Exception)
