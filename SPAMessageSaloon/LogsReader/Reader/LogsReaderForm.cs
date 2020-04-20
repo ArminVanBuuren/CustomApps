@@ -480,7 +480,7 @@ namespace LogsReader.Reader
                         if(template == null)
                             continue;
 
-                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, template.Description, $"\"{template.Message.Trim()}\""}));
+                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, $"\"{template.Description}\"", $"\"{template.Message.Trim()}\""}));
                         writer.Flush();
 
                         Progress = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
@@ -512,10 +512,17 @@ namespace LogsReader.Reader
                 {
                     builder.Append(";");
                 }
-                else if (param.StartsWith("\"") && param.EndsWith("\"") && param.IndexOf("\"", 1, param.Length - 2, StringComparison.Ordinal) != -1)
+                else if (param.StartsWith("\"") && param.EndsWith("\""))
                 {
-                    var test = param.Substring(1, param.Length - 2).Replace("\"", "\"\"");
-                    builder.Append($"\"{test}\";");
+                    if (param.IndexOf("\"", 1, param.Length - 2, StringComparison.Ordinal) != -1)
+                    {
+                        var test = param.Substring(1, param.Length - 2).Replace("\"", "\"\"");
+                        builder.Append($"\"{test}\";");
+                    }
+                    else
+                    {
+                        builder.Append($"{param};");
+                    }
                 }
                 else if (param.Contains("\""))
                 {
@@ -693,7 +700,7 @@ namespace LogsReader.Reader
                 if (template == null)
                     return;
 
-                descriptionText.Text = template.Description;
+                descriptionText.Text = $"FoundLineID:{template.FoundLineID}\r\n{template.Description}";
 
                 if (_message.Language == Language.XML || _message.Language == Language.HTML)
                 {

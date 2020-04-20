@@ -37,6 +37,8 @@ namespace SPAMessageSaloon
         public ToolStripStatusLabel _threadsUsage;
         public ToolStripStatusLabel _ramUsage;
 
+        public bool IsClosed { get; private set; } = false;
+
         ApplicationUpdater AppUpdater { get; set; }
 
         public NationalLanguage Language
@@ -145,8 +147,6 @@ namespace SPAMessageSaloon
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                Thread monitoring = null;
-
                 Closing += (o, args) =>
                 {
                     try
@@ -155,13 +155,13 @@ namespace SPAMessageSaloon
                         Settings.Default.FormSize = Size;
                         Settings.Default.FormState = WindowState;
                         Settings.Default.Save();
-                        monitoring?.Abort();
                     }
                     catch (Exception)
                     {
                         // ignored
                     }
                 };
+                Closed += (o, args) => { IsClosed = true; };
                 Shown += (s, args) =>
                 {
                     try
@@ -188,7 +188,7 @@ namespace SPAMessageSaloon
                         // ignored
                     }
 
-                    monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                    var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
                     monitoring.Start();
                 };
             }
@@ -271,7 +271,7 @@ namespace SPAMessageSaloon
                 }
 
                 var taskBarNotify = TaskbarManager.IsPlatformSupported
-                    ? (Action<int, int>)((processesCount, totalProgress) =>
+                    ? (Action<int, int>) ((processesCount, totalProgress) =>
                     {
                         if (processesCount == 0)
                         {
@@ -288,9 +288,6 @@ namespace SPAMessageSaloon
 
                 void Monitoring()
                 {
-                    if (this.IsDisposed || _cpuUsage.IsDisposed || _threadsUsage.IsDisposed || _ramUsage.IsDisposed)
-                        return;
-
                     double percent = 0;
                     if (appCPU != null)
                         double.TryParse(appCPU.NextValue().ToString(), out percent);
@@ -307,7 +304,7 @@ namespace SPAMessageSaloon
                     int totalProgress = 0;
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
                     {
-                        if(form is Form child && child.IsDisposed)
+                        if (form is Form child && child.IsDisposed)
                             continue;
                         processCount += form.ActiveProcessesCount;
                         totalProgress += form.ActiveTotalProgress;
@@ -320,11 +317,15 @@ namespace SPAMessageSaloon
                     _countOfLastProcess = processCount;
                 }
 
-                while (!this.IsDisposed)
+                while (!IsClosed)
                 {
                     this.SafeInvoke(Monitoring);
                     Thread.Sleep(1000);
                 }
+            }
+            catch (ObjectDisposedException)
+            {
+
             }
             catch (Exception ex)
             {

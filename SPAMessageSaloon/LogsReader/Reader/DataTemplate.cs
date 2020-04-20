@@ -9,7 +9,6 @@ namespace LogsReader.Reader
     public class DataTemplate
     {
         private readonly StringBuilder _traceMessage = new StringBuilder();
-        private string _date = null;
         private string _description = null;
         private string _traceName = null;
 
@@ -21,14 +20,15 @@ namespace LogsReader.Reader
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
-            if (DateTime.TryParse(date.Replace(",", "."), out var dateOfTrace))
+            var dateWithoutSpaces = date?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
+            if (DateTime.TryParse(dateWithoutSpaces.Replace(",", "."), out var dateOfTrace))
             {
                 Date = dateOfTrace;
                 DateOfTrace = Date.Value.ToString("dd.MM.yyyy HH:mm:ss.fff");
             }
             else
             {
-                DateOfTrace = date;
+                DateOfTrace = dateWithoutSpaces;
             }
 
             TraceName = traceName;
@@ -93,15 +93,11 @@ namespace LogsReader.Reader
         public string TraceName
         {
             get => _traceName;
-            private set => _traceName = value?.Replace(Environment.NewLine, string.Empty).Trim();
+            private set => _traceName = value?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
         }
 
         [DGVColumn(ColumnPosition.After, "Date")]
-        public string DateOfTrace
-        {
-            get => _date;
-            private set => _date = value?.Replace(Environment.NewLine, string.Empty).Trim();
-        }
+        public string DateOfTrace { get; private set; }
 
         public DateTime? Date { get; }
 
@@ -110,8 +106,8 @@ namespace LogsReader.Reader
 
         public string Description
         {
-            get => $"FoundLineID:{FoundLineID}\r\n{_description}".Trim();
-            private set => _description = value;
+            get => _description;
+            private set => _description = value.Trim();
         }
 
         public string Message { get; private set; } = string.Empty;
