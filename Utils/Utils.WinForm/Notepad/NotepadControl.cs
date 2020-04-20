@@ -38,6 +38,8 @@ namespace Utils.WinForm.Notepad
 
         internal KeyValuePair<Editor, TabPage>? Current { get; private set; } = null;
 
+        public Editor CurrentEditor => Current?.Key;
+
         public Encoding DefaultEncoding
         {
             get => _encoding;
@@ -522,7 +524,6 @@ namespace Utils.WinForm.Notepad
             if (editor is FileEditor fileEditor)
                 fileEditor.FileChanged += EditorOnSomethingChanged;
 
-            Current = new KeyValuePair<Editor, TabPage>(editor, tabPage);
             ListOfEditors.Add(editor, tabPage);
 
             if (_tabControl.TabCount == 1)

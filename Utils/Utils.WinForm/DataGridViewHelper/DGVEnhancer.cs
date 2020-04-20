@@ -62,9 +62,9 @@ namespace Utils.WinForm.DataGridViewHelper
                 PropertyType = propType ?? typeof(object);
             }
 
-            public DGVColumnAttribute Attribute { get; }
             public string PropertyName { get; }
-            public Type PropertyType { get; }
+            public DGVColumnAttribute Attribute { get; internal set; }
+            public Type PropertyType { get; internal set; }
 
             public override string ToString()
             {
@@ -102,18 +102,61 @@ namespace Utils.WinForm.DataGridViewHelper
             var positionOfColumns = new Dictionary<string, KeyValuePair<int, DGVColumn>>();
 
             var classPosition = 0;
-            var properties = typeof(T).GetProperties();
-            foreach (var property in properties)
+            var inputType = typeof(T);
+            var properties = new Dictionary<string, PropertyInfo>();
+
+            void AssignProperty(Type type)
             {
-                var attrs = property.GetCustomAttributes(true);
-                foreach (var attr in attrs)
+                foreach (var property in type.GetProperties())
                 {
-                    if (attr is DGVColumnAttribute columnAttr)
+                    var attrs = property.GetCustomAttributes(true);
+                    if (!attrs.Any())
+                        continue;
+
+                    var columnAttrs = attrs.Where(x => x is DGVColumnAttribute);
+                    if (!columnAttrs.Any())
+                        continue;
+
+                    var columnAttr = (DGVColumnAttribute)columnAttrs.First();
+
+                    if (columnList.TryGetValue(property.Name, out var exist))
+                    {
+                        properties.Remove(property.Name);
+                        properties.Add(property.Name, property);
+                        exist.Attribute = columnAttr;
+                        exist.PropertyType = property.PropertyType;
+                    }
+                    else
                     {
                         columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
+                        properties.Add(property.Name, property);
                     }
                 }
             }
+
+            var listOfTypes = new List<Type> {inputType};
+            while (inputType.BaseType != null)
+            {
+                inputType = inputType.BaseType;
+                listOfTypes.Add(inputType);
+            }
+            listOfTypes.Reverse();
+            foreach (var type in listOfTypes)
+                AssignProperty(type);
+
+
+            //var properties = typeof(T).GetProperties();
+            //foreach (var property in properties)
+            //{
+            //    var attrs = property.GetCustomAttributes(true);
+            //    foreach (var attr in attrs)
+            //    {
+            //        if (attr is DGVColumnAttribute columnAttr)
+            //        {
+            //            columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
+            //        }
+            //    }
+            //}
 
             if (grid == null || grid.ColumnCount == 0)
             {
@@ -155,7 +198,7 @@ namespace Utils.WinForm.DataGridViewHelper
             {
                 DataRow dr = table.NewRow();
 
-                foreach (var property in properties)
+                foreach (var property in properties.Values)
                 {
                     if (positionOfColumns.TryGetValue(property.Name, out var result))
                     {

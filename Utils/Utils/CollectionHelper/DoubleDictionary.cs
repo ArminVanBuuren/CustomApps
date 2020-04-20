@@ -134,7 +134,7 @@ namespace Utils.CollectionHelper
             get
             {
                 lock (_syncRoot)
-                    return _values.Values.SelectMany(x => x);
+                    return _values.Values.SelectMany(x => x).ToList();
             }
         }
 
@@ -386,7 +386,7 @@ namespace Utils.CollectionHelper
 
         public override string ToString()
         {
-            return this.GetType().ToString();
+            return $"Count = {Count} CountValues = {CountValues}";
         }
     }
 }

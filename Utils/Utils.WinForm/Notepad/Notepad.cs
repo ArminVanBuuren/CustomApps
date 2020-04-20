@@ -15,6 +15,8 @@ namespace Utils.WinForm.Notepad
 
         public bool WindowIsClosed { get; private set; } = false;
 
+        public Editor CurrentEditor => NotepadControlItem.CurrentEditor;
+
         public Encoding DefaultEncoding
         {
             get => NotepadControlItem.DefaultEncoding;
