@@ -43,7 +43,7 @@ namespace SPAFilter
             this.label7 = new System.Windows.Forms.Label();
             this.ProcessesComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.FilterButton = new System.Windows.Forms.Button();
+            this.buttonFilter = new System.Windows.Forms.Button();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.ServiceInstances = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -69,6 +69,7 @@ namespace SPAFilter
             this.ButtonGenerateSC = new System.Windows.Forms.Button();
             this.OpenSCXlsx = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonReset = new System.Windows.Forms.Button();
             this.PrintXMLButton = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.ServiceCatalogTextBox = new System.Windows.Forms.TextBox();
@@ -211,20 +212,20 @@ namespace SPAFilter
             this.label8.TabIndex = 11;
             this.label8.Text = "Process";
             // 
-            // FilterButton
+            // buttonFilter
             // 
-            this.FilterButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.FilterButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.FilterButton.Image = global::SPAFilter.Properties.Resources.find;
-            this.FilterButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FilterButton.Location = new System.Drawing.Point(710, 49);
-            this.FilterButton.Name = "FilterButton";
-            this.FilterButton.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.FilterButton.Size = new System.Drawing.Size(92, 23);
-            this.FilterButton.TabIndex = 13;
-            this.FilterButton.Text = "     Filter [F5]";
-            this.FilterButton.UseVisualStyleBackColor = true;
-            this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
+            this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonFilter.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonFilter.Image = global::SPAFilter.Properties.Resources.find;
+            this.buttonFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonFilter.Location = new System.Drawing.Point(612, 49);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.buttonFilter.Size = new System.Drawing.Size(92, 23);
+            this.buttonFilter.TabIndex = 13;
+            this.buttonFilter.Text = "     Filter [F5]";
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.FilterButton_Click);
             // 
             // mainTabControl
             // 
@@ -552,6 +553,7 @@ namespace SPAFilter
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonReset);
             this.groupBox1.Controls.Add(this.PrintXMLButton);
             this.groupBox1.Controls.Add(this.OperationComboBox);
             this.groupBox1.Controls.Add(this.label7);
@@ -559,7 +561,7 @@ namespace SPAFilter
             this.groupBox1.Controls.Add(this.NetSettComboBox);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.ProcessesComboBox);
-            this.groupBox1.Controls.Add(this.FilterButton);
+            this.groupBox1.Controls.Add(this.buttonFilter);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.groupBox1.Location = new System.Drawing.Point(3, 95);
@@ -569,6 +571,20 @@ namespace SPAFilter
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter";
+            // 
+            // buttonReset
+            // 
+            this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonReset.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonReset.Image = global::SPAFilter.Properties.Resources.reset2;
+            this.buttonReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonReset.Location = new System.Drawing.Point(710, 49);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(92, 23);
+            this.buttonReset.TabIndex = 15;
+            this.buttonReset.Text = "      Reset [F6]";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
             // PrintXMLButton
             // 
@@ -727,7 +743,7 @@ namespace SPAFilter
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox ProcessesComboBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button FilterButton;
+        private System.Windows.Forms.Button buttonFilter;
         private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage Processes;
         private System.Windows.Forms.TabPage Operations;
@@ -762,6 +778,7 @@ namespace SPAFilter
         private System.Windows.Forms.DataGridView dataGridOperations;
         private Button ServiceCatalogOpenButton;
         private ToolStripButton reloadServiceInstancesButton;
+        private Button buttonReset;
     }
 }
 

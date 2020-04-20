@@ -382,4 +382,10 @@
   <data name="Form_Get" xml:space="preserve">
     <value>     Фильтр F5</value>
   </data>
+  <data name="Form_Reset" xml:space="preserve">
+    <value>      Сброс F6</value>
+  </data>
+  <data name="Form_ToolTip_buttonReset" xml:space="preserve">
+    <value>Сбросить фильтр</value>
+  </data>
 </root>

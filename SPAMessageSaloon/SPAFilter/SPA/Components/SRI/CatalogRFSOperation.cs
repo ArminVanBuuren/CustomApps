@@ -5,15 +5,20 @@ using System.Xml.XPath;
 using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SRI
 {
-    public sealed class RFSOperation : CatalogOperation
+    public sealed class CatalogRFSOperation : CatalogOperation
     {
         private readonly XPathNavigator _navigator;
         private RFSBindings _bindings;
 
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName { get; protected set; }
+
         public string RFSName { get; }
+
         public string LinkType { get; set; }
 
         internal bool IsSubscription { get; set; } = false;
@@ -48,7 +53,7 @@ namespace SPAFilter.SPA.Components.SRI
         public XmlNode Node { get; }
         public DistinctList<XmlNode> ChildRFSList { get; } = new DistinctList<XmlNode>();
         public DistinctList<string> ChildCFSList { get; } = new DistinctList<string>();
-        public List<ScenarioOperation> IncludedToScenarios { get; } = new List<ScenarioOperation>();
+        public List<CatalogScenarioOperation> IncludedToScenarios { get; } = new List<CatalogScenarioOperation>();
 
         internal override RFSBindings Bindings
         {
@@ -93,7 +98,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public RFSOperation(XmlNode node, string rfsName, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
+        public CatalogRFSOperation(XmlNode node, string rfsName, string linkType, string hostTypeName, XPathNavigator navigator, ServiceCatalog catalog)
         {
             RFSName = rfsName;
             LinkType = linkType;
@@ -107,11 +112,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
             
             Name = $"{catalog.Prefix}{LinkType}.{RFSName}";
-        }
-
-        public override string ToString()
-        {
-            return $"{base.ToString()} RFS=[{ChildRFSList.Count}] CFS=[{ChildCFSList.Count}] Scenario=[{IncludedToScenarios.Count}]";
+            UniqueName = $"{catalog.Prefix}{HostTypeName}.{LinkType}.{RFSName}";
         }
     }
 }

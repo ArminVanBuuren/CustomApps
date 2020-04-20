@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Threading;
-using System.Windows.Forms;
-
-namespace SPAMessageSaloon.Common
+﻿namespace SPAMessageSaloon.Common
 {
     public interface ISaloonForm : IUserForm
     {

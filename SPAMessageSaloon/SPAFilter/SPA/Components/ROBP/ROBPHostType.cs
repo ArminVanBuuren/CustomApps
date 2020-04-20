@@ -3,11 +3,19 @@ using System.IO;
 using System.Linq;
 using SPAFilter.SPA.Collection;
 using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.ROBP
 {
-    public class ROBPHostType : DriveTemplate, IHostType
+    public sealed class ROBPHostType : DriveTemplate, IHostType
     {
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName
+        {
+            get => FilePath;
+            protected set { }
+        }
+
         public CollectionTemplate<IOperation> Operations { get; private set; } = new CollectionTemplate<IOperation>();
 
         public ROBPHostType(string path) : base(path)

@@ -7,11 +7,18 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA
 {
-    public abstract class DriveTemplate : ObjectTemplate, IComparable
+    public class DriveTemplate : ObjectTemplate
     {
         private readonly FileInfo _fileInfo;
 
-        [DGVColumn(ColumnPosition.Before, "Size[Kb]")]
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName
+        {
+            get => FilePath;
+            protected set { }
+        }
+
+        [DGVColumn(ColumnPosition.After, "Size[Kb]")]
         public double FileSize
         {
             get
@@ -70,41 +77,6 @@ namespace SPAFilter.SPA
             newFileName = fileName;
             newId = -1;
             return false;
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null)
-                return 1;
-
-            if (!(obj is DriveTemplate objRes))
-                return 1;
-
-            if (ReferenceEquals(this, objRes))
-                return 0;
-
-            return Equals(objRes) ? 0 : 1;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is DriveTemplate objRes))
-                return false;
-
-            if (objRes.FilePath.Like(FilePath))
-                return true;
-
-            return RuntimeHelpers.Equals(this, obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return !FilePath.IsNullOrEmptyTrim() ? FilePath.ToLower().GetHashCode() : RuntimeHelpers.GetHashCode(this);
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
     }
 }

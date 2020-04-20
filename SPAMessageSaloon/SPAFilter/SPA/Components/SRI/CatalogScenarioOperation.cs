@@ -8,15 +8,25 @@ using SPAFilter.Properties;
 using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SRI
 {
-    public sealed class ScenarioOperation : CatalogOperation
+    public sealed class CatalogScenarioOperation : CatalogOperation
     {
         private RFSBindings _bindings;
 
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName
+        {
+            get => Name;
+            protected set { }
+        }
+
         internal XmlNode ScenarioNode { get; private set; }
+
         internal string ScenarioName { get; private set; }
+
         internal override RFSBindings Bindings
         {
             get
@@ -40,8 +50,10 @@ namespace SPAFilter.SPA.Components.SRI
         }
 
         private bool IsInner { get; } = false;
-        DistinctList<RFSOperation> RFSList { get; } = new DistinctList<RFSOperation>();
-        DistinctList<RFSOperation> AppendRFSList { get; } = new DistinctList<RFSOperation>();
+
+        DistinctList<CatalogRFSOperation> RFSList { get; } = new DistinctList<CatalogRFSOperation>();
+
+        DistinctList<CatalogRFSOperation> AppendRFSList { get; } = new DistinctList<CatalogRFSOperation>();
 
         public override string Body
         {
@@ -73,7 +85,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        public ScenarioOperation(XmlNode scenarioNode, string scenarioName, string rfsName, ServiceCatalog catalog)
+        public CatalogScenarioOperation(XmlNode scenarioNode, string scenarioName, string rfsName, ServiceCatalog catalog)
         {
             IsInner = true;
             Preload(scenarioNode, scenarioName, catalog);
@@ -83,7 +95,7 @@ namespace SPAFilter.SPA.Components.SRI
             if(type.IsNullOrEmpty())
                 throw new Exception(string.Format(Resources.ServiceCatalog_NotFoundTyoeAttribute, rfsName, ScenarioName));
 
-            if (!catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList))
+            if (!catalog.CatalogRFSCollection.TryGetValue(rfsName, out var rfsOperationList))
                 return;
 
             foreach (var rfs in rfsOperationList.Where(p => p.LinkType.Like(type)))
@@ -98,11 +110,11 @@ namespace SPAFilter.SPA.Components.SRI
 
         class ScenarioRFSList
         {
-            public List<RFSOperation> MandatoryList { get; } = new List<RFSOperation>();
-            public List<RFSOperation> ChildList { get; } = new List<RFSOperation>();
+            public List<CatalogRFSOperation> MandatoryList { get; } = new List<CatalogRFSOperation>();
+            public List<CatalogRFSOperation> ChildList { get; } = new List<CatalogRFSOperation>();
         }
 
-        public ScenarioOperation(XmlNode scenarioNode, string scenarioName, XPathNavigator navigator, ServiceCatalog catalog)
+        public CatalogScenarioOperation(XmlNode scenarioNode, string scenarioName, XPathNavigator navigator, ServiceCatalog catalog)
         {
             Preload(scenarioNode, scenarioName, catalog);
 
@@ -167,7 +179,7 @@ namespace SPAFilter.SPA.Components.SRI
                         break;
                     }
 
-                    if (string.IsNullOrEmpty(rfsName) || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
+                    if (string.IsNullOrEmpty(rfsName) || !catalog.CatalogRFSCollection.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
                         continue;
 
                     AppendRFSList.Add(rfsOperationList.First());
@@ -205,7 +217,7 @@ namespace SPAFilter.SPA.Components.SRI
                     }
                 }
 
-                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Count == 0 || !catalog.AllRFS.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
+                if (string.IsNullOrEmpty(rfsName) || scenarioTypeList == null || scenarioTypeList.Count == 0 || !catalog.CatalogRFSCollection.TryGetValue(rfsName, out var rfsOperationList) || rfsOperationList.Count == 0)
                     continue;
 
 
@@ -216,7 +228,7 @@ namespace SPAFilter.SPA.Components.SRI
                     foreach (var linkType in scenarioTypeList)
                     {
                         // это костыль, т.к. хэндлеры не проверяются. В хэндлерах могут быть разные настройки где RFS может использоваться с типом modify и т.д., поэтому костыльно создаются недостающие
-                        var notExistRFS = new RFSOperation(anyExistRFS.Node, rfsName, linkType, anyExistRFS.HostTypeName, navigator, catalog);
+                        var notExistRFS = new CatalogRFSOperation(anyExistRFS.Node, rfsName, linkType, anyExistRFS.HostTypeName, navigator, catalog);
                         notExistRFS.ChildCFSList.AddRange(anyExistRFS.ChildCFSList);
                         notExistRFS.ChildRFSList.AddRange(notExistRFS.ChildRFSList);
                         rfsOperationList.Add(notExistRFS);
@@ -264,11 +276,6 @@ namespace SPAFilter.SPA.Components.SRI
                 throw new Exception(string.Format(Resources.ServiceCatalog_ScenarioWithDifferentHostType, ScenarioName, string.Join(",", scenarioHostType)));
 
             HostTypeName = scenarioHostType.First();
-        }
-
-        public override string ToString()
-        {
-            return $"{base.ToString()} RFSList=[{RFSList.Count}] AppendRFS=[{AppendRFSList.Count}]";
         }
     }
 }

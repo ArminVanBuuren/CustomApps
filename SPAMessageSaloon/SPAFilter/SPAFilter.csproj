@@ -53,8 +53,9 @@
     <Reference Include="Utils">
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
+    <Reference Include="Utils.WinForm, Version=1.0.7415.5446, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Debug\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -75,24 +76,21 @@
     </Compile>
     <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
     <Compile Include="SPA\Collection\CollectionTemplate.cs" />
-    <Compile Include="SPA\Components\ISAComponent.cs" />
+    <Compile Include="SPA\IMembers.cs" />
     <Compile Include="SPA\Components\ServiceInstance.cs" />
     <Compile Include="SPA\Components\BusinessProcess.cs" />
     <Compile Include="SPA\Components\SRI\CatalogHostType.cs" />
     <Compile Include="SPA\Components\SRI\CatalogOperation.cs" />
-    <Compile Include="SPA\Components\IOperation.cs" />
     <Compile Include="SPA\Components\SRI\RFSBindings.cs" />
     <Compile Include="SPA\Components\Command.cs" />
-    <Compile Include="SPA\Components\IHostType.cs" />
     <Compile Include="SPA\Collection\CollectionHostType.cs" />
     <Compile Include="SPA\Components\ROBP\ROBPHostType.cs" />
     <Compile Include="SPA\Components\ROBP\ROBPOperation.cs" />
     <Compile Include="SPA\Collection\ServiceCatalog.cs" />
-    <Compile Include="SPA\Components\SRI\RFSOperation.cs" />
-    <Compile Include="SPA\Components\SRI\ScenarioOperation.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogRFSOperation.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogScenarioOperation.cs" />
     <Compile Include="SPA\Components\ServiceActivator.cs" />
     <Compile Include="SPA\DriveTemplate.cs" />
-    <Compile Include="SPA\IObjectTemplate.cs" />
     <Compile Include="SPA\Components\SRI\CatalogItemEqualityComparer.cs" />
     <Compile Include="SPA\ObjectTemplate.cs" />
     <Compile Include="SPAFilterForm.cs">
@@ -152,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons8.ico" />
+    <Content Include="Resources\reset2.png" />
     <None Include="Resources\reload.png" />
     <None Include="Resources\xml8.png" />
     <None Include="Resources\xls1.png" />

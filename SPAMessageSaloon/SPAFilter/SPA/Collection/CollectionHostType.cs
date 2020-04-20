@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SPAFilter.SPA.Components;
 
@@ -71,6 +72,43 @@ namespace SPAFilter.SPA.Collection
                     _operationNames.Add(operation.Name);
                     _operations.Add(operation);
                 }
+            }
+        }
+
+        public void Remove(IOperation operation)
+        {
+            lock (sync)
+            {
+                foreach (var hostType in this.Where(x => x.Name.Equals(operation.HostTypeName)).ToList())
+                {
+                    if (hostType.Operations[operation] != null)
+                        hostType.Operations.Remove(operation);
+
+                    if (hostType.Operations.Count == 0)
+                    {
+                        base.Remove(hostType);
+                        _hostTypeNames.Remove(hostType.Name);
+                    }
+                }
+
+                _operationNames.Remove(operation.Name);
+                _operations.Remove(operation);
+            }
+        }
+
+        public void ClearOperations(IHostType hostType)
+        {
+            lock (sync)
+            {
+                foreach (var operation in hostType.Operations)
+                {
+                    _operationNames.Remove(operation.Name);
+                    _operations.Remove(operation);
+                }
+
+                hostType.Operations.Clear();
+                base.Remove(hostType);
+                _hostTypeNames.Remove(hostType.Name);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace SPAFilter.SPA.Components
         internal List<Command> Commands { get; } = new List<Command>();
         internal List<Scenario> SubScenarios { get; private set; } = new List<Scenario>();
 
-        [DGVColumn(ColumnPosition.After, "HostType")]
+        [DGVColumn(ColumnPosition.First, "HostType")]
         public string HostTypeName => Parent.HostTypeName;
 
         [DGVColumn(ColumnPosition.After, "Scenario")]

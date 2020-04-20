@@ -269,11 +269,11 @@ namespace SPAFilter.SPA
             HostTypes = new CollectionHostType();
             var allBPOperations = Processes.AllOperationsNames;
 
-            foreach (var hostTypeDir in hostTypesDir)
+            foreach (var hostTypeDir in hostTypesDir.ToList())
             {
                 var robpHostType = new ROBPHostType(hostTypeDir);
-                FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
                 HostTypes.Add(robpHostType);
+                FilterOperations(HostTypes, robpHostType, htFilter, opFilter, allBPOperations, false);
             }
         }
 
@@ -302,19 +302,19 @@ namespace SPAFilter.SPA
                 return;
             var anyHasCatalogCall = Processes.AnyHasCatalogCall;
 
-            foreach (var hostType in HostTypes)
+            foreach (var hostType in HostTypes.ToList())
             {
-                FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
+                FilterOperations(HostTypes, hostType, neFilter, opFilter, null, anyHasCatalogCall);
             }
         }
 
-        static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
+        static void FilterOperations(CollectionHostType parentHostTypes, IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
         {
             // не менять порядок проверок!
             if (neFilter != null && !neFilter.Invoke(hostType))
             {
                 // если фильтруются операции по другому хосту
-                hostType.Operations.Clear();
+                parentHostTypes.ClearOperations(hostType);
             }
             else if (allBPOperations != null)
             {
@@ -324,19 +324,19 @@ namespace SPAFilter.SPA
 
                 foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
-                        hostType.Operations.Remove(operation);
+                        parentHostTypes.Remove(operation);
             }
             else if (!anyHasCatalogCall)
             {
                 // если ни в одном бизнесс процессе нет вызова каталога, то все операции удалются
-                hostType.Operations.Clear();
+                parentHostTypes.ClearOperations(hostType);
             }
             else if (opFilter != null)
             {
                 // удаляем операции которые не попали под имя указынные в фильтре операций
                 foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!opFilter.Invoke(operation))
-                        hostType.Operations.Remove(operation);
+                        parentHostTypes.Remove(operation);
             }
         }
 
@@ -393,15 +393,15 @@ namespace SPAFilter.SPA
             });
         }
 
-        public async Task RemoveInstanceAsync(IEnumerable<int> instancesPrivateID)
+        public async Task RemoveInstanceAsync(IEnumerable<string> uniqueNamesOfInstances)
         {
             await Task.Factory.StartNew(() =>
             {
                 lock (ACTIVATORS_SYNC)
                 {
-                    foreach (var privateID in instancesPrivateID)
+                    foreach (var uniqueName in uniqueNamesOfInstances)
                     {
-                        var instance = ServiceInstances[privateID];
+                        var instance = ServiceInstances[uniqueName];
                         instance.Parent.Instances.Remove(instance);
                     }
 

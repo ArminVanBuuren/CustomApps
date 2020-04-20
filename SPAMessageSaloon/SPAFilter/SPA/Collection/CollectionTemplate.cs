@@ -9,21 +9,18 @@ namespace SPAFilter.SPA.Collection
     {
         private readonly object sync = new object();
 
-        private int _seqPrivateID = 0;
         int _seqID = 0;
 
-        readonly Dictionary<int, T> _collection;
-
-        public List<string> ItemsName => _collection.Values.Select(x => x.Name).ToList();
+        readonly Dictionary<IObjectTemplate, T> _collection;
 
         public CollectionTemplate()
         {
-            _collection = new Dictionary<int, T>(50);
+            _collection = new Dictionary<IObjectTemplate, T>(50);
         }
 
         public CollectionTemplate(IEnumerable<T> collection)
         {
-            _collection = new Dictionary<int, T>(collection.Count());
+            _collection = new Dictionary<IObjectTemplate, T>(collection.Count());
             AddCollection(collection);
         }
 
@@ -42,9 +39,8 @@ namespace SPAFilter.SPA.Collection
         {
             lock (sync)
             {
-                template.PrivateID = ++_seqPrivateID;
                 template.ID = ++_seqID;
-                _collection.Add(template.ID, template);
+                _collection.Add(template, template);
             }
         }
 
@@ -58,14 +54,40 @@ namespace SPAFilter.SPA.Collection
             }
         }
 
-        public int Count => _collection.Count;
+        public int Count
+        {
+            get
+            {
+                lock (sync)
+                    return _collection.Count;
+            }
+        }
 
-        public T this[int PrivateID] => _collection.TryGetValue(PrivateID, out var template) ? template : default(T);
+        public T this[string UniqueName]
+        {
+            get
+            {
+                lock (sync)
+                {
+                    var input = new BlankTemplate(UniqueName);
+                    return _collection.TryGetValue(input, out var originalTemplate) ? originalTemplate : null;
+                }
+            }
+        }
+
+        public T this[IObjectTemplate template]
+        {
+            get
+            {
+                lock (sync)
+                    return _collection.TryGetValue(template, out var originalTemplate) ? originalTemplate : null;
+            }
+        }
 
         public void Remove(T template)
         {
             lock (sync)
-                _collection.Remove(template.PrivateID);
+                _collection.Remove(template);
         }
 
         public void Clear()
@@ -89,6 +111,11 @@ namespace SPAFilter.SPA.Collection
         public void Dispose()
         {
             Clear();
+        }
+
+        public override string ToString()
+        {
+            return $"Count = {_collection.Count}";
         }
     }
 }

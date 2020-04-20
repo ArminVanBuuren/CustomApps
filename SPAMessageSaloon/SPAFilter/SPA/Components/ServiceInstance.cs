@@ -12,12 +12,16 @@ namespace SPAFilter.SPA.Components
 {
     public sealed class ServiceInstance : DriveTemplate, ISAComponent
     {
-        [DGVColumn(ColumnPosition.After, "HardwareID")]
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName => $"{HardwareID}_{FilePath}";
+
+        [DGVColumn(ColumnPosition.First, "HardwareID")]
         public string HardwareID { get; private set; }
 
-        public string HostTypeName { get; private set; }
-
+        [DGVColumn(ColumnPosition.After, "Name", false)]
         public override string Name { get; set; }
+
+        public string HostTypeName { get; private set; }
 
         public List<Scenario> Scenarios { get; } = new List<Scenario>();
 
@@ -136,21 +140,6 @@ namespace SPAFilter.SPA.Components
         void ShowError(string message)
         {
             ReportMessage.Show(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj) && obj is ServiceInstance instance && HardwareID.Equals(instance.HardwareID);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return HardwareID;
         }
     }
 }

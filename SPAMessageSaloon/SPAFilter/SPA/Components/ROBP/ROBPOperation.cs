@@ -5,7 +5,10 @@ namespace SPAFilter.SPA.Components.ROBP
 {
     public sealed class ROBPOperation : DriveTemplate, IOperation
     {
-        [DGVColumn(ColumnPosition.After, "HostType")]
+        [DGVColumn(ColumnPosition.First, "UniqueName", false)]
+        public override string UniqueName => FilePath;
+
+        [DGVColumn(ColumnPosition.First, "HostType")]
         public string HostTypeName { get; }
 
         [DGVColumn(ColumnPosition.After, "Operation")]
@@ -21,7 +24,7 @@ namespace SPAFilter.SPA.Components.ROBP
         /// </summary>
         public bool IsFailed { get; set; } = false;
 
-        public ROBPOperation(string path, IObjectTemplate parentElement, bool isFailed) : base(path)
+        public ROBPOperation(string path, IObjectTemplate parentHostType, bool isFailed) : base(path)
         {
             if (GetNameWithId(Name, out var newName, out var newId))
             {
@@ -29,20 +32,8 @@ namespace SPAFilter.SPA.Components.ROBP
                 ID = newId;
             }
 
-            HostTypeName = parentElement.Name;
+            HostTypeName = parentHostType.Name;
             IsFailed = isFailed;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is ROBPOperation operation)
-                return Name.Like(operation.Name) && HostTypeName.Equals(operation.HostTypeName);
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
     }
 }

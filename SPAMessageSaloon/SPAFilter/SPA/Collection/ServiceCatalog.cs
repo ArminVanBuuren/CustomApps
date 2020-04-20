@@ -101,8 +101,8 @@ namespace SPAFilter.SPA.Collection
     public class ServiceCatalog : CollectionHostType
     {
         public string Prefix { get; }
-        internal DoubleDictionary<string, RFSOperation> AllRFS { get; }
-        internal Dictionary<string, ScenarioOperation> AllScenarios { get; }
+        internal DoubleDictionary<string, CatalogRFSOperation> CatalogRFSCollection { get; }
+        internal Dictionary<string, CatalogScenarioOperation> CatalogScenarioCollection { get; }
 
         public ServiceCatalog(string filePath)
         {
@@ -115,8 +115,8 @@ namespace SPAFilter.SPA.Collection
                 throw new Exception(Resources.ServiceCatalog_NotFoundScenarioPrefix);
             Prefix = prefix.Value;
 
-            AllRFS = new DoubleDictionary<string, RFSOperation>();
-            AllScenarios = new Dictionary<string, ScenarioOperation>();
+            CatalogRFSCollection = new DoubleDictionary<string, CatalogRFSOperation>();
+            CatalogScenarioCollection = new Dictionary<string, CatalogScenarioOperation>();
 
             if(!navigator.Select(@"/Configuration/RFSList/RFS", out var rfsList))
                 throw new Exception(Resources.ServiceCatalog_NoRFSFound);
@@ -146,18 +146,18 @@ namespace SPAFilter.SPA.Collection
                     var scenarioName = scenario.Node.Attributes?["name"]?.Value;
                     if (string.IsNullOrEmpty(scenarioName))
                         throw new Exception(string.Format(Resources.ServiceCatalog_NoNameAttribute, "Scenario"));
-                    if (AllScenarios.ContainsKey(scenarioName))
+                    if (CatalogScenarioCollection.ContainsKey(scenarioName))
                         throw new Exception(string.Format(Resources.ServiceCatalog_DoubleScenario, scenarioName));
                     
-                    var scenarioOp = new ScenarioOperation(scenario.Node, scenarioName, navigator, this);
-                    AllScenarios.Add(scenarioName, scenarioOp);
+                    var scenarioOp = new CatalogScenarioOperation(scenario.Node, scenarioName, navigator, this);
+                    CatalogScenarioCollection.Add(scenarioName, scenarioOp);
                 }
             }
 
 
             // непосредственная стадия фильтрации. Исключаем дропы и те RFS которые уже есть в сценариях
             var filteredOperations = new Dictionary<string, IOperation>();
-            foreach (var rfsOperationList in AllRFS)
+            foreach (var rfsOperationList in CatalogRFSCollection)
             {
                 foreach (var rfs in rfsOperationList.Value)
                 {
@@ -170,7 +170,7 @@ namespace SPAFilter.SPA.Collection
                 }
             }
 
-            foreach (var scenario in AllScenarios)
+            foreach (var scenario in CatalogScenarioCollection)
             {
                 if (!scenario.Value.IsDropped)
                 {
@@ -184,7 +184,6 @@ namespace SPAFilter.SPA.Collection
                 Add(new CatalogHostType(hostTypeOps.Key, hostTypeOps));
             }
         }
-
 
         void GetRFS(IDictionary<XmlNode, IEnumerable<XmlNode>> collection, XPathNavigator navigator, bool isSubscriptions = false)
         {
@@ -225,7 +224,7 @@ namespace SPAFilter.SPA.Collection
                     throw new Exception(string.Format(Resources.ServiceCatalog_NoHostTypeAttr, rfsName));
                 if (processType.Like("CancelHostType"))
                     continue;
-                if(AllRFS.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is RFSOperation operation) && operation.RFSName.Like(rfsName)))
+                if(CatalogRFSCollection.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is CatalogRFSOperation operation) && operation.RFSName.Like(rfsName)))
                     throw new Exception(string.Format(Resources.ServiceCatalog_AlreadyExist, rfsName));
                 
                 var defaultLinkTypes = new List<string> { "Add", "Remove" };
@@ -277,7 +276,7 @@ namespace SPAFilter.SPA.Collection
 
                 if (!baseRFSName.IsNullOrEmptyTrim())
                 {
-                    if (AllRFS.TryGetValue(baseRFSName, out var result))
+                    if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result))
                     {
                         foreach (var baseRFS in result)
                         {
@@ -340,14 +339,14 @@ namespace SPAFilter.SPA.Collection
                         }
                     }
 
-                    if (AllRFS.TryGetValue(baseRFSName, out var result2))
-                        AllRFS.Add(rfsName, result2);
+                    if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result2))
+                        CatalogRFSCollection.Add(rfsName, result2);
 
                     continue;
                 }
                 else if (!parentRFSName.IsNullOrEmptyTrim())
                 {
-                    if (AllRFS.TryGetValue(parentRFSName, out var result))
+                    if (CatalogRFSCollection.TryGetValue(parentRFSName, out var result))
                     {
                         foreach (var parentRFS in result)
                         {
@@ -364,8 +363,8 @@ namespace SPAFilter.SPA.Collection
                         }
                     }
 
-                    if (AllRFS.TryGetValue(baseRFSName, out var result2))
-                        AllRFS.Add(rfsName, result2);
+                    if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result2))
+                        CatalogRFSCollection.Add(rfsName, result2);
 
                     continue;
                 }
@@ -409,22 +408,22 @@ namespace SPAFilter.SPA.Collection
             }
         }
 
-        RFSOperation AddBaseRFS(XmlNode node, KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
+        CatalogRFSOperation AddBaseRFS(XmlNode node, KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
         {
-            var baseRFS = new RFSOperation(node, rfsName, linkType, hostType, navigator, this);
+            var baseRFS = new CatalogRFSOperation(node, rfsName, linkType, hostType, navigator, this);
             baseRFS.ChildRFSList.Add(rfsCFSs.Key);
-            AllRFS.Add(rfsName, baseRFS);
+            CatalogRFSCollection.Add(rfsName, baseRFS);
             return baseRFS;
         }
 
         void AddRFS(KeyValuePair<XmlNode, IEnumerable<XmlNode>> rfsCFSs, string rfsName, string linkType, string hostType, XPathNavigator navigator)
         {
-            var rfs = new RFSOperation(rfsCFSs.Key, rfsName, linkType, hostType, navigator, this);
+            var rfs = new CatalogRFSOperation(rfsCFSs.Key, rfsName, linkType, hostType, navigator, this);
             AddChildCFS(rfs, rfsCFSs.Value);
-            AllRFS.Add(rfsName, rfs);
+            CatalogRFSCollection.Add(rfsName, rfs);
         }
 
-        static void AddChildCFS(RFSOperation rfs, IEnumerable<XmlNode> cfsList)
+        static void AddChildCFS(CatalogRFSOperation rfs, IEnumerable<XmlNode> cfsList)
         {
             if(cfsList != null)
                 rfs.ChildCFSList.AddRange(cfsList.Select(p => p.Attributes?["name"]?.Value));
@@ -450,10 +449,10 @@ namespace SPAFilter.SPA.Collection
                 if (string.IsNullOrEmpty(scenarioName))
                     throw new Exception(Resources.ServiceCatalog_NoNameAttribute);
 
-                if (!AllScenarios.ContainsKey(scenarioName))
+                if (!CatalogScenarioCollection.ContainsKey(scenarioName))
                 {
-                    var scenarioOp = new ScenarioOperation(childNode, scenarioName, rfsName, this);
-                    AllScenarios.Add(scenarioName, scenarioOp);
+                    var scenarioOp = new CatalogScenarioOperation(childNode, scenarioName, rfsName, this);
+                    CatalogScenarioCollection.Add(scenarioName, scenarioOp);
                 }
             }
         }
