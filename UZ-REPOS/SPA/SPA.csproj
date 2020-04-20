@@ -140,10 +140,10 @@
     <Content Include="EDITION\DOC\SC_DOCs.txt" />
     <Content Include="EDITION\DOC\XMLFile1.xml" />
     <Content Include="EDITION\HLR-Profiles.txt" />
-    <Content Include="EDITION\SPA.ROBP\Operations\BSP Proxy\CounterReinitializationOnBSProxy.xml" />
-    <Content Include="EDITION\SPA.ROBP\Operations\Content\SC.Remove.RFS_CT5_SUBSCRIPTION.xml" />
-    <Content Include="EDITION\SPA.ROBP\Operations\HLR\GetSubscriberByIMSI.xml" />
-    <Content Include="EDITION\SPA.ROBP\Operations\HLR\GetSubscriberByMSISDN.xml" />
+    <Content Include="EDITION\SPA.ROBP\Operations\BSP\CounterReinitializationOnBSProxy.xml" />
+    <Content Include="EDITION\SPA.ROBP\Operations\CT5\SC.Remove.RFS_CT5_SUBSCRIPTION.xml" />
+    <Content Include="EDITION\SPA.ROBP\Operations\HL\GetSubscriberByIMSI.xml" />
+    <Content Include="EDITION\SPA.ROBP\Operations\HL\GetSubscriberByMSISDN.xml" />
     <Content Include="EDITION\SPA.ROBP\Processes\Activate Call Forwarding Sync.xml" />
     <Content Include="EDITION\SPA.ROBP\Processes\Add GPRS.xml" />
     <Content Include="EDITION\SPA.ROBP\Processes\Add MCA Serice.xml" />

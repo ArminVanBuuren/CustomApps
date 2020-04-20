@@ -123,16 +123,22 @@ namespace SPAFilter.SPA
                     // То помечаем бизнесспроцессы в которых файлы ROBP операций не существуют
                     if (ROBPHostTypesPath != null)
                     {
-                        foreach (var process in Processes)
+                        foreach (var process in Processes.Select(x => x).ToList())
                         {
+                            var anyOperationInProcesss = false;
                             foreach (var operation in process.Operations)
                             {
                                 if (operationsDictionary.ContainsKey(operation))
+                                {
+                                    anyOperationInProcesss = true;
                                     continue;
+                                }
 
                                 process.AllOperationsExist = false;
-                                break;
                             }
+
+                            if (!anyOperationInProcesss)
+                                Processes.Remove(process);
                         }
                     }
                 }
