@@ -383,8 +383,8 @@ namespace LogsReader.Reader
 
                     stop.Start();
                     IsWorking = true;
-                    ChangeFormStatus();
                     ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+                    ChangeFormStatus();
 
                     await MainReader.StartAsync();
 
@@ -592,18 +592,6 @@ namespace LogsReader.Reader
 
         void ChangeFormStatus()
         {
-            if (IsWorking)
-            {
-                ParentSplitContainer.Cursor = Cursors.WaitCursor;
-                ClearForm();
-                ParentSplitContainer.Focus();
-            }
-            else
-            {
-                ParentSplitContainer.Cursor = Cursors.Default;
-                dgvFiles.Focus();
-            }
-
             btnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
             btnClear.Enabled = !IsWorking;
             trvMain.Enabled = !IsWorking;
@@ -628,6 +616,18 @@ namespace LogsReader.Reader
             orderByText.Enabled = !IsWorking;
             buttonExport.Enabled = dgvFiles.RowCount > 0;
             buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+
+            if (IsWorking)
+            {
+                ParentSplitContainer.Cursor = Cursors.WaitCursor;
+                ClearForm();
+                this.Focus();
+            }
+            else
+            {
+                ParentSplitContainer.Cursor = Cursors.Default;
+                dgvFiles.Focus();
+            }
         }
 
         private void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

@@ -163,8 +163,5 @@
     <Content Include="Resources\icons8-plus-20.png" />
     <Content Include="Resources\icons8-synchronize-20.png" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

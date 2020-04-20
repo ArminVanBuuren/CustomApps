@@ -44,7 +44,6 @@ namespace LogsReader
                 base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
 
                 KeyPreview = true;
-                KeyDown += MainForm_KeyDown;
                 Closing += (s, e) => { SaveData(); };
                 Shown += (s, e) =>
                 {
@@ -128,9 +127,9 @@ namespace LogsReader
             TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, text);
         }
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            CurrentForm?.LogsReaderKeyDown(sender, e);
+            CurrentForm?.LogsReaderKeyDown(this, e);
         }
 
         public void ApplySettings()

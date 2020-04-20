@@ -91,8 +91,6 @@ namespace SPAMessageSaloon
         {
             try
             {
-                KeyPreview = true;
-
                 try
                 {
                     AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
