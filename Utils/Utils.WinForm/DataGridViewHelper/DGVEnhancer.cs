@@ -105,35 +105,47 @@ namespace Utils.WinForm.DataGridViewHelper
             var inputType = typeof(T);
             var properties = new Dictionary<string, PropertyInfo>();
 
+            // Сначала берутся свойства из базовых типов, затем они ишются в производных и свойство Property заменяется и производного.
+            // Аттрибуты DGVColumnAttribute всегда наследуются, даже если их не указать в производном классе
             void AssignProperty(Type type)
             {
                 foreach (var property in type.GetProperties())
                 {
                     var attrs = property.GetCustomAttributes(true);
-                    if (!attrs.Any())
-                        continue;
+                    IEnumerable<DGVColumnAttribute> columnAttrs = attrs.OfType<DGVColumnAttribute>();
+                    if (attrs.Any())
+                        columnAttrs = attrs.OfType<DGVColumnAttribute>();
 
-                    var columnAttrs = attrs.Where(x => x is DGVColumnAttribute);
                     if (!columnAttrs.Any())
-                        continue;
-
-                    var columnAttr = (DGVColumnAttribute)columnAttrs.First();
-
-                    if (columnList.TryGetValue(property.Name, out var exist))
                     {
-                        properties.Remove(property.Name);
-                        properties.Add(property.Name, property);
-                        exist.Attribute = columnAttr;
-                        exist.PropertyType = property.PropertyType;
+                        if (columnList.TryGetValue(property.Name, out var exist))
+                        {
+                            properties.Remove(property.Name);
+                            properties.Add(property.Name, property);
+                        }
+                        continue;
                     }
                     else
                     {
-                        columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
-                        properties.Add(property.Name, property);
+                        var columnAttr = columnAttrs.First();
+
+                        if (columnList.TryGetValue(property.Name, out var exist))
+                        {
+                            properties.Remove(property.Name);
+                            properties.Add(property.Name, property);
+                            exist.Attribute = columnAttr;
+                            exist.PropertyType = property.PropertyType;
+                        }
+                        else
+                        {
+                            columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
+                            properties.Add(property.Name, property);
+                        }
                     }
                 }
             }
 
+            // сначала идут базовые типы, затем производные
             var listOfTypes = new List<Type> {inputType};
             while (inputType.BaseType != null)
             {
@@ -144,19 +156,6 @@ namespace Utils.WinForm.DataGridViewHelper
             foreach (var type in listOfTypes)
                 AssignProperty(type);
 
-
-            //var properties = typeof(T).GetProperties();
-            //foreach (var property in properties)
-            //{
-            //    var attrs = property.GetCustomAttributes(true);
-            //    foreach (var attr in attrs)
-            //    {
-            //        if (attr is DGVColumnAttribute columnAttr)
-            //        {
-            //            columnList.Add(property.Name, new DGVColumn(classPosition++, property.Name, columnAttr, property.PropertyType));
-            //        }
-            //    }
-            //}
 
             if (grid == null || grid.ColumnCount == 0)
             {
