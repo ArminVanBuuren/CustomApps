@@ -23,7 +23,7 @@ namespace SPAFilter.SPA.Components
         /// <summary>
         /// Количество вложенных сценариев
         /// </summary>
-        [DGVColumn(ColumnPosition.Last, "SubScenarios")]
+        [DGVColumn(ColumnPosition.After, "SubScenarios")]
         public int ExistSubScenarios => SubScenarios.Count;
 
         /// <summary>
