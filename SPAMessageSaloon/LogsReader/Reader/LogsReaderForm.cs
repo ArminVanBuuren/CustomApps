@@ -341,11 +341,11 @@ namespace LogsReader.Reader
                     case Keys.F5 when btnSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
+                    case Keys.Escape when btnSearch.Enabled && IsWorking:
+                        BtnSearch_Click(this, EventArgs.Empty);
+                        break;
                     case Keys.F6 when btnClear.Enabled:
                         ClearForm();
-                        break;
-                    case Keys.S when e.Control && buttonExport.Enabled:
-                        ButtonExport_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F7 when buttonFilter.Enabled:
                         buttonFilter_Click(this, EventArgs.Empty);
@@ -353,8 +353,8 @@ namespace LogsReader.Reader
                     case Keys.F8 when buttonReset.Enabled:
                         buttonReset_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.Escape when btnSearch.Enabled && IsWorking:
-                        BtnSearch_Click(this, EventArgs.Empty);
+                    case Keys.S when e.Control && buttonExport.Enabled:
+                        ButtonExport_Click(this, EventArgs.Empty);
                         break;
                 }
             }
@@ -415,7 +415,6 @@ namespace LogsReader.Reader
                     ChangeFormStatus();
                     if (stop.IsRunning)
                         stop.Stop();
-                    dgvFiles.Focus();
                 }
             }
             else
@@ -597,10 +596,12 @@ namespace LogsReader.Reader
             {
                 ParentSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
+                ParentSplitContainer.Focus();
             }
             else
             {
                 ParentSplitContainer.Cursor = Cursors.Default;
+                dgvFiles.Focus();
             }
 
             btnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
@@ -1021,6 +1022,11 @@ namespace LogsReader.Reader
             _statusInfo.BackColor = SystemColors.Control;
             _statusInfo.ForeColor = Color.Black;
             _statusInfo.Text = string.Empty;
+        }
+
+        public override string ToString()
+        {
+            return CurrentSettings?.ToString();
         }
     }
 

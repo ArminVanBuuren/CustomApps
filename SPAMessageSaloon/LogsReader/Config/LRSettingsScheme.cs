@@ -286,5 +286,10 @@ namespace LogsReader.Config
                 return true;
             }
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

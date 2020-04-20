@@ -14,8 +14,6 @@ namespace LogsReader
 {
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
-        private LogsReaderForm _current;
-
         /// <summary>
         /// Настройки схем
         /// </summary>
@@ -27,12 +25,9 @@ namespace LogsReader
         {
             get
             {
-                return this.SafeInvoke(() =>
-                {
-                    if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
-                        _current = current;
-                    return _current;
-                });
+                if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
+                    return current;
+                return null;
             }
         }
 
