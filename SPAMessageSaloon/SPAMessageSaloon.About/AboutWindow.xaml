@@ -6,16 +6,18 @@
              xmlns:local="clr-namespace:SPAMessageSaloon"
              xmlns:main="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
              Title="About" 
-                
+
+             SizeToContent="WidthAndHeight"
+             ResizeMode="NoResize"
+             WindowStartupLocation="CenterOwner"
+
              FontFamily="Segoe UI"
              FontSize="11"
              Background="#333"
              Foreground="#FF32EBFB"
-             
-             WindowStartupLocation="CenterOwner"
              BorderBrush="#FF1087BF"
              Style="{DynamicResource VSUIWindowStyleLocal}"
-             mc:Ignorable="d" Width="1505.328" Height="735.475">
+             mc:Ignorable="d" Width="1505.328" Height="799.475">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

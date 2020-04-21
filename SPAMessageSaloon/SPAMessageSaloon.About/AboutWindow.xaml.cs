@@ -23,16 +23,18 @@ namespace SPAMessageSaloon.About
     /// </summary>
     public partial class AboutWindow
     {
-        private static AboutWindow About;
         public AboutWindow()
         {
             InitializeComponent();
+            Loaded += AboutWindow_Loaded;
         }
 
-        public static void ShowOwner()
+        private void AboutWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Presenter.ShowOwner();
-            STREAM.GarbageCollect();
+            MaxButton.Visibility = Visibility.Collapsed;
+            MinButton.Visibility = Visibility.Collapsed;
+            CanDragMove = false;
+            VisibleResizeMode = false;
         }
     }
 }
