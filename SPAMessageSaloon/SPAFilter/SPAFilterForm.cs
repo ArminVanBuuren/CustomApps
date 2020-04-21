@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -47,7 +48,7 @@ namespace SPAFilter
         private Notepad _notepad;
         private bool _notepadWordWrap = true;
         private bool _notepadWordHighlights = true;
-        private FormLocation _notepadLocation = FormLocation.Default;
+        private Size _notepadSize;
         private FormWindowState _notepadWindowsState = FormWindowState.Normal;
 
         private ToolStripStatusLabel BPCount;
@@ -268,7 +269,7 @@ namespace SPAFilter
 
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
-                _notepadLocation = (FormLocation) TryGetSerializationValue(allSavedParams, "RRTTDD", FormLocation.Default);
+                _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT",  new Size(this.Size.Width, this.Size.Height));
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Normal);
 
                 ProcessesComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRTT", string.Empty);
@@ -334,7 +335,7 @@ namespace SPAFilter
 
             propertyBag.AddValue("DDCCVV", _notepadWordWrap);
             propertyBag.AddValue("RRTTGGBB", _notepadWordHighlights);
-            propertyBag.AddValue("RRTTDD", _notepadLocation);
+            propertyBag.AddValue("SSEETT", _notepadSize);
             propertyBag.AddValue("SSEEFF", _notepadWindowsState);
         }
 
@@ -642,7 +643,7 @@ namespace SPAFilter
                     }
                     case Keys.Delete:
                     {
-                        if (!GetCurrentDataGridView(out var grid) || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) ||
+                        if (!GetCurrentDataGridView(out var grid) || !grid.Focused || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) ||
                             !GetCellItemSelectedRows(grid, out var filesPath))
                             return;
 
@@ -1272,17 +1273,14 @@ namespace SPAFilter
             {
                 if (_notepad == null || _notepad.WindowIsClosed)
                 {
-                    if (_notepadLocation == FormLocation.Default)
-                        _notepadLocation = new FormLocation(this);
-
-                    _notepad = new Notepad()
+                    _notepad = new Notepad
                     {
-                        Location = _notepadLocation.Location,
-                        WindowState = _notepadWindowsState,
                         WordWrap = _notepadWordWrap,
                         Highlights = _notepadWordHighlights,
                         SizingGrip = true,
-                        AllowUserCloseItems = true
+                        AllowUserCloseItems = true,
+                        Size = _notepadSize,
+                        WindowState = _notepadWindowsState
                     };
                     _notepad.CenterToScreen();
                     _notepad.Closing += _notepad_Closed;
@@ -1312,9 +1310,9 @@ namespace SPAFilter
 
             try
             {
-                _notepadLocation = new FormLocation(notepad);
                 _notepadWordWrap = notepad.CurrentEditor?.WordWrap ?? true;
                 _notepadWordHighlights = notepad.CurrentEditor?.Highlights ?? true;
+                _notepadSize = notepad.Size;
                 _notepadWindowsState = notepad.WindowState;
             }
             catch (Exception)

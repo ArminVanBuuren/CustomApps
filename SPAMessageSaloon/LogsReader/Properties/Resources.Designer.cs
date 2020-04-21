@@ -721,7 +721,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Allowed sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot;. &quot;FoundLineID&quot; is the line number in the file by found trace is written with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
+        ///   Ищет локализованную строку, похожую на Allowed sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot;. &quot;FoundLineID&quot; is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
         /// </summary>
         public static string Txt_LRSettingsScheme_OrderBy {
             get {
@@ -748,7 +748,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; attributes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; nodes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
         ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting..
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {

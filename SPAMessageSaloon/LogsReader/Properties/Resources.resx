@@ -134,7 +134,7 @@
     <value>Servers for search. Specify with a comma.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
-    <value>"Pattern" attributes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+    <value>"Pattern" nodes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
         Optional patterns: "StartTraceWith" and "EndTraceWith" - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
@@ -168,7 +168,7 @@
     <value>Search with filter</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "File", "FoundLineID". "FoundLineID" is the line number in the file by found trace is written with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
+    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "File", "FoundLineID". "FoundLineID" is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>The limit on the count of lines. Reduces RAM usage.</value>

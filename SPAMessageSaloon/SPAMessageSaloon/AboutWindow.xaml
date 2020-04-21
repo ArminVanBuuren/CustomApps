@@ -11,12 +11,12 @@
              WindowStartupLocation="CenterOwner"
 
              FontFamily="Segoe UI"
-             FontSize="11"
+             FontSize="11.5"
              Background="#333"
              Foreground="#FF32EBFB"
              BorderBrush="#FF1087BF"
              Style="{DynamicResource VSUIWindowStyleLocal}"
-             mc:Ignorable="d" Width="1505.328" Height="730.725">
+             mc:Ignorable="d" Width="1471.328" Height="839.6">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -57,7 +57,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Form.jpg" Height="600" Margin="10, 0, 10, 10"></Image>
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Form.jpg" Height="700" Margin="10, 0, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
@@ -124,7 +124,7 @@
 
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
-                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Config.jpg" Height="510" Margin="0,10,0,10" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Config.jpg" Height="734" Margin="0,10,0,10"></Image>
                         </StackPanel>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>

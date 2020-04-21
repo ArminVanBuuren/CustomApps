@@ -58,10 +58,20 @@ namespace SPAFilter.SPA
 
                 if (!filterProcess.IsNullOrEmpty())
                 {
-                    if (filterProcess[0] == '%' || filterProcess[filterProcess.Length - 1] == '%')
+                    if (filterProcess[0] == '%' && filterProcess[filterProcess.Length - 1] == '%')
                     {
-                        var filterProcessContains = filterProcess.Replace("%", "");
+                        var filterProcessContains = filterProcess.Substring(1, filterProcess.Length - 2);
                         bpFilter = (bp) => bp.Name.StringContains(filterProcessContains);
+                    }
+                    else if (filterProcess[0] == '%')
+                    {
+                        var filterProcessContains = filterProcess.Substring(1, filterProcess.Length - 1);
+                        bpFilter = (bp) => bp.Name.EndsWith(filterProcessContains, StringComparison.CurrentCultureIgnoreCase);
+                    }
+                    else if (filterProcess[filterProcess.Length - 1] == '%')
+                    {
+                        var filterProcessContains = filterProcess.Substring(0, filterProcess.Length - 1);
+                        bpFilter = (bp) => bp.Name.StartsWith(filterProcessContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
@@ -78,10 +88,20 @@ namespace SPAFilter.SPA
 
                 if (!filterHT.IsNullOrEmpty())
                 {
-                    if (filterHT[0] == '%' || filterHT[filterHT.Length - 1] == '%')
+                    if (filterHT[0] == '%' && filterHT[filterHT.Length - 1] == '%')
                     {
-                        var filterNEContains = filterHT.Replace("%", "");
+                        var filterNEContains = filterHT.Substring(1, filterHT.Length - 2);
                         htFilter = (ht) => ht.Name.StringContains(filterNEContains);
+                    }
+                    else if (filterHT[0] == '%')
+                    {
+                        var filterNEContains = filterHT.Substring(1, filterHT.Length - 1);
+                        htFilter = (ht) => ht.Name.EndsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else if (filterHT[filterHT.Length - 1] == '%')
+                    {
+                        var filterNEContains = filterHT.Substring(0, filterHT.Length - 1);
+                        htFilter = (ht) => ht.Name.StartsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
@@ -91,10 +111,20 @@ namespace SPAFilter.SPA
 
                 if (!filterOp.IsNullOrEmpty())
                 {
-                    if (filterOp[0] == '%' || filterOp[filterOp.Length - 1] == '%')
+                    if (filterOp[0] == '%' && filterOp[filterOp.Length - 1] == '%')
                     {
-                        var filterOPContains = filterOp.Replace("%", "");
+                        var filterOPContains = filterOp.Substring(1, filterOp.Length - 2);
                         opFilter = (op) => op.Name.StringContains(filterOPContains);
+                    }
+                    else if (filterOp[0] == '%')
+                    {
+                        var filterOPContains = filterOp.Substring(1, filterOp.Length - 1);
+                        opFilter = (op) => op.Name.EndsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else if (filterOp[filterOp.Length - 1] == '%')
+                    {
+                        var filterOPContains = filterOp.Substring(0, filterOp.Length - 1);
+                        opFilter = (op) => op.Name.StartsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
@@ -351,6 +381,9 @@ namespace SPAFilter.SPA
 
         public async Task AssignActivatorAsync(IEnumerable<string> filePathList)
         {
+            if(filePathList == null || !filePathList.Any())
+                return;
+
             await Task.Factory.StartNew(() =>
             {
                 List<ServiceActivator> lastActivatorList;

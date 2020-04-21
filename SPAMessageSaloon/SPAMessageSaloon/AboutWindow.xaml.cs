@@ -14,6 +14,8 @@ namespace SPAMessageSaloon
             InitializeComponent();
             Loaded += AboutWindow_Loaded;
 
+            #region Logs Reader
+
             LRDescriptionTxt.Text = LogsReader.Properties.Resources.Txt_LogsReaderForm_Description;
 
             LRSearch.Header = LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
@@ -45,6 +47,8 @@ namespace SPAMessageSaloon
             LROrderByTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_OrderBy;
 
             LRTraceParseTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_TraceParse;
+
+            #endregion
         }
 
         private void AboutWindow_Loaded(object sender, RoutedEventArgs e)
