@@ -2,8 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SPAMessageSaloon"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:main="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
              Title="About" 
 
@@ -17,7 +16,7 @@
              Foreground="#FF32EBFB"
              BorderBrush="#FF1087BF"
              Style="{DynamicResource VSUIWindowStyleLocal}"
-             mc:Ignorable="d" Width="1505.328" Height="799.475">
+             mc:Ignorable="d" Width="1505.328" Height="1504.725">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -34,7 +33,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition Width="450"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -43,32 +42,34 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/Resources/LogsReader_form.png" Height="500" Margin="10, 0, 10, 10"></Image>
+                            <!--<Image Source="pack://application:,,,/Resources/LogsReader_form.png" Height="500" Margin="10, 0, 10, 10"></Image>-->
+                            <Image Source="/SPAMessageSaloon.About;component/Resources/LogsReader_Form.jpg" Height="600" Margin="10, 0, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="0" Grid.Column="1">
-                            <RichTextBox Margin="10,0" Height="499" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True">
-                                <FlowDocument PageWidth="230">
-                                    <Paragraph>
-                                        <Run Text="Элемент управления "/>
-                                        <Span FontWeight="Bold">
-                                            <Run Text="RichTextBox"/>
-                                        </Span>
-                                    </Paragraph>
-                                    <Paragraph>
-                                        <Run Text="DarkBlue UI - скачать на сайте "/>
-                                        <Hyperlink Foreground="LimeGreen">
-                                            <Run Text="www.professorweb.ru"/>
-                                        </Hyperlink>
-                                        <Run Text=" ."/>
-                                    </Paragraph>
-                                    <Paragraph>
-                                        <Run Text="teteet"/>
-                                    </Paragraph>
-                                </FlowDocument>
-                            </RichTextBox>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="Servers" Header="Servers">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="Logsfolder" Header="Logs folder">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="FileTypes" Header="File Types">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="MaxLines" Header="Max Lines">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="MaxThreads" Header="Max Threads">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="RowsLimit" Header="Rows Limit">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="5" Padding="5" FontSize="15" Name="OrderBy" Header="Order By">
+                                <TextBlock TextWrapping="Wrap"></TextBlock>
+                            </Expander>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="1" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="1" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>

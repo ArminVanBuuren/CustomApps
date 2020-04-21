@@ -22,7 +22,7 @@ namespace SPAFilter.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SPAFilter.Properties {
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SPAFilter.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SPAFilter.Properties {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на {1} directory: &quot;{0}&quot; not found.
         /// </summary>
-        internal static string DirectoryNotFound {
+        public static string DirectoryNotFound {
             get {
                 return ResourceManager.GetString("DirectoryNotFound", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap file7 {
+        public static System.Drawing.Bitmap file7 {
             get {
                 object obj = ResourceManager.GetObject("file7", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -82,7 +82,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на File &quot;{0}&quot; not found.
         /// </summary>
-        internal static string FileNotFound {
+        public static string FileNotFound {
             get {
                 return ResourceManager.GetString("FileNotFound", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Activator &quot;{0}&quot; already exist..
         /// </summary>
-        internal static string Filter_ActivatorAlreadyExist {
+        public static string Filter_ActivatorAlreadyExist {
             get {
                 return ResourceManager.GetString("Filter_ActivatorAlreadyExist", resourceCulture);
             }
@@ -100,7 +100,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Add activator.
         /// </summary>
-        internal static string Filter_AddActivator {
+        public static string Filter_AddActivator {
             get {
                 return ResourceManager.GetString("Filter_AddActivator", resourceCulture);
             }
@@ -109,7 +109,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на You can create Service Catalog only with ROBP operations..
         /// </summary>
-        internal static string Filter_GenerateSCWithoutOperations {
+        public static string Filter_GenerateSCWithoutOperations {
             get {
                 return ResourceManager.GetString("Filter_GenerateSCWithoutOperations", resourceCulture);
             }
@@ -119,7 +119,7 @@ namespace SPAFilter.Properties {
         ///   Ищет локализованную строку, похожую на When initializing instances:&apos;{0}&apos; - {1} scenario collisions were found!
         ///For correct work of a filter, please choose only one instance (host type)..
         /// </summary>
-        internal static string Filter_InitializeActivatorsWarning {
+        public static string Filter_InitializeActivatorsWarning {
             get {
                 return ResourceManager.GetString("Filter_InitializeActivatorsWarning", resourceCulture);
             }
@@ -130,7 +130,7 @@ namespace SPAFilter.Properties {
         ///Columns names should be like:
         ///&apos;{1}&apos;.
         /// </summary>
-        internal static string Filter_MissingColumn {
+        public static string Filter_MissingColumn {
             get {
                 return ResourceManager.GetString("Filter_MissingColumn", resourceCulture);
             }
@@ -139,7 +139,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Filter is not enabled!.
         /// </summary>
-        internal static string Filter_NotEnabled {
+        public static string Filter_NotEnabled {
             get {
                 return ResourceManager.GetString("Filter_NotEnabled", resourceCulture);
             }
@@ -148,7 +148,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на No worksheet found.
         /// </summary>
-        internal static string Filter_NoWorksheetFound {
+        public static string Filter_NoWorksheetFound {
             get {
                 return ResourceManager.GetString("Filter_NoWorksheetFound", resourceCulture);
             }
@@ -157,7 +157,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на You must select a folder with exported ROBP&apos;s host type directories..
         /// </summary>
-        internal static string Filter_ROBPOperationdDirInvalid {
+        public static string Filter_ROBPOperationdDirInvalid {
             get {
                 return ResourceManager.GetString("Filter_ROBPOperationdDirInvalid", resourceCulture);
             }
@@ -168,7 +168,7 @@ namespace SPAFilter.Properties {
         ///Columns names and orders must be like:
         ///&apos;{2}&apos;.
         /// </summary>
-        internal static string Filter_WrongColumnStatement {
+        public static string Filter_WrongColumnStatement {
             get {
                 return ResourceManager.GetString("Filter_WrongColumnStatement", resourceCulture);
             }
@@ -177,7 +177,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap find {
+        public static System.Drawing.Bitmap find {
             get {
                 object obj = ResourceManager.GetObject("find", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -187,7 +187,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder2 {
+        public static System.Drawing.Bitmap folder2 {
             get {
                 object obj = ResourceManager.GetObject("folder2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -197,7 +197,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Add Activator Instances.
         /// </summary>
-        internal static string Form_AddActivator {
+        public static string Form_AddActivator {
             get {
                 return ResourceManager.GetString("Form_AddActivator", resourceCulture);
             }
@@ -206,7 +206,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Export Path.
         /// </summary>
-        internal static string Form_ExportPath {
+        public static string Form_ExportPath {
             get {
                 return ResourceManager.GetString("Form_ExportPath", resourceCulture);
             }
@@ -215,7 +215,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Filter.
         /// </summary>
-        internal static string Form_Filter {
+        public static string Form_Filter {
             get {
                 return ResourceManager.GetString("Form_Filter", resourceCulture);
             }
@@ -224,7 +224,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Generate SC.
         /// </summary>
-        internal static string Form_GenerateSC {
+        public static string Form_GenerateSC {
             get {
                 return ResourceManager.GetString("Form_GenerateSC", resourceCulture);
             }
@@ -233,7 +233,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Please filter files.
         /// </summary>
-        internal static string Form_GenerateSC_NotFileredROBPOps {
+        public static string Form_GenerateSC_NotFileredROBPOps {
             get {
                 return ResourceManager.GetString("Form_GenerateSC_NotFileredROBPOps", resourceCulture);
             }
@@ -242,7 +242,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на No operations found.
         /// </summary>
-        internal static string Form_GenerateSC_NotFoundAnyOperations {
+        public static string Form_GenerateSC_NotFoundAnyOperations {
             get {
                 return ResourceManager.GetString("Form_GenerateSC_NotFoundAnyOperations", resourceCulture);
             }
@@ -251,7 +251,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на       Generate SC.
         /// </summary>
-        internal static string Form_GenerateSC2 {
+        public static string Form_GenerateSC2 {
             get {
                 return ResourceManager.GetString("Form_GenerateSC2", resourceCulture);
             }
@@ -260,7 +260,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на      Filter [F5].
         /// </summary>
-        internal static string Form_Get {
+        public static string Form_Get {
             get {
                 return ResourceManager.GetString("Form_Get", resourceCulture);
             }
@@ -269,7 +269,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Do you want to delete selected file(s) ?.
         /// </summary>
-        internal static string Form_GridView_DeleteSelected {
+        public static string Form_GridView_DeleteSelected {
             get {
                 return ResourceManager.GetString("Form_GridView_DeleteSelected", resourceCulture);
             }
@@ -278,7 +278,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Configuration application is incorrect or scenario collisions were found. Please check instances with same host types..
         /// </summary>
-        internal static string Form_GridView_IncorrectConfig {
+        public static string Form_GridView_IncorrectConfig {
             get {
                 return ResourceManager.GetString("Form_GridView_IncorrectConfig", resourceCulture);
             }
@@ -287,7 +287,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Incorrect ROBP operation.
         /// </summary>
-        internal static string Form_GridView_IncorrectROBPOperation {
+        public static string Form_GridView_IncorrectROBPOperation {
             get {
                 return ResourceManager.GetString("Form_GridView_IncorrectROBPOperation", resourceCulture);
             }
@@ -296,7 +296,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Subscenario.
         /// </summary>
-        internal static string Form_GridView_IsSubScenario {
+        public static string Form_GridView_IsSubScenario {
             get {
                 return ResourceManager.GetString("Form_GridView_IsSubScenario", resourceCulture);
             }
@@ -305,7 +305,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Business process doesn&apos;t have service catalog call.
         /// </summary>
-        internal static string Form_GridView_NotFoundServiceCatalogCall {
+        public static string Form_GridView_NotFoundServiceCatalogCall {
             get {
                 return ResourceManager.GetString("Form_GridView_NotFoundServiceCatalogCall", resourceCulture);
             }
@@ -314,7 +314,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Scenario has some commands which don&apos;t exist.
         /// </summary>
-        internal static string Form_GridView_NotFoundSomeCommands {
+        public static string Form_GridView_NotFoundSomeCommands {
             get {
                 return ResourceManager.GetString("Form_GridView_NotFoundSomeCommands", resourceCulture);
             }
@@ -323,7 +323,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Sub-scenario has some commands which don&apos;t exist.
         /// </summary>
-        internal static string Form_GridView_NotFoundSomeCommandsInSub {
+        public static string Form_GridView_NotFoundSomeCommandsInSub {
             get {
                 return ResourceManager.GetString("Form_GridView_NotFoundSomeCommandsInSub", resourceCulture);
             }
@@ -332,7 +332,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Business process has some operations which don&apos;t exist.
         /// </summary>
-        internal static string Form_GridView_NotFoundSomeOPs {
+        public static string Form_GridView_NotFoundSomeOPs {
             get {
                 return ResourceManager.GetString("Form_GridView_NotFoundSomeOPs", resourceCulture);
             }
@@ -341,7 +341,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Scenario for this operation doesn&apos;t exist.
         /// </summary>
-        internal static string Form_GridView_NotFoundSomeScenarios {
+        public static string Form_GridView_NotFoundSomeScenarios {
             get {
                 return ResourceManager.GetString("Form_GridView_NotFoundSomeScenarios", resourceCulture);
             }
@@ -350,7 +350,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Please select a row.
         /// </summary>
-        internal static string Form_GridView_NotSelectedAnyRows {
+        public static string Form_GridView_NotSelectedAnyRows {
             get {
                 return ResourceManager.GetString("Form_GridView_NotSelectedAnyRows", resourceCulture);
             }
@@ -359,7 +359,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Xml file is incorrect!.
         /// </summary>
-        internal static string Form_GridView_XMLFileIsIncorrect {
+        public static string Form_GridView_XMLFileIsIncorrect {
             get {
                 return ResourceManager.GetString("Form_GridView_XMLFileIsIncorrect", resourceCulture);
             }
@@ -368,7 +368,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на      Open xlsx.
         /// </summary>
-        internal static string Form_OpenXksx {
+        public static string Form_OpenXksx {
             get {
                 return ResourceManager.GetString("Form_OpenXksx", resourceCulture);
             }
@@ -377,7 +377,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Pretty print.
         /// </summary>
-        internal static string Form_PrintXMLFiles_Button {
+        public static string Form_PrintXMLFiles_Button {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Button", resourceCulture);
             }
@@ -386,7 +386,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Cancel.
         /// </summary>
-        internal static string Form_PrintXMLFiles_Cancel {
+        public static string Form_PrintXMLFiles_Cancel {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Cancel", resourceCulture);
             }
@@ -397,7 +397,7 @@ namespace SPAFilter.Properties {
         ///
         ///{1}.
         /// </summary>
-        internal static string Form_PrintXMLFiles_Error {
+        public static string Form_PrintXMLFiles_Error {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Error", resourceCulture);
             }
@@ -406,7 +406,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Do you really want to print all {0} xml files?.
         /// </summary>
-        internal static string Form_PrintXMLFiles_Question {
+        public static string Form_PrintXMLFiles_Question {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Question", resourceCulture);
             }
@@ -415,7 +415,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} out of {1} xml files were printed..
         /// </summary>
-        internal static string Form_PrintXMLFiles_Result {
+        public static string Form_PrintXMLFiles_Result {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Result", resourceCulture);
             }
@@ -424,7 +424,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Successfully completed..
         /// </summary>
-        internal static string Form_PrintXMLFiles_Successfully {
+        public static string Form_PrintXMLFiles_Successfully {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_Successfully", resourceCulture);
             }
@@ -433,7 +433,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Pretty print all filtered XML files.
         /// </summary>
-        internal static string Form_PrintXMLFiles_ToolTip {
+        public static string Form_PrintXMLFiles_ToolTip {
             get {
                 return ResourceManager.GetString("Form_PrintXMLFiles_ToolTip", resourceCulture);
             }
@@ -442,7 +442,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на RD Services.
         /// </summary>
-        internal static string Form_RDServices {
+        public static string Form_RDServices {
             get {
                 return ResourceManager.GetString("Form_RDServices", resourceCulture);
             }
@@ -451,7 +451,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Refresh.
         /// </summary>
-        internal static string Form_Refresh {
+        public static string Form_Refresh {
             get {
                 return ResourceManager.GetString("Form_Refresh", resourceCulture);
             }
@@ -460,7 +460,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Reload.
         /// </summary>
-        internal static string Form_Reload {
+        public static string Form_Reload {
             get {
                 return ResourceManager.GetString("Form_Reload", resourceCulture);
             }
@@ -469,7 +469,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Remove instance from the list.
         /// </summary>
-        internal static string Form_RemoveInstance {
+        public static string Form_RemoveInstance {
             get {
                 return ResourceManager.GetString("Form_RemoveInstance", resourceCulture);
             }
@@ -478,7 +478,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на       Reset [F6].
         /// </summary>
-        internal static string Form_Reset {
+        public static string Form_Reset {
             get {
                 return ResourceManager.GetString("Form_Reset", resourceCulture);
             }
@@ -487,7 +487,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на      Root.
         /// </summary>
-        internal static string Form_Root {
+        public static string Form_Root {
             get {
                 return ResourceManager.GetString("Form_Root", resourceCulture);
             }
@@ -496,7 +496,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Generate Service catalog by ROBP operations.
         /// </summary>
-        internal static string Form_ToolTip_ButtonGenerateSC {
+        public static string Form_ToolTip_ButtonGenerateSC {
             get {
                 return ResourceManager.GetString("Form_ToolTip_ButtonGenerateSC", resourceCulture);
             }
@@ -505,7 +505,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Reset filter.
         /// </summary>
-        internal static string Form_ToolTip_buttonReset {
+        public static string Form_ToolTip_buttonReset {
             get {
                 return ResourceManager.GetString("Form_ToolTip_buttonReset", resourceCulture);
             }
@@ -514,7 +514,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Export folder path.
         /// </summary>
-        internal static string Form_ToolTip_ExportSCPath {
+        public static string Form_ToolTip_ExportSCPath {
             get {
                 return ResourceManager.GetString("Form_ToolTip_ExportSCPath", resourceCulture);
             }
@@ -523,7 +523,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Get all matches by filter.
         /// </summary>
-        internal static string Form_ToolTip_FilterButton {
+        public static string Form_ToolTip_FilterButton {
             get {
                 return ResourceManager.GetString("Form_ToolTip_FilterButton", resourceCulture);
             }
@@ -533,7 +533,7 @@ namespace SPAFilter.Properties {
         ///   Ищет локализованную строку, похожую на Excel file path of RD services for fill CFS description. Columns names and orders must be like:
         ///&apos;{0}&apos;.
         /// </summary>
-        internal static string Form_ToolTip_OpenSCXlsx {
+        public static string Form_ToolTip_OpenSCXlsx {
             get {
                 return ResourceManager.GetString("Form_ToolTip_OpenSCXlsx", resourceCulture);
             }
@@ -543,7 +543,7 @@ namespace SPAFilter.Properties {
         ///   Ищет локализованную строку, похожую на Get excel file of RD services for fill CFS description. Columns names and orders must be like:
         ///&apos;{0}&apos;.
         /// </summary>
-        internal static string Form_ToolTip_OpenSevExelButton {
+        public static string Form_ToolTip_OpenSevExelButton {
             get {
                 return ResourceManager.GetString("Form_ToolTip_OpenSevExelButton", resourceCulture);
             }
@@ -552,7 +552,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Open folder with Business Processes.
         /// </summary>
-        internal static string Form_ToolTip_ProcessesButtonOpen {
+        public static string Form_ToolTip_ProcessesButtonOpen {
             get {
                 return ResourceManager.GetString("Form_ToolTip_ProcessesButtonOpen", resourceCulture);
             }
@@ -561,7 +561,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Open folder with Operations.
         /// </summary>
-        internal static string Form_ToolTip_ROBPOperationButtonOpen {
+        public static string Form_ToolTip_ROBPOperationButtonOpen {
             get {
                 return ResourceManager.GetString("Form_ToolTip_ROBPOperationButtonOpen", resourceCulture);
             }
@@ -570,7 +570,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Open export folder path.
         /// </summary>
-        internal static string Form_ToolTip_RootSCExportPathButton {
+        public static string Form_ToolTip_RootSCExportPathButton {
             get {
                 return ResourceManager.GetString("Form_ToolTip_RootSCExportPathButton", resourceCulture);
             }
@@ -579,7 +579,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на To search for a specified pattern, you can use % symbol. Example: %Assign%.
         /// </summary>
-        internal static string Form_ToolTip_SearchPattern {
+        public static string Form_ToolTip_SearchPattern {
             get {
                 return ResourceManager.GetString("Form_ToolTip_SearchPattern", resourceCulture);
             }
@@ -588,7 +588,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Open Service catalog file.
         /// </summary>
-        internal static string Form_ToolTip_ServiceCatalogOpenButton {
+        public static string Form_ToolTip_ServiceCatalogOpenButton {
             get {
                 return ResourceManager.GetString("Form_ToolTip_ServiceCatalogOpenButton", resourceCulture);
             }
@@ -597,7 +597,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap generatesc {
+        public static System.Drawing.Bitmap generatesc {
             get {
                 object obj = ResourceManager.GetObject("generatesc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -607,7 +607,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
-        internal static System.Drawing.Icon icons8 {
+        public static System.Drawing.Icon icons8 {
             get {
                 object obj = ResourceManager.GetObject("icons8", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -617,7 +617,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_minus_20 {
+        public static System.Drawing.Bitmap icons8_minus_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_minus_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -627,7 +627,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_plus_20 {
+        public static System.Drawing.Bitmap icons8_plus_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_plus_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -637,7 +637,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_synchronize_20 {
+        public static System.Drawing.Bitmap icons8_synchronize_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_synchronize_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -647,7 +647,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Xml file &quot;{0}&quot; is invalid.
         /// </summary>
-        internal static string InvalidXml {
+        public static string InvalidXml {
             get {
                 return ResourceManager.GetString("InvalidXml", resourceCulture);
             }
@@ -656,7 +656,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap reload {
+        public static System.Drawing.Bitmap reload {
             get {
                 object obj = ResourceManager.GetObject("reload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -666,7 +666,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap reset2 {
+        public static System.Drawing.Bitmap reset2 {
             get {
                 object obj = ResourceManager.GetObject("reset2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -676,7 +676,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Activator config &quot;{0}&quot; is incorrect.
         /// </summary>
-        internal static string ServiceActivator_ConfigInvalid {
+        public static string ServiceActivator_ConfigInvalid {
             get {
                 return ResourceManager.GetString("ServiceActivator_ConfigInvalid", resourceCulture);
             }
@@ -685,7 +685,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} already exist..
         /// </summary>
-        internal static string ServiceCatalog_AlreadyExist {
+        public static string ServiceCatalog_AlreadyExist {
             get {
                 return ResourceManager.GetString("ServiceCatalog_AlreadyExist", resourceCulture);
             }
@@ -694,7 +694,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Service Catalog is invalid. &apos;{0}&apos; already exist..
         /// </summary>
-        internal static string ServiceCatalog_DoubleScenario {
+        public static string ServiceCatalog_DoubleScenario {
             get {
                 return ResourceManager.GetString("ServiceCatalog_DoubleScenario", resourceCulture);
             }
@@ -703,7 +703,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Some scenarios are invalid. No attributes found..
         /// </summary>
-        internal static string ServiceCatalog_InvalidScenario {
+        public static string ServiceCatalog_InvalidScenario {
             get {
                 return ResourceManager.GetString("ServiceCatalog_InvalidScenario", resourceCulture);
             }
@@ -712,7 +712,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Xml file &quot;{0}&quot; is invalid.
         /// </summary>
-        internal static string ServiceCatalog_InvalidXml {
+        public static string ServiceCatalog_InvalidXml {
             get {
                 return ResourceManager.GetString("ServiceCatalog_InvalidXml", resourceCulture);
             }
@@ -721,7 +721,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} is invalid. Attribute &quot;hostType&quot; not found..
         /// </summary>
-        internal static string ServiceCatalog_NoHostTypeAttr {
+        public static string ServiceCatalog_NoHostTypeAttr {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NoHostTypeAttr", resourceCulture);
             }
@@ -730,7 +730,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Service Catalog is invalid. {0} doesn&apos;t have attribute \&quot;name\&quot; or value is empty..
         /// </summary>
-        internal static string ServiceCatalog_NoNameAttribute {
+        public static string ServiceCatalog_NoNameAttribute {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NoNameAttribute", resourceCulture);
             }
@@ -739,7 +739,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Service Catalog is invalid. No RFS found..
         /// </summary>
-        internal static string ServiceCatalog_NoRFSFound {
+        public static string ServiceCatalog_NoRFSFound {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NoRFSFound", resourceCulture);
             }
@@ -748,7 +748,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Not found {0}.
         /// </summary>
-        internal static string ServiceCatalog_NotFound {
+        public static string ServiceCatalog_NotFound {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NotFound", resourceCulture);
             }
@@ -757,7 +757,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Service Catalog is invalid. Attribute \&quot;scenarioPrefix\&quot; not found..
         /// </summary>
-        internal static string ServiceCatalog_NotFoundScenarioPrefix {
+        public static string ServiceCatalog_NotFoundScenarioPrefix {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NotFoundScenarioPrefix", resourceCulture);
             }
@@ -766,7 +766,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на {0} is invalid. Attribute &quot;type&quot; not found in scenario &quot;{1}&quot;.
         /// </summary>
-        internal static string ServiceCatalog_NotFoundTyoeAttribute {
+        public static string ServiceCatalog_NotFoundTyoeAttribute {
             get {
                 return ResourceManager.GetString("ServiceCatalog_NotFoundTyoeAttribute", resourceCulture);
             }
@@ -775,7 +775,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Some RFS are invalid. No attributes found..
         /// </summary>
-        internal static string ServiceCatalog_RFSNoAttributes {
+        public static string ServiceCatalog_RFSNoAttributes {
             get {
                 return ResourceManager.GetString("ServiceCatalog_RFSNoAttributes", resourceCulture);
             }
@@ -784,7 +784,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Scenario &quot;{0}&quot; is invalid. Not found any RFS..
         /// </summary>
-        internal static string ServiceCatalog_ScenarioNotFoundRFS {
+        public static string ServiceCatalog_ScenarioNotFoundRFS {
             get {
                 return ResourceManager.GetString("ServiceCatalog_ScenarioNotFoundRFS", resourceCulture);
             }
@@ -793,7 +793,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Scenario &quot;{0}&quot; has RFS with different hostTypes - &quot;{1}&quot;.
         /// </summary>
-        internal static string ServiceCatalog_ScenarioWithDifferentHostType {
+        public static string ServiceCatalog_ScenarioWithDifferentHostType {
             get {
                 return ResourceManager.GetString("ServiceCatalog_ScenarioWithDifferentHostType", resourceCulture);
             }
@@ -802,7 +802,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attributes: &apos;@path&apos; | &apos;@xml&apos; not found. Or &quot;dictionary&quot; node not found..
         /// </summary>
-        internal static string ServiceInstance_AttributesPathXmlNotFound {
+        public static string ServiceInstance_AttributesPathXmlNotFound {
             get {
                 return ResourceManager.GetString("ServiceInstance_AttributesPathXmlNotFound", resourceCulture);
             }
@@ -811,7 +811,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute: &apos;@Root&apos; not found in file dictionary: &quot;{0}&quot;.
         /// </summary>
-        internal static string ServiceInstance_AttributesRootNotFound {
+        public static string ServiceInstance_AttributesRootNotFound {
             get {
                 return ResourceManager.GetString("ServiceInstance_AttributesRootNotFound", resourceCulture);
             }
@@ -820,7 +820,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Directory: &quot;{0}&quot; not found. Final path: &quot;{1}&quot;.
         /// </summary>
-        internal static string ServiceInstance_DirNotFound {
+        public static string ServiceInstance_DirNotFound {
             get {
                 return ResourceManager.GetString("ServiceInstance_DirNotFound", resourceCulture);
             }
@@ -829,7 +829,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Directory: &quot;{0}&quot; not found when initializing file dictionary: &quot;{1}&quot;.
         /// </summary>
-        internal static string ServiceInstance_DirNotFoundWithDescription {
+        public static string ServiceInstance_DirNotFoundWithDescription {
             get {
                 return ResourceManager.GetString("ServiceInstance_DirNotFoundWithDescription", resourceCulture);
             }
@@ -838,7 +838,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute: &apos;@hardwareID&apos; not found in serviceInstance.
         /// </summary>
-        internal static string ServiceInstance_NotFoundHardwareID {
+        public static string ServiceInstance_NotFoundHardwareID {
             get {
                 return ResourceManager.GetString("ServiceInstance_NotFoundHardwareID", resourceCulture);
             }
@@ -847,7 +847,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute: &apos;@dir&apos; not found in &quot;fileScenarioSource&quot;. Or &apos;scenarios&apos; node not found..
         /// </summary>
-        internal static string ServiceInstance_NotFoundScenriosDir {
+        public static string ServiceInstance_NotFoundScenriosDir {
             get {
                 return ResourceManager.GetString("ServiceInstance_NotFoundScenriosDir", resourceCulture);
             }
@@ -856,7 +856,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap xls1 {
+        public static System.Drawing.Bitmap xls1 {
             get {
                 object obj = ResourceManager.GetObject("xls1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -866,7 +866,7 @@ namespace SPAFilter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap xml8 {
+        public static System.Drawing.Bitmap xml8 {
             get {
                 object obj = ResourceManager.GetObject("xml8", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

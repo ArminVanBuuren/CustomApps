@@ -134,8 +134,8 @@
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
-    <value>Паттерны для считывания параметров. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
-        Опциональные паттерны: StartTraceWith и EndTraceWith - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке.</value>
+    <value>Аттрибуты "Pattern" - используются для считывания параметров трейса. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
+        Опциональные паттерны: "StartTraceWith" и "EndTraceWith" - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
     <value>Типы файлов, указать через запятую. Производится поиск по содержанию в имени файла включая расширение.</value>
@@ -168,7 +168,7 @@
     <value>Применить фильтр во время поиска</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
+    <value>Допустима сортировка по полям: "ID", "Server", "TraceName", "Date", "File", "FoundLineID". "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>
@@ -338,5 +338,11 @@
   </data>
   <data name="Txt_LogsReaderForm_Servers2" xml:space="preserve">
     <value>Сервера</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ExportComment" xml:space="preserve">
+    <value>Экспорт результата поиска или фильтра в csv файл</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Description" xml:space="preserve">
+    <value>Это универсальное приложение для поиска и считывания лог файлов, а также для удобного просмотра.</value>
   </data>
 </root>

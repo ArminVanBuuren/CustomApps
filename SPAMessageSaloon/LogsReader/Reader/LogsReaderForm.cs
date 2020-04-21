@@ -236,22 +236,23 @@ namespace LogsReader.Reader
                 _tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
                 _tooltip.SetToolTip(logFolderText, Resources.Txt_LRSettingsScheme_LogsDirectory);
                 _tooltip.SetToolTip(maxLinesStackText, Resources.Txt_LRSettingsScheme_MaxTraceLines);
+                _tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
+                _tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
+                _tooltip.SetToolTip(trvMain, Resources.Txt_Form_trvMainComment);
                 _tooltip.SetToolTip(dateStartFilter, Resources.Txt_Form_DateFilterComment);
                 _tooltip.SetToolTip(dateEndFilter, Resources.Txt_Form_DateFilterComment);
                 _tooltip.SetToolTip(traceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
                 _tooltip.SetToolTip(traceMessageFilter, Resources.Txt_Form_TraceFilterComment);
                 _tooltip.SetToolTip(alreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
-                _tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
-                _tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
-                _tooltip.SetToolTip(trvMain, Resources.Txt_Form_trvMainComment);
+                _tooltip.SetToolTip(buttonExport, Resources.Txt_LogsReaderForm_ExportComment);
 
-                
-                label12.Text = Resources.Txt_LogsReaderForm_OrderBy;
-                label2.Text = Resources.Txt_LogsReaderForm_RowsLimit;
-                label1.Text = Resources.Txt_LogsReaderForm_Servers;
-                label6.Text = Resources.Txt_LogsReaderForm_MaxLines;
-                label3.Text = Resources.Txt_LogsReaderForm_FilteTypes;
-                label5.Text = Resources.Txt_LogsReaderForm_LogsFolder;
+                OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
+                RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
+                ServersLabel.Text = Resources.Txt_LogsReaderForm_Servers;
+                MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
+                MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
+                FilteTypesLabel.Text = Resources.Txt_LogsReaderForm_FilteTypes;
+                LogsFolderLabel.Text = Resources.Txt_LogsReaderForm_LogsFolder;
                 useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
 
                 btnSearch.Text = Resources.Txt_LogsReaderForm_Search;

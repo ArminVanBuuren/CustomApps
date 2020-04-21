@@ -33,7 +33,6 @@ namespace SPAMessageSaloon.About
         {
             MaxButton.Visibility = Visibility.Collapsed;
             MinButton.Visibility = Visibility.Collapsed;
-            CanDragMove = false;
             VisibleResizeMode = false;
         }
     }

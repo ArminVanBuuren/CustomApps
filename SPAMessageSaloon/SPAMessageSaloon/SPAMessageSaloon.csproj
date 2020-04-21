@@ -40,6 +40,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +125,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Beyond Wonderland.ttf" />
     <None Include="Resources\leaves.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -137,10 +142,6 @@
     <ProjectReference Include="..\SPAFilter\SPAFilter.csproj">
       <Project>{2d965102-2cc6-4c82-ad78-dab5ed41dd32}</Project>
       <Name>SPAFilter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SPAMessageSaloon.About\SPAMessageSaloon.About.csproj">
-      <Project>{3d5e621a-16a3-4cd1-ad36-1787aeab42a2}</Project>
-      <Name>SPAMessageSaloon.About</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj">
       <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>
@@ -162,6 +163,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconsSpaFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_Config.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_Form.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

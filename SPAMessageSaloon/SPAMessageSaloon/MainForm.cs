@@ -15,7 +15,6 @@ using Utils.Handles;
 using Utils.UIControls.Main;
 using Utils.WinForm;
 using SPAMessageSaloon.Common;
-using SPAMessageSaloon.About;
 using SPAMessageSaloon.Properties;
 using LogsReader;
 using SPAFilter;
@@ -460,6 +459,10 @@ namespace SPAMessageSaloon
             catch (Exception ex)
             {
                 // ignored
+            }
+            finally
+            {
+                STREAM.GarbageCollect();
             }
         }
 

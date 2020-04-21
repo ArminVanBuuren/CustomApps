@@ -22,7 +22,7 @@ namespace LogsReader.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LogsReader.Properties {
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LogsReader.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace LogsReader.Properties {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap clear1 {
+        public static System.Drawing.Bitmap clear1 {
             get {
                 object obj = ResourceManager.GetObject("clear1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filter17 {
+        public static System.Drawing.Bitmap filter17 {
             get {
                 object obj = ResourceManager.GetObject("filter17", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap find {
+        public static System.Drawing.Bitmap find {
             get {
                 object obj = ResourceManager.GetObject("find", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
-        internal static System.Drawing.Icon icon {
+        public static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -103,7 +103,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 0.
         /// </summary>
-        internal static string LogsReaderForm_alreadyUseFilter_rightPadding {
+        public static string LogsReaderForm_alreadyUseFilter_rightPadding {
             get {
                 return ResourceManager.GetString("LogsReaderForm_alreadyUseFilter_rightPadding", resourceCulture);
             }
@@ -112,7 +112,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 90.
         /// </summary>
-        internal static string LogsReaderForm_btnClear_Width {
+        public static string LogsReaderForm_btnClear_Width {
             get {
                 return ResourceManager.GetString("LogsReaderForm_btnClear_Width", resourceCulture);
             }
@@ -121,7 +121,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 110.
         /// </summary>
-        internal static string LogsReaderForm_buttonExport_Width {
+        public static string LogsReaderForm_buttonExport_Width {
             get {
                 return ResourceManager.GetString("LogsReaderForm_buttonExport_Width", resourceCulture);
             }
@@ -130,7 +130,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 7.
         /// </summary>
-        internal static string LogsReaderForm_buttonFilter_rightPadding {
+        public static string LogsReaderForm_buttonFilter_rightPadding {
             get {
                 return ResourceManager.GetString("LogsReaderForm_buttonFilter_rightPadding", resourceCulture);
             }
@@ -139,7 +139,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на 6.
         /// </summary>
-        internal static string LogsReaderForm_buttonReset_rightPadding {
+        public static string LogsReaderForm_buttonReset_rightPadding {
             get {
                 return ResourceManager.GetString("LogsReaderForm_buttonReset_rightPadding", resourceCulture);
             }
@@ -148,7 +148,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap reset2 {
+        public static System.Drawing.Bitmap reset2 {
             get {
                 object obj = ResourceManager.GetObject("reset2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -158,7 +158,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap save2 {
+        public static System.Drawing.Bitmap save2 {
             get {
                 object obj = ResourceManager.GetObject("save2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -168,7 +168,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Date of end must be greater than date of start.
         /// </summary>
-        internal static string Txt_DataFilter_ErrDate {
+        public static string Txt_DataFilter_ErrDate {
             get {
                 return ResourceManager.GetString("Txt_DataFilter_ErrDate", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace LogsReader.Properties {
         ///Input data:
         ///{2}.
         /// </summary>
-        internal static string Txt_DataTemplate_ErrTimeout {
+        public static string Txt_DataTemplate_ErrTimeout {
             get {
                 return ResourceManager.GetString("Txt_DataTemplate_ErrTimeout", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Search with filter.
         /// </summary>
-        internal static string Txt_Form_AlreadyUseFilterComment {
+        public static string Txt_Form_AlreadyUseFilterComment {
             get {
                 return ResourceManager.GetString("Txt_Form_AlreadyUseFilterComment", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на &quot;Date&quot; filter.
         /// </summary>
-        internal static string Txt_Form_DateFilterComment {
+        public static string Txt_Form_DateFilterComment {
             get {
                 return ResourceManager.GetString("Txt_Form_DateFilterComment", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Use options of invariant culture and ignoring the case. When Regex option of  search is used timeout of completing is 1 second..
         /// </summary>
-        internal static string Txt_Form_SearchComment {
+        public static string Txt_Form_SearchComment {
             get {
                 return ResourceManager.GetString("Txt_Form_SearchComment", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на &quot;Trace&quot; filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored..
         /// </summary>
-        internal static string Txt_Form_TraceFilterComment {
+        public static string Txt_Form_TraceFilterComment {
             get {
                 return ResourceManager.GetString("Txt_Form_TraceFilterComment", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на &quot;TraceName&quot; filter to find a matching. Option turns off when value is empty. Several filters have to be listed with a comma. Case is ignored..
         /// </summary>
-        internal static string Txt_Form_TraceNameFilterComment {
+        public static string Txt_Form_TraceNameFilterComment {
             get {
                 return ResourceManager.GetString("Txt_Form_TraceNameFilterComment", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Server(s) and type(s) of the files must be chosen..
         /// </summary>
-        internal static string Txt_Form_trvMainComment {
+        public static string Txt_Form_trvMainComment {
             get {
                 return ResourceManager.GetString("Txt_Form_trvMainComment", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Initialization.
         /// </summary>
-        internal static string Txt_Initialization {
+        public static string Txt_Initialization {
             get {
                 return ResourceManager.GetString("Txt_Initialization", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Clear [F6].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Clear {
+        public static string Txt_LogsReaderForm_Clear {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Clear", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Contains.
         /// </summary>
-        internal static string Txt_LogsReaderForm_Contains {
+        public static string Txt_LogsReaderForm_Contains {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Contains", resourceCulture);
             }
@@ -270,16 +270,25 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Date value is incorrect.
         /// </summary>
-        internal static string Txt_LogsReaderForm_DateValueIsIncorrect {
+        public static string Txt_LogsReaderForm_DateValueIsIncorrect {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_DateValueIsIncorrect", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на This is a universal application for searching and parsing applications logs, as well as convenient viewing..
+        /// </summary>
+        public static string Txt_LogsReaderForm_Description {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Doesn&apos;t match by &quot;TraceParse&quot; patterns.
         /// </summary>
-        internal static string Txt_LogsReaderForm_DoesntMatchByPattern {
+        public static string Txt_LogsReaderForm_DoesntMatchByPattern {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_DoesntMatchByPattern", resourceCulture);
             }
@@ -288,7 +297,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Unable to save file &quot;{0}&quot;. {1}.
         /// </summary>
-        internal static string Txt_LogsReaderForm_ErrExport {
+        public static string Txt_LogsReaderForm_ErrExport {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_ErrExport", resourceCulture);
             }
@@ -297,16 +306,25 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Export [Ctrl+S].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Export {
+        public static string Txt_LogsReaderForm_Export {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Export", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Export found or filtered data to csv file.
+        /// </summary>
+        public static string Txt_LogsReaderForm_ExportComment {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_ExportComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Exporting....
         /// </summary>
-        internal static string Txt_LogsReaderForm_Exporting {
+        public static string Txt_LogsReaderForm_Exporting {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Exporting", resourceCulture);
             }
@@ -315,7 +333,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Files completed:.
         /// </summary>
-        internal static string Txt_LogsReaderForm_FilesCompleted_1 {
+        public static string Txt_LogsReaderForm_FilesCompleted_1 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_FilesCompleted_1", resourceCulture);
             }
@@ -324,7 +342,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на of.
         /// </summary>
-        internal static string Txt_LogsReaderForm_FilesCompleted_2 {
+        public static string Txt_LogsReaderForm_FilesCompleted_2 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_FilesCompleted_2", resourceCulture);
             }
@@ -333,7 +351,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Filter [F7].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Filter {
+        public static string Txt_LogsReaderForm_Filter {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Filter", resourceCulture);
             }
@@ -342,7 +360,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на File Types.
         /// </summary>
-        internal static string Txt_LogsReaderForm_FilteTypes {
+        public static string Txt_LogsReaderForm_FilteTypes {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_FilteTypes", resourceCulture);
             }
@@ -351,7 +369,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Finished in {0}.
         /// </summary>
-        internal static string Txt_LogsReaderForm_FinishedIn {
+        public static string Txt_LogsReaderForm_FinishedIn {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_FinishedIn", resourceCulture);
             }
@@ -360,7 +378,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Logs folder.
         /// </summary>
-        internal static string Txt_LogsReaderForm_LogsFolder {
+        public static string Txt_LogsReaderForm_LogsFolder {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_LogsFolder", resourceCulture);
             }
@@ -369,7 +387,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Max Lines.
         /// </summary>
-        internal static string Txt_LogsReaderForm_MaxLines {
+        public static string Txt_LogsReaderForm_MaxLines {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_MaxLines", resourceCulture);
             }
@@ -378,7 +396,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Max Threads.
         /// </summary>
-        internal static string Txt_LogsReaderForm_MaxThreads {
+        public static string Txt_LogsReaderForm_MaxThreads {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_MaxThreads", resourceCulture);
             }
@@ -387,7 +405,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на No filter results found.
         /// </summary>
-        internal static string Txt_LogsReaderForm_NoFilterResultsFound {
+        public static string Txt_LogsReaderForm_NoFilterResultsFound {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_NoFilterResultsFound", resourceCulture);
             }
@@ -396,7 +414,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на No logs found.
         /// </summary>
-        internal static string Txt_LogsReaderForm_NoLogsFound {
+        public static string Txt_LogsReaderForm_NoLogsFound {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_NoLogsFound", resourceCulture);
             }
@@ -405,7 +423,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Not Contains.
         /// </summary>
-        internal static string Txt_LogsReaderForm_NotContains {
+        public static string Txt_LogsReaderForm_NotContains {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_NotContains", resourceCulture);
             }
@@ -414,7 +432,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Order By.
         /// </summary>
-        internal static string Txt_LogsReaderForm_OrderBy {
+        public static string Txt_LogsReaderForm_OrderBy {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_OrderBy", resourceCulture);
             }
@@ -423,7 +441,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Overall found.
         /// </summary>
-        internal static string Txt_LogsReaderForm_OverallFound_1 {
+        public static string Txt_LogsReaderForm_OverallFound_1 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_1", resourceCulture);
             }
@@ -432,7 +450,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на matches.
         /// </summary>
-        internal static string Txt_LogsReaderForm_OverallFound_2 {
+        public static string Txt_LogsReaderForm_OverallFound_2 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_2", resourceCulture);
             }
@@ -441,7 +459,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Reset [F8].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Reset {
+        public static string Txt_LogsReaderForm_Reset {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Reset", resourceCulture);
             }
@@ -450,7 +468,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Rows Limit.
         /// </summary>
-        internal static string Txt_LogsReaderForm_RowsLimit {
+        public static string Txt_LogsReaderForm_RowsLimit {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_RowsLimit", resourceCulture);
             }
@@ -459,7 +477,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Search [F5].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Search {
+        public static string Txt_LogsReaderForm_Search {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Search", resourceCulture);
             }
@@ -468,7 +486,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Servers.
         /// </summary>
-        internal static string Txt_LogsReaderForm_Servers {
+        public static string Txt_LogsReaderForm_Servers {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Servers", resourceCulture);
             }
@@ -477,7 +495,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Servers.
         /// </summary>
-        internal static string Txt_LogsReaderForm_Servers2 {
+        public static string Txt_LogsReaderForm_Servers2 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Servers2", resourceCulture);
             }
@@ -486,7 +504,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Stop [Esc].
         /// </summary>
-        internal static string Txt_LogsReaderForm_Stop {
+        public static string Txt_LogsReaderForm_Stop {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Stop", resourceCulture);
             }
@@ -495,7 +513,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Stopping....
         /// </summary>
-        internal static string Txt_LogsReaderForm_Stopping {
+        public static string Txt_LogsReaderForm_Stopping {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Stopping", resourceCulture);
             }
@@ -504,7 +522,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Successfully exported to file &quot;{0}&quot;.
         /// </summary>
-        internal static string Txt_LogsReaderForm_SuccessExport {
+        public static string Txt_LogsReaderForm_SuccessExport {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_SuccessExport", resourceCulture);
             }
@@ -513,7 +531,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Types.
         /// </summary>
-        internal static string Txt_LogsReaderForm_Types {
+        public static string Txt_LogsReaderForm_Types {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Types", resourceCulture);
             }
@@ -522,7 +540,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Use filter when searching.
         /// </summary>
-        internal static string Txt_LogsReaderForm_UseFilterWhenSearching {
+        public static string Txt_LogsReaderForm_UseFilterWhenSearching {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_UseFilterWhenSearching", resourceCulture);
             }
@@ -531,7 +549,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Use Regex.
         /// </summary>
-        internal static string Txt_LogsReaderForm_UseRegex {
+        public static string Txt_LogsReaderForm_UseRegex {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_UseRegex", resourceCulture);
             }
@@ -540,7 +558,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Working....
         /// </summary>
-        internal static string Txt_LogsReaderForm_Working {
+        public static string Txt_LogsReaderForm_Working {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Working", resourceCulture);
             }
@@ -549,7 +567,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Pattern &quot;{0}&quot; is incorrect for use as regular expression! Please check..
         /// </summary>
-        internal static string Txt_LogsReaderPerformer_IncorrectSearchPattern {
+        public static string Txt_LogsReaderPerformer_IncorrectSearchPattern {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderPerformer_IncorrectSearchPattern", resourceCulture);
             }
@@ -558,7 +576,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на No files logs found.
         /// </summary>
-        internal static string Txt_LogsReaderPerformer_NoFilesLogsFound {
+        public static string Txt_LogsReaderPerformer_NoFilesLogsFound {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderPerformer_NoFilesLogsFound", resourceCulture);
             }
@@ -567,7 +585,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Current session already completed!.
         /// </summary>
-        internal static string Txt_LogsReaderPerformer_SessionAlreadyCompleted {
+        public static string Txt_LogsReaderPerformer_SessionAlreadyCompleted {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderPerformer_SessionAlreadyCompleted", resourceCulture);
             }
@@ -576,7 +594,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Session was stopped.
         /// </summary>
-        internal static string Txt_LogsReaderPerformer_SessionStopped {
+        public static string Txt_LogsReaderPerformer_SessionStopped {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderPerformer_SessionStopped", resourceCulture);
             }
@@ -587,7 +605,7 @@ namespace LogsReader.Properties {
         ///
         ///{2}.
         /// </summary>
-        internal static string Txt_LRSettings_Deserialize_Ex {
+        public static string Txt_LRSettings_Deserialize_Ex {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_Deserialize_Ex", resourceCulture);
             }
@@ -596,7 +614,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Deserialize Error.
         /// </summary>
-        internal static string Txt_LRSettings_ErrDeserialize {
+        public static string Txt_LRSettings_ErrDeserialize {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_ErrDeserialize", resourceCulture);
             }
@@ -605,7 +623,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Serialize Error.
         /// </summary>
-        internal static string Txt_LRSettings_ErrSerialize {
+        public static string Txt_LRSettings_ErrSerialize {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_ErrSerialize", resourceCulture);
             }
@@ -614,7 +632,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Schemes names must be unique!.
         /// </summary>
-        internal static string Txt_LRSettings_ErrUnique {
+        public static string Txt_LRSettings_ErrUnique {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_ErrUnique", resourceCulture);
             }
@@ -623,7 +641,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Previous search value.
         /// </summary>
-        internal static string Txt_LRSettings_PreviousSearchComment {
+        public static string Txt_LRSettings_PreviousSearchComment {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_PreviousSearchComment", resourceCulture);
             }
@@ -633,7 +651,7 @@ namespace LogsReader.Properties {
         ///   Ищет локализованную строку, похожую на Unable to save config to path &quot;{0}&quot;.
         ///{1}.
         /// </summary>
-        internal static string Txt_LRSettings_Serialize_Ex {
+        public static string Txt_LRSettings_Serialize_Ex {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_Serialize_Ex", resourceCulture);
             }
@@ -642,7 +660,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Regex search is being completed faster. &quot;Encoding&quot; atributte is used when reading log files..
         /// </summary>
-        internal static string Txt_LRSettings_UseRegexComment {
+        public static string Txt_LRSettings_UseRegexComment {
             get {
                 return ResourceManager.GetString("Txt_LRSettings_UseRegexComment", resourceCulture);
             }
@@ -651,7 +669,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на OrderBy item - &apos;{0}&apos; is incorrect! Please check..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_ErrOrderBy {
+        public static string Txt_LRSettingsScheme_ErrOrderBy {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_ErrOrderBy", resourceCulture);
             }
@@ -660,7 +678,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Scheme &apos;{0}&apos; has incorrect Regex patterns in &apos;TraceParse&apos; node. Please check..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_ErrRegex {
+        public static string Txt_LRSettingsScheme_ErrRegex {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_ErrRegex", resourceCulture);
             }
@@ -669,7 +687,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Columns must be unique!.
         /// </summary>
-        internal static string Txt_LRSettingsScheme_ErrUnique {
+        public static string Txt_LRSettingsScheme_ErrUnique {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_ErrUnique", resourceCulture);
             }
@@ -678,7 +696,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Directory path. File search is being made by all directories..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_LogsDirectory {
+        public static string Txt_LRSettingsScheme_LogsDirectory {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_LogsDirectory", resourceCulture);
             }
@@ -687,7 +705,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Maximum amount of threads. If the value is -1 then amount of threads corresponds to the ammount of processing files..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_MaxThreads {
+        public static string Txt_LRSettingsScheme_MaxThreads {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_MaxThreads", resourceCulture);
             }
@@ -696,16 +714,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Maximum amount of lines for trace stack. Whole trace must be parsed by the &quot;TraceParse&quot; patterns..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_MaxTraceLines {
+        public static string Txt_LRSettingsScheme_MaxTraceLines {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_MaxTraceLines", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot; - the number of the line in file by found trace is written with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
+        ///   Ищет локализованную строку, похожую на Allowed sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;File&quot;, &quot;FoundLineID&quot;. &quot;FoundLineID&quot; is the line number in the file by found trace is written with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_OrderBy {
+        public static string Txt_LRSettingsScheme_OrderBy {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_OrderBy", resourceCulture);
             }
@@ -714,7 +732,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на The limit on the count of lines. Reduces RAM usage..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_RowsLimit {
+        public static string Txt_LRSettingsScheme_RowsLimit {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_RowsLimit", resourceCulture);
             }
@@ -723,17 +741,17 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Servers for search. Specify with a comma..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_Servers {
+        public static string Txt_LRSettingsScheme_Servers {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_Servers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Patterns for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        Optional patterns: StartTraceWith and EndTraceWith - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting..
+        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; attributes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_TraceParse {
+        public static string Txt_LRSettingsScheme_TraceParse {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_TraceParse", resourceCulture);
             }
@@ -742,7 +760,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на File types, specify with a comma. A search on the content of the file name, extension included..
         /// </summary>
-        internal static string Txt_LRSettingsScheme_Types {
+        public static string Txt_LRSettingsScheme_Types {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_Types", resourceCulture);
             }
@@ -751,7 +769,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Pattern &quot;{0}&quot; is incorrect!.
         /// </summary>
-        internal static string Txt_LRTraceParse_ErrPattern {
+        public static string Txt_LRTraceParse_ErrPattern {
             get {
                 return ResourceManager.GetString("Txt_LRTraceParse_ErrPattern", resourceCulture);
             }
@@ -761,7 +779,7 @@ namespace LogsReader.Properties {
         ///   Ищет локализованную строку, похожую на Failed to load schema &quot;{0}&quot;
         ///{1}.
         /// </summary>
-        internal static string Txt_Main_ErrLoadScheme {
+        public static string Txt_Main_ErrLoadScheme {
             get {
                 return ResourceManager.GetString("Txt_Main_ErrLoadScheme", resourceCulture);
             }
@@ -770,7 +788,7 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Load scheme.
         /// </summary>
-        internal static string Txt_Main_LoadScheme {
+        public static string Txt_Main_LoadScheme {
             get {
                 return ResourceManager.GetString("Txt_Main_LoadScheme", resourceCulture);
             }

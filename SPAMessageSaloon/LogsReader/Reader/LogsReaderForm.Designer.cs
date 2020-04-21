@@ -47,20 +47,20 @@ namespace LogsReader.Reader
             this.txtPattern = new System.Windows.Forms.TextBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.label12 = new System.Windows.Forms.Label();
+            this.OrderByLabel = new System.Windows.Forms.Label();
             this.orderByText = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.RowsLimitLabel = new System.Windows.Forms.Label();
             this.rowsLimitText = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ServersLabel = new System.Windows.Forms.Label();
             this.trvMain = new Utils.WinForm.CustomTreeView();
             this.maxLinesStackText = new System.Windows.Forms.TextBox();
             this.serversText = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.MaxLinesLabel = new System.Windows.Forms.Label();
+            this.FilteTypesLabel = new System.Windows.Forms.Label();
             this.logFolderText = new System.Windows.Forms.TextBox();
             this.fileTypes = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.LogsFolderLabel = new System.Windows.Forms.Label();
+            this.MaxThreadslabel = new System.Windows.Forms.Label();
             this.maxThreadsText = new System.Windows.Forms.TextBox();
             this.EnumSplitContainer = new System.Windows.Forms.SplitContainer();
             this.descriptionText = new System.Windows.Forms.RichTextBox();
@@ -84,6 +84,7 @@ namespace LogsReader.Reader
             this.searchPanel = new System.Windows.Forms.Panel();
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.MaxThreadsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
             this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -254,14 +255,14 @@ namespace LogsReader.Reader
             this.statusStrip.TabIndex = 8;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // label12
+            // OrderByLabel
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 164);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 15);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "Order By";
+            this.OrderByLabel.AutoSize = true;
+            this.OrderByLabel.Location = new System.Drawing.Point(3, 164);
+            this.OrderByLabel.Name = "OrderByLabel";
+            this.OrderByLabel.Size = new System.Drawing.Size(53, 15);
+            this.OrderByLabel.TabIndex = 17;
+            this.OrderByLabel.Text = "Order By";
             // 
             // orderByText
             // 
@@ -273,14 +274,14 @@ namespace LogsReader.Reader
             this.orderByText.TabIndex = 18;
             this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
             // 
-            // label2
+            // RowsLimitLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 138);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 15);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Rows Limit";
+            this.RowsLimitLabel.AutoSize = true;
+            this.RowsLimitLabel.Location = new System.Drawing.Point(3, 138);
+            this.RowsLimitLabel.Name = "RowsLimitLabel";
+            this.RowsLimitLabel.Size = new System.Drawing.Size(65, 15);
+            this.RowsLimitLabel.TabIndex = 15;
+            this.RowsLimitLabel.Text = "Rows Limit";
             // 
             // rowsLimitText
             // 
@@ -293,14 +294,14 @@ namespace LogsReader.Reader
             this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
             this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
             // 
-            // label1
+            // ServersLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 15);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Servers";
+            this.ServersLabel.AutoSize = true;
+            this.ServersLabel.Location = new System.Drawing.Point(3, 9);
+            this.ServersLabel.Name = "ServersLabel";
+            this.ServersLabel.Size = new System.Drawing.Size(44, 15);
+            this.ServersLabel.TabIndex = 3;
+            this.ServersLabel.Text = "Servers";
             // 
             // trvMain
             // 
@@ -335,61 +336,61 @@ namespace LogsReader.Reader
             this.serversText.TabIndex = 4;
             this.serversText.TextChanged += new System.EventHandler(this.ServersText_TextChanged);
             // 
-            // label6
+            // MaxLinesLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 86);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 15);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Max Lines";
+            this.MaxLinesLabel.AutoSize = true;
+            this.MaxLinesLabel.Location = new System.Drawing.Point(3, 86);
+            this.MaxLinesLabel.Name = "MaxLinesLabel";
+            this.MaxLinesLabel.Size = new System.Drawing.Size(59, 15);
+            this.MaxLinesLabel.TabIndex = 13;
+            this.MaxLinesLabel.Text = "Max Lines";
             // 
-            // label3
+            // FilteTypesLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 15);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "File Types";
+            this.FilteTypesLabel.AutoSize = true;
+            this.FilteTypesLabel.Location = new System.Drawing.Point(3, 61);
+            this.FilteTypesLabel.Name = "FilteTypesLabel";
+            this.FilteTypesLabel.Size = new System.Drawing.Size(58, 15);
+            this.FilteTypesLabel.TabIndex = 7;
+            this.FilteTypesLabel.Text = "File Types";
             // 
-            // logDirText
+            // logFolderText
             // 
             this.logFolderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logFolderText.Location = new System.Drawing.Point(84, 31);
-            this.logFolderText.Name = "logDirText";
+            this.logFolderText.Name = "logFolderText";
             this.logFolderText.Size = new System.Drawing.Size(134, 23);
             this.logFolderText.TabIndex = 12;
             this.logFolderText.TextChanged += new System.EventHandler(this.LogDirText_TextChanged);
             // 
-            // fileNames
+            // fileTypes
             // 
             this.fileTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fileTypes.Location = new System.Drawing.Point(84, 57);
-            this.fileTypes.Name = "fileNames";
+            this.fileTypes.Name = "fileTypes";
             this.fileTypes.Size = new System.Drawing.Size(134, 23);
             this.fileTypes.TabIndex = 8;
             this.fileTypes.TextChanged += new System.EventHandler(this.TypesText_TextChanged);
             // 
-            // label5
+            // LogsFolderLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 35);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 15);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Logs folder";
+            this.LogsFolderLabel.AutoSize = true;
+            this.LogsFolderLabel.Location = new System.Drawing.Point(3, 35);
+            this.LogsFolderLabel.Name = "LogsFolderLabel";
+            this.LogsFolderLabel.Size = new System.Drawing.Size(66, 15);
+            this.LogsFolderLabel.TabIndex = 11;
+            this.LogsFolderLabel.Text = "Logs folder";
             // 
-            // label4
+            // MaxThreadslabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 112);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Max Threads";
+            this.MaxThreadslabel.AutoSize = true;
+            this.MaxThreadslabel.Location = new System.Drawing.Point(3, 112);
+            this.MaxThreadslabel.Name = "MaxThreadslabel";
+            this.MaxThreadslabel.Size = new System.Drawing.Size(74, 15);
+            this.MaxThreadslabel.TabIndex = 9;
+            this.MaxThreadslabel.Text = "Max Threads";
             // 
             // maxThreadsText
             // 
@@ -698,21 +699,21 @@ namespace LogsReader.Reader
             // 
             // MainSplitContainer.Panel1
             // 
-            this.MainSplitContainer.Panel1.Controls.Add(this.label12);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label1);
+            this.MainSplitContainer.Panel1.Controls.Add(this.OrderByLabel);
+            this.MainSplitContainer.Panel1.Controls.Add(this.ServersLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
             this.MainSplitContainer.Panel1.Controls.Add(this.maxThreadsText);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label2);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label4);
+            this.MainSplitContainer.Panel1.Controls.Add(this.RowsLimitLabel);
+            this.MainSplitContainer.Panel1.Controls.Add(this.MaxThreadslabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.rowsLimitText);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label5);
+            this.MainSplitContainer.Panel1.Controls.Add(this.LogsFolderLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.fileTypes);
             this.MainSplitContainer.Panel1.Controls.Add(this.trvMain);
             this.MainSplitContainer.Panel1.Controls.Add(this.logFolderText);
             this.MainSplitContainer.Panel1.Controls.Add(this.maxLinesStackText);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label3);
+            this.MainSplitContainer.Panel1.Controls.Add(this.FilteTypesLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.serversText);
-            this.MainSplitContainer.Panel1.Controls.Add(this.label6);
+            this.MainSplitContainer.Panel1.Controls.Add(this.MaxLinesLabel);
             this.MainSplitContainer.Panel1MinSize = 120;
             // 
             // MainSplitContainer.Panel2
@@ -721,6 +722,15 @@ namespace LogsReader.Reader
             this.MainSplitContainer.Size = new System.Drawing.Size(680, 408);
             this.MainSplitContainer.SplitterDistance = 225;
             this.MainSplitContainer.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.MaxThreadsLabel.AutoSize = true;
+            this.MaxThreadsLabel.Location = new System.Drawing.Point(3, 112);
+            this.MaxThreadsLabel.Name = "label4";
+            this.MaxThreadsLabel.Size = new System.Drawing.Size(74, 15);
+            this.MaxThreadsLabel.TabIndex = 9;
+            this.MaxThreadsLabel.Text = "Max Threads";
             // 
             // LogsReaderForm
             // 
@@ -766,16 +776,16 @@ namespace LogsReader.Reader
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.CheckBox useRegex;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ServersLabel;
         private System.Windows.Forms.TextBox serversText;
         private System.Windows.Forms.TextBox fileTypes;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label FilteTypesLabel;
         private System.Windows.Forms.TextBox maxThreadsText;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label MaxThreadslabel;
         private System.Windows.Forms.TextBox logFolderText;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label LogsFolderLabel;
         private System.Windows.Forms.TextBox maxLinesStackText;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label MaxLinesLabel;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox traceNameFilter;
@@ -793,9 +803,9 @@ namespace LogsReader.Reader
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.CheckBox alreadyUseFilter;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label RowsLimitLabel;
         private System.Windows.Forms.TextBox rowsLimitText;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label OrderByLabel;
         private System.Windows.Forms.TextBox orderByText;
         private System.Windows.Forms.ComboBox traceNameFilterComboBox;
         private System.Windows.Forms.ComboBox traceMessageFilterComboBox;
@@ -809,6 +819,7 @@ namespace LogsReader.Reader
         private System.Windows.Forms.SplitContainer ParentSplitContainer;
         private System.Windows.Forms.SplitContainer MainSplitContainer;
         private NotepadControl notepad;
+        private Label MaxThreadsLabel;
     }
 }
 
