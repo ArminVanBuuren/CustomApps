@@ -137,6 +137,7 @@ namespace Utils.WinForm.Notepad
             this.ClientSize = new System.Drawing.Size(1035, 648);
             this.Controls.Add(this.NotepadControlItem);
             this.Controls.Add(this.MainMenuStrip);
+            this.Icon = global::Utils.WinForm.Properties.Resources.note;
             this.Name = "Notepad";
             this.Text = "Notepad";
             this.MainMenuStrip.ResumeLayout(false);
