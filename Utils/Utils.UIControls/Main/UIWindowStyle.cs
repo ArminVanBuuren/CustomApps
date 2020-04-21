@@ -209,32 +209,15 @@ namespace Utils.UIControls.Main
 
         private void Information_OnClick(object sender, RoutedEventArgs e)
         {
-            //if(!(sender is UIWindow mainWindow))
-            //    return;
-            //if (sender is DependencyObject)
-            //Window parentWindow = Window.GetWindow((DependencyObject) sender);
-            if (Application.Current.MainWindow is UIWindow mainWindow)
-            {
-                var vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent, false, false)
-                {
-                    Owner = mainWindow
-                };
-                vkhovanskiy.Loaded += WindowInfo_Loaded;
-                mainWindow.Blur();
-                vkhovanskiy.ShowDialog();
-                vkhovanskiy.Loaded -= WindowInfo_Loaded;
-                mainWindow.UnBlur();
-            }
-        }
+            var owner = ((FrameworkElement) sender);
+            while (owner.Parent is FrameworkElement parent)
+                owner = parent;
 
-        private void WindowInfo_Loaded(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = (UIWindow)sender;
-            var infButtom = (Border)mainWindow.Template.FindName("TitleBar", mainWindow);
-            var infText = (TextBlock)mainWindow.Template.FindName("Caption", mainWindow);
-            infButtom.Background = (Brush)mainWindow.FindResource("AuthorWindowTopBorderBrush");
-            infText.Foreground = (Brush)mainWindow.FindResource("AuthorWindowTopBorderTextBrush");
-            infText.Opacity = 1;
+            UIWindow mainWindow = (owner.TemplatedParent is UIWindow uiWindow1) ? uiWindow1 : (Application.Current != null && Application.Current.MainWindow is UIWindow uiWindow2) ? uiWindow2 : null;
+            if (mainWindow != null)
+                Presenter.ShowOwner(mainWindow);
+            else
+                Presenter.ShowOwner();
         }
 
         void CreatePresenterInCode(UIWindow mainWindow)

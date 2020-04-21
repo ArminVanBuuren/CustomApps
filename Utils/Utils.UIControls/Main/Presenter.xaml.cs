@@ -7,24 +7,43 @@ namespace Utils.UIControls.Main
 {
     public partial class Presenter
     {
-        public Presenter(string textPresenter = null, bool canDragMove = true, bool panelItemIsVisible = true) : base(canDragMove, panelItemIsVisible)
+        public Presenter(string textPresenter = null)
         {
-            
             InitializeComponent();
-            //this.Icon = UIControls.Properties.Resources.overwolf.ToImageSource();
-            
-            if (!string.IsNullOrEmpty(textPresenter))
-            {
-                X_title.Text = X_title.Text + "\r\n" + textPresenter;
-            }
 
+            Loaded += (sender, args) =>
+            {
+                Information.Visibility = Visibility.Collapsed;
+                MaxButton.Visibility = Visibility.Collapsed;
+                MinButton.Visibility = Visibility.Collapsed;
+                CanDragMove = false;
+                VisibleResizeMode = false;
+            };
+
+            if (!string.IsNullOrEmpty(textPresenter))
+                X_title.Text = X_title.Text + "\r\n" + textPresenter;
+
+            //this.Icon = UIControls.Properties.Resources.overwolf.ToImageSource();
             //Uri uriIcon = new Uri(@"C:\@MyRepos\CustomApp\UIControls\UIControls\UIControls\Images\overwolf.ico", UriKind.RelativeOrAbsolute);
             //this.Icon = new BitmapImage(uriIcon);
         }
 
+        public static void ShowOwner(UIWindow mainWindow)
+        {
+            var vkhovanskiy = new Presenter(mainWindow.PresenterTitleContent)
+            {
+                Owner = mainWindow
+            };
+            vkhovanskiy.Loaded += WindowInfo_Loaded;
+            mainWindow.Blur();
+            vkhovanskiy.ShowDialog();
+            vkhovanskiy.Loaded -= WindowInfo_Loaded;
+            mainWindow.UnBlur();
+        }
+
         public static void ShowOwner()
         {
-            var vkhovanskiy = new Presenter(string.Empty, false, false)
+            var vkhovanskiy = new Presenter(string.Empty)
             {
                 Width = SystemParameters.PrimaryScreenWidth,
                 Height = SystemParameters.PrimaryScreenHeight,
