@@ -346,48 +346,50 @@ namespace Utils
         public static MTCallBackList<Action, bool> Run(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Action, bool>_{actions.GetHashCode() + 3}");
-            var result = new MTCallBackList<Action, bool>(actions.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var action in actions)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Action, bool>_{actions.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var result = new MTCallBackList<Action, bool>();
+                var listOfTasks = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var action in actions)
                 {
-                    var inputAction = (Action) input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
+                        var inputAction = (Action) input;
+                        try
+                        {
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
 
-                        inputAction.Invoke();
+                            inputAction.Invoke();
 
-                        result.Add(inputAction,true);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputAction, ex);
-                    }
-                    finally
-                    {
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            result.Add(inputAction, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Add(inputAction, ex);
+                        }
+                        finally
+                        {
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
-                        pool.Release();
-                    }
-                }, action));
+                            pool.Release();
+                        }
+                    }, action));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                return result;
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            return result;
         }
 
         public static async Task RunAsync(IEnumerable<Action> actions, Action<MTCallBackList<Action, bool>> callback, MultiTaskingTemplate mtTemplate)
@@ -411,86 +413,88 @@ namespace Utils
         public static void Run(IEnumerable<Action> actions, Action<MTCallBack<Action, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{actions.GetHashCode() + 3}");
-            var listOfTasks = new List<Task>();
-            //var listOfCallBack = new List<Task>();
-
-            foreach (var action in actions)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{actions.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var listOfTasks = new List<Task>();
+                //var listOfCallBack = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var action in actions)
                 {
-                    //Task taskCallback = null;
-                    MTCallBack<Action, bool> callbackItem = null;
-                    var inputAction = (Action) input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
-
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
-
-                        inputAction.Invoke();
-
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<Action, bool>(inputAction, true);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<Action, bool>(inputAction, ex);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
-                        }
-                    }
-                    finally
-                    {
-                        //if (taskCallback != null)
-                        //{
-                        //    try
-                        //    {
-                        //        listOfCallBack.Add(taskCallback);
-                        //        taskCallback.Start();
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                        //    }
-                        //}
-
-                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                        //{
-                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                        //}
-
+                        //Task taskCallback = null;
+                        MTCallBack<Action, bool> callbackItem = null;
+                        var inputAction = (Action) input;
                         try
                         {
-                            if (callback != null && callbackItem != null)
-                                callback.Invoke(callbackItem);
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
+
+                            inputAction.Invoke();
+
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<Action, bool>(inputAction, true);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                            }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<Action, bool>(inputAction, ex);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
+                            }
                         }
+                        finally
+                        {
+                            //if (taskCallback != null)
+                            //{
+                            //    try
+                            //    {
+                            //        listOfCallBack.Add(taskCallback);
+                            //        taskCallback.Start();
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            //    }
+                            //}
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                            //{
+                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            //}
 
-                        pool.Release();
-                    }
-                }, action));
+                            try
+                            {
+                                if (callback != null && callbackItem != null)
+                                    callback.Invoke(callbackItem);
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
+                            pool.Release();
+                        }
+                    }, action));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                //Task.WaitAll(listOfCallBack.ToArray());
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            //Task.WaitAll(listOfCallBack.ToArray());
         }
 
 
@@ -502,48 +506,50 @@ namespace Utils
         public static MTCallBackList<Func<TResult>, TResult> Run<TResult>(IEnumerable<Func<TResult>> funcs, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Func<TResult>>_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}");
-            var result = new MTCallBackList<Func<TResult>, TResult>(funcs.Count());
-            var listOfTasks = new List<Task>();
-            
-            foreach (var func in funcs)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Func<TResult>>_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var result = new MTCallBackList<Func<TResult>, TResult>();
+                var listOfTasks = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var func in funcs)
                 {
-                    var inputFunc = (Func<TResult>) input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
+                        var inputFunc = (Func<TResult>) input;
+                        try
+                        {
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
 
-                        var res = inputFunc.Invoke();
+                            var res = inputFunc.Invoke();
 
-                        result.Add(inputFunc, res);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputFunc, ex);
-                    }
-                    finally
-                    {
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            result.Add(inputFunc, res);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Add(inputFunc, ex);
+                        }
+                        finally
+                        {
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
-                        pool.Release();
-                    }
-                }, func));
+                            pool.Release();
+                        }
+                    }, func));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                return result;
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            return result;
         }
 
         public static async Task RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBackList<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
@@ -567,86 +573,88 @@ namespace Utils
         public static void Run<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBack<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}");
-            var listOfTasks = new List<Task>();
-            //var listOfCallBack = new List<Task>();
-
-            foreach (var func in funcs)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var listOfTasks = new List<Task>();
+                //var listOfCallBack = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var func in funcs)
                 {
-                    //Task taskCallback = null;
-                    MTCallBack<Func<TResult>, TResult> callbackItem = null;
-                    var inputFunc = (Func<TResult>)input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
-
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
-
-                        var res = inputFunc.Invoke();
-
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, res);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, ex);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
-                        }
-                    }
-                    finally
-                    {
-                        //if (taskCallback != null)
-                        //{
-                        //    try
-                        //    {
-                        //        listOfCallBack.Add(taskCallback);
-                        //        taskCallback.Start();
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                        //    }
-                        //}
-
-                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                        //{
-                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                        //}
-
+                        //Task taskCallback = null;
+                        MTCallBack<Func<TResult>, TResult> callbackItem = null;
+                        var inputFunc = (Func<TResult>) input;
                         try
                         {
-                            if (callback != null && callbackItem != null)
-                                callback.Invoke(callbackItem);
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
+
+                            var res = inputFunc.Invoke();
+
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, res);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                            }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, ex);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
+                            }
                         }
+                        finally
+                        {
+                            //if (taskCallback != null)
+                            //{
+                            //    try
+                            //    {
+                            //        listOfCallBack.Add(taskCallback);
+                            //        taskCallback.Start();
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            //    }
+                            //}
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                            //{
+                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            //}
 
-                        pool.Release();
-                    }
-                }, func));
+                            try
+                            {
+                                if (callback != null && callbackItem != null)
+                                    callback.Invoke(callbackItem);
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
+                            pool.Release();
+                        }
+                    }, func));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                //Task.WaitAll(listOfCallBack.ToArray());
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            //Task.WaitAll(listOfCallBack.ToArray());
         }
 
         public static async Task<MTCallBackList<TSource, bool>> RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
@@ -657,48 +665,50 @@ namespace Utils
         public static MTCallBackList<TSource, bool> Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, bool>_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}");
-            var result = new MTCallBackList<TSource, bool>(data.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var item in data)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, bool>_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var result = new MTCallBackList<TSource, bool>();
+                var listOfTasks = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var item in data)
                 {
-                    var inputItem = (TSource) input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
+                        var inputItem = (TSource) input;
+                        try
+                        {
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
 
-                        action.Invoke(inputItem);
+                            action.Invoke(inputItem);
 
-                        result.Add(inputItem, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputItem, ex);
-                    }
-                    finally
-                    {
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            result.Add(inputItem, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Add(inputItem, ex);
+                        }
+                        finally
+                        {
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
-                        pool.Release();
-                    }
-                }, item));
+                            pool.Release();
+                        }
+                    }, item));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                return result;
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            return result;
         }
 
         public static async Task RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBackList<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
@@ -722,87 +732,89 @@ namespace Utils
         public static void Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBack<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}");
-            var listOfTasks = new List<Task>();
-            //var listOfCallBack = new List<Task>();
-
-            foreach (var item in data)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var listOfTasks = new List<Task>();
+                //var listOfCallBack = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var item in data)
                 {
-                    //Task taskCallback = null;
-                    MTCallBack<TSource, bool> callbackItem = null;
-                    var inputItem = (TSource)input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
-
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
-
-                        action.Invoke(inputItem);
-
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<TSource, bool>(inputItem, true);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<TSource, bool>(inputItem, ex);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
-                        }
-                    }
-                    finally
-                    {
-                        //if (taskCallback != null)
-                        //{
-                        //    try
-                        //    {
-                        //        listOfCallBack.Add(taskCallback);
-                        //        taskCallback.Start();
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                        //    }
-                        //}
-
-                        //taskCallback?.RunSynchronously();
-                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                        //{
-                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                        //}
-
+                        //Task taskCallback = null;
+                        MTCallBack<TSource, bool> callbackItem = null;
+                        var inputItem = (TSource) input;
                         try
                         {
-                            if (callback != null && callbackItem != null)
-                                callback.Invoke(callbackItem);
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
+
+                            action.Invoke(inputItem);
+
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<TSource, bool>(inputItem, true);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
+                            }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<TSource, bool>(inputItem, ex);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
+                            }
                         }
+                        finally
+                        {
+                            //if (taskCallback != null)
+                            //{
+                            //    try
+                            //    {
+                            //        listOfCallBack.Add(taskCallback);
+                            //        taskCallback.Start();
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            //    }
+                            //}
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            //taskCallback?.RunSynchronously();
+                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                            //{
+                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            //}
 
-                        pool.Release();
-                    }
-                }, item));
+                            try
+                            {
+                                if (callback != null && callbackItem != null)
+                                    callback.Invoke(callbackItem);
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
+                            pool.Release();
+                        }
+                    }, item));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                //Task.WaitAll(listOfCallBack.ToArray());
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            //Task.WaitAll(listOfCallBack.ToArray());
         }
 
         public static async Task<MTCallBackList<TSource, TResult>> RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
@@ -813,48 +825,50 @@ namespace Utils
         public static MTCallBackList<TSource, TResult> Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}");
-            var result = new MTCallBackList<TSource, TResult>(data.Count());
-            var listOfTasks = new List<Task>();
-
-            foreach (var item in data)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var result = new MTCallBackList<TSource, TResult>();
+                var listOfTasks = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var item in data)
                 {
-                    var inputItem = (TSource) input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
+                        var inputItem = (TSource) input;
+                        try
+                        {
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
 
-                        var res = func.Invoke(inputItem);
+                            var res = func.Invoke(inputItem);
 
-                        result.Add(inputItem, res);
-                    }
-                    catch (Exception ex)
-                    {
-                        result.Add(inputItem, ex);
-                    }
-                    finally
-                    {
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            result.Add(inputItem, res);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Add(inputItem, ex);
+                        }
+                        finally
+                        {
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
-                        pool.Release();
-                    }
-                }, item));
+                            pool.Release();
+                        }
+                    }, item));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                return result;
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            return result;
         }
 
         public static async Task RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBackList<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
@@ -878,87 +892,89 @@ namespace Utils
         public static void Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBack<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}");
-            var listOfTasks = new List<Task>();
-            //var listOfCallBack = new List<Task>();
-
-            foreach (var item in data)
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}"))
             {
-                if (mt.CancelToken.IsCancellationRequested)
-                    break;
+                var listOfTasks = new List<Task>();
+                //var listOfCallBack = new List<Task>();
 
-                pool.WaitOne();
-
-                listOfTasks.Add(Task.Factory.StartNew((input) =>
+                foreach (var item in data)
                 {
-                    //Task taskCallback = null;
-                    
-                    MTCallBack<TSource, TResult> callbackItem = null;
-                    var inputItem = (TSource)input;
-                    try
+                    if (mt.CancelToken.IsCancellationRequested)
+                        break;
+
+                    pool.WaitOne();
+
+                    listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        if (mt.CancelToken.IsCancellationRequested)
-                            return;
+                        //Task taskCallback = null;
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = mt.Priority;
-
-                        var res = func.Invoke(inputItem);
-
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<TSource, TResult>(inputItem, res);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (callback != null)
-                        {
-                            callbackItem = new MTCallBack<TSource, TResult>(inputItem, ex);
-                            //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
-                        }
-                    }
-                    finally
-                    {
-                        //if (taskCallback != null)
-                        //{
-                        //    try
-                        //    {
-                        //        listOfCallBack.Add(taskCallback);
-                        //        taskCallback.Start();
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                        //    }
-                        //}
-
-                        //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                        //{
-                        //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                        //}
-
+                        MTCallBack<TSource, TResult> callbackItem = null;
+                        var inputItem = (TSource) input;
                         try
                         {
-                            if (callback != null && callbackItem != null)
-                                callback.Invoke(callbackItem);
+                            if (mt.CancelToken.IsCancellationRequested)
+                                return;
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = mt.Priority;
+
+                            var res = func.Invoke(inputItem);
+
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<TSource, TResult>(inputItem, res);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                            }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            if (callback != null)
+                            {
+                                callbackItem = new MTCallBack<TSource, TResult>(inputItem, ex);
+                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
+                            }
                         }
+                        finally
+                        {
+                            //if (taskCallback != null)
+                            //{
+                            //    try
+                            //    {
+                            //        listOfCallBack.Add(taskCallback);
+                            //        taskCallback.Start();
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
+                            //    }
+                            //}
 
-                        if (mt.Priority != ThreadPriority.Normal)
-                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
+                            //{
+                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
+                            //}
 
-                        pool.Release();
-                    }
-                }, item));
+                            try
+                            {
+                                if (callback != null && callbackItem != null)
+                                    callback.Invoke(callbackItem);
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+
+                            if (mt.Priority != ThreadPriority.Normal)
+                                Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
+                            pool.Release();
+                        }
+                    }, item));
+                }
+
+                Task.WaitAll(listOfTasks.ToArray());
+                //Task.WaitAll(listOfCallBack.ToArray());
             }
-
-            Task.WaitAll(listOfTasks.ToArray());
-            //Task.WaitAll(listOfCallBack.ToArray());
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="DarkBlue UI - набор тем для WPF-приложений (DEMO)"
         Icon="Images/lime32.ico" MinHeight="480" MinWidth="640"
-        Background="#333" ResizeMode="CanResizeWithGrip" WindowState="Maximized">
+        Background="#333" ResizeMode="CanResizeWithGrip" WindowState="Maximized" Height="2175" Width="1287">
     <Window.Resources>
         <XmlDataProvider x:Key="DataDS" Source="../Gallery.xml" />
         <XmlDataProvider x:Key="DG_data" XPath="Categoryes">
