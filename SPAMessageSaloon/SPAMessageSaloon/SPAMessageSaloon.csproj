@@ -53,7 +53,7 @@
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.UIControls">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Release\Utils.UIControls.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Debug\Utils.UIControls.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm">
       <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
@@ -137,6 +137,10 @@
     <ProjectReference Include="..\SPAFilter\SPAFilter.csproj">
       <Project>{2d965102-2cc6-4c82-ad78-dab5ed41dd32}</Project>
       <Name>SPAFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPAMessageSaloon.About\SPAMessageSaloon.About.csproj">
+      <Project>{3d5e621a-16a3-4cd1-ad36-1787aeab42a2}</Project>
+      <Name>SPAMessageSaloon.About</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj">
       <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>

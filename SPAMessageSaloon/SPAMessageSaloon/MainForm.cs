@@ -1,11 +1,11 @@
-﻿using SPAMessageSaloon.Common;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
@@ -14,10 +14,15 @@ using Utils.AppUpdater.Updater;
 using Utils.Handles;
 using Utils.UIControls.Main;
 using Utils.WinForm;
+using SPAMessageSaloon.Common;
+using SPAMessageSaloon.About;
+using SPAMessageSaloon.Properties;
 using LogsReader;
 using SPAFilter;
-using SPAMessageSaloon.Properties;
 using XPathTester;
+using FontStyle = System.Drawing.FontStyle;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace SPAMessageSaloon
 {
@@ -66,8 +71,8 @@ namespace SPAMessageSaloon
                     CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
                     
 
-                    languageToolStripMenuItem.Text = Properties.Resources.Txt_Language;
-                    aboutToolStripMenuItem.Text = Properties.Resources.Txt_About;
+                    languageToolStripMenuItem.Text = Resources.Txt_Language;
+                    aboutToolStripMenuItem.Text = Resources.Txt_About;
 
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
                         form.ApplySettings();
@@ -224,7 +229,10 @@ namespace SPAMessageSaloon
                 updater.SecondsRunDelay = 5;
 
                 if (updater.ProjectBuildPack.NeedRestartApplication)
+                {
+                    LastUpdatePackage = updater.ProjectBuildPack.Name;
                     SaveData(updater);
+                }
 
                 AppUpdater.DoUpdate(updater);
             }
@@ -245,7 +253,6 @@ namespace SPAMessageSaloon
         {
             try
             {
-                LastUpdatePackage = updater?.ProjectBuildPack.Name;
                 foreach (var form in MdiChildren.OfType<ISaloonForm>())
                     form.SaveData();
             }
@@ -433,14 +440,27 @@ namespace SPAMessageSaloon
             ((sender as Form)?.MdiParent as MainForm)?.statusStrip.Items.Add(button);
         }
 
-        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
+        private void toolButtonAbout_ButtonClick(object sender, EventArgs e)
         {
-            toolStripSplitButton1.ShowDropDown();
+            toolButtonAbout.ShowDropDown();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                var about = new AboutWindow
+                {
+                    Topmost = true,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen
+                };
+                about.Focus();
+                about.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
         }
 
         object GetRegeditValue(string name)

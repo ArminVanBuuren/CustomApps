@@ -1,0 +1,79 @@
+﻿<main:UIWindow x:Class="SPAMessageSaloon.About.AboutWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SPAMessageSaloon"
+             xmlns:main="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
+             Title="About" 
+                
+             FontFamily="Segoe UI"
+             FontSize="11"
+             Background="#333"
+             Foreground="#FF32EBFB"
+             
+             WindowStartupLocation="CenterOwner"
+             BorderBrush="#FF1087BF"
+             Style="{DynamicResource VSUIWindowStyleLocal}"
+             mc:Ignorable="d" Width="1505.328" Height="735.475">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Utils.UIControls;component/Main/UIWindowStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Utils.UIControls;component/Styles/Core.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="VSUIWindowStyleLocal" TargetType="{x:Type main:UIWindow}" BasedOn="{StaticResource VSUIWindowStyle}" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <TabControl Margin="6,6,10,10" >
+            <TabItem Header="Logs Reader" Width="100" Height="25">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Source="/Resources/LogsReader_form.png" Height="500" Margin="10, 0, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1">
+                            <RichTextBox Margin="10,0" Height="499" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True">
+                                <FlowDocument PageWidth="230">
+                                    <Paragraph>
+                                        <Run Text="Элемент управления "/>
+                                        <Span FontWeight="Bold">
+                                            <Run Text="RichTextBox"/>
+                                        </Span>
+                                    </Paragraph>
+                                    <Paragraph>
+                                        <Run Text="DarkBlue UI - скачать на сайте "/>
+                                        <Hyperlink Foreground="LimeGreen">
+                                            <Run Text="www.professorweb.ru"/>
+                                        </Hyperlink>
+                                        <Run Text=" ."/>
+                                    </Paragraph>
+                                    <Paragraph>
+                                        <Run Text="teteet"/>
+                                    </Paragraph>
+                                </FlowDocument>
+                            </RichTextBox>
+                        </StackPanel>
+                        <Border Grid.Row="0" Grid.Column="1" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="0" Grid.Column="1" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</main:UIWindow>

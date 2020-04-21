@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMessageSaloon", "SPAMess
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMessageSaloon.Common", "SPAMessageSaloon.Common\SPAMessageSaloon.Common.csproj", "{CA12905A-D287-4CBB-A91D-358614B24D8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMessageSaloon.About", "SPAMessageSaloon.About\SPAMessageSaloon.About.csproj", "{3D5E621A-16A3-4CD1-AD36-1787AEAB42A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA12905A-D287-4CBB-A91D-358614B24D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D5E621A-16A3-4CD1-AD36-1787AEAB42A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D5E621A-16A3-4CD1-AD36-1787AEAB42A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D5E621A-16A3-4CD1-AD36-1787AEAB42A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D5E621A-16A3-4CD1-AD36-1787AEAB42A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
