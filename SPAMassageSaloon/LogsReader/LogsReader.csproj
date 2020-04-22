@@ -129,7 +129,6 @@
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\filter17.png" />
     <None Include="Resources\save2.png" />
     <None Include="Resources\reset2.png" />
     <None Include="Resources\clear1.png" />
@@ -140,6 +139,9 @@
       <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>
       <Name>SPAMassageSaloon.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filter18.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -74,7 +74,41 @@ namespace LogsReader.Reader
 
         public LogsReaderForm(LRSettingsScheme scheme)
         {
+            if (scheme == null)
+                throw new ArgumentNullException(nameof(scheme));
+
             InitializeComponent();
+
+            #region Initialize StripStatus
+
+            _tooltip = new ToolTip { InitialDelay = 50 };
+
+            var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
+            var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
+            var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
+
+            _filtersCompleted1 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingStart };
+            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            _filtersCompleted2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(_filtersCompleted1);
+            statusStrip.Items.Add(_completedFilesStatus);
+            statusStrip.Items.Add(_filtersCompleted2);
+            statusStrip.Items.Add(_totalFilesStatus);
+
+            _overallFound1 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingStart };
+            _findedInfo = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
+            _overallFound2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(_overallFound1);
+            statusStrip.Items.Add(_findedInfo);
+            statusStrip.Items.Add(_overallFound2);
+
+            statusStrip.Items.Add(new ToolStripSeparator());
+            _statusInfo = new ToolStripStatusLabel("") { Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
+            statusStrip.Items.Add(_statusInfo);
+
+            #endregion
 
             try
             {
@@ -90,37 +124,7 @@ namespace LogsReader.Reader
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
                 orderByText.GotFocus += OrderByText_GotFocus;
 
-                #region Set StatusStrip
-
-                var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
-                var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
-                var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
-
-                _filtersCompleted1 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingStart};
-                _completedFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                _filtersCompleted2 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                _totalFilesStatus = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
-                statusStrip.Items.Add(_filtersCompleted1);
-                statusStrip.Items.Add(_completedFilesStatus);
-                statusStrip.Items.Add(_filtersCompleted2);
-                statusStrip.Items.Add(_totalFilesStatus);
-
-                _overallFound1 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingStart};
-                _findedInfo = new ToolStripStatusLabel("0") {Font = this.Font, Margin = statusStripItemsPaddingMiddle};
-                _overallFound2 = new ToolStripStatusLabel() {Font = this.Font, Margin = statusStripItemsPaddingEnd};
-                statusStrip.Items.Add(new ToolStripSeparator());
-                statusStrip.Items.Add(_overallFound1);
-                statusStrip.Items.Add(_findedInfo);
-                statusStrip.Items.Add(_overallFound2);
-
-                statusStrip.Items.Add(new ToolStripSeparator());
-                _statusInfo = new ToolStripStatusLabel("") {Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
-                statusStrip.Items.Add(_statusInfo);
-
-                #endregion
-
-                _tooltip = new ToolTip {InitialDelay = 50};
-
+                #region Initialize Controls
 
                 _message = notepad.AddDocument(new BlankDocument() {HeaderName = "Message", Language = Language.XML});
                 _message.BackBrush = null;
@@ -143,6 +147,7 @@ namespace LogsReader.Reader
                 _traceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
                 notepad.SelectEditor(0);
+                notepad.DefaultEncoding = CurrentSettings.Encoding;
                 notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
                 notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
@@ -166,6 +171,50 @@ namespace LogsReader.Reader
                     _oldDateEndChecked = true;
                     dateEndFilter.Value = _getEndDate.Invoke();
                 };
+
+                #endregion
+
+                #region Apply All Settings
+
+                txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
+                useRegex.Checked = UserSettings.UseRegex;
+                dateStartFilter.Checked = UserSettings.DateStartChecked;
+                if (dateStartFilter.Checked)
+                    dateStartFilter.Value = _getStartDate.Invoke();
+                dateEndFilter.Checked = UserSettings.DateEndChecked;
+                if (dateEndFilter.Checked)
+                    dateEndFilter.Value = _getEndDate.Invoke();
+                traceNameFilter.AssignValue(UserSettings.TraceNameFilter, TraceNameFilter_TextChanged);
+                traceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TraceMessageFilter_TextChanged);
+
+                var langMessage = UserSettings.MessageLanguage;
+                var langTrace = UserSettings.TraceLanguage;
+                if (_message.Language != langMessage)
+                    _message.ChangeLanguage(langMessage);
+                if (_traceMessage.Language != langTrace)
+                    _traceMessage.ChangeLanguage(langTrace);
+
+                _message.WordWrap = UserSettings.MessageWordWrap;
+                _message.Highlights = UserSettings.MessageHighlights;
+                _traceMessage.WordWrap = UserSettings.TraceWordWrap;
+                _traceMessage.Highlights = UserSettings.TraceHighlights;
+
+                serversText.Text = CurrentSettings.Servers;
+                fileTypes.Text = CurrentSettings.FileTypes;
+                logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
+                maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
+                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
+                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+                orderByText.Text = CurrentSettings.OrderBy;
+
+                #endregion
+
+                trvMain.Nodes["trvServers"].Checked = false;
+                trvMain.Nodes["trvTypes"].Checked = false;
+                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
+                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
+                this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
+
             }
             catch (Exception ex)
             {
@@ -174,7 +223,7 @@ namespace LogsReader.Reader
             finally
             {
                 ClearForm(false);
-                ValidationCheck();
+                ValidationCheck(false);
             }
         }
 
@@ -182,6 +231,9 @@ namespace LogsReader.Reader
         {
             try
             {
+                if(UserSettings == null)
+                    return;
+
                 for (var i = 0; i < dgvFiles.Columns.Count; i++)
                 {
                     var valueStr = UserSettings.GetValue("COL" + i);
@@ -197,19 +249,15 @@ namespace LogsReader.Reader
             {
                 ReportStatus(ex.Message, ReportStatusType.Error);
             }
-            finally
-            {
-                trvMain.Nodes["trvServers"].Checked = false;
-                trvMain.Nodes["trvTypes"].Checked = false;
-                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
-                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
-            }
         }
 
         public void ApplySettings()
         {
             try
             {
+
+                #region Change Language
+
                 treeNode3.Text = Resources.Txt_LogsReaderForm_Servers2;
                 treeNode4.Text = Resources.Txt_LogsReaderForm_Types;
 
@@ -221,12 +269,17 @@ namespace LogsReader.Reader
                 traceNameFilterComboBox.Items.Clear();
                 traceNameFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
                 traceNameFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
-                traceNameFilterComboBox.AssignValue(UserSettings.TraceNameFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains, traceNameFilterComboBox_SelectedIndexChanged);
+                if (UserSettings != null)
+                    traceNameFilterComboBox.AssignValue(UserSettings.TraceNameFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
+                        traceNameFilterComboBox_SelectedIndexChanged);
 
                 traceMessageFilterComboBox.Items.Clear();
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
-                traceMessageFilterComboBox.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains, traceMessageFilterComboBox_SelectedIndexChanged);
+                if (UserSettings != null)
+                    traceMessageFilterComboBox.AssignValue(
+                        UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
+                        traceMessageFilterComboBox_SelectedIndexChanged);
 
                 _tooltip.RemoveAll();
                 _tooltip.SetToolTip(txtPattern, Resources.Txt_Form_SearchComment);
@@ -259,54 +312,26 @@ namespace LogsReader.Reader
                 btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
                 btnClear.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_btnClear_Width), btnClear.Height);
                 buttonFilter.Text = Resources.Txt_LogsReaderForm_Filter;
-                buttonFilter.Padding = new Padding(3,0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
+                buttonFilter.Padding = new Padding(3, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
                 buttonReset.Text = Resources.Txt_LogsReaderForm_Reset;
                 buttonReset.Padding = new Padding(2, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonReset_rightPadding), 0);
                 buttonExport.Text = Resources.Txt_LogsReaderForm_Export;
                 buttonExport.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_buttonExport_Width), buttonExport.Height);
                 alreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
-                alreadyUseFilter.Padding = new Padding(0,0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
+                alreadyUseFilter.Padding = new Padding(0, 0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
 
-                txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
-                useRegex.Checked = UserSettings.UseRegex;
-                dateStartFilter.Checked = UserSettings.DateStartChecked;
-                if (dateStartFilter.Checked)
-                    dateStartFilter.Value = _getStartDate.Invoke();
-                dateEndFilter.Checked = UserSettings.DateEndChecked;
-                if (dateEndFilter.Checked)
-                    dateEndFilter.Value = _getEndDate.Invoke();
-                traceNameFilter.AssignValue(UserSettings.TraceNameFilter, TraceNameFilter_TextChanged);
-                traceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TraceMessageFilter_TextChanged);
+                #endregion
 
-                var langMessage = UserSettings.MessageLanguage;
-                var langTrace = UserSettings.TraceLanguage;
-                if (_message.Language != langMessage)
-                    _message.ChangeLanguage(langMessage);
-                if (_traceMessage.Language != langTrace)
-                    _traceMessage.ChangeLanguage(langTrace);
-
-                _message.WordWrap = UserSettings.MessageWordWrap;
-                _message.Highlights = UserSettings.MessageHighlights;
-                _traceMessage.WordWrap = UserSettings.TraceWordWrap;
-                _traceMessage.Highlights = UserSettings.TraceHighlights;
-
-                serversText.Text = CurrentSettings.Servers;
-                notepad.DefaultEncoding = CurrentSettings.Encoding;
-                logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
-                fileTypes.Text = CurrentSettings.FileTypes;
-                maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-                orderByText.Text = CurrentSettings.OrderBy;
+                ReportStatus(string.Empty, ReportStatusType.Success);
+                ValidationCheck(false);
             }
             catch (Exception ex)
             {
+                ValidationCheck(false);
                 ReportStatus(ex.Message, ReportStatusType.Error);
             }
             finally
             {
-                ReportStatus(string.Empty, ReportStatusType.Success);
-                ValidationCheck();
                 _settingsLoaded = true;
             }
         }
@@ -315,7 +340,7 @@ namespace LogsReader.Reader
         {
             try
             {
-                if (!_settingsLoaded)
+                if (!_settingsLoaded || UserSettings == null)
                     return;
 
                 for (var i = 0; i < dgvFiles.Columns.Count; i++)
@@ -750,8 +775,7 @@ namespace LogsReader.Reader
                     continue;
                 trvMain.Nodes["trvServers"].Nodes.Add(s.Key.Trim().ToUpper());
             }
-
-            trvMain.ExpandAll();
+            trvMain.Nodes["trvServers"].Expand();
 
             ValidationCheck();
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
@@ -778,8 +802,7 @@ namespace LogsReader.Reader
                     continue;
                 trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.Trim().ToUpper());
             }
-
-            trvMain.ExpandAll();
+            trvMain.Nodes["trvTypes"].Expand();
 
             ValidationCheck();
             OnSchemeChanged?.Invoke(this, EventArgs.Empty);
@@ -950,21 +973,28 @@ namespace LogsReader.Reader
 
         void ValidationCheck(bool clearStatus = true)
         {
-            var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
-            logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+            try
+            {
+                var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
+                logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
 
-            var settIsCorrect = CurrentSettings.IsCorrect;
-            if (settIsCorrect && clearStatus)
-                ClearErrorStatus();
+                var settIsCorrect = CurrentSettings?.IsCorrect ?? false;
+                if (settIsCorrect && clearStatus)
+                    ClearErrorStatus();
 
-            btnSearch.Enabled = isCorrectPath
-                                && settIsCorrect
-                                && !txtPattern.Text.IsNullOrEmpty()
-                                && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
-                                && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+                btnSearch.Enabled = isCorrectPath
+                                    && settIsCorrect
+                                    && !txtPattern.Text.IsNullOrEmpty()
+                                    && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
+                                    && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
-            buttonExport.Enabled = dgvFiles.RowCount > 0;
-            buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+                buttonExport.Enabled = dgvFiles.RowCount > 0;
+                buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
         }
 
         private void BtnClear_Click(object sender, EventArgs e)
@@ -974,22 +1004,30 @@ namespace LogsReader.Reader
 
         void ClearForm(bool saveData = true)
         {
-            if (saveData)
-                SaveData();
+            try
+            {
+                if (saveData)
+                    SaveData();
 
-            OverallResultList?.Clear();
-            OverallResultList = null;
+                OverallResultList?.Clear();
+                OverallResultList = null;
 
-            ClearDGV();
+                ClearDGV();
 
-            Progress = 0;
-            _completedFilesStatus.Text = @"0";
-            _totalFilesStatus.Text = @"0";
-            _findedInfo.Text = @"0";
+                Progress = 0;
 
-            ReportStatus(string.Empty, ReportStatusType.Success);
+                _completedFilesStatus.Text = @"0";
+                _totalFilesStatus.Text = @"0";
+                _findedInfo.Text = @"0";
 
-            STREAM.GarbageCollect();
+                ReportStatus(string.Empty, ReportStatusType.Success);
+
+                STREAM.GarbageCollect();
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
         }
 
         void ClearDGV()
@@ -1000,8 +1038,10 @@ namespace LogsReader.Reader
                 dgvFiles.Rows.Clear();
                 dgvFiles.Refresh();
                 descriptionText.Text = string.Empty;
-                _message.Text = string.Empty;
-                _traceMessage.Text = string.Empty;
+                if (_message != null)
+                    _message.Text = string.Empty;
+                if (_traceMessage != null)
+                    _traceMessage.Text = string.Empty;
                 buttonExport.Enabled = false;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
             }
@@ -1041,7 +1081,7 @@ namespace LogsReader.Reader
 
         public override string ToString()
         {
-            return CurrentSettings?.ToString();
+            return CurrentSettings?.ToString() ?? base.ToString();
         }
     }
 

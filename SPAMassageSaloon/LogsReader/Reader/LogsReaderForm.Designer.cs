@@ -60,7 +60,7 @@ namespace LogsReader.Reader
             this.logFolderText = new System.Windows.Forms.TextBox();
             this.fileTypes = new System.Windows.Forms.TextBox();
             this.LogsFolderLabel = new System.Windows.Forms.Label();
-            this.MaxThreadslabel = new System.Windows.Forms.Label();
+            this.MaxThreadsLabel = new System.Windows.Forms.Label();
             this.maxThreadsText = new System.Windows.Forms.TextBox();
             this.EnumSplitContainer = new System.Windows.Forms.SplitContainer();
             this.descriptionText = new System.Windows.Forms.RichTextBox();
@@ -84,7 +84,6 @@ namespace LogsReader.Reader
             this.searchPanel = new System.Windows.Forms.Panel();
             this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.MaxThreadsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
             this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -313,7 +312,6 @@ namespace LogsReader.Reader
             this.trvMain.Name = "trvMain";
             this.trvMain.Size = new System.Drawing.Size(217, 214);
             this.trvMain.TabIndex = 2;
-            this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
             // 
             // maxLinesStackText
             // 
@@ -385,12 +383,12 @@ namespace LogsReader.Reader
             // 
             // MaxThreadslabel
             // 
-            this.MaxThreadslabel.AutoSize = true;
-            this.MaxThreadslabel.Location = new System.Drawing.Point(3, 112);
-            this.MaxThreadslabel.Name = "MaxThreadslabel";
-            this.MaxThreadslabel.Size = new System.Drawing.Size(74, 15);
-            this.MaxThreadslabel.TabIndex = 9;
-            this.MaxThreadslabel.Text = "Max Threads";
+            this.MaxThreadsLabel.AutoSize = true;
+            this.MaxThreadsLabel.Location = new System.Drawing.Point(3, 112);
+            this.MaxThreadsLabel.Name = "MaxThreadsLabel";
+            this.MaxThreadsLabel.Size = new System.Drawing.Size(74, 15);
+            this.MaxThreadsLabel.TabIndex = 9;
+            this.MaxThreadsLabel.Text = "Max Threads";
             // 
             // maxThreadsText
             // 
@@ -529,11 +527,11 @@ namespace LogsReader.Reader
             // buttonFilter
             // 
             this.buttonFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFilter.Image = global::LogsReader.Properties.Resources.filter17;
+            this.buttonFilter.Image = global::LogsReader.Properties.Resources.filter18;
             this.buttonFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonFilter.Location = new System.Drawing.Point(803, 7);
             this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Padding = new System.Windows.Forms.Padding(3, 0, 7, 0);
+            this.buttonFilter.Padding = new System.Windows.Forms.Padding(5, 0, 7, 0);
             this.buttonFilter.Size = new System.Drawing.Size(100, 23);
             this.buttonFilter.TabIndex = 28;
             this.buttonFilter.Text = "Filter [F7]";
@@ -704,7 +702,7 @@ namespace LogsReader.Reader
             this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
             this.MainSplitContainer.Panel1.Controls.Add(this.maxThreadsText);
             this.MainSplitContainer.Panel1.Controls.Add(this.RowsLimitLabel);
-            this.MainSplitContainer.Panel1.Controls.Add(this.MaxThreadslabel);
+            this.MainSplitContainer.Panel1.Controls.Add(this.MaxThreadsLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.rowsLimitText);
             this.MainSplitContainer.Panel1.Controls.Add(this.LogsFolderLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.fileTypes);
@@ -722,15 +720,6 @@ namespace LogsReader.Reader
             this.MainSplitContainer.Size = new System.Drawing.Size(680, 408);
             this.MainSplitContainer.SplitterDistance = 225;
             this.MainSplitContainer.TabIndex = 0;
-            // 
-            // label4
-            // 
-            this.MaxThreadsLabel.AutoSize = true;
-            this.MaxThreadsLabel.Location = new System.Drawing.Point(3, 112);
-            this.MaxThreadsLabel.Name = "label4";
-            this.MaxThreadsLabel.Size = new System.Drawing.Size(74, 15);
-            this.MaxThreadsLabel.TabIndex = 9;
-            this.MaxThreadsLabel.Text = "Max Threads";
             // 
             // LogsReaderForm
             // 
@@ -781,7 +770,7 @@ namespace LogsReader.Reader
         private System.Windows.Forms.TextBox fileTypes;
         private System.Windows.Forms.Label FilteTypesLabel;
         private System.Windows.Forms.TextBox maxThreadsText;
-        private System.Windows.Forms.Label MaxThreadslabel;
+        private System.Windows.Forms.Label MaxThreadsLabel;
         private System.Windows.Forms.TextBox logFolderText;
         private System.Windows.Forms.Label LogsFolderLabel;
         private System.Windows.Forms.TextBox maxLinesStackText;
@@ -819,7 +808,6 @@ namespace LogsReader.Reader
         private System.Windows.Forms.SplitContainer ParentSplitContainer;
         private System.Windows.Forms.SplitContainer MainSplitContainer;
         private NotepadControl notepad;
-        private Label MaxThreadsLabel;
     }
 }
 

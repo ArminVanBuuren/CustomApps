@@ -73,9 +73,9 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap filter17 {
+        public static System.Drawing.Bitmap filter18 {
             get {
-                object obj = ResourceManager.GetObject("filter17", resourceCulture);
+                object obj = ResourceManager.GetObject("filter18", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
