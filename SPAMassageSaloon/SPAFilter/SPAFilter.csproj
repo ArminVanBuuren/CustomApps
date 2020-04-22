@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2D965102-2CC6-4C82-AD78-DAB5ED41DD32}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SPAFilter</RootNamespace>
+    <AssemblyName>SPAFilter</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icons8.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\External\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Utils, Version=1.0.7415.20347, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.WinForm, Version=1.0.7415.20343, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomProgressCalculation.cs" />
+    <Compile Include="CustomStringBuilder.cs" />
+    <Compile Include="Properties\Resources.ru.Designer.cs">
+      <DependentUpon>Resources.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SPA\Collection\CollectionBusinessProcess.cs" />
+    <Compile Include="SPA\Collection\CollectionTemplate.cs" />
+    <Compile Include="SPA\IMembers.cs" />
+    <Compile Include="SPA\Components\ServiceInstance.cs" />
+    <Compile Include="SPA\Components\BusinessProcess.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogHostType.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogOperation.cs" />
+    <Compile Include="SPA\Components\SRI\RFSBindings.cs" />
+    <Compile Include="SPA\Components\Command.cs" />
+    <Compile Include="SPA\Collection\CollectionHostType.cs" />
+    <Compile Include="SPA\Components\ROBP\ROBPHostType.cs" />
+    <Compile Include="SPA\Components\ROBP\ROBPOperation.cs" />
+    <Compile Include="SPA\Collection\ServiceCatalog.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogRFSOperation.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogScenarioOperation.cs" />
+    <Compile Include="SPA\Components\ServiceActivator.cs" />
+    <Compile Include="SPA\DriveTemplate.cs" />
+    <Compile Include="SPA\Components\SRI\CatalogItemEqualityComparer.cs" />
+    <Compile Include="SPA\ObjectTemplate.cs" />
+    <Compile Include="SPAFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SPAFilterForm.Designer.cs">
+      <DependentUpon>SPAFilterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SPA\Components\Scenario.cs" />
+    <Compile Include="SPA\SAComparer.cs" />
+    <Compile Include="SPA\SC\BindingServices.cs" />
+    <Compile Include="SPA\SC\CatalogComponents.cs" />
+    <Compile Include="SPA\SC\CFS.cs" />
+    <Compile Include="SPA\SC\CFS_RFS.cs" />
+    <Compile Include="SPA\SC\HostOperation.cs" />
+    <Compile Include="SPA\SC\Utils.cs" />
+    <Compile Include="SPA\SC\Resource.cs" />
+    <Compile Include="SPA\SC\RFS.cs" />
+    <Compile Include="SPA\SC\CFSGroup.cs" />
+    <Compile Include="SPA\SC\RFSGroup.cs" />
+    <Compile Include="SPA\SC\ServiceCatalogBuilder.cs" />
+    <Compile Include="SPA\SPAProcessFilter.cs" />
+    <EmbeddedResource Include="Properties\Resources.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SPAFilterForm.resx">
+      <DependentUpon>SPAFilterForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SPAMassageSaloon.Common\SPAMassageSaloon.Common.csproj">
+      <Project>{ca12905a-d287-4cbb-a91d-358614b24d8f}</Project>
+      <Name>SPAMassageSaloon.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icons8.ico" />
+    <Content Include="Resources\reset2.png" />
+    <None Include="Resources\reload.png" />
+    <None Include="Resources\xml8.png" />
+    <None Include="Resources\xls1.png" />
+    <None Include="Resources\file7.png" />
+    <None Include="Resources\folder2.png" />
+    <None Include="Resources\find.png" />
+    <None Include="Resources\generatesc.png" />
+    <Content Include="Resources\icons8-minus-20.png" />
+    <Content Include="Resources\icons8-plus-20.png" />
+    <Content Include="Resources\icons8-synchronize-20.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
