@@ -8,8 +8,6 @@ using System.Windows.Forms;
 namespace Utils.WinForm.CustomProgressBar
 {
 
-    #region "  Gradient Mode  "
-
     public enum GradientMode
     {
         Vertical,
@@ -19,63 +17,43 @@ namespace Utils.WinForm.CustomProgressBar
         Diagonal
     };
 
-    #endregion
-
-    public class XpProgressBar : Control//, IProgressBar
+    public class XpProgressBar : Control, IProgressBar
     {
-        #region "  Constructor  "
-
         private const string CategoryName = "Xp ProgressBar";
+
+        private Color mColor1 = Color.FromArgb(170, 240, 170);
+        private Color mColor2 = Color.FromArgb(10, 150, 10);
+        private Color mColorBackGround = Color.White;
+        private Color mColorText = Color.Black;
+        private Image mDobleBack = null;
+        private GradientMode mGradientStyle = GradientMode.VerticalCenter;
+
+        private int mMax = 100;
+        private int mMin = 0;
+
+        private int mPosition = 50;
+        private byte mSteepDistance = 2;
+        private byte mSteepWidth = 6;
+
+        private Rectangle innerRect;
+        private LinearGradientBrush mBrush1;
+        private LinearGradientBrush mBrush2;
+        private readonly Pen mPenIn = new Pen(Color.FromArgb(239, 239, 239));
+
+        private readonly Pen mPenOut = new Pen(Color.FromArgb(104, 104, 104));
+        private readonly Pen mPenOut2 = new Pen(Color.FromArgb(190, 190, 190));
+
+        private Rectangle mSteepRect1;
+        private Rectangle mSteepRect2;
+        private Rectangle outnnerRect;
+        private Rectangle outnnerRect2;
 
         public XpProgressBar()
         {
 
         }
 
-        #endregion
-
-        #region "  Private Fields  "
-
-        private Color mColor1 = Color.FromArgb(170, 240, 170);
-
-        private Color mColor2 = Color.FromArgb(10, 150, 10);
-
-        private Color mColorBackGround = Color.White;
-
-        private Color mColorText = Color.Black;
-
-        private Image mDobleBack = null;
-
-        private GradientMode mGradientStyle = GradientMode.VerticalCenter;
-
-        private int mMax = 100;
-
-        private int mMin = 0;
-
-        private int mPosition = 50;
-
-        private byte mSteepDistance = 2;
-
-        private byte mSteepWidth = 6;
-
-        #endregion
-
-        #region "  Dispose  "
-
-        protected override void Dispose(bool disposing)
-        {
-            if (this.IsDisposed)
-                return;
-
-            mDobleBack?.Dispose();
-            mBrush1?.Dispose();
-            mBrush2?.Dispose();
-            base.Dispose(disposing);
-        }
-
-        #endregion
-
-        #region "  Colors   "
+        public Control ProgressBar => this;
 
         [Category(CategoryName)]
         [Description("The Back Color of the Progress Bar")]
@@ -145,15 +123,10 @@ namespace Utils.WinForm.CustomProgressBar
             }
         }
 
-        #endregion
-
-        #region "  Position   "
-
-
-        //[RefreshProperties(RefreshProperties.Repaint)]
-        //[Category(CategoryName)]
-        //[Description("The Current Value of the Progress Bar")]
-        //public int Value { get => Position; set => Position = value; }
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Category(CategoryName)]
+        [Description("The Current Value of the Progress Bar")]
+        public int Value { get => Position; set => Position = value; }
 
 
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -181,11 +154,11 @@ namespace Utils.WinForm.CustomProgressBar
         }
 
 
-        //[RefreshProperties(RefreshProperties.Repaint)]
-        //[Category(CategoryName)]
-        //[Description("The Max Value of the Progress Bar")]
-        //public int Maximum { get => PositionMax; set => PositionMax = value; }
-        
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Category(CategoryName)]
+        [Description("The Max Value of the Progress Bar")]
+        public int Maximum { get => PositionMax; set => PositionMax = value; }
+
 
         [RefreshProperties(RefreshProperties.Repaint)]
         [Category(CategoryName)]
@@ -243,10 +216,6 @@ namespace Utils.WinForm.CustomProgressBar
             }
         }
 
-        #endregion
-
-        #region  "  Progress Style   "
-
         [Category(CategoryName)]
         [Description("The Style of the gradient bar in Progress Bar")]
         [DefaultValue(GradientMode.VerticalCenter)]
@@ -279,10 +248,6 @@ namespace Utils.WinForm.CustomProgressBar
             }
         }
 
-        #endregion
-
-        #region "  BackImage  "
-
         [RefreshProperties(RefreshProperties.Repaint)]
         [Category(CategoryName)]
         public override Image BackgroundImage
@@ -294,10 +259,6 @@ namespace Utils.WinForm.CustomProgressBar
                 InvalidateBuffer();
             }
         }
-
-        #endregion
-
-        #region "  Text Override  "
 
         [Category(CategoryName)]
         [Description("The Text displayed in the Progress Bar")]
@@ -315,10 +276,6 @@ namespace Utils.WinForm.CustomProgressBar
             }
         }
 
-        #endregion
-
-        #region "  Text Shadow  "
-
         private bool mTextShadow = true;
 
         [Category(CategoryName)]
@@ -333,10 +290,6 @@ namespace Utils.WinForm.CustomProgressBar
                 this.Invalidate();
             }
         }
-
-        #endregion
-
-        #region "  Text Shadow Alpha  "
 
         private byte mTextShadowAlpha = 150;
 
@@ -356,11 +309,7 @@ namespace Utils.WinForm.CustomProgressBar
             }
         }
 
-        #endregion
-
-        #region "  Paint Methods  "
-
-        #region "  OnPaint  "
+        protected override Size DefaultSize => new Size(100, 29);
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -427,10 +376,6 @@ namespace Utils.WinForm.CustomProgressBar
         {
         }
 
-        #endregion
-
-        #region "  OnSizeChange  "
-
         protected override void OnSizeChanged(EventArgs e)
         {
             if (this.IsDisposed)
@@ -445,14 +390,6 @@ namespace Utils.WinForm.CustomProgressBar
             this.InvalidateBuffer(true);
 
         }
-
-        protected override Size DefaultSize => new Size(100, 29);
-
-
-
-        #endregion
-
-        #region "  More Draw Methods  "
 
         private void DrawSteep(Graphics g, int number)
         {
@@ -509,23 +446,6 @@ namespace Utils.WinForm.CustomProgressBar
             mTextBrush.Dispose();
 
         }
-
-        #endregion
-
-        #region "  CreatePaintElements   "
-
-        private Rectangle innerRect;
-        private LinearGradientBrush mBrush1;
-        private LinearGradientBrush mBrush2;
-        private readonly Pen mPenIn = new Pen(Color.FromArgb(239, 239, 239));
-
-        private readonly Pen mPenOut = new Pen(Color.FromArgb(104, 104, 104));
-        private readonly Pen mPenOut2 = new Pen(Color.FromArgb(190, 190, 190));
-
-        private Rectangle mSteepRect1;
-        private Rectangle mSteepRect2;
-        private Rectangle outnnerRect;
-        private Rectangle outnnerRect2;
 
         private void CreatePaintElements()
         {
@@ -646,9 +566,15 @@ namespace Utils.WinForm.CustomProgressBar
 
         }
 
-        #endregion
+        protected override void Dispose(bool disposing)
+        {
+            if (this.IsDisposed)
+                return;
 
-        #endregion
+            mDobleBack?.Dispose();
+            mBrush1?.Dispose();
+            mBrush2?.Dispose();
+            base.Dispose(disposing);
+        }
     }
-
 }
