@@ -440,7 +440,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Pretty print all filtered XML files.
+        ///   Ищет локализованную строку, похожую на This tool converts all filtered XML files in a human-readable format.
         /// </summary>
         public static string Form_PrintXMLFiles_ToolTip {
             get {

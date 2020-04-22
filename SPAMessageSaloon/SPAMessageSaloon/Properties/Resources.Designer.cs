@@ -156,5 +156,15 @@ namespace SPAMessageSaloon.Properties {
                 return ResourceManager.GetString("Txt_SystemResourceMonitoring", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap XPathTester_Form {
+            get {
+                object obj = ResourceManager.GetObject("XPathTester_Form", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

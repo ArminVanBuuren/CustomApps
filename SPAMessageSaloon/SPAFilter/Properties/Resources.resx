@@ -172,7 +172,7 @@
     <value>Please select a row</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Pretty print all filtered XML files</value>
+    <value>This tool converts all filtered XML files in a human-readable format</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>

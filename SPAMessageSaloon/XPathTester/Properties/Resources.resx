@@ -136,4 +136,19 @@
   <data name="XPathIsEmpty" xml:space="preserve">
     <value>XPath expression is empty!</value>
   </data>
+  <data name="PrettyPrintText" xml:space="preserve">
+    <value>Pretty Print [F6]</value>
+  </data>
+  <data name="PrettyPrintTooltip" xml:space="preserve">
+    <value>This tool converts an XML document in a human-readable format</value>
+  </data>
+  <data name="XPathText" xml:space="preserve">
+    <value>Test [F5]</value>
+  </data>
+  <data name="XPathTooltip" xml:space="preserve">
+    <value>Run xpath query</value>
+  </data>
+  <data name="Form_Description" xml:space="preserve">
+    <value>This app is used for test xpath request and retrieve its position in the XML-body</value>
+  </data>
 </root>

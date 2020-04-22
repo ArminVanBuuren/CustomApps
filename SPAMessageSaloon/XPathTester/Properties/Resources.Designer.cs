@@ -71,6 +71,15 @@ namespace XPathTester.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на This app is used for test xpath request and retrieve its position in the XML-body.
+        /// </summary>
+        public static string Form_Description {
+            get {
+                return ResourceManager.GetString("Form_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
         public static System.Drawing.Icon icons8_____96 {
@@ -86,6 +95,24 @@ namespace XPathTester.Properties {
         public static string NoDataFound {
             get {
                 return ResourceManager.GetString("NoDataFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Pretty Print [F6].
+        /// </summary>
+        public static string PrettyPrintText {
+            get {
+                return ResourceManager.GetString("PrettyPrintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на This tool converts an XML document in a human-readable format.
+        /// </summary>
+        public static string PrettyPrintTooltip {
+            get {
+                return ResourceManager.GetString("PrettyPrintTooltip", resourceCulture);
             }
         }
         
@@ -114,6 +141,24 @@ namespace XPathTester.Properties {
         public static string XPathIsEmpty {
             get {
                 return ResourceManager.GetString("XPathIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Test [F5].
+        /// </summary>
+        public static string XPathText {
+            get {
+                return ResourceManager.GetString("XPathText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Run xpath query.
+        /// </summary>
+        public static string XPathTooltip {
+            get {
+                return ResourceManager.GetString("XPathTooltip", resourceCulture);
             }
         }
     }

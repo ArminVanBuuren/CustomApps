@@ -172,7 +172,7 @@
     <value>Пожалуйста выберите строку</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Форматировать все отфильтрованные XML файлы.</value>
+    <value>Этот инструмент преобразует все отфильтрованные XML файлы в удобочитаемый формат</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>Для поиска по содержанию, вы можете использовать символ %. Пример: %Assign%</value>

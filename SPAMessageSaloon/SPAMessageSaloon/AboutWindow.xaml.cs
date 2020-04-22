@@ -82,6 +82,16 @@ namespace SPAMessageSaloon
             SFGenerateSCTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ButtonGenerateSC;
 
             #endregion
+
+            #region XPath Test
+
+            XTDescriptionTxt.Text = XPathTester.Properties.Resources.Form_Description;
+            XTTest.Header = XPathTester.Properties.Resources.XPathText;
+            XTTestTxt.Text = XPathTester.Properties.Resources.XPathTooltip;
+            XTPrettyPrint.Header = XPathTester.Properties.Resources.PrettyPrintText;
+            XTPrettyPrintTxt.Text = XPathTester.Properties.Resources.PrettyPrintTooltip;
+
+            #endregion
         }
 
         private void AboutWindow_Loaded(object sender, RoutedEventArgs e)

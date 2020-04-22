@@ -241,6 +241,42 @@
                     </Grid>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="XPath Tester" Width="100" Height="25">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="950" />
+                            <ColumnDefinition Width="450" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Source="/Resources/About/XPathTester_Form.JPG" Margin="5, 0, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" >
+                            <Expander Margin="2" Padding="5" Name="XTDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
+                                <TextBlock Name="XTDescriptionTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                            <Expander Margin="2" Padding="5" Name="XTTest" Header="Test [F5]" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="XTTestTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="XTPrettyPrint" Header="Pretty Print" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="XTPrettyPrintTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
         
     </Grid>

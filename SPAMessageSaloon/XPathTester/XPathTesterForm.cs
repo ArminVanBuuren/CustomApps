@@ -284,6 +284,8 @@ namespace XPathTester
 
         public void ApplySettings()
         {
+            buttonFind.Text = Resources.XPathText;
+            buttonPrettyPrint.Text = Resources.PrettyPrintText;
             ReportStatus(string.Empty);
         }
 
