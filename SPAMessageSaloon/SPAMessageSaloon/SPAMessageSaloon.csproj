@@ -125,7 +125,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Beyond Wonderland.ttf" />
     <None Include="Resources\leaves.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +168,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\About\LogsReader_Form.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\Beyond Wonderland.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\SPAFilter_GenerateSC.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\SPAFilter_InstancesCatalog.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\SPAFilter_InstancesROBP.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\SPAFilter_Notepad.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AboutWindow.xaml">

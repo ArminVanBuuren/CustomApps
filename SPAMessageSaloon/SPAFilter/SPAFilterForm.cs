@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using FastColoredTextBoxNS;
+using OfficeOpenXml;
 using SPAFilter.Properties;
 using SPAFilter.SPA;
 using SPAFilter.SPA.Components.ROBP;
@@ -420,34 +422,42 @@ namespace SPAFilter
         public void ApplySettings()
         {
             _tooltip.RemoveAll();
-            _tooltip.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
-            _tooltip.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
-            _tooltip.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
-            _tooltip.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
             _tooltip.SetToolTip(ProcessesButtonOpen, Resources.Form_ToolTip_ProcessesButtonOpen);
             _tooltip.SetToolTip(ROBPOperationButtonOpen, Resources.Form_ToolTip_ROBPOperationButtonOpen);
             _tooltip.SetToolTip(ServiceCatalogOpenButton, Resources.Form_ToolTip_ServiceCatalogOpenButton);
+
+            _tooltip.SetToolTip(ProcessesComboBox, Resources.Form_ToolTip_SearchPattern);
+            _tooltip.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
+            _tooltip.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
+
             _tooltip.SetToolTip(buttonFilter, Resources.Form_ToolTip_FilterButton);
             _tooltip.SetToolTip(buttonReset, Resources.Form_ToolTip_buttonReset);
+            _tooltip.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
+            
             _tooltip.SetToolTip(ExportSCPath, Resources.Form_ToolTip_ExportSCPath);
             _tooltip.SetToolTip(RootSCExportPathButton, Resources.Form_ToolTip_RootSCExportPathButton);
-            _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
-            _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAProcessFilter.MandatoryXslxColumns)));
+            _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", MandatoryXslxColumns)));
+            _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", MandatoryXslxColumns)));
             _tooltip.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
 
             buttonFilter.Text = Resources.Form_Get;
             buttonReset.Text = Resources.Form_Reset;
+            PrintXMLButton.Text = Resources.Form_PrintXMLFiles_Button;
+
             addServiceInstancesButton.Text = Resources.Form_AddActivator;
             removeServiceInstancesButton.Text = Resources.Form_RemoveInstance;
             refreshServiceInstancesButton.Text = Resources.Form_Refresh;
             reloadServiceInstancesButton.Text = Resources.Form_Reload;
-            GenerateSC.Text = Resources.Form_GenerateSC;
-            ButtonGenerateSC.Text = Resources.Form_GenerateSC2;
+
+            groupBox1.Text = Resources.Form_Filter;
+
             RootSCExportPathButton.Text = Resources.Form_Root;
             OpenSevExelButton.Text = Resources.Form_OpenXksx;
-            groupBox1.Text = Resources.Form_Filter;
-            label9.Text = Resources.Form_ExportPath;
-            label5.Text = Resources.Form_RDServices;
+            GenerateSC.Text = Resources.Form_GenerateSC;
+            ButtonGenerateSC.Text = Resources.Form_GenerateSC2;
+
+            ExportPathLabel.Text = Resources.Form_ExportPath;
+            RDServicesLabel.Text = Resources.Form_RDServices;
         }
 
         #region Check warning rows
@@ -1176,7 +1186,7 @@ namespace SPAFilter
                     var file = new FileInfo(OpenSCXlsx.Text);
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount, file))
                     {
-                        var rdServices = await Filter.GetRDServicesFromXslxAsync(file, progrAsync);
+                        var rdServices = await GetRDServicesFromXslxAsync(file, progrAsync);
                         fileResult = await Filter.GetServiceCatalogAsync(rdServices, ExportSCPath.Text, progrAsync);
                     }
                 }
@@ -1319,6 +1329,68 @@ namespace SPAFilter
             {
                 // null
             }
+        }
+
+
+        public static readonly string[] MandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
+
+        public async Task<DataTable> GetRDServicesFromXslxAsync(FileInfo file, CustomProgressCalculation progressCalc)
+        {
+            return await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progressCalc));
+        }
+
+        static DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
+        {
+            var serviceTable = new DataTable();
+
+            progressCalc.BeginOpenXslxFile();
+
+            using (var xslPackage = new ExcelPackage(file))
+            {
+                progressCalc.BeginReadXslxFile();
+
+                if (xslPackage.Workbook.Worksheets.Count == 0)
+                    throw new Exception(Resources.Filter_NoWorksheetFound);
+
+                var myWorksheet = xslPackage.Workbook.Worksheets.First();
+                var totalRows = myWorksheet.Dimension.End.Row;
+                var totalColumns = MandatoryXslxColumns.Length;
+
+                progressCalc.EndReadXslxFile(totalRows);
+
+                var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
+
+                if (!columnsNames.Any())
+                    return null;
+
+                var i = 0;
+                foreach (var columnName in columnsNames)
+                {
+                    var columnNameUp = columnName.ToUpper();
+                    if (MandatoryXslxColumns[i++] != columnNameUp)
+                    {
+                        throw new Exception(string.Format(Resources.Filter_WrongColumnStatement, columnNameUp, file.Name, string.Join("','", MandatoryXslxColumns)));
+                    }
+
+                    serviceTable.Columns.Add(columnNameUp, typeof(string));
+                    if (i == MandatoryXslxColumns.Length)
+                        break;
+                }
+
+                if (i != MandatoryXslxColumns.Length)
+                    throw new Exception(string.Format(Resources.Filter_MissingColumn, file.Name, string.Join("','", MandatoryXslxColumns)));
+
+                for (var rowNum = 2; rowNum <= totalRows; rowNum++)
+                {
+                    var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
+                    serviceTable.Rows.Add(values: row.ToArray());
+                    progressCalc.ReadXslxFileLine();
+                }
+            }
+
+            progressCalc.EndOpenXslxFile();
+
+            return serviceTable;
         }
 
         void ClearDataGrid(bool allData = false)

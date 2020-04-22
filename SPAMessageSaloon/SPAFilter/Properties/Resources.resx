@@ -205,7 +205,7 @@
     <value>..\Resources\xml8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_ToolTip_ButtonGenerateSC" xml:space="preserve">
-    <value>Generate Service catalog by ROBP operations</value>
+    <value>Generate Service catalog by ROBP operations. Before you perform, you must filter the necessary ROBP operations or perform a Reset.</value>
   </data>
   <data name="Form_ToolTip_ExportSCPath" xml:space="preserve">
     <value>Export folder path</value>
@@ -368,16 +368,16 @@ Columns names and orders must be like:
     <value>      Generate SC</value>
   </data>
   <data name="Form_AddActivator" xml:space="preserve">
-    <value>Add Activator Instances</value>
+    <value>Add configuration application file with service instances. All scenarios and commands for each instance will be added.</value>
   </data>
   <data name="Form_Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Refresh. All instance settings with related scenarios and commands, will be reload.</value>
   </data>
   <data name="Form_Reload" xml:space="preserve">
-    <value>Reload</value>
+    <value>Reload. All activator configuration application with related instances will be reload.</value>
   </data>
   <data name="Form_RemoveInstance" xml:space="preserve">
-    <value>Remove instance from the list</value>
+    <value>Exclude service instance from the list. All related scenarios and commands will be also excluded.</value>
   </data>
   <data name="Form_Get" xml:space="preserve">
     <value>     Filter [F5]</value>
@@ -390,5 +390,8 @@ Columns names and orders must be like:
   </data>
   <data name="reset2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\reset2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Form_Description" xml:space="preserve">
+    <value>This app can be used for fix and improve the SPA configuration, , as well as for convenient viewing.</value>
   </data>
 </root>

@@ -195,11 +195,20 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add Activator Instances.
+        ///   Ищет локализованную строку, похожую на Add configuration application file with service instances. All scenarios and commands for each instance will be added..
         /// </summary>
         public static string Form_AddActivator {
             get {
                 return ResourceManager.GetString("Form_AddActivator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на This app can be used for fix and improve the SPA configuration, , as well as for convenient viewing..
+        /// </summary>
+        public static string Form_Description {
+            get {
+                return ResourceManager.GetString("Form_Description", resourceCulture);
             }
         }
         
@@ -449,7 +458,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Refresh.
+        ///   Ищет локализованную строку, похожую на Refresh. All instance settings with related scenarios and commands, will be reload..
         /// </summary>
         public static string Form_Refresh {
             get {
@@ -458,7 +467,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Reload.
+        ///   Ищет локализованную строку, похожую на Reload. All activator configuration application with related instances will be reload..
         /// </summary>
         public static string Form_Reload {
             get {
@@ -467,7 +476,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Remove instance from the list.
+        ///   Ищет локализованную строку, похожую на Exclude service instance from the list. All related scenarios and commands will be also excluded..
         /// </summary>
         public static string Form_RemoveInstance {
             get {
@@ -494,7 +503,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Generate Service catalog by ROBP operations.
+        ///   Ищет локализованную строку, похожую на Generate Service catalog by ROBP operations. Before you perform, you must filter the necessary ROBP operations or perform a Reset..
         /// </summary>
         public static string Form_ToolTip_ButtonGenerateSC {
             get {

@@ -205,7 +205,7 @@
     <value>..\Resources\xml8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_ToolTip_ButtonGenerateSC" xml:space="preserve">
-    <value>Сгенерировать cервис rаталог по ROBP операциям.</value>
+    <value>Сгенерировать cервис rаталог по ROBP операциям. Прежде чем выполнить, вы должны отфильтровать необходимые ROBP операции или выполнить сброс.</value>
   </data>
   <data name="Form_ToolTip_ExportSCPath" xml:space="preserve">
     <value>Экспорт</value>
@@ -365,19 +365,19 @@
     <value>Создать SC</value>
   </data>
   <data name="Form_AddActivator" xml:space="preserve">
-    <value>Добавить инстансы активатора</value>
+    <value>Добавить файл конфиграции активатора. Будут добавлены все сценарии и команды для каждого инстанса активатора.</value>
   </data>
   <data name="Form_GenerateSC2" xml:space="preserve">
     <value>      Создать SC</value>
   </data>
   <data name="Form_Refresh" xml:space="preserve">
-    <value>Обновить</value>
+    <value>Обновить. Все настройки экземпляра с соответствующими сценариями и командами будут перезагружены.</value>
   </data>
   <data name="Form_Reload" xml:space="preserve">
-    <value>Перезагрузить</value>
+    <value>Перезагрузить. Все настройки активатора со связанными экземплярами будут перезагружены.</value>
   </data>
   <data name="Form_RemoveInstance" xml:space="preserve">
-    <value>Удалить инстанс из списка</value>
+    <value>Исключить сервис инстанс из списка. Все связанные сценарии и команды будут также исключены.</value>
   </data>
   <data name="Form_Get" xml:space="preserve">
     <value>     Фильтр F5</value>
@@ -387,5 +387,8 @@
   </data>
   <data name="Form_ToolTip_buttonReset" xml:space="preserve">
     <value>Сбросить фильтр</value>
+  </data>
+  <data name="Form_Description" xml:space="preserve">
+    <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA,а также для уобного просмотра.</value>
   </data>
 </root>

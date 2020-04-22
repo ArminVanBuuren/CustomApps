@@ -16,7 +16,7 @@
              Foreground="#FF32EBFB"
              BorderBrush="#FF1087BF"
              Style="{DynamicResource VSUIWindowStyleLocal}"
-             mc:Ignorable="d" Width="1471.328" Height="839.6">
+             mc:Ignorable="d" Width="1471.328" Height="830">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -48,8 +48,8 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="450"/>
+                            <ColumnDefinition Width="950"/>
+                            <ColumnDefinition Width="450" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -57,10 +57,16 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Form.jpg" Height="700" Margin="10, 0, 10, 10"></Image>
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Form.jpg" Margin="5, 0, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0">
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Config.jpg" Margin="5, 10, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                             <Expander Margin="2" Padding="5" Name="LRDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
@@ -121,13 +127,117 @@
                                 <TextBlock Name="LRTraceParseTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                         </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="SPA Filter" Width="80" Height="25">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="850" />
+                            <ColumnDefinition Width="550" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
 
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Source="/Resources/About/SPAFilter_InstancesCatalog.jpg" Margin="5, 0, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
-                            <Image Source="/SPAMessageSaloon;component/Resources/About/LogsReader_Config.jpg" Height="734" Margin="0,10,0,10"></Image>
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/SPAFilter_InstancesROBP.jpg"  Margin="5, 10, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0">
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/SPAFilter_Notepad.jpg"  Margin="5, 10, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="2" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,0" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="2" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,0" Margin="-1,0,1,0"/>
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="3" Grid.Column="0">
+                            <Image Source="/SPAMessageSaloon;component/Resources/About/SPAFilter_GenerateSC.jpg" Margin="5, 10, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="3" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="3" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                            <Expander Margin="2" Padding="5" Name="SFDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
+                                <TextBlock Name="SFDescriptionTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                            <Expander Margin="2" Padding="5" Name="SFProcess" Header="Process" IsExpanded="True" ExpandDirection="Right" Background="#19FF0000">
+                                <TextBlock Name="SFProcessTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFROBPOps" Header="ROBP Operations" IsExpanded="True" ExpandDirection="Right" Background="#19FF0000">
+                                <TextBlock Name="SFROBPOpsTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFServiceCatalog" Header="Service Catalog" IsExpanded="True" ExpandDirection="Right" Background="#19FF0000">
+                                <TextBlock Name="SFServiceCatalogTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                            <Expander Margin="2" Padding="5" Name="SFProcessFilter" Header="Process" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFProcessFilterTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFROBPOpsFilter" Header="Operations" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFROBPOpsFilterTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFHostTypeFilter" Header="HostType" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFHostTypeFilterTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFFilter" Header="Filter" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFFilterTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFReset" Header="Reset" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFResetTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFPrettyPrint" Header="PrettyPrint" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFPrettyPrintTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                            <Expander Margin="2" Padding="5" Name="SFAddInstances" Header="Add Instances" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFAddInstancesTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFRemoveInstances" Header="Remove Instances" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFRemoveInstancesTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFRefreshInstances" Header="Refresh Instances" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFRefreshInstancesTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFReloadInstances" Header="Reload Instances" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFReloadInstancesTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Grid.Column="1">
+                            <!--<Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>-->
+                            <Expander Margin="2" Padding="5" Name="SFExportSCPath" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFExportSCPathTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFOpenRDExcel" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFOpenRDExcelTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFGenerateSC" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="SFGenerateSCTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                        </StackPanel>
+
                     </Grid>
                 </ScrollViewer>
             </TabItem>

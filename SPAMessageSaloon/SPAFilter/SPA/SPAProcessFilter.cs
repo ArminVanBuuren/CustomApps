@@ -591,67 +591,6 @@ namespace SPAFilter.SPA
             resultCommands = new CollectionTemplate<Command>(allCommands);
         }
 
-        public static readonly string[] MandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
-
-        public async Task<DataTable> GetRDServicesFromXslxAsync(FileInfo file, CustomProgressCalculation progressCalc)
-        {
-            return await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progressCalc));
-        }
-
-        DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
-        {
-            var serviceTable = new DataTable();
-
-            progressCalc.BeginOpenXslxFile();
-
-            using (var xslPackage = new ExcelPackage(file))
-            {
-                progressCalc.BeginReadXslxFile();
-
-                if(xslPackage.Workbook.Worksheets.Count == 0)
-                    throw new Exception(Resources.Filter_NoWorksheetFound);
-
-                var myWorksheet = xslPackage.Workbook.Worksheets.First();
-                var totalRows = myWorksheet.Dimension.End.Row;
-                var totalColumns = MandatoryXslxColumns.Length;
-
-                progressCalc.EndReadXslxFile(totalRows);
-
-                var columnsNames = myWorksheet.Cells[1, 1, 1, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
-
-                if (!columnsNames.Any())
-                    return null;
-
-                var i = 0;
-                foreach (var columnName in columnsNames)
-                {
-                    var columnNameUp = columnName.ToUpper();
-                    if (MandatoryXslxColumns[i++] != columnNameUp)
-                    {
-                        throw new Exception(string.Format(Resources.Filter_WrongColumnStatement, columnNameUp, file.Name, string.Join("','", MandatoryXslxColumns)));
-                    }
-
-                    serviceTable.Columns.Add(columnNameUp, typeof(string));
-                    if (i == MandatoryXslxColumns.Length)
-                        break;
-                }
-                
-                if (i != MandatoryXslxColumns.Length)
-                    throw new Exception(string.Format(Resources.Filter_MissingColumn, file.Name, string.Join("','", MandatoryXslxColumns)));
-
-                for (var rowNum = 2; rowNum <= totalRows; rowNum++)
-                {
-                    var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString()).Take(totalColumns);
-                    serviceTable.Rows.Add(values: row.ToArray());
-                    progressCalc.ReadXslxFileLine();
-                }
-            }
-
-            progressCalc.EndOpenXslxFile();
-
-            return serviceTable;
-        }
-
         public async Task<string> GetServiceCatalogAsync(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
         {
             return await Task.Factory.StartNew(() => GetServiceCatalog(rdServices, exportFilePath, progressCalc));

@@ -62,10 +62,10 @@ namespace SPAFilter
             this.dataGridCommands = new System.Windows.Forms.DataGridView();
             this.GenerateSC = new System.Windows.Forms.TabPage();
             this.RootSCExportPathButton = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
+            this.ExportPathLabel = new System.Windows.Forms.Label();
             this.ExportSCPath = new System.Windows.Forms.TextBox();
             this.OpenSevExelButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
+            this.RDServicesLabel = new System.Windows.Forms.Label();
             this.ButtonGenerateSC = new System.Windows.Forms.Button();
             this.OpenSCXlsx = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -451,10 +451,10 @@ namespace SPAFilter
             // 
             this.GenerateSC.BackColor = System.Drawing.Color.DarkGray;
             this.GenerateSC.Controls.Add(this.RootSCExportPathButton);
-            this.GenerateSC.Controls.Add(this.label9);
+            this.GenerateSC.Controls.Add(this.ExportPathLabel);
             this.GenerateSC.Controls.Add(this.ExportSCPath);
             this.GenerateSC.Controls.Add(this.OpenSevExelButton);
-            this.GenerateSC.Controls.Add(this.label5);
+            this.GenerateSC.Controls.Add(this.RDServicesLabel);
             this.GenerateSC.Controls.Add(this.ButtonGenerateSC);
             this.GenerateSC.Controls.Add(this.OpenSCXlsx);
             this.GenerateSC.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -480,15 +480,15 @@ namespace SPAFilter
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label9.Location = new System.Drawing.Point(13, 19);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(68, 15);
-            this.label9.TabIndex = 29;
-            this.label9.Text = "Export Path";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.ExportPathLabel.AutoSize = true;
+            this.ExportPathLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.ExportPathLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.ExportPathLabel.Location = new System.Drawing.Point(13, 19);
+            this.ExportPathLabel.Name = "label9";
+            this.ExportPathLabel.Size = new System.Drawing.Size(68, 15);
+            this.ExportPathLabel.TabIndex = 29;
+            this.ExportPathLabel.Text = "Export Path";
+            this.ExportPathLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ExportSCPath
             // 
@@ -517,14 +517,14 @@ namespace SPAFilter
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(13, 47);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 15);
-            this.label5.TabIndex = 26;
-            this.label5.Text = "RD Services";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.RDServicesLabel.AutoSize = true;
+            this.RDServicesLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.RDServicesLabel.Location = new System.Drawing.Point(13, 47);
+            this.RDServicesLabel.Name = "label5";
+            this.RDServicesLabel.Size = new System.Drawing.Size(69, 15);
+            this.RDServicesLabel.TabIndex = 26;
+            this.RDServicesLabel.Text = "RD Services";
+            this.RDServicesLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // ButtonGenerateSC
             // 
@@ -755,10 +755,10 @@ namespace SPAFilter
         private System.Windows.Forms.Button ButtonGenerateSC;
         private System.Windows.Forms.TabPage GenerateSC;
         private System.Windows.Forms.Button OpenSevExelButton;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label RDServicesLabel;
         private System.Windows.Forms.TextBox OpenSCXlsx;
         private System.Windows.Forms.Button RootSCExportPathButton;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label ExportPathLabel;
         private System.Windows.Forms.TextBox ExportSCPath;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.StatusStrip statusStrip;

@@ -49,6 +49,39 @@ namespace SPAMessageSaloon
             LRTraceParseTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_TraceParse;
 
             #endregion
+
+            #region SPA Filter
+
+            SFDescriptionTxt.Text = SPAFilter.Properties.Resources.Form_Description;
+
+            SFProcessTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ProcessesButtonOpen;
+            SFROBPOpsTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ROBPOperationButtonOpen;
+            SFServiceCatalogTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ServiceCatalogOpenButton;
+
+            SFProcessFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
+            SFROBPOpsFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
+            SFHostTypeFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
+
+            SFFilter.Header = SPAFilter.Properties.Resources.Form_Filter;
+            SFFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_FilterButton;
+            SFReset.Header = SPAFilter.Properties.Resources.Form_Reset.Trim();
+            SFResetTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_buttonReset;
+            SFPrettyPrint.Header = SPAFilter.Properties.Resources.Form_PrintXMLFiles_Button;
+            SFPrettyPrintTxt.Text = SPAFilter.Properties.Resources.Form_PrintXMLFiles_ToolTip;
+
+            SFAddInstancesTxt.Text = SPAFilter.Properties.Resources.Form_AddActivator;
+            SFRemoveInstancesTxt.Text = SPAFilter.Properties.Resources.Form_RemoveInstance;
+            SFRefreshInstancesTxt.Text = SPAFilter.Properties.Resources.Form_Refresh;
+            SFReloadInstancesTxt.Text = SPAFilter.Properties.Resources.Form_Reload;
+
+            SFExportSCPath.Header = SPAFilter.Properties.Resources.Form_Root.Trim();
+            SFExportSCPathTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_RootSCExportPathButton;
+            SFOpenRDExcel.Header = SPAFilter.Properties.Resources.Form_OpenXksx.Trim();
+            SFOpenRDExcelTxt.Text = string.Format(SPAFilter.Properties.Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAFilter.SPAFilterForm.MandatoryXslxColumns));
+            SFGenerateSC.Header = SPAFilter.Properties.Resources.Form_GenerateSC;
+            SFGenerateSCTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ButtonGenerateSC;
+
+            #endregion
         }
 
         private void AboutWindow_Loaded(object sender, RoutedEventArgs e)
