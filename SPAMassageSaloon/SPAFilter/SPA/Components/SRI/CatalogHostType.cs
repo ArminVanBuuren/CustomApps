@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SPAFilter.SPA.Collection;
-using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SRI
 {

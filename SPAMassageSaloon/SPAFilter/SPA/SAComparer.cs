@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SPAFilter.SPA.Components;
 using Utils;
 
 namespace SPAFilter.SPA

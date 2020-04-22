@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
 using SPAFilter.Properties;
-using SPAFilter.SPA.Components;
 using SPAFilter.SPA.Components.SRI;
 using Utils;
 using Utils.CollectionHelper;

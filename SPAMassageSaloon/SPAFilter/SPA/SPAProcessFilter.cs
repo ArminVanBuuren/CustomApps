@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OfficeOpenXml;
 using SPAFilter.Properties;
 using SPAFilter.SPA.Collection;
 using SPAFilter.SPA.Components;
@@ -40,16 +39,16 @@ namespace SPAFilter.SPA
         public CollectionTemplate<Scenario> Scenarios { get; private set; }
         public CollectionTemplate<Command> Commands { get; private set; }
 
-        public async Task DataFilterAsync(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
+        public async Task DataFilterAsync(string filterProcess, string filterHT, string filterOp, bool bindWithFilter, ProgressCalculationAsync progressCalc)
         {
-            await Task.Factory.StartNew(() => DataFilter(filterProcess, filterHT, filterOp, progressCalc));
+            await Task.Factory.StartNew(() => DataFilter(filterProcess, filterHT, filterOp, bindWithFilter, progressCalc));
         }
 
-        void DataFilter(string filterProcess, string filterHT, string filterOp, ProgressCalculationAsync progressCalc)
+        void DataFilter(string filterProcess, string filterHT, string filterOp, bool bindWithFilter, ProgressCalculationAsync progressCalc)
         {
             try
             {
-                if(!IsEnabledFilter)
+                if (!IsEnabledFilter)
                     throw new Exception(Resources.Filter_NotEnabled);
 
                 Func<BusinessProcess, bool> bpFilter = null;
@@ -137,16 +136,18 @@ namespace SPAFilter.SPA
                 // Фильтруем БП и операции.
                 // В фильтре операций используется вызов повторного обновления БП, поэтому не вызываем отдельно
                 if (ROBPHostTypesPath != null)
-                    FilterROBPOperations(bpFilter, htFilter, opFilter);
+                    FilterROBPOperations(bpFilter, htFilter, opFilter, bindWithFilter);
                 else
-                    FilterSCOperations(bpFilter, htFilter, opFilter);
+                    FilterSCOperations(bpFilter, htFilter, opFilter, bindWithFilter);
 
                 progressCalc.Append(2);
 
                 #region Mark or Exclude Processes
 
                 var fileteredOperations = HostTypes.Operations;
-                var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
+                var operationsDictionary = bindWithFilter
+                    ? fileteredOperations.ToDictionary(x => x.Name, x => true, StringComparer.InvariantCultureIgnoreCase)
+                    : HostTypes.OperationNames.ToDictionary(x => x, x => true, StringComparer.InvariantCultureIgnoreCase);
                 if (htFilter == null && opFilter == null)
                 {
                     // Если не установленно никаких фильтрров по операциям или хостам
@@ -202,8 +203,10 @@ namespace SPAFilter.SPA
                 {
                     Refresh(_activators.Values);
                 }
+
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
-                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
+                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>()
+                    .ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
 
                 // Проверка на существование сценария для операции. Ищем несуществующие сценарии.
                 foreach (var operation in fileteredOperations.Except(scenarios.Values, new SAComparer()).Cast<IOperation>())
@@ -218,15 +221,16 @@ namespace SPAFilter.SPA
                 #region Filter Commands
 
                 var filteredSubScenarios = new DistinctList<Scenario>();
-                var filteredCommands  = new DistinctList<Command>();
+                var filteredCommands = new DistinctList<Command>();
                 GetCommandsAndSubscenarios(scenarios, scenarios.Values, filteredSubScenarios, filteredCommands);
 
                 var scenarios2 = scenarios.Values.ToList();
                 scenarios2.AddRange(filteredSubScenarios);
                 scenarios2 = scenarios2.OrderBy(p => p.HostTypeName).ThenBy(p => p.Name).ToList();
-                
+
                 Scenarios = new CollectionTemplate<Scenario>(scenarios2);
                 Commands = new CollectionTemplate<Command>(filteredCommands.OrderBy(p => p.HostTypeName).ThenBy(p => p.FilePath));
+
                 #endregion
 
                 progressCalc.Append(1);
@@ -293,7 +297,7 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null, null));
         }
 
-        void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter)
+        void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter, bool bindWithFilter = false)
         {
             if (!Directory.Exists(ROBPHostTypesPath))
                 throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath, "Operations"));
@@ -306,12 +310,31 @@ namespace SPAFilter.SPA
             HostTypes = new CollectionHostType();
             var allBPOperations = Processes.AllOperationsNames;
 
-            foreach (var hostTypeDir in hostTypesDir.ToList())
+            if (bindWithFilter)
             {
-                var robpHostType = new ROBPHostType(hostTypeDir);
-                HostTypes.Add(robpHostType);
-                FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                foreach (var hostTypeDir in hostTypesDir.ToList())
+                {
+                    var robpHostType = new ROBPHostType(hostTypeDir);
+                    HostTypes.Add(robpHostType);
+                    FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                }
+                HostTypes.Fetch();
             }
+            else
+            {
+                foreach (var hostTypeDir in hostTypesDir.ToList())
+                {
+                    var robpHostType = new ROBPHostType(hostTypeDir);
+                    HostTypes.Add(robpHostType);
+                }
+                HostTypes.Fetch();
+
+                foreach (ROBPHostType robpHostType in HostTypes.ToList())
+                {
+                    FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                }
+            }
+
             HostTypes.Commit();
         }
 
@@ -329,13 +352,17 @@ namespace SPAFilter.SPA
             await Task.Factory.StartNew(() => FilterSCOperations(null, null, null));
         }
 
-        void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter)
+        void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, bool bindWithFilter = false)
         {
             if (!File.Exists(SCPath))
                 throw new Exception(string.Format(Resources.FileNotFound, SCPath));
 
             FilterProcesses(bpFilter);
             HostTypes = new ServiceCatalog(SCPath);
+
+            if (!bindWithFilter)
+                HostTypes.Fetch();
+
             if (HostTypes.Count == 0)
                 return;
             var anyHasCatalogCall = Processes.AnyHasCatalogCall;
@@ -344,6 +371,9 @@ namespace SPAFilter.SPA
             {
                 FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
             }
+
+            if (bindWithFilter)
+                HostTypes.Fetch();
             HostTypes.Commit();
         }
 

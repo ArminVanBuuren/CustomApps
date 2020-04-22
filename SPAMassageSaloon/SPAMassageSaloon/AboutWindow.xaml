@@ -16,7 +16,7 @@
              Foreground="#FF32EBFB"
              BorderBrush="#FF1087BF"
              Style="{DynamicResource VSUIWindowStyleLocal}"
-             mc:Ignorable="d" Width="1471.328" Height="830">
+             mc:Ignorable="d" Width="1471.328" Height="835">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -57,7 +57,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Form.jpg" Margin="5, 0, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Form.jpg" Margin="5, 5, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
@@ -145,13 +145,13 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/Resources/About/SPAFilter_InstancesCatalog.jpg" Margin="5, 0, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/SPAFilter_InstancesROBP.jpg"  Margin="5, 5, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/SPAFilter_InstancesROBP.jpg"  Margin="5, 10, 10, 10"></Image>
+                            <Image Source="/Resources/About/SPAFilter_InstancesCatalog.jpg" Margin="5, 10, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
@@ -197,6 +197,9 @@
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="SFHostTypeFilter" Header="HostType" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
                                 <TextBlock Name="SFHostTypeFilterTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="SFBindWithFilter" Header="Bind with filter" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
+                                <TextBlock Name="SFBindWithFilterTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="SFFilter" Header="Filter" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
                                 <TextBlock Name="SFFilterTxt" TextWrapping="Wrap"></TextBlock>
@@ -254,7 +257,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/Resources/About/XPathTester_Form.JPG" Margin="5, 0, 10, 10"></Image>
+                            <Image Source="/Resources/About/XPathTester_Form.JPG" Margin="5, 5, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>

@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using SPAMassageSaloon.Common;
 using Utils.UIControls;
 
 namespace SPAMassageSaloon
@@ -74,6 +73,8 @@ namespace SPAMassageSaloon
             SFROBPOpsFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
             SFHostTypeFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
 
+            SFBindWithFilter.Header = SPAFilter.Properties.Resources.Form_BindWithFilter;
+            SFBindWithFilterTxt.Text = SPAFilter.Properties.Resources.Form_BindWithFilterToolbox;
             SFFilter.Header = SPAFilter.Properties.Resources.Form_Get.Trim();
             SFFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_FilterButton;
             SFReset.Header = SPAFilter.Properties.Resources.Form_Reset.Trim();

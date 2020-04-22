@@ -204,6 +204,24 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Bind with filter.
+        /// </summary>
+        public static string Form_BindWithFilter {
+            get {
+                return ResourceManager.GetString("Form_BindWithFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Data in Process, Operation and HostType will be displayed relative to the current execution.
+        /// </summary>
+        public static string Form_BindWithFilterToolbox {
+            get {
+                return ResourceManager.GetString("Form_BindWithFilterToolbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на This app can be used for fix and improve the SPA configuration, as well as for convenient viewing..
         /// </summary>
         public static string Form_Description {
@@ -586,7 +604,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на To search for a specified pattern, you can use % symbol. Example: %Assign%.
+        ///   Ищет локализованную строку, похожую на To search for a specified pattern, you can use % symbol. Case is ignored. Example: %Assign%.
         /// </summary>
         public static string Form_ToolTip_SearchPattern {
             get {

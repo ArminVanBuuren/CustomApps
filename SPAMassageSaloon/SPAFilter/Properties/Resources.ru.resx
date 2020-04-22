@@ -175,7 +175,7 @@
     <value>Этот инструмент преобразует все отфильтрованные файлы в удобочитаемый формат XML</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
-    <value>Для поиска по содержанию, вы можете использовать символ %. Пример: %Assign%</value>
+    <value>Для поиска по содержанию, вы можете использовать символ %. Регистр не учитывается. Пример: %Assign%</value>
   </data>
   <data name="Form_PrintXMLFiles_Cancel" xml:space="preserve">
     <value>Отменить  </value>
@@ -387,5 +387,11 @@
   </data>
   <data name="Form_Description" xml:space="preserve">
     <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA, а также для удобного просмотра.</value>
+  </data>
+  <data name="Form_BindWithFilter" xml:space="preserve">
+    <value>Связать с фильтром</value>
+  </data>
+  <data name="Form_BindWithFilterToolbox" xml:space="preserve">
+    <value>Данные в Process, Operation и HostType будут отображаться относительного текущего выполнения</value>
   </data>
 </root>

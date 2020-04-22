@@ -8,7 +8,6 @@ using SPAFilter.Properties;
 using SPAFilter.SPA.Collection;
 using Utils;
 using Utils.CollectionHelper;
-using Utils.WinForm.DataGridViewHelper;
 
 namespace SPAFilter.SPA.Components.SRI
 {

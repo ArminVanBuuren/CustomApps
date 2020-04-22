@@ -175,7 +175,7 @@
     <value>This tool converts all filtered files in a human-readable XML format</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
-    <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
+    <value>To search for a specified pattern, you can use % symbol. Case is ignored. Example: %Assign%</value>
   </data>
   <data name="Form_PrintXMLFiles_Button" xml:space="preserve">
     <value>Pretty print</value>
@@ -393,5 +393,11 @@ Columns names and orders must be like:
   </data>
   <data name="Form_Description" xml:space="preserve">
     <value>This app can be used for fix and improve the SPA configuration, as well as for convenient viewing.</value>
+  </data>
+  <data name="Form_BindWithFilter" xml:space="preserve">
+    <value>Bind with filter</value>
+  </data>
+  <data name="Form_BindWithFilterToolbox" xml:space="preserve">
+    <value>Data in Process, Operation and HostType will be displayed relative to the current execution</value>
   </data>
 </root>

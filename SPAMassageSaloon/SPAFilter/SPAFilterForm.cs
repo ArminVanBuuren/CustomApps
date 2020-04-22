@@ -4,7 +4,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -20,7 +19,6 @@ using Utils;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
-using Utils.WinForm.Handles;
 
 namespace SPAFilter
 {
@@ -100,6 +98,8 @@ namespace SPAFilter
                         ServiceCatalogTextBox.Enabled = !_IsInProgress;
                         ServiceCatalogOpenButton.Enabled = !_IsInProgress;
                     }
+
+                    bindWithFilter.Enabled = !_IsInProgress;
 
                     addServiceInstancesButton.Enabled = !_IsInProgress;
                     removeServiceInstancesButton.Enabled = !_IsInProgress;
@@ -277,6 +277,7 @@ namespace SPAFilter
                 ProcessesComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRTT", string.Empty);
                 NetSettComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRQQ", string.Empty);
                 OperationComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRWW", string.Empty);
+                bindWithFilter.Checked = (bool)TryGetSerializationValue(allSavedParams, "GGGRRSS", false);
             }
             catch (Exception ex)
             {
@@ -326,6 +327,7 @@ namespace SPAFilter
             propertyBag.AddValue("GGGRRTT", ProcessesComboBox.Text);
             propertyBag.AddValue("GGGRRQQ", NetSettComboBox.Text);
             propertyBag.AddValue("GGGRRWW", OperationComboBox.Text);
+            propertyBag.AddValue("GGGRRSS", bindWithFilter.Checked);
 
             propertyBag.AddValue("GGHHTTDD", ROBPOperationsRadioButton.Checked);
 
@@ -430,6 +432,7 @@ namespace SPAFilter
             _tooltip.SetToolTip(OperationComboBox, Resources.Form_ToolTip_SearchPattern);
             _tooltip.SetToolTip(NetSettComboBox, Resources.Form_ToolTip_SearchPattern);
 
+            _tooltip.SetToolTip(bindWithFilter, Resources.Form_BindWithFilterToolbox);
             _tooltip.SetToolTip(buttonFilter, Resources.Form_ToolTip_FilterButton);
             _tooltip.SetToolTip(buttonReset, Resources.Form_ToolTip_buttonReset);
             _tooltip.SetToolTip(PrintXMLButton, Resources.Form_PrintXMLFiles_ToolTip);
@@ -440,6 +443,7 @@ namespace SPAFilter
             _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("\",\"", MandatoryXslxColumns)));
             _tooltip.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
 
+            bindWithFilter.Text = Resources.Form_BindWithFilter;
             buttonFilter.Text = Resources.Form_Get;
             buttonReset.Text = Resources.Form_Reset;
             PrintXMLButton.Text = Resources.Form_PrintXMLFiles_Button;
@@ -1074,7 +1078,7 @@ namespace SPAFilter
 
                 using (_progressMonitor = new ProgressCalculationAsync(progressBar, 9))
                 {
-                    await Filter.DataFilterAsync(filterProcess, filterHT, filterOp, _progressMonitor);
+                    await Filter.DataFilterAsync(filterProcess, filterHT, filterOp, bindWithFilter.Checked, _progressMonitor);
 
                     await AssignServiceInstances();
 
