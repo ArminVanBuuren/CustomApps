@@ -214,11 +214,11 @@
     <value>Выполнить фильтр</value>
   </data>
   <data name="Form_ToolTip_OpenSCXlsx" xml:space="preserve">
-    <value>Путь к файлу Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
+    <value>Путь к файлу Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть вида:
 "{0}"</value>
   </data>
   <data name="Form_ToolTip_OpenSevExelButton" xml:space="preserve">
-    <value>Открыть файл Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
+    <value>Открыть файл Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть вида:
 "{0}"</value>
   </data>
   <data name="Form_ToolTip_ProcessesButtonOpen" xml:space="preserve">
@@ -266,7 +266,7 @@
   </data>
   <data name="Filter_MissingColumn" xml:space="preserve">
     <value>Ошибка при считывании файла "{0}". Отсутствуют обязательные столбцы. 
-Имена столбцов и их позиция в документе должна быть:
+Имена столбцов и их позиция в документе должна быть вида:
 "{1}"</value>
   </data>
   <data name="Filter_NotEnabled" xml:space="preserve">
@@ -280,7 +280,7 @@
   </data>
   <data name="Filter_WrongColumnStatement" xml:space="preserve">
     <value>Некорректный столбец перед "{0}" в файле "{1}".
-Имена столбцов и их позиция в документе должна быть:
+Имена столбцов и их позиция в документе должна быть вида:
 "{2}"</value>
   </data>
   <data name="InvalidXml" xml:space="preserve">
