@@ -144,9 +144,6 @@ namespace SPAFilter.SPA
 
                 #region Mark or Exclude Processes
 
-                if (!bindWithFilter)
-                    Processes.FetchNames();
-
                 var fileteredOperations = HostTypes.Operations;
                 var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => true, StringComparer.InvariantCultureIgnoreCase);
                 if (htFilter == null && opFilter == null)
@@ -281,7 +278,11 @@ namespace SPAFilter.SPA
             Processes = new CollectionBusinessProcess();
             foreach (var file in GetFiles(ProcessPath))
             {
-                if (BusinessProcess.IsBusinessProcess(file, out var result) && (bpFilter == null || bpFilter.Invoke(result)))
+                if (!BusinessProcess.IsBusinessProcess(file, out var result))
+                    continue;
+
+                Processes.AddName(result.Name);
+                if (bpFilter == null || bpFilter.Invoke(result))
                     Processes.Add(result);
             }
         }

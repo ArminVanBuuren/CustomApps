@@ -9,8 +9,9 @@ namespace SPAFilter.SPA.Collection
     {
         private readonly object sync = new object(); 
         readonly SortedList<string, bool> _allOperationsName;
+        List<string> _allBusinessProcessNames = new List<string>();
 
-        public IReadOnlyCollection<string> BusinessProcessNames { get; private set; }
+        public IReadOnlyCollection<string> BusinessProcessNames => _allBusinessProcessNames;
 
         public IDictionary<string, bool> AllOperationsNames
         {
@@ -48,9 +49,14 @@ namespace SPAFilter.SPA.Collection
             }
         }
 
+        public void AddName(string name)
+        {
+            _allBusinessProcessNames.Add(name);
+        }
+
         public void FetchNames()
         {
-            BusinessProcessNames = this.Select(x => x.Name).ToList();
+            _allBusinessProcessNames = this.Select(x => x.Name).ToList();
         }
     }
 }
