@@ -1033,7 +1033,6 @@ namespace SPAFilter
 
         async Task AssignServiceInstances()
         {
-            //dataGridServiceInstances.Enabled = !_IsInProgress; - из за ебучего Enabled дисеблился scrollbar. Не дисейблить.
             dataGridServiceInstances.DataSource = null;
             dataGridServiceInstances.Refresh();
 
