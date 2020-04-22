@@ -16,6 +16,7 @@ namespace SPAMessageSaloon
 
             #region Logs Reader
 
+            LRDescription.Header = SPAMessageSaloon.Properties.Resources.Txt_Description;
             LRDescriptionTxt.Text = LogsReader.Properties.Resources.Txt_LogsReaderForm_Description;
 
             LRSearch.Header = LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
@@ -52,6 +53,7 @@ namespace SPAMessageSaloon
 
             #region SPA Filter
 
+            SFDescription.Header = SPAMessageSaloon.Properties.Resources.Txt_Description;
             SFDescriptionTxt.Text = SPAFilter.Properties.Resources.Form_Description;
 
             SFProcessTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ProcessesButtonOpen;
@@ -62,7 +64,7 @@ namespace SPAMessageSaloon
             SFROBPOpsFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
             SFHostTypeFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_SearchPattern;
 
-            SFFilter.Header = SPAFilter.Properties.Resources.Form_Filter;
+            SFFilter.Header = SPAFilter.Properties.Resources.Form_Get.Trim();
             SFFilterTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_FilterButton;
             SFReset.Header = SPAFilter.Properties.Resources.Form_Reset.Trim();
             SFResetTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_buttonReset;
@@ -77,7 +79,8 @@ namespace SPAMessageSaloon
             SFExportSCPath.Header = SPAFilter.Properties.Resources.Form_Root.Trim();
             SFExportSCPathTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_RootSCExportPathButton;
             SFOpenRDExcel.Header = SPAFilter.Properties.Resources.Form_OpenXksx.Trim();
-            SFOpenRDExcelTxt.Text = string.Format(SPAFilter.Properties.Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", SPAFilter.SPAFilterForm.MandatoryXslxColumns));
+            SFOpenRDExcelTxt.Text = string.Format(SPAFilter.Properties.Resources.Form_ToolTip_OpenSevExelButton, string.Empty).Replace("\"\"", string.Empty).Trim();
+            SFOpenRDExcelTxtColumns.Text = $"\"{string.Join("\" , \"", SPAFilter.SPAFilterForm.MandatoryXslxColumns)}\"";
             SFGenerateSC.Header = SPAFilter.Properties.Resources.Form_GenerateSC;
             SFGenerateSCTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ButtonGenerateSC;
 
@@ -85,6 +88,7 @@ namespace SPAMessageSaloon
 
             #region XPath Test
 
+            XTDescription.Header = SPAMessageSaloon.Properties.Resources.Txt_Description;
             XTDescriptionTxt.Text = XPathTester.Properties.Resources.Form_Description;
             XTTest.Header = XPathTester.Properties.Resources.XPathText;
             XTTestTxt.Text = XPathTester.Properties.Resources.XPathTooltip;

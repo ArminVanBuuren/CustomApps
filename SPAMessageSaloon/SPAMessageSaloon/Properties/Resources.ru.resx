@@ -120,6 +120,9 @@
   <data name="Txt_About" xml:space="preserve">
     <value>О программе</value>
   </data>
+  <data name="Txt_Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="Txt_SystemResourceMonitoring" xml:space="preserve">
     <value>Мониторинг системных ресурсов</value>
   </data>

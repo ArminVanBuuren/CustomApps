@@ -140,6 +140,15 @@ namespace SPAMessageSaloon.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Description.
+        /// </summary>
+        internal static string Txt_Description {
+            get {
+                return ResourceManager.GetString("Txt_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Language.
         /// </summary>
         internal static string Txt_Language {

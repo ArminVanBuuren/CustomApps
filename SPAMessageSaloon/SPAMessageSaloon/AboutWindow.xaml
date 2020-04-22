@@ -225,13 +225,14 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="1">
-                            <!--<Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
-                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>-->
                             <Expander Margin="2" Padding="5" Name="SFExportSCPath" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="SFExportSCPathTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="SFOpenRDExcel" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
-                                <TextBlock Name="SFOpenRDExcelTxt" TextWrapping="Wrap"></TextBlock>
+                                <StackPanel>
+                                    <TextBlock Name="SFOpenRDExcelTxt" TextWrapping="Wrap"></TextBlock>
+                                    <TextBox TextWrapping="Wrap" Name="SFOpenRDExcelTxtColumns" IsReadOnly="True" Padding="5,10" Margin="0, 5"></TextBox>
+                                </StackPanel>
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="SFGenerateSC" Header="" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="SFGenerateSCTxt" TextWrapping="Wrap"></TextBlock>

@@ -436,8 +436,8 @@ namespace SPAFilter
             
             _tooltip.SetToolTip(ExportSCPath, Resources.Form_ToolTip_ExportSCPath);
             _tooltip.SetToolTip(RootSCExportPathButton, Resources.Form_ToolTip_RootSCExportPathButton);
-            _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("','", MandatoryXslxColumns)));
-            _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("','", MandatoryXslxColumns)));
+            _tooltip.SetToolTip(OpenSCXlsx, string.Format(Resources.Form_ToolTip_OpenSCXlsx, string.Join("\",\"", MandatoryXslxColumns)));
+            _tooltip.SetToolTip(OpenSevExelButton, string.Format(Resources.Form_ToolTip_OpenSevExelButton, string.Join("\",\"", MandatoryXslxColumns)));
             _tooltip.SetToolTip(ButtonGenerateSC, Resources.Form_ToolTip_ButtonGenerateSC);
 
             buttonFilter.Text = Resources.Form_Get;
@@ -1378,7 +1378,7 @@ namespace SPAFilter
                 }
 
                 if (i != MandatoryXslxColumns.Length)
-                    throw new Exception(string.Format(Resources.Filter_MissingColumn, file.Name, string.Join("','", MandatoryXslxColumns)));
+                    throw new Exception(string.Format(Resources.Filter_MissingColumn, file.Name, string.Join("\",\"", MandatoryXslxColumns)));
 
                 for (var rowNum = 2; rowNum <= totalRows; rowNum++)
                 {

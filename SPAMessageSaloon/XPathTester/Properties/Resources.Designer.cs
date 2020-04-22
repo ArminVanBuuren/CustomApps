@@ -71,7 +71,7 @@ namespace XPathTester.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на This app is used for test xpath request and retrieve its position in the XML-body.
+        ///   Ищет локализованную строку, похожую на This app can be used for test XPath query and obtain position results in an XML document.
         /// </summary>
         public static string Form_Description {
             get {
@@ -127,7 +127,7 @@ namespace XPathTester.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на XML-Body is incorrect!{0}.
+        ///   Ищет локализованную строку, похожую на XML document is incorrect!{0}.
         /// </summary>
         public static string XmlIsIncorrect {
             get {
@@ -154,7 +154,7 @@ namespace XPathTester.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Run xpath query.
+        ///   Ищет локализованную строку, похожую на Run XPath query.
         /// </summary>
         public static string XPathTooltip {
             get {

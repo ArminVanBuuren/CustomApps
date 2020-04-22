@@ -116,7 +116,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на When initializing instances:&apos;{0}&apos; - {1} scenario collisions were found!
+        ///   Ищет локализованную строку, похожую на When initializing instances: &quot;{0}&quot; - {1} scenario collisions were found!
         ///For correct work of a filter, please choose only one instance (host type)..
         /// </summary>
         public static string Filter_InitializeActivatorsWarning {
@@ -126,9 +126,9 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Wrong file &apos;{0}&apos;. Missing some required columns. 
+        ///   Ищет локализованную строку, похожую на Wrong file &quot;{0}&quot;. Missing some required columns. 
         ///Columns names should be like:
-        ///&apos;{1}&apos;.
+        ///&quot;{1}&quot;.
         /// </summary>
         public static string Filter_MissingColumn {
             get {
@@ -164,9 +164,9 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Wrong column name before &apos;{0}&apos; from file &apos;{1}&apos;.
+        ///   Ищет локализованную строку, похожую на Wrong column name before &quot;{0}&quot; from file &quot;{1}&quot;.
         ///Columns names and orders must be like:
-        ///&apos;{2}&apos;.
+        ///&quot;{2}&quot;.
         /// </summary>
         public static string Filter_WrongColumnStatement {
             get {
@@ -204,7 +204,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на This app can be used for fix and improve the SPA configuration, , as well as for convenient viewing..
+        ///   Ищет локализованную строку, похожую на This app can be used for fix and improve the SPA configuration, as well as for convenient viewing..
         /// </summary>
         public static string Form_Description {
             get {
@@ -540,7 +540,7 @@ namespace SPAFilter.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Excel file path of RD services for fill CFS description. Columns names and orders must be like:
-        ///&apos;{0}&apos;.
+        ///&quot;{0}&quot;.
         /// </summary>
         public static string Form_ToolTip_OpenSCXlsx {
             get {
@@ -550,7 +550,7 @@ namespace SPAFilter.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Get excel file of RD services for fill CFS description. Columns names and orders must be like:
-        ///&apos;{0}&apos;.
+        ///&quot;{0}&quot;.
         /// </summary>
         public static string Form_ToolTip_OpenSevExelButton {
             get {
@@ -577,7 +577,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Open export folder path.
+        ///   Ищет локализованную строку, похожую на Open folder for export.
         /// </summary>
         public static string Form_ToolTip_RootSCExportPathButton {
             get {

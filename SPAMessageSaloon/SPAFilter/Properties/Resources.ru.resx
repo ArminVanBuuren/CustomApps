@@ -215,11 +215,11 @@
   </data>
   <data name="Form_ToolTip_OpenSCXlsx" xml:space="preserve">
     <value>Путь к файлу Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
-'{0}'</value>
+"{0}"</value>
   </data>
   <data name="Form_ToolTip_OpenSevExelButton" xml:space="preserve">
     <value>Открыть файл Excel со списком услуг для описания CFS. Имена столбцов и их позиция в документе должна быть:
-'{0}'</value>
+"{0}"</value>
   </data>
   <data name="Form_ToolTip_ProcessesButtonOpen" xml:space="preserve">
     <value>Открыть директорию с файлами Бизнес процессов</value>
@@ -261,13 +261,13 @@
     <value>Вы можете создать Сервис Каталог только с ROBP операциями</value>
   </data>
   <data name="Filter_InitializeActivatorsWarning" xml:space="preserve">
-    <value>При инициализации инстансов:'{0}' были обнаружены коллизии сценариев. {1} из них дублируются.
+    <value>При инициализации инстансов: "{0}" были обнаружены коллизии сценариев. {1} из них дублируются.
 Для корректной работы фильтра, выберите только один экземпляр (тип хоста).</value>
   </data>
   <data name="Filter_MissingColumn" xml:space="preserve">
-    <value>Ошибка при считывании файла '{0}'. Отсутствуют обязательные столбцы. 
+    <value>Ошибка при считывании файла "{0}". Отсутствуют обязательные столбцы. 
 Имена столбцов и их позиция в документе должна быть:
-'{1}'</value>
+"{1}"</value>
   </data>
   <data name="Filter_NotEnabled" xml:space="preserve">
     <value>Данные фильтра некорректны!</value>
@@ -279,9 +279,9 @@
     <value>Вы должны выбрать каталог с типами хостов в которых присутствуют ROBP операции</value>
   </data>
   <data name="Filter_WrongColumnStatement" xml:space="preserve">
-    <value>Некорректный столбец перед '{0}' из файла '{1}'.
+    <value>Некорректный столбец перед "{0}" в файле "{1}".
 Имена столбцов и их позиция в документе должна быть:
-'{2}'</value>
+"{2}"</value>
   </data>
   <data name="InvalidXml" xml:space="preserve">
     <value>Ошибка при чтении Xml файла "{0}"</value>
@@ -389,6 +389,6 @@
     <value>Сбросить фильтр</value>
   </data>
   <data name="Form_Description" xml:space="preserve">
-    <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA,а также для уобного просмотра.</value>
+    <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA, а также для удобного просмотра.</value>
   </data>
 </root>

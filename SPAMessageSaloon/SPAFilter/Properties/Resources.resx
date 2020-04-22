@@ -215,11 +215,11 @@
   </data>
   <data name="Form_ToolTip_OpenSCXlsx" xml:space="preserve">
     <value>Excel file path of RD services for fill CFS description. Columns names and orders must be like:
-'{0}'</value>
+"{0}"</value>
   </data>
   <data name="Form_ToolTip_OpenSevExelButton" xml:space="preserve">
     <value>Get excel file of RD services for fill CFS description. Columns names and orders must be like:
-'{0}'</value>
+"{0}"</value>
   </data>
   <data name="Form_ToolTip_ProcessesButtonOpen" xml:space="preserve">
     <value>Open folder with Business Processes</value>
@@ -228,7 +228,7 @@
     <value>Open folder with Operations</value>
   </data>
   <data name="Form_ToolTip_RootSCExportPathButton" xml:space="preserve">
-    <value>Open export folder path</value>
+    <value>Open folder for export</value>
   </data>
   <data name="Form_ToolTip_ServiceCatalogOpenButton" xml:space="preserve">
     <value>Open Service catalog file</value>
@@ -261,13 +261,13 @@
     <value>You can create Service Catalog only with ROBP operations.</value>
   </data>
   <data name="Filter_InitializeActivatorsWarning" xml:space="preserve">
-    <value>When initializing instances:'{0}' - {1} scenario collisions were found!
+    <value>When initializing instances: "{0}" - {1} scenario collisions were found!
 For correct work of a filter, please choose only one instance (host type).</value>
   </data>
   <data name="Filter_MissingColumn" xml:space="preserve">
-    <value>Wrong file '{0}'. Missing some required columns. 
+    <value>Wrong file "{0}". Missing some required columns. 
 Columns names should be like:
-'{1}'</value>
+"{1}"</value>
   </data>
   <data name="Filter_NotEnabled" xml:space="preserve">
     <value>Filter is not enabled!</value>
@@ -279,9 +279,9 @@ Columns names should be like:
     <value>You must select a folder with exported ROBP's host type directories.</value>
   </data>
   <data name="Filter_WrongColumnStatement" xml:space="preserve">
-    <value>Wrong column name before '{0}' from file '{1}'.
+    <value>Wrong column name before "{0}" from file "{1}".
 Columns names and orders must be like:
-'{2}'</value>
+"{2}"</value>
   </data>
   <data name="InvalidXml" xml:space="preserve">
     <value>Xml file "{0}" is invalid</value>
@@ -392,6 +392,6 @@ Columns names and orders must be like:
     <value>..\resources\reset2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Form_Description" xml:space="preserve">
-    <value>This app can be used for fix and improve the SPA configuration, , as well as for convenient viewing.</value>
+    <value>This app can be used for fix and improve the SPA configuration, as well as for convenient viewing.</value>
   </data>
 </root>

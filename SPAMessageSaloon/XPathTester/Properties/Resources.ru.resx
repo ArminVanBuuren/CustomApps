@@ -134,13 +134,13 @@
     <value>Неверный XML документ{0}</value>
   </data>
   <data name="XPathIsEmpty" xml:space="preserve">
-    <value>Пустое XPath выражение</value>
+    <value>XPath запрос не может быть пустым</value>
   </data>
   <data name="XPathTooltip" xml:space="preserve">
     <value>Выполнить XPath запрос</value>
   </data>
   <data name="Form_Description" xml:space="preserve">
-    <value>Это приложение используется для проверки xpath запроса и получения его позиции в XM документе</value>
+    <value>Это приложение можно использовать для проверки XPath запроса и получения результатов позиции в XML документе</value>
   </data>
   <data name="PrettyPrintTooltip" xml:space="preserve">
     <value>Этот инструмент преобразует XML документ в удобочитаемый формат</value>
