@@ -51,7 +51,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm, Version=1.0.7415.20347, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Utils.WinForm, Version=1.0.7416.36955, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
     </Reference>

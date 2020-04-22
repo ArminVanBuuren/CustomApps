@@ -54,7 +54,7 @@
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.UIControls">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Debug\Utils.UIControls.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Release\Utils.UIControls.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm">
       <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
@@ -185,13 +185,16 @@
     <Resource Include="Resources\About\SPAFilter_Notepad.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\About\XPathTester_Form.JPG" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Include="AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\About\XPathTester_Form.JPG" />
+    <None Include="Resources\about3.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

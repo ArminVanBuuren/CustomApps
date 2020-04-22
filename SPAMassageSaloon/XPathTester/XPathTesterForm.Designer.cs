@@ -160,11 +160,11 @@ namespace XPathTester
             // 
             // NodeName
             // 
-            this.NodeName.DataPropertyName = "NodeName";
+            this.NodeName.DataPropertyName = "Name";
             this.NodeName.FillWeight = 9.335174F;
-            this.NodeName.HeaderText = "NodeName";
+            this.NodeName.HeaderText = "Name";
             this.NodeName.MinimumWidth = 65;
-            this.NodeName.Name = "NodeName";
+            this.NodeName.Name = "Name";
             this.NodeName.ReadOnly = true;
             this.NodeName.Width = 75;
             // 

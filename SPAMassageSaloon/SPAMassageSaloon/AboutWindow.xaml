@@ -30,7 +30,7 @@
         <Grid.Resources>
             <Style TargetType="Label" x:Key="TopLabel">
                 <Setter Property="FontSize" Value="25"/>
-                <Setter Property="FontFamily" Value="/SPAMassageSaloon;component/Beyond Wonderland.ttf"/>
+                <Setter Property="FontFamily" Value="/SPAMassageSaloon;component/Resources/About/Beyond Wonderland.ttf"/>
                 <Setter Property="Foreground">
                     <Setter.Value>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">

@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 using SPAMassageSaloon.Common;
+using Utils.UIControls;
 
 namespace SPAMassageSaloon
 {
@@ -9,9 +11,17 @@ namespace SPAMassageSaloon
     /// </summary>
     public partial class AboutWindow
     {
+        private static readonly ImageSource IconImage;
+        static AboutWindow()
+        {
+            IconImage = SPAMassageSaloon.Properties.Resources.about3.ToImageSource();
+        }
         public AboutWindow()
         {
             InitializeComponent();
+
+            this.Icon = IconImage;
+
             Loaded += AboutWindow_Loaded;
 
             #region Logs Reader

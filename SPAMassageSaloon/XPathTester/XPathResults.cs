@@ -14,8 +14,8 @@ namespace XPathTester
         [DGVColumn(ColumnPosition.Last, "NodeType")]
         public string NodeType { get; set; }
 
-        [DGVColumn(ColumnPosition.Last, "NodeName")]
-        public string NodeName { get; set; }
+        [DGVColumn(ColumnPosition.Last, "Name")]
+        public string Name { get; set; }
 
         [DGVColumn(ColumnPosition.Last, "Value")]
         public string Value { get; set; }
@@ -41,7 +41,7 @@ namespace XPathTester
                 {
                     ID = result.ID,
                     NodeType = result.NodeType,
-                    NodeName = result.NodeName,
+                    Name = result.NodeName,
                     Value = result.Value,
                     Node = result.Node
                 });
