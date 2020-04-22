@@ -69,6 +69,7 @@ namespace SPAFilter
             this.ButtonGenerateSC = new System.Windows.Forms.Button();
             this.OpenSCXlsx = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bindWithFilter = new System.Windows.Forms.CheckBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.PrintXMLButton = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -78,7 +79,6 @@ namespace SPAFilter
             this.ServiceCatalogRadioButton = new System.Windows.Forms.RadioButton();
             this.panelTop = new System.Windows.Forms.Panel();
             this.progressBar = new SPAFilter.CustomProgressBar();
-            this.bindWithFilter = new System.Windows.Forms.CheckBox();
             this.mainTabControl.SuspendLayout();
             this.ServiceInstances.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -339,7 +339,7 @@ namespace SPAFilter
             this.Processes.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Processes.Location = new System.Drawing.Point(4, 24);
             this.Processes.Name = "Processes";
-            this.Processes.Size = new System.Drawing.Size(904, 298);
+            this.Processes.Size = new System.Drawing.Size(950, 298);
             this.Processes.TabIndex = 0;
             this.Processes.Text = "Processes";
             // 
@@ -357,7 +357,7 @@ namespace SPAFilter
             this.dataGridProcesses.ReadOnly = true;
             this.dataGridProcesses.RowHeadersVisible = false;
             this.dataGridProcesses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridProcesses.Size = new System.Drawing.Size(904, 298);
+            this.dataGridProcesses.Size = new System.Drawing.Size(950, 298);
             this.dataGridProcesses.TabIndex = 0;
             this.dataGridProcesses.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridProcessesResults_CellMouseDoubleClick);
             // 
@@ -368,7 +368,7 @@ namespace SPAFilter
             this.Operations.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Operations.Location = new System.Drawing.Point(4, 24);
             this.Operations.Name = "Operations";
-            this.Operations.Size = new System.Drawing.Size(904, 298);
+            this.Operations.Size = new System.Drawing.Size(950, 298);
             this.Operations.TabIndex = 1;
             this.Operations.Text = "Operations";
             // 
@@ -386,7 +386,7 @@ namespace SPAFilter
             this.dataGridOperations.ReadOnly = true;
             this.dataGridOperations.RowHeadersVisible = false;
             this.dataGridOperations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridOperations.Size = new System.Drawing.Size(904, 298);
+            this.dataGridOperations.Size = new System.Drawing.Size(950, 298);
             this.dataGridOperations.TabIndex = 0;
             this.dataGridOperations.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridOperationsResult_CellDoubleClick);
             // 
@@ -397,7 +397,7 @@ namespace SPAFilter
             this.Scenarios.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Scenarios.Location = new System.Drawing.Point(4, 24);
             this.Scenarios.Name = "Scenarios";
-            this.Scenarios.Size = new System.Drawing.Size(904, 298);
+            this.Scenarios.Size = new System.Drawing.Size(950, 298);
             this.Scenarios.TabIndex = 2;
             this.Scenarios.Text = "Scenarios";
             // 
@@ -415,7 +415,7 @@ namespace SPAFilter
             this.dataGridScenarios.ReadOnly = true;
             this.dataGridScenarios.RowHeadersVisible = false;
             this.dataGridScenarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridScenarios.Size = new System.Drawing.Size(904, 298);
+            this.dataGridScenarios.Size = new System.Drawing.Size(950, 298);
             this.dataGridScenarios.TabIndex = 5;
             this.dataGridScenarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridScenariosResult_CellDoubleClick);
             // 
@@ -426,7 +426,7 @@ namespace SPAFilter
             this.Commands.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Commands.Location = new System.Drawing.Point(4, 24);
             this.Commands.Name = "Commands";
-            this.Commands.Size = new System.Drawing.Size(904, 298);
+            this.Commands.Size = new System.Drawing.Size(950, 298);
             this.Commands.TabIndex = 3;
             this.Commands.Text = "Commands";
             // 
@@ -444,7 +444,7 @@ namespace SPAFilter
             this.dataGridCommands.ReadOnly = true;
             this.dataGridCommands.RowHeadersVisible = false;
             this.dataGridCommands.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridCommands.Size = new System.Drawing.Size(904, 298);
+            this.dataGridCommands.Size = new System.Drawing.Size(950, 298);
             this.dataGridCommands.TabIndex = 1;
             this.dataGridCommands.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridCommandsResult_CellMouseDoubleClick);
             // 
@@ -461,7 +461,7 @@ namespace SPAFilter
             this.GenerateSC.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.GenerateSC.Location = new System.Drawing.Point(4, 24);
             this.GenerateSC.Name = "GenerateSC";
-            this.GenerateSC.Size = new System.Drawing.Size(904, 298);
+            this.GenerateSC.Size = new System.Drawing.Size(950, 298);
             this.GenerateSC.TabIndex = 4;
             this.GenerateSC.Text = "Generate SC";
             // 
@@ -567,12 +567,23 @@ namespace SPAFilter
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.groupBox1.Location = new System.Drawing.Point(3, 95);
+            this.groupBox1.MaximumSize = new System.Drawing.Size(958, 79);
             this.groupBox1.MinimumSize = new System.Drawing.Size(958, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(958, 79);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter";
+            // 
+            // bindWithFilter
+            // 
+            this.bindWithFilter.AutoSize = true;
+            this.bindWithFilter.Location = new System.Drawing.Point(521, 51);
+            this.bindWithFilter.Name = "bindWithFilter";
+            this.bindWithFilter.Size = new System.Drawing.Size(103, 19);
+            this.bindWithFilter.TabIndex = 16;
+            this.bindWithFilter.Text = "Bind with filter";
+            this.bindWithFilter.UseVisualStyleBackColor = true;
             // 
             // buttonReset
             // 
@@ -691,16 +702,6 @@ namespace SPAFilter
             this.progressBar.Size = new System.Drawing.Size(958, 9);
             this.progressBar.TabIndex = 23;
             this.progressBar.Visible = false;
-            // 
-            // bindWithFilter
-            // 
-            this.bindWithFilter.AutoSize = true;
-            this.bindWithFilter.Location = new System.Drawing.Point(521, 51);
-            this.bindWithFilter.Name = "bindWithFilter";
-            this.bindWithFilter.Size = new System.Drawing.Size(103, 19);
-            this.bindWithFilter.TabIndex = 16;
-            this.bindWithFilter.Text = "Bind with filter";
-            this.bindWithFilter.UseVisualStyleBackColor = true;
             // 
             // SPAFilterForm
             // 

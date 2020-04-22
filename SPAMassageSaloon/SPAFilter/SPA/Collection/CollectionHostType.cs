@@ -20,13 +20,13 @@ namespace SPAFilter.SPA.Collection
 
         }
 
-        public void Fetch()
+        public void FetchNames()
         {
             HostTypeNames = this.Where(x => x.Operations.Count > 0).Select(x => x.Name).OrderBy(x => x).ToList();
             OperationNames = this.SelectMany(x => x.Operations).OrderBy(x => x.HostTypeName).ThenBy(x => x.Name).Select(x => x.Name).ToList();
         }
 
-        public void Commit()
+        public void FetchOperations()
         {
             Operations = new CollectionTemplate<IOperation>(this.SelectMany(x => x.Operations).OrderBy(x => x.HostTypeName).ThenBy(x => x.Name).ToList());
         }

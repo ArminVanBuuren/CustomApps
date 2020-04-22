@@ -144,10 +144,11 @@ namespace SPAFilter.SPA
 
                 #region Mark or Exclude Processes
 
+                if (!bindWithFilter)
+                    Processes.FetchNames();
+
                 var fileteredOperations = HostTypes.Operations;
-                var operationsDictionary = bindWithFilter
-                    ? fileteredOperations.ToDictionary(x => x.Name, x => true, StringComparer.InvariantCultureIgnoreCase)
-                    : HostTypes.OperationNames.ToDictionary(x => x, x => true, StringComparer.InvariantCultureIgnoreCase);
+                var operationsDictionary = fileteredOperations.ToDictionary(x => x.Name, x => true, StringComparer.InvariantCultureIgnoreCase);
                 if (htFilter == null && opFilter == null)
                 {
                     // Если не установленно никаких фильтрров по операциям или хостам
@@ -189,6 +190,9 @@ namespace SPAFilter.SPA
                     }
                 }
 
+                if (bindWithFilter)
+                    Processes.FetchNames();
+
                 Processes.ResetPublicID();
                 HostTypes.Operations.ResetPublicID();
 
@@ -205,8 +209,7 @@ namespace SPAFilter.SPA
                 }
 
                 // Получаем общие объекты по именам операций и сценариев. Т.е. фильтруем все сценарии по отфильтрованным операциям.
-                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>()
-                    .ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
+                var scenarios = Scenarios.Intersect(fileteredOperations, new SAComparer()).Cast<Scenario>().ToDictionary(x => x.Name, x => x, StringComparer.InvariantCultureIgnoreCase);
 
                 // Проверка на существование сценария для операции. Ищем несуществующие сценарии.
                 foreach (var operation in fileteredOperations.Except(scenarios.Values, new SAComparer()).Cast<IOperation>())
@@ -318,7 +321,7 @@ namespace SPAFilter.SPA
                     HostTypes.Add(robpHostType);
                     FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
                 }
-                HostTypes.Fetch();
+                HostTypes.FetchNames();
             }
             else
             {
@@ -327,7 +330,7 @@ namespace SPAFilter.SPA
                     var robpHostType = new ROBPHostType(hostTypeDir);
                     HostTypes.Add(robpHostType);
                 }
-                HostTypes.Fetch();
+                HostTypes.FetchNames();
 
                 foreach (ROBPHostType robpHostType in HostTypes.ToList())
                 {
@@ -335,7 +338,7 @@ namespace SPAFilter.SPA
                 }
             }
 
-            HostTypes.Commit();
+            HostTypes.FetchOperations();
         }
 
         public async Task AssignSCOperationsAsync(string serviceCatalogFilePath)
@@ -361,7 +364,7 @@ namespace SPAFilter.SPA
             HostTypes = new ServiceCatalog(SCPath);
 
             if (!bindWithFilter)
-                HostTypes.Fetch();
+                HostTypes.FetchNames();
 
             if (HostTypes.Count == 0)
                 return;
@@ -373,8 +376,9 @@ namespace SPAFilter.SPA
             }
 
             if (bindWithFilter)
-                HostTypes.Fetch();
-            HostTypes.Commit();
+                HostTypes.FetchNames();
+
+            HostTypes.FetchOperations();
         }
 
         static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)

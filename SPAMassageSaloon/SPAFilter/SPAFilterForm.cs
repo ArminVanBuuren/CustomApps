@@ -1084,7 +1084,7 @@ namespace SPAFilter
 
                     await dataGridProcesses.AssignCollectionAsync(Filter.Processes, null, true);
                     var prevProcessText = ProcessesComboBox.Text;
-                    ProcessesComboBox.DataSource = Filter.Processes.Select(p => p.Name).ToList();
+                    ProcessesComboBox.DataSource = Filter.Processes.BusinessProcessNames;
                     ProcessesComboBox.Text = prevProcessText;
                     ProcessesComboBox.DisplayMember = prevProcessText;
 
