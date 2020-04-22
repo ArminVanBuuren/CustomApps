@@ -172,7 +172,7 @@
     <value>Please select a row</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>This tool converts all filtered XML files in a human-readable format</value>
+    <value>This tool converts all filtered files in a human-readable XML format</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>To search for a specified pattern, you can use % symbol. Example: %Assign%</value>
@@ -181,7 +181,7 @@
     <value>Pretty print</value>
   </data>
   <data name="Form_PrintXMLFiles_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancel      </value>
   </data>
   <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
     <value>{0} out of {1} xml files were printed.</value>

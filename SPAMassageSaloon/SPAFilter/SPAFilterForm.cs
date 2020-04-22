@@ -1250,7 +1250,7 @@ namespace SPAFilter
                         }
                         else
                         {
-                            ReportMessage.Show($"{Resources.Form_PrintXMLFiles_Successfully} {result}", MessageBoxIcon.Information);
+                            ReportMessage.Show(result, MessageBoxIcon.Information);
                         }
                     }
                 }

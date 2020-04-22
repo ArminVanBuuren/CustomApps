@@ -478,13 +478,13 @@ namespace SPAFilter
             this.RootSCExportPathButton.UseVisualStyleBackColor = true;
             this.RootSCExportPathButton.Click += new System.EventHandler(this.RootSCExportPathButton_Click);
             // 
-            // label9
+            // ExportPathLabel
             // 
             this.ExportPathLabel.AutoSize = true;
             this.ExportPathLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.ExportPathLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ExportPathLabel.Location = new System.Drawing.Point(13, 19);
-            this.ExportPathLabel.Name = "label9";
+            this.ExportPathLabel.Name = "ExportPathLabel";
             this.ExportPathLabel.Size = new System.Drawing.Size(68, 15);
             this.ExportPathLabel.TabIndex = 29;
             this.ExportPathLabel.Text = "Export Path";
@@ -515,12 +515,12 @@ namespace SPAFilter
             this.OpenSevExelButton.UseVisualStyleBackColor = true;
             this.OpenSevExelButton.Click += new System.EventHandler(this.OpenRDServiceExelButton_Click);
             // 
-            // label5
+            // RDServicesLabel
             // 
             this.RDServicesLabel.AutoSize = true;
             this.RDServicesLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.RDServicesLabel.Location = new System.Drawing.Point(13, 47);
-            this.RDServicesLabel.Name = "label5";
+            this.RDServicesLabel.Name = "RDServicesLabel";
             this.RDServicesLabel.Size = new System.Drawing.Size(69, 15);
             this.RDServicesLabel.TabIndex = 26;
             this.RDServicesLabel.Text = "RD Services";

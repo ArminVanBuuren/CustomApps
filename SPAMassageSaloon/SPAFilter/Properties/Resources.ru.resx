@@ -172,22 +172,19 @@
     <value>Пожалуйста выберите строку</value>
   </data>
   <data name="Form_PrintXMLFiles_ToolTip" xml:space="preserve">
-    <value>Этот инструмент преобразует все отфильтрованные XML файлы в удобочитаемый формат</value>
+    <value>Этот инструмент преобразует все отфильтрованные файлы в удобочитаемый формат XML</value>
   </data>
   <data name="Form_ToolTip_SearchPattern" xml:space="preserve">
     <value>Для поиска по содержанию, вы можете использовать символ %. Пример: %Assign%</value>
   </data>
-  <data name="Form_PrintXMLFiles_Button" xml:space="preserve">
-    <value>Pretty print</value>
-  </data>
   <data name="Form_PrintXMLFiles_Cancel" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Отменить  </value>
   </data>
   <data name="Form_PrintXMLFiles_Result" xml:space="preserve">
-    <value>{0} из {1} xml файлов были отформатированы.</value>
+    <value>{0} из {1} xml файлов было преобразовано</value>
   </data>
   <data name="Form_PrintXMLFiles_Question" xml:space="preserve">
-    <value>Вы действительно хотите отформатировать все {0} xml файлы?</value>
+    <value>Вы действительно хотите выполнить для {0} xml файлов?</value>
   </data>
   <data name="file7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\file7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

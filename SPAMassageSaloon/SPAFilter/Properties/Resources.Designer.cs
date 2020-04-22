@@ -393,7 +393,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Cancel.
+        ///   Ищет локализованную строку, похожую на Cancel      .
         /// </summary>
         public static string Form_PrintXMLFiles_Cancel {
             get {
@@ -440,7 +440,7 @@ namespace SPAFilter.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на This tool converts all filtered XML files in a human-readable format.
+        ///   Ищет локализованную строку, похожую на This tool converts all filtered files in a human-readable XML format.
         /// </summary>
         public static string Form_PrintXMLFiles_ToolTip {
             get {
