@@ -683,7 +683,7 @@ namespace SPAFilter
                             }
                             catch (Exception ex)
                             {
-                                File.Delete(filePath);
+                                // ignored
                             }
                         }, filesPath, new MultiTaskingTemplate(filesPath.Count, ThreadPriority.Lowest)));
 
