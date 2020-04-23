@@ -386,7 +386,7 @@
     <value>Сбросить фильтр</value>
   </data>
   <data name="Form_Description" xml:space="preserve">
-    <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA, а также для удобного просмотра.</value>
+    <value>Это приложение можно использовать для исправления и улучшения конфигурации SPA</value>
   </data>
   <data name="Form_BindWithFilter" xml:space="preserve">
     <value>Связать с фильтром</value>
