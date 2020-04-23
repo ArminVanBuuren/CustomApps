@@ -1,0 +1,31 @@
+﻿<Command Name="ChangeMsisdn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>ChangeMsisdn</Description>
+  <Author Name="Oleg Safonov" Date="2011-02-08+12:35"/>
+  <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="Command">
+  <Attributes>
+    <Attribute Name="Function" Type="System.String" Value="Account.ChangeMsisdn"/>
+    <Attribute Name="TerminalDeviceID" Type="System.Int64" Value="##TerminalDeviceID##"/>
+    <Attribute Name="OldMSISDN" Type="System.String" Value="##msisdn##"/>
+    <Attribute Name="NewMSISDN" Type="System.String" Value="##NewMSISDN##"/>
+  </Attributes>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="NewMSISDN" Type="LocalParameter"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="NewMSISDN" IsChoice="true">
+      <Source Path="ExtendedRequestMessage/AdditionalData/ProvisionList/ChangeMsisdn/NewMSISDN"/>
+      <Source Path="//AdditionalData/AddList/RFS_BMS_CHANGE_MSISDN/NewMSISDN"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Code&gt;-771003&lt;" Value="SUCCESS"/>
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+  </ErrorsList>
+</Command>

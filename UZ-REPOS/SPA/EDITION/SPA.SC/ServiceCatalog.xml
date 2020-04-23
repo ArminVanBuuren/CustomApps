@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration markers="*" scenarioPrefix="SC." mainIdentities="MSISDN,PersonalAccountNumber,ContractNumber" SICreation="" formatVersion="1">
   <HostTypeList>
-    <HostType name="BM" nriType="RI" allowTerminalDeviceType="mobile" description="Bonus Management System" />
+    <HostType name="BS" nriType="RI" allowTerminalDeviceType="mobile" description="Bonus Management System" />
     <HostType name="BSP" nriType="RI" allowTerminalDeviceType="mobile" description="VAS-платформа счетчиков BSProxy" />
     <HostType name="CT4" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content MST" />
     <HostType name="CT5" nriType="RI" allowTerminalDeviceType="mobile" description="Service Content UNIFUN" />
@@ -70,7 +70,42 @@
   </RFSParameterList>
   <FlagList />
   <RFSList>
-    <RFS name="RFS_BMS_SERVICE" hostType="BM" processType="DynamicList" description="Услуга включения в кампанию на BMS" />
+    <RFS name="RFS_BMS_SUBSCRIBER" hostType="BS" processType="Subscription" description="Абонент на BMS">
+      <RFSParameter name="Subscriber" />
+    </RFS>
+    <RFS name="RFS_BMS_SERVICE" hostType="BS" processType="DynamicList" description="Услуга включения в кампанию на BMS">
+      <RFSParameter name="ServiceCode"/>
+      <RFSParameter name="DateFrom"/>
+      <RFSParameter name="BonusCampaignId" />
+      <RFSParameter name="MsisdnStartDate" />
+      <RFSParameter name="TariffPlanId" />
+    </RFS>
+    <RFS name="RFS_BMS_ANNUAL_CONTRACT" hostType="BS" processType="DynamicList" description="Услуга годового контракта на BMS">
+      <RFSParameter name="ServiceCode"/>
+      <RFSParameter name="DateFrom"/>
+      <RFSParameter name="BonusCampaignId" />
+      <RFSParameter name="MsisdnStartDate" />
+      <RFSParameter name="TariffPlanId" />
+      <RFSParameter name="ResetDate" />
+      <RFSParameter name="ResetPeriod" />
+      <RFSParameter name="ResetPeriodUnit" />
+      <RFSParameter name="AnnualContractBasePenaltyPrice" />
+    </RFS>
+    <RFS name="RFS_BMS_BLOCK" hostType="BS" processType="DynamicList" description="Услуга блокировки на BMS">
+      <RFSParameter name="ServiceCode"/>
+    </RFS>
+    <RFS name="RFS_BMS_LANGUAGE" hostType="BS" description="Обновление языка на BMS">
+      <RFSParameter name="NewLanguageCode"/>
+    </RFS>
+    <RFS name="RFS_BMS_CHANGE_MSISDN" hostType="BS" description="Изменение номера MSISDN на BMS">
+      <RFSParameter name="NewMSISDN" path="//NewMSISDN"/>
+    </RFS>
+    <RFS name="RFS_BMS_TRANSFER_TD" hostType="BS" description="Изменение ЛС и ПО на BMS">
+      <RFSParameter name="TransferTD" />
+    </RFS>
+    <RFS name="RFS_BMS_CHANGE_TARIFF_PLAN" hostType="BS" description="Изменение тарифного плана на BMS">
+      <RFSParameter name="ChangeTP" />
+    </RFS>
     <RFS name="RFS_BSPROXY_COUNTER" hostType="BSP" processType="DynamicList" description="Счетчик на BSProxy">
       <RFSParameter name="Counter" />
     </RFS>
@@ -712,7 +747,11 @@
       <RFS name="RFS_FP_SERVICE_ADDITIONAL_NUMBER" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
+    <CFS name="CFS_BMS_SERVICE" isMarker="true" description="Шаблон услуги BMS">
+      <RFS name="RFS_BMS_SERVICE" linkType="Add" />
+    </CFS>
     <CFS name="CFS_FP_SERVICE_GENERAL_AND_BMS" description="Шаблон услуги FP и BMS">
+      <RFS name="RFS_BMS_SERVICE" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
     </CFS>
     <CFS name="CFS_FP_SERVICE_GENERAL_AND_CUG" description="Шаблон простой услуги и ЗГП для FP">
@@ -745,6 +784,7 @@
       <RFSGroup name="RFS_GROUP_HLR_RECREATE_SUBSCRIBER" />
     </CFS>
     <CFS name="ChangeMsisdn" priority="9999" type="OneTime" description="Изменение номера MSISDN">
+      <RFS name="RFS_BMS_CHANGE_MSISDN" linkType="Add" />
       <RFS name="RFS_CT4_CHANGE_MSISDN" linkType="Add" dependsOn="RFS_CT4_SUBSCRIPTION" />
       <RFS name="RFS_EI_CHANGE_MSISDN" linkType="Add" />
       <RFS name="RFS_HLR_CHANGE_MSISDN" linkType="Add" />
@@ -759,6 +799,7 @@
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN_AND_DELETE" />
     </CFS>
     <CFS name="ChangeTP" priority="9999" type="OneTime" description="Изменение тарифного плана">
+      <RFS name="RFS_BMS_CHANGE_TARIFF_PLAN" linkType="Add" />
       <RFS name="RFS_SM_CHANGE_TARIFF" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_CHANGE_TARIFF_PLAN" />
       <RFSGroup name="RFS_GROUP_HLR_CHANGE_PROFILE" />
@@ -1062,6 +1103,9 @@
     <CFS name="FRBMSBESH200" globalServiceCode="FRBMSBESH200" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.200 sms на Besh при платежах" />
     <CFS name="FRBMSBRK20" globalServiceCode="FRBMSBRK20" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.20 mb на Baraka при платежах" />
     <CFS name="FRBMSBRK50" globalServiceCode="FRBMSBRK50" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.50 mb на Baraka при платежах_old" />
+    <CFS name="BMS" isMarker="true" description="Услуга Маркер: BMS">
+      <RFS name="RFS_BMS_SERVICE" linkType="Add" />
+    </CFS>
     <CFS name="FRBMSCHTP" isMarker="true" description="BMS. Смена ТП">
       <RFS name="RFS_BMS_SERVICE" linkType="Add" />
       <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
@@ -2234,7 +2278,7 @@
     <CFS name="TEST1" globalServiceCode="TEST1" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая учлуга для НЕ подбалансовых счетчиков" />
     <CFS name="TESTAVTO" globalServiceCode="TESTAVTO" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга созданная скриптом" />
     <CFS name="TESTAVTO2" globalServiceCode="TESTAVTO2" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга созданная скриптом 2" />
-    <CFS name="TESTFRIDAY" globalServiceCode="TESTFRIDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Пятница" />
+    <CFS name="TESTFRIDAY" globalServiceCode="TESTFRIDAY" copyOf="CFS_FP_SERVICE_GENERAL_AND_BMS" description="Тестовая услуга Пятница" />
     <CFS name="TESTKGK" globalServiceCode="TESTKGK" copyOf="CFS_FP_SERVICE_GENERAL" description="Корпоративный годовой контракт (test)" />
     <CFS name="TESTMONDAY" globalServiceCode="TESTMONDAY" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая услуга Понедельник" />
     <CFS name="TESTPPDA" globalServiceCode="TESTPPDA" copyOf="CFS_FP_SERVICE_GENERAL" description="TEST.Услуга A" />
@@ -2252,12 +2296,14 @@
     <CFS name="TMP000017" copyOf="CFS_FP_SERVICE_GENERAL" description="Тест.У3" />
     <CFS name="TPCHANGEBAN" globalServiceCode="TPCHANGEBAN" copyOf="CFS_FP_SERVICE_GENERAL" description="Блокировка смены ТП до конца месяца" />
     <CFS name="TransferTD" priority="9999" type="OneTime" description="Перенос ПО">
+      <RFS name="RFS_BMS_TRANSFER_TD" linkType="Add" />
       <RFSGroup name="RFS_GROUP_FP_TRANSFER_TD" />
     </CFS>
     <CFS name="UpdateAttributes" priority="9999" type="OneTime" description="Изменение атрибутов ЛС">
       <RFS name="RFS_FP_UPDATE_ATTIBUTES" linkType="Add" />
     </CFS>
     <CFS name="UpdateLanguage" priority="9999" type="OneTime" description="Обновление языка на фин.платформе и BMS">
+      <RFS name="RFS_BMS_LANGUAGE" linkType="Add" />
       <RFS name="RFS_FP_LANGUAGE" linkType="Add" />
     </CFS>
     <CFS name="VM2EMAIL" globalServiceCode="VM2EMAIL" copyOf="CFS_FP_SERVICE_GENERAL" description="Пересылка голосового сообщения на e-mail" />
@@ -2333,6 +2379,12 @@
     <RFSDependency parent="RFS_HLR_STATIC_IP" child="RFS_MG_SUBSCRIPTION" />
   </RFSDependencyList>
   <HandlerList>
+    <Handler name="FP.ExtendedCancelHandler" type="RFSFilter" description="Обработчик отмены обработки на фин.платформе и BMS. Прописан в бизнес-процессы.">
+      <Configuration deny="FP,BS"/>
+    </Handler>
+    <Handler name="FP.ExtendedExclusiveHandler" type="RFSFilter" description="Обработчик выделения обработки на фин.платформе,BMS,DS. Прописан в бизнес-процессы.">
+      <Configuration allow="FP,BS,DS"/>
+    </Handler>
     <Handler name="ChangeFPMSISDNHandler" type="Custom" description="Обработчик RFS для изменения номера MSISDN">
       <Configuration type="FORIS.SPA.SC.Customization.ChangeFPMSISDNHandler, FORIS.SPA.SC.Customization">
         <RFS name="RFS_FP_CHANGE_MSISDN_IMSI" changeHLR="True" />
@@ -2436,11 +2488,16 @@
     </Handler>
   </HandlerList>
   <ScenarioList>
-    <Scenario name="BMS.AssignMsisdnToCampaign" description="Add Campaing">
-      <RFS name="RFS_BMS_SERVICE" scenarioType="Add" />
+    <Scenario name="BMS.Dummy" sendType="Drop" description="Фейковый сценарии для пропуска безусловного создания абонента на BMS">
+      <RFS name="RFS_BMS_SUBSCRIBER" scenarioType="Add" />
     </Scenario>
-    <Scenario name="BMS.RemoveMsisdnToCampaign" description="Remove Campaing">
-      <RFS name="RFS_BMS_SERVICE" scenarioType="Remove" />
+    <Scenario name="BMS.ChangeTariff" description="Изменение тарифного плана на BMS">
+      <RFS name="RFS_BMS_CHANGE_TARIFF_PLAN" scenarioType="Add"/>
+      <Append name="RFS_BMS_ANNUAL_CONTRACT" listType="EndList" />
+    </Scenario>
+    <Scenario name="BMS.Remove.BLock" description="Удаление блокировки с BMS">
+      <RFS name="RFS_BMS_BLOCK" scenarioType="Remove"/>
+      <Append name="RFS_BMS_BLOCK" listType="EndList" />
     </Scenario>
     <Scenario name="BSP.ChangeCounterProfile" description="Переинициализация счетчиков на BSProxy">
       <RFS name="RFS_BSPROXY_COUNTER" scenarioType="Add" />

@@ -1,0 +1,30 @@
+<Command Name="ChangeTDPAOnBMSPlatform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>ChangeTDPAOnBMSPlatform</Description>
+  <Author Name="Max Smirnov" Date="2013-03-22+18:00"/>
+  <ModifiedBy Name="Victor Kosonogov" Date="2017-07-07+07:07" />
+  <Request>
+    <RequestTemplate>
+      <![CDATA[<DataSet Name="Command">
+  <Attributes>
+    <Attribute Name="Function" Type="System.String" Value="Account.UpdateMsisdn"/>
+    <Attribute Name="Msisdn" Type="System.String" Value="##msisdn##"/>
+    <Attribute Name="PersonalAccountNumber" Type="System.Int64" Value="##PersonalAccountNumber##"/>
+    <Attribute Name="TerminalDeviceId" Type="System.Int64" Value="##TerminalDeviceID##"/>
+    <Attribute Name="IsUpdatePA" Type="System.Char" Value="Y"/>
+  </Attributes>
+</DataSet>]]>
+    </RequestTemplate>
+    <EmulationPrintoutTemplate><![CDATA[]]></EmulationPrintoutTemplate>
+    <Item Name="msisdn" Type="Wellknown"/>
+    <Item Name="PersonalAccountNumber" Type="LocalParameter"/>
+    <Item Name="TerminalDeviceID" Type="Wellknown"/>
+  </Request>
+  <ParametersList>
+    <Parameter Name="PersonalAccountNumber">
+      <Source Path="//AdditionalData//TransferTD/NewPersonalAccountNumber"/>
+    </Parameter>
+  </ParametersList>
+  <ErrorsList CodePage="ascii">
+    <Error Name="Code&gt;-770823&lt;" Value="SUCCESS"/>
+  </ErrorsList>
+</Command>

@@ -1,0 +1,24 @@
+<Configuration>
+  <serviceInstances>
+    <serviceInstance hardwareID="BS:BS">
+      <scenarioSource type="FORIS.ServiceProvisioning.ServiceActivator.ScenarioSource.FileScenarioSource, FORIS.SPA.ServiceActivator.Core">
+        <fileScenarioSource dir="..\SPA.SA\BMS\Scenarios" />
+      </scenarioSource>
+      <socketList poolSize="5" maxConnections="5" minConnections="1" averageTime="20" deltaAverageTime="40" maxCommandsPerPeriod="30" periodDuration="10" reconfigurationTimeout="0">
+        <socket type="FORIS.ServiceProvisioning.Communication.Integrated.BmsSocket, FORIS.SPA.Communication.Integrated">
+          <config timeout="60" workingmode="wmGeneral">
+            <Emulation Success="Code&gt;0&lt;" Failure="Code&gt;-771001&lt;" RandomizePrintout="false" OverwriteCommandPrintout="true" Lifetime="00:00:00.00" MinDelay="100" MaxDelay="200" RandomDelay="true" />
+          </config>
+        </socket>
+      </socketList>
+      <context>
+        <object name="dictionary" type="FORIS.ServiceProvisioning.Dictionary.ServiceActivatorDictionary, FORIS.SPA.Dictionary">
+          <config path="..\SPA.SA\BMS\" xml="dictionary.xml" />
+        </object>
+        <object name="repetitionTable" type="FORIS.ServiceProvisioning.MmlProcessing.SPF.RepetitionTable, FORIS.SPA.MmlProcessing">
+          <fileTableSource path="..\SPA.SA\BMS\MISC" xml="RepetitionTable.xml" />
+        </object>
+      </context>
+    </serviceInstance>
+  </serviceInstances>
+</Configuration>
