@@ -275,8 +275,6 @@
                             <Expander Margin="2" Padding="5" Name="XTPrettyPrint" Header="Pretty Print" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
                                 <TextBlock Name="XTPrettyPrintTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
-                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
-                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>

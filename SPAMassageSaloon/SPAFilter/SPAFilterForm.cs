@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using FastColoredTextBoxNS;
@@ -668,12 +669,25 @@ namespace SPAFilter
                         if (userResult != DialogResult.OK)
                             return;
 
-                        foreach (var filePath in filesPath)
+                        await DoLongExecutionTasksAsync(MultiTasking.RunAsync((filePath) =>
                         {
-                            if (File.Exists(filePath))
+                            if (!File.Exists(filePath))
+                                return;
+                            try
+                            {
+                                // удаляет и перемещает в корзину
+                                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(filePath,
+                                    Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                                    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin,
+                                    Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                            }
+                            catch (Exception ex)
+                            {
                                 File.Delete(filePath);
-                        }
+                            }
+                        }, filesPath, new MultiTaskingTemplate(filesPath.Count, ThreadPriority.Lowest)));
 
+                        
                         if (grid == dataGridServiceInstances)
                         {
                             await AssignServiceInstances(Filter.RemoveActivatorAsync(filesPath));
@@ -1012,6 +1026,37 @@ namespace SPAFilter
 
                 await getInstances;
                 await AssignServiceInstances();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
+
+                addServiceInstancesButton.Enabled = true;
+                removeServiceInstancesButton.Enabled = true;
+                refreshServiceInstancesButton.Enabled = true;
+                reloadServiceInstancesButton.Enabled = true;
+
+                ClearDataGrid(true);
+                RefreshStatus();
+            }
+        }
+
+        async Task DoLongExecutionTasksAsync(Task longExecutionTask)
+        {
+            try
+            {
+                IsLoading = true;
+
+                addServiceInstancesButton.Enabled = false;
+                removeServiceInstancesButton.Enabled = false;
+                refreshServiceInstancesButton.Enabled = false;
+                reloadServiceInstancesButton.Enabled = false;
+
+                await longExecutionTask;
             }
             catch (Exception)
             {

@@ -471,9 +471,9 @@ namespace SPAFilter
             this.RootSCExportPathButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.RootSCExportPathButton.Image = global::SPAFilter.Properties.Resources.folder2;
             this.RootSCExportPathButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.RootSCExportPathButton.Location = new System.Drawing.Point(797, 16);
+            this.RootSCExportPathButton.Location = new System.Drawing.Point(842, 16);
             this.RootSCExportPathButton.Name = "RootSCExportPathButton";
-            this.RootSCExportPathButton.Size = new System.Drawing.Size(104, 23);
+            this.RootSCExportPathButton.Size = new System.Drawing.Size(105, 23);
             this.RootSCExportPathButton.TabIndex = 30;
             this.RootSCExportPathButton.Text = "     Root";
             this.RootSCExportPathButton.UseVisualStyleBackColor = true;
@@ -497,7 +497,7 @@ namespace SPAFilter
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ExportSCPath.Location = new System.Drawing.Point(90, 16);
             this.ExportSCPath.Name = "ExportSCPath";
-            this.ExportSCPath.Size = new System.Drawing.Size(701, 23);
+            this.ExportSCPath.Size = new System.Drawing.Size(746, 23);
             this.ExportSCPath.TabIndex = 28;
             this.ExportSCPath.TextChanged += new System.EventHandler(this.ExportSCPath_TextChanged);
             // 
@@ -507,10 +507,10 @@ namespace SPAFilter
             this.OpenSevExelButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.OpenSevExelButton.Image = global::SPAFilter.Properties.Resources.xls1;
             this.OpenSevExelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.OpenSevExelButton.Location = new System.Drawing.Point(797, 43);
+            this.OpenSevExelButton.Location = new System.Drawing.Point(842, 43);
             this.OpenSevExelButton.Name = "OpenSevExelButton";
             this.OpenSevExelButton.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.OpenSevExelButton.Size = new System.Drawing.Size(104, 23);
+            this.OpenSevExelButton.Size = new System.Drawing.Size(105, 23);
             this.OpenSevExelButton.TabIndex = 27;
             this.OpenSevExelButton.Text = "     Open xlsx";
             this.OpenSevExelButton.UseVisualStyleBackColor = true;
@@ -534,9 +534,9 @@ namespace SPAFilter
             this.ButtonGenerateSC.Enabled = false;
             this.ButtonGenerateSC.Image = global::SPAFilter.Properties.Resources.generatesc;
             this.ButtonGenerateSC.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonGenerateSC.Location = new System.Drawing.Point(797, 70);
+            this.ButtonGenerateSC.Location = new System.Drawing.Point(842, 70);
             this.ButtonGenerateSC.Name = "ButtonGenerateSC";
-            this.ButtonGenerateSC.Size = new System.Drawing.Size(106, 24);
+            this.ButtonGenerateSC.Size = new System.Drawing.Size(105, 24);
             this.ButtonGenerateSC.TabIndex = 26;
             this.ButtonGenerateSC.Text = "      Generate SC";
             this.ButtonGenerateSC.UseVisualStyleBackColor = true;
@@ -548,7 +548,7 @@ namespace SPAFilter
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenSCXlsx.Location = new System.Drawing.Point(90, 43);
             this.OpenSCXlsx.Name = "OpenSCXlsx";
-            this.OpenSCXlsx.Size = new System.Drawing.Size(701, 23);
+            this.OpenSCXlsx.Size = new System.Drawing.Size(746, 23);
             this.OpenSCXlsx.TabIndex = 0;
             this.OpenSCXlsx.TextChanged += new System.EventHandler(this.OpenSCXlsx_TextChanged);
             // 
