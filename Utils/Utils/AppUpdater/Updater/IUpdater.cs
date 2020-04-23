@@ -74,13 +74,13 @@ namespace Utils.AppUpdater.Updater
         string GetProgressString();
 
         /// <summary>
-        /// Задержка в секундах перед заменой обновляемых файлов
+        /// задержка в секундах перед запуском переноса файла (ограниение 1 час)
         /// </summary>
-        int SecondsMoveDelay { get; set; }
+        int DelayBeforeMove { get; set; }
 
         /// <summary>
-        /// Задержка в секундах перед перед запуском приложения
+        /// задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла
         /// </summary>
-        int SecondsRunDelay { get; set; }
+        int DelayAfterMoveAndRunApp { get; set; }
     }
 }

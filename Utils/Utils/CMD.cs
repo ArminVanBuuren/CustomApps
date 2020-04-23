@@ -16,11 +16,11 @@ namespace Utils
         /// Запустить приложение
         /// </summary>
         /// <param name="fileDestination">запустить приложение</param>
-        /// <param name="secondsRunDelay">задержка в секундах перед запуском приложения  (ограниение 1 час)</param>
-        public static void StartApplication(string fileDestination, int secondsRunDelay = 0)
+        /// <param name="delayBeforeRun">задержка в секундах перед запуском приложения  (ограниение 1 час)</param>
+        public static void StartApplication(string fileDestination, int delayBeforeRun = 0)
         {
             var argument_complete = string.Format(argument_start, 
-                GetCommandTimeout(secondsRunDelay), 
+                GetCommandTimeout(delayBeforeRun), 
                 Path.GetDirectoryName(fileDestination), 
                 Path.GetFileName(fileDestination));
 
@@ -32,15 +32,12 @@ namespace Utils
         /// </summary>
         /// <param name="fileSource">изначальное местоположение файла</param>
         /// <param name="fileDestination">скопировать куда и запустить</param>
-        /// <param name="secondsMoveDelay">задержка в секундах перед заменой файла (ограниение 1 час)</param>
-        /// <param name="secondsRunDelay">задержка в секундах перед запуском приложения (ограниение 1 час)</param>
-        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int secondsMoveDelay = 0, int secondsRunDelay = 0)
+        /// <param name="delayBeforeMove">задержка в секундах перед запуском переноса файла (ограниение 1 час)</param>
+        /// <param name="delayAfterMoveAndRunDestination">задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла</param>
+        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int delayBeforeMove = 0, int delayAfterMoveAndRunDestination = 0)
         {
-            if (secondsMoveDelay > secondsRunDelay)
-                throw new Exception("Seconds delay of run application must be greater than seconds delay of movement file.");
-
-            var delayDelMove = GetCommandTimeout(secondsMoveDelay);
-            var delayStart = GetCommandTimeout(secondsRunDelay);
+            var delayDelMove = GetCommandTimeout(delayBeforeMove);
+            var delayStart = GetCommandTimeout(delayAfterMoveAndRunDestination);
             var argument_complete = string.Format(argument_update_start,
                 delayDelMove,
                 fileDestination,
@@ -59,11 +56,11 @@ namespace Utils
         /// </summary>
         /// <param name="fileSource">изначальное местоположение файла</param>
         /// <param name="fileDestination">путь назначения файла</param>
-        /// <param name="secondsDelay">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void OverwriteFile(string fileSource, string fileDestination, int secondsDelay = 0)
+        /// <param name="delayBeforeMove">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
+        public static void OverwriteFile(string fileSource, string fileDestination, int delayBeforeMove = 0)
         {
             var argument_complete = string.Format(argument_update, 
-                GetCommandTimeout(secondsDelay), 
+                GetCommandTimeout(delayBeforeMove), 
                 fileDestination, 
                 fileSource, 
                 fileDestination);
@@ -76,11 +73,11 @@ namespace Utils
         /// </summary>
         /// <param name="fileSource">местоположение файла</param>
         /// <param name="fileDestination">путь назначения файла</param>
-        /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void CopyFile(string fileSource, string fileDestination, int secondsDelay = 0)
+        /// <param name="delayBeforeCopy">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
+        public static void CopyFile(string fileSource, string fileDestination, int delayBeforeCopy = 0)
         {
             var argument_complete = string.Format(argument_add, 
-                GetCommandTimeout(secondsDelay), 
+                GetCommandTimeout(delayBeforeCopy), 
                 fileSource, 
                 fileDestination);
 
@@ -91,11 +88,11 @@ namespace Utils
         /// Файл удалиться асинхронным процессом, после того когда держать перестанут. Но не гарантированно.
         /// </summary>
         /// <param name="fileDestination">путь назначения файла</param>
-        /// <param name="secondsDelay">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void DeleteFile(string fileDestination, int secondsDelay = 0)
+        /// <param name="delayBeforeDelete">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
+        public static void DeleteFile(string fileDestination, int delayBeforeDelete = 0)
         {
             var argument_complete = string.Format(argument_remove, 
-                GetCommandTimeout(secondsDelay), 
+                GetCommandTimeout(delayBeforeDelete), 
                 fileDestination);
 
             StartProcess(argument_complete);

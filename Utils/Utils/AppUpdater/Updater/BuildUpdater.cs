@@ -69,14 +69,14 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        internal static void Pull(string runningAppLocation, int secondsRunDelay)
+        internal static void Pull(string runningAppLocation, int delayBeforeRun)
         {
-            CMD.StartApplication(runningAppLocation, secondsRunDelay);  // задержка на запуск 30 секунд
+            CMD.StartApplication(runningAppLocation, delayBeforeRun);
         }
 
-        internal void Pull(int secondsMoveDelay, int secondsRunDelay)
+        internal void Pull(int delayBeforeMove, int delayAfterMoveAndRunApp)
         {
-            CMD.OverwriteAndStartApplication(FileSource, FileDestination, secondsMoveDelay, secondsRunDelay); // задержка на запуск 30 секунд
+            CMD.OverwriteAndStartApplication(FileSource, FileDestination, delayBeforeMove, delayAfterMoveAndRunApp);
         }
 
         public override string ToString()

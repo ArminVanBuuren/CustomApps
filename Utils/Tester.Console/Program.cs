@@ -206,6 +206,10 @@ namespace Tester.Console
         {
             try
             {
+                //CMD.OverwriteAndStartApplication(@"C:\test\CMD\NEW\versions.xml", @"C:\test\CMD\OLD\versions.xml", 0, 10);
+                //return;
+
+
                 var res11111 = getTimeInRangeFunction.Invoke(null, new[] { "0", "16:00", "20:00" }, null);
 
                 SortedDictionary<DateTime, string> _result = new SortedDictionary<DateTime, string>();
