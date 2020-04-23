@@ -224,8 +224,8 @@ namespace SPAMassageSaloon
                 }
 
                 var updater = args.Control;
-                updater.SecondsMoveDelay = 1;
-                updater.SecondsRunDelay = 5;
+                updater.DelayBeforeMove = 2;
+                updater.DelayAfterMoveAndRunApp = 5;
 
                 if (updater.ProjectBuildPack.NeedRestartApplication)
                 {
