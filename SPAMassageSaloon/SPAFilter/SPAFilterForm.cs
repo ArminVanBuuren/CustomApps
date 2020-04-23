@@ -273,6 +273,8 @@ namespace SPAFilter
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
                 _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT", _notepadSize);
+                if(_notepadSize.Width <= 300 || _notepadSize.Height <= 300)
+                    _notepadSize = new Size(1200, 800);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Normal);
 
                 ProcessesComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRTT", string.Empty);
@@ -469,81 +471,109 @@ namespace SPAFilter
 
         private void DataGridServiceInstances_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
-                return;
-
-            var template = Filter.ServiceInstances[uniqueName];
-            if (template == null || template.IsCorrect)
-                return;
-
-            row.DefaultCellStyle.BackColor = Color.Yellow;
-            foreach (DataGridViewCell cell2 in row.Cells)
+            try
             {
-                cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
+                if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
+                    return;
+
+                var template = Filter.ServiceInstances[uniqueName];
+                if (template == null || template.IsCorrect)
+                    return;
+
+                row.DefaultCellStyle.BackColor = Color.Yellow;
+                foreach (DataGridViewCell cell2 in row.Cells)
+                {
+                    cell2.ToolTipText = Resources.Form_GridView_IncorrectConfig;
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
 
         private void DataGridProcesses_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
-                return;
-
-            var template = Filter.Processes[uniqueName];
-            if (template == null)
-                return;
-
-            if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
+            try
             {
-                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
+                if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
+                    return;
+
+                var template = Filter.Processes[uniqueName];
+                if (template == null)
+                    return;
+
+                if (ROBPOperationsRadioButton.Checked && !template.AllOperationsExist)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_NotFoundSomeOPs);
+                }
+                else if (!ROBPOperationsRadioButton.Checked && !template.HasCatalogCall)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
+                }
             }
-            else if (!ROBPOperationsRadioButton.Checked && !template.HasCatalogCall)
+            catch (Exception ex)
             {
-                SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
+                // ignored
             }
         }
 
         private void DataGridOperations_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
-                return;
-
-            var template = Filter.HostTypes.Operations[uniqueName];
-            if (template == null)
-                return;
-
-            if (!template.IsScenarioExist)
+            try
             {
-                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
+                if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
+                    return;
+
+                var template = Filter.HostTypes.Operations[uniqueName];
+                if (template == null)
+                    return;
+
+                if (!template.IsScenarioExist)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_NotFoundSomeScenarios);
+                }
+                else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
+                }
             }
-            else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
+            catch (Exception ex)
             {
-                SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
+                // ignored
             }
         }
         private void DataGridScenariosResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
-                return;
+            try
+            {
+                if (!GetUniqueName(sender, e.RowIndex, out var row, out var uniqueName))
+                    return;
 
-            var template = Filter.Scenarios[uniqueName];
-            if (template == null)
-                return;
+                var template = Filter.Scenarios[uniqueName];
+                if (template == null)
+                    return;
 
-            if (!template.IsCorrectXML)
-            {
-                SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
+                if (!template.IsCorrectXML)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_XMLFileIsIncorrect);
+                }
+                else if (template.IsSubScenario && !template.AllCommandsExist)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommandsInSub);
+                }
+                else if (!template.AllCommandsExist)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommands);
+                }
+                else if (template.IsSubScenario)
+                {
+                    SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
+                }
             }
-            else if (template.IsSubScenario && !template.AllCommandsExist)
+            catch (Exception ex)
             {
-                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommandsInSub);
-            }
-            else if (!template.AllCommandsExist)
-            {
-                SetFailedRow(row, Resources.Form_GridView_NotFoundSomeCommands);
-            }
-            else if (template.IsSubScenario)
-            {
-                SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
+                // ignored
             }
         }
 
