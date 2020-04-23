@@ -20,8 +20,10 @@ namespace SPAFilter.SPA
 {
     public class SPAProcessFilter
     {
-        //readonly object BP_OP_SYNC = new object();
         readonly object ACTIVATORS_SYNC = new object();
+        readonly object bpLock = new object();
+        readonly object operationsLock = new object();
+
         readonly Dictionary<string, ServiceActivator> _activators = new Dictionary<string, ServiceActivator>(StringComparer.InvariantCultureIgnoreCase);
 
         public string ProcessPath { get; private set; }
@@ -272,18 +274,21 @@ namespace SPAFilter.SPA
 
         void FilterProcesses(Func<BusinessProcess, bool> bpFilter)
         {
-            if (!Directory.Exists(ProcessPath))
-                throw new Exception(string.Format(Resources.DirectoryNotFound, ProcessPath, "Process"));
-
-            Processes = new CollectionBusinessProcess();
-            foreach (var file in GetFiles(ProcessPath))
+            lock (bpLock)
             {
-                if (!BusinessProcess.IsBusinessProcess(file, out var result))
-                    continue;
+                if (!Directory.Exists(ProcessPath))
+                    throw new Exception(string.Format(Resources.DirectoryNotFound, ProcessPath, "Process"));
 
-                Processes.AddName(result.Name);
-                if (bpFilter == null || bpFilter.Invoke(result))
-                    Processes.Add(result);
+                Processes = new CollectionBusinessProcess();
+                foreach (var file in GetFiles(ProcessPath))
+                {
+                    if (!BusinessProcess.IsBusinessProcess(file, out var result))
+                        continue;
+
+                    Processes.AddName(result.Name);
+                    if (bpFilter == null || bpFilter.Invoke(result))
+                        Processes.Add(result);
+                }
             }
         }
 
@@ -303,43 +308,48 @@ namespace SPAFilter.SPA
 
         void FilterROBPOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> htFilter, Func<IOperation, bool> opFilter, bool bindWithFilter = false)
         {
-            if (!Directory.Exists(ROBPHostTypesPath))
-                throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath, "Operations"));
-
-            var hostTypesDir = GetDirectories(ROBPHostTypesPath);
-            if (hostTypesDir.Count == 0)
-                throw new Exception(Resources.Filter_ROBPOperationdDirInvalid);
-
-            FilterProcesses(bpFilter);
-            HostTypes = new CollectionHostType();
-            var allBPOperations = Processes.AllOperationsNames;
-
-            if (bindWithFilter)
+            lock (operationsLock)
             {
-                foreach (var hostTypeDir in hostTypesDir.ToList())
-                {
-                    var robpHostType = new ROBPHostType(hostTypeDir);
-                    HostTypes.Add(robpHostType);
-                    FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
-                }
-                HostTypes.FetchNames();
-            }
-            else
-            {
-                foreach (var hostTypeDir in hostTypesDir.ToList())
-                {
-                    var robpHostType = new ROBPHostType(hostTypeDir);
-                    HostTypes.Add(robpHostType);
-                }
-                HostTypes.FetchNames();
+                if (!Directory.Exists(ROBPHostTypesPath))
+                    throw new Exception(string.Format(Resources.DirectoryNotFound, ROBPHostTypesPath, "Operations"));
 
-                foreach (ROBPHostType robpHostType in HostTypes.ToList())
-                {
-                    FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
-                }
-            }
+                var hostTypesDir = GetDirectories(ROBPHostTypesPath);
+                if (hostTypesDir.Count == 0)
+                    throw new Exception(Resources.Filter_ROBPOperationdDirInvalid);
 
-            HostTypes.FetchOperations();
+                FilterProcesses(bpFilter);
+                HostTypes = new CollectionHostType();
+                var allBPOperations = Processes.AllOperationsNames;
+
+                if (bindWithFilter)
+                {
+                    foreach (var hostTypeDir in hostTypesDir.ToList())
+                    {
+                        var robpHostType = new ROBPHostType(hostTypeDir);
+                        HostTypes.Add(robpHostType);
+                        FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                    }
+
+                    HostTypes.FetchNames();
+                }
+                else
+                {
+                    foreach (var hostTypeDir in hostTypesDir.ToList())
+                    {
+                        var robpHostType = new ROBPHostType(hostTypeDir);
+                        HostTypes.Add(robpHostType);
+                    }
+
+                    HostTypes.FetchNames();
+
+                    foreach (ROBPHostType robpHostType in HostTypes.ToList())
+                    {
+                        FilterOperations(robpHostType, htFilter, opFilter, allBPOperations, false);
+                    }
+                }
+
+                HostTypes.FetchOperations();
+            }
         }
 
         public async Task AssignSCOperationsAsync(string serviceCatalogFilePath)
@@ -358,28 +368,31 @@ namespace SPAFilter.SPA
 
         void FilterSCOperations(Func<BusinessProcess, bool> bpFilter, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, bool bindWithFilter = false)
         {
-            if (!File.Exists(SCPath))
-                throw new Exception(string.Format(Resources.FileNotFound, SCPath));
-
-            FilterProcesses(bpFilter);
-            HostTypes = new ServiceCatalog(SCPath);
-
-            if (!bindWithFilter)
-                HostTypes.FetchNames();
-
-            if (HostTypes.Count == 0)
-                return;
-            var anyHasCatalogCall = Processes.AnyHasCatalogCall;
-
-            foreach (var hostType in HostTypes.ToList())
+            lock (operationsLock)
             {
-                FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
+                if (!File.Exists(SCPath))
+                    throw new Exception(string.Format(Resources.FileNotFound, SCPath));
+
+                FilterProcesses(bpFilter);
+                HostTypes = new ServiceCatalog(SCPath);
+
+                if (!bindWithFilter)
+                    HostTypes.FetchNames();
+
+                if (HostTypes.Count == 0)
+                    return;
+                var anyHasCatalogCall = Processes.AnyHasCatalogCall;
+
+                foreach (var hostType in HostTypes.ToList())
+                {
+                    FilterOperations(hostType, neFilter, opFilter, null, anyHasCatalogCall);
+                }
+
+                if (bindWithFilter)
+                    HostTypes.FetchNames();
+
+                HostTypes.FetchOperations();
             }
-
-            if (bindWithFilter)
-                HostTypes.FetchNames();
-
-            HostTypes.FetchOperations();
         }
 
         static void FilterOperations(IHostType hostType, Func<IHostType, bool> neFilter, Func<IOperation, bool> opFilter, IDictionary<string, bool> allBPOperations, bool anyHasCatalogCall)
