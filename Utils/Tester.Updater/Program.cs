@@ -89,7 +89,15 @@ namespace Tester.Updater
 
             Repository repo = null;
             try
-            {   
+            {
+                // при первом использовании для начала нужно инитить папку:
+                // $ cd -P -- "C:\!Builds\Git"
+                // git remote -v
+                // git fetch origin master
+                // при ошибке fatal: unable to access 'https://github.com/ArminVanBuuren/Builds/': Could not resolve host: github.com выполнить:
+                // git config --global --unset http.proxy 
+                // git config --global--unset https.proxy
+
                 //Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
                 const string sourcePath = @"C:\!Builds\Builds";
                 const string destPath = @"C:\!Builds\Git";
