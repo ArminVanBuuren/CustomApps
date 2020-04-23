@@ -308,7 +308,7 @@ namespace SPAMassageSaloon
                     double percent = 0;
                     if (appCPU != null)
                         double.TryParse(appCPU.NextValue().ToString(), out percent);
-                    var cpuUsage = $"{(int)(percent / Environment.ProcessorCount),3}%";
+                    var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
                     var currentProcess = Process.GetCurrentProcess();
                     var threadsUsage = $"{currentProcess.Threads.Count,-2}";
                     var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
@@ -336,13 +336,10 @@ namespace SPAMassageSaloon
 
                 while (!IsClosed)
                 {
-                    this.SafeInvoke(Monitoring);
+                    try { this.SafeInvoke(Monitoring); }
+                    catch (InvalidOperationException) { }
                     Thread.Sleep(1000);
                 }
-            }
-            catch (ObjectDisposedException)
-            {
-
             }
             catch (Exception ex)
             {

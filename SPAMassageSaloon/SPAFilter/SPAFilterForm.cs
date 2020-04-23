@@ -49,7 +49,7 @@ namespace SPAFilter
         private Notepad _notepad;
         private bool _notepadWordWrap = true;
         private bool _notepadWordHighlights = true;
-        private Size _notepadSize;
+        private Size _notepadSize = new Size(1200, 800);
         private FormWindowState _notepadWindowsState = FormWindowState.Normal;
 
         private ToolStripStatusLabel BPCount;
@@ -272,9 +272,7 @@ namespace SPAFilter
 
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
-                _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT",  new Size(1200, 800));
-                if (_notepadSize.Height <= 300 || _notepadSize.Width <= 300)
-                    _notepadSize = new Size(1200, 800);
+                _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT", _notepadSize);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Normal);
 
                 ProcessesComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRTT", string.Empty);
