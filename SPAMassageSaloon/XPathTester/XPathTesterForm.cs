@@ -34,25 +34,35 @@ namespace XPathTester
         {
             InitializeComponent();
 
-            base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
+            try
+            {
+                base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
 
-            xpathResultDataGrid.AutoGenerateColumns = false;
-            xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
-            xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
-            xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
-            xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
+                xpathResultDataGrid.AutoGenerateColumns = false;
+                xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
+                xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
-            KeyPreview = true;
-            KeyDown += XPathWindow_KeyDown;
-            
-            editor.SizingGrip = false;
-            editor.SetLanguages(new [] { Language.XML, Language.HTML }, Language.XML);
-            _statusInfo = editor.AddToolStripLabel();
-            _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-            editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                KeyPreview = true;
+                KeyDown += XPathWindow_KeyDown;
 
-            ApplySettings();
-            CenterToScreen();
+                editor.SizingGrip = false;
+                editor.SetLanguages(new[] { Language.XML, Language.HTML }, Language.XML);
+                _statusInfo = editor.AddToolStripLabel();
+                _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+                editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+
+                ApplySettings();
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message);
+            }
+            finally
+            {
+                CenterToScreen();
+            }
         }
 
         private void XpathResultDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
@@ -268,6 +278,9 @@ namespace XPathTester
 
         void ReportStatus(string message, bool? isException = true)
         {
+            if(_statusInfo == null)
+                return;
+
             if (!message.IsNullOrEmpty())
             {
                 _statusInfo.BackColor = isException == null ? Color.Yellow : isException.Value ? Color.Red : Color.Green;

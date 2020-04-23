@@ -983,7 +983,7 @@ namespace SPAFilter
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex);
+                ReportMessage.Show(ex.Message);
 
                 ClearDataGrid();
 

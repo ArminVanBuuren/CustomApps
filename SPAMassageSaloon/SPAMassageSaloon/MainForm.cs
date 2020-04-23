@@ -134,7 +134,8 @@ namespace SPAMassageSaloon
         {
             try
             {
-                IsMdiContainer = true;
+                this.Visible = false;
+                this.IsMdiContainer = true;
                 base.Text = $"{AppName} {this.GetAssemblyInfo().CurrentVersion}";
 
                 try
@@ -176,12 +177,6 @@ namespace SPAMassageSaloon
 
                 try
                 {
-                    if (!LastUpdatePackage.IsNullOrEmpty() && !UpdateAlreadyShown)
-                    {
-                        ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, LastUpdateInfo).Trim());
-                        UpdateAlreadyShown = true;
-                    }
-
                     AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
                     AppUpdater.OnFetch += AppUpdater_OnFetch;
                     AppUpdater.OnUpdate += AppUpdater_OnUpdate;
@@ -237,11 +232,6 @@ namespace SPAMassageSaloon
                     }
                 };
                 Closing += (o, args) => { FormOnClosing = true; };
-                Shown += (s, args) =>
-                {
-                    var monitoring = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
-                    monitoring.Start();
-                };
             }
             catch (Exception ex)
             {
@@ -250,6 +240,16 @@ namespace SPAMassageSaloon
             finally
             {
                 CenterToScreen();
+                this.Visible = true;
+
+                if (!LastUpdatePackage.IsNullOrEmpty() && !UpdateAlreadyShown)
+                {
+                    ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, LastUpdateInfo).Trim(), MessageBoxIcon.Information, AppName);
+                    UpdateAlreadyShown = true;
+                }
+
+                var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                monitoring.Start();
             }
         }
 
@@ -301,8 +301,12 @@ namespace SPAMassageSaloon
         {
             if (updater != null && updater.ProjectBuildPack.Builds.Any())
             {
+                var separator = $"\r\n{new string('-', 61)}\r\n";
                 UpdateAlreadyShown = false;
-                LastUpdateInfo = string.Join("\r\n", updater.ProjectBuildPack.Builds.Select(x => $"{x.Location} Version=[{x.VersionString}]")).Trim();
+                LastUpdateInfo = separator.TrimStart()
+                                 + string.Join("\r\n-------------------------------------------------------------\r\n",
+                                     updater.ProjectBuildPack.Builds.Select(x => $"{x.Location} Version = {x.VersionString}\r\nDescription = {x.Description}")).Trim()
+                                 + separator.TrimEnd();
             }
 
             foreach (var form in MdiChildren.OfType<ISaloonForm>())
