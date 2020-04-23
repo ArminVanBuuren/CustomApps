@@ -112,6 +112,28 @@ namespace SPAMassageSaloon
                     // ignored
                 }
 
+                try
+                {
+                    if (!IsMdiChild)
+                    {
+                        WindowState = Settings.Default.FormState;
+                        if (WindowState != FormWindowState.Maximized &&
+                            (Settings.Default.FormSize.Height < 100 ||
+                             Settings.Default.FormSize.Width < 100 ||
+                             Settings.Default.FormLocation.X < 0 ||
+                             Settings.Default.FormLocation.Y < 0))
+                        {
+                            WindowState = FormWindowState.Maximized;
+                        }
+                        else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
+                            Size = Settings.Default.FormSize;
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+
                 IsMdiContainer = true;
                 base.Text = $"SPA Massage Saloon {this.GetAssemblyInfo().CurrentVersion}";
 
@@ -123,31 +145,38 @@ namespace SPAMassageSaloon
                 switch (lang)
                 {
                     case NationalLanguage.Russian:
-                        russianToolStripMenuItem_Click(this, null); break;
+                        russianToolStripMenuItem_Click(this, null);
+                        break;
                     default:
-                        englishToolStripMenuItem_Click(this, null); break;
+                        englishToolStripMenuItem_Click(this, null);
+                        break;
                 }
 
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-                var autor = new ToolStripButton("?") { Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue };
-                autor.Click += (s, args) => { Presenter.ShowOwner(); STREAM.GarbageCollect(); };
+                var autor = new ToolStripButton("?")
+                    {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte) 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
+                autor.Click += (s, args) =>
+                {
+                    Presenter.ShowOwner();
+                    STREAM.GarbageCollect();
+                };
                 statusStrip.Items.Add(autor);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _cpuUsage = new ToolStripStatusLabel("    ") { Font = this.Font, Margin = new Padding(-7, 2, 1, 2) };
+                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _cpuUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 1, 2)};
                 statusStrip.Items.Add(_cpuUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _threadsUsage = new ToolStripStatusLabel("  ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _threadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_threadsUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _ramUsage = new ToolStripStatusLabel("       ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
+                _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
@@ -168,37 +197,17 @@ namespace SPAMassageSaloon
                 Closed += (o, args) => { IsClosed = true; };
                 Shown += (s, args) =>
                 {
-                    try
-                    {
-                        if (!IsMdiChild)
-                        {
-                            WindowState = Settings.Default.FormState;
-                            if (WindowState != FormWindowState.Maximized &&
-                                (Settings.Default.FormSize.Height < 100 ||
-                                 Settings.Default.FormSize.Width < 100 ||
-                                 Settings.Default.FormLocation.X < 0 ||
-                                 Settings.Default.FormLocation.Y < 0))
-                            {
-                                WindowState = FormWindowState.Maximized;
-                            }
-                            else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
-                                Size = Settings.Default.FormSize;
-                        }
-
-                        CenterToScreen();
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-
-                    var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
+                    var monitoring = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
                     monitoring.Start();
                 };
             }
             catch (Exception ex)
             {
                 ReportMessage.Show(ex);
+            }
+            finally
+            {
+                CenterToScreen();
             }
         }
 

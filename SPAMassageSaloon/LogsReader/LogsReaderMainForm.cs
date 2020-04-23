@@ -135,21 +135,6 @@ namespace LogsReader
         {
             try
             {
-                if (!IsMdiChild)
-                {
-                    WindowState = Settings.Default.FormState;
-                    if (WindowState != FormWindowState.Maximized &&
-                        (Settings.Default.FormSize.Height < 100 ||
-                         Settings.Default.FormSize.Width < 100 ||
-                         Settings.Default.FormLocation.X < 0 ||
-                         Settings.Default.FormLocation.Y < 0))
-                    {
-                        WindowState = FormWindowState.Maximized;
-                    }
-                    else if (Settings.Default.FormSize.Height > 300 && Settings.Default.FormSize.Width > 300)
-                        Size = Settings.Default.FormSize;
-                }
-
                 foreach (var logsReader in AllForms.Values)
                     logsReader.ApplySettings();
             }
