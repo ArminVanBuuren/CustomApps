@@ -8,9 +8,15 @@ namespace Utils.Messaging.Telegram
 {
     internal class TLControlSessionStore : ISessionStore
     {
+        private readonly Assembly _runningApp;
+        public TLControlSessionStore(Assembly runningApp)
+        {
+            _runningApp = runningApp;
+        }
+
         public Session Load(string sessionUserId)
         {
-            using (var regedit = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
+            using (var regedit = new RegeditControl(_runningApp.GetAssemblyInfo().ApplicationName))
             {
                 if (regedit[sessionUserId] != null)
                 {
@@ -26,7 +32,7 @@ namespace Utils.Messaging.Telegram
 
         public void Save(Session session)
         {
-            using (var regedit = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
+            using (var regedit = new RegeditControl(_runningApp.GetAssemblyInfo().ApplicationName))
             {
                 regedit[session.SessionUserId, RegistryValueKind.Binary] = session.ToBytes();
             }

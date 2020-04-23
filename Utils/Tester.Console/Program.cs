@@ -15,7 +15,9 @@ using System.Xml.Serialization;
 using Microsoft.Win32;
 using Utils;
 using Utils.CollectionHelper;
+using Utils.Crypto;
 using Utils.Handles;
+using Utils.Messaging.Telegram;
 
 //using TeleSharp.TL;
 //using TLSharp.Core;
@@ -206,6 +208,8 @@ namespace Tester.Console
         {
             try
             {
+                var code = AES.EncryptStringAES("59071", nameof(TLControl));
+
                 //CMD.OverwriteAndStartApplication(@"C:\test\CMD\NEW\versions.xml", @"C:\test\CMD\OLD\versions.xml", 0, 10);
                 //return;
 

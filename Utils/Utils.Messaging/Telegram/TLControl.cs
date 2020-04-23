@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Messages;
@@ -23,9 +24,9 @@ namespace Utils.Messaging.Telegram
         public bool IsAuthorized => Client.IsUserAuthorized();
         public bool IsConnected => Client != null && Client.IsConnected;
 
-        public TLControl(int appiId, string apiHash)
+        public TLControl(Assembly runningApp, int appiId, string apiHash)
         {
-            Session = new TLControlSessionStore();
+            Session = new TLControlSessionStore(runningApp);
             Client = new TelegramClient(appiId, apiHash, Session, SessionName);
         }
 

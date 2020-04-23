@@ -109,7 +109,7 @@ namespace TFSAssist.Remoter
                 IsEnabled = false;
 
                 _control?.Dispose();
-                _control = new TLControl(int.Parse(Utils.Crypto.AES.DecryptStringAES("EAAAANgw9/AN5XtERxX5Rjl1v2dxWpc1kbN7Pz8zMSNvduOj", KEY)), Utils.Crypto.AES.DecryptStringAES("EAAAAKUDZalqO6zA+3GkNaXYWGjBAIKeXdCshPO6fuf2tL4xIt7gaXd49TZY3isKaXi3lECRYUynr/qZQl0WDiHeYfg=", KEY));
+                _control = new TLControl(Assembly.GetEntryAssembly(), int.Parse(Utils.Crypto.AES.DecryptStringAES("EAAAANgw9/AN5XtERxX5Rjl1v2dxWpc1kbN7Pz8zMSNvduOj", KEY)), Utils.Crypto.AES.DecryptStringAES("EAAAAKUDZalqO6zA+3GkNaXYWGjBAIKeXdCshPO6fuf2tL4xIt7gaXd49TZY3isKaXi3lECRYUynr/qZQl0WDiHeYfg=", KEY));
                 await _control.ConnectAsync();
 
                 IsEnabled = true;
