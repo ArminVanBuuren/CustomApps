@@ -34,6 +34,9 @@ namespace SPAMassageSaloon
 
     public partial class MainForm : Form
     {
+        public static readonly string AppName = "SPA Massage Saloon";
+        public static readonly string BuildTime;
+
         private NationalLanguage _language;
         private int _countOfLastProcess = 0;
 
@@ -41,7 +44,7 @@ namespace SPAMassageSaloon
         public ToolStripStatusLabel _threadsUsage;
         public ToolStripStatusLabel _ramUsage;
 
-        public bool IsClosed { get; private set; } = false;
+        public bool FormOnClosing { get; private set; } = false;
 
         ApplicationUpdater AppUpdater { get; set; }
 
@@ -68,15 +71,23 @@ namespace SPAMassageSaloon
 
                     CultureInfo.DefaultThreadCurrentCulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
                     CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
-                    
-
-                    languageToolStripMenuItem.Text = Resources.Txt_Language;
-                    aboutToolStripMenuItem.Text = Resources.Txt_About;
 
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
-                        form.ApplySettings();
-
+                    {
+                        try
+                        {
+                            form.ApplySettings();
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
+                    }
+                    
                     about?.ApplySettings();
+
+                    languageToolStripMenuItem.Text = Resources.Txt_Language;
+                    aboutToolStripMenuItem.Text = Resources.Txt_About;   
                 }
                 catch (Exception ex)
                 {
@@ -87,8 +98,31 @@ namespace SPAMassageSaloon
 
         private string LastUpdatePackage
         {
-            get => GetRegeditValue(nameof(LastUpdatePackage))?.ToString();
+            get => GetRegeditValue(nameof(LastUpdatePackage));
             set => SetRegeditValue(nameof(LastUpdatePackage), value);
+        }
+
+        private string LastUpdateInfo
+        {
+            get => GetRegeditValue(nameof(LastUpdateInfo));
+            set => SetRegeditValue(nameof(LastUpdateInfo), value);
+        }
+
+        private bool UpdateAlreadyShown
+        {
+            get
+            {
+                var resStr = GetRegeditValue(nameof(UpdateAlreadyShown));
+                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                    return false;
+                return res;
+            }
+            set => SetRegeditValue(nameof(UpdateAlreadyShown), value);
+        }
+
+        static MainForm()
+        {
+            BuildTime = $"Build time: {Assembly.GetExecutingAssembly().GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
         }
 
         public MainForm()
@@ -100,22 +134,14 @@ namespace SPAMassageSaloon
         {
             try
             {
-                try
-                {
-                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
-                    AppUpdater.OnFetch += AppUpdater_OnFetch;
-                    AppUpdater.OnUpdate += AppUpdater_OnUpdate;
-                    AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
-                    AppUpdater.Start();
-                    AppUpdater.CheckUpdates();
-                }
-                catch (Exception ex)
-                {
-                    // ignored
-                }
+                IsMdiContainer = true;
+                base.Text = $"{AppName} {this.GetAssemblyInfo().CurrentVersion}";
 
                 try
                 {
+                    ToolStripManager.LoadSettings(this);
+                    InitializeToolbarsMenu();
+
                     if (!IsMdiChild)
                     {
                         WindowState = Settings.Default.FormState;
@@ -136,13 +162,7 @@ namespace SPAMassageSaloon
                     // ignored
                 }
 
-                IsMdiContainer = true;
-                base.Text = $"SPA Massage Saloon {this.GetAssemblyInfo().CurrentVersion}";
-
-                ToolStripManager.LoadSettings(this);
-                InitializeToolbarsMenu();
-
-                if (!NationalLanguage.TryParse(GetRegeditValue(nameof(Language))?.ToString(), out NationalLanguage lang))
+                if (!NationalLanguage.TryParse(GetRegeditValue(nameof(Language)), out NationalLanguage lang))
                     lang = NationalLanguage.English;
                 switch (lang)
                 {
@@ -152,6 +172,26 @@ namespace SPAMassageSaloon
                     default:
                         englishToolStripMenuItem_Click(this, null);
                         break;
+                }
+
+                try
+                {
+                    if (!LastUpdatePackage.IsNullOrEmpty() && !UpdateAlreadyShown)
+                    {
+                        ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, LastUpdateInfo).Trim());
+                        UpdateAlreadyShown = true;
+                    }
+
+                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
+                    AppUpdater.OnFetch += AppUpdater_OnFetch;
+                    AppUpdater.OnUpdate += AppUpdater_OnUpdate;
+                    AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
+                    AppUpdater.Start();
+                    AppUpdater.CheckUpdates();
+                }
+                catch (Exception ex)
+                {
+                    // ignored
                 }
 
                 var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
@@ -196,7 +236,7 @@ namespace SPAMassageSaloon
                         // ignored
                     }
                 };
-                Closed += (o, args) => { IsClosed = true; };
+                Closing += (o, args) => { FormOnClosing = true; };
                 Shown += (s, args) =>
                 {
                     var monitoring = new Thread(CalculateLocalResources) {IsBackground = true, Priority = ThreadPriority.Lowest};
@@ -257,20 +297,29 @@ namespace SPAMassageSaloon
 
         }
 
-        #endregion
-
         public void SaveData(IUpdater updater)
         {
-            try
+            if (updater != null && updater.ProjectBuildPack.Builds.Any())
             {
-                foreach (var form in MdiChildren.OfType<ISaloonForm>())
-                    form.SaveData();
+                UpdateAlreadyShown = false;
+                LastUpdateInfo = string.Join("\r\n", updater.ProjectBuildPack.Builds.Select(x => $"{x.Location} Version=[{x.VersionString}]")).Trim();
             }
-            catch (Exception ex)
+
+            foreach (var form in MdiChildren.OfType<ISaloonForm>())
             {
-                // ignored
+                try
+                {
+                    form.SaveData();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
         }
+
+        #endregion
+
 
         /// <summary>
         /// Мониторинг системных ресурсов
@@ -334,7 +383,7 @@ namespace SPAMassageSaloon
                     _countOfLastProcess = processCount;
                 }
 
-                while (!IsClosed)
+                while (!FormOnClosing)
                 {
                     try { this.SafeInvoke(Monitoring); }
                     catch (InvalidOperationException) { }
@@ -499,16 +548,30 @@ namespace SPAMassageSaloon
             }
         }
 
-        object GetRegeditValue(string name)
+        string GetRegeditValue(string name)
         {
-            using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                return (string)reg[name];
+            try
+            {
+                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    return (string)reg[name];
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         void SetRegeditValue(string name, object value)
         {
-            using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                reg[name] = value;
+            try
+            {
+                using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    reg[name] = value;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

@@ -15,19 +15,17 @@ namespace SPAMassageSaloon
     public partial class AboutWindow : IUserForm
     {
         private static readonly ImageSource IconImage;
-        private static readonly string BuildTime;
 
         static AboutWindow()
         {
             IconImage = SPAMassageSaloon.Properties.Resources.about3.ToImageSource();
-            BuildTime = $"Build time: {Assembly.GetExecutingAssembly().GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
         }
 
         public AboutWindow()
         {
             InitializeComponent();
 
-            this.Title = BuildTime;
+            this.Title = MainForm.BuildTime;
             this.Icon = IconImage;
 
             ApplySettings();

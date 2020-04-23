@@ -177,6 +177,18 @@ namespace SPAMassageSaloon.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на {0} was updated to version {1}
+        ///{2}
+        ///
+        ///{3}.
+        /// </summary>
+        internal static string Txt_Updated {
+            get {
+                return ResourceManager.GetString("Txt_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap XPathTester_Form {
