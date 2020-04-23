@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using SPAMassageSaloon.Common;
 using Utils;
 using Utils.AppUpdater;
 using Utils.UIControls;
@@ -11,7 +12,7 @@ namespace SPAMassageSaloon
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class AboutWindow
+    public partial class AboutWindow : IUserForm
     {
         private static readonly ImageSource IconImage;
         private static readonly string BuildTime;
@@ -29,8 +30,13 @@ namespace SPAMassageSaloon
             this.Title = BuildTime;
             this.Icon = IconImage;
 
-            Loaded += AboutWindow_Loaded;
+            ApplySettings();
 
+            Loaded += AboutWindow_Loaded;
+        }
+
+        public void ApplySettings()
+        {
             #region Logs Reader
 
             LRDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
@@ -115,6 +121,11 @@ namespace SPAMassageSaloon
             XTPrettyPrintTxt.Text = XPathTester.Properties.Resources.PrettyPrintTooltip;
 
             #endregion
+        }
+
+        public void SaveData()
+        {
+            
         }
 
         private void AboutWindow_Loaded(object sender, RoutedEventArgs e)

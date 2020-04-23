@@ -75,6 +75,8 @@ namespace SPAMassageSaloon
 
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
                         form.ApplySettings();
+
+                    about?.ApplySettings();
                 }
                 catch (Exception ex)
                 {
@@ -453,17 +455,42 @@ namespace SPAMassageSaloon
             toolButtonAbout.ShowDropDown();
         }
 
+        private AboutWindow about;
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                var about = new AboutWindow
+                if (about != null)
                 {
-                    Topmost = true,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen
-                };
-                about.Focus();
-                about.ShowDialog();
+                    about.Focus();
+                    about.Activate();
+                }
+                else
+                {
+                    about = new AboutWindow
+                    {
+                        //Topmost = true,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    };
+                    about.Focus();
+                    about.Show();
+                    //about.ShowDialog();
+                    about.Closed += About_Closed;
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        private void About_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                about.Closed -= About_Closed;
+                about = null;
+
             }
             catch (Exception ex)
             {
