@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using Utils;
@@ -11,7 +12,7 @@ namespace TFSAssist
     [Serializable]
     public class WindowSaver : IDisposable
     {
-        public static string WindowSaverPath = $"{ASSEMBLY.ApplicationFilePath}.update";
+        public static string WindowSaverPath = $"{Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationFilePath}.update";
         public IUpdater Updater { get; }
         public WindowState WindowState { get; }
         public bool ShowInTaskbar { get; }

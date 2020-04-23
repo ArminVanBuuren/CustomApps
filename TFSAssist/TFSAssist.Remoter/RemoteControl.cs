@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,8 +48,8 @@ namespace TFSAssist.Remoter
         private const string KEY = nameof(TLControl);
         // PRIVATE DATA!!!
 
-        private static string HashCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".hash");
-        private static string AuthCodeFilePath => Path.Combine(ASSEMBLY.ApplicationDirectory, TLControl.SessionName + ".code");
+        private static string HashCodeFilePath => Path.Combine(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationDirectory, TLControl.SessionName + ".hash");
+        private static string AuthCodeFilePath => Path.Combine(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationDirectory, TLControl.SessionName + ".code");
 
         public bool IsEnabled { get; private set; } = false;
 
@@ -763,7 +764,7 @@ namespace TFSAssist.Remoter
                 {
                     var buffer = new byte[2048];
                     await stream.ReadAsync(buffer, 0, 2048);
-                    using (var regedit = new RegeditControl(ASSEMBLY.ApplicationName))
+                    using (var regedit = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
                     {
                         regedit[TLControl.SessionName, RegistryValueKind.Binary] = buffer;
                     }

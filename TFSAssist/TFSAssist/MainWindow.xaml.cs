@@ -86,7 +86,7 @@ namespace TFSAssist
             get
             {
                 string _currentVal;
-                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
                 {
                     _currentVal = regControl[nameof(BuildPackInfo)]?.ToString();
                 }
@@ -95,7 +95,7 @@ namespace TFSAssist
             }
             private set
             {
-                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
                 {
                     regControl[nameof(BuildPackInfo)] = value;
                 }
@@ -151,7 +151,7 @@ namespace TFSAssist
             {
                 MainThread = Thread.CurrentThread;
 
-                using (var regControl = new RegeditControl(ASSEMBLY.ApplicationName))
+                using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
                 {
                     var clinetID = regControl["CliendID"]?.ToString();
                     if (clinetID.IsNullOrEmptyTrim())
@@ -428,7 +428,7 @@ namespace TFSAssist
                 {
                     WriteLog(WarnSeverity.Normal, DateTime.Now, REMOTE_ON_RESTART);
                     saver = PrepareToApplicationRestart(wasInProgress);
-                    CMD.StartApplication(ASSEMBLY.ApplicationPath, 5);
+                    CMD.StartApplication(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationPath, 5);
                     Process.GetCurrentProcess().Kill();
                 }
             }

@@ -7,7 +7,7 @@ namespace TFSAssist
 	/// </summary>
 	public partial class WindowWarning
 	{
-		public WindowWarning(double width, string title, string message):base(false, false)
+		public WindowWarning(double width, string title, string message)
 		{
 			InitializeComponent();
 			WindowStartupLocation = WindowStartupLocation.CenterOwner;
