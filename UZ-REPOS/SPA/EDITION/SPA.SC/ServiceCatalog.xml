@@ -418,14 +418,6 @@
     <RFS name="RFS_HLR_SUBSCRIBER_DEALERS" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание дилерского абонента">
       <Resource name="RES_HLR_PROFILE" value="DEALERS" />
     </RFS>
-    <RFS name="RFS_HLR_SUBSCRIBER_PREPAID" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента Prepaid">
-      <Resource name="RES_HLR_PROFILE" value="Prepaid"/>
-    </RFS>
-    <RFS name="RFS_HLR_SUBSCRIBER_POSTPAID" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента Postpaid">
-      <Resource name="RES_HLR_PROFILE" value="Prepaid">
-        <Value hosts="FP:05" value="Postpaid" />
-      </Resource>
-    </RFS>
     <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента">
       <Resource name="RES_HLR_PROFILE" value="Prepaid">
         <Value hosts="FP:05" value="Postpaid" />
@@ -433,6 +425,14 @@
     </RFS>
     <RFS name="RFS_HLR_SUBSCRIBER_DGU" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента ТП ДГУ">
       <Resource name="RES_HLR_PROFILE" value="DGU" />
+    </RFS>
+    <RFS name="RFS_HLR_SUBSCRIBER_POSTPAID" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента Postpaid">
+      <Resource name="RES_HLR_PROFILE" value="Prepaid">
+        <Value hosts="FP:05" value="Postpaid" />
+      </Resource>
+    </RFS>
+    <RFS name="RFS_HLR_SUBSCRIBER_PREPAID" base="RFS_HLR_SUBSCRIBER" hostType="HL" processType="Subscription" description="Создание абонента Prepaid">
+      <Resource name="RES_HLR_PROFILE" value="Prepaid" />
     </RFS>
     <RFS name="RFS_HLR_TEST_ADDLTE_1" hostType="HL" description="Добавить LTE" />
     <RFS name="RFS_HLR_TEST_ADDLTE_2" hostType="HL" description="Добавить LTE" />
@@ -601,8 +601,8 @@
       <RFS name="RFS_HLR_ODB_IC_ALL_CALLS" linkType="Set" />
       <RFS name="RFS_HLR_ODB_OC_INTERCITY_CALLS" linkType="Set" />
       <RFS name="RFS_HLR_SUBSCRIBER_DEFAULT" linkType="Set" />
+      <RFS name="RFS_HLR_SUBSCRIBER_POSTPAID" linkType="Set" hosts="FP:05" actionName="Change Financial Platform for Change of Tariff Plan" />
       <RFS name="RFS_HLR_SUBSCRIBER_PREPAID" linkType="Set" hosts="FP:MS,FP:MS-155" actionName="Change Financial Platform for Change of Tariff Plan" />
-      <RFS name="RFS_HLR_SUBSCRIBER_POSTPAID" linkType="Set" hosts="FP:05" actionName="Change Financial Platform for Change of Tariff Plan"/>
     </CFS>
     <CFS name="CB10339" globalServiceCode="CB10339" copyOf="CFS_FP_SERVICE_GENERAL" description="Доставка счета курьером" />
     <CFS name="CB10363" description="Конференц-связь вызова">
@@ -850,6 +850,7 @@
     <CFS name="FRAPCORP" globalServiceCode="FRAPCORP" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate" />
     <CFS name="FRAPCORP100" globalServiceCode="FRAPCORP100" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 100" />
     <CFS name="FRAPCORP130" globalServiceCode="FRAPCORP130" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 130" />
+    <CFS name="FRAPCORP200" globalServiceCode="FRAPCORP200" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 200" />
     <CFS name="FRAPCORP30" globalServiceCode="FRAPCORP30" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 30" />
     <CFS name="FRAPCORP50" globalServiceCode="FRAPCORP50" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Corporate 50" />
     <CFS name="FRAPCORP777" description="Абонентская плата за ТП Corporate 777">
@@ -935,6 +936,7 @@
     <CFS name="FRAPTEST" globalServiceCode="FRAPTEST" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Тестовый" />
     <CFS name="FRAPTEST2" globalServiceCode="FRAPTEST2" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Тестовый2" />
     <CFS name="FRAPTESTYEAR" globalServiceCode="FRAPTESTYEAR" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая Годовая Абонентская плата" />
+    <CFS name="FRAPTESTYEARON" globalServiceCode="FRAPTESTYEARON" copyOf="CFS_FP_SERVICE_GENERAL" description="Тестовая годовая Абонентская плата за ТП Тестовый online" />
     <CFS name="FRAPULTRA" globalServiceCode="FRAPULTRA" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Ultra" />
     <CFS name="FRAPULTRAYEAR" globalServiceCode="FRAPULTRAYEAR" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Ultra Year" />
     <CFS name="FRAPUNIVERSAL" globalServiceCode="FRAPUNIVERSAL" copyOf="CFS_FP_SERVICE_GENERAL" description="Абонентская плата за ТП Universal" />
@@ -1413,6 +1415,7 @@
     <CFS name="FRMBPACKMSK2" globalServiceCode="FRMBPACKMSK2" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 500" />
     <CFS name="FRMBPACKMSK2000" globalServiceCode="FRMBPACKMSK2000" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 2000" />
     <CFS name="FRMBPACKMSK3" globalServiceCode="FRMBPACKMSK3" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 300" />
+    <CFS name="FRMBPACKMSK3000" globalServiceCode="FRMBPACKMSK3000" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 3000" />
     <CFS name="FRMBPACKMSK40" globalServiceCode="FRMBPACKMSK40" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 1000. Скидка 40%" />
     <CFS name="FRMBPACKMSK60" globalServiceCode="FRMBPACKMSK60" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 500. Скидка 60%" />
     <CFS name="FRMBPACKMSKN100" globalServiceCode="FRMBPACKMSKN100" copyOf="CFS_FP_SERVICE_GENERAL" description="Промо Internet 100" />
