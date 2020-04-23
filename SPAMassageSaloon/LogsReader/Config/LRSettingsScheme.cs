@@ -41,7 +41,7 @@ namespace LogsReader.Config
                     _servers = "mg1,mg2,mg3,mg4,mg5";
                     _logsFolder = @"C:\FORISLOG\MG";
                     _fileTypes = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
-                    _maxLines = 50;
+                    _maxLines = 100;
                     _maxThreads = -1;
                     _traceParce = new LRTraceParse(_schemeName);
                     break;
