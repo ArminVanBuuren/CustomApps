@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Media;
+using Utils;
+using Utils.AppUpdater;
 using Utils.UIControls;
 
 namespace SPAMassageSaloon
@@ -11,14 +14,19 @@ namespace SPAMassageSaloon
     public partial class AboutWindow
     {
         private static readonly ImageSource IconImage;
+        private static readonly string BuildTime;
+
         static AboutWindow()
         {
             IconImage = SPAMassageSaloon.Properties.Resources.about3.ToImageSource();
+            BuildTime = $"Build time: {Assembly.GetExecutingAssembly().GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
         }
+
         public AboutWindow()
         {
             InitializeComponent();
 
+            this.Title = BuildTime;
             this.Icon = IconImage;
 
             Loaded += AboutWindow_Loaded;
