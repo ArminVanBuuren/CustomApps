@@ -272,7 +272,9 @@ namespace SPAFilter
 
                 _notepadWordWrap = (bool) TryGetSerializationValue(allSavedParams, "DDCCVV", true);
                 _notepadWordHighlights = (bool) TryGetSerializationValue(allSavedParams, "RRTTGGBB", true);
-                _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT",  new Size(this.Size.Width, this.Size.Height));
+                _notepadSize = (Size) TryGetSerializationValue(allSavedParams, "SSEETT",  new Size(1200, 800));
+                if (_notepadSize.Height <= 300 || _notepadSize.Width <= 300)
+                    _notepadSize = new Size(1200, 800);
                 _notepadWindowsState = (FormWindowState) TryGetSerializationValue(allSavedParams, "SSEEFF", FormWindowState.Normal);
 
                 ProcessesComboBox.Text = (string)TryGetSerializationValue(allSavedParams, "GGGRRTT", string.Empty);
