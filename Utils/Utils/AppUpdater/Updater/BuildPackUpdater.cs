@@ -120,7 +120,7 @@ namespace Utils.AppUpdater.Updater
                 return stream.ToArray();
         }
 
-        public BuildPackUpdater Deserialize(byte[] streamOfBytes)
+        public static BuildPackUpdater Deserialize(byte[] streamOfBytes)
         {
             using (var stream = new MemoryStream(streamOfBytes))
                 return new BinaryFormatter().Deserialize(stream) as BuildPackUpdater;
