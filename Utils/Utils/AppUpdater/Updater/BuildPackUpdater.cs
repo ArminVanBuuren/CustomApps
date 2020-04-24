@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
 using Utils.AppUpdater.Pack;
 
 namespace Utils.AppUpdater.Updater
@@ -107,7 +106,24 @@ namespace Utils.AppUpdater.Updater
 
         protected internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            _collection.Add(GetBuildUpdater(localFile, remoteFile));
+            Add(GetBuildUpdater(localFile, remoteFile));
+        }
+
+        protected internal void Add(BuildUpdater item)
+        {
+            _collection.Add(item);
+        }
+
+        public byte[] SerializeToStreamOfBytes()
+        {
+            using (var stream = this.SerializeToStream())
+                return stream.ToArray();
+        }
+
+        public BuildPackUpdater Deserialize(byte[] streamOfBytes)
+        {
+            using (var stream = new MemoryStream(streamOfBytes))
+                return new BinaryFormatter().Deserialize(stream) as BuildPackUpdater;
         }
 
         protected abstract BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile);

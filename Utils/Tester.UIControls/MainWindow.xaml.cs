@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using Utils;
-using Utils.WinForm.Notepad;
 
 namespace Tester.UIControls
 {

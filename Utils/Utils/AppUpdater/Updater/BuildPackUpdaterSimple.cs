@@ -9,7 +9,7 @@ using Utils.AppUpdater.Pack;
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    internal sealed class BuildPackUpdaterSimple : BuildPackUpdaterBase
+    public sealed class BuildPackUpdaterSimple : BuildPackUpdaterBase
     {
         private readonly object sync = new object();
         private UpdaterProcessingArgs _fetchArgs;
@@ -30,7 +30,7 @@ namespace Utils.AppUpdater.Updater
         [field: NonSerialized]
         public override event UpdaterFetchHandler OnFetchComplete;
 
-        internal BuildPackUpdaterSimple(Assembly runningApp, BuildPackInfo projectBuildPack, IUpdaterProject updaterProject) : base(runningApp, projectBuildPack)
+        public BuildPackUpdaterSimple(Assembly runningApp, BuildPackInfo projectBuildPack, IUpdaterProject updaterProject) : base(runningApp, projectBuildPack)
         {
             _updaterProject = updaterProject ?? throw new ArgumentNullException(nameof(updaterProject));
 

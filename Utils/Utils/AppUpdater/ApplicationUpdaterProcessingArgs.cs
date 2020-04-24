@@ -1,5 +1,4 @@
 ﻿using System;
-using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater

@@ -3,11 +3,14 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using Microsoft.Win32;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
+using Utils.Handles;
 
 namespace Tester.Updater
 {
@@ -101,9 +104,42 @@ namespace Tester.Updater
 
         private static void Up_OnUpdate(object sender, ApplicationUpdatingArgs args)
         {
-            Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. Status=[{up.Status:G}]");
-            _updater = args.Control;
-            Console.WriteLine("Waiting command...");
+            try
+            {
+                _updater = args.Control;
+                Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. Status=[{up.Status:G}]");
+
+
+                //using (var streamSer = args.Control.SerializeToStream())
+                //{
+                    
+                //    var streamDes1 = streamSer.DeserializeFromStream();
+
+                //    try
+                //    {
+                //        using (var reg = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
+                //            reg["Stream", RegistryValueKind.Binary] = streamSer.ToArray();
+
+                //        using (var reg = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
+                //        {
+                //            var byteArray = (byte[])reg["Stream"];
+                //            var test1 = new MemoryStream(byteArray);
+                //            var test2 = new BinaryFormatter().Deserialize(test1) as BuildPackUpdater;
+                //        }
+                //    }
+                //    catch (Exception)
+                //    {
+                //        // ignored
+                //    }
+                //}
+
+                Console.WriteLine("Waiting command...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+           
 
             //Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Status=[{up.Status}] Updater{args.Control}");
             //Console.WriteLine("Sleep 5 second and DoUpdate");

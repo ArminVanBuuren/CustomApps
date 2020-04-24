@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 //using System.Data.OleDb;
 using System.Diagnostics;
@@ -10,13 +9,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using Microsoft.Win32;
 using Utils;
-using Utils.CollectionHelper;
 using Utils.Crypto;
-using Utils.Handles;
 using Utils.Messaging.Telegram;
 
 //using TeleSharp.TL;
