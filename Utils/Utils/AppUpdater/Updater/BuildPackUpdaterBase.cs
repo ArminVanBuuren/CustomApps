@@ -41,28 +41,28 @@ namespace Utils.AppUpdater.Updater
             var localVersions = BuildPackInfo.GetLocalVersions(runningApp);
             var needToFetchPack = 0;
 
-            foreach (var serverFile in ProjectBuildPack.Builds)
+            foreach (var remoteFile in ProjectBuildPack.Builds)
             {
-                if (localVersions.TryGetValue(serverFile.Location, out var localFile))
+                if (localVersions.TryGetValue(remoteFile.Location, out var localFile))
                 {
-                    if ((serverFile.Type == BuldPerformerType.Update || serverFile.Type == BuldPerformerType.CreateOrUpdate) && serverFile.Version > localFile.Version)
+                    if ((remoteFile.Type == BuldPerformerType.Update || remoteFile.Type == BuldPerformerType.CreateOrUpdate) && remoteFile.Version > localFile.Version)
                     {
-                        Add(localFile, serverFile);
+                        Add(localFile, remoteFile);
                         needToFetchPack++;
                     }
-                    else if ((serverFile.Type == BuldPerformerType.RollBack || serverFile.Type == BuldPerformerType.CreateOrRollBack) && serverFile.Version < localFile.Version)
+                    else if ((remoteFile.Type == BuldPerformerType.RollBack || remoteFile.Type == BuldPerformerType.CreateOrRollBack) && remoteFile.Version < localFile.Version)
                     {
-                        Add(localFile, serverFile);
+                        Add(localFile, remoteFile);
                         needToFetchPack++;
                     }
-                    else if (serverFile.Type == BuldPerformerType.Remove)
+                    else if (remoteFile.Type == BuldPerformerType.Remove)
                     {
-                        Add(localFile, serverFile);
+                        Add(localFile, remoteFile);
                     }
                 }
-                else if (serverFile.Type == BuldPerformerType.CreateOrUpdate || serverFile.Type == BuldPerformerType.CreateOrRollBack)
+                else if (remoteFile.Type == BuldPerformerType.CreateOrUpdate || remoteFile.Type == BuldPerformerType.CreateOrRollBack)
                 {
-                    Add(null, serverFile);
+                    Add(null, remoteFile);
                     needToFetchPack++;
                 }
             }

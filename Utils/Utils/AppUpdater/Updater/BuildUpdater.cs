@@ -15,7 +15,7 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// Пусть скачанного файла билда
         /// </summary>
-        public string FileSource => Path.Combine(_parent.DiretoryTempPath, ServerFile.Location);
+        public string FileSource => Path.Combine(_parent.DiretoryTempPath, RemoteFile.Location);
         /// <summary>
         /// Путь назначения файла билда
         /// </summary>
@@ -39,22 +39,22 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// Информация билда на удаленном сервере
         /// </summary>
-        public FileBuildInfo ServerFile { get; }
+        public FileBuildInfo RemoteFile { get; }
 
-        protected internal BuildUpdater(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo serverFile)
+        protected internal BuildUpdater(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            if (serverFile == null)
-                throw new ArgumentNullException($"[{nameof(FileBuildInfo)}] from server cannot be null");
+            if (remoteFile == null)
+                throw new ArgumentNullException($"Remote [{nameof(FileBuildInfo)}] cannot be null");
 
             _parent = parent;
             LocalFile = localFile;
-            ServerFile = serverFile;
-            FileDestination = Path.Combine(Path.GetDirectoryName(parent.LocationApp), ServerFile.Location);
+            RemoteFile = remoteFile;
+            FileDestination = Path.Combine(Path.GetDirectoryName(parent.LocationApp), RemoteFile.Location);
         }
 
         public override string ToString()
         {
-            return $"[{ServerFile.Location}] Local = {LocalFile?.Version} Server = {ServerFile.Version}";
+            return $"[{RemoteFile.Location}] Local = {LocalFile?.Version} Remote = {RemoteFile.Version}";
         }
     }
 }

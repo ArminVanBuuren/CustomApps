@@ -105,12 +105,12 @@ namespace Utils.AppUpdater.Updater
             LocationApp = runningApp.Location;
         }
 
-        protected internal void Add(FileBuildInfo localFile, FileBuildInfo serverFile)
+        protected internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            _collection.Add(GetBuildUpdater(localFile, serverFile));
+            _collection.Add(GetBuildUpdater(localFile, remoteFile));
         }
 
-        protected abstract BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo serverFile);
+        protected abstract BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile);
 
         public IEnumerator<BuildUpdater> GetEnumerator()
         {

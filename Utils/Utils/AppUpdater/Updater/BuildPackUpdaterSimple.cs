@@ -42,9 +42,9 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        protected override BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo serverFile)
+        protected override BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            return new BuildUpdaterSimple(this, localFile, serverFile);
+            return new BuildUpdaterSimple(this, localFile, remoteFile);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Utils.AppUpdater.Updater
                     }
                     else
                     {
-                        _fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Server hash is [{ProjectBuildPack.MD5}]");
+                        _fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Remote hash is [{ProjectBuildPack.MD5}]");
                     }
                 }
                 catch (Exception exception)

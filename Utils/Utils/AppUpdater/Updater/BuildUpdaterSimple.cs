@@ -11,11 +11,11 @@ namespace Utils.AppUpdater.Updater
     [Serializable]
     public class BuildUpdaterSimple : BuildUpdaterBase
     {
-        public BuildUpdaterSimple(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo serverFile) : base(parent, localFile, serverFile) { }
+        public BuildUpdaterSimple(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo remoteFile) : base(parent, localFile, remoteFile) { }
 
         public override void Commit()
         {
-            switch (ServerFile.Type)
+            switch (RemoteFile.Type)
             {
                 case BuldPerformerType.CreateOrUpdate:
                 case BuldPerformerType.CreateOrRollBack:
