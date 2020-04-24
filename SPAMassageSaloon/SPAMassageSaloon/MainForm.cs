@@ -177,10 +177,8 @@ namespace SPAMassageSaloon
 
                 try
                 {
-                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), LastUpdatePackage, 900);
-                    AppUpdater.OnFetch += AppUpdater_OnFetch;
+                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 5);
                     AppUpdater.OnUpdate += AppUpdater_OnUpdate;
-                    AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
                     AppUpdater.Start();
                     AppUpdater.CheckUpdates();
                 }
@@ -242,7 +240,7 @@ namespace SPAMassageSaloon
                 CenterToScreen();
                 this.Visible = true;
 
-                if (!LastUpdatePackage.IsNullOrEmpty() && !UpdateAlreadyShown)
+                if (!UpdateAlreadyShown && !LastUpdateInfo.IsNullOrEmpty())
                 {
                     ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, LastUpdateInfo).Trim(), MessageBoxIcon.Information, AppName);
                     UpdateAlreadyShown = true;
@@ -255,70 +253,45 @@ namespace SPAMassageSaloon
 
         #region Application Update
 
-        private static void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
-        {
-            if (args == null)
-                return;
-
-            if (args.Control == null)
-                args.Result = UpdateBuildResult.Cancel;
-        }
-
         private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
         {
             try
             {
-                if (args?.Control?.ProjectBuildPack == null)
-                {
-                    AppUpdater.Refresh();
-                    return;
-                }
-
-                var updater = args.Control;
-                updater.DelayBeforeMove = 2;
-                updater.DelayAfterMoveAndRunApp = 5;
-
-                if (updater.ProjectBuildPack.NeedRestartApplication)
-                {
-                    LastUpdatePackage = updater.ProjectBuildPack.Name;
-                    SaveData(updater);
-                }
-
-                AppUpdater.DoUpdate(updater);
+                SaveData(args.Control);
+                AppUpdater.DoUpdate(args.Control);
             }
             catch (Exception ex)
             {
-                // ignored
+                AppUpdater.Refresh();
             }
         }
 
-        private static void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
+        public void SaveData(BuildPackUpdater updater)
         {
-
-        }
-
-        public void SaveData(IUpdater updater)
-        {
-            if (updater != null && updater.ProjectBuildPack.Builds.Any())
+            try
             {
                 var separator = $"\r\n{new string('-', 61)}\r\n";
                 UpdateAlreadyShown = false;
                 LastUpdateInfo = separator.TrimStart()
                                  + string.Join("\r\n-------------------------------------------------------------\r\n",
-                                     updater.ProjectBuildPack.Builds.Select(x => $"{x.Location} Version = {x.VersionString}\r\nDescription = {x.Description}")).Trim()
+                                     updater.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
                                  + separator.TrimEnd();
-            }
 
-            foreach (var form in MdiChildren.OfType<ISaloonForm>())
+                foreach (var form in MdiChildren.OfType<ISaloonForm>())
+                {
+                    try
+                    {
+                        form.SaveData();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                }
+            }
+            catch (Exception e)
             {
-                try
-                {
-                    form.SaveData();
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
+                // ignored
             }
         }
 
