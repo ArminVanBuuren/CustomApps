@@ -34,6 +34,8 @@ namespace Utils.AppUpdater
         private readonly object syncUpdating = new object();
         private readonly Timer _watcher;
 
+        private int _httpRequestTimeoutSeconds = 100;
+
         [NonSerialized]
         private readonly IUpdaterProject _updaterProject;
 
@@ -50,6 +52,17 @@ namespace Utils.AppUpdater
         public IUpdaterProject UpdaterProject { get; }
 
         public int CheckUpdatesIntervalMinutes { get; }
+
+        public int HttpRequestTimeoutSeconds
+        {
+            get => _httpRequestTimeoutSeconds;
+            set
+            {
+                if(value <= 0)
+                    return;
+                _httpRequestTimeoutSeconds = value;
+            }
+        }
 
         public AutoUpdaterStatus Status
         {
@@ -112,7 +125,7 @@ namespace Utils.AppUpdater
                     if (Status == AutoUpdaterStatus.Processing)
                         return;
 
-                    var contextStr = WEB.WebHttpStringData(_updaterProject.BuildsInfoUri, out var responceHttpCode, HttpRequestCacheLevel.NoCacheNoStore);
+                    var contextStr = WEB.WebHttpStringData(_updaterProject.BuildsInfoUri, out var responceHttpCode, HttpRequestCacheLevel.NoCacheNoStore, HttpRequestTimeoutSeconds * 1000);
                     if (responceHttpCode == HttpStatusCode.OK)
                     {
                         var remoteBuilds = BuildsInfo.Deserialize(contextStr);

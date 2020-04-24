@@ -49,9 +49,9 @@ namespace Utils
                 if (property.PropertyType == typeof(DateTime))
                     property.SetValue(request, DateTime.Parse(value), null);
                 else if (property.PropertyType == typeof(bool))
-                    property.SetValue(request, Boolean.Parse(value), null);
+                    property.SetValue(request, bool.Parse(value), null);
                 else if (property.PropertyType == typeof(long))
-                    property.SetValue(request, Int64.Parse(value), null);
+                    property.SetValue(request, long.Parse(value), null);
                 else
                     property.SetValue(request, value, null);
             }
@@ -61,16 +61,11 @@ namespace Utils
             }
         }
 
-        public static string WebHttpStringData(string uri, out HttpStatusCode httpResponceCode, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
-        {
-            return WebHttpStringData(new Uri(uri), out httpResponceCode, cashLevel);
-        }
-
-        public static string WebHttpStringData(Uri uri, out HttpStatusCode httpResponceCode, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static string WebHttpStringData(Uri uri, out HttpStatusCode httpResponceCode, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default, int? timeoutMilliseconds = null)
         {
             httpResponceCode = HttpStatusCode.BadRequest;
 
-            using (var response = (HttpWebResponse) GetWebResponse(uri, cashLevel))
+            using (var response = (HttpWebResponse) GetWebResponse(uri, cashLevel, timeoutMilliseconds))
             {
                 if (response == null)
                     return null;
@@ -98,20 +93,6 @@ namespace Utils
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="autorization"></param>
-        /// <param name="cashLevel"></param>
-        /// <returns></returns>
-        public static HttpWebResponse GetHttpWebResponse(string uri, NetworkCredential autorization = null, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
-        {
-            SetDefaultPolicy(true, cashLevel);
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            return GetHttpWebResponse(request, autorization, cashLevel);
         }
 
         /// <summary>
@@ -151,24 +132,14 @@ namespace Utils
         /// </summary>
         /// <param name="uri"></param>
         /// <param name="cashLevel"></param>
+        /// <param name="timeoutMilliseconds">Timeout is the number of milliseconds that a subsequent synchronous request made with the GetResponse method waits for a response</param>
         /// <returns></returns>
-        public static WebResponse GetWebResponse(string uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
+        public static WebResponse GetWebResponse(Uri uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default, int? timeoutMilliseconds = null)
         {
             SetDefaultPolicy(true, cashLevel);
             var request = WebRequest.Create(uri);
-            return GetWebResponse(request, cashLevel);
-        }
-
-        /// <summary>
-        /// Обязательно нужно будет закрывать HttpWebResponse методом Close или использовать using
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="cashLevel"></param>
-        /// <returns></returns>
-        public static WebResponse GetWebResponse(Uri uri, HttpRequestCacheLevel cashLevel = HttpRequestCacheLevel.Default)
-        {
-            SetDefaultPolicy(true, cashLevel);
-            var request = WebRequest.Create(uri);
+            if (timeoutMilliseconds != null && timeoutMilliseconds > 0)
+                request.Timeout = timeoutMilliseconds.Value;
             return GetWebResponse(request, cashLevel);
         }
 

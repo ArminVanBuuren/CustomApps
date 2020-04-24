@@ -91,7 +91,7 @@ namespace Utils
 
         static string GetExternalIPAddress(string externalWebAddress)
         {
-            var responceBody = WEB.WebHttpStringData(externalWebAddress , out var httpRespCode);
+            var responceBody = WEB.WebHttpStringData(new Uri(externalWebAddress) , out var httpRespCode);
             if (httpRespCode != HttpStatusCode.OK)
                 return string.Empty;
 
