@@ -127,7 +127,7 @@
     <value>Exception when get status from server. HttpStatus=[{0:G}] Uri=[{1}]</value>
   </data>
   <data name="ApplicationUpdater_ErrUpdateInterval" xml:space="preserve">
-    <value>Check update interval must be more than one second.</value>
+    <value>Check update minutes interval must be more than zero.</value>
   </data>
   <data name="ApplicationUpdater_IncorrectControl" xml:space="preserve">
     <value>Incoming control '{0}' is incorrect.</value>
@@ -135,8 +135,11 @@
   <data name="ApplicationUpdater_NoBuildsFound" xml:space="preserve">
     <value>No builds found for update.</value>
   </data>
-  <data name="ApplicationUpdater_NotExpected" xml:space="preserve">
-    <value>{0} does not expect an update.</value>
+  <data name="ApplicationUpdater_NotExpectedOnChecking" xml:space="preserve">
+    <value>{0} does not expect an update. Before update you must stop checking updates.</value>
+  </data>
+  <data name="ApplicationUpdater_NotFetched" xml:space="preserve">
+    <value>Your Updater has not received the updates.</value>
   </data>
   <data name="day" xml:space="preserve">
     <value>day</value>

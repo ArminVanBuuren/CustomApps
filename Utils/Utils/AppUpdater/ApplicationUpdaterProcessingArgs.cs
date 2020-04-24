@@ -1,4 +1,5 @@
 ﻿using System;
+using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
 
 namespace Utils.AppUpdater
@@ -8,11 +9,28 @@ namespace Utils.AppUpdater
     public delegate void AppUpdatingHandler(object sender, ApplicationUpdatingArgs args);
 
     [Serializable]
+    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdatingArgs args);
+
+    [Serializable]
     public delegate void AppFetchingHandler(object sender, ApplicationFetchingArgs args);
 
     [Serializable]
-    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdatingArgs args);
+    public class ApplicationUpdatingArgs
+    {
+        internal ApplicationUpdatingArgs(BuildPackUpdater control)
+        {
+            Control = control;
+        }
 
+        internal ApplicationUpdatingArgs(BuildPackUpdater control, Exception exception, string message = null)
+        {
+            Control = control;
+            Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
+        }
+
+        public BuildPackUpdater Control { get; }
+        public Exception Error { get; }
+    }
 
     [Serializable]
     public enum UpdateBuildResult
@@ -22,32 +40,14 @@ namespace Utils.AppUpdater
     }
 
     [Serializable]
-    public class ApplicationUpdatingArgs
-    {
-        internal ApplicationUpdatingArgs(IUpdater control)
-        {
-            Control = control;
-        }
-
-        internal ApplicationUpdatingArgs(IUpdater control, Exception exception, string message = null)
-        {
-            Control = control;
-            Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
-        }
-
-        public IUpdater Control { get; }
-        public Exception Error { get; }
-    }
-
-    [Serializable]
     public class ApplicationFetchingArgs : ApplicationUpdatingArgs
     {
-        internal ApplicationFetchingArgs(IUpdater control):base(control)
+        internal ApplicationFetchingArgs(BuildPackUpdater control):base(control)
         {
             Result = UpdateBuildResult.Fetch;
         }
 
-        internal ApplicationFetchingArgs(IUpdater control, Exception exception, string message = null) : base(control, exception, message)
+        internal ApplicationFetchingArgs(BuildPackUpdater control, Exception exception, string message = null) : base(control, exception, message)
         {
             Result = UpdateBuildResult.Cancel;
         }

@@ -127,7 +127,7 @@
     <value>Ошибка при считывании статуса от сервера. HttpStatus=[{0:G}] Uri=[{1}]</value>
   </data>
   <data name="ApplicationUpdater_ErrUpdateInterval" xml:space="preserve">
-    <value>Проверка наличия обновлений должно быть больше 1 секунды</value>
+    <value>Интервал для проверки наличия обновлений должно быть больше 0 минут</value>
   </data>
   <data name="ApplicationUpdater_IncorrectControl" xml:space="preserve">
     <value>Неверный контрол - '{0}'</value>
@@ -135,8 +135,11 @@
   <data name="ApplicationUpdater_NoBuildsFound" xml:space="preserve">
     <value>Не найдены сборки для обновления.</value>
   </data>
-  <data name="ApplicationUpdater_NotExpected" xml:space="preserve">
-    <value>{0} не ожидает обновления.</value>
+  <data name="ApplicationUpdater_NotExpectedOnChecking" xml:space="preserve">
+    <value>{0} не ожидает обновления. Прежде чем выполнить, вы должны остановить проверку обновлений.</value>
+  </data>
+  <data name="ApplicationUpdater_NotFetched" xml:space="preserve">
+    <value>Updater не вытянул обновления.</value>
   </data>
   <data name="day" xml:space="preserve">
     <value>день</value>

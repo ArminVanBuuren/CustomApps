@@ -84,17 +84,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUpdater\BuildNumber.cs" />
-    <Compile Include="AppUpdater\Updater\BuildUpdaterProcessingArgs.cs" />
-    <Compile Include="AppUpdater\Updater\IBuildUpdater.cs" />
-    <Compile Include="AppUpdater\Updater\IUpdater.cs" />
-    <Compile Include="ASSEMBLY.cs" />
-    <Compile Include="AppUpdater\BuildPackInfo.cs" />
-    <Compile Include="AppUpdater\BuildsInfo.cs" />
+    <Compile Include="AppUpdater\UpdaterProject.cs" />
+    <Compile Include="AppUpdater\Updater\BuildPackUpdater.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdater.cs" />
-    <Compile Include="AppUpdater\Updater\BuildUpdaterCollection.cs" />
+    <Compile Include="AppUpdater\Updater\BuildUpdaterSimple.cs" />
+    <Compile Include="AppUpdater\Updater\UpdaterProcessingArgs.cs" />
+    <Compile Include="AppUpdater\Updater\BuildPackUpdaterBase.cs" />
+    <Compile Include="ASSEMBLY.cs" />
+    <Compile Include="AppUpdater\Pack\BuildPackInfo.cs" />
+    <Compile Include="AppUpdater\Pack\BuildsInfo.cs" />
+    <Compile Include="AppUpdater\Updater\BuildUpdaterBase.cs" />
+    <Compile Include="AppUpdater\Updater\BuildPackUpdaterSimple.cs" />
     <Compile Include="AppUpdater\Hasher.cs" />
     <Compile Include="AppUpdater\ApplicationUpdaterProcessingArgs.cs" />
-    <Compile Include="AppUpdater\Updater\UploadProgress.cs" />
     <Compile Include="ATTRIBUTES.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />
@@ -192,7 +194,7 @@
     <Compile Include="SERVER.cs" />
     <Compile Include="STREAM.cs" />
     <Compile Include="STRING.cs" />
-    <Compile Include="AppUpdater\FileBuildInfo.cs" />
+    <Compile Include="AppUpdater\Pack\FileBuildInfo.cs" />
     <Compile Include="AppUpdater\ApplicationUpdater.cs" />
     <Compile Include="BigMath\BigInteger.cs" />
     <Compile Include="BigMath\Int128.cs" />

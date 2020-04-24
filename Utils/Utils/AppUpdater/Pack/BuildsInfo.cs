@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Utils.AppUpdater
+namespace Utils.AppUpdater.Pack
 {
     [Serializable, XmlRoot("Builds")]
     public class BuildsInfo
     {
-        public const string DEFAULT_PROJECT_GIT = @"https://github.com/ArminVanBuuren/Builds";
-        public const string DEFAULT_PROJECT_RAW = @"https://raw.githubusercontent.com/ArminVanBuuren/Builds/master";
-        public const string FILE_NAME = "versions.xml";
-
         [XmlElement("Pack")]
         public List<BuildPackInfo> Packs { get; set; } = new List<BuildPackInfo>();
 
-        public void Add(string project, string assembliesDirPath, string destinationDirPath)
+        public void Add(string project, string assembliesDirPath, string destinationDirPath, string buildsInfoFileName)
         {
             if (!Directory.Exists(destinationDirPath))
                 throw new ArgumentException($"Destination directory=[{destinationDirPath}] doesn't exist");
@@ -39,7 +32,7 @@ namespace Utils.AppUpdater
 
             try
             {
-                Serialize(Path.Combine(destinationDirPath, FILE_NAME));
+                Serialize(Path.Combine(destinationDirPath, buildsInfoFileName));
             }
             catch (Exception)
             {
@@ -53,7 +46,7 @@ namespace Utils.AppUpdater
             }
         }
 
-        public void Serialize(string fileVersionsPath)
+        void Serialize(string fileVersionsPath)
         {
             if (File.Exists(fileVersionsPath))
                 File.Delete(fileVersionsPath);

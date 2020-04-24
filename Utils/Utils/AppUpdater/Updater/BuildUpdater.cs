@@ -1,17 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Utils.AppUpdater.Pack;
 
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    internal class BuildUpdater : IBuildUpdater
+    public abstract class BuildUpdater
     {
-        private readonly BuildUpdaterCollection _parent;
-
+        private readonly BuildPackUpdaterBase _parent;
+        /// <summary>
+        /// Пусть скачанного файла билда
+        /// </summary>
         public string FileSource => Path.Combine(_parent.DiretoryTempPath, ServerFile.Location);
-        public string FileDestination { get; }
-
-        public bool IsExecutable
+        /// <summary>
+        /// Путь назначения файла билда
+        /// </summary>
+        public virtual string FileDestination { get; }
+        /// <summary>
+        /// Явлиется ли билд контрольным объектом
+        /// </summary>
+        public virtual bool IsExecutable
         {
             get
             {
@@ -20,13 +32,18 @@ namespace Utils.AppUpdater.Updater
                 return false;
             }
         }
-
+        /// <summary>
+        /// Информация билда на локальном сервере
+        /// </summary>
         public FileBuildInfo LocalFile { get; }
+        /// <summary>
+        /// Информация билда на удаленном сервере
+        /// </summary>
         public FileBuildInfo ServerFile { get; }
 
-        internal BuildUpdater(BuildUpdaterCollection parent, FileBuildInfo localFile, FileBuildInfo serverFile)
+        protected internal BuildUpdater(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo serverFile)
         {
-            if(serverFile == null)
+            if (serverFile == null)
                 throw new ArgumentNullException($"[{nameof(FileBuildInfo)}] from server cannot be null");
 
             _parent = parent;
@@ -35,53 +52,9 @@ namespace Utils.AppUpdater.Updater
             FileDestination = Path.Combine(Path.GetDirectoryName(parent.LocationApp), ServerFile.Location);
         }
 
-        internal void Commit()
-        {
-            switch (ServerFile.Type)
-            {
-                case BuldPerformerType.CreateOrUpdate:
-                case BuldPerformerType.CreateOrRollBack:
-                    if (LocalFile == null)
-                    {
-                        var destinationDir = Path.GetDirectoryName(FileDestination);
-                        if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
-                            Directory.CreateDirectory(destinationDir);
-                        
-                        CMD.CopyFile(FileSource, FileDestination); // задержка не нужна
-                    }
-                    else
-                    {
-                        CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
-                    }
-                    break;
-
-                case BuldPerformerType.RollBack:
-                case BuldPerformerType.Update:
-                    CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
-                    break;
-
-                case BuldPerformerType.Remove:
-                    CMD.DeleteFile(FileDestination); // задержка не нужна
-                    break;
-
-                default:
-                    return;
-            }
-        }
-
-        internal static void Pull(string runningAppLocation, int delayBeforeRun)
-        {
-            CMD.StartApplication(runningAppLocation, delayBeforeRun);
-        }
-
-        internal void Pull(int delayBeforeMove, int delayAfterMoveAndRunApp)
-        {
-            CMD.OverwriteAndStartApplication(FileSource, FileDestination, delayBeforeMove, delayAfterMoveAndRunApp);
-        }
-
         public override string ToString()
         {
-            return $"[{ServerFile.Location}] Local=[{LocalFile?.Version}] Server=[{ServerFile.Version}]";
+            return $"[{ServerFile.Location}] Local = {LocalFile?.Version} Server = {ServerFile.Version}";
         }
     }
 }

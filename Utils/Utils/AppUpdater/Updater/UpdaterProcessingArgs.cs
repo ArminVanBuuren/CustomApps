@@ -3,7 +3,7 @@
 namespace Utils.AppUpdater.Updater
 {
     [Serializable]
-    internal class BuildUpdaterProcessingArgs
+    public class UpdaterProcessingArgs
     {
         public Exception Error { get; internal set; }
     }

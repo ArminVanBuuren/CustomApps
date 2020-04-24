@@ -6,40 +6,70 @@ using System.Reflection;
 using System.Threading;
 using Utils;
 using Utils.AppUpdater;
+using Utils.AppUpdater.Pack;
+using Utils.AppUpdater.Updater;
 
 namespace Tester.Updater
 {
     class Program
     {
+        private static ApplicationUpdater up;
+        private static BuildPackUpdater _updater;
         static void Main(string[] args)
         {
             Start:
-            Console.WriteLine("Press \"1\" for UPDATE or \"2\" for UPLOAD.");
-            var res = Console.ReadLine();
-            switch (res)
+            try
             {
-                case "1":
-                    Update();
-                    break;
-                case "2":
-                    Upload();
-                    break;
-                default:
-                    goto Start;
-            }
+                Console.WriteLine("Press \"1\" for UPDATE or \"2\" for UPLOAD.");
+                var res = Console.ReadLine();
+                switch (res)
+                {
+                    case "1":
+                        Update();
 
-            Console.ReadLine();
+                        while (true)
+                        {
+                            var key = Console.ReadKey().Key;
+                            if (key == ConsoleKey.Enter)
+                            {
+                                if (_updater == null)
+                                {
+                                    Console.WriteLine("No updates found.");
+                                }
+                                else
+                                {
+                                    up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 1);
+                                    //up.Start();
+                                    up?.DoUpdate(_updater);
+                                }
+                            }
+                        }
+
+                        break;
+                    case "2":
+                        Upload();
+                        Console.ReadKey();
+                        break;
+                    default:
+                        goto Start;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.ReadKey();
+            }
         }
 
         
-        private static ApplicationUpdater up;
         public static void Update()
         {
-            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), "QJedWja49u4vlnS.zip", 1);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 1);
             up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
             up.OnProcessingError += Up_OnProcessingError;
             up.Start();
+            up.CheckUpdates();
             Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
         }
 
@@ -72,10 +102,16 @@ namespace Tester.Updater
         private static void Up_OnUpdate(object sender, ApplicationUpdatingArgs args)
         {
             Console.WriteLine($"[{DateTime.Now:hh:mm:ss}] [{Thread.CurrentThread.ManagedThreadId}] Update. Status=[{up.Status:G}]");
-            args.Control.Dispose();
-            up.Refresh();
-            //Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Action=[{args.Result:G}] Status=[{up.Status}] IUpdater{args.Control}");
+            _updater = args.Control;
+            Console.WriteLine("Waiting command...");
+
+            //Console.WriteLine($"Up_OnUpdate. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] Status=[{up.Status}] Updater{args.Control}");
+            //Console.WriteLine("Sleep 5 second and DoUpdate");
+            //Thread.Sleep(5000);
             //up.DoUpdate(args.Control);
+
+            //args.Control.Dispose();
+            //up.Refresh();
         }
 
         private static void Up_OnProcessingError(object sender, ApplicationUpdatingArgs args)
@@ -93,6 +129,7 @@ namespace Tester.Updater
                 // при первом использовании для начала нужно инитить папку:
                 // $ cd -P -- "C:\!Builds\Git"
                 // git remote -v
+                // https://www.shellhacks.com/ru/git-remove-all-commits-clear-git-history-local-remote/
                 // git fetch origin master
                 // при ошибке fatal: unable to access 'https://github.com/ArminVanBuuren/Builds/': Could not resolve host: github.com выполнить:
                 // git config --global --unset http.proxy 
@@ -149,7 +186,7 @@ namespace Tester.Updater
                     // создаем локальную ветку
                     var remote = repo.Network.Remotes.FirstOrDefault(p => p.Name == "origin");
                     if (remote == null)
-                        remote = repo.Network.Remotes.Add("origin", BuildsInfo.DEFAULT_PROJECT_GIT);
+                        remote = repo.Network.Remotes.Add("origin", @"https://github.com/ArminVanBuuren/Builds");
 
                     // вытягиваем весь репозиторий с сервера 
                     Commands.Fetch(repo, "origin", new string[0], new FetchOptions
@@ -160,7 +197,7 @@ namespace Tester.Updater
                     repo.Merge(repo.Branches["origin/master"], signature);
 
 
-                    var fileVersionsPath = Path.Combine(destPath, BuildsInfo.FILE_NAME);
+                    var fileVersionsPath = Path.Combine(destPath, "versions.xml");
                     BuildsInfo buildVersions = null;
                     if (File.Exists(fileVersionsPath))
                     {
@@ -172,7 +209,7 @@ namespace Tester.Updater
                         buildVersions = new BuildsInfo();
                     }
 
-                    buildVersions.Add(projectStr, sourcePath, destPath);
+                    buildVersions.Add(projectStr, sourcePath, destPath, "versions.xml");
                     Console.WriteLine($"You should correct file:'{fileVersionsPath}'. Then press any key for continue.");
                     Console.ReadKey();
 

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Utils.AppUpdater
+namespace Utils.AppUpdater.Pack
 {
     [Serializable, XmlRoot("Pack")]
     public class BuildPackInfo
@@ -39,11 +39,7 @@ namespace Utils.AppUpdater
         [XmlElement("Build")]
         public List<FileBuildInfo> Builds { get; set; } = new List<FileBuildInfo>();
 
-        public BuildPackInfo()
-        {
-
-        }
-
+        public BuildPackInfo() { }
 
         /// <summary>
         /// ПОдготовка пакета обновлений
@@ -100,7 +96,7 @@ namespace Utils.AppUpdater
             return localVersions;
         }
 
-        void SerializeAndDeserialize(BuildsInfo versions)
+        BuildsInfo SerializeAndDeserialize(BuildsInfo versions)
         {
             var xsSubmit = new XmlSerializer(typeof(BuildsInfo));
             string xml;
@@ -113,11 +109,21 @@ namespace Utils.AppUpdater
                 }
             }
 
-            BuildsInfo res;
             using (TextReader reader = new StringReader(xml))
-            {
-                res = (BuildsInfo)xsSubmit.Deserialize(reader);
-            }
+                return (BuildsInfo)xsSubmit.Deserialize(reader);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is BuildPackInfo input))
+                return false;
+
+            return Project.Equals(input.Project) && Name.Equals(input.Name) && MD5.Equals(input.MD5);
+        }
+
+        public override int GetHashCode()
+        {
+            return Project?.GetHashCode() ?? 0 + Name?.GetHashCode() ?? 0 + MD5?.GetHashCode() ?? 0 + 34;
         }
 
         public override string ToString()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Utils.AppUpdater
+namespace Utils.AppUpdater.Pack
 {
     [Serializable]
     public enum BuldPerformerType
