@@ -67,6 +67,13 @@
     <RFSParameter name="TransferTD" path="xml(//TransferTD)" description="Параметры переноса ПО" />
     <RFSParameter name="UpdateAttributes" path="xml(//UpdateAttributes)" description="Параметры изменения атрибутов" />
     <RFSParameter name="UserGroupCode" path="//UserGroupCode" description="Код группы" />
+    <RFSParameter name="AnnualContractBasePenaltyPrice" path="//AnnualContractBasePenaltyPrice" description="Штраф по годовому контракту"/>
+    <RFSParameter name="BonusCampaignId" path="//BonusCampaignId/Value" description="ID бонусной кампании"/>
+    <RFSParameter name="MsisdnStartDate" path="//MsisdnStartDate" description="Дата включения в бонусную кампанию"/>
+    <RFSParameter name="TariffPlanId" path="//TariffPlanId" description="Тарифный план"/>
+    <RFSParameter name="ResetDate" path="//ResetDate" description="Дата сброса"/>
+    <RFSParameter name="ResetPeriod" path="//ResetPeriod" description="Период сброса"/>
+    <RFSParameter name="ResetPeriodUnit" path="//ResetPeriodUnit" description="Юнит периода сброса"/>
   </RFSParameterList>
   <FlagList />
   <RFSList>
@@ -1106,10 +1113,7 @@
     <CFS name="BMS" isMarker="true" description="Услуга Маркер: BMS">
       <RFS name="RFS_BMS_SERVICE" linkType="Add" />
     </CFS>
-    <CFS name="FRBMSCHTP" isMarker="true" description="BMS. Смена ТП">
-      <RFS name="RFS_BMS_SERVICE" linkType="Add" />
-      <RFS name="RFS_FP_SERVICE_GENERAL" linkType="Add" />
-    </CFS>
+    <CFS name="FRBMSCHTP" copyOf="CFS_FP_SERVICE_GENERAL_AND_BMS" description="BMS. Смена ТП" />
     <CFS name="FRBMSPP" globalServiceCode="FRBMSPP" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS. Участие при платежах" />
     <CFS name="FRBMSPP2" globalServiceCode="FRBMSPP2" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.100 минут на UMS при платежах" />
     <CFS name="FRBMSSMN" globalServiceCode="FRBMSSMN" copyOf="CFS_FP_SERVICE_GENERAL" description="BMS.300 MB при смене ТП" />
