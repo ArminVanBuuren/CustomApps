@@ -28,7 +28,7 @@ namespace Utils.AppUpdater.Pack
             Version = BuildNumber.FromFile(file);
             Type = BuldPerformerType.None;
             Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
-            Description = @"Fixed and improved";
+            Description = @"None";
             IsExecutingFile = isExecFile;
         }
 
@@ -75,7 +75,7 @@ namespace Utils.AppUpdater.Pack
         public BuldPerformerType Type { get; set; }
 
         /// <summary>
-        /// названия файлов и папок в ноде location регистрзависимы для URI!!!!
+        /// Названия файлов и папок в ноде location регистрзависимы для URI!!!!
         /// </summary>
         [XmlElement]
         public string Location
@@ -98,7 +98,7 @@ namespace Utils.AppUpdater.Pack
 
         public override string ToString()
         {
-            return $"Location=[{Location}] Version=[{Version}] Type=[{Type:G}]";
+            return $"Location = {Location} Version = {Version}";
         }
     }
 }

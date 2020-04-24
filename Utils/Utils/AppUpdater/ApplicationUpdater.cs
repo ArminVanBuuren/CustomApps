@@ -191,9 +191,13 @@ namespace Utils.AppUpdater
                     control.Dispose();
                     ReturnBackStatus(); // если возникли какие то ошибки при скачивании пакета с обновлениями
                 }
+                else if(OnUpdate != null)
+                {
+                    OnUpdate.BeginInvoke(this, new ApplicationUpdatingArgs(control), null, null);
+                }
                 else
                 {
-                    OnUpdate?.BeginInvoke(this, new ApplicationUpdatingArgs(control), null, null);
+                    DoUpdate(control);
                 }
             }
             catch (Exception ex)

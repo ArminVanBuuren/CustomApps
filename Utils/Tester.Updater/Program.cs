@@ -65,9 +65,9 @@ namespace Tester.Updater
         public static void Update()
         {
             up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 1);
-            up.OnFetch += Up_OnFetch;
+            //up.OnFetch += Up_OnFetch;
             up.OnUpdate += Up_OnUpdate;
-            up.OnProcessingError += Up_OnProcessingError;
+            //up.OnProcessingError += Up_OnProcessingError;
             up.Start();
             up.CheckUpdates();
             Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
