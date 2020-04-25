@@ -17,6 +17,7 @@ using Utils.WinForm;
 using SPAMassageSaloon.Common;
 using SPAMassageSaloon.Properties;
 using LogsReader;
+using Microsoft.Win32;
 using SPAFilter;
 using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
@@ -102,10 +103,45 @@ namespace SPAMassageSaloon
             set => SetRegeditValue(nameof(LastUpdatePackage), value);
         }
 
-        private string LastUpdateInfo
+        private BuildPackUpdater LastUpdateInfo
         {
-            get => GetRegeditValue(nameof(LastUpdateInfo));
-            set => SetRegeditValue(nameof(LastUpdateInfo), value);
+            get
+            {
+                try
+                {
+                    using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    {
+                        var obj = reg[nameof(LastUpdateInfo)];
+                        if (obj is byte[] array)
+                        {
+                            return BuildPackUpdater.Deserialize(array);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }   
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                try
+                {
+                    using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                    {
+                        reg.Remove(nameof(LastUpdateInfo));
+                        reg[nameof(LastUpdateInfo), RegistryValueKind.Binary] = value.SerializeToStreamOfBytes();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            }
         }
 
         private bool UpdateAlreadyShown
@@ -223,6 +259,8 @@ namespace SPAMassageSaloon
                         Settings.Default.FormSize = Size;
                         Settings.Default.FormState = WindowState;
                         Settings.Default.Save();
+                        using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                            reg.Remove("LastUpdatePackage");
                     }
                     catch (Exception)
                     {
@@ -240,10 +278,19 @@ namespace SPAMassageSaloon
                 CenterToScreen();
                 this.Visible = true;
 
-                if (!UpdateAlreadyShown && !LastUpdateInfo.IsNullOrEmpty())
+                if (!UpdateAlreadyShown)
                 {
-                    ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, LastUpdateInfo).Trim(), MessageBoxIcon.Information, AppName);
-                    UpdateAlreadyShown = true;
+                    var lastUpdate = LastUpdateInfo;
+                    if (lastUpdate != null)
+                    {
+                        var separator = $"\r\n{new string('-', 61)}\r\n";
+                        var description = separator.TrimStart()
+                                   + string.Join(separator, lastUpdate.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
+                                   + separator.TrimEnd();
+
+                        ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
+                        UpdateAlreadyShown = true;
+                    }
                 }
 
                 var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
@@ -251,13 +298,13 @@ namespace SPAMassageSaloon
             }
         }
 
-        #region Application Update
-
         private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
         {
             try
             {
-                SaveData(args.Control);
+                UpdateAlreadyShown = false;
+                LastUpdateInfo = args.Control;
+                SaveData();
                 AppUpdater.DoUpdate(args.Control);
             }
             catch (Exception ex)
@@ -266,17 +313,10 @@ namespace SPAMassageSaloon
             }
         }
 
-        public void SaveData(BuildPackUpdater updater)
+        public void SaveData()
         {
             try
             {
-                var separator = $"\r\n{new string('-', 61)}\r\n";
-                UpdateAlreadyShown = false;
-                LastUpdateInfo = separator.TrimStart()
-                                 + string.Join("\r\n-------------------------------------------------------------\r\n",
-                                     updater.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
-                                 + separator.TrimEnd();
-
                 foreach (var form in MdiChildren.OfType<ISaloonForm>())
                 {
                     try
@@ -294,9 +334,6 @@ namespace SPAMassageSaloon
                 // ignored
             }
         }
-
-        #endregion
-
 
         /// <summary>
         /// Мониторинг системных ресурсов
