@@ -10,6 +10,6 @@ namespace Utils.AppUpdater.Updater
 
         public abstract void Commit();
 
-        public abstract void Pull(int delayBeforeMove, int delayAfterMoveAndRunApp);
+        public abstract void Pull(int delayBeforeDeleteAndMove, int delayBetweenMoveAndRunApp);
     }
 }

@@ -21,21 +21,21 @@ namespace Utils.AppUpdater.Updater
                         if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
                             Directory.CreateDirectory(destinationDir);
 
-                        CMD.CopyFile(FileSource, FileDestination); // задержка не нужна
+                        CMD.CopyFile(FileSource, FileDestination);
                     }
                     else
                     {
-                        CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
+                        CMD.OverwriteFile(FileSource, FileDestination);
                     }
                     break;
 
                 case BuldPerformerType.RollBack:
                 case BuldPerformerType.Update:
-                    CMD.OverwriteFile(FileSource, FileDestination); // задержка не нужна
+                    CMD.OverwriteFile(FileSource, FileDestination);
                     break;
 
                 case BuldPerformerType.Remove:
-                    CMD.DeleteFile(FileDestination); // задержка не нужна
+                    CMD.DeleteFile(FileDestination);
                     break;
 
                 default:
@@ -43,9 +43,9 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        public override void Pull(int delayBeforeMove, int delayAfterMoveAndRunApp)
+        public override void Pull(int delayBeforeDeleteAndMove, int delayBetweenMoveAndRun)
         {
-            CMD.OverwriteAndStartApplication(FileSource, FileDestination, delayBeforeMove, delayAfterMoveAndRunApp);
+            CMD.OverwriteAndStartApplication(FileSource, FileDestination, delayBeforeDeleteAndMove, delayBetweenMoveAndRun);
         }
     }
 }

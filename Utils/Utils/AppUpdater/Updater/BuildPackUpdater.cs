@@ -44,12 +44,12 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// задержка в секундах перед запуском переноса файла (ограниение 1 час)
         /// </summary>
-        public int DelayBeforeMove { get; set; } = 0;
+        public int DelayBeforeDelete { get; set; } = 0;
 
         /// <summary>
         /// задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла
         /// </summary>
-        public int DelayAfterMoveAndRunApp { get; set; } = 5;
+        public int DelayBetweenMoveAndRunApp { get; set; } = 5;
 
         /// <summary>
         /// Количество файлов для обновления

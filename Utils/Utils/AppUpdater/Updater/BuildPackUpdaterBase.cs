@@ -105,14 +105,14 @@ namespace Utils.AppUpdater.Updater
             // рестарт приложения, если обновляется исполняемый exe файл, даже если указано NeedRestartApplication = false
             if (runningApp != null)
             {
-                ((BuildUpdaterBase)runningApp).Pull(DelayBeforeMove, DelayAfterMoveAndRunApp);
+                ((BuildUpdaterBase)runningApp).Pull(DelayBeforeDelete, DelayBetweenMoveAndRunApp);
                 Status = UploaderStatus.Pulled;
 
                 Process.GetCurrentProcess().Kill();
             }
             else if (ProjectBuildPack.NeedRestartApplication) // рестарт приложения, если указана метка в пакете с обновлениями, иначе рестарта не будет
             {
-                CMD.StartApplication(LocationApp, DelayAfterMoveAndRunApp);
+                CMD.StartApplication(LocationApp, DelayBetweenMoveAndRunApp);
                 Status = UploaderStatus.Pulled;
 
                 Process.GetCurrentProcess().Kill();

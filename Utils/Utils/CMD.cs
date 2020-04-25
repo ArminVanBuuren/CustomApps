@@ -31,12 +31,12 @@ namespace Utils
         /// </summary>
         /// <param name="fileSource">изначальное местоположение файла</param>
         /// <param name="fileDestination">скопировать куда и запустить</param>
-        /// <param name="delayBeforeMove">задержка в секундах перед запуском переноса файла (ограниение 1 час)</param>
-        /// <param name="delayAfterMoveAndRunDestination">задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла</param>
-        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int delayBeforeMove = 0, int delayAfterMoveAndRunDestination = 0)
+        /// <param name="delayBeforeDeleteAndMove">задержка в секундах перед запуском переноса файла (ограниение 1 час)</param>
+        /// <param name="delayBetweenMoveAndRun">задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла</param>
+        public static void OverwriteAndStartApplication(string fileSource, string fileDestination, int delayBeforeDeleteAndMove = 0, int delayBetweenMoveAndRun = 0)
         {
-            var delayDelMove = GetCommandTimeout(delayBeforeMove);
-            var delayStart = GetCommandTimeout(delayAfterMoveAndRunDestination);
+            var delayDelMove = GetCommandTimeout(delayBeforeDeleteAndMove);
+            var delayStart = GetCommandTimeout(delayBetweenMoveAndRun);
             var argument_complete = string.Format(argument_update_start,
                 delayDelMove,
                 fileDestination,
@@ -55,11 +55,11 @@ namespace Utils
         /// </summary>
         /// <param name="fileSource">изначальное местоположение файла</param>
         /// <param name="fileDestination">путь назначения файла</param>
-        /// <param name="delayBeforeMove">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void OverwriteFile(string fileSource, string fileDestination, int delayBeforeMove = 0)
+        /// <param name="delayBeforeDelete">перезаписать после оперделенного времени в секундах (ограниение 1 час)</param>
+        public static void OverwriteFile(string fileSource, string fileDestination, int delayBeforeDelete = 0)
         {
             var argument_complete = string.Format(argument_update, 
-                GetCommandTimeout(delayBeforeMove), 
+                GetCommandTimeout(delayBeforeDelete), 
                 fileDestination, 
                 fileSource, 
                 fileDestination);

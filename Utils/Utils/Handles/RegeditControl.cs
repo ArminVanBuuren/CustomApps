@@ -29,107 +29,11 @@ namespace Utils.Handles
             ApplicationName = applicationName;
             Parent = parent;
             software = Parent.GetCurrentProject();
-
-            //using (var parentSoftware = )
-            //{
-            //    parentSoftware.OpenSubKey(ApplicationName, true);
-            //}
-
-            //if (software == null)
-            //{
-            //    var str = @"HKEY_CURRENT_USER\SOFTWARE";
-            //    var _parent = Parent;
-            //    while (_parent != null)
-            //    {
-            //        str += "\\" + _parent.ApplicationName;
-            //        _parent = _parent.Parent;
-            //    }
-            //    throw new Exception($"Can't find {str}\\{ApplicationName}");
-            //}
         }
 
         RegistryKey GetCurrentProject()
         {
             return software.OpenSubKey(ApplicationName, true) ?? software.CreateSubKey(ApplicationName);
-        }
-
-        object GetValue(string propertyName)
-        {
-            RegistryKey project = null;
-            try
-            {
-                project = GetCurrentProject();
-                return project?.GetValue(propertyName);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            finally
-            {
-                project?.Close();
-            }
-        }
-
-        void SetValue(string propertyName, object value, RegistryValueKind type)
-        {
-            RegistryKey project = null;
-            try
-            {
-                project = GetCurrentProject();
-                project?.SetValue(propertyName, value, type);
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-            finally
-            {
-                project?.Close();
-            }
-        }
-
-        string[] GetValueNames()
-        {
-            RegistryKey project = null;
-            try
-            {
-                project = GetCurrentProject();
-                return project?.GetValueNames();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            finally
-            {
-                project?.Close();
-            }
-        }
-
-        Dictionary<string, object> GetKeyValues()
-        {
-            var listOfValues = new Dictionary<string, object>();
-            RegistryKey project = null;
-            try
-            {
-                project = GetCurrentProject();
-                if (project != null)
-                {
-                    foreach (var propertyName in project.GetValueNames())
-                        listOfValues.Add(propertyName, project.GetValue(propertyName));
-                }
-
-                return listOfValues;
-            }
-            catch (Exception ex)
-            {
-                return listOfValues;
-            }
-            finally
-            {
-                project?.Close();
-            }
         }
 
         public object this[string propertyName]
@@ -138,34 +42,74 @@ namespace Utils.Handles
             set => SetValue(propertyName, value, RegistryValueKind.String);
         }
 
-        ///// <summary>
-        ///// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
-        ///// </summary>
-        ///// <param name="applicationName"></param>
-        ///// <param name="description"></param>
-        ///// <returns></returns>
-        //public static string GetOrSetRegedit(string applicationName, string description)
-        //{
-        //    string currentDesc = (string) myProject.GetValue("Description") ?? string.Empty;
-        //    if (!currentDesc.Equals(description))
-        //        myProject.SetValue("Description", description);
-
-        //    string result = (string) myProject.GetValue("Key");
-        //    if (result == null)
-        //    {
-        //        result = Guid.NewGuid().ToString("D");
-        //        myProject.SetValue("Key", result);
-        //    }
-
-        //    software.Close();
-        //    myProject.Close();
-        //    return result;
-        //}
-
         public object this[string propertyName, RegistryValueKind type]
         {
             get => GetValue(propertyName);
             set => SetValue(propertyName, value, type);
+        }
+
+        object GetValue(string propertyName)
+        {
+            try
+            {
+                using (var project = GetCurrentProject())
+                    return project?.GetValue(propertyName);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        void SetValue(string propertyName, object value, RegistryValueKind type)
+        {
+            try
+            {
+                using (var project = GetCurrentProject())
+                {
+                    project?.DeleteValue(propertyName, false);
+                    project?.SetValue(propertyName, value, type);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        string[] GetValueNames()
+        {
+            try
+            {
+                using (var project = GetCurrentProject())
+                    return project?.GetValueNames();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        Dictionary<string, object> GetKeyValues()
+        {
+            var listOfValues = new Dictionary<string, object>();
+            try
+            {
+                using (var project = GetCurrentProject())
+                {
+                    if (project == null)
+                        return listOfValues;
+
+                    foreach (var propertyName in project.GetValueNames())
+                        listOfValues.Add(propertyName, project.GetValue(propertyName));
+
+                    return listOfValues;
+                }
+            }
+            catch (Exception ex)
+            {
+                return listOfValues;
+            }
         }
 
         public ICollection<string> Keys => GetValueNames();
@@ -176,19 +120,14 @@ namespace Utils.Handles
         {
             get
             {
-                RegistryKey project = null;
                 try
                 {
-                    project = GetCurrentProject();
-                    return project?.ValueCount ?? -1;
+                    using (var project = GetCurrentProject())
+                        return project?.ValueCount ?? -1;       
                 }
                 catch (Exception ex)
                 {
                     return -1;
-                }
-                finally
-                {
-                    project?.Close();
                 }
             }
         }
@@ -268,20 +207,15 @@ namespace Utils.Handles
 
         public bool Remove(string key)
         {
-            RegistryKey project = null;
             try
             {
-                project = GetCurrentProject();
-                project?.DeleteSubKeyTree(key, false);
+                using (var project = GetCurrentProject())
+                    project?.DeleteValue(key, false);
                 return true;
             }
             catch (Exception ex)
             {
                 return false;
-            }
-            finally
-            {
-                project?.Close();
             }
         }
 
@@ -310,5 +244,30 @@ namespace Utils.Handles
         {
             software.Close();
         }
+
+
+        ///// <summary>
+        ///// Создание или получение записи в реестре с сгенеринным ключем и данными о приложении
+        ///// </summary>
+        ///// <param name="applicationName"></param>
+        ///// <param name="description"></param>
+        ///// <returns></returns>
+        //public static string GetOrSetRegedit(string applicationName, string description)
+        //{
+        //    string currentDesc = (string) myProject.GetValue("Description") ?? string.Empty;
+        //    if (!currentDesc.Equals(description))
+        //        myProject.SetValue("Description", description);
+
+        //    string result = (string) myProject.GetValue("Key");
+        //    if (result == null)
+        //    {
+        //        result = Guid.NewGuid().ToString("D");
+        //        myProject.SetValue("Key", result);
+        //    }
+
+        //    software.Close();
+        //    myProject.Close();
+        //    return result;
+        //}
     }
 }
