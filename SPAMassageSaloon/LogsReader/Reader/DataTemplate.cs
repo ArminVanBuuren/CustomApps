@@ -20,7 +20,7 @@ namespace LogsReader.Reader
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
-            var dateWithoutSpaces = date?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
+            var dateWithoutSpaces = date?.Replace("\r", string.Empty).Replace("\n", " ").TrimWhiteSpaces() ?? string.Empty;
             if (DateTime.TryParse(dateWithoutSpaces.Replace(",", "."), out var dateOfTrace))
             {
                 Date = dateOfTrace;
