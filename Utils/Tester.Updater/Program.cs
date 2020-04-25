@@ -174,7 +174,7 @@ namespace Tester.Updater
                 //Console.WriteLine(@"Enter builds directory path. Like - C:\!MyRepos\CustomApp\Utils\Tester.Updater\bin\Uploader\test1\OnServer");
                 const string sourcePath = @"C:\!Builds\Builds";
                 const string destPath = @"C:\!Builds\Git";
-                Console.WriteLine($"Do not forget library git2-572e4d8.dll with correct bit-depth (x86 or x64)\r\nEnter project name. Like - TFSAssist; Tester.Updater");
+                Console.WriteLine($"Run only on x86 Platform. Do not forget library git2-572e4d8.dll with correct bit-depth (x86 or x64)\r\nEnter project name. Like - TFSAssist; Tester.Updater");
                 var projectStr = Console.ReadLine();
 
                 if (!Directory.Exists(sourcePath))
