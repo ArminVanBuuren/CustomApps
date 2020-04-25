@@ -132,10 +132,7 @@ namespace SPAMassageSaloon
                 try
                 {
                     using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                    {
-                        reg.Remove(nameof(LastUpdateInfo));
                         reg[nameof(LastUpdateInfo), RegistryValueKind.Binary] = value.SerializeToStreamOfBytes();
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -251,6 +248,35 @@ namespace SPAMassageSaloon
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
+                try
+                {
+                    if (!UpdateAlreadyShown)
+                    {
+                        var lastUpdate = LastUpdateInfo;
+                        if (lastUpdate != null)
+                        {
+                            var info = this.GetAssemblyInfo();
+                            var currentName = info.CurrentAssembly.ManifestModule.Name;
+                            var currentVersion = BuildNumber.FromFile(info.ApplicationPath);
+                            var remote = lastUpdate.FirstOrDefault(x => x.RemoteFile.Location.Split('\\').Last().Equals(currentName));
+                            if (remote != null && remote.RemoteFile.Version == currentVersion)
+                            {
+                                var separator = $"\r\n{new string('-', 61)}\r\n";
+                                var description = separator.TrimStart()
+                                                  + string.Join(separator, lastUpdate.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
+                                                  + separator.TrimEnd();
+
+                                ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
+                                UpdateAlreadyShown = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+
                 Closing += (o, args) =>
                 {
                     try
@@ -277,21 +303,6 @@ namespace SPAMassageSaloon
             {
                 CenterToScreen();
                 this.Visible = true;
-
-                if (!UpdateAlreadyShown)
-                {
-                    var lastUpdate = LastUpdateInfo;
-                    if (lastUpdate != null)
-                    {
-                        var separator = $"\r\n{new string('-', 61)}\r\n";
-                        var description = separator.TrimStart()
-                                   + string.Join(separator, lastUpdate.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
-                                   + separator.TrimEnd();
-
-                        ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
-                        UpdateAlreadyShown = true;
-                    }
-                }
 
                 var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
                 monitoring.Start();
