@@ -71,10 +71,14 @@ namespace Utils.AppUpdater.Pack
                 // по дефолту всегда надо перегружать приложение после обновления
                 NeedRestartApplication = true;
             }
+            catch (Exception)
+            {
+                File.Delete(packFileDestinationPath);
+                throw;
+            }
             finally
             {
                 File.Delete(packFileTempPath);
-                File.Delete(packFileDestinationPath);
             }
         }
 
