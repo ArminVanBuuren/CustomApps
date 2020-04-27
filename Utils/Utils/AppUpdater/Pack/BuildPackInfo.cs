@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Utils.CollectionHelper;
 using Utils.Properties;
 
 namespace Utils.AppUpdater.Pack
@@ -57,7 +58,7 @@ namespace Utils.AppUpdater.Pack
 
             try
             {
-                Builds = GetLocalVersions(assembliesDirPath);
+                Builds = GetLocalVersions(assembliesDirPath, SearchOption.AllDirectories);
                 if (Builds.Count == 0)
                     throw new ArgumentException(string.Format(Resources.DirectoryHasNoFiles, assembliesDirPath));
 
@@ -82,14 +83,32 @@ namespace Utils.AppUpdater.Pack
             }
         }
 
-        public static List<FileBuildInfo> GetLocalVersions(Assembly runningApp)
+        internal static List<FileBuildInfo> GetLocalVersions(string assembliesDirPath, SearchOption option, string runningAppLocation = null)
         {
-            return GetLocalVersions(runningApp.GetDirectory(), runningApp.Location);
+            return Directory.GetFiles(assembliesDirPath, "*", option)
+                .Select(file => new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation)))
+                .ToList();
         }
 
-        internal static List<FileBuildInfo> GetLocalVersions(string assembliesDirPath, string runningAppLocation = null)
+        internal static List<FileBuildInfo> GetLocalVersions(Assembly runningApp, IEnumerable<string> childFiles)
         {
-            return Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories).Select(file => new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation))).ToList();
+            var assembliesDirPath = AssemblyInfo.ApplicationDirectory;
+            var dirs = new DistinctList<string>(StringComparer.InvariantCultureIgnoreCase);
+            foreach (var file in childFiles)
+            {
+                var filePath = Path.Combine(assembliesDirPath, file);
+                var dirPath = Path.GetDirectoryName(filePath);
+                if (Directory.Exists(dirPath))
+                    dirs.Add(dirPath);
+            }
+
+            var runningAppLocation = AssemblyInfo.ApplicationDirectory;
+            var result = new List<FileBuildInfo>(childFiles.Count());
+            foreach (var directory in dirs)
+            {
+                result.AddRange(GetLocalVersions(directory, SearchOption.TopDirectoryOnly, runningAppLocation));
+            }
+            return result;
         }
 
         BuildsInfo SerializeAndDeserialize(BuildsInfo versions)

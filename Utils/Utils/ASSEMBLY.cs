@@ -11,8 +11,8 @@ namespace Utils
     {
         public string ApplicationName => CurrentAssembly.GetName().Name;
         public string ApplicationPath => CurrentAssembly.Location;
-        public string ApplicationDirectory => AppDomain.CurrentDomain.BaseDirectory; //Path.GetDirectoryName(ApplicationPath);
-        public string ProcessFilePath => Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
+        public static string ApplicationDirectory => AppDomain.CurrentDomain.BaseDirectory; //Path.GetDirectoryName(ApplicationPath);
+        public static string ProcessFilePath => Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
         public string ApplicationFilePath => CurrentAssembly.GetDirectory();
         public string CurrentVersion => CurrentAssembly.GetName().Version.ToString();
         public string Company => ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(CurrentAssembly, typeof(AssemblyCompanyAttribute), false))?.Company ?? string.Empty;

@@ -120,7 +120,7 @@ namespace Utils.AppUpdater.Updater
             LocationApp = runningApp.Location;
             BuildPack = buildPack ?? throw new ArgumentNullException(nameof(buildPack));
 
-            var localVersions = BuildPackInfo.GetLocalVersions(runningApp);
+            var localVersions = BuildPackInfo.GetLocalVersions(runningApp, BuildPack.Builds.Select(x => x.Location));
             var filesToChange = 0;
 
             foreach (var localFile in localVersions)

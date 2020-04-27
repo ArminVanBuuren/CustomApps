@@ -21,6 +21,51 @@ namespace Tester.Updater
         private static BuildPackUpdater _updater;
         static void Main(string[] args)
         {
+            try
+            {
+                var dd = BuildsInfo.Deserialize(IO.SafeReadFile(@"C:\!Builds\Git\versions.xml"));
+                var dd2 = new BuildPackUpdaterSimple(typeof(Class1).GetAssemblyInfo().CurrentAssembly, dd.Packs.First(), null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
+
+            //var test0 = new FileBuildInfo(@"C:\!Builds\Builds\SPAMassageSaloon.exe", @"C:\!Builds\Builds", false);
+            //var test1 = new FileBuildInfo(@"C:\!Builds\Builds\SPAMassageSaloon1.exe", @"C:\!Builds\Builds", false);
+            //var test2 = new FileBuildInfo(@"C:\!Builds\Builds\Utils1.dll", @"C:\!Builds\Builds", false);
+            //var test3 = new FileBuildInfo(@"C:\!Builds\Builds\SPAFilter.bin", @"C:\!Builds\Builds", false);
+            //var test4 = new FileBuildInfo(@"C:\!Builds\Builds\LogsReader.xml", @"C:\!Builds\Builds", false);
+            
+            //var ass = Assembly.LoadFile(@"C:\!Builds\Builds\SPAMassageSaloon1.exe");
+            //var pr = ass.GetName().Name;
+            //try
+            //{
+            //    var ass2 = Assembly.LoadFile(@"C:\!Builds\Builds\Utils1.dll");
+            //    var pr2 = ass2.GetName().Name;
+            //}
+            //catch (Exception e)
+            //{
+            //    var type = e.GetType();
+            //}
+            //try
+            //{
+            //    var ass3 = Assembly.LoadFile(@"C:\!Builds\Builds\SPAFilter.bin");
+            //}
+            //catch (Exception e)
+            //{
+            //    var type = e.GetType();
+            //}
+            //try
+            //{
+            //    var ass4 = Assembly.LoadFile(@"C:\!Builds\Builds\LogsReader.xml");
+            //}
+            //catch (Exception e)
+            //{
+            //    var type = e.GetType();
+            //}
+
             Start:
             try
             {
