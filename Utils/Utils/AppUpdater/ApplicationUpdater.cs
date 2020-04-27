@@ -107,7 +107,7 @@ namespace Utils.AppUpdater
             RunningApp = runningApp;
             ProjectName = RunningApp.GetName().Name;
             UpdaterProject = updaterProject;
-            _updaterProject = UpdaterProject ?? new UpdaterProject();
+            _updaterProject = UpdaterProject ?? new UpdaterProjectSimple();
             CheckUpdatesIntervalMinutes = checkUpdatesIntervalMinutes * 1000 * 60;
 
             _watcher = new Timer {Enabled = false};
@@ -129,7 +129,7 @@ namespace Utils.AppUpdater
                     if (responceHttpCode == HttpStatusCode.OK)
                     {
                         var remoteBuilds = BuildsInfo.Deserialize(contextStr);
-                        var buildPack = remoteBuilds.Packs.FirstOrDefault(p => p.Project == ProjectName);
+                        var buildPack = remoteBuilds.Packs.FirstOrDefault(p => p.ProjectName == ProjectName);
                         if (buildPack?.Builds.Count > 0)
                         {
                             var control = GetBuildPackUpdater(buildPack);
@@ -340,7 +340,7 @@ namespace Utils.AppUpdater
 
         public override string ToString()
         {
-            return $"{nameof(ApplicationUpdater)} ProjectName = {ProjectName}] Status = {Status:G}";
+            return $"{nameof(ApplicationUpdater)} Project = \"{ProjectName}\" Status = \"{Status:G}\"";
         }
     }
 }

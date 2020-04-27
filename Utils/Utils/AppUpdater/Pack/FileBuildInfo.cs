@@ -1,5 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Xml.Serialization;
+using Utils.Properties;
 
 namespace Utils.AppUpdater.Pack
 {
@@ -19,18 +24,27 @@ namespace Utils.AppUpdater.Pack
     {
         private string _location = string.Empty;
 
-        public FileBuildInfo()
+        /// <summary>
+        /// Названия файлов и папок в ноде location регистрзависимы для URI!!!!
+        /// </summary>
+        [XmlElement]
+        public string Location
         {
+            get => _location;
+            set => _location = value.IsNullOrEmptyTrim() ? throw new ArgumentNullException(Resources.InvalidFileLocation) : value;
         }
 
-        public FileBuildInfo(string file, string assemblyDirPath, bool isExecFile)
-        {
-            Version = BuildNumber.FromFile(file);
-            Type = BuldPerformerType.None;
-            Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
-            Description = @"None";
-            IsExecutingFile = isExecFile;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlElement]
+        public string AssemblyName { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlElement]
+        public string ScopeName { get; set; }
 
         [XmlElement("Version")]
         public string VersionString
@@ -39,9 +53,7 @@ namespace Utils.AppUpdater.Pack
             set
             {
                 if (!BuildNumber.TryParse(value, out var getVers))
-                {
                     BuildNumber.TryParse("1.0.0.0", out getVers);
-                }
 
                 Version = getVers;
             }
@@ -74,31 +86,46 @@ namespace Utils.AppUpdater.Pack
         [XmlIgnore]
         public BuldPerformerType Type { get; set; }
 
-        /// <summary>
-        /// Названия файлов и папок в ноде location регистрзависимы для URI!!!!
-        /// </summary>
-        [XmlElement]
-        public string Location
-        {
-            get => _location;
-            set
-            {
-                if (value.IsNullOrEmptyTrim())
-                    throw new ArgumentNullException($"Location of file is null");
-
-                _location = value;
-            }
-        }
-
         [XmlElement]
         public string Description { get; set; }
 
         [XmlIgnore]
         public bool IsExecutingFile { get; set; }
 
+        public FileBuildInfo() { }
+
+        public FileBuildInfo(string file, string assemblyDirPath, bool isExecFile)
+        {
+            Location = file.Replace(assemblyDirPath, string.Empty).Trim('\\');
+
+            try
+            {
+                var fileExt = Path.GetExtension(file).ToLower();
+                if (fileExt.Equals(".exe") || fileExt.Equals(".dll"))
+                {
+                    var ass = Assembly.LoadFile(file);
+                    AssemblyName = ass.GetName().Name;
+                    ScopeName = ass.ManifestModule.ScopeName;
+                }
+                else
+                {
+                    AssemblyName = ScopeName = Path.GetFileName(file);
+                }
+            }
+            catch (Exception)
+            {
+                AssemblyName = ScopeName = Path.GetFileName(file);
+            }
+
+            Version = BuildNumber.FromFile(file);
+            Type = BuldPerformerType.None;
+            Description = @"None";
+            IsExecutingFile = isExecFile;
+        }
+
         public override string ToString()
         {
-            return $"Location = {Location} Version = {Version}";
+            return $"Assembly = \"{AssemblyName}\" Version = {Version}";
         }
     }
 }

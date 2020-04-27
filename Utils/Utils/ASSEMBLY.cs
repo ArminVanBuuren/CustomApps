@@ -39,6 +39,11 @@ namespace Utils
 
     public static class ASSEMBLY
     {
+        public static AssemblyInfo GetAssemblyInfo(this Type input)
+        {
+            return new AssemblyInfo(input);
+        }
+
         public static AssemblyInfo GetAssemblyInfo(this Assembly input)
         {
             return new AssemblyInfo(input);

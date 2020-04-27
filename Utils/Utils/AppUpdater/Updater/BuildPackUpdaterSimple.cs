@@ -32,14 +32,13 @@ namespace Utils.AppUpdater.Updater
 
         public BuildPackUpdaterSimple(Assembly runningApp, BuildPackInfo projectBuildPack, IUpdaterProject updaterProject) : base(runningApp, projectBuildPack)
         {
-            _updaterProject = updaterProject ?? throw new ArgumentNullException(nameof(updaterProject));
+            if (!NeedToFetchPack)
+                return;
 
-            if (Count > 0)
-            {
-                _webClient = new WebClient();
-                _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
-            }
+            _updaterProject = updaterProject ?? throw new ArgumentNullException(nameof(updaterProject));
+            _webClient = new WebClient();
+            _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+            _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
         }
 
         protected override BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile)
@@ -58,7 +57,7 @@ namespace Utils.AppUpdater.Updater
             {
                 if (NeedToFetchPack)
                 {
-                    _webClient.DownloadFileAsync(new Uri($"{_updaterProject.Uri}/{ProjectBuildPack.Name}"), FileTempPath);
+                    _webClient.DownloadFileAsync(new Uri($"{_updaterProject.Uri}/{BuildPack.Name}"), FileTempPath);
                     Status = UploaderStatus.Init;
                 }
                 else
@@ -88,14 +87,14 @@ namespace Utils.AppUpdater.Updater
         {
             if (e.Error != null || e.Cancelled)
             {
-                _fetchArgs.Error = e.Error ?? new Exception($"Upload pack '{ProjectBuildPack}' was cancelled!");
+                _fetchArgs.Error = e.Error ?? new Exception($"Upload pack '{BuildPack}' was cancelled!");
             }
             else
             {
                 try
                 {
                     var downloadedMD5 = Hasher.HashFile(FileTempPath, HashType.MD5);
-                    if (downloadedMD5.Like(ProjectBuildPack.MD5))
+                    if (downloadedMD5.Like(BuildPack.MD5))
                     {
                         Directory.CreateDirectory(DiretoryTempPath);
                         ZipFile.ExtractToDirectory(FileTempPath, DiretoryTempPath);
@@ -104,7 +103,7 @@ namespace Utils.AppUpdater.Updater
                     }
                     else
                     {
-                        _fetchArgs.Error = new Exception($"Hash of uploaded file [{downloadedMD5}] is incorrect. Remote hash is [{ProjectBuildPack.MD5}]");
+                        _fetchArgs.Error = new Exception($"Hash of uploaded file \'{downloadedMD5}\' is incorrect. Remote hash is [{BuildPack.MD5}]");
                     }
                 }
                 catch (Exception exception)

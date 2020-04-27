@@ -160,6 +160,33 @@ namespace Utils.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Directory= &quot;{0}&quot; doesn&apos;t exist.
+        /// </summary>
+        internal static string DirectoryDoesntExist {
+            get {
+                return ResourceManager.GetString("DirectoryDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Directory = &quot;{0}&quot; has no one file..
+        /// </summary>
+        internal static string DirectoryHasNoFiles {
+            get {
+                return ResourceManager.GetString("DirectoryHasNoFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на File &quot;{0}&quot; not exist!.
+        /// </summary>
+        internal static string FileNotExist {
+            get {
+                return ResourceManager.GetString("FileNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на hour.
         /// </summary>
         internal static string hour {
@@ -183,6 +210,15 @@ namespace Utils.Properties {
         internal static string hours5 {
             get {
                 return ResourceManager.GetString("hours5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на  Invalid file location..
+        /// </summary>
+        internal static string InvalidFileLocation {
+            get {
+                return ResourceManager.GetString("InvalidFileLocation", resourceCulture);
             }
         }
         

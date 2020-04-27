@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Utils.Properties;
 
 namespace Utils.AppUpdater.Pack
 {
@@ -15,8 +16,8 @@ namespace Utils.AppUpdater.Pack
         /// <summary>
         /// Проект к которому предназначено обновление
         /// </summary>
-        [XmlAttribute]
-        public string Project { get; set; }
+        [XmlAttribute("Project")]
+        public string ProjectName { get; set; }
 
         /// <summary>
         /// Название пакета с обновлениями
@@ -44,21 +45,21 @@ namespace Utils.AppUpdater.Pack
         /// <summary>
         /// ПОдготовка пакета обновлений
         /// </summary>
-        /// <param name="project"></param>
+        /// <param name="projectName"></param>
         /// <param name="assembliesDirPath"></param>
         /// <param name="destinationDirPath"></param>
-        public BuildPackInfo(string project, string assembliesDirPath, string destinationDirPath)
+        public BuildPackInfo(string projectName, string assembliesDirPath, string destinationDirPath)
         {
-            Project = project;
-            Name = STRING.RandomStringNumbers(15) + ".zip";
+            ProjectName = projectName;
+            Name = $"{STRING.RandomStringNumbers(15)}.zip";
             var packFileDestinationPath = Path.Combine(destinationDirPath, Name);
             var packFileTempPath = Path.GetTempFileName();
 
             try
             {
-                Builds = GetLocalVersions(assembliesDirPath).Values.ToList();
+                Builds = GetLocalVersions(assembliesDirPath);
                 if (Builds.Count == 0)
-                    throw new ArgumentException($"Directory=[{assembliesDirPath}] has no one file.");
+                    throw new ArgumentException(string.Format(Resources.DirectoryHasNoFiles, assembliesDirPath));
 
                 File.Delete(packFileTempPath);
                 ZipFile.CreateFromDirectory(assembliesDirPath, packFileTempPath, CompressionLevel.Optimal, false);
@@ -70,30 +71,21 @@ namespace Utils.AppUpdater.Pack
                 // по дефолту всегда надо перегружать приложение после обновления
                 NeedRestartApplication = true;
             }
-            catch (Exception)
+            finally
             {
                 File.Delete(packFileTempPath);
                 File.Delete(packFileDestinationPath);
-                throw;
             }
         }
 
-        public static Dictionary<string, FileBuildInfo> GetLocalVersions(Assembly runningApp)
+        public static List<FileBuildInfo> GetLocalVersions(Assembly runningApp)
         {
-            var assembliesDirPath = runningApp.GetDirectory();
-            return GetLocalVersions(assembliesDirPath, runningApp.Location);
+            return GetLocalVersions(runningApp.GetDirectory(), runningApp.Location);
         }
 
-        internal static Dictionary<string, FileBuildInfo> GetLocalVersions(string assembliesDirPath, string runningAppLocation = null)
+        internal static List<FileBuildInfo> GetLocalVersions(string assembliesDirPath, string runningAppLocation = null)
         {
-            var localVersions = new Dictionary<string, FileBuildInfo>(StringComparer.InvariantCultureIgnoreCase);
-            foreach (var file in Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories))
-            {
-                var localFileInfo = new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation));
-                localVersions.Add(localFileInfo.Location, localFileInfo);
-            }
-
-            return localVersions;
+            return Directory.GetFiles(assembliesDirPath, "*.*", SearchOption.AllDirectories).Select(file => new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation))).ToList();
         }
 
         BuildsInfo SerializeAndDeserialize(BuildsInfo versions)
@@ -118,17 +110,17 @@ namespace Utils.AppUpdater.Pack
             if (!(obj is BuildPackInfo input))
                 return false;
 
-            return Project.Equals(input.Project) && Name.Equals(input.Name) && MD5.Equals(input.MD5);
+            return ProjectName.Equals(input.ProjectName) && Name.Equals(input.Name) && MD5.Equals(input.MD5);
         }
 
         public override int GetHashCode()
         {
-            return Project?.GetHashCode() ?? 0 + Name?.GetHashCode() ?? 0 + MD5?.GetHashCode() ?? 0 + 34;
+            return ProjectName?.GetHashCode() ?? 0 + Name?.GetHashCode() ?? 0 + MD5?.GetHashCode() ?? 0 + 34;
         }
 
         public override string ToString()
         {
-            return $"Name=[{Name}] Project=[{Project}]";
+            return Name;
         }
     }
 }

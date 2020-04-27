@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Utils.Properties;
 
 namespace Utils.AppUpdater
 {
@@ -14,10 +15,7 @@ namespace Utils.AppUpdater
         public int Build { get; private set; }
         public int Revision { get; private set; }
 
-        BuildNumber()
-        {
-
-        }
+        BuildNumber() { }
 
         BuildNumber(DateTime buildDateTime)
         {
@@ -37,7 +35,7 @@ namespace Utils.AppUpdater
         public static BuildNumber FromFile(string file)
         {
             if (!File.Exists(file))
-                throw new ArgumentException($"File [{file}] not exist!");
+                throw new ArgumentException(string.Format(Resources.FileNotExist, file));
 
             var fileVersion = FileVersionInfo.GetVersionInfo(file);
             if (fileVersion.FileVersion == null)
@@ -48,9 +46,7 @@ namespace Utils.AppUpdater
             else
             {
                 if (!TryParse(fileVersion, out var getVers))
-                {
                     TryParse("1.0.0.0", out getVers);
-                }
 
                 return getVers;
             }

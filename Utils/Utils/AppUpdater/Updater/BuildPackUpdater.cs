@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using Utils.AppUpdater.Pack;
@@ -95,24 +96,79 @@ namespace Utils.AppUpdater.Updater
 
         #endregion
 
-        protected internal BuildPackUpdater(Assembly runningApp)
+        /// <summary>
+        /// Исходный файл с информацией о версиях
+        /// </summary>
+        public BuildPackInfo BuildPack { get; }
+
+        /// <summary>
+        /// Указывает на необходимость выкачивания файла с пакетом обновлений из сервера на локальный компютер
+        /// Необходимо проверять т.к. возмоно пакет пришел только на удаление файлов
+        /// </summary>
+        public bool NeedToFetchPack { get; protected set; }
+
+        public string FileTempPath { get; }
+
+        public string DiretoryTempPath { get; }
+
+        protected internal BuildPackUpdater(Assembly runningApp, BuildPackInfo buildPack)
         {
             if (runningApp == null)
                 throw new ArgumentNullException(nameof(runningApp));
 
             _collection = new List<BuildUpdater>();
             LocationApp = runningApp.Location;
+            BuildPack = buildPack ?? throw new ArgumentNullException(nameof(buildPack));
+
+            var localVersions = BuildPackInfo.GetLocalVersions(runningApp);
+            var filesToChange = 0;
+
+            foreach (var localFile in localVersions)
+            {
+                var remoteFile = BuildPack.Builds.FirstOrDefault(x => x.AssemblyName == localFile.AssemblyName && x.ScopeName == localFile.ScopeName);
+                if (remoteFile == null)
+                    continue;
+
+                if ((remoteFile.Type == BuldPerformerType.Update || remoteFile.Type == BuldPerformerType.CreateOrUpdate) && remoteFile.Version > localFile.Version)
+                {
+                    Add(localFile, remoteFile);
+                    filesToChange++;
+                }
+                else if ((remoteFile.Type == BuldPerformerType.RollBack || remoteFile.Type == BuldPerformerType.CreateOrRollBack) && remoteFile.Version < localFile.Version)
+                {
+                    Add(localFile, remoteFile);
+                    filesToChange++;
+                }
+                else if (remoteFile.Type == BuldPerformerType.Remove)
+                {
+                    Add(localFile, remoteFile);
+                }
+            }
+
+            foreach (var remoteFile in BuildPack.Builds.Where(x => x.Type == BuldPerformerType.CreateOrUpdate || x.Type == BuldPerformerType.CreateOrRollBack))
+            {
+                if (this.Any(x => x.LocalFile.AssemblyName == remoteFile.AssemblyName && x.LocalFile.ScopeName == remoteFile.ScopeName))
+                    continue;
+
+                Add(null, remoteFile);
+                filesToChange++;
+            }
+
+            NeedToFetchPack = filesToChange > 0;
+
+            if (NeedToFetchPack)
+            {
+                FileTempPath = Path.GetTempFileName();
+                DiretoryTempPath = Path.Combine(Path.GetTempPath(), STRING.RandomString(15));
+            }
         }
 
-        protected internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
+        internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            Add(GetBuildUpdater(localFile, remoteFile));
+            _collection.Add(GetBuildUpdater(localFile, remoteFile));
         }
 
-        protected internal void Add(BuildUpdater item)
-        {
-            _collection.Add(item);
-        }
+        protected abstract BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile);
 
         public byte[] SerializeToStreamOfBytes()
         {
@@ -126,8 +182,6 @@ namespace Utils.AppUpdater.Updater
                 return new BinaryFormatter().Deserialize(stream) as BuildPackUpdater;
         }
 
-        protected abstract BuildUpdater GetBuildUpdater(FileBuildInfo localFile, FileBuildInfo remoteFile);
-
         public IEnumerator<BuildUpdater> GetEnumerator()
         {
             return _collection.GetEnumerator();
@@ -138,14 +192,48 @@ namespace Utils.AppUpdater.Updater
             return _collection.GetEnumerator();
         }
 
+        void RemoveTempObjects()
+        {
+            try
+            {
+                if (!DiretoryTempPath.IsNullOrEmptyTrim() && Directory.Exists(DiretoryTempPath))
+                    IO.DeleteReadOnlyDirectory(DiretoryTempPath);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            finally
+            {
+                DeleteTempFile();
+            }
+        }
+
+        protected void DeleteTempFile()
+        {
+            try
+            {
+                if (!FileTempPath.IsNullOrEmptyTrim() && File.Exists(FileTempPath))
+                {
+                    IO.GetAccessToFile(FileTempPath);
+                    File.Delete(FileTempPath);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
         public virtual void Dispose()
         {
             Status = UploaderStatus.Disposed;
+            RemoveTempObjects();
         }
 
         public override string ToString()
         {
-            return $"Status = {Status:G} BuildsCount = {Count}";
+            return $"Status = \"{Status:G}\" BuildsCount = {Count}";
         }
     }
 }

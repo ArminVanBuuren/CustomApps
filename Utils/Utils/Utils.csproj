@@ -84,7 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUpdater\BuildNumber.cs" />
-    <Compile Include="AppUpdater\UpdaterProject.cs" />
+    <Compile Include="AppUpdater\IUpdaterProject.cs" />
+    <Compile Include="AppUpdater\UpdaterProjectSimple.cs" />
     <Compile Include="AppUpdater\Updater\BuildPackUpdater.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdater.cs" />
     <Compile Include="AppUpdater\Updater\BuildUpdaterSimple.cs" />
@@ -240,6 +241,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

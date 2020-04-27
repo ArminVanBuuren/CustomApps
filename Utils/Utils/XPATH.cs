@@ -32,7 +32,7 @@ namespace Utils
         {
             result = null;
             var collection = Select(navigator, xpath, true);
-            if (collection == null)
+            if (collection == null || collection.Count == 0)
                 return false;
 
             result = collection.First();

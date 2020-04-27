@@ -150,6 +150,12 @@
   <data name="days5" xml:space="preserve">
     <value>days</value>
   </data>
+  <data name="DirectoryHasNoFiles" xml:space="preserve">
+    <value>Directory = "{0}" has no one file.</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>File "{0}" not exist!</value>
+  </data>
   <data name="hour" xml:space="preserve">
     <value>hour</value>
   </data>
@@ -176,5 +182,11 @@
   </data>
   <data name="seconds5" xml:space="preserve">
     <value>seconds</value>
+  </data>
+  <data name="DirectoryDoesntExist" xml:space="preserve">
+    <value>Directory= "{0}" doesn't exist</value>
+  </data>
+  <data name="InvalidFileLocation" xml:space="preserve">
+    <value> Invalid file location.</value>
   </data>
 </root>

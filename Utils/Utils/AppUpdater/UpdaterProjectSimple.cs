@@ -2,21 +2,14 @@
 
 namespace Utils.AppUpdater
 {
-    public interface IUpdaterProject
-    {
-        Uri Uri { get; }
-        string BuildsInfoName { get; }
-        Uri BuildsInfoUri { get; }
-    }
-
     [Serializable]
-    class UpdaterProject : IUpdaterProject
+    class UpdaterProjectSimple : IUpdaterProject
     {
         public Uri Uri { get; }
         public string BuildsInfoName { get; }
         public Uri BuildsInfoUri { get; }
 
-        internal UpdaterProject()
+        internal UpdaterProjectSimple()
         {
             Uri = new Uri(@"https://raw.githubusercontent.com/ArminVanBuuren/Builds/master");
             BuildsInfoName = "versions.xml";

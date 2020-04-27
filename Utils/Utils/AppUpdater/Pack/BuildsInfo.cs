@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Utils.Properties;
 
 namespace Utils.AppUpdater.Pack
 {
@@ -11,16 +12,16 @@ namespace Utils.AppUpdater.Pack
         [XmlElement("Pack")]
         public List<BuildPackInfo> Packs { get; set; } = new List<BuildPackInfo>();
 
-        public void Add(string project, string assembliesDirPath, string destinationDirPath, string buildsInfoFileName)
+        public void Add(string projectName, string assembliesDirPath, string destinationDirPath, string buildsInfoFileName)
         {
             if (!Directory.Exists(destinationDirPath))
-                throw new ArgumentException($"Destination directory=[{destinationDirPath}] doesn't exist");
+                throw new ArgumentException(string.Format(Resources.DirectoryDoesntExist, destinationDirPath));
 
-            var pack = new BuildPackInfo(project, assembliesDirPath, destinationDirPath);
+            var pack = new BuildPackInfo(projectName, assembliesDirPath, destinationDirPath);
             var prevPacks = new List<BuildPackInfo>();
             Packs.RemoveAll(p =>
             {
-                if (p.Project == project)
+                if (p.ProjectName == projectName)
                 {
                     prevPacks.Add(p);
                     return true;
@@ -41,9 +42,7 @@ namespace Utils.AppUpdater.Pack
             }
 
             foreach (var prevPack in prevPacks)
-            {
                 File.Delete(Path.Combine(destinationDirPath, prevPack.Name));
-            }
         }
 
         void Serialize(string fileVersionsPath)
@@ -52,21 +51,14 @@ namespace Utils.AppUpdater.Pack
                 File.Delete(fileVersionsPath);
 
             using (var stream = new FileStream(fileVersionsPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
-            {
                 new XmlSerializer(typeof(BuildsInfo)).Serialize(stream, this);
-            }
         }
 
         public static BuildsInfo Deserialize(string contextStr)
         {
             var xsSubmit = new XmlSerializer(typeof(BuildsInfo));
-            BuildsInfo result;
             using (TextReader reader = new StringReader(contextStr))
-            {
-                result = (BuildsInfo)xsSubmit.Deserialize(reader);
-            }
-
-            return result;
+                return (BuildsInfo)xsSubmit.Deserialize(reader);
         }
     }
 }

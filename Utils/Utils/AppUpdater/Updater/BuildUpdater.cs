@@ -11,7 +11,7 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// Пусть скачанного файла билда
         /// </summary>
-        public string FileSource => Path.Combine(_parent.DiretoryTempPath, RemoteFile.Location);
+        public string FileSource => Path.Combine(_parent.DiretoryTempPath ?? string.Empty, RemoteFile.Location);
         /// <summary>
         /// Путь назначения файла билда
         /// </summary>
@@ -19,15 +19,8 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// Явлиется ли билд контрольным объектом
         /// </summary>
-        public virtual bool IsExecutable
-        {
-            get
-            {
-                if (LocalFile != null)
-                    return LocalFile.IsExecutingFile;
-                return false;
-            }
-        }
+        public virtual bool IsExecutable => LocalFile != null && LocalFile.IsExecutingFile;
+
         /// <summary>
         /// Информация билда на локальном сервере
         /// </summary>
@@ -39,18 +32,15 @@ namespace Utils.AppUpdater.Updater
 
         protected internal BuildUpdater(BuildPackUpdaterBase parent, FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
-            if (remoteFile == null)
-                throw new ArgumentNullException($"Remote [{nameof(FileBuildInfo)}] cannot be null");
-
             _parent = parent;
             LocalFile = localFile;
-            RemoteFile = remoteFile;
-            FileDestination = Path.Combine(Path.GetDirectoryName(parent.LocationApp), RemoteFile.Location);
+            RemoteFile = remoteFile ?? throw new ArgumentNullException($"Remote {nameof(FileBuildInfo)} cannot be null");
+            FileDestination = Path.Combine(Path.GetDirectoryName(parent.LocationApp), LocalFile != null ? LocalFile.Location : RemoteFile.Location);
         }
 
         public override string ToString()
         {
-            return $"[{RemoteFile.Location}] Local = {LocalFile?.Version} Remote = {RemoteFile.Version}";
+            return $"[{RemoteFile.AssemblyName}] Local = \"{LocalFile?.Version}\" Remote = \"{RemoteFile.Version}\"";
         }
     }
 }
