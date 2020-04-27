@@ -255,10 +255,10 @@ namespace SPAMassageSaloon
                         var lastUpdate = LastUpdateInfo;
                         if (lastUpdate != null)
                         {
-                            var info = this.GetAssemblyInfo();
-                            var currentName = info.CurrentAssembly.ManifestModule.Name;
-                            var currentVersion = BuildNumber.FromFile(info.ApplicationPath);
-                            var remote = lastUpdate.FirstOrDefault(x => x.RemoteFile.Location.Split('\\').Last().Equals(currentName));
+                            var current = this.GetAssemblyInfo();
+                            var currentName = current.CurrentAssembly.GetName().Name;
+                            var currentVersion = BuildNumber.FromFile(current.ApplicationPath);
+                            var remote = lastUpdate.FirstOrDefault(x => !x.RemoteFile.AssemblyName.IsNullOrEmpty() && x.RemoteFile.AssemblyName.Equals(currentName));
                             if (remote != null && remote.RemoteFile.Version == currentVersion)
                             {
                                 var separator = $"\r\n{new string('-', 61)}\r\n";
