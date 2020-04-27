@@ -62,7 +62,7 @@ namespace Utils.Media.MediaCapture
 
         protected MediaCapture(string destinationDir, int secondsRecDuration)
         {
-            DestinationDir = destinationDir.IsNullOrEmptyTrim() ? this.GetAssemblyInfo().ApplicationDirectory : destinationDir;
+            DestinationDir = destinationDir.IsNullOrEmptyTrim() ? AssemblyInfo.ApplicationDirectory : destinationDir;
 
             SecondsRecordDuration = secondsRecDuration;
         }
