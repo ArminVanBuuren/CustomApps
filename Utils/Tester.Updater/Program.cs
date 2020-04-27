@@ -21,15 +21,15 @@ namespace Tester.Updater
         private static BuildPackUpdater _updater;
         static void Main(string[] args)
         {
-            try
-            {
-                var dd = BuildsInfo.Deserialize(IO.SafeReadFile(@"C:\!Builds\Git\versions.xml"));
-                var dd2 = new BuildPackUpdaterSimple(typeof(Class1).GetAssemblyInfo().CurrentAssembly, dd.Packs.First(), null);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            //try
+            //{
+            //    var dd = BuildsInfo.Deserialize(IO.SafeReadFile(@"C:\!Builds\Git\versions.xml"));
+            //    var dd2 = new BuildPackUpdaterSimple(typeof(Class1).GetAssemblyInfo().CurrentAssembly, dd.Packs.First(), null);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex);
+            //}
             
 
             //var test0 = new FileBuildInfo(@"C:\!Builds\Builds\SPAMassageSaloon.exe", @"C:\!Builds\Builds", false);
