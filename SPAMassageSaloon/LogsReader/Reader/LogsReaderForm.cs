@@ -122,6 +122,11 @@ namespace LogsReader.Reader
 
                 dgvFiles.AutoGenerateColumns = false;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+                dgvFiles.KeyDown += (sender, args) =>
+                {
+                    if (args.KeyData == Keys.Enter)
+                        args.Handled = true;
+                };
                 orderByText.GotFocus += OrderByText_GotFocus;
 
                 #region Initialize Controls
@@ -754,11 +759,19 @@ namespace LogsReader.Reader
 
         private void DgvFiles_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
+                if (e.Button != MouseButtons.Right)
+                    return;
                 var hti = dgvFiles.HitTest(e.X, e.Y);
+                if (hti.RowIndex == -1)
+                    return;
                 dgvFiles.ClearSelection();
                 dgvFiles.Rows[hti.RowIndex].Selected = true;
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
     

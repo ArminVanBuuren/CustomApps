@@ -395,9 +395,14 @@ namespace SPAFilter
             KeyDown += ProcessFilterForm_KeyDown;
 
             dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;
+            dataGridServiceInstances.KeyDown += DataGrid_KeyDown;
             dataGridProcesses.CellFormatting += DataGridProcesses_CellFormatting;
+            dataGridProcesses.KeyDown += DataGrid_KeyDown;
             dataGridOperations.CellFormatting += DataGridOperations_CellFormatting;
+            dataGridOperations.KeyDown += DataGrid_KeyDown;
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
+            dataGridScenarios.KeyDown += DataGrid_KeyDown;
+            dataGridCommands.KeyDown += DataGrid_KeyDown;
 
             ProcessesButtonOpen.Click += ProcessesButtonOpen_Click;
             ProcessesTextBox.TextChanged += ProcessesTextBox_TextChanged;
@@ -422,6 +427,12 @@ namespace SPAFilter
 
             ApplySettings();
             CenterToScreen();
+        }
+
+        private void DataGrid_KeyDown(object sender, KeyEventArgs args)
+        {
+            if (args.KeyData == Keys.Enter)
+                args.Handled = true;
         }
 
         public void ApplySettings()
