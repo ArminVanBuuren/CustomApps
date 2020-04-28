@@ -194,7 +194,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(null, ex));
+                    SendError(new ApplicationUpdaterArgs(null, ex));
                 }
                 finally
                 {
@@ -216,9 +216,16 @@ namespace Utils.AppUpdater
 
             foreach (AppFetchingHandler del in eventListeners)
             {
-                del.Invoke(this, args);
-                if (args.Result == UpdateBuildResult.Cancel)
-                    return args;
+                try
+                {
+                    del.Invoke(this, args);
+                    if (args.Result == UpdateBuildResult.Cancel)
+                        return args;
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
             }
 
             return args;
@@ -234,13 +241,13 @@ namespace Utils.AppUpdater
 
                 if (e.Error != null || control.Status != UploaderStatus.Fetched)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(control, e.Error, Resources.ApplicationUpdater_ErrFetch));
+                    SendError(new ApplicationUpdaterArgs(control, e.Error, Resources.ApplicationUpdater_ErrFetch));
                     control.Dispose();
                     ReturnBackStatus(); // если возникли какие то ошибки при скачивании пакета с обновлениями
                 }
-                else if(OnUpdate != null)
+                else if (OnUpdate != null)
                 {
-                    OnUpdate.BeginInvoke(this, new ApplicationUpdaterArgs(control), null, null);
+                    SendMessage(OnUpdate, new ApplicationUpdaterArgs(control));
                 }
                 else
                 {
@@ -249,7 +256,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(control, ex, Resources.ApplicationUpdater_ErrInstall));
+                SendError(new ApplicationUpdaterArgs(control, ex, Resources.ApplicationUpdater_ErrInstall));
                 control?.Dispose();
                 ReturnBackStatus();
             }
@@ -377,7 +384,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(updater, ex, Resources.ApplicationUpdater_ErrInstall));
+                    SendError(new ApplicationUpdaterArgs(updater, ex, Resources.ApplicationUpdater_ErrInstall));
                     updater.Dispose();
                 }
                 finally
@@ -398,17 +405,40 @@ namespace Utils.AppUpdater
 
             try
             {
-                var prescent = remoteControl.ProgressPercent;
                 var localControl = GetBuildPackUpdater(remoteControl.BuildPack);
                 if (localControl.Count == 0)
                 {
-                    OnSuccessfulUpdated?.Invoke(this, new ApplicationUpdaterArgs(remoteControl));
+                    SendMessage(OnSuccessfulUpdated, new ApplicationUpdaterArgs(remoteControl));
                     LastUpdateInfo = null;
                 }
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(remoteControl, ex));
+                SendError(new ApplicationUpdaterArgs(remoteControl, ex));
+            }
+        }
+
+        void SendMessage(AppUpdaterHandler handler, ApplicationUpdaterArgs args)
+        {
+            try
+            {
+                handler?.Invoke(this, args);
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        void SendError(ApplicationUpdaterArgs args)
+        {
+            try
+            {
+                OnProcessingError?.Invoke(this, args);
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
 
