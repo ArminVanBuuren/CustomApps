@@ -97,7 +97,7 @@
     <Compile Include="AppUpdater\Updater\BuildUpdaterBase.cs" />
     <Compile Include="AppUpdater\Updater\BuildPackUpdaterSimple.cs" />
     <Compile Include="AppUpdater\Hasher.cs" />
-    <Compile Include="AppUpdater\ApplicationUpdaterProcessingArgs.cs" />
+    <Compile Include="AppUpdater\ApplicationUpdaterArgs.cs" />
     <Compile Include="ATTRIBUTES.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CollectionHelper\DistinctList.cs" />

@@ -72,15 +72,12 @@ namespace Utils.AppUpdater.Updater
                 OnFetchComplete?.BeginInvoke(this, _fetchArgs, null, null);
             }
         }
-        
+
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            lock (sync)
-            {
-                UploadedBytes = e.BytesReceived;
-                TotalBytes = e.TotalBytesToReceive;
-                DownloadProgressChanged?.Invoke(this, EventArgs.Empty);
-            }
+            UploadedBytes = e.BytesReceived;
+            TotalBytes = e.TotalBytesToReceive;
+            DownloadProgressChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -106,9 +103,9 @@ namespace Utils.AppUpdater.Updater
                         _fetchArgs.Error = new Exception($"Hash of uploaded file \'{downloadedMD5}\' is incorrect. Remote hash is [{BuildPack.MD5}]");
                     }
                 }
-                catch (Exception exception)
+                catch (Exception ex)
                 {
-                    _fetchArgs.Error = exception;
+                    _fetchArgs.Error = ex;
                 }
             }
 

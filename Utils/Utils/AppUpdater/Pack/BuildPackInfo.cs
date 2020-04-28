@@ -90,11 +90,12 @@ namespace Utils.AppUpdater.Pack
                 .ToList();
         }
 
-        internal static List<FileBuildInfo> GetLocalVersions(Assembly runningApp, IEnumerable<string> childFiles)
+        internal static List<FileBuildInfo> GetLocalVersions(Assembly runningApp, BuildPackInfo remoteBuildPack)
         {
+            var remoteBuilds = remoteBuildPack.Builds.Select(x => x.Location).ToList();
             var assembliesDirPath = AssemblyInfo.ApplicationDirectory;
             var dirs = new DistinctList<string>(StringComparer.InvariantCultureIgnoreCase);
-            foreach (var file in childFiles)
+            foreach (var file in remoteBuilds)
             {
                 var filePath = Path.Combine(assembliesDirPath, file);
                 var dirPath = Path.GetDirectoryName(filePath);
@@ -103,7 +104,7 @@ namespace Utils.AppUpdater.Pack
             }
 
             var runningAppLocation = AssemblyInfo.ApplicationDirectory;
-            var result = new List<FileBuildInfo>(childFiles.Count());
+            var result = new List<FileBuildInfo>(remoteBuilds.Count());
             foreach (var directory in dirs)
             {
                 result.AddRange(GetLocalVersions(directory, SearchOption.TopDirectoryOnly, runningAppLocation));

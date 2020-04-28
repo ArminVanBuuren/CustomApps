@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Cache;
 using System.Reflection;
 using System.Timers;
+using Microsoft.Win32;
 using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
+using Utils.Handles;
 using Utils.Properties;
 
 namespace Utils.AppUpdater
@@ -33,6 +35,7 @@ namespace Utils.AppUpdater
         private readonly object syncChecking = new object();
         private readonly object syncUpdating = new object();
         private readonly Timer _watcher;
+        private readonly AssemblyInfo _assemblyInfo;
 
         private int _httpRequestTimeoutSeconds = 100;
 
@@ -42,10 +45,11 @@ namespace Utils.AppUpdater
         private AutoUpdaterStatus _satus = AutoUpdaterStatus.Stopped;
 
         public event AppFetchingHandler OnFetch;
-        public event AppUpdatingHandler OnUpdate;
+        public event AppUpdaterHandler OnUpdate;
+        public event AppUpdaterHandler OnSuccessfulUpdated;
         public event AppUpdaterErrorHandler OnProcessingError;
 
-        public Assembly RunningApp { get; }
+        public Assembly RunningApp => _assemblyInfo.CurrentAssembly;
 
         public string ProjectName { get; }
 
@@ -91,6 +95,40 @@ namespace Utils.AppUpdater
             }
         }
 
+        private BuildPackUpdater LastUpdateInfo
+        {
+            get
+            {
+                try
+                {
+                    using (var reg = new RegeditControl(_assemblyInfo.ApplicationName))
+                    {
+                        var obj = reg[nameof(LastUpdateInfo)];
+                        if (obj is byte[] array)
+                            return BuildPackUpdater.Deserialize(array);
+                        else
+                            return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                try
+                {
+                    using (var reg = new RegeditControl(_assemblyInfo.ApplicationName))
+                        reg[nameof(LastUpdateInfo), RegistryValueKind.Binary] = value?.SerializeToStreamOfBytes();
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -104,7 +142,7 @@ namespace Utils.AppUpdater
             if (checkUpdatesIntervalMinutes <= 0)
                 throw new ArgumentException(Resources.ApplicationUpdater_ErrUpdateInterval);
 
-            RunningApp = runningApp;
+            _assemblyInfo = new AssemblyInfo(runningApp);
             ProjectName = RunningApp.GetName().Name;
             UpdaterProject = updaterProject;
             _updaterProject = UpdaterProject ?? new UpdaterProjectSimple();
@@ -156,7 +194,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(null, ex));
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(null, ex));
                 }
                 finally
                 {
@@ -174,17 +212,13 @@ namespace Utils.AppUpdater
         {
             var eventListeners = eventReference?.GetInvocationList();
             if (eventListeners == null || !eventListeners.Any())
-            {
                 return args;
-            }
 
             foreach (AppFetchingHandler del in eventListeners)
             {
                 del.Invoke(this, args);
                 if (args.Result == UpdateBuildResult.Cancel)
-                {
                     return args;
-                }
             }
 
             return args;
@@ -200,13 +234,13 @@ namespace Utils.AppUpdater
 
                 if (e.Error != null || control.Status != UploaderStatus.Fetched)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, e.Error, Resources.ApplicationUpdater_ErrFetch));
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(control, e.Error, Resources.ApplicationUpdater_ErrFetch));
                     control.Dispose();
                     ReturnBackStatus(); // если возникли какие то ошибки при скачивании пакета с обновлениями
                 }
                 else if(OnUpdate != null)
                 {
-                    OnUpdate.BeginInvoke(this, new ApplicationUpdatingArgs(control), null, null);
+                    OnUpdate.BeginInvoke(this, new ApplicationUpdaterArgs(control), null, null);
                 }
                 else
                 {
@@ -215,7 +249,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, Resources.ApplicationUpdater_ErrCommitAndPull));
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(control, ex, Resources.ApplicationUpdater_ErrInstall));
                 control?.Dispose();
                 ReturnBackStatus();
             }
@@ -232,6 +266,9 @@ namespace Utils.AppUpdater
             // если был в стопе или в чеке, то принудительно переводим в проверку
             lock (syncStatus)
                 Status = AutoUpdaterStatus.Checking;
+
+            CheckOnSuccessfulUpdated();
+            CheckUpdates();
 
             return true;
         }
@@ -325,22 +362,59 @@ namespace Utils.AppUpdater
 
                 try
                 {
-                    updater.Commit();
-                    updater.Pull();
-                    ReturnBackStatus(); // если произошло обновление без рестарта приложения то возвращаем статус обратно
+                    if (updater.Commit())
+                    {
+                        LastUpdateInfo = updater;
+                        if (updater.Pull())
+                            CheckOnSuccessfulUpdated();
+                        else
+                            throw new Exception(Resources.UnableExecutePull);
+                    }
+                    else
+                    {
+                        throw new Exception(Resources.UnableExecuteCommit);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    OnProcessingError?.Invoke(this, new ApplicationUpdatingArgs(control, ex, Resources.ApplicationUpdater_ErrCommitAndPull));
-                    control.Dispose();
-                    ReturnBackStatus();
+                    OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(updater, ex, Resources.ApplicationUpdater_ErrInstall));
+                    updater.Dispose();
                 }
+                finally
+                {
+                    ReturnBackStatus(); // если произошло обновление без рестарта приложения то возвращаем статус обратно
+                }
+            }
+        }
+
+        /// <summary>
+        /// Проверка на успешность обновления по предыдущему паку
+        /// </summary>
+        void CheckOnSuccessfulUpdated()
+        {
+            var remoteControl = LastUpdateInfo;
+            if (remoteControl == null)
+                return;
+
+            try
+            {
+                var prescent = remoteControl.ProgressPercent;
+                var localControl = GetBuildPackUpdater(remoteControl.BuildPack);
+                if (localControl.Count == 0)
+                {
+                    OnSuccessfulUpdated?.Invoke(this, new ApplicationUpdaterArgs(remoteControl));
+                    LastUpdateInfo = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProcessingError?.Invoke(this, new ApplicationUpdaterArgs(remoteControl, ex));
             }
         }
 
         public override string ToString()
         {
-            return $"{nameof(ApplicationUpdater)} Project = \"{ProjectName}\" Status = \"{Status:G}\"";
+            return $"[{nameof(ApplicationUpdater)}] Project = \"{ProjectName}\" Status = \"{Status:G}\"";
         }
     }
 }

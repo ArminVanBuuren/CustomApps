@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplicationUpdater_ErrCommitAndPull" xml:space="preserve">
-    <value>Error when trying commit and pull!</value>
+  <data name="ApplicationUpdater_ErrInstall" xml:space="preserve">
+    <value>Errors when installing updates</value>
   </data>
   <data name="ApplicationUpdater_ErrFetch" xml:space="preserve">
-    <value>Error when fetching pack of builds!</value>
+    <value>Error when fetching pack of builds</value>
   </data>
   <data name="ApplicationUpdater_ErrServerGetStatus" xml:space="preserve">
     <value>Exception when get status from server. HttpStatus=[{0:G}] Uri=[{1}]</value>
@@ -188,5 +188,11 @@
   </data>
   <data name="InvalidFileLocation" xml:space="preserve">
     <value> Invalid file location.</value>
+  </data>
+  <data name="UnableExecuteCommit" xml:space="preserve">
+    <value>Unable to execute Commit</value>
+  </data>
+  <data name="UnableExecutePull" xml:space="preserve">
+    <value>Unable to execute Pull</value>
   </data>
 </root>

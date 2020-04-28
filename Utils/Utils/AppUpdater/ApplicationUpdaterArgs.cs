@@ -5,23 +5,23 @@ namespace Utils.AppUpdater
 {
 
     [Serializable]
-    public delegate void AppUpdatingHandler(object sender, ApplicationUpdatingArgs args);
+    public delegate void AppUpdaterHandler(object sender, ApplicationUpdaterArgs args);
 
     [Serializable]
-    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdatingArgs args);
+    public delegate void AppUpdaterErrorHandler(object sender, ApplicationUpdaterArgs args);
 
     [Serializable]
     public delegate void AppFetchingHandler(object sender, ApplicationFetchingArgs args);
 
     [Serializable]
-    public class ApplicationUpdatingArgs
+    public class ApplicationUpdaterArgs
     {
-        internal ApplicationUpdatingArgs(BuildPackUpdater control)
+        internal ApplicationUpdaterArgs(BuildPackUpdater control)
         {
             Control = control;
         }
 
-        internal ApplicationUpdatingArgs(BuildPackUpdater control, Exception exception, string message = null)
+        internal ApplicationUpdaterArgs(BuildPackUpdater control, Exception exception, string message = null)
         {
             Control = control;
             Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
@@ -39,7 +39,7 @@ namespace Utils.AppUpdater
     }
 
     [Serializable]
-    public class ApplicationFetchingArgs : ApplicationUpdatingArgs
+    public class ApplicationFetchingArgs : ApplicationUpdaterArgs
     {
         internal ApplicationFetchingArgs(BuildPackUpdater control):base(control)
         {

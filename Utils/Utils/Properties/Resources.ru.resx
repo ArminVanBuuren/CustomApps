@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApplicationUpdater_ErrCommitAndPull" xml:space="preserve">
-    <value>Ошибки при выполненнии операций commit и pull!</value>
+    <value>Ошибки при установке обновлений</value>
   </data>
   <data name="ApplicationUpdater_ErrFetch" xml:space="preserve">
     <value>Ошибка при скачивании пакета со сборками!</value>

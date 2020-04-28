@@ -113,13 +113,19 @@ namespace Tester.Updater
         
         public static void Update()
         {
-            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 1);
+            up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 10);
+            up.OnSuccessfulUpdated += Up_OnSuccessfulUpdated;
             //up.OnFetch += Up_OnFetch;
-            up.OnUpdate += Up_OnUpdate;
+            //up.OnUpdate += Up_OnUpdate;
             //up.OnProcessingError += Up_OnProcessingError;
             up.Start();
-            up.CheckUpdates();
+            //up.CheckUpdates();
             Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] {nameof(ApplicationUpdater)} created!");
+        }
+
+        private static void Up_OnSuccessfulUpdated(object sender, ApplicationUpdaterArgs args)
+        {
+            Console.WriteLine("Succeessful Updated!!!");
         }
 
         //private static bool infinityChecking = true;
@@ -148,7 +154,7 @@ namespace Tester.Updater
 
         }
 
-        private static void Up_OnUpdate(object sender, ApplicationUpdatingArgs args)
+        private static void Up_OnUpdate(object sender, ApplicationUpdaterArgs args)
         {
             try
             {
@@ -196,7 +202,7 @@ namespace Tester.Updater
             //up.Refresh();
         }
 
-        private static void Up_OnProcessingError(object sender, ApplicationUpdatingArgs args)
+        private static void Up_OnProcessingError(object sender, ApplicationUpdaterArgs args)
         {
             Console.WriteLine($"Up_OnProcessingError. ThreadId=[{Thread.CurrentThread.ManagedThreadId}] IUpdater{(args.Control == null ? "=[null]" : args.Control.ToString())} Error=[{args.Error}]");
         }

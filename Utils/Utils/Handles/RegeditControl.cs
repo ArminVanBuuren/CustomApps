@@ -12,29 +12,27 @@ namespace Utils.Handles
         public string ApplicationName { get; }
         private readonly RegistryKey software;
 
-        public RegeditControl(string applicationName)
-        {
-            ApplicationName = applicationName;
+        public ICollection<string> Keys => GetValueNames();
 
-            software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
-            if (software == null)
-                throw new Exception(@"Can't find HKEY_CURRENT_USER\SOFTWARE");
+        public ICollection<object> Values => GetKeyValues().Values;
+
+        public int Count
+        {
+            get
+            {
+                try
+                {
+                    using (var project = GetCurrentProject())
+                        return project?.ValueCount ?? -1;
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+            }
         }
 
-        public RegeditControl(string applicationName, RegeditControl parent)
-        {
-            if(parent == null)
-                throw new ArgumentException(nameof(parent));
-
-            ApplicationName = applicationName;
-            Parent = parent;
-            software = Parent.GetCurrentProject();
-        }
-
-        RegistryKey GetCurrentProject()
-        {
-            return software.OpenSubKey(ApplicationName, true) ?? software.CreateSubKey(ApplicationName);
-        }
+        public bool IsReadOnly => false;
 
         public object this[string propertyName]
         {
@@ -46,6 +44,30 @@ namespace Utils.Handles
         {
             get => GetValue(propertyName);
             set => SetValue(propertyName, value, type);
+        }
+
+        public RegeditControl(string applicationName)
+        {
+            ApplicationName = applicationName;
+
+            software = Registry.CurrentUser.OpenSubKey("SOFTWARE", true);
+            if (software == null)
+                throw new Exception(@"Can't find HKEY_CURRENT_USER\SOFTWARE");
+        }
+
+        public RegeditControl(string applicationName, RegeditControl parent)
+        {
+            if (parent == null)
+                throw new ArgumentException(nameof(parent));
+
+            ApplicationName = applicationName;
+            Parent = parent;
+            software = Parent.GetCurrentProject();
+        }
+
+        RegistryKey GetCurrentProject()
+        {
+            return software.OpenSubKey(ApplicationName, true) ?? software.CreateSubKey(ApplicationName);
         }
 
         object GetValue(string propertyName)
@@ -112,27 +134,6 @@ namespace Utils.Handles
             }
         }
 
-        public ICollection<string> Keys => GetValueNames();
-
-        public ICollection<object> Values => GetKeyValues().Values;
-
-        public int Count
-        {
-            get
-            {
-                try
-                {
-                    using (var project = GetCurrentProject())
-                        return project?.ValueCount ?? -1;       
-                }
-                catch (Exception ex)
-                {
-                    return -1;
-                }
-            }
-        }
-
-        public bool IsReadOnly => false;
 
         public static bool EnabledBootRun(string applicationName)
         {

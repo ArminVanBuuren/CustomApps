@@ -61,20 +61,20 @@ namespace Utils.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Error when trying commit and pull!.
-        /// </summary>
-        internal static string ApplicationUpdater_ErrCommitAndPull {
-            get {
-                return ResourceManager.GetString("ApplicationUpdater_ErrCommitAndPull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Error when fetching pack of builds!.
+        ///   Ищет локализованную строку, похожую на Error when fetching pack of builds.
         /// </summary>
         internal static string ApplicationUpdater_ErrFetch {
             get {
                 return ResourceManager.GetString("ApplicationUpdater_ErrFetch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Errors when installing updates.
+        /// </summary>
+        internal static string ApplicationUpdater_ErrInstall {
+            get {
+                return ResourceManager.GetString("ApplicationUpdater_ErrInstall", resourceCulture);
             }
         }
         
@@ -273,6 +273,24 @@ namespace Utils.Properties {
         internal static string seconds5 {
             get {
                 return ResourceManager.GetString("seconds5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Unable to execute Commit.
+        /// </summary>
+        internal static string UnableExecuteCommit {
+            get {
+                return ResourceManager.GetString("UnableExecuteCommit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Unable to execute Pull.
+        /// </summary>
+        internal static string UnableExecutePull {
+            get {
+                return ResourceManager.GetString("UnableExecutePull", resourceCulture);
             }
         }
     }

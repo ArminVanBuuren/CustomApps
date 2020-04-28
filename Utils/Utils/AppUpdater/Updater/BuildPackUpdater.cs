@@ -84,7 +84,7 @@ namespace Utils.AppUpdater.Updater
                 IO.FormatBytes(TotalBytes, out var total);
                 if (total == 0)
                     return 0;
-                return int.Parse(((upload / total) * 100).ToString(CultureInfo.InvariantCulture));
+                return (int)((upload / total) * 100);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Utils.AppUpdater.Updater
             LocationApp = runningApp.Location;
             BuildPack = buildPack ?? throw new ArgumentNullException(nameof(buildPack));
 
-            var localVersions = BuildPackInfo.GetLocalVersions(runningApp, BuildPack.Builds.Select(x => x.Location));
+            var localVersions = BuildPackInfo.GetLocalVersions(runningApp, BuildPack);
             var filesToChange = 0;
 
             foreach (var localFile in localVersions)
@@ -163,7 +163,7 @@ namespace Utils.AppUpdater.Updater
             }
         }
 
-        internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
+        protected internal void Add(FileBuildInfo localFile, FileBuildInfo remoteFile)
         {
             _collection.Add(GetBuildUpdater(localFile, remoteFile));
         }
