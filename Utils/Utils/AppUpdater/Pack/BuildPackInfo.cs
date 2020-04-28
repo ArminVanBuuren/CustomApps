@@ -104,11 +104,10 @@ namespace Utils.AppUpdater.Pack
             }
 
             var runningAppLocation = AssemblyInfo.ApplicationDirectory;
-            var result = new List<FileBuildInfo>(remoteBuilds.Count());
+            var result = new List<FileBuildInfo>(remoteBuilds.Count);
             foreach (var directory in dirs)
-            {
                 result.AddRange(GetLocalVersions(directory, SearchOption.TopDirectoryOnly, runningAppLocation));
-            }
+
             return result;
         }
 

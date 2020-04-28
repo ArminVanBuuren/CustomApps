@@ -16,5 +16,4 @@ namespace Utils.AppUpdater
             BuildsInfoUri = new Uri($"{Uri}/{BuildsInfoName}");
         }
     }
-
 }
