@@ -113,15 +113,22 @@ namespace LogsReader.Config
                         Path.GetFileName(FailedSettingsPath),
                         message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
 
-                    if (File.Exists(FailedSettingsPath))
+                    try
                     {
-                        File.SetAttributes(FailedSettingsPath, FileAttributes.Normal);
-                        File.Delete(FailedSettingsPath);
-                    }
+                        if (File.Exists(FailedSettingsPath))
+                        {
+                            File.SetAttributes(FailedSettingsPath, FileAttributes.Normal);
+                            File.Delete(FailedSettingsPath);
+                        }
 
-                    File.SetAttributes(SettingsPath, FileAttributes.Normal);
-                    File.Copy(SettingsPath, FailedSettingsPath);
-                    File.Delete(SettingsPath);
+                        File.SetAttributes(SettingsPath, FileAttributes.Normal);
+                        File.Copy(SettingsPath, FailedSettingsPath);
+                        File.Delete(SettingsPath);
+                    }
+                    catch (Exception ex2)
+                    {
+                        ReportMessage.Show(ex2.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
+                    }
                 }
             }
 
