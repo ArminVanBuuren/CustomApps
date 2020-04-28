@@ -103,56 +103,6 @@ namespace SPAMassageSaloon
             set => SetRegeditValue(nameof(LastUpdatePackage), value);
         }
 
-        private BuildPackUpdater LastUpdateInfo
-        {
-            get
-            {
-                try
-                {
-                    using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                    {
-                        var obj = reg[nameof(LastUpdateInfo)];
-                        if (obj is byte[] array)
-                        {
-                            return BuildPackUpdater.Deserialize(array);
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }   
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                try
-                {
-                    using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                        reg[nameof(LastUpdateInfo), RegistryValueKind.Binary] = value.SerializeToStreamOfBytes();
-                }
-                catch (Exception ex)
-                {
-                    // ignored
-                }
-            }
-        }
-
-        private bool UpdateAlreadyShown
-        {
-            get
-            {
-                var resStr = GetRegeditValue(nameof(UpdateAlreadyShown));
-                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
-                    return false;
-                return res;
-            }
-            set => SetRegeditValue(nameof(UpdateAlreadyShown), value);
-        }
-
         static MainForm()
         {
             BuildTime = $"Build time: {Assembly.GetExecutingAssembly().GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
@@ -212,8 +162,8 @@ namespace SPAMassageSaloon
                 {
                     AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 5);
                     AppUpdater.OnUpdate += AppUpdater_OnUpdate;
+                    AppUpdater.OnSuccessfulUpdated += AppUpdater_OnSuccessfulUpdated;
                     AppUpdater.Start();
-                    AppUpdater.CheckUpdates();
                 }
                 catch (Exception ex)
                 {
@@ -247,36 +197,7 @@ namespace SPAMassageSaloon
                 _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
-
-                try
-                {
-                    if (!UpdateAlreadyShown)
-                    {
-                        var lastUpdate = LastUpdateInfo;
-                        if (lastUpdate != null)
-                        {
-                            var current = this.GetAssemblyInfo();
-                            var currentName = current.CurrentAssembly.GetName().Name;
-                            var currentVersion = BuildNumber.FromFile(current.ApplicationPath);
-                            var remote = lastUpdate.FirstOrDefault(x => !x.RemoteFile.AssemblyName.IsNullOrEmpty() && x.RemoteFile.AssemblyName.Equals(currentName));
-                            if (remote != null && remote.RemoteFile.Version == currentVersion)
-                            {
-                                var separator = $"\r\n{new string('-', 61)}\r\n";
-                                var description = separator.TrimStart()
-                                                  + string.Join(separator, lastUpdate.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
-                                                  + separator.TrimEnd();
-
-                                ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
-                                UpdateAlreadyShown = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // ignored
-                }
-
+                
                 Closing += (o, args) =>
                 {
                     try
@@ -309,12 +230,30 @@ namespace SPAMassageSaloon
             }
         }
 
-        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
+        private void AppUpdater_OnSuccessfulUpdated(object sender, ApplicationUpdaterArgs args)
         {
             try
             {
-                UpdateAlreadyShown = false;
-                LastUpdateInfo = args.Control;
+                if (args.Control == null)
+                    return;
+
+                var separator = $"\r\n{new string('-', 61)}\r\n";
+                var description = separator.TrimStart()
+                                  + string.Join(separator, args.Control.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
+                                  + separator.TrimEnd();
+
+                ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+        }
+
+        private void AppUpdater_OnUpdate(object sender, ApplicationUpdaterArgs args)
+        {
+            try
+            {
                 SaveData();
                 AppUpdater.DoUpdate(args.Control);
             }
