@@ -39,7 +39,7 @@ namespace SPAFilter.SPA.SC
 
         public override string ToString()
         {
-            return $"TYPE=[{Type}];RFS=[{string.Join(",", DependenceRFSList.OrderBy(p => p))}]";
+            return $"Type = {Type} DependenceRFS = \"{string.Join(",", DependenceRFSList.OrderBy(p => p))}\"";
         }
     }
 }

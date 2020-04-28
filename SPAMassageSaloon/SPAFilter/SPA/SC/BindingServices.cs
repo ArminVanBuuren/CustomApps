@@ -85,7 +85,7 @@ namespace SPAFilter.SPA.SC
 
         public override string ToString()
         {
-            return $"DEP:[{DependenceServices.Count}];RESTR:[{RestrictedServices.Count}]";
+            return $"Dependence = {DependenceServices.Count} Restricted = {RestrictedServices.Count}";
         }
     }
 }

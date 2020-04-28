@@ -81,9 +81,7 @@ namespace LogsReader.Config
 
                     var xml = new XmlSerializer(typeof(LRSettings));
                     using (StreamWriter sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
-                    {
                         xml.Serialize(sw, settings);
-                    }
                 }
             }
             catch (Exception ex)
@@ -96,9 +94,9 @@ namespace LogsReader.Config
         {
             LRSettings sett = null;
 
-            try
+            lock (_sync)
             {
-                lock (_sync)
+                try
                 {
                     if (File.Exists(SettingsPath))
                     {
@@ -107,24 +105,24 @@ namespace LogsReader.Config
                             sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Deserialize_Ex,
-                    Path.GetFileName(SettingsPath),
-                    Path.GetFileName(FailedSettingsPath),
-                    message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
-
-                if (File.Exists(FailedSettingsPath))
+                catch (Exception ex)
                 {
-                    File.SetAttributes(FailedSettingsPath, FileAttributes.Normal);
-                    File.Delete(FailedSettingsPath);
-                }
+                    var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                    ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Deserialize_Ex,
+                        Path.GetFileName(SettingsPath),
+                        Path.GetFileName(FailedSettingsPath),
+                        message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
 
-                File.SetAttributes(SettingsPath, FileAttributes.Normal);
-                File.Copy(SettingsPath, FailedSettingsPath);
-                File.Delete(SettingsPath);
+                    if (File.Exists(FailedSettingsPath))
+                    {
+                        File.SetAttributes(FailedSettingsPath, FileAttributes.Normal);
+                        File.Delete(FailedSettingsPath);
+                    }
+
+                    File.SetAttributes(SettingsPath, FileAttributes.Normal);
+                    File.Copy(SettingsPath, FailedSettingsPath);
+                    File.Delete(SettingsPath);
+                }
             }
 
             return sett ?? new LRSettings();
