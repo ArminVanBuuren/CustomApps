@@ -207,7 +207,10 @@ namespace SPAMassageSaloon
                         Settings.Default.FormState = WindowState;
                         Settings.Default.Save();
                         using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
+                        {
+                            reg.Remove("UpdateAlreadyShown");
                             reg.Remove("LastUpdatePackage");
+                        }
                     }
                     catch (Exception)
                     {
