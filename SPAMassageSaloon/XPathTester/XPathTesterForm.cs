@@ -43,6 +43,11 @@ namespace XPathTester
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
                 xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
+                xpathResultDataGrid.KeyDown += (sender, args) =>
+                {
+                    if (args.KeyData == Keys.Enter)
+                        args.Handled = true;
+                };
 
                 KeyPreview = true;
                 KeyDown += XPathWindow_KeyDown;
