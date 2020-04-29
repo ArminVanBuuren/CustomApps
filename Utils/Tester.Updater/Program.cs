@@ -3,15 +3,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using Microsoft.Win32;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
-using Utils.Handles;
 
 namespace Tester.Updater
 {
@@ -19,8 +15,27 @@ namespace Tester.Updater
     {
         private static ApplicationUpdater up;
         private static BuildPackUpdater _updater;
+
         static void Main(string[] args)
         {
+            //var _tfsUserPassword = new SecureString();
+            //foreach (var ch in "123")
+            //    _tfsUserPassword.AppendChar(ch);
+
+            //string result = null;
+            //var num = IntPtr.Zero;
+            //try
+            //{
+            //    num = Marshal.SecureStringToBSTR(_tfsUserPassword);
+            //    result = Marshal.PtrToStringBSTR(num);
+            //}
+            //finally
+            //{
+            //    if (num != IntPtr.Zero)
+            //        Marshal.ZeroFreeBSTR(num);
+            //}
+
+
             //try
             //{
             //    var dd = BuildsInfo.Deserialize(IO.SafeReadFile(@"C:\!Builds\Git\versions.xml"));
@@ -110,7 +125,7 @@ namespace Tester.Updater
             }
         }
 
-        
+
         public static void Update()
         {
             up = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 10);
