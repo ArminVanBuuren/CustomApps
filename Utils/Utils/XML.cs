@@ -1227,11 +1227,7 @@ namespace Utils
             {
                 var prevIndexStart = source.Length;
                 source.Append(' ');
-                source.Append(attribute.Name);
-                source.Append('=');
-                source.Append('"');
-                source.Append(NormalizeXmlValueFast(attribute.InnerXml));
-                source.Append('"');
+                source.Append(NormalizeXmlValueFast(attribute.OuterXml));
                 if (attribute.Equals(findNode))
                 {
                     targetText = source.ToString(prevIndexStart + 1, source.Length - prevIndexStart - 1);
