@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -15,8 +16,10 @@ namespace Utils.WinForm.Notepad
 
         public bool WindowIsClosed { get; private set; } = false;
 
+        [Browsable(false)]
         public Editor CurrentEditor => NotepadControlItem.CurrentEditor;
 
+        [Browsable(false)]
         public Encoding DefaultEncoding
         {
             get => NotepadControlItem.DefaultEncoding;
@@ -59,6 +62,7 @@ namespace Utils.WinForm.Notepad
             set => NotepadControlItem.TextForeColor = value;
         }
 
+        [Browsable(false)]
         public int SelectedIndex
         {
             get => NotepadControlItem.SelectedIndex;

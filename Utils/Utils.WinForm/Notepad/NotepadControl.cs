@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -38,8 +39,10 @@ namespace Utils.WinForm.Notepad
 
         internal KeyValuePair<Editor, TabPage>? Current { get; private set; } = null;
 
+        [Browsable(false)]
         public Editor CurrentEditor => Current?.Key;
 
+        [Browsable(false)]
         public Encoding DefaultEncoding
         {
             get => _encoding;
@@ -117,6 +120,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        [Browsable(false)]
         public int SelectedIndex
         {
             get => _tabControl.SelectedIndex;

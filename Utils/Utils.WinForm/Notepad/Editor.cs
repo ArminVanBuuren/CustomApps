@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,7 @@ namespace Utils.WinForm.Notepad
 
         public string HeaderName { get; set; }
 
+        [Browsable(false)]
         public string Source
         {
             get => _source;
@@ -60,8 +62,10 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        [Browsable(false)]
         public virtual Encoding Encoding { get; protected set; } = null;
 
+        [Browsable(false)]
         public Encoding DefaultEncoding
         {
             get => _default;
@@ -72,6 +76,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        [Browsable(false)]
         public bool IsContentChanged => !Text.Equals(Source, StringComparison.Ordinal);
 
         public override string Text
@@ -128,6 +133,7 @@ namespace Utils.WinForm.Notepad
             set => base.Font = FCTB.Font = value;
         }
 
+        [Browsable(false)]
         public bool IsChanged
         {
             get => FCTB.IsChanged;
@@ -140,6 +146,7 @@ namespace Utils.WinForm.Notepad
             set => FCTB.DelayedEventsInterval = value;
         }
 
+        [Browsable(false)]
         public Brush BackBrush
         {
             get => FCTB.BackBrush;
@@ -158,6 +165,7 @@ namespace Utils.WinForm.Notepad
             set => FCTB.DisabledColor = value;
         }
 
+        [Browsable(false)]
         public bool IsReplaceMode
         {
             get => FCTB.IsReplaceMode;
@@ -171,13 +179,20 @@ namespace Utils.WinForm.Notepad
         }
 
         public int TextLength => FCTB.TextLength;
+
+        [Browsable(false)]
         public int LinesCount => FCTB.LinesCount;
+
+        [Browsable(false)]
         public Range Selection
         {
             get => FCTB.Selection;
             set => FCTB.Selection = value;
         }
+
+        [Browsable(false)]
         public string SelectedText => FCTB.SelectedText;
+
         public Language Language => FCTB.Language;
 
         public bool ColoredOnlyVisible
@@ -204,6 +219,7 @@ namespace Utils.WinForm.Notepad
             }
         }
 
+        [Browsable(false)]
         protected new bool IsDisposed
         {
             get => base.IsDisposed && _isDisposed;
