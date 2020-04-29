@@ -160,7 +160,7 @@ namespace SPAMassageSaloon
 
                 try
                 {
-                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 5);
+                    AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), 2);
                     AppUpdater.OnUpdate += AppUpdater_OnUpdate;
                     AppUpdater.OnSuccessfulUpdated += AppUpdater_OnSuccessfulUpdated;
                     AppUpdater.Start();
