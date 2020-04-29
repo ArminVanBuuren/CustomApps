@@ -30,14 +30,14 @@ namespace Tester.Updater
             //{
             //    Console.WriteLine(ex);
             //}
-            
+
 
             //var test0 = new FileBuildInfo(@"C:\!Builds\Builds\SPAMassageSaloon.exe", @"C:\!Builds\Builds", false);
             //var test1 = new FileBuildInfo(@"C:\!Builds\Builds\SPAMassageSaloon1.exe", @"C:\!Builds\Builds", false);
             //var test2 = new FileBuildInfo(@"C:\!Builds\Builds\Utils1.dll", @"C:\!Builds\Builds", false);
             //var test3 = new FileBuildInfo(@"C:\!Builds\Builds\SPAFilter.bin", @"C:\!Builds\Builds", false);
             //var test4 = new FileBuildInfo(@"C:\!Builds\Builds\LogsReader.xml", @"C:\!Builds\Builds", false);
-            
+
             //var ass = Assembly.LoadFile(@"C:\!Builds\Builds\SPAMassageSaloon1.exe");
             //var pr = ass.GetName().Name;
             //try

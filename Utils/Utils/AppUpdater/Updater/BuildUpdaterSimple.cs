@@ -21,7 +21,7 @@ namespace Utils.AppUpdater.Updater
                         if (!string.IsNullOrWhiteSpace(destinationDir) && !Directory.Exists(destinationDir))
                             Directory.CreateDirectory(destinationDir);
 
-                        CMD.CopyFile(FileSource, FileDestination);
+                        CMD.MoveFile(FileSource, FileDestination);
                     }
                     else
                     {

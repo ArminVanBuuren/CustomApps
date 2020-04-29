@@ -68,12 +68,12 @@ namespace Utils
         }
 
         /// <summary>
-        /// Скопировать файл
+        /// Перенести файл
         /// </summary>
         /// <param name="fileSource">местоположение файла</param>
         /// <param name="fileDestination">путь назначения файла</param>
         /// <param name="delayBeforeCopy">скопировать файл после оперделенного времени в секундах (ограниение 1 час)</param>
-        public static void CopyFile(string fileSource, string fileDestination, int delayBeforeCopy = 0)
+        public static void MoveFile(string fileSource, string fileDestination, int delayBeforeCopy = 0)
         {
             var argument_complete = string.Format(argument_add, 
                 GetCommandTimeout(delayBeforeCopy), 
