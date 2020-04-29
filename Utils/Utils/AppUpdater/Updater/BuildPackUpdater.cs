@@ -50,7 +50,7 @@ namespace Utils.AppUpdater.Updater
         /// <summary>
         /// задержка в секундах перед запуском приложения после переноса файла (ограниение 1 час). Учесть размер файла и примерное время замены и удаления изначального местоположения файла
         /// </summary>
-        public int DelayBetweenMoveAndRunApp { get; set; } = 5;
+        public int DelayBetweenMoveAndRunApp { get; set; } = 3;
 
         /// <summary>
         /// Количество файлов для обновления
