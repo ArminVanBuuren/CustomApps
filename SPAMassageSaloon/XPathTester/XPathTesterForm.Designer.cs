@@ -92,7 +92,6 @@ namespace XPathTester
             this.editor.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             this.editor.BackBrush = null;
             this.editor.ColoredOnlyVisible = false;
-            this.editor.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("editor.DefaultEncoding")));
             this.editor.DelayedEventsInterval = 100;
             this.editor.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.editor.Dock = System.Windows.Forms.DockStyle.Fill;

@@ -34,7 +34,7 @@ namespace LogsReader.Reader
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderForm));
-            this.dgvFiles = new System.Windows.Forms.DataGridView();
+            this.dgvFiles = new SPAMassageSaloon.Common.CustomDataGridView();
             this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -435,7 +435,6 @@ namespace LogsReader.Reader
             // notepad
             // 
             this.notepad.AllowUserCloseItems = false;
-            this.notepad.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("notepad.DefaultEncoding")));
             this.notepad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.notepad.Highlights = false;
             this.notepad.Location = new System.Drawing.Point(0, 0);
@@ -757,7 +756,7 @@ namespace LogsReader.Reader
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView dgvFiles;
+        private SPAMassageSaloon.Common.CustomDataGridView dgvFiles;
         private Utils.WinForm.CustomTreeView trvMain;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
