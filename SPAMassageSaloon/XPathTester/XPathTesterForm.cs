@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,15 +40,11 @@ namespace XPathTester
                 base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
 
                 xpathResultDataGrid.AutoGenerateColumns = false;
+                xpathResultDataGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
                 xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
                 xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
-                xpathResultDataGrid.KeyDown += (sender, args) =>
-                {
-                    if (args.KeyData == Keys.Enter)
-                        args.Handled = true;
-                };
 
                 KeyPreview = true;
                 KeyDown += XPathWindow_KeyDown;
@@ -72,30 +69,137 @@ namespace XPathTester
 
         private void XpathResultDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            if (xpathResultDataGrid.RowCount > 0)
-                xpathResultDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = xpathResultDataGrid.BackgroundColor;
+            try
+            {
+                if (xpathResultDataGrid.RowCount > 0)
+                    xpathResultDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = xpathResultDataGrid.BackgroundColor;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         private void XPathWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            try
             {
-                case Keys.F5:
-                    ButtonFind_Click(this, EventArgs.Empty);
-                    e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-                    break;
-                case Keys.F6:
-                    ButtonPrettyPrint_Click(this, EventArgs.Empty);
-                    e.SuppressKeyPress = true;
-                    break;
+                switch (e.KeyCode)
+                {
+                    case Keys.F5:
+                        ButtonFind_Click(this, EventArgs.Empty);
+                        e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+                        break;
+                    case Keys.F6:
+                        ButtonPrettyPrint_Click(this, EventArgs.Empty);
+                        e.SuppressKeyPress = true; // все эвенты KeyDown дочерних элементов отменяются
+                        break;
+                    case Keys.C when (ModifierKeys & Keys.Control) != 0 && xpathResultDataGrid.SelectedRows.Count > 0:
+                        var results = new List<DGVXPathResult>();
+                        foreach (DataGridViewRow row in xpathResultDataGrid.SelectedRows)
+                        {
+                            if (row.Cells?[0]?.Value is int id)
+                                results.Insert(0, Result[id]);
+                        }
+
+                        var clipboardText = new StringBuilder(results.Count);
+                        foreach (var result in results)
+                        {
+                            clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\r\n",
+                                result.ID,
+                                result.NodeType,
+                                result.Name,
+                                result.Value,
+                                result.Node.OuterXml);
+                        }
+
+                        Clipboard.SetText(clipboardText.ToString());
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message);
             }
         }
 
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(Keys vKey);
-        private static bool KeyIsDown(Keys key)
+        private async void XpathResultDataGrid_SelectionChanged(object sender, EventArgs e)
         {
-            return (GetAsyncKeyState(key) < 0);
+            if (xpathResultDataGrid.CurrentRow == null 
+                || xpathResultDataGrid.SelectedRows.Count == 0 
+                || Result == null 
+                || !(xpathResultDataGrid.CurrentRow?.Cells[0].Value is int id))
+                return;
+
+            try
+            {
+                editor.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
+                xpathResultDataGrid.MouseClick -= XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
+
+                var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, Result[id].Node));
+                if (xmlObject == null)
+                    return;
+
+                var range = editor.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
+
+                editor.Selection = range;
+                editor.DoSelectionVisible();
+                editor.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                ReportStatus(ex.Message);
+            }
+            finally
+            {
+                editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
+                xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
+            }
+        }
+
+        void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
+        {
+            lock (sync)
+            {
+                if (editor.Text.IsNullOrEmpty())
+                {
+                    XmlBody = null;
+                    ReportStatus(string.Empty);
+                    return;
+                }
+
+                try
+                {
+                    ClearResultTap();
+
+                    var source = editor.Text.Trim();
+                    if (!source.StartsWith("<") || !source.EndsWith(">"))
+                    {
+                        ReportStatus(string.Format(Resources.XmlIsIncorrect, string.Empty));
+                        return;
+                    }
+
+                    try
+                    {   
+                        var document = new XmlDocument();
+                        document.LoadXml(XML.RemoveUnallowable(source, " "));
+                        XmlBody = document;
+                    }
+                    catch (Exception ex)
+                    {
+                        XmlBody = null;
+                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $". {ex.Message}"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ReportStatus(ex.Message);
+                }
+            }
         }
 
         void XpathResultDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -124,105 +228,6 @@ namespace XPathTester
             catch (Exception ex)
             {
                 ReportStatus(ex.Message);
-            }
-        }
-
-        private void XpathResultDataGrid_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Enter)
-                return;
-            if (!(sender is DataGridView data) || data.SelectedCells.Count == 0)
-                return;
-
-            XpathResultDataGrid_CellMouseDoubleClick(sender, null);
-            // Останавливает все последующие эвенты, нужен true для того чтобы выделенная строка не переносилось на следующую строку
-            e.SuppressKeyPress = true;
-        }
-
-        private void XpathResultDataGrid_SelectionChanged(object sender, EventArgs e)
-        {
-            if (xpathResultDataGrid.CurrentRow == null || xpathResultDataGrid.SelectedRows.Count == 0)
-                return;
-
-            XpathResultDataGrid_CellMouseDoubleClick(xpathResultDataGrid, null);
-        }
-
-        private async void XpathResultDataGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if(Result == null)
-                return;
-
-            if (xpathResultDataGrid.CurrentRow?.Cells[0].Value is int id)
-            {
-                try
-                {
-                    editor.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
-                    xpathResultDataGrid.MouseClick -= XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
-
-                    var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, Result[id].Node));
-                    if (xmlObject == null)
-                        return;
-
-                    var range = editor.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
-
-                    editor.Selection = range;
-                    editor.DoSelectionVisible();
-                    editor.Invalidate();
-                }
-                catch (Exception ex)
-                {
-                    ReportStatus(ex.Message);
-                }
-                finally
-                {
-                    editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
-                    xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
-                    xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
-                }
-            }
-        }
-
-        void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
-        {
-            lock (sync)
-            {
-                if (editor.Text.IsNullOrEmpty())
-                {
-                    XmlBody = null;
-                    ReportStatus(string.Empty);
-                    return;
-                }
-
-                try
-                {
-                    ClearResultTap();
-
-                    var source = editor.Text;
-                    if (!source.StartsWith("<") || !source.EndsWith(">"))
-                    {
-                        ReportStatus(string.Format(Resources.XmlIsIncorrect, string.Empty));
-                        return;
-                    }
-
-                    try
-                    {   
-                        var document = new XmlDocument();
-                        document.LoadXml(XML.RemoveUnallowable(source, " "));
-                        XmlBody = document;
-                    }
-                    catch (Exception ex)
-                    {
-                        XmlBody = null;
-                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $". {ex.Message}"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ReportStatus(ex.Message);
-                }
             }
         }
 

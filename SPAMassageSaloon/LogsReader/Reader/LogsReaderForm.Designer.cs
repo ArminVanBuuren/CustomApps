@@ -105,7 +105,6 @@ namespace LogsReader.Reader
             // 
             this.dgvFiles.AllowUserToAddRows = false;
             this.dgvFiles.AllowUserToDeleteRows = false;
-            this.dgvFiles.AllowUserToOrderColumns = true;
             this.dgvFiles.AllowUserToResizeRows = false;
             this.dgvFiles.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -121,7 +120,6 @@ namespace LogsReader.Reader
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.ControlLight;
             this.dgvFiles.Location = new System.Drawing.Point(0, 0);
-            this.dgvFiles.MultiSelect = false;
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowHeadersVisible = false;

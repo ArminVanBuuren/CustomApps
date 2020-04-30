@@ -121,12 +121,8 @@ namespace LogsReader.Reader
                 trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {treeNode3, treeNode4});
 
                 dgvFiles.AutoGenerateColumns = false;
+                dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-                dgvFiles.KeyDown += (sender, args) =>
-                {
-                    if (args.KeyData == Keys.Enter)
-                        args.Handled = true;
-                };
                 orderByText.GotFocus += OrderByText_GotFocus;
 
                 #region Initialize Controls
@@ -387,6 +383,28 @@ namespace LogsReader.Reader
                     case Keys.S when e.Control && buttonExport.Enabled:
                         ButtonExport_Click(this, EventArgs.Empty);
                         break;
+                    case Keys.C when e.Control && dgvFiles.SelectedRows.Count > 0 && OverallResultList != null:
+                        var templateList = new List<DataTemplate>();
+                        foreach (DataGridViewRow row in dgvFiles.SelectedRows)
+                        {
+                            if (TryGetTemplate(row, out var template))
+                                templateList.Insert(0, template);
+                        }
+
+                        var clipboardText = new StringBuilder(templateList.Count);
+                        foreach (var template in templateList)
+                        {
+                            clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
+                                template.ID,
+                                template.ParentReader.FilePath,
+                                template.DateOfTrace,
+                                template.TraceName,
+                                template.Description,
+                                notepad.SelectedIndex <= 0 ? template.Message.Trim() : template.TraceMessage.Trim());
+                        }
+
+                        Clipboard.SetText(clipboardText.ToString());
+                        break;
                 }
             }
             catch (Exception ex)
@@ -501,17 +519,21 @@ namespace LogsReader.Reader
                 Progress = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
-                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "Server", "File", "Trace name", "Date", "Description", "Message"}));
+                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "File", "Date", "Trace name", "Description", notepad.SelectedIndex <= 0 ? "Message" : "Trace Message" }));
                     foreach (DataGridViewRow row in dgvFiles.Rows)
                     {
-                        var privateID = (int) (row.Cells["PrivateID"]?.Value ?? -1);
-                        if(privateID <= -1)
-                            continue;
-                        var template = OverallResultList[privateID];
-                        if(template == null)
+                        if(!TryGetTemplate(row, out var template))
                             continue;
 
-                        await writer.WriteLineAsync(GetCSVRow(new[] {template.ID.ToString(), template.Server, template.File, template.TraceName, template.DateOfTrace, $"\"{template.Description}\"", $"\"{template.Message.Trim()}\""}));
+                        await writer.WriteLineAsync(GetCSVRow(new[]
+                        {
+                            template.ID.ToString(),
+                            template.ParentReader.FilePath,
+                            template.DateOfTrace,
+                            template.TraceName,
+                            $"\"{template.Description}\"",
+                            notepad.SelectedIndex <= 0 ? $"\"{template.Message.Trim()}\"" : $"\"{template.TraceMessage.Trim()}\""
+                        }));
                         writer.Flush();
 
                         Progress = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
@@ -680,12 +702,7 @@ namespace LogsReader.Reader
             try
             {
                 var row = ((DataGridView) sender).Rows[e.RowIndex];
-                var privateID = (int)(row.Cells["PrivateID"]?.Value ?? -1);
-                if (privateID <= -1 || OverallResultList == null)
-                    return;
-
-                var template = OverallResultList[privateID];
-                if (template == null)
+                if(!TryGetTemplate(row, out var template))
                     return;
 
                 if (template.IsMatched)
@@ -720,15 +737,10 @@ namespace LogsReader.Reader
                 _message.Text = string.Empty;
                 _traceMessage.Text = string.Empty;
 
-                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0 || OverallResultList == null)
+                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
                     return;
 
-                var privateID = (int) (dgvFiles.SelectedRows[0].Cells["PrivateID"]?.Value ?? -1);
-                if (privateID <= -1)
-                    return;
-
-                var template = OverallResultList?[privateID];
-                if (template == null)
+                if(!TryGetTemplate(dgvFiles.SelectedRows[0], out var template))
                     return;
 
                 descriptionText.Text = $"FoundLineID:{template.FoundLineID}\r\n{template.Description}";
@@ -755,6 +767,18 @@ namespace LogsReader.Reader
             {
                 dgvFiles.Focus();
             }
+        }
+
+        bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+        {
+            template = null;
+            if (OverallResultList == null)
+                return false;
+            var privateID = (int)(row?.Cells["PrivateID"]?.Value ?? -1);
+            if (privateID <= -1)
+                return false;
+            template = OverallResultList[privateID];
+            return template != null;
         }
 
         private void DgvFiles_MouseDown(object sender, MouseEventArgs e)

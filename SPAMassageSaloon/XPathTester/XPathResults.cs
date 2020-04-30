@@ -41,14 +41,14 @@ namespace XPathTester
                 {
                     ID = result.ID,
                     NodeType = result.NodeType,
-                    Name = result.NodeName,
-                    Value = result.Value,
+                    Name = result.NodeName.Trim(),
+                    Value = result.Value.Trim(),
                     Node = result.Node
                 });
             }
         }
 
-        public DGVXPathResult this[int id] => _values[id];
+        public DGVXPathResult this[int id] => _values.TryGetValue(id, out var result) ? result : null;
 
         public IEnumerator<DGVXPathResult> GetEnumerator()
         {

@@ -6,12 +6,21 @@ namespace SPAMassageSaloon.Common
     {
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Left)
-                base.OnKeyDown(new KeyEventArgs(Keys.PageUp));
-            else if (e.KeyData == Keys.Right)
-                base.OnKeyDown(new KeyEventArgs(Keys.PageDown));
-            else
-                base.OnKeyDown(e);
+
+            switch (e.KeyData)
+            {
+                case Keys.Left:
+                    base.OnKeyDown(new KeyEventArgs(Keys.PageUp));
+                    break;
+                case Keys.Right:
+                    base.OnKeyDown(new KeyEventArgs(Keys.PageDown));
+                    break;
+                case Keys.Enter:
+                    break;
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
         }
     }
 }

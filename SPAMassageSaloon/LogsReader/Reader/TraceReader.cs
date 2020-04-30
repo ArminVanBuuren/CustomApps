@@ -152,7 +152,7 @@ namespace LogsReader.Reader
 
         public override string ToString()
         {
-            return $"\\{Server}\\{FilePath}";
+            return FilePath;
         }
     }
 }

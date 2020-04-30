@@ -395,14 +395,9 @@ namespace SPAFilter
             KeyDown += ProcessFilterForm_KeyDown;
 
             dataGridServiceInstances.CellFormatting += DataGridServiceInstances_CellFormatting;
-            dataGridServiceInstances.KeyDown += DataGrid_KeyDown;
             dataGridProcesses.CellFormatting += DataGridProcesses_CellFormatting;
-            dataGridProcesses.KeyDown += DataGrid_KeyDown;
             dataGridOperations.CellFormatting += DataGridOperations_CellFormatting;
-            dataGridOperations.KeyDown += DataGrid_KeyDown;
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
-            dataGridScenarios.KeyDown += DataGrid_KeyDown;
-            dataGridCommands.KeyDown += DataGrid_KeyDown;
 
             ProcessesButtonOpen.Click += ProcessesButtonOpen_Click;
             ProcessesTextBox.TextChanged += ProcessesTextBox_TextChanged;
@@ -427,12 +422,6 @@ namespace SPAFilter
 
             ApplySettings();
             CenterToScreen();
-        }
-
-        private void DataGrid_KeyDown(object sender, KeyEventArgs args)
-        {
-            if (args.KeyData == Keys.Enter)
-                args.Handled = true;
         }
 
         public void ApplySettings()
@@ -590,16 +579,25 @@ namespace SPAFilter
 
         bool GetUniqueName(object sender, int rowIndex, out DataGridViewRow row, out string uniqueName)
         {
-            if (Filter == null)
+            try
+            {
+                if (Filter == null)
+                {
+                    row = null;
+                    uniqueName = null;
+                    return false;
+                }
+
+                row = ((DataGridView) sender).Rows[rowIndex];
+                uniqueName = (string) row.Cells["UniqueName"]?.Value;
+                return uniqueName != null;
+            }
+            catch (Exception ex)
             {
                 row = null;
                 uniqueName = null;
                 return false;
             }
-
-            row = ((DataGridView)sender).Rows[rowIndex];
-            uniqueName = (string)row.Cells["UniqueName"]?.Value;
-            return uniqueName != null;
         }
 
         //public void FormattingProcess()
@@ -699,11 +697,11 @@ namespace SPAFilter
                     }
                     case Keys.Delete:
                     {
-                        if (!GetCurrentDataGridView(out var grid) || !grid.Focused || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked) ||
-                            !GetCellItemSelectedRows(grid, out var filesPath))
-                            return;
-
-                        if (filesPath.Count == 0)
+                        if (!GetCurrentDataGridView(out var grid)
+                            || !grid.Focused
+                            || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked)
+                            || !GetCellItemSelectedRows(grid, out var filesPath)
+                            || filesPath.Count == 0)
                             return;
 
                         var userResult = MessageBox.Show(string.Format(Resources.Form_GridView_DeleteSelected), @"Question", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
@@ -712,10 +710,10 @@ namespace SPAFilter
 
                         await DoLongExecutionTasksAsync(MultiTasking.RunAsync((filePath) =>
                         {
-                            if (!File.Exists(filePath))
-                                return;
                             try
                             {
+                                if (!File.Exists(filePath))
+                                    return;
                                 // удаляет и перемещает в корзину
                                 Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(filePath,
                                     Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
@@ -728,7 +726,7 @@ namespace SPAFilter
                             }
                         }, filesPath, new MultiTaskingTemplate(filesPath.Count, ThreadPriority.Lowest)));
 
-                        
+
                         if (grid == dataGridServiceInstances)
                         {
                             await AssignServiceInstances(Filter.RemoveActivatorAsync(filesPath));
@@ -753,9 +751,7 @@ namespace SPAFilter
         {
             focusedGrid = null;
             if (mainTabControl.SelectedTab.HasChildren)
-            {
                 focusedGrid = mainTabControl.SelectedTab.Controls.OfType<DataGridView>().FirstOrDefault();
-            }
 
             return focusedGrid != null;
         }
@@ -1600,10 +1596,10 @@ namespace SPAFilter
                 foreach (DataGridViewRow row in grid.SelectedRows)
                 {
                     if (TryGetCellValue(row, name, out var cellValue))
-                        result.Add(cellValue.ToString());
+                        result.Insert(0, cellValue.ToString());
                 }
 
-                result = result.Distinct().ToList();
+                result = result.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             }
             else
             {

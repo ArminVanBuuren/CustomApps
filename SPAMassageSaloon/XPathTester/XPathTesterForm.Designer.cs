@@ -115,7 +115,6 @@ namespace XPathTester
             this.xpathResultDataGrid.AllowDrop = true;
             this.xpathResultDataGrid.AllowUserToAddRows = false;
             this.xpathResultDataGrid.AllowUserToDeleteRows = false;
-            this.xpathResultDataGrid.AllowUserToOrderColumns = true;
             this.xpathResultDataGrid.AllowUserToResizeRows = false;
             this.xpathResultDataGrid.BackgroundColor = System.Drawing.Color.White;
             this.xpathResultDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -163,7 +162,7 @@ namespace XPathTester
             this.NodeName.FillWeight = 9.335174F;
             this.NodeName.HeaderText = "Name";
             this.NodeName.MinimumWidth = 65;
-            this.NodeName.Name = "Name";
+            this.NodeName.Name = "NodeName";
             this.NodeName.ReadOnly = true;
             this.NodeName.Width = 75;
             // 

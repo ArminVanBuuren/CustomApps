@@ -316,7 +316,6 @@ namespace SPAFilter
             // 
             this.dataGridServiceInstances.AllowUserToAddRows = false;
             this.dataGridServiceInstances.AllowUserToDeleteRows = false;
-            this.dataGridServiceInstances.AllowUserToOrderColumns = true;
             this.dataGridServiceInstances.AllowUserToResizeRows = false;
             this.dataGridServiceInstances.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -347,7 +346,6 @@ namespace SPAFilter
             // 
             this.dataGridProcesses.AllowUserToAddRows = false;
             this.dataGridProcesses.AllowUserToDeleteRows = false;
-            this.dataGridProcesses.AllowUserToOrderColumns = true;
             this.dataGridProcesses.AllowUserToResizeRows = false;
             this.dataGridProcesses.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridProcesses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -376,7 +374,6 @@ namespace SPAFilter
             // 
             this.dataGridOperations.AllowUserToAddRows = false;
             this.dataGridOperations.AllowUserToDeleteRows = false;
-            this.dataGridOperations.AllowUserToOrderColumns = true;
             this.dataGridOperations.AllowUserToResizeRows = false;
             this.dataGridOperations.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridOperations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -405,7 +402,6 @@ namespace SPAFilter
             // 
             this.dataGridScenarios.AllowUserToAddRows = false;
             this.dataGridScenarios.AllowUserToDeleteRows = false;
-            this.dataGridScenarios.AllowUserToOrderColumns = true;
             this.dataGridScenarios.AllowUserToResizeRows = false;
             this.dataGridScenarios.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridScenarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -434,7 +430,6 @@ namespace SPAFilter
             // 
             this.dataGridCommands.AllowUserToAddRows = false;
             this.dataGridCommands.AllowUserToDeleteRows = false;
-            this.dataGridCommands.AllowUserToOrderColumns = true;
             this.dataGridCommands.AllowUserToResizeRows = false;
             this.dataGridCommands.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridCommands.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
