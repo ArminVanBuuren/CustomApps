@@ -10,14 +10,12 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Utils;
 using Utils.AppUpdater;
-using Utils.AppUpdater.Updater;
 using Utils.Handles;
 using Utils.UIControls.Main;
 using Utils.WinForm;
 using SPAMassageSaloon.Common;
 using SPAMassageSaloon.Properties;
 using LogsReader;
-using Microsoft.Win32;
 using SPAFilter;
 using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
@@ -35,17 +33,22 @@ namespace SPAMassageSaloon
 
     public partial class MainForm : Form
     {
-        public static readonly string AppName = "SPA Massage Saloon";
-        public static readonly string BuildTime;
+        internal static readonly string AppName = "SPA Massage Saloon";
+        internal static readonly string FormName;
+        internal static readonly string BuildTime;
 
+        private AboutWindow _about;
         private NationalLanguage _language;
         private int _countOfLastProcess = 0;
+        private int _countOfXPathTester = 0;
 
         public ToolStripStatusLabel _cpuUsage;
         public ToolStripStatusLabel _threadsUsage;
         public ToolStripStatusLabel _ramUsage;
 
         public bool FormOnClosing { get; private set; } = false;
+
+        internal int CountOfDefaultStatusItems { get; private set; } = 0;
 
         ApplicationUpdater AppUpdater { get; set; }
 
@@ -85,7 +88,7 @@ namespace SPAMassageSaloon
                         }
                     }
                     
-                    about?.ApplySettings();
+                    _about?.ApplySettings();
 
                     languageToolStripMenuItem.Text = Resources.Txt_Language;
                     aboutToolStripMenuItem.Text = Resources.Txt_About;   
@@ -105,7 +108,9 @@ namespace SPAMassageSaloon
 
         static MainForm()
         {
-            BuildTime = $"Build time: {Assembly.GetExecutingAssembly().GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
+            var currentAssembly = Assembly.GetExecutingAssembly();
+            BuildTime = $"Build time: {currentAssembly.GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
+            FormName = $"{AppName} {currentAssembly.GetAssemblyInfo().CurrentVersion}";
         }
 
         public MainForm()
@@ -119,7 +124,7 @@ namespace SPAMassageSaloon
             {
                 this.Visible = false;
                 this.IsMdiContainer = true;
-                base.Text = $"{AppName} {this.GetAssemblyInfo().CurrentVersion}";
+                base.Text = FormName;
 
                 try
                 {
@@ -197,7 +202,9 @@ namespace SPAMassageSaloon
                 _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
-                
+                CountOfDefaultStatusItems = statusStrip.Items.Count;
+                statusStrip.ItemRemoved += (o, args) => { if(statusStrip?.Items.Count == CountOfDefaultStatusItems) base.Text = FormName; };
+
                 Closing += (o, args) =>
                 {
                     try
@@ -407,7 +414,13 @@ namespace SPAMassageSaloon
 
         private void toolStripXPathButton_Click(object sender, EventArgs e)
         {
-            ShowMdiForm(() => new XPathTesterForm());
+            ShowMdiForm(() =>
+            {
+                var tester = new XPathTesterForm();
+                tester.Load += (o, args) => _countOfXPathTester++;
+                tester.Closed += (o, args) => _countOfXPathTester--;
+                return tester;
+            }, _countOfXPathTester < 6);
         }
 
         public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISaloonForm
@@ -458,9 +471,62 @@ namespace SPAMassageSaloon
 
         private static void MDIManagerButton_Load(object sender, EventArgs e)
         {
-            MDIManagerButton button = new MDIManagerButton(sender as Form) {BackColor = Color.White};
-            button.Click += (S, E) => { ((MDIManagerButton) S).mdiForm.Activate(); };
-            ((sender as Form)?.MdiParent as MainForm)?.statusStrip.Items.Add(button);
+            try
+            {
+                var mdiForm = sender as Form;
+                var button = new MDIManagerButton(mdiForm) { BackColor = Color.White };
+                var mainForm = mdiForm?.MdiParent as MainForm;
+                var status = mainForm?.statusStrip;
+                if (status == null)
+                    return;
+
+                mainForm.Text = $"{MainForm.FormName}  [{mdiForm.Text.Trim()}]";
+                button.Activated += (o, args) =>
+                {
+                    try
+                    {
+                        var mdiButton = (MDIManagerButton)o;
+                        mainForm.Text = $"{MainForm.FormName}  [{mdiButton.mdiForm.Text.Trim()}]";
+                    }
+                    catch (Exception ex)
+                    {
+                        // ignored
+                    }
+                };
+                button.Click += (o, args) =>
+                {
+                    try
+                    {
+                        var mdiButton = (MDIManagerButton)o;
+                        mdiButton.mdiForm.Activate();
+                    }
+                    catch (Exception ex)
+                    {
+                        // ignored
+                    }
+                };
+
+                switch (sender)
+                {
+                    case LogsReaderMainForm _:
+                        status.Items.Insert(mainForm.CountOfDefaultStatusItems, button);
+                        break;
+                    case SPAFilterForm _:
+                        status.Items.Insert(status.Items.Count > mainForm.CountOfDefaultStatusItems
+                                            && status.Items[mainForm.CountOfDefaultStatusItems] is MDIManagerButton mdiButton
+                                            && mdiButton.mdiForm is LogsReaderMainForm
+                            ? mainForm.CountOfDefaultStatusItems + 1
+                            : mainForm.CountOfDefaultStatusItems, button);
+                        break;
+                    default:
+                        status.Items.Add(button);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
         }
 
         private void toolButtonAbout_ButtonClick(object sender, EventArgs e)
@@ -468,27 +534,26 @@ namespace SPAMassageSaloon
             toolButtonAbout.ShowDropDown();
         }
 
-        private AboutWindow about;
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                if (about != null)
+                if (_about != null)
                 {
-                    about.Focus();
-                    about.Activate();
+                    _about.Focus();
+                    _about.Activate();
                 }
                 else
                 {
-                    about = new AboutWindow
+                    _about = new AboutWindow
                     {
                         //Topmost = true,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen
                     };
-                    about.Focus();
-                    about.Show();
+                    _about.Focus();
+                    _about.Show();
                     //about.ShowDialog();
-                    about.Closed += About_Closed;
+                    _about.Closed += About_Closed;
                 }
             }
             catch (Exception ex)
@@ -501,8 +566,8 @@ namespace SPAMassageSaloon
         {
             try
             {
-                about.Closed -= About_Closed;
-                about = null;
+                _about.Closed -= About_Closed;
+                _about = null;
 
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Utils;
 
 namespace SPAMassageSaloon
 {
@@ -9,6 +10,7 @@ namespace SPAMassageSaloon
     {
         public Form mdiForm { get; private set; }
         public event EventHandler MClick;
+        public event EventHandler Activated;
 
         private int btnTop, btnLeft;
         private Rectangle btnRectangle;
@@ -21,24 +23,41 @@ namespace SPAMassageSaloon
             mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"    "; };
             mdiForm.Activated += (s, e) => { this.MDIManagerButton_Click(this, null); };
 
-            base.Text = mdiForm.Text + @"    ";
-            MouseUp += new MouseEventHandler(MDIManagerButton_MouseUp);
-            MouseMove += new MouseEventHandler(MDIManagerButton_MouseMove);
-            Paint += new PaintEventHandler(MDIManagerButton_Paint);
-            Click += new EventHandler(MDIManagerButton_Click);
+            base.Text = mdiForm.Text.RegexReplace(@"[0-9.]+", string.Empty).Trim() + @"    ";
+            base.Padding = new Padding(6, 0, 0, 5);
+            base.Margin = new Padding(0, 0, 0, 0);
+            base.TextAlign = ContentAlignment.MiddleCenter;
+            MouseUp += MDIManagerButton_MouseUp;
+            MouseMove += MDIManagerButton_MouseMove;
+            Paint += MDIManagerButton_Paint;
+            Click += MDIManagerButton_Click;
             this.BorderSides = ToolStripStatusLabelBorderSides.All;
         }
 
         void MDIManagerButton_Click(object sender, EventArgs e)
         {
-            if (this.Parent == null) return;
-            foreach (MDIManagerButton btn in this.Parent.Items.OfType<MDIManagerButton>())
+            if (this.Parent == null)
+                return;
+
+            try
             {
-                btn.BorderStyle = Border3DStyle.Flat;
-                btn.BackColor = SystemColors.ButtonFace;
+                foreach (MDIManagerButton btn in this.Parent.Items.OfType<MDIManagerButton>())
+                {
+                    btn.BorderStyle = Border3DStyle.Flat;
+                    btn.BackColor = SystemColors.ButtonFace;
+                }
+
+                this.BorderStyle = Border3DStyle.Sunken;
+                this.BackColor = Color.White;
             }
-            this.BorderStyle = Border3DStyle.Sunken;
-            this.BackColor = Color.White;
+            catch (Exception ex)
+            {
+                // ignored
+            }
+            finally
+            {
+                Activated?.Invoke(this, null);
+            }
         }
 
         void MDIManagerButton_MouseUp(object sender, MouseEventArgs e)

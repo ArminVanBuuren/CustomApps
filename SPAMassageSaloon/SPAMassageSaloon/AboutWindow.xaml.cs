@@ -1,9 +1,6 @@
-﻿using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using SPAMassageSaloon.Common;
-using Utils;
-using Utils.AppUpdater;
 using Utils.UIControls;
 
 namespace SPAMassageSaloon
