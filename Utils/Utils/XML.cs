@@ -1297,13 +1297,13 @@ namespace Utils
         /// </summary>
         static XmlNodeResult GetPositionInSourceText(string sourceText, string outerText, string targetText, XMlType type)
         {
-            var docIndex = outerText.Length - targetText.TrimStart().Length;
             var indexStart = -1;
             var indexEnd = -1;
+            var docIndex = outerText.Length - targetText.TrimStart().Length;
 
-
-            var j = 0;
-            for (var i = 0; i < sourceText.Length; i++)
+            var i = 0;
+            var j = -1;
+            for (i = 0; i < sourceText.Length; i++)
             {
                 var ch = sourceText[i];
                 if (char.IsWhiteSpace(ch))
@@ -1311,46 +1311,34 @@ namespace Utils
 
                 if (IsSymbolName(sourceText, i, out var symbolName, out var symbolResult))
                 {
-                    i = i + symbolName.Length;
-                    ch = sourceText[i];
-
-
-                    int indexEscapeSpace = j;
-                    while (sourceText.Length > indexEscapeSpace && char.IsWhiteSpace(sourceText[indexEscapeSpace]))
-                        indexEscapeSpace++;
-                    var sourceSymbol = sourceText.Substring(indexEscapeSpace, sourceText.Length > 8 ? 8 : sourceText.Length);
-
-                    if (IsSymbolName(outerText, i, out var outerSymbol, out var symbolResult))
-                    {
-                        // если в исходном документе нет обозначения имени символа, но есть сам сивол
-                        // увеличиваем индексатор на имя сивола и меняем обозначение символа на сам символ
-                        if (sourceSymbol.IndexOf(outerSymbol, StringComparison.Ordinal) != 0)
-                        {
-                            ch = symbolResult;
-                            i = i + outerSymbol.Length - 1;
-                        }
-                    }
+                    ch = symbolResult;
+                    i = i + symbolName.Length - 1;
                 }
-
-                var sourceCh = sourceText[j];
-                while (ch != sourceCh && sourceText.Length > j + 1)
-                {
-                    j++;
-                    sourceCh = sourceText[j];
-                }
-
-                if (i == docIndex)
-                {
-                    indexStart = j;
-                }
-
-                if (sourceText.Length <= j + 1)
-                    break;
 
                 j++;
-            }
+                if (j == docIndex)
+                    indexStart = i;
+                var outerCh = outerText[j];
+                while (char.IsWhiteSpace(outerCh) && outerText.Length > j + 1)
+                {
+                    j++;
+                    outerCh = outerText[j];
 
-            indexEnd = j;
+                    if (j == docIndex)
+                        indexStart = i;
+                }
+
+                if (outerText.Length <= j + 1) // конец поиска
+                {
+                    indexEnd = i + 1;
+                    break;
+                }
+
+                if (ch == outerCh || ((ch == '\'' || ch == '"') && (outerCh == '\'' || outerCh == '"')))
+                    continue;
+
+                break; // ошибка считывания если последнее условие не выполнилось
+            }
 
             if (indexStart == -1 || (indexStart > indexEnd))
                 return null;
