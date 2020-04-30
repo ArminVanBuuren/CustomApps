@@ -1151,7 +1151,7 @@ namespace Utils
                 }
             }
 
-            return type != XMlType.Unknown ? GetPositionInSourceText(formattedXML.ToString(), targetText, type, sourceXmlText) : null;
+            return type != XMlType.Unknown ? GetPositionInSourceText(sourceXmlText, formattedXML.ToString(), targetText, type) : null;
         }
 
         static XMlType GetXmlPosition(XmlNode node, StringBuilder source, ref string targetText, XmlNode findNode)
@@ -1187,7 +1187,7 @@ namespace Utils
                         source.Append('<');
                         source.Append(node.Name);
 
-                        if(IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
+                        if (IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
                             return XMlType.Attribute;
 
                         source.Append('>');
@@ -1227,7 +1227,11 @@ namespace Utils
             {
                 var prevIndexStart = source.Length;
                 source.Append(' ');
-                source.Append(NormalizeXmlValueFast(attribute.OuterXml));
+                source.Append(attribute.Name);
+                source.Append('=');
+                source.Append('"');
+                source.Append(NormalizeXmlValueFast(attribute.InnerXml));
+                source.Append('"');
                 if (attribute.Equals(findNode))
                 {
                     targetText = source.ToString(prevIndexStart + 1, source.Length - prevIndexStart - 1);
@@ -1238,113 +1242,118 @@ namespace Utils
             return false;
         }
 
+        static string FormatOuterValue(string input)
+        {
+            int i = 0;
+            var outer = new StringBuilder(input.Length + 10);
+            foreach (var ch in input)
+            {
+                if (IsSymbolName(input, i, out var symbolName, out var symbolResult))
+                {
+                    outer.Append(ch);
+                }
+                else if (!char.IsWhiteSpace(ch) && XmlEntityNames.GetNameByCharFull(ch, out var nameOfSymbol))
+                {
+                    outer.Append(nameOfSymbol);
+                }
+                else
+                {
+                    outer.Append(ch);
+                }
+
+                i++;
+            }
+
+            return outer.ToString();
+        }
+
+        static bool IsSymbolName(string input, int startIndex, out string symbolName, out char symbolResult)
+        {
+            symbolName = null;
+            symbolResult = '\0';
+            if (input[startIndex] != '&')
+                return false;
+            
+            symbolName = input.Substring(startIndex, input.Length > 8 ? 8 : input.Length);
+            var indexOfEnd = symbolName.IndexOf(';', 0);
+            if (indexOfEnd != -1)
+            {
+                symbolName = symbolName.Substring(0, indexOfEnd + 1);
+                foreach (var chSymbol in symbolName)
+                    if (char.IsWhiteSpace(chSymbol))
+                        return false;
+            }
+            else
+            {
+                return false;
+            }
+
+            var name = symbolName.Substring(1, symbolName.Length - 2);
+            return XmlEntityNames.GetCharByName(name, out symbolResult);
+        }
 
         /// <summary>
         /// Немного колхоз, но работает точно корректно. Также учитывает отступы по спецсимволам.
         /// </summary>
-        static XmlNodeResult GetPositionInSourceText(string innerText, string targetText, XMlType type, string sourceText)
+        static XmlNodeResult GetPositionInSourceText(string sourceText, string outerText, string targetText, XMlType type)
         {
-            var indexStartEscapeWhiteSpace = -1;
-            var indexEndEscapeWhiteSpace = -1;
-
-            var docIndex = innerText.Length - targetText.TrimStart().Length;
-            var findedRange = innerText.Length;
-
-            var j = 0;
-            for (var i = 0; i < innerText.Length; i++)
-            {
-                if (i == docIndex)
-                    indexStartEscapeWhiteSpace = j;
-
-                var ch = innerText[i];
-                if (char.IsWhiteSpace(ch))
-                    continue;
-
-                j++;
-            }
-
-
-            indexEndEscapeWhiteSpace = j;
-            if (indexStartEscapeWhiteSpace == -1 || indexEndEscapeWhiteSpace == -1 || (indexStartEscapeWhiteSpace > indexEndEscapeWhiteSpace))
-                return null;
-
-            j = 0;
+            var docIndex = outerText.Length - targetText.TrimStart().Length;
             var indexStart = -1;
             var indexEnd = -1;
 
-            var isOpen = 0;
-            var symbolsIdents = 0;
-            var charName = new StringBuilder();
+
+            var j = 0;
             for (var i = 0; i < sourceText.Length; i++)
             {
                 var ch = sourceText[i];
-
-                if (isOpen > 0)
-                {
-                    switch (ch)
-                    {
-                        case ';':
-                        {
-                            isOpen--;
-                            if (XmlEntityNames.GetCharByName(charName.ToString(), out var res))
-                            {
-                                symbolsIdents += charName.Length + 1 + (char.IsWhiteSpace(res) ? 1 : 0);
-                            }
-                            charName.Clear();
-                            break;
-                        }
-                        case '&':
-                        {
-                            charName.Clear();
-                            break;
-                        }
-                        default:
-                        {
-                            if (charName.Length >= 6 || char.IsWhiteSpace(ch))
-                            {
-                                isOpen--;
-                                charName.Clear();
-                            }
-                            else
-                            {
-                                charName.Append(ch);
-                            }
-                            break;
-                        }
-                    }
-                }
-                else if (ch == '&')
-                {
-                    isOpen++;
-                }
-
                 if (char.IsWhiteSpace(ch))
                     continue;
 
-                if (j == indexStartEscapeWhiteSpace + symbolsIdents && indexStart == -1)
+                if (IsSymbolName(sourceText, i, out var symbolName, out var symbolResult))
                 {
-                    indexStart = i;
+                    i = i + symbolName.Length;
+                    ch = sourceText[i];
+
+
+                    int indexEscapeSpace = j;
+                    while (sourceText.Length > indexEscapeSpace && char.IsWhiteSpace(sourceText[indexEscapeSpace]))
+                        indexEscapeSpace++;
+                    var sourceSymbol = sourceText.Substring(indexEscapeSpace, sourceText.Length > 8 ? 8 : sourceText.Length);
+
+                    if (IsSymbolName(outerText, i, out var outerSymbol, out var symbolResult))
+                    {
+                        // если в исходном документе нет обозначения имени символа, но есть сам сивол
+                        // увеличиваем индексатор на имя сивола и меняем обозначение символа на сам символ
+                        if (sourceSymbol.IndexOf(outerSymbol, StringComparison.Ordinal) != 0)
+                        {
+                            ch = symbolResult;
+                            i = i + outerSymbol.Length - 1;
+                        }
+                    }
                 }
+
+                var sourceCh = sourceText[j];
+                while (ch != sourceCh && sourceText.Length > j + 1)
+                {
+                    j++;
+                    sourceCh = sourceText[j];
+                }
+
+                if (i == docIndex)
+                {
+                    indexStart = j;
+                }
+
+                if (sourceText.Length <= j + 1)
+                    break;
 
                 j++;
-
-                if (j == indexEndEscapeWhiteSpace + symbolsIdents && indexEnd == -1)
-                {
-                    indexEnd = i;
-                    break;
-                }
-
-                //sourceTextBld.Append(ch);
             }
 
-            if (indexStart == -1 || indexEnd == -1 || (indexStart > indexEnd))
+            indexEnd = j;
+
+            if (indexStart == -1 || (indexStart > indexEnd))
                 return null;
-
-            indexEnd++;
-
-            //string res1 = xmlTextBld.ToString();
-            //string res2 = sourceTextBld.ToString();
-            //string res3 = sourceText.Substring(indexStart, indexEnd - indexStart);
 
             return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
         }
