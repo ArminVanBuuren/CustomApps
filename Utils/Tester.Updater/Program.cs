@@ -19,7 +19,6 @@ namespace Tester.Updater
 
         static void Main(string[] args)
         {
-            Thread.Sleep(1000 / 2000);
             var code = AES.EncryptStringAES("69870", "TLControl");
             //var _tfsUserPassword = new SecureString();
             //foreach (var ch in "123")
