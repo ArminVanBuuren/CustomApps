@@ -14,10 +14,7 @@ namespace TFSAssist.Remoter
     delegate void ProcessingErrorHandler(string log);
     class MediaPack : IDisposable
     {
-        readonly object _aforgeLock = new object();
-        readonly object _encoderLock = new object();
-        readonly object _screenLock = new object();
-        readonly object _audioLock = new object();
+        readonly object _rootLock = new object();
 
         private readonly Thread _mainThread;
         private readonly string _projectDirPath;
@@ -41,6 +38,11 @@ namespace TFSAssist.Remoter
         private int _countOfPlannedEncoder = 0;
         private int _countOfPlannedScreen = 0;
         private int _countOfPlannedNAudio = 0;
+
+        public bool IsBusy => !((_aforgeCapture == null || _aforgeCapture.Mode == MediaCaptureMode.None)
+                              && (_encoderCapture == null || _encoderCapture.Mode == MediaCaptureMode.None)
+                              && (_screenCapture == null || _screenCapture.Mode == MediaCaptureMode.None)
+                              && (_naudioCapture == null || _naudioCapture.Mode == MediaCaptureMode.None));
 
         public MediaPack(Thread mainThread, string projectDirPath)
         {
@@ -73,16 +75,16 @@ namespace TFSAssist.Remoter
             }
 
 
-            try
-            {
-                _encDevices = new EncoderMediaDevices();
-                _encoderCapture = new EncoderCapture(_mainThread, _aforgeDevices, _encDevices, _projectDirPath, 60);
-                _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
-            }
-            catch (Exception ex)
-            {
-                WriteExLog(ex);
-            }
+            //try
+            //{
+            //    _encDevices = new EncoderMediaDevices();
+            //    _encoderCapture = new EncoderCapture(_mainThread, _aforgeDevices, _encDevices, _projectDirPath, 60);
+            //    _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
+            //}
+            //catch (Exception ex)
+            //{
+            //    WriteExLog(ex);
+            //}
 
 
             try
@@ -119,9 +121,9 @@ namespace TFSAssist.Remoter
 
         public void StartAForge()
         {
-            lock (_aforgeLock)
+            lock (_rootLock)
             {
-                if (_aforgeCapture != null && _aforgeCapture.Mode == MediaCaptureMode.None && (_encoderCapture == null || _encoderCapture.Mode == MediaCaptureMode.None))
+                if (!IsBusy)
                 {
                     _aforgeCapture.StartRecording();
                 }
@@ -134,9 +136,9 @@ namespace TFSAssist.Remoter
 
         public void StartEncoder()
         {
-            lock (_encoderLock)
+            lock (_rootLock)
             {
-                if (_encoderCapture != null && _encoderCapture.Mode == MediaCaptureMode.None && (_aforgeCapture == null || _aforgeCapture.Mode == MediaCaptureMode.None))
+                if (!IsBusy)
                 {
                     _encoderCapture.StartRecording();
                 }
@@ -149,17 +151,20 @@ namespace TFSAssist.Remoter
 
         public void StartBroadcast(int port = 8080)
         {
-            if (_encoderCapture != null && _encoderCapture.Mode == MediaCaptureMode.None && (_aforgeCapture == null || _aforgeCapture.Mode == MediaCaptureMode.None))
+            lock (_rootLock)
             {
-                _encoderCapture.StartBroadcast(port);
+                if (!IsBusy)
+                {
+                    _encoderCapture.StartBroadcast(port);
+                }
             }
         }
 
         public void StartScreen()
         {
-            lock (_screenLock)
+            lock (_rootLock)
             {
-                if (_screenCapture != null && _screenCapture.Mode == MediaCaptureMode.None)
+                if (!IsBusy)
                 {
                     _screenCapture.StartRecording();
                 }
@@ -172,9 +177,9 @@ namespace TFSAssist.Remoter
 
         public void StartNAudio()
         {
-            lock (_audioLock)
+            lock (_rootLock)
             {
-                if (_naudioCapture.Mode == MediaCaptureMode.None)
+                if (!IsBusy)
                 {
                     _naudioCapture.StartRecording();
                 }

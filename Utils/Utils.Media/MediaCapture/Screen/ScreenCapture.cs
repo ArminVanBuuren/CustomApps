@@ -63,13 +63,14 @@ namespace Utils.Media.MediaCapture.Screen
                 // ignored
             }
 
+            Mode = MediaCaptureMode.Recording;
+
             new Action<string, string>(DoRecordingAsync).BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
         }
 
         void DoRecordingAsync(string destinationVideo, string destinationAudio)
         {
             MediaCaptureEventArgs result = null;
-            Mode = MediaCaptureMode.Recording;
 
             try
             {

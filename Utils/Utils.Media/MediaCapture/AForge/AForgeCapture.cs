@@ -130,6 +130,26 @@ namespace Utils.Media.MediaCapture.AForge
                 // ignored
             }
 
+            switch (Mode)
+            {
+                case MediaCaptureMode.None:
+                    Mode = MediaCaptureMode.Recording;
+                    StartVideoGrab();
+                    break;
+                case MediaCaptureMode.Previewing:
+                    Mode = MediaCaptureMode.Recording;
+                    break;
+            }
+
+            try
+            {
+                _waveSource?.StartRecording();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             // timer
             var asyncRec = new Action<string, string>(DoRecordingAsync);
             asyncRec.BeginInvoke(destinationVideoPath, destinationAudioPath, null, null);
@@ -140,26 +160,6 @@ namespace Utils.Media.MediaCapture.AForge
             MediaCaptureEventArgs result = null;
             try
             {
-                switch (Mode)
-                {
-                    case MediaCaptureMode.None:
-                        Mode = MediaCaptureMode.Recording;
-                        StartVideoGrab();
-                        break;
-                    case MediaCaptureMode.Previewing:
-                        Mode = MediaCaptureMode.Recording;
-                        break;
-                }
-
-                try
-                {
-                    _waveSource?.StartRecording();
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-
                 var startCapture = DateTime.Now;
                 while (DateTime.Now.Subtract(startCapture).TotalSeconds < SecondsRecordDuration)
                 {

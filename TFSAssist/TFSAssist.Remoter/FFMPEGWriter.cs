@@ -26,8 +26,15 @@ namespace TFSAssist.Remoter
 
         public void AddFrame(Bitmap frameImage)
         {
-            if (_fileWriter.IsOpen)
-                _fileWriter.WriteVideoFrame(frameImage);
+            try
+            {
+                if (_fileWriter.IsOpen)
+                    _fileWriter.WriteVideoFrame(frameImage);
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
         }
 
         public void Refresh()

@@ -89,31 +89,6 @@ namespace Utils.Media.MediaCapture.Encoder
             }
         }
 
-        //public override async Task StartCamRecordingAsync(string fileName = null)
-        //{
-        //    if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
-        //        throw new MediaCaptureRunningException("You must stop the previous process first!");
-
-        //    if (VideoEncoderDevice == null || AudioEncoderDevice == null)
-        //        throw new ArgumentException($"Video=[{VideoEncoderDevice?.ToString()}] or Audio=[{AudioEncoderDevice?.ToString()}] device is incorrect!");
-
-
-        //    EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
-        //    try
-        //    {
-        //        await InitializationAsync(procThread, DoCamInitializeAsync);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new TargetInvocationException(ex);
-        //    }
-
-        //    if (!procThread.IsCanceled)
-        //    {
-        //        StartRecordingThread(procThread);
-        //    }
-        //}
-
         public void StartScreenRecording(string fileName = null)
         {
             if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
@@ -131,31 +106,6 @@ namespace Utils.Media.MediaCapture.Encoder
             }
         }
 
-        //public override async Task StartScreenRecordingAsync(string fileName = null)
-        //{
-        //    if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
-        //        throw new MediaCaptureRunningException("You must stop the previous process first!");
-
-        //    if (AudioEncoderDevice == null)
-        //        throw new ArgumentException("Audio device is incorrect!");
-
-        //    EncoderProcessingThread procThread = new EncoderProcessingThread(GetNewVideoFilePath(fileName));
-        //    try
-        //    {
-        //        await InitializationAsync(procThread, DoScreenInitializeAsync);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new TargetInvocationException(ex);
-        //    }
-            
-
-        //    if (!procThread.IsCanceled)
-        //    {
-        //        StartRecordingThread(procThread);
-        //    }
-        //}
-
         public override bool StartBroadcast(int port = 8080)
         {
             // <MediaElement Name = "VideoControl" Source = "http://localhost:8080" />
@@ -171,29 +121,6 @@ namespace Utils.Media.MediaCapture.Encoder
 
             return !procThread.IsCanceled;
         }
-
-        //public override async Task<bool> StartBroadcastAsync(int port = 8080)
-        //{
-        //    // <MediaElement Name = "VideoControl" Source = "http://localhost:8080" />
-
-        //    if (Mode != MediaCaptureMode.None || (_asyncRecordingThread != null && _asyncRecordingThread.IsAlive))
-        //        throw new MediaCaptureRunningException("You must stop the previous process first!");
-
-        //    if (VideoEncoderDevice == null || AudioEncoderDevice == null)
-        //        throw new ArgumentException("Video or Audio device is incorrect!");
-
-        //    EncoderProcessingThread procThread = new EncoderProcessingThread(port);
-        //    try
-        //    {
-        //        await InitializationAsync(procThread, DoBroadcastInitializeAsync);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new TargetInvocationException(ex);
-        //    }
-
-        //    return !procThread.IsCanceled;
-        //}
 
         void Initialization(EncoderProcessingThread procThread, Func<EncoderProcessingThread, bool> initializeDeviceMethod)
         {
@@ -221,32 +148,6 @@ namespace Utils.Media.MediaCapture.Encoder
                 stopProcess.BeginInvoke(false, null, null).AsyncWaitHandle.WaitOne(TIMEOUT_STOP);
             }
         }
-
-        //async Task InitializationAsync(EncoderProcessingThread procThread, Func<EncoderProcessingThread, Task<bool>> initializeDeviceMethod)
-        //{
-        //    Mode = MediaCaptureMode.Initialization;
-
-        //    lock (syncPT)
-        //    {
-        //        ProcessingThreads.Add(procThread);
-        //    }
-
-        //    if (!await ASYNC.ExecuteWithTimeoutAsync(initializeDeviceMethod.Invoke(procThread), TIMEOUT_INITIALIZE))
-        //    {
-        //        procThread.IsCanceled = true;
-        //        await ASYNC.ExecuteWithTimeoutAsync(procThread.StopAsync(), TIMEOUT_STOP);
-        //        Mode = MediaCaptureMode.None;
-        //        throw new TimeoutException();
-        //    }
-
-        //    // если во время инициализации была произведена команда отмены
-        //    if (Mode == MediaCaptureMode.None)
-        //    {
-        //        procThread.IsCanceled = true;
-        //        await ASYNC.ExecuteWithTimeoutAsync(procThread.StopAsync(), TIMEOUT_STOP);
-        //        return;
-        //    }
-        //}
 
         void InitializationAsyncToSync(EncoderProcessingThread procThread, Func<EncoderProcessingThread, Task<bool>> initializeDeviceMethod)
         {

@@ -34,13 +34,14 @@ namespace Utils.Media.MediaCapture.NAudio
                 _waveFileWriter = new WaveFileWriter(destinationFilePath, _waveSource.WaveFormat);
             }
 
+            Mode = MediaCaptureMode.Recording;
+
             new Action<string>(DoRecordingAsync).BeginInvoke(destinationFilePath, null, null);
         }
 
         void DoRecordingAsync(string destinationFilePath)
         {
             MediaCaptureEventArgs result = null;
-            Mode = MediaCaptureMode.Recording;
 
             try
             {
