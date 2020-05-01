@@ -14,6 +14,11 @@ namespace TFSAssist.Remoter
     delegate void ProcessingErrorHandler(string log);
     class MediaPack : IDisposable
     {
+        readonly object _aforgeLock = new object();
+        readonly object _encoderLock = new object();
+        readonly object _screenLock = new object();
+        readonly object _audioLock = new object();
+
         private readonly Thread _mainThread;
         private readonly string _projectDirPath;
 
@@ -31,6 +36,11 @@ namespace TFSAssist.Remoter
 
         public event ProcessingCompleteHandler OnCompleted;
         public event ProcessingErrorHandler OnProcessingExceptions;
+
+        private int _countOfPlannedAforge = 0;
+        private int _countOfPlannedEncoder = 0;
+        private int _countOfPlannedScreen = 0;
+        private int _countOfPlannedNAudio = 0;
 
         public MediaPack(Thread mainThread, string projectDirPath)
         {
@@ -109,17 +119,31 @@ namespace TFSAssist.Remoter
 
         public void StartAForge()
         {
-            if (_aforgeCapture != null && _aforgeCapture.Mode == MediaCaptureMode.None && (_encoderCapture == null || _encoderCapture.Mode == MediaCaptureMode.None))
+            lock (_aforgeLock)
             {
-                _aforgeCapture.StartRecording();
+                if (_aforgeCapture != null && _aforgeCapture.Mode == MediaCaptureMode.None && (_encoderCapture == null || _encoderCapture.Mode == MediaCaptureMode.None))
+                {
+                    _aforgeCapture.StartRecording();
+                }
+                else
+                {
+                    _countOfPlannedAforge++;
+                }
             }
         }
 
         public void StartEncoder()
         {
-            if (_encoderCapture != null && _encoderCapture.Mode == MediaCaptureMode.None && (_aforgeCapture == null || _aforgeCapture.Mode == MediaCaptureMode.None))
+            lock (_encoderLock)
             {
-                _encoderCapture.StartRecording();
+                if (_encoderCapture != null && _encoderCapture.Mode == MediaCaptureMode.None && (_aforgeCapture == null || _aforgeCapture.Mode == MediaCaptureMode.None))
+                {
+                    _encoderCapture.StartRecording();
+                }
+                else
+                {
+                    _countOfPlannedEncoder++;
+                }
             }
         }
 
@@ -133,17 +157,31 @@ namespace TFSAssist.Remoter
 
         public void StartScreen()
         {
-            if (_screenCapture != null && _screenCapture.Mode == MediaCaptureMode.None)
+            lock (_screenLock)
             {
-                _screenCapture.StartRecording();
+                if (_screenCapture != null && _screenCapture.Mode == MediaCaptureMode.None)
+                {
+                    _screenCapture.StartRecording();
+                }
+                else
+                {
+                    _countOfPlannedScreen++;
+                }
             }
         }
 
         public void StartNAudio()
         {
-            if (_naudioCapture.Mode == MediaCaptureMode.None)
+            lock (_audioLock)
             {
-                _naudioCapture.StartRecording();
+                if (_naudioCapture.Mode == MediaCaptureMode.None)
+                {
+                    _naudioCapture.StartRecording();
+                }
+                else
+                {
+                    _countOfPlannedNAudio++;
+                }
             }
         }
 
@@ -157,17 +195,45 @@ namespace TFSAssist.Remoter
 
         private void OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
-            if (args == null)
-                return;
+            try
+            {
+                if (args == null)
+                    return;
 
-            if (args.Error != null)
-                WriteExLog(args.Error);
+                if (args.Error != null)
+                    WriteExLog(args.Error);
 
-            if (args.FilesDestinations == null || args.FilesDestinations.Length == 0)
-                return;
+                if (args.FilesDestinations == null || args.FilesDestinations.Length == 0)
+                    return;
 
 
-            OnCompleted?.Invoke(this, args.FilesDestinations);
+                OnCompleted?.Invoke(this, args.FilesDestinations);
+
+                if (_countOfPlannedAforge > 0)
+                {
+                    _countOfPlannedAforge--;
+                    StartAForge();
+                }
+                else if (_countOfPlannedEncoder > 0)
+                {
+                    _countOfPlannedEncoder--;
+                    StartEncoder();
+                }
+                else if(_countOfPlannedScreen > 0)
+                {
+                    _countOfPlannedScreen--;
+                    StartScreen();
+                }
+                else if (_countOfPlannedNAudio > 0)
+                {
+                    _countOfPlannedNAudio--;
+                    StartNAudio();
+                }
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
         }
 
         private void OnUnexpectedError(object sender, MediaCaptureEventArgs args)

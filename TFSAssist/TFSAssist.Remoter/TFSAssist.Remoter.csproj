@@ -72,8 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.Media">
-      <HintPath>..\..\Utils\Utils.Media\bin\x86\Release\Utils.Media.dll</HintPath>
+    <Reference Include="Utils.Media, Version=1.0.7426.26936, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Utils\Utils.Media\bin\Debug\Utils.Media.dll</HintPath>
     </Reference>
     <Reference Include="Utils.Messaging">
       <HintPath>..\..\Utils\Utils.Messaging\bin\x86\Release\Utils.Messaging.dll</HintPath>
@@ -82,7 +83,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Utils\Utils.WinForm\bin\x86\Release\Utils.WinForm.dll</HintPath>
     </Reference>
-<Reference Include="Windows"> <HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\Windows.winmd</HintPath> </Reference>
+    <Reference Include="Windows">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\Windows.winmd</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FFMPEGWriter.cs" />
