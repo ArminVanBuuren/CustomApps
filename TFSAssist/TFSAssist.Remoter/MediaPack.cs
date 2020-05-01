@@ -190,14 +190,6 @@ namespace TFSAssist.Remoter
             }
         }
 
-        public void Stop()
-        {
-            _aforgeCapture?.Stop();
-            _encoderCapture?.Stop();
-            _screenCapture?.Stop();
-            _naudioCapture?.Stop();
-        }
-
         private void OnRecordingCompleted(object sender, MediaCaptureEventArgs args)
         {
             try
@@ -366,9 +358,26 @@ namespace TFSAssist.Remoter
             return resultCamInfo;
         }
 
+        public void Stop()
+        {
+            _aforgeCapture?.Stop();
+            _encoderCapture?.Stop();
+            _screenCapture?.Stop();
+            _naudioCapture?.Stop();
+        }
+
         public void Dispose()
         {
+            _countOfPlannedAforge = 0;
+            _countOfPlannedEncoder = 0;
+            _countOfPlannedScreen = 0;
+            _countOfPlannedNAudio = 0;
             Stop();
+
+            _aforgeCapture?.Dispose();
+            _encoderCapture?.Dispose();
+            _screenCapture?.Dispose();
+            _naudioCapture?.Dispose();
         }
     }
 }
