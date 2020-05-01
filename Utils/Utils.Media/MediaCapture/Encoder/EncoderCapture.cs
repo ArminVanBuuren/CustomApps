@@ -661,7 +661,7 @@ namespace Utils.Media.MediaCapture.Encoder
 
         public override string ToString()
         {
-            return $"{base.ToString()}\r\nVideo=[{VideoEncoderDevice.Name}]\r\nAudio=[{AudioEncoderDevice.Name}]";
+            return $"{base.ToString()}\r\nVideo=[{VideoEncoderDevice?.Name}]\r\nAudio=[{AudioEncoderDevice?.Name}]";
         }
     }
 }

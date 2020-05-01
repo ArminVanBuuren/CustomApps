@@ -8,6 +8,7 @@ using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
+using Utils.Crypto;
 
 namespace Tester.Updater
 {
@@ -18,6 +19,7 @@ namespace Tester.Updater
 
         static void Main(string[] args)
         {
+            var code = AES.EncryptStringAES("69870", "TLControl");
             //var _tfsUserPassword = new SecureString();
             //foreach (var ch in "123")
             //    _tfsUserPassword.AppendChar(ch);
