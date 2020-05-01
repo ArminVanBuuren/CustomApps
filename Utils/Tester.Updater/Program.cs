@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Cache;
 using System.Reflection;
 using System.Threading;
 using Utils;

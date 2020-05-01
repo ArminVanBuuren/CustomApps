@@ -4,8 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Cache;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 using Utils;
 using Utils.AppUpdater;
 using Utils.AppUpdater.Pack;
@@ -15,16 +19,17 @@ namespace TFSAssist.Remoter
     class SystemInfo : IDisposable
     {
         private GeoCoordinateWatcher _watcher;
-        private string _locationResult = "Location unknown.";
+        private GeoCoordinate _coordinate;
+        private Geolocator _geolocator;
 
         public event ProcessingErrorHandler OnProcessingExceptions;
 
         public SystemInfo()
         {
-
+            
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             try
             {
@@ -36,6 +41,47 @@ namespace TFSAssist.Remoter
             {
                 WriteExLog(ex);
             }
+
+            try
+            {
+                var accessStatus = await Geolocator.RequestAccessAsync();
+                switch (accessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
+                        // Create Geolocator and define perodic-based tracking (2 second interval).
+                        _geolocator = new Geolocator { ReportInterval = 2000 };
+
+                        // Subscribe to the PositionChanged event to get location updates.
+                        _geolocator.PositionChanged += GeolocatorOnPositionChanged;
+
+                        // Subscribe to StatusChanged event to get updates of location status changes.
+                        _geolocator.StatusChanged += GeolocatorOnStatusChanged;
+
+                        break;
+
+                    case GeolocationAccessStatus.Denied:
+                        WriteExLog(new Exception("Access to location is denied."));
+                        break;
+
+                    case GeolocationAccessStatus.Unspecified:
+                        WriteExLog(new Exception("Unspecificed error!"));
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
+        }
+
+        private void GeolocatorOnStatusChanged(Geolocator sender, StatusChangedEventArgs args)
+        {
+            
+        }
+
+        private void GeolocatorOnPositionChanged(Geolocator sender, PositionChangedEventArgs args)
+        {
+            
         }
 
         void GeoWatcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -46,12 +92,33 @@ namespace TFSAssist.Remoter
             if (_watcher.Position.Location.IsUnknown)
                 return;
 
-            var coordinate = _watcher.Position.Location;
-            _locationResult = $"Latitude=[{coordinate.Latitude.ToString().Replace(",", ".")}] Longitude=[{coordinate.Longitude.ToString().Replace(",", ".")}]";
+            _coordinate = _watcher.Position.Location;
         }
 
-        public string GetLocationInfo()
+        public async Task<string> GetLocationInfo()
         {
+            var _locationResult = "Watcher location unknown.";
+            try
+            {
+
+                if (_coordinate != null)
+                    _locationResult = $"Latitude=[{_coordinate.Latitude.ToString().Replace(",", ".")}] Longitude=[{_coordinate.Longitude.ToString().Replace(",", ".")}]";
+
+                if (_geolocator != null)
+                {
+                    // timeout установить побольше чтобы определилось местоположение
+                    var pos = await _geolocator.GetGeopositionAsync(TimeSpan.FromMilliseconds(5000), TimeSpan.FromSeconds(10));
+                    _locationResult += Environment.NewLine + $"Latitude=[{pos?.Coordinate?.Latitude.ToString().Replace(",", ".")}] Longitude=[{pos?.Coordinate?.Longitude.ToString().Replace(",", ".")}]";
+                }
+
+                var reg = new Regex(@"var\s+me.+$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                var contextStr = WEB.WebHttpStringData(new Uri("https://maper.info/Xj2Xq"), out var responceHttpCode, HttpRequestCacheLevel.NoCacheNoStore, 30 * 1000);
+                _locationResult += Environment.NewLine + reg.Match(contextStr).Value;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
             return _locationResult;
         }
 

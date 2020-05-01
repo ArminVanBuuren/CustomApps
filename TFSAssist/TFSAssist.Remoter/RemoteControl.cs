@@ -90,11 +90,7 @@ namespace TFSAssist.Remoter
             await Connect(GetAuthCode);
 
             if (IsEnabled)
-            {
-                Thread.Sleep(5000);
                 SendMessageToUserHost($"Connected. {_systemInfo.GetHostInfo()}");
-                Thread.Sleep(1000);
-            }
 
             return IsEnabled;
         }
@@ -373,7 +369,7 @@ namespace TFSAssist.Remoter
                                 break;
 
                             case RemoteControlCommands.LOC:
-                                SendMessageToUserHost(_systemInfo.GetLocationInfo());
+                                SendMessageToUserHost(await _systemInfo.GetLocationInfo());
                                 break;
 
                             case RemoteControlCommands.MEDIA:
