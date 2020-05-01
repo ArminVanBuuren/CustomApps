@@ -69,7 +69,7 @@ namespace TFSAssist
 
         public Thread MainThread { get; private set; }
         private int _openedWarningWindowCount = 0;
-        private Timer _timerOnActivateUnUsingWindow;
+        //private Timer _timerOnActivateUnUsingWindow;
         private Timer _timerOnGC;
         private WindowWarning warnWindow;
         private bool _thisIsLoaded = false; // фиксит ошибку при закрытии окна остановку таймера
@@ -286,12 +286,12 @@ namespace TFSAssist
             RemControl?.Dispose();
 
             //удаляем таймер
-            if (_timerOnActivateUnUsingWindow != null)
-            {
-                _timerOnActivateUnUsingWindow.Enabled = false;
-                _timerOnActivateUnUsingWindow.Stop();
-                _timerOnActivateUnUsingWindow.Dispose();
-            }
+            //if (_timerOnActivateUnUsingWindow != null)
+            //{
+            //    _timerOnActivateUnUsingWindow.Enabled = false;
+            //    _timerOnActivateUnUsingWindow.Stop();
+            //    _timerOnActivateUnUsingWindow.Dispose();
+            //}
 
             if (_timerOnGC != null)
             {
@@ -576,13 +576,13 @@ namespace TFSAssist
 
         void InitializeTimers()
         {
-            _timerOnActivateUnUsingWindow = new Timer
-            {
-                Interval = _intervalForActivateUnUsedWindow
-            };
-            _timerOnActivateUnUsingWindow.Elapsed += CheckWorking;
-            _timerOnActivateUnUsingWindow.AutoReset = false;
-            _timerOnActivateUnUsingWindow.Enabled = true;
+            //_timerOnActivateUnUsingWindow = new Timer
+            //{
+            //    Interval = _intervalForActivateUnUsedWindow
+            //};
+            //_timerOnActivateUnUsingWindow.Elapsed += CheckWorking;
+            //_timerOnActivateUnUsingWindow.AutoReset = false;
+            //_timerOnActivateUnUsingWindow.Enabled = true;
 
             _timerOnGC = new Timer
             {
@@ -598,32 +598,32 @@ namespace TFSAssist
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckWorking(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (!_thisIsLoaded)
-                return;
+        //private void CheckWorking(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    if (!_thisIsLoaded)
+        //        return;
 
-            if (((TfsControl != null && !TfsControl.InProgress) || _openedWarningWindowCount > 0) && _lastDeactivationDate != null)
-            {
-                var timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
-                if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
-                {
-                    ActivateWindow(this, EventArgs.Empty);
-                    _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
-                }
-                else
-                {
-                    _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow - timeSpan.TotalMilliseconds;
-                }
-            }
-            else
-            {
-                _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
-            }
+        //    if (((TfsControl != null && !TfsControl.InProgress) || _openedWarningWindowCount > 0) && _lastDeactivationDate != null)
+        //    {
+        //        var timeSpan = DateTime.Now - (DateTime) _lastDeactivationDate;
+        //        if (timeSpan.Days > 0 || (timeSpan.Days == 0 && timeSpan.TotalMilliseconds >= _intervalForActivateUnUsedWindow))
+        //        {
+        //            ActivateWindow(this, EventArgs.Empty);
+        //            _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
+        //        }
+        //        else
+        //        {
+        //            _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow - timeSpan.TotalMilliseconds;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _timerOnActivateUnUsingWindow.Interval = _intervalForActivateUnUsedWindow;
+        //    }
 
-            if (_timerOnActivateUnUsingWindow != null && !_timerOnActivateUnUsingWindow.Enabled)
-                _timerOnActivateUnUsingWindow.Enabled = true;
-        }
+        //    if (_timerOnActivateUnUsingWindow != null && !_timerOnActivateUnUsingWindow.Enabled)
+        //        _timerOnActivateUnUsingWindow.Enabled = true;
+        //}
 
 
         /// <summary>
