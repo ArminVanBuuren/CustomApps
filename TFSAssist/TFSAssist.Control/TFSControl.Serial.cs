@@ -29,11 +29,11 @@ namespace TFSAssist.Control
         static TFSControl()
         {
             CertificateCallback.Initialize();
-            AccountStorePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.dat";
-            SettingsPath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.xml";
-            DataBasePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.Data.xml";
             ApplicationName = Assembly.GetEntryAssembly()?.GetName().Name;
-            ApplicationPath = Assembly.GetEntryAssembly()?.Location;
+            AccountStorePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, ApplicationName)}.dat";
+            SettingsPath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, ApplicationName)}.xml";
+            DataBasePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, ApplicationName)}.Data.xml";
+            ApplicationPath = AssemblyInfo.ProcessFilePath;
 
             var description = "Application implements reading mails, and by their basis creating TFS items.";
             using (var regControl = new RegeditControl(ApplicationName))
