@@ -131,18 +131,25 @@ namespace TFSAssist.Remoter
                     detInfo.Append($"{value.Key} {new string('.', maxLenghtSpace - value.Key.Length)} [{string.Join("];[", value.Value)}]\r\n");
                 }
 
-                // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
-                var localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly(), SearchOption.AllDirectories);
-                if (localVersions?.Count > 0)
+                try
                 {
-                    maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;
-                    localVersions = localVersions.OrderBy(p => p.Key).ToDictionary(x => x.Key, x => x.Value);
-
-                    detInfo.Append($"\r\nLocation=[{Assembly.GetEntryAssembly().GetDirectory()}]\r\n");
-                    foreach (var versionLocalFiles in localVersions)
+                    // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
+                    var localVersions = BuildPackInfo.GetLocalVersions(AssemblyInfo.ApplicationDirectory, SearchOption.AllDirectories);
+                    if (localVersions?.Count > 0)
                     {
-                        detInfo.Append($"{versionLocalFiles.Key} {new string('.', maxLenghtSpace - versionLocalFiles.Key.Length)} [{versionLocalFiles.Value.Version}] ({new FileInfo(versionLocalFiles.Key).Length.ToMegabytes()} MB)\r\n");
+                        maxLenghtSpace = localVersions.Aggregate("", (max, cur) => max.Length > cur.Location.Length ? max : cur.Location).Length + 3;
+
+                        detInfo.Append($"\r\nLocation=[{AssemblyInfo.ApplicationDirectory}]\r\n");
+                        foreach (var versionLocalFiles in localVersions)
+                        {
+                            detInfo.Append(
+                                $"{versionLocalFiles.Location} {new string('.', maxLenghtSpace - versionLocalFiles.Location.Length)} [{versionLocalFiles.Version}] ({new FileInfo(Path.Combine(AssemblyInfo.ApplicationDirectory, versionLocalFiles.Location)).Length.ToMegabytes()} MB)\r\n");
+                        }
                     }
+                }
+                catch (Exception)
+                {
+                    // ignored
                 }
             }
 

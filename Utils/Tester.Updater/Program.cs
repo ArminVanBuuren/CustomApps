@@ -231,6 +231,14 @@ namespace Tester.Updater
             {
                 // при первом использовании для начала нужно инитить папку:
                 // $ cd -P -- "C:\!Builds\Git"
+                // https://www.shellhacks.com/ru/git-remove-all-commits-clear-git-history-local-remote/
+                // $ git checkout --orphan temp_branch
+                // $ git add -A
+                // $ git commit -am "The first commit"
+                // $ git branch -D master
+                // $ git branch -m master
+                // $ git push -f origin master
+
                 // git remote -v
                 // https://www.shellhacks.com/ru/git-remove-all-commits-clear-git-history-local-remote/
                 // git fetch origin master
