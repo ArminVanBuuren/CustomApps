@@ -29,9 +29,9 @@ namespace TFSAssist.Control
         static TFSControl()
         {
             CertificateCallback.Initialize();
-            AccountStorePath = $"{Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationFilePath}.dat";
-            SettingsPath = $"{Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationFilePath}.xml";
-            DataBasePath = $"{Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationFilePath}.Data.xml";
+            AccountStorePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.dat";
+            SettingsPath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.xml";
+            DataBasePath = $"{Path.Combine(AssemblyInfo.ApplicationDirectory, nameof(TFSAssist))}.Data.xml";
             ApplicationName = Assembly.GetEntryAssembly()?.GetName().Name;
             ApplicationPath = Assembly.GetEntryAssembly()?.Location;
 
