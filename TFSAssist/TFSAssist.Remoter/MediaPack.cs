@@ -75,16 +75,16 @@ namespace TFSAssist.Remoter
             }
 
 
-            //try
-            //{
-            //    _encDevices = new EncoderMediaDevices();
-            //    _encoderCapture = new EncoderCapture(_mainThread, _aforgeDevices, _encDevices, _projectDirPath, 60);
-            //    _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
-            //}
-            //catch (Exception ex)
-            //{
-            //    WriteExLog(ex);
-            //}
+            try
+            {
+                _encDevices = new EncoderMediaDevices();
+                _encoderCapture = new EncoderCapture(_mainThread, _aforgeDevices, _encDevices, _projectDirPath, 60);
+                _encoderCapture.OnRecordingCompleted += OnRecordingCompleted;
+            }
+            catch (Exception ex)
+            {
+                WriteExLog(ex);
+            }
 
 
             try

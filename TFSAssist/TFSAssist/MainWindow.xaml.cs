@@ -124,6 +124,7 @@ namespace TFSAssist
             Activated += MainWindow_Activated;
             Deactivated += MainWindow_Deactivated;
             Unloaded += MainWindow_Unloaded;
+            Closed += (sender, args) => Process.GetCurrentProcess().Kill();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -1276,6 +1277,5 @@ namespace TFSAssist
                 MainWindow_Deactivated(this, EventArgs.Empty);
             });
         }
-
     }
 }
