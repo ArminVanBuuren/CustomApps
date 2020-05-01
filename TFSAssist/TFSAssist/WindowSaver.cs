@@ -13,15 +13,13 @@ namespace TFSAssist
     public class WindowSaver : IDisposable
     {
         public static string WindowSaverPath = $"{Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationFilePath}.update";
-        public IUpdater Updater { get; }
+        public BuildPackUpdater Updater { get; }
         public WindowState WindowState { get; }
         public bool ShowInTaskbar { get; }
         public bool TfsInProgress { get; }
         public List<TraceHighlighter> Traces { get; }
 
-
-
-        public WindowSaver(IUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress):this(windowState, showInTaskbar, traces, tfsInProgress)
+        public WindowSaver(BuildPackUpdater updater, WindowState windowState, bool showInTaskbar, List<TraceHighlighter> traces, bool tfsInProgress):this(windowState, showInTaskbar, traces, tfsInProgress)
         {
             Updater = updater;
         }

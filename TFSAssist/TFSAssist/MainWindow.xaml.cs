@@ -19,6 +19,7 @@ using TFSAssist.Control;
 using TFSAssist.Remoter;
 using Utils;
 using Utils.AppUpdater;
+using Utils.AppUpdater.Pack;
 using Utils.AppUpdater.Updater;
 using Utils.Handles;
 using Binding = System.Windows.Data.Binding;
@@ -55,7 +56,7 @@ namespace TFSAssist
         private readonly string ERR_SECOND_PROC = $"{nameof(TFSAssist)} already started. Please check your notification area. To run second process, you can rename the executable file.";
 
         // 15 минут на проверку обновлений. Потому что если долго не будет интернета, в логах будут одни ошибки.
-        private const int _intervalCheckUpdatesSec = 900;
+        private const int _intervalCheckUpdatesMin = 10;
         private const int _timeoutMSECToShowToolTip = 2000;
         private const int _timeoutToShowToolTip = 2000;
         // каждые 15 минут проверять работает ли приложение, если нет то сообщать это пользователю, т.к. может быть ошибка которую он не знает.
@@ -81,26 +82,6 @@ namespace TFSAssist
         public RemoteControl RemControl { get; private set; }
         public string CliendID { get; private set; }
 
-        public string CurrentPackUpdaterName
-        {
-            get
-            {
-                string _currentVal;
-                using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
-                {
-                    _currentVal = regControl[nameof(BuildPackInfo)]?.ToString();
-                }
-
-                return _currentVal;
-            }
-            private set
-            {
-                using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
-                {
-                    regControl[nameof(BuildPackInfo)] = value;
-                }
-            }
-        }
 
         static MainWindow()
         {
@@ -386,8 +367,7 @@ namespace TFSAssist
 
                     if (lastUpdate.Updater != null)
                     {
-                        var updatePackName = lastUpdate.Updater.ProjectBuildPack.Name;
-                        CurrentPackUpdaterName = updatePackName;
+                        var updatePackName = lastUpdate.Updater.BuildPack.Name;
                         WriteLog(WarnSeverity.Normal, DateTime.Now, string.Format(UPDATE_ON_COMPLETE, updatePackName));
                     }
 
@@ -436,7 +416,7 @@ namespace TFSAssist
             {
                 if (_readyUpdateEntity != null)
                 {
-                    WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, _readyUpdateEntity?.ProjectBuildPack?.Name, ex));
+                    WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, _readyUpdateEntity?.BuildPack?.Name, ex));
 
                     if (_readyUpdateEntity.Status != UploaderStatus.Disposed)
                         _readyUpdateEntity.Dispose();
@@ -463,7 +443,7 @@ namespace TFSAssist
         }
 
 
-        WindowSaver PrepareToApplicationRestart(bool wasInProgress, IUpdater readyEntity = null)
+        WindowSaver PrepareToApplicationRestart(bool wasInProgress, BuildPackUpdater readyEntity = null)
         {
             WindowSaver saver = null;
             Dispatcher?.Invoke(() =>
@@ -497,16 +477,15 @@ namespace TFSAssist
         const string UPDATE_ON_COMPLETE = "Update successfully installed. Package=[{0}]";
         const string UPDATE_ON_EXCEPTION = "Update error. Package=[{0}]\r\n{1}";
         private TraceHighlighter _traceHighUpdateStatus;
-        private IUpdater _readyUpdateEntity;
+        private BuildPackUpdater _readyUpdateEntity;
 
         void InitializeAppUpdater()
         {
-            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), CurrentPackUpdaterName, _intervalCheckUpdatesSec);
+            AppUpdater = new ApplicationUpdater(Assembly.GetExecutingAssembly(), _intervalCheckUpdatesMin);
             AppUpdater.OnFetch += AppUpdater_OnFetch;
             AppUpdater.OnUpdate += AppUpdater_OnUpdate;
             AppUpdater.OnProcessingError += AppUpdater_OnProcessingError;
             AppUpdater.Start();
-            AppUpdater.CheckUpdates();
         }
 
         private void AppUpdater_OnFetch(object sender, ApplicationFetchingArgs args)
@@ -539,7 +518,7 @@ namespace TFSAssist
             {
                 try
                 {
-                    var updater = (IUpdater)sender;
+                    var updater = (BuildPackUpdater)sender;
                     _traceHighUpdateStatus.Refresh(string.Format(UPDATE_TRACE_FORMAT, updater.UploadedString, updater.TotalString));
                 }
                 catch (Exception)
@@ -549,7 +528,7 @@ namespace TFSAssist
             });
         }
 
-        private void AppUpdater_OnUpdate(object sender, ApplicationUpdatingArgs args)
+        private void AppUpdater_OnUpdate(object sender, ApplicationUpdaterArgs args)
         {
             if (args?.Control == null)
             {
@@ -557,7 +536,7 @@ namespace TFSAssist
                 return;
             }
 
-            if (args.Control.ProjectBuildPack == null)
+            if (args.Control.BuildPack == null)
             {
                 AppUpdater.Refresh();
                 return;
@@ -565,15 +544,14 @@ namespace TFSAssist
 
             try
             {
-                if (args.Control.ProjectBuildPack.NeedRestartApplication)
+                if (args.Control.BuildPack.NeedRestartApplication)
                 {
                     _readyUpdateEntity = args.Control;
                     DoRestartApplication();
                 }
                 else
                 {
-                    var updatePackName = args.Control.ProjectBuildPack.Name;
-                    CurrentPackUpdaterName = updatePackName;
+                    var updatePackName = args.Control.BuildPack.Name;
 
                     WriteLog(WarnSeverity.Normal, DateTime.Now, UPDATE_ON_START);
                     AppUpdater.DoUpdate(args.Control);
@@ -582,11 +560,11 @@ namespace TFSAssist
             }
             catch (Exception ex)
             {
-                WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, args.Control?.ProjectBuildPack?.Name, ex));
+                WriteLog(WarnSeverity.Error, DateTime.Now, string.Format(UPDATE_ON_EXCEPTION, args.Control?.BuildPack?.Name, ex));
             }
         }
 
-        private void AppUpdater_OnProcessingError(object sender, ApplicationUpdatingArgs args)
+        private void AppUpdater_OnProcessingError(object sender, ApplicationUpdaterArgs args)
         {
             if (args?.Error != null)
                 WriteLog(WarnSeverity.Error, DateTime.Now, args.Error.ToString());

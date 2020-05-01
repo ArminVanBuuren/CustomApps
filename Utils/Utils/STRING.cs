@@ -394,6 +394,11 @@ namespace Utils
             return res;
         }
 
+        public static string RegexReplace(this string input, string pattern, string replacemenet, RegexOptions options = RegexOptions.None)
+        {
+            return Regex.Replace(input, pattern, replacemenet, options);
+        }
+
         static bool GetCharByUTFCode(string input, out char result)
         {
             result = char.MinValue;

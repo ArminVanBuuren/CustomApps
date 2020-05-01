@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using Utils;
 using Utils.AppUpdater;
+using Utils.AppUpdater.Pack;
 
 namespace TFSAssist.Remoter
 {
@@ -131,7 +132,7 @@ namespace TFSAssist.Remoter
                 }
 
                 // должен быть именно GetEntryAssembly вместо GetExecutingAssembly. Т.к. GetExecutingAssembly смотрит исполняемую библиотеку, а не испольняемый exe файл
-                var localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly());
+                var localVersions = BuildPackInfo.GetLocalVersions(Assembly.GetEntryAssembly(), SearchOption.AllDirectories);
                 if (localVersions?.Count > 0)
                 {
                     maxLenghtSpace = localVersions.Keys.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 3;

@@ -83,7 +83,7 @@ namespace Utils.AppUpdater.Pack
             }
         }
 
-        internal static List<FileBuildInfo> GetLocalVersions(string assembliesDirPath, SearchOption option, string runningAppLocation = null)
+        public static List<FileBuildInfo> GetLocalVersions(string assembliesDirPath, SearchOption option, string runningAppLocation = null)
         {
             return Directory.GetFiles(assembliesDirPath, "*", option)
                 .Select(file => new FileBuildInfo(file, assembliesDirPath, file.Like(runningAppLocation)))

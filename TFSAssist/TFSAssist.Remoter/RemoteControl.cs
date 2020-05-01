@@ -48,8 +48,8 @@ namespace TFSAssist.Remoter
         private const string KEY = nameof(TLControl);
         // PRIVATE DATA!!!
 
-        private static string HashCodeFilePath => Path.Combine(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationDirectory, TLControl.SessionName + ".hash");
-        private static string AuthCodeFilePath => Path.Combine(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationDirectory, TLControl.SessionName + ".code");
+        private static string HashCodeFilePath => Path.Combine(AssemblyInfo.ApplicationDirectory, TLControl.SessionName + ".hash");
+        private static string AuthCodeFilePath => Path.Combine(AssemblyInfo.ApplicationDirectory, TLControl.SessionName + ".code");
 
         public bool IsEnabled { get; private set; } = false;
 
