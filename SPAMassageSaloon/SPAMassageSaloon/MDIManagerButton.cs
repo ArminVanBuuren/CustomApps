@@ -20,11 +20,11 @@ namespace SPAMassageSaloon
         {
             mdiForm = form;
             mdiForm.FormClosed += (s, e) => { this.Owner.Items.Remove(this); };
-            mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"    "; };
+            mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"     "; };
             mdiForm.Activated += (s, e) => { this.MDIManagerButton_Click(this, null); };
 
-            base.Text = mdiForm.Text.RegexReplace(@"[0-9.]+", string.Empty).Trim() + @"    ";
-            base.Padding = new Padding(6, 0, 0, 5);
+            base.Text = mdiForm.Text.RegexReplace(@"[0-9.]+", string.Empty).Trim() + @"     ";
+            base.Padding = new Padding(6, 0, 0, 0);
             base.Margin = new Padding(0, 0, 0, 0);
             base.TextAlign = ContentAlignment.MiddleCenter;
             MouseUp += MDIManagerButton_MouseUp;
@@ -41,7 +41,7 @@ namespace SPAMassageSaloon
 
             try
             {
-                foreach (MDIManagerButton btn in this.Parent.Items.OfType<MDIManagerButton>())
+                foreach (var btn in this.Parent.Items.OfType<MDIManagerButton>())
                 {
                     btn.BorderStyle = Border3DStyle.Flat;
                     btn.BackColor = SystemColors.ButtonFace;
@@ -81,7 +81,7 @@ namespace SPAMassageSaloon
 
         void MDIManagerButton_Paint(object sender, PaintEventArgs e)
         {
-            btnLeft = this.Width - Properties.Resources.close.Size.Width - 2;
+            btnLeft = this.Width - Properties.Resources.close.Size.Width - 6;
             btnTop = (this.Height - Properties.Resources.close.Size.Height) / 2;
             btnRectangle = new Rectangle(btnLeft, btnTop, Properties.Resources.close.Size.Width, Properties.Resources.close.Size.Height);
 
