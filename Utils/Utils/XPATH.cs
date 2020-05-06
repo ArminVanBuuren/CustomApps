@@ -31,8 +31,13 @@ namespace Utils
     {
         public static bool SelectFirst(this XmlDocument document, string xpath, out XPathResult result)
         {
+            return SelectFirst(document.CreateNavigator(), xpath, out result);
+        }
+
+        public static bool SelectFirst(this XPathNavigator navigator, string xpath, out XPathResult result)
+        {
             result = null;
-            var collection = Select(document, xpath, true);
+            var collection = Select(navigator, xpath, true);
             if (collection == null || collection.Count == 0)
                 return false;
 
@@ -42,18 +47,26 @@ namespace Utils
 
         public static bool Select(this XmlDocument document, string xpath, out List<XPathResult> result)
         {
-            result = Select(document, xpath);
+            return Select(document.CreateNavigator(), xpath, out result);
+        }
+
+        public static bool Select(this XPathNavigator navigator, string xpath, out List<XPathResult> result)
+        {
+            result = Select(navigator, xpath);
             return result != null;
         }
 
         public static List<XPathResult> Select(XmlDocument document, string xpath, bool getFirst = false)
         {
-            if (document == null)
+            return Select(document.CreateNavigator(), xpath, getFirst);
+        }
+
+        public static List<XPathResult> Select(XPathNavigator navigator, string xpath, bool getFirst = false)
+        {
+            if (navigator == null || xpath == null)
                 return null;
 
-            var navigator = document.CreateNavigator();
             var manager = new XmlNamespaceManager(navigator.NameTable);
-
             while (navigator.MoveToFollowing(XPathNodeType.Element))
             {
                 var localNamespaces = navigator.GetNamespacesInScope(XmlNamespaceScope.Local);
@@ -75,7 +88,6 @@ namespace Utils
             switch (expression.ReturnType)
             {
                 case XPathResultType.NodeSet:
-                    var nodes22 = navigator.SelectSingleNode(expression);
                     var nodes = navigator.Select(expression);
                     if (nodes.Count == 0)
                         return null;
