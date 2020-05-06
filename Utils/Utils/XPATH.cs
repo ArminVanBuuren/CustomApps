@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace Utils
@@ -28,10 +29,10 @@ namespace Utils
 
     public static class XPATH
     {
-        public static bool SelectFirst(this XPathNavigator navigator, string xpath, out XPathResult result)
+        public static bool SelectFirst(this XmlDocument document, string xpath, out XPathResult result)
         {
             result = null;
-            var collection = Select(navigator, xpath, true);
+            var collection = Select(document, xpath, true);
             if (collection == null || collection.Count == 0)
                 return false;
 
@@ -39,63 +40,82 @@ namespace Utils
             return true;
         }
 
-        public static bool Select(this XPathNavigator navigator, string xpath, out List<XPathResult> result)
+        public static bool Select(this XmlDocument document, string xpath, out List<XPathResult> result)
         {
-            result = Select(navigator, xpath);
+            result = Select(document, xpath);
             return result != null;
         }
 
-        public static List<XPathResult> Select(XPathNavigator navigator, string xpath, bool getSingle = false)
+        public static List<XPathResult> Select(XmlDocument document, string xpath, bool getFirst = false)
         {
-            if (navigator == null)
+            if (document == null)
                 return null;
 
-            var expression = XPathExpression.Compile(xpath);
+            var navigator = document.CreateNavigator();
             var manager = new XmlNamespaceManager(navigator.NameTable);
-            //manager.AddNamespace("bk", "http://www.contoso.com/books");
-            manager.AddNamespace(string.Empty, "urn:samples");
+
+            while (navigator.MoveToFollowing(XPathNodeType.Element))
+            {
+                var localNamespaces = navigator.GetNamespacesInScope(XmlNamespaceScope.Local);
+                if (localNamespaces == null || localNamespaces.Count == 0)
+                    continue;
+                foreach (var localNamespace in localNamespaces)
+                {
+                    var prefix = localNamespace.Key;
+                    if (string.IsNullOrEmpty(prefix))
+                        continue;
+
+                    manager.AddNamespace(prefix, localNamespace.Value);
+                }
+            }
+
+            var expression = XPathExpression.Compile(xpath);
             expression.SetContext(manager);
 
             switch (expression.ReturnType)
             {
                 case XPathResultType.NodeSet:
+                    var nodes22 = navigator.SelectSingleNode(expression);
                     var nodes = navigator.Select(expression);
                     if (nodes.Count == 0)
                         return null;
 
-                    var res1 = new List<XPathResult>();
+                    var nodeSetResult = new List<XPathResult>();
                     var i = 0;
 
-                    while (nodes.MoveNext())
+                    void AddCurrent()
                     {
                         var current = nodes.Current;
                         if (current == null)
-                            continue;
+                            return;
 
-                        var xpathRes = new XPathResult
+                        nodeSetResult.Add(new XPathResult
                         {
                             ID = i++,
                             NodeType = current.NodeType.ToString(),
                             NodeName = current.Name,
-                            Value = current.Value
-                        };
-
-                        if (current is IHasXmlNode node1)
-                            xpathRes.Node = node1.GetNode();
-
-                        res1.Add(xpathRes);
-
-                        if (getSingle)
-                            return res1;
+                            Value = current.Value,
+                            Node = current is IHasXmlNode node1 ? node1.GetNode() : null
+                        });
                     }
 
-                    return res1;
+                    if (getFirst)
+                    {
+                        AddCurrent();
+                    }
+                    else
+                    {
+                        while (nodes.MoveNext())
+                            AddCurrent();
+                    }
+
+                    return nodeSetResult;
                 default:
                     var obj = navigator.Evaluate(expression);
                     if (obj == null)
                         return null;
 
-                    var res2 = new List<XPathResult>
+                    var defaultResult = new List<XPathResult>
                     {
                         new XPathResult
                         {
@@ -108,12 +128,44 @@ namespace Utils
 
                     if (obj is IHasXmlNode node2)
                     {
-                        res2[0].Node = node2.GetNode();
-                        res2[0].NodeName = res2[0].Node.NodeType.ToString();
+                        defaultResult[0].Node = node2.GetNode();
+                        defaultResult[0].NodeName = defaultResult[0].Node.NodeType.ToString();
                     }
 
-                    return res2;
+                    return defaultResult;
             }
+        }
+
+        /// <summary>
+        /// Implemented based on interface, not part of algorithm
+        /// </summary>
+        /// <param name="xmlDocument"></param>
+        /// <returns></returns>
+        public static XElement RemoveAllNamespaces(string xmlDocument)
+        {
+            return RemoveAllNamespaces(XElement.Parse(xmlDocument));
+        }
+
+        /// <summary>
+        /// Core recursion function
+        /// </summary>
+        /// <param name="xmlDocument"></param>
+        /// <returns></returns>
+        public static XElement RemoveAllNamespaces(XElement xmlDocument)
+        {
+            if (!xmlDocument.HasElements)
+            {
+                var xElement = new XElement(xmlDocument.Name.LocalName)
+                {
+                    Value = xmlDocument.Value
+                };
+
+                foreach (var attribute in xmlDocument.Attributes())
+                    xElement.Add(attribute);
+
+                return xElement;
+            }
+            return new XElement(xmlDocument.Name.LocalName, xmlDocument.Elements().Select(RemoveAllNamespaces));
         }
     }
 }

@@ -1164,40 +1164,25 @@ namespace Utils
             }
             else
             {
-                if ((node.ChildNodes.Count <= 0) && string.IsNullOrEmpty(node.InnerText))
+                if (node.Attributes.Count > 0)
                 {
-                    if (node.Attributes.Count > 0)
-                    {
-                        var attrBuilder = new StringBuilder();
-                        if (IsXmlAttribute(node.Attributes, attrBuilder, ref targetText, findNode))
-                        {
-                            source.Append('<');
-                            source.Append(node.Name);
-                            source.Append(attrBuilder);
-                            return XMlType.Attribute;
-                        }
-                    }
+                    source.Append('<');
+                    source.Append(node.Name);
 
-                    source.Append(NormalizeXmlValueFast(node.OuterXml));
+                    if (IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
+                        return XMlType.Attribute;
                 }
                 else
                 {
-                    if (node.Attributes.Count > 0)
-                    {
-                        source.Append('<');
-                        source.Append(node.Name);
+                    source.Append('<');
+                    source.Append(node.Name);
+                }
 
-                        if (IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
-                            return XMlType.Attribute;
-
-                        source.Append('>');
-                    }
-                    else
-                    {
-                        source.Append('<');
-                        source.Append(node.Name);
-                        source.Append('>');
-                    }
+                if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
+                    source.Append(" />");
+                else
+                {
+                    source.Append('>');
 
                     foreach (XmlNode node2 in node.ChildNodes)
                     {
