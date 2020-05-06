@@ -185,7 +185,13 @@ namespace XPathTester
                     try
                     {   
                         var document = new XmlDocument();
-                        document.LoadXml(XML.RemoveUnallowable(source, " "));
+                        var formatted = XML.RemoveUnallowable(source, " ");
+                        //var endOfParentNode = formatted.IndexOf(">", StringComparison.Ordinal);
+                        //var removeNS = formatted.Substring(0, endOfParentNode).RegexReplace("xmlns=\"[^\"]+\"","");
+                        //
+                        //editor.Text = document.OuterXml;
+
+                        document.LoadXml(formatted);
                         XmlBody = document;
                     }
                     catch (Exception ex)
@@ -256,7 +262,7 @@ namespace XPathTester
 
                 var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
 
-                if (XmlBody.CreateNavigator().Select(getNodeNamesValue, out var result))
+                if (XmlBody.Select(getNodeNamesValue, out var result))
                 {
                     Result = new XPathCollection(result);
                     UpdateResultDataGrid(Result);
