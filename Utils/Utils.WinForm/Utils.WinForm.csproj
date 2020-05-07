@@ -91,6 +91,24 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewHelper\DGVColumnAttribute.cs" />
+    <Compile Include="Expander\AdvancedFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Expander\ExpandCollapseButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Expander\ExpandCollapseButton.designer.cs">
+      <DependentUpon>ExpandCollapseButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Expander\ExpandCollapseEventArgs.cs" />
+    <Compile Include="Expander\ExpandCollapsePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Expander\ExpandCollapsePanel.designer.cs">
+      <DependentUpon>ExpandCollapsePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Expander\ExpandCollapsePanelActionList.cs" />
+    <Compile Include="Expander\ExpandCollapsePanelDesigner.cs" />
     <Compile Include="FlashWindow.cs" />
     <Compile Include="Handles\FormLocation.cs" />
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
@@ -207,6 +225,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Expander\AdvancedFlowLayoutPanel.resx">
+      <DependentUpon>AdvancedFlowLayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Expander\ExpandCollapseButton.resx">
+      <DependentUpon>ExpandCollapseButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Expander\ExpandCollapsePanel.resx">
+      <DependentUpon>ExpandCollapsePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox.resx">
       <DependentUpon>FastColoredTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -255,6 +282,12 @@
     <Content Include="Notepad\Resources\Add.png" />
     <Content Include="Notepad\Resources\Close.png" />
     <Content Include="Notepad\Resources\icons8-xml-48.ico" />
+    <None Include="Resources\1downarrow1.png" />
+    <None Include="Resources\Upload.png" />
+    <None Include="Resources\up_256.png" />
+    <None Include="Resources\icon-expand.png" />
+    <None Include="Resources\icon_struct_hide_collapsed.png" />
+    <None Include="Resources\Expand.png" />
     <None Include="Resources\note.ico" />
     <None Include="packages.config" />
   </ItemGroup>
