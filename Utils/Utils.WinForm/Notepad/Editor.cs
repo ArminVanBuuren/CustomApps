@@ -384,17 +384,28 @@ namespace Utils.WinForm.Notepad
             _listOfLanguages.Text = Language.ToString();
         }
 
-        public void PrintXml()
+        public void PrintXml(bool commitChanges = true)
         {
             try
             {
                 if (FCTB.Language == Language.XML && Text.IsXml(out var document))
-                    Text = document.PrintXml();
+                {
+                    var prettyPrintedXml = document.PrintXml();
+                    if (commitChanges)
+                        Text = document.PrintXml();
+                    else
+                        ChangeTextWithoutCommit(prettyPrintedXml);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ChangeTextWithoutCommit(string text)
+        {
+            FCTB.Text = text;
         }
 
         public void ClearUndo()
