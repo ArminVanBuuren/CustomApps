@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Utils.WinForm.Expander
 {
@@ -11,11 +13,12 @@ namespace Utils.WinForm.Expander
         /// Handle the resize of panel
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnSizeChanged(System.EventArgs e)
+        protected override void OnSizeChanged(EventArgs e)
         {
             // for each child control
             foreach (Control c in Controls)
                 FillControlWidth(c); // scale the width to fill free horizontal space
+
 
             // get all another resize stuff from base class
             base.OnSizeChanged(e);

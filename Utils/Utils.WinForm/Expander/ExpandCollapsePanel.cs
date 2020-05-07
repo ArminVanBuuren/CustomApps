@@ -11,6 +11,8 @@ namespace Utils.WinForm.Expander
     [Designer(typeof(ExpandCollapsePanelDesigner))]
     public partial class ExpandCollapsePanel : Panel
     {
+        private readonly int _defaultCollapsedHeight;
+        private int _userCollapsedHeight = -1;
         /// <summary>
         /// Last stored size of panel's parent control
         /// <remarks>used for handling panel's Anchor property sets to Bottom when panel collapsed
@@ -26,7 +28,13 @@ namespace Utils.WinForm.Expander
         /// <summary>
         /// Height of panel in collapsed state
         /// </summary>
-        private readonly int _collapsedHeight;
+        [Category("ExpandCollapsePanel")]
+        [Description("Height of panel in collapsed state")]
+        [Browsable(true)]
+        public int CollapsedHeight {
+            get => _userCollapsedHeight <= 0 ? _defaultCollapsedHeight : _userCollapsedHeight;
+            set => _userCollapsedHeight = value;
+        }
 
         /// <summary>
         /// Height of panel in expanded state
@@ -156,7 +164,7 @@ namespace Utils.WinForm.Expander
             InitializeComponent();
 
             // make collapsed height equals to fit expand-collapse button
-            _collapsedHeight = _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
+            _defaultCollapsedHeight = _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
 
             // right away manually scale expand-collapse button for filling the horizontal space of panel:
             _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right,
@@ -243,7 +251,7 @@ namespace Utils.WinForm.Expander
                 // set internal state to Normal
                 _internalPanelState = InternalPanelState.Normal;
                 // resize panel
-                Size = new Size(Size.Width, _collapsedHeight);
+                Size = new Size(Size.Width, CollapsedHeight);
             }
         }
 
@@ -267,14 +275,14 @@ namespace Utils.WinForm.Expander
 
             if (!IsExpanded // if panel collapsed
                 && ((Anchor & AnchorStyles.Bottom) != 0) //and panel's Anchor property sets to Bottom
-                && Size.Height != _collapsedHeight // and panel height is changed (it could happens only if parent control just has resized)
+                && Size.Height != CollapsedHeight // and panel height is changed (it could happens only if parent control just has resized)
                 && Parent != null) // and panel has the parent control
             {
                 // main, calculate the parent control resize diff and add it to expandedHeight value:
                 _expandedHeight += Parent.Height - _previousParentSize.Height;
 
                 // reset resized height (by base.OnSizeChanged anchor.Bottom handling) to collapsedHeight value:
-                Size = new Size(Size.Width, _collapsedHeight);
+                Size = new Size(Size.Width, CollapsedHeight);
             }
 
             // store previous size of parent control (however we need only height)
@@ -354,7 +362,7 @@ namespace Utils.WinForm.Expander
 
                 case InternalPanelState.Collapsing:
                     // still something to collapse
-                    if ((Height - _animationHeightAdjustment) > _collapsedHeight)
+                    if ((Height - _animationHeightAdjustment) > CollapsedHeight)
                     {
                         Height -= _animationHeightAdjustment;
                         // continue decreasing opacity
@@ -364,7 +372,7 @@ namespace Utils.WinForm.Expander
                     {
                         // we are done so we dont want any transparency
                         currOpacity = byte.MaxValue;
-                        Height = _collapsedHeight;
+                        Height = CollapsedHeight;
                         _internalPanelState = InternalPanelState.Normal;
                     }
                     break;
