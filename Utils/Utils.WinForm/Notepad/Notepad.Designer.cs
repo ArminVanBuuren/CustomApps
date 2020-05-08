@@ -1,4 +1,5 @@
-﻿using Utils.WinForm.Properties;
+﻿using System.Windows.Forms;
+using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
@@ -62,9 +63,12 @@ namespace Utils.WinForm.Notepad
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
+            new ToolStripSeparator(),
             this.formatXmlF5ToolStripMenuItem,
+            new ToolStripSeparator(),
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            new ToolStripSeparator(), 
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
