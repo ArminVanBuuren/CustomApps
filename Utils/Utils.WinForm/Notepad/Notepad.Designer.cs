@@ -77,6 +77,7 @@ namespace Utils.WinForm.Notepad
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.newToolStripMenuItem.Text = Resources.Notepad_New;
+            this.newToolStripMenuItem.Image = Resources.notepad_newItem;
             this.newToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.newToolStripMenuItem.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
             // 
@@ -85,30 +86,35 @@ namespace Utils.WinForm.Notepad
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.openToolStripMenuItem.Text = Resources.Notepad_Open;
+            this.openToolStripMenuItem.Image = Resources.notepad_openFile;
             // 
             // formatXmlF5ToolStripMenuItem
             // 
             this.formatXmlF5ToolStripMenuItem.Name = "formatXmlF5ToolStripMenuItem";
             this.formatXmlF5ToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.formatXmlF5ToolStripMenuItem.Text = "XML Pretty Print     F5";
+            this.formatXmlF5ToolStripMenuItem.Image = Resources.notepad_XMLPretty;
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.saveToolStripMenuItem.Text = Resources.Notepad_Save;
+            this.saveToolStripMenuItem.Image = Resources.notepad_saveItem;
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.saveAsToolStripMenuItem.Text = Resources.Notepad_SaveAs;
+            this.saveAsToolStripMenuItem.Image = Resources.notepad_saveItemAs;
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.closeToolStripMenuItem.Text = Resources.Notepad_CLose;
+            this.closeToolStripMenuItem.Image = Resources.notepad_closeWindow;
             // 
             // NotepadControlItem
             // 
@@ -150,7 +156,7 @@ namespace Utils.WinForm.Notepad
         #endregion
 
         private NotepadControl NotepadControlItem;
-        private System.Windows.Forms.MenuStrip MainMenuStrip;
+        //private System.Windows.Forms.MenuStrip MainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;

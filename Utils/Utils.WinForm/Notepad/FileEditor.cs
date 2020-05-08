@@ -49,11 +49,11 @@ namespace Utils.WinForm.Notepad
 
         FileEditor(Editor editor) : this()
         {
-            base.Source = editor.Text;
+            Source = editor.Text;
             base.Text = editor.Text;
             ChangeLanguage(editor.Language);
-            base.WordWrap = editor.WordWrap;
-            base.Highlights = editor.Highlights;
+            WordWrap = editor.WordWrap;
+            Highlights = editor.Highlights;
         }
 
         public static FileEditor ConvertToFileEditor(Editor editor, Encoding encoding)

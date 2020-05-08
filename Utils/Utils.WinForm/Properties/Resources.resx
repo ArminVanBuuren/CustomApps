@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\notepad\resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Close" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\notepad\resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FileNotFound" xml:space="preserve">
     <value>File "{0}" not found!</value>
   </data>
@@ -172,25 +165,65 @@
   <data name="Notepad_SaveAs" xml:space="preserve">
     <value>Save As</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="expander_downarrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_downarrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expander_Expand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_expand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expander_icon_expand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_icon-expand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expander_icon_struct_hide_collapsed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_icon_struct_hide_collapsed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expander_Upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_upload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expander_up_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\expander\resources\expander_up_256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="note" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\note.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\notepad\resources\note.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Expand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Expand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_addTad" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_addtad.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon_expand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-expand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_closeAllButThis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_closeallbutthis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon_struct_hide_collapsed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon_struct_hide_collapsed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_closeAllItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_closeallitems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Upload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_closeItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_closeitem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="up_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\up_256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_closeTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_closetab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1downarrow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1downarrow1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="notepad_closeWindow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_closewindow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_copyFolderPath" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_copyfolderpath.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_newItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_newitem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_openFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_openfile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_openFolder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_openfolder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_saveItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_saveitem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_saveItemAs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_saveitemas.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_XMLPretty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notepad\resources\notepad_xmlpretty.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

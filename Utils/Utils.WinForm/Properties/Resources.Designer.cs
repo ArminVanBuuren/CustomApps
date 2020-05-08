@@ -63,9 +63,9 @@ namespace Utils.WinForm.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _1downarrow1 {
+        internal static System.Drawing.Bitmap expander_downarrow {
             get {
-                object obj = ResourceManager.GetObject("_1downarrow1", resourceCulture);
+                object obj = ResourceManager.GetObject("expander_downarrow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Utils.WinForm.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Add {
+        internal static System.Drawing.Bitmap expander_Expand {
             get {
-                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                object obj = ResourceManager.GetObject("expander_Expand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace Utils.WinForm.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Close {
+        internal static System.Drawing.Bitmap expander_icon_expand {
             get {
-                object obj = ResourceManager.GetObject("Close", resourceCulture);
+                object obj = ResourceManager.GetObject("expander_icon_expand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,29 @@ namespace Utils.WinForm.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Expand {
+        internal static System.Drawing.Bitmap expander_icon_struct_hide_collapsed {
             get {
-                object obj = ResourceManager.GetObject("Expand", resourceCulture);
+                object obj = ResourceManager.GetObject("expander_icon_struct_hide_collapsed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap expander_up_256 {
+            get {
+                object obj = ResourceManager.GetObject("expander_up_256", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap expander_Upload {
+            get {
+                object obj = ResourceManager.GetObject("expander_Upload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -137,26 +157,6 @@ namespace Utils.WinForm.Properties {
         }
         
         /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_expand {
-            get {
-                object obj = ResourceManager.GetObject("icon_expand", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_struct_hide_collapsed {
-            get {
-                object obj = ResourceManager.GetObject("icon_struct_hide_collapsed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Xml is incorrect! Save anyway?.
         /// </summary>
         internal static string IncorrectXmlAndQuestion {
@@ -176,11 +176,81 @@ namespace Utils.WinForm.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_addTad {
+            get {
+                object obj = ResourceManager.GetObject("notepad_addTad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Close                       Alt+F4.
         /// </summary>
         internal static string Notepad_CLose {
             get {
                 return ResourceManager.GetString("Notepad_CLose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_closeAllButThis {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeAllButThis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_closeAllItems {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeAllItems", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_closeItem {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_closeTab {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeTab", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_closeWindow {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeWindow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_copyFolderPath {
+            get {
+                object obj = ResourceManager.GetObject("notepad_copyFolderPath", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -203,11 +273,41 @@ namespace Utils.WinForm.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_newItem {
+            get {
+                object obj = ResourceManager.GetObject("notepad_newItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Open                      Ctrl+O.
         /// </summary>
         internal static string Notepad_Open {
             get {
                 return ResourceManager.GetString("Notepad_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_openFile {
+            get {
+                object obj = ResourceManager.GetObject("notepad_openFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_openFolder {
+            get {
+                object obj = ResourceManager.GetObject("notepad_openFolder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -226,6 +326,36 @@ namespace Utils.WinForm.Properties {
         internal static string Notepad_SaveAs {
             get {
                 return ResourceManager.GetString("Notepad_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_saveItem {
+            get {
+                object obj = ResourceManager.GetObject("notepad_saveItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_saveItemAs {
+            get {
+                object obj = ResourceManager.GetObject("notepad_saveItemAs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notepad_XMLPretty {
+            get {
+                object obj = ResourceManager.GetObject("notepad_XMLPretty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -271,26 +401,6 @@ namespace Utils.WinForm.Properties {
         internal static string Txt_OpenContainingFolder {
             get {
                 return ResourceManager.GetString("Txt_OpenContainingFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap up_256 {
-            get {
-                object obj = ResourceManager.GetObject("up_256", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Upload {
-            get {
-                object obj = ResourceManager.GetObject("Upload", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

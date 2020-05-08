@@ -255,7 +255,7 @@ namespace Utils.WinForm.Notepad
             {
                 Cursor = Cursors.Default,
                 ForeColor = Color.Black,
-                LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow,
+                LayoutStyle = ToolStripLayoutStyle.Flow,
                 Padding = new Padding(0, 2, 0, 0),
                 MinimumSize = new Size(710, 0)
             };

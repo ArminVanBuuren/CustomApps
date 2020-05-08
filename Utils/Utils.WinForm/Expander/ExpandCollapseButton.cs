@@ -134,24 +134,24 @@ namespace Utils.WinForm.Expander
             switch (_expandButtonStyle)
             {
                 case ExpandButtonStyle.MagicArrow:
-                    var bmp = Properties.Resources.Upload;
+                    var bmp = Properties.Resources.expander_Upload;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
                     pictureBox1.Image = bmp;
                     break;
                 case ExpandButtonStyle.Circle:
-                    bmp = Properties.Resources.icon_expand;
+                    bmp = Properties.Resources.expander_icon_expand;
                     pictureBox1.Image = bmp;
                     break;
                 case ExpandButtonStyle.Triangle:
-                    pictureBox1.Image = Properties.Resources._1downarrow1;
+                    pictureBox1.Image = Properties.Resources.expander_downarrow;
                     break;
                 case ExpandButtonStyle.FatArrow:
-                    bmp = Properties.Resources.up_256;
+                    bmp = Properties.Resources.expander_up_256;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
                     pictureBox1.Image = bmp;
                     break;
                 case ExpandButtonStyle.Classic:
-                    bmp = Properties.Resources.icon_struct_hide_collapsed;
+                    bmp = Properties.Resources.expander_icon_struct_hide_collapsed;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
                     pictureBox1.Image = bmp;
                     break;

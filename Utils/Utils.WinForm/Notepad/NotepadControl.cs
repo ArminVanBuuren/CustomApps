@@ -182,7 +182,7 @@ namespace Utils.WinForm.Notepad
         {
             InitializeComponent();
 
-            this.BorderStyle = BorderStyle.None;
+            BorderStyle = BorderStyle.None;
 
             _tabControl.DrawMode = TabDrawMode.Normal;
             _tabControl.Padding = new Point(12, 4);
@@ -217,14 +217,14 @@ namespace Utils.WinForm.Notepad
                 {
                     Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
                 };
-                _closeMenuStrip.Items.Add(Resources.Txt_Close);
-                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllButThis);
-                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllDocuments);
+                _closeMenuStrip.Items.Add(Resources.Txt_Close, Resources.notepad_closeItem);
+                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllButThis, Resources.notepad_closeAllButThis);
+                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllDocuments, Resources.notepad_closeAllItems);
                 if (tabPage.Controls[0] is FileEditor fileEditor)
                 {
                     _closeMenuStrip.Items.Add(new ToolStripSeparator());
-                    _closeMenuStrip.Items.Add(Resources.Txt_CopyFullPath);
-                    _closeMenuStrip.Items.Add(Resources.Txt_OpenContainingFolder);
+                    _closeMenuStrip.Items.Add(Resources.Txt_CopyFullPath, Resources.notepad_copyFolderPath);
+                    _closeMenuStrip.Items.Add(Resources.Txt_OpenContainingFolder, Resources.notepad_openFolder);
                 }
 
                 _closeMenuStrip.ItemClicked += CloseMenuStrip_ItemClicked;
@@ -284,7 +284,7 @@ namespace Utils.WinForm.Notepad
             {
                 var tabRect = _tabControl.GetTabRect(i);
                 tabRect.Inflate(-2, -2);
-                var closeImage = Properties.Resources.Close;
+                var closeImage = Resources.notepad_closeTab;
                 var imageRect = new Rectangle(
                     (tabRect.Right - closeImage.Width),
                     tabRect.Top + (tabRect.Height - closeImage.Height) / 2,
@@ -313,7 +313,7 @@ namespace Utils.WinForm.Notepad
         {
             Graphics g = e.Graphics;
             Pen p = new Pen(Color.Transparent, 0);
-            g.DrawRectangle(p, this._tabControl.SelectedTab.Bounds);
+            g.DrawRectangle(p, _tabControl.SelectedTab.Bounds);
         }
 
         private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
@@ -324,7 +324,7 @@ namespace Utils.WinForm.Notepad
             if (AllowUserCloseItems)
             {
                 tabRect.Inflate(-2, -2);
-                var closeImage = Properties.Resources.Close;
+                var closeImage = Resources.notepad_closeTab;
                 e.Graphics.DrawImage(closeImage, (tabRect.Right - closeImage.Width) - 2, (tabRect.Top + (tabRect.Height - closeImage.Height) / 2) + 1);
             }
 

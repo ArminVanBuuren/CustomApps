@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Utils;
 using Utils.Crypto;
 using Utils.Messaging.Telegram;
@@ -202,6 +203,19 @@ namespace Tester.Console
         {
             try
             {
+                //var doc = new XmlDocument();
+                //doc.LoadXml(@"<XML><UserInfo><SpaReqId>-9223372036854775808</SpaReqId></UserInfo></XML>");
+                //var oo = doc.InnerXml;
+
+                //var doc2 = new XmlDocument();
+                //doc2.LoadXml(@"<XML><UserInfo><SpaReqId>-9223372036854775808</SpaReqId></UserInfo></XML>");
+                //var oo2 = doc2.InnerXml;
+
+                //if (oo == oo2)
+                //{
+
+                //}
+
                 var code = AES.EncryptStringAES("18739", nameof(TLControl));
 
                 //CMD.OverwriteAndStartApplication(@"C:\test\CMD\NEW\versions.xml", @"C:\test\CMD\OLD\versions.xml", 0, 10);
