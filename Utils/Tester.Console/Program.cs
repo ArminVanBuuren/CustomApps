@@ -203,6 +203,9 @@ namespace Tester.Console
         {
             try
             {
+	            //var sseee = @"[All] C:\ddd\ddd";
+	            //var dsed = sseee.Substring(5, sseee.Length - 5);
+	            //var dsed2 = sseee.Substring(0, 5).Equals("[ALl]", StringComparison.InvariantCultureIgnoreCase);
                 //var doc = new XmlDocument();
                 //doc.LoadXml(@"<XML><UserInfo><SpaReqId>-9223372036854775808</SpaReqId></UserInfo></XML>");
                 //var oo = doc.InnerXml;
