@@ -53,7 +53,7 @@ namespace LogsReader.Config
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new ArgumentException(Properties.Resources.Txt_LRSettings_ErrUnique, ex);
+                    throw new ArgumentException(Resources.Txt_LRSettings_ErrUnique, ex);
                 }
             }
         }
@@ -80,13 +80,13 @@ namespace LogsReader.Config
                         IO.SetAllAccessPermissions(SettingsPath);
 
                     var xml = new XmlSerializer(typeof(LRSettings));
-                    using (StreamWriter sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
+                    using (var sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
                         xml.Serialize(sw, settings);
                 }
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrSerialize);
+                ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error, Resources.Txt_LRSettings_ErrSerialize);
             }
         }
 
@@ -100,7 +100,7 @@ namespace LogsReader.Config
                 {
                     if (File.Exists(SettingsPath))
                     {
-                        using (StreamReader stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
+                        using (var stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
                         using (TextReader sr = new StringReader(XML.RemoveUnallowable(stream.ReadToEnd(), true)))
                             sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
                     }
@@ -111,7 +111,7 @@ namespace LogsReader.Config
                     ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Deserialize_Ex,
                         Path.GetFileName(SettingsPath),
                         Path.GetFileName(FailedSettingsPath),
-                        message), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
+                        message), MessageBoxIcon.Error, Resources.Txt_LRSettings_ErrDeserialize);
 
                     try
                     {
@@ -127,7 +127,7 @@ namespace LogsReader.Config
                     }
                     catch (Exception ex2)
                     {
-                        ReportMessage.Show(ex2.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_LRSettings_ErrDeserialize);
+                        ReportMessage.Show(ex2.ToString(), MessageBoxIcon.Error, Resources.Txt_LRSettings_ErrDeserialize);
                     }
                 }
             }

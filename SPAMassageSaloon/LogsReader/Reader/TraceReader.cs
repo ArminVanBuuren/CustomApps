@@ -38,7 +38,7 @@ namespace LogsReader.Reader
 
         public long Lines { get; protected set; } = 0;
 
-        protected TraceReader(string server, string filePath, LogsReaderPerformer mainReader)
+        protected TraceReader(string server, string filePath, string originalFolder, LogsReaderPerformer mainReader)
         {
             _mainReader = mainReader;
 
@@ -47,7 +47,7 @@ namespace LogsReader.Reader
             Server = server;
             FilePath = filePath;
             File = new FileInfo(filePath);
-            FileNamePartial = IO.GetPartialPath(FilePath, CurrentSettings.LogsFolder);
+            FileNamePartial = IO.GetPartialPath(FilePath, originalFolder);
         }
 
         public abstract void ReadLine(string line);

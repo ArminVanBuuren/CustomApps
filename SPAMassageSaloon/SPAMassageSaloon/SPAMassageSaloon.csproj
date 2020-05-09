@@ -196,5 +196,10 @@
   <ItemGroup>
     <None Include="Resources\about3.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\aboutPng.png" />
+    <Content Include="Resources\info.png" />
+    <Content Include="Resources\language.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

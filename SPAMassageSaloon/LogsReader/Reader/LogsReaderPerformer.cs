@@ -23,6 +23,8 @@ namespace LogsReader.Reader
 
         private readonly IEnumerable<string> _servers;
         private readonly IEnumerable<string> _traces;
+        private readonly IReadOnlyDictionary<string, bool> _folders;
+
         private MTActionResult<TraceReader> _multiTaskingHandler = null;
 
         public event ReportProcessStatusHandler OnProcessReport;
@@ -63,7 +65,7 @@ namespace LogsReader.Reader
 
         public DataFilter Filter { get; }
 
-        public LogsReaderPerformer(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, string findMessage, bool useRegex, DataFilter filter)
+        public LogsReaderPerformer(LRSettingsScheme settings, IEnumerable<string> servers, IEnumerable<string> traces, IReadOnlyDictionary<string, bool> folders, string findMessage, bool useRegex, DataFilter filter)
         {
             if (useRegex)
             {
@@ -82,6 +84,7 @@ namespace LogsReader.Reader
             Filter = filter;
             _servers = servers;
             _traces = traces;
+            _folders = folders;
             Reset();
         }
 
@@ -111,40 +114,43 @@ namespace LogsReader.Reader
 
         List<TraceReader> GetFileLogs()
         {
-            var dirMatch = IO.CHECK_PATH.Match(CurrentSettings.LogsFolder);
-            var logsDirFormat = @"\\{0}\" + $"{dirMatch.Groups["DISC"]}${dirMatch.Groups["FULL"]}";
-            var kvpList = new List<TraceReader>();
+	        var kvpList = new List<TraceReader>();
 
-            Func<string, string, TraceReader> _getTraceReader;
+	        Func<string, string, string, TraceReader> _getTraceReader;
             if (CurrentSettings.TraceParse.StartTraceWith != null && CurrentSettings.TraceParse.EndTraceWith != null)
-                _getTraceReader = (server, filePath) => new TraceReaderStartWithEndWith(server, filePath, this);
+                _getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWithEndWith(server, filePath, originalFolder, this);
             else if (CurrentSettings.TraceParse.StartTraceWith != null)
-                _getTraceReader = (server, filePath) => new TraceReaderStartWith(server, filePath, this);
+                _getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWith(server, filePath, originalFolder, this);
             else if (CurrentSettings.TraceParse.EndTraceWith != null)
-                _getTraceReader = (server, filePath) => new TraceReaderEndWith(server, filePath, this);
+                _getTraceReader = (server, filePath, originalFolder) => new TraceReaderEndWith(server, filePath, originalFolder, this);
             else
-                _getTraceReader = (server, filePath) => new TraceReaderSimple(server, filePath, this);
+                _getTraceReader = (server, filePath, originalFolder) => new TraceReaderSimple(server, filePath, originalFolder, this);
 
             foreach (var serverName in _servers)
             {
                 if (IsStopPending)
                     return kvpList;
 
-                var serverDir = string.Format(logsDirFormat, serverName);
-                if (!Directory.Exists(serverDir))
-                    continue;
-
-                var files = Directory.GetFiles(serverDir, "*", SearchOption.AllDirectories);
-                foreach (var fileLog in files.Select(filePath => _getTraceReader(serverName, filePath)))
+                foreach (var originalFolder in _folders)
                 {
-                    if (IsStopPending)
-                        return kvpList;
+	                var folderMatch = IO.CHECK_PATH.Match(originalFolder.Key);
 
-                    if (!IsAllowedExtension(fileLog.File.Name))
-                        continue;
+	                var serverFolder = string.Format($"\\\\{0}\\{folderMatch.Groups["DISC"]}${folderMatch.Groups["FULL"]}", serverName);
+	                if (!Directory.Exists(serverFolder))
+		                continue;
 
-                    if (_traces.Any(x => fileLog.File.Name.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
-                        kvpList.Add(fileLog);
+	                var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+	                foreach (var fileLog in files.Select(filePath => _getTraceReader(serverName, filePath, originalFolder.Key)))
+	                {
+		                if (IsStopPending)
+			                return kvpList;
+
+		                if (!IsAllowedExtension(fileLog.File.Name))
+			                continue;
+
+		                if (_traces.Any(x => fileLog.File.Name.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
+			                kvpList.Add(fileLog);
+	                }
                 }
             }
 

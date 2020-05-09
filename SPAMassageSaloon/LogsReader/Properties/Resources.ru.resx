@@ -333,7 +333,7 @@
   <data name="LogsReaderForm_buttonReset_rightPadding" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="Txt_LogsReaderForm_Servers2" xml:space="preserve">
+  <data name="Txt_LogsReaderForm_Servers" xml:space="preserve">
     <value>Сервера</value>
   </data>
   <data name="Txt_LogsReaderForm_ExportComment" xml:space="preserve">
@@ -341,5 +341,26 @@
   </data>
   <data name="Txt_LogsReaderForm_Description" xml:space="preserve">
     <value>Это универсальное приложение для поиска и считывания лог файлов, а также для удобного просмотра.</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AddFileType" xml:space="preserve">
+    <value>Добавить тип файла</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AddFileTypeGroup" xml:space="preserve">
+    <value>Добавить группу из типов файлов</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
+    <value>Добавить директорию для поиска</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
+    <value>Добавить сервер</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AddServerGroup" xml:space="preserve">
+    <value>Добавить группу из серверов</value>
+  </data>
+  <data name="Txt_LogsReaderForm_LogsFolder" xml:space="preserve">
+    <value>Директории</value>
+  </data>
+  <data name="Txt_LogsReaderForm_Properties" xml:space="preserve">
+    <value>Свойства</value>
   </data>
 </root>

@@ -46,11 +46,13 @@ namespace SPAMassageSaloon
         public ToolStripStatusLabel _threadsUsage;
         public ToolStripStatusLabel _ramUsage;
 
-        public bool FormOnClosing { get; private set; } = false;
+        private ApplicationUpdater AppUpdater { get; set; }
 
         internal int CountOfDefaultStatusItems { get; private set; } = 0;
 
-        ApplicationUpdater AppUpdater { get; set; }
+        public bool FormOnClosing { get; private set; } = false;
+
+        public bool IsActivated { get; private set; }
 
         public NationalLanguage Language
         {
@@ -223,8 +225,13 @@ namespace SPAMassageSaloon
                     {
                         // ignored
                     }
+                    finally
+                    {
+                        FormOnClosing = true;
+                    }
                 };
-                Closing += (o, args) => { FormOnClosing = true; };
+                Activated += (o, args) => IsActivated = true;
+                Deactivate += (o, args) => IsActivated = false;
             }
             catch (Exception ex)
             {
@@ -328,20 +335,23 @@ namespace SPAMassageSaloon
 
                 void Monitoring()
                 {
-                    double percent = 0;
-                    if (appCPU != null)
-                        double.TryParse(appCPU.NextValue().ToString(), out percent);
-                    var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
-                    var currentProcess = Process.GetCurrentProcess();
-                    var threadsUsage = $"{currentProcess.Threads.Count,-2}";
-                    var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+                    if (this.WindowState != FormWindowState.Minimized)
+                    {
+                        double percent = 0;
+                        if (appCPU != null)
+                            double.TryParse(appCPU.NextValue().ToString(), out percent);
+                        var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
+                        var currentProcess = Process.GetCurrentProcess();
+                        var threadsUsage = $"{currentProcess.Threads.Count,-2}";
+                        var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
 
-                    _cpuUsage.Text = cpuUsage;
-                    _threadsUsage.Text = threadsUsage;
-                    _ramUsage.Text = ramUsage;
+                        _cpuUsage.Text = cpuUsage;
+                        _threadsUsage.Text = threadsUsage;
+                        _ramUsage.Text = ramUsage;
+                    }
 
-                    int processCount = 0;
-                    int totalProgress = 0;
+                    var processCount = 0;
+                    var totalProgress = 0;
                     foreach (var form in MdiChildren.OfType<ISaloonForm>())
                     {
                         if (form is Form child && child.IsDisposed)
@@ -373,7 +383,7 @@ namespace SPAMassageSaloon
         private static void SetTaskBarOverlay(int countItem)
         {
             var bmp = new Bitmap(32, 32);
-            using (Graphics g = Graphics.FromImage(bmp))
+            using (var g = Graphics.FromImage(bmp))
             {
                 g.FillEllipse(Brushes.Red, new Rectangle(new Point(4, 4), new Size(27, 27)));
                 g.DrawString(countItem.ToString(), new Font("Sans serif", 16, GraphicsUnit.Point), Brushes.White, new Rectangle(new Point(countItem <= 9 ? 8 : 1, 5), bmp.Size));
@@ -456,7 +466,7 @@ namespace SPAMassageSaloon
 
         private bool ActivateMdiForm<T>(out T form) where T : Form
         {
-            foreach (Form f in MdiChildren)
+            foreach (var f in MdiChildren)
             {
                 form = f as T;
                 if (form != null)

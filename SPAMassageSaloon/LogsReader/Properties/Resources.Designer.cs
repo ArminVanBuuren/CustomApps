@@ -19,7 +19,7 @@ namespace LogsReader.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -73,9 +73,9 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap filter18 {
+        public static System.Drawing.Bitmap filter {
             get {
-                object obj = ResourceManager.GetObject("filter18", resourceCulture);
+                object obj = ResourceManager.GetObject("filter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -86,6 +86,16 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap find {
             get {
                 object obj = ResourceManager.GetObject("find", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -148,6 +158,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap properies {
+            get {
+                object obj = ResourceManager.GetObject("properies", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap reset2 {
             get {
                 object obj = ResourceManager.GetObject("reset2", resourceCulture);
@@ -161,6 +181,26 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap save2 {
             get {
                 object obj = ResourceManager.GetObject("save2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap server {
+            get {
+                object obj = ResourceManager.GetObject("server", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap server_group {
+            get {
+                object obj = ResourceManager.GetObject("server_group", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -246,6 +286,51 @@ namespace LogsReader.Properties {
         public static string Txt_Initialization {
             get {
                 return ResourceManager.GetString("Txt_Initialization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add file type.
+        /// </summary>
+        public static string Txt_LogsReaderForm_AddFileType {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AddFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add file type group.
+        /// </summary>
+        public static string Txt_LogsReaderForm_AddFileTypeGroup {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AddFileTypeGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add search folder.
+        /// </summary>
+        public static string Txt_LogsReaderForm_AddFolder {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AddFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add server.
+        /// </summary>
+        public static string Txt_LogsReaderForm_AddServer {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AddServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add server group.
+        /// </summary>
+        public static string Txt_LogsReaderForm_AddServerGroup {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AddServerGroup", resourceCulture);
             }
         }
         
@@ -376,7 +461,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Logs folder.
+        ///   Ищет локализованную строку, похожую на Folders.
         /// </summary>
         public static string Txt_LogsReaderForm_LogsFolder {
             get {
@@ -457,6 +542,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Properties.
+        /// </summary>
+        public static string Txt_LogsReaderForm_Properties {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Reset [F8].
         /// </summary>
         public static string Txt_LogsReaderForm_Reset {
@@ -489,15 +583,6 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_Servers {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Servers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Servers.
-        /// </summary>
-        public static string Txt_LogsReaderForm_Servers2 {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_Servers2", resourceCulture);
             }
         }
         
@@ -791,6 +876,26 @@ namespace LogsReader.Properties {
         public static string Txt_Main_LoadScheme {
             get {
                 return ResourceManager.GetString("Txt_Main_LoadScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap type {
+            get {
+                object obj = ResourceManager.GetObject("type", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap types_group {
+            get {
+                object obj = ResourceManager.GetObject("types_group", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

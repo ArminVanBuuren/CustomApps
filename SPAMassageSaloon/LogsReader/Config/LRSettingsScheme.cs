@@ -18,54 +18,19 @@ namespace LogsReader.Config
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {
-        private string _schemeName = "TEST";
-        private string _servers = "localhost";
-        private string _fileTypes = "test";
+	    private LRGroupItem[] _servers = new LRGroupItem[] { new LRGroupItem("local", "localhost") };
+	    private LRGroupItem[] _fileTypes = new LRGroupItem[] {new LRGroupItem("type", "log") };
+	    private LRFolder[] _logsFolder = new LRFolder[] { new LRFolder() };
+        
+	    private string _schemeName = "TEST";
         private string _orderBy = "Date, File, FoundLineID";
         private int _maxLines = 50;
         private int _maxThreads = -1;
         private int _rowsLimit = 999;
-        private string _logsFolder = @"C:\TEST";
+        
         private LRTraceParse _traceParce = new LRTraceParse();
 
         public event ReportStatusHandler ReportStatus;
-
-        public LRSettingsScheme() { }
-
-        internal LRSettingsScheme(string name)
-        {
-            switch (name)
-            {
-                case "MG":
-                    _schemeName = name;
-                    _servers = "mg1,mg2,mg3,mg4,mg5";
-                    _logsFolder = @"C:\FORISLOG\MG";
-                    _fileTypes = "crmcon,soapcon,smscon,ivrcon,emailcon,wcfhnd,dbcon,dispatcher";
-                    _maxLines = 100;
-                    _maxThreads = -1;
-                    _traceParce = new LRTraceParse(_schemeName);
-                    break;
-                case "SPA":
-                    _schemeName = name;
-                    _servers = "spa-bpm1,spa-bpm2,spa-bpm3,spa-bpm4,spa-bpm5,spa-bpm6,spa-sa1,spa-sa2,spa-sa3,spa-sa4,spa-sa5,spa-sa6";
-                    _logsFolder = @"C:\FORISLOG\SPA";
-                    _fileTypes = "spa.bpm,bms,bsp,content,eir,am,scp,hlr,mca,mg,rbt,smsc";
-                    _maxLines = 1;
-                    _maxThreads = -1;
-                    _orderBy = "Date desc, ID desc";
-                    _traceParce = new LRTraceParse(_schemeName);
-                    break;
-                case "MGA":
-                    _schemeName = name;
-                    _servers = "crm-mg1,crm-mg2,crm-mg3,crm-mg4,crm-mg5";
-                    _logsFolder = @"C:\FORISLOG\MGAdapter";
-                    _fileTypes = "fast,slow,test";
-                    _maxLines = 20000;
-                    _maxThreads = -1;
-                    _traceParce = new LRTraceParse(_schemeName);
-                    break;
-            }
-        }
 
         [XmlAttribute("name")]
         public string Name
@@ -85,7 +50,7 @@ namespace LogsReader.Config
                 if(value.IsNullOrEmptyTrim())
                     return;
 
-                Encoding enc = null;
+                Encoding enc;
                 try
                 {
                     enc = Encoding.GetEncoding(value);
@@ -111,24 +76,14 @@ namespace LogsReader.Config
         }
 
         [XmlElement("Servers")]
-        public string Servers
+        public LRGroupItem[] Servers
         {
-            get => _servers;
-            set => _servers = value.IsNullOrEmptyTrim() ? _servers : value;
-        }
-
-        [XmlAnyElement("LogsFolderComment")]
-        public XmlComment LogsFolderComment
-        {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
-            set { }
-        }
-
-        [XmlElement("LogsFolder")]
-        public string LogsFolder
-        {
-            get => _logsFolder;
-            set => _logsFolder = value.IsNullOrEmptyTrim() ? _logsFolder : value;
+	        get => _servers;
+	        set
+	        {
+		        _servers = value ?? _servers;
+		        ServerGroups = GetGroups(_servers);
+            }
         }
 
         [XmlAnyElement("FileTypesComment")]
@@ -139,10 +94,47 @@ namespace LogsReader.Config
         }
 
         [XmlElement("FileTypes")]
-        public string FileTypes
+        public LRGroupItem[] FileTypes
         {
-            get => _fileTypes;
-            set => _fileTypes = value.IsNullOrEmptyTrim() ? _fileTypes : value;
+	        get => _fileTypes;
+	        set
+	        {
+		        _fileTypes = value ?? _fileTypes;
+		        FileTypesGroups = GetGroups(_fileTypes);
+            }
+        }
+
+        static Dictionary<string, IEnumerable<string>> GetGroups(LRGroupItem[] items)
+        {
+	        return items.ToDictionary(k => k.GroupName, v => v.Item[0].Value.Split(',')
+		        .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+		        .OrderBy(p => p.Key)
+		        .Select(x => x.Key), StringComparer.InvariantCultureIgnoreCase);
+        }
+
+        [XmlAnyElement("LogsFolderComment")]
+        public XmlComment LogsFolderComment
+        {
+	        get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
+	        set { }
+        }
+
+        [XmlElement("LogsFolderGroup")]
+        public LRFolder[] LogsFolder
+        {
+	        get => _logsFolder;
+	        set
+	        {
+		        _logsFolder = value ?? _logsFolder;
+		        Folders = GetFolders(_logsFolder);
+	        }
+        }
+
+        static IEnumerable<string> GetFolders(LRFolder[] items)
+        { 
+	        return items.Select(x => x.Item[0].Value.Trim()).GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+		        .OrderBy(p => p.Key)
+		        .Select(x => x.Key);
         }
 
         [XmlAnyElement("MaxLinesComment")]
@@ -204,7 +196,7 @@ namespace LogsReader.Config
                 if (value.IsNullOrEmptyTrim())
                     return;
 
-                Dictionary<string, bool> result = null;
+                Dictionary<string, bool> result;
                 try
                 {
                     result = CheckOrderByItem(value);
@@ -212,9 +204,9 @@ namespace LogsReader.Config
                 catch (ArgumentException)
                 {
                     if (ReportStatus == null)
-                        ReportMessage.Show(Properties.Resources.Txt_LRSettingsScheme_ErrUnique, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
+                        ReportMessage.Show(Resources.Txt_LRSettingsScheme_ErrUnique, MessageBoxIcon.Error, $"Scheme=\"{Name}\" - OrderBy");
                     else
-                        ReportStatus.Invoke(Properties.Resources.Txt_LRSettingsScheme_ErrUnique, ReportStatusType.Error);
+                        ReportStatus.Invoke(Resources.Txt_LRSettingsScheme_ErrUnique, ReportStatusType.Error);
                     return;
                 }
                 catch (Exception ex)
@@ -243,7 +235,7 @@ namespace LogsReader.Config
                 var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
                 
                 if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
-                    throw new Exception(string.Format(Properties.Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
+                    throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
 
                 result.Add(orderItem2, isDescending);
             }
@@ -279,12 +271,58 @@ namespace LogsReader.Config
             {
                 if (!TraceParse.IsCorrectRegex)
                 {
-                    ReportStatus?.Invoke(string.Format(Properties.Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
+                    ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
                     return false;
                 }
 
                 return true;
             }
+        }
+
+        public LRSettingsScheme() { }
+
+        [XmlIgnore] public Dictionary<string, IEnumerable<string>> ServerGroups { get; private set; }
+        [XmlIgnore] public Dictionary<string, IEnumerable<string>> FileTypesGroups { get; private set; }
+        [XmlIgnore] public IEnumerable<string> Folders { get; private set; }
+
+        internal LRSettingsScheme(string schemeName)
+        {
+	        switch (schemeName)
+	        {
+		        case "MG":
+			        _schemeName = schemeName;
+			        _servers = new[] { new LRGroupItem("UZ", "mg1, mg2, mg3, mg4, mg5") };
+			        _fileTypes = new[] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") };
+			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\MG") };
+			        _maxLines = 100;
+			        _maxThreads = -1;
+			        _traceParce = new LRTraceParse(_schemeName);
+			        break;
+		        case "SPA":
+			        _schemeName = schemeName;
+			        _servers = new[] { new LRGroupItem("UZ", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6, spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6") };
+			        _fileTypes = new[] { new LRGroupItem("default", "spa.bpm, bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc") };
+			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\SPA") };
+			        _maxLines = 1;
+			        _maxThreads = -1;
+			        _orderBy = "Date desc, ID desc";
+			        _traceParce = new LRTraceParse(_schemeName);
+			        break;
+		        case "MGA":
+			        _schemeName = schemeName;
+			        _servers = new[] { new LRGroupItem("UZ", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") };
+			        _fileTypes = new[] { new LRGroupItem("default", "fast, slow, test") };
+			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\MGAdapter") };
+			        _maxLines = 20000;
+			        _maxThreads = -1;
+			        _traceParce = new LRTraceParse(_schemeName);
+			        break;
+	        }
+        }
+
+        void Load()
+        {
+
         }
 
         public override string ToString()

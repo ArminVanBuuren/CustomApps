@@ -10,7 +10,7 @@ namespace LogsReader.Reader
             var xDate = x.Date ?? DateTime.MinValue;
             var yDate = y.Date ?? DateTime.MinValue;
 
-            int result = xDate.CompareTo(yDate);
+            var result = xDate.CompareTo(yDate);
 
             if (result == 0)
             {

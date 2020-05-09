@@ -108,7 +108,7 @@ namespace LogsReader.Config
         {
             get
             {
-                if (Language.TryParse(GetValue(nameof(MessageLanguage)), out Language langResult))
+                if (Enum.TryParse(GetValue(nameof(MessageLanguage)), out Language langResult))
                     return langResult;
                 return Language.XML;
             }
@@ -142,7 +142,7 @@ namespace LogsReader.Config
         {
             get
             {
-                if (Language.TryParse(GetValue(nameof(TraceLanguage)), out Language langResult))
+                if (Enum.TryParse(GetValue(nameof(TraceLanguage)), out Language langResult))
                     return langResult;
                 return Language.Custom;
             }

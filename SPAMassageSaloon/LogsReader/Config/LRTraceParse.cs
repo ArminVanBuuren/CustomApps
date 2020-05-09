@@ -9,7 +9,7 @@ using Utils;
 
 namespace LogsReader.Config
 {
-    [XmlRoot("TraceParse")]
+    [Serializable, XmlRoot("TraceParse")]
     public class LRTraceParse : TraceParse
     {
         private LRTraceParseItem[] _traceParsePatterns = new LRTraceParseItem[] {new LRTraceParseItem()};
@@ -65,11 +65,10 @@ namespace LogsReader.Config
             get => _traceParsePatterns;
             set
             {
-                if (value != null)
-                {
-                    if (value.Length > 0)
-                        _traceParsePatterns = value;
-                }
+	            if (value == null) 
+		            return;
+	            if (value.Length > 0)
+		            _traceParsePatterns = value;
             }
         }
 
@@ -92,7 +91,7 @@ namespace LogsReader.Config
         [XmlIgnore] internal Regex EndTraceWith { get; private set; }
     }
 
-    [XmlRoot("Pattern")]
+    [Serializable, XmlRoot("Pattern")]
     public class LRTraceParseItem : TraceParse
     {
         private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };

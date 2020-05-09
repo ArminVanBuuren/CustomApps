@@ -13,10 +13,10 @@ namespace LogsReader.Reader
         private readonly Func<DataTemplate, bool> _checkTraceNameFilter;
         private readonly Func<DataTemplate, bool> _checkTraceMessageFilter;
 
-        DateTime StartDate { get; }
-        DateTime EndDate { get; }
-        List<string> TraceNameFilterList { get; }
-        List<string> TraceMessageFilterList { get; }
+        public DateTime StartDate { get; }
+        public DateTime EndDate { get; }
+        public List<string> TraceNameFilterList { get; }
+        public List<string> TraceMessageFilterList { get; }
 
         public DataFilter(DateTime startDate, DateTime endDate, string traceNameFilter, bool traceNameContains, string traceMessageFilter, bool traceMessageContains)
         {

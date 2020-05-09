@@ -27,8 +27,10 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked = false;
         private bool _settingsLoaded = false;
 
-        readonly TreeNode treeNode3 = new TreeNode("Servers");
-        readonly TreeNode treeNode4 = new TreeNode("Types");
+        private readonly ContextMenuStrip _contextTreeMainMenuStrip;
+        private readonly TreeNode treeNodeServersGroup;
+        private readonly TreeNode treeNodeTypesGroup;
+        private readonly TreeNode treeNodeFolders;
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -116,10 +118,6 @@ namespace LogsReader.Reader
                 CurrentSettings.ReportStatus += ReportStatus;
                 UserSettings = new UserSettings(CurrentSettings.Name);
 
-                treeNode3.Name = "trvServers";
-                treeNode4.Name = "trvTypes";
-                trvMain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {treeNode3, treeNode4});
-
                 dgvFiles.AutoGenerateColumns = false;
                 dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
                 dgvFiles.CellFormatting += DgvFiles_CellFormatting;
@@ -200,9 +198,10 @@ namespace LogsReader.Reader
                 _traceMessage.WordWrap = UserSettings.TraceWordWrap;
                 _traceMessage.Highlights = UserSettings.TraceHighlights;
 
-                serversText.Text = CurrentSettings.Servers;
-                fileTypes.Text = CurrentSettings.FileTypes;
-                logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
+                #endregion
+
+                #region Options
+
                 maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
@@ -210,12 +209,43 @@ namespace LogsReader.Reader
 
                 #endregion
 
-                trvMain.Nodes["trvServers"].Checked = false;
-                trvMain.Nodes["trvTypes"].Checked = false;
-                CheckTreeViewNode(trvMain.Nodes["trvServers"], false);
-                CheckTreeViewNode(trvMain.Nodes["trvTypes"], false);
-                this.trvMain.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterCheck);
+                #region TreeNode - Servers; FileTypes; Folders
 
+                treeNodeServersGroup = GetGroupTreeItems(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.ServerGroups);
+                treeNodeServersGroup.Name = "trvServers";
+                treeNodeServersGroup.Checked = false;
+                CheckTreeViewNode(treeNodeServersGroup, false);
+
+                treeNodeTypesGroup = GetGroupTreeItems(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypesGroups);
+                treeNodeTypesGroup.Name = "trvTypes";
+                treeNodeTypesGroup.Checked = false;
+                CheckTreeViewNode(treeNodeTypesGroup, false);
+
+                treeNodeFolders = GetTreeNode(Resources.Txt_LogsReaderForm_LogsFolder, CurrentSettings.Folders);
+                treeNodeFolders.Name = "trvFolders";
+                treeNodeFolders.Expand();
+                treeNodeFolders.Checked = true;
+                CheckTreeViewNode(treeNodeFolders, true);
+
+                TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
+                TreeMain.MouseDown += TreeMain_MouseDown;
+                TreeMain.AfterCheck += TrvMain_AfterCheck;
+
+                _contextTreeMainMenuStrip = new ContextMenuStrip
+                {
+	                Tag = TreeMain
+                };
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServersGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypesGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, AddFolder);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, ChangeProperies);
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -227,6 +257,96 @@ namespace LogsReader.Reader
                 ValidationCheck(false);
             }
         }
+
+        #region TreeNode - Servers; FileTypes; Folders
+
+        void AddServersGroup(object sender, EventArgs e)
+        {
+            // TODO
+	        ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void AddServer(object sender, EventArgs e)
+        {
+	        // TODO
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void AddFileTypesGroup(object sender, EventArgs e)
+        {
+	        // TODO
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void AddFileType(object sender, EventArgs e)
+        {
+	        // TODO
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void AddFolder(object sender, EventArgs e)
+        {
+	        // TODO
+            //var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
+            //logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+
+
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void ChangeProperies(object sender, EventArgs e)
+        {
+	        // TODO
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void DeleteTreeItem()
+        {
+	        // TODO
+            if (!TreeMain.Enabled
+	            || TreeMain.SelectedNode == treeNodeServersGroup
+	            || TreeMain.SelectedNode == treeNodeTypesGroup
+	            || TreeMain.SelectedNode == treeNodeFolders)
+		        return;
+
+
+        }
+
+        static TreeNode GetGroupTreeItems(string name, Dictionary<string, IEnumerable<string>> groups)
+        {
+	        var treeNode = new TreeNode(name);
+            foreach (var groupItem in groups)
+		        treeNode.Nodes.Add(GetTreeNode(groupItem.Key, groupItem.Value));
+	        treeNode.Expand();
+	        return treeNode;
+        }
+
+        static TreeNode GetTreeNode(string name, IEnumerable<string> items)
+        {
+	        var treeNode = new TreeNode(name);
+            foreach (var item in items)
+	            treeNode.Nodes.Add(item.Trim());
+            return treeNode;
+        }
+
+        private void TreeMain_MouseDown(object sender, MouseEventArgs e)
+        {
+	        if (e.Button != MouseButtons.Right)
+                return;
+
+	        //var selectedNode = TreeMain.SelectedNode;
+	        //var nodeAt = TreeMain.GetNodeAt(e.X, e.Y);
+
+            _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
+        }
+
+        #endregion
 
         public void ApplyFormSettings()
         {
@@ -255,12 +375,12 @@ namespace LogsReader.Reader
         public void ApplySettings()
         {
             try
-            {
+            { 
+	            #region Change Language
 
-                #region Change Language
-
-                treeNode3.Text = Resources.Txt_LogsReaderForm_Servers2;
-                treeNode4.Text = Resources.Txt_LogsReaderForm_Types;
+                treeNodeServersGroup.Text = Resources.Txt_LogsReaderForm_Servers;
+                treeNodeTypesGroup.Text = Resources.Txt_LogsReaderForm_Types;
+                treeNodeFolders.Text = Resources.Txt_LogsReaderForm_LogsFolder;
 
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
@@ -285,14 +405,11 @@ namespace LogsReader.Reader
                 _tooltip.RemoveAll();
                 _tooltip.SetToolTip(txtPattern, Resources.Txt_Form_SearchComment);
                 _tooltip.SetToolTip(useRegex, Resources.Txt_LRSettings_UseRegexComment);
-                _tooltip.SetToolTip(serversText, Resources.Txt_LRSettingsScheme_Servers);
-                _tooltip.SetToolTip(fileTypes, Resources.Txt_LRSettingsScheme_Types);
                 _tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
-                _tooltip.SetToolTip(logFolderText, Resources.Txt_LRSettingsScheme_LogsDirectory);
                 _tooltip.SetToolTip(maxLinesStackText, Resources.Txt_LRSettingsScheme_MaxTraceLines);
                 _tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
                 _tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
-                _tooltip.SetToolTip(trvMain, Resources.Txt_Form_trvMainComment);
+                _tooltip.SetToolTip(TreeMain, Resources.Txt_Form_trvMainComment);
                 _tooltip.SetToolTip(dateStartFilter, Resources.Txt_Form_DateFilterComment);
                 _tooltip.SetToolTip(dateEndFilter, Resources.Txt_Form_DateFilterComment);
                 _tooltip.SetToolTip(traceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
@@ -302,11 +419,8 @@ namespace LogsReader.Reader
 
                 OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
                 RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
-                ServersLabel.Text = Resources.Txt_LogsReaderForm_Servers;
                 MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
                 MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
-                FilteTypesLabel.Text = Resources.Txt_LogsReaderForm_FilteTypes;
-                LogsFolderLabel.Text = Resources.Txt_LogsReaderForm_LogsFolder;
                 useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
 
                 btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
@@ -383,6 +497,30 @@ namespace LogsReader.Reader
                     case Keys.S when e.Control && buttonExport.Enabled:
                         ButtonExport_Click(this, EventArgs.Empty);
                         break;
+
+
+                    case Keys.Delete:
+	                    DeleteTreeItem();
+                        break;
+                    case Keys.G when e.Control && TreeMain.Enabled:
+	                    AddServersGroup(this, EventArgs.Empty);
+	                    break;
+                    case Keys.R when e.Control && TreeMain.Enabled:
+	                    AddServer(this, EventArgs.Empty);
+                        break;
+                    case Keys.H when e.Control && TreeMain.Enabled:
+	                    AddFileTypesGroup(this, EventArgs.Empty);
+                        break;
+                    case Keys.T when e.Control && TreeMain.Enabled:
+	                    AddFileType(this, EventArgs.Empty);
+                        break;
+                    case Keys.F when e.Control && TreeMain.Enabled:
+	                    AddFolder(this, EventArgs.Empty);
+                        break;
+                    case Keys.P when e.Control && TreeMain.Enabled:
+	                    ChangeProperies(this, EventArgs.Empty);
+                        break;
+
                     case Keys.C when e.Control && dgvFiles.SelectedRows.Count > 0 && OverallResultList != null:
                         var templateList = new List<DataTemplate>();
                         foreach (DataGridViewRow row in dgvFiles.SelectedRows)
@@ -422,12 +560,32 @@ namespace LogsReader.Reader
                 {
                     var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
-                    MainReader = new LogsReaderPerformer(CurrentSettings, 
-                        trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
-                        trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text),
-                        txtPattern.Text, 
-                        useRegex.Checked,
-                        filter);
+                    var servers = new List<string>();
+                    foreach (TreeNode childTreeNode in treeNodeServersGroup.Nodes)
+	                    servers.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+                    servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+
+                    var fileTypes = new List<string>();
+                    foreach (TreeNode childTreeNode in treeNodeTypesGroup.Nodes)
+	                    fileTypes.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+                    fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+
+                    var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
+                    foreach (var folderWithType in treeNodeFolders.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text))
+                    {
+	                    var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
+	                    if (folders.TryGetValue(folder, out var type))
+	                    {
+		                    if (type)
+			                    folders[folder] = true;
+	                    }
+	                    else
+	                    {
+		                    folders.Add(folder, folder.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
+                        }
+                    }
+
+                    MainReader = new LogsReaderPerformer(CurrentSettings, servers, fileTypes, folders, txtPattern.Text, useRegex.Checked, filter);
                     MainReader.OnProcessReport += ReportProcessStatus;
 
                     stop.Start();
@@ -499,7 +657,7 @@ namespace LogsReader.Reader
             if (IsWorking)
                 return;
 
-            string fileName = string.Empty;
+            var fileName = string.Empty;
             try
             { 
                 string desctination;
@@ -654,7 +812,7 @@ namespace LogsReader.Reader
         {
             btnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
             btnClear.Enabled = !IsWorking;
-            trvMain.Enabled = !IsWorking;
+            TreeMain.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
 
             foreach (var dgvChild in dgvFiles.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
@@ -664,11 +822,8 @@ namespace LogsReader.Reader
             notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
-            serversText.Enabled = !IsWorking;
-            fileTypes.Enabled = !IsWorking;
             maxThreadsText.Enabled = !IsWorking;
             rowsLimitText.Enabled = !IsWorking;
-            logFolderText.Enabled = !IsWorking;
             maxLinesStackText.Enabled = !IsWorking;
             dateStartFilter.Enabled = !IsWorking;
             dateEndFilter.Enabled = !IsWorking;
@@ -797,52 +952,6 @@ namespace LogsReader.Reader
             {
                 // ignored
             }
-        }
-    
-        private void ServersText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.Servers = serversText.Text;
-            serversText.AssignValue(CurrentSettings.Servers, ServersText_TextChanged);
-
-            //заполняем список серверов из параметра
-            trvMain.Nodes["trvServers"].Nodes.Clear();
-            foreach (var s in CurrentSettings.Servers.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
-            {
-                if (s.Key.IsNullOrEmptyTrim())
-                    continue;
-                trvMain.Nodes["trvServers"].Nodes.Add(s.Key.Trim().ToUpper());
-            }
-            trvMain.Nodes["trvServers"].Expand();
-
-            ValidationCheck();
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void LogDirText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.LogsFolder = logFolderText.Text;
-            logFolderText.AssignValue(CurrentSettings.LogsFolder, LogDirText_TextChanged);
-            ValidationCheck();
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void TypesText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentSettings.FileTypes = fileTypes.Text;
-            fileTypes.AssignValue(CurrentSettings.FileTypes, TypesText_TextChanged);
-
-            //заполняем список типов из параметра
-            trvMain.Nodes["trvTypes"].Nodes.Clear();
-            foreach (var s in CurrentSettings.FileTypes.Split(',').GroupBy(p => p.TrimWhiteSpaces(), StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p.Key))
-            {
-                if (s.Key.IsNullOrEmptyTrim())
-                    continue;
-                trvMain.Nodes["trvTypes"].Nodes.Add(s.Key.Trim().ToUpper());
-            }
-            trvMain.Nodes["trvTypes"].Expand();
-
-            ValidationCheck();
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
@@ -1012,18 +1121,15 @@ namespace LogsReader.Reader
         {
             try
             {
-                var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
-                logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
-
-                var settIsCorrect = CurrentSettings?.IsCorrect ?? false;
+	            var settIsCorrect = CurrentSettings?.IsCorrect ?? false;
                 if (settIsCorrect && clearStatus)
                     ClearErrorStatus();
 
-                btnSearch.Enabled = isCorrectPath
+                btnSearch.Enabled = treeNodeFolders.Nodes.Count > 0
                                     && settIsCorrect
                                     && !txtPattern.Text.IsNullOrEmpty()
-                                    && trvMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
-                                    && trvMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+                                    && TreeMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
+                                    && TreeMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
 
                 buttonExport.Enabled = dgvFiles.RowCount > 0;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;

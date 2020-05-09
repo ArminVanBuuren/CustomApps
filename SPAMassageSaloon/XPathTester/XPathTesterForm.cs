@@ -52,7 +52,8 @@ namespace XPathTester
                 editor.SetLanguages(new[] { Language.XML, Language.HTML }, Language.XML);
                 _statusInfo = editor.AddToolStripLabel();
                 _statusInfo.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-                editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                editor.TextChanged += EditorOnTextChanged;
+                editor.Pasting += EditorOnPasting;
 
                 ApplySettings();
             }
@@ -97,7 +98,7 @@ namespace XPathTester
                         var results = new List<DGVXPathResult>();
                         foreach (DataGridViewRow row in xpathResultDataGrid.SelectedRows)
                         {
-                            if (row.Cells?[0]?.Value is int id)
+                            if (row.Cells[0]?.Value is int id)
                                 results.Insert(0, Result[id]);
                         }
 
@@ -132,7 +133,7 @@ namespace XPathTester
 
             try
             {
-                editor.TextChanged -= XmlBodyRichTextBoxOnTextChanged;
+                editor.TextChanged -= EditorOnTextChanged;
                 xpathResultDataGrid.MouseClick -= XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
@@ -153,14 +154,21 @@ namespace XPathTester
             }
             finally
             {
-                editor.TextChanged += XmlBodyRichTextBoxOnTextChanged;
+                editor.TextChanged += EditorOnTextChanged;
                 xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
             }
         }
 
-        void XmlBodyRichTextBoxOnTextChanged(object sender, EventArgs eventArgs)
+        readonly Regex _checkXmlNS = new Regex("xmlns\\s*=\\s*\"[^\"]+\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
+        private bool isPasting = false;
+        private void EditorOnPasting(object sender, EventArgs e)
+        {
+            isPasting = true;
+        }
+
+        void EditorOnTextChanged(object sender, EventArgs eventArgs)
         {
             lock (sync)
             {
@@ -175,23 +183,43 @@ namespace XPathTester
                 {
                     ClearResultTap();
 
-                    var source = editor.Text.Trim();
-                    if (!source.StartsWith("<") || !source.EndsWith(">"))
+                    var trimSource = editor.Text.Trim();
+                    if (!trimSource.StartsWith("<") || !trimSource.EndsWith(">"))
                     {
                         ReportStatus(string.Format(Resources.XmlIsIncorrect, string.Empty));
                         return;
                     }
 
                     try
-                    {   
-                        var document = new XmlDocument();
-                        var formatted = XML.RemoveUnallowable(source, " ");
-                        //var endOfParentNode = formatted.IndexOf(">", StringComparison.Ordinal);
-                        //var removeNS = formatted.Substring(0, endOfParentNode).RegexReplace("xmlns=\"[^\"]+\"","");
-                        //
-                        //editor.Text = document.OuterXml;
+                    {
+                        if (isPasting)
+                        {
+                            var source = XML.RemoveUnallowable(editor.Text, " ");
+                            source = _checkXmlNS.Replace(source, string.Empty);
+                            try
+                            {
+                                editor.TextChanged -= EditorOnTextChanged;
+                                var prevSelection = editor.Selection.Clone();
+                                editor.ChangeTextWithoutCommit(source);
+                                editor.Selection = prevSelection;
+                            }
+                            catch (Exception) { }
+                            finally
+                            {
+                                editor.TextChanged += EditorOnTextChanged;
+                                isPasting = false;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
 
-                        document.LoadXml(formatted);
+                    }
+
+                    try
+                    {
+                        var document = new XmlDocument();
+                        document.LoadXml(editor.Text);
                         XmlBody = document;
                     }
                     catch (Exception ex)
@@ -241,7 +269,7 @@ namespace XPathTester
             if (XmlBody == null)
                 return;
 
-            editor.Text = XmlBody.PrintXml();
+            editor.ChangeTextWithoutCommit(XmlBody.PrintXml());
         }
 
         void ButtonFind_Click(object sender, EventArgs e)
