@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -386,18 +385,17 @@ namespace LogsReader.Reader
 
 	        treeNodeFolders.Nodes.Clear();
             var foldersList = new List<LRFolder>();
-	        foreach (var folder in items.OrderBy(x => x.Key))
-	        {
-		        var folderType = folder.Value ? @"[All]" : @"[Top]";
-		        var childFolder = treeNodeFolders.Nodes.Add($"{folderType} {folder.Key}");
-		        foldersList.Add(new LRFolder(folder.Key, folder.Value));
+            foreach (var folder in items.OrderBy(x => x.Key))
+            {
+	            var folderType = folder.Value ? @"[All]" : @"[Top]";
+	            var childFolder = treeNodeFolders.Nodes.Add($"{folderType} {folder.Key}");
+	            foldersList.Add(new LRFolder(folder.Key, folder.Value));
 
-		        if (!clone.TryGetValue(folder.Key, out var res))
-		        {
-			        TreeMain.SelectedNode = childFolder;
-                }
-	        }
-	        treeNodeFolders.Expand();
+	            if (!clone.TryGetValue(folder.Key, out var _))
+		            TreeMain.SelectedNode = childFolder;
+            }
+
+            treeNodeFolders.Expand();
 
 	        CurrentSettings.LogsFolder = foldersList.ToArray();
 
