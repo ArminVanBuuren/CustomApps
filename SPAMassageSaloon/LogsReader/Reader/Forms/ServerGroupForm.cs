@@ -136,39 +136,40 @@ namespace LogsReader.Reader.Forms
 						{
 							lock (objectPingSync)
 							{
-								var pinger = new Ping();
-								Color color;
 								try
 								{
-									var reply = pinger.Send(serverText2, 10000);
-									color = reply != null && reply.Status == IPStatus.Success ? Color.LightGreen : Color.LightPink;
-								}
-								catch (Exception)
-								{
-									color = Color.LightPink;
-								}
-								finally
-								{
-									pinger.Dispose();
-								}
-
-								if (!this.IsDisposed)
-								{
-									this.SafeInvoke(() =>
+									var pinger = new Ping();
+									Color color;
+									try
 									{
-										try
+										var reply = pinger.Send(serverText2, 10000);
+										color = reply != null && reply.Status == IPStatus.Success ? Color.LightGreen : Color.LightPink;
+									}
+									catch (Exception)
+									{
+										color = Color.LightPink;
+									}
+									finally
+									{
+										pinger.Dispose();
+									}
+
+									if (!this.IsDisposed)
+									{
+										this.SafeInvoke(() =>
 										{
+
 											if (this.IsDisposed || textBoxServer.IsDisposed)
 												return;
 
 											textBoxServer.BackColor = color;
 											textBoxServer.Enabled = true;
-										}
-										catch (Exception)
-										{
-											// ignored
-										}
-									});
+										});
+									}
+								}
+								catch (Exception)
+								{
+									// ignored
 								}
 							}
 						});
