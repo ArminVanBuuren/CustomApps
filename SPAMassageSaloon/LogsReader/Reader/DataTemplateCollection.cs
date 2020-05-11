@@ -1,8 +1,8 @@
-﻿using LogsReader.Config;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LogsReader.Config;
 using Utils;
 
 namespace LogsReader.Reader
@@ -12,8 +12,8 @@ namespace LogsReader.Reader
         private readonly Dictionary<int, DataTemplate> _values;
         private readonly LRSettingsScheme _settings;
 
-        int _seqPrivateID = 0;
-        int _seqID = 0;
+        int _seqPrivateID;
+        int _seqID;
 
         public DataTemplateCollection(LRSettingsScheme settings, IEnumerable<DataTemplate> list)
         {
@@ -24,8 +24,8 @@ namespace LogsReader.Reader
 
         public IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input)
         {
-            IQueryable<DataTemplate> result = input.AsQueryable();
-            int i = 0;
+            var result = input.AsQueryable();
+            var i = 0;
             foreach (var orderItem in _settings.OrderByItems)
             {
                 if (orderItem.Key.LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))

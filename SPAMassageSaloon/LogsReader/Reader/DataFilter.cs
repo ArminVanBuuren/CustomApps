@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LogsReader.Properties;
 using Utils;
 
 namespace LogsReader.Reader
@@ -21,15 +22,15 @@ namespace LogsReader.Reader
         public DataFilter(DateTime startDate, DateTime endDate, string traceNameFilter, bool traceNameContains, string traceMessageFilter, bool traceMessageContains)
         {
             if (startDate > endDate)
-                throw new Exception(Properties.Resources.Txt_DataFilter_ErrDate);
+                throw new Exception(Resources.Txt_DataFilter_ErrDate);
 
             #region фильтр по дате начала
 
             StartDate = startDate;
             if (StartDate > DateTime.MinValue)
-                _checkStartDate = (input) => input.Date != null && input.Date.Value >= StartDate;
+                _checkStartDate = input => input.Date != null && input.Date.Value >= StartDate;
             else
-                _checkStartDate = (input) => true;
+                _checkStartDate = input => true;
 
             #endregion
 
@@ -38,9 +39,9 @@ namespace LogsReader.Reader
 
             EndDate = endDate;
             if (EndDate < DateTime.MaxValue)
-                _checkEndDate = (input) => input.Date != null && input.Date.Value <= EndDate;
+                _checkEndDate = input => input.Date != null && input.Date.Value <= EndDate;
             else
-                _checkEndDate = (input) => true;
+                _checkEndDate = input => true;
 
             #endregion
 
@@ -53,11 +54,11 @@ namespace LogsReader.Reader
 
             if (TraceNameFilterList.Any())
                 if (traceNameContains)
-                    _checkTraceNameFilter = (input) => !input.TraceName.IsNullOrEmptyTrim() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
+                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrEmptyTrim() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
                 else
-                    _checkTraceNameFilter = (input) => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
+                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
             else
-                _checkTraceNameFilter = (input) => true;
+                _checkTraceNameFilter = input => true;
 
             #endregion
 
@@ -70,11 +71,11 @@ namespace LogsReader.Reader
                     .ToList();
             if (TraceMessageFilterList.Any())
                 if (traceMessageContains)
-                    _checkTraceMessageFilter = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
                 else
-                    _checkTraceMessageFilter = (input) => !input.TraceMessage.IsNullOrEmptyTrim() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrEmptyTrim() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
             else
-                _checkTraceMessageFilter = (input) => true;
+                _checkTraceMessageFilter = input => true;
 
             #endregion
         }

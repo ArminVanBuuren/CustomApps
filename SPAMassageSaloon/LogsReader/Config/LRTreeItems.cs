@@ -5,17 +5,10 @@ using Utils;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("FileTypeGroup")]
-	public class LRGroupItem : LRFolder
+	[Serializable, XmlRoot("Group")]
+	public class LRGroupItem : LRItem
 	{
 		private string _groupName = "default";
-
-		public LRGroupItem() : base("item") { }
-
-		internal LRGroupItem(string groupName, string items) : base(items)
-		{
-			_groupName = groupName;
-		}
 
 		[XmlAttribute("name")]
 		public string GroupName
@@ -23,16 +16,43 @@ namespace LogsReader.Config
 			get => _groupName;
 			set => _groupName = value;
 		}
+
+		public LRGroupItem() : base("item") { }
+
+		internal LRGroupItem(string groupName, string items) : base(items)
+		{
+			_groupName = groupName;
+		}
 	}
 
 	[Serializable, XmlRoot("Folder")]
-	public class LRFolder
+	public class LRFolder : LRItem
 	{
-		private XmlNode[] _item = new XmlNode[] { new XmlDocument().CreateTextNode(@"C:\TEST") };
+		private bool _allDirectoriesSearch = true;
+
+		[XmlAttribute("AllDirectoriesSearching")] 
+		public bool AllDirectoriesSearching
+		{
+			get => _allDirectoriesSearch;
+			set => _allDirectoriesSearch = value;
+		}
 
 		public LRFolder() { }
 
-		internal LRFolder(string item)
+		internal LRFolder(string item, bool allDirSearching) : base(item)
+		{
+			_allDirectoriesSearch = allDirSearching;
+		}
+	}
+
+	[Serializable]
+	public class LRItem
+	{
+		private XmlNode[] _item = new XmlNode[] { new XmlDocument().CreateTextNode(string.Empty) };
+
+		public LRItem() { }
+
+		internal LRItem(string item)
 		{
 			_item = new XmlNode[] { new XmlDocument().CreateTextNode(item) };
 		}

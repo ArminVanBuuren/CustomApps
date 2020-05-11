@@ -17,6 +17,7 @@ using SPAFilter.SPA.Components.ROBP;
 using SPAFilter.SPA.Components.SRI;
 using SPAMassageSaloon.Common;
 using Utils;
+using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
 using Utils.WinForm.Notepad;
 using Utils.WinForm.CustomProgressBar;
@@ -791,7 +792,7 @@ namespace SPAFilter
 
         private async void ProcessesButtonOpen_Click(object sender, EventArgs e)
         {
-            if (!OpenFolder(_lastDirPath, out var filePath))
+            if (!Folder.Open(_lastDirPath, out var filePath))
                 return;
 
             ProcessesTextBox.Text = filePath;
@@ -818,7 +819,7 @@ namespace SPAFilter
         private bool _robpOperationTextBoxChanged = false;
         private async void ROBPOperationButtonOpen_Click(object sender, EventArgs e)
         {
-            if (!OpenFolder(_lastDirPath, out var filePath))
+            if (!Folder.Open(_lastDirPath, out var filePath))
                 return;
 
             ROBPOperationTextBox.Text = filePath;
@@ -1233,7 +1234,7 @@ namespace SPAFilter
 
         private void RootSCExportPathButton_Click(object sender, EventArgs e)
         {
-            if (OpenFolder(_lastDirPath, out var filePath))
+            if (Folder.Open(_lastDirPath, out var filePath))
                 ExportSCPath.Text = filePath;
         }
 
@@ -1556,32 +1557,6 @@ namespace SPAFilter
                 return false;
             }
             catch(Exception ex)
-            {
-                ReportMessage.Show(ex);
-                return false;
-            }
-        }
-
-        static bool OpenFolder(string lastDir, out string result)
-        {
-            result = null;
-            try
-            {
-                using (var fbd = new FolderBrowserDialog())
-                {
-                    if (!lastDir.IsNullOrEmpty())
-                        fbd.SelectedPath = lastDir;
-
-                    if (fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
-                    {
-                        result = fbd.SelectedPath;
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            catch (Exception ex)
             {
                 ReportMessage.Show(ex);
                 return false;

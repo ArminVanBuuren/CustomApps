@@ -63,6 +63,26 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap add {
+            get {
+                object obj = ResourceManager.GetObject("add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap cancel {
+            get {
+                object obj = ResourceManager.GetObject("cancel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap clear1 {
             get {
                 object obj = ResourceManager.GetObject("clear1", resourceCulture);
@@ -158,9 +178,49 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Ok {
+            get {
+                object obj = ResourceManager.GetObject("Ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ping {
+            get {
+                object obj = ResourceManager.GetObject("ping", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap pingAll {
+            get {
+                object obj = ResourceManager.GetObject("pingAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap properies {
             get {
                 object obj = ResourceManager.GetObject("properies", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap remove {
+            get {
+                object obj = ResourceManager.GetObject("remove", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -227,6 +287,24 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Group names of file types must be unique!.
+        /// </summary>
+        public static string Txt_FileTypesGroups_ErrUnique {
+            get {
+                return ResourceManager.GetString("Txt_FileTypesGroups_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Folders path must be unique!.
+        /// </summary>
+        public static string Txt_Folders_ErrUnique {
+            get {
+                return ResourceManager.GetString("Txt_Folders_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Search with filter.
         /// </summary>
         public static string Txt_Form_AlreadyUseFilterComment {
@@ -281,6 +359,141 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на     Add.
+        /// </summary>
+        public static string Txt_Forms_Add {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add Folder.
+        /// </summary>
+        public static string Txt_Forms_AddFolder {
+            get {
+                return ResourceManager.GetString("Txt_Forms_AddFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Files will be selected in top and in all child directories..
+        /// </summary>
+        public static string Txt_Forms_AddFolderTooltip {
+            get {
+                return ResourceManager.GetString("Txt_Forms_AddFolderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add Group.
+        /// </summary>
+        public static string Txt_Forms_AddGroup {
+            get {
+                return ResourceManager.GetString("Txt_Forms_AddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на All directories.
+        /// </summary>
+        public static string Txt_Forms_AllDirectories {
+            get {
+                return ResourceManager.GetString("Txt_Forms_AllDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на      Cancel.
+        /// </summary>
+        public static string Txt_Forms_Cancel {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на File Types Group.
+        /// </summary>
+        public static string Txt_Forms_FileTypesGroup {
+            get {
+                return ResourceManager.GetString("Txt_Forms_FileTypesGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Folder.
+        /// </summary>
+        public static string Txt_Forms_Folder {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Group.
+        /// </summary>
+        public static string Txt_Forms_Group {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Group Name.
+        /// </summary>
+        public static string Txt_Forms_GroupName {
+            get {
+                return ResourceManager.GetString("Txt_Forms_GroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на      OK.
+        /// </summary>
+        public static string Txt_Forms_OK {
+            get {
+                return ResourceManager.GetString("Txt_Forms_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на      Remove.
+        /// </summary>
+        public static string Txt_Forms_Remove {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на      Remove All.
+        /// </summary>
+        public static string Txt_Forms_RemoveAll {
+            get {
+                return ResourceManager.GetString("Txt_Forms_RemoveAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Server.
+        /// </summary>
+        public static string Txt_Forms_Server {
+            get {
+                return ResourceManager.GetString("Txt_Forms_Server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Server Group.
+        /// </summary>
+        public static string Txt_Forms_ServerGroup {
+            get {
+                return ResourceManager.GetString("Txt_Forms_ServerGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Initialization.
         /// </summary>
         public static string Txt_Initialization {
@@ -290,7 +503,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add file type.
+        ///   Ищет локализованную строку, похожую на Add file type [Ctrl + T].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFileType {
             get {
@@ -299,7 +512,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add file type group.
+        ///   Ищет локализованную строку, похожую на Add file type group [Ctrl + H].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFileTypeGroup {
             get {
@@ -308,7 +521,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add search folder.
+        ///   Ищет локализованную строку, похожую на Add search folder [Ctrl + F].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFolder {
             get {
@@ -317,7 +530,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add server.
+        ///   Ищет локализованную строку, похожую на Add server [Ctrl + R].
         /// </summary>
         public static string Txt_LogsReaderForm_AddServer {
             get {
@@ -326,7 +539,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add server group.
+        ///   Ищет локализованную строку, похожую на Add server group [Ctrl + G].
         /// </summary>
         public static string Txt_LogsReaderForm_AddServerGroup {
             get {
@@ -542,7 +755,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Properties.
+        ///   Ищет локализованную строку, похожую на Properties [Ctrl + P].
         /// </summary>
         public static string Txt_LogsReaderForm_Properties {
             get {
@@ -876,6 +1089,15 @@ namespace LogsReader.Properties {
         public static string Txt_Main_LoadScheme {
             get {
                 return ResourceManager.GetString("Txt_Main_LoadScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Server group names must be unique!.
+        /// </summary>
+        public static string Txt_ServerGroups_ErrUnique {
+            get {
+                return ResourceManager.GetString("Txt_ServerGroups_ErrUnique", resourceCulture);
             }
         }
         

@@ -93,21 +93,18 @@ namespace LogsReader.Reader
                 Match match;
                 try
                 {
-                    match = item.RegexItem.Match(traceMessage);
+	                match = item.RegexItem.Match(traceMessage);
                 }
                 catch (Exception ex)
                 {
-                    if (throwException)
-                    {
-                        throw;
-                    }
-                    else
-                    {
-                        result = new DataTemplate(this, failed?.FoundLineID ?? Lines, input, ex);
-                        return false;
-                    }
+	                if (throwException)
+		                throw;
+
+
+	                result = new DataTemplate(this, failed?.FoundLineID ?? Lines, input, ex);
+	                return false;
                 }
-                
+
                 if (match.Success && match.Value.Length == traceMessage.Length)
                 {
                     result = new DataTemplate(this,

@@ -1,6 +1,8 @@
 ﻿
+using System.ComponentModel;
 using System.Windows.Forms;
-using LogsReader.Properties;
+using SPAMassageSaloon.Common;
+using Utils.WinForm;
 using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
@@ -10,7 +12,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -688,50 +690,50 @@ namespace LogsReader.Reader
         }
 
         #endregion
-        private SPAMassageSaloon.Common.CustomDataGridView dgvFiles;
-        private Utils.WinForm.CustomTreeView TreeMain;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.TextBox txtPattern;
-        private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.CheckBox useRegex;
-        private System.Windows.Forms.TextBox maxThreadsText;
-        private System.Windows.Forms.Label MaxThreadsLabel;
-        private System.Windows.Forms.TextBox maxLinesStackText;
-        private System.Windows.Forms.Label MaxLinesLabel;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox traceNameFilter;
-        private System.Windows.Forms.DateTimePicker dateEndFilter;
-        private System.Windows.Forms.DateTimePicker dateStartFilter;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button buttonFilter;
-        private System.Windows.Forms.Button buttonReset;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox traceMessageFilter;
-        private System.Windows.Forms.Panel filterPanel;
-        private System.Windows.Forms.SplitContainer EnumSplitContainer;
-        private System.Windows.Forms.RichTextBox descriptionText;
-        private System.Windows.Forms.Panel searchPanel;
-        private System.Windows.Forms.Button buttonExport;
-        private System.Windows.Forms.CheckBox alreadyUseFilter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Date;
-        private System.Windows.Forms.Label RowsLimitLabel;
-        private System.Windows.Forms.TextBox rowsLimitText;
-        private System.Windows.Forms.Label OrderByLabel;
-        private System.Windows.Forms.TextBox orderByText;
-        private System.Windows.Forms.ComboBox traceNameFilterComboBox;
-        private System.Windows.Forms.ComboBox traceMessageFilterComboBox;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PrivateID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn IsMatched;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Server;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TraceName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateOfTrace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn File;
-        private System.Windows.Forms.SplitContainer ParentSplitContainer;
-        private System.Windows.Forms.SplitContainer MainSplitContainer;
+        private CustomDataGridView dgvFiles;
+        private CustomTreeView TreeMain;
+        private Button btnSearch;
+        private Button btnClear;
+        private TextBox txtPattern;
+        private ProgressBar progressBar;
+        private StatusStrip statusStrip;
+        private CheckBox useRegex;
+        private TextBox maxThreadsText;
+        private Label MaxThreadsLabel;
+        private TextBox maxLinesStackText;
+        private Label MaxLinesLabel;
+        private Label label7;
+        private Label label9;
+        private TextBox traceNameFilter;
+        private DateTimePicker dateEndFilter;
+        private DateTimePicker dateStartFilter;
+        private Label label8;
+        private Button buttonFilter;
+        private Button buttonReset;
+        private Label label11;
+        private TextBox traceMessageFilter;
+        private Panel filterPanel;
+        private SplitContainer EnumSplitContainer;
+        private RichTextBox descriptionText;
+        private Panel searchPanel;
+        private Button buttonExport;
+        private CheckBox alreadyUseFilter;
+        private DataGridViewTextBoxColumn Date;
+        private Label RowsLimitLabel;
+        private TextBox rowsLimitText;
+        private Label OrderByLabel;
+        private TextBox orderByText;
+        private ComboBox traceNameFilterComboBox;
+        private ComboBox traceMessageFilterComboBox;
+        private DataGridViewTextBoxColumn PrivateID;
+        private DataGridViewTextBoxColumn IsMatched;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn Server;
+        private DataGridViewTextBoxColumn TraceName;
+        private DataGridViewTextBoxColumn DateOfTrace;
+        private DataGridViewTextBoxColumn File;
+        private SplitContainer ParentSplitContainer;
+        private SplitContainer MainSplitContainer;
         private NotepadControl notepad;
     }
 }

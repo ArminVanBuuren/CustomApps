@@ -70,6 +70,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reader\Forms\AddFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\AddFolder.Designer.cs">
+      <DependentUpon>AddFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reader\Forms\AddGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\AddGroupForm.Designer.cs">
+      <DependentUpon>AddGroupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reader\Forms\ServerGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\ServerGroupForm.Designer.cs">
+      <DependentUpon>ServerGroupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reader\DataFilter.cs" />
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
@@ -94,6 +112,12 @@
     <Compile Include="Reader\TraceReaderEndWith.cs" />
     <Compile Include="Reader\TraceReaderStartWithEndWith.cs" />
     <Compile Include="Reader\TraceReaderStartWith.cs" />
+    <Compile Include="Reader\Forms\TypesGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\TypesGroupForm.Designer.cs">
+      <DependentUpon>TypesGroupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
     <Compile Include="Config\LRSettingsScheme.cs" />
@@ -103,6 +127,15 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\AddFolder.resx">
+      <DependentUpon>AddFolder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\AddGroupForm.resx">
+      <DependentUpon>AddGroupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\ServerGroupForm.resx">
+      <DependentUpon>ServerGroupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\LogsReaderForm.resx">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
@@ -114,6 +147,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\TypesGroupForm.resx">
+      <DependentUpon>TypesGroupForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -162,5 +198,14 @@
   <ItemGroup>
     <None Include="Resources\properies.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\add.png" />
+    <Content Include="Resources\cancel.png" />
+    <Content Include="Resources\Ok.png" />
+    <Content Include="Resources\ping.png" />
+    <Content Include="Resources\pingAll.png" />
+    <Content Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

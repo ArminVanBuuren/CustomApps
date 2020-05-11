@@ -16,7 +16,7 @@ namespace LogsReader.Reader
     public class LogsReaderPerformer : IDisposable
     {
         private readonly object _syncRootMatches = new object();
-        private int _countMatches = 0;
+        private int _countMatches;
 
         private readonly object _syncRootResult = new object();
         private readonly SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
@@ -25,7 +25,7 @@ namespace LogsReader.Reader
         private readonly IEnumerable<string> _traces;
         private readonly IReadOnlyDictionary<string, bool> _folders;
 
-        private MTActionResult<TraceReader> _multiTaskingHandler = null;
+        private MTActionResult<TraceReader> _multiTaskingHandler;
 
         public event ReportProcessStatusHandler OnProcessReport;
 
@@ -34,7 +34,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Запрос на ожидание остановки выполнения поиска
         /// </summary>
-        public bool IsStopPending { get; private set; } = false;
+        public bool IsStopPending { get; private set; }
 
         /// <summary>
         /// Количество совпадений по критериям поиска
@@ -73,11 +73,11 @@ namespace LogsReader.Reader
                     throw new ArgumentException(string.Format(Resources.Txt_LogsReaderPerformer_IncorrectSearchPattern, findMessage));
 
                 var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, new TimeSpan(0, 0, 1));
-                IsMatchSearchPatternFunc = (input) => searchPattern.IsMatch(input);
+                IsMatchSearchPatternFunc = input => searchPattern.IsMatch(input);
             }
             else
             {
-                IsMatchSearchPatternFunc = (input) => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
+                IsMatchSearchPatternFunc = input => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
             }
 
             CurrentSettings = settings;

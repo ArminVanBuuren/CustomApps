@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
@@ -9,8 +10,8 @@ namespace LogsReader.Reader
     public class DataTemplate
     {
         private readonly StringBuilder _traceMessage = new StringBuilder();
-        private string _description = null;
-        private string _traceName = null;
+        private string _description;
+        private string _traceName;
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
         {
@@ -62,7 +63,7 @@ namespace LogsReader.Reader
             Description = error.Message;
             if (error is RegexMatchTimeoutException errorRegex)
             {
-                Message = string.Format(Properties.Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
+                Message = string.Format(Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
             }
             else
             {

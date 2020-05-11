@@ -41,10 +41,8 @@ namespace LogsReader.Reader
                     PastTraceLines.Dequeue();
                 return;
             }
-            else
-            {
-                Commit();
-            }
+
+            Commit();
 
 
             Found = new DataTemplate(this, Lines, line);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
+using LogsReader.Reader.Forms;
 using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
@@ -23,9 +25,9 @@ namespace LogsReader.Reader
         private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
-        private bool _oldDateStartChecked = false;
-        private bool _oldDateEndChecked = false;
-        private bool _settingsLoaded = false;
+        private bool _oldDateStartChecked;
+        private bool _oldDateEndChecked;
+        private bool _settingsLoaded;
 
         private readonly ContextMenuStrip _contextTreeMainMenuStrip;
         private readonly TreeNode treeNodeServersGroup;
@@ -52,7 +54,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Статус выполнения поиска
         /// </summary>
-        public bool IsWorking { get; private set; } = false;
+        public bool IsWorking { get; private set; }
 
         /// <summary>
         /// Юзерские настройки 
@@ -89,18 +91,18 @@ namespace LogsReader.Reader
             var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-            _filtersCompleted1 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingStart };
-            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            _filtersCompleted2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+            _filtersCompleted1 = new ToolStripStatusLabel { Font = Font, Margin = statusStripItemsPaddingStart };
+            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = Font, Margin = statusStripItemsPaddingMiddle };
+            _filtersCompleted2 = new ToolStripStatusLabel { Font = Font, Margin = statusStripItemsPaddingMiddle };
+            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = Font, Margin = statusStripItemsPaddingEnd };
             statusStrip.Items.Add(_filtersCompleted1);
             statusStrip.Items.Add(_completedFilesStatus);
             statusStrip.Items.Add(_filtersCompleted2);
             statusStrip.Items.Add(_totalFilesStatus);
 
-            _overallFound1 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingStart };
-            _findedInfo = new ToolStripStatusLabel("0") { Font = this.Font, Margin = statusStripItemsPaddingMiddle };
-            _overallFound2 = new ToolStripStatusLabel() { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+            _overallFound1 = new ToolStripStatusLabel { Font = Font, Margin = statusStripItemsPaddingStart };
+            _findedInfo = new ToolStripStatusLabel("0") { Font = Font, Margin = statusStripItemsPaddingMiddle };
+            _overallFound2 = new ToolStripStatusLabel { Font = Font, Margin = statusStripItemsPaddingEnd };
             statusStrip.Items.Add(new ToolStripSeparator());
             statusStrip.Items.Add(_overallFound1);
             statusStrip.Items.Add(_findedInfo);
@@ -125,7 +127,7 @@ namespace LogsReader.Reader
 
                 #region Initialize Controls
 
-                _message = notepad.AddDocument(new BlankDocument() {HeaderName = "Message", Language = Language.XML});
+                _message = notepad.AddDocument(new BlankDocument {HeaderName = "Message", Language = Language.XML});
                 _message.BackBrush = null;
                 _message.BorderStyle = BorderStyle.FixedSingle;
                 _message.Cursor = Cursors.IBeam;
@@ -135,7 +137,7 @@ namespace LogsReader.Reader
                 _message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 _message.LanguageChanged += Message_LanguageChanged;
 
-                _traceMessage = notepad.AddDocument(new BlankDocument() {HeaderName = "Trace"});
+                _traceMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Trace"});
                 _traceMessage.BackBrush = null;
                 _traceMessage.BorderStyle = BorderStyle.FixedSingle;
                 _traceMessage.Cursor = Cursors.IBeam;
@@ -211,20 +213,24 @@ namespace LogsReader.Reader
 
                 #region TreeNode - Servers; FileTypes; Folders
 
-                treeNodeServersGroup = GetGroupTreeItems(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.ServerGroups);
+                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.ServerGroups);
                 treeNodeServersGroup.Name = "trvServers";
                 treeNodeServersGroup.Checked = false;
                 CheckTreeViewNode(treeNodeServersGroup, false);
 
-                treeNodeTypesGroup = GetGroupTreeItems(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypesGroups);
+                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypesGroups);
                 treeNodeTypesGroup.Name = "trvTypes";
                 treeNodeTypesGroup.Checked = false;
                 CheckTreeViewNode(treeNodeTypesGroup, false);
 
-                treeNodeFolders = GetTreeNode(Resources.Txt_LogsReaderForm_LogsFolder, CurrentSettings.Folders);
-                treeNodeFolders.Name = "trvFolders";
+                treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
+                {
+	                Name = "trvFolders", 
+	                Text = Resources.Txt_LogsReaderForm_LogsFolder, 
+	                Checked = true
+                };
                 treeNodeFolders.Expand();
-                treeNodeFolders.Checked = true;
+                AddFolder(TreeMain.SelectedNode.Text, CurrentSettings.Folders, false);
                 CheckTreeViewNode(treeNodeFolders, true);
 
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
@@ -235,15 +241,15 @@ namespace LogsReader.Reader
                 {
 	                Tag = TreeMain
                 };
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServersGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
                 _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypesGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
                 _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, AddFolder);
                 _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, ChangeProperies);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
 
                 #endregion
             }
@@ -260,77 +266,200 @@ namespace LogsReader.Reader
 
         #region TreeNode - Servers; FileTypes; Folders
 
-        void AddServersGroup(object sender, EventArgs e)
+        void AddServerGroup(object sender, EventArgs args)
         {
-            // TODO
-	        ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        SetTreeNodes(GroupType.Server, true);
         }
 
-        void AddServer(object sender, EventArgs e)
+        void AddServer(object sender, EventArgs args)
         {
-	        // TODO
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        SetTreeNodes(GroupType.Server, false);
         }
 
-        void AddFileTypesGroup(object sender, EventArgs e)
+        void AddFileTypeGroup(object sender, EventArgs args)
         {
-	        // TODO
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        SetTreeNodes(GroupType.FileType, true);
         }
 
-        void AddFileType(object sender, EventArgs e)
+        void AddFileType(object sender, EventArgs args)
         {
-	        // TODO
+	        SetTreeNodes(GroupType.FileType, false);
+        }
+
+        void OpenProperties(object sender, EventArgs args)
+        {
+	        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
+		        SetTreeNodes(GroupType.Server, false);
+	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
+		        SetTreeNodes(GroupType.FileType, false);
+	        else if (TreeMain.SelectedNode == treeNodeFolders)
+		        AddFolder(this, EventArgs.Empty);
+	        else
+		        AddFolder(TreeMain.SelectedNode.Text, GetFolders(false), true);
+        }
+
+        static bool Compare(TreeNode treeNode, TreeNode toFind)
+        {
+	        var isCurrent = treeNode == toFind;
+	        return isCurrent || (treeNode?.Parent != null && Compare(treeNode.Parent, toFind));
+        }
+
+        void SetTreeNodes(GroupType _groupType, bool isNewGroup)
+        {
+	        var treeNode = _groupType == GroupType.Server ? treeNodeServersGroup : treeNodeTypesGroup;
+
+	        var treeGroups = treeNode
+                .Nodes.OfType<TreeNode>()
+		        .ToDictionary(x => x.Text, 
+	                x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)), StringComparer.InvariantCultureIgnoreCase);
+	        var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
+
+	        if (isNewGroup || treeNode.Nodes.Count == 0)
+	        {
+		        new AddGroupForm(treeGroups, _groupType).ShowDialog();
+	        }
+	        else
+	        {
+		        var groupName = treeGroups.First().Key;
+		        if (TreeMain.SelectedNode?.Parent == treeNode)
+			        groupName = TreeMain.SelectedNode.Text;
+		        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
+		            groupName = TreeMain.SelectedNode.Parent.Text;
+		        
+                AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
+            }
+
+	        treeNode.Nodes.Clear();
+	        var groupItems = new List<LRGroupItem>(treeGroups.Count);
+            foreach (var newGroup in treeGroups)
+	        {
+		        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value);
+		        treeNode.Nodes.Add(childTreeNode);
+		        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
+
+                if (!clone.TryGetValue(newGroup.Key, out var existGroup)
+		            || existGroup.Except(newGroup.Value).Any()
+		            || newGroup.Value.Except(existGroup).Any())
+		        {
+			        TreeMain.SelectedNode = childTreeNode;
+			        childTreeNode.Expand();
+		        }
+	        }
+
+            if (_groupType == GroupType.Server)
+		        CurrentSettings.Servers = groupItems.ToArray();
+	        else
+		        CurrentSettings.FileTypes = groupItems.ToArray();
+
             ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void AddFolder(object sender, EventArgs e)
         {
-	        // TODO
-            //var isCorrectPath = IO.CHECK_PATH.IsMatch(logFolderText.Text);
-            //logFolderText.BackColor = isCorrectPath ? SystemColors.Window : Color.LightPink;
+	        AddFolder(null, GetFolders(false), true);
+        }
 
+        void AddFolder(string folderPath, Dictionary<string, bool> items, bool showForm)
+        {
+            var clone = new Dictionary<string, bool>(items, items.Comparer);
+	        if (showForm)
+	        {
+		        var folderForm = new AddFolder(folderPath);
+		        folderForm.ShowDialog();
+		        if (folderForm.FolderPath.IsNullOrEmptyTrim())
+			        return;
+
+                if(items.TryGetValue(folderForm.FolderPath, out var allDirSearching))
+                {
+	                if (allDirSearching != folderForm.AllDirectoriesSearching)
+		                items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
+                    else
+                        return;
+                }
+                else
+                {
+	                items.Add(folderForm.FolderPath, folderForm.AllDirectoriesSearching);
+                }
+	        }
+
+
+	        treeNodeFolders.Nodes.Clear();
+            var foldersList = new List<LRFolder>();
+	        foreach (var folder in items.OrderBy(x => x.Key))
+	        {
+		        var folderType = folder.Value ? @"[All]" : @"[Top]";
+		        var childFolder = treeNodeFolders.Nodes.Add($"{folderType} {folder.Key}");
+		        foldersList.Add(new LRFolder(folder.Key, folder.Value));
+
+		        if (!clone.TryGetValue(folder.Key, out var res))
+		        {
+			        TreeMain.SelectedNode = childFolder;
+                }
+	        }
+	        treeNodeFolders.Expand();
+
+	        CurrentSettings.LogsFolder = foldersList.ToArray();
 
             ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        void ChangeProperies(object sender, EventArgs e)
+        Dictionary<string, bool> GetFolders(bool getOnlyChecked)
         {
-	        // TODO
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
+	        foreach (var folderWithType in treeNodeFolders.Nodes.Cast<TreeNode>().Where(x => !getOnlyChecked || x.Checked).Select(x => x.Text))
+	        {
+		        var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
+		        if (folders.TryGetValue(folder, out var type))
+		        {
+			        if (type)
+				        folders[folder] = true;
+		        }
+		        else
+		        {
+			        folders.Add(folder, folder.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
+		        }
+	        }
+
+	        return folders;
         }
 
         void DeleteTreeItem()
         {
-	        // TODO
-            if (!TreeMain.Enabled
-	            || TreeMain.SelectedNode == treeNodeServersGroup
-	            || TreeMain.SelectedNode == treeNodeTypesGroup
-	            || TreeMain.SelectedNode == treeNodeFolders)
+	        if (!TreeMain.Enabled)
 		        return;
 
+	        if (TreeMain.SelectedNode == treeNodeServersGroup)
+	        {
 
+	        }
+	        else if (TreeMain.SelectedNode == treeNodeTypesGroup)
+	        {
+
+	        }
+	        else if (TreeMain.SelectedNode == treeNodeFolders)
+	        {
+
+	        }
+
+	        ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        static TreeNode GetGroupTreeItems(string name, Dictionary<string, IEnumerable<string>> groups)
+        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups)
         {
 	        var treeNode = new TreeNode(name);
             foreach (var groupItem in groups)
-		        treeNode.Nodes.Add(GetTreeNode(groupItem.Key, groupItem.Value));
+		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value));
 	        treeNode.Expand();
 	        return treeNode;
         }
 
-        static TreeNode GetTreeNode(string name, IEnumerable<string> items)
+        static TreeNode GetGroupItems(string name, IEnumerable<string> items)
         {
 	        var treeNode = new TreeNode(name);
-            foreach (var item in items)
+            foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
 	            treeNode.Nodes.Add(item.Trim());
             return treeNode;
         }
@@ -503,13 +632,13 @@ namespace LogsReader.Reader
 	                    DeleteTreeItem();
                         break;
                     case Keys.G when e.Control && TreeMain.Enabled:
-	                    AddServersGroup(this, EventArgs.Empty);
+	                    AddServerGroup(this, EventArgs.Empty);
 	                    break;
                     case Keys.R when e.Control && TreeMain.Enabled:
 	                    AddServer(this, EventArgs.Empty);
                         break;
                     case Keys.H when e.Control && TreeMain.Enabled:
-	                    AddFileTypesGroup(this, EventArgs.Empty);
+	                    AddFileTypeGroup(this, EventArgs.Empty);
                         break;
                     case Keys.T when e.Control && TreeMain.Enabled:
 	                    AddFileType(this, EventArgs.Empty);
@@ -518,9 +647,8 @@ namespace LogsReader.Reader
 	                    AddFolder(this, EventArgs.Empty);
                         break;
                     case Keys.P when e.Control && TreeMain.Enabled:
-	                    ChangeProperies(this, EventArgs.Empty);
-                        break;
-
+	                    OpenProperties(this, EventArgs.Empty);
+	                    break;
                     case Keys.C when e.Control && dgvFiles.SelectedRows.Count > 0 && OverallResultList != null:
                         var templateList = new List<DataTemplate>();
                         foreach (DataGridViewRow row in dgvFiles.SelectedRows)
@@ -570,20 +698,7 @@ namespace LogsReader.Reader
 	                    fileTypes.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
                     fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
-                    var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
-                    foreach (var folderWithType in treeNodeFolders.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text))
-                    {
-	                    var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
-	                    if (folders.TryGetValue(folder, out var type))
-	                    {
-		                    if (type)
-			                    folders[folder] = true;
-	                    }
-	                    else
-	                    {
-		                    folders.Add(folder, folder.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
-                        }
-                    }
+                    var folders = GetFolders(true);
 
                     MainReader = new LogsReaderPerformer(CurrentSettings, servers, fileTypes, folders, txtPattern.Text, useRegex.Checked, filter);
                     MainReader.OnProcessReport += ReportProcessStatus;
@@ -840,7 +955,7 @@ namespace LogsReader.Reader
             {
                 ParentSplitContainer.Cursor = Cursors.WaitCursor;
                 ClearForm();
-                this.Focus();
+                Focus();
             }
             else
             {
@@ -1194,7 +1309,7 @@ namespace LogsReader.Reader
             }
         }
 
-        private bool _isLastWasError = false;
+        private bool _isLastWasError;
 
         void ReportStatus(string message, ReportStatusType type)
         {

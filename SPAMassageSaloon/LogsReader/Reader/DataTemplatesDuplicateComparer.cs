@@ -18,19 +18,16 @@ namespace LogsReader.Reader
                 {
                     return x.FoundLineID.CompareTo(y.FoundLineID);
                 }
-                else
+
+                if (x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial))
                 {
-                    if (x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial))
-                    {
-                        return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
-                    }
-                    return string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
+	                return DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime);
                 }
+
+                return string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
             }
-            else
-            {
-                return result;
-            }
+
+            return result;
         }
     }
 }

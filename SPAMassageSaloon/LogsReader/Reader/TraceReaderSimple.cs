@@ -35,10 +35,8 @@ namespace LogsReader.Reader
                             Found.MergeDataTemplates(newResult);
                             return;
                         }
-                        else
-                        {
-                            Found = null;
-                        }
+
+                        Found = null;
                     }
                     else if (!Found.IsMatched)
                     {
@@ -63,10 +61,8 @@ namespace LogsReader.Reader
                     PastTraceLines.Dequeue();
                 return;
             }
-            else
-            {
-                Commit();
-            }
+
+            Commit();
 
             var isMatched = IsTraceMatch(line, out var found);
             Found = found;

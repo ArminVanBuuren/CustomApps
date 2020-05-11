@@ -24,15 +24,13 @@ namespace LogsReader.Reader
                 }
                 else
                 {
-                    if (!StartTraceWith.IsMatch(line))
+	                if (!StartTraceWith.IsMatch(line))
                     {
                         Found.AppendNextLine(line);
                         return;
                     }
-                    else
-                    {
-                        Commit();
-                    }
+
+	                Commit();
                 }
             }
 
@@ -43,10 +41,8 @@ namespace LogsReader.Reader
                     PastTraceLines.Dequeue();
                 return;
             }
-            else
-            {
-                Commit();
-            }
+
+            Commit();
 
 
             Found = new DataTemplate(this, Lines, line);

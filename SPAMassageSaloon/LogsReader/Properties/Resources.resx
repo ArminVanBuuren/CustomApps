@@ -382,21 +382,93 @@ Input data:
     <value>..\Resources\types_group.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileType" xml:space="preserve">
-    <value>Add file type</value>
+    <value>Add file type [Ctrl + T]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileTypeGroup" xml:space="preserve">
-    <value>Add file type group</value>
+    <value>Add file type group [Ctrl + H]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
-    <value>Add search folder</value>
+    <value>Add search folder [Ctrl + F]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
-    <value>Add server</value>
+    <value>Add server [Ctrl + R]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServerGroup" xml:space="preserve">
-    <value>Add server group</value>
+    <value>Add server group [Ctrl + G]</value>
   </data>
   <data name="Txt_LogsReaderForm_Properties" xml:space="preserve">
-    <value>Properties</value>
+    <value>Properties [Ctrl + P]</value>
+  </data>
+  <data name="ping" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ping.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pingAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pingall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cancel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ok" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ok.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_FileTypesGroups_ErrUnique" xml:space="preserve">
+    <value>Group names of file types must be unique!</value>
+  </data>
+  <data name="Txt_Folders_ErrUnique" xml:space="preserve">
+    <value>Folders path must be unique!</value>
+  </data>
+  <data name="Txt_Forms_Add" xml:space="preserve">
+    <value>    Add</value>
+  </data>
+  <data name="Txt_Forms_AddFolder" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Txt_Forms_AddFolderTooltip" xml:space="preserve">
+    <value>Files will be selected in top and in all child directories.</value>
+  </data>
+  <data name="Txt_Forms_AddGroup" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+  <data name="Txt_Forms_AllDirectories" xml:space="preserve">
+    <value>All directories</value>
+  </data>
+  <data name="Txt_Forms_Cancel" xml:space="preserve">
+    <value>     Cancel</value>
+  </data>
+  <data name="Txt_Forms_FileTypesGroup" xml:space="preserve">
+    <value>File Types Group</value>
+  </data>
+  <data name="Txt_Forms_Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="Txt_Forms_Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Txt_Forms_GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="Txt_Forms_OK" xml:space="preserve">
+    <value>     OK</value>
+  </data>
+  <data name="Txt_Forms_Remove" xml:space="preserve">
+    <value>     Remove</value>
+  </data>
+  <data name="Txt_Forms_RemoveAll" xml:space="preserve">
+    <value>     Remove All</value>
+  </data>
+  <data name="Txt_Forms_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Txt_Forms_ServerGroup" xml:space="preserve">
+    <value>Server Group</value>
+  </data>
+  <data name="Txt_ServerGroups_ErrUnique" xml:space="preserve">
+    <value>Server group names must be unique!</value>
   </data>
 </root>
