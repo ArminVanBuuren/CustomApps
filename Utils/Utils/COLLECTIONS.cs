@@ -12,6 +12,18 @@ namespace Utils
             return listToClone.Select(item => (T)item.Clone()).ToList();
         }
 
+        public static Dictionary<TKey, TValue> CloneDictionaryCloningValues<TKey, TValue>
+	        (Dictionary<TKey, TValue> original) where TValue : ICloneable
+        {
+	        var ret = new Dictionary<TKey, TValue>(original.Count,
+		        original.Comparer);
+	        foreach (var entry in original)
+	        {
+		        ret.Add(entry.Key, (TValue)entry.Value.Clone());
+	        }
+	        return ret;
+        }
+
         public static bool ScrambledEquals<T>(IEnumerable<T> list1, IEnumerable<T> list2)
         {
             var cnt = new Dictionary<T, int>();
