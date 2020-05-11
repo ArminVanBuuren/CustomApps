@@ -340,9 +340,11 @@ namespace LogsReader.Reader
 		            || existGroup.Except(newGroup.Value).Any()
 		            || newGroup.Value.Except(existGroup).Any())
 		        {
-			        TreeMain.SelectedNode = childTreeNode;
 			        childTreeNode.Expand();
-		        }
+                    childTreeNode.Checked = true;
+                    CheckTreeViewNode(childTreeNode, true);
+                    TreeMain.SelectedNode = childTreeNode;
+                }
 	        }
 
             if (_groupType == GroupType.Server)
@@ -389,10 +391,14 @@ namespace LogsReader.Reader
             {
 	            var folderType = folder.Value ? @"[All]" : @"[Top]";
 	            var childFolder = treeNodeFolders.Nodes.Add($"{folderType} {folder.Key}");
+
 	            foldersList.Add(new LRFolder(folder.Key, folder.Value));
 
-	            if (!clone.TryGetValue(folder.Key, out var _))
-		            TreeMain.SelectedNode = childFolder;
+                if (!clone.TryGetValue(folder.Key, out var _))
+                {
+	                childFolder.Checked = true;
+                    TreeMain.SelectedNode = childFolder;
+                }
             }
 
             treeNodeFolders.Expand();
@@ -425,21 +431,12 @@ namespace LogsReader.Reader
 
         void DeleteTreeItem()
         {
-	        if (!TreeMain.Enabled)
+	        if (!TreeMain.Enabled
+	            || TreeMain.SelectedNode == treeNodeServersGroup
+		        || TreeMain.SelectedNode == treeNodeTypesGroup
+		        || TreeMain.SelectedNode == treeNodeFolders)
 		        return;
 
-	        if (TreeMain.SelectedNode == treeNodeServersGroup)
-	        {
-
-	        }
-	        else if (TreeMain.SelectedNode == treeNodeTypesGroup)
-	        {
-
-	        }
-	        else if (TreeMain.SelectedNode == treeNodeFolders)
-	        {
-
-	        }
 
 	        ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
@@ -1238,11 +1235,11 @@ namespace LogsReader.Reader
                 if (settIsCorrect && clearStatus)
                     ClearErrorStatus();
 
-                btnSearch.Enabled = treeNodeFolders.Nodes.Count > 0
-                                    && settIsCorrect
+                btnSearch.Enabled = settIsCorrect
                                     && !txtPattern.Text.IsNullOrEmpty()
-                                    && TreeMain.Nodes["trvServers"].Nodes.Cast<TreeNode>().Any(x => x.Checked)
-                                    && TreeMain.Nodes["trvTypes"].Nodes.Cast<TreeNode>().Any(x => x.Checked);
+                                    && treeNodeFolders.Nodes.OfType<TreeNode>().Any(x => x.Checked)
+                                    && treeNodeServersGroup.Nodes.Cast<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+                                    && treeNodeTypesGroup.Nodes.Cast<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked));
 
                 buttonExport.Enabled = dgvFiles.RowCount > 0;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
