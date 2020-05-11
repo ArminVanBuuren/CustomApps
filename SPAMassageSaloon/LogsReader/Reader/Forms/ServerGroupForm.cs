@@ -69,7 +69,7 @@ namespace LogsReader.Reader.Forms
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (_serverGroups.TryGetValue(comboboxGroup.Text, out var result))
+			if (_serverGroups.TryGetValue(comboboxGroup.Text, out var _))
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -125,6 +125,13 @@ namespace LogsReader.Reader.Forms
 					}
 					else
 					{
+						string serverText2;
+						lock (objectPingSync)
+						{
+							serverText2 = textBoxServer.Text;
+							textBoxServer.Enabled = false;
+						}
+
 						Task.Factory.StartNew(() =>
 						{
 							lock (objectPingSync)
@@ -133,7 +140,7 @@ namespace LogsReader.Reader.Forms
 								Color color;
 								try
 								{
-									var reply = pinger.Send(textBoxServer.Text, 10000);
+									var reply = pinger.Send(serverText2, 10000);
 									color = reply != null && reply.Status == IPStatus.Success ? Color.LightGreen : Color.LightPink;
 								}
 								catch (Exception)
@@ -145,18 +152,24 @@ namespace LogsReader.Reader.Forms
 									pinger.Dispose();
 								}
 
-								this.SafeInvoke(() =>
+								if (!this.IsDisposed)
 								{
-									try
+									this.SafeInvoke(() =>
 									{
-										if (!this.IsDisposed && !textBoxServer.IsDisposed)
+										try
+										{
+											if (this.IsDisposed || textBoxServer.IsDisposed)
+												return;
+
 											textBoxServer.BackColor = color;
-									}
-									catch (Exception)
-									{
-										// ignored
-									}
-								});
+											textBoxServer.Enabled = true;
+										}
+										catch (Exception)
+										{
+											// ignored
+										}
+									});
+								}
 							}
 						});
 					}
@@ -188,7 +201,7 @@ namespace LogsReader.Reader.Forms
 					Controls.Remove(serverTemplate);
 					_serverPanels.Remove(serverTemplate);
 				}
-				catch (Exception e)
+				catch (Exception ex)
 				{
 					// igored
 				}
