@@ -24,6 +24,13 @@ namespace Utils
 	        return ret;
         }
 
+        public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey fromKey, TKey toKey)
+        {
+	        var value = dic[fromKey];
+	        dic.Remove(fromKey);
+	        dic[toKey] = value;
+        }
+
         public static bool ScrambledEquals<T>(IEnumerable<T> list1, IEnumerable<T> list2)
         {
             var cnt = new Dictionary<T, int>();
