@@ -26,6 +26,8 @@ namespace LogsReader.Reader.Forms
 
 			Icon = Icon.FromHandle(_groupType == GroupType.Server ? Resources.server_group.GetHicon() : Resources.types_group.GetHicon());
 			buttonOK.Enabled = false;
+
+			CenterToScreen();
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)

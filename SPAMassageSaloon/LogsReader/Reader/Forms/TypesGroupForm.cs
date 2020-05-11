@@ -22,6 +22,8 @@ namespace LogsReader.Reader.Forms
 			comboboxGroup.Items.AddRange(_typesGroups.Keys.ToArray());
 			comboboxGroup.SelectionChangeCommitted += ComboboxGroup_SelectionChangeCommitted;
 			comboboxGroup.SelectedText = selectedGroup;
+
+			CenterToScreen();
 		}
 
 		private void ComboboxGroup_SelectionChangeCommitted(object sender, EventArgs e)

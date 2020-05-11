@@ -437,6 +437,10 @@ namespace LogsReader.Reader
 		        || TreeMain.SelectedNode == treeNodeFolders)
 		        return;
 
+            if(TreeMain.SelectedNode.Parent == treeNodeFolders)
+            {
+	            treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
+            }
 
 	        ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);

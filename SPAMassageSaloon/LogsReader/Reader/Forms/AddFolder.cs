@@ -24,6 +24,8 @@ namespace LogsReader.Reader.Forms
 			_lastDir = folderPath;
 			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
 			new ToolTip().SetToolTip(checkBoxAllDirectories, Resources.Txt_Forms_AddFolderTooltip);
+
+			CenterToScreen();
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
