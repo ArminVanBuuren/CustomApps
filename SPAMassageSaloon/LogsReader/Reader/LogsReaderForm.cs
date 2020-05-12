@@ -363,7 +363,7 @@ namespace LogsReader.Reader
             }
 	        finally
 	        {
-		        ValidationCheck();
+		        ValidationCheck(false);
 		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -401,11 +401,18 @@ namespace LogsReader.Reader
 			        if (result == DialogResult.Cancel || folderForm.FolderPath.IsNullOrEmptyTrim())
 				        return;
 
-			        if (items.TryGetValue(folderForm.FolderPath, out var allDirSearching))
+			        if (items.TryGetValue(folderForm.FolderPath, out var allDirSearching1))
 			        {
-				        if (allDirSearching != folderForm.AllDirectoriesSearching)
+				        if (allDirSearching1 != folderForm.AllDirectoriesSearching)
 					        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
+				        else
+					        return;
 			        }
+                    else if(folderForm.SourceFolder != null && items.TryGetValue(folderForm.SourceFolder, out var allDirSearching2))
+			        {
+				        items.RenameKey(folderForm.SourceFolder, folderForm.FolderPath);
+				        items[folderForm.FolderPath] = allDirSearching2;
+                    }
 			        else
 			        {
 				        items.Add(folderForm.FolderPath, folderForm.AllDirectoriesSearching);
@@ -442,7 +449,7 @@ namespace LogsReader.Reader
             }
 	        finally
 	        {
-		        ValidationCheck();
+		        ValidationCheck(false);
 		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
             }
         }
