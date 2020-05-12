@@ -15,7 +15,7 @@ namespace Utils
 {
     public static class IO
     {
-        public static Regex CHECK_PATH = new Regex(@"(?<DISC>\w{1})(\$|\:)(?<FULL>([^\\/]*[\\/])*(?<LAST>[^\\/]*))", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        public static Regex CHECK_PATH = new Regex(@"^(?<DISC>\w{1})(\$|\:)\\(?<FULL>([^\\/\r\n\t]*[\\/])*(?<LAST>[^\\/\r\n\t]*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         /// <summary>
         /// Determines a text file's encoding by analyzing its byte order mark (BOM).
