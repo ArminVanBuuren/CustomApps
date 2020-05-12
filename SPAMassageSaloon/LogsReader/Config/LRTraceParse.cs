@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using SPAMassageSaloon.Common;
-using Utils;
 
 namespace LogsReader.Config
 {
