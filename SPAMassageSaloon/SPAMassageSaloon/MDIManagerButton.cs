@@ -23,7 +23,7 @@ namespace SPAMassageSaloon
             mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"     "; };
             mdiForm.Activated += (s, e) => { this.MDIManagerButton_Click(this, null); };
 
-            base.Text = mdiForm.Text.RegexReplace(@"[0-9.]+", string.Empty).Trim() + @"     ";
+            base.Text = mdiForm.Text.RegexReplace(@"\-\s*([Vv])|([0-9.]+)", string.Empty).Trim() + @"     ";
             base.Padding = new Padding(6, 0, 0, 0);
             base.Margin = new Padding(0, 0, 0, 0);
             base.TextAlign = ContentAlignment.MiddleCenter;

@@ -530,7 +530,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add file type [Ctrl + T].
+        ///   Ищет локализованную строку, похожую на Add file type [Ctrl+T].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFileType {
             get {
@@ -539,7 +539,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add file type group [Ctrl + H].
+        ///   Ищет локализованную строку, похожую на Add file type group [Ctrl+H].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFileTypeGroup {
             get {
@@ -548,7 +548,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add search folder [Ctrl + F].
+        ///   Ищет локализованную строку, похожую на Add search folder [Ctrl+F].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFolder {
             get {
@@ -557,7 +557,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add server [Ctrl + R].
+        ///   Ищет локализованную строку, похожую на Add server [Ctrl+R].
         /// </summary>
         public static string Txt_LogsReaderForm_AddServer {
             get {
@@ -566,7 +566,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add server group [Ctrl + G].
+        ///   Ищет локализованную строку, похожую на Add server group [Ctrl+G].
         /// </summary>
         public static string Txt_LogsReaderForm_AddServerGroup {
             get {
@@ -782,7 +782,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Properties [Ctrl + P].
+        ///   Ищет локализованную строку, похожую на Properties [Ctrl+P].
         /// </summary>
         public static string Txt_LogsReaderForm_Properties {
             get {

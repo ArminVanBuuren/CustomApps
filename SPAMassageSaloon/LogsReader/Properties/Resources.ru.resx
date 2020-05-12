@@ -343,25 +343,25 @@
     <value>Это универсальное приложение для поиска и считывания лог файлов, а также для удобного просмотра.</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileType" xml:space="preserve">
-    <value>Добавить тип файла [Ctrl + T]</value>
+    <value>Добавить тип файла [Ctrl+T]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileTypeGroup" xml:space="preserve">
-    <value>Добавить группу из типов файлов [Ctrl + H]</value>
+    <value>Добавить группу из типов файлов [Ctrl+H]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
-    <value>Добавить директорию для поиска [Ctrl + F]</value>
+    <value>Добавить директорию для поиска [Ctrl+F]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
-    <value>Добавить сервер [Ctrl + R]</value>
+    <value>Добавить сервер [Ctrl+R]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServerGroup" xml:space="preserve">
-    <value>Добавить группу из серверов [Ctrl + G]</value>
+    <value>Добавить группу из серверов [Ctrl+G]</value>
   </data>
   <data name="Txt_LogsReaderForm_LogsFolder" xml:space="preserve">
     <value>Директории</value>
   </data>
   <data name="Txt_LogsReaderForm_Properties" xml:space="preserve">
-    <value>Свойства [Ctrl + P]</value>
+    <value>Свойства [Ctrl+P]</value>
   </data>
   <data name="Txt_FileTypesGroups_ErrUnique" xml:space="preserve">
     <value>Имена групп типов должны быть уникальными!</value>

@@ -39,6 +39,7 @@
 			this.toolStripLogsReaderButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSpaFilterButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripXPathButton = new System.Windows.Forms.ToolStripButton();
+			this.toolStripRegexTester = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -56,7 +57,8 @@
             this.toolButtonAbout,
             this.toolStripLogsReaderButton,
             this.toolStripSpaFilterButton,
-            this.toolStripXPathButton});
+            this.toolStripXPathButton,
+            this.toolStripRegexTester});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
 			this.toolStrip.Size = new System.Drawing.Size(1127, 25);
@@ -82,7 +84,7 @@
             this.russianToolStripMenuItem});
 			this.languageToolStripMenuItem.Image = global::SPAMassageSaloon.Properties.Resources.language;
 			this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-			this.languageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.languageToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.languageToolStripMenuItem.Text = "Language";
 			// 
 			// englishToolStripMenuItem
@@ -103,7 +105,7 @@
 			// 
 			this.aboutToolStripMenuItem.Image = global::SPAMassageSaloon.Properties.Resources.info;
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.aboutToolStripMenuItem.Text = "About";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
@@ -137,6 +139,16 @@
 			this.toolStripXPathButton.Text = "XPath Tester";
 			this.toolStripXPathButton.Click += new System.EventHandler(this.toolStripXPathButton_Click);
 			// 
+			// toolStripRegexTester
+			// 
+			this.toolStripRegexTester.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripRegexTester.Image = ((System.Drawing.Image)(resources.GetObject("toolStripRegexTester.Image")));
+			this.toolStripRegexTester.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripRegexTester.Name = "toolStripRegexTester";
+			this.toolStripRegexTester.Size = new System.Drawing.Size(23, 22);
+			this.toolStripRegexTester.Text = "RegEx Tester";
+			this.toolStripRegexTester.Click += new System.EventHandler(this.toolStripRegexTester_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -166,6 +178,7 @@
         private System.Windows.Forms.ToolStripButton toolStripLogsReaderButton;
         private System.Windows.Forms.ToolStripButton toolStripSpaFilterButton;
         private System.Windows.Forms.ToolStripButton toolStripXPathButton;
-    }
+		private System.Windows.Forms.ToolStripButton toolStripRegexTester;
+	}
 }
 

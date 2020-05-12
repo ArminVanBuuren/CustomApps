@@ -171,6 +171,16 @@ namespace SPAMassageSaloon.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RegExTester {
+            get {
+                object obj = ResourceManager.GetObject("RegExTester", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на About.
         /// </summary>
         internal static string Txt_About {

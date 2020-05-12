@@ -124,6 +124,24 @@
     <value>126, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripRegexTester.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALWSURBVEhL3ZU/SBthGMY/LRQVJKBiF0scanToIoI42RM6
+        KCk4nFWqgwgKEQSHgpY05WyyBAKNqIS2S1RKq5QWa0FbNL1EnBzEtTVtENEmKDqUBEFyT7/37otJG/zv
+        0v7gIW+e9833cHfvEfY/oOQyNmzjUrkWzi9vhuj72BfGRrz83DwR8OguY28TjMXAWIRrk+vn2erSH2AV
+        cbDbXDcTYLc2UZP7GeYbn1BWpvgWFtwmHvDUytM0xqb4j15yjXO9Pltd8RxMCoLd46oJgd0Zx4Nr91Fj
+        sUOSFM3jobOZ3drU9ELz+T5iZIQ0K3SGepjXzz4Y8tLnLIbH5tHd8yYz4KFVUQIaoCGZPDxWQJKLyJ4j
+        z4Bmkpib+/Z3gJqaOJZIJILR0VGsrKwIJw151KMZYn7++/kDdnd3UV9fj4aGBmxsbAgXek0e9WiGuFAA
+        sby8jPLycgwODkLT6FYl9Zo86qU4MUBVVbjdbmxtbcHv98Nut2NiYkLv0aFerxdmsxmBQACrq6t6TR71
+        UpwY4HA4kJOTg97eXr7LZcjPz0dzc7PoAuFwGNXV1ejq6kJ/fz/q6uqwvr4uugYnBiiKwnecoa2tTb+a
+        nZ0d7O/vi66Bz+dDYWEhqqqqEAqFhJvm1ACTyYRYLCacbNbW1mCxWFBUVISZmRnhprlUQDQaRUdHB2RZ
+        RmNjo67t7W3RNbhUwPT0NIqLi/Vbs7S0hJKSEgwMDODwkF44gwsH0AOura1FZ2cn4vG4LqppEYLBoJg6
+        JYC2qKCgICvg4OBAvzWVlZV/vM1Uk0ebRjNEVoDTGTwKmJp6hdZWGYnEL+EYhMNfYbN184f6TjhpyLPZ
+        evQZYnExkhlgt0qSX3O5QhgaUnXxKzqqMz3DD2b1yEv1nc4Q2tvf84AhiAC3SZKe+GTZsSfLj2NXoZYW
+        R6yvT4m6XAr/M+OoqpI3OamUXqU8HqWUL8x1PeAfhrHf/pQL6xLqsrwAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAQEAAAAEAIAAoQgAAFgAAACgAAABAAAAAgAAAAAEAIAAAAAAAAEAAAMMOAADDDgAAAAAAAAAA

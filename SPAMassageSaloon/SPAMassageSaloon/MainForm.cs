@@ -41,6 +41,7 @@ namespace SPAMassageSaloon
         private NationalLanguage _language;
         private int _countOfLastProcess = 0;
         private int _countOfXPathTester = 0;
+        private int _countOfRegexTester = 0;
 
         public ToolStripStatusLabel _cpuUsage;
         public ToolStripStatusLabel _threadsUsage;
@@ -430,10 +431,21 @@ namespace SPAMassageSaloon
                 tester.Load += (o, args) => _countOfXPathTester++;
                 tester.Closed += (o, args) => _countOfXPathTester--;
                 return tester;
-            }, _countOfXPathTester < 6);
+            }, _countOfXPathTester < 4);
         }
 
-        public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISaloonForm
+        private void toolStripRegexTester_Click(object sender, EventArgs e)
+        {
+	        ShowMdiForm(() =>
+	        {
+		        var tester = new RegExTester.frmMain();
+		        tester.Load += (o, args) => _countOfRegexTester++;
+		        tester.Closed += (o, args) => _countOfRegexTester--;
+		        return tester;
+	        }, _countOfRegexTester < 3);
+        }
+
+        public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
         {
             try
             {

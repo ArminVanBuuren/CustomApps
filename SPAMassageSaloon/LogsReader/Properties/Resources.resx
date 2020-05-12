@@ -382,22 +382,22 @@ Input data:
     <value>..\Resources\types_group.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileType" xml:space="preserve">
-    <value>Add file type [Ctrl + T]</value>
+    <value>Add file type [Ctrl+T]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFileTypeGroup" xml:space="preserve">
-    <value>Add file type group [Ctrl + H]</value>
+    <value>Add file type group [Ctrl+H]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
-    <value>Add search folder [Ctrl + F]</value>
+    <value>Add search folder [Ctrl+F]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
-    <value>Add server [Ctrl + R]</value>
+    <value>Add server [Ctrl+R]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServerGroup" xml:space="preserve">
-    <value>Add server group [Ctrl + G]</value>
+    <value>Add server group [Ctrl+G]</value>
   </data>
   <data name="Txt_LogsReaderForm_Properties" xml:space="preserve">
-    <value>Properties [Ctrl + P]</value>
+    <value>Properties [Ctrl+P]</value>
   </data>
   <data name="ping" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\ping.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

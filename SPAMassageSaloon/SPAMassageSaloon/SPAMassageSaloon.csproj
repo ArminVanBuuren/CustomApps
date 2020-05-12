@@ -38,6 +38,9 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RegExTester">
+      <HintPath>..\External\RegExTester.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -200,6 +203,7 @@
     <Content Include="Resources\aboutPng.png" />
     <Content Include="Resources\info.png" />
     <Content Include="Resources\language.png" />
+    <Content Include="Resources\RegExTester.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
