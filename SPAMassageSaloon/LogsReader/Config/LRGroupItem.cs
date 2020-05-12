@@ -15,7 +15,7 @@ namespace LogsReader.Config
 			set => _groupName = value.ToUpper();
 		}
 
-		public LRGroupItem() : base("item") { }
+		public LRGroupItem() : base(string.Empty) { }
 
 		internal LRGroupItem(string groupName, string items) : base(items)
 		{

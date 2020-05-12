@@ -10,7 +10,7 @@ namespace LogsReader.Config
 	[Serializable]
 	public class LRGroups
 	{
-		private LRGroupItem[] _groupItems; 
+		private LRGroupItem[] _groupItems = new []{ new LRGroupItem(string.Empty, string.Empty), }; 
 		
 		[XmlIgnore] public Dictionary<string, IEnumerable<string>> Groups { get; private set; }
 
