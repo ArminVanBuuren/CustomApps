@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
@@ -50,6 +51,20 @@ namespace Utils.WinForm
             //}
 
             return destImage;
+        }
+
+        public static Icon IconFromFilePath(string filePath)
+        {
+	        var result = (Icon)null;
+	        try
+	        {
+		        result = Icon.ExtractAssociatedIcon(filePath);
+	        }
+	        catch (Exception ex)
+	        {
+		        // swallow and return nothing. You could supply a default Icon here as well
+	        }
+	        return result;
         }
     }
 }

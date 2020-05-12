@@ -7,6 +7,7 @@ using Utils.Media.MediaCapture.AForge;
 using Utils.Media.MediaCapture.Encoder;
 using Utils.Media.MediaCapture.NAudio;
 using Utils.Media.MediaCapture.Screen;
+using Utils.WinForm;
 
 namespace Tester.WinForm
 {
@@ -15,7 +16,7 @@ namespace Tester.WinForm
         private int completed = 0;
         public Form1()
         {
-            //TestAForge test = new TestAForge();
+	        //TestAForge test = new TestAForge();
             //test.button2_Click(this, EventArgs.Empty);
 
             InitializeComponent();

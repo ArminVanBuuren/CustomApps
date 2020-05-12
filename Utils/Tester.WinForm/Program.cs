@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Utils.WinForm;
 using Utils.WinForm.Notepad;
 
 namespace Tester.WinForm
@@ -27,6 +28,19 @@ namespace Tester.WinForm
         {
             try
             {
+	            //var filePath = @"C:\Soft\RegExTester.exe";
+	            //var theIcon = DRAWING.IconFromFilePath(filePath);
+
+	            //if (theIcon != null)
+	            //{
+		           // // Save it to disk, or do whatever you want with it.
+		           // using (var stream = new System.IO.FileStream(@"C:\Soft\RegExTester.ico", System.IO.FileMode.CreateNew))
+		           // {
+			          //  theIcon.Save(stream);
+		           // }
+	            //}
+
+
                 var source = CultureInfo.DefaultThreadCurrentCulture;
                 var source1 = CultureInfo.DefaultThreadCurrentUICulture;
                 var source2 = Thread.CurrentThread.CurrentCulture;
