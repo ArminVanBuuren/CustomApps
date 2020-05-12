@@ -137,7 +137,7 @@ namespace LogsReader.Reader
 	                if (!folderMatch.Success)
 		                throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, originalFolder.Key));
 
-                    var serverFolder = string.Format($"\\\\{0}\\{folderMatch.Groups["DISC"]}${folderMatch.Groups["FULL"]}", serverName);
+                    var serverFolder = string.Format($"\\\\{0}\\{folderMatch.Groups["DISC"]}$\\{folderMatch.Groups["FULL"]}", serverName);
 	                if (!Directory.Exists(serverFolder))
 		                continue;
 
