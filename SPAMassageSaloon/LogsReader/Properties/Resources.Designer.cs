@@ -350,7 +350,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Server(s) and type(s) of the files must be chosen..
+        ///   Ищет локализованную строку, похожую на Server(s), type(s) and folder(s) of the files must be chosen..
         /// </summary>
         public static string Txt_Form_trvMainComment {
             get {

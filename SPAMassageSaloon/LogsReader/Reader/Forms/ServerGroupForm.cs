@@ -106,7 +106,7 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonPingAll_Click(object sender, EventArgs e)
 		{
-			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().Reverse().ToList())
 			{
 				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == PING_SERVER);
 				button?.PerformClick();

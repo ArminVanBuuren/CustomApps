@@ -293,7 +293,7 @@ namespace LogsReader.Reader
 	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
 		        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
 	        else if (TreeMain.SelectedNode == treeNodeFolders)
-		        SetFolder(this, EventArgs.Empty);
+		        SetFolder(treeNodeFolders.FirstNode, GetFolders(false), true);
 	        else
 		        SetFolder(TreeMain.SelectedNode, GetFolders(false), true);
         }

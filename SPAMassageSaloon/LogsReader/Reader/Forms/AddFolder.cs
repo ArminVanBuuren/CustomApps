@@ -9,6 +9,9 @@ namespace LogsReader.Reader.Forms
 {
 	public partial class AddFolder : Form
 	{
+		private string _sourceFolder = null;
+		private bool _sourceAllDirSearching = false;
+
 		private string _lastDir;
 
 		public string FolderPath { get; private set; } = string.Empty;
@@ -25,12 +28,14 @@ namespace LogsReader.Reader.Forms
 
 			labelFolder.Text = Resources.Txt_Forms_Folder;
 
-			textBoxFolder.Text = folderPath;
+			_sourceFolder = folderPath;
 			_lastDir = folderPath;
+			textBoxFolder.Text = folderPath;
 
-			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
+			_sourceAllDirSearching = allDirSearching;
 			checkBoxAllDirectories.Checked = allDirSearching;
-			
+			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
+
 			CenterToScreen();
 
 			KeyPreview = true;
@@ -43,8 +48,8 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
 			FolderPath = textBoxFolder.Text.Trim();
+			this.DialogResult = FolderPath != _sourceFolder || AllDirectoriesSearching != _sourceAllDirSearching ? DialogResult.OK : DialogResult.Cancel;
 			Close();
 		}
 

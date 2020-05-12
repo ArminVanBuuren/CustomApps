@@ -177,7 +177,7 @@
     <value>Регистр не учитывается. При использовании поиска по Regex - таймаут выполнения 1 секунда.</value>
   </data>
   <data name="Txt_Form_trvMainComment" xml:space="preserve">
-    <value>Необходимо выбрать сервера и типы файлов</value>
+    <value>Необходимо выбрать сервера, типы файлов и директории для поиска</value>
   </data>
   <data name="clear1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clear1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -376,7 +376,7 @@
     <value>Добавить директорию</value>
   </data>
   <data name="Txt_Forms_AddFolderTooltip" xml:space="preserve">
-    <value>Поиск будет осуществляться в текущем и во всех всех дочерних каталогах.</value>
+    <value>Поиск будет осуществляться в текущем каталоге и во всех всех дочерних.</value>
   </data>
   <data name="Txt_Forms_AddGroup" xml:space="preserve">
     <value>Добавить группу</value>
