@@ -93,6 +93,7 @@ namespace LogsReader.Reader.Forms
 			this.MaximumSize = new System.Drawing.Size(999, 95);
 			this.MinimumSize = new System.Drawing.Size(244, 95);
 			this.Name = "AddGroupForm";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Add Group";
 			this.ResumeLayout(false);
 			this.PerformLayout();

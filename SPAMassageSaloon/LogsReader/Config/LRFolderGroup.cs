@@ -22,12 +22,11 @@ namespace LogsReader.Config
 			{
 				try
 				{
-					_logsFolder = (value ?? _logsFolder).OrderBy(x => x.Item[0].Value).ToArray();
-					Folders = _logsFolder.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching, StringComparer.InvariantCultureIgnoreCase);
+					var prevLogFolders = (value ?? _logsFolder).OrderBy(x => x.Item[0].Value).ToArray();
+					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching, StringComparer.InvariantCultureIgnoreCase);
 
-					var incorrectFolder = Folders.Keys.FirstOrDefault(key => key.IsNullOrEmptyTrim() || !IO.CHECK_PATH.IsMatch(key));
-					if (incorrectFolder != null)
-						throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, incorrectFolder));
+					_logsFolder = prevLogFolders;
+					Folders = prevFolders;
 				}
 				catch (ArgumentException ex)
 				{

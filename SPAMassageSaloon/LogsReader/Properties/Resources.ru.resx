@@ -370,7 +370,7 @@
     <value>Пути к каталогам должны быть уникальными!</value>
   </data>
   <data name="Txt_Forms_Add" xml:space="preserve">
-    <value>Добавить</value>
+    <value>     Добавить</value>
   </data>
   <data name="Txt_Forms_AddFolder" xml:space="preserve">
     <value>Добавить директорию</value>
@@ -391,7 +391,7 @@
     <value>Группа файловых типов</value>
   </data>
   <data name="Txt_Forms_Folder" xml:space="preserve">
-    <value>Директория</value>
+    <value>Папка</value>
   </data>
   <data name="Txt_Forms_Group" xml:space="preserve">
     <value>Группа</value>
@@ -400,10 +400,10 @@
     <value>Имя группы</value>
   </data>
   <data name="Txt_Forms_Remove" xml:space="preserve">
-    <value>  Удалить</value>
+    <value>     Удалить</value>
   </data>
   <data name="Txt_Forms_RemoveAll" xml:space="preserve">
-    <value> Удалить все</value>
+    <value>     Удалить все</value>
   </data>
   <data name="Txt_Forms_Server" xml:space="preserve">
     <value>Сервер</value>

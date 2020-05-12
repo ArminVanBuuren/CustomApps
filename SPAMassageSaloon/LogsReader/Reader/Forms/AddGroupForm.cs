@@ -28,10 +28,18 @@ namespace LogsReader.Reader.Forms
 			buttonOK.Enabled = false;
 
 			CenterToScreen();
+
+			KeyPreview = true;
+			KeyDown += (sender, args) =>
+			{
+				if (args.KeyCode == Keys.Escape)
+					Close();
+			};
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
+			this.DialogResult = DialogResult.OK;
 			_groups.Add(textBoxGroupName.Text, new List<string>());
 			ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
 			Close();
@@ -42,13 +50,14 @@ namespace LogsReader.Reader.Forms
 			Close();
 		}
 
-		public static void ShowGroupItemsForm(string groupName, Dictionary<string, List<string>> groups, GroupType groupType)
+		public static DialogResult ShowGroupItemsForm(string groupName, Dictionary<string, List<string>> groups, GroupType groupType)
 		{
 			DialogResult result;
 			if (groupType == GroupType.Server)
 				result = new ServerGroupForm(groupName, groups).ShowDialog();
 			else
 				result = new TypesGroupForm(groupName, groups).ShowDialog();
+			return result;
 		}
 
 		private void textBoxGroupName_TextChanged(object sender, EventArgs e)

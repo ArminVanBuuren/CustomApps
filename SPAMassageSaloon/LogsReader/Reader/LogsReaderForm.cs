@@ -229,7 +229,7 @@ namespace LogsReader.Reader
 	                Checked = true
                 };
                 treeNodeFolders.Expand();
-                SetFolder(TreeMain.SelectedNode?.Text, CurrentSettings.LogsFolder.Folders, false);
+                SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
                 CheckTreeViewNode(treeNodeFolders, true);
 
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
@@ -295,7 +295,7 @@ namespace LogsReader.Reader
 	        else if (TreeMain.SelectedNode == treeNodeFolders)
 		        SetFolder(this, EventArgs.Empty);
 	        else
-		        SetFolder(TreeMain.SelectedNode.Text, GetFolders(false), true);
+		        SetFolder(TreeMain.SelectedNode, GetFolders(false), true);
         }
 
         enum ProcessingType
@@ -307,63 +307,80 @@ namespace LogsReader.Reader
 
         void SetTreeNodes(GroupType _groupType, ProcessingType processingType)
         {
-	        var treeNode = _groupType == GroupType.Server ? treeNodeServersGroup : treeNodeTypesGroup;
-
-	        var treeGroups = GetGroups(treeNode);
-	        var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
-
-            if (processingType == ProcessingType.Remove)
+	        try
 	        {
-		        TreeMain.SelectedNode.Remove();
-		        treeGroups = GetGroups(treeNode);
-            }
-	        else
-	        {
-		        if (processingType == ProcessingType.CreateGroupItem || treeNode.Nodes.Count == 0)
+		        var treeNode = _groupType == GroupType.Server ? treeNodeServersGroup : treeNodeTypesGroup;
+
+		        var treeGroups = GetGroups(treeNode);
+		        var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
+
+		        if (processingType == ProcessingType.Remove)
 		        {
-			        new AddGroupForm(treeGroups, _groupType).ShowDialog();
+			        TreeMain.SelectedNode.Remove();
+			        treeGroups = GetGroups(treeNode);
 		        }
 		        else
 		        {
-			        var groupName = treeGroups.First().Key;
-			        if (TreeMain.SelectedNode?.Parent == treeNode)
-				        groupName = TreeMain.SelectedNode.Text;
-			        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
-				        groupName = TreeMain.SelectedNode.Parent.Text;
+			        DialogResult dialogResul;
+			        if (processingType == ProcessingType.CreateGroupItem || treeNode.Nodes.Count == 0)
+			        {
+				        dialogResul = new AddGroupForm(treeGroups, _groupType).ShowDialog();
+			        }
+			        else
+			        {
+				        var groupName = treeGroups.First().Key;
+				        if (TreeMain.SelectedNode?.Parent == treeNode)
+					        groupName = TreeMain.SelectedNode.Text;
+				        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
+					        groupName = TreeMain.SelectedNode.Parent.Text;
 
-			        AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
+				        dialogResul = AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
+			        }
+
+			        if (dialogResul == DialogResult.Cancel)
+				        return;
 		        }
-            }
 
-            treeNode.Nodes.Clear();
-	        var groupItems = new List<LRGroupItem>(treeGroups.Count);
-            foreach (var newGroup in treeGroups)
-	        {
-		        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value);
-		        treeNode.Nodes.Add(childTreeNode);
-		        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
-
-                if (!clone.TryGetValue(newGroup.Key, out var existGroup)
-		            || existGroup.Except(newGroup.Value).Any()
-		            || newGroup.Value.Except(existGroup).Any())
+                var nodes = new List<TreeNode>();
+		        var groupItems = new List<LRGroupItem>(treeGroups.Count);
+		        foreach (var newGroup in treeGroups)
 		        {
-			        childTreeNode.Expand();
-                    childTreeNode.Checked = true;
-                    CheckTreeViewNode(childTreeNode, true);
-                    TreeMain.SelectedNode = childTreeNode;
-                }
+			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value);
+			        nodes.Add(childTreeNode);
+			        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
+
+			        if (!clone.TryGetValue(newGroup.Key, out var existGroup)
+			            || existGroup.Except(newGroup.Value).Any()
+			            || newGroup.Value.Except(existGroup).Any())
+			        {
+				        childTreeNode.Expand();
+				        childTreeNode.Checked = true;
+				        CheckTreeViewNode(childTreeNode, true);
+			        }
+		        }
+
+		        if (_groupType == GroupType.Server)
+			        CurrentSettings.Servers = new LRGroups(groupItems.ToArray());
+		        else
+			        CurrentSettings.FileTypes = new LRGroups(groupItems.ToArray());
+
+                treeNode.Nodes.Clear();
+		        treeNode.Checked = false;
+		        treeNode.Nodes.AddRange(nodes.ToArray());
+		        TreeMain.SelectedNode = nodes.FirstOrDefault(x => x.Checked) ?? TreeMain.SelectedNode;
 	        }
-
-            if (_groupType == GroupType.Server)
-		        CurrentSettings.Servers = new LRGroups(groupItems.ToArray());
-	        else
-		        CurrentSettings.FileTypes = new LRGroups(groupItems.ToArray());
-
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+	        finally
+	        {
+		        ValidationCheck();
+		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
+        static Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
         {
 	        return treeNode
 		        .Nodes.OfType<TreeNode>()
@@ -378,78 +395,105 @@ namespace LogsReader.Reader
 	        SetFolder(null, GetFolders(false), true);
         }
 
-        void SetFolder(string folderPath, Dictionary<string, bool> items, bool showForm)
+        void SetFolder(TreeNode selectedNode, Dictionary<string, bool> items, bool showForm)
         {
-            var clone = new Dictionary<string, bool>(items, items.Comparer);
-	        if (showForm)
+	        try
 	        {
-		        var folderForm = new AddFolder(folderPath);
-		        folderForm.ShowDialog();
-		        if (folderForm.FolderPath.IsNullOrEmptyTrim())
-			        return;
+		        var clone = new Dictionary<string, bool>(items, items.Comparer);
+		        if (showForm)
+		        {
+			        AddFolder folderForm;
+			        if (selectedNode != null)
+				        folderForm = new AddFolder(selectedNode.Text.Substring(5, selectedNode.Text.Length - 5).Trim(), selectedNode.Text.StartsWith("[All]", StringComparison.InvariantCultureIgnoreCase));
+			        else
+				        folderForm = new AddFolder(null, true);
 
-                if(items.TryGetValue(folderForm.FolderPath, out var allDirSearching))
-                {
-	                if (allDirSearching != folderForm.AllDirectoriesSearching)
-		                items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
-                    else
-                        return;
-                }
-                else
-                {
-	                items.Add(folderForm.FolderPath, folderForm.AllDirectoriesSearching);
-                }
+			        var result = folderForm.ShowDialog();
+
+			        if (result == DialogResult.Cancel || folderForm.FolderPath.IsNullOrEmptyTrim())
+				        return;
+
+			        if (items.TryGetValue(folderForm.FolderPath, out var allDirSearching))
+			        {
+				        if (allDirSearching != folderForm.AllDirectoriesSearching)
+					        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
+			        }
+			        else
+			        {
+				        items.Add(folderForm.FolderPath, folderForm.AllDirectoriesSearching);
+			        }
+		        }
+
+		        var nodes = new List<TreeNode>();
+		        var foldersList = new List<LRFolder>();
+		        foreach (var folder in items.OrderBy(x => x.Key))
+		        {
+			        var folderType = folder.Value ? @"[All]" : @"[Top]";
+			        var childFolder = new TreeNode($"{folderType} {folder.Key}");
+			        nodes.Add(childFolder);
+
+                    foldersList.Add(new LRFolder(folder.Key, folder.Value));
+
+			        if (clone.TryGetValue(folder.Key, out var value) && folder.Value == value)
+				        continue;
+
+			        childFolder.Checked = true;
+		        }
+
+		        CurrentSettings.LogsFolder = new LRFolderGroup(foldersList.ToArray());
+
+		        treeNodeFolders.Nodes.Clear();
+		        treeNodeFolders.Checked = false;
+		        treeNodeFolders.Nodes.AddRange(nodes.ToArray());
+		        treeNodeFolders.Expand();
+		        TreeMain.SelectedNode = nodes.FirstOrDefault(x => x.Checked) ?? TreeMain.SelectedNode;
 	        }
-
-
-	        treeNodeFolders.Nodes.Clear();
-            var foldersList = new List<LRFolder>();
-            foreach (var folder in items.OrderBy(x => x.Key))
-            {
-	            var folderType = folder.Value ? @"[All]" : @"[Top]";
-	            var childFolder = treeNodeFolders.Nodes.Add($"{folderType} {folder.Key}");
-
-	            foldersList.Add(new LRFolder(folder.Key, folder.Value));
-
-                if (!clone.TryGetValue(folder.Key, out var _))
-                {
-	                childFolder.Checked = true;
-                    TreeMain.SelectedNode = childFolder;
-                }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
             }
-
-            treeNodeFolders.Expand();
-
-	        CurrentSettings.LogsFolder = new LRFolderGroup(foldersList.ToArray());
-
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+	        finally
+	        {
+		        ValidationCheck();
+		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         void RemoveSelectedNodeItem(object sender, EventArgs e)
         {
-	        if (!TreeMain.Enabled
-	            || TreeMain.SelectedNode == treeNodeServersGroup
-	            || TreeMain.SelectedNode == treeNodeTypesGroup
-	            || TreeMain.SelectedNode == treeNodeFolders)
-		        return;
+	        try
+	        {
+		        if (!TreeMain.Enabled
+		            || TreeMain.SelectedNode == treeNodeServersGroup
+		            || TreeMain.SelectedNode == treeNodeTypesGroup
+		            || TreeMain.SelectedNode == treeNodeFolders)
+			        return;
 
-	        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
-	        {
-		        SetTreeNodes(GroupType.Server, ProcessingType.Remove);
+		        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
+		        {
+			        SetTreeNodes(GroupType.Server, ProcessingType.Remove);
+		        }
+		        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
+		        {
+			        SetTreeNodes(GroupType.FileType, ProcessingType.Remove);
+		        }
+		        else if (TreeMain.SelectedNode.Parent == treeNodeFolders)
+		        {
+			        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
+			        CurrentSettings.LogsFolder = new LRFolderGroup(GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray());
+		        }
+
+
 	        }
-	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
+	        catch (Exception ex)
 	        {
-		        SetTreeNodes(GroupType.FileType, ProcessingType.Remove);
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+	        finally
+	        {
+		        ValidationCheck();
+		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
             }
-	        else if (TreeMain.SelectedNode.Parent == treeNodeFolders)
-	        {
-		        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
-		        CurrentSettings.LogsFolder = new LRFolderGroup(GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray());
-	        }
-
-            ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         static bool Compare(TreeNode treeNode, TreeNode toFind)
@@ -471,7 +515,7 @@ namespace LogsReader.Reader
 		        }
 		        else
 		        {
-			        folders.Add(folder, folder.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
+			        folders.Add(folder, folderWithType.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
 		        }
 	        }
 
@@ -495,15 +539,48 @@ namespace LogsReader.Reader
             return treeNode;
         }
 
+
+        private void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+	        try
+	        {
+		        TreeMain.AfterCheck -= TrvMain_AfterCheck;
+		        CheckTreeViewNode(e.Node, e.Node.Checked);
+		        ValidationCheck();
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+	        finally
+	        {
+		        TreeMain.AfterCheck += TrvMain_AfterCheck;
+            }
+        }
+
+        private static void CheckTreeViewNode(TreeNode node, bool isChecked)
+        {
+	        foreach (TreeNode item in node.Nodes)
+	        {
+		        item.Checked = isChecked;
+		        if (item.Nodes.Count > 0)
+			        CheckTreeViewNode(item, isChecked);
+	        }
+        }
+
         private void TreeMain_MouseDown(object sender, MouseEventArgs e)
         {
-	        if (e.Button != MouseButtons.Right)
-                return;
-
-	        //var selectedNode = TreeMain.SelectedNode;
-	        //var nodeAt = TreeMain.GetNodeAt(e.X, e.Y);
-
-            _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
+	        try
+	        {
+		        if (e.Button != MouseButtons.Right)
+			        return;
+		        TreeMain.SelectedNode = TreeMain.GetNodeAt(e.X, e.Y);
+		        _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
         }
 
         #endregion
@@ -1100,13 +1177,6 @@ namespace LogsReader.Reader
             }
         }
 
-        private void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            if (e.Node.Level == 0)
-                CheckTreeViewNode(e.Node, e.Node.Checked);
-            ValidationCheck();
-        }
-
         private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var value))
@@ -1179,16 +1249,6 @@ namespace LogsReader.Reader
         {
             LRSettingsScheme.CheckOrderByItem(orderByText.Text);
             ValidationCheck(CurrentSettings.OrderBy.Equals(orderByText.Text, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        private static void CheckTreeViewNode(TreeNode node, bool isChecked)
-        {
-            foreach (TreeNode item in node.Nodes)
-            {
-                item.Checked = isChecked;
-                if (item.Nodes.Count > 0)
-                    CheckTreeViewNode(item, isChecked);
-            }
         }
 
         private void TxtPattern_TextChanged(object sender, EventArgs e)

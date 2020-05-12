@@ -15,23 +15,35 @@ namespace LogsReader.Reader.Forms
 
 		public bool AllDirectoriesSearching => checkBoxAllDirectories.Checked;
 
-		public AddFolder(string folderPath = null)
+		public AddFolder(string folderPath, bool allDirSearching)
 		{
 			InitializeComponent();
 
 			Icon = Icon.FromHandle(Resources.folder.GetHicon());
-			textBoxFolder.Text = folderPath;
-			_lastDir = folderPath;
-			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
-			labelFolder.Text = Resources.Txt_Forms_Folder;
 			base.Text = Resources.Txt_Forms_AddFolder;
 			new ToolTip().SetToolTip(checkBoxAllDirectories, Resources.Txt_Forms_AddFolderTooltip);
 
+			labelFolder.Text = Resources.Txt_Forms_Folder;
+
+			textBoxFolder.Text = folderPath;
+			_lastDir = folderPath;
+
+			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
+			checkBoxAllDirectories.Checked = allDirSearching;
+			
 			CenterToScreen();
+
+			KeyPreview = true;
+			KeyDown += (sender, args) =>
+			{
+				if (args.KeyCode == Keys.Escape)
+					Close();
+			};
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
+			this.DialogResult = DialogResult.OK;
 			FolderPath = textBoxFolder.Text.Trim();
 			Close();
 		}

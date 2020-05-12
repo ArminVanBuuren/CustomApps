@@ -53,7 +53,7 @@ namespace LogsReader.Reader.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxFolder.Location = new System.Drawing.Point(46, 5);
 			this.textBoxFolder.Name = "textBoxFolder";
-			this.textBoxFolder.Size = new System.Drawing.Size(283, 20);
+			this.textBoxFolder.Size = new System.Drawing.Size(280, 20);
 			this.textBoxFolder.TabIndex = 1;
 			this.textBoxFolder.TextChanged += new System.EventHandler(this.textBoxFolder_TextChanged);
 			// 
@@ -62,7 +62,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(250, 29);
+			this.buttonCancel.Location = new System.Drawing.Point(247, 29);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 39;
@@ -75,7 +75,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(184, 29);
+			this.buttonOK.Location = new System.Drawing.Point(181, 29);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 40;
@@ -90,7 +90,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOpenFolder.Image = global::LogsReader.Properties.Resources.folder;
 			this.buttonOpenFolder.Location = new System.Drawing.Point(306, 6);
 			this.buttonOpenFolder.Name = "buttonOpenFolder";
-			this.buttonOpenFolder.Size = new System.Drawing.Size(22, 18);
+			this.buttonOpenFolder.Size = new System.Drawing.Size(19, 18);
 			this.buttonOpenFolder.TabIndex = 41;
 			this.buttonOpenFolder.Text = "..";
 			this.buttonOpenFolder.UseVisualStyleBackColor = false;

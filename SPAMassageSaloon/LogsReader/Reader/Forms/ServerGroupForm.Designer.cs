@@ -36,19 +36,20 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup = new System.Windows.Forms.ComboBox();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOK = new System.Windows.Forms.Button();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.panelChooseGroup = new System.Windows.Forms.Panel();
 			this.buttonPingAll = new System.Windows.Forms.Button();
 			this.buttonRemoveAll = new System.Windows.Forms.Button();
 			this.buttonAdd = new System.Windows.Forms.Button();
 			this.panelBottom = new System.Windows.Forms.Panel();
-			this.panel1.SuspendLayout();
+			this.groupBoxServers = new System.Windows.Forms.GroupBox();
+			this.panelChooseGroup.SuspendLayout();
 			this.panelBottom.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelGroup
 			// 
 			this.labelGroup.AutoSize = true;
-			this.labelGroup.Location = new System.Drawing.Point(7, 6);
+			this.labelGroup.Location = new System.Drawing.Point(3, 6);
 			this.labelGroup.Name = "labelGroup";
 			this.labelGroup.Size = new System.Drawing.Size(36, 13);
 			this.labelGroup.TabIndex = 0;
@@ -60,19 +61,18 @@ namespace LogsReader.Reader.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboboxGroup.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.comboboxGroup.FormattingEnabled = true;
-			this.comboboxGroup.Location = new System.Drawing.Point(51, 3);
+			this.comboboxGroup.Location = new System.Drawing.Point(49, 3);
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
-			this.comboboxGroup.Size = new System.Drawing.Size(346, 21);
+			this.comboboxGroup.Size = new System.Drawing.Size(371, 21);
 			this.comboboxGroup.TabIndex = 35;
-			this.comboboxGroup.TextChanged += new System.EventHandler(this.comboboxGroup_TextChanged);
 			// 
 			// buttonCancel
 			// 
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(315, 3);
+			this.buttonCancel.Location = new System.Drawing.Point(343, 2);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 37;
@@ -85,7 +85,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(249, 3);
+			this.buttonOK.Location = new System.Drawing.Point(277, 2);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 38;
@@ -93,22 +93,22 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
 			// 
-			// panel1
+			// panelChooseGroup
 			// 
-			this.panel1.Controls.Add(this.comboboxGroup);
-			this.panel1.Controls.Add(this.labelGroup);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(400, 26);
-			this.panel1.TabIndex = 39;
+			this.panelChooseGroup.Controls.Add(this.comboboxGroup);
+			this.panelChooseGroup.Controls.Add(this.labelGroup);
+			this.panelChooseGroup.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelChooseGroup.Location = new System.Drawing.Point(0, 0);
+			this.panelChooseGroup.Name = "panelChooseGroup";
+			this.panelChooseGroup.Size = new System.Drawing.Size(426, 26);
+			this.panelChooseGroup.TabIndex = 39;
 			// 
 			// buttonPingAll
 			// 
 			this.buttonPingAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonPingAll.Image = global::LogsReader.Properties.Resources.pingAll;
 			this.buttonPingAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonPingAll.Location = new System.Drawing.Point(68, 3);
+			this.buttonPingAll.Location = new System.Drawing.Point(89, 2);
 			this.buttonPingAll.Name = "buttonPingAll";
 			this.buttonPingAll.Size = new System.Drawing.Size(80, 25);
 			this.buttonPingAll.TabIndex = 42;
@@ -121,11 +121,11 @@ namespace LogsReader.Reader.Forms
 			this.buttonRemoveAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonRemoveAll.Image = global::LogsReader.Properties.Resources.remove;
 			this.buttonRemoveAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonRemoveAll.Location = new System.Drawing.Point(154, 3);
+			this.buttonRemoveAll.Location = new System.Drawing.Point(175, 2);
 			this.buttonRemoveAll.Name = "buttonRemoveAll";
-			this.buttonRemoveAll.Size = new System.Drawing.Size(89, 25);
+			this.buttonRemoveAll.Size = new System.Drawing.Size(96, 25);
 			this.buttonRemoveAll.TabIndex = 41;
-			this.buttonRemoveAll.Text = global::LogsReader.Properties.Resources.Txt_Forms_RemoveAll;
+			this.buttonRemoveAll.Text = "     Remove All";
 			this.buttonRemoveAll.UseVisualStyleBackColor = true;
 			this.buttonRemoveAll.Click += new System.EventHandler(this.buttonRemoveAll_Click);
 			// 
@@ -134,11 +134,11 @@ namespace LogsReader.Reader.Forms
 			this.buttonAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdd.Image = global::LogsReader.Properties.Resources.add;
 			this.buttonAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonAdd.Location = new System.Drawing.Point(4, 3);
+			this.buttonAdd.Location = new System.Drawing.Point(3, 2);
 			this.buttonAdd.Name = "buttonAdd";
-			this.buttonAdd.Size = new System.Drawing.Size(58, 25);
+			this.buttonAdd.Size = new System.Drawing.Size(80, 25);
 			this.buttonAdd.TabIndex = 43;
-			this.buttonAdd.Text = global::LogsReader.Properties.Resources.Txt_Forms_Add;
+			this.buttonAdd.Text = "  Add";
 			this.buttonAdd.UseVisualStyleBackColor = true;
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
 			// 
@@ -150,23 +150,35 @@ namespace LogsReader.Reader.Forms
 			this.panelBottom.Controls.Add(this.buttonOK);
 			this.panelBottom.Controls.Add(this.buttonRemoveAll);
 			this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelBottom.Location = new System.Drawing.Point(0, 55);
+			this.panelBottom.Location = new System.Drawing.Point(0, 69);
 			this.panelBottom.Name = "panelBottom";
-			this.panelBottom.Size = new System.Drawing.Size(400, 30);
+			this.panelBottom.Size = new System.Drawing.Size(426, 30);
 			this.panelBottom.TabIndex = 44;
+			// 
+			// groupBoxServers
+			// 
+			this.groupBoxServers.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBoxServers.Location = new System.Drawing.Point(0, 26);
+			this.groupBoxServers.Name = "groupBoxServers";
+			this.groupBoxServers.Size = new System.Drawing.Size(426, 43);
+			this.groupBoxServers.TabIndex = 45;
+			this.groupBoxServers.TabStop = false;
+			this.groupBoxServers.Text = "Servers";
 			// 
 			// ServerGroupForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(400, 85);
+			this.ClientSize = new System.Drawing.Size(426, 99);
+			this.Controls.Add(this.groupBoxServers);
 			this.Controls.Add(this.panelBottom);
-			this.Controls.Add(this.panel1);
-			this.MinimumSize = new System.Drawing.Size(416, 124);
+			this.Controls.Add(this.panelChooseGroup);
+			this.MinimumSize = new System.Drawing.Size(442, 138);
 			this.Name = "ServerGroupForm";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Server Group";
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
+			this.panelChooseGroup.ResumeLayout(false);
+			this.panelChooseGroup.PerformLayout();
 			this.panelBottom.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -178,10 +190,11 @@ namespace LogsReader.Reader.Forms
 		private ComboBox comboboxGroup;
 		private Button buttonCancel;
 		private Button buttonOK;
-		private Panel panel1;
+		private Panel panelChooseGroup;
 		private Button buttonPingAll;
 		private Button buttonRemoveAll;
 		private Button buttonAdd;
 		private Panel panelBottom;
+		private GroupBox groupBoxServers;
 	}
 }

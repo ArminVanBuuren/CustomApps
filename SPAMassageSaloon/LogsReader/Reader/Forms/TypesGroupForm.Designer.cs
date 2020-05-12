@@ -60,7 +60,6 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup.Name = "comboboxGroup";
 			this.comboboxGroup.Size = new System.Drawing.Size(495, 21);
 			this.comboboxGroup.TabIndex = 35;
-			this.comboboxGroup.TextChanged += new System.EventHandler(this.comboboxGroup_TextChanged);
 			// 
 			// labelGroup
 			// 
@@ -119,6 +118,7 @@ namespace LogsReader.Reader.Forms
 			this.Controls.Add(this.panel1);
 			this.MinimumSize = new System.Drawing.Size(179, 153);
 			this.Name = "TypesGroupForm";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "File Types Group";
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();

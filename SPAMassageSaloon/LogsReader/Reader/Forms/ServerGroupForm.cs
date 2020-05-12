@@ -22,30 +22,41 @@ namespace LogsReader.Reader.Forms
 		public ServerGroupForm(string selectedGroup, Dictionary<string, List<string>> serverGroups)
 		{
 			InitializeComponent();
+
 			Icon = Icon.FromHandle(Resources.server_group.GetHicon());
-			
+			base.Text = Resources.Txt_Forms_ServerGroup;
+			base.AutoSize = false;
+
+			labelGroup.Text = Resources.Txt_Forms_Group;
+			buttonAdd.Text = Resources.Txt_Forms_Add;
+			buttonRemoveAll.Text = Resources.Txt_Forms_RemoveAll;
+			buttonCancel.Text = Resources.Txt_Forms_Cancel;
+
 			_serverGroups = serverGroups;
 
 			comboboxGroup.Items.AddRange(_serverGroups.Keys.ToArray());
-			comboboxGroup.SelectionChangeCommitted += ComboboxGroup_SelectionChangeCommitted;
+			comboboxGroup.Text = selectedGroup;
 			comboboxGroup.SelectedText = selectedGroup;
+			ComboboxGroup_SelectionChangeCommitted(this, EventArgs.Empty);
+			comboboxGroup.SelectionChangeCommitted += ComboboxGroup_SelectionChangeCommitted;
+			comboboxGroup.TextChanged += comboboxGroup_TextChanged;
 
 			CenterToScreen();
+
+			KeyPreview = true;
+			KeyDown += (sender, args) =>
+			{
+				if (args.KeyCode == Keys.Escape)
+					Close();
+			};
 		}
 
 		private void ComboboxGroup_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			Save();
-
-			foreach (var panel in Controls.OfType<Panel>().ToList())
-			{
-				if(_serverPanels.TryGetValue(panel, out var _))
-					Controls.Remove(panel);
-			}
 			_serverPanels.Clear();
+			_currentGroup = comboboxGroup.SelectedItem.ToString();
 
-			_currentGroup = comboboxGroup.SelectedText;
-			if (_serverGroups.TryGetValue(comboboxGroup.SelectedText, out var servers) && servers.Count > 0)
+			if (_serverGroups.TryGetValue(_currentGroup, out var servers) && servers.Count > 0)
 			{
 				foreach (var server in servers)
 					AddServer(server);
@@ -54,24 +65,14 @@ namespace LogsReader.Reader.Forms
 			{
 				AddServer(string.Empty);
 			}
-			buttonOK.Enabled = true;
-		}
 
-		void Save()
-		{
-			if (_currentGroup != null && buttonOK.Enabled)
-			{
-				_serverGroups[_currentGroup] =
-					new List<string>(_serverPanels.Keys
-						.Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
-						.Where(x => !x.IsNullOrEmptyTrim())
-						.Distinct(StringComparer.InvariantCultureIgnoreCase));
-			}
+			AssignForm();
+			buttonOK.Enabled = true;
 		}
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (_serverGroups.TryGetValue(comboboxGroup.Text, out var _))
+			if (comboboxGroup.Text.IsNullOrEmptyTrim() || (_serverGroups.TryGetValue(comboboxGroup.Text, out var _) && _currentGroup != comboboxGroup.Text))
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -85,25 +86,111 @@ namespace LogsReader.Reader.Forms
 			}
 		}
 
+		private void buttonAdd_Click(object sender, EventArgs e)
+		{
+			AddServer(string.Empty);
+			AssignForm();
+		}
+
+		private void buttonRemoveAll_Click(object sender, EventArgs e)
+		{
+			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+			{
+				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == REMOVE_SERVER);
+				button?.PerformClick();
+			}
+
+			AddServer(string.Empty);
+			AssignForm();
+		}
+
+		private void buttonPingAll_Click(object sender, EventArgs e)
+		{
+			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+			{
+				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == PING_SERVER);
+				button?.PerformClick();
+			}
+		}
+
+		void AssignForm()
+		{
+			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+				groupBoxServers.Controls.Remove(panel);
+
+			var formHeightSize = panelChooseGroup.Size.Height + panelBottom.Size.Height + 60;
+			foreach (var panel in _serverPanels.Keys.Reverse())
+			{
+				groupBoxServers.Controls.Add(panel);
+				formHeightSize += panel.Size.Height;
+			}
+
+			this.Size = new Size(this.Size.Width, formHeightSize);
+			this.MinimumSize = new Size(this.MinimumSize.Width, formHeightSize);
+			this.Size = new Size(this.Size.Width, formHeightSize);
+			this.MinimumSize = new Size(this.MinimumSize.Width, formHeightSize);
+		}
+
+		private void buttonOK_Click(object sender, EventArgs e)
+		{
+			this.DialogResult = DialogResult.OK;
+
+			if (_currentGroup != null && buttonOK.Enabled)
+			{
+				_serverGroups[_currentGroup] =
+					new List<string>(_serverPanels.Keys
+						.Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
+						.Where(x => !x.IsNullOrEmptyTrim())
+						.Distinct(StringComparer.InvariantCultureIgnoreCase));
+			}
+
+			Close();
+		}
+
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
 		void AddServer(string serverText)
 		{
 			var objectPingSync = new object();
 			var serverTemplate = new Panel();
 
-			var labelServer = new Label
-			{
-				AutoSize = true,
-				Location = new Point(7, 8),
-				Size = new Size(38, 13),
-				Text = Resources.Txt_Forms_Server
-			};
-
 			var textBoxServer = new TextBox
 			{
 				Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
-				Location = new Point(51, 5),
-				Size = new Size(193, 20),
+				Location = new Point(10, 6),
+				Size = new Size(30, 20),
 				Text = serverText
+			};
+			textBoxServer.TextChanged += (sender, args) => { textBoxServer.BackColor = Color.White; };
+
+			var buttonRemove = new Button
+			{
+				Anchor = AnchorStyles.Top | AnchorStyles.Right,
+				Image = Resources.remove,
+				ImageAlign = ContentAlignment.MiddleLeft,
+				Location = new Point(115, 3),
+				Size = new Size(76, 25),
+				Name = REMOVE_SERVER,
+				Text = Resources.Txt_Forms_Remove,
+				UseVisualStyleBackColor = true
+			};
+			buttonRemove.Click += (sender, args) =>
+			{
+				try
+				{
+					if (this.IsDisposed)
+						return;
+
+					_serverPanels.Remove(serverTemplate);
+					AssignForm();
+				}
+				catch (Exception ex)
+				{
+					// igored
+				}
 			};
 
 			var buttonPing = new Button
@@ -111,7 +198,7 @@ namespace LogsReader.Reader.Forms
 				Anchor = AnchorStyles.Top | AnchorStyles.Right,
 				Image = Resources.ping,
 				ImageAlign = ContentAlignment.MiddleLeft,
-				Location = new Point(250, 3),
+				Location = new Point(50, 3),
 				Size = new Size(60, 25),
 				Name = PING_SERVER,
 				Text = "   Ping",
@@ -131,6 +218,8 @@ namespace LogsReader.Reader.Forms
 						lock (objectPingSync)
 						{
 							serverText2 = textBoxServer.Text;
+							buttonPing.Enabled = false;
+							buttonRemove.Enabled = false;
 							textBoxServer.Enabled = false;
 						}
 
@@ -165,6 +254,8 @@ namespace LogsReader.Reader.Forms
 												return;
 
 											textBoxServer.BackColor = color;
+											buttonPing.Enabled = true;
+											buttonRemove.Enabled = true;
 											textBoxServer.Enabled = true;
 										});
 									}
@@ -183,34 +274,6 @@ namespace LogsReader.Reader.Forms
 				}
 			};
 
-			var buttonRemove = new Button
-			{
-				Anchor = AnchorStyles.Top | AnchorStyles.Right,
-				Image = Resources.remove,
-				ImageAlign = ContentAlignment.MiddleLeft,
-				Location = new Point(316, 3),
-				Size = new Size(76, 25),
-				Name = REMOVE_SERVER,
-				Text = Resources.Txt_Forms_Remove,
-				UseVisualStyleBackColor = true
-			};
-			buttonRemove.Click += (sender, args) =>
-			{
-				try
-				{
-					if (this.IsDisposed) 
-						return;
-
-					Controls.Remove(serverTemplate);
-					_serverPanels.Remove(serverTemplate);
-				}
-				catch (Exception ex)
-				{
-					// igored
-				}
-			};
-
-			serverTemplate.Controls.Add(labelServer);
 			serverTemplate.Controls.Add(textBoxServer);
 			serverTemplate.Controls.Add(buttonPing);
 			serverTemplate.Controls.Add(buttonRemove);
@@ -219,42 +282,6 @@ namespace LogsReader.Reader.Forms
 			serverTemplate.Size = new Size(400, 30);
 
 			_serverPanels.Add(serverTemplate, true);
-			Controls.Add(serverTemplate);
-		}
-
-		private void buttonAdd_Click(object sender, EventArgs e)
-		{
-			AddServer(string.Empty);
-		}
-
-		private void buttonPingAll_Click(object sender, EventArgs e)
-		{
-			foreach (var panel in Controls.OfType<Panel>().ToList())
-			{
-				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == PING_SERVER);
-				button?.PerformClick();
-			}
-		}
-
-		private void buttonRemoveAll_Click(object sender, EventArgs e)
-		{
-			foreach (var panel in Controls.OfType<Panel>().ToList())
-			{
-				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == REMOVE_SERVER);
-				button?.PerformClick();
-			}
-			AddServer(string.Empty);
-		}
-
-		private void buttonOK_Click(object sender, EventArgs e)
-		{
-			Save();
-			Close();
-		}
-
-		private void buttonCancel_Click(object sender, EventArgs e)
-		{
-			Close();
 		}
 	}
 }
