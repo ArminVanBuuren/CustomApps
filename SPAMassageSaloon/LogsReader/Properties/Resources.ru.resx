@@ -363,4 +363,58 @@
   <data name="Txt_LogsReaderForm_Properties" xml:space="preserve">
     <value>Свойства [Ctrl + P]</value>
   </data>
+  <data name="Txt_FileTypesGroups_ErrUnique" xml:space="preserve">
+    <value>Имена групп типов должны быть уникальными!</value>
+  </data>
+  <data name="Txt_Folders_ErrUnique" xml:space="preserve">
+    <value>Пути к каталогам должны быть уникальными!</value>
+  </data>
+  <data name="Txt_Forms_Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Txt_Forms_AddFolder" xml:space="preserve">
+    <value>Добавить директорию</value>
+  </data>
+  <data name="Txt_Forms_AddFolderTooltip" xml:space="preserve">
+    <value>Поиск будет осуществляться в текущем и во всех всех дочерних каталогах.</value>
+  </data>
+  <data name="Txt_Forms_AddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="Txt_Forms_AllDirectories" xml:space="preserve">
+    <value>Все директории</value>
+  </data>
+  <data name="Txt_Forms_Cancel" xml:space="preserve">
+    <value>  Отмена</value>
+  </data>
+  <data name="Txt_Forms_FileTypesGroup" xml:space="preserve">
+    <value>Группа файловых типов</value>
+  </data>
+  <data name="Txt_Forms_Folder" xml:space="preserve">
+    <value>Директория</value>
+  </data>
+  <data name="Txt_Forms_Group" xml:space="preserve">
+    <value>Группа</value>
+  </data>
+  <data name="Txt_Forms_GroupName" xml:space="preserve">
+    <value>Имя группы</value>
+  </data>
+  <data name="Txt_Forms_Remove" xml:space="preserve">
+    <value>  Удалить</value>
+  </data>
+  <data name="Txt_Forms_RemoveAll" xml:space="preserve">
+    <value> Удалить все</value>
+  </data>
+  <data name="Txt_Forms_Server" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="Txt_Forms_ServerGroup" xml:space="preserve">
+    <value>Группа серверов</value>
+  </data>
+  <data name="Txt_LogsReaderForm_RemoveSelected" xml:space="preserve">
+    <value>Удалить выбранное [Del]</value>
+  </data>
+  <data name="Txt_ServerGroups_ErrUnique" xml:space="preserve">
+    <value>Имена групп серверов должны быть уникальными!</value>
+  </data>
 </root>

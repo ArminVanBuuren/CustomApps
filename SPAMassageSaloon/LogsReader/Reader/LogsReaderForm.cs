@@ -229,7 +229,7 @@ namespace LogsReader.Reader
 	                Checked = true
                 };
                 treeNodeFolders.Expand();
-                AddFolder(TreeMain.SelectedNode.Text, CurrentSettings.Folders, false);
+                SetFolder(TreeMain.SelectedNode.Text, CurrentSettings.Folders, false);
                 CheckTreeViewNode(treeNodeFolders, true);
 
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
@@ -246,8 +246,9 @@ namespace LogsReader.Reader
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
                 _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, AddFolder);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
                 _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
                 _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
 
                 #endregion
@@ -267,68 +268,74 @@ namespace LogsReader.Reader
 
         void AddServerGroup(object sender, EventArgs args)
         {
-	        SetTreeNodes(GroupType.Server, true);
+	        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupItem);
         }
 
         void AddServer(object sender, EventArgs args)
         {
-	        SetTreeNodes(GroupType.Server, false);
+	        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
         }
 
         void AddFileTypeGroup(object sender, EventArgs args)
         {
-	        SetTreeNodes(GroupType.FileType, true);
+	        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupItem);
         }
 
         void AddFileType(object sender, EventArgs args)
         {
-	        SetTreeNodes(GroupType.FileType, false);
+	        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
         }
 
         void OpenProperties(object sender, EventArgs args)
         {
 	        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
-		        SetTreeNodes(GroupType.Server, false);
+		        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
 	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
-		        SetTreeNodes(GroupType.FileType, false);
+		        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
 	        else if (TreeMain.SelectedNode == treeNodeFolders)
-		        AddFolder(this, EventArgs.Empty);
+		        SetFolder(this, EventArgs.Empty);
 	        else
-		        AddFolder(TreeMain.SelectedNode.Text, GetFolders(false), true);
+		        SetFolder(TreeMain.SelectedNode.Text, GetFolders(false), true);
         }
 
-        static bool Compare(TreeNode treeNode, TreeNode toFind)
+        enum ProcessingType
         {
-	        var isCurrent = treeNode == toFind;
-	        return isCurrent || (treeNode?.Parent != null && Compare(treeNode.Parent, toFind));
+            CreateGroupItem = 0,
+            CreateGroupChildItem = 1,
+            Remove = 2
         }
 
-        void SetTreeNodes(GroupType _groupType, bool isNewGroup)
+        void SetTreeNodes(GroupType _groupType, ProcessingType processingType)
         {
 	        var treeNode = _groupType == GroupType.Server ? treeNodeServersGroup : treeNodeTypesGroup;
 
-	        var treeGroups = treeNode
-                .Nodes.OfType<TreeNode>()
-		        .ToDictionary(x => x.Text, 
-	                x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)), StringComparer.InvariantCultureIgnoreCase);
+	        var treeGroups = GetGroups(treeNode);
 	        var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
 
-	        if (isNewGroup || treeNode.Nodes.Count == 0)
+            if (processingType == ProcessingType.Remove)
 	        {
-		        new AddGroupForm(treeGroups, _groupType).ShowDialog();
-	        }
+		        TreeMain.SelectedNode.Remove();
+		        treeGroups = GetGroups(treeNode);
+            }
 	        else
 	        {
-		        var groupName = treeGroups.First().Key;
-		        if (TreeMain.SelectedNode?.Parent == treeNode)
-			        groupName = TreeMain.SelectedNode.Text;
-		        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
-		            groupName = TreeMain.SelectedNode.Parent.Text;
-		        
-                AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
+		        if (processingType == ProcessingType.CreateGroupItem || treeNode.Nodes.Count == 0)
+		        {
+			        new AddGroupForm(treeGroups, _groupType).ShowDialog();
+		        }
+		        else
+		        {
+			        var groupName = treeGroups.First().Key;
+			        if (TreeMain.SelectedNode?.Parent == treeNode)
+				        groupName = TreeMain.SelectedNode.Text;
+			        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
+				        groupName = TreeMain.SelectedNode.Parent.Text;
+
+			        AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
+		        }
             }
 
-	        treeNode.Nodes.Clear();
+            treeNode.Nodes.Clear();
 	        var groupItems = new List<LRGroupItem>(treeGroups.Count);
             foreach (var newGroup in treeGroups)
 	        {
@@ -356,12 +363,21 @@ namespace LogsReader.Reader
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        void AddFolder(object sender, EventArgs e)
+        Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
         {
-	        AddFolder(null, GetFolders(false), true);
+	        return treeNode
+		        .Nodes.OfType<TreeNode>()
+		        .ToDictionary(x => x.Text,
+			        x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)),
+			        StringComparer.InvariantCultureIgnoreCase);
         }
 
-        void AddFolder(string folderPath, Dictionary<string, bool> items, bool showForm)
+        void SetFolder(object sender, EventArgs e)
+        {
+	        SetFolder(null, GetFolders(false), true);
+        }
+
+        void SetFolder(string folderPath, Dictionary<string, bool> items, bool showForm)
         {
             var clone = new Dictionary<string, bool>(items, items.Comparer);
 	        if (showForm)
@@ -409,6 +425,38 @@ namespace LogsReader.Reader
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        void RemoveSelectedNodeItem(object sender, EventArgs e)
+        {
+	        if (!TreeMain.Enabled
+	            || TreeMain.SelectedNode == treeNodeServersGroup
+	            || TreeMain.SelectedNode == treeNodeTypesGroup
+	            || TreeMain.SelectedNode == treeNodeFolders)
+		        return;
+
+	        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
+	        {
+		        SetTreeNodes(GroupType.Server, ProcessingType.Remove);
+	        }
+	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
+	        {
+		        SetTreeNodes(GroupType.FileType, ProcessingType.Remove);
+            }
+	        else if (TreeMain.SelectedNode.Parent == treeNodeFolders)
+	        {
+		        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
+		        CurrentSettings.LogsFolder = GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray();
+	        }
+
+            ValidationCheck();
+	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        static bool Compare(TreeNode treeNode, TreeNode toFind)
+        {
+	        var isCurrent = treeNode == toFind;
+	        return isCurrent || (treeNode?.Parent != null && Compare(treeNode.Parent, toFind));
+        }
+
         Dictionary<string, bool> GetFolders(bool getOnlyChecked)
         {
 	        var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
@@ -427,23 +475,6 @@ namespace LogsReader.Reader
 	        }
 
 	        return folders;
-        }
-
-        void DeleteTreeItem()
-        {
-	        if (!TreeMain.Enabled
-	            || TreeMain.SelectedNode == treeNodeServersGroup
-		        || TreeMain.SelectedNode == treeNodeTypesGroup
-		        || TreeMain.SelectedNode == treeNodeFolders)
-		        return;
-
-            if(TreeMain.SelectedNode.Parent == treeNodeFolders)
-            {
-	            treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
-            }
-
-	        ValidationCheck();
-	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups)
@@ -628,7 +659,7 @@ namespace LogsReader.Reader
 
 
                     case Keys.Delete:
-	                    DeleteTreeItem();
+	                    RemoveSelectedNodeItem(this, EventArgs.Empty);
                         break;
                     case Keys.G when e.Control && TreeMain.Enabled:
 	                    AddServerGroup(this, EventArgs.Empty);
@@ -643,7 +674,7 @@ namespace LogsReader.Reader
 	                    AddFileType(this, EventArgs.Empty);
                         break;
                     case Keys.F when e.Control && TreeMain.Enabled:
-	                    AddFolder(this, EventArgs.Empty);
+	                    SetFolder(this, EventArgs.Empty);
                         break;
                     case Keys.P when e.Control && TreeMain.Enabled:
 	                    OpenProperties(this, EventArgs.Empty);

@@ -430,7 +430,7 @@ Input data:
     <value>Add Folder</value>
   </data>
   <data name="Txt_Forms_AddFolderTooltip" xml:space="preserve">
-    <value>Files will be selected in top and in all child directories.</value>
+    <value>Search will be carried out in the top and all child directories.</value>
   </data>
   <data name="Txt_Forms_AddGroup" xml:space="preserve">
     <value>Add Group</value>
@@ -467,6 +467,9 @@ Input data:
   </data>
   <data name="Txt_Forms_ServerGroup" xml:space="preserve">
     <value>Server Group</value>
+  </data>
+  <data name="Txt_LogsReaderForm_RemoveSelected" xml:space="preserve">
+    <value>Remove selected [Del]</value>
   </data>
   <data name="Txt_ServerGroups_ErrUnique" xml:space="preserve">
     <value>Server group names must be unique!</value>

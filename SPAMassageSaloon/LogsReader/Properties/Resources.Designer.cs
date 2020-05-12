@@ -377,7 +377,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Files will be selected in top and in all child directories..
+        ///   Ищет локализованную строку, похожую на Search will be carried out in the top and all child directories..
         /// </summary>
         public static string Txt_Forms_AddFolderTooltip {
             get {
@@ -760,6 +760,15 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_Properties {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Remove selected [Del].
+        /// </summary>
+        public static string Txt_LogsReaderForm_RemoveSelected {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_RemoveSelected", resourceCulture);
             }
         }
         
