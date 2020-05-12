@@ -78,6 +78,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.TabIndex = 37;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// buttonOK
 			// 

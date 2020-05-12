@@ -59,7 +59,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\LRTreeItems.cs" />
+    <Compile Include="Config\LRFolderGroup.cs" />
+    <Compile Include="Config\LRFolder.cs" />
+    <Compile Include="Config\LRGroupItem.cs" />
+    <Compile Include="Config\LRItem.cs" />
+    <Compile Include="Config\LRTraceParseItem.cs" />
+    <Compile Include="Config\LRGroups.cs" />
+    <Compile Include="Config\TraceParse.cs" />
     <Compile Include="Properties\Resources.ru.Designer.cs">
       <DependentUpon>Resources.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -212,12 +212,12 @@ namespace LogsReader.Reader
 
                 #region TreeNode - Servers; FileTypes; Folders
 
-                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.ServerGroups);
+                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups);
                 treeNodeServersGroup.Name = "trvServers";
                 treeNodeServersGroup.Checked = false;
                 CheckTreeViewNode(treeNodeServersGroup, false);
 
-                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypesGroups);
+                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups);
                 treeNodeTypesGroup.Name = "trvTypes";
                 treeNodeTypesGroup.Checked = false;
                 CheckTreeViewNode(treeNodeTypesGroup, false);
@@ -229,7 +229,7 @@ namespace LogsReader.Reader
 	                Checked = true
                 };
                 treeNodeFolders.Expand();
-                SetFolder(TreeMain.SelectedNode.Text, CurrentSettings.Folders, false);
+                SetFolder(TreeMain.SelectedNode?.Text, CurrentSettings.LogsFolder.Folders, false);
                 CheckTreeViewNode(treeNodeFolders, true);
 
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
@@ -355,9 +355,9 @@ namespace LogsReader.Reader
 	        }
 
             if (_groupType == GroupType.Server)
-		        CurrentSettings.Servers = groupItems.ToArray();
+		        CurrentSettings.Servers = new LRGroups(groupItems.ToArray());
 	        else
-		        CurrentSettings.FileTypes = groupItems.ToArray();
+		        CurrentSettings.FileTypes = new LRGroups(groupItems.ToArray());
 
             ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
@@ -367,6 +367,7 @@ namespace LogsReader.Reader
         {
 	        return treeNode
 		        .Nodes.OfType<TreeNode>()
+		        .OrderBy(x => x.Text)
 		        .ToDictionary(x => x.Text,
 			        x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)),
 			        StringComparer.InvariantCultureIgnoreCase);
@@ -419,7 +420,7 @@ namespace LogsReader.Reader
 
             treeNodeFolders.Expand();
 
-	        CurrentSettings.LogsFolder = foldersList.ToArray();
+	        CurrentSettings.LogsFolder = new LRFolderGroup(foldersList.ToArray());
 
             ValidationCheck();
 	        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
@@ -444,7 +445,7 @@ namespace LogsReader.Reader
 	        else if (TreeMain.SelectedNode.Parent == treeNodeFolders)
 	        {
 		        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
-		        CurrentSettings.LogsFolder = GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray();
+		        CurrentSettings.LogsFolder = new LRFolderGroup(GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray());
 	        }
 
             ValidationCheck();
@@ -488,9 +489,9 @@ namespace LogsReader.Reader
 
         static TreeNode GetGroupItems(string name, IEnumerable<string> items)
         {
-	        var treeNode = new TreeNode(name);
+	        var treeNode = new TreeNode(name.Trim().ToUpper());
             foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
-	            treeNode.Nodes.Add(item.Trim());
+	            treeNode.Nodes.Add(item.Trim().ToUpper());
             return treeNode;
         }
 

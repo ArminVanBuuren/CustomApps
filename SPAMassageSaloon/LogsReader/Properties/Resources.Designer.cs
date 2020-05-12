@@ -431,6 +431,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Folder &apos;{0}&apos; is incorrect!.
+        /// </summary>
+        public static string Txt_Forms_FolderIsIncorrect {
+            get {
+                return ResourceManager.GetString("Txt_Forms_FolderIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Group.
         /// </summary>
         public static string Txt_Forms_Group {
@@ -440,11 +449,29 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Groups items cannot be Empty!.
+        /// </summary>
+        public static string Txt_Forms_GroupChildItemIsIncorrect {
+            get {
+                return ResourceManager.GetString("Txt_Forms_GroupChildItemIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Group Name.
         /// </summary>
         public static string Txt_Forms_GroupName {
             get {
                 return ResourceManager.GetString("Txt_Forms_GroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Group name cannot be Empty!.
+        /// </summary>
+        public static string Txt_Forms_GroupNameIsIncorrect {
+            get {
+                return ResourceManager.GetString("Txt_Forms_GroupNameIsIncorrect", resourceCulture);
             }
         }
         

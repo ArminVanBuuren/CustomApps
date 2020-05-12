@@ -23,6 +23,8 @@ namespace LogsReader.Reader.Forms
 			textBoxFolder.Text = folderPath;
 			_lastDir = folderPath;
 			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
+			labelFolder.Text = Resources.Txt_Forms_Folder;
+			base.Text = Resources.Txt_Forms_AddFolder;
 			new ToolTip().SetToolTip(checkBoxAllDirectories, Resources.Txt_Forms_AddFolderTooltip);
 
 			CenterToScreen();
@@ -31,6 +33,11 @@ namespace LogsReader.Reader.Forms
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			FolderPath = textBoxFolder.Text.Trim();
+			Close();
+		}
+
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
 			Close();
 		}
 

@@ -43,7 +43,7 @@ namespace LogsReader.Reader.Forms
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(67, 13);
 			this.label1.TabIndex = 0;
-			this.label1.Text = Resources.Txt_Forms_GroupName;
+			this.label1.Text = "Group Name";
 			// 
 			// textBoxGroupName
 			// 
@@ -64,8 +64,9 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 39;
-			this.buttonCancel.Text = Resources.Txt_Forms_Cancel;
+			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// buttonOK
 			// 
@@ -76,7 +77,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 40;
-			this.buttonOK.Text = Resources.Txt_Forms_OK;
+			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
 			// 
@@ -92,7 +93,7 @@ namespace LogsReader.Reader.Forms
 			this.MaximumSize = new System.Drawing.Size(999, 95);
 			this.MinimumSize = new System.Drawing.Size(244, 95);
 			this.Name = "AddGroupForm";
-			this.Text = Resources.Txt_Forms_AddGroup;
+			this.Text = "Add Group";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

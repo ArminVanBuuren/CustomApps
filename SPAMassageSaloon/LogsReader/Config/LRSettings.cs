@@ -37,7 +37,6 @@ namespace LogsReader.Config
             set { }
         }
 
-
         [XmlElement("Scheme", IsNullable = false)]
         public LRSettingsScheme[] SchemeList
         {

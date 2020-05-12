@@ -18,9 +18,9 @@ namespace LogsReader.Config
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {
-	    private LRGroupItem[] _servers = new LRGroupItem[] { new LRGroupItem("local", "localhost") };
-	    private LRGroupItem[] _fileTypes = new LRGroupItem[] {new LRGroupItem("type", "log") };
-	    private LRFolder[] _logsFolder = new LRFolder[] { new LRFolder() };
+	    private LRGroups _servers = new LRGroups(new [] { new LRGroupItem("local", "localhost") });
+	    private LRGroups _fileTypes = new LRGroups(new []{ new LRGroupItem("type", "log") });
+	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder() });
         
 	    private string _schemeName = "TEST";
         private string _orderBy = "Date, File, FoundLineID";
@@ -76,21 +76,10 @@ namespace LogsReader.Config
         }
 
         [XmlElement("Servers")]
-        public LRGroupItem[] Servers
+        public LRGroups Servers
         {
 	        get => _servers;
-	        set
-	        {
-		        try
-		        {
-			        _servers = value ?? _servers;
-			        ServerGroups = GetGroups(_servers);
-                }
-		        catch (ArgumentException ex)
-		        {
-			        throw new ArgumentException(Resources.Txt_ServerGroups_ErrUnique, ex);
-		        }
-	        }
+	        set => _servers = value ?? _servers;
         }
 
         [XmlAnyElement("FileTypesComment")]
@@ -101,29 +90,10 @@ namespace LogsReader.Config
         }
 
         [XmlElement("FileTypes")]
-        public LRGroupItem[] FileTypes
+        public LRGroups FileTypes
         {
 	        get => _fileTypes;
-	        set
-	        {
-		        try
-		        {
-			        _fileTypes = value ?? _fileTypes;
-			        FileTypesGroups = GetGroups(_fileTypes);
-                }
-		        catch (ArgumentException ex)
-		        {
-			        throw new ArgumentException(Resources.Txt_FileTypesGroups_ErrUnique, ex);
-		        }
-	        }
-        }
-
-        static Dictionary<string, IEnumerable<string>> GetGroups(LRGroupItem[] items)
-        {
-	        return items.ToDictionary(k => k.GroupName, v => v.Item[0].Value.Split(',')
-		        .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-		        .OrderBy(p => p.Key)
-		        .Select(x => x.Key), StringComparer.InvariantCultureIgnoreCase);
+	        set => _fileTypes = value ?? _fileTypes;
         }
 
         [XmlAnyElement("LogsFolderComment")]
@@ -134,21 +104,10 @@ namespace LogsReader.Config
         }
 
         [XmlElement("LogsFolderGroup")]
-        public LRFolder[] LogsFolder
+        public LRFolderGroup LogsFolder
         {
 	        get => _logsFolder;
-	        set
-	        {
-		        try
-		        {
-			        _logsFolder = value ?? _logsFolder;
-			        Folders = _logsFolder.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirectoriesSearching, StringComparer.InvariantCultureIgnoreCase);
-                }
-		        catch (ArgumentException ex)
-		        {
-			        throw new ArgumentException(Resources.Txt_Folders_ErrUnique, ex);
-		        }
-	        }
+	        set => _logsFolder = value ?? _logsFolder;
         }
 
         [XmlAnyElement("MaxLinesComment")]
@@ -295,28 +254,28 @@ namespace LogsReader.Config
 
         public LRSettingsScheme() { }
 
-        [XmlIgnore] public Dictionary<string, IEnumerable<string>> ServerGroups { get; private set; }
-        [XmlIgnore] public Dictionary<string, IEnumerable<string>> FileTypesGroups { get; private set; }
-        [XmlIgnore] public Dictionary<string, bool> Folders { get; private set; }
-
         internal LRSettingsScheme(string schemeName)
         {
 	        switch (schemeName)
 	        {
 		        case "MG":
 			        _schemeName = schemeName;
-			        _servers = new[] { new LRGroupItem("UZ", "mg1, mg2, mg3, mg4, mg5") };
-			        _fileTypes = new[] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") };
-			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\MG", true) };
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "mg1, mg2, mg3, mg4, mg5") });
+			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
+			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        _maxLines = 100;
 			        _maxThreads = -1;
 			        _traceParce = new LRTraceParse(_schemeName);
 			        break;
 		        case "SPA":
 			        _schemeName = schemeName;
-			        _servers = new[] { new LRGroupItem("UZ", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6, spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6") };
-			        _fileTypes = new[] { new LRGroupItem("default", "spa.bpm, bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc") };
-			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\SPA", true) };
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6, spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6") });
+			        FileTypes = new LRGroups(new[]
+			        {
+				        new LRGroupItem("SPA.SA", "bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc"),
+				        new LRGroupItem("SPA.BPM", "spa.bpm")
+                    });
+			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
 			        _maxLines = 1;
 			        _maxThreads = -1;
 			        _orderBy = "Date desc, ID desc";
@@ -324,9 +283,9 @@ namespace LogsReader.Config
 			        break;
 		        case "MGA":
 			        _schemeName = schemeName;
-			        _servers = new[] { new LRGroupItem("UZ", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") };
-			        _fileTypes = new[] { new LRGroupItem("default", "fast, slow, test") };
-			        _logsFolder = new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) };
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
+			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, test") });
+			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        _maxLines = 20000;
 			        _maxThreads = -1;
 			        _traceParce = new LRTraceParse(_schemeName);

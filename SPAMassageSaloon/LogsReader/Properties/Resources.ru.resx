@@ -385,7 +385,7 @@
     <value>Все директории</value>
   </data>
   <data name="Txt_Forms_Cancel" xml:space="preserve">
-    <value>  Отмена</value>
+    <value>      Отмена</value>
   </data>
   <data name="Txt_Forms_FileTypesGroup" xml:space="preserve">
     <value>Группа файловых типов</value>

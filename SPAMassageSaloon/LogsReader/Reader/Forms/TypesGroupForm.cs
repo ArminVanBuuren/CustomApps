@@ -39,6 +39,11 @@ namespace LogsReader.Reader.Forms
 			Close();
 		}
 
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
 			if (_typesGroups.TryGetValue(comboboxGroup.Text, out var result))

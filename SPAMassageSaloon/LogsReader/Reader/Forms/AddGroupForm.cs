@@ -37,6 +37,11 @@ namespace LogsReader.Reader.Forms
 			Close();
 		}
 
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
 		public static void ShowGroupItemsForm(string groupName, Dictionary<string, List<string>> groups, GroupType groupType)
 		{
 			DialogResult result;

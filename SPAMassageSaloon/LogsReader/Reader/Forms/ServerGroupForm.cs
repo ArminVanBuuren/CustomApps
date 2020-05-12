@@ -251,5 +251,10 @@ namespace LogsReader.Reader.Forms
 			Save();
 			Close();
 		}
+
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 	}
 }

@@ -447,11 +447,20 @@ Input data:
   <data name="Txt_Forms_Folder" xml:space="preserve">
     <value>Folder</value>
   </data>
+  <data name="Txt_Forms_FolderIsIncorrect" xml:space="preserve">
+    <value>Folder '{0}' is incorrect!</value>
+  </data>
   <data name="Txt_Forms_Group" xml:space="preserve">
     <value>Group</value>
   </data>
+  <data name="Txt_Forms_GroupChildItemIsIncorrect" xml:space="preserve">
+    <value>Groups items cannot be Empty!</value>
+  </data>
   <data name="Txt_Forms_GroupName" xml:space="preserve">
     <value>Group Name</value>
+  </data>
+  <data name="Txt_Forms_GroupNameIsIncorrect" xml:space="preserve">
+    <value>Group name cannot be Empty!</value>
   </data>
   <data name="Txt_Forms_OK" xml:space="preserve">
     <value>     OK</value>
