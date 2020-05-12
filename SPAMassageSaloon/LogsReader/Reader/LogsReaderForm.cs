@@ -27,8 +27,8 @@ namespace LogsReader.Reader
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
+        private ContextMenuStrip _contextTreeMainMenuStrip;
 
-        private readonly ContextMenuStrip _contextTreeMainMenuStrip;
         private readonly TreeNode treeNodeServersGroup;
         private readonly TreeNode treeNodeTypesGroup;
         private readonly TreeNode treeNodeFolders;
@@ -235,21 +235,6 @@ namespace LogsReader.Reader
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
                 TreeMain.MouseDown += TreeMain_MouseDown;
                 TreeMain.AfterCheck += TrvMain_AfterCheck;
-
-                _contextTreeMainMenuStrip = new ContextMenuStrip
-                {
-	                Tag = TreeMain
-                };
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
 
                 #endregion
             }
@@ -618,6 +603,19 @@ namespace LogsReader.Reader
                 treeNodeServersGroup.Text = Resources.Txt_LogsReaderForm_Servers;
                 treeNodeTypesGroup.Text = Resources.Txt_LogsReaderForm_Types;
                 treeNodeFolders.Text = Resources.Txt_LogsReaderForm_LogsFolder;
+
+                _contextTreeMainMenuStrip?.Dispose();
+                _contextTreeMainMenuStrip = new ContextMenuStrip { Tag = TreeMain };
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
+                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
+                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
 
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
