@@ -25,6 +25,9 @@ namespace LogsReader.Reader.Forms
 			_groupType = groupType;
 
 			Icon = Icon.FromHandle(_groupType == GroupType.Server ? Resources.server_group.GetHicon() : Resources.types_group.GetHicon());
+			base.Text = Resources.Txt_Forms_AddGroup;
+			labelGroupName.Text =  Resources.Txt_Forms_GroupName;
+			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
 
 			CenterToScreen();

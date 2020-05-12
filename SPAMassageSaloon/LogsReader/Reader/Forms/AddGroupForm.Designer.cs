@@ -30,20 +30,20 @@ namespace LogsReader.Reader.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelGroupName = new System.Windows.Forms.Label();
 			this.textBoxGroupName = new System.Windows.Forms.TextBox();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// label1
+			// labelGroupName
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(4, 8);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(67, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Group Name";
+			this.labelGroupName.AutoSize = true;
+			this.labelGroupName.Location = new System.Drawing.Point(4, 8);
+			this.labelGroupName.Name = "labelGroupName";
+			this.labelGroupName.Size = new System.Drawing.Size(67, 13);
+			this.labelGroupName.TabIndex = 0;
+			this.labelGroupName.Text = "Group Name";
 			// 
 			// textBoxGroupName
 			// 
@@ -89,7 +89,7 @@ namespace LogsReader.Reader.Forms
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.textBoxGroupName);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelGroupName);
 			this.MaximumSize = new System.Drawing.Size(999, 95);
 			this.MinimumSize = new System.Drawing.Size(244, 95);
 			this.Name = "AddGroupForm";
@@ -102,7 +102,7 @@ namespace LogsReader.Reader.Forms
 
 		#endregion
 
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelGroupName;
 		private System.Windows.Forms.TextBox textBoxGroupName;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;

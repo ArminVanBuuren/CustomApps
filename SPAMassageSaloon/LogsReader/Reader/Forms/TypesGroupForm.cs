@@ -18,6 +18,9 @@ namespace LogsReader.Reader.Forms
 			InitializeComponent();
 
 			Icon = Icon.FromHandle(Resources.types_group.GetHicon());
+			base.Text = Resources.Txt_Forms_FileTypesGroup;
+			labelGroup.Text = Resources.Txt_Forms_Group;
+			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 
 			_typesGroups = typesGroups;
 

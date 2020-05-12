@@ -64,7 +64,7 @@ namespace LogsReader.Reader.Forms
 			// labelGroup
 			// 
 			this.labelGroup.AutoSize = true;
-			this.labelGroup.Location = new System.Drawing.Point(7, 6);
+			this.labelGroup.Location = new System.Drawing.Point(3, 6);
 			this.labelGroup.Name = "labelGroup";
 			this.labelGroup.Size = new System.Drawing.Size(36, 13);
 			this.labelGroup.TabIndex = 0;

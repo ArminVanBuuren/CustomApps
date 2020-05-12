@@ -28,6 +28,7 @@ namespace LogsReader.Reader.Forms
 			base.AutoSize = false;
 
 			labelGroup.Text = Resources.Txt_Forms_Group;
+			groupBoxServers.Text = Resources.Txt_LogsReaderForm_Servers;
 			buttonAdd.Text = Resources.Txt_Forms_Add;
 			buttonRemoveAll.Text = Resources.Txt_Forms_RemoveAll;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
