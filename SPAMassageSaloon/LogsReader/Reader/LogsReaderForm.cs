@@ -215,11 +215,13 @@ namespace LogsReader.Reader
                 treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups);
                 treeNodeServersGroup.Name = "trvServers";
                 treeNodeServersGroup.Checked = false;
+                treeNodeServersGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
                 CheckTreeViewNode(treeNodeServersGroup, false);
 
                 treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups);
                 treeNodeTypesGroup.Name = "trvTypes";
                 treeNodeTypesGroup.Checked = false;
+                treeNodeTypesGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
                 CheckTreeViewNode(treeNodeTypesGroup, false);
 
                 treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
@@ -230,6 +232,7 @@ namespace LogsReader.Reader
                 };
                 treeNodeFolders.Expand();
                 SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
+                treeNodeFolders.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
                 CheckTreeViewNode(treeNodeFolders, true);
 
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });

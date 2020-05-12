@@ -376,7 +376,7 @@
     <value>Добавить директорию</value>
   </data>
   <data name="Txt_Forms_AddFolderTooltip" xml:space="preserve">
-    <value>Поиск будет осуществляться в текущем каталоге и во всех всех дочерних.</value>
+    <value>Поиск будет осуществляться в текущем каталоге и во всех дочерних.</value>
   </data>
   <data name="Txt_Forms_AddGroup" xml:space="preserve">
     <value>Добавить группу</value>
