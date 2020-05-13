@@ -30,6 +30,7 @@ namespace LogsReader.Reader.Forms
 
 			labelFolder.Text = Resources.Txt_Forms_Folder;
 
+			buttonOK.Enabled = !folderPath.IsNullOrEmptyTrim();
 			SourceFolder = folderPath;
 			_lastDir = folderPath;
 			textBoxFolder.Text = folderPath;
@@ -43,7 +44,7 @@ namespace LogsReader.Reader.Forms
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
-				if (args.KeyCode == Keys.Enter)
+				if (args.KeyCode == Keys.Enter && buttonOK.Enabled)
 					buttonOK_Click(this, EventArgs.Empty);
 				else if (args.KeyCode == Keys.Escape)
 					Close();
