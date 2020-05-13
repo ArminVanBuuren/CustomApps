@@ -352,8 +352,11 @@ namespace LogsReader.Reader
 
                 var nodes = new List<TreeNode>();
 		        var groupItems = new List<LRGroupItem>(treeGroups.Count);
-		        foreach (var newGroup in treeGroups)
+		        foreach (var newGroup in treeGroups.OrderBy(x => x.Key))
 		        {
+                    if(newGroup.Value.Count == 0 || newGroup.Value.All(x => x.IsNullOrEmptyTrim()))
+                        continue;
+
 			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value, _groupType);
 			        nodes.Add(childTreeNode);
 			        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
@@ -1008,7 +1011,7 @@ namespace LogsReader.Reader
                 ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
-                int i = 0;
+                var i = 0;
                 Progress = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {

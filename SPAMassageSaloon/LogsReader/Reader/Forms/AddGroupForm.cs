@@ -35,16 +35,17 @@ namespace LogsReader.Reader.Forms
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
-				if (args.KeyCode == Keys.Escape)
+				if (args.KeyCode == Keys.Enter)
+					buttonOK_Click(this, EventArgs.Empty);
+				else if (args.KeyCode == Keys.Escape)
 					Close();
 			};
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
 			_groups.Add(textBoxGroupName.Text, new List<string>());
-			ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
+			this.DialogResult = ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
 			Close();
 		}
 
