@@ -379,7 +379,13 @@ namespace LogsReader.Reader
                 treeNode.Nodes.Clear();
 		        treeNode.Checked = false;
 		        treeNode.Nodes.AddRange(nodes.ToArray());
-		        TreeMain.SelectedNode = nodes.FirstOrDefault(x => x.Checked) ?? TreeMain.SelectedNode;
+
+		        var checkedNode = nodes.FirstOrDefault(x => x.Checked);
+		        if (checkedNode != null)
+		        {
+			        checkedNode.Checked = true;
+			        TreeMain.SelectedNode = checkedNode;
+		        }
 	        }
 	        catch (Exception ex)
 	        {
@@ -435,7 +441,7 @@ namespace LogsReader.Reader
                     else if(folderForm.SourceFolder != null && items.TryGetValue(folderForm.SourceFolder, out var allDirSearching2))
 			        {
 				        items.RenameKey(folderForm.SourceFolder, folderForm.FolderPath);
-				        items[folderForm.FolderPath] = allDirSearching2;
+				        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
                     }
 			        else
 			        {
@@ -469,7 +475,13 @@ namespace LogsReader.Reader
 		        treeNodeFolders.Checked = false;
 		        treeNodeFolders.Nodes.AddRange(nodes.ToArray());
 		        treeNodeFolders.Expand();
-		        TreeMain.SelectedNode = nodes.FirstOrDefault(x => x.Checked) ?? TreeMain.SelectedNode;
+		        
+		        var checkedNode = nodes.FirstOrDefault(x => x.Checked);
+		        if (checkedNode != null)
+		        {
+			        checkedNode.Checked = true;
+			        TreeMain.SelectedNode = checkedNode;
+                }
 	        }
 	        catch (Exception ex)
 	        {
@@ -504,9 +516,14 @@ namespace LogsReader.Reader
 		        {
 			        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
 			        CurrentSettings.LogsFolder = new LRFolderGroup(GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray());
-		        }
-
-
+			        
+			        var checkedNode = treeNodeFolders.Nodes.OfType<TreeNode>().FirstOrDefault(x => x.Checked);
+			        if (checkedNode != null)
+			        {
+				        checkedNode.Checked = true;
+				        TreeMain.SelectedNode = checkedNode;
+			        }
+                }
 	        }
 	        catch (Exception ex)
 	        {
@@ -605,7 +622,10 @@ namespace LogsReader.Reader
 
         private static void CheckChildTreeViewNode(TreeNode node, bool isChecked)
         {
-	        foreach (TreeNode item in node.Nodes)
+	        if (node == null)
+		        return;
+
+            foreach (TreeNode item in node.Nodes)
             {
 	            item.Checked = isChecked;
 	            SetIndexImageTreeNode(item);
@@ -619,7 +639,7 @@ namespace LogsReader.Reader
 
         static void CheckParentTreeView(TreeNode node)
         {
-	        if (node.Parent == null) 
+	        if (node?.Parent == null) 
 		        return;
 
 	        var isAllChecked = true;
