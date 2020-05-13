@@ -260,7 +260,7 @@ namespace LogsReader.Config
 	        {
 		        case "MG":
 			        _schemeName = schemeName;
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "mg1, mg2, mg3, mg4, mg5") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", "mg1, mg2, mg3, mg4, mg5") });
 			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        _maxLines = 100;
@@ -269,7 +269,11 @@ namespace LogsReader.Config
 			        break;
 		        case "SPA":
 			        _schemeName = schemeName;
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6, spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6") });
+			        Servers = new LRGroups(new[]
+			        {
+				        new LRGroupItem("UZ-BPM", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6"),
+				        new LRGroupItem("UZ-SA", "spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6")
+                    });
 			        FileTypes = new LRGroups(new[]
 			        {
 				        new LRGroupItem("SPA.SA", "bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc"),
@@ -283,7 +287,7 @@ namespace LogsReader.Config
 			        break;
 		        case "MGA":
 			        _schemeName = schemeName;
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
 			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, test") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        _maxLines = 20000;

@@ -21,6 +21,12 @@ namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl, IUserForm
     {
+	    private const string ParentServerTreeNodeName = "Parent_Server";
+	    private const string ParentFileTypeTreeNodeName = "Parent_FileType";
+	    private const string ChildServerTreeNodeName = "Child_Server";
+	    private const string ChildFileTypeTreeNodeName = "Child_FileType";
+	    private const string FolderTreeNodeName = "Folder";
+
         private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
@@ -212,16 +218,31 @@ namespace LogsReader.Reader
 
                 #region TreeNode - Servers; FileTypes; Folders
 
-                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups, 1, 4);
+                var imageList = new ImageList {ImageSize = new Size(14, 14)};
+                imageList.Images.Add("0", Resources._default);
+                imageList.Images.Add("1", Resources.server_group);
+                imageList.Images.Add("2", Resources.types_group);
+                imageList.Images.Add("3", Resources.server);
+                imageList.Images.Add("4", Resources.type);
+                imageList.Images.Add("5", Resources.folder);
+                //imageList.ImageSize = new Size(10, 10);
+                //TreeMain.StateImageList = imageList;
+                TreeMain.ImageList = imageList;
+                TreeMain.ItemHeight = 18;
+                TreeMain.Indent = 18;
+
+                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups, GroupType.Server);
                 treeNodeServersGroup.Name = "trvServers";
                 treeNodeServersGroup.Checked = false;
                 treeNodeServersGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+                TreeMain.Nodes.Add(treeNodeServersGroup);
                 CheckTreeViewNode(treeNodeServersGroup, false);
 
-                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups, 2, 5);
+                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups, GroupType.FileType);
                 treeNodeTypesGroup.Name = "trvTypes";
                 treeNodeTypesGroup.Checked = false;
                 treeNodeTypesGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+                TreeMain.Nodes.Add(treeNodeTypesGroup);
                 CheckTreeViewNode(treeNodeTypesGroup, false);
 
                 treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
@@ -233,17 +254,9 @@ namespace LogsReader.Reader
                 treeNodeFolders.Expand();
                 SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
                 treeNodeFolders.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+                TreeMain.Nodes.Add(treeNodeFolders);
                 CheckTreeViewNode(treeNodeFolders, true);
 
-                var myImageList = new ImageList();
-                myImageList.Images.Add(Resources._default);
-                myImageList.Images.Add(Resources.server_group);
-                myImageList.Images.Add(Resources.types_group);
-                myImageList.Images.Add(Resources.folder);
-                myImageList.Images.Add(Resources.server);
-                myImageList.Images.Add(Resources.type);
-                TreeMain.ImageList = myImageList;
-                TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
                 TreeMain.MouseDown += TreeMain_MouseDown;
                 TreeMain.AfterCheck += TrvMain_AfterCheck;
 
@@ -341,7 +354,7 @@ namespace LogsReader.Reader
 		        var groupItems = new List<LRGroupItem>(treeGroups.Count);
 		        foreach (var newGroup in treeGroups)
 		        {
-			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value, 1, 3);
+			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value, _groupType);
 			        nodes.Add(childTreeNode);
 			        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
 
@@ -434,10 +447,10 @@ namespace LogsReader.Reader
 			        var folderType = folder.Value ? @"[All]" : @"[Top]";
 			        var childFolder = new TreeNode($"{folderType} {folder.Key}")
 			        {
-				        ImageIndex = 3,
-				        SelectedImageIndex = 3
-			        };
-			        nodes.Add(childFolder);
+                        Name = FolderTreeNodeName
+                    };
+			        SetIndexImageTreeNode(childFolder);
+                    nodes.Add(childFolder);
 
                     foldersList.Add(new LRFolder(folder.Key, folder.Value));
 
@@ -529,30 +542,37 @@ namespace LogsReader.Reader
 	        return folders;
         }
 
-        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups, int imageParent, int imageChild)
+        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups, GroupType groupType)
         {
 	        var treeNode = new TreeNode(name);
             foreach (var groupItem in groups)
-		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value, imageParent, imageChild));
+		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value, groupType));
 	        treeNode.Expand();
 	        return treeNode;
         }
 
-        static TreeNode GetGroupItems(string name, IEnumerable<string> items, int imageParent, int imageChild)
+        static TreeNode GetGroupItems(string name, IEnumerable<string> items, GroupType groupType)
         {
-	        var treeNode = new TreeNode(name.Trim().ToUpper())
+	        var parentName = ParentServerTreeNodeName;
+	        var childName = ChildServerTreeNodeName;
+	        if (groupType == GroupType.FileType)
 	        {
-		        ImageIndex = imageParent,
-                SelectedImageIndex = imageParent
-	        };
+		        parentName = ParentFileTypeTreeNodeName;
+		        childName = ChildFileTypeTreeNodeName;
+	        }
+
+            var treeNode = new TreeNode(name.Trim().ToUpper())
+	        {
+                Name = parentName
+            };
 	        foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
 	        {
 		        var child = treeNode.Nodes.Add(item.Trim().ToUpper());
-		        child.ImageIndex = imageChild;
-		        child.SelectedImageIndex = imageChild;
-
-	        }
-	        return treeNode;
+		        child.Name = childName;
+		        SetIndexImageTreeNode(child);
+            }
+	        SetIndexImageTreeNode(treeNode);
+            return treeNode;
         }
 
 
@@ -576,22 +596,85 @@ namespace LogsReader.Reader
 
         private static void CheckTreeViewNode(TreeNode node, bool isChecked)
         {
+	        CheckChildTreeViewNode(node, isChecked);
+	        CheckParentTreeView(node);
+        }
+
+        private static void CheckChildTreeViewNode(TreeNode node, bool isChecked)
+        {
 	        foreach (TreeNode item in node.Nodes)
-	        {
-		        item.Checked = isChecked;
-		        if (item.Nodes.Count > 0)
-			        CheckTreeViewNode(item, isChecked);
+            {
+	            item.Checked = isChecked;
+	            SetIndexImageTreeNode(item);
+	            if (item.Nodes.Count > 0)
+		            CheckChildTreeViewNode(item, isChecked);
 	        }
+
+	        node.Checked = isChecked;
+	        SetIndexImageTreeNode(node);
+        }
+
+        static void CheckParentTreeView(TreeNode node)
+        {
+	        if (node.Parent == null) 
+		        return;
+
+	        var isAllChecked = true;
+	        foreach (var nodeParent in node.Parent.Nodes.OfType<TreeNode>())
+	        {
+		        if (!nodeParent.Checked)
+		        {
+			        isAllChecked = false;
+			        break;
+		        }
+	        }
+
+	        node.Parent.Checked = isAllChecked;
+	        SetIndexImageTreeNode(node.Parent);
+	        CheckParentTreeView(node.Parent);
+        }
+
+        static void SetIndexImageTreeNode(TreeNode node)
+        {
+	        var result = 0;
+	        //if (node.Checked)
+	        switch (node.Name)
+	        {
+		        case ParentServerTreeNodeName:
+			        result = 1;
+			        break;
+		        case ParentFileTypeTreeNodeName:
+			        result = 2;
+			        break;
+		        case ChildServerTreeNodeName:
+			        result = 3;
+			        break;
+		        case ChildFileTypeTreeNodeName:
+			        result = 4;
+			        break;
+		        case FolderTreeNodeName:
+			        result = 5;
+			        break;
+	        }
+
+	        var resultStr = result.ToString();
+
+            node.ImageKey = resultStr;
+	        node.ImageIndex = result;
+	        node.SelectedImageKey = resultStr;
+	        node.SelectedImageIndex = result;
+	        node.StateImageKey = resultStr;
+	        node.StateImageIndex = result;
         }
 
         private void TreeMain_MouseDown(object sender, MouseEventArgs e)
         {
 	        try
 	        {
-		        if (e.Button != MouseButtons.Right)
-			        return;
 		        TreeMain.SelectedNode = TreeMain.GetNodeAt(e.X, e.Y);
-		        _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
+                if (e.Button != MouseButtons.Right)
+			        return;
+                _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
             }
 	        catch (Exception ex)
 	        {
