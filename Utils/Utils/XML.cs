@@ -1321,8 +1321,18 @@ namespace Utils
 
                 if (ch == outerCh || ((ch == '\'' || ch == '"') && (outerCh == '\'' || outerCh == '"')))
                     continue;
+                else
+                {
+	                // ошибка считывания если последнее условие не выполнилось
+	                while (ch != outerCh)
+	                {
+		                i++;
+                        if(i < sourceText.Length)
+                            break;
 
-                break; // ошибка считывания если последнее условие не выполнилось
+		                ch = sourceText[i];
+                    }
+                }
             }
 
             if (indexStart == -1 || (indexStart > indexEnd))
