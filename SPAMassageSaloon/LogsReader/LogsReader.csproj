@@ -207,6 +207,7 @@
   <ItemGroup>
     <Content Include="Resources\add.png" />
     <Content Include="Resources\cancel.png" />
+    <Content Include="Resources\default.png" />
     <Content Include="Resources\Ok.png" />
     <Content Include="Resources\ping.png" />
     <Content Include="Resources\pingAll.png" />

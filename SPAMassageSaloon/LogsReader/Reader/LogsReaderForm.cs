@@ -212,13 +212,13 @@ namespace LogsReader.Reader
 
                 #region TreeNode - Servers; FileTypes; Folders
 
-                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups);
+                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups, 1, 4);
                 treeNodeServersGroup.Name = "trvServers";
                 treeNodeServersGroup.Checked = false;
                 treeNodeServersGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
                 CheckTreeViewNode(treeNodeServersGroup, false);
 
-                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups);
+                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups, 2, 5);
                 treeNodeTypesGroup.Name = "trvTypes";
                 treeNodeTypesGroup.Checked = false;
                 treeNodeTypesGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
@@ -235,6 +235,14 @@ namespace LogsReader.Reader
                 treeNodeFolders.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
                 CheckTreeViewNode(treeNodeFolders, true);
 
+                var myImageList = new ImageList();
+                myImageList.Images.Add(Resources._default);
+                myImageList.Images.Add(Resources.server_group);
+                myImageList.Images.Add(Resources.types_group);
+                myImageList.Images.Add(Resources.folder);
+                myImageList.Images.Add(Resources.server);
+                myImageList.Images.Add(Resources.type);
+                TreeMain.ImageList = myImageList;
                 TreeMain.Nodes.AddRange(new[] { treeNodeServersGroup, treeNodeTypesGroup, treeNodeFolders });
                 TreeMain.MouseDown += TreeMain_MouseDown;
                 TreeMain.AfterCheck += TrvMain_AfterCheck;
@@ -333,7 +341,7 @@ namespace LogsReader.Reader
 		        var groupItems = new List<LRGroupItem>(treeGroups.Count);
 		        foreach (var newGroup in treeGroups)
 		        {
-			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value);
+			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value, 1, 3);
 			        nodes.Add(childTreeNode);
 			        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
 
@@ -424,7 +432,11 @@ namespace LogsReader.Reader
 		        foreach (var folder in items.OrderBy(x => x.Key))
 		        {
 			        var folderType = folder.Value ? @"[All]" : @"[Top]";
-			        var childFolder = new TreeNode($"{folderType} {folder.Key}");
+			        var childFolder = new TreeNode($"{folderType} {folder.Key}")
+			        {
+				        ImageIndex = 3,
+				        SelectedImageIndex = 3
+			        };
 			        nodes.Add(childFolder);
 
                     foldersList.Add(new LRFolder(folder.Key, folder.Value));
@@ -517,21 +529,30 @@ namespace LogsReader.Reader
 	        return folders;
         }
 
-        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups)
+        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups, int imageParent, int imageChild)
         {
 	        var treeNode = new TreeNode(name);
             foreach (var groupItem in groups)
-		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value));
+		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value, imageParent, imageChild));
 	        treeNode.Expand();
 	        return treeNode;
         }
 
-        static TreeNode GetGroupItems(string name, IEnumerable<string> items)
+        static TreeNode GetGroupItems(string name, IEnumerable<string> items, int imageParent, int imageChild)
         {
-	        var treeNode = new TreeNode(name.Trim().ToUpper());
-            foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
-	            treeNode.Nodes.Add(item.Trim().ToUpper());
-            return treeNode;
+	        var treeNode = new TreeNode(name.Trim().ToUpper())
+	        {
+		        ImageIndex = imageParent,
+                SelectedImageIndex = imageParent
+	        };
+	        foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
+	        {
+		        var child = treeNode.Nodes.Add(item.Trim().ToUpper());
+		        child.ImageIndex = imageChild;
+		        child.SelectedImageIndex = imageChild;
+
+	        }
+	        return treeNode;
         }
 
 
