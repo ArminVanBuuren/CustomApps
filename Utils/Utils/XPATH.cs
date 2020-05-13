@@ -95,30 +95,25 @@ namespace Utils
                     var nodeSetResult = new List<XPathResult>();
                     var i = 0;
 
-                    void AddCurrent()
+                    while (nodes.MoveNext())
                     {
-                        var current = nodes.Current;
-                        if (current == null)
-                            return;
+	                    var current = nodes.Current;
+	                    if (current == null)
+		                    continue;
 
-                        nodeSetResult.Add(new XPathResult
-                        {
-                            ID = i++,
-                            NodeType = current.NodeType.ToString(),
-                            NodeName = current.Name,
-                            Value = current.Value,
-                            Node = current is IHasXmlNode node1 ? node1.GetNode() : null
-                        });
-                    }
+	                    var xpathRes = new XPathResult
+	                    {
+		                    ID = i++,
+		                    NodeType = current.NodeType.ToString(),
+		                    NodeName = current.Name,
+		                    Value = current.Value,
+		                    Node = current is IHasXmlNode node1 ? node1.GetNode() : null
+	                    };
 
-                    if (getFirst)
-                    {
-                        AddCurrent();
-                    }
-                    else
-                    {
-                        while (nodes.MoveNext())
-                            AddCurrent();
+	                    nodeSetResult.Add(xpathRes);
+
+	                    if (getFirst)
+		                    return nodeSetResult;
                     }
 
                     return nodeSetResult;
