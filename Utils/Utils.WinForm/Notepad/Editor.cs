@@ -130,7 +130,7 @@ namespace Utils.WinForm.Notepad
         public override Font Font
         {
             get => FCTB.Font;
-            set => base.Font = FCTB.Font = value;
+            set => FCTB.Font = value;
         }
 
         [Browsable(false)]
