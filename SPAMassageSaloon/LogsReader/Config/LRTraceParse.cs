@@ -25,9 +25,9 @@ namespace LogsReader.Config
                 case "MG":
                     Patterns = new[]
                     {
-                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
-                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
-                        new LRTraceParseItem(@"(.+?)\s*(\[.+?\])\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
+                        new LRTraceParseItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
+                        new LRTraceParseItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
+                        new LRTraceParseItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
                     };
                     StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
                     break;
