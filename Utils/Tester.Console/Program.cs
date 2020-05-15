@@ -208,8 +208,12 @@ namespace Tester.Console
         {
             try
             {
+	            var sfewfwe = IO.SafeReadFile(@"C:\SMSTemplateProcessor.01.xml");
+	            //var sfewfwe = IO.SafeReadFile(@"C:\1.xml");
+	            var res111 = XPATH.Select(sfewfwe, @"//template");
 
-	            var list = new List<test>();
+
+                var list = new List<test>();
 	            
 
                 var dssdd = list.ToDictionary(x => x.Id, x => x.name);
@@ -242,7 +246,7 @@ namespace Tester.Console
 
                 var res11111 = getTimeInRangeFunction.Invoke(null, new[] { "0", "16:00", "20:00" }, null);
 
-                SortedDictionary<DateTime, string> _result = new SortedDictionary<DateTime, string>();
+                var _result = new SortedDictionary<DateTime, string>();
                 _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty1");
                 _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty3");
                 _result.Add(DateTime.Parse("17.03.2020 11:54:53.880"), "Empty2");

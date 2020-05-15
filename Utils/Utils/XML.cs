@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,14 +10,7 @@ using Utils.CollectionHelper;
 
 namespace Utils
 {
-    public enum XMlType
-    {
-        Unknown = 0,
-        Attribute = 1,
-        Node = 2
-    }
-
-    public enum XMLValueEncoder
+	public enum XMLValueEncoder
     {
         /// <summary>
         /// из имени объекта превращает в символ
@@ -37,25 +31,6 @@ namespace Utils
         /// из символа превращает в имя объекта для аттрибутов
         /// </summary>
         EncodeAttribute = 4
-    }
-
-    public class XmlNodeResult
-    {
-        //public string InnerText { get; set; }
-        //public string FindedText { get; set; }
-
-        public int IndexStart { get; }
-        public int IndexEnd { get; }
-        public int Length { get; }
-        public XMlType Type { get; }
-
-        public XmlNodeResult(int start, int end, int length, XMlType type)
-        {
-            IndexStart = start;
-            IndexEnd = end;
-            Length = length;
-            Type = type;
-        }
     }
 
     public static class XML
@@ -1127,109 +1102,9 @@ namespace Utils
             return true;
         }
 
-        /// <summary>
-        /// Получить точно позицию ноды в неотформатированном тексте XML
-        /// </summary>
-        /// <param name="sourceXmlText">Неотформатированный текст XML</param>
-        /// <param name="xmlDocument"></param>
-        /// <param name="find">ноду которую необходимо найти</param>
-        /// <returns></returns>
-        public static XmlNodeResult GetPositionByXmlNode(string sourceXmlText, XmlDocument xmlDocument, XmlNode find)
+        internal static string FormatOuterValue(string input)
         {
-            var formattedXML = new StringBuilder(xmlDocument.OuterXml.Length + 100);
-            var targetText = string.Empty;
-            var type = XMlType.Unknown;
-
-            foreach (XmlNode child in xmlDocument.ChildNodes)
-            {
-                var resType = GetXmlPosition(child, formattedXML, ref targetText,  find);
-
-                if (resType != XMlType.Unknown)
-                {
-                    type = resType;
-                    break;
-                }
-            }
-
-            return type != XMlType.Unknown ? GetPositionInSourceText(sourceXmlText, formattedXML.ToString(), targetText, type) : null;
-        }
-
-        static XMlType GetXmlPosition(XmlNode node, StringBuilder source, ref string targetText, XmlNode findNode)
-        {
-            var inputSourceLength = source.Length;
-
-            if (node.Attributes == null)
-            {
-                source.Append(NormalizeXmlValueFast(node.OuterXml));
-            }
-            else
-            {
-                if (node.Attributes.Count > 0)
-                {
-                    source.Append('<');
-                    source.Append(node.Name);
-
-                    if (IsXmlAttribute(node.Attributes, source, ref targetText, findNode))
-                        return XMlType.Attribute;
-                }
-                else
-                {
-                    source.Append('<');
-                    source.Append(node.Name);
-                }
-
-                if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
-                    source.Append(" />");
-                else
-                {
-                    source.Append('>');
-
-                    foreach (XmlNode node2 in node.ChildNodes)
-                    {
-                        var type = GetXmlPosition(node2, source, ref targetText, findNode);
-                        if (type != XMlType.Unknown)
-                            return type;
-                    }
-
-                    source.Append("</");
-                    source.Append(node.Name);
-                    source.Append('>');
-                }
-            }
-
-            if (node.Equals(findNode))
-            {
-                targetText = source.ToString(inputSourceLength, source.Length - inputSourceLength);
-                return XMlType.Node;
-            }
-
-            return XMlType.Unknown;
-        }
-
-        static bool IsXmlAttribute(XmlAttributeCollection attributes, StringBuilder source, ref string targetText, XmlNode findNode)
-        {
-            foreach (XmlAttribute attribute in attributes)
-            {
-                var prevIndexStart = source.Length;
-                source.Append(' ');
-                source.Append(attribute.Name);
-                source.Append('=');
-                source.Append('"');
-                source.Append(NormalizeXmlValueFast(attribute.InnerXml));
-                source.Append('"');
-                if (attribute.Equals(findNode))
-                {
-                    targetText = source.ToString(prevIndexStart + 1, source.Length - prevIndexStart - 1);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        static string FormatOuterValue(string input)
-        {
-            int i = 0;
+            var i = 0;
             var outer = new StringBuilder(input.Length + 10);
             foreach (var ch in input)
             {
@@ -1252,7 +1127,7 @@ namespace Utils
             return outer.ToString();
         }
 
-        static bool IsSymbolName(string input, int startIndex, out string symbolName, out char symbolResult)
+        internal static bool IsSymbolName(string input, int startIndex, out string symbolName, out char symbolResult)
         {
             symbolName = null;
             symbolResult = '\0';
@@ -1276,71 +1151,6 @@ namespace Utils
             var name = symbolName.Substring(1, symbolName.Length - 2);
             return XmlEntityNames.GetCharByName(name, out symbolResult);
         }
-
-        /// <summary>
-        /// Немного колхоз, но работает точно корректно. Также учитывает отступы по спецсимволам.
-        /// </summary>
-        static XmlNodeResult GetPositionInSourceText(string sourceText, string outerText, string targetText, XMlType type)
-        {
-            var indexStart = -1;
-            var indexEnd = -1;
-            var docIndex = outerText.Length - targetText.TrimStart().Length;
-
-            var i = 0;
-            var j = -1;
-            for (i = 0; i < sourceText.Length; i++)
-            {
-                var ch = sourceText[i];
-                if (char.IsWhiteSpace(ch))
-                    continue;
-
-                if (IsSymbolName(sourceText, i, out var symbolName, out var symbolResult))
-                {
-                    ch = symbolResult;
-                    i = i + symbolName.Length - 1;
-                }
-
-                j++;
-                if (j == docIndex)
-                    indexStart = i;
-                var outerCh = outerText[j];
-                while (char.IsWhiteSpace(outerCh) && outerText.Length > j + 1)
-                {
-                    j++;
-                    outerCh = outerText[j];
-
-                    if (j == docIndex)
-                        indexStart = i;
-                }
-
-                if (outerText.Length <= j + 1) // конец поиска
-                {
-                    indexEnd = i + 1;
-                    break;
-                }
-
-                if (ch == outerCh || ((ch == '\'' || ch == '"') && (outerCh == '\'' || outerCh == '"')))
-                    continue;
-                else
-                {
-	                // ошибка считывания если последнее условие не выполнилось
-	                while (ch != outerCh)
-	                {
-		                i++;
-                        if(i < sourceText.Length)
-                            break;
-
-		                ch = sourceText[i];
-                    }
-                }
-            }
-
-            if (indexStart == -1 || (indexStart > indexEnd))
-                return null;
-
-            return new XmlNodeResult(indexStart, indexEnd, indexEnd - indexStart, type);
-        }
-
 
         /// <summary>
         /// Creates validated XmlDocument object using given schema for validation.
