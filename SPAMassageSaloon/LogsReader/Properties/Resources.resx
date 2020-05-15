@@ -388,7 +388,7 @@ Input data:
     <value>Add file type group [Ctrl+H]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
-    <value>Add search folder [Ctrl+F]</value>
+    <value>Add search folder [Ctrl+J]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
     <value>Add server [Ctrl+R]</value>

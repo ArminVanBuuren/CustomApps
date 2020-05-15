@@ -8,19 +8,24 @@ namespace XPathTester
 {
     public class DGVXPathResult
     {
-        [DGVColumn(ColumnPosition.Last, "ID")]
-        public int ID { get; set; }
+	    public XPathNavigatorResult Navigator { get; }
 
-        [DGVColumn(ColumnPosition.Last, "NodeType")]
-        public string NodeType { get; set; }
+        [DGVColumn(ColumnPosition.Last, "ID")] 
+	    public int ID => Navigator.ID;
 
-        [DGVColumn(ColumnPosition.Last, "Name")]
-        public string Name { get; set; }
+	    [DGVColumn(ColumnPosition.Last, "NodeType")]
+	    public string NodeType => Navigator.NodeType;
 
-        [DGVColumn(ColumnPosition.Last, "Value")]
-        public string Value { get; set; }
+	    [DGVColumn(ColumnPosition.Last, "Name")]
+	    public string Name => Navigator.NodeName;
 
-        public XmlNode Node { get; set; }
+	    [DGVColumn(ColumnPosition.Last, "Value")]
+	    public string Value => Navigator.Value?.Trim().Replace("\r", "").Replace("\n", "");
+
+	    public DGVXPathResult(XPathNavigatorResult navigator)
+        {
+	        Navigator = navigator;
+        }
     }
 
     public class XPathCollection : IEnumerable<DGVXPathResult>
@@ -33,19 +38,10 @@ namespace XPathTester
                 _values.Add(item.ID, item);
         }
 
-        public XPathCollection(IEnumerable<XPathResult> source)
+        public XPathCollection(IEnumerable<XPathNavigatorResult> source)
         {
-            foreach (var result in source)
-            {
-                _values.Add(result.ID, new DGVXPathResult()
-                {
-                    ID = result.ID,
-                    NodeType = result.NodeType,
-                    Name = result.NodeName.Trim(),
-                    Value = result.Value.Trim(),
-                    Node = result.Node
-                });
-            }
+	        foreach (var result in source)
+		        _values.Add(result.ID, new DGVXPathResult(result));
         }
 
         public DGVXPathResult this[int id] => _values.TryGetValue(id, out var result) ? result : null;

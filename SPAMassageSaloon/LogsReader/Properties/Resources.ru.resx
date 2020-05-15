@@ -349,7 +349,7 @@
     <value>Добавить группу из типов файлов [Ctrl+H]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddFolder" xml:space="preserve">
-    <value>Добавить директорию для поиска [Ctrl+F]</value>
+    <value>Добавить директорию для поиска [Ctrl+J]</value>
   </data>
   <data name="Txt_LogsReaderForm_AddServer" xml:space="preserve">
     <value>Добавить сервер [Ctrl+R]</value>

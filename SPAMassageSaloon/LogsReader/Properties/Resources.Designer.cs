@@ -558,7 +558,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add search folder [Ctrl+F].
+        ///   Ищет локализованную строку, похожую на Add search folder [Ctrl+J].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFolder {
             get {

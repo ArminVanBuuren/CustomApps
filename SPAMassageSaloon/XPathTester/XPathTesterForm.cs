@@ -18,13 +18,16 @@ namespace XPathTester
     public partial class XPathTesterForm : Form, ISaloonForm
     {
         private readonly object sync = new object();
+
         private readonly ToolStripLabel _statusInfo;
 
+        private readonly Regex _checkXmlNS = new Regex("xmlns\\s*=\\s*\"[^\"]+\"",
+	        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
+
+        private bool _isPasting = false;
         private int _prevSortedColumn = -1;
 
         public XPathCollection Result { get; private set; }
-
-        public XmlDocument XmlBody { get; private set; }
 
         public int ActiveProcessesCount => 0;
 
@@ -110,7 +113,7 @@ namespace XPathTester
                                 result.NodeType,
                                 result.Name,
                                 result.Value,
-                                result.Node.OuterXml);
+                                result.Navigator.Node?.OuterXml);
                         }
 
                         Clipboard.SetText(clipboardText.ToString());
@@ -123,7 +126,7 @@ namespace XPathTester
             }
         }
 
-        private async void XpathResultDataGrid_SelectionChanged(object sender, EventArgs e)
+        private void XpathResultDataGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (xpathResultDataGrid.CurrentRow == null 
                 || xpathResultDataGrid.SelectedRows.Count == 0 
@@ -138,11 +141,8 @@ namespace XPathTester
                 xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
-                var xmlObject = await Task<XmlNodeResult>.Factory.StartNew(() => XML.GetPositionByXmlNode(editor.Text, XmlBody, Result[id].Node));
-                if (xmlObject == null)
-                    return;
-
-                var range = editor.GetRange(xmlObject.IndexStart, xmlObject.IndexEnd);
+                var navigator = Result[id].Navigator;
+                var range = editor.GetRange(navigator.Start, navigator.End);
 
                 editor.Selection = range;
                 editor.DoSelectionVisible();
@@ -161,11 +161,9 @@ namespace XPathTester
             }
         }
 
-        readonly Regex _checkXmlNS = new Regex("xmlns\\s*=\\s*\"[^\"]+\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
-        private bool isPasting = false;
         private void EditorOnPasting(object sender, EventArgs e)
         {
-            isPasting = true;
+            _isPasting = true;
         }
 
         void EditorOnTextChanged(object sender, EventArgs eventArgs)
@@ -174,8 +172,7 @@ namespace XPathTester
             {
                 if (editor.Text.IsNullOrEmpty())
                 {
-                    XmlBody = null;
-                    ReportStatus(string.Empty);
+	                ReportStatus(string.Empty);
                     return;
                 }
 
@@ -189,121 +186,110 @@ namespace XPathTester
                         ReportStatus(string.Format(Resources.XmlIsIncorrect, string.Empty));
                         return;
                     }
-
-                    try
-                    {
-                        if (isPasting)
-                        {
-                            var source = XML.RemoveUnallowable(editor.Text, " ");
-                            source = _checkXmlNS.Replace(source, string.Empty);
-                            try
-                            {
-                                editor.TextChanged -= EditorOnTextChanged;
-                                var prevSelection = editor.Selection.Clone();
-                                editor.ChangeTextWithoutCommit(source);
-                                editor.Selection = prevSelection;
-                            }
-                            catch (Exception) { }
-                            finally
-                            {
-                                editor.TextChanged += EditorOnTextChanged;
-                                isPasting = false;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-
-                    try
-                    {
-                        var document = new XmlDocument();
-                        document.LoadXml(editor.Text);
-                        XmlBody = document;
-                    }
-                    catch (Exception ex)
-                    {
-                        XmlBody = null;
-                        ReportStatus(string.Format(Resources.XmlIsIncorrect, $". {ex.Message}"));
-                    }
                 }
                 catch (Exception ex)
                 {
                     ReportStatus(ex.Message);
+                }
+
+                try
+                {
+	                if (!_isPasting) 
+		                return;
+
+	                var source = XML.RemoveUnallowable(editor.Text, " ");
+	                source = _checkXmlNS.Replace(source, string.Empty);
+	                try
+	                {
+		                editor.TextChanged -= EditorOnTextChanged;
+		                var prevSelection = editor.Selection.Clone();
+		                editor.ChangeTextWithoutCommit(source);
+		                editor.Selection = prevSelection;
+	                }
+	                catch (Exception)
+	                {
+		                // ignored
+	                }
+	                finally
+	                {
+		                editor.TextChanged += EditorOnTextChanged;
+		                _isPasting = false;
+	                }
+                }
+                catch (Exception ex)
+                {
+	                // ignored
                 }
             }
         }
 
         void XpathResultDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            try
-            {
-                if (Result == null)
-                    return;
+	        try
+	        {
+		        if (Result == null)
+			        return;
 
-                var columnName = xpathResultDataGrid.Columns[e.ColumnIndex].Name;
-                var result = Result.AsQueryable();
+		        var columnName = xpathResultDataGrid.Columns[e.ColumnIndex].Name;
+		        var result = Result.AsQueryable();
 
-                if (_prevSortedColumn == e.ColumnIndex)
-                {
-                    Result = new XPathCollection(result.OrderBy(columnName));
-                    _prevSortedColumn = e.ColumnIndex;
-                }
-                else
-                {
-                    Result = new XPathCollection(result.OrderByDescending(columnName));
-                    _prevSortedColumn = -1;
-                }
+		        if (_prevSortedColumn == e.ColumnIndex)
+			        Result = new XPathCollection(result.OrderBy(columnName));
+		        else
+			        Result = new XPathCollection(result.OrderByDescending(columnName));
 
-                UpdateResultDataGrid(Result);
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message);
-            }
+		        _prevSortedColumn = e.ColumnIndex;
+
+		        UpdateResultDataGrid(Result);
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message);
+	        }
         }
 
         private void ButtonPrettyPrint_Click(object sender, EventArgs e)
         {
-            if (XmlBody == null)
-                return;
-
-            editor.ChangeTextWithoutCommit(XmlBody.PrintXml());
+	        try
+	        {
+		        var document = new XmlDocument();
+		        document.LoadXml(editor.Text);
+		        editor.ChangeTextWithoutCommit(document.PrintXml());
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message);
+	        }
         }
 
-        void ButtonFind_Click(object sender, EventArgs e)
+        async void ButtonFind_Click(object sender, EventArgs e)
         {
-            if (XmlBody == null)
-                return;
-
-            if (string.IsNullOrEmpty(XPathText.Text))
+	        if (string.IsNullOrEmpty(XPathText.Text))
             {
                 ReportStatus(Resources.XPathIsEmpty);
                 return;
             }
+	        ClearResultTap();
 
-            ClearResultTap();
+	        try
+	        {
+		        var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
 
-            try
-            {
-
-                var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
-
-                if (XmlBody.Select(getNodeNamesValue, out var result))
-                {
-                    Result = new XPathCollection(result);
-                    UpdateResultDataGrid(Result);
-                }
-                else
-                {
-                    ReportStatus(Resources.NoDataFound, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message);
-            }
+		        var navigator = await Task<XPathNavigator2>.Factory.StartNew((input) => XPATH.Select((string) input, getNodeNamesValue), editor.Text);
+		        if (navigator.Result.Any())
+		        {
+			        Result = new XPathCollection(navigator.Result);
+			        UpdateResultDataGrid(Result);
+		        }
+		        else
+		        {
+			        ReportStatus(Resources.NoDataFound, null);
+		        }
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message);
+	        }
         }
 
         async void UpdateResultDataGrid(IEnumerable<DGVXPathResult> items)

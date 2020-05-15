@@ -47,7 +47,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        void BuildRFSList(IReadOnlyCollection<XPathResult> collection)
+        void BuildRFSList(IList<XPathResult> collection)
         {
             if (collection == null || collection.Count == 0)
                 return;
@@ -219,7 +219,7 @@ namespace SPAFilter.SPA.Components.SRI
             }
         }
 
-        static void AddXmlNode(IReadOnlyCollection<XPathResult> collection, ICollection<XmlNode> catalogComponent)
+        static void AddXmlNode(IList<XPathResult> collection, ICollection<XmlNode> catalogComponent)
         {
             if (collection == null || collection.Count <= 0)
                 return;

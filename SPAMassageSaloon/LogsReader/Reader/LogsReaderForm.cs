@@ -886,7 +886,7 @@ namespace LogsReader.Reader
                     case Keys.T when e.Control && TreeMain.Enabled:
 	                    AddFileType(this, EventArgs.Empty);
                         break;
-                    case Keys.F when e.Control && TreeMain.Enabled:
+                    case Keys.J when e.Control && TreeMain.Enabled:
 	                    SetFolder(this, EventArgs.Empty);
                         break;
                     case Keys.P when e.Control && TreeMain.Enabled:
