@@ -13,8 +13,8 @@ namespace Utils
 	{
 		private readonly StringBuilder _internalXml;
 		private readonly Dictionary<XmlNode, XPathNavigatorResult> _resultCollection;
-		
-		internal Dictionary<int, int> Indexes_Source_Internal { get; private set; }
+
+        internal Dictionary<int, int> Indexes_Source_Internal { get; private set; }
 
         public string Xml { get; }
 
@@ -28,6 +28,7 @@ namespace Utils
 	    {
 		    Xml = sourceXml;
 		    _internalXml = new StringBuilder(Xml.Length);
+		    _resultCollection = new Dictionary<XmlNode, XPathNavigatorResult>();
             Document = new XmlDocument();
 		    Document.LoadXml(Xml);
 		    XPath = xpath;
@@ -38,14 +39,13 @@ namespace Utils
 			    {
 				    var navigator = (XPathNavigatorResult)result;
 				    navigator.Parent = this;
-				    _resultCollection = new Dictionary<XmlNode, XPathNavigatorResult> { { navigator.Node, navigator } };
+				    _resultCollection.Add(navigator.Node, navigator);
 			    }
 		    }
 		    else
 		    {
 			    if (Document.Select(XPath, out var result))
 			    {
-				    _resultCollection = new Dictionary<XmlNode, XPathNavigatorResult>();
 				    foreach (XPathNavigatorResult navigator in result)
 				    {
 					    navigator.Parent = this;
@@ -54,7 +54,7 @@ namespace Utils
 			    }
 		    }
 
-		    if (_resultCollection != null && _resultCollection.Count > 0)
+		    if (_resultCollection.Count > 0)
 		    {
 			    foreach (XmlNode child in Document.ChildNodes)
 			    {
@@ -137,10 +137,9 @@ namespace Utils
         void GetPositionInSourceText()
         {
 	        Indexes_Source_Internal = new Dictionary<int, int>();
-
-            var i = 0;
-            var j = -1;
-            for (i = 0; i < Xml.Length; i++)
+            
+	        var j = -1;
+            for (var i = 0; i < Xml.Length; i++)
             {
                 var ch = Xml[i];
                 if (char.IsWhiteSpace(ch))
@@ -162,8 +161,7 @@ namespace Utils
 
                 if (ch == outerCh || ((ch == '\'' || ch == '"') && (outerCh == '\'' || outerCh == '"')))
                 {
-	                Indexes_Source_Internal.Add(j, i);
-                    continue;
+                    Indexes_Source_Internal.Add(j, i);
                 }
                 else
                 {
@@ -199,7 +197,7 @@ namespace Utils
 
         public int Start => GetSourceIndex(InternalStart);
 
-        public int End => GetSourceIndex(InternalEnd);
+        public int End => GetSourceIndex(InternalEnd) + 1;
 
         public string Text
         {
@@ -207,7 +205,7 @@ namespace Utils
 	        {
 		        var start = Start;
 		        var end = End;
-		        return start >= 0 && end >= 0 && Parent.Xml.Length >= end ? Parent.Xml.Substring(start, end - start + 1) : null;
+		        return start >= 0 && end >= 0 && Parent.Xml.Length >= end ? Parent.Xml.Substring(start, end - start) : null;
 	        }
         }
 
