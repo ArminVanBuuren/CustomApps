@@ -82,7 +82,7 @@ namespace LogsReader.Reader.Forms
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (comboboxGroup.Text.IsNullOrEmptyTrim() || (_typesGroups.TryGetValue(comboboxGroup.Text, out var _) && _currentGroup != comboboxGroup.Text))
+			if (comboboxGroup.Text.IsNullOrEmptyTrim() || (_typesGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim()))
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;

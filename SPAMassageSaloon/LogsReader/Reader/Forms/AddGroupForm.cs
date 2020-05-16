@@ -66,7 +66,7 @@ namespace LogsReader.Reader.Forms
 
 		private void textBoxGroupName_TextChanged(object sender, EventArgs e)
 		{
-			if (_groups.TryGetValue(textBoxGroupName.Text, out var _))
+			if (_groups.TryGetValue(textBoxGroupName.Text.Trim(), out var _))
 			{
 				textBoxGroupName.BackColor = Color.LightPink;
 				buttonOK.Enabled = false;
