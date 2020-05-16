@@ -438,7 +438,7 @@ namespace LogsReader.Reader
 				        else
 					        return;
 			        }
-                    else if(folderForm.SourceFolder != null && items.TryGetValue(folderForm.SourceFolder, out var allDirSearching2))
+                    else if(folderForm.SourceFolder != null && items.TryGetValue(folderForm.SourceFolder, out var _))
 			        {
 				        items.RenameKey(folderForm.SourceFolder, folderForm.FolderPath);
 				        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
