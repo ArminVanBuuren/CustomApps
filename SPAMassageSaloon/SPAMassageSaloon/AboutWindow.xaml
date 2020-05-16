@@ -47,10 +47,11 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="950"/>
-                            <ColumnDefinition Width="450" />
+                            <ColumnDefinition Width="1100"/>
+                            <ColumnDefinition Width="350" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
@@ -62,10 +63,16 @@
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Config.jpg" Margin="5, 10, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Config.jpg" Margin="5, 5, 10, 10"></Image>
                         </StackPanel>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0">
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Options.jpg" Margin="5, 10, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="2" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="2" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                             <Expander Margin="2" Padding="5" Name="LRDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
@@ -104,11 +111,11 @@
                             <Expander Margin="2" Padding="5" Name="LRServers" Header="Servers" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="LRServersTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
-                            <Expander Margin="2" Padding="5" Name="LRLogsfolder" Header="Logs folder" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
-                                <TextBlock Name="LRLogsfolderTxt" TextWrapping="Wrap"></TextBlock>
-                            </Expander>
                             <Expander Margin="2" Padding="5" Name="LRFileTypes" Header="File Types" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="LRFileTypesTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                            <Expander Margin="2" Padding="5" Name="LRLogsfolder" Header="Logs folder" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
+                                <TextBlock Name="LRLogsfolderTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="LRMaxLines" Header="Max Lines" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="LRMaxLinesTxt" TextWrapping="Wrap"></TextBlock>
@@ -125,6 +132,12 @@
                             <Expander Margin="2" Padding="5" Name="LRTraceParse" Header="TraceParse" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="LRTraceParseTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
+                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                            <Expander Margin="2" Padding="5" Name="LROptions" Header="Options" IsExpanded="True" ExpandDirection="Right" Background="#19FF00FF">
+                                <TextBlock Name="LROptionsTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
@@ -133,8 +146,8 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="850" />
-                            <ColumnDefinition Width="550" />
+                            <ColumnDefinition Width="950" />
+                            <ColumnDefinition Width="500" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -248,8 +261,8 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="950" />
-                            <ColumnDefinition Width="450" />
+                            <ColumnDefinition Width="1050" />
+                            <ColumnDefinition Width="400" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -273,6 +286,31 @@
                             </Expander>
                             <Expander Margin="2" Padding="5" Name="XTPrettyPrint" Header="Pretty Print" IsExpanded="True" ExpandDirection="Right" Background="#1900FF51">
                                 <TextBlock Name="XTPrettyPrintTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="RegEx Tester" Width="100" Height="25">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="950" />
+                            <ColumnDefinition Width="500" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Source="/Resources/About/RegExTester_Form.jpg" Margin="5, 5, 10, 10"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" >
+                            <Expander Margin="2" Padding="5" Name="RTDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
+                                <TextBlock Name="RTDescriptionTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                         </StackPanel>
                     </Grid>

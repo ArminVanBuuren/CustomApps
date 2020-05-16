@@ -173,6 +173,9 @@
     <Resource Include="Resources\About\LogsReader_Form.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_Options.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\About\Beyond Wonderland.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\About\XPathTester_Form.JPG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\RegExTester_Form.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AboutWindow.xaml">

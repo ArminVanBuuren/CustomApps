@@ -360,7 +360,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Server(s), type(s) and folder(s) of the files must be chosen..
+        ///   Ищет локализованную строку, похожую на Options must be selected to perform the search. By mouse right click you can add group(s) of servers, file types, and directories to search..
         /// </summary>
         public static string Txt_Form_trvMainComment {
             get {
@@ -1093,7 +1093,7 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; nodes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting..
+        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options Singlel [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

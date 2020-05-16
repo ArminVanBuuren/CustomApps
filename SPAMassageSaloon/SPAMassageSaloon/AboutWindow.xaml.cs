@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using SPAMassageSaloon.Common;
 using Utils.UIControls;
@@ -64,8 +65,12 @@ namespace SPAMassageSaloon
             LRRowsLimitTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_RowsLimit;
             LROrderBy.Header = LogsReader.Properties.Resources.Txt_LogsReaderForm_OrderBy;
             LROrderByTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_OrderBy;
-
             LRTraceParseTxt.Text = LogsReader.Properties.Resources.Txt_LRSettingsScheme_TraceParse;
+
+            LROptions.Header = LogsReader.Properties.Resources.Txt_LogsReaderForm_Servers + Environment.NewLine +
+                               LogsReader.Properties.Resources.Txt_LogsReaderForm_Types + Environment.NewLine +
+                               LogsReader.Properties.Resources.Txt_LogsReaderForm_LogsFolder;
+            LROptionsTxt.Text = LogsReader.Properties.Resources.Txt_Form_trvMainComment;
 
             #endregion
 
@@ -114,6 +119,13 @@ namespace SPAMassageSaloon
             XTTestTxt.Text = XPathTester.Properties.Resources.XPathTooltip;
             XTPrettyPrint.Header = XPathTester.Properties.Resources.PrettyPrintText;
             XTPrettyPrintTxt.Text = XPathTester.Properties.Resources.PrettyPrintTooltip;
+
+            #endregion
+
+            #region RegEx Tester
+
+            RTDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
+            RTDescriptionTxt.Text = SPAMassageSaloon.Properties.Resources.RegExTester_Description;
 
             #endregion
         }

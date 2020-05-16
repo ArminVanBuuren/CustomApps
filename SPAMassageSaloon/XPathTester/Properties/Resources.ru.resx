@@ -134,7 +134,7 @@
     <value>Неверный XML документ{0}</value>
   </data>
   <data name="XPathIsEmpty" xml:space="preserve">
-    <value>XPath запрос не может быть пустым</value>
+    <value>Пустой XPath запрос</value>
   </data>
   <data name="XPathTooltip" xml:space="preserve">
     <value>Выполнить XPath запрос</value>

@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="RegExTester_Description" xml:space="preserve">
+    <value>Добавлено сторонее приложение.
+С RegEx Tester вы можете разрабатывать и тестировать своё регулярное выражение в соответствии с целевым текстом. Интерфейс предназначен, для помощи в разработке регулярных выражений. Он использует и поддерживает все функции, доступные в .NET RegEx Class.</value>
+  </data>
   <data name="Txt_About" xml:space="preserve">
     <value>О программе</value>
   </data>

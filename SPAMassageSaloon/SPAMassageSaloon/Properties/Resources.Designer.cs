@@ -181,6 +181,16 @@ namespace SPAMassageSaloon.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Added external application.
+        ///With RegEx Tester you can fully develop and test your regular expression against a target text. It&apos;s UI is designed to aid you in the RegEx developing. It uses and supports ALL of the features available in the .NET RegEx Class..
+        /// </summary>
+        internal static string RegExTester_Description {
+            get {
+                return ResourceManager.GetString("RegExTester_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на About.
         /// </summary>
         internal static string Txt_About {
