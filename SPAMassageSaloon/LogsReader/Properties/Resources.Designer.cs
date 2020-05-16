@@ -1038,7 +1038,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Directory path. File search is being made by all directories..
+        ///   Ищет локализованную строку, похожую на Directories for search. Enabled option allDirSearching=&quot;true&quot; performs a search in the top and in all child directories..
         /// </summary>
         public static string Txt_LRSettingsScheme_LogsDirectory {
             get {
