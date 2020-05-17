@@ -1,19 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
 using LogsReader.Reader;
+using Microsoft.Win32;
 using SPAMassageSaloon.Common;
 using Utils;
+using Utils.Handles;
 
 namespace LogsReader
 {
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
-        /// <summary>
+	    private static readonly object credentialSync = new object();
+	    private static readonly Dictionary<NetworkCredential, DateTime> _userCredentials;
+
+	    public static Dictionary<NetworkCredential, DateTime> UserCredentials
+	    {
+		    get
+		    {
+			    lock (credentialSync)
+				    return _userCredentials;
+		    }
+	    }
+
+	    /// <summary>
         /// Настройки схем
         /// </summary>
         public LRSettings AllSettings { get; }
@@ -34,6 +51,41 @@ namespace LogsReader
 
         public int ActiveTotalProgress => AllForms.Values.Where(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking)).Sum(x => x.Progress);
 
+        static LogsReaderMainForm()
+        {
+	        _userCredentials = new Dictionary<NetworkCredential, DateTime>();
+	        try
+	        {
+		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
+		        {
+			        var obj = reg[nameof(UserCredentials)];
+			        if (obj is byte[] array)
+			        {
+				        using (var stream = new MemoryStream(array))
+					        _userCredentials = new BinaryFormatter().Deserialize(stream) as Dictionary<NetworkCredential, DateTime>;
+			        }
+		        }
+	        }
+	        catch (Exception ex)
+	        {
+		        // ignored
+	        }
+        }
+
+        static void DeserializeUserCreditails()
+        {
+	        try
+	        {
+		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
+		        using (var stream = UserCredentials.SerializeToStream())
+			        reg[nameof(UserCredentials), RegistryValueKind.Binary] = stream.ToArray();
+	        }
+	        catch (Exception ex)
+	        {
+		        // ignored
+	        }
+        }
+
         public LogsReaderMainForm()
         {
             InitializeComponent();
@@ -43,7 +95,11 @@ namespace LogsReader
                 base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
 
                 KeyPreview = true;
-                Closing += (s, e) => { SaveData(); };
+                Closing += (s, e) =>
+                {
+	                SaveData();
+	                DeserializeUserCreditails();
+                };
                 Shown += (s, e) =>
                 {
                     ApplySettings();
@@ -105,7 +161,7 @@ namespace LogsReader
 
         private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
-            TabPage page = MainTabControl.TabPages[e.Index];
+            var page = MainTabControl.TabPages[e.Index];
             if (page == MainTabControl.SelectedTab)
             {
                 RenderTabPage(page, e, Color.FromArgb(0, 200, 205), Color.White);
@@ -120,8 +176,8 @@ namespace LogsReader
         {
             e.Graphics.FillRectangle(new SolidBrush(fore), e.Bounds);
 
-            Rectangle paddedBounds = e.Bounds;
-            int yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
+            var paddedBounds = e.Bounds;
+            var yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
             paddedBounds.Offset(1, yOffset);
             TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, text);
         }

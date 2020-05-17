@@ -83,6 +83,12 @@
     <Compile Include="Reader\Forms\AddFolder.Designer.cs">
       <DependentUpon>AddFolder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reader\Forms\AddUserCredentials.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\AddUserCredentials.Designer.cs">
+      <DependentUpon>AddUserCredentials.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reader\Forms\AddGroupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +105,8 @@
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
     <Compile Include="Reader\DataTemplatesDuplicateComparer.cs" />
+    <Compile Include="Reader\LogsReaderControl.cs" />
+    <Compile Include="Reader\LogsReaderRaw.cs" />
     <Compile Include="Reader\TraceReader.cs" />
     <Compile Include="Reader\LogsReaderPerformer.cs" />
     <Compile Include="Reader\LogsReaderForm.cs">
@@ -137,6 +145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\Forms\AddFolder.resx">
       <DependentUpon>AddFolder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\AddUserCredentials.resx">
+      <DependentUpon>AddUserCredentials.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\Forms\AddGroupForm.resx">
       <DependentUpon>AddGroupForm.cs</DependentUpon>
@@ -205,6 +216,7 @@
   <ItemGroup>
     <Content Include="Resources\add.png" />
     <Content Include="Resources\cancel.png" />
+    <Content Include="Resources\connectionLocked.png" />
     <Content Include="Resources\default.png" />
     <Content Include="Resources\Ok.png" />
     <Content Include="Resources\ping.png" />

@@ -943,14 +943,17 @@ namespace LogsReader.Reader
 
                     var folders = GetFolders(true);
 
-                    MainReader = new LogsReaderPerformer(CurrentSettings, servers, fileTypes, folders, txtPattern.Text, useRegex.Checked, filter);
+                    MainReader = new LogsReaderPerformer(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
                     MainReader.OnProcessReport += ReportProcessStatus;
 
                     stop.Start();
                     IsWorking = true;
                     ChangeFormStatus();
-                    ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 
+                    ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
+                    await MainReader.GetTargetFilesAsync();
+
+                    ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
                     await MainReader.StartAsync();
 
                     OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);

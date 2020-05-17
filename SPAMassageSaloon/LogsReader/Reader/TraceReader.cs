@@ -12,7 +12,7 @@ namespace LogsReader.Reader
 
     public abstract class TraceReader
     {
-        private readonly LogsReaderPerformer _mainReader;
+        private readonly LogsReaderControl _settings;
 
         protected Queue<string> PastTraceLines { get; }
 
@@ -20,12 +20,12 @@ namespace LogsReader.Reader
 
         public event FoundDataTemplate OnFound;
 
-        public Func<string, bool> IsMatchSearchPatternFunc => _mainReader.IsMatchSearchPatternFunc;
+        public Func<string, bool> IsMatchSearchPatternFunc => _settings.IsMatchSearchPatternFunc;
 
         /// <summary>
         /// Текущая схема настроек
         /// </summary>
-        public LRSettingsScheme CurrentSettings => _mainReader.CurrentSettings;
+        public LRSettingsScheme CurrentSettings => _settings.CurrentSettings;
 
         protected int MaxTraceLines => CurrentSettings.MaxLines;
 
@@ -38,9 +38,9 @@ namespace LogsReader.Reader
 
         public long Lines { get; protected set; } = 0;
 
-        protected TraceReader(string server, string filePath, string originalFolder, LogsReaderPerformer mainReader)
+        protected TraceReader(string server, string filePath, string originalFolder, LogsReaderControl settings)
         {
-            _mainReader = mainReader;
+            _settings = settings;
 
             PastTraceLines = new Queue<string>(MaxTraceLines);
 

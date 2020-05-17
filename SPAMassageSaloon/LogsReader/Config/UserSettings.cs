@@ -188,9 +188,7 @@ namespace LogsReader.Config
             try
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-                {
-                    return (string)schemeControl[$"{UserName}_{name}"] ?? string.Empty;
-                }
+	                return (string)schemeControl[$"{UserName}_{name}"] ?? string.Empty;
             }
             catch (Exception)
             {
@@ -206,9 +204,7 @@ namespace LogsReader.Config
             try
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-                {
-                    schemeControl[$"{UserName}_{name}"] = value;
-                }
+	                schemeControl[$"{UserName}_{name}"] = value;
             }
             catch (Exception)
             {

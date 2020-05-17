@@ -103,6 +103,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap connectionLocked {
+            get {
+                object obj = ResourceManager.GetObject("connectionLocked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap filter {
             get {
                 object obj = ResourceManager.GetObject("filter", resourceCulture);
@@ -711,6 +721,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Log files searching....
+        /// </summary>
+        public static string Txt_LogsReaderForm_LogFilesSearching {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_LogFilesSearching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Folders.
         /// </summary>
         public static string Txt_LogsReaderForm_LogsFolder {
@@ -734,6 +753,24 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_MaxThreads {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_MaxThreads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No access to server &apos;{0}&apos; to reach target path &apos;{1}&apos;..
+        /// </summary>
+        public static string Txt_LogsReaderForm_NoAccessToServer {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NoAccessToServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Please try again..
+        /// </summary>
+        public static string Txt_LogsReaderForm_NoAccessToServerTryAgain {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NoAccessToServerTryAgain", resourceCulture);
             }
         }
         
@@ -905,6 +942,15 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_Working {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_Working", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Target files not found.
+        /// </summary>
+        public static string Txt_LogsReaderPerformer_FilesNotInitialized {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderPerformer_FilesNotInitialized", resourceCulture);
             }
         }
         
