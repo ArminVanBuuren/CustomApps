@@ -489,14 +489,17 @@ Input data:
   <data name="connectionLocked" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\connectionlocked.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Txt_LogsReaderForm_AccessDenied" xml:space="preserve">
+    <value>Access denied to reach the target path '{0}'.</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AccessDeniedAuthor" xml:space="preserve">
+    <value>You must log in.</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AccessDeniedTryAgain" xml:space="preserve">
+    <value>Please try again.</value>
+  </data>
   <data name="Txt_LogsReaderForm_LogFilesSearching" xml:space="preserve">
     <value>Log files searching...</value>
-  </data>
-  <data name="Txt_LogsReaderForm_NoAccessToServer" xml:space="preserve">
-    <value>No access to server '{0}' to reach target path '{1}'.</value>
-  </data>
-  <data name="Txt_LogsReaderForm_NoAccessToServerTryAgain" xml:space="preserve">
-    <value>Please try again.</value>
   </data>
   <data name="Txt_LogsReaderPerformer_FilesNotInitialized" xml:space="preserve">
     <value>Target files not found</value>

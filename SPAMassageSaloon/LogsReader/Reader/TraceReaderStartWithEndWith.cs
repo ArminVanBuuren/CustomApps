@@ -9,8 +9,8 @@ namespace LogsReader.Reader
         public Regex StartTraceWith => CurrentSettings.TraceParse.StartTraceWith;
         public Regex EndTraceWith => CurrentSettings.TraceParse.EndTraceWith;
 
-        public TraceReaderStartWithEndWith(string server, string filePath, string originalFolder, LogsReaderControl mainReader)
-	        : base(server, filePath, originalFolder, mainReader) { }
+        public TraceReaderStartWithEndWith(LogsReaderControl control, string server, string filePath, string originalFolder)
+	        : base(control, server, filePath, originalFolder) { }
 
         public override void ReadLine(string line)
         {
@@ -34,7 +34,7 @@ namespace LogsReader.Reader
                 }
             }
 
-            if (!IsMatchSearchPatternFunc.Invoke(line))
+            if (!IsMatchLineFunc.Invoke(line))
             {
                 PastTraceLines.Enqueue(line);
                 if (PastTraceLines.Count > MaxTraceLines)

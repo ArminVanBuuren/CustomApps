@@ -12,7 +12,7 @@ namespace LogsReader.Reader
 {
 	public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
-    public class LogsReaderPerformer : LogsReaderRaw
+    public class LogsReaderPerformer : LogsReaderFiles
     {
         private readonly object _syncRootMatches = new object();
         private int _countMatches;
@@ -53,7 +53,8 @@ namespace LogsReader.Reader
 	        IEnumerable<string> servers,
 	        IEnumerable<string> fileTypes,
 	        IReadOnlyDictionary<string, bool> folders, 
-	        DataFilter filter) :base(settings, findMessage, useRegex, servers, fileTypes, folders)
+	        DataFilter filter) 
+	        :base(settings, findMessage, useRegex, servers, fileTypes, folders)
         {
 	        Filter = filter;
         }

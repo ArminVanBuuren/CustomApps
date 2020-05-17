@@ -106,7 +106,7 @@
     <Compile Include="Reader\DataTemplateCollection.cs" />
     <Compile Include="Reader\DataTemplatesDuplicateComparer.cs" />
     <Compile Include="Reader\LogsReaderControl.cs" />
-    <Compile Include="Reader\LogsReaderRaw.cs" />
+    <Compile Include="Reader\LogsReaderFiles.cs" />
     <Compile Include="Reader\TraceReader.cs" />
     <Compile Include="Reader\LogsReaderPerformer.cs" />
     <Compile Include="Reader\LogsReaderForm.cs">

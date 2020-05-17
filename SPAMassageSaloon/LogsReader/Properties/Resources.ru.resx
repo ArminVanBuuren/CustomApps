@@ -417,14 +417,17 @@
   <data name="Txt_ServerGroups_ErrUnique" xml:space="preserve">
     <value>Имена групп серверов должны быть уникальными!</value>
   </data>
+  <data name="Txt_LogsReaderForm_AccessDenied" xml:space="preserve">
+    <value>Нет доступа к достижению пути '{0}'.</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AccessDeniedAuthor" xml:space="preserve">
+    <value>Вы должны авторизоваться.</value>
+  </data>
+  <data name="Txt_LogsReaderForm_AccessDeniedTryAgain" xml:space="preserve">
+    <value>Пожалуйста повторите.</value>
+  </data>
   <data name="Txt_LogsReaderForm_LogFilesSearching" xml:space="preserve">
     <value>Поиск лог файлов...</value>
-  </data>
-  <data name="Txt_LogsReaderForm_NoAccessToServer" xml:space="preserve">
-    <value>Нет доступа до сервера '{0}' чтобы открыть '{1}'.</value>
-  </data>
-  <data name="Txt_LogsReaderForm_NoAccessToServerTryAgain" xml:space="preserve">
-    <value>Пожалуйста повторите.</value>
   </data>
   <data name="Txt_LogsReaderPerformer_FilesNotInitialized" xml:space="preserve">
     <value>Лог файлы не найдены</value>

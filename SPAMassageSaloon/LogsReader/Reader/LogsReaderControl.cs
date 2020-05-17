@@ -7,19 +7,17 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public abstract class LogsReaderControl : IDisposable
+	public abstract class LogsReaderControl
 	{
-		/// <summary>
-		/// Запрос на ожидание остановки выполнения поиска
-		/// </summary>
-		public bool IsStopPending { get; private set; } = false;
-
 		/// <summary>
 		/// Текущая схема настроек
 		/// </summary>
 		public LRSettingsScheme CurrentSettings { get; }
 
-		public Func<string, bool> IsMatchSearchPatternFunc { get; }
+		/// <summary>
+		/// Поиск совпадения в одной строке
+		/// </summary>
+		public Func<string, bool> IsMatchLineFunc { get; }
 
 		protected LogsReaderControl(LRSettingsScheme settings, string findMessage, bool useRegex)
 		{
@@ -31,31 +29,18 @@ namespace LogsReader.Reader
 					throw new ArgumentException(string.Format(Resources.Txt_LogsReaderPerformer_IncorrectSearchPattern, findMessage));
 
 				var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, new TimeSpan(0, 0, 1));
-				IsMatchSearchPatternFunc = input => searchPattern.IsMatch(input);
+				IsMatchLineFunc = input => searchPattern.IsMatch(input);
 			}
 			else
 			{
-				IsMatchSearchPatternFunc = input => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
+				IsMatchLineFunc = input => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
 			}
 		}
 
-		public abstract Task GetTargetFilesAsync();
-
-		public abstract Task StartAsync();
-
-		public virtual void Stop()
+		protected LogsReaderControl(LogsReaderControl control)
 		{
-			IsStopPending = true;
-		}
-
-		public virtual void Reset()
-		{
-			IsStopPending = false;
-		}
-
-		public void Dispose()
-		{
-			Reset();
+			CurrentSettings = control.CurrentSettings;
+			IsMatchLineFunc = control.IsMatchLineFunc;
 		}
 	}
 }

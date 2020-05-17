@@ -550,6 +550,33 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Access denied to reach the target path &apos;{0}&apos;..
+        /// </summary>
+        public static string Txt_LogsReaderForm_AccessDenied {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на You must log in..
+        /// </summary>
+        public static string Txt_LogsReaderForm_AccessDeniedAuthor {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AccessDeniedAuthor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Please try again..
+        /// </summary>
+        public static string Txt_LogsReaderForm_AccessDeniedTryAgain {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_AccessDeniedTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Add file type [Ctrl+T].
         /// </summary>
         public static string Txt_LogsReaderForm_AddFileType {
@@ -753,24 +780,6 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_MaxThreads {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_MaxThreads", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на No access to server &apos;{0}&apos; to reach target path &apos;{1}&apos;..
-        /// </summary>
-        public static string Txt_LogsReaderForm_NoAccessToServer {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_NoAccessToServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Please try again..
-        /// </summary>
-        public static string Txt_LogsReaderForm_NoAccessToServerTryAgain {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_NoAccessToServerTryAgain", resourceCulture);
             }
         }
         

@@ -12,17 +12,22 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public abstract class LogsReaderRaw : LogsReaderControl
+	public abstract class LogsReaderFiles : LogsReaderControl, IDisposable
 	{
 		private readonly IEnumerable<string> _servers;
 		private readonly IEnumerable<string> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
 
+		/// <summary>
+		/// Запрос на ожидание остановки выполнения поиска
+		/// </summary>
+		public bool IsStopPending { get; private set; } = false;
+
 		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
-		protected LogsReaderRaw(
+		protected LogsReaderFiles(
 			LRSettingsScheme settings, 
 			string findMessage,  
 			bool useRegex, 
@@ -36,7 +41,7 @@ namespace LogsReader.Reader
 			_folders = folders;
 		}
 
-		public override async Task GetTargetFilesAsync()
+		public async Task GetTargetFilesAsync()
 		{
 			if (IsStopPending)
 				return;
@@ -52,13 +57,13 @@ namespace LogsReader.Reader
 
 			Func<string, string, string, TraceReader> _getTraceReader;
 			if (CurrentSettings.TraceParse.StartTraceWith != null && CurrentSettings.TraceParse.EndTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWithEndWith(server, filePath, originalFolder, this);
+				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWithEndWith(this, server, filePath, originalFolder);
 			else if (CurrentSettings.TraceParse.StartTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWith(server, filePath, originalFolder, this);
+				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWith(this, server, filePath, originalFolder);
 			else if (CurrentSettings.TraceParse.EndTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderEndWith(server, filePath, originalFolder, this);
+				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderEndWith(this, server, filePath, originalFolder);
 			else
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderSimple(server, filePath, originalFolder, this);
+				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderSimple(this, server, filePath, originalFolder);
 
 			foreach (var serverName in _servers)
 			{
@@ -76,8 +81,7 @@ namespace LogsReader.Reader
 
 					var serverFolder = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$\\{folderMatch.Groups["FULL"]}";
 
-					
-					if(!IsExistAndAvailable(serverFolder, serverName, folderMatch.Groups["FULL"]?.Value))
+					if(!IsExistAndAvailable(serverFolder))
 						continue;
 
 					var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
@@ -105,7 +109,7 @@ namespace LogsReader.Reader
 			return kvpList;
 		}
 
-		bool IsExistAndAvailable(string serverFolder, string serverName, string directoryPath)
+		bool IsExistAndAvailable(string serverFolder)
 		{
 			try
 			{
@@ -143,12 +147,15 @@ namespace LogsReader.Reader
 				{
 					var tryCount = 0;
 					AddUserCredentials credential = null;
-					var additional = string.Empty;
+					var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, serverFolder);
+					var additionalTxt = string.Empty;
 					while (tryCount < 3)
 					{
+						if (IsStopPending)
+							return false;
+
 						credential = new AddUserCredentials(
-							(string.Format(Resources.Txt_LogsReaderForm_NoAccessToServer, serverName, directoryPath)
-							 + Environment.NewLine + additional).Trim(),
+							(accessDeniedTxt + Environment.NewLine + Resources.Txt_LogsReaderForm_AccessDeniedAuthor + Environment.NewLine + additionalTxt).Trim(),
 							credential?.Credential?.Domain,
 							credential?.Credential?.UserName);
 
@@ -167,12 +174,12 @@ namespace LogsReader.Reader
 							}
 							catch (Exception ex)
 							{
-								additional = Resources.Txt_LogsReaderForm_NoAccessToServerTryAgain;
+								additionalTxt = Resources.Txt_LogsReaderForm_AccessDeniedTryAgain;
 							}
 						}
 						else
 						{
-							break;
+							throw new Exception(accessDeniedTxt);
 						}
 					}
 				}
@@ -181,7 +188,14 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		public override void Reset()
+		public abstract Task StartAsync();
+
+		public virtual void Stop()
+		{
+			IsStopPending = true;
+		}
+
+		public virtual void Reset()
 		{
 			if (Connections != null)
 			{
@@ -196,11 +210,18 @@ namespace LogsReader.Reader
 						// ignored
 					}
 				}
+
+				Connections.Clear();
 			}
 
 			TraceReaders = null;
 
-			base.Reset();
+			IsStopPending = false;
+		}
+
+		public void Dispose()
+		{
+			Reset();
 		}
 
 		static bool IsAllowedExtension(string fileName)
