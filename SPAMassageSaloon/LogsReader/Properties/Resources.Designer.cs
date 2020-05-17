@@ -550,7 +550,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Access denied to reach the target path &apos;{0}&apos;..
+        ///   Ищет локализованную строку, похожую на Access to the server &apos;{0}&apos; is denied. Failed to reach the target path &apos;{1}&apos;..
         /// </summary>
         public static string Txt_LogsReaderForm_AccessDenied {
             get {
@@ -564,15 +564,6 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_AccessDeniedAuthor {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_AccessDeniedAuthor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Please try again..
-        /// </summary>
-        public static string Txt_LogsReaderForm_AccessDeniedTryAgain {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_AccessDeniedTryAgain", resourceCulture);
             }
         }
         

@@ -418,13 +418,10 @@
     <value>Имена групп серверов должны быть уникальными!</value>
   </data>
   <data name="Txt_LogsReaderForm_AccessDenied" xml:space="preserve">
-    <value>Нет доступа к достижению пути '{0}'.</value>
+    <value>Нет доступа к серверу '{0}'. Невозможно получить доступ к '{1}'.</value>
   </data>
   <data name="Txt_LogsReaderForm_AccessDeniedAuthor" xml:space="preserve">
     <value>Вы должны авторизоваться.</value>
-  </data>
-  <data name="Txt_LogsReaderForm_AccessDeniedTryAgain" xml:space="preserve">
-    <value>Пожалуйста повторите.</value>
   </data>
   <data name="Txt_LogsReaderForm_LogFilesSearching" xml:space="preserve">
     <value>Поиск лог файлов...</value>

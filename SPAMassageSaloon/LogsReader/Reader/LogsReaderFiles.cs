@@ -81,7 +81,7 @@ namespace LogsReader.Reader
 
 					var serverFolder = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$\\{folderMatch.Groups["FULL"]}";
 
-					if(!IsExistAndAvailable(serverFolder))
+					if(!IsExistAndAvailable(serverFolder, serverName, originalFolder.Key))
 						continue;
 
 					var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
@@ -109,7 +109,7 @@ namespace LogsReader.Reader
 			return kvpList;
 		}
 
-		bool IsExistAndAvailable(string serverFolder)
+		bool IsExistAndAvailable(string serverFolder, string server, string folderPath)
 		{
 			try
 			{
@@ -147,15 +147,15 @@ namespace LogsReader.Reader
 				{
 					var tryCount = 0;
 					AddUserCredentials credential = null;
-					var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, serverFolder);
-					var additionalTxt = string.Empty;
+					var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
+					var additionalTxt = Resources.Txt_LogsReaderForm_AccessDeniedAuthor;
 					while (tryCount < 3)
 					{
 						if (IsStopPending)
 							return false;
 
 						credential = new AddUserCredentials(
-							$"{accessDeniedTxt}\r\n{Resources.Txt_LogsReaderForm_AccessDeniedAuthor} {additionalTxt}".Trim(),
+							$"{accessDeniedTxt}\r\n{additionalTxt}".Trim(),
 							credential?.Credential?.Domain,
 							credential?.Credential?.UserName);
 
@@ -174,12 +174,13 @@ namespace LogsReader.Reader
 							}
 							catch (Exception ex)
 							{
-								additionalTxt = Resources.Txt_LogsReaderForm_AccessDeniedTryAgain;
+								additionalTxt = ex.Message;
+								NetworkConnection.CancelConnection(serverFolder);
 							}
 						}
 						else
 						{
-							throw new Exception(accessDeniedTxt);
+							break;
 						}
 					}
 				}
