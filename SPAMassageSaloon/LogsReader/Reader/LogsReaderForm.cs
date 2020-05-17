@@ -889,6 +889,7 @@ namespace LogsReader.Reader
                     case Keys.J when e.Control && TreeMain.Enabled:
 	                    SetFolder(this, EventArgs.Empty);
                         break;
+                    case Keys.Enter when TreeMain.Enabled && TreeMain.Focused:
                     case Keys.P when e.Control && TreeMain.Enabled:
 	                    OpenProperties(this, EventArgs.Empty);
 	                    break;
