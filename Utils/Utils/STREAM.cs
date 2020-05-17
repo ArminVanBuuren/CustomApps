@@ -10,7 +10,7 @@ namespace Utils
     {
         public static void GarbageCollect()
         {
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 GC.WaitForPendingFinalizers();
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
@@ -20,7 +20,7 @@ namespace Utils
 
         public static MemoryStream SerializeToStream(this object obj)
         {
-            MemoryStream stream = new MemoryStream();
+            var stream = new MemoryStream();
             IFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, obj);
             return stream;
@@ -30,7 +30,7 @@ namespace Utils
         {
             IFormatter formatter = new BinaryFormatter();
             stream.Seek(0, SeekOrigin.Begin);
-            object obj = formatter.Deserialize(stream);
+            var obj = formatter.Deserialize(stream);
             return obj;
         }
 

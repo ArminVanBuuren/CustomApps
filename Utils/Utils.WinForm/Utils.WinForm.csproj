@@ -110,6 +110,9 @@
     <Compile Include="Expander\ExpandCollapsePanelActionList.cs" />
     <Compile Include="Expander\ExpandCollapsePanelDesigner.cs" />
     <Compile Include="FlashWindow.cs" />
+    <Compile Include="GrowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Handles\FormLocation.cs" />
     <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
@@ -212,6 +215,9 @@
     </Compile>
     <Compile Include="Notepad\Notepad.Designer.cs">
       <DependentUpon>Notepad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

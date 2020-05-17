@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 //using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -208,7 +211,61 @@ namespace Tester.Console
         {
             try
             {
-	            var sfewfwe = IO.SafeReadFile(@"C:\SMSTemplateProcessor.01.xml");
+                //
+                test:
+                try
+                {
+	                try
+	                {
+		                using (var dd1111 = new NetworkConnection(@"\\f6-spa-sa01\c$", new NetworkCredential(@"foris6\vhovanskij", "IO%11111")))
+		                {
+
+		                }
+
+                        //var dd111= Directory.GetAccessControl(@"\\f6-spa-sa01\c$");
+                        //var exist = Directory.Exists(@"\\f6-spa-sa01\c$");
+		                //var files1 = Directory.GetFiles(@"\\f6-spa-sa01\c$\forislog\", "*", SearchOption.AllDirectories);
+                    }
+	               
+	                catch (InvalidOperationException ex)
+	                {
+		                var type = ex.GetType();
+	                }
+	                catch (Exception e) { }
+
+                    using (var dd111 = new NetworkConnection(@"\\f6-mg05\c$", new NetworkCredential(@"foris6\vhovanskij", "IO%11111")))
+	                {
+		                
+	                }
+
+                    var files = Directory.GetFiles(@"\\f6-mg05\c$\forislog\mg", "*", SearchOption.AllDirectories);
+
+	                
+
+                    Ping x = new Ping();
+	                PingReply reply = x.Send("f6-mg02", 10000);
+
+	                if (reply.Status == IPStatus.Success)
+		                System.Console.WriteLine("Address is accessible");
+                }
+                catch (Exception e)
+                {
+	                var type = e.GetType();
+	                var res1111 = NetworkShare.ConnectToShare(@"\\f6-mg02\c$\forislog\mg", @"foris6\vhovanskij", "IO%11111");
+	                goto test;
+                }
+
+                if (Directory.Exists(@"\\f6-mg02\c$\forislog\mg"))
+	            {
+		            var res1111 = NetworkShare.ConnectToShare(@"\\f6-mg02\c$\forislog\mg", @"foris6\vhovanskij", "IO%11111");
+                    var files = Directory.GetFiles(@"\\f6-mg02\c$\forislog\mg", "*", SearchOption.AllDirectories);
+                }
+                else
+                {
+	                
+                }
+
+                var sfewfwe = IO.SafeReadFile(@"C:\SMSTemplateProcessor.01.xml");
 	            //var sfewfwe = IO.SafeReadFile(@"C:\1.xml");
 	            var res111 = XPATH.Select(sfewfwe, @"//template");
 

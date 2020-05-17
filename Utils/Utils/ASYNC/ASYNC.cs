@@ -153,8 +153,6 @@ namespace Utils
             }
         }
 
-
-
         public static T Run<T>(TimeSpan timeout, Func<T> operation)
         {
             Exception error = null;
