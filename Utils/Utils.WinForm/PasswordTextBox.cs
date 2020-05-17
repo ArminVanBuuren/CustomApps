@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
@@ -11,26 +12,27 @@ namespace Utils.WinForm
     public class PasswordTextBox : TextBox
     {
         private readonly Timer timer;
-        private char[] adminPassword;
+        private readonly List<char> adminPassword;
         private readonly char DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.ToCharArray()[0];
         private int m_iCaretPosition = 0;
         private bool canEdit = true;
-        private const int PWD_LENGTH = 8;
+
+        public int HideCharIntervalMsec => timer.Interval;
 
         /// <summary>
         /// 
         /// </summary>
         public PasswordTextBox()
         {
-            timer = new Timer { Interval = 250 };
+	        adminPassword = new List<char>(8);
+            timer = new Timer { Interval = 1000 };
             timer.Tick += timer_Tick;
-            adminPassword = new char[8];
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string AdminPassword => new string(adminPassword).Trim('\0').Replace("\0", "");
+        public string AdminPassword => string.Join("", adminPassword).Trim('\0').Replace("\0", "");
 
         /// <summary>
         /// 
@@ -90,8 +92,7 @@ namespace Utils.WinForm
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Delete)
             {
-                canEdit = false;
-                DeleteSelectedCharacters(this, e.KeyCode);
+	            DeleteSelectedCharacters(this, e.KeyCode);
             }
         }
 
@@ -111,7 +112,7 @@ namespace Utils.WinForm
 	            {
 		            [index - 1] = '*'
 	            };
-	            this.Invoke(new Action(() =>
+	            this.SafeInvoke(new Action(() =>
                 {
                     this.Text = s.ToString();
                     this.SelectionStart = index;
@@ -127,6 +128,7 @@ namespace Utils.WinForm
             var selectionStart = this.SelectionStart;
             var length = this.TextLength;
             var selectedChars = this.SelectionLength;
+            var eModified = (Keys)e.KeyChar;
             canEdit = false;
 
             if (selectedChars == length)
@@ -134,10 +136,17 @@ namespace Utils.WinForm
                 /*
                  * Means complete text selected so clear it before using it
                  */
-                ClearCharBufferPlusTextBox();
+                if (Keys.Back == eModified)
+                {
+	                canEdit = true;
+	                ClearCharBufferPlusTextBox();
+                    return;
+                }
+                else
+                {
+	                ClearCharBufferPlusTextBox();
+                }
             }
-
-            var eModified = (Keys)e.KeyChar;
 
             if (e.KeyChar == DecimalSeparator)
             {
@@ -155,9 +164,13 @@ namespace Utils.WinForm
                         }
                         else
                         {
-                            if (this.TextLength < PWD_LENGTH)
+                            if (adminPassword.Count > selectionStart)
                             {
-                                adminPassword = new string(adminPassword).Insert(selectionStart, e.KeyChar.ToString()).ToCharArray();
+	                            adminPassword.Insert(selectionStart, e.KeyChar);
+                            }
+                            else
+                            {
+	                            adminPassword.Add(e.KeyChar);
                             }
                         }
                     }
@@ -167,7 +180,7 @@ namespace Utils.WinForm
                     if (this.TextLength == 0)
                     {
                         e.Handled = true;
-                        Array.Clear(adminPassword, 0, adminPassword.Length);
+                        adminPassword.Clear();
                     }
                 }
             }
@@ -191,70 +204,80 @@ namespace Utils.WinForm
         /// <param name="key"></param>
         private void DeleteSelectedCharacters(object sender, Keys key)
         {
-            var selectionStart = this.SelectionStart;
-            var length = this.TextLength;
-            var selectedChars = this.SelectionLength;
+	        try
+	        {
+                var selectionStart = this.SelectionStart;
+                var length = this.TextLength;
+                var selectedChars = this.SelectionLength;
 
-            if (selectedChars == length)
-            {
-                ClearCharBufferPlusTextBox();
-                return;
-            }
+                if (selectedChars == length)
+                {
+                    ClearCharBufferPlusTextBox();
+                    return;
+                }
 
-            if (selectedChars > 0)
-            {
-                var i = selectionStart;
-                this.Text.Remove(selectionStart, selectedChars);
-                adminPassword = new string(adminPassword).Remove(selectionStart, selectedChars).ToCharArray();
-            }
-            else
-            {
-                /*
-                 * Basically this portion of code is to handle the condition 
-                 * when the cursor is placed at the start or in the end 
-                 */
-                if (selectionStart == 0)
+                if (selectedChars > 0)
+                {
+                    var i = selectionStart;
+                    this.Text.Remove(selectionStart, selectedChars);
+                    adminPassword.RemoveRange(selectionStart, selectedChars);
+                }
+                else
                 {
                     /*
-                    * Cursor in the beginning, before the first character 
-                    * Delete the character only when Del is pressed, No action when Back key is pressed
-                    */
-                    if (key == Keys.Delete)
+                     * Basically this portion of code is to handle the condition 
+                     * when the cursor is placed at the start or in the end 
+                     */
+                    if (selectionStart == 0)
                     {
-                        adminPassword = new string(adminPassword).Remove(0, 1).ToCharArray();
+                        /*
+                        * Cursor in the beginning, before the first character 
+                        * Delete the character only when Del is pressed, No action when Back key is pressed
+                        */
+                        if (key == Keys.Delete)
+                        {
+                            adminPassword.RemoveAt(0);
+                        }
+                    }
+                    else if (selectionStart > 0 && selectionStart < length)
+                    {
+                        /*
+                        * Cursor position anywhere in between 
+                        * Backspace and Delete have the same effect
+                        */
+                        if (key == Keys.Delete)
+                        {
+                            adminPassword.RemoveAt(selectionStart);
+                        }
+                        else if (key == Keys.Back)
+                        {
+                            adminPassword.RemoveAt(selectionStart - 1);
+                        }
+                    }
+                    else if (selectionStart == length)
+                    {
+                        /*
+                        * Cursor at the end, after the last character 
+                        * Delete the character only when Back key is pressed, No action when Delete key is pressed
+                        */
+                        if (key == Keys.Back)
+                        {
+                            adminPassword.RemoveAt(selectionStart - 1);
+                        }
                     }
                 }
-                else if (selectionStart > 0 && selectionStart < length)
-                {
-                    /*
-                    * Cursor position anywhere in between 
-                    * Backspace and Delete have the same effect
-                    */
-                    if (key == Keys.Back || key == Keys.Delete)
-                    {
-                        adminPassword = new string(adminPassword).Remove(selectionStart, 1).ToCharArray();
-                    }
-                }
-                else if (selectionStart == length)
-                {
-                    /*
-                    * Cursor at the end, after the last character 
-                    * Delete the character only when Back key is pressed, No action when Delete key is pressed
-                    */
-                    if (key == Keys.Back)
-                    {
-                        adminPassword = new string(adminPassword).Remove(selectionStart - 1, 1).ToCharArray();
-                    }
-                }
+
+                this.Select((selectionStart > this.Text.Length ? this.Text.Length : selectionStart), 0);
             }
-
-            this.Select((selectionStart > this.Text.Length ? this.Text.Length : selectionStart), 0);
-
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
         }
 
         private void ClearCharBufferPlusTextBox()
         {
-            Array.Clear(adminPassword, 0, adminPassword.Length);
+	        adminPassword.Clear();
             this.Clear();
         }
     }
