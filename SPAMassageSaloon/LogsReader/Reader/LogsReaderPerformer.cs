@@ -65,6 +65,8 @@ namespace LogsReader.Reader
 
 	        if (TraceReaders == null)
 		        throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
+	        if (TraceReaders.Count <= 0)
+		        throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
             // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
             var maxThreads = CurrentSettings.MaxThreads <= 0 ? TraceReaders.Count : CurrentSettings.MaxThreads;

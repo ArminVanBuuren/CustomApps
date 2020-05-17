@@ -929,60 +929,61 @@ namespace LogsReader.Reader
                 var stop = new Stopwatch();
                 try
                 {
-                    var filter = alreadyUseFilter.Checked ? GetFilter() : null;
+	                var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
-                    var servers = new List<string>();
-                    foreach (TreeNode childTreeNode in treeNodeServersGroup.Nodes)
-	                    servers.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
-                    servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+	                var servers = new List<string>();
+	                foreach (TreeNode childTreeNode in treeNodeServersGroup.Nodes)
+		                servers.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+	                servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
-                    var fileTypes = new List<string>();
-                    foreach (TreeNode childTreeNode in treeNodeTypesGroup.Nodes)
-	                    fileTypes.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
-                    fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+	                var fileTypes = new List<string>();
+	                foreach (TreeNode childTreeNode in treeNodeTypesGroup.Nodes)
+		                fileTypes.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+	                fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
-                    var folders = GetFolders(true);
+	                var folders = GetFolders(true);
 
-                    MainReader = new LogsReaderPerformer(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
-                    MainReader.OnProcessReport += ReportProcessStatus;
+	                MainReader = new LogsReaderPerformer(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
+	                MainReader.OnProcessReport += ReportProcessStatus;
 
-                    stop.Start();
-                    IsWorking = true;
-                    ChangeFormStatus();
+	                stop.Start();
+	                IsWorking = true;
+	                ChangeFormStatus();
 
-                    ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
-                    await MainReader.GetTargetFilesAsync();
+	                ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
+	                await MainReader.GetTargetFilesAsync();
 
-                    ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
-                    await MainReader.StartAsync();
+	                ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+	                await MainReader.StartAsync();
 
-                    OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
-                    OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
+	                OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
+	                if (MainReader.ResultsOfError != null)
+		                OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
-                    if (await AssignResult(filter))
-                    {
-                        ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, stop.Elapsed.ToReadableString()), ReportStatusType.Success);
-                    }
+	                if (await AssignResult(filter))
+	                {
+		                ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, stop.Elapsed.ToReadableString()), ReportStatusType.Success);
+	                }
 
-                    stop.Stop();
+	                stop.Stop();
                 }
                 catch (Exception ex)
                 {
-                    ReportStatus(ex.Message, ReportStatusType.Error);
+	                ReportStatus(ex.Message, ReportStatusType.Error);
                 }
                 finally
                 {
-                    if (MainReader != null)
-                    {
-                        MainReader.OnProcessReport -= ReportProcessStatus;
-                        MainReader.Dispose();
-                        MainReader = null;
-                    }
+	                if (MainReader != null)
+	                {
+		                MainReader.OnProcessReport -= ReportProcessStatus;
+		                MainReader.Dispose();
+		                MainReader = null;
+	                }
 
-                    IsWorking = false;
-                    ChangeFormStatus();
-                    if (stop.IsRunning)
-                        stop.Stop();
+	                IsWorking = false;
+	                ChangeFormStatus();
+	                if (stop.IsRunning)
+		                stop.Stop();
                 }
             }
             else
