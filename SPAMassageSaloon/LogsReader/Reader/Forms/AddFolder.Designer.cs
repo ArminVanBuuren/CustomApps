@@ -65,7 +65,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Location = new System.Drawing.Point(247, 29);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
-			this.buttonCancel.TabIndex = 39;
+			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -78,7 +78,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Location = new System.Drawing.Point(181, 29);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
-			this.buttonOK.TabIndex = 40;
+			this.buttonOK.TabIndex = 4;
 			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -91,7 +91,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOpenFolder.Location = new System.Drawing.Point(306, 6);
 			this.buttonOpenFolder.Name = "buttonOpenFolder";
 			this.buttonOpenFolder.Size = new System.Drawing.Size(19, 18);
-			this.buttonOpenFolder.TabIndex = 41;
+			this.buttonOpenFolder.TabIndex = 2;
 			this.buttonOpenFolder.Text = "..";
 			this.buttonOpenFolder.UseVisualStyleBackColor = false;
 			this.buttonOpenFolder.Click += new System.EventHandler(this.buttonOpenFolder_Click);
@@ -105,7 +105,7 @@ namespace LogsReader.Reader.Forms
 			this.checkBoxAllDirectories.Location = new System.Drawing.Point(91, 33);
 			this.checkBoxAllDirectories.Name = "checkBoxAllDirectories";
 			this.checkBoxAllDirectories.Size = new System.Drawing.Size(88, 17);
-			this.checkBoxAllDirectories.TabIndex = 42;
+			this.checkBoxAllDirectories.TabIndex = 3;
 			this.checkBoxAllDirectories.Text = "All directories";
 			this.checkBoxAllDirectories.UseVisualStyleBackColor = true;
 			// 

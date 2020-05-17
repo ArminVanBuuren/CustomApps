@@ -55,19 +55,6 @@ namespace LogsReader.Reader.Forms
 			this.textBoxGroupName.TabIndex = 1;
 			this.textBoxGroupName.TextChanged += new System.EventHandler(this.textBoxGroupName_TextChanged);
 			// 
-			// buttonCancel
-			// 
-			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
-			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(193, 29);
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
-			this.buttonCancel.TabIndex = 39;
-			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
-			this.buttonCancel.UseVisualStyleBackColor = true;
-			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-			// 
 			// buttonOK
 			// 
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -80,6 +67,19 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
+			// 
+			// buttonCancel
+			// 
+			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
+			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonCancel.Location = new System.Drawing.Point(193, 29);
+			this.buttonCancel.Name = "buttonCancel";
+			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
+			this.buttonCancel.TabIndex = 41;
+			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
+			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// AddGroupForm
 			// 

@@ -59,7 +59,7 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
 			this.comboboxGroup.Size = new System.Drawing.Size(495, 21);
-			this.comboboxGroup.TabIndex = 35;
+			this.comboboxGroup.TabIndex = 1;
 			// 
 			// labelGroup
 			// 
@@ -78,7 +78,7 @@ namespace LogsReader.Reader.Forms
 			this.richTextBoxTypes.Location = new System.Drawing.Point(10, 32);
 			this.richTextBoxTypes.Name = "richTextBoxTypes";
 			this.richTextBoxTypes.Size = new System.Drawing.Size(531, 105);
-			this.richTextBoxTypes.TabIndex = 41;
+			this.richTextBoxTypes.TabIndex = 2;
 			this.richTextBoxTypes.Text = "";
 			// 
 			// buttonCancel
@@ -89,7 +89,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Location = new System.Drawing.Point(461, 139);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
-			this.buttonCancel.TabIndex = 42;
+			this.buttonCancel.TabIndex = 4;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -102,7 +102,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Location = new System.Drawing.Point(395, 139);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
-			this.buttonOK.TabIndex = 43;
+			this.buttonOK.TabIndex = 3;
 			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Net;
-using System.Security;
 using System.Windows.Forms;
 using LogsReader.Properties;
 
@@ -10,25 +7,26 @@ namespace LogsReader.Reader.Forms
 {
 	public partial class AddUserCredentials : Form
 	{
-		private readonly string _information;
-
-		public NetworkCredential Credential { get; private set; }
+		private readonly ContextMenuStrip _contextMenuStrip;
+		public CryptoNetworkCredential Credential { get; private set; }
 
 		public AddUserCredentials(string information, string domain = null, string userName = null)
 		{
 			InitializeComponent();
 
 			Icon = Icon.FromHandle(Resources.connectionLocked.GetHicon());
-			labelDomain.Text =  Resources.Txt_Forms_GroupName;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
 
-			_information = information;
-			SetInformation(_information);
+			SetInformation(information);
 			textBoxDomain.Text = domain ?? string.Empty;
 			textBoxUser.Text = userName ?? string.Empty;
 
 			CenterToScreen();
+
+			_contextMenuStrip = new ContextMenuStrip { Tag = labelInformation };
+			_contextMenuStrip.Items.Add("Copy text", null, (sender, args) => { Clipboard.SetText(labelInformation.Text); });
+			labelInformation.MouseClick += Information_MouseClick;
 
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
@@ -40,33 +38,46 @@ namespace LogsReader.Reader.Forms
 			};
 		}
 
+		private void Information_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+			_contextMenuStrip?.Show(labelInformation, e.Location);
+		}
+
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				var password = new SecureString();
-				foreach (var ch in textBoxPassword.AdminPassword)
-					password.AppendChar(ch);
+			this.DialogResult = DialogResult.OK;
+			Credential = new CryptoNetworkCredential(textBoxDomain.Text, textBoxUser.Text, textBoxPassword.AdminPassword);
+			Close();
+		}
 
-				if (textBoxDomain.Text.Length > 0)
-					Credential = new NetworkCredential(textBoxUser.Text, password, textBoxDomain.Text);
-				else
-					Credential = new NetworkCredential(textBoxUser.Text, password);
-
-				this.DialogResult = DialogResult.OK;
-				Close();
-			}
-			catch (Exception ex)
-			{
-				SetInformation($"{_information}\r\n{ex.Message}");
-			}
+		protected override void OnSizeChanged(EventArgs e)
+		{
+			base.OnSizeChanged(e);
+			ChangeFormSize();
 		}
 
 		void SetInformation(string info)
 		{
-			this.MaximumSize = new Size(this.MaximumSize.Width, 999);
+			labelInformation.MaximumSize = new Size(groupBoxInfo.Size.Width - 20, 0);
+			labelInformation.AutoSize = true;
 			labelInformation.Text = info;
-			this.MaximumSize = new Size(this.MaximumSize.Width, this.Size.Height);
+			ChangeFormSize();
+		}
+
+		void ChangeFormSize()
+		{
+			labelInformation.MaximumSize = new Size(groupBoxInfo.Size.Width - 20, 0);
+			labelInformation.AutoSize = true;
+
+			var formHeight = groupBoxInfo.Size.Height + panelAuthorization.Size.Height + 40;
+			this.Size = new Size(this.Size.Width, formHeight);
+			this.MinimumSize = new Size(this.MinimumSize.Width, formHeight);
+			this.MaximumSize = new Size(999, formHeight);
+			this.Size = new Size(this.Size.Width, formHeight);
+			this.MinimumSize = new Size(this.MinimumSize.Width, formHeight);
+			this.MaximumSize = new Size(999, formHeight);
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)

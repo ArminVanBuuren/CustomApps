@@ -65,7 +65,7 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
 			this.comboboxGroup.Size = new System.Drawing.Size(371, 21);
-			this.comboboxGroup.TabIndex = 35;
+			this.comboboxGroup.TabIndex = 1;
 			// 
 			// buttonCancel
 			// 
@@ -75,7 +75,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Location = new System.Drawing.Point(343, 2);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
-			this.buttonCancel.TabIndex = 37;
+			this.buttonCancel.TabIndex = 104;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -88,7 +88,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Location = new System.Drawing.Point(277, 2);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
-			this.buttonOK.TabIndex = 38;
+			this.buttonOK.TabIndex = 103;
 			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -111,7 +111,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonPingAll.Location = new System.Drawing.Point(89, 2);
 			this.buttonPingAll.Name = "buttonPingAll";
 			this.buttonPingAll.Size = new System.Drawing.Size(80, 25);
-			this.buttonPingAll.TabIndex = 42;
+			this.buttonPingAll.TabIndex = 101;
 			this.buttonPingAll.Text = "     Ping All";
 			this.buttonPingAll.UseVisualStyleBackColor = true;
 			this.buttonPingAll.Click += new System.EventHandler(this.buttonPingAll_Click);
@@ -124,7 +124,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonRemoveAll.Location = new System.Drawing.Point(175, 2);
 			this.buttonRemoveAll.Name = "buttonRemoveAll";
 			this.buttonRemoveAll.Size = new System.Drawing.Size(96, 25);
-			this.buttonRemoveAll.TabIndex = 41;
+			this.buttonRemoveAll.TabIndex = 102;
 			this.buttonRemoveAll.Text = "     Remove All";
 			this.buttonRemoveAll.UseVisualStyleBackColor = true;
 			this.buttonRemoveAll.Click += new System.EventHandler(this.buttonRemoveAll_Click);
@@ -137,7 +137,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonAdd.Location = new System.Drawing.Point(3, 2);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Size = new System.Drawing.Size(80, 25);
-			this.buttonAdd.TabIndex = 43;
+			this.buttonAdd.TabIndex = 100;
 			this.buttonAdd.Text = "  Add";
 			this.buttonAdd.UseVisualStyleBackColor = true;
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
@@ -161,7 +161,7 @@ namespace LogsReader.Reader.Forms
 			this.groupBoxServers.Location = new System.Drawing.Point(0, 26);
 			this.groupBoxServers.Name = "groupBoxServers";
 			this.groupBoxServers.Size = new System.Drawing.Size(426, 43);
-			this.groupBoxServers.TabIndex = 45;
+			this.groupBoxServers.TabIndex = 2;
 			this.groupBoxServers.TabStop = false;
 			this.groupBoxServers.Text = "Servers";
 			// 

@@ -19,9 +19,9 @@ namespace LogsReader
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
 	    private static readonly object credentialSync = new object();
-	    private static readonly Dictionary<NetworkCredential, DateTime> _userCredentials;
+	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
 
-	    public static Dictionary<NetworkCredential, DateTime> UserCredentials
+	    public static Dictionary<CryptoNetworkCredential, DateTime> UserCredentials
 	    {
 		    get
 		    {
@@ -53,7 +53,7 @@ namespace LogsReader
 
         static LogsReaderMainForm()
         {
-	        _userCredentials = new Dictionary<NetworkCredential, DateTime>();
+	        _userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
 	        try
 	        {
 		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
@@ -62,7 +62,7 @@ namespace LogsReader
 			        if (obj is byte[] array)
 			        {
 				        using (var stream = new MemoryStream(array))
-					        _userCredentials = new BinaryFormatter().Deserialize(stream) as Dictionary<NetworkCredential, DateTime>;
+					        _userCredentials = new BinaryFormatter().Deserialize(stream) as Dictionary<CryptoNetworkCredential, DateTime>;
 			        }
 		        }
 	        }
@@ -72,7 +72,7 @@ namespace LogsReader
 	        }
         }
 
-        static void DeserializeUserCreditails()
+        static void SerializeUserCreditails()
         {
 	        try
 	        {
@@ -98,7 +98,7 @@ namespace LogsReader
                 Closing += (s, e) =>
                 {
 	                SaveData();
-	                DeserializeUserCreditails();
+	                SerializeUserCreditails();
                 };
                 Shown += (s, e) =>
                 {

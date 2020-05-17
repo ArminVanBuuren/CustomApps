@@ -128,7 +128,7 @@ namespace LogsReader.Reader
 						if (IsStopPending)
 							return false;
 
-						using (var connection = new NetworkConnection(serverFolder, credential))
+						using (var connection = new NetworkConnection(serverFolder, credential.Value))
 						{
 							var access = Directory.GetAccessControl(serverFolder);
 							Connections.Add(connection);
@@ -155,7 +155,7 @@ namespace LogsReader.Reader
 							return false;
 
 						credential = new AddUserCredentials(
-							(accessDeniedTxt + Environment.NewLine + Resources.Txt_LogsReaderForm_AccessDeniedAuthor + Environment.NewLine + additionalTxt).Trim(),
+							$"{accessDeniedTxt}\r\n{Resources.Txt_LogsReaderForm_AccessDeniedAuthor} {additionalTxt}".Trim(),
 							credential?.Credential?.Domain,
 							credential?.Credential?.UserName);
 
@@ -164,7 +164,7 @@ namespace LogsReader.Reader
 							tryCount++;
 							try
 							{
-								using (var connection = new NetworkConnection(serverFolder, credential.Credential))
+								using (var connection = new NetworkConnection(serverFolder, credential.Credential.Value))
 								{
 									var access = Directory.GetAccessControl(serverFolder);
 									Connections.Add(connection);
