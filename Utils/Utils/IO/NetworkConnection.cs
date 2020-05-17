@@ -162,6 +162,11 @@ namespace Utils
 		[DllImport("mpr.dll")]
 		private static extern int WNetCancelConnection2(string name, int flags, bool force);
 
+		public static void CancelConnection(string networkName)
+		{
+			WNetCancelConnection2(networkName, 0, true);
+		}
+
 		/// <summary>
 		/// Finalizes an instance of the <see cref="NetworkConnection"/> class.
 		/// Allows an <see cref="System.Object"></see> to attempt to free resources and perform other cleanup operations before the <see cref="System.Object"></see> is reclaimed by garbage collection.

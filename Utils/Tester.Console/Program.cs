@@ -217,7 +217,7 @@ namespace Tester.Console
                 {
 	                try
 	                {
-		                using (var dd1111 = new NetworkConnection(@"\\f6-spa-sa01\c$", new NetworkCredential(@"foris6\vhovanskij", "IO%11111")))
+		                using (var dd1111 = new NetworkConnection(@"\\f6-mg01\c$", new NetworkCredential(@"foris6\vhovanskij", "IO%11111")))
 		                {
 
 		                }
