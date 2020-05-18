@@ -691,6 +691,73 @@ namespace Utils
 			}
 		}
 
+		public static bool HasReadPermissionOnDir(string path)
+		{
+			try
+			{
+				var readAllow = false;
+				var readDeny = false;
+				var accessControlList = Directory.GetAccessControl(path);
+
+				//get the access rules that pertain to a valid SID/NTAccount.
+				var accessRules = accessControlList?.GetAccessRules(true, true, 
+					typeof(System.Security.Principal.SecurityIdentifier));
+
+				if (accessRules == null)
+					return false;
+
+				//we want to go over these rules to ensure a valid SID has access
+				foreach (FileSystemAccessRule rule in accessRules)
+				{
+					if ((FileSystemRights.Read & rule.FileSystemRights) != FileSystemRights.Read) continue;
+
+					if (rule.AccessControlType == AccessControlType.Allow)
+						readAllow = true;
+					else if (rule.AccessControlType == AccessControlType.Deny)
+						readDeny = true;
+				}
+
+				return readAllow && !readDeny;
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				return false;
+			}
+		}
+
+		public static bool HasWritePermissionOnDir(string path)
+		{
+			try
+			{
+				var writeAllow = false;
+				var writeDeny = false;
+				var accessControlList = Directory.GetAccessControl(path);
+
+				var accessRules = accessControlList?.GetAccessRules(true, true,
+					typeof(System.Security.Principal.SecurityIdentifier));
+
+				if (accessRules == null)
+					return false;
+
+				foreach (FileSystemAccessRule rule in accessRules)
+				{
+					if ((FileSystemRights.Write & rule.FileSystemRights) != FileSystemRights.Write)
+						continue;
+
+					if (rule.AccessControlType == AccessControlType.Allow)
+						writeAllow = true;
+					else if (rule.AccessControlType == AccessControlType.Deny)
+						writeDeny = true;
+				}
+
+				return writeAllow && !writeDeny;
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				return false;
+			}
+		}
+
 		static readonly string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
 
 		/// <summary>

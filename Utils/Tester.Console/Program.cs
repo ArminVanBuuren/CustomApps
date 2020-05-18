@@ -16,6 +16,7 @@ using System.Xml;
 using Utils;
 using Utils.Crypto;
 using Utils.Messaging.Telegram;
+using IOException = System.IO.IOException;
 
 //using TeleSharp.TL;
 //using TLSharp.Core;
@@ -211,8 +212,26 @@ namespace Tester.Console
         {
             try
             {
-                //
-                test:
+
+	            try
+	            {
+		            var f11f = Directory.GetDirectories(@"C:\test1");
+	            }
+	            catch (DirectoryNotFoundException e)
+	            {
+
+	            }
+	            catch (IOException e)
+	            {
+		            var type = e.GetType();
+	            }
+	            catch (Exception e)
+	            {
+		            
+	            }
+	            
+            //
+            test:
                 try
                 {
 	                try
