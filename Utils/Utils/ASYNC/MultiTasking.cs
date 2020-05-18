@@ -7,9 +7,7 @@ namespace Utils
 {
 	public class MultiTasking
     {
-        //public const int CallbackTimeout = 3000;
-
-        public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
+	    public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
         {
             return await Task<MTCallBackList<Action, bool>>.Factory.StartNew(() => Run(actions, mtTemplate));
         }
@@ -87,8 +85,6 @@ namespace Utils
             using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{actions.GetHashCode() + 3}"))
             {
                 var listOfTasks = new List<Task>();
-                //var listOfCallBack = new List<Task>();
-
                 foreach (var action in actions)
                 {
                     if (mt.CancelToken.IsCancellationRequested)
@@ -98,8 +94,7 @@ namespace Utils
 
                     listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        //Task taskCallback = null;
-                        MTCallBack<Action, bool> callbackItem = null;
+	                    MTCallBack<Action, bool> callbackItem = null;
                         var inputAction = (Action) input;
                         try
                         {
@@ -114,7 +109,6 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<Action, bool>(inputAction, true);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
                             }
                         }
                         catch (Exception ex)
@@ -122,30 +116,11 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<Action, bool>(inputAction, ex);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Action, bool>) callbackItem2), callbackItem);
                             }
                         }
                         finally
                         {
-                            //if (taskCallback != null)
-                            //{
-                            //    try
-                            //    {
-                            //        listOfCallBack.Add(taskCallback);
-                            //        taskCallback.Start();
-                            //    }
-                            //    catch (Exception ex)
-                            //    {
-                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                            //    }
-                            //}
-
-                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                            //{
-                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                            //}
-
-                            try
+	                        try
                             {
                                 if (callback != null && callbackItem != null)
                                     callback.Invoke(callbackItem);
@@ -164,7 +139,6 @@ namespace Utils
                 }
 
                 Task.WaitAll(listOfTasks.ToArray());
-                //Task.WaitAll(listOfCallBack.ToArray());
             }
         }
 
@@ -247,8 +221,6 @@ namespace Utils
             using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}"))
             {
                 var listOfTasks = new List<Task>();
-                //var listOfCallBack = new List<Task>();
-
                 foreach (var func in funcs)
                 {
                     if (mt.CancelToken.IsCancellationRequested)
@@ -258,8 +230,7 @@ namespace Utils
 
                     listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        //Task taskCallback = null;
-                        MTCallBack<Func<TResult>, TResult> callbackItem = null;
+	                    MTCallBack<Func<TResult>, TResult> callbackItem = null;
                         var inputFunc = (Func<TResult>) input;
                         try
                         {
@@ -274,7 +245,6 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, res);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
                             }
                         }
                         catch (Exception ex)
@@ -282,30 +252,11 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<Func<TResult>, TResult>(inputFunc, ex);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<Func<TResult>, TResult>) callbackItem2), callbackItem);
                             }
                         }
                         finally
                         {
-                            //if (taskCallback != null)
-                            //{
-                            //    try
-                            //    {
-                            //        listOfCallBack.Add(taskCallback);
-                            //        taskCallback.Start();
-                            //    }
-                            //    catch (Exception ex)
-                            //    {
-                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                            //    }
-                            //}
-
-                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                            //{
-                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                            //}
-
-                            try
+	                        try
                             {
                                 if (callback != null && callbackItem != null)
                                     callback.Invoke(callbackItem);
@@ -324,7 +275,6 @@ namespace Utils
                 }
 
                 Task.WaitAll(listOfTasks.ToArray());
-                //Task.WaitAll(listOfCallBack.ToArray());
             }
         }
 
@@ -406,8 +356,6 @@ namespace Utils
             using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}"))
             {
                 var listOfTasks = new List<Task>();
-                //var listOfCallBack = new List<Task>();
-
                 foreach (var item in data)
                 {
                     if (mt.CancelToken.IsCancellationRequested)
@@ -417,8 +365,7 @@ namespace Utils
 
                     listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        //Task taskCallback = null;
-                        MTCallBack<TSource, bool> callbackItem = null;
+	                    MTCallBack<TSource, bool> callbackItem = null;
                         var inputItem = (TSource) input;
                         try
                         {
@@ -433,7 +380,6 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<TSource, bool>(inputItem, true);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
                             }
                         }
                         catch (Exception ex)
@@ -441,31 +387,11 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<TSource, bool>(inputItem, ex);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, bool>)callbackItem2), callbackItem);
                             }
                         }
                         finally
                         {
-                            //if (taskCallback != null)
-                            //{
-                            //    try
-                            //    {
-                            //        listOfCallBack.Add(taskCallback);
-                            //        taskCallback.Start();
-                            //    }
-                            //    catch (Exception ex)
-                            //    {
-                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                            //    }
-                            //}
-
-                            //taskCallback?.RunSynchronously();
-                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                            //{
-                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                            //}
-
-                            try
+	                        try
                             {
                                 if (callback != null && callbackItem != null)
                                     callback.Invoke(callbackItem);
@@ -484,7 +410,6 @@ namespace Utils
                 }
 
                 Task.WaitAll(listOfTasks.ToArray());
-                //Task.WaitAll(listOfCallBack.ToArray());
             }
         }
 
@@ -566,8 +491,6 @@ namespace Utils
             using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}"))
             {
                 var listOfTasks = new List<Task>();
-                //var listOfCallBack = new List<Task>();
-
                 foreach (var item in data)
                 {
                     if (mt.CancelToken.IsCancellationRequested)
@@ -577,9 +500,7 @@ namespace Utils
 
                     listOfTasks.Add(Task.Factory.StartNew((input) =>
                     {
-                        //Task taskCallback = null;
-
-                        MTCallBack<TSource, TResult> callbackItem = null;
+	                    MTCallBack<TSource, TResult> callbackItem = null;
                         var inputItem = (TSource) input;
                         try
                         {
@@ -594,7 +515,6 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<TSource, TResult>(inputItem, res);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
                             }
                         }
                         catch (Exception ex)
@@ -602,30 +522,11 @@ namespace Utils
                             if (callback != null)
                             {
                                 callbackItem = new MTCallBack<TSource, TResult>(inputItem, ex);
-                                //taskCallback = new Task((callbackItem2) => callback.Invoke((MTCallBack<TSource, TResult>) callbackItem2), callbackItem);
                             }
                         }
                         finally
                         {
-                            //if (taskCallback != null)
-                            //{
-                            //    try
-                            //    {
-                            //        listOfCallBack.Add(taskCallback);
-                            //        taskCallback.Start();
-                            //    }
-                            //    catch (Exception ex)
-                            //    {
-                            //        callbackItem.Error = callbackItem.Error == null ? new MTCallbackException(ex) : new MTCallbackException(ex, callbackItem.Error);
-                            //    }
-                            //}
-
-                            //if (taskCallback != null && !taskCallback.Wait(CallbackTimeout))
-                            //{
-                            //    callbackItem.Error = callbackItem.Error == null ? new MTCallbackTimeoutException() : new MTCallbackTimeoutException(callbackItem.Error);
-                            //}
-
-                            try
+	                        try
                             {
                                 if (callback != null && callbackItem != null)
                                     callback.Invoke(callbackItem);
@@ -644,7 +545,6 @@ namespace Utils
                 }
 
                 Task.WaitAll(listOfTasks.ToArray());
-                //Task.WaitAll(listOfCallBack.ToArray());
             }
         }
     }
