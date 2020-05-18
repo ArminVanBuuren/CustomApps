@@ -150,6 +150,7 @@ namespace LogsReader.Reader
 			{
 				if (IsStopPending)
 					return false;
+
 				try
 				{
 					return IsExist(serverRoot, serverFolder, credential);
