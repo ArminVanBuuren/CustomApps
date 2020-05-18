@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 
@@ -12,10 +13,38 @@ namespace Utils.WinForm
     {
         private readonly Timer timer;
         private readonly List<char> adminPassword;
-        private int m_iCaretPosition = 0;
-        private bool canEdit = true;
 
-        public int HideCharIntervalMsec => timer.Interval;
+        private bool _timerIsEnabled;
+        private int _сaretPosition = 0;
+        private bool _canEdit = true;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AdminPassword => string.Join("", adminPassword).Trim('\0').Replace("\0", "");
+
+        /// <summary>
+        /// Height of panel in collapsed state
+        /// </summary>
+        [Category("PasswordTextBox")]
+        [Description("Hide char after entering. Interval in msec. Zero is disabled option.")]
+        [Browsable(true)]
+        public int HideCharIntervalMsec
+        {
+	        get => timer.Interval;
+	        set
+	        {
+		        if (value <= 0)
+		        {
+			        _timerIsEnabled = false;
+		        }
+		        else
+		        {
+			        _timerIsEnabled = true;
+                    timer.Interval = value;
+		        }
+	        }
+        }
 
         /// <summary>
         /// 
@@ -25,12 +54,8 @@ namespace Utils.WinForm
 	        adminPassword = new List<char>(8);
             timer = new Timer { Interval = 1000 };
             timer.Tick += timer_Tick;
+            _timerIsEnabled = true;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string AdminPassword => string.Join("", adminPassword).Trim('\0').Replace("\0", "");
 
         /// <summary>
         /// 
@@ -38,7 +63,7 @@ namespace Utils.WinForm
         /// <param name="e"></param>
         protected override void OnTextChanged(EventArgs e)
         {
-            if (canEdit)
+            if (_canEdit)
             {
                 base.OnTextChanged(e);
                 txtInput_TextChanged(this, e);
@@ -62,7 +87,7 @@ namespace Utils.WinForm
         protected override void OnMouseClick(MouseEventArgs e)
         {
             base.OnMouseClick(e);
-            m_iCaretPosition = this.GetCharIndexFromPosition(e.Location);
+            _сaretPosition = this.GetCharIndexFromPosition(e.Location);
         }
 
         /// <summary>
@@ -70,19 +95,23 @@ namespace Utils.WinForm
         /// </summary>
         private void HidePasswordCharacters()
         {
-            var index = this.SelectionStart;
+	        var index = this.SelectionStart;
 
-            if (index > 1)
-            {
-	            var s = new StringBuilder(this.Text)
-	            {
-		            [index - 2] = '*'
-	            };
-	            this.Text = s.ToString();
-                this.SelectionStart = index;
-                m_iCaretPosition = index;
-            }
-            timer.Enabled = true;
+	        if (index > 1)
+	        {
+		        var s = new StringBuilder(this.Text)
+		        {
+			        [index - 2] = '*'
+		        };
+		        this.Text = s.ToString();
+		        this.SelectionStart = index;
+		        _сaretPosition = index;
+	        }
+
+	        if (_timerIsEnabled)
+		        timer.Enabled = true;
+	        else
+		        timer_Tick(this, EventArgs.Empty);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -90,7 +119,7 @@ namespace Utils.WinForm
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Delete)
             {
-	            DeleteSelectedCharacters(this, e.KeyCode);
+	            DeleteSelectedCharacters(e.KeyCode);
             }
         }
 
@@ -101,7 +130,7 @@ namespace Utils.WinForm
         /// <param name="e"></param>
         private void timer_Tick(object sender, EventArgs e)
         {
-            timer.Enabled = false;
+	        timer.Enabled = false;
             var index = this.SelectionStart;
 
             if (index >= 1)
@@ -114,7 +143,7 @@ namespace Utils.WinForm
                 {
                     this.Text = s.ToString();
                     this.SelectionStart = index;
-                    m_iCaretPosition = index;
+                    _сaretPosition = index;
                 }));
             }
         }
@@ -127,7 +156,7 @@ namespace Utils.WinForm
             var length = this.TextLength;
             var selectedChars = this.SelectionLength;
             var eModified = (Keys)e.KeyChar;
-            canEdit = false;
+            _canEdit = false;
 
             if (selectedChars == length)
             {
@@ -136,7 +165,7 @@ namespace Utils.WinForm
                  */
                 if (eModified == Keys.Back)
                 {
-	                canEdit = true;
+	                _canEdit = true;
 	                ClearCharBufferPlusTextBox();
                     return;
                 }
@@ -149,7 +178,7 @@ namespace Utils.WinForm
             if (IgnoreKey(eModified))
             {
 	            e.Handled = true;
-	            canEdit = true;
+	            _canEdit = true;
 	            ClearCharBufferPlusTextBox();
 	            return;
             }
@@ -174,7 +203,7 @@ namespace Utils.WinForm
             }
             else if ((Keys.Back == eModified) || (Keys.Delete == eModified))
             {
-                DeleteSelectedCharacters(this, eModified);
+                DeleteSelectedCharacters(eModified);
             }
 
             /*
@@ -182,15 +211,14 @@ namespace Utils.WinForm
              */
             HidePasswordCharacters();
 
-            canEdit = true;
+            _canEdit = true;
         }
 
         /// <summary>
         /// Deletes the specific characters in the char array based on the key press action
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="key"></param>
-        private void DeleteSelectedCharacters(object sender, Keys key)
+        private void DeleteSelectedCharacters(Keys key)
         {
 	        try
 	        {
@@ -206,8 +234,7 @@ namespace Utils.WinForm
 
                 if (selectedChars > 0)
                 {
-                    var i = selectionStart;
-                    this.Text.Remove(selectionStart, selectedChars);
+	                this.Text.Remove(selectionStart, selectedChars);
                     adminPassword.RemoveRange(selectionStart, selectedChars);
                 }
                 else

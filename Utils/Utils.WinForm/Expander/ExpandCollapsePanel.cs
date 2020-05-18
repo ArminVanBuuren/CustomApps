@@ -13,6 +13,7 @@ namespace Utils.WinForm.Expander
     {
         private readonly int _defaultCollapsedHeight;
         private int _userCollapsedHeight = -1;
+
         /// <summary>
         /// Last stored size of panel's parent control
         /// <remarks>used for handling panel's Anchor property sets to Bottom when panel collapsed
