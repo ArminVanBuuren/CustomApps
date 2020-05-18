@@ -26,6 +26,8 @@ namespace LogsReader.Reader
 
 		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
 
+		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
+
 		protected LogsReaderFiles(
 			LRSettingsScheme settings, 
 			string findMessage,  
@@ -195,25 +197,43 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		static bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
+		bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
 		{
-			// сначала проверяем доступ к рутовой папке
+			// сначала проверяем доступ к рутовой папке. Если все ОК, то вероятно до основной папки тоже есть доступ
+			NetworkConnection connectionRoot = null;
 			try
 			{
-				using (new NetworkConnection(serverRoot, credential.Value))
-				{
-					return IsExist(serverFolder, credential);
-				}
+				connectionRoot = new NetworkConnection(serverRoot, credential.Value);
+				Connections.Add(connectionRoot);
+				return IsExist(serverFolder, credential);
 			}
 			catch (Exception)
 			{
-				// ignored
+				// ошибочные коннекты логофим
+				if (connectionRoot != null)
+				{
+					Connections.Remove(connectionRoot);
+					connectionRoot.Dispose();
+				}
 			}
 
 			// если доступа к руту нет, то проверяем доступ к конкретной папке
-			using (new NetworkConnection(serverFolder, credential.Value))
+			NetworkConnection connection = null;
+			try
 			{
+				connection = new NetworkConnection(serverFolder, credential.Value);
+				Connections.Add(connection);
 				return IsExist(serverFolder, credential);
+			}
+			catch (Exception)
+			{
+				// ошибочные коннекты логофим
+				if (connection != null)
+				{
+					Connections.Remove(connection);
+					connection.Dispose();
+				}
+				throw;
 			}
 		}
 
@@ -239,17 +259,15 @@ namespace LogsReader.Reader
 			IsStopPending = true;
 		}
 
-		//protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
-
 		public virtual void Reset()
 		{
 			//if (Connections != null)
 			//{
-			//	foreach (var connect in Connections)
+			//	foreach (var connection in Connections)
 			//	{
 			//		try
 			//		{
-			//			connect.Dispose();
+			//			connection.Dispose();
 			//		}
 			//		catch (Exception ex)
 			//		{

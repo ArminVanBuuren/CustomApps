@@ -69,13 +69,21 @@ namespace LogsReader.Reader
 	        if (TraceReaders.Count <= 0)
 		        throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
-            // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
+	        // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
+            var readers = TraceReaders.OrderByDescending(x => x.File.LastWriteTime).ThenByDescending(x => x.File.CreationTime).ToList();
             var maxThreads = CurrentSettings.MaxThreads <= 0 ? TraceReaders.Count : CurrentSettings.MaxThreads;
-	        _multiTaskingHandler = new MTActionResult<TraceReader>(ReadData, TraceReaders.OrderByDescending(x => x.File.LastWriteTime).ThenByDescending(x => x.File.CreationTime).ToList(), maxThreads, ThreadPriority.Lowest);
+	        _multiTaskingHandler = new MTActionResult<TraceReader>(
+		        ReadData,
+		        readers, 
+		        maxThreads, 
+		        ThreadPriority.Lowest);
+
 	        new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
 	        await _multiTaskingHandler.StartAsync();
 
-	        ResultsOfError = _multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null).Aggregate(new List<DataTemplate>(), (listErr, x) =>
+	        ResultsOfError = _multiTaskingHandler.Result.CallBackList
+		        .Where(x => x.Error != null)
+		        .Aggregate(new List<DataTemplate>(), (listErr, x) =>
 	        {
 		        listErr.Add(new DataTemplate(x.Source, -1, string.Empty, x.Error));
 		        return listErr;
