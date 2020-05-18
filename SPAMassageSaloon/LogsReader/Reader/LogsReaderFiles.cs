@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -155,7 +156,7 @@ namespace LogsReader.Reader
 				{
 					return IsExist(serverRoot, serverFolder, credential);
 				}
-				catch (Exception)
+				catch (Exception ex1)
 				{
 					// ignore and continue
 				}
@@ -173,7 +174,6 @@ namespace LogsReader.Reader
 
 				authorizationForm = new AddUserCredentials(
 					$"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(),
-					authorizationForm?.Credential?.Domain,
 					authorizationForm?.Credential?.UserName);
 
 				if (authorizationForm.ShowDialog() == DialogResult.OK)
@@ -198,44 +198,55 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
+		bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credentialList)
 		{
 			// сначала проверяем доступ к рутовой папке. Если все ОК, то вероятно до основной папки тоже есть доступ
 			NetworkConnection connectionRoot = null;
-			try
+			foreach (var credential in credentialList.Value)
 			{
-				connectionRoot = new NetworkConnection(serverRoot, credential.Value);
-				Connections.Add(connectionRoot);
-				return IsExist(serverFolder, credential);
-			}
-			catch (Exception)
-			{
-				// ошибочные коннекты логофим
-				if (connectionRoot != null)
+				try
 				{
-					Connections.Remove(connectionRoot);
-					connectionRoot.Dispose();
+					connectionRoot = new NetworkConnection(serverRoot, credential);
+					Connections.Add(connectionRoot);
+					return IsExist(serverFolder, credentialList);
+				}
+				catch (Exception)
+				{
+					// ошибочные коннекты логофим
+					if (connectionRoot != null)
+					{
+						Connections.Remove(connectionRoot);
+						connectionRoot.Dispose();
+					}
 				}
 			}
 
+
+			Exception accessDenied = new Win32Exception(1326);
 			// если доступа к руту нет, то проверяем доступ к конкретной папке
-			NetworkConnection connection = null;
-			try
+			foreach (var credential in credentialList.Value)
 			{
-				connection = new NetworkConnection(serverFolder, credential.Value);
-				Connections.Add(connection);
-				return IsExist(serverFolder, credential);
-			}
-			catch (Exception)
-			{
-				// ошибочные коннекты логофим
-				if (connection != null)
+				NetworkConnection connection = null;
+				try
 				{
-					Connections.Remove(connection);
-					connection.Dispose();
+					connection = new NetworkConnection(serverFolder, credential);
+					Connections.Add(connection);
+					return IsExist(serverFolder, credentialList);
 				}
-				throw;
+				catch (Exception ex)
+				{
+					// ошибочные коннекты логофим
+					if (connection != null)
+					{
+						Connections.Remove(connection);
+						connection.Dispose();
+					}
+
+					accessDenied = ex;
+				}
 			}
+
+			throw accessDenied;
 		}
 
 		static bool IsExist(string serverFolder, CryptoNetworkCredential credential)

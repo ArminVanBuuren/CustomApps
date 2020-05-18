@@ -288,7 +288,7 @@ namespace LogsReader.Config
 		        case "MGA":
 			        _schemeName = schemeName;
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
-			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, test") });
+			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, debug-all, debug-only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        _maxLines = 20000;
 			        _maxThreads = -1;

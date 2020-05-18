@@ -31,8 +31,6 @@ namespace LogsReader.Reader.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.labelDomain = new System.Windows.Forms.Label();
-			this.textBoxDomain = new System.Windows.Forms.TextBox();
 			this.textBoxUser = new System.Windows.Forms.TextBox();
 			this.textBoxPassword = new Utils.WinForm.PasswordTextBox();
 			this.buttonCancel = new System.Windows.Forms.Button();
@@ -46,30 +44,11 @@ namespace LogsReader.Reader.Forms
 			this.groupBoxInfo.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// labelDomain
-			// 
-			this.labelDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelDomain.AutoSize = true;
-			this.labelDomain.Location = new System.Drawing.Point(3, 9);
-			this.labelDomain.Name = "labelDomain";
-			this.labelDomain.Size = new System.Drawing.Size(43, 13);
-			this.labelDomain.TabIndex = 0;
-			this.labelDomain.Text = "Domain";
-			// 
-			// textBoxDomain
-			// 
-			this.textBoxDomain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxDomain.Location = new System.Drawing.Point(62, 6);
-			this.textBoxDomain.Name = "textBoxDomain";
-			this.textBoxDomain.Size = new System.Drawing.Size(178, 20);
-			this.textBoxDomain.TabIndex = 2;
-			// 
 			// textBoxUser
 			// 
-			this.textBoxUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.textBoxUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxUser.Location = new System.Drawing.Point(62, 32);
+			this.textBoxUser.Location = new System.Drawing.Point(62, 5);
 			this.textBoxUser.Name = "textBoxUser";
 			this.textBoxUser.Size = new System.Drawing.Size(177, 20);
 			this.textBoxUser.TabIndex = 3;
@@ -77,22 +56,23 @@ namespace LogsReader.Reader.Forms
 			// 
 			// textBoxPassword
 			// 
-			this.textBoxPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.textBoxPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxPassword.Location = new System.Drawing.Point(62, 58);
+			this.textBoxPassword.HideCharIntervalMsec = 1000;
+			this.textBoxPassword.Location = new System.Drawing.Point(62, 31);
 			this.textBoxPassword.Name = "textBoxPassword";
-			this.textBoxPassword.Size = new System.Drawing.Size(178, 20);
+			this.textBoxPassword.Size = new System.Drawing.Size(177, 20);
 			this.textBoxPassword.TabIndex = 4;
 			this.textBoxPassword.TextChanged += new System.EventHandler(this.textBoxPassword_TextChanged);
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(160, 83);
+			this.buttonCancel.Location = new System.Drawing.Point(160, 56);
 			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
+			this.buttonCancel.Size = new System.Drawing.Size(79, 25);
 			this.buttonCancel.TabIndex = 6;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
@@ -100,10 +80,10 @@ namespace LogsReader.Reader.Forms
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(94, 83);
+			this.buttonOK.Location = new System.Drawing.Point(94, 56);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 5;
@@ -115,17 +95,17 @@ namespace LogsReader.Reader.Forms
 			// 
 			this.labelUser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.labelUser.AutoSize = true;
-			this.labelUser.Location = new System.Drawing.Point(3, 35);
+			this.labelUser.Location = new System.Drawing.Point(3, 8);
 			this.labelUser.Name = "labelUser";
-			this.labelUser.Size = new System.Drawing.Size(29, 13);
+			this.labelUser.Size = new System.Drawing.Size(58, 13);
 			this.labelUser.TabIndex = 3;
-			this.labelUser.Text = "User";
+			this.labelUser.Text = "User name";
 			// 
 			// labelPassword
 			// 
 			this.labelPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.labelPassword.AutoSize = true;
-			this.labelPassword.Location = new System.Drawing.Point(3, 61);
+			this.labelPassword.Location = new System.Drawing.Point(3, 34);
 			this.labelPassword.Name = "labelPassword";
 			this.labelPassword.Size = new System.Drawing.Size(53, 13);
 			this.labelPassword.TabIndex = 5;
@@ -143,8 +123,6 @@ namespace LogsReader.Reader.Forms
 			// 
 			// panelAuthorization
 			// 
-			this.panelAuthorization.Controls.Add(this.labelDomain);
-			this.panelAuthorization.Controls.Add(this.textBoxDomain);
 			this.panelAuthorization.Controls.Add(this.textBoxUser);
 			this.panelAuthorization.Controls.Add(this.textBoxPassword);
 			this.panelAuthorization.Controls.Add(this.buttonOK);
@@ -153,9 +131,9 @@ namespace LogsReader.Reader.Forms
 			this.panelAuthorization.Controls.Add(this.labelUser);
 			this.panelAuthorization.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panelAuthorization.Location = new System.Drawing.Point(0, 45);
-			this.panelAuthorization.MaximumSize = new System.Drawing.Size(999, 111);
+			this.panelAuthorization.MaximumSize = new System.Drawing.Size(999, 84);
 			this.panelAuthorization.Name = "panelAuthorization";
-			this.panelAuthorization.Size = new System.Drawing.Size(243, 111);
+			this.panelAuthorization.Size = new System.Drawing.Size(243, 84);
 			this.panelAuthorization.TabIndex = 47;
 			// 
 			// groupBoxInfo
@@ -174,7 +152,7 @@ namespace LogsReader.Reader.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(243, 157);
+			this.ClientSize = new System.Drawing.Size(243, 129);
 			this.Controls.Add(this.panelAuthorization);
 			this.Controls.Add(this.groupBoxInfo);
 			this.MaximumSize = new System.Drawing.Size(999, 999);
@@ -192,9 +170,6 @@ namespace LogsReader.Reader.Forms
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Label labelDomain;
-		private System.Windows.Forms.TextBox textBoxDomain;
 		private System.Windows.Forms.TextBox textBoxUser;
 		private PasswordTextBox textBoxPassword;
 		private System.Windows.Forms.Button buttonCancel;

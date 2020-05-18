@@ -2,15 +2,17 @@
 using System.Drawing;
 using System.Windows.Forms;
 using LogsReader.Properties;
+using Utils;
 
 namespace LogsReader.Reader.Forms
 {
 	public partial class AddUserCredentials : Form
 	{
+		private readonly string _sourceInformation;
 		private readonly ContextMenuStrip _contextMenuStrip;
 		public CryptoNetworkCredential Credential { get; private set; }
 
-		public AddUserCredentials(string information, string domain = null, string userName = null)
+		public AddUserCredentials(string information, string userName = null)
 		{
 			InitializeComponent();
 
@@ -22,8 +24,8 @@ namespace LogsReader.Reader.Forms
 			TopLevel = true;
 			TopMost = true;
 
+			_sourceInformation = information;
 			SetInformation(information);
-			textBoxDomain.Text = domain ?? string.Empty;
 			textBoxUser.Text = userName ?? string.Empty;
 
 			CenterToScreen();
@@ -52,7 +54,7 @@ namespace LogsReader.Reader.Forms
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.OK;
-			Credential = new CryptoNetworkCredential(textBoxDomain.Text, textBoxUser.Text, textBoxPassword.AdminPassword);
+			Credential = new CryptoNetworkCredential(textBoxUser.Text, textBoxPassword.AdminPassword);
 			Close();
 		}
 
@@ -93,6 +95,19 @@ namespace LogsReader.Reader.Forms
 
 		private void textBoxUser_TextChanged(object sender, EventArgs e)
 		{
+			if (!textBoxUser.Text.IsNullOrEmptyTrim())
+			{
+				var domain_username = textBoxUser.Text.Split('\\');
+				if (domain_username.Length > 1)
+					SetInformation($"{_sourceInformation}\r\n\r\nDomain:{domain_username[0]}");
+				else if (labelInformation.Text != _sourceInformation)
+					SetInformation(_sourceInformation);
+			}
+			else if (labelInformation.Text != _sourceInformation)
+			{
+				SetInformation(_sourceInformation);
+			}
+
 			Check();
 		}
 

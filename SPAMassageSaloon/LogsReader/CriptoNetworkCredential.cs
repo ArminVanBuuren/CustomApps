@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Security;
 using Utils;
@@ -9,39 +11,45 @@ namespace LogsReader
 	[Serializable]
 	public class CryptoNetworkCredential
 	{
-		[field: NonSerialized] private NetworkCredential _value;
-
-		internal string Domain { get; }
+		[field: NonSerialized] 
+		private IReadOnlyList<NetworkCredential> _value;
 
 		internal string UserName { get; }
 
 		internal string Password { get; }
 
 		[field: NonSerialized]
-		public NetworkCredential Value
+		public IReadOnlyList<NetworkCredential> Value
 		{
 			get
 			{
 				if (_value != null)
 					return _value;
 
-				var password = AES.DecryptStringAES(Password, nameof(CryptoNetworkCredential));
 				var securedPassword = new SecureString();
-				foreach (var ch in password)
+				foreach (var ch in AES.DecryptStringAES(Password, nameof(CryptoNetworkCredential)))
 					securedPassword.AppendChar(ch);
 
-				if (Domain.IsNullOrEmptyTrim())
-					_value = new NetworkCredential(UserName, securedPassword);
-				else
-					_value = new NetworkCredential(UserName, securedPassword, Domain);
+				// сначала приоритетнее без домена, должен быть первым в списке
+				var listCreditails = new List<NetworkCredential>
+				{
+					new NetworkCredential(UserName, securedPassword)
+				};
 
+				var domain_Username = UserName.Split('\\');
+				if (domain_Username.Length > 1)
+				{
+					listCreditails.Add(new NetworkCredential(domain_Username[1], securedPassword, domain_Username[0]));
+					listCreditails.Add(new NetworkCredential(UserName, securedPassword, domain_Username[0]));
+				}
+
+				_value = new ReadOnlyCollection<NetworkCredential>(listCreditails);
 				return _value;
 			}
 		}
 
-		public CryptoNetworkCredential(string domain, string userName, string password)
+		public CryptoNetworkCredential(string userName, string password)
 		{
-			Domain = domain;
 			UserName = userName;
 			Password = AES.EncryptStringAES(password, nameof(CryptoNetworkCredential));
 		}
