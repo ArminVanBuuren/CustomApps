@@ -94,6 +94,9 @@ namespace LogsReader.Reader
         {
             try
             {
+	            if (IsStopPending)
+		            return;
+
                 fileLog.OnFound += AddResult;
                 // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
                 using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
