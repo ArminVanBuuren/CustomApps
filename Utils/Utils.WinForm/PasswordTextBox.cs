@@ -13,7 +13,6 @@ namespace Utils.WinForm
     {
         private readonly Timer timer;
         private readonly List<char> adminPassword;
-	    //private readonly char DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.ToCharArray()[0];
         private int m_iCaretPosition = 0;
         private bool canEdit = true;
 
@@ -148,13 +147,12 @@ namespace Utils.WinForm
                 }
             }
 
-            //if (e.KeyChar == DecimalSeparator)
-            //{
-            //    e.Handled = true;
-            //}
-            if (IgnoreKey(eModified) || eModified == (Keys.RButton | Keys.Capital))
+            if (IgnoreKey(eModified))
             {
 	            e.Handled = true;
+	            canEdit = true;
+	            ClearCharBufferPlusTextBox();
+	            return;
             }
             else if ((Keys.Delete != eModified) && (Keys.Back != eModified))
             {
@@ -356,6 +354,12 @@ namespace Utils.WinForm
                 case Keys.Shift: return true;
                 case Keys.Control: return true;
                 case Keys.Alt: return true;
+                case Keys.RButton | Keys.Capital: return true;  // CTRL + V
+                case Keys.RButton | Keys.FinalMode: return true;
+                case Keys.RButton | Keys.Clear: return true;
+                case Keys.LButton | Keys.XButton2: return true;
+                case Keys.LButton | Keys.LineFeed: return true;
+                case Keys.RButton | Keys.Enter: return true;
             }
 
 	        return false;
