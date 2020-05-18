@@ -964,7 +964,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Current session already completed!.
+        ///   Ищет локализованную строку, похожую на Current session is already completed!.
         /// </summary>
         public static string Txt_LogsReaderPerformer_SessionAlreadyCompleted {
             get {
@@ -1129,8 +1129,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; nodes - are used for read trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for set data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options Singlel [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options  [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {
