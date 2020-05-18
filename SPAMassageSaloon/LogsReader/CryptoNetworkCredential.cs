@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Security;
-using Utils;
 using Utils.Crypto;
 
 namespace LogsReader
