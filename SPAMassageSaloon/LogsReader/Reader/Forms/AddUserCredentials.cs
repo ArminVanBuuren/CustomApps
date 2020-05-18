@@ -47,7 +47,7 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
+			DialogResult = DialogResult.OK;
 			Credential = new CryptoNetworkCredential(textBoxDomain.Text, textBoxUser.Text, textBoxPassword.AdminPassword);
 			Close();
 		}
@@ -72,12 +72,14 @@ namespace LogsReader.Reader.Forms
 			labelInformation.AutoSize = true;
 
 			var formHeight = groupBoxInfo.Size.Height + panelAuthorization.Size.Height + 40;
-			this.Size = new Size(this.Size.Width, formHeight);
-			this.MinimumSize = new Size(this.MinimumSize.Width, formHeight);
-			this.MaximumSize = new Size(999, formHeight);
-			this.Size = new Size(this.Size.Width, formHeight);
-			this.MinimumSize = new Size(this.MinimumSize.Width, formHeight);
-			this.MaximumSize = new Size(999, formHeight);
+			
+			Size = new Size(Size.Width, formHeight);
+			MinimumSize = new Size(MinimumSize.Width, formHeight);
+			MaximumSize = new Size(999, formHeight);
+			// необходим повтор, т.к. это сраные формы
+			Size = new Size(Size.Width, formHeight);
+			MinimumSize = new Size(MinimumSize.Width, formHeight);
+			MaximumSize = new Size(999, formHeight);
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)

@@ -176,18 +176,18 @@ namespace SPAFilter
         public static SPAFilterForm GetControl()
         {
             SPAFilterForm mainControl = null;
-            if (File.Exists(SPAFilterForm.SavedDataPath))
+            if (File.Exists(SavedDataPath))
             {
                 try
                 {
-                    using (Stream stream = new FileStream(SPAFilterForm.SavedDataPath, FileMode.Open, FileAccess.Read))
+                    using (Stream stream = new FileStream(SavedDataPath, FileMode.Open, FileAccess.Read))
                     {
                         mainControl = new BinaryFormatter().Deserialize(stream) as SPAFilterForm;
                     }
                 }
                 catch (Exception)
                 {
-                    File.Delete(SPAFilterForm.SavedDataPath);
+                    File.Delete(SavedDataPath);
                 }
             }
 
@@ -354,7 +354,7 @@ namespace SPAFilter
             InitializeComponent();
 
             // Gets or sets a value indicating whether to catch calls on the wrong thread that access a control's Handle property when an application is being debugged.
-            Control.CheckForIllegalCrossThreadCalls = false;
+            CheckForIllegalCrossThreadCalls = false;
 
             base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
 
@@ -853,7 +853,7 @@ namespace SPAFilter
             _serviceCatalogTextBoxChanged = false;
         }
 
-        private async void ServiceCatalogTextBox_LostFocus(object sender, System.EventArgs e)
+        private async void ServiceCatalogTextBox_LostFocus(object sender, EventArgs e)
         {
             if (!_serviceCatalogTextBoxChanged)
                 return;

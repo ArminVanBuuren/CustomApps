@@ -54,7 +54,7 @@ namespace LogsReader.Reader.Forms
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			FolderPath = textBoxFolder.Text.Trim();
-			this.DialogResult = FolderPath != SourceFolder || AllDirectoriesSearching != _sourceAllDirSearching ? DialogResult.OK : DialogResult.Cancel;
+			DialogResult = FolderPath != SourceFolder || AllDirectoriesSearching != _sourceAllDirSearching ? DialogResult.OK : DialogResult.Cancel;
 			Close();
 		}
 

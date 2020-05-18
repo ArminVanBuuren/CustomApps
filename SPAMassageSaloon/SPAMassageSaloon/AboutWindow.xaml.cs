@@ -16,15 +16,15 @@ namespace SPAMassageSaloon
 
         static AboutWindow()
         {
-            IconImage = SPAMassageSaloon.Properties.Resources.about3.ToImageSource();
+            IconImage = Properties.Resources.about3.ToImageSource();
         }
 
         public AboutWindow()
         {
             InitializeComponent();
 
-            this.Title = MainForm.BuildTime;
-            this.Icon = IconImage;
+            Title = MainForm.BuildTime;
+            Icon = IconImage;
 
             ApplySettings();
 
@@ -35,7 +35,7 @@ namespace SPAMassageSaloon
         {
             #region Logs Reader
 
-            LRDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
+            LRDescription.Header = Properties.Resources.Txt_Description;
             LRDescriptionTxt.Text = LogsReader.Properties.Resources.Txt_LogsReaderForm_Description;
 
             LRSearch.Header = LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
@@ -76,7 +76,7 @@ namespace SPAMassageSaloon
 
             #region SPA Filter
 
-            SFDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
+            SFDescription.Header = Properties.Resources.Txt_Description;
             SFDescriptionTxt.Text = SPAFilter.Properties.Resources.Form_Description;
 
             SFProcessTxt.Text = SPAFilter.Properties.Resources.Form_ToolTip_ProcessesButtonOpen;
@@ -113,7 +113,7 @@ namespace SPAMassageSaloon
 
             #region XPath Test
 
-            XTDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
+            XTDescription.Header = Properties.Resources.Txt_Description;
             XTDescriptionTxt.Text = XPathTester.Properties.Resources.Form_Description;
             XTTest.Header = XPathTester.Properties.Resources.XPathText;
             XTTestTxt.Text = XPathTester.Properties.Resources.XPathTooltip;
@@ -124,8 +124,8 @@ namespace SPAMassageSaloon
 
             #region RegEx Tester
 
-            RTDescription.Header = SPAMassageSaloon.Properties.Resources.Txt_Description;
-            RTDescriptionTxt.Text = SPAMassageSaloon.Properties.Resources.RegExTester_Description;
+            RTDescription.Header = Properties.Resources.Txt_Description;
+            RTDescriptionTxt.Text = Properties.Resources.RegExTester_Description;
 
             #endregion
         }

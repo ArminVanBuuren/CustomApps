@@ -45,7 +45,7 @@ namespace LogsReader.Reader.Forms
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			_groups.Add(textBoxGroupName.Text, new List<string>());
-			this.DialogResult = ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
+			DialogResult = ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
 			Close();
 		}
 

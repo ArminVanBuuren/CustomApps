@@ -138,13 +138,13 @@ namespace LogsReader
                     }
                     catch (Exception ex)
                     {
-                        ReportMessage.Show(string.Format(Properties.Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Properties.Resources.Txt_Main_LoadScheme);
+                        ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_Initialization);
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
             }
             finally
             {

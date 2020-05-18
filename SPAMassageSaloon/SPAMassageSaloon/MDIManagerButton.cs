@@ -19,36 +19,36 @@ namespace SPAMassageSaloon
         public MDIManagerButton(Form form)
         {
             mdiForm = form;
-            mdiForm.FormClosed += (s, e) => { this.Owner.Items.Remove(this); };
-            mdiForm.TextChanged += (s, e) => { this.Text = mdiForm.Text + @"     "; };
-            mdiForm.Activated += (s, e) => { this.MDIManagerButton_Click(this, null); };
+            mdiForm.FormClosed += (s, e) => { Owner.Items.Remove(this); };
+            mdiForm.TextChanged += (s, e) => { Text = mdiForm.Text + @"     "; };
+            mdiForm.Activated += (s, e) => { MDIManagerButton_Click(this, null); };
 
             base.Text = mdiForm.Text.RegexReplace(@"\-\s*([Vv])|([0-9.]+)", string.Empty).Trim() + @"     ";
             base.Padding = new Padding(6, 0, 0, 0);
-            base.Margin = new Padding(0, 0, 0, 0);
             base.TextAlign = ContentAlignment.MiddleCenter;
+            Margin = new Padding(0, 0, 0, 0);
             MouseUp += MDIManagerButton_MouseUp;
             MouseMove += MDIManagerButton_MouseMove;
             Paint += MDIManagerButton_Paint;
             Click += MDIManagerButton_Click;
-            this.BorderSides = ToolStripStatusLabelBorderSides.All;
+            BorderSides = ToolStripStatusLabelBorderSides.All;
         }
 
         void MDIManagerButton_Click(object sender, EventArgs e)
         {
-            if (this.Parent == null)
+            if (Parent == null)
                 return;
 
             try
             {
-                foreach (var btn in this.Parent.Items.OfType<MDIManagerButton>())
+                foreach (var btn in Parent.Items.OfType<MDIManagerButton>())
                 {
                     btn.BorderStyle = Border3DStyle.Flat;
                     btn.BackColor = SystemColors.ButtonFace;
                 }
 
-                this.BorderStyle = Border3DStyle.Sunken;
-                this.BackColor = Color.White;
+                BorderStyle = Border3DStyle.Sunken;
+                BackColor = Color.White;
             }
             catch (Exception ex)
             {
@@ -76,13 +76,13 @@ namespace SPAMassageSaloon
         void MDIManagerButton_MouseMove(object sender, MouseEventArgs e)
         {
             mouseOnCloseBtn = btnRectangle.Contains(e.Location);
-            this.Invalidate();
+            Invalidate();
         }
 
         void MDIManagerButton_Paint(object sender, PaintEventArgs e)
         {
-            btnLeft = this.Width - Properties.Resources.close.Size.Width - 6;
-            btnTop = (this.Height - Properties.Resources.close.Size.Height) / 2;
+            btnLeft = Width - Properties.Resources.close.Size.Width - 6;
+            btnTop = (Height - Properties.Resources.close.Size.Height) / 2;
             btnRectangle = new Rectangle(btnLeft, btnTop, Properties.Resources.close.Size.Width, Properties.Resources.close.Size.Height);
 
             if (mouseOnCloseBtn)

@@ -125,8 +125,8 @@ namespace SPAMassageSaloon
         {
             try
             {
-                this.Visible = false;
-                this.IsMdiContainer = true;
+                Visible = false;
+                IsMdiContainer = true;
                 base.Text = FormName;
 
                 try
@@ -154,7 +154,7 @@ namespace SPAMassageSaloon
                     // ignored
                 }
 
-                if (!NationalLanguage.TryParse(GetRegeditValue(nameof(Language)), out NationalLanguage lang))
+                if (!Enum.TryParse(GetRegeditValue(nameof(Language)), out NationalLanguage lang))
                     lang = NationalLanguage.English;
                 switch (lang)
                 {
@@ -191,18 +191,18 @@ namespace SPAMassageSaloon
                 statusStrip.Items.Add(autor);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _cpuUsage = new ToolStripStatusLabel("    ") {Font = this.Font, Margin = new Padding(-7, 2, 1, 2)};
+                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _cpuUsage = new ToolStripStatusLabel("    ") { Font = this.Font, Margin = new Padding(-7, 2, 1, 2) };
                 statusStrip.Items.Add(_cpuUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _threadsUsage = new ToolStripStatusLabel("  ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
+                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _threadsUsage = new ToolStripStatusLabel("  ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
                 statusStrip.Items.Add(_threadsUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") {Font = this.Font, Margin = statusStripItemsPaddingStart});
-                _ramUsage = new ToolStripStatusLabel("       ") {Font = this.Font, Margin = statusStripItemsPaddingEnd};
+                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                _ramUsage = new ToolStripStatusLabel("       ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
                 statusStrip.Items.Add(_ramUsage);
                 statusStrip.Items.Add(new ToolStripSeparator());
                 CountOfDefaultStatusItems = statusStrip.Items.Count;
@@ -241,7 +241,7 @@ namespace SPAMassageSaloon
             finally
             {
                 CenterToScreen();
-                this.Visible = true;
+                Visible = true;
 
                 var monitoring = new Thread(CalculateLocalResources) { IsBackground = true, Priority = ThreadPriority.Lowest };
                 monitoring.Start();
@@ -336,7 +336,7 @@ namespace SPAMassageSaloon
 
                 void Monitoring()
                 {
-                    if (this.WindowState != FormWindowState.Minimized)
+                    if (WindowState != FormWindowState.Minimized)
                     {
                         double percent = 0;
                         if (appCPU != null)
@@ -377,7 +377,7 @@ namespace SPAMassageSaloon
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Properties.Resources.Txt_SystemResourceMonitoring);
+                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_SystemResourceMonitoring);
             }
         }
 
@@ -502,13 +502,13 @@ namespace SPAMassageSaloon
                 if (status == null)
                     return;
 
-                mainForm.Text = $"{MainForm.FormName}  [{mdiForm.Text.Trim()}]";
+                mainForm.Text = $"{FormName}  [{mdiForm.Text.Trim()}]";
                 button.Activated += (o, args) =>
                 {
                     try
                     {
                         var mdiButton = (MDIManagerButton)o;
-                        mainForm.Text = $"{MainForm.FormName}  [{mdiButton.mdiForm.Text.Trim()}]";
+                        mainForm.Text = $"{FormName}  [{mdiButton.mdiForm.Text.Trim()}]";
                     }
                     catch (Exception ex)
                     {

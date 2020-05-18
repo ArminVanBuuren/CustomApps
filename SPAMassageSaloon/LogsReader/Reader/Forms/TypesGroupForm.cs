@@ -61,7 +61,7 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
+			DialogResult = DialogResult.OK;
 
 			if (_currentGroup != null && buttonOK.Enabled)
 			{

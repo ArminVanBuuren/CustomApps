@@ -128,15 +128,16 @@ namespace LogsReader.Reader.Forms
 				formHeightSize += panel.Size.Height;
 			}
 
-			this.Size = new Size(this.Size.Width, formHeightSize);
-			this.MinimumSize = new Size(this.MinimumSize.Width, formHeightSize);
-			this.Size = new Size(this.Size.Width, formHeightSize);
-			this.MinimumSize = new Size(this.MinimumSize.Width, formHeightSize);
+			Size = new Size(Size.Width, formHeightSize);
+			MinimumSize = new Size(MinimumSize.Width, formHeightSize);
+			// необходим повтор, т.к. это сраные формы
+			Size = new Size(Size.Width, formHeightSize);
+			MinimumSize = new Size(MinimumSize.Width, formHeightSize);
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
+			DialogResult = DialogResult.OK;
 
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
@@ -184,7 +185,7 @@ namespace LogsReader.Reader.Forms
 			{
 				try
 				{
-					if (this.IsDisposed)
+					if (IsDisposed)
 						return;
 
 					_serverPanels.Remove(serverTemplate);
@@ -248,12 +249,12 @@ namespace LogsReader.Reader.Forms
 										pinger.Dispose();
 									}
 
-									if (!this.IsDisposed)
+									if (!IsDisposed)
 									{
 										this.SafeInvoke(() =>
 										{
 
-											if (this.IsDisposed || textBoxServer.IsDisposed)
+											if (IsDisposed || textBoxServer.IsDisposed)
 												return;
 
 											textBoxServer.BackColor = color;
