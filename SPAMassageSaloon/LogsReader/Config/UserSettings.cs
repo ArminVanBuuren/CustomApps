@@ -12,23 +12,9 @@ namespace LogsReader.Config
     {
         private RegeditControl parentRegistry;
 
-        public UserSettings(string schemeName)
-        {
-            try
-            {
-                Scheme = schemeName;
-                var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
-                UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch.ToString(), string.Empty));
-                parentRegistry = new RegeditControl(this.GetAssemblyInfo().ApplicationName);
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
+        public static string UserName { get; }
 
         public string Scheme { get; }
-        public string UserName { get; }
 
         public string PreviousSearch
         {
@@ -172,6 +158,32 @@ namespace LogsReader.Config
             set => SetValue(nameof(TraceHighlights), value);
         }
 
+        static UserSettings()
+        {
+	        try
+	        {
+		        var userName = Environment.UserName.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
+		        UserName = Path.GetInvalidFileNameChars().Aggregate(userName, (current, ch) => current.Replace(ch.ToString(), string.Empty));
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+        }
+
+        public UserSettings(string schemeName)
+        {
+	        try
+	        {
+		        Scheme = schemeName;
+		        parentRegistry = new RegeditControl(this.GetAssemblyInfo().ApplicationName);
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+        }
+
         public int GetValue(string name, int rangeFrom, int rangeTo, int @default)
         {
             var vlueStr = GetValue(name);
@@ -188,7 +200,7 @@ namespace LogsReader.Config
             try
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-	                return (string)schemeControl[$"{UserName}_{name}"] ?? string.Empty;
+	                return (string)schemeControl[name] ?? string.Empty;
             }
             catch (Exception)
             {
@@ -204,7 +216,7 @@ namespace LogsReader.Config
             try
             {
                 using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-	                schemeControl[$"{UserName}_{name}"] = value;
+	                schemeControl[name] = value;
             }
             catch (Exception)
             {

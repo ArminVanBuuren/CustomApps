@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using LogsReader.Config;
@@ -21,7 +20,7 @@ namespace LogsReader
 	    private static readonly object credentialSync = new object();
 	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
 
-	    public static Dictionary<CryptoNetworkCredential, DateTime> UserCredentials
+	    public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get
 		    {
@@ -58,7 +57,7 @@ namespace LogsReader
 	        {
 		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
 		        {
-			        var obj = reg[nameof(UserCredentials)];
+			        var obj = reg[nameof(Credentials)];
 			        if (obj is byte[] array)
 			        {
 				        using (var stream = new MemoryStream(array))
@@ -77,8 +76,8 @@ namespace LogsReader
 	        try
 	        {
 		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
-		        using (var stream = UserCredentials.SerializeToStream())
-			        reg[nameof(UserCredentials), RegistryValueKind.Binary] = stream.ToArray();
+		        using (var stream = Credentials.SerializeToStream())
+			        reg[nameof(Credentials), RegistryValueKind.Binary] = stream.ToArray();
 	        }
 	        catch (Exception ex)
 	        {

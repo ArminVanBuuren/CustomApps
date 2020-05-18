@@ -118,7 +118,7 @@ namespace LogsReader.Reader
 			catch (Exception)
 			{
 				var success = false;
-				foreach (var credential in LogsReaderMainForm.UserCredentials
+				foreach (var credential in LogsReaderMainForm.Credentials
 					.OrderByDescending(x => x.Value)
 					.Select(x => x.Key)
 					.ToList())
@@ -132,7 +132,7 @@ namespace LogsReader.Reader
 						{
 							var access = Directory.GetAccessControl(serverFolder);
 							Connections.Add(connection);
-							LogsReaderMainForm.UserCredentials[credential] = DateTime.Now;
+							LogsReaderMainForm.Credentials[credential] = DateTime.Now;
 							success = true;
 							break;
 						}
@@ -168,7 +168,7 @@ namespace LogsReader.Reader
 								{
 									var access = Directory.GetAccessControl(serverFolder);
 									Connections.Add(connection);
-									LogsReaderMainForm.UserCredentials[credential.Credential] = DateTime.Now;
+									LogsReaderMainForm.Credentials[credential.Credential] = DateTime.Now;
 									break;
 								}
 							}
