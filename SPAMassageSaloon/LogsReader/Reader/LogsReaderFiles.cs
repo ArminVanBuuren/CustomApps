@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
@@ -24,8 +25,6 @@ namespace LogsReader.Reader
 		public bool IsStopPending { get; private set; } = false;
 
 		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
-
-		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
 		protected LogsReaderFiles(
 			LRSettingsScheme settings, 
@@ -79,9 +78,10 @@ namespace LogsReader.Reader
 					if (!folderMatch.Success)
 						throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, originalFolder.Key));
 
-					var serverFolder = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$\\{folderMatch.Groups["FULL"]}";
+					var serverRoot = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$";
+					var serverFolder = $"{serverRoot}\\{folderMatch.Groups["FULL"]}";
 
-					if(!IsExistAndAvailable(serverFolder, serverName, originalFolder.Key))
+					if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder.Key))
 						continue;
 
 					var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
@@ -109,84 +109,127 @@ namespace LogsReader.Reader
 			return kvpList;
 		}
 
-		bool IsExistAndAvailable(string serverFolder, string server, string folderPath)
+		bool IsExistAndAvailable(string serverFolder, string server, string serverRoot, string folderPath)
 		{
 			try
 			{
-				var access = Directory.GetAccessControl(serverFolder);
+				Directory.GetDirectories(serverFolder);
 			}
-			catch (Exception)
+			catch (DirectoryNotFoundException)
 			{
-				var success = false;
-				foreach (var credential in LogsReaderMainForm.Credentials
-					.OrderByDescending(x => x.Value)
-					.Select(x => x.Key)
-					.ToList())
+				return false;
+			}
+			catch (SecurityException ex)
+			{
+				return IsExistAndAvailable(ex, serverFolder, server, serverRoot, folderPath);
+			}
+			catch (IOException ex)
+			{
+				return IsExistAndAvailable(ex, serverFolder, server, serverRoot, folderPath);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				return IsExistAndAvailable(ex, serverFolder, server, serverRoot, folderPath);
+			}
+
+			return Directory.Exists(serverFolder);
+		}
+
+		bool IsExistAndAvailable(Exception ex, string serverFolder, string server, string serverRoot, string folderPath)
+		{
+			if (ex.HResult == -2147024843) // не найден сетевой путь
+				throw new Exception($"[{server}] {ex.Message.Trim()}", ex);
+
+
+			foreach (var credential in LogsReaderMainForm.Credentials
+				.OrderByDescending(x => x.Value)
+				.Select(x => x.Key)
+				.ToList())
+			{
+				if (IsStopPending)
+					return false;
+				try
 				{
+					return IsExist(serverRoot, serverFolder, credential);
+				}
+				catch (Exception)
+				{
+					// ignore and continue
+				}
+			}
+
+
+			var tryCount = 0;
+			AddUserCredentials authorizationForm = null;
+			var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
+			var additionalTxt = string.Empty;
+			while (tryCount < 3)
+			{
+				if (IsStopPending)
+					return false;
+
+				authorizationForm = new AddUserCredentials(
+					$"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(),
+					authorizationForm?.Credential?.Domain,
+					authorizationForm?.Credential?.UserName);
+
+				if (authorizationForm.ShowDialog() == DialogResult.OK)
+				{
+					tryCount++;
+
 					try
 					{
-						if (IsStopPending)
-							return false;
-
-						using (var connection = new NetworkConnection(serverFolder, credential.Value))
-						{
-							var access = Directory.GetAccessControl(serverFolder);
-							Connections.Add(connection);
-							LogsReaderMainForm.Credentials[credential] = DateTime.Now;
-							success = true;
-							break;
-						}
+						return IsExist(serverRoot, serverFolder, authorizationForm.Credential);
 					}
-					catch (Exception ex)
+					catch (Exception ex2)
 					{
-						// ignored
+						additionalTxt = ex2.Message;
 					}
 				}
-
-				if (!success)
+				else
 				{
-					var tryCount = 0;
-					AddUserCredentials credential = null;
-					var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
-					var additionalTxt = Resources.Txt_LogsReaderForm_AccessDeniedAuthor;
-					while (tryCount < 3)
-					{
-						if (IsStopPending)
-							return false;
-
-						credential = new AddUserCredentials(
-							$"{accessDeniedTxt}\r\n{additionalTxt}".Trim(),
-							credential?.Credential?.Domain,
-							credential?.Credential?.UserName);
-
-						if (credential.ShowDialog() == DialogResult.OK)
-						{
-							tryCount++;
-							try
-							{
-								using (var connection = new NetworkConnection(serverFolder, credential.Credential.Value))
-								{
-									var access = Directory.GetAccessControl(serverFolder);
-									Connections.Add(connection);
-									LogsReaderMainForm.Credentials[credential.Credential] = DateTime.Now;
-									break;
-								}
-							}
-							catch (Exception ex)
-							{
-								additionalTxt = ex.Message;
-								NetworkConnection.CancelConnection(serverFolder);
-							}
-						}
-						else
-						{
-							break;
-						}
-					}
+					break;
 				}
 			}
 
 			return Directory.Exists(serverFolder);
+		}
+
+		static bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
+		{
+			// сначала проверяем доступ к рутовой папке
+			try
+			{
+				using (new NetworkConnection(serverRoot, credential.Value))
+				{
+					return IsExist(serverFolder, credential);
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+
+			// если доступа к руту нет, то проверяем доступ к конкретной папке
+			using (new NetworkConnection(serverFolder, credential.Value))
+			{
+				return IsExist(serverFolder, credential);
+			}
+		}
+
+		static bool IsExist(string serverFolder, CryptoNetworkCredential credential)
+		{
+			try
+			{
+				Directory.GetDirectories(serverFolder);
+				LogsReaderMainForm.Credentials[credential] = DateTime.Now;
+				return Directory.Exists(serverFolder);
+			}
+			catch (DirectoryNotFoundException)
+			{
+				LogsReaderMainForm.Credentials[credential] = DateTime.Now;
+				return false;
+			}
 		}
 
 		public abstract Task StartAsync();
@@ -196,24 +239,26 @@ namespace LogsReader.Reader
 			IsStopPending = true;
 		}
 
+		//protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
+
 		public virtual void Reset()
 		{
-			if (Connections != null)
-			{
-				foreach (var connect in Connections)
-				{
-					try
-					{
-						connect.Dispose();
-					}
-					catch (Exception ex)
-					{
-						// ignored
-					}
-				}
+			//if (Connections != null)
+			//{
+			//	foreach (var connect in Connections)
+			//	{
+			//		try
+			//		{
+			//			connect.Dispose();
+			//		}
+			//		catch (Exception ex)
+			//		{
+			//			// ignored
+			//		}
+			//	}
 
-				Connections.Clear();
-			}
+			//	Connections.Clear();
+			//}
 
 			TraceReaders = null;
 

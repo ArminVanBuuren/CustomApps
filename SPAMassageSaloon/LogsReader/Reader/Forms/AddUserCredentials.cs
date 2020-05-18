@@ -14,9 +14,13 @@ namespace LogsReader.Reader.Forms
 		{
 			InitializeComponent();
 
-			Icon = Icon.FromHandle(Resources.connectionLocked.GetHicon());
+			Icon = Icon.FromHandle(Resources.authorization.GetHicon());
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
+			MinimizeBox = false;
+			MaximizeBox = false;
+			TopLevel = true;
+			TopMost = true;
 
 			SetInformation(information);
 			textBoxDomain.Text = domain ?? string.Empty;

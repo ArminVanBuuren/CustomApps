@@ -27,6 +27,8 @@ namespace LogsReader.Reader.Forms
 			Icon = Icon.FromHandle(Resources.folder.GetHicon());
 			base.Text = Resources.Txt_Forms_AddFolder;
 			new ToolTip().SetToolTip(checkBoxAllDirectories, Resources.Txt_Forms_AddFolderTooltip);
+			MinimizeBox = false;
+			MaximizeBox = false;
 
 			labelFolder.Text = Resources.Txt_Forms_Folder;
 

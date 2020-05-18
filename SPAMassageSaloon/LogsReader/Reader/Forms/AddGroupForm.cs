@@ -29,6 +29,8 @@ namespace LogsReader.Reader.Forms
 			labelGroupName.Text =  Resources.Txt_Forms_GroupName;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
+			MinimizeBox = false;
+			MaximizeBox = false;
 
 			CenterToScreen();
 

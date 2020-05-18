@@ -21,6 +21,8 @@ namespace LogsReader.Reader.Forms
 			base.Text = Resources.Txt_Forms_FileTypesGroup;
 			labelGroup.Text = Resources.Txt_Forms_Group;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
+			MinimizeBox = false;
+			MaximizeBox = false;
 
 			_typesGroups = typesGroups;
 

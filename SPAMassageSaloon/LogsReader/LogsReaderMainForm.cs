@@ -52,7 +52,6 @@ namespace LogsReader
 
         static LogsReaderMainForm()
         {
-	        _userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
 	        try
 	        {
 		        using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
@@ -69,6 +68,11 @@ namespace LogsReader
 	        {
 		        // ignored
 	        }
+	        finally
+	        {
+                if(_userCredentials == null)
+	                _userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
+            }
         }
 
         static void SerializeUserCreditails()

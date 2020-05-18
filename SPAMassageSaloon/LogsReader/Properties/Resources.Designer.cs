@@ -83,6 +83,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap authorization {
+            get {
+                object obj = ResourceManager.GetObject("authorization", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap cancel {
             get {
                 object obj = ResourceManager.GetObject("cancel", resourceCulture);
@@ -96,16 +106,6 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap clear1 {
             get {
                 object obj = ResourceManager.GetObject("clear1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap connectionLocked {
-            get {
-                object obj = ResourceManager.GetObject("connectionLocked", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -555,15 +555,6 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_AccessDenied {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_AccessDenied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на You must log in..
-        /// </summary>
-        public static string Txt_LogsReaderForm_AccessDeniedAuthor {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_AccessDeniedAuthor", resourceCulture);
             }
         }
         

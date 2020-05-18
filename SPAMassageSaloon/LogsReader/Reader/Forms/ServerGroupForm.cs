@@ -26,6 +26,8 @@ namespace LogsReader.Reader.Forms
 			Icon = Icon.FromHandle(Resources.server_group.GetHicon());
 			base.Text = Resources.Txt_Forms_ServerGroup;
 			base.AutoSize = false;
+			MinimizeBox = false;
+			MaximizeBox = false;
 
 			labelGroup.Text = Resources.Txt_Forms_Group;
 			groupBoxServers.Text = Resources.Txt_LogsReaderForm_Servers;
