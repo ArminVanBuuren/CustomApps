@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Utils;
@@ -12,8 +14,15 @@ namespace Tester.Console
         {
             try
             {
-	            
-            }
+	            var securedPassword = new SecureString();
+	            foreach (var ch in "IO%11111")
+		            securedPassword.AppendChar(ch);
+				var creditail = new NetworkCredential(@"foris6\vhovanskij", securedPassword, "foris6");
+				using (var dd1111 = new NetworkConnection(@"\\f6-crm-gui01\c$", creditail))
+				{
+
+				}
+			}
             catch (Exception e)
             {
                 System.Console.WriteLine(e);
