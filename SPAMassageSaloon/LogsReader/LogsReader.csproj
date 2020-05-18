@@ -67,7 +67,7 @@
     <Compile Include="Config\LRTraceParseItem.cs" />
     <Compile Include="Config\LRGroups.cs" />
     <Compile Include="Config\TraceParse.cs" />
-    <Compile Include="CriptoNetworkCredential.cs" />
+    <Compile Include="CryptoNetworkCredential.cs" />
     <Compile Include="Properties\Resources.ru.Designer.cs">
       <DependentUpon>Resources.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
