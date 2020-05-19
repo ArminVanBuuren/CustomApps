@@ -130,9 +130,11 @@ namespace LogsReader.Reader.Forms
 				formHeightSize += panel.Size.Height;
 			}
 
+			MaximumSize = new Size(999, formHeightSize);
 			Size = new Size(Size.Width, formHeightSize);
 			MinimumSize = new Size(MinimumSize.Width, formHeightSize);
 			// необходим повтор, т.к. это сраные формы
+			MaximumSize = new Size(999, formHeightSize);
 			Size = new Size(Size.Width, formHeightSize);
 			MinimumSize = new Size(MinimumSize.Width, formHeightSize);
 		}
