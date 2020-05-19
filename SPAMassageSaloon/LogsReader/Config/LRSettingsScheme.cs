@@ -263,9 +263,10 @@ namespace LogsReader.Config
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", "mg1, mg2, mg3, mg4, mg5") });
 			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
-			        _maxLines = 100;
-			        _maxThreads = -1;
-			        _traceParce = new LRTraceParse(_schemeName);
+			        MaxLines = 100;
+			        MaxThreads = -1;
+			        OrderBy = _orderBy;
+                    _traceParce = new LRTraceParse(_schemeName);
 			        break;
 		        case "SPA":
 			        _schemeName = schemeName;
@@ -280,9 +281,9 @@ namespace LogsReader.Config
 				        new LRGroupItem("SPA.BPM", "spa.bpm")
                     });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
-			        _maxLines = 1;
-			        _maxThreads = -1;
-			        _orderBy = "Date desc, ID desc";
+			        MaxLines = 1;
+			        MaxThreads = -1;
+			        OrderBy = "Date desc, ID desc";
 			        _traceParce = new LRTraceParse(_schemeName);
 			        break;
 		        case "MGA":
@@ -290,9 +291,10 @@ namespace LogsReader.Config
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
 			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, debug-all, debug-only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
-			        _maxLines = 20000;
-			        _maxThreads = -1;
-			        _traceParce = new LRTraceParse(_schemeName);
+			        MaxLines = 20000;
+			        MaxThreads = -1;
+			        OrderBy = _orderBy;
+                    _traceParce = new LRTraceParse(_schemeName);
 			        break;
 	        }
         }
