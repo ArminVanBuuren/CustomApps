@@ -19,7 +19,7 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    public sealed partial class LogsReaderForm : UserControl, IUserForm
+    public sealed partial class GlobalForm : UserControl, IUserForm
     {
 	    private const string ParentServerTreeNodeName = "Parent_Server";
 	    private const string ParentFileTypeTreeNodeName = "Parent_FileType";
@@ -81,7 +81,7 @@ namespace LogsReader.Reader
             private set => progressBar.Value = value;
         }
 
-        public LogsReaderForm(LRSettingsScheme scheme)
+        public GlobalForm(LRSettingsScheme scheme)
         {
             if (scheme == null)
                 throw new ArgumentNullException(nameof(scheme));
@@ -209,9 +209,6 @@ namespace LogsReader.Reader
 
                 #region Options
 
-                maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
                 orderByText.Text = CurrentSettings.OrderBy;
 
                 #endregion
@@ -781,9 +778,6 @@ namespace LogsReader.Reader
                 _tooltip.RemoveAll();
                 _tooltip.SetToolTip(txtPattern, Resources.Txt_Form_SearchComment);
                 _tooltip.SetToolTip(useRegex, Resources.Txt_LRSettings_UseRegexComment);
-                _tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
-                _tooltip.SetToolTip(maxLinesStackText, Resources.Txt_LRSettingsScheme_MaxTraceLines);
-                _tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
                 _tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
                 _tooltip.SetToolTip(TreeMain, Resources.Txt_Form_trvMainComment);
                 _tooltip.SetToolTip(dateStartFilter, Resources.Txt_Form_DateFilterComment);
@@ -794,9 +788,6 @@ namespace LogsReader.Reader
                 _tooltip.SetToolTip(buttonExport, Resources.Txt_LogsReaderForm_ExportComment);
 
                 OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
-                RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
-                MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
-                MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
                 useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
 
                 btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
@@ -1189,9 +1180,6 @@ namespace LogsReader.Reader
             notepad.Enabled = !IsWorking;
             descriptionText.Enabled = !IsWorking;
             useRegex.Enabled = !IsWorking;
-            maxThreadsText.Enabled = !IsWorking;
-            rowsLimitText.Enabled = !IsWorking;
-            maxLinesStackText.Enabled = !IsWorking;
             dateStartFilter.Enabled = !IsWorking;
             dateEndFilter.Enabled = !IsWorking;
             traceNameFilterComboBox.Enabled = !IsWorking;
@@ -1319,66 +1307,6 @@ namespace LogsReader.Reader
             {
                 // ignored
             }
-        }
-
-        private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(maxLinesStackText.Text, out var value))
-                MaxLinesStackTextSave(value);
-        }
-
-        private void MaxLinesStackText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(maxLinesStackText.Text, out var value))
-                value = -1;
-            MaxLinesStackTextSave(value);
-        }
-
-        void MaxLinesStackTextSave(int value)
-        {
-            CurrentSettings.MaxLines = value;
-            maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void MaxThreadsText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(maxThreadsText.Text, out var value))
-                MaxThreadsTextSave(value);
-        }
-
-        private void MaxThreadsText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(maxThreadsText.Text, out var value))
-                value = -1;
-            MaxThreadsTextSave(value);
-        }
-
-        void MaxThreadsTextSave(int value)
-        {
-            CurrentSettings.MaxThreads = value;
-            maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void RowsLimitText_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(rowsLimitText.Text, out var value))
-                RowsLimitTextSave(value);
-        }
-
-        private void RowsLimitText_Leave(object sender, EventArgs e)
-        {
-            if (!int.TryParse(rowsLimitText.Text, out var value))
-                value = -1;
-            RowsLimitTextSave(value);
-        }
-
-        void RowsLimitTextSave(int value)
-        {
-            CurrentSettings.RowsLimit = value;
-            rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-            OnSchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OrderByText_Leave(object sender, EventArgs e)
