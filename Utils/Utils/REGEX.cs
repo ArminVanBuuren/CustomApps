@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -36,7 +35,7 @@ namespace Utils
         /// <param name="groupsFormat">Формат группировок. Например = "$1.$2"</param>
         /// <param name="itemFormatExist">Если существует формат даты или валюты. Например = "$1:{dd.MM.yyyy HH:mm:ss.fff}", то срабатывает триггер и вызов функции.</param>
         /// <returns></returns>
-        public static string GetValueByReplacement<T>(this Match match, string groupsFormat, Func<string, string, T> itemFormatExist)
+        public static string GetValueByReplacement(this Match match, string groupsFormat, Func<string, string, string> itemFormatExist)
         {
 	        var builder = new StringBuilder();
 	        var builderItemFormat = new StringBuilder();

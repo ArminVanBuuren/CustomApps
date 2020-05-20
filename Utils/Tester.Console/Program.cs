@@ -18,7 +18,7 @@ namespace Tester.Console
 	    {
 		    try
 		    {
-			    
+			    Test_DateTime();
 		    }
 		    catch (Exception e)
 		    {
@@ -91,16 +91,33 @@ namespace Tester.Console
 			    }
 			    return value;
 		    }));
+	    }
+
+		static void Test_DateTime()
+		{
+			Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+			Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+			var dateStr = "  2020-03-26 18:45:21.009   ";
+
+			if (DateTime.TryParseExact(dateStr, "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var result))
+			{
+				dateStr = result.ToString("O");
+			}
+
+			if (TIME.TryParseAnyDate(dateStr, DateTimeStyles.AllowWhiteSpaces, out var result2))
+			{
+
+			}
 
 
-		    //         DateTime.Now.ToString("")
-		    //var test = DateTime.TryParse(" 01.05.2020   15:30:05 ".Replace(",", "."), out var date1);
-		    //         var test2 = DateTime.TryParseExact("01.05.2020 15:30:05".Replace(",", "."), "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var date2);
-		    //         var date3 = Convert.ToDateTime("  01.05\\2020   15:30:05  ");
+			//         DateTime.Now.ToString("")
+			//var test = DateTime.TryParse(" 01.05.2020   15:30:05 ".Replace(",", "."), out var date1);
+			//         var test2 = DateTime.TryParseExact("01.05.2020 15:30:05".Replace(",", "."), "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var date2);
+			//         var date3 = Convert.ToDateTime("  01.05\\2020   15:30:05  ");
 
-		    //System.Console.WriteLine(date1);
-		    //System.Console.WriteLine(date2);
-		    //System.Console.WriteLine(date3);
+			//System.Console.WriteLine(date1);
+			//System.Console.WriteLine(date2);
+			//System.Console.WriteLine(date3);
 		}
 
 		static void Test_1()
@@ -127,14 +144,14 @@ namespace Tester.Console
 
 		    var stop = new Stopwatch();
 		    stop.Start();
-		    for (int i = 0; i < 10000; i++)
+		    for (var i = 0; i < 10000; i++)
 			    listForIgnore.Contains("USER_INFO");
 		    stop.Stop();
 		    System.Console.WriteLine(stop.Elapsed);
 
 		    stop.Reset();
 		    stop.Start();
-		    for (int i = 0; i < 10000; i++)
+		    for (var i = 0; i < 10000; i++)
 			    listForIgnore2.Contains("USER_INFO");
 		    stop.Stop();
 		    System.Console.WriteLine(stop.Elapsed);
