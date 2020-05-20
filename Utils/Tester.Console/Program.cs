@@ -95,18 +95,19 @@ namespace Tester.Console
 
 		static void Test_DateTime()
 		{
+			var invariant = DateTime.Now.ToString("dddd, yyyy 'с.' MMMM d 'күнэ'", CultureInfo.GetCultureInfo("sah-RU"));
 			Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
 			var dateStr = "  2020-03-26 18:45:21.009   ";
 
-			if (DateTime.TryParseExact(dateStr, "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var result))
+			if (DateTime.TryParseExact(invariant, "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var result))
 			{
-				dateStr = result.ToString("O");
+				System.Console.WriteLine(result);
 			}
 
-			if (TIME.TryParseAnyDate(dateStr, DateTimeStyles.AllowWhiteSpaces, out var result2))
+			if (TIME.TryParseAnyDate(invariant, DateTimeStyles.AllowWhiteSpaces, out var result2))
 			{
-
+				System.Console.WriteLine(result2);
 			}
 
 

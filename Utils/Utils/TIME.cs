@@ -97,6 +97,7 @@ namespace Utils
 
 		private static List<CultureInfo> _dateCultures;
 
+		// https://www.basicdatepicker.com/samples/cultureinfo.aspx
 		private static IEnumerable<CultureInfo> DateCultures
 		{
 			get
