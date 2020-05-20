@@ -89,7 +89,9 @@ namespace Utils
 				Thread.CurrentThread.CurrentCulture,
 				CultureInfo.InstalledUICulture,
 				CultureInfo.CurrentUICulture,
-				CultureInfo.CurrentCulture
+				CultureInfo.CurrentCulture,
+				CultureInfo.InvariantCulture,
+				CultureInfo.InstalledUICulture
 			};
 		}
 
