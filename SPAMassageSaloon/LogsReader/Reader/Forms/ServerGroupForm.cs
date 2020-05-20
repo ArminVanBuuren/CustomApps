@@ -15,8 +15,10 @@ namespace LogsReader.Reader.Forms
 	{
 		private const string PING_SERVER = "PingServer";
 		private const string REMOVE_SERVER = "RemoveServer";
+
 		private readonly Dictionary<string, List<string>> _serverGroups;
-		private readonly Dictionary<Panel, bool> _serverPanels = new Dictionary<Panel, bool>();
+		private readonly HashSet<Panel> _serverPanels = new HashSet<Panel>();
+
 		private string _currentGroup = null;
 
 		public ServerGroupForm(string selectedGroup, Dictionary<string, List<string>> serverGroups)
@@ -104,9 +106,6 @@ namespace LogsReader.Reader.Forms
 				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == REMOVE_SERVER);
 				button?.PerformClick();
 			}
-
-			AddServer(string.Empty);
-			AssignForm();
 		}
 
 		private void buttonPingAll_Click(object sender, EventArgs e)
@@ -124,7 +123,7 @@ namespace LogsReader.Reader.Forms
 				groupBoxServers.Controls.Remove(panel);
 
 			var formHeightSize = panelChooseGroup.Size.Height + panelBottom.Size.Height + 60;
-			foreach (var panel in _serverPanels.Keys.Reverse())
+			foreach (var panel in _serverPanels.Reverse())
 			{
 				groupBoxServers.Controls.Add(panel);
 				formHeightSize += panel.Size.Height;
@@ -146,7 +145,7 @@ namespace LogsReader.Reader.Forms
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
 				_serverGroups[_currentGroup] =
-					new List<string>(_serverPanels.Keys
+					new List<string>(_serverPanels
 						.Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
 						.Where(x => !x.IsNullOrEmptyTrim())
 						.Distinct(StringComparer.InvariantCultureIgnoreCase));
@@ -193,6 +192,10 @@ namespace LogsReader.Reader.Forms
 						return;
 
 					_serverPanels.Remove(serverTemplate);
+
+					if(_serverPanels.Count == 0)
+						AddServer(string.Empty);
+
 					AssignForm();
 				}
 				catch (Exception ex)
@@ -289,7 +292,17 @@ namespace LogsReader.Reader.Forms
 			serverTemplate.Location = new Point(0, 26);
 			serverTemplate.Size = new Size(400, 30);
 
-			_serverPanels.Add(serverTemplate, true);
+			_serverPanels.Add(serverTemplate);
+
+			var tabIndex = 1;
+			foreach (var panel in _serverPanels)
+			{
+				panel.TabIndex = tabIndex++;
+				foreach (var control in panel.Controls.OfType<Control>())
+				{
+					control.TabIndex = tabIndex++;
+				}
+			}
 		}
 	}
 }

@@ -65,7 +65,7 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
 			this.comboboxGroup.Size = new System.Drawing.Size(371, 21);
-			this.comboboxGroup.TabIndex = 1;
+			this.comboboxGroup.TabIndex = 99;
 			// 
 			// buttonCancel
 			// 
