@@ -9,9 +9,7 @@ namespace LogsReader.Reader
 {
     public class DataTemplate
     {
-        public const string OUTPUT_DATE_FORMAT = "dd.MM.yyyy HH:mm:ss.fff";
-
-        private readonly StringBuilder _traceMessage = new StringBuilder();
+	    private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
         private string _traceName;
 
@@ -27,7 +25,7 @@ namespace LogsReader.Reader
             if (DateTime.TryParse(dateWithoutSpaces.Replace(",", "."), out var dateOfTrace))
             {
                 Date = dateOfTrace;
-                DateOfTrace = Date.Value.ToString(OUTPUT_DATE_FORMAT);
+                DateOfTrace = Date.Value.ToString(traceReader.OutputDateFormat);
             }
             else
             {
@@ -58,7 +56,7 @@ namespace LogsReader.Reader
 
             ID = -1;
             Date = DateTime.Now;
-            DateOfTrace = Date.Value.ToString(OUTPUT_DATE_FORMAT);
+            DateOfTrace = Date.Value.ToString(traceReader.OutputDateFormat);
 
             Error = error;
             TraceName = error.GetType().ToString();

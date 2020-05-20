@@ -9,7 +9,7 @@ namespace LogsReader.Config
     [Serializable, XmlRoot("TraceParse")]
     public class LRTraceParse : TraceParse
     {
-        private LRTraceParseItem[] _traceParsePatterns = new LRTraceParseItem[] {new LRTraceParseItem()};
+	    private LRTraceParseItem[] _traceParsePatterns = new LRTraceParseItem[] {new LRTraceParseItem()};
         private XmlNode[] _startTraceWith = null;
         private XmlNode[] _endTraceWith = null;
 
@@ -55,6 +55,9 @@ namespace LogsReader.Config
             get => _traceParsePatterns != null && _traceParsePatterns.Length > 0 && _traceParsePatterns.All(x => x.IsCorrectRegex);
             set { }
         }
+
+        [XmlAttribute("outputDateFormat")] 
+        public string OutputDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
 
         [XmlElement("Pattern")]
         public LRTraceParseItem[] Patterns

@@ -19,9 +19,11 @@ namespace LogsReader.Reader
 
         public event FoundDataTemplate OnFound;
 
-        protected int MaxTraceLines => CurrentSettings.MaxLines;
+        public int MaxTraceLines => CurrentSettings.MaxLines;
 
-        protected LRTraceParseItem[] TraceParsePatterns => CurrentSettings.TraceParse.Patterns;
+        public LRTraceParseItem[] TraceParsePatterns => CurrentSettings.TraceParse.Patterns;
+
+        public string OutputDateFormat => CurrentSettings.TraceParse.OutputDateFormat;
 
         public string Server { get; }
         public string FileNamePartial { get; }
@@ -104,7 +106,7 @@ namespace LogsReader.Reader
                         {
 	                        if (DateTime.TryParseExact(value.Replace("\r", string.Empty).Replace("\n", " ").TrimWhiteSpaces(), format, null, DateTimeStyles.None, out var customDateParseResult))
 	                        {
-		                        return customDateParseResult.ToString(DataTemplate.OUTPUT_DATE_FORMAT);
+		                        return customDateParseResult.ToString(OutputDateFormat);
 	                        }
 	                        return value;
                         }),
