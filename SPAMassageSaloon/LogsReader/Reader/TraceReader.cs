@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -99,7 +100,14 @@ namespace LogsReader.Reader
                     result = new DataTemplate(this,
                         failed?.FoundLineID ?? Lines,
                         match.GetValueByReplacement(item.ID),
-                        match.GetValueByReplacement(item.Date),
+                        match.GetValueByReplacement(item.Date, (value, format) =>
+                        {
+	                        if (DateTime.TryParseExact(value.Replace("\r", string.Empty).Replace("\n", " ").TrimWhiteSpaces(), format, null, DateTimeStyles.None, out var customDateParseResult))
+	                        {
+		                        return customDateParseResult.ToString(DataTemplate.OUTPUT_DATE_FORMAT);
+	                        }
+	                        return value;
+                        }),
                         match.GetValueByReplacement(item.TraceName),
                         match.GetValueByReplacement(item.Description),
                         match.GetValueByReplacement(item.Message),
