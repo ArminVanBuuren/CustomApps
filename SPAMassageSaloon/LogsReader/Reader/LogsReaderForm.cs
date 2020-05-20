@@ -724,6 +724,10 @@ namespace LogsReader.Reader
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
                 EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+
+                ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
+                MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
+                EnumSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
             }
             catch (Exception ex)
             {
