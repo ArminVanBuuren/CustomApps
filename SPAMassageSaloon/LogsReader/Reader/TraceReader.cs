@@ -104,7 +104,7 @@ namespace LogsReader.Reader
                         match.GetValueByReplacement(item.ID),
                         match.GetValueByReplacement(item.Date, (value, format) =>
                         {
-	                        if (DateTime.TryParseExact(value.Replace("\r", string.Empty).Replace("\n", " ").TrimWhiteSpaces(), format, null, DateTimeStyles.AllowWhiteSpaces, out var customDateParseResult))
+	                        if (TIME.TryParseAnyDateExtract(value, format, DateTimeStyles.AllowWhiteSpaces, out var customDateParseResult))
 	                        {
 		                        return customDateParseResult.ToString(OutputDateFormat);
 	                        }

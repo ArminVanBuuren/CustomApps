@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using LogsReader.Properties;
@@ -21,15 +22,15 @@ namespace LogsReader.Reader
 
             ID = int.TryParse(strID, out var id) ? id : -1;
 
-            var dateWithoutSpaces = date?.Replace("\r", string.Empty).Replace("\n", " ").TrimWhiteSpaces() ?? string.Empty;
-            if (DateTime.TryParse(dateWithoutSpaces.Replace(",", "."), out var dateOfTrace))
+            var dateValue = date ?? string.Empty;
+            if (TIME.TryParseAnyDate(dateValue.Replace(",", "."), DateTimeStyles.AllowWhiteSpaces, out var dateOfTrace))
             {
                 Date = dateOfTrace;
                 DateOfTrace = Date.Value.ToString(traceReader.OutputDateFormat);
             }
             else
             {
-                DateOfTrace = dateWithoutSpaces;
+                DateOfTrace = dateValue;
             }
 
             TraceName = traceName;
