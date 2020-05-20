@@ -8,6 +8,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Oracle.ManagedDataAccess.Client;
 using Utils;
 
 namespace Tester.Console
@@ -18,7 +19,7 @@ namespace Tester.Console
 	    {
 		    try
 		    {
-			    Test_DateTime();
+			    OracleCommandTest();
 		    }
 		    catch (Exception e)
 		    {
@@ -27,6 +28,19 @@ namespace Tester.Console
 
 		    System.Console.WriteLine(@"Complete");
 		    System.Console.ReadLine();
+	    }
+
+
+	    public static void OracleCommandTest()
+	    {
+		    const string connectionString = "Data Source=vip12;User ID=tf2_cust;Password=cust;Max Pool Size=1";
+		    var connection = new Oracle.ManagedDataAccess.Client.OracleConnection(connectionString);
+		    var command = connection.CreateCommand();
+		    {
+			    command.CommandText = "SELECT sysdate FROM dual";
+			    connection.Open();
+			    command.ExecuteNonQuery();
+		    }
 	    }
 
 		static void Test_GetReplacement()
