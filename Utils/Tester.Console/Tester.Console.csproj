@@ -80,6 +80,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SpaCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

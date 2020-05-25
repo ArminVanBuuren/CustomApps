@@ -13,13 +13,13 @@ using Utils;
 
 namespace Tester.Console
 {
-    class Program
+	class Program
     {
 	    static void Main(string[] args)
 	    {
 		    try
 		    {
-			    OracleCommandTest();
+			    
 		    }
 		    catch (Exception e)
 		    {
@@ -34,7 +34,7 @@ namespace Tester.Console
 	    public static void OracleCommandTest()
 	    {
 		    const string connectionString = "Data Source=vip12;User ID=tf2_cust;Password=cust;Max Pool Size=1";
-		    var connection = new Oracle.ManagedDataAccess.Client.OracleConnection(connectionString);
+		    var connection = new OracleConnection(connectionString);
 		    var command = connection.CreateCommand();
 		    {
 			    command.CommandText = "SELECT sysdate FROM dual";
@@ -42,6 +42,15 @@ namespace Tester.Console
 			    command.ExecuteNonQuery();
 		    }
 	    }
+
+	    static void Test_SpaCalculator()
+	    {
+		    var calc = new SpaCalculator();
+		    calc.Require(new Context(), (ResultedTerminalDeviceServices parameter) =>
+		    {
+
+		    });
+		}
 
 		static void Test_GetReplacement()
 		{
