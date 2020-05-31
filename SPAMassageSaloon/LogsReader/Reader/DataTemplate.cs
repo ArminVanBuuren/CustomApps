@@ -14,7 +14,16 @@ namespace LogsReader.Reader
         private string _description;
         private string _traceName;
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string strID, string date, string traceName, string description, string message, string traceMessage)
+        internal DataTemplate(
+	        TraceReader traceReader, 
+	        long foundLineID, 
+	        string strID, 
+	        string date, 
+	        string traceName, 
+	        string description, 
+	        string message, 
+	        string traceMessage,
+	        string trn)
         {
             IsMatched = true;
             FoundLineID = foundLineID;
@@ -37,9 +46,10 @@ namespace LogsReader.Reader
             Description = description;
             Message = message;
             TraceMessage = traceMessage;
+            TransactionValue = trn;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn)
         {
             IsMatched = false;
             FoundLineID = foundLineID;
@@ -47,9 +57,10 @@ namespace LogsReader.Reader
 
             ID = -1;
             TraceMessage = traceMessage;
+            TransactionValue = trn;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, Exception error)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn, Exception error)
         {
             IsMatched = false;
             FoundLineID = foundLineID;
@@ -71,11 +82,14 @@ namespace LogsReader.Reader
                 Message = error.ToString();
             }
             TraceMessage = traceMessage;
+            TransactionValue = trn;
         }
 
         public TraceReader ParentReader { get; }
 
         public long FoundLineID { get; }
+
+        public string TransactionValue { get; }
 
         public Exception Error { get; }
 
@@ -145,9 +159,24 @@ namespace LogsReader.Reader
             TraceMessage = input.TraceMessage;
         }
 
+        public override bool Equals(object obj)
+        {
+	        var isEqual = false;
+	        if (obj is DataTemplate input)
+		        isEqual = FoundLineID == input.FoundLineID && ParentReader.Equals(input.ParentReader);
+	        return isEqual;
+        }
+
+        public override int GetHashCode()
+        {
+	        // найденная позиция в файле и хэш ридера
+            var hash = FoundLineID.GetHashCode() + ParentReader.GetHashCode();
+            return hash;
+        }
+
         public override string ToString()
         {
-            return $"{File} | {TraceName}";
+            return $"{ParentReader} | {nameof(FoundLineID)} = {FoundLineID}";
         }
     }
 }

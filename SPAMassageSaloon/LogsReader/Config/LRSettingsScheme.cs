@@ -152,7 +152,6 @@ namespace LogsReader.Config
             set => _rowsLimit = value <= 0 ? 9999 : value;
         }
 
-
         [XmlAnyElement("OrderByComment")]
         public XmlComment OrderByComment
         {
@@ -198,23 +197,6 @@ namespace LogsReader.Config
 
         [XmlIgnore]
         public Dictionary<string, bool> OrderByItems { get; private set; }
-
-        internal static Dictionary<string, bool> CheckOrderByItem(string value)
-        {
-            var result = new Dictionary<string, bool>();
-            foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrEmptyTrim()).Select(x => x.Trim()))
-            {
-                var orderStatement = orderItem.Split(' ');
-                var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
-                
-                if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
-                    throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
-
-                result.Add(orderItem2, isDescending);
-            }
-
-            return result;
-        }
 
         [XmlAnyElement("TraceParseComment")]
         public XmlComment TraceParseComment
@@ -299,9 +281,21 @@ namespace LogsReader.Config
 	        }
         }
 
-        void Load()
+        internal static Dictionary<string, bool> CheckOrderByItem(string value)
         {
+	        var result = new Dictionary<string, bool>();
+	        foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrEmptyTrim()).Select(x => x.Trim()))
+	        {
+		        var orderStatement = orderItem.Split(' ');
+		        var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
 
+		        if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
+
+		        result.Add(orderItem2, isDescending);
+	        }
+
+	        return result;
         }
 
         public override string ToString()

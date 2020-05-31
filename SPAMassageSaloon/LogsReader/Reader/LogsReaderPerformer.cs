@@ -42,6 +42,7 @@ namespace LogsReader.Reader
         }
 
         public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
+
         public IEnumerable<DataTemplate> ResultsOfError { get; private set; } = null;
 
         public DataFilter Filter { get; }
@@ -71,7 +72,7 @@ namespace LogsReader.Reader
 
 	        // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
             var readers = TraceReaders.OrderByDescending(x => x.File.LastWriteTime).ThenByDescending(x => x.File.CreationTime).ToList();
-            var maxThreads = CurrentSettings.MaxThreads <= 0 ? TraceReaders.Count : CurrentSettings.MaxThreads;
+            var maxThreads = MaxThreads <= 0 ? TraceReaders.Count : MaxThreads;
 	        _multiTaskingHandler = new MTActionResult<TraceReader>(
 		        ReadData,
 		        readers, 
@@ -81,11 +82,11 @@ namespace LogsReader.Reader
 	        new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
 	        await _multiTaskingHandler.StartAsync();
 
-	        ResultsOfError = _multiTaskingHandler.Result.CallBackList
+	        ResultsOfError = _multiTaskingHandler?.Result.CallBackList
 		        .Where(x => x.Error != null)
 		        .Aggregate(new List<DataTemplate>(), (listErr, x) =>
 	        {
-		        listErr.Add(new DataTemplate(x.Source, -1, string.Empty, x.Error));
+		        listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
 		        return listErr;
 	        });
         }
@@ -98,15 +99,21 @@ namespace LogsReader.Reader
 		            return;
 
                 fileLog.OnFound += AddResult;
+
                 // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
                 using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (var inputReader = new StreamReader(inputStream, CurrentSettings.Encoding))
                 {
-                    string line;
-                    while ((line = inputReader.ReadLine()) != null && !IsStopPending)
-                    {
-                        fileLog.ReadLine(line);
-                    }
+	                if (IsStopPending)
+		                return;
+
+                    using (var inputReader = new StreamReader(inputStream, Encoding))
+	                {
+		                string line;
+		                while ((line = inputReader.ReadLine()) != null && !IsStopPending)
+		                {
+			                fileLog.ReadLine(line);
+		                }
+	                }
                 }
             }
             finally
@@ -131,20 +138,27 @@ namespace LogsReader.Reader
 
             lock (_syncRootResult)
             {
-                var dateCurrent = item?.Date ?? DateTime.MinValue;
-                if (_result.Count >= CurrentSettings.RowsLimit)
-                {
-                    var latest = _result.First().Key;
-                    if (latest.Date == null || latest.Date > dateCurrent)
-                        return;
+	            if (!_result.ContainsKey(item))
+	            {
+		            var dateCurrent = item.Date ?? DateTime.MinValue;
+		            if (_result.Count >= RowsLimit)
+		            {
+			            var latest = _result.First().Key;
+			            if (latest.Date == null || latest.Date > dateCurrent)
+				            return;
 
-                    _result.Remove(latest);
-                    _result.Add(item, item);
-                }
-                else
-                {
-                    _result.Add(item, item);
-                }
+			            _result.Remove(latest);
+			            _result.Add(item, item);
+		            }
+		            else
+		            {
+			            _result.Add(item, item);
+		            }
+	            }
+	            else
+	            {
+		            
+	            }
             }
         }
 
@@ -169,13 +183,13 @@ namespace LogsReader.Reader
             try
             {
                 var total = _multiTaskingHandler.Source.Count;
-                while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted)
+                while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted && !IsDisposed)
                 {
                     OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
                     Thread.Sleep(10);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -187,10 +201,16 @@ namespace LogsReader.Reader
             {
                 OnProcessReport?.Invoke(CountMatches, 100, _multiTaskingHandler.Result.Count, _multiTaskingHandler.Source.Count());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
+        }
+
+        public override void Dispose()
+        {
+	        Reset();
+	        base.Dispose();
         }
     }
 }

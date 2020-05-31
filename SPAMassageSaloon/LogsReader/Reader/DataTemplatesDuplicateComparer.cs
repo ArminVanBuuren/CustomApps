@@ -14,7 +14,7 @@ namespace LogsReader.Reader
 
             if (result == 0)
             {
-                if (x.ParentReader.FilePath.Equals(y.ParentReader.FilePath))
+                if (x.ParentReader.FilePath.Equals(y.ParentReader.FilePath, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return x.FoundLineID.CompareTo(y.FoundLineID);
                 }

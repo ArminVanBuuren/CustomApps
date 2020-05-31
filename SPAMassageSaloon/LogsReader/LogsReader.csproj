@@ -50,7 +50,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=1.0.7443.28490, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Utils, Version=1.0.7445.32492, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
@@ -66,6 +66,8 @@
     <Compile Include="Config\LRItem.cs" />
     <Compile Include="Config\LRTraceParseItem.cs" />
     <Compile Include="Config\LRGroups.cs" />
+    <Compile Include="Config\LRTraceParseTransactionItem.cs" />
+    <Compile Include="Config\LRTraceParsePatternItem.cs" />
     <Compile Include="Config\TraceParse.cs" />
     <Compile Include="CryptoNetworkCredential.cs" />
     <Compile Include="Properties\Resources.ru.Designer.cs">
@@ -234,6 +236,10 @@
     <Content Include="Resources\pingAll.png" />
     <Content Include="Resources\remove.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.3.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

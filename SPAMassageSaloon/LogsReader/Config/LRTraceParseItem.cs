@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("Pattern")]
+	[Serializable]
 	public class LRTraceParseItem : TraceParse
 	{
 		private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
@@ -33,17 +33,12 @@ namespace LogsReader.Config
 					IsCorrectRegex = true;
 					return;
 				}
+
 				IsCorrectRegex = false;
 			}
 		}
 
 		[XmlIgnore] internal override bool IsCorrectRegex { get; set; }
 		[XmlIgnore] internal Regex RegexItem { get; private set; }
-
-		[XmlAttribute] public string ID { get; set; } = string.Empty;
-		[XmlAttribute] public string Date { get; set; } = string.Empty;
-		[XmlAttribute] public string TraceName { get; set; } = string.Empty;
-		[XmlAttribute] public string Description { get; set; } = string.Empty;
-		[XmlAttribute] public string Message { get; set; } = string.Empty;
 	}
 }

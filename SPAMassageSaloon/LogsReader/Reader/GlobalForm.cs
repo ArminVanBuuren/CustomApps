@@ -1242,41 +1242,7 @@ namespace LogsReader.Reader
 
         private void DgvFiles_SelectionChanged(object sender, EventArgs e)
         {
-            try
-            {
-                _message.Text = string.Empty;
-                _traceMessage.Text = string.Empty;
-
-                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
-                    return;
-
-                if(!TryGetTemplate(dgvFiles.SelectedRows[0], out var template))
-                    return;
-
-                descriptionText.Text = $"FoundLineID:{template.FoundLineID}\r\n{template.Description}";
-
-                if (_message.Language == Language.XML || _message.Language == Language.HTML)
-                {
-                    var messageXML = XML.RemoveUnallowable(template.Message, " ");
-                    _message.Text = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
-                }
-                else
-                {
-                    _message.Text = template.Message.TrimWhiteSpaces();
-                }
-                _message.DelayedEventsInterval = 10;
-
-                _traceMessage.Text = template.TraceMessage;
-                _traceMessage.DelayedEventsInterval = 10;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
-            finally
-            {
-                dgvFiles.Focus();
-            }
+            // !!!!
         }
 
         bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)

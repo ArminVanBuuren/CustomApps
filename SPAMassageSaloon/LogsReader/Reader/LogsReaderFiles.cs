@@ -14,7 +14,7 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public abstract class LogsReaderFiles : LogsReaderControl, IDisposable
+	public abstract class LogsReaderFiles : LogsReaderControl
 	{
 		private readonly IEnumerable<string> _servers;
 		private readonly IEnumerable<string> _fileTypes;
@@ -25,7 +25,7 @@ namespace LogsReader.Reader
 		/// </summary>
 		public bool IsStopPending { get; private set; } = false;
 
-		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
+		protected IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
@@ -57,16 +57,6 @@ namespace LogsReader.Reader
 		{
 			var kvpList = new List<TraceReader>();
 
-			Func<string, string, string, TraceReader> _getTraceReader;
-			if (CurrentSettings.TraceParse.StartTraceWith != null && CurrentSettings.TraceParse.EndTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWithEndWith(this, server, filePath, originalFolder);
-			else if (CurrentSettings.TraceParse.StartTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderStartWith(this, server, filePath, originalFolder);
-			else if (CurrentSettings.TraceParse.EndTraceWith != null)
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderEndWith(this, server, filePath, originalFolder);
-			else
-				_getTraceReader = (server, filePath, originalFolder) => new TraceReaderSimple(this, server, filePath, originalFolder);
-
 			foreach (var serverName in _servers)
 			{
 				if (IsStopPending)
@@ -88,7 +78,7 @@ namespace LogsReader.Reader
 						continue;
 
 					var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-					foreach (var fileLog in files.Select(filePath => _getTraceReader(serverName, filePath, originalFolder.Key)))
+					foreach (var fileLog in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder.Key))))
 					{
 						if (IsStopPending)
 							return kvpList;
@@ -156,7 +146,7 @@ namespace LogsReader.Reader
 				{
 					return IsExist(serverRoot, serverFolder, credential);
 				}
-				catch (Exception ex1)
+				catch (Exception)
 				{
 					// ignore and continue
 				}
@@ -295,9 +285,10 @@ namespace LogsReader.Reader
 			IsStopPending = false;
 		}
 
-		public void Dispose()
+		public override void Dispose()
 		{
 			Reset();
+			base.Dispose();
 		}
 
 		static bool IsAllowedExtension(string fileName)

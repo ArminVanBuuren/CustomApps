@@ -1245,6 +1245,8 @@ namespace LogsReader.Reader
                     foreach (DataGridViewCell cell2 in row.Cells)
                         cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
                 }
+
+                row.Cells["File"].ToolTipText = template.ToString();
             }
             catch (Exception ex)
             {
@@ -1265,7 +1267,11 @@ namespace LogsReader.Reader
                 if(!TryGetTemplate(dgvFiles.SelectedRows[0], out var template))
                     return;
 
-                descriptionText.Text = $"FoundLineID:{template.FoundLineID}\r\n{template.Description}";
+                var foundByTransactionValue = string.Empty;
+                if (!template.TransactionValue.IsNullOrEmptyTrim())
+	                foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
+
+                descriptionText.Text = $"FoundLineID = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 
                 if (_message.Language == Language.XML || _message.Language == Language.HTML)
                 {
@@ -1437,7 +1443,7 @@ namespace LogsReader.Reader
             UserSettings.MessageLanguage = _message.Language;
             if((prev == Language.HTML || prev == Language.XML) && (_message.Language == Language.XML || _message.Language == Language.HTML))
                 return;
-            DgvFiles_SelectionChanged(this, EventArgs.Empty);
+            DgvFiles_SelectionChanged(dgvFiles, EventArgs.Empty);
         }
 
         private void TraceMessage_LanguageChanged(object sender, EventArgs e)
