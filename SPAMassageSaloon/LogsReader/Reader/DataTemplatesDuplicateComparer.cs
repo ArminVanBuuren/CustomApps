@@ -7,6 +7,9 @@ namespace LogsReader.Reader
     {
         public int Compare(DataTemplate x, DataTemplate y)
         {
+	        if (x.Equals(y))
+		        return 0; // означает та же строка и тот же файл
+
             var xDate = x.Date ?? DateTime.MinValue;
             var yDate = y.Date ?? DateTime.MinValue;
 

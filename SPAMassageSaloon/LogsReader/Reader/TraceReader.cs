@@ -188,7 +188,7 @@ namespace LogsReader.Reader
 					                    var innerReader = GetTraceReader((Server, FilePath, _originalFolder));
 					                    innerReader.SearchByTransaction = false;
 					                    innerReader._trn = trnValue;
-					                    innerReader.Lines = Lines - PastTraceLines.Count - 1;
+					                    innerReader.Lines = (failed?.FoundLineID ?? Lines) - PastTraceLines.Count - 1;
 					                    innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
 					                    void OnPastFound(DataTemplate pastItem)

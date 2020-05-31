@@ -157,7 +157,8 @@ namespace LogsReader.Reader
 	            }
 	            else
 	            {
-		            
+		            // косяк! Перазаписываем старый темплейт на новый в той же строке и том же файле
+                    _result[item] = item;
 	            }
             }
         }
