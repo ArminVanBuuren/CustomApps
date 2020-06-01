@@ -905,7 +905,7 @@ namespace LogsReader.Reader
                                 templateList.Insert(0, template);
                         }
 
-                        var clipboardText = new StringBuilder(templateList.Count);
+                        var clipboardText = new StringBuilder(templateList.Sum(x => x.TraceMessage.Length) + (templateList.Count * 10) + 250);
                         foreach (var template in templateList)
                         {
                             clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",

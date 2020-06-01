@@ -19,8 +19,14 @@ namespace LogsReader.Reader
 
         private Func<string, bool> _IsMatchedFunc;
 
+	    /// <summary>
+        /// Сохраненные данный которые не спарсились по основному поиску и по транзакциям
+        /// </summary>
         protected Queue<string> PastTraceLines { get; }
 
+	    /// <summary>
+        /// Прошлый успешный результат, который возможно будет дополняться
+        /// </summary>
 	    protected DataTemplate Found { get; set; }
 
 	    protected string CurrentTransactionValue => _trn;
@@ -119,7 +125,7 @@ namespace LogsReader.Reader
             catch (Exception ex)
             {
                 if (!Found.IsMatched)
-                    AddResult(new DataTemplate(this, Lines, Found.TraceMessage, _trn, ex));
+                    AddResult(new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, _trn, ex));
                 throw;
             }
             finally
@@ -185,6 +191,8 @@ namespace LogsReader.Reader
 
 				                    if (PastTraceLines.Count > 0)
 				                    {
+                                        // создаем внутренний ридер, для считывания последних сохраненных данных
+                                        // которые не подошли под основной поиск и под прошлые транзакции
 					                    var innerReader = GetTraceReader((Server, FilePath, _originalFolder));
 					                    innerReader.SearchByTransaction = false;
 					                    innerReader._trn = trnValue;

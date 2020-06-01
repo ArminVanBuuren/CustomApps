@@ -45,7 +45,7 @@ namespace LogsReader.Config
 					};
 					TransactionPatterns = new[]
 					{
-						new LRTraceParseTransactionItem(@"OriginalID\>(.+?)\<") {Trn = "$1"}
+						new LRTraceParseTransactionItem(@"OriginalID\s*\>(.+?)\<") {Trn = "$1"}
 					};
 					break;
 				case "MGA":

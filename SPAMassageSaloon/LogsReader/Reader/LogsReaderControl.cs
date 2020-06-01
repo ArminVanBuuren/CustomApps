@@ -129,7 +129,7 @@ namespace LogsReader.Reader
 				if (_transactionValues.Count > 100)
 					_transactionValues.Remove(_transactionValues.First().Key);
 
-				var trnPattern = new StringBuilder();
+				var trnPattern = new StringBuilder(_transactionValues.Values.Sum(x => x.Length) + _transactionValues.Count);
 				foreach (var value in _transactionValues.Values)
 				{
 					trnPattern.Append(value);
