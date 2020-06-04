@@ -202,6 +202,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="CODE\FormatItem.cs" />
     <Compile Include="REGEX.cs" />
     <Compile Include="SERIALIZATION.cs" />
     <Compile Include="Handles\SerialHelper.cs" />
@@ -231,7 +232,7 @@
     <Compile Include="Ionic.Zlib\ZlibConstants.cs" />
     <Compile Include="Ionic.Zlib\ZlibStream.cs" />
     <Compile Include="TIME.cs" />
-    <Compile Include="CODE.cs" />
+    <Compile Include="CODE\CODE.cs" />
     <Compile Include="UNIVERSAL.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="Handles\WebDownload.cs">
