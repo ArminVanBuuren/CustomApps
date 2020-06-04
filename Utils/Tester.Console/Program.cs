@@ -37,15 +37,15 @@ namespace Tester.Console
 
 		static void Test_CustomFunction()
 		{
-			var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
-			codeFunc += @"   public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			//var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			//codeFunc += @"   public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			var codeFunc = "";
 			var customFunc = new CustomFunctions
 			{
 				Assemblies = new CustomFunctionAssemblies
 				{
 					Childs = new[]
 					{
-						new XmlNodeValueText("mscorlib.dll"),
 						new XmlNodeValueText("System.dll")
 					}
 				},
