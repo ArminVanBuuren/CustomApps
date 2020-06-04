@@ -23,7 +23,7 @@ namespace Tester.Console
 			
 			try
 			{
-				
+				Test_CustomFunction();
 			}
 			catch (Exception e)
 			{
@@ -35,10 +35,37 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
+		static void Test_CustomFunction()
+		{
+			var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			codeFunc += @"   public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			var customFunc = new CustomFunctions
+			{
+				Assemblies = new CustomFunctionAssemblies
+				{
+					Childs = new[]
+					{
+						new XmlNodeValueText("mscorlib.dll"),
+						new XmlNodeValueText("System.dll")
+					}
+				},
+				Namespaces = new XmlNodeValueText("using System;"),
+				Functions = new CustomFunctionCode()
+				{
+					Function = new XmlNodeCDATAText[]
+					{
+						new XmlNodeCDATAText(codeFunc)
+					}
+				}
+			};
+
+			var compiler = new CustomFunctionsCompiler(customFunc);
+		}
+
 		static void Test_CustomTemplateCalculation()
 		{
 			var seq = 0;
-			const string template = "|{ test ( '$1', 'ARG_BEAUTY_SECOND' ) }|";
+			const string template = "$1|{ test ( '$1', 'ARG_BEAUTY_SECOND' ) }|$1";
 			var funcs = new Dictionary<string, Func<string[], string>>()
 			{
 				{
@@ -52,10 +79,12 @@ namespace Tester.Console
 
 			var func = CODE.Calculate<Match>(template, funcs, REGEX.GetValueByReplacement);
 
-			for (var i = 0; i < 10000; i++)
-			{
-				System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
-			}
+			//for (var i = 0; i < 10000; i++)
+			//	System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
+
+			System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
+			Thread.Sleep(1000);
+			System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
 		}
 
 		static void Test_Join()
