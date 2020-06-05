@@ -39,7 +39,7 @@ namespace XPathTester
 
             try
             {
-                base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
+                base.Text = $"{base.Text} {this.GetAssemblyInfo().Version}";
 
                 xpathResultDataGrid.AutoGenerateColumns = false;
                 xpathResultDataGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;

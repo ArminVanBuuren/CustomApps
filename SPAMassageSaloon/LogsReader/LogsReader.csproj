@@ -64,8 +64,8 @@
     <Compile Include="Config\LRFolder.cs" />
     <Compile Include="Config\LRGroupItem.cs" />
     <Compile Include="Config\LRItem.cs" />
-    <Compile Include="Config\LRTraceParseItem.cs" />
     <Compile Include="Config\LRGroups.cs" />
+    <Compile Include="Config\LRTraceParseItem.cs" />
     <Compile Include="Config\LRTraceParseTransactionItem.cs" />
     <Compile Include="Config\LRTraceParsePatternItem.cs" />
     <Compile Include="Config\TraceParse.cs" />

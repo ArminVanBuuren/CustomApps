@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -17,16 +18,45 @@ namespace LogsReader.Config
     public class LRSettings
     {
         private static object _sync = new object();
-        private static string SettingsPath { get; }
-        private static string FailedSettingsPath { get; }
-
-        static LRSettings()
-        {
-            SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(LogsReader)}.xml");
-            FailedSettingsPath = $"{SettingsPath}_failed.bak";
-        }
 
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
+
+        CustomFunctions _customFunc = new CustomFunctions
+        {
+	        Assemblies = new CustomFunctionAssemblies
+	        {
+		        Childs = new[]
+		        {
+			        new XmlNodeValueText("System.dll")
+		        }
+	        },
+	        Namespaces = new XmlNodeValueText("using System;"),
+	        Functions = new CustomFunctionCode()
+	        {
+		        Function = new []
+		        {
+			        new XmlNodeCDATAText(@"
+    public class test : ICustomFunction 
+    { 
+        public string Invoke(string[] args) 
+        { 
+            return ""FUNC_TEST""; 
+        }
+    }".Trim())
+		        }
+	        }
+        };
+
+        private static string SettingsPath { get; }
+
+        private static string FailedSettingsPath { get; }
+
+        public static Dictionary<string, Func<string[], string>> Functions { get; private set; }
+
+        /// <summary>
+        /// Функция используется для сичтывания стринговых аттрибутов, для подставления результата парсинга включая кастомные аттрибуты
+        /// </summary>
+        public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; }
 
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
@@ -55,6 +85,41 @@ namespace LogsReader.Config
                     throw new ArgumentException(Resources.Txt_LRSettings_ErrUnique, ex);
                 }
             }
+        }
+
+        [XmlElement("CustomFunctions")]
+        public CustomFunctions CustomFunctions
+        {
+	        get => _customFunc;
+	        set
+	        {
+		        _customFunc = value;
+		        if (_customFunc != null)
+		        {
+			        // если существуют кастомные функции, то добавляем каждый аттрибут на поиск внутренних функций для дальнейшей обработки записи
+			        // функция GetValueByReplacement используется в качестве поиска группировок и подставления значений из совпадения по регулярному выражению
+                    var compiler = new CustomFunctionsCompiler(_customFunc);
+			        if (compiler.Functions.Count > 0)
+			        {
+				        Functions = new Dictionary<string, Func<string[], string>>();
+				        foreach (var (name, customFunction) in compiler.Functions)
+					        Functions.Add(name, customFunction.Invoke);
+
+				        MatchCalculationFunc = (template) => CODE.Calculate<Match>(template, LRSettings.Functions, REGEX.GetValueByReplacement);
+				        return;
+			        }
+		        }
+
+                Functions = null;
+                // если нет кастомных функций то подставляем функцию для поиска группировок GetValueByReplacement
+                MatchCalculationFunc = (template) => (match) => match.GetValueByReplacement(template);
+            }
+        }
+
+        static LRSettings()
+        {
+	        SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(LogsReader)}.xml");
+	        FailedSettingsPath = $"{SettingsPath}_failed.bak";
         }
 
         public LRSettings()

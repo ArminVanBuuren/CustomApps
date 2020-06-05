@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
+using static LogsReader.Config.LRTraceParsePatternItem;
 
 namespace LogsReader.Reader
 {
@@ -16,12 +17,8 @@ namespace LogsReader.Reader
 
         internal DataTemplate(
 	        TraceReader traceReader, 
-	        long foundLineID, 
-	        string strID, 
-	        string date, 
-	        string traceName, 
-	        string description, 
-	        string message, 
+	        long foundLineID,
+	        TraceParsePatternResult parseResult, 
 	        string traceMessage,
 	        string trn)
         {
@@ -29,9 +26,9 @@ namespace LogsReader.Reader
             FoundLineID = foundLineID;
             ParentReader = traceReader;
 
-            ID = int.TryParse(strID, out var id) ? id : -1;
+            ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
-            var dateValue = date ?? string.Empty;
+            var dateValue = parseResult.Date ?? string.Empty;
             if (TIME.TryParseAnyDate(dateValue.Replace(",", "."), DateTimeStyles.AllowWhiteSpaces, out var dateOfTrace))
             {
                 Date = dateOfTrace;
@@ -42,9 +39,9 @@ namespace LogsReader.Reader
                 DateOfTrace = dateValue;
             }
 
-            TraceName = traceName;
-            Description = description;
-            Message = message;
+            TraceName = parseResult.TraceName;
+            Description = parseResult.Description;
+            Message = parseResult.Message;
             TraceMessage = traceMessage;
             TransactionValue = trn;
         }

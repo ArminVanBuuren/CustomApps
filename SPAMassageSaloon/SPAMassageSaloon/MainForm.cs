@@ -113,7 +113,7 @@ namespace SPAMassageSaloon
         {
             var currentAssembly = Assembly.GetExecutingAssembly();
             BuildTime = $"Build time: {currentAssembly.GetLinkerTime():dd.MM.yyyy HH:mm:ss}";
-            FormName = $"{AppName} {currentAssembly.GetAssemblyInfo().CurrentVersion}";
+            FormName = $"{AppName} {currentAssembly.GetAssemblyInfo().Version}";
         }
 
         public MainForm()
@@ -260,7 +260,7 @@ namespace SPAMassageSaloon
                                   + string.Join(separator, args.Control.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
                                   + separator.TrimEnd();
 
-                ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().CurrentVersion, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
+                ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().Version, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
             }
             catch (Exception ex)
             {

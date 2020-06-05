@@ -95,7 +95,7 @@ namespace LogsReader
 
             try
             {
-                base.Text = $"Logs Reader {this.GetAssemblyInfo().CurrentVersion}";
+                base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
 
                 KeyPreview = true;
                 Closing += (s, e) =>

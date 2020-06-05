@@ -106,6 +106,11 @@ namespace LogsReader.Reader
             return true;
         }
 
+        /// <summary>
+        /// Проверям по фильтру. Если был задан дополнительный поиск по фильтру
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public bool IsAllowed(DataTemplate input)
         {
             return _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameFilter(input) && _checkTraceMessageFilter(input);

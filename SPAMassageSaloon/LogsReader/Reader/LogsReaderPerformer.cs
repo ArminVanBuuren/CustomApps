@@ -128,6 +128,10 @@ namespace LogsReader.Reader
             }
         }
 
+        /// <summary>
+        /// Добавляем найденный трейс
+        /// </summary>
+        /// <param name="item"></param>
         protected void AddResult(DataTemplate item)
         {
             if (Filter != null && !Filter.IsAllowed(item))
@@ -138,7 +142,7 @@ namespace LogsReader.Reader
 
             lock (_syncRootResult)
             {
-	            if (!_result.ContainsKey(item))
+	            if (!_result.TryGetValue(item, out var existingItem))
 	            {
 		            var dateCurrent = item.Date ?? DateTime.MinValue;
 		            if (_result.Count >= RowsLimit)
@@ -157,6 +161,10 @@ namespace LogsReader.Reader
 	            }
 	            else
 	            {
+                    // Если существующий трейс корректно спарсен, а новый не получилось спарсить, то оставляем в коллекции сущесвующий коректный
+		            if(existingItem.IsMatched && !item.IsMatched)
+                        return;
+
 		            // Если найден еще один темплейт в той же строке и том же файле.
 		            // То перазаписываем, возможно это тот же темплейт только более дополненный.
                     _result[item] = item;

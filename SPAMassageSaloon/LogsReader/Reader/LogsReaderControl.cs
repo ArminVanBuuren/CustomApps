@@ -115,6 +115,10 @@ namespace LogsReader.Reader
 			}
 		}
 
+		/// <summary>
+		/// Добавить спарсенную транзакцию в общий список для всех лог файлов, текущей схемы
+		/// </summary>
+		/// <param name="trn"></param>
 		protected void AddTransactionValue(string trn)
 		{
 			if(trn.IsNullOrEmptyTrim())
@@ -143,6 +147,11 @@ namespace LogsReader.Reader
 			}
 		}
 
+		/// <summary>
+		/// Сравниваются только базовые настройки и инстанс. Игнорируется изменения настроек поиска свойства IsMatch.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			var isEqual = false;
@@ -151,9 +160,12 @@ namespace LogsReader.Reader
 			return isEqual;
 		}
 
+		/// <summary>
+		/// в качестве хэша должен быть только хэш базовых настроек
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			// в качестве хэша должен быть только хэш настроек
 			var hash = _currentSettings.GetHashCode() + 13;
 			return hash;
 		}

@@ -62,23 +62,23 @@ namespace LogsReader.Reader
 				if (IsStopPending)
 					return kvpList;
 
-				foreach (var originalFolder in _folders)
+				foreach (var (originalFolder, isAllDirectories) in _folders)
 				{
 					if (IsStopPending)
 						return kvpList;
 
-					var folderMatch = IO.CHECK_PATH.Match(originalFolder.Key);
+					var folderMatch = IO.CHECK_PATH.Match(originalFolder);
 					if (!folderMatch.Success)
-						throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, originalFolder.Key));
+						throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, originalFolder));
 
 					var serverRoot = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$";
 					var serverFolder = $"{serverRoot}\\{folderMatch.Groups["FULL"]}";
 
-					if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder.Key))
+					if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
 						continue;
 
-					var files = Directory.GetFiles(serverFolder, "*", originalFolder.Value ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-					foreach (var fileLog in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder.Key))))
+					var files = Directory.GetFiles(serverFolder, "*", isAllDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+					foreach (var fileLog in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
 					{
 						if (IsStopPending)
 							return kvpList;

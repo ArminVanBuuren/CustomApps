@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -29,6 +28,9 @@ namespace LogsReader.Reader
         /// </summary>
 	    protected DataTemplate Found { get; set; }
 
+        /// <summary>
+        /// Текущая транзакция, используется для DataTempalte 
+        /// </summary>
 	    protected string CurrentTransactionValue => _trn;
 
 	    /// <summary>
@@ -74,6 +76,9 @@ namespace LogsReader.Reader
 		    }
 	    }
 
+        /// <summary>
+        /// Генерирует событие при найденном трейсе
+        /// </summary>
 	    public event FoundDataTemplate OnFound;
 
         public string Server { get; }
@@ -143,12 +148,12 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var pattern in TraceParsePatterns)
+            foreach (var traceParsePattern in TraceParsePatterns)
             {
                 Match match;
                 try
                 {
-	                match = pattern.RegexItem.Match(traceMessage);
+	                match = traceParsePattern.RegexItem.Match(traceMessage);
                 }
                 catch (Exception ex)
                 {
@@ -164,39 +169,29 @@ namespace LogsReader.Reader
                     var current = new DataTemplate(
 	                    this,
                         failed?.FoundLineID ?? Lines,
-                        match.GetValueByReplacement(pattern.ID),
-                        match.GetValueByReplacement(pattern.Date, (value, format) =>
-                        {
-	                        if (TIME.TryParseAnyDateExtract(value, format, DateTimeStyles.AllowWhiteSpaces, out var customDateParseResult))
-		                        return customDateParseResult.ToString(OutputDateFormat);
-	                        return value;
-                        }),
-                        match.GetValueByReplacement(pattern.TraceName),
-                        match.GetValueByReplacement(pattern.Description),
-                        match.GetValueByReplacement(pattern.Message),
-                        traceMessage,
+	                    traceParsePattern.GetParsingResult(match),
+	                    traceMessage,
                         _trn);
 
                     if (SearchByTransaction && TransactionPatterns != null && TransactionPatterns.Length > 0)
                     {
 	                    try
 	                    {
-		                    foreach (var trnPattern in TransactionPatterns)
+		                    foreach (var transactionParsePattern in TransactionPatterns)
 		                    {
-			                    var trnMatch = trnPattern.RegexItem.Match(traceMessage);
+			                    var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
 			                    if (trnMatch.Success)
 			                    {
-				                    var trnValue = trnMatch.GetValueByReplacement(trnPattern.Trn);
+				                    var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
 				                    AddTransactionValue(trnValue);
 
 				                    if (PastTraceLines.Count > 0)
 				                    {
-                                        // создаем внутренний ридер, для считывания последних сохраненных данных
-                                        // которые не подошли под основной поиск и под прошлые транзакции
-					                    var innerReader = GetTraceReader((Server, FilePath, _originalFolder));
-					                    innerReader.SearchByTransaction = false;
+                                        // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
+                                        var innerReader = GetTraceReader((Server, FilePath, _originalFolder));
+					                    innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
 					                    innerReader._trn = trnValue;
-					                    innerReader.Lines = (failed?.FoundLineID ?? Lines) - PastTraceLines.Count - 1;
+					                    innerReader.Lines = (failed?.FoundLineID ?? Lines) - PastTraceLines.Count - 1; // возвращаемся обратно к первой сохраненной строке
 					                    innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
 					                    void OnPastFound(DataTemplate pastItem)
@@ -249,12 +244,12 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var regexPatt in TraceParsePatterns.Select(x => x.RegexItem))
+            foreach (var traceParsePattern in TraceParsePatterns.Select(x => x.RegexItem))
             {
                 Match match;
                 try
                 {
-                    match = regexPatt.Match(traceMessage);
+                    match = traceParsePattern.Match(traceMessage);
                 }
                 catch (Exception)
                 {

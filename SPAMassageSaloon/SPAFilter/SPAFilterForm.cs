@@ -356,7 +356,7 @@ namespace SPAFilter
             // Gets or sets a value indicating whether to catch calls on the wrong thread that access a control's Handle property when an application is being debugged.
             CheckForIllegalCrossThreadCalls = false;
 
-            base.Text = $"{base.Text} {this.GetAssemblyInfo().CurrentVersion}";
+            base.Text = $"{base.Text} {this.GetAssemblyInfo().Version}";
 
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
