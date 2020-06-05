@@ -96,8 +96,8 @@ namespace LogsReader.Config
 		        _customFunc = value;
 		        if (_customFunc != null)
 		        {
-			        // если существуют кастомные функции, то добавляем каждый аттрибут на поиск внутренних функций для дальнейшей обработки записи
-			        // функция GetValueByReplacement используется в качестве поиска группировок и подставления значений из совпадения по регулярному выражению
+                    // если существуют кастомные функции, то при успешном паринге лога, будет производится вызов внутренних функций по шаблону для дальнейшей обработки записи
+                    // функция GetValueByReplacement используется в качестве поиска группировок и подставления значений по шаблону
                     var compiler = new CustomFunctionsCompiler(_customFunc);
 			        if (compiler.Functions.Count > 0)
 			        {
@@ -111,7 +111,6 @@ namespace LogsReader.Config
 		        }
 
                 Functions = null;
-                // если нет кастомных функций то подставляем функцию для поиска группировок GetValueByReplacement
                 MatchCalculationFunc = (template) => (match) => match.GetValueByReplacement(template);
             }
         }
