@@ -54,7 +54,7 @@ namespace LogsReader.Config
         public static Dictionary<string, Func<string[], string>> Functions { get; private set; }
 
         /// <summary>
-        /// Функция используется для сичтывания стринговых аттрибутов, для подставления результата парсинга включая кастомные аттрибуты
+        /// Функция используется для сичтывания стринговых аттрибутов, для подставления результата парсинга включая кастомные функции
         /// </summary>
         public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; }
 
