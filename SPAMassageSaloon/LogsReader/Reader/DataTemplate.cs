@@ -164,10 +164,13 @@ namespace LogsReader.Reader
 	        return isEqual;
         }
 
+        /// <summary>
+        /// хэш найденной позиции в файле и хэш ридера
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
-	        // найденная позиция в файле и хэш ридера
-            var hash = FoundLineID.GetHashCode() + ParentReader.GetHashCode();
+	        var hash = FoundLineID.GetHashCode() + ParentReader.GetHashCode();
             return hash;
         }
 

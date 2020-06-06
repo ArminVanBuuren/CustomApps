@@ -11,8 +11,6 @@ namespace LogsReader.Reader
 
     public abstract class TraceReader : LogsReaderControl
     {
-	    private readonly string _originalFolder = null;
-
 	    private bool _searchByTransaction;
         private string _trn = null;
 
@@ -83,9 +81,21 @@ namespace LogsReader.Reader
 
         public string Server { get; }
 
+        /// <summary>
+        /// Отсекается часть пути из первичных настроек (OriginalFolder) от основного пути к файлу (FilePath)
+        /// Пример - отсекается "\\LOCALHOST\C$\TEST" от "\\LOCALHOST\C$\TEST\soapcon.log" - получается soapcon.log
+        /// </summary>
         public string FileNamePartial { get; }
 
+        /// <summary>
+        /// Содержит в себе полный путь к файлу, включая сервер "\\LOCALHOST\C$\TEST\soapcon.log"
+        /// </summary>
         public string FilePath { get; }
+
+        /// <summary>
+        /// Содержит в себе исходную настройку пути к директории "C:\TEST"
+        /// </summary>
+        public string OriginalFolder { get; }
 
         public FileInfo File { get; }
 
@@ -99,8 +109,8 @@ namespace LogsReader.Reader
             FilePath = filePath;
             File = new FileInfo(filePath);
 
-            _originalFolder = originalFolder;
-            FileNamePartial = IO.GetPartialPath(FilePath, _originalFolder);
+            OriginalFolder = originalFolder;
+            FileNamePartial = IO.GetPartialPath(FilePath, OriginalFolder);
 
             SearchByTransaction = TransactionPatterns != null && TransactionPatterns.Length > 0;
         }
@@ -188,7 +198,7 @@ namespace LogsReader.Reader
 				                    if (PastTraceLines.Count > 0)
 				                    {
                                         // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
-                                        var innerReader = GetTraceReader((Server, FilePath, _originalFolder));
+                                        var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 					                    innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
 					                    innerReader._trn = trnValue;
 					                    innerReader.Lines = (failed?.FoundLineID ?? Lines) - PastTraceLines.Count - 1; // возвращаемся обратно к первой сохраненной строке
@@ -267,14 +277,17 @@ namespace LogsReader.Reader
         {
 	        var isEqual = false;
 	        if (obj is TraceReader input)
-		        isEqual = FilePath == input.FilePath && Server == input.Server && _originalFolder == input._originalFolder && base.Equals(input);
+		        isEqual = FilePath == input.FilePath && base.Equals(input);
 	        return isEqual;
         }
 
+        /// <summary>
+        /// хэш только полного пути к файлу и базовый хэш
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
-	        // только файл и базовый хэш настроек
-            var hash = File.GetHashCode() + base.GetHashCode();
+	        var hash = FilePath.GetHashCode() + base.GetHashCode();
             return hash;
         }
 
