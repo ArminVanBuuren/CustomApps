@@ -12,6 +12,7 @@ namespace Utils
 	{
 		public ExceptionCompilationError(string errors) : base($"Error of compilation custom function: {errors}") { }
 	}
+
 	public interface ICustomFunction
 	{
 		string Invoke(string[] args);
@@ -58,17 +59,17 @@ namespace Utils
 			};
 		}
 
-		public CustomFunctionsCompiler(CustomFunctions function, string customNamespace = null)
+		public CustomFunctionsCompiler(CustomFunctions customFunctions, string customNamespace = null)
 		{
 			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
-			var references = new HashSet<string>(function.Assemblies.Childs
+			var references = new HashSet<string>(customFunctions.Assemblies.Childs
 				.Where(x => x.Item.Length > 0)
 				.Select(x => x.Item[0].Value));
 			references.UnionWith(REFERENCES);
 
 			var customNamespaces = string.Empty;
-			if (function.Namespaces.Item != null && function.Namespaces.Item.Length > 0)
-				customNamespaces = function.Namespaces.Item[0].Value;
+			if (customFunctions.Namespaces.Item != null && customFunctions.Namespaces.Item.Length > 0)
+				customNamespaces = customFunctions.Namespaces.Item[0].Value;
 
 			var code = new StringBuilder();
 			code.Append(customNamespaces);
@@ -79,7 +80,7 @@ namespace Utils
 			code.AppendLine();
 			code.Append('{');
 
-			foreach (var func in function.Functions.Function)
+			foreach (var func in customFunctions.Functions.Function)
 			{
 				if (func.Item == null || func.Item.Length == 0 || func.Item[0].Value.IsNullOrEmpty())
 					continue;
@@ -95,19 +96,16 @@ namespace Utils
 			Functions = new Dictionary<string, ICustomFunction>();
 			foreach (var type in CustomAssembly.ExportedTypes)
 			{
-				Functions.Add(type.Name, ResolveFunction(type));
-			}
-		}
-
-		public ICustomFunction ResolveFunction(Type type)
-		{
-			try
-			{
-				return (ICustomFunction)Activator.CreateInstance(type);
-			}
-			catch (Exception ex)
-			{
-				throw new Exception($"Error in function invoking: \"{type.Name}\":\r\n{ex}");
+				try
+				{
+					var funcInstance = Activator.CreateInstance(type);
+					if (funcInstance is ICustomFunction function)
+						Functions.Add(type.Name, function);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"Error in function invoking: \"{type.Name}\":\r\n{ex}");
+				}
 			}
 		}
 
