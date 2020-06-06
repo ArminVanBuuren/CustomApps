@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,11 +21,22 @@ namespace Utils
 		/// </summary>
 		const string OUT_NAMESPACE = "CustomFunction";
 
+		readonly string[] DEFAULT_REFERENCE = new string[] {
+			"mscorlib.dll",
+			"System.dll",
+			//info.CurrentAssembly.CodeBase.Substring(8)
+			//info.CurrentAssembly.ManifestModule.ScopeName
+		};
+
 		public CustomFunctions CustomFunctions { get; }
 
 		public string Namespace { get; }
 
+		public Type FuncType { get; }
+
 		public Assembly CustomAssembly { get; }
+
+		public string Code { get; }
 
 		public Dictionary<string, T> Functions { get; }
 
@@ -32,51 +44,10 @@ namespace Utils
 		{
 			CustomFunctions = customFunctions;
 			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
+			FuncType = typeof(T);
 
-			var funcType = typeof(T);
-			var info = new AssemblyInfo(funcType);
-
-			var securityNamespaces = $"using {funcType.Namespace};\r\n" +
-			                         @"using System.Security.Permissions;
-[assembly: SecurityPermission(SecurityAction.RequestRefuse, UnmanagedCode = true)]
-[assembly: FileIOPermission(SecurityAction.RequestRefuse, AllFiles = FileIOPermissionAccess.Write)]";
-
-			var defaultReferences = new[] {
-				"mscorlib.dll",
-				"System.dll",
-				info.CurrentAssembly.ManifestModule.Name
-			};
-
-			var references = new HashSet<string>(customFunctions.Assemblies.Childs
-				.Where(x => x.Item.Length > 0)
-				.Select(x => x.Item[0].Value));
-			references.UnionWith(defaultReferences);
-
-			var customNamespaces = string.Empty;
-			if (customFunctions.Namespaces.Item != null && customFunctions.Namespaces.Item.Length > 0)
-				customNamespaces = customFunctions.Namespaces.Item[0].Value;
-
-			var code = new StringBuilder();
-			code.Append(customNamespaces);
-			code.AppendLine();
-			code.AppendLine(securityNamespaces);
-			code.AppendLine();
-			code.Append($"namespace {Namespace}");
-			code.AppendLine();
-			code.Append('{');
-
-			foreach (var func in customFunctions.Functions.Function)
-			{
-				if (func.Item == null || func.Item.Length == 0 || func.Item[0].Value.IsNullOrEmpty())
-					continue;
-				code.AppendLine();
-				code.Append(func.Item[0].Value);
-			}
-
-			code.AppendLine();
-			code.Append('}');
-
-			CustomAssembly = ExecuteCompiling(code.ToString(), references);
+			Code = GenerateCode();
+			CustomAssembly = ExecuteCompiling();
 
 			Functions = new Dictionary<string, T>();
 			foreach (var type in CustomAssembly.ExportedTypes)
@@ -94,8 +65,43 @@ namespace Utils
 			}
 		}
 
-		private static Assembly ExecuteCompiling(string code, IEnumerable<string> references)
+		string GenerateCode()
 		{
+			var securityNamespaces = $"using {FuncType.Namespace};\r\n" +
+			                         @"using System.Security.Permissions;
+[assembly: SecurityPermission(SecurityAction.RequestRefuse, UnmanagedCode = true)]
+[assembly: FileIOPermission(SecurityAction.RequestRefuse, AllFiles = FileIOPermissionAccess.Write)]";
+
+			var customNamespaces = string.Empty;
+			if (CustomFunctions.Namespaces.Item != null && CustomFunctions.Namespaces.Item.Length > 0)
+				customNamespaces = CustomFunctions.Namespaces.Item[0].Value;
+
+			var code = new StringBuilder();
+			code.Append(customNamespaces);
+			code.AppendLine();
+			code.AppendLine(securityNamespaces);
+			code.AppendLine();
+			code.Append($"namespace {Namespace}");
+			code.AppendLine();
+			code.Append('{');
+
+			foreach (var func in CustomFunctions.Functions.Function)
+			{
+				if (func.Item == null || func.Item.Length == 0 || func.Item[0].Value.IsNullOrEmpty())
+					continue;
+				code.AppendLine();
+				code.Append(func.Item[0].Value);
+			}
+
+			code.AppendLine();
+			code.Append('}');
+
+			return code.ToString();
+		}
+
+		private Assembly ExecuteCompiling()
+		{
+			var info = new AssemblyInfo(FuncType);
 			var provider = new CSharpCodeProvider();
 
 			var options = new CompilerParameters
@@ -108,25 +114,76 @@ namespace Utils
 				//ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
 			};
 
-			foreach (var r in references)
-				options.ReferencedAssemblies.Add(r);
+			var references = new HashSet<string>(CustomFunctions.Assemblies.Childs
+				.Where(x => x.Item.Length > 0)
+				.Select(x => x.Item[0].Value));
+			references.UnionWith(DEFAULT_REFERENCE);
 
-			var compiled = provider.CompileAssemblyFromSource(options, code);
-
-			if (compiled.Errors.Count > 0)
+			string fileAssembly = null;
+			try
 			{
-				var errors = new StringBuilder();
-				foreach (CompilerError err in compiled.Errors)
+				var currentReference = info.CurrentAssembly.ManifestModule.Name;
+				if (currentReference.Equals("<Unknown>", StringComparison.InvariantCultureIgnoreCase))
 				{
-					errors.Append(err);
-					errors.Append(Environment.NewLine);
+					fileAssembly = CreateEntryAssembly();
+					if(fileAssembly != null)
+						references.Add(fileAssembly);
 				}
-				throw new ExceptionCompilationError(errors.ToString());
+				else
+				{
+					references.Add(currentReference);
+				}
+
+				foreach (var r in references)
+					options.ReferencedAssemblies.Add(r);
+
+				var compiled = provider.CompileAssemblyFromSource(options, Code);
+
+				if (compiled.Errors.Count > 0)
+				{
+					var errors = new StringBuilder();
+					foreach (CompilerError err in compiled.Errors)
+					{
+						errors.Append(err);
+						errors.Append(Environment.NewLine);
+					}
+					throw new ExceptionCompilationError(errors.ToString());
+				}
+				else
+				{
+					return compiled.CompiledAssembly;
+				}
 			}
-			else
+			finally
 			{
-				return compiled.CompiledAssembly;
+				if(fileAssembly != null)
+					File.Delete(fileAssembly);
 			}
+		}
+
+		string CreateEntryAssembly()
+		{
+			var assemblyEntry = Assembly.GetEntryAssembly();
+			if (assemblyEntry == null) 
+				return null;
+
+			var manifestResourceNames = assemblyEntry.GetManifestResourceNames()
+				.Where(x => x.IndexOf(FuncType.Assembly.ManifestModule.ScopeName, StringComparison.InvariantCultureIgnoreCase) != -1);
+
+			if (!manifestResourceNames.Any()) 
+				return null;
+
+			var tempFile = Path.GetTempFileName();
+			var ass = assemblyEntry.GetReferencedAssemblies();
+			using (var s = assemblyEntry.GetManifestResourceStream(manifestResourceNames.First()))
+			using (var r = new BinaryReader(s))
+			using (var fs = new FileStream(tempFile, FileMode.OpenOrCreate))
+			using (var w = new BinaryWriter(fs))
+				w.Write(r.ReadBytes((int) s.Length));
+			return tempFile;
+			//var a = Assembly.Load(data);
+			//AppDomain.CurrentDomain.Load(data);
+			//var ass1 = AppDomain.CurrentDomain.GetAssemblies();
 		}
 	}
 }
