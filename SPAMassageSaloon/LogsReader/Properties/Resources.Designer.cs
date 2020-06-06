@@ -982,8 +982,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;$ 1&apos;, &apos;$ 2&apos;, &apos;$ 3 - test&apos;)}&quot;
-        ///      Example: &lt;Pattern ID=&quot;{getID(&apos;$1&apos;)}&quot; Date=&quot;{getDate(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceName(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescription(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessage(&apos;$6&apos;)}&quot; &gt;(.+?)\s+(.+?)\s+(.+?)\ [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;$1&apos;, &apos;$2&apos;, &apos;$3 - test&apos;)}&quot;
+        ///      Example: &lt;Pattern ID=&quot;{getID(&apos;$1&apos;)}&quot; Date=&quot;{getDate(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceName(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescription(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessage(&apos;$6&apos;)}&quot; &gt;(.+?)\s+(.+?)\s+(.+?)\s+( [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettings_CustomFunctionsComment {
             get {

@@ -428,7 +428,7 @@
     <value>Лог файлы не найдены</value>
   </data>
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
-    <value>Набор кастомных функций. Могут применяться только в аттрибутах нод - Pattern и TransactionPattern. Используются для того чтобы корректировать отображаемые данные. Каждый класс должен реализовать интерфейс ICustomFunction. Формат: "{custom_function_test('arg1', '$ 1', '$ 2', '$ 3 - test')}"
-      Пример: &lt;Pattern ID="{getID('$1')}" Date="{getDate('$2')}" TraceName="name = {getTraceName('$3')}" Description="description = {formatDescription('$4', '$5')}" Message="Original = '$6' Result = {getMessage('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)&lt;/Pattern&gt;</value>
+    <value>Набор кастомных функций. Могут применяться только в аттрибутах нод - Pattern и TransactionPattern. Используются для того чтобы корректировать отображаемые данные. Каждый класс должен реализовать интерфейс ICustomFunction. Формат: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
+      Пример: &lt;Pattern ID="{getID('$1')}" Date="{getDate('$2')}" TraceName="name = {getTraceName('$3')}" Description="description = {formatDescription('$4', '$5')}" Message="Original = '$6' Result = {getMessage('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
   </data>
 </root>
