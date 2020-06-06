@@ -13,59 +13,44 @@ namespace Utils
 		public ExceptionCompilationError(string errors) : base($"Error of compilation custom function: {errors}") { }
 	}
 
-	public interface ICustomFunction
-	{
-		string Invoke(string[] args);
-	}
-
-	public class CustomFunctionsCompiler
+	public class CustomFunctionsCompiler<T>
 	{
 		/// <summary>
 		/// This namespace wrap generated code.
 		/// </summary>
 		const string OUT_NAMESPACE = "CustomFunction";
 
-		/// <summary>
-		/// Attributes restricting
-		/// rights of compiled code. 
-		/// </summary>
-		private static readonly string SECURITY_ATTR;
-
-		/// <summary>
-		/// References on assembly
-		/// added on default.
-		/// </summary>
-		private static readonly string[] REFERENCES;
+		public CustomFunctions CustomFunctions { get; }
 
 		public string Namespace { get; }
 
 		public Assembly CustomAssembly { get; }
 
-		public Dictionary<string, ICustomFunction> Functions { get; }
+		public Dictionary<string, T> Functions { get; }
 
-		static CustomFunctionsCompiler()
+		public CustomFunctionsCompiler(CustomFunctions customFunctions, string customNamespace = null)
 		{
-			var info = new AssemblyInfo(typeof(ICustomFunction));
-			
-			SECURITY_ATTR = $"using {typeof(ICustomFunction).Namespace};\r\n" +
-							@"using System.Security.Permissions;
+			CustomFunctions = customFunctions;
+			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
+
+			var funcType = typeof(T);
+			var info = new AssemblyInfo(funcType);
+
+			var securityNamespaces = $"using {funcType.Namespace};\r\n" +
+			                         @"using System.Security.Permissions;
 [assembly: SecurityPermission(SecurityAction.RequestRefuse, UnmanagedCode = true)]
 [assembly: FileIOPermission(SecurityAction.RequestRefuse, AllFiles = FileIOPermissionAccess.Write)]";
-			
-			REFERENCES = new string[] {
+
+			var defaultReferences = new string[] {
 				"mscorlib.dll",
 				"System.dll",
 				info.CurrentAssembly.ManifestModule.Name
 			};
-		}
 
-		public CustomFunctionsCompiler(CustomFunctions customFunctions, string customNamespace = null)
-		{
-			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
 			var references = new HashSet<string>(customFunctions.Assemblies.Childs
 				.Where(x => x.Item.Length > 0)
 				.Select(x => x.Item[0].Value));
-			references.UnionWith(REFERENCES);
+			references.UnionWith(defaultReferences);
 
 			var customNamespaces = string.Empty;
 			if (customFunctions.Namespaces.Item != null && customFunctions.Namespaces.Item.Length > 0)
@@ -74,9 +59,9 @@ namespace Utils
 			var code = new StringBuilder();
 			code.Append(customNamespaces);
 			code.AppendLine();
-			code.AppendLine(SECURITY_ATTR);
+			code.AppendLine(securityNamespaces);
 			code.AppendLine();
-			code.Append($"namespace {OUT_NAMESPACE}");
+			code.Append($"namespace {Namespace}");
 			code.AppendLine();
 			code.Append('{');
 
@@ -93,13 +78,13 @@ namespace Utils
 
 			CustomAssembly = ExecuteCompiling(code.ToString(), references);
 
-			Functions = new Dictionary<string, ICustomFunction>();
+			Functions = new Dictionary<string, T>();
 			foreach (var type in CustomAssembly.ExportedTypes)
 			{
 				try
 				{
 					var funcInstance = Activator.CreateInstance(type);
-					if (funcInstance is ICustomFunction function)
+					if (funcInstance is T function)
 						Functions.Add(type.Name, function);
 				}
 				catch (Exception ex)

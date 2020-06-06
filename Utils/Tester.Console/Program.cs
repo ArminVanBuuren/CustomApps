@@ -59,7 +59,12 @@ namespace Tester.Console
 				}
 			};
 
-			var compiler = new CustomFunctionsCompiler(customFunc);
+			var compiler = new CustomFunctionsCompiler<ICustomFunction>(customFunc);
+		}
+
+		public interface ICustomFunction
+		{
+			string Invoke(string[] args);
 		}
 
 		static void Test_CustomTemplateCalculation()
