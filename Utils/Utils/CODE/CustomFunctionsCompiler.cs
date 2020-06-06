@@ -41,7 +41,7 @@ namespace Utils
 [assembly: SecurityPermission(SecurityAction.RequestRefuse, UnmanagedCode = true)]
 [assembly: FileIOPermission(SecurityAction.RequestRefuse, AllFiles = FileIOPermissionAccess.Write)]";
 
-			var defaultReferences = new string[] {
+			var defaultReferences = new[] {
 				"mscorlib.dll",
 				"System.dll",
 				info.CurrentAssembly.ManifestModule.Name
@@ -118,7 +118,7 @@ namespace Utils
 				var errors = new StringBuilder();
 				foreach (CompilerError err in compiled.Errors)
 				{
-					errors.Append(err.ToString());
+					errors.Append(err);
 					errors.Append(Environment.NewLine);
 				}
 				throw new ExceptionCompilationError(errors.ToString());
