@@ -982,6 +982,16 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;$ 1&apos;, &apos;$ 2&apos;, &apos;$ 3 - test&apos;)}&quot;
+        ///      Example: &lt;Pattern ID=&quot;{getID(&apos;$1&apos;)}&quot; Date=&quot;{getDate(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceName(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescription(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessage(&apos;$6&apos;)}&quot; &gt;(.+?)\s+(.+?)\s+(.+?)\ [остаток строки не уместился]&quot;;.
+        /// </summary>
+        public static string Txt_LRSettings_CustomFunctionsComment {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_CustomFunctionsComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Config &quot;{0}&quot; is incorrect! Moved to &quot;{1}&quot;.
         ///
         ///{2}.
@@ -1129,8 +1139,9 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &quot;Pattern&quot; nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options  [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format.
+        ///        &quot;Pattern&quot; nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, a [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

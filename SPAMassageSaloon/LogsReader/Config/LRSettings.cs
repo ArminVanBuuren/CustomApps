@@ -14,7 +14,7 @@ using Utils;
 
 namespace LogsReader.Config
 {
-    [Serializable, XmlRoot("Settings")]
+	[Serializable, XmlRoot("Settings")]
     public class LRSettings
     {
         private static object _sync = new object();
@@ -36,7 +36,7 @@ namespace LogsReader.Config
 		        Function = new []
 		        {
 			        new XmlNodeCDATAText(@"
-    public class test : ICustomFunction 
+    public class custom_function_test : ICustomFunction 
     { 
         public string Invoke(string[] args) 
         { 
@@ -50,8 +50,6 @@ namespace LogsReader.Config
         private static string SettingsPath { get; }
 
         private static string FailedSettingsPath { get; }
-
-        public static Dictionary<string, Func<string[], string>> Functions { get; private set; }
 
         /// <summary>
         /// Функция используется для сичтывания стринговых аттрибутов, для подставления результата парсинга включая кастомные функции
@@ -87,6 +85,13 @@ namespace LogsReader.Config
             }
         }
 
+        [XmlAnyElement(nameof(Resources.Txt_LRSettings_CustomFunctionsComment))]
+        public XmlComment CustomFunctionsComment
+        {
+	        get => new XmlDocument().CreateComment(Resources.Txt_LRSettings_CustomFunctionsComment);
+	        set { }
+        }
+
         [XmlElement("CustomFunctions")]
         public CustomFunctions CustomFunctions
         {
@@ -98,19 +103,18 @@ namespace LogsReader.Config
 		        {
                     // если существуют кастомные функции, то при успешном паринге лога, будет производится вызов внутренних функций по шаблону для дальнейшей обработки записи
                     // функция GetValueByReplacement используется в качестве поиска группировок и подставления значений по шаблону
-                    var compiler = new CustomFunctionsCompiler(_customFunc);
+                    var compiler = new CustomFunctionsCompiler<ICustomFunction>(_customFunc);
 			        if (compiler.Functions.Count > 0)
 			        {
-				        Functions = new Dictionary<string, Func<string[], string>>();
+				        var functions = new Dictionary<string, Func<string[], string>>();
 				        foreach (var (name, customFunction) in compiler.Functions)
-					        Functions.Add(name, customFunction.Invoke);
+					        functions.Add(name, customFunction.Invoke);
 
-				        MatchCalculationFunc = (template) => CODE.Calculate<Match>(template, LRSettings.Functions, REGEX.GetValueByReplacement);
+				        MatchCalculationFunc = (template) => CODE.Calculate<Match>(template, functions, REGEX.GetValueByReplacement);
 				        return;
 			        }
 		        }
 
-                Functions = null;
                 MatchCalculationFunc = (template) => (match) => match.GetValueByReplacement(template);
             }
         }

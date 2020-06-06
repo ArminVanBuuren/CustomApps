@@ -32,7 +32,7 @@ namespace LogsReader.Reader
             if (TIME.TryParseAnyDate(dateValue.Replace(",", "."), DateTimeStyles.AllowWhiteSpaces, out var dateOfTrace))
             {
                 Date = dateOfTrace;
-                DateOfTrace = Date.Value.ToString(traceReader.OutputDateFormat);
+                DateOfTrace = Date.Value.ToString(traceReader.DisplayDateFormat);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace LogsReader.Reader
 
             ID = -1;
             Date = DateTime.Now;
-            DateOfTrace = Date.Value.ToString(traceReader.OutputDateFormat);
+            DateOfTrace = Date.Value.ToString(traceReader.DisplayDateFormat);
 
             Error = error;
             TraceName = error.GetType().ToString();

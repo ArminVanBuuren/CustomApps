@@ -134,7 +134,8 @@
     <value>Servers for search. Specify with a comma.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
-    <value>"Pattern" nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+    <value>Attribute "displayDateFormat" sets the display date format.
+        "Pattern" nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
         Optional patterns: "StartTraceWith" and "EndTraceWith" - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
@@ -497,5 +498,9 @@ Input data:
   </data>
   <data name="authorization" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\authorization.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
+    <value>Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: "{custom_function_test('arg1', '$ 1', '$ 2', '$ 3 - test')}"
+      Example: &lt;Pattern ID="{getID('$1')}" Date="{getDate('$2')}" TraceName="name = {getTraceName('$3')}" Description="description = {formatDescription('$4', '$5')}" Message="Original = '$6' Result = {getMessage('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)&lt;/Pattern&gt;</value>
   </data>
 </root>

@@ -45,7 +45,7 @@ namespace LogsReader.Reader
 
 		public LRTraceParseTransactionItem[] TransactionPatterns => _currentSettings.TraceParse.TransactionPatterns;
 
-		public string OutputDateFormat => _currentSettings.TraceParse.OutputDateFormat;
+		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
 
 		public Regex StartTraceWith => _currentSettings.TraceParse.StartTraceWith;
 

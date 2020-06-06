@@ -66,7 +66,7 @@ namespace LogsReader.Config
 			set { }
 		}
 
-		[XmlAttribute("outputDateFormat")] public string OutputDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
+		[XmlAttribute("displayDateFormat")] public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
 
 		[XmlElement("Pattern")]
 		public LRTraceParsePatternItem[] Patterns

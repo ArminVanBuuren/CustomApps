@@ -134,7 +134,8 @@
     <value>Сервера для поиска. Указать через запятую.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
-    <value>Аттрибуты "Pattern" - используются для считывания параметров трейса. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
+    <value>Аттрибут "displayDateFormat" устанавливает формат отображения даты.
+        Ноды "Pattern" - используются для считывания параметров трейса. Подбираются сверху вниз, от самого точного, до дефолтного. Необходимо использовать группировки. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.
         Опциональные паттерны: "StartTraceWith" и "EndTraceWith" - улучшают скорость поиска, т.к. определяются точные грани трассировки. Опции можно использовать по отдельности, а также в одной настройке. Регулярное выражение работает только с опциями Singleline и CultureInvariant. Таймаут выполнения - 10 секунд.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
@@ -425,5 +426,9 @@
   </data>
   <data name="Txt_LogsReaderPerformer_FilesNotInitialized" xml:space="preserve">
     <value>Лог файлы не найдены</value>
+  </data>
+  <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
+    <value>Набор кастомных функций. Могут применяться только в аттрибутах нод - Pattern и TransactionPattern. Используются для того чтобы корректировать отображаемые данные. Каждый класс должен реализовать интерфейс ICustomFunction. Формат: "{custom_function_test('arg1', '$ 1', '$ 2', '$ 3 - test')}"
+      Пример: &lt;Pattern ID="{getID('$1')}" Date="{getDate('$2')}" TraceName="name = {getTraceName('$3')}" Description="description = {formatDescription('$4', '$5')}" Message="Original = '$6' Result = {getMessage('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)&lt;/Pattern&gt;</value>
   </data>
 </root>

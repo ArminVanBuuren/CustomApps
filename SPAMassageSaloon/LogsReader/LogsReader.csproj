@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ICustomFunction.cs" />
     <Compile Include="Config\LRFolderGroup.cs" />
     <Compile Include="Config\LRFolder.cs" />
     <Compile Include="Config\LRGroupItem.cs" />
