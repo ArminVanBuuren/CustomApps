@@ -41,28 +41,28 @@ namespace Tester.WinForm
 	            //}
 
 
-                var source = CultureInfo.DefaultThreadCurrentCulture;
-                var source1 = CultureInfo.DefaultThreadCurrentUICulture;
-                var source2 = Thread.CurrentThread.CurrentCulture;
-                var source3 = Thread.CurrentThread.CurrentUICulture;
+                //var source = CultureInfo.DefaultThreadCurrentCulture;
+                //var source1 = CultureInfo.DefaultThreadCurrentUICulture;
+                //var source2 = Thread.CurrentThread.CurrentCulture;
+                //var source3 = Thread.CurrentThread.CurrentUICulture;
 
-                var culture = new CultureInfo("en-US");
+                //var culture = new CultureInfo("en-US");
 
-                CultureInfo.DefaultThreadCurrentCulture = culture;
-                CultureInfo.DefaultThreadCurrentUICulture = culture;
+                //CultureInfo.DefaultThreadCurrentCulture = culture;
+                //CultureInfo.DefaultThreadCurrentUICulture = culture;
                 //Thread.CurrentThread.CurrentCulture = culture;
                 //Thread.CurrentThread.CurrentUICulture = culture;
 
-                Task.Factory.StartNew(() => new Test());
+                //Task.Factory.StartNew(() => new Test());
                 //var test = new Test();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                //Application.Run(new Form1());
+                Application.Run(new Form1());
 
-                var notepad = new Notepad {AllowUserCloseItems = true};
-                notepad.SizingGrip = true;
-                Application.Run(notepad);
+                //var notepad = new Notepad {AllowUserCloseItems = true};
+                //notepad.SizingGrip = true;
+                //Application.Run(notepad);
             }
             catch (Exception e)
             {
