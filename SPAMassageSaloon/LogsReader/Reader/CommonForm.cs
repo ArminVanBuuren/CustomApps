@@ -4,9 +4,9 @@ using SPAMassageSaloon.Common;
 
 namespace LogsReader.Reader
 {
-    public sealed partial class GlobalForm : UserControl, IUserForm
+    public sealed partial class CommonForm : UserControl, IUserForm
     {
-	    public GlobalForm()
+	    public CommonForm()
         {
 	        InitializeComponent();
         }

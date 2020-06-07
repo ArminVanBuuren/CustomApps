@@ -8,7 +8,7 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    sealed partial class GlobalForm
+    sealed partial class CommonForm
 	{
         /// <summary>
         /// Required designer variable.
@@ -36,7 +36,7 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GlobalForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommonForm));
 			this.dgvFiles = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,12 +71,12 @@ namespace LogsReader.Reader
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.OrderByLabel = new System.Windows.Forms.Label();
-			this.orderByText = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.TreeMain = new Utils.WinForm.CustomTreeView();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.buttonForeground = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
 			this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -522,10 +522,10 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
+			this.MainSplitContainer.Panel1.Controls.Add(this.button1);
+			this.MainSplitContainer.Panel1.Controls.Add(this.buttonForeground);
 			this.MainSplitContainer.Panel1.Controls.Add(this.label2);
 			this.MainSplitContainer.Panel1.Controls.Add(this.label1);
-			this.MainSplitContainer.Panel1.Controls.Add(this.OrderByLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
 			this.MainSplitContainer.Panel1.Controls.Add(this.TreeMain);
 			this.MainSplitContainer.Panel1MinSize = 60;
 			// 
@@ -536,24 +536,23 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.SplitterDistance = 213;
 			this.MainSplitContainer.TabIndex = 0;
 			// 
-			// OrderByLabel
+			// label2
 			// 
-			this.OrderByLabel.AutoSize = true;
-			this.OrderByLabel.Location = new System.Drawing.Point(1, 7);
-			this.OrderByLabel.Name = "OrderByLabel";
-			this.OrderByLabel.Size = new System.Drawing.Size(53, 15);
-			this.OrderByLabel.TabIndex = 17;
-			this.OrderByLabel.Text = "Order By";
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(6, 35);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(71, 15);
+			this.label2.TabIndex = 23;
+			this.label2.Text = "Background";
 			// 
-			// orderByText
+			// label1
 			// 
-			this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.orderByText.Location = new System.Drawing.Point(76, 4);
-			this.orderByText.Name = "orderByText";
-			this.orderByText.Size = new System.Drawing.Size(130, 23);
-			this.orderByText.TabIndex = 18;
-			this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(69, 15);
+			this.label1.TabIndex = 22;
+			this.label1.Text = "Foreground";
 			// 
 			// TreeMain
 			// 
@@ -565,9 +564,9 @@ namespace LogsReader.Reader
 			this.TreeMain.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
 			this.TreeMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.TreeMain.Location = new System.Drawing.Point(1, 85);
+			this.TreeMain.Location = new System.Drawing.Point(1, 59);
 			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(208, 381);
+			this.TreeMain.Size = new System.Drawing.Size(208, 407);
 			this.TreeMain.TabIndex = 19;
 			// 
 			// notepad
@@ -589,23 +588,23 @@ namespace LogsReader.Reader
 			this.notepad.TextForeColor = System.Drawing.Color.Black;
 			this.notepad.WordWrap = true;
 			// 
-			// label1
+			// buttonForeground
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(1, 35);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(69, 15);
-			this.label1.TabIndex = 22;
-			this.label1.Text = "Foreground";
+			this.buttonForeground.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.buttonForeground.Location = new System.Drawing.Point(81, 4);
+			this.buttonForeground.Name = "buttonForeground";
+			this.buttonForeground.Size = new System.Drawing.Size(27, 23);
+			this.buttonForeground.TabIndex = 24;
+			this.buttonForeground.UseVisualStyleBackColor = false;
 			// 
-			// label2
+			// button1
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(1, 61);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(71, 15);
-			this.label2.TabIndex = 23;
-			this.label2.Text = "Background";
+			this.button1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.button1.Location = new System.Drawing.Point(81, 30);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(27, 23);
+			this.button1.TabIndex = 25;
+			this.button1.UseVisualStyleBackColor = false;
 			// 
 			// GlobalForm
 			// 
@@ -668,8 +667,6 @@ namespace LogsReader.Reader
         private Button buttonExport;
         private CheckBox alreadyUseFilter;
         private DataGridViewTextBoxColumn Date;
-        private Label OrderByLabel;
-        private TextBox orderByText;
         private ComboBox traceNameFilterComboBox;
         private ComboBox traceMessageFilterComboBox;
         private DataGridViewTextBoxColumn PrivateID;
@@ -684,6 +681,8 @@ namespace LogsReader.Reader
         private NotepadControl notepad;
         private Label label1;
 		private Label label2;
+		private Button buttonForeground;
+		private Button button1;
 	}
 }
 

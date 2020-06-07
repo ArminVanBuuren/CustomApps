@@ -118,7 +118,7 @@ namespace LogsReader
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 
-                var globalForm = new GlobalForm { Dock = DockStyle.Fill };
+                var globalForm = new CommonForm { Dock = DockStyle.Fill };
                 var globalPage = new TabPage
                 {
 	                Name = COMMON_PAGE_NAME,

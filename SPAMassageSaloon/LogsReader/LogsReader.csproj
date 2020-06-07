@@ -111,11 +111,11 @@
     <Compile Include="Reader\DataTemplatesDuplicateComparer.cs" />
     <Compile Include="Reader\LogsReaderControl.cs" />
     <Compile Include="Reader\LogsReaderFiles.cs" />
-    <Compile Include="Reader\GlobalForm.cs">
+    <Compile Include="Reader\CommonForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Reader\GlobalForm.Designer.cs">
-      <DependentUpon>GlobalForm.cs</DependentUpon>
+    <Compile Include="Reader\CommonForm.Designer.cs">
+      <DependentUpon>CommonForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Reader\ReportStatusType.cs" />
     <Compile Include="Reader\TraceReader.cs" />
@@ -166,8 +166,8 @@
     <EmbeddedResource Include="Reader\Forms\ServerGroupForm.resx">
       <DependentUpon>ServerGroupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reader\GlobalForm.resx">
-      <DependentUpon>GlobalForm.cs</DependentUpon>
+    <EmbeddedResource Include="Reader\CommonForm.resx">
+      <DependentUpon>CommonForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\LogsReaderForm.resx">
