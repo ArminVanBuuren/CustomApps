@@ -123,10 +123,11 @@ namespace Utils
 			try
 			{
 				var currentReference = info.CurrentAssembly.ManifestModule.Name;
+				// Если неизвестная сборка, значит большая вероятность, это сборка находится в ресурсах
 				if (currentReference.Equals("<Unknown>", StringComparison.InvariantCultureIgnoreCase))
 				{
 					fileAssembly = CreateResourceAssembly();
-					if(fileAssembly != null)
+					if(fileAssembly != null) // создаем, если была в ресурсах. А в самом конце удаляем
 						references.Add(fileAssembly);
 				}
 				else
