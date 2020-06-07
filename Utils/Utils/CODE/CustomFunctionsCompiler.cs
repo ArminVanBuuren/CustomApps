@@ -125,7 +125,7 @@ namespace Utils
 				var currentReference = info.CurrentAssembly.ManifestModule.Name;
 				if (currentReference.Equals("<Unknown>", StringComparison.InvariantCultureIgnoreCase))
 				{
-					fileAssembly = CreateEntryAssembly();
+					fileAssembly = CreateResourceAssembly();
 					if(fileAssembly != null)
 						references.Add(fileAssembly);
 				}
@@ -161,29 +161,34 @@ namespace Utils
 			}
 		}
 
-		string CreateEntryAssembly()
+		string CreateResourceAssembly()
 		{
-			var assemblyEntry = Assembly.GetEntryAssembly();
-			if (assemblyEntry == null) 
-				return null;
+			foreach (var assembly in new[] { Assembly.GetEntryAssembly(), Assembly.GetCallingAssembly(), Assembly.GetExecutingAssembly()})
+			{
+				if (assembly == null)
+					continue;
 
-			var manifestResourceNames = assemblyEntry.GetManifestResourceNames()
-				.Where(x => x.IndexOf(FuncType.Assembly.ManifestModule.ScopeName, StringComparison.InvariantCultureIgnoreCase) != -1);
+				var manifestResourceNames = assembly.GetManifestResourceNames()
+					.Where(x => x.IndexOf(FuncType.Assembly.ManifestModule.ScopeName, StringComparison.InvariantCultureIgnoreCase) != -1);
 
-			if (!manifestResourceNames.Any()) 
-				return null;
+				if (!manifestResourceNames.Any())
+					continue;
 
-			var tempFile = Path.GetTempFileName();
-			var ass = assemblyEntry.GetReferencedAssemblies();
-			using (var s = assemblyEntry.GetManifestResourceStream(manifestResourceNames.First()))
-			using (var r = new BinaryReader(s))
-			using (var fs = new FileStream(tempFile, FileMode.OpenOrCreate))
-			using (var w = new BinaryWriter(fs))
-				w.Write(r.ReadBytes((int) s.Length));
-			return tempFile;
-			//var a = Assembly.Load(data);
-			//AppDomain.CurrentDomain.Load(data);
-			//var ass1 = AppDomain.CurrentDomain.GetAssemblies();
+				var tempFile = Path.GetTempFileName();
+				using (var s = assembly.GetManifestResourceStream(manifestResourceNames.First()))
+				using (var r = new BinaryReader(s))
+				using (var fs = new FileStream(tempFile, FileMode.OpenOrCreate))
+				using (var w = new BinaryWriter(fs))
+					w.Write(r.ReadBytes((int)s.Length));
+
+				//var a = Assembly.Load(data);
+				//AppDomain.CurrentDomain.Load(data);
+				//var ass1 = AppDomain.CurrentDomain.GetAssemblies();
+
+				return tempFile;
+			}
+
+			return null;
 		}
 	}
 }
