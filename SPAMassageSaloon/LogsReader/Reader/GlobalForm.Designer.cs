@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using SPAMassageSaloon.Common;
 using Utils.WinForm;
@@ -74,6 +75,8 @@ namespace LogsReader.Reader
 			this.orderByText = new System.Windows.Forms.TextBox();
 			this.TreeMain = new Utils.WinForm.CustomTreeView();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
 			this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -519,6 +522,8 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
+			this.MainSplitContainer.Panel1.Controls.Add(this.label2);
+			this.MainSplitContainer.Panel1.Controls.Add(this.label1);
 			this.MainSplitContainer.Panel1.Controls.Add(this.OrderByLabel);
 			this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
 			this.MainSplitContainer.Panel1.Controls.Add(this.TreeMain);
@@ -534,7 +539,7 @@ namespace LogsReader.Reader
 			// OrderByLabel
 			// 
 			this.OrderByLabel.AutoSize = true;
-			this.OrderByLabel.Location = new System.Drawing.Point(8, 7);
+			this.OrderByLabel.Location = new System.Drawing.Point(1, 7);
 			this.OrderByLabel.Name = "OrderByLabel";
 			this.OrderByLabel.Size = new System.Drawing.Size(53, 15);
 			this.OrderByLabel.TabIndex = 17;
@@ -544,9 +549,9 @@ namespace LogsReader.Reader
 			// 
 			this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.orderByText.Location = new System.Drawing.Point(67, 4);
+			this.orderByText.Location = new System.Drawing.Point(76, 4);
 			this.orderByText.Name = "orderByText";
-			this.orderByText.Size = new System.Drawing.Size(139, 23);
+			this.orderByText.Size = new System.Drawing.Size(130, 23);
 			this.orderByText.TabIndex = 18;
 			this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
 			// 
@@ -560,9 +565,9 @@ namespace LogsReader.Reader
 			this.TreeMain.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
 			this.TreeMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.TreeMain.Location = new System.Drawing.Point(1, 33);
+			this.TreeMain.Location = new System.Drawing.Point(1, 85);
 			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(208, 433);
+			this.TreeMain.Size = new System.Drawing.Size(208, 381);
 			this.TreeMain.TabIndex = 19;
 			// 
 			// notepad
@@ -583,6 +588,24 @@ namespace LogsReader.Reader
 			this.notepad.TextFont = new System.Drawing.Font("Segoe UI", 10F);
 			this.notepad.TextForeColor = System.Drawing.Color.Black;
 			this.notepad.WordWrap = true;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(1, 35);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(69, 15);
+			this.label1.TabIndex = 22;
+			this.label1.Text = "Foreground";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(1, 61);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(71, 15);
+			this.label2.TabIndex = 23;
+			this.label2.Text = "Background";
 			// 
 			// GlobalForm
 			// 
@@ -659,6 +682,8 @@ namespace LogsReader.Reader
         private SplitContainer ParentSplitContainer;
         private SplitContainer MainSplitContainer;
         private NotepadControl notepad;
-    }
+        private Label label1;
+		private Label label2;
+	}
 }
 

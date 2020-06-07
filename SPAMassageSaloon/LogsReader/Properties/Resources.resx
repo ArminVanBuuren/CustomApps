@@ -135,7 +135,8 @@
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
     <value>Attribute "displayDateFormat" sets the display date format.
-        "Pattern" nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        "Pattern" nodes are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        "TransactionPattern" nodes are used to search for transactions value in the found trace. Slows down the processing speed, but contributes to a more detailed search.
         Optional patterns: "StartTraceWith" and "EndTraceWith" - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">

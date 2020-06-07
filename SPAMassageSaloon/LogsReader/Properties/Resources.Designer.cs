@@ -1140,8 +1140,8 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format.
-        ///        &quot;Pattern&quot; nodes - are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        Optional patterns: &quot;StartTraceWith&quot; and &quot;EndTraceWith&quot; - improve search speed because determine the exact verge trace. Options can be used individually, a [остаток строки не уместился]&quot;;.
+        ///        &quot;Pattern&quot; nodes are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        ///        &quot;TransactionPattern&quot; nodes are used to search for transactions value in the found trace. Slows down the processing speed, but contributes to a more detailed [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

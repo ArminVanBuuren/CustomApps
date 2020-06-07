@@ -19,8 +19,10 @@ namespace LogsReader
     {
 	    private static readonly object credentialSync = new object();
 	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
+	    private const string COMMON_PAGE_NAME = "Common";
 
-	    public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
+
+        public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get
 		    {
@@ -116,8 +118,20 @@ namespace LogsReader
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 
-                AllSettings = LRSettings.Deserialize();
+                var globalForm = new GlobalForm { Dock = DockStyle.Fill };
+                var globalPage = new TabPage
+                {
+	                Name = COMMON_PAGE_NAME,
+	                Text = COMMON_PAGE_NAME,
+	                UseVisualStyleBackColor = false,
+	                Font = new Font("Segoe UI", 8.5F),
+	                Margin = new Padding(0),
+	                Padding = new Padding(0)
+                };
+                globalPage.Controls.Add(globalForm);
+                MainTabControl.TabPages.Add(globalPage);
 
+                AllSettings = LRSettings.Deserialize();
                 foreach (var scheme in AllSettings.SchemeList)
                 {
                     try
@@ -167,7 +181,9 @@ namespace LogsReader
             var page = MainTabControl.TabPages[e.Index];
             if (page == MainTabControl.SelectedTab)
             {
-                RenderTabPage(page, e, Color.FromArgb(0, 200, 205), Color.White);
+                RenderTabPage(page, e, 
+	                page.Name == COMMON_PAGE_NAME ? Color.FromArgb(255, 0, 206) : Color.FromArgb(0, 200, 205), 
+	                Color.White);
             }
             else
             {

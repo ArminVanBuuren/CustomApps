@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,8 @@ namespace LogsReader.Reader
 		private static long _seqBaseInstance = 0;
 		private readonly long _instanceId = 0;
 
-		private readonly object trnSync = new object();
 		private readonly LRSettingsScheme _currentSettings;
-		private readonly Dictionary<string, string> _transactionValues;
-		private readonly Crutch _findTrnPattern;
+		private readonly ConcurrentDictionary<string, Regex> _transactionValues;
 
 		/// <summary>
 		/// Проверяет на совпадение по обычному поиску
@@ -56,22 +55,29 @@ namespace LogsReader.Reader
 		protected LogsReaderControl(LRSettingsScheme settings, string findMessage, bool useRegex)
 		{
 			_instanceId = ++_seqBaseInstance;
-
 			_currentSettings = settings;
 
 			ResetMatchFunc(findMessage, useRegex);
 
-			_transactionValues = new Dictionary<string, string>();
-			_findTrnPattern = new Crutch();
+			_transactionValues = new ConcurrentDictionary<string, Regex>();
 			IsMatchByTransactions = (string input, out string output) =>
 			{
 				output = null;
-				if (_findTrnPattern.Value == null)
-					return false;
 
-				var match = _findTrnPattern.Value.Match(input);
-				output = match.Value;
-				return match.Success;
+				foreach (var regex in _transactionValues.Values.ToList())
+				{
+					if (regex == null)
+						continue;
+
+					var match = regex.Match(input);
+					if (!match.Success)
+						continue;
+
+					output = match.Value;
+					return true;
+				}
+
+				return false;
 			};
 
 			if (_currentSettings.TraceParse.StartTraceWith != null && _currentSettings.TraceParse.EndTraceWith != null)
@@ -89,14 +95,8 @@ namespace LogsReader.Reader
 			_currentSettings = control._currentSettings;
 			IsMatch = control.IsMatch;
 			_transactionValues = control._transactionValues;
-			_findTrnPattern = control._findTrnPattern;
 			IsMatchByTransactions = control.IsMatchByTransactions;
 			GetTraceReader = control.GetTraceReader;
-		}
-
-		class Crutch
-		{
-			public Regex Value { get; set; }
 		}
 
 		protected void ResetMatchFunc(string findMessage, bool useRegex)
@@ -121,30 +121,18 @@ namespace LogsReader.Reader
 		/// <param name="trn"></param>
 		protected void AddTransactionValue(string trn)
 		{
-			if(trn.IsNullOrEmptyTrim())
+			if (trn.IsNullOrEmptyTrim())
 				return;
 
-			lock (trnSync)
-			{
-				if (_transactionValues.ContainsKey(trn))
-					return;
-				_transactionValues.Add(trn, Regex.Escape(trn));
+			if (_transactionValues.ContainsKey(trn))
+				return;
 
-				if (_transactionValues.Count > 100)
-					_transactionValues.Remove(_transactionValues.First().Key);
+			_transactionValues.TryAdd(trn, new Regex(Regex.Escape(trn),
+				RegexOptions.Compiled | RegexOptions.CultureInvariant,
+				new TimeSpan(0, 0, 1)));
 
-				var trnPattern = new StringBuilder(_transactionValues.Values.Sum(x => x.Length) + _transactionValues.Count);
-				foreach (var value in _transactionValues.Values)
-				{
-					trnPattern.Append(value);
-					trnPattern.Append("|");
-				}
-
-				_findTrnPattern.Value = new Regex(
-					trnPattern.ToString().Trim('|'), 
-					RegexOptions.Compiled | RegexOptions.CultureInvariant, 
-					new TimeSpan(0, 0, _transactionValues.Count > 10 ? 10 : _transactionValues.Count));
-			}
+			if (_transactionValues.Count > 100)
+				_transactionValues.TryRemove(_transactionValues.First().Key, out _);
 		}
 
 		/// <summary>

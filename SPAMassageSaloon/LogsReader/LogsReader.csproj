@@ -50,7 +50,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=1.0.7445.32492, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Utils, Version=1.0.7463.1612, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
@@ -168,6 +168,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\GlobalForm.resx">
       <DependentUpon>GlobalForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\LogsReaderForm.resx">
       <DependentUpon>LogsReaderForm.cs</DependentUpon>
