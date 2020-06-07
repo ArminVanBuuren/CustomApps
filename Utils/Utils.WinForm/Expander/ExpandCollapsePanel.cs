@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,6 +15,8 @@ namespace Utils.WinForm.Expander
         private readonly int _defaultCollapsedHeight;
         private int _userCollapsedHeight = -1;
 
+        readonly Dictionary<Control, bool> _controlsDict = new Dictionary<Control, bool>();
+
         /// <summary>
         /// Last stored size of panel's parent control
         /// <remarks>used for handling panel's Anchor property sets to Bottom when panel collapsed
@@ -27,12 +30,29 @@ namespace Utils.WinForm.Expander
         private int _expandedHeight;
 
         /// <summary>
+        /// Occurs when the panel has expanded or collapsed
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("Occurs when the panel has expanded or collapsed.")]
+        [Browsable(true)]
+        public event EventHandler<ExpandCollapseEventArgs> ExpandCollapse;
+
+        /// <summary>
+        /// Occurs when the button has expanded or collapsed
+        /// </summary>
+        [Category("ExpandCollapsePanelCheckedChanged")]
+        [Description("Occurs when the button has CheckBox changed.")]
+        [Browsable(true)]
+        public event EventHandler CheckedChanged;
+
+        /// <summary>
         /// Height of panel in collapsed state
         /// </summary>
         [Category("ExpandCollapsePanel")]
         [Description("Height of panel in collapsed state")]
         [Browsable(true)]
-        public int CollapsedHeight {
+        public int CollapsedHeight 
+        {
             get => _userCollapsedHeight <= 0 ? _defaultCollapsedHeight : _userCollapsedHeight;
             set => _userCollapsedHeight = value;
         }
@@ -88,6 +108,30 @@ namespace Utils.WinForm.Expander
         }
 
         /// <summary>
+        /// CheckBox
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("CheckBox shown in panel")]
+        [Browsable(true)]
+        public bool CheckBoxShown
+        {
+	        get => _btnExpandCollapse.CheckBoxShown;
+	        set => _btnExpandCollapse.CheckBoxShown = value;
+        }
+
+        /// <summary>
+        /// CheckBox
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("CheckBox is checked")]
+        [Browsable(true)]
+        public bool CheckBoxChecked
+        {
+	        get => _btnExpandCollapse.CheckBoxChecked;
+	        set => _btnExpandCollapse.CheckBoxChecked = value;
+        }
+
+        /// <summary>
         /// Enable pretty simple animation of panel on expanding or collapsing
         /// </summary>
         [Category("ExpandCollapsePanel")]
@@ -101,7 +145,7 @@ namespace Utils.WinForm.Expander
         [Category("ExpandCollapsePanel")]
         [Description("Visual style of the expand-collapse button.")]
         [Browsable(true)]
-        public ExpandCollapseButton.ExpandButtonStyle ButtonStyle
+        public ExpandButtonStyle ButtonStyle
         {
             get => _btnExpandCollapse.ButtonStyle;
             set => _btnExpandCollapse.ButtonStyle = value;
@@ -113,7 +157,7 @@ namespace Utils.WinForm.Expander
         [Category("ExpandCollapsePanel")]
         [Description("Size preset of the expand-collapse button.")]
         [Browsable(true)]
-        public ExpandCollapseButton.ExpandButtonSize ButtonSize
+        public ExpandButtonSize ButtonSize
         {
             get => _btnExpandCollapse.ButtonSize;
             set => _btnExpandCollapse.ButtonSize = value;
@@ -149,15 +193,6 @@ namespace Utils.WinForm.Expander
         }
 
         /// <summary>
-        /// Occurs when the panel has expanded or collapsed
-        /// </summary>
-        [Category("ExpandCollapsePanel")]
-        [Description("Occurs when the panel has expanded or collapsed.")]
-        [Browsable(true)]
-        public event EventHandler<ExpandCollapseEventArgs> ExpandCollapse;
-
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public ExpandCollapsePanel()
@@ -179,7 +214,12 @@ namespace Utils.WinForm.Expander
             _btnExpandCollapse.IsExpanded = true;
             // subscribe for button expand-collapse state changed event
             _btnExpandCollapse.ExpandCollapse += BtnExpandCollapseExpandCollapse;
-         
+
+            _btnExpandCollapse.CheckBoxShown = false;
+            _btnExpandCollapse.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
+
+            this.ControlAdded += (sender, args) => _controlsDict.Add(args.Control, true);
+            this.ControlRemoved += (sender, args) => _controlsDict.Remove(args.Control);
         }
 
         /// <summary>
@@ -342,7 +382,7 @@ namespace Utils.WinForm.Expander
                 _animationOpacity += 5;
             }
 
-            int currOpacity = _animationOpacity;
+            var currOpacity = _animationOpacity;
 
             switch (_internalPanelState)
             {
@@ -402,26 +442,29 @@ namespace Utils.WinForm.Expander
         /// </remarks>
         private void SetControlsOpacity(int opacity)
         {
-            foreach (Control c in Controls)
-            {
-                if (c.Visible)
-                {
-                    try
-                    {
-                        if (c.BackColor != Color.Transparent)
-                        {
-                            c.BackColor = Color.FromArgb(opacity, c.BackColor);
-                        }
-                        // ignore exception from controls that do not support transparent background color
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
+	        foreach (Control c in Controls)
+	        {
+		        if (!c.Visible)
+			        continue;
 
-                    c.ForeColor = Color.FromArgb(opacity, c.ForeColor);
-                }
-            }
+		        bool? isCanOpacity = null;
+		        if (_controlsDict.TryGetValue(c, out var canOpacity))
+			        isCanOpacity = canOpacity;
+		        try
+		        {
+			        if (isCanOpacity != null && isCanOpacity == true && c.BackColor != Color.Transparent)
+			        {
+				        c.BackColor = Color.FromArgb(opacity, c.BackColor);
+			        }
+		        }
+		        catch
+		        {
+			        if (isCanOpacity != null)
+				        _controlsDict[c] = false;
+		        }
+
+		        c.ForeColor = Color.FromArgb(opacity, c.ForeColor);
+	        }
         }
 
         /// <summary>

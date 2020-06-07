@@ -6,10 +6,35 @@ using System.Windows.Forms;
 
 namespace Utils.WinForm.Expander
 {
+
+	// ExpandButtonStyles
+	/// <summary>
+	/// Visual styles of the expand-collapse button.
+	/// </summary>
+	public enum ExpandButtonStyle
+	{
+		Classic,
+		Circle,
+		MagicArrow,
+		Triangle,
+		FatArrow
+	}
+
+	// ExpandButtonSizes
+	/// <summary>
+	/// Size presets of the expand-collapse button.
+	/// </summary>
+	public enum ExpandButtonSize
+	{
+		Small,
+		Normal,
+		Large
+	}
+
     /// <summary>
     /// Button with two states: expanded/collapsed
     /// </summary>
-    public partial class ExpandCollapseButton : UserControl
+    internal partial class ExpandCollapseButton : UserControl
     {
         /// <summary>
         /// Image displays expanded state of button
@@ -25,6 +50,27 @@ namespace Utils.WinForm.Expander
         /// (true - expanded, false - collapsed)
         /// </summary>
         private bool _isExpanded;
+
+
+        private ExpandButtonSize _expandButtonSize = ExpandButtonSize.Small;
+
+        private ExpandButtonStyle _expandButtonStyle = ExpandButtonStyle.Circle;
+
+        /// <summary>
+        /// Occurs when the button has expanded or collapsed
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("Occurs when the button has expanded or collapsed.")]
+        [Browsable(true)]
+        public event EventHandler<ExpandCollapseEventArgs> ExpandCollapse;
+
+        /// <summary>
+        /// Occurs when the button has expanded or collapsed
+        /// </summary>
+        [Category("CheckedChangedButton")]
+        [Description("Occurs when the button has CheckBox changed.")]
+        [Browsable(true)]
+        public event EventHandler CheckedChanged;
 
         /// <summary>
         /// Set flag for expand or collapse button
@@ -56,6 +102,30 @@ namespace Utils.WinForm.Expander
         }
 
         /// <summary>
+        /// CheckBox
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("CheckBoxShown")]
+        [Browsable(true)]
+        public bool CheckBoxShown
+        {
+	        get => checkBox.Visible;
+	        set => checkBox.Visible = value;
+        }
+
+        /// <summary>
+        /// CheckBox
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("CheckBoxChecked")]
+        [Browsable(true)]
+        public bool CheckBoxChecked
+        {
+	        get => checkBox.Checked;
+	        set => checkBox.Checked = value;
+        }
+
+        /// <summary>
         /// Font used for displays header text
         /// </summary>
         public override Font Font
@@ -73,42 +143,6 @@ namespace Utils.WinForm.Expander
             set => lblHeader.ForeColor = value;
         }
 
-
-        /// <summary>
-        /// Occurs when the button has expanded or collapsed
-        /// </summary>
-        [Category("ExpandCollapseButton")]
-        [Description("Occurs when the button has expanded or collapsed.")]
-        [Browsable(true)]
-        public event EventHandler<ExpandCollapseEventArgs> ExpandCollapse;
-
-        public ExpandCollapseButton()
-        {
-            InitializeComponent();
-
-            // initialize expanded/collapsed state bitmaps:
-            InitButtonStyle(ExpandButtonStyle.Circle);
-            InitButtonSize(ExpandButtonSize.Normal);
-
-            // initial state of panel - collapsed
-            _isExpanded = false;
-        }
-
-        // ExpandButtonStyles
-        /// <summary>
-        /// Visual styles of the expand-collapse button.
-        /// </summary>
-        public enum ExpandButtonStyle
-        {
-            Classic,
-            Circle,
-            MagicArrow,
-            Triangle,
-            FatArrow
-        }
-
-        private ExpandButtonStyle _expandButtonStyle = ExpandButtonStyle.Circle;
-
         /// <summary>
         /// Visual style of the expand-collapse button.
         /// </summary>
@@ -125,6 +159,38 @@ namespace Utils.WinForm.Expander
                     InitButtonStyle(value);
                 }
             }
+        }
+
+        /// <summary>
+        /// Size preset of the expand-collapse button.
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("Size preset of the expand-collapse button.")]
+        [Browsable(true)]
+        public ExpandButtonSize ButtonSize
+        {
+	        get => _expandButtonSize;
+	        set
+	        {
+		        if (_expandButtonSize != value)
+		        {
+			        InitButtonSize(value);
+		        }
+	        }
+        }
+
+        public ExpandCollapseButton()
+        {
+	        InitializeComponent();
+
+	        // initialize expanded/collapsed state bitmaps:
+	        InitButtonStyle(_expandButtonStyle);
+	        InitButtonSize(_expandButtonSize);
+
+            checkBox.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
+
+            // initial state of panel - collapsed
+            _isExpanded = false;
         }
 
         private void InitButtonStyle(ExpandButtonStyle style)
@@ -170,37 +236,6 @@ namespace Utils.WinForm.Expander
             // finally set appropriate bitmap for current state
             pictureBox1.Image = _isExpanded ? _expanded : _collapsed;
         }
-        
-
-        // ExpandButtonSizes
-        /// <summary>
-        /// Size presets of the expand-collapse button.
-        /// </summary>
-        public enum ExpandButtonSize
-        {
-            Small,
-            Normal,
-            Large
-        }
-        private ExpandButtonSize _expandButtonSize = ExpandButtonSize.Normal;
-
-        /// <summary>
-        /// Size preset of the expand-collapse button.
-        /// </summary>
-        [Category("ExpandCollapseButton")]
-        [Description("Size preset of the expand-collapse button.")]
-        [Browsable(true)]
-        public ExpandButtonSize ButtonSize
-        {
-            get => _expandButtonSize;
-            set
-            {
-                if (_expandButtonSize != value)
-                {
-                    InitButtonSize(value);
-                }
-            }
-        }
 
         /// <summary>
         /// Resize and arrange child controls according to ButtonSize preset
@@ -237,9 +272,6 @@ namespace Utils.WinForm.Expander
             // after resize all child controls - do resize for entire ExpandCollapseButton control:
             Height = pictureBox1.Location.Y + pictureBox1.Height + 2;
         }
-
-
-
 
         /// <summary>
         /// Handle clicks from PictureBox and Header
@@ -299,8 +331,14 @@ namespace Utils.WinForm.Expander
 
                 // draw the original image on the new image
                 // using the grayscale color matrix
-                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
-                            0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
+                g.DrawImage(original,
+	                new Rectangle(0, 0, original.Width, original.Height), 
+	                0, 
+	                0, 
+	                original.Width, 
+	                original.Height, 
+	                GraphicsUnit.Pixel, 
+	                attributes);
 
                 // dispose the Graphics object
                 g.Dispose();

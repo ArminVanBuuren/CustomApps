@@ -45,7 +45,7 @@ namespace Utils.WinForm.Expander
             //this.designerActionUISvc.Refresh(this.Component);
         }
 
-        public ExpandCollapseButton.ExpandButtonStyle ButtonStyle
+        public ExpandButtonStyle ButtonStyle
         {
             get => panel.ButtonStyle;
             set => GetPropertyByName("ButtonStyle").SetValue(panel, value);
@@ -53,7 +53,7 @@ namespace Utils.WinForm.Expander
             //this.designerActionUISvc.Refresh(this.Component);
         }
 
-        public ExpandCollapseButton.ExpandButtonSize ButtonSize
+        public ExpandButtonSize ButtonSize
         {
             get => panel.ButtonSize;
             set => GetPropertyByName("ButtonSize").SetValue(panel, value);
