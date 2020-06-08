@@ -203,8 +203,7 @@ namespace Utils.WinForm.Expander
             _defaultCollapsedHeight = _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
 
             // right away manually scale expand-collapse button for filling the horizontal space of panel:
-            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right,
-                         _btnExpandCollapse.Height);
+            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right, _btnExpandCollapse.Height);
 
             // in spite of we always manually scale button, setting Anchor and AutoSize properties provide correct redraw of control in forms designer window
             _btnExpandCollapse.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
@@ -305,8 +304,7 @@ namespace Utils.WinForm.Expander
             base.OnSizeChanged(e);
 
             // we always manually scale expand-collapse button for filling the horizontal space of panel:
-            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right,
-                _btnExpandCollapse.Height);
+            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right, _btnExpandCollapse.Height);
 
             // ignore height changing from animation timer
             if(_internalPanelState != InternalPanelState.Normal)
