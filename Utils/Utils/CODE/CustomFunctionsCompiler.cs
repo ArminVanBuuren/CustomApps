@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 
 namespace Utils
@@ -23,7 +24,7 @@ namespace Utils
 
 		readonly string[] DEFAULT_REFERENCE = new string[] {
 			"mscorlib.dll",
-			"System.dll",
+			"System.dll"
 			//info.CurrentAssembly.CodeBase.Substring(8)
 			//info.CurrentAssembly.ManifestModule.ScopeName
 		};
@@ -45,7 +46,7 @@ namespace Utils
 			CustomFunctions = customFunctions;
 			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
 			FuncType = typeof(T);
-
+			
 			Code = GenerateCode();
 			CustomAssembly = ExecuteCompiling();
 
@@ -67,19 +68,15 @@ namespace Utils
 
 		string GenerateCode()
 		{
-			var securityNamespaces = $"using {FuncType.Namespace};\r\n" +
-			                         @"using System.Security.Permissions;
-[assembly: SecurityPermission(SecurityAction.RequestRefuse, UnmanagedCode = true)]
-[assembly: FileIOPermission(SecurityAction.RequestRefuse, AllFiles = FileIOPermissionAccess.Write)]";
-
 			var customNamespaces = string.Empty;
 			if (CustomFunctions.Namespaces.Item != null && CustomFunctions.Namespaces.Item.Length > 0)
-				customNamespaces = CustomFunctions.Namespaces.Item[0].Value;
+				customNamespaces = CustomFunctions.Namespaces.Item[0].Value.Trim();
 
 			var code = new StringBuilder();
 			code.Append(customNamespaces);
 			code.AppendLine();
-			code.AppendLine(securityNamespaces);
+			if (!Regex.IsMatch(customNamespaces, $"using\\s+{Regex.Escape(FuncType.Namespace)}\\s*\\;"))
+				code.AppendLine($"using {FuncType.Namespace};");
 			code.AppendLine();
 			code.Append($"namespace {Namespace}");
 			code.AppendLine();
@@ -91,9 +88,9 @@ namespace Utils
 					continue;
 				code.AppendLine();
 				code.Append(func.Item[0].Value);
+				code.AppendLine();
 			}
 
-			code.AppendLine();
 			code.Append('}');
 
 			return code.ToString();

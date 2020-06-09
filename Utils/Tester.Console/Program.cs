@@ -13,6 +13,11 @@ using Utils;
 
 namespace Tester.Console
 {
+	public interface ICustomFunction
+	{
+		string Invoke(string[] args);
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -35,11 +40,45 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
+		static void Test_Lookup()
+		{
+			var parameters = new[]
+			{
+				new  { PropType = "Type_2", PropValue = "Value_3" },
+				new  { PropType = "Type_3", PropValue = "Value_2" },
+				new  { PropType = "Type_3", PropValue = "Value_2" },
+				new  { PropType = "Type_3", PropValue = "Value_3" },
+				new  { PropType = "Type_1", PropValue = "Value_1" },
+				new  { PropType = "Type_1", PropValue = "Value_2" },
+			};
+			var data = parameters.Select(x => new { x.PropType, x.PropValue })
+					.Distinct()
+					.OrderBy(x => x.PropValue)
+					.ToLookup(x => x.PropType, x => x.PropValue)
+				//
+				;
+		}
+
+		void Test_SpecifyOrderBy()
+		{
+			var data = new string[]
+			{
+				"SERVICE_CODE",
+				"SourceTypeCode",
+				"ExternalServiceCode",
+				"DateFrom",
+				"ProductStatusCode",
+				"Test"
+			};
+			var preferences = new HashSet<string> { "DateFrom", "SERVICE_CODE", "SourceTypeCode", "ProductStatusCode", "ExternalServiceCode" };
+			var orderedData = data.OrderBy(item => preferences.Concat(data).ToList().IndexOf(item));
+		}
+
 		static void Test_CustomFunction()
 		{
-			//var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
-			//codeFunc += @"   public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
-			var codeFunc = "";
+			var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }" + Environment.NewLine;
+			codeFunc += @"public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
+			//var codeFunc = "";
 			var customFunc = new CustomFunctions
 			{
 				Assemblies = new CustomFunctionAssemblies
@@ -60,11 +99,6 @@ namespace Tester.Console
 			};
 
 			var compiler = new CustomFunctionsCompiler<ICustomFunction>(customFunc);
-		}
-
-		public interface ICustomFunction
-		{
-			string Invoke(string[] args);
 		}
 
 		static void Test_CustomTemplateCalculation()
