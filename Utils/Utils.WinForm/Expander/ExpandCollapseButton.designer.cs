@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Utils.WinForm.Expander
 {
@@ -32,9 +33,11 @@ namespace Utils.WinForm.Expander
         {
 			this.lblLine = new System.Windows.Forms.Label();
 			this.lblHeader = new System.Windows.Forms.Label();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.pictureBox = new System.Windows.Forms.PictureBox();
 			this.checkBox = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.panel = new System.Windows.Forms.Panel();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+			this.panel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lblLine
@@ -44,7 +47,7 @@ namespace Utils.WinForm.Expander
 			this.lblLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.lblLine.Location = new System.Drawing.Point(41, 28);
 			this.lblLine.Name = "lblLine";
-			this.lblLine.Size = new System.Drawing.Size(1040, 1);
+			this.lblLine.Size = new System.Drawing.Size(1242, 1);
 			this.lblLine.TabIndex = 0;
 			this.lblLine.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
 			// 
@@ -56,48 +59,59 @@ namespace Utils.WinForm.Expander
 			this.lblHeader.AutoSize = true;
 			this.lblHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lblHeader.ForeColor = System.Drawing.Color.Teal;
-			this.lblHeader.Location = new System.Drawing.Point(41, 3);
+			this.lblHeader.Location = new System.Drawing.Point(42, 4);
 			this.lblHeader.Name = "lblHeader";
 			this.lblHeader.Size = new System.Drawing.Size(68, 15);
 			this.lblHeader.TabIndex = 2;
 			this.lblHeader.Text = "Заголовок";
 			this.lblHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
 			// 
-			// pictureBox1
+			// pictureBox
 			// 
-			this.pictureBox1.Image = global::Utils.WinForm.Properties.Resources.expander_downarrow;
-			this.pictureBox1.Location = new System.Drawing.Point(0, 3);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(35, 35);
-			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.pictureBox1.TabIndex = 1;
-			this.pictureBox1.TabStop = false;
-			this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+			this.pictureBox.Image = global::Utils.WinForm.Properties.Resources.expander_downarrow;
+			this.pictureBox.Location = new System.Drawing.Point(3, 0);
+			this.pictureBox.Name = "pictureBox";
+			this.pictureBox.Size = new System.Drawing.Size(35, 35);
+			this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox.TabIndex = 1;
+			this.pictureBox.TabStop = false;
+			this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
 			// 
 			// checkBox
 			// 
 			this.checkBox.AutoSize = true;
 			this.checkBox.BackColor = System.Drawing.Color.Transparent;
 			this.checkBox.Dock = System.Windows.Forms.DockStyle.Right;
-			this.checkBox.Location = new System.Drawing.Point(116, 0);
+			this.checkBox.Location = new System.Drawing.Point(368, 0);
 			this.checkBox.Name = "checkBox";
 			this.checkBox.Padding = new System.Windows.Forms.Padding(8, 0, 5, 0);
-			this.checkBox.Size = new System.Drawing.Size(28, 40);
+			this.checkBox.Size = new System.Drawing.Size(28, 37);
 			this.checkBox.TabIndex = 3;
 			this.checkBox.UseVisualStyleBackColor = false;
+			// 
+			// panel
+			// 
+			this.panel.Controls.Add(this.lblHeader);
+			this.panel.Controls.Add(this.pictureBox);
+			this.panel.Controls.Add(this.lblLine);
+			this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel.Location = new System.Drawing.Point(0, 0);
+			this.panel.Name = "panel";
+			this.panel.Size = new System.Drawing.Size(368, 37);
+			this.panel.TabIndex = 4;
 			// 
 			// ExpandCollapseButton
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.checkBox);
-			this.Controls.Add(this.lblHeader);
-			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.lblLine);
+			this.Controls.Add(this.panel);
 			this.MaximumSize = new System.Drawing.Size(0, 40);
 			this.Name = "ExpandCollapseButton";
-			this.Size = new System.Drawing.Size(144, 40);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			this.Size = new System.Drawing.Size(396, 37);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+			this.panel.ResumeLayout(false);
+			this.panel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -106,8 +120,9 @@ namespace Utils.WinForm.Expander
         #endregion
 
         private System.Windows.Forms.Label lblLine;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label lblHeader;
 		private System.Windows.Forms.CheckBox checkBox;
+		private Panel panel;
 	}
 }

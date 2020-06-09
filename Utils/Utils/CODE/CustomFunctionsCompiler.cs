@@ -136,7 +136,7 @@ namespace Utils
 					options.ReferencedAssemblies.Add(r);
 
 				var compiled = provider.CompileAssemblyFromSource(options, Code);
-
+				
 				if (compiled.Errors.Count > 0)
 				{
 					var errors = new StringBuilder();

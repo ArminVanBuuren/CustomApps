@@ -45,6 +45,8 @@ namespace Utils.WinForm.Expander
         /// </summary>
         private Image _collapsed;
 
+        private Color _headerColor = Color.Transparent;
+
         /// <summary>
         /// Set flag for expand or collapse button
         /// (true - expanded, false - collapsed)
@@ -144,6 +146,35 @@ namespace Utils.WinForm.Expander
         }
 
         /// <summary>
+        /// HeaderBackColor
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("HeaderBackColor")]
+        [Browsable(true)]
+        public Color HeaderBackColor
+        {
+	        get => _headerColor;
+	        set
+	        {
+		        _headerColor = value;
+		        panel.BackColor = _headerColor;
+		        checkBox.BackColor = _headerColor;
+	        }
+        }
+
+        /// <summary>
+        /// HeaderLineColor
+        /// </summary>
+        [Category("ExpandCollapseButton")]
+        [Description("HeaderLineColor")]
+        [Browsable(true)]
+        public Color HeaderLineColor
+        {
+	        get => lblLine.BackColor;
+	        set => lblLine.BackColor = value;
+        }
+
+        /// <summary>
         /// Visual style of the expand-collapse button.
         /// </summary>
         [Category("ExpandCollapseButton")]
@@ -187,10 +218,10 @@ namespace Utils.WinForm.Expander
 	        InitButtonStyle(_expandButtonStyle);
 	        InitButtonSize(_expandButtonSize);
 
-            checkBox.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
-
             // initial state of panel - collapsed
             _isExpanded = false;
+
+            checkBox.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
         }
 
         private void InitButtonStyle(ExpandButtonStyle style)
@@ -202,39 +233,39 @@ namespace Utils.WinForm.Expander
                 case ExpandButtonStyle.MagicArrow:
                     var bmp = Properties.Resources.expander_Upload;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                    pictureBox1.Image = bmp;
+                    pictureBox.Image = bmp;
                     break;
                 case ExpandButtonStyle.Circle:
                     bmp = Properties.Resources.expander_icon_expand;
-                    pictureBox1.Image = bmp;
+                    pictureBox.Image = bmp;
                     break;
                 case ExpandButtonStyle.Triangle:
-                    pictureBox1.Image = Properties.Resources.expander_downarrow;
+                    pictureBox.Image = Properties.Resources.expander_downarrow;
                     break;
                 case ExpandButtonStyle.FatArrow:
                     bmp = Properties.Resources.expander_up_256;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                    pictureBox1.Image = bmp;
+                    pictureBox.Image = bmp;
                     break;
                 case ExpandButtonStyle.Classic:
                     bmp = Properties.Resources.expander_icon_struct_hide_collapsed;
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                    pictureBox1.Image = bmp;
+                    pictureBox.Image = bmp;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(style));
             }
 
             // collapsed bitmap:
-            _collapsed = pictureBox1.Image;
+            _collapsed = pictureBox.Image;
 
             // expanded bitmap is rotated collapsed bitmap:
-            _expanded = MakeGrayscale3(pictureBox1.Image);
+            _expanded = MakeGrayscale3(pictureBox.Image);
             _expanded.RotateFlip(RotateFlipType.Rotate180FlipNone);
 
 
             // finally set appropriate bitmap for current state
-            pictureBox1.Image = _isExpanded ? _expanded : _collapsed;
+            pictureBox.Image = _isExpanded ? _expanded : _collapsed;
         }
 
         /// <summary>
@@ -248,20 +279,20 @@ namespace Utils.WinForm.Expander
             switch (_expandButtonSize)
             {
                 case ExpandButtonSize.Small:
-                    pictureBox1.Location = new Point(0, 1);
-                    pictureBox1.Size = new Size(16, 16);
+                    pictureBox.Location = new Point(2, 1);
+                    pictureBox.Size = new Size(16, 16);
                     lblLine.Location = new Point(20, 18);
                     lblHeader.Location = new Point(20, 1);
                     break;
                 case ExpandButtonSize.Normal:
-                    pictureBox1.Location = new Point(0, 1);
-                    pictureBox1.Size = new Size(24, 24);
+                    pictureBox.Location = new Point(2, 1);
+                    pictureBox.Size = new Size(24, 24);
                     lblLine.Location = new Point(30, 22);
                     lblHeader.Location = new Point(30, 3);
                     break;
                 case ExpandButtonSize.Large:
-                    pictureBox1.Location = new Point(0, 1);
-                    pictureBox1.Size = new Size(35, 35);
+                    pictureBox.Location = new Point(2, 1);
+                    pictureBox.Size = new Size(35, 35);
                     lblLine.Location = new Point(41, 28);
                     lblHeader.Location = new Point(41, 3);
                     break;
@@ -270,7 +301,7 @@ namespace Utils.WinForm.Expander
             }
 
             // after resize all child controls - do resize for entire ExpandCollapseButton control:
-            Height = pictureBox1.Location.Y + pictureBox1.Height + 2;
+            Height = pictureBox.Location.Y + pictureBox.Height + 2;
         }
 
         /// <summary>
@@ -290,12 +321,22 @@ namespace Utils.WinForm.Expander
         protected virtual void OnExpandCollapse()
         {
             // set appropriate bitmap
-            pictureBox1.Image = _isExpanded ? _expanded : _collapsed;
+            pictureBox.Image = _isExpanded ? _expanded : _collapsed;
             //lblHeader.ForeColor = _isExpanded ? Color.DarkGray : Color.SteelBlue;
 
             // and fire the event:
             var handler = ExpandCollapse;
             handler?.Invoke(this, new ExpandCollapseEventArgs(_isExpanded));
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            //using (var g = CreateGraphics())
+            //{
+            // var size = g.MeasureString(lblHeader.Text, lblHeader.Font);
+            //}
+
+            panel.MaximumSize = new Size(Size.Width - (checkBox.Visible ? checkBox.Size.Width : 0), 0);
         }
 
         /// <summary>

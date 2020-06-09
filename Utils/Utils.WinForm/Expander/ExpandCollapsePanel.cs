@@ -193,6 +193,59 @@ namespace Utils.WinForm.Expander
         }
 
         /// <summary>
+        /// HeaderColor
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("HeaderBackColor")]
+        [Browsable(true)]
+        public Color HeaderBackColor
+        {
+	        get => _btnExpandCollapse.HeaderBackColor;
+	        set
+	        {
+		        if (value == Color.Transparent)
+		        {
+			        _btnExpandCollapse.HeaderBackColor = value;
+			        panel.BackColor = value;
+                    return;
+                }
+		        _btnExpandCollapse.HeaderBackColor = value;
+            }
+        }
+
+        /// <summary>
+        /// HeaderBorderBrush
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("HeaderBorderBrush")]
+        [Browsable(true)]
+        public Color HeaderBorderBrush
+        {
+	        get => panel.BackColor;
+	        set
+	        {
+		        if (HeaderBackColor == Color.Transparent)
+		        {
+			        panel.BackColor = HeaderBackColor;
+                    return;
+		        }
+		        panel.BackColor = value;
+	        }
+        }
+
+        /// <summary>
+        /// HeaderLineColor
+        /// </summary>
+        [Category("ExpandCollapsePanel")]
+        [Description("HeaderLineColor")]
+        [Browsable(true)]
+        public Color HeaderLineColor
+        {
+	        get => _btnExpandCollapse.HeaderLineColor;
+	        set => _btnExpandCollapse.HeaderLineColor = value;
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ExpandCollapsePanel()
@@ -200,7 +253,7 @@ namespace Utils.WinForm.Expander
             InitializeComponent();
 
             // make collapsed height equals to fit expand-collapse button
-            _defaultCollapsedHeight = _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
+            _defaultCollapsedHeight = _btnExpandCollapse.Size.Height - 2; // _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
 
             // right away manually scale expand-collapse button for filling the horizontal space of panel:
             _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right, _btnExpandCollapse.Height);
@@ -328,6 +381,8 @@ namespace Utils.WinForm.Expander
             if(Parent != null)
                 _previousParentSize = Parent.Size;
             #endregion
+
+            panel.Size = new Size(panel.Size.Width, _btnExpandCollapse.Size.Height + 6);
         }
 
         //#region Animation Code
