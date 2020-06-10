@@ -80,7 +80,6 @@ namespace Utils.WinForm.Expander
 			// checkBox
 			// 
 			this.checkBox.AutoSize = true;
-			this.checkBox.BackColor = System.Drawing.Color.Transparent;
 			this.checkBox.Dock = System.Windows.Forms.DockStyle.Right;
 			this.checkBox.Location = new System.Drawing.Point(-28, 0);
 			this.checkBox.Name = "checkBox";

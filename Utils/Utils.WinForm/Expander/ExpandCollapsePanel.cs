@@ -97,7 +97,7 @@ namespace Utils.WinForm.Expander
         /// CheckBox
         /// </summary>
         [Category("ExpandCollapsePanel")]
-        [Description("CheckBox shown in panel")]
+        [Description("CheckBox is shown in panel")]
         [Browsable(true)]
         public bool CheckBoxShown
         {
@@ -182,7 +182,7 @@ namespace Utils.WinForm.Expander
         /// HeaderColor
         /// </summary>
         [Category("ExpandCollapsePanel")]
-        [Description("HeaderBackColor")]
+        [Description("Background color of header")]
         [Browsable(true)]
         public Color HeaderBackColor
         {
@@ -203,7 +203,7 @@ namespace Utils.WinForm.Expander
         /// HeaderBorderBrush
         /// </summary>
         [Category("ExpandCollapsePanel")]
-        [Description("HeaderBorderBrush")]
+        [Description("Header borders color")]
         [Browsable(true)]
         public Color HeaderBorderBrush
         {
@@ -223,7 +223,7 @@ namespace Utils.WinForm.Expander
         /// HeaderLineColor
         /// </summary>
         [Category("ExpandCollapsePanel")]
-        [Description("HeaderLineColor")]
+        [Description("Header line color")]
         [Browsable(true)]
         public Color HeaderLineColor
         {
