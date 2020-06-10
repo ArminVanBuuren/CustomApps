@@ -84,7 +84,7 @@ namespace Utils.WinForm.Expander
 			this.checkBox.Location = new System.Drawing.Point(-28, 0);
 			this.checkBox.Name = "checkBox";
 			this.checkBox.Padding = new System.Windows.Forms.Padding(8, 0, 5, 0);
-			this.checkBox.Size = new System.Drawing.Size(28, 37);
+			this.checkBox.Size = new System.Drawing.Size(28, 40);
 			this.checkBox.TabIndex = 3;
 			this.checkBox.UseVisualStyleBackColor = false;
 			// 
@@ -96,7 +96,7 @@ namespace Utils.WinForm.Expander
 			this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel.Location = new System.Drawing.Point(0, 0);
 			this.panel.Name = "panel";
-			this.panel.Size = new System.Drawing.Size(0, 37);
+			this.panel.Size = new System.Drawing.Size(0, 40);
 			this.panel.TabIndex = 4;
 			this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
 			// 
@@ -108,6 +108,7 @@ namespace Utils.WinForm.Expander
 			this.Controls.Add(this.panel);
 			this.MaximumSize = new System.Drawing.Size(0, 40);
 			this.Name = "ExpandCollapseButton";
+			this.Size = new System.Drawing.Size(0, 40);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			this.panel.ResumeLayout(false);
 			this.panel.PerformLayout();
