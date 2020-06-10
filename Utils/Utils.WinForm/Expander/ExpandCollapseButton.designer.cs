@@ -98,6 +98,7 @@ namespace Utils.WinForm.Expander
 			this.panel.Name = "panel";
 			this.panel.Size = new System.Drawing.Size(0, 37);
 			this.panel.TabIndex = 4;
+			this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
 			// 
 			// ExpandCollapseButton
 			// 

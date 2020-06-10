@@ -61,8 +61,8 @@ namespace Utils.WinForm.Expander
         /// <summary>
         /// Occurs when the button has expanded or collapsed
         /// </summary>
-        [Category("CheckedChangedButton")]
-        [Description("Occurs when the button has CheckBox changed.")]
+        [Category("ExpandCollapseButton")]
+        [Description("Occurs when the button has CheckBox check changed.")]
         [Browsable(true)]
         public event EventHandler<ExpandCollapseEventArgs> CheckedChanged;
 

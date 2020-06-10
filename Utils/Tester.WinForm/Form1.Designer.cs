@@ -95,19 +95,20 @@
 			this.TestExpander.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TestExpander.BackColor = System.Drawing.Color.OrangeRed;
+			this.TestExpander.BordersThickness = 3;
 			this.TestExpander.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
 			this.TestExpander.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
-			this.TestExpander.IsChecked = false;
 			this.TestExpander.CheckBoxShown = true;
 			this.TestExpander.Controls.Add(this.richTextBox1);
 			this.TestExpander.ExpandedHeight = 319;
 			this.TestExpander.HeaderBackColor = System.Drawing.Color.Azure;
-			this.TestExpander.HeaderBorderBrush = System.Drawing.Color.White;
+			this.TestExpander.HeaderBorderBrush = System.Drawing.Color.Chartreuse;
 			this.TestExpander.HeaderLineColor = System.Drawing.Color.Silver;
-			this.TestExpander.IsExpanded = false;
+			this.TestExpander.IsChecked = false;
+			this.TestExpander.IsExpanded = true;
 			this.TestExpander.Location = new System.Drawing.Point(207, 147);
 			this.TestExpander.Name = "TestExpander";
-			this.TestExpander.Size = new System.Drawing.Size(330, 25);
+			this.TestExpander.Size = new System.Drawing.Size(365, 319);
 			this.TestExpander.TabIndex = 5;
 			this.TestExpander.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.TestExpander.UseAnimation = true;
