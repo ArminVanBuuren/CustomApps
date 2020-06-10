@@ -45,17 +45,9 @@ namespace Utils.WinForm.Expander
         /// </summary>
         private Image _collapsed;
 
-        private Color _headerColor = Color.Transparent;
-
-        /// <summary>
-        /// Set flag for expand or collapse button
-        /// (true - expanded, false - collapsed)
-        /// </summary>
-        private bool _isExpanded;
-
-
+        private Color _headerBackColor = Color.Azure;
+        private bool _isExpanded = true;
         private ExpandButtonSize _expandButtonSize = ExpandButtonSize.Small;
-
         private ExpandButtonStyle _expandButtonStyle = ExpandButtonStyle.Circle;
 
         /// <summary>
@@ -72,7 +64,7 @@ namespace Utils.WinForm.Expander
         [Category("CheckedChangedButton")]
         [Description("Occurs when the button has CheckBox changed.")]
         [Browsable(true)]
-        public event EventHandler CheckedChanged;
+        public event EventHandler<ExpandCollapseEventArgs> CheckedChanged;
 
         /// <summary>
         /// Set flag for expand or collapse button
@@ -119,9 +111,9 @@ namespace Utils.WinForm.Expander
         /// CheckBox
         /// </summary>
         [Category("ExpandCollapseButton")]
-        [Description("CheckBoxChecked")]
+        [Description("IsChecked")]
         [Browsable(true)]
-        public bool CheckBoxChecked
+        public bool IsChecked
         {
 	        get => checkBox.Checked;
 	        set => checkBox.Checked = value;
@@ -153,12 +145,12 @@ namespace Utils.WinForm.Expander
         [Browsable(true)]
         public Color HeaderBackColor
         {
-	        get => _headerColor;
+	        get => _headerBackColor;
 	        set
 	        {
-		        _headerColor = value;
-		        panel.BackColor = _headerColor;
-		        checkBox.BackColor = _headerColor;
+		        _headerBackColor = value;
+		        panel.BackColor = _headerBackColor;
+		        checkBox.BackColor = _headerBackColor;
 	        }
         }
 
@@ -214,14 +206,14 @@ namespace Utils.WinForm.Expander
         {
 	        InitializeComponent();
 
-	        // initialize expanded/collapsed state bitmaps:
-	        InitButtonStyle(_expandButtonStyle);
+	        panel.BackColor = _headerBackColor;
+	        checkBox.BackColor = _headerBackColor;
+
+            // initialize expanded/collapsed state bitmaps:
+            InitButtonStyle(_expandButtonStyle);
 	        InitButtonSize(_expandButtonSize);
 
-            // initial state of panel - collapsed
-            _isExpanded = false;
-
-            checkBox.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
+            checkBox.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, new ExpandCollapseEventArgs(IsExpanded, IsChecked));
         }
 
         private void InitButtonStyle(ExpandButtonStyle style)
@@ -326,7 +318,7 @@ namespace Utils.WinForm.Expander
 
             // and fire the event:
             var handler = ExpandCollapse;
-            handler?.Invoke(this, new ExpandCollapseEventArgs(_isExpanded));
+            handler?.Invoke(this, new ExpandCollapseEventArgs(IsExpanded, IsChecked));
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -336,7 +328,10 @@ namespace Utils.WinForm.Expander
             // var size = g.MeasureString(lblHeader.Text, lblHeader.Font);
             //}
 
+            //var test = this.Size;
+
             panel.MaximumSize = new Size(Size.Width - (checkBox.Visible ? checkBox.Size.Width : 0), 0);
+            base.OnSizeChanged(e);
         }
 
         /// <summary>

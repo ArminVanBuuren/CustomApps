@@ -33,26 +33,21 @@ namespace Utils.WinForm.Expander
 	        this.components = new System.ComponentModel.Container();
 	        this._btnExpandCollapse = new ExpandCollapseButton();
 	        this.animationTimer = new System.Windows.Forms.Timer(this.components);
-	        this.panel = new System.Windows.Forms.Panel();
+	        this.panelHeader = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // panel
             // 
-            this.panel.Controls.Add(this._btnExpandCollapse);
-            this.panel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel.Location = new System.Drawing.Point(0, 0);
-            this.panel.Name = "panel";
-            this.panel.TabIndex = 0;
+            this.panelHeader.Controls.Add(this._btnExpandCollapse);
+            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Name = "panel";
+            this.panelHeader.TabIndex = 0;
 			// 
 			// _btnExpandCollapse
 			// 
-			this._btnExpandCollapse.Anchor = ((System.Windows.Forms.AnchorStyles)
-		        (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-		          | System.Windows.Forms.AnchorStyles.Right)));
-	        this._btnExpandCollapse.ButtonSize = ExpandButtonSize.Normal;
+			this._btnExpandCollapse.ButtonSize = ExpandButtonSize.Small;
 	        this._btnExpandCollapse.ButtonStyle = ExpandButtonStyle.Circle;
-	        this._btnExpandCollapse.IsExpanded = false;
-	        this._btnExpandCollapse.Location = new System.Drawing.Point(3, 3);
 	        this._btnExpandCollapse.Name = "_btnExpandCollapse";
 	        this._btnExpandCollapse.TabIndex = 1;
 	        // 
@@ -63,7 +58,7 @@ namespace Utils.WinForm.Expander
 	        // 
 	        // ExpandCollapsePanel
 	        // 
-	        this.Controls.Add(this.panel);
+	        this.Controls.Add(this.panelHeader);
 	        this.Size = new System.Drawing.Size(365, 319);
 	        this.ResumeLayout(false);
 
@@ -71,7 +66,7 @@ namespace Utils.WinForm.Expander
 
         #endregion
 
-        private Panel panel;
+        private Panel panelHeader;
         private ExpandCollapseButton _btnExpandCollapse;
         private System.Windows.Forms.Timer animationTimer;
     }

@@ -10,15 +10,22 @@ namespace Utils.WinForm.Expander
         /// <summary>
         /// true - контрол развёрнут. false - контрол свёрнут
         /// </summary>
-        public bool IsExpanded { get; private set; }
+        public bool IsExpanded { get; }
+
+        /// <summary>
+        /// true - контрол развёрнут. false - контрол свёрнут
+        /// </summary>
+        public bool IsChecked { get; }
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="isExpanded">true - контрол развёрнут. false - контрол свёрнут</param>
-        public ExpandCollapseEventArgs(bool isExpanded)
+        /// <param name="isChecked"></param>
+        public ExpandCollapseEventArgs(bool isExpanded, bool isChecked)
         {
             IsExpanded = isExpanded;
+            IsChecked = isChecked;
         }
     }
 }

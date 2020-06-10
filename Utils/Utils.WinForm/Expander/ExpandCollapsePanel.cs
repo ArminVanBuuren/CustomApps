@@ -12,10 +12,7 @@ namespace Utils.WinForm.Expander
     [Designer(typeof(ExpandCollapsePanelDesigner))]
     public partial class ExpandCollapsePanel : Panel
     {
-        private readonly int _defaultCollapsedHeight;
-        private int _userCollapsedHeight = -1;
-
-        readonly Dictionary<Control, bool> _controlsDict = new Dictionary<Control, bool>();
+	    private readonly Dictionary<Control, bool> _controlsDict = new Dictionary<Control, bool>();
 
         /// <summary>
         /// Last stored size of panel's parent control
@@ -24,6 +21,7 @@ namespace Utils.WinForm.Expander
         /// </summary>
         private Size _previousParentSize = Size.Empty;
 
+        private readonly int _collapsedHeight;
         /// <summary>
         /// Height of panel in expanded state
         /// </summary>
@@ -44,18 +42,6 @@ namespace Utils.WinForm.Expander
         [Description("Occurs when the button has CheckBox changed.")]
         [Browsable(true)]
         public event EventHandler CheckedChanged;
-
-        /// <summary>
-        /// Height of panel in collapsed state
-        /// </summary>
-        [Category("ExpandCollapsePanel")]
-        [Description("Height of panel in collapsed state")]
-        [Browsable(true)]
-        public int CollapsedHeight 
-        {
-            get => _userCollapsedHeight <= 0 ? _defaultCollapsedHeight : _userCollapsedHeight;
-            set => _userCollapsedHeight = value;
-        }
 
         /// <summary>
         /// Height of panel in expanded state
@@ -125,10 +111,10 @@ namespace Utils.WinForm.Expander
         [Category("ExpandCollapsePanel")]
         [Description("CheckBox is checked")]
         [Browsable(true)]
-        public bool CheckBoxChecked
+        public bool IsChecked
         {
-	        get => _btnExpandCollapse.CheckBoxChecked;
-	        set => _btnExpandCollapse.CheckBoxChecked = value;
+	        get => _btnExpandCollapse.IsChecked;
+	        set => _btnExpandCollapse.IsChecked = value;
         }
 
         /// <summary>
@@ -206,7 +192,7 @@ namespace Utils.WinForm.Expander
 		        if (value == Color.Transparent)
 		        {
 			        _btnExpandCollapse.HeaderBackColor = value;
-			        panel.BackColor = value;
+			        panelHeader.BackColor = value;
                     return;
                 }
 		        _btnExpandCollapse.HeaderBackColor = value;
@@ -221,15 +207,15 @@ namespace Utils.WinForm.Expander
         [Browsable(true)]
         public Color HeaderBorderBrush
         {
-	        get => panel.BackColor;
+	        get => panelHeader.BackColor;
 	        set
 	        {
 		        if (HeaderBackColor == Color.Transparent)
 		        {
-			        panel.BackColor = HeaderBackColor;
+			        panelHeader.BackColor = HeaderBackColor;
                     return;
 		        }
-		        panel.BackColor = value;
+		        panelHeader.BackColor = value;
 	        }
         }
 
@@ -252,23 +238,21 @@ namespace Utils.WinForm.Expander
         {
             InitializeComponent();
 
-            // make collapsed height equals to fit expand-collapse button
-            _defaultCollapsedHeight = _btnExpandCollapse.Size.Height - 2; // _btnExpandCollapse.Location.Y + _btnExpandCollapse.Size.Height + _btnExpandCollapse.Margin.Bottom;
-
-            // right away manually scale expand-collapse button for filling the horizontal space of panel:
-            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right, _btnExpandCollapse.Height);
-
             // in spite of we always manually scale button, setting Anchor and AutoSize properties provide correct redraw of control in forms designer window
             _btnExpandCollapse.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             _btnExpandCollapse.AutoSize = true;
+            _collapsedHeight = _btnExpandCollapse.Size.Height + 6;
+            _btnExpandCollapse.Anchor = AnchorStyles.None;
+            _btnExpandCollapse.Dock = DockStyle.Fill;
+            _btnExpandCollapse.AutoSize = false;
+            panelHeader.Size = new Size(panelHeader.Size.Width + 6, _collapsedHeight);
+            panelHeader.Padding = new Padding(3);
+            //_btnExpandCollapse.IsExpanded = true; // initial state of panel - expanded
+            _btnExpandCollapse.CheckBoxShown = false; // checkBox shown
 
-            // initial state of panel - expanded
-            _btnExpandCollapse.IsExpanded = true;
+            _btnExpandCollapse.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
             // subscribe for button expand-collapse state changed event
             _btnExpandCollapse.ExpandCollapse += BtnExpandCollapseExpandCollapse;
-
-            _btnExpandCollapse.CheckBoxShown = false;
-            _btnExpandCollapse.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
 
             this.ControlAdded += (sender, args) => _controlsDict.Add(args.Control, true);
             this.ControlRemoved += (sender, args) => _controlsDict.Remove(args.Control);
@@ -314,7 +298,6 @@ namespace Utils.WinForm.Expander
                 _internalPanelState = InternalPanelState.Normal;
                 // resize panel
                 Size = new Size(Size.Width, _expandedHeight);
-
             }
         }
 
@@ -344,7 +327,7 @@ namespace Utils.WinForm.Expander
                 // set internal state to Normal
                 _internalPanelState = InternalPanelState.Normal;
                 // resize panel
-                Size = new Size(Size.Width, CollapsedHeight);
+                Size = new Size(Size.Width, _collapsedHeight);
             }
         }
 
@@ -354,35 +337,27 @@ namespace Utils.WinForm.Expander
         /// <param name="e"></param>
         protected override void OnSizeChanged(EventArgs e)
         {
-            base.OnSizeChanged(e);
+	        base.OnSizeChanged(e);
 
-            // we always manually scale expand-collapse button for filling the horizontal space of panel:
-            _btnExpandCollapse.Size = new Size(ClientSize.Width - _btnExpandCollapse.Margin.Left - _btnExpandCollapse.Margin.Right, _btnExpandCollapse.Height);
+	        // ignore height changing from animation timer
+	        if (_internalPanelState != InternalPanelState.Normal)
+		        return;
 
-            // ignore height changing from animation timer
-            if(_internalPanelState != InternalPanelState.Normal)
-                return;
+	        if (!IsExpanded // if panel collapsed
+	            && ((Anchor & AnchorStyles.Bottom) != 0) //and panel's Anchor property sets to Bottom
+	            && Size.Height != _collapsedHeight // and panel height is changed (it could happens only if parent control just has resized)
+	            && Parent != null) // and panel has the parent control
+	        {
+		        // main, calculate the parent control resize diff and add it to expandedHeight value:
+		        _expandedHeight += Parent.Height - _previousParentSize.Height;
 
-            #region Handling panel's Anchor property sets to Bottom when panel collapsed
+		        // reset resized height (by base.OnSizeChanged anchor.Bottom handling) to collapsedHeight value:
+		        Size = new Size(Size.Width, _collapsedHeight);
+	        }
 
-            if (!IsExpanded // if panel collapsed
-                && ((Anchor & AnchorStyles.Bottom) != 0) //and panel's Anchor property sets to Bottom
-                && Size.Height != CollapsedHeight // and panel height is changed (it could happens only if parent control just has resized)
-                && Parent != null) // and panel has the parent control
-            {
-                // main, calculate the parent control resize diff and add it to expandedHeight value:
-                _expandedHeight += Parent.Height - _previousParentSize.Height;
-
-                // reset resized height (by base.OnSizeChanged anchor.Bottom handling) to collapsedHeight value:
-                Size = new Size(Size.Width, CollapsedHeight);
-            }
-
-            // store previous size of parent control (however we need only height)
-            if(Parent != null)
-                _previousParentSize = Parent.Size;
-            #endregion
-
-            panel.Size = new Size(panel.Size.Width, _btnExpandCollapse.Size.Height + 6);
+	        // store previous size of parent control (however we need only height)
+	        if (Parent != null)
+		        _previousParentSize = Parent.Size;
         }
 
         //#region Animation Code
@@ -456,7 +431,7 @@ namespace Utils.WinForm.Expander
 
                 case InternalPanelState.Collapsing:
                     // still something to collapse
-                    if ((Height - _animationHeightAdjustment) > CollapsedHeight)
+                    if ((Height - _animationHeightAdjustment) > _collapsedHeight)
                     {
                         Height -= _animationHeightAdjustment;
                         // continue decreasing opacity
@@ -466,7 +441,7 @@ namespace Utils.WinForm.Expander
                     {
                         // we are done so we dont want any transparency
                         currOpacity = byte.MaxValue;
-                        Height = CollapsedHeight;
+                        Height = _collapsedHeight;
                         _internalPanelState = InternalPanelState.Normal;
                     }
                     break;

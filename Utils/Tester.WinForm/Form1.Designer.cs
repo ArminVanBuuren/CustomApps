@@ -97,24 +97,24 @@
 			this.TestExpander.BackColor = System.Drawing.Color.OrangeRed;
 			this.TestExpander.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
 			this.TestExpander.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
-			this.TestExpander.CheckBoxChecked = false;
+			this.TestExpander.IsChecked = false;
 			this.TestExpander.CheckBoxShown = true;
-			this.TestExpander.CollapsedHeight = 25;
 			this.TestExpander.Controls.Add(this.richTextBox1);
-			this.TestExpander.ExpandedHeight = 0;
-			this.TestExpander.HeaderBackColor = System.Drawing.Color.White;
-			this.TestExpander.HeaderBorderBrush = System.Drawing.Color.Maroon;
+			this.TestExpander.ExpandedHeight = 319;
+			this.TestExpander.HeaderBackColor = System.Drawing.Color.Azure;
+			this.TestExpander.HeaderBorderBrush = System.Drawing.Color.White;
 			this.TestExpander.HeaderLineColor = System.Drawing.Color.Silver;
-			this.TestExpander.IsExpanded = true;
-			this.TestExpander.Location = new System.Drawing.Point(186, 144);
+			this.TestExpander.IsExpanded = false;
+			this.TestExpander.Location = new System.Drawing.Point(207, 147);
 			this.TestExpander.Name = "TestExpander";
-			this.TestExpander.Size = new System.Drawing.Size(330, 319);
+			this.TestExpander.Size = new System.Drawing.Size(330, 25);
 			this.TestExpander.TabIndex = 5;
 			this.TestExpander.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.TestExpander.UseAnimation = true;
 			// 
 			// richTextBox1
 			// 
+			this.richTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.richTextBox1.Location = new System.Drawing.Point(0, 25);
 			this.richTextBox1.Name = "richTextBox1";
 			this.richTextBox1.Size = new System.Drawing.Size(330, 294);
@@ -125,6 +125,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.ClientSize = new System.Drawing.Size(1125, 804);
 			this.Controls.Add(this.TestExpander);
 			this.Controls.Add(this.button3);
