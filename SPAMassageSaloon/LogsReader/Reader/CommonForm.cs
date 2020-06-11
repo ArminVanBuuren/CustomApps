@@ -22,9 +22,12 @@ namespace LogsReader.Reader
 	    public void Initialize(LogsReaderMainForm main)
 	    {
 		    MainForm = main;
+
+		    var index = -1;
 		    foreach (var readerForm in MainForm.AllForms.Values)
 		    {
-			    var expander = CreateExpander(readerForm);
+			    index++;
+                var expander = CreateExpander(readerForm, index);
                 readerForm.OnTreeViewChanged += ReaderForm_OnTreeViewChanged;
                 AllExpanders.Add(readerForm, expander);
 
@@ -37,66 +40,67 @@ namespace LogsReader.Reader
             
         }
 
-        ExpandCollapsePanel CreateExpander(LogsReaderForm readerForm)
-	    {
-		    var buttonBack = new Button
-		    {
-			    BackColor = Color.White,
-			    FlatStyle = FlatStyle.Flat,
-			    Location = new Point(3, 4),
-			    Size = new Size(20, 17),
-			    UseVisualStyleBackColor = false
-		    };
-		    var labelBack = new Label {AutoSize = true, Location = new Point(25, 4), Size = new Size(34, 15), Text = @"Back"};
+        ExpandCollapsePanel CreateExpander(LogsReaderForm readerForm, int index)
+        {
+	        var buttonBack = new Button
+	        {
+		        BackColor = Color.White,
+		        FlatStyle = FlatStyle.Flat,
+		        Location = new Point(3, 4),
+		        Size = new Size(20, 17),
+		        UseVisualStyleBackColor = false
+	        };
+	        var labelBack = new Label {AutoSize = true, Location = new Point(25, 4), Size = new Size(34, 15), Text = @"Back"};
 
-		    var buttonFore = new Button
-		    {
-			    BackColor = Color.Black,
-			    FlatStyle = FlatStyle.Flat,
-			    Location = new Point(63, 4),
-			    Size = new Size(20, 17),
-			    UseVisualStyleBackColor = false
-		    };
-		    var labelFore = new Label {AutoSize = true, Location = new Point(85, 4), Size = new Size(32, 15), Text = @"Fore"};
+	        var buttonFore = new Button
+	        {
+		        BackColor = Color.Black,
+		        FlatStyle = FlatStyle.Flat,
+		        Location = new Point(63, 4),
+		        Size = new Size(20, 17),
+		        UseVisualStyleBackColor = false
+	        };
+	        var labelFore = new Label {AutoSize = true, Location = new Point(85, 4), Size = new Size(32, 15), Text = @"Fore"};
 
-		    var splitContainerInner = new SplitContainer
-		    {
-			    Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-			    FixedPanel = FixedPanel.Panel1,
-			    IsSplitterFixed = true,
-			    Location = new Point(0, 24),
-			    Orientation = Orientation.Horizontal,
-			    AutoSize = true,
-			    SplitterDistance = 25
-		    };
-		    splitContainerInner.Panel1.Controls.Add(buttonBack);
-		    splitContainerInner.Panel1.Controls.Add(labelBack);
-		    splitContainerInner.Panel1.Controls.Add(buttonFore);
-            splitContainerInner.Panel1.Controls.Add(labelFore);
-            splitContainerInner.Panel2.Controls.Add(readerForm.TreeMain);
+	        var splitContainerInner = new SplitContainer
+	        {
+		        Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+		        FixedPanel = FixedPanel.Panel1,
+		        IsSplitterFixed = true,
+		        Location = new Point(0, 24),
+		        Orientation = Orientation.Horizontal,
+		        AutoSize = true,
+		        SplitterDistance = 25
+	        };
+	        splitContainerInner.Panel1.Controls.Add(buttonBack);
+	        splitContainerInner.Panel1.Controls.Add(labelBack);
+	        splitContainerInner.Panel1.Controls.Add(buttonFore);
+	        splitContainerInner.Panel1.Controls.Add(labelFore);
+	        splitContainerInner.Panel2.Controls.Add(readerForm.TreeMain);
 
-            var schemeExpander = new ExpandCollapsePanel
-		    {
-			    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-			    BackColor = SystemColors.Control,
-			    BordersThickness = 3,
-			    ButtonSize = ExpandButtonSize.Small,
-			    ButtonStyle = ExpandButtonStyle.Circle,
-			    CheckBoxShown = true,
-			    ExpandedHeight = 0,
-			    HeaderBackColor = Color.Azure,
-			    HeaderBorderBrush = SystemColors.Control,
-			    HeaderLineColor = Color.Azure,
-			    IsChecked = false,
-			    IsExpanded = false,
-			    Size = new Size(FlowPanelForExpanders.Size.Width - 6, 200),
-			    Text = readerForm.CurrentSettings.Name,
-			    UseAnimation = true
-		    };
-		    schemeExpander.Controls.Add(splitContainerInner);
+	        var schemeExpander = new ExpandCollapsePanel
+	        {
+		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+		        BackColor = SystemColors.Control,
+		        BordersThickness = 3,
+		        ButtonSize = ExpandButtonSize.Small,
+		        ButtonStyle = ExpandButtonStyle.Circle,
+		        CheckBoxShown = true,
+		        ExpandedHeight = 200,
+		        HeaderBackColor = Color.Azure,
+		        HeaderBorderBrush = SystemColors.Control,
+		        HeaderLineColor = Color.Azure,
+		        IsChecked = false,
+		        IsExpanded = false,
+		        Location = new Point(3, 3 + (index * 31)),
+		        Size = new Size(FlowPanelForExpanders.Size.Width - 6, 25),
+		        Text = readerForm.CurrentSettings.Name,
+		        UseAnimation = true
+	        };
+	        schemeExpander.Controls.Add(splitContainerInner);
 
-		    return schemeExpander;
-	    }
+	        return schemeExpander;
+        }
 
         public void ApplySettings()
         {

@@ -160,7 +160,7 @@ namespace LogsReader
                     }
                 }
 
-                //globalForm.Initialize(this);
+                globalForm.Initialize(this);
             }
             catch (Exception ex)
             {
