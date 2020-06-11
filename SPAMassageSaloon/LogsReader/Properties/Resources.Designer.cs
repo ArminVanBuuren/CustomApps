@@ -983,7 +983,7 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;$1&apos;, &apos;$2&apos;, &apos;$3 - test&apos;)}&quot;
-        ///      Example: &lt;Pattern ID=&quot;{getID(&apos;$1&apos;)}&quot; Date=&quot;{getDate(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceName(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescription(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessage(&apos;$6&apos;)}&quot; &gt;(.+?)\s+(.+?)\s+(.+?)\s+( [остаток строки не уместился]&quot;;.
+        ///      Example: &lt;Pattern ID=&quot;{getIDFunc(&apos;$1&apos;)}&quot; Date=&quot;{getDateFunc(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceNameFunc(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescriptionFunc(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessageFunc(&apos;$6&apos;)}&quot; &gt;(.+?) [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettings_CustomFunctionsComment {
             get {
@@ -1140,8 +1140,8 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format.
-        ///        &quot;Pattern&quot; nodes are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        ///        &quot;TransactionPattern&quot; nodes are used to search for transactions value in the found trace. Slows down the processing speed, but contributes to a more detailed [остаток строки не уместился]&quot;;.
+        ///        &quot;Pattern&quot; nodes are required settings, that are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Custom functions can be used in node attributes.
+        ///        &quot;TransactionPattern&quot; nodes are optional settings, that are used to search for t [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

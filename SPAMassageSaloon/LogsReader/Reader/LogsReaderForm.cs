@@ -57,6 +57,11 @@ namespace LogsReader.Reader
         public event EventHandler OnSchemeChanged;
 
         /// <summary>
+        /// Если изменения произошли в TreeView
+        /// </summary>
+        public event EventHandler OnTreeViewChanged;
+
+        /// <summary>
         /// Статус выполнения поиска
         /// </summary>
         public bool IsWorking { get; private set; }
@@ -395,6 +400,7 @@ namespace LogsReader.Reader
 	        {
 		        ValidationCheck(false);
 		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -491,6 +497,7 @@ namespace LogsReader.Reader
 	        {
 		        ValidationCheck(false);
 		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -533,6 +540,7 @@ namespace LogsReader.Reader
 	        {
 		        ValidationCheck();
 		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -611,6 +619,7 @@ namespace LogsReader.Reader
 	        finally
 	        {
 		        TreeMain.AfterCheck += TrvMain_AfterCheck;
+		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

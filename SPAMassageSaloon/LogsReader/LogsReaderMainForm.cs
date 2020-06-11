@@ -17,12 +17,12 @@ namespace LogsReader
 {
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
-	    private static readonly object credentialSync = new object();
+	    private const string GLOBAL_PAGE_NAME = "Global";
+
+        private static readonly object credentialSync = new object();
 	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
-	    private const string COMMON_PAGE_NAME = "Common";
 
-
-        public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
+	    public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get
 		    {
@@ -121,8 +121,8 @@ namespace LogsReader
                 var globalForm = new CommonForm { Dock = DockStyle.Fill };
                 var globalPage = new TabPage
                 {
-	                Name = COMMON_PAGE_NAME,
-	                Text = COMMON_PAGE_NAME,
+	                Name = GLOBAL_PAGE_NAME,
+	                Text = GLOBAL_PAGE_NAME,
 	                UseVisualStyleBackColor = false,
 	                Font = new Font("Segoe UI", 8.5F),
 	                Margin = new Padding(0),
@@ -182,7 +182,7 @@ namespace LogsReader
             if (page == MainTabControl.SelectedTab)
             {
                 RenderTabPage(page, e, 
-	                page.Name == COMMON_PAGE_NAME ? Color.FromArgb(255, 0, 206) : Color.FromArgb(0, 200, 205), 
+	                page.Name == GLOBAL_PAGE_NAME ? Color.FromArgb(255, 0, 206) : Color.FromArgb(0, 200, 205), 
 	                Color.White);
             }
             else

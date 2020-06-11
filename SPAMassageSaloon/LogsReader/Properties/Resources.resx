@@ -135,9 +135,9 @@
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
     <value>Attribute "displayDateFormat" sets the display date format.
-        "Pattern" nodes are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        "TransactionPattern" nodes are used to search for transactions value in the found trace. Slows down the processing speed, but contributes to a more detailed search.
-        Optional patterns: "StartTraceWith" and "EndTraceWith" - improve search speed because determine the exact verge trace. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.</value>
+        "Pattern" nodes are required settings, that are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Custom functions can be used in node attributes.
+        "TransactionPattern" nodes are optional settings, that are used to search for transactions in the found trace. Slows down the processing speed, but contributes to a more detailed search. Custom functions can be used in node attributes.
+        "StartTraceWith" and "EndTraceWith" nodes are optional settings. Improve search speed, because what determines the exact boundary tracing. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
     <value>File types, specify with a comma. A search on the content of the file name, extension included.</value>
@@ -502,6 +502,6 @@ Input data:
   </data>
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
     <value>Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
-      Example: &lt;Pattern ID="{getID('$1')}" Date="{getDate('$2')}" TraceName="name = {getTraceName('$3')}" Description="description = {formatDescription('$4', '$5')}" Message="Original = '$6' Result = {getMessage('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
+      Example: &lt;Pattern ID="{getIDFunc('$1')}" Date="{getDateFunc('$2')}" TraceName="name = {getTraceNameFunc('$3')}" Description="description = {formatDescriptionFunc('$4', '$5')}" Message="Original = '$6' Result = {getMessageFunc('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
   </data>
 </root>

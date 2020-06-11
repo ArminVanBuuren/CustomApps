@@ -71,12 +71,17 @@ namespace LogsReader.Reader
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
+			this.FlowPanelForExpanders = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
+			this.expandCollapsePanelMG = new Utils.WinForm.Expander.ExpandCollapsePanel();
+			this.splitContainerInner = new System.Windows.Forms.SplitContainer();
+			this.buttonBack = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
+			this.buttonFore = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.TreeMain = new Utils.WinForm.CustomTreeView();
+			this.panelCollapseSelectAll = new System.Windows.Forms.Panel();
+			this.checkBoxSelectAll = new System.Windows.Forms.CheckBox();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
-			this.buttonForeground = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
 			this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -92,6 +97,13 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel1.SuspendLayout();
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
+			this.FlowPanelForExpanders.SuspendLayout();
+			this.expandCollapsePanelMG.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerInner)).BeginInit();
+			this.splitContainerInner.Panel1.SuspendLayout();
+			this.splitContainerInner.Panel2.SuspendLayout();
+			this.splitContainerInner.SuspendLayout();
+			this.panelCollapseSelectAll.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dgvFiles
@@ -117,7 +129,7 @@ namespace LogsReader.Reader
 			this.dgvFiles.ReadOnly = true;
 			this.dgvFiles.RowHeadersVisible = false;
 			this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvFiles.Size = new System.Drawing.Size(459, 410);
+			this.dgvFiles.Size = new System.Drawing.Size(487, 410);
 			this.dgvFiles.TabIndex = 20;
 			this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
 			this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -261,7 +273,7 @@ namespace LogsReader.Reader
 			// EnumSplitContainer.Panel2
 			// 
 			this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-			this.EnumSplitContainer.Size = new System.Drawing.Size(463, 470);
+			this.EnumSplitContainer.Size = new System.Drawing.Size(491, 470);
 			this.EnumSplitContainer.SplitterDistance = 414;
 			this.EnumSplitContainer.TabIndex = 2;
 			// 
@@ -272,7 +284,7 @@ namespace LogsReader.Reader
 			this.descriptionText.Location = new System.Drawing.Point(0, 0);
 			this.descriptionText.Name = "descriptionText";
 			this.descriptionText.ReadOnly = true;
-			this.descriptionText.Size = new System.Drawing.Size(459, 48);
+			this.descriptionText.Size = new System.Drawing.Size(487, 48);
 			this.descriptionText.TabIndex = 21;
 			this.descriptionText.Text = "";
 			// 
@@ -522,52 +534,148 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
-			this.MainSplitContainer.Panel1.Controls.Add(this.button1);
-			this.MainSplitContainer.Panel1.Controls.Add(this.buttonForeground);
-			this.MainSplitContainer.Panel1.Controls.Add(this.label2);
-			this.MainSplitContainer.Panel1.Controls.Add(this.label1);
-			this.MainSplitContainer.Panel1.Controls.Add(this.TreeMain);
-			this.MainSplitContainer.Panel1MinSize = 60;
+			this.MainSplitContainer.Panel1.Controls.Add(this.FlowPanelForExpanders);
+			this.MainSplitContainer.Panel1.Controls.Add(this.panelCollapseSelectAll);
+			this.MainSplitContainer.Panel1MinSize = 95;
 			// 
 			// MainSplitContainer.Panel2
 			// 
 			this.MainSplitContainer.Panel2.Controls.Add(this.EnumSplitContainer);
 			this.MainSplitContainer.Size = new System.Drawing.Size(680, 470);
-			this.MainSplitContainer.SplitterDistance = 213;
+			this.MainSplitContainer.SplitterDistance = 185;
 			this.MainSplitContainer.TabIndex = 0;
+			// 
+			// FlowPanelForExpanders
+			// 
+			this.FlowPanelForExpanders.Controls.Add(this.expandCollapsePanelMG);
+			this.FlowPanelForExpanders.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.FlowPanelForExpanders.Location = new System.Drawing.Point(0, 27);
+			this.FlowPanelForExpanders.Name = "FlowPanelForExpanders";
+			this.FlowPanelForExpanders.Size = new System.Drawing.Size(181, 439);
+			this.FlowPanelForExpanders.TabIndex = 27;
+			// 
+			// expandCollapsePanelMG
+			// 
+			this.expandCollapsePanelMG.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.expandCollapsePanelMG.BackColor = System.Drawing.SystemColors.Control;
+			this.expandCollapsePanelMG.BordersThickness = 3;
+			this.expandCollapsePanelMG.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
+			this.expandCollapsePanelMG.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
+			this.expandCollapsePanelMG.CheckBoxShown = true;
+			this.expandCollapsePanelMG.Controls.Add(this.splitContainerInner);
+			this.expandCollapsePanelMG.ExpandedHeight = 0;
+			this.expandCollapsePanelMG.HeaderBackColor = System.Drawing.Color.Azure;
+			this.expandCollapsePanelMG.HeaderBorderBrush = System.Drawing.SystemColors.Control;
+			this.expandCollapsePanelMG.HeaderLineColor = System.Drawing.Color.Azure;
+			this.expandCollapsePanelMG.IsChecked = false;
+			this.expandCollapsePanelMG.IsExpanded = true;
+			this.expandCollapsePanelMG.Location = new System.Drawing.Point(3, 3);
+			this.expandCollapsePanelMG.Name = "expandCollapsePanelMG";
+			this.expandCollapsePanelMG.Size = new System.Drawing.Size(175, 255);
+			this.expandCollapsePanelMG.TabIndex = 26;
+			this.expandCollapsePanelMG.Text = "MG";
+			this.expandCollapsePanelMG.UseAnimation = true;
+			// 
+			// splitContainerInner
+			// 
+			this.splitContainerInner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.splitContainerInner.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this.splitContainerInner.IsSplitterFixed = true;
+			this.splitContainerInner.Location = new System.Drawing.Point(0, 24);
+			this.splitContainerInner.Name = "splitContainerInner";
+			this.splitContainerInner.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainerInner.Panel1
+			// 
+			this.splitContainerInner.Panel1.Controls.Add(this.buttonBack);
+			this.splitContainerInner.Panel1.Controls.Add(this.label2);
+			this.splitContainerInner.Panel1.Controls.Add(this.buttonFore);
+			this.splitContainerInner.Panel1.Controls.Add(this.label1);
+			// 
+			// splitContainerInner.Panel2
+			// 
+			this.splitContainerInner.Panel2.Controls.Add(this.TreeMain);
+			this.splitContainerInner.Size = new System.Drawing.Size(175, 231);
+			this.splitContainerInner.SplitterDistance = 25;
+			this.splitContainerInner.TabIndex = 26;
+			// 
+			// buttonBack
+			// 
+			this.buttonBack.BackColor = System.Drawing.Color.White;
+			this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonBack.Location = new System.Drawing.Point(3, 4);
+			this.buttonBack.Name = "buttonBack";
+			this.buttonBack.Size = new System.Drawing.Size(20, 17);
+			this.buttonBack.TabIndex = 24;
+			this.buttonBack.UseVisualStyleBackColor = false;
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 35);
+			this.label2.Location = new System.Drawing.Point(85, 4);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(71, 15);
+			this.label2.Size = new System.Drawing.Size(32, 15);
 			this.label2.TabIndex = 23;
-			this.label2.Text = "Background";
+			this.label2.Text = "Fore";
+			// 
+			// buttonFore
+			// 
+			this.buttonFore.BackColor = System.Drawing.Color.Black;
+			this.buttonFore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonFore.Location = new System.Drawing.Point(63, 4);
+			this.buttonFore.Name = "buttonFore";
+			this.buttonFore.Size = new System.Drawing.Size(20, 17);
+			this.buttonFore.TabIndex = 25;
+			this.buttonFore.UseVisualStyleBackColor = false;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 9);
+			this.label1.Location = new System.Drawing.Point(25, 4);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(69, 15);
+			this.label1.Size = new System.Drawing.Size(34, 15);
 			this.label1.TabIndex = 22;
-			this.label1.Text = "Foreground";
+			this.label1.Text = "Back";
 			// 
 			// TreeMain
 			// 
-			this.TreeMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.TreeMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.TreeMain.CheckBoxes = true;
+			this.TreeMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TreeMain.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
 			this.TreeMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.TreeMain.Location = new System.Drawing.Point(1, 59);
+			this.TreeMain.Location = new System.Drawing.Point(0, 0);
 			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(208, 407);
+			this.TreeMain.Size = new System.Drawing.Size(175, 202);
 			this.TreeMain.TabIndex = 19;
+			// 
+			// panelCollapseSelectAll
+			// 
+			this.panelCollapseSelectAll.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelCollapseSelectAll.Controls.Add(this.checkBoxSelectAll);
+			this.panelCollapseSelectAll.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelCollapseSelectAll.Location = new System.Drawing.Point(0, 0);
+			this.panelCollapseSelectAll.Name = "panelCollapseSelectAll";
+			this.panelCollapseSelectAll.Padding = new System.Windows.Forms.Padding(3);
+			this.panelCollapseSelectAll.Size = new System.Drawing.Size(181, 27);
+			this.panelCollapseSelectAll.TabIndex = 28;
+			// 
+			// checkBoxSelectAll
+			// 
+			this.checkBoxSelectAll.AutoSize = true;
+			this.checkBoxSelectAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Right;
+			this.checkBoxSelectAll.Location = new System.Drawing.Point(94, 3);
+			this.checkBoxSelectAll.Name = "checkBoxSelectAll";
+			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
+			this.checkBoxSelectAll.Size = new System.Drawing.Size(82, 19);
+			this.checkBoxSelectAll.TabIndex = 1;
+			this.checkBoxSelectAll.Text = "Select All";
+			this.checkBoxSelectAll.UseVisualStyleBackColor = true;
 			// 
 			// notepad
 			// 
@@ -588,25 +696,7 @@ namespace LogsReader.Reader
 			this.notepad.TextForeColor = System.Drawing.Color.Black;
 			this.notepad.WordWrap = true;
 			// 
-			// buttonForeground
-			// 
-			this.buttonForeground.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.buttonForeground.Location = new System.Drawing.Point(81, 4);
-			this.buttonForeground.Name = "buttonForeground";
-			this.buttonForeground.Size = new System.Drawing.Size(27, 23);
-			this.buttonForeground.TabIndex = 24;
-			this.buttonForeground.UseVisualStyleBackColor = false;
-			// 
-			// button1
-			// 
-			this.button1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.button1.Location = new System.Drawing.Point(81, 30);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(27, 23);
-			this.button1.TabIndex = 25;
-			this.button1.UseVisualStyleBackColor = false;
-			// 
-			// GlobalForm
+			// CommonForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -616,7 +706,7 @@ namespace LogsReader.Reader
 			this.Controls.Add(this.progressBar);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.MinimumSize = new System.Drawing.Size(0, 25);
-			this.Name = "GlobalForm";
+			this.Name = "CommonForm";
 			this.Size = new System.Drawing.Size(1152, 594);
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
 			this.EnumSplitContainer.Panel1.ResumeLayout(false);
@@ -633,10 +723,18 @@ namespace LogsReader.Reader
 			((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).EndInit();
 			this.ParentSplitContainer.ResumeLayout(false);
 			this.MainSplitContainer.Panel1.ResumeLayout(false);
-			this.MainSplitContainer.Panel1.PerformLayout();
 			this.MainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
+			this.FlowPanelForExpanders.ResumeLayout(false);
+			this.expandCollapsePanelMG.ResumeLayout(false);
+			this.splitContainerInner.Panel1.ResumeLayout(false);
+			this.splitContainerInner.Panel1.PerformLayout();
+			this.splitContainerInner.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerInner)).EndInit();
+			this.splitContainerInner.ResumeLayout(false);
+			this.panelCollapseSelectAll.ResumeLayout(false);
+			this.panelCollapseSelectAll.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -681,8 +779,13 @@ namespace LogsReader.Reader
         private NotepadControl notepad;
         private Label label1;
 		private Label label2;
-		private Button buttonForeground;
-		private Button button1;
+		private Button buttonBack;
+		private Button buttonFore;
+		private Utils.WinForm.Expander.ExpandCollapsePanel expandCollapsePanelMG;
+		private SplitContainer splitContainerInner;
+		private Utils.WinForm.Expander.AdvancedFlowLayoutPanel FlowPanelForExpanders;
+		private Panel panelCollapseSelectAll;
+		private CheckBox checkBoxSelectAll;
 	}
 }
 

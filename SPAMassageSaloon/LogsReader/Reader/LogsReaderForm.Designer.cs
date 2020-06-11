@@ -693,7 +693,7 @@ namespace LogsReader.Reader
 
         #endregion
         private CustomDataGridView dgvFiles;
-        private CustomTreeView TreeMain;
+        public CustomTreeView TreeMain;
         private Button btnSearch;
         private Button btnClear;
         private TextBox txtPattern;
