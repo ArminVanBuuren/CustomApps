@@ -35,8 +35,13 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.TestExpander = new Utils.WinForm.Expander.ExpandCollapsePanel();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.advancedFlowLayoutPanel1 = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
+			this.expandCollapsePanel1 = new Utils.WinForm.Expander.ExpandCollapsePanel();
+			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.TestExpander.SuspendLayout();
+			this.advancedFlowLayoutPanel1.SuspendLayout();
+			this.expandCollapsePanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -44,9 +49,9 @@
 			this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox1.Location = new System.Drawing.Point(12, 496);
+			this.pictureBox1.Location = new System.Drawing.Point(12, 671);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(1101, 267);
+			this.pictureBox1.Size = new System.Drawing.Size(1101, 92);
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
 			// 
@@ -106,21 +111,64 @@
 			this.TestExpander.HeaderLineColor = System.Drawing.Color.Silver;
 			this.TestExpander.IsChecked = false;
 			this.TestExpander.IsExpanded = true;
-			this.TestExpander.Location = new System.Drawing.Point(207, 147);
+			this.TestExpander.Location = new System.Drawing.Point(3, 216);
 			this.TestExpander.Name = "TestExpander";
-			this.TestExpander.Size = new System.Drawing.Size(365, 319);
+			this.TestExpander.Size = new System.Drawing.Size(394, 207);
 			this.TestExpander.TabIndex = 5;
 			this.TestExpander.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.TestExpander.UseAnimation = true;
 			// 
 			// richTextBox1
 			// 
+			this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.richTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.richTextBox1.Location = new System.Drawing.Point(0, 25);
 			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(330, 294);
+			this.richTextBox1.Size = new System.Drawing.Size(330, 182);
 			this.richTextBox1.TabIndex = 1;
 			this.richTextBox1.Text = "";
+			// 
+			// advancedFlowLayoutPanel1
+			// 
+			this.advancedFlowLayoutPanel1.Controls.Add(this.expandCollapsePanel1);
+			this.advancedFlowLayoutPanel1.Controls.Add(this.TestExpander);
+			this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(257, 54);
+			this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
+			this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(397, 536);
+			this.advancedFlowLayoutPanel1.TabIndex = 6;
+			// 
+			// expandCollapsePanel1
+			// 
+			this.expandCollapsePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.expandCollapsePanel1.BackColor = System.Drawing.Color.OrangeRed;
+			this.expandCollapsePanel1.BordersThickness = 3;
+			this.expandCollapsePanel1.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
+			this.expandCollapsePanel1.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
+			this.expandCollapsePanel1.CheckBoxShown = true;
+			this.expandCollapsePanel1.Controls.Add(this.richTextBox2);
+			this.expandCollapsePanel1.ExpandedHeight = 319;
+			this.expandCollapsePanel1.HeaderBackColor = System.Drawing.Color.Azure;
+			this.expandCollapsePanel1.HeaderBorderBrush = System.Drawing.Color.Chartreuse;
+			this.expandCollapsePanel1.HeaderLineColor = System.Drawing.Color.Red;
+			this.expandCollapsePanel1.IsChecked = false;
+			this.expandCollapsePanel1.IsExpanded = true;
+			this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 3);
+			this.expandCollapsePanel1.Name = "expandCollapsePanel1";
+			this.expandCollapsePanel1.Size = new System.Drawing.Size(394, 207);
+			this.expandCollapsePanel1.TabIndex = 6;
+			this.expandCollapsePanel1.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
+			this.expandCollapsePanel1.UseAnimation = true;
+			// 
+			// richTextBox2
+			// 
+			this.richTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			this.richTextBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+			this.richTextBox2.Location = new System.Drawing.Point(0, 25);
+			this.richTextBox2.Name = "richTextBox2";
+			this.richTextBox2.Size = new System.Drawing.Size(330, 182);
+			this.richTextBox2.TabIndex = 1;
+			this.richTextBox2.Text = "";
 			// 
 			// Form1
 			// 
@@ -128,7 +176,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.ClientSize = new System.Drawing.Size(1125, 804);
-			this.Controls.Add(this.TestExpander);
+			this.Controls.Add(this.advancedFlowLayoutPanel1);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -138,6 +186,8 @@
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.TestExpander.ResumeLayout(false);
+			this.advancedFlowLayoutPanel1.ResumeLayout(false);
+			this.expandCollapsePanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -151,6 +201,9 @@
         private System.Windows.Forms.Button button3;
 		private Utils.WinForm.Expander.ExpandCollapsePanel TestExpander;
 		private System.Windows.Forms.RichTextBox richTextBox1;
+		private Utils.WinForm.Expander.AdvancedFlowLayoutPanel advancedFlowLayoutPanel1;
+		private Utils.WinForm.Expander.ExpandCollapsePanel expandCollapsePanel1;
+		private System.Windows.Forms.RichTextBox richTextBox2;
 	}
 }
 

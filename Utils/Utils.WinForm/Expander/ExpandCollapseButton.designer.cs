@@ -44,7 +44,6 @@ namespace Utils.WinForm.Expander
 			// 
 			this.lblLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.lblLine.Location = new System.Drawing.Point(41, 28);
 			this.lblLine.Name = "lblLine";
 			this.lblLine.Size = new System.Drawing.Size(874, 1);
