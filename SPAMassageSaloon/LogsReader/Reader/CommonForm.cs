@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using LogsReader.Config;
 using SPAMassageSaloon.Common;
+using Utils.WinForm;
 using Utils.WinForm.Expander;
 
 namespace LogsReader.Reader
@@ -76,9 +78,23 @@ namespace LogsReader.Reader
 	        splitContainerInner.Panel1.Controls.Add(labelBack);
 	        splitContainerInner.Panel1.Controls.Add(buttonFore);
 	        splitContainerInner.Panel1.Controls.Add(labelFore);
-	        splitContainerInner.Panel2.Controls.Add(readerForm.TreeMain);
 
-	        var schemeExpander = new ExpandCollapsePanel
+	        var treeMain = new CustomTreeView
+	        {
+		        CheckBoxes = true,
+		        Dock = System.Windows.Forms.DockStyle.Fill,
+		        DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll,
+		        Location = new System.Drawing.Point(0, 0),
+		        Size = new System.Drawing.Size(175, 147)
+	        };
+
+	        var clone = readerForm.TreeMain.Clone();
+	        clone.Nodes.AddRange(readerForm.TreeMain.Nodes.Cast<TreeNode>().ToArray());
+	        
+
+            splitContainerInner.Panel2.Controls.Add(treeMain);
+
+            var schemeExpander = new ExpandCollapsePanel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
 		        BackColor = SystemColors.Control,

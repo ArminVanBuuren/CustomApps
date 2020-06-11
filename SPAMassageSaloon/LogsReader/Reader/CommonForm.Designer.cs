@@ -79,9 +79,6 @@ namespace LogsReader.Reader
 			this.buttonFore = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.TreeMain = new Utils.WinForm.CustomTreeView();
-			this.panelCollapseSelectAll = new System.Windows.Forms.Panel();
-			this.checkBoxSelectAll = new System.Windows.Forms.CheckBox();
-			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
 			this.expandCollapsePanel1 = new Utils.WinForm.Expander.ExpandCollapsePanel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.button1 = new System.Windows.Forms.Button();
@@ -89,6 +86,10 @@ namespace LogsReader.Reader
 			this.button2 = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.customTreeView1 = new Utils.WinForm.CustomTreeView();
+			this.panelCollapseSelectAll = new System.Windows.Forms.Panel();
+			this.checkBoxSelectAll = new System.Windows.Forms.CheckBox();
+			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
+			this.panel1 = new System.Windows.Forms.Panel();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
 			this.EnumSplitContainer.Panel1.SuspendLayout();
@@ -110,12 +111,13 @@ namespace LogsReader.Reader
 			this.splitContainerInner.Panel1.SuspendLayout();
 			this.splitContainerInner.Panel2.SuspendLayout();
 			this.splitContainerInner.SuspendLayout();
-			this.panelCollapseSelectAll.SuspendLayout();
 			this.expandCollapsePanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.panelCollapseSelectAll.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dgvFiles
@@ -546,7 +548,7 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
-			this.MainSplitContainer.Panel1.Controls.Add(this.FlowPanelForExpanders);
+			this.MainSplitContainer.Panel1.Controls.Add(this.panel1);
 			this.MainSplitContainer.Panel1.Controls.Add(this.panelCollapseSelectAll);
 			this.MainSplitContainer.Panel1MinSize = 95;
 			// 
@@ -559,12 +561,14 @@ namespace LogsReader.Reader
 			// 
 			// FlowPanelForExpanders
 			// 
+			this.FlowPanelForExpanders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.FlowPanelForExpanders.Controls.Add(this.expandCollapsePanelMG);
 			this.FlowPanelForExpanders.Controls.Add(this.expandCollapsePanel1);
-			this.FlowPanelForExpanders.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.FlowPanelForExpanders.Location = new System.Drawing.Point(0, 27);
+			this.FlowPanelForExpanders.Location = new System.Drawing.Point(1, 2);
 			this.FlowPanelForExpanders.Name = "FlowPanelForExpanders";
-			this.FlowPanelForExpanders.Size = new System.Drawing.Size(181, 439);
+			this.FlowPanelForExpanders.Size = new System.Drawing.Size(160, 170);
 			this.FlowPanelForExpanders.TabIndex = 27;
 			// 
 			// expandCollapsePanelMG
@@ -585,7 +589,7 @@ namespace LogsReader.Reader
 			this.expandCollapsePanelMG.IsExpanded = false;
 			this.expandCollapsePanelMG.Location = new System.Drawing.Point(3, 3);
 			this.expandCollapsePanelMG.Name = "expandCollapsePanelMG";
-			this.expandCollapsePanelMG.Size = new System.Drawing.Size(175, 25);
+			this.expandCollapsePanelMG.Size = new System.Drawing.Size(154, 25);
 			this.expandCollapsePanelMG.TabIndex = 26;
 			this.expandCollapsePanelMG.Text = "MG";
 			this.expandCollapsePanelMG.UseAnimation = true;
@@ -613,7 +617,7 @@ namespace LogsReader.Reader
 			// splitContainerInner.Panel2
 			// 
 			this.splitContainerInner.Panel2.Controls.Add(this.TreeMain);
-			this.splitContainerInner.Size = new System.Drawing.Size(175, 1);
+			this.splitContainerInner.Size = new System.Drawing.Size(154, 54);
 			this.splitContainerInner.SplitterDistance = 25;
 			this.splitContainerInner.TabIndex = 26;
 			// 
@@ -665,51 +669,8 @@ namespace LogsReader.Reader
 			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
 			this.TreeMain.Location = new System.Drawing.Point(0, 0);
 			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(175, 147);
+			this.TreeMain.Size = new System.Drawing.Size(154, 25);
 			this.TreeMain.TabIndex = 19;
-			// 
-			// panelCollapseSelectAll
-			// 
-			this.panelCollapseSelectAll.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelCollapseSelectAll.Controls.Add(this.checkBoxSelectAll);
-			this.panelCollapseSelectAll.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panelCollapseSelectAll.Location = new System.Drawing.Point(0, 0);
-			this.panelCollapseSelectAll.Name = "panelCollapseSelectAll";
-			this.panelCollapseSelectAll.Padding = new System.Windows.Forms.Padding(3);
-			this.panelCollapseSelectAll.Size = new System.Drawing.Size(181, 27);
-			this.panelCollapseSelectAll.TabIndex = 28;
-			// 
-			// checkBoxSelectAll
-			// 
-			this.checkBoxSelectAll.AutoSize = true;
-			this.checkBoxSelectAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Right;
-			this.checkBoxSelectAll.Location = new System.Drawing.Point(94, 3);
-			this.checkBoxSelectAll.Name = "checkBoxSelectAll";
-			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-			this.checkBoxSelectAll.Size = new System.Drawing.Size(82, 19);
-			this.checkBoxSelectAll.TabIndex = 1;
-			this.checkBoxSelectAll.Text = "Select All";
-			this.checkBoxSelectAll.UseVisualStyleBackColor = true;
-			// 
-			// notepad
-			// 
-			this.notepad.AllowUserCloseItems = false;
-			this.notepad.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("notepad.DefaultEncoding")));
-			this.notepad.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.notepad.Highlights = false;
-			this.notepad.Location = new System.Drawing.Point(0, 0);
-			this.notepad.Name = "notepad";
-			this.notepad.ReadOnly = true;
-			this.notepad.SelectedIndex = -1;
-			this.notepad.Size = new System.Drawing.Size(464, 488);
-			this.notepad.SizingGrip = false;
-			this.notepad.TabIndex = 0;
-			this.notepad.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.notepad.TabsForeColor = System.Drawing.Color.Green;
-			this.notepad.TextFont = new System.Drawing.Font("Segoe UI", 10F);
-			this.notepad.TextForeColor = System.Drawing.Color.Black;
-			this.notepad.WordWrap = true;
 			// 
 			// expandCollapsePanel1
 			// 
@@ -729,7 +690,7 @@ namespace LogsReader.Reader
 			this.expandCollapsePanel1.IsExpanded = false;
 			this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 34);
 			this.expandCollapsePanel1.Name = "expandCollapsePanel1";
-			this.expandCollapsePanel1.Size = new System.Drawing.Size(175, 25);
+			this.expandCollapsePanel1.Size = new System.Drawing.Size(154, 25);
 			this.expandCollapsePanel1.TabIndex = 27;
 			this.expandCollapsePanel1.Text = "MG";
 			this.expandCollapsePanel1.UseAnimation = true;
@@ -757,7 +718,7 @@ namespace LogsReader.Reader
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.customTreeView1);
-			this.splitContainer1.Size = new System.Drawing.Size(175, 1);
+			this.splitContainer1.Size = new System.Drawing.Size(154, 54);
 			this.splitContainer1.SplitterDistance = 25;
 			this.splitContainer1.TabIndex = 26;
 			// 
@@ -809,8 +770,62 @@ namespace LogsReader.Reader
 			this.customTreeView1.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
 			this.customTreeView1.Location = new System.Drawing.Point(0, 0);
 			this.customTreeView1.Name = "customTreeView1";
-			this.customTreeView1.Size = new System.Drawing.Size(175, 147);
+			this.customTreeView1.Size = new System.Drawing.Size(154, 25);
 			this.customTreeView1.TabIndex = 19;
+			// 
+			// panelCollapseSelectAll
+			// 
+			this.panelCollapseSelectAll.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelCollapseSelectAll.Controls.Add(this.checkBoxSelectAll);
+			this.panelCollapseSelectAll.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelCollapseSelectAll.Location = new System.Drawing.Point(0, 0);
+			this.panelCollapseSelectAll.Name = "panelCollapseSelectAll";
+			this.panelCollapseSelectAll.Padding = new System.Windows.Forms.Padding(3);
+			this.panelCollapseSelectAll.Size = new System.Drawing.Size(181, 27);
+			this.panelCollapseSelectAll.TabIndex = 28;
+			// 
+			// checkBoxSelectAll
+			// 
+			this.checkBoxSelectAll.AutoSize = true;
+			this.checkBoxSelectAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Right;
+			this.checkBoxSelectAll.Location = new System.Drawing.Point(74, 3);
+			this.checkBoxSelectAll.Name = "checkBoxSelectAll";
+			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 28, 0);
+			this.checkBoxSelectAll.Size = new System.Drawing.Size(102, 19);
+			this.checkBoxSelectAll.TabIndex = 1;
+			this.checkBoxSelectAll.Text = "Select All";
+			this.checkBoxSelectAll.UseVisualStyleBackColor = true;
+			// 
+			// notepad
+			// 
+			this.notepad.AllowUserCloseItems = false;
+			this.notepad.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("notepad.DefaultEncoding")));
+			this.notepad.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.notepad.Highlights = false;
+			this.notepad.Location = new System.Drawing.Point(0, 0);
+			this.notepad.Name = "notepad";
+			this.notepad.ReadOnly = true;
+			this.notepad.SelectedIndex = -1;
+			this.notepad.Size = new System.Drawing.Size(464, 488);
+			this.notepad.SizingGrip = false;
+			this.notepad.TabIndex = 0;
+			this.notepad.TabsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.notepad.TabsForeColor = System.Drawing.Color.Green;
+			this.notepad.TextFont = new System.Drawing.Font("Segoe UI", 10F);
+			this.notepad.TextForeColor = System.Drawing.Color.Black;
+			this.notepad.WordWrap = true;
+			// 
+			// panel1
+			// 
+			this.panel1.AutoScroll = true;
+			this.panel1.AutoScrollMinSize = new System.Drawing.Size(0, 1500);
+			this.panel1.Controls.Add(this.FlowPanelForExpanders);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(0, 27);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(181, 439);
+			this.panel1.TabIndex = 29;
 			// 
 			// CommonForm
 			// 
@@ -849,14 +864,15 @@ namespace LogsReader.Reader
 			this.splitContainerInner.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerInner)).EndInit();
 			this.splitContainerInner.ResumeLayout(false);
-			this.panelCollapseSelectAll.ResumeLayout(false);
-			this.panelCollapseSelectAll.PerformLayout();
 			this.expandCollapsePanel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.panelCollapseSelectAll.ResumeLayout(false);
+			this.panelCollapseSelectAll.PerformLayout();
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -915,6 +931,7 @@ namespace LogsReader.Reader
 		private Button button2;
 		private Label label4;
 		private CustomTreeView customTreeView1;
+		private Panel panel1;
 	}
 }
 

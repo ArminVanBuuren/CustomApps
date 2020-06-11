@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Reflection;
 using System.Windows.Forms;
 using SPAMassageSaloon.Common;
 
@@ -22,6 +24,33 @@ namespace LogsReader
             {
                 ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, @"Run");
             }
+        }
+
+        public static T Clone<T>(this T controlToClone)
+	        where T : Control
+        {
+	        var controlProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+	        var instance = Activator.CreateInstance<T>();
+
+	        foreach (var propInfo in controlProperties)
+	        {
+		        if (propInfo.CanWrite)
+		        {
+			        if (propInfo.Name != "WindowTarget")
+				        propInfo.SetValue(instance, propInfo.GetValue(controlToClone, null), null);
+		        }
+		        else 
+		        {
+			        if (propInfo.PropertyType is ICollection)
+			        {
+
+			        }
+
+                }
+	        }
+
+	        return instance;
         }
     }
 }
