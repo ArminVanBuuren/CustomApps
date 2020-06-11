@@ -71,7 +71,7 @@ namespace LogsReader.Config
         [XmlAnyElement("ServersComment")]
         public XmlComment ServersComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_Servers);
+	        get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_Servers);
             set { }
         }
 
@@ -85,7 +85,7 @@ namespace LogsReader.Config
         [XmlAnyElement("FileTypesComment")]
         public XmlComment FileTypesComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_Types);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_Types);
             set { }
         }
 
@@ -99,7 +99,7 @@ namespace LogsReader.Config
         [XmlAnyElement("LogsFolderComment")]
         public XmlComment LogsFolderComment
         {
-	        get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
+	        get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_LogsDirectory);
 	        set { }
         }
 
@@ -113,7 +113,7 @@ namespace LogsReader.Config
         [XmlAnyElement("MaxLinesComment")]
         public XmlComment MaxLinesComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_MaxTraceLines);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_MaxTraceLines);
             set { }
         }
 
@@ -127,7 +127,7 @@ namespace LogsReader.Config
         [XmlAnyElement("MaxThreadsComment")]
         public XmlComment MaxThreadsComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_MaxThreads);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_MaxThreads);
             set { }
         }
 
@@ -141,7 +141,7 @@ namespace LogsReader.Config
         [XmlAnyElement("RowsLimitComment")]
         public XmlComment RowsLimitComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_RowsLimit);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_RowsLimit);
             set { }
         }
 
@@ -155,7 +155,7 @@ namespace LogsReader.Config
         [XmlAnyElement("OrderByComment")]
         public XmlComment OrderByComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_OrderBy);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_OrderBy);
             set { }
         }
 
@@ -201,7 +201,7 @@ namespace LogsReader.Config
         [XmlAnyElement("TraceParseComment")]
         public XmlComment TraceParseComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettingsScheme_TraceParse);
+            get => LRSettings.GetComment(Resources.Txt_LRSettingsScheme_TraceParse);
             set { }
         }
 

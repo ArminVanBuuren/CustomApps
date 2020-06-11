@@ -89,7 +89,7 @@ namespace LogsReader.Reader
 			    HeaderLineColor = Color.Azure,
 			    IsChecked = false,
 			    IsExpanded = false,
-			    Size = new Size(FlowPanelForExpanders.Size.Width - 6, 255),
+			    Size = new Size(FlowPanelForExpanders.Size.Width - 6, 200),
 			    Text = readerForm.CurrentSettings.Name,
 			    UseAnimation = true
 		    };

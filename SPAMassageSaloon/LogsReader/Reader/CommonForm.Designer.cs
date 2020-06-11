@@ -572,7 +572,7 @@ namespace LogsReader.Reader
 			this.expandCollapsePanelMG.IsExpanded = true;
 			this.expandCollapsePanelMG.Location = new System.Drawing.Point(3, 3);
 			this.expandCollapsePanelMG.Name = "expandCollapsePanelMG";
-			this.expandCollapsePanelMG.Size = new System.Drawing.Size(175, 255);
+			this.expandCollapsePanelMG.Size = new System.Drawing.Size(175, 200);
 			this.expandCollapsePanelMG.TabIndex = 26;
 			this.expandCollapsePanelMG.Text = "MG";
 			this.expandCollapsePanelMG.UseAnimation = true;
@@ -598,7 +598,7 @@ namespace LogsReader.Reader
 			// splitContainerInner.Panel2
 			// 
 			this.splitContainerInner.Panel2.Controls.Add(this.TreeMain);
-			this.splitContainerInner.Size = new System.Drawing.Size(175, 231);
+			this.splitContainerInner.Size = new System.Drawing.Size(175, 176);
 			this.splitContainerInner.SplitterDistance = 25;
 			this.splitContainerInner.TabIndex = 26;
 			// 
@@ -650,7 +650,7 @@ namespace LogsReader.Reader
 			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
 			this.TreeMain.Location = new System.Drawing.Point(0, 0);
 			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(175, 202);
+			this.TreeMain.Size = new System.Drawing.Size(175, 147);
 			this.TreeMain.TabIndex = 19;
 			// 
 			// panelCollapseSelectAll

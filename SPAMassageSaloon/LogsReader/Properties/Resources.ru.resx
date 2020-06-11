@@ -154,8 +154,8 @@
     <value>Невозможно сохранить конфигурацию в "{0}".
 {1}</value>
   </data>
-  <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Поиск по регулярному выражению выполняется быстрее. Атрибут "encoding" используется при считывании лог файлов.</value>
+  <data name="Txt_LRSettings_SettingsComment" xml:space="preserve">
+    <value>Атрибут "encoding" используется при считывании лог файлов. Если задать атрибуту "disableHintComments" значение true, то комментарии с подсказками будут отключены.</value>
   </data>
   <data name="Txt_Form_DateFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Date"</value>
@@ -431,5 +431,8 @@
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
     <value>Набор кастомных функций. Могут применяться только в аттрибутах нод - Pattern и TransactionPattern. Используются для того чтобы корректировать отображаемые данные. Каждый класс должен реализовать интерфейс ICustomFunction. Формат: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
       Пример: &lt;Pattern ID="{getIDFunc('$1')}" Date="{getDateFunc('$2')}" TraceName="name = {getTraceNameFunc('$3')}" Description="description = {formatDescriptionFunc('$4', '$5')}" Message="Original = '$6' Result = {getMessageFunc('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
+  </data>
+  <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
+    <value>Поиск по регулярному выражению выполняется быстрее.</value>
   </data>
 </root>

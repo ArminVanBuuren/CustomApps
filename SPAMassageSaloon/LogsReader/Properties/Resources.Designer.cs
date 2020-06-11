@@ -1049,7 +1049,16 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Regex search is being completed faster. &quot;Encoding&quot; atributte is used when reading log files..
+        ///   Ищет локализованную строку, похожую на &quot;Encoding&quot; atributte is used when reading log files. The attribute &quot;disableHintComments&quot; to true - disables hinted comments..
+        /// </summary>
+        public static string Txt_LRSettings_SettingsComment {
+            get {
+                return ResourceManager.GetString("Txt_LRSettings_SettingsComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Regex search is being completed faster..
         /// </summary>
         public static string Txt_LRSettings_UseRegexComment {
             get {

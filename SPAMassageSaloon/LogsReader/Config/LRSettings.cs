@@ -18,6 +18,7 @@ namespace LogsReader.Config
     public class LRSettings
     {
         private static object _sync = new object();
+        private static bool _disableHintComments = false;
 
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
 
@@ -59,10 +60,17 @@ namespace LogsReader.Config
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
         [XmlAnyElement(nameof(Resources.Txt_LRSettings_PreviousSearchComment))]
-        public XmlComment PreviousSearchComment
+        public XmlComment SettingsComment
         {
-            get => new XmlDocument().CreateComment(Resources.Txt_LRSettings_UseRegexComment);
+            get => GetComment($"{Resources.Txt_LRSettings_UseRegexComment} {Resources.Txt_LRSettings_SettingsComment}");
             set { }
+        }
+
+        [XmlAttribute("disableHintComments")]
+        public bool DisableHintCommentsString
+        {
+	        get => _disableHintComments;
+	        set => _disableHintComments = value;
         }
 
         [XmlElement("Scheme", IsNullable = false)]
@@ -88,7 +96,7 @@ namespace LogsReader.Config
         [XmlAnyElement(nameof(Resources.Txt_LRSettings_CustomFunctionsComment))]
         public XmlComment CustomFunctionsComment
         {
-	        get => new XmlDocument().CreateComment(Resources.Txt_LRSettings_CustomFunctionsComment);
+	        get => GetComment(Resources.Txt_LRSettings_CustomFunctionsComment);
 	        set { }
         }
 
@@ -200,6 +208,13 @@ namespace LogsReader.Config
             }
 
             return sett ?? new LRSettings();
+        }
+
+        public static XmlComment GetComment(string value)
+        {
+	        if (_disableHintComments)
+		        return null;
+            return new XmlDocument().CreateComment(value);
         }
     }
 }

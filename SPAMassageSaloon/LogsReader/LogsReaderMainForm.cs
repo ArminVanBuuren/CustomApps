@@ -34,7 +34,7 @@ namespace LogsReader
 	    /// <summary>
         /// Настройки схем
         /// </summary>
-        public LRSettings AllSettings { get; }
+        public static LRSettings Settings { get; private set; }
 
         public Dictionary<TabPage, LogsReaderForm> AllForms { get; } = new Dictionary<TabPage, LogsReaderForm>(15);
 
@@ -131,8 +131,8 @@ namespace LogsReader
                 globalPage.Controls.Add(globalForm);
                 MainTabControl.TabPages.Add(globalPage);
 
-                AllSettings = LRSettings.Deserialize();
-                foreach (var scheme in AllSettings.SchemeList)
+                Settings = LRSettings.Deserialize();
+                foreach (var scheme in Settings.SchemeList)
                 {
                     try
                     {
@@ -159,6 +159,8 @@ namespace LogsReader
                         ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
                     }
                 }
+
+                //globalForm.Initialize(this);
             }
             catch (Exception ex)
             {
@@ -172,8 +174,8 @@ namespace LogsReader
 
         async void SaveSchemas(object sender, EventArgs args)
         {
-            if (AllSettings != null)
-                await LRSettings.SerializeAsync(AllSettings);
+            if (Settings != null)
+                await LRSettings.SerializeAsync(Settings);
         }
 
         private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)
@@ -223,18 +225,18 @@ namespace LogsReader
         {
             try
             {
-                if (AllSettings != null)
-                    LRSettings.Serialize(AllSettings);
+                if (Settings != null)
+                    LRSettings.Serialize(Settings);
 
                 foreach (var logsReader in AllForms.Values)
                 {
                     logsReader.SaveData();
                 }
 
-                Settings.Default.FormLocation = Location;
-                Settings.Default.FormSize = Size;
-                Settings.Default.FormState = WindowState;
-                Settings.Default.Save();
+                Properties.Settings.Default.FormLocation = Location;
+                Properties.Settings.Default.FormSize = Size;
+                Properties.Settings.Default.FormState = WindowState;
+                Properties.Settings.Default.Save();
             }
             catch (Exception ex)
             {

@@ -154,8 +154,8 @@
     <value>Unable to save config to path "{0}".
 {1}</value>
   </data>
-  <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Regex search is being completed faster. "Encoding" atributte is used when reading log files.</value>
+  <data name="Txt_LRSettings_SettingsComment" xml:space="preserve">
+    <value>"Encoding" atributte is used when reading log files. The attribute "disableHintComments" to true - disables hinted comments.</value>
   </data>
   <data name="Txt_Form_DateFilterComment" xml:space="preserve">
     <value>"Date" filter</value>
@@ -503,5 +503,8 @@ Input data:
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
     <value>Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
       Example: &lt;Pattern ID="{getIDFunc('$1')}" Date="{getDateFunc('$2')}" TraceName="name = {getTraceNameFunc('$3')}" Description="description = {formatDescriptionFunc('$4', '$5')}" Message="Original = '$6' Result = {getMessageFunc('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
+  </data>
+  <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
+    <value>Regex search is being completed faster.</value>
   </data>
 </root>
