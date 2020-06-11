@@ -603,12 +603,13 @@ namespace LogsReader.Reader
             return treeNode;
         }
 
-
-        private void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
+        internal void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
         {
+	        if (!(sender is CustomTreeView customTreeView))
+		        return;
 	        try
 	        {
-		        TreeMain.AfterCheck -= TrvMain_AfterCheck;
+		        customTreeView.AfterCheck -= TrvMain_AfterCheck;
 		        CheckTreeViewNode(e.Node, e.Node.Checked);
 		        ValidationCheck();
 	        }
@@ -618,9 +619,9 @@ namespace LogsReader.Reader
 	        }
 	        finally
 	        {
-		        TreeMain.AfterCheck += TrvMain_AfterCheck;
+		        customTreeView.AfterCheck += TrvMain_AfterCheck;
 		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
-            }
+	        }
         }
 
         private static void CheckTreeViewNode(TreeNode node, bool isChecked)
@@ -699,14 +700,16 @@ namespace LogsReader.Reader
 	        node.StateImageIndex = result;
         }
 
-        private void TreeMain_MouseDown(object sender, MouseEventArgs e)
+        internal void TreeMain_MouseDown(object sender, MouseEventArgs e)
         {
-	        try
+	        if (!(sender is CustomTreeView customTreeView))
+		        return;
+            try
 	        {
-		        TreeMain.SelectedNode = TreeMain.GetNodeAt(e.X, e.Y);
+		        customTreeView.SelectedNode = customTreeView.GetNodeAt(e.X, e.Y);
                 if (e.Button != MouseButtons.Right)
 			        return;
-                _contextTreeMainMenuStrip?.Show(TreeMain, e.Location);
+                _contextTreeMainMenuStrip?.Show(customTreeView, e.Location);
             }
 	        catch (Exception ex)
 	        {

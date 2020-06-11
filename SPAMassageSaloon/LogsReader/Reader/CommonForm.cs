@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using LogsReader.Config;
 using SPAMassageSaloon.Common;
+using Utils;
 using Utils.WinForm;
 using Utils.WinForm.Expander;
 
@@ -25,11 +28,9 @@ namespace LogsReader.Reader
 	    {
 		    MainForm = main;
 
-		    var index = -1;
 		    foreach (var readerForm in MainForm.AllForms.Values)
 		    {
-			    index++;
-                var expander = CreateExpander(readerForm, index);
+			    var expander = CreateExpander(readerForm);
                 readerForm.OnTreeViewChanged += ReaderForm_OnTreeViewChanged;
                 AllExpanders.Add(readerForm, expander);
 
@@ -42,78 +43,80 @@ namespace LogsReader.Reader
             
         }
 
-        ExpandCollapsePanel CreateExpander(LogsReaderForm readerForm, int index)
+        ExpandCollapsePanel CreateExpander(LogsReaderForm readerForm)
         {
-	        var buttonBack = new Button
-	        {
-		        BackColor = Color.White,
-		        FlatStyle = FlatStyle.Flat,
-		        Location = new Point(3, 4),
-		        Size = new Size(20, 17),
-		        UseVisualStyleBackColor = false
-	        };
-	        var labelBack = new Label {AutoSize = true, Location = new Point(25, 4), Size = new Size(34, 15), Text = @"Back"};
-
-	        var buttonFore = new Button
-	        {
-		        BackColor = Color.Black,
-		        FlatStyle = FlatStyle.Flat,
-		        Location = new Point(63, 4),
-		        Size = new Size(20, 17),
-		        UseVisualStyleBackColor = false
-	        };
-	        var labelFore = new Label {AutoSize = true, Location = new Point(85, 4), Size = new Size(32, 15), Text = @"Fore"};
-
-	        var splitContainerInner = new SplitContainer
-	        {
-		        Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-		        FixedPanel = FixedPanel.Panel1,
-		        IsSplitterFixed = true,
-		        Location = new Point(0, 24),
-		        Orientation = Orientation.Horizontal,
-		        AutoSize = true,
-		        SplitterDistance = 25
-	        };
-	        splitContainerInner.Panel1.Controls.Add(buttonBack);
-	        splitContainerInner.Panel1.Controls.Add(labelBack);
-	        splitContainerInner.Panel1.Controls.Add(buttonFore);
-	        splitContainerInner.Panel1.Controls.Add(labelFore);
-
-	        var treeMain = new CustomTreeView
-	        {
-		        CheckBoxes = true,
-		        Dock = System.Windows.Forms.DockStyle.Fill,
-		        DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll,
-		        Location = new System.Drawing.Point(0, 0),
-		        Size = new System.Drawing.Size(175, 147)
-	        };
-
-	        var clone = readerForm.TreeMain.Clone();
-	        clone.Nodes.AddRange(readerForm.TreeMain.Nodes.Cast<TreeNode>().ToArray());
-	        
-
-            splitContainerInner.Panel2.Controls.Add(treeMain);
-
-            var schemeExpander = new ExpandCollapsePanel
+	        var schemeExpander = new ExpandCollapsePanel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-		        BackColor = SystemColors.Control,
 		        BordersThickness = 3,
 		        ButtonSize = ExpandButtonSize.Small,
 		        ButtonStyle = ExpandButtonStyle.Circle,
 		        CheckBoxShown = true,
 		        ExpandedHeight = 200,
+		        BackColor = Color.Azure,
 		        HeaderBackColor = Color.Azure,
-		        HeaderBorderBrush = SystemColors.Control,
-		        HeaderLineColor = Color.Azure,
+		        HeaderBorderBrush = Color.ForestGreen,
+		        HeaderLineColor = Color.Black,
 		        IsChecked = false,
 		        IsExpanded = false,
-		        Location = new Point(3, 3 + (index * 31)),
-		        Size = new Size(FlowPanelForExpanders.Size.Width - 6, 25),
 		        Text = readerForm.CurrentSettings.Name,
 		        UseAnimation = true
 	        };
-	        schemeExpander.Controls.Add(splitContainerInner);
+
+	        var buttonSize = Size = new Size(20, 17);
+
+            var buttonBack = new Button
+	        {
+		        BackColor = Color.White,
+		        FlatStyle = FlatStyle.Flat,
+		        Location = new Point(3, 29),
+		        Size = buttonSize,
+		        UseVisualStyleBackColor = false
+	        };
+	        var labelBack = new Label {AutoSize = true, Location = new Point(25, 29), Size = new Size(34, 15), Text = @"Back"};
+
+	        var buttonFore = new Button
+	        {
+		        BackColor = Color.Black,
+		        FlatStyle = FlatStyle.Flat,
+		        Location = new Point(63, 29),
+		        Size = buttonSize,
+		        UseVisualStyleBackColor = false
+	        };
+	        var labelFore = new Label {AutoSize = true, Location = new Point(85, 29), Size = new Size(34, 15), Text = @"Fore"};
+
+
+	        var copy = new CustomTreeView
+	        {
+		        ImageList = readerForm.TreeMain.ImageList,
+		        ItemHeight = readerForm.TreeMain.ItemHeight,
+		        Indent = readerForm.TreeMain.Indent,
+		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+		        CheckBoxes = true,
+		        DrawMode = TreeViewDrawMode.OwnerDrawAll,
+		        Location = new Point(0, 50),
+		        Size = new Size(schemeExpander.Size.Width, 150)
+	        };
+
+	        foreach (var treeNode in readerForm.TreeMain.Nodes.Cast<TreeNode>())
+	        {
+		        var clone = (TreeNode)treeNode.Clone();
+		        copy.Nodes.Add(clone);
+	        }
+
+	        copy.MouseDown += readerForm.TreeMain_MouseDown;
+	        copy.AfterCheck += readerForm.TrvMain_AfterCheck;
+
+
+            schemeExpander.Controls.Add(buttonBack);
+	        schemeExpander.Controls.Add(buttonFore);
+	        schemeExpander.Controls.Add(labelBack);
+            schemeExpander.Controls.Add(labelFore);
+	        schemeExpander.Controls.Add(copy);
+
+
+
+	        
 
 	        return schemeExpander;
         }

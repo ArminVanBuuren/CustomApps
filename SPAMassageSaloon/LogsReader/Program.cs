@@ -40,14 +40,6 @@ namespace LogsReader
 			        if (propInfo.Name != "WindowTarget")
 				        propInfo.SetValue(instance, propInfo.GetValue(controlToClone, null), null);
 		        }
-		        else 
-		        {
-			        if (propInfo.PropertyType is ICollection)
-			        {
-
-			        }
-
-                }
 	        }
 
 	        return instance;
