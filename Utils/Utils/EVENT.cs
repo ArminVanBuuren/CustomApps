@@ -1,157 +1,217 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace Utils
 {
-    public static class EVENT
-    {
-        private static readonly Type EventType = typeof(EventHandler);
+	public static class EVENT
+	{
+		public static void DelegateAllEventsTo(this object source, object target)
+		{
+			var sourceType = source.GetType();
 
-        public static void DelegateAllEvents(this object source, object to)
-        {
-            var sourceType = source.GetType();
-            var toType = to.GetType();
-            while (sourceType != toType)
-            {
-                if (toType.BaseType == null)
-                    return;
-                toType = toType.BaseType;
-            }
+			while (sourceType != null)
+			{
+				var targetType = target.GetType();
 
-            var sourceEventList = sourceType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == EventType).ToDictionary(x => x.Name, x => x);
-            var toEventList = toType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == EventType).ToDictionary(x => x.Name, x => x);
-            foreach (var sourceEvent in sourceEventList)
-            {
-                var objSource = (EventHandler)sourceEvent.Value.GetValue(source);
-                var eventListeners = objSource?.GetInvocationList();
-                if (eventListeners == null || !eventListeners.Any())
-                    continue;
+				while (sourceType != targetType)
+				{
+					if (targetType.BaseType == null)
+						break;
+					targetType = targetType.BaseType;
+				}
 
-                if (toEventList.TryGetValue(sourceEvent.Key, out var toFiled))
-                {
-                    var objTo = (EventHandler) toFiled.GetValue(to);
-                    foreach (EventHandler del in eventListeners)
-                        objTo += del;
-                }
-            }
-        }
+				var sourceEventList = sourceType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => IsTargetType(typeof(Delegate), x.FieldType)).ToDictionary(x => x.Name, x => x);
 
-        public static void RemoveAllEvents(this object input)
-        {
-            var fieldList = input.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == EventType);
-            foreach (var field in fieldList)
-            {
-                var obj = (EventHandler) field.GetValue(input);
-                var eventListeners = obj?.GetInvocationList();
-                if (eventListeners == null || !eventListeners.Any())
-                    continue;
+				try
+				{
+					if (sourceEventList.Count == 0)
+						continue;
 
-                foreach (EventHandler del in eventListeners)
-                    obj -= del;
-            }
-        }
-    }
+					var targetEventList = targetType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => IsTargetType(typeof(Delegate), x.FieldType)).ToDictionary(x => x.Name, x => x);
+					foreach (var (name, field) in sourceEventList)
+					{
+						var objSource = (Delegate)field.GetValue(source);
+						var eventListeners = objSource?.GetInvocationList();
+						if (eventListeners == null || !eventListeners.Any() || !targetEventList.TryGetValue(name, out var targetFiled))
+							continue;
 
-    //public static class EVENT
-    //{
-    //    //private static readonly Type EventType = typeof(EventHandler);
+						var listOfAllDelegates = new List<Delegate>();
 
-    //    public static void DelegateAllEvents<T>(this object source, object to)
-    //    {
-    //        var eventType = typeof(T);
-    //        //var sourceType = source.GetType();
-    //        //var toType = to.GetType();
+						var objTarget = (Delegate)targetFiled.GetValue(target);
+						var targetSourceDelegates = objTarget?.GetInvocationList();
 
-    //        //Type CombineTypes(Type sourceType2, Type toType2)
-    //        //{
-    //        // var toType3 = toType2;
-    //        // while (sourceType2 != toType3)
-    //        // {
-    //        //  if (toType3.BaseType == null)
-    //        //   return null;
-    //        //  toType3 = toType3.BaseType;
-    //        // }
+						if (targetSourceDelegates != null && targetSourceDelegates.Any())
+							listOfAllDelegates.AddRange(targetSourceDelegates);
+						listOfAllDelegates.AddRange(eventListeners);
 
-    //        // return toType3;
-    //        //}
+						var newDelegates = Delegate.Combine(listOfAllDelegates.ToArray());
+						targetFiled.SetValue(target, newDelegates);
+					}
+				}
+				finally
+				{
+					sourceType = sourceType.BaseType;
+				}
+			}
+		}
 
-    //        var sourceType = source.GetType();
+		static bool IsTargetType(Type source, Type target)
+		{
+			var target2 = target;
 
-    //        while (sourceType != null)
-    //        {
-    //            var toType = to.GetType();
+			while (target2 != null && source != target2)
+				target2 = target2.BaseType;
 
-    //            while (sourceType != toType)
-    //            {
-    //                if (toType.BaseType == null)
-    //                    break;
-    //                toType = toType.BaseType;
-    //            }
+			return target2 != null;
+		}
 
-    //            if (toType == null)
-    //            {
-    //                sourceType = sourceType.BaseType;
-    //                continue;
-    //            }
+		public static void RemoveAllEvents(this object input)
+		{
+			var fieldList = input.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == typeof(Delegate));
+			foreach (var field in fieldList)
+			{
+				var obj = (Delegate)field.GetValue(input);
+				var eventListeners = obj?.GetInvocationList();
+				if (eventListeners == null || !eventListeners.Any())
+					continue;
 
-    //            var sourceEventList = sourceType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => IsTargetType(x.FieldType, eventType) || IsTargetType(eventType, x.FieldType)).ToDictionary(x => x.Name, x => x);
-    //            var toEventList = toType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => IsTargetType(x.FieldType, eventType) || IsTargetType(eventType, x.FieldType)).ToDictionary(x => x.Name, x => x);
-    //            foreach (var sourceEvent in sourceEventList)
-    //            {
-    //                var objSource = (MulticastDelegate)sourceEvent.Value.GetValue(source);
-    //                var eventListeners = objSource?.GetInvocationList();
-    //                if (eventListeners == null || !eventListeners.Any())
-    //                    continue;
+				field.SetValue(input, null);
+			}
+		}
+	}
+	//public static class EVENT
+	//{
+	//	public static Dictionary<string, KeyValuePair<FieldInfo, Delegate[]>> GetSubscribedEvents(this object source, bool onlyAssigned = false)
+	//	{
+	//		FieldInfo Ei2Fi(EventInfo ei)
+	//		{
+	//			var sourceType = source.GetType();
 
-    //                if (toEventList.TryGetValue(sourceEvent.Key, out var toFiled))
-    //                {
-    //                    var targetEvents = new List<Delegate>();
-    //                    var objTo = (MulticastDelegate)toFiled.GetValue(to);
-    //                    if (objTo != null)
-    //                        targetEvents.AddRange(objTo.GetInvocationList());
-    //                    targetEvents.AddRange(eventListeners);
+	//			while (sourceType != null)
+	//			{
+	//				var fieldInfo = sourceType.GetField(ei.Name);
+	//				if (fieldInfo != null)
+	//					return fieldInfo;
+	//				sourceType = sourceType.BaseType;
+	//			}
 
-    //                    foreach (var del in eventListeners)
-    //                    {
-    //                        objTo += eventListeners;
-    //                    }
-    //                    toFiled.SetValue(to, targetEvents.ToArray());
-    //                }
-    //            }
+	//			sourceType = source.GetType();
+	//			while (sourceType != null)
+	//			{
+	//				var propertyInfo = sourceType.GetProperty(ei.Name);
+	//				if (propertyInfo != null)
+	//					return null;
+	//				sourceType = sourceType.BaseType;
+	//			}
 
-    //            sourceType = sourceType.BaseType;
-    //        }
-    //    }
+	//			//sourceType = source.GetType();
+	//			//while (sourceType != null)
+	//			//{
+	//			//	var propertyInfo = sourceType.GetMember(ei.Name);
+	//			//	if (propertyInfo != null)
+	//			//		return null;
+	//			//	sourceType = sourceType.BaseType;
+	//			//}
 
-    //    static bool IsTargetType(Type source, Type target)
-    //    {
-    //        var source1 = source;
-    //        var target1 = target;
+	//			return null;
+	//		}
 
-    //        while (target1 != null && source1 != target1)
-    //            target1 = target1.BaseType;
+	//		Func<Delegate[], bool> onlyAssignedFunc = (delegates) => true;
+	//		if (onlyAssigned)
+	//			onlyAssignedFunc = delegates => delegates != null && delegates.Length > 0;
 
-    //        if (target1 != null)
-    //            return true;
+	//		var test  = source.GetType().GetEvents();
 
-    //        return false;
-    //    }
+	//		foreach (var @event in test)
+	//		{
 
-    //    public static void RemoveAllEvents<T>(this object input)
-    //    {
-    //        var eventType = typeof(T);
-    //        var fieldList = input.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == eventType);
-    //        foreach (var field in fieldList)
-    //        {
-    //            var obj = (EventHandler)field.GetValue(input);
-    //            var eventListeners = obj?.GetInvocationList();
-    //            if (eventListeners == null || !eventListeners.Any())
-    //                continue;
+	//			var dd = @event;
+	//			if (dd != null)
+	//			{
 
-    //            foreach (EventHandler del in eventListeners)
-    //                obj -= del;
-    //        }
-    //    }
-    //}
+	//			}
+	//		}
+
+	//		return source.GetType()
+	//			.GetEvents()
+	//			.Select(Ei2Fi)
+	//			.Select(x => new { Field = x, Delegates = ((Delegate)x?.GetValue(source))?.GetInvocationList() })
+	//			.Where(x => onlyAssignedFunc(x.Delegates))
+	//			.ToDictionary(x => x.Field.Name, x => new KeyValuePair<FieldInfo, Delegate[]>(x.Field, x.Delegates));
+	//	}
+
+	//	public static void DelegateAllEventsTo<T>(this object source, object to) where T : Delegate
+	//	{
+	//		var sourceEventList = source.GetSubscribedEvents(true);
+	//		if (sourceEventList.Count == 0)
+	//			return;
+
+	//		var toEventList = to.GetSubscribedEvents(false);
+	//		foreach (var (fieldName, (field, delegates)) in sourceEventList)
+	//		{
+	//			if (!toEventList.TryGetValue(fieldName, out var toFiled))
+	//				continue;
+
+	//			var listOfAllDelegates = new List<Delegate>();
+
+	//			var objTo = (Delegate)toFiled.Key.GetValue(to);
+	//			var targetExistedDelegates = objTo?.GetInvocationList();
+
+	//			if (targetExistedDelegates != null && targetExistedDelegates.Any())
+	//				listOfAllDelegates.AddRange(targetExistedDelegates);
+	//			listOfAllDelegates.AddRange(delegates);
+
+	//			toFiled.Key.SetValue(to, Delegate.Combine(listOfAllDelegates.ToArray()));
+	//		}
+
+
+	//		//while (sourceType != null)
+	//		//{
+	//		//	toType = to.GetType();
+	//		//	while (sourceType != toType)
+	//		//	{
+	//		//		if (toType.BaseType == null)
+	//		//			break;
+	//		//		toType = toType.BaseType;
+	//		//	}
+
+
+	//		//	try
+	//		//	{
+
+	//		//	}
+	//		//	finally
+	//		//	{
+	//		//		sourceType = sourceType.BaseType;
+	//		//	}
+	//		//}
+	//	}
+
+	//	static bool IsTargetType(Type source, Type target)
+	//	{
+	//		var target2 = target;
+
+	//		while (target2 != null && source != target2)
+	//			target2 = target2.BaseType;
+
+	//		return target2 != null;
+	//	}
+
+	//	public static void RemoveAllEvents<T>(this object input) where T : Delegate
+	//	{
+	//		var eventType = typeof(T);
+	//		var fieldList = input.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.FieldType == eventType);
+	//		foreach (var field in fieldList)
+	//		{
+	//			var obj = (T)field.GetValue(input);
+	//			var eventListeners = obj?.GetInvocationList();
+	//			if (eventListeners == null || !eventListeners.Any())
+	//				continue;
+
+	//			field.SetValue(input, null);
+	//		}
+	//	}
+	//}
 }

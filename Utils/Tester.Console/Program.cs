@@ -18,6 +18,17 @@ namespace Tester.Console
 		string Invoke(string[] args);
 	}
 
+	public delegate void DelegateTest(string value);
+	public class TestingEvents
+	{
+		public event DelegateTest DelegateTest;
+
+		public void Test(string value)
+		{
+			DelegateTest?.Invoke(value);
+		}
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -28,7 +39,7 @@ namespace Tester.Console
 			
 			try
 			{
-				Test_CustomFunction();
+				Test_DelegateAllEventsTo();
 			}
 			catch (Exception e)
 			{
@@ -38,6 +49,18 @@ namespace Tester.Console
 			stopWatch.Stop();
 			System.Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
 			System.Console.ReadLine();
+		}
+
+		static void Test_DelegateAllEventsTo()
+		{
+			var test_1 = new TestingEvents();
+			test_1.DelegateTest += (arg) => { System.Console.WriteLine(arg); };
+
+			var test_2 = new TestingEvents();
+			test_1.DelegateAllEventsTo(test_2);
+
+			test_1.Test("Invoked Test_1");
+			test_2.Test("Invoked Test_2");
 		}
 
 		static void Test_Lookup()

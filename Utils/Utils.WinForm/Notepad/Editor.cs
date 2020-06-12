@@ -505,7 +505,7 @@ namespace Utils.WinForm.Notepad
 
         public new virtual void Dispose()
         {
-            this.RemoveAllEvents();
+	        this.RemoveAllEvents();
             base.Dispose();
             IsDisposed = true;
         }

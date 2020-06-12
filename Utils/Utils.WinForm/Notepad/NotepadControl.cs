@@ -476,7 +476,7 @@ namespace Utils.WinForm.Notepad
         {
             try
             {
-                removeEditor.DelegateAllEvents(newEditor);
+                removeEditor.DelegateAllEventsTo(newEditor);
                 FinnalizePage(removeEditor);
                 InitializePage(newEditor, true);
             }
