@@ -97,7 +97,7 @@ namespace Utils
 
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string memberName)
         {
-            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
             if(pi == null)
                 throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
@@ -114,7 +114,7 @@ namespace Utils
 
         public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string memberName)
         {
-            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
             if (pi == null)
                 throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
@@ -131,7 +131,7 @@ namespace Utils
 
         public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string memberName)
         {
-            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
             if (pi == null)
 	            throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
@@ -148,7 +148,7 @@ namespace Utils
 
         public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string memberName)
         {
-            ParameterExpression[] typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
+            var typeParams = new ParameterExpression[] { Expression.Parameter(typeof(T), "") };
             var pi = typeof(T).GetProperty(memberName);
             if (pi == null)
 	            throw new Exception($"Property \"{memberName}\" not found in type \"{typeof(T)}\".");
@@ -667,7 +667,7 @@ namespace Utils
 	        var result = new T[input.Count];
 	        unchecked
 	        {
-		        for (int i = 0; i < input.Count; i++)
+		        for (var i = 0; i < input.Count; i++)
 			        result[i] = (T)input[i];
 	        }
 	        return result;
@@ -1113,16 +1113,16 @@ namespace Utils
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            Comparer<TArgument> comparer = Comparer<TArgument>.Default;
-            TSource result = default(TSource);
-            TArgument maxValue = default(TArgument);
-            bool hasValue = false;
+            var comparer = Comparer<TArgument>.Default;
+            var result = default(TSource);
+            var maxValue = default(TArgument);
+            var hasValue = false;
 
-            foreach (TSource item in items)
+            foreach (var item in items)
             {
                 if (hasValue)
                 {
-                    TArgument candidate = selector(item);
+                    var candidate = selector(item);
                     if (comparer.Compare(candidate, maxValue) > 0)
                     {
                         maxValue = candidate;
@@ -1159,16 +1159,16 @@ namespace Utils
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            Comparer<TArgument> comparer = Comparer<TArgument>.Default;
-            TSource result = default(TSource);
-            TArgument minValue = default(TArgument);
-            bool hasValue = false;
+            var comparer = Comparer<TArgument>.Default;
+            var result = default(TSource);
+            var minValue = default(TArgument);
+            var hasValue = false;
 
-            foreach (TSource item in items)
+            foreach (var item in items)
             {
                 if (hasValue)
                 {
-                    TArgument candidate = selector(item);
+                    var candidate = selector(item);
                     if (comparer.Compare(candidate, minValue) < 0)
                     {
                         minValue = candidate;
@@ -1205,7 +1205,7 @@ namespace Utils
                 throw new ArgumentOutOfRangeException(nameof(pageSize), pageSize, "pageSize must be positive");
 
             var page = new List<T>(pageSize);
-            foreach (T item in items)
+            foreach (var item in items)
             {
                 page.Add(item);
                 if (page.Count == pageSize)

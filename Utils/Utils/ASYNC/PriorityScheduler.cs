@@ -38,11 +38,11 @@ namespace Utils
 				return;
 
 			_threads = new Thread[_maximumConcurrencyLevel];
-			for (int i = 0; i < _threads.Length; i++)
+			for (var i = 0; i < _threads.Length; i++)
 			{
 				_threads[i] = new Thread(() =>
 				{
-					foreach (Task t in _tasks.GetConsumingEnumerable())
+					foreach (var t in _tasks.GetConsumingEnumerable())
 						TryExecuteTask(t);
 				})
 				{

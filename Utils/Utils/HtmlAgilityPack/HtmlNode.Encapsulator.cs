@@ -85,7 +85,7 @@ namespace HtmlAgilityPack
                 else
                 {
                     // Fill targetObject variable Properties ( T targetObject )
-                    foreach (PropertyInfo propertyInfo in validProperties)
+                    foreach (var propertyInfo in validProperties)
                     {
                         // Get xpath attribute from valid properties
                         // for .Net old versions:

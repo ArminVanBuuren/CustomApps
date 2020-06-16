@@ -514,10 +514,10 @@ namespace BigMath.Utils
             var ale = GetIsLittleEndian(asLittleEndian);
             EnsureLength(ref bytes, 32, offset, ale);
 
-            ulong a = bytes.ToUInt64(ale ? offset + 24 : offset, ale);
-            ulong b = bytes.ToUInt64(ale ? offset + 16 : offset + 8, ale);
-            ulong c = bytes.ToUInt64(ale ? offset + 8 : offset + 16, ale);
-            ulong d = bytes.ToUInt64(ale ? offset : offset + 24, ale);
+            var a = bytes.ToUInt64(ale ? offset + 24 : offset, ale);
+            var b = bytes.ToUInt64(ale ? offset + 16 : offset + 8, ale);
+            var c = bytes.ToUInt64(ale ? offset + 8 : offset + 16, ale);
+            var d = bytes.ToUInt64(ale ? offset : offset + 24, ale);
 
             return new Int256(a, b, c, d);
         }
