@@ -39,7 +39,7 @@ namespace Tester.Console
 			
 			try
 			{
-				Test_DelegateAllEventsTo();
+				
 			}
 			catch (Exception e)
 			{
