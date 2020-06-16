@@ -898,7 +898,7 @@ namespace Utils
             var builder = new StringBuilder(input.Length);
             foreach (var ch in input)
             {
-                if (IsUnallowable(ch, out var res))
+                if (IsUnallowable(ch, out var _))
                 {
                     builder.Append(replaceTo);
                 }
@@ -915,7 +915,7 @@ namespace Utils
         {
             foreach (var ch in input)
             {
-                if (IsUnallowable(ch, out var res))
+                if (IsUnallowable(ch, out var _))
                 {
                     return true;
                 }
@@ -1069,7 +1069,9 @@ namespace Utils
                     source.Append(xmlAttributes);
 
                 if (node.ChildNodes.Count <= 0 && node.InnerText.IsNullOrEmpty())
-                    source.Append(" />");
+                {
+	                source.Append(" />");
+                }
                 else
                 {
                     source.Append('>');
@@ -1107,7 +1109,7 @@ namespace Utils
             var outer = new StringBuilder(input.Length + 10);
             foreach (var ch in input)
             {
-                if (IsSymbolName(input, i, out var symbolName, out var symbolResult))
+                if (IsSymbolName(input, i, out var _, out var _))
                 {
                     outer.Append(ch);
                 }
@@ -1261,7 +1263,7 @@ namespace Utils
             {
                 if (!exceptional)
                     return string.Empty;
-                throw new ArgumentException("Can not be null or empty", nameof(xml));
+                throw new ArgumentException(@"Can not be null or empty", nameof(xml));
             }
 
             try

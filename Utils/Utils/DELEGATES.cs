@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Utils
 {
-	public static class EVENT
+	public static class DELEGATES
 	{
 		public static void DelegateAllEventsTo(this object source, object target)
 		{
@@ -79,6 +79,15 @@ namespace Utils
 
 				field.SetValue(input, null);
 			}
+		}
+
+		/// <summary>
+		/// Выполняем действие над входным объектом.
+		/// </summary>
+		public static T Do<T>(this T src, Action<T> fn) where T : class
+		{
+			fn(src);
+			return src;
 		}
 	}
 	//public static class EVENT

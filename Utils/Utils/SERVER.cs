@@ -82,7 +82,7 @@ namespace Utils
             {
                 baseProcessName = Process.GetCurrentProcess().ProcessName;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -91,7 +91,7 @@ namespace Utils
             {
                 processId = Process.GetCurrentProcess().Id;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -112,7 +112,7 @@ namespace Utils
                     if (processId == (int)new PerformanceCounter("Process", "ID Process", processName).NextValue())
                         notFound = !true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // ignored
                 }

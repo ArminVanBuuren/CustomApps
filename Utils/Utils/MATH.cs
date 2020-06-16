@@ -22,27 +22,30 @@ namespace Utils
 
                 if ((ch == '+' || ch == '-' || ch == '*' || ch == '/') && nextIsNum == 0)
                 {
-                    if (!NUMBER.IsNumber(temp.ToString()))
+                    if (!NUMERIC.IsNumber(temp.ToString()))
                         return false;
                     temp.Remove(0, temp.Length);
                     nextIsNum++;
                 }
-                else switch (ch)
+                else
                 {
-                    case '(':
-                        bkt++;
-                        break;
-                    case ')':
-                        bkt--;
-                        break;
-                    default:
-                        temp.Append(ch);
-                        nextIsNum = 0;
-                        break;
+	                switch (ch)
+	                {
+		                case '(':
+			                bkt++;
+			                break;
+		                case ')':
+			                bkt--;
+			                break;
+		                default:
+			                temp.Append(ch);
+			                nextIsNum = 0;
+			                break;
+	                }
                 }
             }
 
-            return NUMBER.IsNumber(temp.ToString()) && bkt == 0;
+            return NUMERIC.IsNumber(temp.ToString()) && bkt == 0;
         }
 
         public static double Calculate(string expression)

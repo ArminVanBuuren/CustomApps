@@ -80,7 +80,7 @@ namespace Utils
             }
 
             // timeout logic
-            return default(T);
+            return default;
         }
 
         public static async Task ExecuteWithTimeoutAsync(Task task, int millisecondsTimeout = 1000)
@@ -183,6 +183,28 @@ namespace Utils
                 throw new TargetInvocationException(error);
 
             return result;
+        }
+
+        /// <summary>
+        /// Запускает несколько задач параллельно с барьерной синхронизацией в конце.
+        /// </summary>
+        /// <remarks>
+        ///  Для первой из задач задействуется основной поток приложения.
+        /// </remarks>
+        public static void RunAndWait(params Task[] tasks)
+        {
+	        if (tasks == null)
+		        throw new ArgumentNullException(nameof(tasks));
+
+	        if (tasks.Length == 0)
+		        return;
+
+	        for (var i = 1; i < tasks.Length; i++)
+		        tasks[i].Start();
+
+	        tasks[0].RunSynchronously();
+
+	        Task.WaitAll(tasks);
         }
     }
 }

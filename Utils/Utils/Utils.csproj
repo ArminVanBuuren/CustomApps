@@ -109,6 +109,7 @@
     <Compile Include="ASYNC\MultiTaskingTemplate.cs" />
     <Compile Include="ASYNC\PriorityScheduler.cs" />
     <Compile Include="ATTRIBUTES.cs" />
+    <Compile Include="BOOLEAN.cs" />
     <Compile Include="CMD.cs" />
     <Compile Include="CODE\CustomFunctions.cs" />
     <Compile Include="CODE\CustomFunctionsCompiler.cs" />
@@ -135,7 +136,7 @@
     <Compile Include="Crypto\AES.cs" />
     <Compile Include="Crypto\DH.cs" />
     <Compile Include="ASYNC\ASYNC.cs" />
-    <Compile Include="EVENT.cs" />
+    <Compile Include="DELEGATES.cs" />
     <Compile Include="Handles\Address.cs" />
     <Compile Include="Handles\CollectionSizes.cs" />
     <Compile Include="Handles\ResourceHelper.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="HtmlAgilityPack\Trace.cs" />
     <Compile Include="HtmlAgilityPack\Trace.FullFramework.cs" />
     <Compile Include="HtmlAgilityPack\Utilities.cs" />
-    <Compile Include="NUMBER.cs" />
+    <Compile Include="NUMERIC.cs" />
     <Compile Include="IO\IO.cs" />
     <Compile Include="Handles\ProcessEx.cs" />
     <Compile Include="MATH.cs" />
@@ -235,7 +236,7 @@
     <Compile Include="Ionic.Zlib\ZlibStream.cs" />
     <Compile Include="TIME.cs" />
     <Compile Include="CODE\CODE.cs" />
-    <Compile Include="UNIVERSAL.cs" />
+    <Compile Include="COMMON.cs" />
     <Compile Include="WEB.cs" />
     <Compile Include="Handles\WebDownload.cs">
       <SubType>Component</SubType>

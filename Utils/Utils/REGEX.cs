@@ -190,11 +190,11 @@ namespace Utils
 				Regex.Match("", testPattern);
 				return true;
 			}
-			catch (ArgumentException ex)
+			catch (ArgumentException)
 			{
 				return false; // BAD PATTERN: Syntax error
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return false;
 			}

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -72,7 +74,7 @@ namespace Utils
 
         public static bool IsNumber(this string value)
         {
-            return int.TryParse(value, out _);
+            return int.TryParse(value, out var _);
         }
 
         public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase)
@@ -163,15 +165,15 @@ namespace Utils
 
         public static bool StringContains2(this string input, string value, StringComparison? comp = null)
         {
-            int[] c = new int[value.Length];
+            var c = new int[value.Length];
             if (comp != null)
             {
-                for (int y = 0; y < value.Length; y++)
+                for (var y = 0; y < value.Length; y++)
                     c[y] += ((input.Length - input.Replace(value, string.Empty, comp.Value).Length) / value.Length > 0 ? 1 : 0);
             }
             else
             {
-                for (int y = 0; y < value.Length; y++)
+                for (var y = 0; y < value.Length; y++)
                     c[y] += ((input.Length - input.Replace(value, string.Empty).Length) / value.Length > 0 ? 1 : 0);
             }
 
@@ -192,7 +194,7 @@ namespace Utils
         /// <returns>A string that is equivalent to the current string except that all instances of <paramref name="oldValue"/> are replaced with <paramref name="newValue"/>. 
         /// If <paramref name="oldValue"/> is not found in the current instance, the method returns the current instance unchanged.</returns>
         [DebuggerStepThrough]
-        public static string Replace(this string str, string oldValue, string @newValue, StringComparison comparisonType)
+        public static string Replace(this string str, string oldValue, string newValue, StringComparison comparisonType)
         {
 
             // Check inputs.
@@ -229,28 +231,28 @@ namespace Utils
 
             // Prepare string builder for storing the processed string.
             // Note: StringBuilder has a better performance than String by 30-40%.
-            StringBuilder resultStringBuilder = new StringBuilder(str.Length);
+            var resultStringBuilder = new StringBuilder(str.Length);
 
 
 
             // Analyze the replacement: replace or remove.
-            bool isReplacementNullOrEmpty = string.IsNullOrEmpty(@newValue);
+            var isReplacementNullOrEmpty = string.IsNullOrEmpty(newValue);
 
 
 
             // Replace all values.
             const int valueNotFound = -1;
             int foundAt;
-            int startSearchFromIndex = 0;
+            var startSearchFromIndex = 0;
             while ((foundAt = str.IndexOf(oldValue, startSearchFromIndex, comparisonType)) != valueNotFound)
             {
 
                 // Append all characters until the found replacement.
-                int @charsUntilReplacment = foundAt - startSearchFromIndex;
-                bool isNothingToAppend = @charsUntilReplacment == 0;
+                var charsUntilReplacment = foundAt - startSearchFromIndex;
+                var isNothingToAppend = charsUntilReplacment == 0;
                 if (!isNothingToAppend)
                 {
-                    resultStringBuilder.Append(str, startSearchFromIndex, @charsUntilReplacment);
+                    resultStringBuilder.Append(str, startSearchFromIndex, charsUntilReplacment);
                 }
 
 
@@ -258,7 +260,7 @@ namespace Utils
                 // Process the replacement.
                 if (!isReplacementNullOrEmpty)
                 {
-                    resultStringBuilder.Append(@newValue);
+                    resultStringBuilder.Append(newValue);
                 }
 
 
@@ -279,8 +281,8 @@ namespace Utils
 
 
             // Append the last part to the result.
-            int @charsUntilStringEnd = str.Length - startSearchFromIndex;
-            resultStringBuilder.Append(str, startSearchFromIndex, @charsUntilStringEnd);
+            var charsUntilStringEnd = str.Length - startSearchFromIndex;
+            resultStringBuilder.Append(str, startSearchFromIndex, charsUntilStringEnd);
 
 
             return resultStringBuilder.ToString();
@@ -343,8 +345,8 @@ namespace Utils
         {
             var builder = new StringBuilder(str.Length);
             var builderChar = new StringBuilder(6);
-            int start = 0;
-            int startUnicode = 0;
+            var start = 0;
+            var startUnicode = 0;
             foreach (var ch in str)
             {
                 if (ch == '\\')
@@ -397,6 +399,242 @@ namespace Utils
         public static string RegexReplace(this string input, string pattern, string replacemenet, RegexOptions options = RegexOptions.None)
         {
             return Regex.Replace(input, pattern, replacemenet, options);
+        }
+
+        /// <summary>
+        /// Показывает, состоит ли строка только из цифр.
+        /// </summary>
+        /// <param name="s">Строка.</param>
+        /// <returns>Флаг, который показывает, состоит ли строка только из цифр.</returns>
+        public static bool ContainsDigitsOnly(string s)
+        {
+	        for (var index = 0; index < s.Length; index++)
+		        if (!char.IsDigit(s, index))
+			        return false;
+
+	        return true;
+        }
+
+        /// <summary>
+        /// Форматирует "красивое" имя типа с его generic-параметрами для вывода в лог.
+        /// </summary>
+        public static string FormatTypeName(this Type type)
+        {
+	        return !type.IsGenericType
+		        ? type.Name
+		        : new StringBuilder(type.Name).Append('<').AppendItems(type.GetGenericArguments().Select(FormatTypeName), ", ").Append('>').ToString();
+        }
+
+        /// <summary>
+        /// Дописывает к заданному <paramref name="sb"/> элементы последовательности <paramref name="sequence"/>, используя разделитель <paramref name="separator"/>.
+        /// </summary>
+        public static StringBuilder AppendItems(this StringBuilder sb, IEnumerable sequence, string separator)
+        {
+	        if (sequence == null)
+	        {
+		        return sb;
+	        }
+
+	        var isFirst = true;
+	        foreach (var item in sequence)
+	        {
+		        if (isFirst)
+		        {
+			        isFirst = false;
+		        }
+		        else
+		        {
+			        sb.Append(separator);
+		        }
+		        sb.Append(item);
+	        }
+	        return sb;
+        }
+
+        /// <summary>
+        /// Возвращает значение, показывающее, все ли строки пусты. Для проверки на пустоту используется метод <see cref="COMMON.IsEmpty(string)"/>
+        /// </summary>
+        /// <param name="value1">Строка 1.</param>
+        /// <param name="value2">Строка 2.</param>
+        /// <returns>true, если все строки пусты; false в противном случае.</returns>
+        public static bool IsAllEmpty(string value1, string value2)
+        {
+	        return value1.IsEmpty() && value2.IsEmpty();
+        }
+
+        /// <summary>
+        /// Возвращает значение, показывающее, все ли строки пусты. Для проверки на пустоту используется метод <see cref="COMMON.IsEmpty(string)"/>
+        /// </summary>
+        /// <param name="value1">Строка 1.</param>
+        /// <param name="value2">Строка 2.</param>
+        /// <param name="value3">Строка 3.</param>
+        /// <returns>true, если все строки пусты; false в противном случае.</returns>
+        public static bool IsAllEmpty(string value1, string value2, string value3)
+        {
+	        return value1.IsEmpty() && value2.IsEmpty() && value3.IsEmpty();
+        }
+
+        /// <summary>
+        /// Возвращает значение, показывающее, все ли строки пусты. Для проверки на пустоту используется метод <see cref="COMMON.IsEmpty(string)"/>
+        /// </summary>
+        /// <param name="args">Массив строк для проверки.</param>
+        /// <returns>true, если все строки в <paramref name="args"/> пусты; false в противном случае.</returns>
+        public static bool IsAllEmpty(params string[] args)
+        {
+	        return args == null || args.All(COMMON.IsEmpty);
+        }
+
+        /// <summary>
+        /// Проверяет, является ли пустым датасет или все его таблицы.
+        /// </summary>
+        /// <param name="value">Датасет.</param>
+        /// <returns>true, если <paramref name="value"/> <c>null</c> или все его таблицы пустые; <c>false</c> в противном случае.</returns>
+        public static bool IsAllEmpty(this DataSet value)
+        {
+	        return value == null || value.Tables.Cast<DataTable>().All(COMMON.IsEmpty);
+        }
+
+        /// <summary>
+        /// Возвращает строку, отформатированную в соответствии с <paramref name="formatting"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///		Выполняет форматирование строки с помощью <see cref="System.String.Format(IFormatProvider,string,object[])"/>.
+        /// </para>
+        /// <para>
+        ///		В качестве <see cref="IFormatProvider"/> используется значение культуры <see cref="COMMON.CommonCulture"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="formatting">Формат строки.</param>
+        /// <param name="args">Параметры форматирования.</param>
+        /// <returns>Форматированная строка.</returns>
+        public static string Format(string formatting, params object[] args)
+        {
+	        return string.Format(COMMON.CommonCulture, formatting, args);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+		/// <param name="value">Значение.</param>
+		/// <returns>Строковое представление <paramref name="value"/>.</returns>
+		public static string ToString(short value)
+        {
+            return value.ToString(COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(int value)
+        {
+            return value.ToString(COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(long value)
+        {
+            return value.ToString(COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(decimal value)
+        {
+            return value.ToString(COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке c удалением незначащих нулей.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToStringTrimZeros(decimal value)
+        {
+            var decimalStr = value.ToString(COMMON.CommonCulture);
+            return decimalStr.IndexOf(".", StringComparison.Ordinal) > -1 ? decimalStr.TrimEnd('0') : decimalStr;
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(bool value)
+        {
+            return value.ToString(COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="format">Формат приведения к строке.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(decimal value, string format)
+        {
+            return value.ToString(format, COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке с обрезанием лишних символов</summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="format">Формат приведения к строке.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToStringWithTruncate(decimal value, string format)
+        {
+            try
+            {
+                var stringValue = value.ToString(COMMON.CommonCulture);
+                if (stringValue.Contains(".") && !string.IsNullOrEmpty(format))
+                {
+                    return stringValue.Remove(stringValue.IndexOf(".", StringComparison.Ordinal) + GetCountAfterPoint(format) + 1);
+                }
+                return value.ToString(format, COMMON.CommonCulture);
+            }
+            catch
+            {
+                return value.ToString(format, COMMON.CommonCulture);
+            }
+        }
+
+        /// <summary>
+        /// Возвращает количество символов после точки.
+        /// </summary>
+        private static int GetCountAfterPoint(string format)
+        {
+	        var parts = format.Split('.');
+	        return parts.Length > 1 ? parts[1].Length : -1;
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="format">Формат.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(DateTime value, string format)
+        {
+            return value.ToString(format, COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString(object value)
+        {
+            return Convert.ToString(value, COMMON.CommonCulture);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString<T>(T? value)
+            where T : struct
+        {
+            return ToString(value, string.Empty);
+        }
+
+        /// <summary>Выполняет преобразование <paramref name="value"/> к строке.</summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="defaultValue">Значение по умолчанию, если <paramref name="value"/> == null.</param>
+        /// <returns>Строковое представление <paramref name="value"/>.</returns>
+        public static string ToString<T>(T? value, string defaultValue)
+            where T : struct
+        {
+            return value.HasValue ? ToString(value.Value) : defaultValue;
         }
 
         static bool GetCharByUTFCode(string input, out char result)

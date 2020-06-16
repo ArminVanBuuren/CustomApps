@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 
 namespace Utils
@@ -27,26 +26,11 @@ namespace Utils
 		{
 			if (string.IsNullOrEmpty(input))
 				return TypeParam.Null;
-			if (IsBool(input))
+			if (BOOLEAN.IsBool(input))
 				return TypeParam.Bool;
-			if (NUMBER.IsNumber(input))
+			if (NUMERIC.IsNumber(input))
 				return TypeParam.Number;
 			return MATH.IsMathExpression(input) ? TypeParam.MathEx : TypeParam.String;
-		}
-
-		static readonly Regex _isTime = new Regex(@"^(([0-1]|)[0-9]|2[0-3])\:[0-5][0-9]((\:[0-5][0-9])|)$", RegexOptions.Compiled);
-
-		public static bool IsTime(string input)
-		{
-			return _isTime.IsMatch(input);
-		}
-
-		public static bool IsBool(string input)
-		{
-			if (string.IsNullOrEmpty(input))
-				return false;
-			var trimVal = input.Trim();
-			return trimVal.Like("true") || trimVal.Like("false");
 		}
 
 		class ParamsList
