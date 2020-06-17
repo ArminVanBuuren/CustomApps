@@ -71,7 +71,7 @@ namespace LogsReader.Reader
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.PanelFlowDoc = new System.Windows.Forms.Panel();
 			this.FlowPanelForExpanders = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
 			this.panelCollapseSelectAll = new System.Windows.Forms.Panel();
 			this.checkBoxSelectAll = new System.Windows.Forms.CheckBox();
@@ -91,7 +91,7 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel1.SuspendLayout();
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
-			this.panel1.SuspendLayout();
+			this.PanelFlowDoc.SuspendLayout();
 			this.panelCollapseSelectAll.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -523,7 +523,7 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
-			this.MainSplitContainer.Panel1.Controls.Add(this.panel1);
+			this.MainSplitContainer.Panel1.Controls.Add(this.PanelFlowDoc);
 			this.MainSplitContainer.Panel1.Controls.Add(this.panelCollapseSelectAll);
 			this.MainSplitContainer.Panel1MinSize = 110;
 			// 
@@ -534,16 +534,16 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.SplitterDistance = 185;
 			this.MainSplitContainer.TabIndex = 0;
 			// 
-			// panel1
+			// PanelFlowDoc
 			// 
-			this.panel1.AutoScroll = true;
-			this.panel1.AutoScrollMinSize = new System.Drawing.Size(0, 1500);
-			this.panel1.Controls.Add(this.FlowPanelForExpanders);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 27);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(181, 439);
-			this.panel1.TabIndex = 29;
+			this.PanelFlowDoc.AutoScroll = true;
+			this.PanelFlowDoc.AutoScrollMinSize = new System.Drawing.Size(0, 1500);
+			this.PanelFlowDoc.Controls.Add(this.FlowPanelForExpanders);
+			this.PanelFlowDoc.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PanelFlowDoc.Location = new System.Drawing.Point(0, 27);
+			this.PanelFlowDoc.Name = "PanelFlowDoc";
+			this.PanelFlowDoc.Size = new System.Drawing.Size(181, 439);
+			this.PanelFlowDoc.TabIndex = 29;
 			// 
 			// FlowPanelForExpanders
 			// 
@@ -553,7 +553,7 @@ namespace LogsReader.Reader
 			this.FlowPanelForExpanders.Location = new System.Drawing.Point(0, 0);
 			this.FlowPanelForExpanders.Margin = new System.Windows.Forms.Padding(0);
 			this.FlowPanelForExpanders.Name = "FlowPanelForExpanders";
-			this.FlowPanelForExpanders.Size = new System.Drawing.Size(183, 1500);
+			this.FlowPanelForExpanders.Size = new System.Drawing.Size(164, 2561);
 			this.FlowPanelForExpanders.TabIndex = 27;
 			// 
 			// panelCollapseSelectAll
@@ -572,10 +572,10 @@ namespace LogsReader.Reader
 			this.checkBoxSelectAll.AutoSize = true;
 			this.checkBoxSelectAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Right;
-			this.checkBoxSelectAll.Location = new System.Drawing.Point(79, 3);
+			this.checkBoxSelectAll.Location = new System.Drawing.Point(80, 3);
 			this.checkBoxSelectAll.Name = "checkBoxSelectAll";
-			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 23, 0);
-			this.checkBoxSelectAll.Size = new System.Drawing.Size(97, 19);
+			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 22, 0);
+			this.checkBoxSelectAll.Size = new System.Drawing.Size(96, 19);
 			this.checkBoxSelectAll.TabIndex = 1;
 			this.checkBoxSelectAll.Text = "Select All";
 			this.checkBoxSelectAll.UseVisualStyleBackColor = true;
@@ -629,7 +629,7 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
+			this.PanelFlowDoc.ResumeLayout(false);
 			this.panelCollapseSelectAll.ResumeLayout(false);
 			this.panelCollapseSelectAll.PerformLayout();
 			this.ResumeLayout(false);
@@ -676,7 +676,7 @@ namespace LogsReader.Reader
 		private Utils.WinForm.Expander.AdvancedFlowLayoutPanel FlowPanelForExpanders;
 		private Panel panelCollapseSelectAll;
 		private CheckBox checkBoxSelectAll;
-		private Panel panel1;
+		private Panel PanelFlowDoc;
 	}
 }
 

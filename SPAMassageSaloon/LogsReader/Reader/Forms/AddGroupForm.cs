@@ -6,12 +6,6 @@ using LogsReader.Properties;
 
 namespace LogsReader.Reader.Forms
 {
-	public enum GroupType
-	{
-		Server = 0,
-		FileType = 1
-	}
-
 	public partial class AddGroupForm : Form
 	{
 		private readonly GroupType _groupType;

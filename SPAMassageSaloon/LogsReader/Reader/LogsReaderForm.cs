@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
-using LogsReader.Reader.Forms;
 using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
@@ -21,23 +20,14 @@ namespace LogsReader.Reader
 {
     public sealed partial class LogsReaderForm : UserControl, IUserForm
     {
-	    private const string ParentServerTreeNodeName = "Parent_Server";
-	    private const string ParentFileTypeTreeNodeName = "Parent_FileType";
-	    private const string ChildServerTreeNodeName = "Child_Server";
-	    private const string ChildFileTypeTreeNodeName = "Child_FileType";
-	    private const string FolderTreeNodeName = "Folder";
-
-        private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+	    private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
-        private ContextMenuStrip _contextTreeMainMenuStrip;
 
-        private readonly TreeNode treeNodeServersGroup;
-        private readonly TreeNode treeNodeTypesGroup;
-        private readonly TreeNode treeNodeFolders;
+        private readonly TreeViewContainer _treeViewContainer;
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -55,11 +45,6 @@ namespace LogsReader.Reader
         /// Сохранить изменения в конфиг
         /// </summary>
         public event EventHandler OnSchemeChanged;
-
-        /// <summary>
-        /// Если изменения произошли в TreeView
-        /// </summary>
-        public event EventHandler OnTreeViewChanged;
 
         /// <summary>
         /// Статус выполнения поиска
@@ -129,11 +114,6 @@ namespace LogsReader.Reader
                 CurrentSettings = scheme;
                 CurrentSettings.ReportStatus += ReportStatus;
                 UserSettings = new UserSettings(CurrentSettings.Name);
-
-                dgvFiles.AutoGenerateColumns = false;
-                dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-                orderByText.GotFocus += OrderByText_GotFocus;
 
                 #region Initialize Controls
 
@@ -218,54 +198,35 @@ namespace LogsReader.Reader
                 maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
                 rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
                 orderByText.Text = CurrentSettings.OrderBy;
+                orderByText.GotFocus += OrderByText_GotFocus;
+
+                dgvFiles.AutoGenerateColumns = false;
+                dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+                dgvFiles.CellFormatting += DgvFiles_CellFormatting;
 
                 #endregion
 
-                #region TreeNode - Servers; FileTypes; Folders
+                #region TreeView Container
 
-                var imageList = new ImageList {ImageSize = new Size(14, 14)};
-                imageList.Images.Add("0", Resources._default);
-                imageList.Images.Add("1", Resources.server_group);
-                imageList.Images.Add("2", Resources.types_group);
-                imageList.Images.Add("3", Resources.server);
-                imageList.Images.Add("4", Resources.type);
-                imageList.Images.Add("5", Resources.folder);
-                //imageList.ImageSize = new Size(10, 10);
-                //TreeMain.StateImageList = imageList;
-                TreeMain.ImageList = imageList;
-                TreeMain.ItemHeight = 18;
-                TreeMain.Indent = 18;
+                _treeViewContainer = new TreeViewContainer(
+	                CurrentSettings, 
+	                TreeMain, 
+	                CurrentSettings.Servers.Groups, 
+	                CurrentSettings.FileTypes.Groups, 
+	                CurrentSettings.LogsFolder.Folders);
 
-                treeNodeServersGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups, GroupType.Server);
-                treeNodeServersGroup.Name = "trvServers";
-                treeNodeServersGroup.Checked = false;
-                treeNodeServersGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-                TreeMain.Nodes.Add(treeNodeServersGroup);
-                CheckTreeViewNode(treeNodeServersGroup, false);
-
-                treeNodeTypesGroup = GetGroupNodes(Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups, GroupType.FileType);
-                treeNodeTypesGroup.Name = "trvTypes";
-                treeNodeTypesGroup.Checked = false;
-                treeNodeTypesGroup.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-                TreeMain.Nodes.Add(treeNodeTypesGroup);
-                CheckTreeViewNode(treeNodeTypesGroup, false);
-
-                treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
+                _treeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
                 {
-	                Name = "trvFolders", 
-	                Text = Resources.Txt_LogsReaderForm_LogsFolder, 
-	                Checked = true
+	                ValidationCheck(clearStatus);
+                    if(onSchemeChanged)
+	                    OnSchemeChanged?.Invoke(this, EventArgs.Empty);
                 };
-                treeNodeFolders.Expand();
-                SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
-                treeNodeFolders.NodeFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-                TreeMain.Nodes.Add(treeNodeFolders);
-                CheckTreeViewNode(treeNodeFolders, true);
+                _treeViewContainer.OnError += (ex) =>
+                {
+	                ReportStatus(ex.Message, ReportStatusType.Error);
+                };
 
-                TreeMain.MouseDown += TreeMain_MouseDown;
-                TreeMain.AfterCheck += TrvMain_AfterCheck;
-
-                #endregion
+				#endregion
             }
             catch (Exception ex)
             {
@@ -278,446 +239,10 @@ namespace LogsReader.Reader
             }
         }
 
-        #region TreeNode - Servers; FileTypes; Folders
-
-        void AddServerGroup(object sender, EventArgs args)
+        public CustomTreeView GetTreeView()
         {
-	        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupItem);
+	        return _treeViewContainer.CreateNewCopy();
         }
-
-        void AddServer(object sender, EventArgs args)
-        {
-	        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
-        }
-
-        void AddFileTypeGroup(object sender, EventArgs args)
-        {
-	        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupItem);
-        }
-
-        void AddFileType(object sender, EventArgs args)
-        {
-	        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
-        }
-
-        void OpenProperties(object sender, EventArgs args)
-        {
-	        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
-		        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
-	        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
-		        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
-	        else if (TreeMain.SelectedNode == treeNodeFolders)
-		        SetFolder(treeNodeFolders.FirstNode, GetFolders(false), true);
-	        else
-		        SetFolder(TreeMain.SelectedNode, GetFolders(false), true);
-        }
-
-        enum ProcessingType
-        {
-            CreateGroupItem = 0,
-            CreateGroupChildItem = 1,
-            Remove = 2
-        }
-
-        void SetTreeNodes(GroupType _groupType, ProcessingType processingType)
-        {
-	        try
-	        {
-		        var treeNode = _groupType == GroupType.Server ? treeNodeServersGroup : treeNodeTypesGroup;
-
-		        var treeGroups = GetGroups(treeNode);
-		        var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
-
-		        if (processingType == ProcessingType.Remove)
-		        {
-			        TreeMain.SelectedNode.Remove();
-			        treeGroups = GetGroups(treeNode);
-		        }
-		        else
-		        {
-			        DialogResult dialogResul;
-			        if (processingType == ProcessingType.CreateGroupItem || treeNode.Nodes.Count == 0)
-			        {
-				        dialogResul = new AddGroupForm(treeGroups, _groupType).ShowDialog();
-			        }
-			        else
-			        {
-				        var groupName = treeGroups.First().Key;
-				        if (TreeMain.SelectedNode?.Parent == treeNode)
-					        groupName = TreeMain.SelectedNode.Text;
-				        else if (TreeMain.SelectedNode?.Parent?.Parent == treeNode)
-					        groupName = TreeMain.SelectedNode.Parent.Text;
-
-				        dialogResul = AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, _groupType);
-			        }
-
-			        if (dialogResul == DialogResult.Cancel)
-				        return;
-		        }
-
-                var nodes = new List<TreeNode>();
-		        var groupItems = new List<LRGroupItem>(treeGroups.Count);
-		        foreach (var newGroup in treeGroups.OrderBy(x => x.Key))
-		        {
-                    if(newGroup.Value.Count == 0 || newGroup.Value.All(x => x.IsNullOrEmptyTrim()))
-                        continue;
-
-			        var childTreeNode = GetGroupItems(newGroup.Key, newGroup.Value, _groupType);
-			        nodes.Add(childTreeNode);
-			        groupItems.Add(new LRGroupItem(newGroup.Key, string.Join(", ", newGroup.Value)));
-
-			        if (!clone.TryGetValue(newGroup.Key, out var existGroup)
-			            || existGroup.Except(newGroup.Value).Any()
-			            || newGroup.Value.Except(existGroup).Any())
-			        {
-				        childTreeNode.Expand();
-				        childTreeNode.Checked = true;
-				        CheckTreeViewNode(childTreeNode, true);
-			        }
-		        }
-
-		        if (_groupType == GroupType.Server)
-			        CurrentSettings.Servers = new LRGroups(groupItems.ToArray());
-		        else
-			        CurrentSettings.FileTypes = new LRGroups(groupItems.ToArray());
-
-                treeNode.Nodes.Clear();
-		        treeNode.Checked = false;
-		        treeNode.Nodes.AddRange(nodes.ToArray());
-
-		        var checkedNode = nodes.FirstOrDefault(x => x.Checked);
-		        if (checkedNode != null)
-		        {
-			        checkedNode.Checked = true;
-			        TreeMain.SelectedNode = checkedNode;
-		        }
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
-	        finally
-	        {
-		        ValidationCheck(false);
-		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        static Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
-        {
-	        return treeNode
-		        .Nodes.OfType<TreeNode>()
-		        .OrderBy(x => x.Text)
-		        .ToDictionary(x => x.Text,
-			        x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)),
-			        StringComparer.InvariantCultureIgnoreCase);
-        }
-
-        void SetFolder(object sender, EventArgs e)
-        {
-	        SetFolder(null, GetFolders(false), true);
-        }
-
-        void SetFolder(TreeNode selectedNode, Dictionary<string, bool> items, bool showForm)
-        {
-	        try
-	        {
-		        var clone = new Dictionary<string, bool>(items, items.Comparer);
-		        if (showForm)
-		        {
-			        AddFolder folderForm;
-			        if (selectedNode != null)
-				        folderForm = new AddFolder(selectedNode.Text.Substring(5, selectedNode.Text.Length - 5).Trim(), selectedNode.Text.StartsWith("[All]", StringComparison.InvariantCultureIgnoreCase));
-			        else
-				        folderForm = new AddFolder(null, true);
-
-			        var result = folderForm.ShowDialog();
-
-			        if (result == DialogResult.Cancel || folderForm.FolderPath.IsNullOrEmptyTrim())
-				        return;
-
-			        if (items.TryGetValue(folderForm.FolderPath, out var allDirSearching1))
-			        {
-				        if (allDirSearching1 != folderForm.AllDirectoriesSearching)
-					        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
-				        else
-					        return;
-			        }
-                    else if(folderForm.SourceFolder != null && items.TryGetValue(folderForm.SourceFolder, out var _))
-			        {
-				        items.RenameKey(folderForm.SourceFolder, folderForm.FolderPath);
-				        items[folderForm.FolderPath] = folderForm.AllDirectoriesSearching;
-                    }
-			        else
-			        {
-				        items.Add(folderForm.FolderPath, folderForm.AllDirectoriesSearching);
-			        }
-		        }
-
-		        var nodes = new List<TreeNode>();
-		        var foldersList = new List<LRFolder>();
-		        foreach (var folder in items.OrderBy(x => x.Key))
-		        {
-			        var folderType = folder.Value ? @"[All]" : @"[Top]";
-			        var childFolder = new TreeNode($"{folderType} {folder.Key}")
-			        {
-                        Name = FolderTreeNodeName
-                    };
-			        SetIndexImageTreeNode(childFolder);
-                    nodes.Add(childFolder);
-
-                    foldersList.Add(new LRFolder(folder.Key, folder.Value));
-
-			        if (clone.TryGetValue(folder.Key, out var value) && folder.Value == value)
-				        continue;
-
-			        childFolder.Checked = true;
-		        }
-
-		        CurrentSettings.LogsFolder = new LRFolderGroup(foldersList.ToArray());
-
-		        treeNodeFolders.Nodes.Clear();
-		        treeNodeFolders.Checked = false;
-		        treeNodeFolders.Nodes.AddRange(nodes.ToArray());
-		        treeNodeFolders.Expand();
-		        
-		        var checkedNode = nodes.FirstOrDefault(x => x.Checked);
-		        if (checkedNode != null)
-		        {
-			        checkedNode.Checked = true;
-			        TreeMain.SelectedNode = checkedNode;
-                }
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
-	        finally
-	        {
-		        ValidationCheck(false);
-		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        void RemoveSelectedNodeItem(object sender, EventArgs e)
-        {
-	        try
-	        {
-		        if (!TreeMain.Enabled
-		            || TreeMain.SelectedNode == treeNodeServersGroup
-		            || TreeMain.SelectedNode == treeNodeTypesGroup
-		            || TreeMain.SelectedNode == treeNodeFolders)
-			        return;
-
-		        if (Compare(TreeMain.SelectedNode, treeNodeServersGroup))
-		        {
-			        SetTreeNodes(GroupType.Server, ProcessingType.Remove);
-		        }
-		        else if (Compare(TreeMain.SelectedNode, treeNodeTypesGroup))
-		        {
-			        SetTreeNodes(GroupType.FileType, ProcessingType.Remove);
-		        }
-		        else if (TreeMain.SelectedNode.Parent == treeNodeFolders)
-		        {
-			        treeNodeFolders.Nodes.Remove(TreeMain.SelectedNode);
-			        CurrentSettings.LogsFolder = new LRFolderGroup(GetFolders(false).Select(fodler => new LRFolder(fodler.Key, fodler.Value)).ToArray());
-			        
-			        var checkedNode = treeNodeFolders.Nodes.OfType<TreeNode>().FirstOrDefault(x => x.Checked);
-			        if (checkedNode != null)
-			        {
-				        checkedNode.Checked = true;
-				        TreeMain.SelectedNode = checkedNode;
-			        }
-                }
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
-	        finally
-	        {
-		        ValidationCheck();
-		        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        static bool Compare(TreeNode treeNode, TreeNode toFind)
-        {
-	        var isCurrent = treeNode == toFind;
-	        return isCurrent || (treeNode?.Parent != null && Compare(treeNode.Parent, toFind));
-        }
-
-        Dictionary<string, bool> GetFolders(bool getOnlyChecked)
-        {
-	        var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
-	        foreach (var folderWithType in treeNodeFolders.Nodes.Cast<TreeNode>().Where(x => !getOnlyChecked || x.Checked).Select(x => x.Text))
-	        {
-		        var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
-		        if (folders.TryGetValue(folder, out var type))
-		        {
-			        if (type)
-				        folders[folder] = true;
-		        }
-		        else
-		        {
-			        folders.Add(folder, folderWithType.Substring(0, 5).Equals("[All]", StringComparison.InvariantCultureIgnoreCase));
-		        }
-	        }
-
-	        return folders;
-        }
-
-        static TreeNode GetGroupNodes(string name, Dictionary<string, IEnumerable<string>> groups, GroupType groupType)
-        {
-	        var treeNode = new TreeNode(name);
-            foreach (var groupItem in groups)
-		        treeNode.Nodes.Add(GetGroupItems(groupItem.Key, groupItem.Value, groupType));
-	        treeNode.Expand();
-	        return treeNode;
-        }
-
-        static TreeNode GetGroupItems(string name, IEnumerable<string> items, GroupType groupType)
-        {
-	        var parentName = ParentServerTreeNodeName;
-	        var childName = ChildServerTreeNodeName;
-	        if (groupType == GroupType.FileType)
-	        {
-		        parentName = ParentFileTypeTreeNodeName;
-		        childName = ChildFileTypeTreeNodeName;
-	        }
-
-            var treeNode = new TreeNode(name.Trim().ToUpper())
-	        {
-                Name = parentName
-            };
-	        foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
-	        {
-		        var child = treeNode.Nodes.Add(item.Trim().ToUpper());
-		        child.Name = childName;
-		        SetIndexImageTreeNode(child);
-            }
-	        SetIndexImageTreeNode(treeNode);
-            return treeNode;
-        }
-
-        internal void TrvMain_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-	        if (!(sender is CustomTreeView customTreeView))
-		        return;
-	        try
-	        {
-		        customTreeView.AfterCheck -= TrvMain_AfterCheck;
-		        CheckTreeViewNode(e.Node, e.Node.Checked);
-		        ValidationCheck();
-	        }
-	        catch (Exception)
-	        {
-		        // ignored
-	        }
-	        finally
-	        {
-		        customTreeView.AfterCheck += TrvMain_AfterCheck;
-		        OnTreeViewChanged?.Invoke(this, EventArgs.Empty);
-	        }
-        }
-
-        private static void CheckTreeViewNode(TreeNode node, bool isChecked)
-        {
-	        CheckChildTreeViewNode(node, isChecked);
-	        CheckParentTreeView(node);
-        }
-
-        private static void CheckChildTreeViewNode(TreeNode node, bool isChecked)
-        {
-	        if (node == null)
-		        return;
-
-            foreach (TreeNode item in node.Nodes)
-            {
-	            item.Checked = isChecked;
-	            SetIndexImageTreeNode(item);
-	            if (item.Nodes.Count > 0)
-		            CheckChildTreeViewNode(item, isChecked);
-	        }
-
-	        node.Checked = isChecked;
-	        SetIndexImageTreeNode(node);
-        }
-
-        static void CheckParentTreeView(TreeNode node)
-        {
-	        if (node?.Parent == null) 
-		        return;
-
-	        var isAllChecked = true;
-	        foreach (var nodeParent in node.Parent.Nodes.OfType<TreeNode>())
-	        {
-		        if (!nodeParent.Checked)
-		        {
-			        isAllChecked = false;
-			        break;
-		        }
-	        }
-
-	        node.Parent.Checked = isAllChecked;
-	        SetIndexImageTreeNode(node.Parent);
-	        CheckParentTreeView(node.Parent);
-        }
-
-        static void SetIndexImageTreeNode(TreeNode node)
-        {
-	        var result = 0;
-	        //if (node.Checked)
-	        switch (node.Name)
-	        {
-		        case ParentServerTreeNodeName:
-			        result = 1;
-			        break;
-		        case ParentFileTypeTreeNodeName:
-			        result = 2;
-			        break;
-		        case ChildServerTreeNodeName:
-			        result = 3;
-			        break;
-		        case ChildFileTypeTreeNodeName:
-			        result = 4;
-			        break;
-		        case FolderTreeNodeName:
-			        result = 5;
-			        break;
-	        }
-
-	        var resultStr = result.ToString();
-
-            node.ImageKey = resultStr;
-	        node.ImageIndex = result;
-	        node.SelectedImageKey = resultStr;
-	        node.SelectedImageIndex = result;
-	        node.StateImageKey = resultStr;
-	        node.StateImageIndex = result;
-        }
-
-        internal void TreeMain_MouseDown(object sender, MouseEventArgs e)
-        {
-	        if (!(sender is CustomTreeView customTreeView))
-		        return;
-            try
-	        {
-		        customTreeView.SelectedNode = customTreeView.GetNodeAt(e.X, e.Y);
-                if (e.Button != MouseButtons.Right)
-			        return;
-                _contextTreeMainMenuStrip?.Show(customTreeView, e.Location);
-            }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
-        }
-
-        #endregion
 
         public void ApplyFormSettings()
         {
@@ -750,25 +275,10 @@ namespace LogsReader.Reader
         public void ApplySettings()
         {
             try
-            { 
-	            #region Change Language
+            {
+                #region Change Language
 
-                treeNodeServersGroup.Text = Resources.Txt_LogsReaderForm_Servers;
-                treeNodeTypesGroup.Text = Resources.Txt_LogsReaderForm_Types;
-                treeNodeFolders.Text = Resources.Txt_LogsReaderForm_LogsFolder;
-
-                _contextTreeMainMenuStrip?.Dispose();
-                _contextTreeMainMenuStrip = new ContextMenuStrip { Tag = TreeMain };
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
-                _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
-                _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
+                _treeViewContainer.ApplySettings();
 
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
@@ -885,30 +395,6 @@ namespace LogsReader.Reader
                     case Keys.S when e.Control && buttonExport.Enabled:
                         ButtonExport_Click(this, EventArgs.Empty);
                         break;
-
-
-                    case Keys.Delete:
-	                    RemoveSelectedNodeItem(this, EventArgs.Empty);
-                        break;
-                    case Keys.G when e.Control && TreeMain.Enabled:
-	                    AddServerGroup(this, EventArgs.Empty);
-	                    break;
-                    case Keys.R when e.Control && TreeMain.Enabled:
-	                    AddServer(this, EventArgs.Empty);
-                        break;
-                    case Keys.H when e.Control && TreeMain.Enabled:
-	                    AddFileTypeGroup(this, EventArgs.Empty);
-                        break;
-                    case Keys.T when e.Control && TreeMain.Enabled:
-	                    AddFileType(this, EventArgs.Empty);
-                        break;
-                    case Keys.J when e.Control && TreeMain.Enabled:
-	                    SetFolder(this, EventArgs.Empty);
-                        break;
-                    case Keys.Enter when TreeMain.Enabled && TreeMain.Focused:
-                    case Keys.P when e.Control && TreeMain.Enabled:
-	                    OpenProperties(this, EventArgs.Empty);
-	                    break;
                     case Keys.C when e.Control && dgvFiles.SelectedRows.Count > 0 && OverallResultList != null:
                         var templateList = new List<DataTemplate>();
                         foreach (DataGridViewRow row in dgvFiles.SelectedRows)
@@ -931,6 +417,9 @@ namespace LogsReader.Reader
 
                         Clipboard.SetText(clipboardText.ToString());
                         break;
+                    default:
+                        _treeViewContainer.MainFormKeyDown(sender, e);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -949,16 +438,16 @@ namespace LogsReader.Reader
 	                var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
 	                var servers = new List<string>();
-	                foreach (TreeNode childTreeNode in treeNodeServersGroup.Nodes)
-		                servers.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes)
+		                servers.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
 	                servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
 	                var fileTypes = new List<string>();
-	                foreach (TreeNode childTreeNode in treeNodeTypesGroup.Nodes)
-		                fileTypes.AddRange(childTreeNode.Nodes.Cast<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
+	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes)
+		                fileTypes.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
 	                fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
-	                var folders = GetFolders(true);
+	                var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
 	                MainReader = new LogsReaderPerformer(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
 	                MainReader.OnProcessReport += ReportProcessStatus;
@@ -1416,7 +905,7 @@ namespace LogsReader.Reader
         private void TxtPattern_TextChanged(object sender, EventArgs e)
         {
             UserSettings.PreviousSearch = txtPattern.Text;
-            ValidationCheck();
+            ValidationCheck(true);
         }
 
         private void UseRegex_CheckedChanged(object sender, EventArgs e)
@@ -1485,7 +974,7 @@ namespace LogsReader.Reader
                 UserSettings.TraceHighlights = editor.Highlights;
         }
 
-        void ValidationCheck(bool clearStatus = true)
+        void ValidationCheck(bool clearStatus)
         {
             try
             {
@@ -1495,9 +984,9 @@ namespace LogsReader.Reader
 
                 btnSearch.Enabled = settIsCorrect
                                     && !txtPattern.Text.IsNullOrEmpty()
-                                    && treeNodeFolders.Nodes.OfType<TreeNode>().Any(x => x.Checked)
-                                    && treeNodeServersGroup.Nodes.Cast<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
-                                    && treeNodeTypesGroup.Nodes.Cast<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked));
+                                    && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+                                    && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+                                    && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);
 
                 buttonExport.Enabled = dgvFiles.RowCount > 0;
                 buttonFilter.Enabled = buttonReset.Enabled = OverallResultList != null && OverallResultList.Count > 0;
