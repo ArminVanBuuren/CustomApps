@@ -28,20 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.butStop = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
-			this.TestExpander = new Utils.WinForm.Expander.ExpandCollapsePanel();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.advancedFlowLayoutPanel1 = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
 			this.expandCollapsePanel1 = new Utils.WinForm.Expander.ExpandCollapsePanel();
-			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+			this.TestExpander = new Utils.WinForm.Expander.ExpandCollapsePanel();
+			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
+			this.customTreeView1 = new Utils.WinForm.CustomTreeView();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-			this.TestExpander.SuspendLayout();
 			this.advancedFlowLayoutPanel1.SuspendLayout();
 			this.expandCollapsePanel1.SuspendLayout();
+			this.TestExpander.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -95,6 +99,40 @@
 			this.button3.Text = "Take Pic";
 			this.button3.UseVisualStyleBackColor = true;
 			// 
+			// advancedFlowLayoutPanel1
+			// 
+			this.advancedFlowLayoutPanel1.Controls.Add(this.expandCollapsePanel1);
+			this.advancedFlowLayoutPanel1.Controls.Add(this.TestExpander);
+			this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(257, 54);
+			this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
+			this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(397, 536);
+			this.advancedFlowLayoutPanel1.TabIndex = 6;
+			// 
+			// expandCollapsePanel1
+			// 
+			this.expandCollapsePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.expandCollapsePanel1.BackColor = System.Drawing.Color.OrangeRed;
+			this.expandCollapsePanel1.BordersThickness = 3;
+			this.expandCollapsePanel1.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
+			this.expandCollapsePanel1.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
+			this.expandCollapsePanel1.CheckBoxShown = true;
+			this.expandCollapsePanel1.Controls.Add(this.customTreeView1);
+			this.expandCollapsePanel1.Controls.Add(this.fastColoredTextBox1);
+			this.expandCollapsePanel1.ExpandedHeight = 319;
+			this.expandCollapsePanel1.HeaderBackColor = System.Drawing.Color.Azure;
+			this.expandCollapsePanel1.HeaderBorderBrush = System.Drawing.Color.Chartreuse;
+			this.expandCollapsePanel1.HeaderLineColor = System.Drawing.Color.Black;
+			this.expandCollapsePanel1.IsChecked = false;
+			this.expandCollapsePanel1.IsExpanded = true;
+			this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 3);
+			this.expandCollapsePanel1.Name = "expandCollapsePanel1";
+			this.expandCollapsePanel1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+			this.expandCollapsePanel1.Size = new System.Drawing.Size(391, 319);
+			this.expandCollapsePanel1.TabIndex = 6;
+			this.expandCollapsePanel1.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
+			this.expandCollapsePanel1.UseAnimation = true;
+			// 
 			// TestExpander
 			// 
 			this.TestExpander.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -128,48 +166,46 @@
 			this.richTextBox1.TabIndex = 1;
 			this.richTextBox1.Text = "";
 			// 
-			// advancedFlowLayoutPanel1
+			// fastColoredTextBox1
 			// 
-			this.advancedFlowLayoutPanel1.Controls.Add(this.expandCollapsePanel1);
-			this.advancedFlowLayoutPanel1.Controls.Add(this.TestExpander);
-			this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(257, 54);
-			this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
-			this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(397, 536);
-			this.advancedFlowLayoutPanel1.TabIndex = 6;
+			this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+			this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
+			this.fastColoredTextBox1.BackBrush = null;
+			this.fastColoredTextBox1.CharHeight = 14;
+			this.fastColoredTextBox1.CharWidth = 8;
+			this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+			this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
+			this.fastColoredTextBox1.IsReplaceMode = false;
+			this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 36);
+			this.fastColoredTextBox1.Name = "fastColoredTextBox1";
+			this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+			this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+			this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
+			this.fastColoredTextBox1.Size = new System.Drawing.Size(295, 150);
+			this.fastColoredTextBox1.TabIndex = 1;
+			this.fastColoredTextBox1.TabLength = 2;
+			this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+			this.fastColoredTextBox1.Zoom = 100;
 			// 
-			// expandCollapsePanel1
+			// customTreeView1
 			// 
-			this.expandCollapsePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.expandCollapsePanel1.BackColor = System.Drawing.Color.OrangeRed;
-			this.expandCollapsePanel1.BordersThickness = 3;
-			this.expandCollapsePanel1.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
-			this.expandCollapsePanel1.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
-			this.expandCollapsePanel1.CheckBoxShown = true;
-			this.expandCollapsePanel1.Controls.Add(this.richTextBox2);
-			this.expandCollapsePanel1.ExpandedHeight = 319;
-			this.expandCollapsePanel1.HeaderBackColor = System.Drawing.Color.Azure;
-			this.expandCollapsePanel1.HeaderBorderBrush = System.Drawing.Color.Chartreuse;
-			this.expandCollapsePanel1.HeaderLineColor = System.Drawing.Color.Black;
-			this.expandCollapsePanel1.IsChecked = false;
-			this.expandCollapsePanel1.IsExpanded = true;
-			this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 3);
-			this.expandCollapsePanel1.Name = "expandCollapsePanel1";
-			this.expandCollapsePanel1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
-			this.expandCollapsePanel1.Size = new System.Drawing.Size(391, 319);
-			this.expandCollapsePanel1.TabIndex = 6;
-			this.expandCollapsePanel1.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
-			this.expandCollapsePanel1.UseAnimation = true;
-			// 
-			// richTextBox2
-			// 
-			this.richTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this.richTextBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.richTextBox2.Location = new System.Drawing.Point(0, 35);
-			this.richTextBox2.Name = "richTextBox2";
-			this.richTextBox2.Size = new System.Drawing.Size(330, 172);
-			this.richTextBox2.TabIndex = 1;
-			this.richTextBox2.Text = "";
+			this.customTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+			this.customTreeView1.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+			this.customTreeView1.Location = new System.Drawing.Point(68, 219);
+			this.customTreeView1.Name = "customTreeView1";
+			this.customTreeView1.Size = new System.Drawing.Size(276, 97);
+			this.customTreeView1.TabIndex = 2;
 			// 
 			// Form1
 			// 
@@ -186,9 +222,10 @@
 			this.Name = "Form1";
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-			this.TestExpander.ResumeLayout(false);
 			this.advancedFlowLayoutPanel1.ResumeLayout(false);
 			this.expandCollapsePanel1.ResumeLayout(false);
+			this.TestExpander.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -204,7 +241,8 @@
 		private System.Windows.Forms.RichTextBox richTextBox1;
 		private Utils.WinForm.Expander.AdvancedFlowLayoutPanel advancedFlowLayoutPanel1;
 		private Utils.WinForm.Expander.ExpandCollapsePanel expandCollapsePanel1;
-		private System.Windows.Forms.RichTextBox richTextBox2;
+		private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
+		private Utils.WinForm.CustomTreeView customTreeView1;
 	}
 }
 
