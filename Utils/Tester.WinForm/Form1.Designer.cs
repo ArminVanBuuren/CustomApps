@@ -111,9 +111,9 @@
 			this.TestExpander.HeaderLineColor = System.Drawing.Color.Silver;
 			this.TestExpander.IsChecked = false;
 			this.TestExpander.IsExpanded = true;
-			this.TestExpander.Location = new System.Drawing.Point(3, 216);
+			this.TestExpander.Location = new System.Drawing.Point(3, 328);
 			this.TestExpander.Name = "TestExpander";
-			this.TestExpander.Size = new System.Drawing.Size(394, 207);
+			this.TestExpander.Size = new System.Drawing.Size(391, 207);
 			this.TestExpander.TabIndex = 5;
 			this.TestExpander.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.TestExpander.UseAnimation = true;
@@ -122,9 +122,9 @@
 			// 
 			this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.richTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.richTextBox1.Location = new System.Drawing.Point(0, 25);
+			this.richTextBox1.Location = new System.Drawing.Point(0, 27);
 			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(330, 182);
+			this.richTextBox1.Size = new System.Drawing.Size(330, 180);
 			this.richTextBox1.TabIndex = 1;
 			this.richTextBox1.Text = "";
 			// 
@@ -150,12 +150,13 @@
 			this.expandCollapsePanel1.ExpandedHeight = 319;
 			this.expandCollapsePanel1.HeaderBackColor = System.Drawing.Color.Azure;
 			this.expandCollapsePanel1.HeaderBorderBrush = System.Drawing.Color.Chartreuse;
-			this.expandCollapsePanel1.HeaderLineColor = System.Drawing.Color.Red;
+			this.expandCollapsePanel1.HeaderLineColor = System.Drawing.Color.Black;
 			this.expandCollapsePanel1.IsChecked = false;
 			this.expandCollapsePanel1.IsExpanded = true;
 			this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 3);
 			this.expandCollapsePanel1.Name = "expandCollapsePanel1";
-			this.expandCollapsePanel1.Size = new System.Drawing.Size(394, 207);
+			this.expandCollapsePanel1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+			this.expandCollapsePanel1.Size = new System.Drawing.Size(391, 319);
 			this.expandCollapsePanel1.TabIndex = 6;
 			this.expandCollapsePanel1.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.expandCollapsePanel1.UseAnimation = true;
@@ -164,9 +165,9 @@
 			// 
 			this.richTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.richTextBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.richTextBox2.Location = new System.Drawing.Point(0, 25);
+			this.richTextBox2.Location = new System.Drawing.Point(0, 35);
 			this.richTextBox2.Name = "richTextBox2";
-			this.richTextBox2.Size = new System.Drawing.Size(330, 182);
+			this.richTextBox2.Size = new System.Drawing.Size(330, 172);
 			this.richTextBox2.TabIndex = 1;
 			this.richTextBox2.Text = "";
 			// 

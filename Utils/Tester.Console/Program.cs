@@ -361,7 +361,7 @@ namespace Tester.Console
 					}, data);
 					listOfTask.Add(task);
 				}
-
+				
 				Task.WaitAll(listOfTask.ToArray());
 				System.Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Raw completed");
 			});

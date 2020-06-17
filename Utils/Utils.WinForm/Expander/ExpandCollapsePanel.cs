@@ -20,6 +20,7 @@ namespace Utils.WinForm.Expander
         /// in OnSizeChanged method</remarks>
         /// </summary>
         private Size _previousParentSize = Size.Empty;
+        private int _firstpanelHeaderWidth = 0;
 
         private int _collapsedHeight;
         /// <summary>
@@ -51,7 +52,7 @@ namespace Utils.WinForm.Expander
         [Browsable(true)]
         public int CollapsedHeight
         {
-	        get => _collapsedHeight + (BordersThickness * 2);
+	        get => _collapsedHeight + (BordersThickness * 2) + Padding.Top + Padding.Bottom;
 	        private set => _collapsedHeight = value;
         }
 
@@ -245,9 +246,23 @@ namespace Utils.WinForm.Expander
 	        set
 	        {
 		        panelHeader.Padding = new Padding(value);
-		        panelHeader.Size = new Size(panelHeader.Size.Width + (BordersThickness * 2), CollapsedHeight);
+		        panelHeader.Size = new Size(_firstpanelHeaderWidth + (BordersThickness * 2), CollapsedHeight - base.Padding.Top - base.Padding.Bottom);
 		        Size = new Size(Size.Width, IsExpanded ? _expandedHeight : CollapsedHeight);
             }
+        }
+
+        /// <summary>
+        /// Padding
+        /// </summary>
+        public new Padding Padding
+        {
+	        get => base.Padding;
+	        set
+	        {
+		        base.Padding = value;
+		        panelHeader.Size = new Size(_firstpanelHeaderWidth + (BordersThickness * 2), CollapsedHeight - base.Padding.Top - base.Padding.Bottom);
+		        Size = new Size(Size.Width, IsExpanded ? _expandedHeight : CollapsedHeight);
+	        }
         }
 
         /// <summary>
@@ -278,7 +293,8 @@ namespace Utils.WinForm.Expander
             _btnExpandCollapse.Anchor = AnchorStyles.None;
             _btnExpandCollapse.Dock = DockStyle.Fill;
             _btnExpandCollapse.AutoSize = false;
-            panelHeader.Size = new Size(panelHeader.Size.Width + (BordersThickness * 2), CollapsedHeight);
+            _firstpanelHeaderWidth = panelHeader.Size.Width;
+            panelHeader.Size = new Size(_firstpanelHeaderWidth + (BordersThickness * 2), CollapsedHeight);
             _btnExpandCollapse.CheckBoxShown = false; // checkBox shown
             
             _btnExpandCollapse.CheckedChanged += (sender, args) => CheckedChanged?.Invoke(this, args);
