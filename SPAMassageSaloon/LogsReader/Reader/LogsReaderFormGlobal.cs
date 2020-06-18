@@ -13,13 +13,13 @@ using Utils.WinForm.Expander;
 
 namespace LogsReader.Reader
 {
-    public sealed partial class CommonForm : UserControl, IUserForm
+    public sealed partial class LogsReaderFormGlobal : UserControl, IUserForm
     {
-	    private Dictionary<LogsReaderForm, (ExpandCollapsePanel, CustomTreeView)> AllExpanders { get; } = new Dictionary<LogsReaderForm, (ExpandCollapsePanel, CustomTreeView)>();
+	    private Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)>();
 	    
 	    public LogsReaderMainForm MainForm { get; private set; }
 
-        public CommonForm()
+        public LogsReaderFormGlobal()
         {
 	        InitializeComponent();
         }
@@ -49,7 +49,7 @@ namespace LogsReader.Reader
 		       // expander.Item2.Nodes.Add((TreeNode)treeNode.Clone());
         }
 
-        (ExpandCollapsePanel, CustomTreeView) CreateExpander(LogsReaderForm readerForm)
+        (ExpandCollapsePanel, CustomTreeView) CreateExpander(LogsReaderFormScheme readerForm)
         {
 	        var schemeExpander = new ExpandCollapsePanel
 	        {
@@ -105,11 +105,18 @@ namespace LogsReader.Reader
 	        };
 	        var labelFore = new Label {AutoSize = true, Location = new Point(85, 3), Size = new Size(34, 15), Text = @"Fore"};
 
-	        var treeView = readerForm.GetTreeView();
-	        treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+	        var treeView = readerForm.TreeViewContainer.CreateNewCopy();
+	        //readerForm.TreeViewContainer.OnError += ;
+
+            treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 3, 253);
+	        treeView.KeyDown += (sender, args) =>
+	        {
+		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
+            };
+
 
 	        panel.Controls.Add(buttonBack);
 	        panel.Controls.Add(buttonFore);

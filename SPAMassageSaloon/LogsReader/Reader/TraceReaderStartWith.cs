@@ -5,7 +5,7 @@ namespace LogsReader.Reader
 {
     public class TraceReaderStartWith : TraceReader
     {
-	    public TraceReaderStartWith(LogsReaderControl control, string server, string filePath, string originalFolder) 
+	    public TraceReaderStartWith(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) 
 	        : base(control, server, filePath, originalFolder) { }
 
 	    public override void ReadLine(string line)

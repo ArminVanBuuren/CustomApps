@@ -36,9 +36,9 @@ namespace LogsReader
         /// </summary>
         public static LRSettings Settings { get; private set; }
 
-        public Dictionary<TabPage, LogsReaderForm> AllForms { get; } = new Dictionary<TabPage, LogsReaderForm>(15);
+        public Dictionary<TabPage, LogsReaderFormScheme> AllForms { get; } = new Dictionary<TabPage, LogsReaderFormScheme>(15);
 
-        public LogsReaderForm CurrentForm
+        public LogsReaderFormScheme CurrentForm
         {
             get
             {
@@ -118,7 +118,7 @@ namespace LogsReader
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
 
-                var globalForm = new CommonForm { Dock = DockStyle.Fill };
+                var globalForm = new LogsReaderFormGlobal { Dock = DockStyle.Fill };
                 var globalPage = new TabPage
                 {
 	                Name = GLOBAL_PAGE_NAME,
@@ -136,7 +136,7 @@ namespace LogsReader
                 {
                     try
                     {
-                        var logsReader = new LogsReaderForm(scheme)
+                        var logsReader = new LogsReaderFormScheme(scheme)
                         {
                             Dock = DockStyle.Fill
                         };

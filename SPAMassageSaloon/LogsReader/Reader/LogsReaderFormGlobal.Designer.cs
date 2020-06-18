@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using SPAMassageSaloon.Common;
 using Utils.WinForm;
@@ -7,8 +8,8 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    sealed partial class LogsReaderForm
-    {
+    sealed partial class LogsReaderFormGlobal
+	{
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -35,7 +36,7 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderFormGlobal));
 			this.dgvFiles = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,15 +71,10 @@ namespace LogsReader.Reader
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.OrderByLabel = new System.Windows.Forms.Label();
-			this.MaxLinesLabel = new System.Windows.Forms.Label();
-			this.orderByText = new System.Windows.Forms.TextBox();
-			this.MaxThreadsLabel = new System.Windows.Forms.Label();
-			this.maxLinesStackText = new System.Windows.Forms.TextBox();
-			this.RowsLimitLabel = new System.Windows.Forms.Label();
-			this.maxThreadsText = new System.Windows.Forms.TextBox();
-			this.rowsLimitText = new System.Windows.Forms.TextBox();
-			this.TreeMain = new Utils.WinForm.CustomTreeView();
+			this.PanelFlowDoc = new System.Windows.Forms.Panel();
+			this.FlowPanelForExpanders = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
+			this.panelCollapseSelectAll = new System.Windows.Forms.Panel();
+			this.checkBoxSelectAll = new System.Windows.Forms.CheckBox();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
@@ -95,6 +91,8 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel1.SuspendLayout();
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
+			this.PanelFlowDoc.SuspendLayout();
+			this.panelCollapseSelectAll.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dgvFiles
@@ -120,7 +118,7 @@ namespace LogsReader.Reader
 			this.dgvFiles.ReadOnly = true;
 			this.dgvFiles.RowHeadersVisible = false;
 			this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvFiles.Size = new System.Drawing.Size(459, 410);
+			this.dgvFiles.Size = new System.Drawing.Size(487, 410);
 			this.dgvFiles.TabIndex = 20;
 			this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
 			this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
@@ -264,7 +262,7 @@ namespace LogsReader.Reader
 			// EnumSplitContainer.Panel2
 			// 
 			this.EnumSplitContainer.Panel2.Controls.Add(this.descriptionText);
-			this.EnumSplitContainer.Size = new System.Drawing.Size(463, 470);
+			this.EnumSplitContainer.Size = new System.Drawing.Size(491, 470);
 			this.EnumSplitContainer.SplitterDistance = 414;
 			this.EnumSplitContainer.TabIndex = 2;
 			// 
@@ -275,7 +273,7 @@ namespace LogsReader.Reader
 			this.descriptionText.Location = new System.Drawing.Point(0, 0);
 			this.descriptionText.Name = "descriptionText";
 			this.descriptionText.ReadOnly = true;
-			this.descriptionText.Size = new System.Drawing.Size(459, 48);
+			this.descriptionText.Size = new System.Drawing.Size(487, 48);
 			this.descriptionText.TabIndex = 21;
 			this.descriptionText.Text = "";
 			// 
@@ -525,117 +523,62 @@ namespace LogsReader.Reader
 			// 
 			// MainSplitContainer.Panel1
 			// 
-			this.MainSplitContainer.Panel1.Controls.Add(this.OrderByLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.MaxLinesLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.MaxThreadsLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.maxLinesStackText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.RowsLimitLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.maxThreadsText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.rowsLimitText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.TreeMain);
-			this.MainSplitContainer.Panel1MinSize = 60;
+			this.MainSplitContainer.Panel1.Controls.Add(this.PanelFlowDoc);
+			this.MainSplitContainer.Panel1.Controls.Add(this.panelCollapseSelectAll);
+			this.MainSplitContainer.Panel1MinSize = 110;
 			// 
 			// MainSplitContainer.Panel2
 			// 
 			this.MainSplitContainer.Panel2.Controls.Add(this.EnumSplitContainer);
 			this.MainSplitContainer.Size = new System.Drawing.Size(680, 470);
-			this.MainSplitContainer.SplitterDistance = 213;
+			this.MainSplitContainer.SplitterDistance = 185;
 			this.MainSplitContainer.TabIndex = 0;
 			// 
-			// OrderByLabel
+			// PanelFlowDoc
 			// 
-			this.OrderByLabel.AutoSize = true;
-			this.OrderByLabel.Location = new System.Drawing.Point(3, 88);
-			this.OrderByLabel.Name = "OrderByLabel";
-			this.OrderByLabel.Size = new System.Drawing.Size(53, 15);
-			this.OrderByLabel.TabIndex = 17;
-			this.OrderByLabel.Text = "Order By";
+			this.PanelFlowDoc.AutoScroll = true;
+			this.PanelFlowDoc.AutoScrollMinSize = new System.Drawing.Size(0, 1500);
+			this.PanelFlowDoc.Controls.Add(this.FlowPanelForExpanders);
+			this.PanelFlowDoc.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PanelFlowDoc.Location = new System.Drawing.Point(0, 27);
+			this.PanelFlowDoc.Name = "PanelFlowDoc";
+			this.PanelFlowDoc.Size = new System.Drawing.Size(181, 439);
+			this.PanelFlowDoc.TabIndex = 29;
 			// 
-			// MaxLinesLabel
+			// FlowPanelForExpanders
 			// 
-			this.MaxLinesLabel.AutoSize = true;
-			this.MaxLinesLabel.Location = new System.Drawing.Point(3, 10);
-			this.MaxLinesLabel.Name = "MaxLinesLabel";
-			this.MaxLinesLabel.Size = new System.Drawing.Size(59, 15);
-			this.MaxLinesLabel.TabIndex = 13;
-			this.MaxLinesLabel.Text = "Max Lines";
-			// 
-			// orderByText
-			// 
-			this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.orderByText.Location = new System.Drawing.Point(84, 85);
-			this.orderByText.Name = "orderByText";
-			this.orderByText.Size = new System.Drawing.Size(122, 23);
-			this.orderByText.TabIndex = 18;
-			this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
-			// 
-			// MaxThreadsLabel
-			// 
-			this.MaxThreadsLabel.AutoSize = true;
-			this.MaxThreadsLabel.Location = new System.Drawing.Point(3, 36);
-			this.MaxThreadsLabel.Name = "MaxThreadsLabel";
-			this.MaxThreadsLabel.Size = new System.Drawing.Size(74, 15);
-			this.MaxThreadsLabel.TabIndex = 9;
-			this.MaxThreadsLabel.Text = "Max Threads";
-			// 
-			// maxLinesStackText
-			// 
-			this.maxLinesStackText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.maxLinesStackText.Location = new System.Drawing.Point(84, 7);
-			this.maxLinesStackText.Name = "maxLinesStackText";
-			this.maxLinesStackText.Size = new System.Drawing.Size(122, 23);
-			this.maxLinesStackText.TabIndex = 15;
-			this.maxLinesStackText.TextChanged += new System.EventHandler(this.MaxLinesStackText_TextChanged);
-			this.maxLinesStackText.Leave += new System.EventHandler(this.MaxLinesStackText_Leave);
-			// 
-			// RowsLimitLabel
-			// 
-			this.RowsLimitLabel.AutoSize = true;
-			this.RowsLimitLabel.Location = new System.Drawing.Point(3, 62);
-			this.RowsLimitLabel.Name = "RowsLimitLabel";
-			this.RowsLimitLabel.Size = new System.Drawing.Size(65, 15);
-			this.RowsLimitLabel.TabIndex = 15;
-			this.RowsLimitLabel.Text = "Rows Limit";
-			// 
-			// maxThreadsText
-			// 
-			this.maxThreadsText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.maxThreadsText.Location = new System.Drawing.Point(84, 33);
-			this.maxThreadsText.Name = "maxThreadsText";
-			this.maxThreadsText.Size = new System.Drawing.Size(122, 23);
-			this.maxThreadsText.TabIndex = 16;
-			this.maxThreadsText.TextChanged += new System.EventHandler(this.MaxThreadsText_TextChanged);
-			this.maxThreadsText.Leave += new System.EventHandler(this.MaxThreadsText_Leave);
-			// 
-			// rowsLimitText
-			// 
-			this.rowsLimitText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.rowsLimitText.Location = new System.Drawing.Point(84, 59);
-			this.rowsLimitText.Name = "rowsLimitText";
-			this.rowsLimitText.Size = new System.Drawing.Size(122, 23);
-			this.rowsLimitText.TabIndex = 17;
-			this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
-			this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
-			// 
-			// TreeMain
-			// 
-			this.TreeMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.FlowPanelForExpanders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.TreeMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this.TreeMain.CheckBoxes = true;
-			this.TreeMain.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-			this.TreeMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.TreeMain.Location = new System.Drawing.Point(1, 114);
-			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(208, 352);
-			this.TreeMain.TabIndex = 19;
+			this.FlowPanelForExpanders.Location = new System.Drawing.Point(0, 0);
+			this.FlowPanelForExpanders.Margin = new System.Windows.Forms.Padding(0);
+			this.FlowPanelForExpanders.Name = "FlowPanelForExpanders";
+			this.FlowPanelForExpanders.Size = new System.Drawing.Size(164, 2561);
+			this.FlowPanelForExpanders.TabIndex = 27;
+			// 
+			// panelCollapseSelectAll
+			// 
+			this.panelCollapseSelectAll.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelCollapseSelectAll.Controls.Add(this.checkBoxSelectAll);
+			this.panelCollapseSelectAll.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelCollapseSelectAll.Location = new System.Drawing.Point(0, 0);
+			this.panelCollapseSelectAll.Name = "panelCollapseSelectAll";
+			this.panelCollapseSelectAll.Padding = new System.Windows.Forms.Padding(3);
+			this.panelCollapseSelectAll.Size = new System.Drawing.Size(181, 27);
+			this.panelCollapseSelectAll.TabIndex = 28;
+			// 
+			// checkBoxSelectAll
+			// 
+			this.checkBoxSelectAll.AutoSize = true;
+			this.checkBoxSelectAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Right;
+			this.checkBoxSelectAll.Location = new System.Drawing.Point(80, 3);
+			this.checkBoxSelectAll.Name = "checkBoxSelectAll";
+			this.checkBoxSelectAll.Padding = new System.Windows.Forms.Padding(0, 0, 22, 0);
+			this.checkBoxSelectAll.Size = new System.Drawing.Size(96, 19);
+			this.checkBoxSelectAll.TabIndex = 1;
+			this.checkBoxSelectAll.Text = "Select All";
+			this.checkBoxSelectAll.UseVisualStyleBackColor = true;
 			// 
 			// notepad
 			// 
@@ -656,7 +599,7 @@ namespace LogsReader.Reader
 			this.notepad.TextForeColor = System.Drawing.Color.Black;
 			this.notepad.WordWrap = true;
 			// 
-			// LogsReaderForm
+			// CommonForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -666,7 +609,7 @@ namespace LogsReader.Reader
 			this.Controls.Add(this.progressBar);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.MinimumSize = new System.Drawing.Size(0, 25);
-			this.Name = "LogsReaderForm";
+			this.Name = "CommonForm";
 			this.Size = new System.Drawing.Size(1152, 594);
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
 			this.EnumSplitContainer.Panel1.ResumeLayout(false);
@@ -683,27 +626,24 @@ namespace LogsReader.Reader
 			((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).EndInit();
 			this.ParentSplitContainer.ResumeLayout(false);
 			this.MainSplitContainer.Panel1.ResumeLayout(false);
-			this.MainSplitContainer.Panel1.PerformLayout();
 			this.MainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
+			this.PanelFlowDoc.ResumeLayout(false);
+			this.panelCollapseSelectAll.ResumeLayout(false);
+			this.panelCollapseSelectAll.PerformLayout();
 			this.ResumeLayout(false);
 
         }
 
         #endregion
         private CustomDataGridView dgvFiles;
-        private CustomTreeView TreeMain;
         private Button btnSearch;
         private Button btnClear;
         private TextBox txtPattern;
         private ProgressBar progressBar;
         private StatusStrip statusStrip;
         private CheckBox useRegex;
-        private TextBox maxThreadsText;
-        private Label MaxThreadsLabel;
-        private TextBox maxLinesStackText;
-        private Label MaxLinesLabel;
         private Label label7;
         private Label label9;
         private TextBox traceNameFilter;
@@ -721,10 +661,6 @@ namespace LogsReader.Reader
         private Button buttonExport;
         private CheckBox alreadyUseFilter;
         private DataGridViewTextBoxColumn Date;
-        private Label RowsLimitLabel;
-        private TextBox rowsLimitText;
-        private Label OrderByLabel;
-        private TextBox orderByText;
         private ComboBox traceNameFilterComboBox;
         private ComboBox traceMessageFilterComboBox;
         private DataGridViewTextBoxColumn PrivateID;
@@ -737,6 +673,10 @@ namespace LogsReader.Reader
         private SplitContainer ParentSplitContainer;
         private SplitContainer MainSplitContainer;
         private NotepadControl notepad;
-    }
+		private Utils.WinForm.Expander.AdvancedFlowLayoutPanel FlowPanelForExpanders;
+		private Panel panelCollapseSelectAll;
+		private CheckBox checkBoxSelectAll;
+		private Panel PanelFlowDoc;
+	}
 }
 

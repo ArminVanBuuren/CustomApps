@@ -9,7 +9,7 @@ namespace LogsReader.Reader
 {
     public delegate void FoundDataTemplate(DataTemplate item);
 
-    public abstract class TraceReader : LogsReaderControl
+    public abstract class TraceReader : LogsReaderPerformerBase
     {
 	    private bool _searchByTransaction;
         private string _trn = null;
@@ -101,7 +101,7 @@ namespace LogsReader.Reader
 
         public long Lines { get; protected set; } = 0;
 
-        protected TraceReader(LogsReaderControl control, string server, string filePath, string originalFolder) : base(control)
+        protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) : base(control)
         {
 	        PastTraceLines = new Queue<string>(MaxTraceLines);
 

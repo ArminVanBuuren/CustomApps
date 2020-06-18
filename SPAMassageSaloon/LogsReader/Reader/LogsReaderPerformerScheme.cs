@@ -12,7 +12,7 @@ namespace LogsReader.Reader
 {
 	public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
-    public class LogsReaderPerformer : LogsReaderFiles
+    public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
     {
         private readonly object _syncRootMatches = new object();
         private int _countMatches;
@@ -47,7 +47,7 @@ namespace LogsReader.Reader
 
         public DataFilter Filter { get; }
 
-        public LogsReaderPerformer(
+        public LogsReaderPerformerScheme(
 	        LRSettingsScheme settings,
 	        string findMessage,
 	        bool useRegex,

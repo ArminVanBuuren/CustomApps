@@ -11,7 +11,7 @@ namespace LogsReader.Reader
 {
 	public delegate V GetTransactionDelegate<in T, U, out V>(T input, out U output);
 
-	public abstract class LogsReaderControl : IDisposable
+	public abstract class LogsReaderPerformerBase : IDisposable
 	{
 		private static long _seqBaseInstance = 0;
 		private readonly long _instanceId = 0;
@@ -51,7 +51,7 @@ namespace LogsReader.Reader
 
 		public bool IsDisposed { get; private set; } = false;
 
-		protected LogsReaderControl(LRSettingsScheme settings, string findMessage, bool useRegex)
+		protected LogsReaderPerformerBase(LRSettingsScheme settings, string findMessage, bool useRegex)
 		{
 			_instanceId = ++_seqBaseInstance;
 			_currentSettings = settings;
@@ -89,7 +89,7 @@ namespace LogsReader.Reader
 				GetTraceReader = (data) => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
 		}
 
-		protected LogsReaderControl(LogsReaderControl control)
+		protected LogsReaderPerformerBase(LogsReaderPerformerBase control)
 		{
 			_currentSettings = control._currentSettings;
 			IsMatch = control.IsMatch;
@@ -142,7 +142,7 @@ namespace LogsReader.Reader
 		public override bool Equals(object obj)
 		{
 			var isEqual = false;
-			if (obj is LogsReaderControl input)
+			if (obj is LogsReaderPerformerBase input)
 				isEqual = _currentSettings == input._currentSettings && _instanceId == input._instanceId;
 			return isEqual;
 		}

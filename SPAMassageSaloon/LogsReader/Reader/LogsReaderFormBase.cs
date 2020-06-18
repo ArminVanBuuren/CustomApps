@@ -18,7 +18,7 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    public sealed partial class LogsReaderForm : UserControl, IUserForm
+    public sealed partial class LogsReaderFormBase : UserControl, IUserForm
     {
 	    private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
@@ -27,7 +27,6 @@ namespace LogsReader.Reader
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
 
-        private readonly TreeViewContainer _treeViewContainer;
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -63,7 +62,7 @@ namespace LogsReader.Reader
 
         public DataTemplateCollection OverallResultList { get; private set; }
 
-        public LogsReaderPerformer MainReader { get; private set; }
+        public LogsReaderPerformerScheme MainReader { get; private set; }
 
         public int Progress
         {
@@ -71,7 +70,9 @@ namespace LogsReader.Reader
             private set => progressBar.Value = value;
         }
 
-        public LogsReaderForm(LRSettingsScheme scheme)
+        public TreeViewContainer TreeViewContainer { get; }
+
+        public LogsReaderFormBase(LRSettingsScheme scheme)
         {
             if (scheme == null)
                 throw new ArgumentNullException(nameof(scheme));
@@ -208,20 +209,20 @@ namespace LogsReader.Reader
 
                 #region TreeView Container
 
-                _treeViewContainer = new TreeViewContainer(
+                TreeViewContainer = new TreeViewContainer(
 	                CurrentSettings, 
 	                TreeMain, 
 	                CurrentSettings.Servers.Groups, 
 	                CurrentSettings.FileTypes.Groups, 
 	                CurrentSettings.LogsFolder.Folders);
 
-                _treeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
+                TreeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
                 {
 	                ValidationCheck(clearStatus);
                     if(onSchemeChanged)
 	                    OnSchemeChanged?.Invoke(this, EventArgs.Empty);
                 };
-                _treeViewContainer.OnError += (ex) =>
+                TreeViewContainer.OnError += (ex) =>
                 {
 	                ReportStatus(ex.Message, ReportStatusType.Error);
                 };
@@ -237,11 +238,6 @@ namespace LogsReader.Reader
                 ClearForm(false);
                 ValidationCheck(false);
             }
-        }
-
-        public CustomTreeView GetTreeView()
-        {
-	        return _treeViewContainer.CreateNewCopy();
         }
 
         public void ApplyFormSettings()
@@ -278,7 +274,7 @@ namespace LogsReader.Reader
             {
                 #region Change Language
 
-                _treeViewContainer.ApplySettings();
+                TreeViewContainer.ApplySettings();
 
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
@@ -418,8 +414,8 @@ namespace LogsReader.Reader
                         Clipboard.SetText(clipboardText.ToString());
                         break;
                     default:
-                        _treeViewContainer.MainFormKeyDown(sender, e);
-                        break;
+	                    TreeViewContainer.MainFormKeyDown(TreeMain, e);
+	                    break;
                 }
             }
             catch (Exception ex)
@@ -449,7 +445,7 @@ namespace LogsReader.Reader
 
 	                var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
-	                MainReader = new LogsReaderPerformer(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
+	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
 	                MainReader.OnProcessReport += ReportProcessStatus;
 
 	                stop.Start();

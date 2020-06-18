@@ -109,22 +109,28 @@
     <Compile Include="Reader\DataTemplate.cs" />
     <Compile Include="Reader\DataTemplateCollection.cs" />
     <Compile Include="Reader\DataTemplatesDuplicateComparer.cs" />
-    <Compile Include="Reader\LogsReaderControl.cs" />
-    <Compile Include="Reader\LogsReaderFiles.cs" />
-    <Compile Include="Reader\CommonForm.cs">
+    <Compile Include="Reader\LogsReaderPerformerBase.cs" />
+    <Compile Include="Reader\LogsReaderPerformerFiles.cs" />
+    <Compile Include="Reader\LogsReaderFormGlobal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Reader\CommonForm.Designer.cs">
-      <DependentUpon>CommonForm.cs</DependentUpon>
+    <Compile Include="Reader\LogsReaderFormGlobal.Designer.cs">
+      <DependentUpon>LogsReaderFormGlobal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reader\LogsReaderFormBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reader\LogsReaderFormBase.Designer.cs">
+      <DependentUpon>LogsReaderFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Reader\ReportStatusType.cs" />
     <Compile Include="Reader\TraceReader.cs" />
-    <Compile Include="Reader\LogsReaderPerformer.cs" />
-    <Compile Include="Reader\LogsReaderForm.cs">
+    <Compile Include="Reader\LogsReaderPerformerScheme.cs" />
+    <Compile Include="Reader\LogsReaderFormScheme.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Reader\LogsReaderForm.Designer.cs">
-      <DependentUpon>LogsReaderForm.cs</DependentUpon>
+    <Compile Include="Reader\LogsReaderFormScheme.Designer.cs">
+      <DependentUpon>LogsReaderFormScheme.cs</DependentUpon>
     </Compile>
     <Compile Include="LogsReaderMainForm.cs">
       <SubType>Form</SubType>
@@ -167,12 +173,15 @@
     <EmbeddedResource Include="Reader\Forms\ServerGroupForm.resx">
       <DependentUpon>ServerGroupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reader\CommonForm.resx">
-      <DependentUpon>CommonForm.cs</DependentUpon>
+    <EmbeddedResource Include="Reader\LogsReaderFormGlobal.resx">
+      <DependentUpon>LogsReaderFormGlobal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reader\LogsReaderForm.resx">
-      <DependentUpon>LogsReaderForm.cs</DependentUpon>
+    <EmbeddedResource Include="Reader\LogsReaderFormBase.resx">
+      <DependentUpon>LogsReaderFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\LogsReaderFormScheme.resx">
+      <DependentUpon>LogsReaderFormScheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogsReaderMainForm.resx">
       <DependentUpon>LogsReaderMainForm.cs</DependentUpon>

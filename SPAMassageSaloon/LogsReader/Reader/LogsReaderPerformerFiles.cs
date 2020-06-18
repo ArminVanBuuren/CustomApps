@@ -14,7 +14,7 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public abstract class LogsReaderFiles : LogsReaderControl
+	public abstract class LogsReaderPerformerFiles : LogsReaderPerformerBase
 	{
 		private readonly IEnumerable<string> _servers;
 		private readonly IEnumerable<string> _fileTypes;
@@ -29,7 +29,7 @@ namespace LogsReader.Reader
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
-		protected LogsReaderFiles(
+		protected LogsReaderPerformerFiles(
 			LRSettingsScheme settings, 
 			string findMessage,  
 			bool useRegex, 
