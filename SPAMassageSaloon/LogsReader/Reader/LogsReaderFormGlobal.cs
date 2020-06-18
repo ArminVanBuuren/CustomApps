@@ -17,7 +17,7 @@ namespace LogsReader.Reader
 	    
 	    public LogsReaderMainForm MainForm { get; private set; }
 
-		public override bool HasAnyResult => throw new NotImplementedException();
+		public override bool HasAnyResult => false;
 
 		private readonly Panel PanelFlowDoc;
 	    private readonly AdvancedFlowLayoutPanel FlowPanelForExpanders;

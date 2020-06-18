@@ -107,18 +107,11 @@ namespace LogsReader.Reader
 
         public void ApplySettings()
         {
-	        void AssignText(TreeView treeView, string name, string value)
-	        {
-		        var treeNode = treeView.Nodes[name];
-		        if (treeNode != null)
-			        treeNode.Text = value;
-            }
-
-            foreach (var treeView in _copyList)
+	        foreach (var treeView in _copyList)
             {
-	            AssignText(treeView, TRVServers, Resources.Txt_LogsReaderForm_Servers);
-	            AssignText(treeView, TRVTypes, Resources.Txt_LogsReaderForm_Types);
-	            AssignText(treeView, TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
+	            AssignTreeViewText(treeView, TRVServers, Resources.Txt_LogsReaderForm_Servers);
+	            AssignTreeViewText(treeView, TRVTypes, Resources.Txt_LogsReaderForm_Types);
+	            AssignTreeViewText(treeView, TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
             }
 
             _contextTreeMainMenuStrip?.Dispose();
@@ -135,6 +128,13 @@ namespace LogsReader.Reader
             _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
         }
 
+        void AssignTreeViewText(TreeView treeView, string name, string value)
+        {
+	        var treeNode = treeView.Nodes[name];
+	        if (treeNode != null)
+		        treeNode.Text = value;
+        }
+
         public CustomTreeView CreateNewCopy()
         {
             var copy = new CustomTreeView();
@@ -147,6 +147,10 @@ namespace LogsReader.Reader
             treeView.ImageList = _imageList;
             treeView.ItemHeight = 18;
             treeView.Indent = 18;
+            AssignTreeViewText(treeView, TRVServers, Resources.Txt_LogsReaderForm_Servers);
+            AssignTreeViewText(treeView, TRVTypes, Resources.Txt_LogsReaderForm_Types);
+            AssignTreeViewText(treeView, TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
+
             treeView.MouseDown += TreeMain_MouseDown;
             treeView.AfterCheck += TrvMain_AfterCheck;
             return treeView;

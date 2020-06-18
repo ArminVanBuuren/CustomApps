@@ -191,7 +191,7 @@ namespace LogsReader.Reader
 	                ReportStatus(ex.Message, ReportStatusType.Error);
                 };
 
-				#endregion
+                #endregion
             }
             catch (Exception ex)
             {
@@ -216,6 +216,8 @@ namespace LogsReader.Reader
 	        Tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
 	        Tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
 	        Tooltip.SetToolTip(TreeMain, Resources.Txt_Form_trvMainComment);
+
+	        TreeViewContainer.ApplySettings();
 
             base.ApplySettings();
         }
