@@ -108,31 +108,34 @@ namespace LogsReader.Reader
         public void ApplySettings()
         {
 	        foreach (var treeView in _copyList)
-            {
-	            AssignTreeViewText(treeView, TRVServers, Resources.Txt_LogsReaderForm_Servers);
-	            AssignTreeViewText(treeView, TRVTypes, Resources.Txt_LogsReaderForm_Types);
-	            AssignTreeViewText(treeView, TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
-            }
+		        AssignTreeViewText(treeView);
 
-            _contextTreeMainMenuStrip?.Dispose();
-            _contextTreeMainMenuStrip = new ContextMenuStrip { Tag = Main };
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
-            _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
-            _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
-            _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
-            _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
+	        _contextTreeMainMenuStrip?.Dispose();
+	        _contextTreeMainMenuStrip = new ContextMenuStrip {Tag = Main};
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServer, Resources.server, AddServer);
+	        _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileTypeGroup, Resources.types_group, AddFileTypeGroup);
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFileType, Resources.type, AddFileType);
+	        _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddFolder, Resources.folder, SetFolder);
+	        _contextTreeMainMenuStrip.Items.Add(new ToolStripSeparator());
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_RemoveSelected, Resources.remove, RemoveSelectedNodeItem);
+	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
         }
 
-        void AssignTreeViewText(TreeView treeView, string name, string value)
+        static void AssignTreeViewText(TreeView treeView)
         {
-	        var treeNode = treeView.Nodes[name];
-	        if (treeNode != null)
-		        treeNode.Text = value;
+	        void AssignText(string name, string value)
+	        {
+		        var treeNode = treeView.Nodes[name];
+		        if (treeNode != null)
+			        treeNode.Text = value;
+	        }
+
+	        AssignText(TRVServers, Resources.Txt_LogsReaderForm_Servers);
+	        AssignText(TRVTypes, Resources.Txt_LogsReaderForm_Types);
+	        AssignText(TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
         }
 
         public CustomTreeView CreateNewCopy()
@@ -147,9 +150,7 @@ namespace LogsReader.Reader
             treeView.ImageList = _imageList;
             treeView.ItemHeight = 18;
             treeView.Indent = 18;
-            AssignTreeViewText(treeView, TRVServers, Resources.Txt_LogsReaderForm_Servers);
-            AssignTreeViewText(treeView, TRVTypes, Resources.Txt_LogsReaderForm_Types);
-            AssignTreeViewText(treeView, TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
+            AssignTreeViewText(treeView);
 
             treeView.MouseDown += TreeMain_MouseDown;
             treeView.AfterCheck += TrvMain_AfterCheck;
