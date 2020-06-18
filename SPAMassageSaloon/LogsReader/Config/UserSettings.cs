@@ -171,12 +171,27 @@ namespace LogsReader.Config
 	        }
         }
 
+        private Func<RegeditControl> _getRegeditControl;
+
+        public UserSettings()
+        {
+	        try
+	        {
+		        _getRegeditControl = () => new RegeditControl(this.GetAssemblyInfo().ApplicationName);
+            }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+        }
+
         public UserSettings(string schemeName)
         {
 	        try
 	        {
 		        Scheme = schemeName;
 		        parentRegistry = new RegeditControl(this.GetAssemblyInfo().ApplicationName);
+                _getRegeditControl = () => new RegeditControl(Scheme, parentRegistry);
 	        }
 	        catch (Exception)
 	        {
@@ -194,13 +209,10 @@ namespace LogsReader.Config
 
         public string GetValue(string name)
         {
-            if (parentRegistry == null)
-                return string.Empty;
-
-            try
+	        try
             {
-                using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-	                return (string)schemeControl[name] ?? string.Empty;
+                using (var regControl = _getRegeditControl.Invoke())
+	                return (string)regControl[name] ?? string.Empty;
             }
             catch (Exception)
             {
@@ -210,13 +222,10 @@ namespace LogsReader.Config
 
         public void SetValue(string name, object value)
         {
-            if (parentRegistry == null)
-                return;
-
-            try
+	        try
             {
-                using (var schemeControl = new RegeditControl(Scheme, parentRegistry))
-	                schemeControl[name] = value;
+                using (var regControl = _getRegeditControl.Invoke())
+	                regControl[name] = value;
             }
             catch (Exception)
             {

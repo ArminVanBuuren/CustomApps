@@ -1,27 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
-using SPAMassageSaloon.Common;
-using Utils;
 using Utils.WinForm;
 using Utils.WinForm.Expander;
 
 namespace LogsReader.Reader
 {
-    public sealed partial class LogsReaderFormGlobal : UserControl, IUserForm
-    {
+    public class LogsReaderFormGlobal : LogsReaderFormBase
+	{
 	    private Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)>();
 	    
 	    public LogsReaderMainForm MainForm { get; private set; }
 
-        public LogsReaderFormGlobal()
+		public override bool HasAnyResult => throw new NotImplementedException();
+
+		private readonly Panel PanelFlowDoc;
+	    private readonly AdvancedFlowLayoutPanel FlowPanelForExpanders;
+	    private readonly CheckBox checkBoxSelectAll;
+
+		public LogsReaderFormGlobal(Encoding defaultEncoding) :base(defaultEncoding, new UserSettings())
         {
-	        InitializeComponent();
+	        FlowPanelForExpanders = new AdvancedFlowLayoutPanel
+	        {
+		        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
+		        Location = new Point(0, -1),
+		        Margin = new Padding(0),
+		        Name = "FlowPanelForExpanders",
+		        Size = new Size(147, 3623),
+		        TabIndex = 27
+	        };
+
+	        PanelFlowDoc = new Panel
+	        {
+		        AutoScroll = true,
+		        AutoScrollMinSize = new Size(0, 1500),
+		        Dock = DockStyle.Fill,
+		        Location = new Point(0, 27),
+		        Name = "PanelFlowDoc",
+		        Size = new Size(181, 439),
+		        TabIndex = 29
+	        };
+	        PanelFlowDoc.Controls.Add(FlowPanelForExpanders);
+
+	        checkBoxSelectAll = new CheckBox
+	        {
+		        AutoSize = true,
+		        CheckAlign = ContentAlignment.MiddleRight,
+		        Dock = DockStyle.Right,
+		        Location = new Point(80, 3),
+		        Name = "checkBoxSelectAll",
+		        Padding = new Padding(0, 0, 22, 0),
+		        Size = new Size(96, 19),
+		        TabIndex = 1,
+		        Text = "Select All",
+		        UseVisualStyleBackColor = true
+	        };
+
+			var panelCollapseSelectAll = new Panel
+	        {
+		        BorderStyle = BorderStyle.FixedSingle,
+		        Dock = DockStyle.Top,
+		        Location = new Point(0, 0),
+		        Name = "panelCollapseSelectAll",
+		        Padding = new Padding(3),
+		        Size = new Size(181, 27),
+		        TabIndex = 28
+	        };
+			panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
+
+			MainSplitContainer.Panel1.Controls.Add(PanelFlowDoc);
+			MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
+			MainSplitContainer.Panel1MinSize = 110;
         }
 
 	    public void Initialize(LogsReaderMainForm main)
@@ -135,6 +189,9 @@ namespace LogsReader.Reader
 
         private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
         {
+			if(FlowPanelForExpanders == null)
+				return;
+
 	        var height = 0;
 	        foreach (var expander in FlowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
 	        {
@@ -160,88 +217,19 @@ namespace LogsReader.Reader
             }
         }
 
-        public void ApplySettings()
-        {
-            
-        }
+		protected override void BtnSearch_Click(object sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
 
-        public void SaveData()
-        {
+		protected override Task<bool> AssignResult(DataFilter filter)
+		{
+			throw new NotImplementedException();
+		}
 
-        }
-
-        private async void BtnSearch_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void ButtonExport_Click(object sender, EventArgs e)
-        {
-        }
-
-        private async void buttonFilter_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void buttonReset_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void DgvFiles_SelectionChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void DgvFiles_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void OrderByText_Leave(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TxtPattern_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void UseRegex_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void TraceNameFilter_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void BtnClear_Click(object sender, EventArgs e)
-        {
-            
-        }
-    }
+		protected override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

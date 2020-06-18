@@ -7,25 +7,12 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    sealed partial class LogsReaderFormBase
+    partial class LogsReaderFormBase
 	{
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         #region Windows Form Designer generated code
 
@@ -35,7 +22,7 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderFormScheme));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderFormBase));
 			this.dgvFiles = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,15 +57,6 @@ namespace LogsReader.Reader
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.OrderByLabel = new System.Windows.Forms.Label();
-			this.MaxLinesLabel = new System.Windows.Forms.Label();
-			this.orderByText = new System.Windows.Forms.TextBox();
-			this.MaxThreadsLabel = new System.Windows.Forms.Label();
-			this.maxLinesStackText = new System.Windows.Forms.TextBox();
-			this.RowsLimitLabel = new System.Windows.Forms.Label();
-			this.maxThreadsText = new System.Windows.Forms.TextBox();
-			this.rowsLimitText = new System.Windows.Forms.TextBox();
-			this.TreeMain = new Utils.WinForm.CustomTreeView();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
@@ -92,7 +70,6 @@ namespace LogsReader.Reader
 			this.ParentSplitContainer.Panel2.SuspendLayout();
 			this.ParentSplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
-			this.MainSplitContainer.Panel1.SuspendLayout();
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
 			this.SuspendLayout();
@@ -522,18 +499,6 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.MainSplitContainer.Location = new System.Drawing.Point(0, 0);
 			this.MainSplitContainer.Name = "MainSplitContainer";
-			// 
-			// MainSplitContainer.Panel1
-			// 
-			this.MainSplitContainer.Panel1.Controls.Add(this.OrderByLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.MaxLinesLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.orderByText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.MaxThreadsLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.maxLinesStackText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.RowsLimitLabel);
-			this.MainSplitContainer.Panel1.Controls.Add(this.maxThreadsText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.rowsLimitText);
-			this.MainSplitContainer.Panel1.Controls.Add(this.TreeMain);
 			this.MainSplitContainer.Panel1MinSize = 60;
 			// 
 			// MainSplitContainer.Panel2
@@ -542,100 +507,6 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Size = new System.Drawing.Size(680, 470);
 			this.MainSplitContainer.SplitterDistance = 213;
 			this.MainSplitContainer.TabIndex = 0;
-			// 
-			// OrderByLabel
-			// 
-			this.OrderByLabel.AutoSize = true;
-			this.OrderByLabel.Location = new System.Drawing.Point(3, 88);
-			this.OrderByLabel.Name = "OrderByLabel";
-			this.OrderByLabel.Size = new System.Drawing.Size(53, 15);
-			this.OrderByLabel.TabIndex = 17;
-			this.OrderByLabel.Text = "Order By";
-			// 
-			// MaxLinesLabel
-			// 
-			this.MaxLinesLabel.AutoSize = true;
-			this.MaxLinesLabel.Location = new System.Drawing.Point(3, 10);
-			this.MaxLinesLabel.Name = "MaxLinesLabel";
-			this.MaxLinesLabel.Size = new System.Drawing.Size(59, 15);
-			this.MaxLinesLabel.TabIndex = 13;
-			this.MaxLinesLabel.Text = "Max Lines";
-			// 
-			// orderByText
-			// 
-			this.orderByText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.orderByText.Location = new System.Drawing.Point(84, 85);
-			this.orderByText.Name = "orderByText";
-			this.orderByText.Size = new System.Drawing.Size(122, 23);
-			this.orderByText.TabIndex = 18;
-			this.orderByText.Leave += new System.EventHandler(this.OrderByText_Leave);
-			// 
-			// MaxThreadsLabel
-			// 
-			this.MaxThreadsLabel.AutoSize = true;
-			this.MaxThreadsLabel.Location = new System.Drawing.Point(3, 36);
-			this.MaxThreadsLabel.Name = "MaxThreadsLabel";
-			this.MaxThreadsLabel.Size = new System.Drawing.Size(74, 15);
-			this.MaxThreadsLabel.TabIndex = 9;
-			this.MaxThreadsLabel.Text = "Max Threads";
-			// 
-			// maxLinesStackText
-			// 
-			this.maxLinesStackText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.maxLinesStackText.Location = new System.Drawing.Point(84, 7);
-			this.maxLinesStackText.Name = "maxLinesStackText";
-			this.maxLinesStackText.Size = new System.Drawing.Size(122, 23);
-			this.maxLinesStackText.TabIndex = 15;
-			this.maxLinesStackText.TextChanged += new System.EventHandler(this.MaxLinesStackText_TextChanged);
-			this.maxLinesStackText.Leave += new System.EventHandler(this.MaxLinesStackText_Leave);
-			// 
-			// RowsLimitLabel
-			// 
-			this.RowsLimitLabel.AutoSize = true;
-			this.RowsLimitLabel.Location = new System.Drawing.Point(3, 62);
-			this.RowsLimitLabel.Name = "RowsLimitLabel";
-			this.RowsLimitLabel.Size = new System.Drawing.Size(65, 15);
-			this.RowsLimitLabel.TabIndex = 15;
-			this.RowsLimitLabel.Text = "Rows Limit";
-			// 
-			// maxThreadsText
-			// 
-			this.maxThreadsText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.maxThreadsText.Location = new System.Drawing.Point(84, 33);
-			this.maxThreadsText.Name = "maxThreadsText";
-			this.maxThreadsText.Size = new System.Drawing.Size(122, 23);
-			this.maxThreadsText.TabIndex = 16;
-			this.maxThreadsText.TextChanged += new System.EventHandler(this.MaxThreadsText_TextChanged);
-			this.maxThreadsText.Leave += new System.EventHandler(this.MaxThreadsText_Leave);
-			// 
-			// rowsLimitText
-			// 
-			this.rowsLimitText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.rowsLimitText.Location = new System.Drawing.Point(84, 59);
-			this.rowsLimitText.Name = "rowsLimitText";
-			this.rowsLimitText.Size = new System.Drawing.Size(122, 23);
-			this.rowsLimitText.TabIndex = 17;
-			this.rowsLimitText.TextChanged += new System.EventHandler(this.RowsLimitText_TextChanged);
-			this.rowsLimitText.Leave += new System.EventHandler(this.RowsLimitText_Leave);
-			// 
-			// TreeMain
-			// 
-			this.TreeMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.TreeMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this.TreeMain.CheckBoxes = true;
-			this.TreeMain.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-			this.TreeMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			this.TreeMain.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.TreeMain.Location = new System.Drawing.Point(1, 114);
-			this.TreeMain.Name = "TreeMain";
-			this.TreeMain.Size = new System.Drawing.Size(208, 352);
-			this.TreeMain.TabIndex = 19;
 			// 
 			// notepad
 			// 
@@ -656,7 +527,7 @@ namespace LogsReader.Reader
 			this.notepad.TextForeColor = System.Drawing.Color.Black;
 			this.notepad.WordWrap = true;
 			// 
-			// LogsReaderForm
+			// LogsReaderFormBase
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -666,7 +537,7 @@ namespace LogsReader.Reader
 			this.Controls.Add(this.progressBar);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.MinimumSize = new System.Drawing.Size(0, 25);
-			this.Name = "LogsReaderForm";
+			this.Name = "LogsReaderFormBase";
 			this.Size = new System.Drawing.Size(1152, 594);
 			((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
 			this.EnumSplitContainer.Panel1.ResumeLayout(false);
@@ -682,8 +553,6 @@ namespace LogsReader.Reader
 			this.ParentSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).EndInit();
 			this.ParentSplitContainer.ResumeLayout(false);
-			this.MainSplitContainer.Panel1.ResumeLayout(false);
-			this.MainSplitContainer.Panel1.PerformLayout();
 			this.MainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
@@ -693,17 +562,9 @@ namespace LogsReader.Reader
 
         #endregion
         private CustomDataGridView dgvFiles;
-        private CustomTreeView TreeMain;
-        private Button btnSearch;
         private Button btnClear;
-        private TextBox txtPattern;
         private ProgressBar progressBar;
         private StatusStrip statusStrip;
-        private CheckBox useRegex;
-        private TextBox maxThreadsText;
-        private Label MaxThreadsLabel;
-        private TextBox maxLinesStackText;
-        private Label MaxLinesLabel;
         private Label label7;
         private Label label9;
         private TextBox traceNameFilter;
@@ -719,12 +580,7 @@ namespace LogsReader.Reader
         private RichTextBox descriptionText;
         private Panel searchPanel;
         private Button buttonExport;
-        private CheckBox alreadyUseFilter;
         private DataGridViewTextBoxColumn Date;
-        private Label RowsLimitLabel;
-        private TextBox rowsLimitText;
-        private Label OrderByLabel;
-        private TextBox orderByText;
         private ComboBox traceNameFilterComboBox;
         private ComboBox traceMessageFilterComboBox;
         private DataGridViewTextBoxColumn PrivateID;
@@ -735,8 +591,13 @@ namespace LogsReader.Reader
         private DataGridViewTextBoxColumn DateOfTrace;
         private DataGridViewTextBoxColumn File;
         private SplitContainer ParentSplitContainer;
-        private SplitContainer MainSplitContainer;
         private NotepadControl notepad;
-    }
+
+        protected Button btnSearch;
+		protected CheckBox useRegex;
+		protected TextBox txtPattern;
+		protected CheckBox alreadyUseFilter;
+        protected SplitContainer MainSplitContainer;
+	}
 }
 

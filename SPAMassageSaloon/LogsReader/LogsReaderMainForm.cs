@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
@@ -35,6 +36,8 @@ namespace LogsReader
         /// Настройки схем
         /// </summary>
         public static LRSettings Settings { get; private set; }
+
+        public LogsReaderFormGlobal Global { get; }
 
         public Dictionary<TabPage, LogsReaderFormScheme> AllForms { get; } = new Dictionary<TabPage, LogsReaderFormScheme>(15);
 
@@ -98,27 +101,14 @@ namespace LogsReader
             try
             {
                 base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
-
                 KeyPreview = true;
-                Closing += (s, e) =>
-                {
-	                SaveData();
-	                SerializeUserCreditails();
-                };
-                Shown += (s, e) =>
-                {
-                    ApplySettings();
-                    foreach (var logsReader in AllForms.Values)
-                    {
-                        logsReader.ApplyFormSettings();
-                        logsReader.OnSchemeChanged += SaveSchemas;
-                    }
-                };
 
                 MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-                MainTabControl.DrawItem += MainTabControl_DrawItem;
 
-                var globalForm = new LogsReaderFormGlobal { Dock = DockStyle.Fill };
+                Global = new LogsReaderFormGlobal(Encoding.UTF8)
+                {
+	                Dock = DockStyle.Fill
+                };
                 var globalPage = new TabPage
                 {
 	                Name = GLOBAL_PAGE_NAME,
@@ -128,7 +118,7 @@ namespace LogsReader
 	                Margin = new Padding(0),
 	                Padding = new Padding(0)
                 };
-                globalPage.Controls.Add(globalForm);
+                globalPage.Controls.Add(Global);
                 MainTabControl.TabPages.Add(globalPage);
 
                 Settings = LRSettings.Deserialize();
@@ -160,7 +150,26 @@ namespace LogsReader
                     }
                 }
 
-                globalForm.Initialize(this);
+                Global.Initialize(this);
+
+
+                MainTabControl.DrawItem += MainTabControl_DrawItem;
+                Closing += (s, e) =>
+                {
+	                SaveData();
+	                SerializeUserCreditails();
+                };
+                Shown += (s, e) =>
+                {
+	                ApplySettings();
+	                Global.ApplyFormSettings();
+
+	                foreach (var logsReader in AllForms.Values)
+	                {
+		                logsReader.ApplyFormSettings();
+		                logsReader.OnSchemeChanged += SaveSchemas;
+	                }
+                };
             }
             catch (Exception ex)
             {
@@ -212,6 +221,7 @@ namespace LogsReader
         {
             try
             {
+	            Global.ApplySettings();
                 foreach (var logsReader in AllForms.Values)
                     logsReader.ApplySettings();
             }
