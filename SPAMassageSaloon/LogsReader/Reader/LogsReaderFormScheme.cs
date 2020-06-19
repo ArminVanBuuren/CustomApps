@@ -138,11 +138,6 @@ namespace LogsReader.Reader
                 TreeMain = new CustomTreeView
                 {
                     Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
-                    BackColor = Color.FromArgb(255, 255, 255),
-                    CheckBoxes = true,
-                    DrawMode = TreeViewDrawMode.OwnerDrawAll,
-                    ForeColor = Color.FromArgb(0, 0, 0),
-                    LineColor = Color.FromArgb(109, 109, 109),
                     Location = new Point(1, 114),
                     Name = "TreeMain",
                     Size = new Size(208, 352),

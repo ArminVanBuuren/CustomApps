@@ -93,16 +93,6 @@ namespace LogsReader.Reader
 		    SchemeExpander_ExpandCollapse(this, null);
 	    }
 
-        private void ReaderForm_OnTreeViewChanged(object sender, EventArgs e)
-        {
-	        //if (!(sender is LogsReaderForm readerForm) || !AllExpanders.TryGetValue(readerForm, out var expander))
-		       // return;
-
-         //   expander.Item2.Nodes.Clear();
-	        //foreach (var treeNode in readerForm.TreeMain.Nodes.Cast<TreeNode>())
-		       // expander.Item2.Nodes.Add((TreeNode)treeNode.Clone());
-        }
-
         (ExpandCollapsePanel, CustomTreeView) CreateExpander(LogsReaderFormScheme readerForm)
         {
 	        var schemeExpander = new ExpandCollapsePanel
