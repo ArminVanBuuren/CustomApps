@@ -124,20 +124,6 @@ namespace LogsReader.Reader
 	        _contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_Properties, Resources.properies, OpenProperties);
         }
 
-        static void AssignTreeViewText(TreeView treeView)
-        {
-	        void AssignText(string name, string value)
-	        {
-		        var treeNode = treeView.Nodes[name];
-		        if (treeNode != null)
-			        treeNode.Text = value;
-	        }
-
-	        AssignText(TRVServers, Resources.Txt_LogsReaderForm_Servers);
-	        AssignText(TRVTypes, Resources.Txt_LogsReaderForm_Types);
-	        AssignText(TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
-        }
-
         public CustomTreeView CreateNewCopy()
         {
             var copy = new CustomTreeView();
@@ -165,6 +151,20 @@ namespace LogsReader.Reader
             return treeView;
         }
 
+        static void AssignTreeViewText(TreeView treeView)
+        {
+	        void AssignText(string name, string value)
+	        {
+		        var treeNode = treeView.Nodes[name];
+		        if (treeNode != null)
+			        treeNode.Text = value;
+	        }
+
+	        AssignText(TRVServers, Resources.Txt_LogsReaderForm_Servers);
+	        AssignText(TRVTypes, Resources.Txt_LogsReaderForm_Types);
+	        AssignText(TRVFolders, Resources.Txt_LogsReaderForm_LogsFolder);
+        }
+
         void TreeMain_MouseDown(object sender, MouseEventArgs e)
         {
             if (!(sender is CustomTreeView current))
@@ -190,7 +190,6 @@ namespace LogsReader.Reader
             if (!(sender is CustomTreeView current))
                 return;
             Current = current;
-            var name = Current.Name;
 
             foreach (var treeView in _copyList)
 	            treeView.AfterCheck -= TrvMain_AfterCheck;
@@ -198,7 +197,6 @@ namespace LogsReader.Reader
             try
             {
 	            CheckTreeViewNode(e.Node, e.Node.Checked);
-                OnChanged?.Invoke(true, false);
             }
             catch (Exception)
             {
@@ -210,6 +208,8 @@ namespace LogsReader.Reader
 
                 foreach (var treeView in _copyList)
 		            treeView.AfterCheck += TrvMain_AfterCheck;
+
+                OnChanged?.Invoke(true, false);
             }
         }
 
@@ -769,6 +769,10 @@ namespace LogsReader.Reader
             node.StateImageIndex = result;
         }
 
+        /// <summary>
+        /// Обновить все ноды TreeView контейнера
+        /// </summary>
+        /// <param name="changedTreeView"></param>
         void UpdateContainer(TreeView changedTreeView)
         {
 	        foreach (var bindedTreeView in _copyList.Where(x => x != changedTreeView))
@@ -781,6 +785,11 @@ namespace LogsReader.Reader
 	        UpdateContainerProperties(changedTreeView, true);
         }
 
+        /// <summary>
+        /// Обновить свойства IsExpanded и Checeked для всех форм контейнера
+        /// </summary>
+        /// <param name="changedTreeView"></param>
+        /// <param name="disableAfterCheck"></param>
         void UpdateContainerProperties(TreeView changedTreeView, bool disableAfterCheck)
         {
 	        if (disableAfterCheck)

@@ -13,7 +13,7 @@ using Utils.WinForm;
 
 namespace LogsReader.Reader
 {
-    public sealed class LogsReaderFormScheme : LogsReaderFormBase
+	public sealed class LogsReaderFormScheme : LogsReaderFormBase
     {
 	    /// <summary>
         /// Сохранить изменения в конфиг
@@ -425,24 +425,24 @@ namespace LogsReader.Reader
 
         protected override void ValidationCheck(bool clearStatus)
         {
-            try
-            {
-	            var settIsCorrect = CurrentSettings?.IsCorrect ?? false;
-                if (settIsCorrect && clearStatus)
-                    ClearErrorStatus();
+	        try
+	        {
+		        var settIsCorrect = CurrentSettings?.IsCorrect ?? false;
+		        if (settIsCorrect && clearStatus)
+			        ClearErrorStatus();
 
-                btnSearch.Enabled = settIsCorrect
-                                    && !txtPattern.Text.IsNullOrEmpty()
-                                    && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
-                                    && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
-                                    && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);
+		        BTNSearch.Enabled = settIsCorrect
+		                            && !txtPattern.Text.IsNullOrEmpty()
+		                            && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+		                            && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+		                            && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);
 
-                base.ValidationCheck(clearStatus);
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
+		        base.ValidationCheck(clearStatus);
+	        }
+	        catch (Exception ex)
+	        {
+		        // ignored
+	        }
         }
 
         protected override void ClearForm(bool saveData = true)

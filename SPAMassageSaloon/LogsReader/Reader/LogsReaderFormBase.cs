@@ -251,7 +251,7 @@ namespace LogsReader.Reader
 
                 useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
 
-                btnSearch.Text = Resources.Txt_LogsReaderForm_Search;
+                BTNSearch.Text = Resources.Txt_LogsReaderForm_Search;
                 btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
                 btnClear.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_btnClear_Width), btnClear.Height);
                 buttonFilter.Text = Resources.Txt_LogsReaderForm_Filter;
@@ -309,10 +309,10 @@ namespace LogsReader.Reader
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.F5 when btnSearch.Enabled && !IsWorking:
+                    case Keys.F5 when BTNSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.Escape when btnSearch.Enabled && IsWorking:
+                    case Keys.Escape when BTNSearch.Enabled && IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
@@ -397,7 +397,7 @@ namespace LogsReader.Reader
                     desctination = sfd.FileName;
                 }
 
-                btnSearch.Enabled = btnClear.Enabled = buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = false;
+                BTNSearch.Enabled = btnClear.Enabled = buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = false;
                 ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
@@ -514,7 +514,7 @@ namespace LogsReader.Reader
 
         protected virtual void ChangeFormStatus()
         {
-            btnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
+            BTNSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
             btnClear.Enabled = !IsWorking;
             txtPattern.Enabled = !IsWorking;
 

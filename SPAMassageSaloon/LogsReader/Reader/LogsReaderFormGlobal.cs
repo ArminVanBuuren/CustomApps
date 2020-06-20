@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
+using Utils;
 using Utils.WinForm;
 using Utils.WinForm.Expander;
 
@@ -13,19 +14,22 @@ namespace LogsReader.Reader
 {
     public class LogsReaderFormGlobal : LogsReaderFormBase
 	{
-	    private Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, (ExpandCollapsePanel, CustomTreeView)>();
+		private readonly Panel panelFlowDoc;
+		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
+		private readonly CheckBox checkBoxSelectAll;
+
+		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
 	    
 	    public LogsReaderMainForm MainForm { get; private set; }
 
-		public override bool HasAnyResult => false;
+		public override bool HasAnyResult => dgvFiles.RowCount > 0 
+		                                     && AllExpanders.Any(x => x.Key.HasAnyResult && x.Value.IsChecked);
 
-		private readonly Panel PanelFlowDoc;
-	    private readonly AdvancedFlowLayoutPanel FlowPanelForExpanders;
-	    private readonly CheckBox checkBoxSelectAll;
-
-		public LogsReaderFormGlobal(Encoding defaultEncoding) :base(defaultEncoding, new UserSettings())
+		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
         {
-	        FlowPanelForExpanders = new AdvancedFlowLayoutPanel
+			#region Initialize Controls
+
+			flowPanelForExpanders = new AdvancedFlowLayoutPanel
 	        {
 		        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
 		        Location = new Point(0, -1),
@@ -35,7 +39,7 @@ namespace LogsReader.Reader
 		        TabIndex = 27
 	        };
 
-	        PanelFlowDoc = new Panel
+	        panelFlowDoc = new Panel
 	        {
 		        AutoScroll = true,
 		        AutoScrollMinSize = new Size(0, 1500),
@@ -45,7 +49,7 @@ namespace LogsReader.Reader
 		        Size = new Size(181, 439),
 		        TabIndex = 29
 	        };
-	        PanelFlowDoc.Controls.Add(FlowPanelForExpanders);
+	        panelFlowDoc.Controls.Add(flowPanelForExpanders);
 
 	        checkBoxSelectAll = new CheckBox
 	        {
@@ -60,6 +64,11 @@ namespace LogsReader.Reader
 		        Text = "Select All",
 		        UseVisualStyleBackColor = true
 	        };
+	        checkBoxSelectAll.CheckedChanged += (sender, args) =>
+	        {
+		        foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
+			        expander.IsChecked = checkBoxSelectAll.Checked;
+	        };
 
 			var panelCollapseSelectAll = new Panel
 	        {
@@ -73,12 +82,14 @@ namespace LogsReader.Reader
 	        };
 			panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
 
-			MainSplitContainer.Panel1.Controls.Add(PanelFlowDoc);
+			MainSplitContainer.Panel1.Controls.Add(panelFlowDoc);
 			MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
 			MainSplitContainer.Panel1MinSize = 110;
-        }
 
-	    public void Initialize(LogsReaderMainForm main)
+			#endregion
+		}
+
+		public void Initialize(LogsReaderMainForm main)
 	    {
 		    MainForm = main;
 
@@ -86,16 +97,65 @@ namespace LogsReader.Reader
 		    {
 			    var expander = CreateExpander(readerForm);
 			    AllExpanders.Add(readerForm, expander);
-
-                FlowPanelForExpanders.Controls.Add(expander.Item1);
+			    flowPanelForExpanders.Controls.Add(expander);
 		    }
 
 		    SchemeExpander_ExpandCollapse(this, null);
 	    }
 
-        (ExpandCollapsePanel, CustomTreeView) CreateExpander(LogsReaderFormScheme readerForm)
-        {
-	        var schemeExpander = new ExpandCollapsePanel
+		ExpandCollapsePanel CreateExpander(LogsReaderFormScheme readerForm)
+		{
+			Button buttonBack = null;
+			Button buttonFore = null;
+			ExpandCollapsePanel schemeExpander = null;
+
+			Func<Color> expanderBorderColor = () => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.FromArgb(209, 27, 27);
+			Func<Color> expanderPanelColor = () => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(236, 186, 202);
+
+			var colorDialog = new ColorDialog { FullOpen = true };
+			void ChangeColor(object sender, EventArgs e)
+			{
+				if (!(sender is Button button))
+					return;
+
+				colorDialog.Color = button.BackColor;
+
+				if (colorDialog.ShowDialog() != DialogResult.OK)
+					return;
+
+				button.BackColor = colorDialog.Color;
+
+				if (button == buttonBack)
+					schemeExpander.HeaderBackColor = colorDialog.Color;
+				else if(button == buttonFore)
+					schemeExpander.ForeColor = colorDialog.Color;
+			}
+
+			var buttonSize = new Size(20, 17);
+
+			var labelBack = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(25, 3), Size = new Size(34, 15), Text = @"Back" };
+			buttonBack = new Button
+			{
+				BackColor = Color.White,
+				FlatStyle = FlatStyle.Flat,
+				Location = new Point(3, 3),
+				Size = buttonSize,
+				UseVisualStyleBackColor = false
+			};
+			buttonBack.Click += ChangeColor;
+
+			var labelFore = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(85, 3), Size = new Size(34, 15), Text = @"Fore" };
+			buttonFore = new Button
+			{
+				BackColor = Color.Black,
+				FlatStyle = FlatStyle.Flat,
+				Location = new Point(63, 3),
+				Size = buttonSize,
+				UseVisualStyleBackColor = false
+			};
+			buttonFore.Click += ChangeColor;
+
+			schemeExpander = new ExpandCollapsePanel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
 		        BordersThickness = 0,
@@ -103,64 +163,34 @@ namespace LogsReader.Reader
 		        ButtonStyle = ExpandButtonStyle.Circle,
 		        CheckBoxShown = true,
 		        ExpandedHeight = 300,
-		        BackColor = Color.ForestGreen,
-		        HeaderBackColor = Color.Azure,
-		        HeaderBorderBrush = Color.ForestGreen,
-		        HeaderLineColor = Color.White,
+		        CheckBoxEnabled = readerForm.BTNSearch.Enabled,
+				BackColor = expanderBorderColor.Invoke(),
+				HeaderBorderBrush = Color.Azure,
+		        HeaderBackColor = buttonBack.BackColor,
+		        ForeColor = buttonFore.BackColor,
+				HeaderLineColor = Color.White,
 		        IsChecked = false,
 		        IsExpanded = false,
 		        UseAnimation = false,
 		        Text = readerForm.CurrentSettings.Name,
 		        Padding = new Padding(2),
-                Margin = new Padding(2, 2, 2, 0)
+                Margin = new Padding(3, 3, 3, 0)
 	        };
-            schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
-
-            var panel = new Panel
+			
+			var panel = new Panel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                BackColor = Color.Azure,
+                BackColor = expanderPanelColor.Invoke(),
                 Location = new Point(2, 23),
                 Size = new Size(schemeExpander.Size.Width - 4, 275)
             };
+			schemeExpander.Controls.Add(panel);
 
-	        schemeExpander.Controls.Add(panel);
-
-
-            var buttonSize = new Size(20, 17);
-
-            var buttonBack = new Button
-	        {
-		        BackColor = Color.White,
-		        FlatStyle = FlatStyle.Flat,
-		        Location = new Point(3, 3),
-		        Size = buttonSize,
-		        UseVisualStyleBackColor = false
-	        };
-	        var labelBack = new Label {AutoSize = true, Location = new Point(25, 3), Size = new Size(34, 15), Text = @"Back"};
-
-	        var buttonFore = new Button
-	        {
-		        BackColor = Color.Black,
-		        FlatStyle = FlatStyle.Flat,
-		        Location = new Point(63, 3),
-		        Size = buttonSize,
-		        UseVisualStyleBackColor = false
-	        };
-	        var labelFore = new Label {AutoSize = true, Location = new Point(85, 3), Size = new Size(34, 15), Text = @"Fore"};
-
-	        var treeView = readerForm.TreeViewContainer.CreateNewCopy();
-	        //readerForm.TreeViewContainer.OnError += ;
-
-            treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+			var treeView = readerForm.TreeViewContainer.CreateNewCopy();
+	        treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 3, 253);
-	        treeView.KeyDown += (sender, args) =>
-	        {
-		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
-            };
-
 
 	        panel.Controls.Add(buttonBack);
 	        panel.Controls.Add(buttonFore);
@@ -168,10 +198,50 @@ namespace LogsReader.Reader
 	        panel.Controls.Add(labelFore);
 	        panel.Controls.Add(treeView);
 
-	        return (schemeExpander, treeView);
+			// events
+	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
+	        schemeExpander.CheckedChanged += (sender, args) =>
+	        {
+				if(!schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
+					schemeExpander.BackColor = Color.DimGray;
+				else
+					schemeExpander.BackColor = expanderBorderColor.Invoke();
+				ValidationCheck(true);
+	        };
+	        treeView.KeyDown += (sender, args) =>
+	        {
+		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
+	        };
+	        readerForm.TreeViewContainer.OnError += ex =>
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        };
+			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
+			{
+				schemeExpander.BackColor = expanderBorderColor.Invoke();
+				panel.BackColor = expanderPanelColor.Invoke();
+				if (readerForm.BTNSearch.Enabled)
+				{
+					schemeExpander.CheckBoxEnabled = true;
+					if (schemeExpander.IsChecked != checkBoxSelectAll.Checked)
+						schemeExpander.IsChecked = checkBoxSelectAll.Checked;
+					else
+						ValidationCheck(true);
+				}
+				else
+				{
+					schemeExpander.CheckBoxEnabled = false;
+					if (schemeExpander.IsChecked)
+						schemeExpander.IsChecked = false;
+					else
+						ValidationCheck(true);
+				}
+			};
+
+	        return schemeExpander;
         }
 
-        protected override void OnResize(EventArgs e)
+		protected override void OnResize(EventArgs e)
         {
 	        base.OnResize(e);
 	        SchemeExpander_ExpandCollapse(this, null);
@@ -179,11 +249,11 @@ namespace LogsReader.Reader
 
         private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
         {
-			if(FlowPanelForExpanders == null)
+			if(flowPanelForExpanders == null)
 				return;
 
 	        var height = 0;
-	        foreach (var expander in FlowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
+	        foreach (var expander in flowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
 	        {
 		        if (expander.IsExpanded)
 			        height += expander.ExpandedHeight;
@@ -193,16 +263,16 @@ namespace LogsReader.Reader
 		        height += expander.Margin.Top + expander.Margin.Bottom;
 	        }
 
-            PanelFlowDoc.AutoScrollMinSize = new Size(0, height);
+            panelFlowDoc.AutoScrollMinSize = new Size(0, height);
             
-            if (PanelFlowDoc.VerticalScroll.Visible)
+            if (panelFlowDoc.VerticalScroll.Visible)
             {
-	            FlowPanelForExpanders.Size = new Size(PanelFlowDoc.Size.Width - 16, height);
+	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 16, height);
 	            checkBoxSelectAll.Padding = new Padding(0, 0, 22, 0);
             }
             else
             {
-	            FlowPanelForExpanders.Size = new Size(PanelFlowDoc.Size.Width - 2, height);
+	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 2, height);
 	            checkBoxSelectAll.Padding = new Padding(0, 0, 8, 0);
             }
         }
@@ -220,6 +290,13 @@ namespace LogsReader.Reader
 		protected override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
 			throw new NotImplementedException();
+		}
+
+		protected override void ValidationCheck(bool clearStatus)
+		{
+			BTNSearch.Enabled = !txtPattern.Text.IsNullOrEmpty() 
+			                    && AllExpanders.Any(x => x.Key.BTNSearch.Enabled && x.Value.IsChecked);
+			base.ValidationCheck(clearStatus);
 		}
 	}
 }

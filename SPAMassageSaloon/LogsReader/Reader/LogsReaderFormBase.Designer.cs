@@ -31,7 +31,7 @@ namespace LogsReader.Reader
 			this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DateOfTrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.btnSearch = new System.Windows.Forms.Button();
+			this.BTNSearch = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.txtPattern = new System.Windows.Forms.TextBox();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
@@ -167,21 +167,21 @@ namespace LogsReader.Reader
 			this.File.ReadOnly = true;
 			this.File.Width = 1000;
 			// 
-			// btnSearch
+			// BTNSearch
 			// 
-			this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSearch.BackColor = System.Drawing.SystemColors.Control;
-			this.btnSearch.Image = global::LogsReader.Properties.Resources.find;
-			this.btnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnSearch.Location = new System.Drawing.Point(943, 2);
-			this.btnSearch.Name = "btnSearch";
-			this.btnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-			this.btnSearch.Size = new System.Drawing.Size(90, 24);
-			this.btnSearch.TabIndex = 3;
-			this.btnSearch.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
-			this.btnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnSearch.UseVisualStyleBackColor = true;
-			this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
+			this.BTNSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.BTNSearch.BackColor = System.Drawing.SystemColors.Control;
+			this.BTNSearch.Image = global::LogsReader.Properties.Resources.find;
+			this.BTNSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.BTNSearch.Location = new System.Drawing.Point(943, 2);
+			this.BTNSearch.Name = "BTNSearch";
+			this.BTNSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.BTNSearch.Size = new System.Drawing.Size(90, 24);
+			this.BTNSearch.TabIndex = 3;
+			this.BTNSearch.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
+			this.BTNSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.BTNSearch.UseVisualStyleBackColor = true;
+			this.BTNSearch.Click += new System.EventHandler(this.BtnSearch_Click);
 			// 
 			// btnClear
 			// 
@@ -462,7 +462,7 @@ namespace LogsReader.Reader
 			this.searchPanel.BackColor = System.Drawing.SystemColors.Control;
 			this.searchPanel.Controls.Add(this.txtPattern);
 			this.searchPanel.Controls.Add(this.useRegex);
-			this.searchPanel.Controls.Add(this.btnSearch);
+			this.searchPanel.Controls.Add(this.BTNSearch);
 			this.searchPanel.Controls.Add(this.btnClear);
 			this.searchPanel.Dock = System.Windows.Forms.DockStyle.Top;
 			this.searchPanel.Location = new System.Drawing.Point(0, 0);
@@ -561,7 +561,6 @@ namespace LogsReader.Reader
         }
 
         #endregion
-        private CustomDataGridView dgvFiles;
         private Button btnClear;
         private ProgressBar progressBar;
         private StatusStrip statusStrip;
@@ -580,7 +579,6 @@ namespace LogsReader.Reader
         private RichTextBox descriptionText;
         private Panel searchPanel;
         private Button buttonExport;
-        private DataGridViewTextBoxColumn Date;
         private ComboBox traceNameFilterComboBox;
         private ComboBox traceMessageFilterComboBox;
         private DataGridViewTextBoxColumn PrivateID;
@@ -593,7 +591,8 @@ namespace LogsReader.Reader
         private SplitContainer ParentSplitContainer;
         private NotepadControl notepad;
 
-        protected Button btnSearch;
+        internal Button BTNSearch;
+        protected CustomDataGridView dgvFiles;
 		protected CheckBox useRegex;
 		protected TextBox txtPattern;
 		protected CheckBox alreadyUseFilter;
