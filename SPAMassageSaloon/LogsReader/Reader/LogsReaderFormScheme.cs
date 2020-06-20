@@ -46,157 +46,158 @@ namespace LogsReader.Reader
         public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {
 	        try
-            {
-	            CurrentSettings = scheme;
-	            CurrentSettings.ReportStatus += ReportStatus;
+	        {
+		        CurrentSettings = scheme;
+		        CurrentSettings.ReportStatus += ReportStatus;
 
-                #region Initialize Controls
+		        #region Initialize Controls
 
-                OrderByLabel = new Label
-                {
-                    AutoSize = true,
-                    Location = new Point(3, 88),
-                    Name = "OrderByLabel",
-                    Size = new Size(53, 15),
-                    TabIndex = 17,
-                    Text = Resources.Txt_LogsReaderForm_OrderBy
-                };
+		        OrderByLabel = new Label
+		        {
+			        AutoSize = true,
+			        Location = new Point(3, 88),
+			        Name = "OrderByLabel",
+			        Size = new Size(53, 15),
+			        TabIndex = 17,
+			        Text = Resources.Txt_LogsReaderForm_OrderBy
+		        };
 
-                MaxLinesLabel = new Label
-                {
-                    AutoSize = true,
-                    Location = new Point(3, 10),
-                    Name = "MaxLinesLabel",
-                    Size = new Size(59, 15),
-                    TabIndex = 13,
-                    Text = Resources.Txt_LogsReaderForm_MaxLines
-                };
+		        MaxLinesLabel = new Label
+		        {
+			        AutoSize = true,
+			        Location = new Point(3, 10),
+			        Name = "MaxLinesLabel",
+			        Size = new Size(59, 15),
+			        TabIndex = 13,
+			        Text = Resources.Txt_LogsReaderForm_MaxLines
+		        };
 
-                orderByText = new TextBox
-                {
-                    Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
-                    Location = new Point(84, 85),
-                    Name = "orderByText",
-                    Size = new Size(122, 23),
-                    TabIndex = 18
-                };
-                orderByText.Leave += OrderByText_Leave;
+		        orderByText = new TextBox
+		        {
+			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(84, 85),
+			        Name = "orderByText",
+			        Size = new Size(122, 23),
+			        TabIndex = 18
+		        };
+		        orderByText.Leave += OrderByText_Leave;
 
-                MaxThreadsLabel = new Label
-                {
-                    AutoSize = true,
-                    Location = new Point(3, 36),
-                    Name = "MaxThreadsLabel",
-                    Size = new Size(74, 15),
-                    TabIndex = 9,
-                    Text = Resources.Txt_LogsReaderForm_MaxThreads
-                };
+		        MaxThreadsLabel = new Label
+		        {
+			        AutoSize = true,
+			        Location = new Point(3, 36),
+			        Name = "MaxThreadsLabel",
+			        Size = new Size(74, 15),
+			        TabIndex = 9,
+			        Text = Resources.Txt_LogsReaderForm_MaxThreads
+		        };
 
-                maxLinesStackText = new TextBox
-                {
-                    Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
-                    Location = new Point(84, 7),
-                    Name = "maxLinesStackText",
-                    Size = new Size(122, 23),
-                    TabIndex = 15
-                };
-                maxLinesStackText.TextChanged += MaxLinesStackText_TextChanged;
-                maxLinesStackText.Leave += MaxLinesStackText_Leave;
+		        maxLinesStackText = new TextBox
+		        {
+			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(84, 7),
+			        Name = "maxLinesStackText",
+			        Size = new Size(122, 23),
+			        TabIndex = 15
+		        };
+		        maxLinesStackText.TextChanged += MaxLinesStackText_TextChanged;
+		        maxLinesStackText.Leave += MaxLinesStackText_Leave;
 
-                RowsLimitLabel = new Label
-                {
-                    AutoSize = true,
-                    Location = new Point(3, 62),
-                    Name = "RowsLimitLabel",
-                    Size = new Size(65, 15),
-                    TabIndex = 15,
-                    Text = Resources.Txt_LogsReaderForm_RowsLimit
-                };
+		        RowsLimitLabel = new Label
+		        {
+			        AutoSize = true,
+			        Location = new Point(3, 62),
+			        Name = "RowsLimitLabel",
+			        Size = new Size(65, 15),
+			        TabIndex = 15,
+			        Text = Resources.Txt_LogsReaderForm_RowsLimit
+		        };
 
-                maxThreadsText = new TextBox
-                {
-                    Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
-                    Location = new Point(84, 33),
-                    Name = "maxThreadsText",
-                    Size = new Size(122, 23),
-                    TabIndex = 16
-                };
-                maxThreadsText.TextChanged += MaxThreadsText_TextChanged;
-                maxThreadsText.Leave += MaxThreadsText_Leave;
+		        maxThreadsText = new TextBox
+		        {
+			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(84, 33),
+			        Name = "maxThreadsText",
+			        Size = new Size(122, 23),
+			        TabIndex = 16
+		        };
+		        maxThreadsText.TextChanged += MaxThreadsText_TextChanged;
+		        maxThreadsText.Leave += MaxThreadsText_Leave;
 
-                rowsLimitText = new TextBox
-                {
-                    Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
-                    Location = new Point(84, 59),
-                    Name = "rowsLimitText",
-                    Size = new Size(122, 23),
-                    TabIndex = 17
-                };
-                rowsLimitText.TextChanged += RowsLimitText_TextChanged;
-                rowsLimitText.Leave += RowsLimitText_Leave;
+		        rowsLimitText = new TextBox
+		        {
+			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(84, 59),
+			        Name = "rowsLimitText",
+			        Size = new Size(122, 23),
+			        TabIndex = 17
+		        };
+		        rowsLimitText.TextChanged += RowsLimitText_TextChanged;
+		        rowsLimitText.Leave += RowsLimitText_Leave;
 
-                TreeMain = new CustomTreeView
-                {
-                    Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
-                    Location = new Point(1, 114),
-                    Name = "TreeMain",
-                    Size = new Size(208, 352),
-                    TabIndex = 19
-                };
+		        TreeMain = new CustomTreeView
+		        {
+			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(1, 114),
+			        Name = "TreeMain",
+			        Size = new Size(208, 352),
+			        TabIndex = 19
+		        };
 
-                MainSplitContainer.Panel1.Controls.Add(OrderByLabel);
-                MainSplitContainer.Panel1.Controls.Add(MaxLinesLabel);
-                MainSplitContainer.Panel1.Controls.Add(orderByText);
-                MainSplitContainer.Panel1.Controls.Add(MaxThreadsLabel);
-                MainSplitContainer.Panel1.Controls.Add(maxLinesStackText);
-                MainSplitContainer.Panel1.Controls.Add(RowsLimitLabel);
-                MainSplitContainer.Panel1.Controls.Add(maxThreadsText);
-                MainSplitContainer.Panel1.Controls.Add(rowsLimitText);
-                MainSplitContainer.Panel1.Controls.Add(TreeMain);
+		        MainSplitContainer.Panel1.Controls.Add(OrderByLabel);
+		        MainSplitContainer.Panel1.Controls.Add(MaxLinesLabel);
+		        MainSplitContainer.Panel1.Controls.Add(orderByText);
+		        MainSplitContainer.Panel1.Controls.Add(MaxThreadsLabel);
+		        MainSplitContainer.Panel1.Controls.Add(maxLinesStackText);
+		        MainSplitContainer.Panel1.Controls.Add(RowsLimitLabel);
+		        MainSplitContainer.Panel1.Controls.Add(maxThreadsText);
+		        MainSplitContainer.Panel1.Controls.Add(rowsLimitText);
+		        MainSplitContainer.Panel1.Controls.Add(TreeMain);
 
-                #endregion
+		        #endregion
 
-                #region Options
+		        #region Options
 
-                maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
-                maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-                rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-                orderByText.Text = CurrentSettings.OrderBy;
-                orderByText.GotFocus += OrderByText_GotFocus;
+		        maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
+		        maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
+		        rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+		        orderByText.Text = CurrentSettings.OrderBy;
+		        orderByText.GotFocus += OrderByText_GotFocus;
 
-                #endregion
+		        #endregion
 
-                #region TreeView Container
+		        #region TreeView Container
 
-                TreeViewContainer = new TreeViewContainer(
-	                CurrentSettings, 
-	                TreeMain, 
-	                CurrentSettings.Servers.Groups, 
-	                CurrentSettings.FileTypes.Groups, 
-	                CurrentSettings.LogsFolder.Folders);
+		        TreeViewContainer = new TreeViewContainer(
+			        CurrentSettings,
+			        TreeMain,
+			        CurrentSettings.Servers.Groups,
+			        CurrentSettings.FileTypes.Groups,
+			        CurrentSettings.LogsFolder.Folders);
 
-                TreeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
-                {
-	                ValidationCheck(clearStatus);
-                    if(onSchemeChanged)
-	                    OnSchemeChanged?.Invoke(this, EventArgs.Empty);
-                };
-                TreeViewContainer.OnError += ex =>
-                {
-	                ReportStatus(ex.Message, ReportStatusType.Error);
-                };
+		        TreeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
+		        {
+			        ValidationCheck(clearStatus);
+			        if (onSchemeChanged)
+				        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+		        };
+		        TreeViewContainer.OnError += ex => { ReportStatus(ex.Message, ReportStatusType.Error); };
 
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
-            }
-            finally
-            {
-                ClearForm(false);
-                ValidationCheck(false);
-            }
+		        var template = UserSettings.Template;
+		        if (template != null)
+			        TreeViewContainer.UpdateContainerByTemplate(template);
+
+		        #endregion
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
+	        }
+	        finally
+	        {
+		        ClearForm(false);
+		        ValidationCheck(false);
+	        }
         }
 
         public override void ApplySettings()
@@ -215,6 +216,12 @@ namespace LogsReader.Reader
 	        TreeViewContainer.ApplySettings();
 
             base.ApplySettings();
+        }
+
+        public override void SaveData()
+        {
+	        UserSettings.Template = TreeViewContainer.GetTemplate(TreeMain);
+            base.SaveData();
         }
 
         public override void LogsReaderKeyDown(object sender, KeyEventArgs e)

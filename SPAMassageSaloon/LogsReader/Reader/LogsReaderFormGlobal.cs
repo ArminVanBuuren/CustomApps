@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
 using Utils;
-using Utils.WinForm;
 using Utils.WinForm.Expander;
 
 namespace LogsReader.Reader
@@ -112,7 +111,17 @@ namespace LogsReader.Reader
 			Func<Color> expanderBorderColor = () => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.FromArgb(209, 27, 27);
 			Func<Color> expanderPanelColor = () => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(236, 186, 202);
 
-			var colorDialog = new ColorDialog { FullOpen = true };
+			var colorDialog = new ColorDialog
+			{
+				AllowFullOpen = true,
+				FullOpen = true, 
+				CustomColors = new[]
+				{
+					ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_BACK),
+					ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_FORE)
+				}
+			};
+
 			void ChangeColor(object sender, EventArgs e)
 			{
 				if (!(sender is Button button))
@@ -126,9 +135,15 @@ namespace LogsReader.Reader
 				button.BackColor = colorDialog.Color;
 
 				if (button == buttonBack)
+				{
+					readerForm.UserSettings.BackColor = colorDialog.Color;
 					schemeExpander.HeaderBackColor = colorDialog.Color;
-				else if(button == buttonFore)
+				}
+				else if (button == buttonFore)
+				{
+					readerForm.UserSettings.ForeColor = colorDialog.Color;
 					schemeExpander.ForeColor = colorDialog.Color;
+				}
 			}
 
 			var buttonSize = new Size(20, 17);
@@ -136,7 +151,7 @@ namespace LogsReader.Reader
 			var labelBack = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(25, 3), Size = new Size(34, 15), Text = @"Back" };
 			buttonBack = new Button
 			{
-				BackColor = Color.White,
+				BackColor = readerForm.UserSettings.BackColor,
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(3, 3),
 				Size = buttonSize,
@@ -147,7 +162,7 @@ namespace LogsReader.Reader
 			var labelFore = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(85, 3), Size = new Size(34, 15), Text = @"Fore" };
 			buttonFore = new Button
 			{
-				BackColor = Color.Black,
+				BackColor = readerForm.UserSettings.ForeColor,
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(63, 3),
 				Size = buttonSize,
@@ -169,6 +184,7 @@ namespace LogsReader.Reader
 		        HeaderBackColor = buttonBack.BackColor,
 		        ForeColor = buttonFore.BackColor,
 				HeaderLineColor = Color.White,
+				Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
 		        IsChecked = false,
 		        IsExpanded = false,
 		        UseAnimation = false,
@@ -177,14 +193,14 @@ namespace LogsReader.Reader
                 Margin = new Padding(3, 3, 3, 0)
 	        };
 			
-			var panel = new Panel
+			var expanderPanel = new Panel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                 BackColor = expanderPanelColor.Invoke(),
                 Location = new Point(2, 23),
                 Size = new Size(schemeExpander.Size.Width - 4, 275)
             };
-			schemeExpander.Controls.Add(panel);
+			schemeExpander.Controls.Add(expanderPanel);
 
 			var treeView = readerForm.TreeViewContainer.CreateNewCopy();
 	        treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
@@ -192,11 +208,11 @@ namespace LogsReader.Reader
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 3, 253);
 
-	        panel.Controls.Add(buttonBack);
-	        panel.Controls.Add(buttonFore);
-	        panel.Controls.Add(labelBack);
-	        panel.Controls.Add(labelFore);
-	        panel.Controls.Add(treeView);
+	        expanderPanel.Controls.Add(buttonBack);
+	        expanderPanel.Controls.Add(buttonFore);
+	        expanderPanel.Controls.Add(labelBack);
+	        expanderPanel.Controls.Add(labelFore);
+	        expanderPanel.Controls.Add(treeView);
 
 			// events
 	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
@@ -219,7 +235,7 @@ namespace LogsReader.Reader
 			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke();
-				panel.BackColor = expanderPanelColor.Invoke();
+				expanderPanel.BackColor = expanderPanelColor.Invoke();
 				if (readerForm.BTNSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
@@ -268,12 +284,12 @@ namespace LogsReader.Reader
             if (panelFlowDoc.VerticalScroll.Visible)
             {
 	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 16, height);
-	            checkBoxSelectAll.Padding = new Padding(0, 0, 22, 0);
+	            checkBoxSelectAll.Padding = new Padding(0, 0, 23, 0);
             }
             else
             {
 	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 2, height);
-	            checkBoxSelectAll.Padding = new Padding(0, 0, 8, 0);
+	            checkBoxSelectAll.Padding = new Padding(0, 0, 9, 0);
             }
         }
 

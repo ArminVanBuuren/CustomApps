@@ -281,7 +281,7 @@ namespace LogsReader.Reader
             }
         }
 
-        public void SaveData()
+        public virtual void SaveData()
         {
             try
             {

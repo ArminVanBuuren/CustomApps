@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using FastColoredTextBoxNS;
+using LogsReader.Reader;
+using Microsoft.Win32;
 using Utils;
 using Utils.Handles;
 
@@ -156,6 +161,65 @@ namespace LogsReader.Config
                 return false;
             }
             set => SetValue(nameof(TraceHighlights), value);
+        }
+
+        public Color BackColor
+        {
+	        get
+	        {
+		        if (int.TryParse(GetValue(nameof(BackColor)), out var res))
+			        return Color.FromArgb(res);
+		        return LogsReaderMainForm.SCHEME_COLOR_BACK;
+            }
+	        set => SetValue(nameof(BackColor), value.ToArgb());
+        }
+
+        public Color ForeColor
+        {
+	        get
+	        {
+		        if (int.TryParse(GetValue(nameof(ForeColor)), out var res))
+			        return Color.FromArgb(res);
+		        return LogsReaderMainForm.SCHEME_COLOR_FORE;
+	        }
+	        set => SetValue(nameof(ForeColor), value.ToArgb());
+        }
+
+        public Dictionary<string, TreeNodeItem> Template
+        {
+	        get
+	        {
+		        try
+		        {
+			        using (var regControl = _getRegeditControl.Invoke())
+			        {
+				        var obj = regControl[nameof(Template)];
+				        if (obj is byte[] array)
+				        {
+					        using (var stream = new MemoryStream(array))
+						        return new BinaryFormatter().Deserialize(stream) as Dictionary<string, TreeNodeItem>;
+				        }
+			        }
+		        }
+		        catch (Exception ex)
+		        {
+			        // ignored
+		        }
+		        return null;
+            }
+	        set
+	        {
+		        try
+		        {
+			        using (var stream = value.SerializeToStream())
+			        using (var regControl = _getRegeditControl.Invoke())
+				        regControl[nameof(Template), RegistryValueKind.Binary] = stream.ToArray();
+                }
+		        catch (Exception)
+		        {
+			        // ignored
+		        }
+            }
         }
 
         static UserSettings()

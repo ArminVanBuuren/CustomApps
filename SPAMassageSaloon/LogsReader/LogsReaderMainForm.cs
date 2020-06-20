@@ -23,6 +23,11 @@ namespace LogsReader
         private static readonly object credentialSync = new object();
 	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
 
+	    public static readonly Color GLOBAL_COLOR_BACK = Color.FromArgb(255, 0, 206);
+	    public static readonly Color GLOBAL_COLOR_FORE = Color.White;
+	    public static readonly Color SCHEME_COLOR_BACK = Color.FromArgb(0, 200, 205);
+	    public static readonly Color SCHEME_COLOR_FORE = Color.White;
+
 	    public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get
@@ -154,11 +159,6 @@ namespace LogsReader
 
 
                 MainTabControl.DrawItem += MainTabControl_DrawItem;
-                Closing += (s, e) =>
-                {
-	                SaveData();
-	                SerializeUserCreditails();
-                };
                 Shown += (s, e) =>
                 {
 	                ApplySettings();
@@ -169,6 +169,11 @@ namespace LogsReader
 		                logsReader.ApplyFormSettings();
 		                logsReader.OnSchemeChanged += SaveSchemas;
 	                }
+                };
+                Closing += (s, e) =>
+                {
+	                SaveData();
+	                SerializeUserCreditails();
                 };
             }
             catch (Exception ex)
@@ -181,7 +186,7 @@ namespace LogsReader
             }
         }
 
-        async void SaveSchemas(object sender, EventArgs args)
+        static async void SaveSchemas(object sender, EventArgs args)
         {
             if (Settings != null)
                 await LRSettings.SerializeAsync(Settings);
@@ -192,9 +197,17 @@ namespace LogsReader
             var page = MainTabControl.TabPages[e.Index];
             if (page == MainTabControl.SelectedTab)
             {
-                RenderTabPage(page, e, 
-	                page.Name == GLOBAL_PAGE_NAME ? Color.FromArgb(255, 0, 206) : Color.FromArgb(0, 200, 205), 
-	                Color.White);
+	            if (page.Name == GLOBAL_PAGE_NAME)
+	            {
+		            RenderTabPage(page, e, GLOBAL_COLOR_BACK, GLOBAL_COLOR_FORE);
+                }
+	            else
+	            {
+		            if (AllForms.TryGetValue(page, out var reader))
+			            RenderTabPage(page, e, reader.UserSettings.BackColor, reader.UserSettings.ForeColor);
+                    else
+			            RenderTabPage(page, e, SCHEME_COLOR_BACK, SCHEME_COLOR_FORE);
+                }
             }
             else
             {
@@ -233,25 +246,24 @@ namespace LogsReader
 
         public void SaveData()
         {
-            try
-            {
-                if (Settings != null)
-                    LRSettings.Serialize(Settings);
+	        try
+	        {
+		        if (Settings != null)
+			        LRSettings.Serialize(Settings);
 
-                foreach (var logsReader in AllForms.Values)
-                {
-                    logsReader.SaveData();
-                }
+		        Global.SaveData();
+		        foreach (var logsReader in AllForms.Values)
+			        logsReader.SaveData();
 
-                Properties.Settings.Default.FormLocation = Location;
-                Properties.Settings.Default.FormSize = Size;
-                Properties.Settings.Default.FormState = WindowState;
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
+		        Properties.Settings.Default.FormLocation = Location;
+		        Properties.Settings.Default.FormSize = Size;
+		        Properties.Settings.Default.FormState = WindowState;
+		        Properties.Settings.Default.Save();
+	        }
+	        catch (Exception ex)
+	        {
+		        // ignored
+	        }
         }
     }
 }

@@ -220,9 +220,7 @@ namespace LogsReader.Reader
 	        Current = current;
 
 	        DisableExpandersEvents();
-
 	        UpdateContainerProperties(Current, true);
-
 	        EnableExpandersEvents();
         }
 
@@ -487,12 +485,12 @@ namespace LogsReader.Reader
                     CurrentSettings.FileTypes = new LRGroups(groupItems.ToArray());
 
                 // бэкапим ноды, для чтобы в новом листе установить Checked и Expand
-                var prevNodes = new Dictionary<string, TreeNode>();
+                var prevNodes = new Dictionary<string, TreeNodeItem>();
                 foreach (var group in treeNode.Nodes.OfType<TreeNode>())
                 {
-                    prevNodes.Add(group.Text, group);
+                    prevNodes.Add(group.Text, new TreeNodeItem(group.IsExpanded, group.Checked));
                     foreach (var item in group.Nodes.OfType<TreeNode>())
-                        prevNodes.Add($"{group.Text}_{item.Text}", item);
+                        prevNodes.Add($"{group.Text}_{item.Text}", new TreeNodeItem(item.IsExpanded, item.Checked));
                 }
 
                 treeNode.Nodes.Clear();
@@ -798,60 +796,104 @@ namespace LogsReader.Reader
 			        treeView.AfterCheck -= TrvMain_AfterCheck;
 	        }
 
-	        var allTreeViewItems = new Dictionary<string, TreeNode>();
-            foreach (var parent in changedTreeView.Nodes.OfType<TreeNode>())
-            {
-                allTreeViewItems.Add(parent.Name, parent);
-                foreach (var group in parent.Nodes.OfType<TreeNode>())
-                {
-                    allTreeViewItems.Add($"{parent.Name}_{group.Text}", group);
-                    foreach (var item in group.Nodes.OfType<TreeNode>())
-                    {
-                        allTreeViewItems.Add($"{parent.Name}_{group.Text}_{item.Text}", item);
-                    }
-                }
-            }
+	        var template = GetTemplate(changedTreeView);
 
-            foreach (var bindedTreeView in _copyList.Where(x => x != changedTreeView))
-            {
-	            foreach (var parent in bindedTreeView.Nodes.OfType<TreeNode>())
-	            {
-		            if (allTreeViewItems.TryGetValue(parent.Name, out var newParent))
-		            {
-			            parent.Checked = newParent.Checked;
-                        if(newParent.IsExpanded)
-	                        parent.Expand();
-                        else
-	                        parent.Collapse();
-                    }
+	        foreach (var bindedTreeView in _copyList.Where(x => x != changedTreeView))
+		        SetTreeNodeItemsProperies(bindedTreeView, template);
 
-		            foreach (var group in parent.Nodes.OfType<TreeNode>())
-		            {
-			            if (allTreeViewItems.TryGetValue($"{parent.Name}_{group.Text}", out var newGroup))
-			            {
-				            group.Checked = newGroup.Checked;
-				            if (newGroup.IsExpanded)
-					            group.Expand();
-				            else
-					            group.Collapse();
-			            }
-
-			            foreach (var item in group.Nodes.OfType<TreeNode>())
-			            {
-				            if (allTreeViewItems.TryGetValue($"{parent.Name}_{group.Text}_{item.Text}", out var newItem))
-				            {
-					            item.Checked = newItem.Checked;
-				            }
-                        }
-                    }
-                }
-            }
-
-            if (disableAfterCheck)
-            {
-	            foreach (var treeView in _copyList)
-		            treeView.AfterCheck += TrvMain_AfterCheck;
-            }
+	        if (disableAfterCheck)
+	        {
+		        foreach (var treeView in _copyList)
+			        treeView.AfterCheck += TrvMain_AfterCheck;
+	        }
         }
+
+        public static Dictionary<string, TreeNodeItem> GetTemplate(TreeView treeView)
+        {
+	        var template = new Dictionary<string, TreeNodeItem>();
+	        foreach (var parent in treeView.Nodes.OfType<TreeNode>())
+	        {
+		        template.Add(parent.Name, new TreeNodeItem(parent.IsExpanded, parent.Checked));
+		        foreach (var group in parent.Nodes.OfType<TreeNode>())
+		        {
+			        template.Add($"{parent.Name}_{group.Text}", new TreeNodeItem(group.IsExpanded, group.Checked));
+			        foreach (var item in group.Nodes.OfType<TreeNode>())
+			        {
+				        template.Add($"{parent.Name}_{group.Text}_{item.Text}", new TreeNodeItem(item.IsExpanded, item.Checked));
+			        }
+		        }
+	        }
+
+	        return template;
+        }
+
+        public void UpdateContainerByTemplate(Dictionary<string, TreeNodeItem> template)
+        {
+	        DisableExpandersEvents();
+            foreach (var treeView in _copyList)
+		        treeView.AfterCheck -= TrvMain_AfterCheck;
+
+            foreach (var bindedTreeView in _copyList)
+		        SetTreeNodeItemsProperies(bindedTreeView, template);
+
+            EnableExpandersEvents();
+            foreach (var treeView in _copyList)
+	            treeView.AfterCheck += TrvMain_AfterCheck;
+        }
+
+        static void SetTreeNodeItemsProperies(TreeView bindedTreeView, IReadOnlyDictionary<string, TreeNodeItem> template)
+        {
+	        foreach (var parent in bindedTreeView.Nodes.OfType<TreeNode>())
+	        {
+		        try
+		        {
+			        if (template.TryGetValue(parent.Name, out var newParent))
+			        {
+				        parent.Checked = newParent.Checked;
+				        if (newParent.IsExpanded)
+					        parent.Expand();
+				        else
+					        parent.Collapse();
+			        }
+
+			        foreach (var group in parent.Nodes.OfType<TreeNode>())
+			        {
+				        if (template.TryGetValue($"{parent.Name}_{group.Text}", out var newGroup))
+				        {
+					        group.Checked = newGroup.Checked;
+					        if (newGroup.IsExpanded)
+						        group.Expand();
+					        else
+						        group.Collapse();
+				        }
+
+				        foreach (var item in group.Nodes.OfType<TreeNode>())
+				        {
+					        if (template.TryGetValue($"{parent.Name}_{group.Text}_{item.Text}", out var newItem))
+					        {
+						        item.Checked = newItem.Checked;
+					        }
+				        }
+			        }
+                }
+		        catch (Exception)
+		        {
+			        // ignored
+		        }
+	        }
+        }
+    }
+
+    [Serializable]
+    public class TreeNodeItem
+    {
+	    public bool IsExpanded { get; }
+	    public bool Checked { get; }
+
+	    public TreeNodeItem(bool isExpanded, bool @checked)
+	    {
+		    IsExpanded = isExpanded;
+		    Checked = @checked;
+	    }
     }
 }
