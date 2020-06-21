@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
+using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.Expander;
 
@@ -108,8 +109,8 @@ namespace LogsReader.Reader
 			Button buttonFore = null;
 			ExpandCollapsePanel schemeExpander = null;
 
-			Func<Color> expanderBorderColor = () => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.FromArgb(209, 27, 27);
-			Func<Color> expanderPanelColor = () => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(236, 186, 202);
+			Func<Color> expanderBorderColor = () => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
+			Func<Color> expanderPanelColor = () => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
 
 			var colorDialog = new ColorDialog
 			{
@@ -206,7 +207,7 @@ namespace LogsReader.Reader
 	        treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
-	        treeView.Size = new Size(schemeExpander.Size.Width - 3, 253);
+	        treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
 
 	        expanderPanel.Controls.Add(buttonBack);
 	        expanderPanel.Controls.Add(buttonFore);
@@ -236,6 +237,7 @@ namespace LogsReader.Reader
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke();
 				expanderPanel.BackColor = expanderPanelColor.Invoke();
+
 				if (readerForm.BTNSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
@@ -253,8 +255,9 @@ namespace LogsReader.Reader
 						ValidationCheck(true);
 				}
 			};
+			readerForm.OnSearchCompleted += ReaderForm_OnSearchCompleted;
 
-	        return schemeExpander;
+			return schemeExpander;
         }
 
 		protected override void OnResize(EventArgs e)
@@ -293,9 +296,48 @@ namespace LogsReader.Reader
             }
         }
 
-		protected override void BtnSearch_Click(object sender, EventArgs e)
+        private Dictionary<LogsReaderFormScheme, Task> _processing;
+
+        internal override void BtnSearch_Click(object sender, EventArgs e)
 		{
-			throw new NotImplementedException();
+			if (!IsWorking)
+			{
+				try
+				{
+					IsWorking = true;
+					_processing = new Dictionary<LogsReaderFormScheme, Task>();
+
+					ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+
+					foreach (var (readerForm, expander) in AllExpanders.Where(x => x.Value.IsChecked))
+					{
+						if (readerForm.IsWorking) 
+							continue;
+
+						_processing.Add(readerForm, Task.Factory.StartNew(() => readerForm.BtnSearch_Click(this, EventArgs.Empty)));
+					}
+				}
+				catch (Exception ex)
+				{
+					ReportStatus(ex.Message, ReportStatusType.Error);
+				}
+			}
+			else
+			{
+				foreach (var (readerForm, expander) in AllExpanders.Where(x => x.Value.IsChecked))
+					if (readerForm.IsWorking)
+						readerForm.BtnSearch_Click(this, EventArgs.Empty);
+
+				ReportStatus(Resources.Txt_LogsReaderForm_Stopping, ReportStatusType.Success);
+			}
+		}
+
+        private void ReaderForm_OnSearchCompleted(object sender, EventArgs e)
+        {
+	        if (_processing.Any(x => x.Key.IsWorking))
+				return;
+
+			IsWorking = false;
 		}
 
 		protected override Task<bool> AssignResult(DataFilter filter)
@@ -304,6 +346,11 @@ namespace LogsReader.Reader
 		}
 
 		protected override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			throw new NotImplementedException();
 		}

@@ -29,7 +29,12 @@ namespace LogsReader.Reader
 		/// </summary>
 		protected GetTransactionDelegate<string, string, bool> IsMatchByTransactions { get; }
 
+		/// <summary>
+		/// Функция для получение определенного <see cref="TraceReader"/> согласно настройкам
+		/// </summary>
 		protected Func<(string server, string filePath, string originalFolder), TraceReader> GetTraceReader { get; }
+
+		public string SchemeName => _currentSettings.Name;
 
 		public Encoding Encoding => _currentSettings.Encoding;
 

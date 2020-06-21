@@ -90,6 +90,9 @@ namespace LogsReader.Reader
 
         public Exception Error { get; }
 
+        [DGVColumn(ColumnPosition.Last, "SchemeName", false)]
+        public string SchemeName => ParentReader.SchemeName;
+
         [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
         public int PrivateID { get; internal set; }
 

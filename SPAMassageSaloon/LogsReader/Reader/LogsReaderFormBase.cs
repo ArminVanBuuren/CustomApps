@@ -25,6 +25,7 @@ namespace LogsReader.Reader
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
+        private bool _isWorking;
 
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
@@ -44,7 +45,15 @@ namespace LogsReader.Reader
         /// <summary>
         /// Статус выполнения поиска
         /// </summary>
-        public bool IsWorking { get; protected set; }
+        public bool IsWorking
+        {
+	        get => _isWorking;
+	        protected set
+	        {
+		        _isWorking = value;
+		        ChangeFormStatus();
+            }
+        }
 
         /// <summary>
         /// Юзерские настройки 
@@ -357,7 +366,7 @@ namespace LogsReader.Reader
             }
         }
 
-        protected abstract void BtnSearch_Click(object sender, EventArgs e);
+        internal abstract void BtnSearch_Click(object sender, EventArgs e);
 
         protected void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
@@ -640,7 +649,7 @@ namespace LogsReader.Reader
                 dgvFiles.ClearSelection();
                 dgvFiles.Rows[hti.RowIndex].Selected = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -748,7 +757,7 @@ namespace LogsReader.Reader
 
                 STREAM.GarbageCollect();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }

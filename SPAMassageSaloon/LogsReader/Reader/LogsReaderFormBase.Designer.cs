@@ -24,6 +24,7 @@ namespace LogsReader.Reader
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogsReaderFormBase));
 			this.dgvFiles = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -83,6 +84,7 @@ namespace LogsReader.Reader
 			this.dgvFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SchemeName,
             this.PrivateID,
             this.IsMatched,
             this.ID,
@@ -101,6 +103,16 @@ namespace LogsReader.Reader
 			this.dgvFiles.TabIndex = 20;
 			this.dgvFiles.SelectionChanged += new System.EventHandler(this.DgvFiles_SelectionChanged);
 			this.dgvFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvFiles_MouseDown);
+			// 
+			// SchemeName
+			// 
+			this.SchemeName.DataPropertyName = "SchemeName";
+			this.SchemeName.HeaderText = "SchemeName";
+			this.SchemeName.MinimumWidth = 10;
+			this.SchemeName.Name = "SchemeName";
+			this.SchemeName.ReadOnly = true;
+			this.SchemeName.Visible = false;
+			this.SchemeName.Width = 10;
 			// 
 			// PrivateID
 			// 
@@ -581,6 +593,7 @@ namespace LogsReader.Reader
         private Button buttonExport;
         private ComboBox traceNameFilterComboBox;
         private ComboBox traceMessageFilterComboBox;
+        private DataGridViewTextBoxColumn SchemeName;
         private DataGridViewTextBoxColumn PrivateID;
         private DataGridViewTextBoxColumn IsMatched;
         private DataGridViewTextBoxColumn ID;

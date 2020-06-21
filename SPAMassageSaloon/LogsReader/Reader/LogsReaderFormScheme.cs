@@ -20,6 +20,11 @@ namespace LogsReader.Reader
         /// </summary>
         public event EventHandler OnSchemeChanged;
 
+	    /// <summary>
+		/// Поиск логов завершен
+		/// </summary>
+        public event EventHandler OnSearchCompleted;
+
         /// <summary>
         /// Текущая схема настроек
         /// </summary>
@@ -230,25 +235,29 @@ namespace LogsReader.Reader
 	        TreeViewContainer.MainFormKeyDown(TreeMain, e);
         }
 
-        protected override async void BtnSearch_Click(object sender, EventArgs e)
+        internal override async void BtnSearch_Click(object sender, EventArgs e)
         {
             if (!IsWorking)
             {
                 var stop = new Stopwatch();
                 try
                 {
+	                // получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
 	                var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
+	                // получение серверов по чекбоксам
 	                var servers = new List<string>();
 	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes)
 		                servers.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
 	                servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
+	                // получение названия файлов типов  по чекбоксам
 	                var fileTypes = new List<string>();
 	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes)
 		                fileTypes.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
 	                fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
 
+	                // получение папок по чекбоксам
 	                var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
 	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
@@ -256,22 +265,21 @@ namespace LogsReader.Reader
 
 	                stop.Start();
 	                IsWorking = true;
-	                ChangeFormStatus();
 
 	                ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
-	                await MainReader.GetTargetFilesAsync();
+	                await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
 	                ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
-	                await MainReader.StartAsync();
+	                await MainReader.StartAsync(); // вополнение поиска
 
+	                // результат выполнения
 	                OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
 	                if (MainReader.ResultsOfError != null)
 		                OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
+	                // заполняем DataGrid
 	                if (await AssignResult(filter))
-	                {
 		                ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, stop.Elapsed.ToReadableString()), ReportStatusType.Success);
-	                }
 
 	                stop.Stop();
                 }
@@ -289,7 +297,8 @@ namespace LogsReader.Reader
 	                }
 
 	                IsWorking = false;
-	                ChangeFormStatus();
+	                OnSearchCompleted?.Invoke(this, EventArgs.Empty);
+
 	                if (stop.IsRunning)
 		                stop.Stop();
                 }
@@ -446,7 +455,7 @@ namespace LogsReader.Reader
 
 		        base.ValidationCheck(clearStatus);
 	        }
-	        catch (Exception ex)
+	        catch (Exception)
 	        {
 		        // ignored
 	        }
