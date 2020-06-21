@@ -215,9 +215,9 @@ namespace LogsReader.Reader
 	        expanderPanel.Controls.Add(labelFore);
 	        expanderPanel.Controls.Add(treeView);
 
-			// если закрываются или открываются схемы для глобальной формы
+			// если закрываются или открываются схемы для глобальной формы в глобальной форме
 	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
-			// если выбирается схема в глобальной форме
+			// если выбирается схема в глобальной форме в checkbox
 	        schemeExpander.CheckedChanged += (sender, args) =>
 	        {
 				if(!schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
@@ -226,17 +226,17 @@ namespace LogsReader.Reader
 					schemeExpander.BackColor = expanderBorderColor.Invoke();
 				ValidationCheck(true);
 	        };
-			// горячие клавишы для добавления сервероа, типов и директорий
+			// горячие клавишы для добавления сервера, типов и директорий в глобальной форме так и в основной
 	        treeView.KeyDown += (sender, args) =>
 	        {
 		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
 	        };
-			// в случае какой то непонятной ошибки панели TreeView, совсем маловеростно, но пусть будет
+			// в случае какой то неизвестной ошибки панели TreeView
 			readerForm.TreeViewContainer.OnError += ex =>
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
 	        };
-			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схема
+			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схеме
 			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke();
@@ -259,7 +259,7 @@ namespace LogsReader.Reader
 						ValidationCheck(true);
 				}
 			};
-			// если какая то форма схемы выполнила поиск
+			// если какая то форма схемы завершила поиск
 			readerForm.OnSearchCompleted += ReaderForm_OnSearchCompleted;
 
 			return schemeExpander;
