@@ -215,8 +215,9 @@ namespace LogsReader.Reader
 	        expanderPanel.Controls.Add(labelFore);
 	        expanderPanel.Controls.Add(treeView);
 
-			// events
+			// если закрываются или открываются схемы для глобальной формы
 	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
+			// если выбирается схема в глобальной форме
 	        schemeExpander.CheckedChanged += (sender, args) =>
 	        {
 				if(!schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
@@ -225,14 +226,17 @@ namespace LogsReader.Reader
 					schemeExpander.BackColor = expanderBorderColor.Invoke();
 				ValidationCheck(true);
 	        };
+			// горячие клавишы
 	        treeView.KeyDown += (sender, args) =>
 	        {
 		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
 	        };
-	        readerForm.TreeViewContainer.OnError += ex =>
+			// в случае какой то непонятной ошибки панели TreeView
+			readerForm.TreeViewContainer.OnError += ex =>
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
 	        };
+			// если юзер выбрал доступные кейсы для поиска для определенной схемы
 			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke();
