@@ -226,17 +226,17 @@ namespace LogsReader.Reader
 					schemeExpander.BackColor = expanderBorderColor.Invoke();
 				ValidationCheck(true);
 	        };
-			// горячие клавишы
+			// горячие клавишы для добавления сервероа, типов и директорий
 	        treeView.KeyDown += (sender, args) =>
 	        {
 		        readerForm.TreeViewContainer.MainFormKeyDown(treeView, args);
 	        };
-			// в случае какой то непонятной ошибки панели TreeView
+			// в случае какой то непонятной ошибки панели TreeView, совсем маловеростно, но пусть будет
 			readerForm.TreeViewContainer.OnError += ex =>
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
 	        };
-			// если юзер выбрал доступные кейсы для поиска для определенной схемы
+			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схема
 			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke();
@@ -259,6 +259,7 @@ namespace LogsReader.Reader
 						ValidationCheck(true);
 				}
 			};
+			// если какая то форма схемы выполнила поиск
 			readerForm.OnSearchCompleted += ReaderForm_OnSearchCompleted;
 
 			return schemeExpander;
