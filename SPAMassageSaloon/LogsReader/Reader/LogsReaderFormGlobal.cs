@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,8 @@ namespace LogsReader.Reader
 		private readonly Panel panelFlowDoc;
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
+
+		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
 	    
@@ -260,7 +263,16 @@ namespace LogsReader.Reader
 				}
 			};
 			// если какая то форма схемы завершила поиск
-			readerForm.OnSearchCompleted += ReaderForm_OnSearchCompleted;
+			readerForm.OnSearchChanged += (sender, args) =>
+			{
+				schemeExpander.Enabled = readerForm.IsWorking;
+
+				if (InProcessing == null || InProcessing.IsAnyWorking)
+					return;
+
+				IsWorking = false;
+				ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, InProcessing.Elapsed.ToReadableString()), ReportStatusType.Success);
+			};
 
 			return schemeExpander;
         }
@@ -301,7 +313,57 @@ namespace LogsReader.Reader
             }
         }
 
-        private Dictionary<LogsReaderFormScheme, Task> _processing;
+        class GlobalReaderItemsProcessing
+        {
+	        private Stopwatch _watcher;
+			private Dictionary<string, (LogsReaderFormScheme, Task)> _items;
+
+			public bool IsAnyWorking
+			{
+				get
+				{
+					var isAnyWorking = _items.Any(x => x.Value.Item1.IsWorking);
+					if (!isAnyWorking)
+						_watcher.Stop();
+					return isAnyWorking;
+				}
+			}
+
+			public TimeSpan Elapsed => _watcher.Elapsed;
+
+			public bool TryGetValue(string schemeName, out LogsReaderFormScheme result)
+			{
+				result = null;
+				if (_items.TryGetValue(schemeName, out var result2))
+				{
+					result = result2.Item1;
+					return true;
+				}
+
+				return false;
+			}
+
+			public void Start(IEnumerable<LogsReaderFormScheme> readerFormCollection)
+			{
+				_items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
+				_watcher = new Stopwatch();
+				_watcher.Start();
+
+				foreach (var readerForm in readerFormCollection)
+				{
+					if (readerForm.IsWorking)
+						continue;
+
+					_items.Add(readerForm.CurrentSettings.Name, (readerForm, Task.Factory.StartNew(() => readerForm.BtnSearch_Click(this, EventArgs.Empty))));
+				}
+			}
+
+			public void TryToStop()
+			{
+				foreach (var reader in _items.Cast<LogsReaderFormScheme>().Where(reader => reader.IsWorking))
+					reader.BtnSearch_Click(this, EventArgs.Empty);
+			}
+        }
 
         internal override void BtnSearch_Click(object sender, EventArgs e)
 		{
@@ -310,17 +372,11 @@ namespace LogsReader.Reader
 				try
 				{
 					IsWorking = true;
-					_processing = new Dictionary<LogsReaderFormScheme, Task>();
-
 					ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 
-					foreach (var (readerForm, expander) in AllExpanders.Where(x => x.Value.IsChecked))
-					{
-						if (readerForm.IsWorking) 
-							continue;
-
-						_processing.Add(readerForm, Task.Factory.StartNew(() => readerForm.BtnSearch_Click(this, EventArgs.Empty)));
-					}
+					InProcessing.Start(AllExpanders
+						.Where(x => x.Value.IsChecked)
+						.Select(x => x.Key));
 				}
 				catch (Exception ex)
 				{
@@ -329,35 +385,46 @@ namespace LogsReader.Reader
 			}
 			else
 			{
-				foreach (var (readerForm, expander) in AllExpanders.Where(x => x.Value.IsChecked))
-					if (readerForm.IsWorking)
-						readerForm.BtnSearch_Click(this, EventArgs.Empty);
-
+				InProcessing?.TryToStop();
 				ReportStatus(Resources.Txt_LogsReaderForm_Stopping, ReportStatusType.Success);
 			}
 		}
 
-        private void ReaderForm_OnSearchCompleted(object sender, EventArgs e)
-        {
-	        if (_processing.Any(x => x.Key.IsWorking))
+		protected override IEnumerable<DataTemplate> GetResultTemplates()
+		{
+			var result = new List<DataTemplate>();
+
+			foreach (var schemeForm in AllExpanders
+				.Where(x => x.Key.HasAnyResult)
+				.Select(x => x.Key))
+			{
+				result.AddRange(schemeForm.OverallResultList);
+			}
+
+			return result;
+		}
+
+		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+		{
+			template = null;
+			var schemeName = row?.Cells["SchemeName"]?.Value?.ToString();
+			if (schemeName == null 
+			    || InProcessing == null
+			    || !InProcessing.TryGetValue(schemeName, out var readerForm) 
+			    || readerForm.TryGetTemplate(row, out var templateResult))
+				return false;
+
+			template = templateResult;
+			return true;
+		}
+
+		protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+		{
+			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;
 
-			IsWorking = false;
-		}
-
-		protected override Task<bool> AssignResult(DataFilter filter)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected override void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-		{
-			throw new NotImplementedException();
+			row.DefaultCellStyle.BackColor = result.UserSettings.BackColor;
+			row.DefaultCellStyle.ForeColor = result.UserSettings.ForeColor;
 		}
 
 		protected override void ValidationCheck(bool clearStatus)

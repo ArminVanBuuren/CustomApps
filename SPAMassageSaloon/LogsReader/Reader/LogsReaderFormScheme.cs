@@ -21,9 +21,9 @@ namespace LogsReader.Reader
         public event EventHandler OnSchemeChanged;
 
 	    /// <summary>
-		/// Поиск логов завершен
+		/// Поиск логов начался или завершился
 		/// </summary>
-        public event EventHandler OnSearchCompleted;
+        public event EventHandler OnSearchChanged;
 
         /// <summary>
         /// Текущая схема настроек
@@ -297,7 +297,6 @@ namespace LogsReader.Reader
 	                }
 
 	                IsWorking = false;
-	                OnSearchCompleted?.Invoke(this, EventArgs.Empty);
 
 	                if (stop.IsRunning)
 		                stop.Stop();
@@ -310,36 +309,9 @@ namespace LogsReader.Reader
             }
         }
 
-        protected override async Task<bool> AssignResult(DataFilter filter)
+        protected override IEnumerable<DataTemplate> GetResultTemplates()
         {
-	        ClearDGV();
-	        ClearErrorStatus();
-
-	        if (OverallResultList == null)
-		        return false;
-
-	        IEnumerable<DataTemplate> result = new List<DataTemplate>(OverallResultList);
-
-	        if (!result.Any())
-	        {
-		        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
-		        return false;
-	        }
-
-	        if (filter != null)
-	        {
-		        result = filter.FilterCollection(result);
-
-		        if (!result.Any())
-		        {
-			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
-			        return false;
-		        }
-	        }
-
-	        await AssignToDGV(result);
-
-            return true;
+	        return OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
         }
 
         protected override void ChangeFormStatus()
@@ -351,9 +323,11 @@ namespace LogsReader.Reader
 	        rowsLimitText.Enabled = !IsWorking;
 	        maxLinesStackText.Enabled = !IsWorking;
 	        orderByText.Enabled = !IsWorking;
-        }
 
-        protected override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+	        OnSearchChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+        internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
         {
             template = null;
             if (OverallResultList == null)

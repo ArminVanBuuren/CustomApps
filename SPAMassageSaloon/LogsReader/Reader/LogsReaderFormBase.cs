@@ -512,14 +512,38 @@ namespace LogsReader.Reader
             await AssignResult(null);
         }
 
-        protected abstract Task<bool> AssignResult(DataFilter filter);
-
-        protected async Task AssignToDGV(IEnumerable<DataTemplate> result)
+        protected async Task<bool> AssignResult(DataFilter filter)
         {
+	        ClearDGV();
+	        ClearErrorStatus();
+
+	        var result = GetResultTemplates();
+
+            if (!result.Any())
+	        {
+		        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
+		        return false;
+	        }
+
+	        if (filter != null)
+	        {
+		        result = filter.FilterCollection(result);
+
+		        if (!result.Any())
+		        {
+			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+			        return false;
+		        }
+	        }
+
 	        await dgvFiles.AssignCollectionAsync(result, null);
 
 	        buttonExport.Enabled = dgvFiles.RowCount > 0;
+
+            return true;
         }
+
+        protected abstract IEnumerable<DataTemplate> GetResultTemplates();
 
         protected virtual void ChangeFormStatus()
         {
@@ -557,39 +581,43 @@ namespace LogsReader.Reader
             }
         }
 
-        protected virtual void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        protected void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
                 var row = ((DataGridView) sender).Rows[e.RowIndex];
                 if(!TryGetTemplate(row, out var template))
                     return;
-
-                if (template.IsMatched)
-                {
-                    if (template.Date == null)
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Yellow;
-                        foreach (DataGridViewCell cell2 in row.Cells)
-                            cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-                        return;
-                    }
-
-                    row.DefaultCellStyle.BackColor = Color.White;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightPink;
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
-                }
-
-                row.Cells["File"].ToolTipText = template.ToString();
+                СolorizationDGV(row, template);
             }
             catch (Exception ex)
             {
                 ReportStatus(ex.Message, ReportStatusType.Error);
             }
+        }
+
+        protected virtual void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+        {
+	        if (template.IsMatched)
+	        {
+		        if (template.Date == null)
+		        {
+			        row.DefaultCellStyle.BackColor = Color.Yellow;
+			        foreach (DataGridViewCell cell2 in row.Cells)
+				        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+			        return;
+		        }
+
+		        row.DefaultCellStyle.BackColor = Color.White;
+	        }
+	        else
+	        {
+		        row.DefaultCellStyle.BackColor = Color.LightPink;
+		        foreach (DataGridViewCell cell2 in row.Cells)
+			        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+	        }
+
+	        row.Cells["File"].ToolTipText = template.ToString();
         }
 
         protected void DgvFiles_SelectionChanged(object sender, EventArgs e)
@@ -635,7 +663,7 @@ namespace LogsReader.Reader
             }
         }
 
-        protected abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
+        internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
 
         private void DgvFiles_MouseDown(object sender, MouseEventArgs e)
         {
