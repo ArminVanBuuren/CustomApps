@@ -21,11 +21,12 @@ namespace LogsReader.Reader
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
 
+		readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
+		readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
+
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
-
-		protected override string TemplateFilePropertyName => "FileFullName";
 
 		public LogsReaderMainForm MainForm { get; private set; }
 
@@ -123,9 +124,6 @@ namespace LogsReader.Reader
 			Button buttonFore = null;
 			ExpandCollapsePanel schemeExpander = null;
 
-			Func<Color> expanderBorderColor = () => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
-			Func<Color> expanderPanelColor = () => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
-
 			var colorDialog = new ColorDialog
 			{
 				AllowFullOpen = true,
@@ -194,7 +192,7 @@ namespace LogsReader.Reader
 		        CheckBoxShown = true,
 		        ExpandedHeight = 300,
 		        CheckBoxEnabled = readerForm.BTNSearch.Enabled,
-				BackColor = expanderBorderColor.Invoke(),
+				BackColor = expanderBorderColor.Invoke(readerForm),
 				HeaderBorderBrush = Color.Azure,
 		        HeaderBackColor = buttonBack.BackColor,
 		        ForeColor = buttonFore.BackColor,
@@ -211,7 +209,7 @@ namespace LogsReader.Reader
 			var expanderPanel = new Panel
 	        {
 		        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                BackColor = expanderPanelColor.Invoke(),
+                BackColor = expanderPanelColor.Invoke(readerForm),
                 Location = new Point(2, 23),
                 Size = new Size(schemeExpander.Size.Width - 4, 275)
             };
@@ -237,7 +235,7 @@ namespace LogsReader.Reader
 				if(!schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
 					schemeExpander.BackColor = Color.DimGray;
 				else
-					schemeExpander.BackColor = expanderBorderColor.Invoke();
+					schemeExpander.BackColor = expanderBorderColor.Invoke(readerForm);
 				ValidationCheck(true);
 	        };
 			// горячие клавишы для добавления сервера, типов и директорий в глобальной форме так и в основной
@@ -278,8 +276,8 @@ namespace LogsReader.Reader
 			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схеме
 			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
 			{
-				schemeExpander.BackColor = expanderBorderColor.Invoke();
-				expanderPanel.BackColor = expanderPanelColor.Invoke();
+				schemeExpander.BackColor = expanderBorderColor.Invoke(readerForm);
+				expanderPanel.BackColor = expanderPanelColor.Invoke(readerForm);
 
 				if (readerForm.BTNSearch.Enabled)
 				{
@@ -465,9 +463,9 @@ namespace LogsReader.Reader
 		{
 			template = null;
 			var schemeName = row?.Cells["SchemeName"]?.Value?.ToString();
-			if (schemeName == null 
+			if (schemeName == null
 			    || InProcessing == null
-			    || !InProcessing.TryGetValue(schemeName, out var readerForm) 
+			    || !InProcessing.TryGetValue(schemeName, out var readerForm)
 			    || !readerForm.TryGetTemplate(row, out var templateResult))
 				return false;
 

@@ -24,9 +24,7 @@ namespace LogsReader.Reader
 	    private readonly TextBox rowsLimitText;
 	    private readonly CustomTreeView TreeMain;
 
-		protected override string TemplateFilePropertyName => "FileNamePartial";
-
-		/// <summary>
+	    /// <summary>
 		/// Сохранить изменения в конфиг
 		/// </summary>
 		public event EventHandler OnSchemeChanged;

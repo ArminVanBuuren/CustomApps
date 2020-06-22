@@ -46,8 +46,6 @@ namespace LogsReader.Reader
 
         protected Editor TraceMessage { get; }
 
-        protected abstract string TemplateFilePropertyName { get; }
-
         /// <summary>
         /// Поиск логов начался или завершился
         /// </summary>
@@ -609,6 +607,7 @@ namespace LogsReader.Reader
                 var row = ((DataGridView) sender).Rows[e.RowIndex];
                 if(!TryGetTemplate(row, out var template))
                     return;
+                row.Cells["FileNamePartial"].ToolTipText = template.File;
                 СolorizationDGV(row, template);
             }
             catch (Exception ex)
@@ -637,8 +636,6 @@ namespace LogsReader.Reader
 		        foreach (DataGridViewCell cell2 in row.Cells)
 			        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 	        }
-
-	        row.Cells["FileNamePartial"].ToolTipText = template.ToString();
         }
 
         protected void DgvFiles_SelectionChanged(object sender, EventArgs e)

@@ -80,7 +80,7 @@ namespace LogsReader
 			        }
 		        }
 	        }
-	        catch (Exception ex)
+	        catch (Exception)
 	        {
 		        // ignored
 	        }
@@ -99,7 +99,7 @@ namespace LogsReader
 		        using (var stream = Credentials.SerializeToStream())
 			        reg[nameof(Credentials), RegistryValueKind.Binary] = stream.ToArray();
 	        }
-	        catch (Exception ex)
+	        catch (Exception)
 	        {
 		        // ignored
 	        }
@@ -244,7 +244,7 @@ namespace LogsReader
                 foreach (var logsReader in AllForms.Values)
                     logsReader.ApplySettings();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -266,7 +266,7 @@ namespace LogsReader
 		        Properties.Settings.Default.FormState = WindowState;
 		        Properties.Settings.Default.Save();
 	        }
-	        catch (Exception ex)
+	        catch (Exception)
 	        {
 		        // ignored
 	        }

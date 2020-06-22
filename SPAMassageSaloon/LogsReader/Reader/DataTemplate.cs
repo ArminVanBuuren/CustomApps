@@ -9,7 +9,7 @@ using static LogsReader.Config.LRTraceParsePatternItem;
 
 namespace LogsReader.Reader
 {
-    public class DataTemplate
+    public class DataTemplate : ICloneable
     {
 	    private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
@@ -97,7 +97,7 @@ namespace LogsReader.Reader
         public int PrivateID { get; internal set; }
 
         [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
-        public bool IsMatched { get; private set; }
+        public bool IsMatched { get; }
 
         [DGVColumn(ColumnPosition.After, "ID")]
         public int ID { get; internal set; }
@@ -113,7 +113,7 @@ namespace LogsReader.Reader
         }
 
         [DGVColumn(ColumnPosition.After, "Date")]
-        public string DateOfTrace { get; private set; }
+        public string DateOfTrace { get; }
 
         public DateTime? Date { get; }
 
@@ -121,8 +121,6 @@ namespace LogsReader.Reader
         public string FileNamePartial => ParentReader.FileNamePartial;
 
         public string File => ParentReader.FilePath;
-
-        //public string FileFullName => ParentReader.File.FullName;
 
         public string Description
         {
@@ -179,6 +177,11 @@ namespace LogsReader.Reader
         {
 	        var hash = FoundLineID.GetHashCode() + ParentReader.GetHashCode();
             return hash;
+        }
+
+        public object Clone()
+        {
+	        return this.MemberwiseClone();
         }
 
         public override string ToString()
