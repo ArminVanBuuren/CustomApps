@@ -111,6 +111,18 @@ namespace Utils.WinForm.Expander
         /// CheckBox
         /// </summary>
         [Category("ExpandCollapseButton")]
+        [Description("CheckBoxEnabled")]
+        [Browsable(true)]
+        public bool CheckBoxEnabled
+        {
+	        get => checkBox.Enabled;
+	        set => checkBox.Enabled = value;
+        }
+
+        /// <summary>
+        /// CheckBox
+        /// </summary>
+        [Category("ExpandCollapseButton")]
         [Description("IsChecked")]
         [Browsable(true)]
         public bool IsChecked
