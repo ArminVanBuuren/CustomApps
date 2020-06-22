@@ -14,10 +14,22 @@ namespace LogsReader.Reader
 {
 	public sealed class LogsReaderFormScheme : LogsReaderFormBase
     {
-	    /// <summary>
-        /// Сохранить изменения в конфиг
-        /// </summary>
-        public event EventHandler OnSchemeChanged;
+	    private readonly Label OrderByLabel;
+	    private readonly Label MaxLinesLabel;
+	    private readonly TextBox orderByText;
+	    private readonly Label MaxThreadsLabel;
+	    private readonly TextBox maxLinesStackText;
+	    private readonly Label RowsLimitLabel;
+	    private readonly TextBox maxThreadsText;
+	    private readonly TextBox rowsLimitText;
+	    private readonly CustomTreeView TreeMain;
+
+		protected override string TemplateFilePropertyName => "FileNamePartial";
+
+		/// <summary>
+		/// Сохранить изменения в конфиг
+		/// </summary>
+		public event EventHandler OnSchemeChanged;
 
 	    /// <summary>
 		/// Поиск логов начался или завершился
@@ -36,16 +48,6 @@ namespace LogsReader.Reader
         public DataTemplateCollection OverallResultList { get; private set; }
 
         public override bool HasAnyResult => OverallResultList != null && OverallResultList.Count > 0;
-
-        private readonly Label OrderByLabel;
-        private readonly Label MaxLinesLabel;
-        private readonly TextBox orderByText;
-        private readonly Label MaxThreadsLabel;
-        private readonly TextBox maxLinesStackText;
-        private readonly Label RowsLimitLabel;
-        private readonly TextBox maxThreadsText;
-        private readonly TextBox rowsLimitText;
-        private readonly CustomTreeView TreeMain;
 
         public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {

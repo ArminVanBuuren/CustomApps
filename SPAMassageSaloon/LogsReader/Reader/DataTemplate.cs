@@ -122,6 +122,8 @@ namespace LogsReader.Reader
 
         public string File => ParentReader.FilePath;
 
+        //public string FileFullName => ParentReader.File.FullName;
+
         public string Description
         {
             get => _description;

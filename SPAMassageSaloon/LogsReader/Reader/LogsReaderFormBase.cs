@@ -40,6 +40,13 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _overallFound1;
         private readonly ToolStripStatusLabel _overallFound2;
 
+        protected ToolTip Tooltip { get; }
+
+        protected Editor Message { get; }
+
+        protected Editor TraceMessage { get; }
+
+        protected abstract string TemplateFilePropertyName { get; }
 
         /// <summary>
         /// Поиск логов начался или завершился
@@ -50,12 +57,6 @@ namespace LogsReader.Reader
         /// При смене языка
         /// </summary>
         public event EventHandler OnAppliedSettings;
-
-        protected ToolTip Tooltip { get; }
-
-        protected Editor Message { get; }
-
-        protected Editor TraceMessage { get; }
 
         /// <summary>
         /// Статус выполнения поиска
@@ -539,7 +540,7 @@ namespace LogsReader.Reader
 
 	        var result = GetResultTemplates();
 
-            if (!result.Any())
+            if (result == null || !result.Any())
 	        {
 		        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 		        return false;

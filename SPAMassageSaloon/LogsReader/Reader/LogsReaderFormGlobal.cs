@@ -24,8 +24,10 @@ namespace LogsReader.Reader
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
-	    
-	    public LogsReaderMainForm MainForm { get; private set; }
+
+		protected override string TemplateFilePropertyName => "FileFullName";
+
+		public LogsReaderMainForm MainForm { get; private set; }
 
 		public override bool HasAnyResult => dgvFiles.RowCount > 0 
 		                                     && AllExpanders.Any(x => x.Key.HasAnyResult && x.Value.IsChecked);
@@ -89,7 +91,7 @@ namespace LogsReader.Reader
 
 			MainSplitContainer.Panel1.Controls.Add(panelFlowDoc);
 			MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
-			MainSplitContainer.Panel1MinSize = 110;
+			MainSplitContainer.Panel1MinSize = 115;
 
 			#endregion
 		}
@@ -360,7 +362,7 @@ namespace LogsReader.Reader
 			{
 				get
 				{
-					var isAnyWorking = _items.Any(x => x.Value.Item1.IsWorking);
+					var isAnyWorking = _items != null && _items.Any(x => x.Value.Item1.IsWorking);
 					if (!isAnyWorking)
 						_watcher.Stop();
 					return isAnyWorking;
@@ -444,11 +446,14 @@ namespace LogsReader.Reader
 
 		protected override IEnumerable<DataTemplate> GetResultTemplates()
 		{
+			if (InProcessing == null)
+				return null;
+
 			var result = new List<DataTemplate>();
 
-			foreach (var schemeForm in AllExpanders
-				.Where(x => x.Key.HasAnyResult)
-				.Select(x => x.Key))
+			foreach (var schemeForm in InProcessing
+				.Where(x => x.Item1.HasAnyResult)
+				.Select(x => x.Item1))
 			{
 				result.AddRange(schemeForm.OverallResultList);
 			}
