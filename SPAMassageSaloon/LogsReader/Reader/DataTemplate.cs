@@ -118,7 +118,9 @@ namespace LogsReader.Reader
         public DateTime? Date { get; }
 
         [DGVColumn(ColumnPosition.After, "File")]
-        public string File => ParentReader.FileNamePartial;
+        public string FileNamePartial => ParentReader.FileNamePartial;
+
+        public string File => ParentReader.FilePath;
 
         public string Description
         {
@@ -179,7 +181,7 @@ namespace LogsReader.Reader
 
         public override string ToString()
         {
-            return $"{ParentReader} | {nameof(FoundLineID)} = {FoundLineID}";
+            return ParentReader.ToString();
         }
     }
 }

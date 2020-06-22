@@ -637,7 +637,7 @@ namespace LogsReader.Reader
 			        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 	        }
 
-	        row.Cells["File"].ToolTipText = template.ToString();
+	        row.Cells["FileNamePartial"].ToolTipText = template.ToString();
         }
 
         protected void DgvFiles_SelectionChanged(object sender, EventArgs e)

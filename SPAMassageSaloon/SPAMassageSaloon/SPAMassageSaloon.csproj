@@ -54,7 +54,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Utils">
-      <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.UIControls">
       <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Release\Utils.UIControls.dll</HintPath>

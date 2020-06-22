@@ -172,10 +172,10 @@ namespace LogsReader.Reader
 			// 
 			// File
 			// 
-			this.File.DataPropertyName = "File";
+			this.File.DataPropertyName = "FileNamePartial";
 			this.File.HeaderText = "File";
 			this.File.MinimumWidth = 40;
-			this.File.Name = "File";
+			this.File.Name = "FileNamePartial";
 			this.File.ReadOnly = true;
 			this.File.Width = 1000;
 			// 
