@@ -309,7 +309,10 @@ namespace LogsReader.Reader
 				var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 				// заполняем DataGrid
 				if (await AssignResult(filter))
+				{
+					Progress = 100;
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, InProcessing.Elapsed.ToReadableString()), ReportStatusType.Success);
+				}
 			};
 
 			return schemeExpander;

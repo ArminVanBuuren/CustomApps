@@ -876,16 +876,20 @@ namespace LogsReader.Reader
 					        else
 						        group.Collapse();
 				        }
+				        else
+				        {
+					        CheckTreeViewNode(group, false);
+                        }
 
 				        foreach (var item in group.Nodes.OfType<TreeNode>())
 				        {
 					        if (template.TryGetValue($"{parent.Name}_{group.Text}_{item.Text}", out var newItem))
-					        {
 						        item.Checked = newItem.Checked;
-					        }
-				        }
+                            else
+						        CheckTreeViewNode(item, false);
+                        }
 			        }
-                }
+		        }
 		        catch (Exception)
 		        {
 			        // ignored
