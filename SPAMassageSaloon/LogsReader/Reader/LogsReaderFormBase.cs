@@ -27,6 +27,10 @@ namespace LogsReader.Reader
         private bool _settingsLoaded;
         private bool _isWorking;
 
+        private int _countMatches = 0;
+        private int _filesCompleted = 0;
+        private int _totalFiles = 0;
+
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -35,6 +39,17 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _filtersCompleted2;
         private readonly ToolStripStatusLabel _overallFound1;
         private readonly ToolStripStatusLabel _overallFound2;
+
+
+        /// <summary>
+        /// Поиск логов начался или завершился
+        /// </summary>
+        public event EventHandler OnProcessStatusChanged;
+
+        /// <summary>
+        /// При смене языка
+        /// </summary>
+        public event EventHandler OnAppliedSettings;
 
         protected ToolTip Tooltip { get; }
 
@@ -60,10 +75,40 @@ namespace LogsReader.Reader
         /// </summary>
         public UserSettings UserSettings { get; }
 
+        public int CountMatches
+        {
+	        get => _countMatches;
+	        protected set
+	        {
+		        _countMatches = value;
+		        _findedInfo.Text = _countMatches.ToString();
+	        }
+        }
+
         public int Progress
         {
-            get => IsWorking ? progressBar.Value : 100;
-            protected set => progressBar.Value = value;
+	        get => IsWorking ? progressBar.Value : 100;
+	        protected set => progressBar.Value = value;
+        }
+
+        public int FilesCompleted
+        {
+	        get => _filesCompleted;
+	        protected set
+	        {
+		        _filesCompleted = value;
+		        _completedFilesStatus.Text = _filesCompleted.ToString();
+	        }
+        }
+
+        public int TotalFiles
+        {
+	        get => _totalFiles;
+	        protected set
+	        {
+		        _totalFiles = value;
+		        _totalFilesStatus.Text = _totalFiles.ToString();
+	        }
         }
 
         public abstract bool HasAnyResult { get; }
@@ -138,26 +183,8 @@ namespace LogsReader.Reader
                 notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
                 notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
-                dateStartFilter.ValueChanged += (sender, args) =>
-                {
-                    if (UserSettings != null)
-                        UserSettings.DateStartChecked = dateStartFilter.Checked;
-
-                    if (_oldDateStartChecked || !dateStartFilter.Checked)
-                        return;
-                    _oldDateStartChecked = true;
-                    dateStartFilter.Value = _getStartDate.Invoke();
-                };
-                dateEndFilter.ValueChanged += (sender, args) =>
-                {
-                    if (UserSettings != null)
-                        UserSettings.DateEndChecked = dateEndFilter.Checked;
-
-                    if (_oldDateEndChecked || !dateEndFilter.Checked)
-                        return;
-                    _oldDateEndChecked = true;
-                    dateEndFilter.Value = _getEndDate.Invoke();
-                };
+                dateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
+                dateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
 
                 #endregion
 
@@ -287,6 +314,7 @@ namespace LogsReader.Reader
             finally
             {
                 _settingsLoaded = true;
+                OnAppliedSettings?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -370,23 +398,15 @@ namespace LogsReader.Reader
 
         protected void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(delegate
-                {
-                    _findedInfo.Text = countMatches.ToString();
-                    Progress = percentOfProgeress;
-                    _completedFilesStatus.Text = filesCompleted.ToString();
-                    _totalFilesStatus.Text = totalFiles.ToString();
-                }));
-            }
-            else
-            {
-                _findedInfo.Text = countMatches.ToString();
-                Progress = percentOfProgeress;
-                _completedFilesStatus.Text = filesCompleted.ToString();
-                _totalFilesStatus.Text = totalFiles.ToString();
-            }
+	        this.SafeInvoke(() =>
+	        {
+		        CountMatches = countMatches;
+		        Progress = percentOfProgeress;
+		        FilesCompleted = filesCompleted;
+		        TotalFiles = totalFiles;
+            });
+
+	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private async void ButtonExport_Click(object sender, EventArgs e)
@@ -683,15 +703,39 @@ namespace LogsReader.Reader
             }
         }
 
-        private void TxtPattern_TextChanged(object sender, EventArgs e)
+        internal virtual void TxtPattern_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.PreviousSearch = txtPattern.Text;
+            UserSettings.PreviousSearch = ((TextBox)sender).Text;
             ValidationCheck(true);
         }
 
-        private void UseRegex_CheckedChanged(object sender, EventArgs e)
+        internal virtual void UseRegex_CheckedChanged(object sender, EventArgs e)
         {
-            UserSettings.UseRegex = useRegex.Checked;
+            UserSettings.UseRegex = ((CheckBox)sender).Checked;
+        }
+
+        internal virtual void DateStartFilterOnValueChanged(object sender, EventArgs e)
+        {
+	        if (UserSettings != null)
+		        UserSettings.DateStartChecked = dateStartFilter.Checked;
+
+	        if (_oldDateStartChecked || !dateStartFilter.Checked)
+		        return;
+
+	        _oldDateStartChecked = true;
+	        dateStartFilter.Value = _getStartDate.Invoke();
+        }
+
+        internal virtual void DateEndFilterOnValueChanged(object sender, EventArgs e)
+        {
+	        if (UserSettings != null)
+		        UserSettings.DateEndChecked = dateEndFilter.Checked;
+
+	        if (_oldDateEndChecked || !dateEndFilter.Checked)
+		        return;
+
+	        _oldDateEndChecked = true;
+	        dateEndFilter.Value = _getEndDate.Invoke();
         }
 
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -699,24 +743,29 @@ namespace LogsReader.Reader
             e.Handled = true;
         }
 
-        private void TraceNameFilter_TextChanged(object sender, EventArgs e)
+        internal virtual void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceNameFilter = traceNameFilter.Text;
+	        UserSettings.TraceNameFilterContains = ((ComboBox)sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
         }
 
-        private void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        internal virtual void TraceNameFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceNameFilterContains = traceNameFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains);
+            UserSettings.TraceNameFilter = ((TextBox)sender).Text;
         }
 
-        private void TraceMessageFilter_TextChanged(object sender, EventArgs e)
+        internal virtual void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceMessageFilter = traceMessageFilter.Text;
+	        UserSettings.TraceMessageFilterContains = ((ComboBox)sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
         }
 
-        private void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        internal virtual void TraceMessageFilter_TextChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceMessageFilterContains = traceMessageFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains);
+            UserSettings.TraceMessageFilter = ((TextBox)sender).Text;
+        }
+
+        internal virtual void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void Message_LanguageChanged(object sender, EventArgs e)

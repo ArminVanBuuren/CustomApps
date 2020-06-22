@@ -435,4 +435,13 @@
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
     <value>Поиск по регулярному выражению выполняется быстрее.</value>
   </data>
+  <data name="Txt_Global_Back" xml:space="preserve">
+    <value>Фон</value>
+  </data>
+  <data name="Txt_Global_Fore" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Txt_Global_SelectAll" xml:space="preserve">
+    <value>Выбрать Все</value>
+  </data>
 </root>

@@ -453,6 +453,7 @@ namespace LogsReader.Reader
 			this.alreadyUseFilter.TabIndex = 14;
 			this.alreadyUseFilter.Text = "Use filter when searching";
 			this.alreadyUseFilter.UseVisualStyleBackColor = true;
+			this.alreadyUseFilter.CheckedChanged += new System.EventHandler(this.alreadyUseFilter_CheckedChanged);
 			// 
 			// buttonExport
 			// 
@@ -578,21 +579,16 @@ namespace LogsReader.Reader
         private StatusStrip statusStrip;
         private Label label7;
         private Label label9;
-        private TextBox traceNameFilter;
-        private DateTimePicker dateEndFilter;
-        private DateTimePicker dateStartFilter;
+        
         private Label label8;
         private Button buttonFilter;
         private Button buttonReset;
         private Label label11;
-        private TextBox traceMessageFilter;
         private Panel filterPanel;
         private SplitContainer EnumSplitContainer;
         private RichTextBox descriptionText;
         private Panel searchPanel;
         private Button buttonExport;
-        private ComboBox traceNameFilterComboBox;
-        private ComboBox traceMessageFilterComboBox;
         private DataGridViewTextBoxColumn SchemeName;
         private DataGridViewTextBoxColumn PrivateID;
         private DataGridViewTextBoxColumn IsMatched;
@@ -604,12 +600,19 @@ namespace LogsReader.Reader
         private SplitContainer ParentSplitContainer;
         private NotepadControl notepad;
 
-        internal Button BTNSearch;
         protected CustomDataGridView dgvFiles;
-		protected CheckBox useRegex;
-		protected TextBox txtPattern;
-		protected CheckBox alreadyUseFilter;
         protected SplitContainer MainSplitContainer;
+
+        internal Button BTNSearch;
+        internal TextBox txtPattern;
+        internal CheckBox useRegex;
+        internal DateTimePicker dateStartFilter;
+        internal DateTimePicker dateEndFilter;
+        internal ComboBox traceNameFilterComboBox;
+        internal ComboBox traceMessageFilterComboBox;
+        internal TextBox traceNameFilter;
+        internal TextBox traceMessageFilter;
+        internal CheckBox alreadyUseFilter;
 	}
 }
 

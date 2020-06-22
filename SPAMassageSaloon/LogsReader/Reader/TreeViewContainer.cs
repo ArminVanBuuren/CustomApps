@@ -291,7 +291,8 @@ namespace LogsReader.Reader
 	        {
 		        UpdateContainer(Current);
 		        EnableExpandersEvents();
-	        }
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void AddServer(object sender, EventArgs args)
@@ -305,7 +306,8 @@ namespace LogsReader.Reader
 	        {
 		        UpdateContainer(Current);
 		        EnableExpandersEvents();
-	        }
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void AddFileTypeGroup(object sender, EventArgs args)
@@ -319,7 +321,8 @@ namespace LogsReader.Reader
 	        {
 		        UpdateContainer(Current);
 		        EnableExpandersEvents();
-	        }
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void AddFileType(object sender, EventArgs args)
@@ -333,7 +336,8 @@ namespace LogsReader.Reader
 	        {
 		        UpdateContainer(Current);
 		        EnableExpandersEvents();
-	        }
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void AddFolder(object sender, EventArgs e)
@@ -350,7 +354,8 @@ namespace LogsReader.Reader
 	        {
 		        UpdateContainer(Current);
 		        EnableExpandersEvents();
-	        }
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void RemoveSelected(object sender, EventArgs e)
@@ -409,19 +414,29 @@ namespace LogsReader.Reader
 			        OnChanged?.Invoke(true, true);
 		        }
 		        EnableExpandersEvents();
-            }
+	        }
         }
 
         void OpenProperties(object sender, EventArgs args)
         {
-            if (Current.SelectedNode == null || Compare(Current.SelectedNode, TRVServers))
-                SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
-            else if (Compare(Current.SelectedNode, TRVTypes))
-                SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
-            else if (Current.SelectedNode.Name == TRVFolders)
-                SetFolder(Current.SelectedNode.FirstNode, GetFolders(Current, false), true);
-            else if(Current.Nodes[TRVFolders] != null)
-                SetFolder(Current.SelectedNode, GetFolders(Current, false), true);
+	        try
+	        {
+		        DisableExpandersEvents();
+		        if (Current.SelectedNode == null || Compare(Current.SelectedNode, TRVServers))
+			        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
+		        else if (Compare(Current.SelectedNode, TRVTypes))
+			        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
+		        else if (Current.SelectedNode.Name == TRVFolders)
+			        SetFolder(Current.SelectedNode.FirstNode, GetFolders(Current, false), true);
+		        else if (Current.Nodes[TRVFolders] != null)
+			        SetFolder(Current.SelectedNode, GetFolders(Current, false), true);
+            }
+	        finally
+	        {
+		        UpdateContainer(Current);
+		        EnableExpandersEvents();
+		        OnChanged?.Invoke(false, true);
+            }
         }
 
         void SetTreeNodes(GroupType groupType, ProcessingType processingType)
@@ -524,10 +539,6 @@ namespace LogsReader.Reader
             {
 	            OnError?.Invoke(ex);
             }
-            finally
-            {
-	            OnChanged?.Invoke(false, true);
-            }
         }
 
         static Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
@@ -607,7 +618,10 @@ namespace LogsReader.Reader
                 treeNodeFolders.Expand();
 
                 if (newNode != null)
-	                Current.SelectedNode = newNode;
+                {
+	                newNode.Checked = true;
+                    Current.SelectedNode = newNode;
+                }
 
                 foreach (var node in treeNodeFolders.Nodes.OfType<TreeNode>())
 	                if (prevNodes.TryGetValue(node.Text, out var prevNode))
@@ -616,10 +630,6 @@ namespace LogsReader.Reader
             catch (Exception ex)
             {
 	            OnError?.Invoke(ex);
-            }
-            finally
-            {
-	            OnChanged?.Invoke(false, true);
             }
         }
 

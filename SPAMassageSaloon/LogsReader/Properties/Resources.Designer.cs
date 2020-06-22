@@ -541,6 +541,33 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Back.
+        /// </summary>
+        public static string Txt_Global_Back {
+            get {
+                return ResourceManager.GetString("Txt_Global_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Fore.
+        /// </summary>
+        public static string Txt_Global_Fore {
+            get {
+                return ResourceManager.GetString("Txt_Global_Fore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Select All.
+        /// </summary>
+        public static string Txt_Global_SelectAll {
+            get {
+                return ResourceManager.GetString("Txt_Global_SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Initialization.
         /// </summary>
         public static string Txt_Initialization {

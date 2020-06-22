@@ -46,13 +46,19 @@ namespace LogsReader
 
         public Dictionary<TabPage, LogsReaderFormScheme> AllForms { get; } = new Dictionary<TabPage, LogsReaderFormScheme>(15);
 
-        public LogsReaderFormScheme CurrentForm
+        public LogsReaderFormBase CurrentForm
         {
             get
             {
-                if (MainTabControl.SelectedTab != null && AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
-                    return current;
-                return null;
+	            if (MainTabControl.SelectedTab != null)
+	            {
+		            if (AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
+			            return current;
+		            else if (MainTabControl.SelectedTab.Name == GLOBAL_PAGE_NAME)
+			            return Global;
+	            }
+
+	            return null;
             }
         }
 

@@ -507,4 +507,13 @@ Input data:
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
     <value>Regex search is being completed faster.</value>
   </data>
+  <data name="Txt_Global_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Txt_Global_Fore" xml:space="preserve">
+    <value>Fore</value>
+  </data>
+  <data name="Txt_Global_SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
 </root>
