@@ -640,12 +640,18 @@ namespace LogsReader.Reader
                 if (newNode != null)
                 {
 	                newNode.Checked = true;
+	                CheckTreeViewNode(newNode, true);
                     Current.SelectedNode = newNode;
                 }
 
                 foreach (var node in treeNodeFolders.Nodes.OfType<TreeNode>())
+                {
 	                if (prevNodes.TryGetValue(node.Text, out var prevNode))
+	                {
 		                node.Checked = prevNode.Checked;
+		                CheckTreeViewNode(node, true);
+	                }
+                }
             }
             catch (Exception ex)
             {
