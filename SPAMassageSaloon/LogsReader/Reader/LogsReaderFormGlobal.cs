@@ -254,7 +254,7 @@ namespace LogsReader.Reader
 			// если изменились значения прогресса поиска
 	        readerForm.OnProcessStatusChanged += (sender, args) =>
 	        {
-		        if (InProcessing.Count == 0)
+		        if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
 			        return;
 
 		        var countMatches = 0;
@@ -316,7 +316,12 @@ namespace LogsReader.Reader
 				if (InProcessing.IsAnyWorking)
 				{
 					if (InProcessing.IsCompleted)
+					{
+						InProcessing.Continue();
 						await AssignResult(alreadyUseFilter.Checked ? GetFilter() : null);
+						ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+					}
+
 					return;
 				}
 
@@ -430,6 +435,11 @@ namespace LogsReader.Reader
 					.Where(x => x.Value.Item1.IsWorking)
 					.Select(x => x.Value.Item1))
 					reader.BtnSearch_Click(this, EventArgs.Empty);
+			}
+
+			public void Continue()
+			{
+				_watcher?.Start();
 			}
 
 			public void Clear()
