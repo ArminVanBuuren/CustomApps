@@ -530,7 +530,7 @@ namespace LogsReader.Reader
 		internal override void TxtPattern_TextChanged(object sender, EventArgs e)
 		{
 			base.TxtPattern_TextChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key))
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.txtPattern.Text = ((TextBox) sender).Text;
 		}
 
