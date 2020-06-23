@@ -352,7 +352,7 @@ namespace LogsReader.Reader
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
-                        ClearForm();
+                        ClearForm(true);
                         break;
                     case Keys.F7 when buttonFilter.Enabled:
                         buttonFilter_Click(this, EventArgs.Empty);
@@ -590,7 +590,7 @@ namespace LogsReader.Reader
             if (IsWorking)
             {
                 ParentSplitContainer.Cursor = Cursors.WaitCursor;
-                ClearForm();
+                ClearForm(true);
                 Focus();
             }
             else
@@ -810,10 +810,10 @@ namespace LogsReader.Reader
 
         private void BtnClear_Click(object sender, EventArgs e)
         {
-            ClearForm();
+            ClearForm(true);
         }
 
-        protected virtual void ClearForm(bool saveData = true)
+        protected virtual void ClearForm(bool saveData)
         {
             try
             {

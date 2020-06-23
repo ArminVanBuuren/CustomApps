@@ -45,6 +45,9 @@ namespace LogsReader.Reader
 	    private readonly ImageList _imageList;
 	    private readonly Font _defaultParentFont = new Font("Segoe UI", 8.5F, FontStyle.Bold);
 
+	    private bool _isSyncEnabled = false;
+	    private bool _isSyncAllow = false;
+
         private ContextMenuStrip _contextTreeMainMenuStrip;
 
         /// <summary>
@@ -58,6 +61,36 @@ namespace LogsReader.Reader
 
         public event TreeViewContainerChanged OnChanged;
         public event TreeViewContainerError OnError;
+
+        public bool IsSyncEnabled
+        {
+	        get => _isSyncEnabled;
+	        private set
+	        {
+		        if (value == _isSyncEnabled || !_isSyncAllow)
+			        return;
+		        _isSyncEnabled = value;
+
+		        if (_isSyncEnabled)
+		        {
+			        foreach (var treeView in _copyList)
+			        {
+				        treeView.AfterCheck += TrvMain_AfterCheck;
+				        treeView.AfterExpand += TreeView_AfterExpandOrCollapse;
+				        treeView.AfterCollapse += TreeView_AfterExpandOrCollapse;
+			        }
+		        }
+		        else
+		        {
+			        foreach (var treeView in _copyList)
+			        {
+				        treeView.AfterCheck -= TrvMain_AfterCheck;
+				        treeView.AfterExpand -= TreeView_AfterExpandOrCollapse;
+				        treeView.AfterCollapse -= TreeView_AfterExpandOrCollapse;
+			        }
+		        }
+	        }
+        }
 
         public TreeViewContainer(
 	        LRSettingsScheme schemeSettings,
@@ -97,8 +130,9 @@ namespace LogsReader.Reader
 	        _imageList.Images.Add("4", Resources.type);
 	        _imageList.Images.Add("5", Resources.folder);
 
-	        _copyList.Add(InitializeTreeView(Main));
-	        Main.EnabledChanged += (sender, args) =>
+	        _copyList.Add(Main);
+            InitializeTreeView(Main);
+            Main.EnabledChanged += (sender, args) =>
 	        {
 		        foreach (var treeView in _copyList.Where(treeView => treeView != Main))
 			        treeView.Enabled = Main.Enabled;
@@ -127,12 +161,13 @@ namespace LogsReader.Reader
         public CustomTreeView CreateNewCopy()
         {
             var copy = new CustomTreeView();
-            _copyList.Add(InitializeTreeView(copy));
-            UpdateContainer(Main);
+            _copyList.Add(copy);
+            UpdateContainerByTreeView(Main);
+            InitializeTreeView(copy);
             return copy;
         }
 
-        CustomTreeView InitializeTreeView(CustomTreeView treeView)
+        void InitializeTreeView(TreeView treeView)
         {
             treeView.ImageList = _imageList;
             treeView.ItemHeight = 18;
@@ -143,12 +178,7 @@ namespace LogsReader.Reader
             treeView.ForeColor = Color.FromArgb(0, 0, 0);
             treeView.LineColor = Color.FromArgb(109, 109, 109);
             AssignTreeViewText(treeView);
-
             treeView.MouseDown += TreeMain_MouseDown;
-            treeView.AfterCheck += TrvMain_AfterCheck;
-            treeView.AfterExpand += TreeView_AfterExpandOrCollapse;
-            treeView.AfterCollapse += TreeView_AfterExpandOrCollapse;
-            return treeView;
         }
 
         static void AssignTreeViewText(TreeView treeView)
@@ -191,12 +221,10 @@ namespace LogsReader.Reader
                 return;
             Current = current;
 
-            foreach (var treeView in _copyList)
-	            treeView.AfterCheck -= TrvMain_AfterCheck;
-
             try
             {
-	            CheckTreeViewNode(e.Node, e.Node.Checked);
+	            IsSyncEnabled = false;
+                CheckTreeViewNode(e.Node, e.Node.Checked);
             }
             catch (Exception)
             {
@@ -204,11 +232,8 @@ namespace LogsReader.Reader
             }
             finally
             {
-	            UpdateContainerProperties(Current, false);
-
-                foreach (var treeView in _copyList)
-		            treeView.AfterCheck += TrvMain_AfterCheck;
-
+	            UpdateContainerProperties(Current);
+	            IsSyncEnabled = true;
                 OnChanged?.Invoke(true, false);
             }
         }
@@ -219,27 +244,18 @@ namespace LogsReader.Reader
 		        return;
 	        Current = current;
 
-	        DisableExpandersEvents();
-	        UpdateContainerProperties(Current, true);
-	        EnableExpandersEvents();
+	        var name = Current.Name;
+	        var collapsedParent = Current.Nodes.OfType<TreeNode>().Where(x => !x.IsExpanded).ToList();
+
+	        IsSyncEnabled = false;
+            UpdateContainerProperties(Current);
+            IsSyncEnabled = true;
         }
 
-        void DisableExpandersEvents()
+        public void EnableSync()
         {
-	        foreach (var treeView in _copyList)
-	        {
-		        treeView.AfterExpand -= TreeView_AfterExpandOrCollapse;
-		        treeView.AfterCollapse -= TreeView_AfterExpandOrCollapse;
-	        }
-        }
-
-        void EnableExpandersEvents()
-        {
-	        foreach (var treeView in _copyList)
-	        {
-		        treeView.AfterExpand += TreeView_AfterExpandOrCollapse;
-		        treeView.AfterCollapse += TreeView_AfterExpandOrCollapse;
-	        }
+	        _isSyncAllow = true;
+	        IsSyncEnabled = true;
         }
 
         public void MainFormKeyDown(CustomTreeView treeView, KeyEventArgs e)
@@ -284,14 +300,14 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        DisableExpandersEvents();
-		        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupItem);
+		        IsSyncEnabled = false;
+                SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupItem);
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -299,14 +315,14 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        DisableExpandersEvents();
-		        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
+		        IsSyncEnabled = false;
+                SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -314,14 +330,14 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        DisableExpandersEvents();
-		        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupItem);
+		        IsSyncEnabled = false;
+                SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupItem);
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -329,14 +345,14 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        DisableExpandersEvents();
-		        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
+		        IsSyncEnabled = false;
+                SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -347,14 +363,14 @@ namespace LogsReader.Reader
 
 	        try
 	        {
-		        DisableExpandersEvents();
-		        SetFolder(null, GetFolders(Current, false), true);
+		        IsSyncEnabled = false;
+                SetFolder(null, GetFolders(Current, false), true);
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -372,7 +388,7 @@ namespace LogsReader.Reader
             var isChanged = false;
             try
 	        {
-		        DisableExpandersEvents();
+		        IsSyncEnabled = false;
 
                 if (Compare(Current.SelectedNode, TRVServers))
 		        {
@@ -410,19 +426,20 @@ namespace LogsReader.Reader
 	        {
 		        if (isChanged)
 		        {
-			        UpdateContainer(Current);
+			        UpdateContainerByTreeView(Current);
 			        OnChanged?.Invoke(true, true);
 		        }
-		        EnableExpandersEvents();
-	        }
+		        IsSyncEnabled = true;
+            }
         }
 
         void OpenProperties(object sender, EventArgs args)
         {
 	        try
 	        {
-		        DisableExpandersEvents();
-		        if (Current.SelectedNode == null || Compare(Current.SelectedNode, TRVServers))
+		        IsSyncEnabled = false;
+
+                if (Current.SelectedNode == null || Compare(Current.SelectedNode, TRVServers))
 			        SetTreeNodes(GroupType.Server, ProcessingType.CreateGroupChildItem);
 		        else if (Compare(Current.SelectedNode, TRVTypes))
 			        SetTreeNodes(GroupType.FileType, ProcessingType.CreateGroupChildItem);
@@ -433,9 +450,9 @@ namespace LogsReader.Reader
             }
 	        finally
 	        {
-		        UpdateContainer(Current);
-		        EnableExpandersEvents();
-		        OnChanged?.Invoke(false, true);
+		        UpdateContainerByTreeView(Current);
+		        IsSyncEnabled = true;
+                OnChanged?.Invoke(false, true);
             }
         }
 
@@ -522,7 +539,10 @@ namespace LogsReader.Reader
 			                group.Expand();
 
 		                if (group.Checked)
-			                continue;
+		                {
+			                CheckTreeViewNode(group, true);
+                            continue;
+		                }
 	                }
 
                     foreach (var item in group.Nodes.OfType<TreeNode>())
@@ -781,7 +801,7 @@ namespace LogsReader.Reader
         /// Обновить все ноды TreeView контейнера
         /// </summary>
         /// <param name="changedTreeView"></param>
-        void UpdateContainer(TreeView changedTreeView)
+        void UpdateContainerByTreeView(TreeView changedTreeView)
         {
 	        foreach (var bindedTreeView in _copyList.Where(x => x != changedTreeView))
 	        {
@@ -790,32 +810,19 @@ namespace LogsReader.Reader
 			        bindedTreeView.Nodes.Add((TreeNode)treeNode.Clone());
             }
 
-	        UpdateContainerProperties(changedTreeView, true);
+	        UpdateContainerProperties(changedTreeView);
         }
 
         /// <summary>
         /// Обновить свойства IsExpanded и Checeked для всех форм контейнера
         /// </summary>
         /// <param name="changedTreeView"></param>
-        /// <param name="disableAfterCheck"></param>
-        void UpdateContainerProperties(TreeView changedTreeView, bool disableAfterCheck)
+        void UpdateContainerProperties(TreeView changedTreeView)
         {
-	        if (disableAfterCheck)
-	        {
-		        foreach (var treeView in _copyList)
-			        treeView.AfterCheck -= TrvMain_AfterCheck;
-	        }
-
 	        var template = GetTemplate(changedTreeView);
 
 	        foreach (var bindedTreeView in _copyList.Where(x => x != changedTreeView))
 		        SetTreeNodeItemsProperies(bindedTreeView, template);
-
-	        if (disableAfterCheck)
-	        {
-		        foreach (var treeView in _copyList)
-			        treeView.AfterCheck += TrvMain_AfterCheck;
-	        }
         }
 
         public static Dictionary<string, TreeNodeItem> GetTemplate(TreeView treeView)
@@ -839,16 +846,12 @@ namespace LogsReader.Reader
 
         public void UpdateContainerByTemplate(Dictionary<string, TreeNodeItem> template)
         {
-	        DisableExpandersEvents();
-            foreach (var treeView in _copyList)
-		        treeView.AfterCheck -= TrvMain_AfterCheck;
+	        IsSyncEnabled = false;
 
-            foreach (var bindedTreeView in _copyList)
+	        foreach (var bindedTreeView in _copyList)
 		        SetTreeNodeItemsProperies(bindedTreeView, template);
 
-            EnableExpandersEvents();
-            foreach (var treeView in _copyList)
-	            treeView.AfterCheck += TrvMain_AfterCheck;
+            IsSyncEnabled = true;
         }
 
         static void SetTreeNodeItemsProperies(TreeView bindedTreeView, IReadOnlyDictionary<string, TreeNodeItem> template)
@@ -859,22 +862,32 @@ namespace LogsReader.Reader
 		        {
 			        if (template.TryGetValue(parent.Name, out var newParent))
 			        {
-				        parent.Checked = newParent.Checked;
-				        if (newParent.IsExpanded)
-					        parent.Expand();
-				        else
-					        parent.Collapse();
+				        if (newParent.Checked != parent.Checked)
+					        parent.Checked = newParent.Checked;
+
+				        if (newParent.IsExpanded != parent.IsExpanded)
+				        {
+					        if (newParent.IsExpanded)
+						        parent.Expand();
+					        else
+						        parent.Collapse();
+				        }
 			        }
 
 			        foreach (var group in parent.Nodes.OfType<TreeNode>())
 			        {
 				        if (template.TryGetValue($"{parent.Name}_{group.Text}", out var newGroup))
 				        {
-					        group.Checked = newGroup.Checked;
-					        if (newGroup.IsExpanded)
-						        group.Expand();
-					        else
-						        group.Collapse();
+					        if (newGroup.Checked != group.Checked)
+						        group.Checked = newGroup.Checked;
+
+					        if (newGroup.IsExpanded != group.IsExpanded)
+					        {
+						        if (newGroup.IsExpanded)
+							        group.Expand();
+						        else
+							        group.Collapse();
+					        }
 				        }
 				        else
 				        {
@@ -884,10 +897,15 @@ namespace LogsReader.Reader
 				        foreach (var item in group.Nodes.OfType<TreeNode>())
 				        {
 					        if (template.TryGetValue($"{parent.Name}_{group.Text}_{item.Text}", out var newItem))
-						        item.Checked = newItem.Checked;
-                            else
+					        {
+						        if (newItem.Checked != item.Checked)
+							        item.Checked = newItem.Checked;
+					        }
+					        else
+					        {
 						        CheckTreeViewNode(item, false);
-                        }
+					        }
+				        }
 			        }
 		        }
 		        catch (Exception)

@@ -47,7 +47,9 @@ namespace LogsReader.Reader
 
         public override bool HasAnyResult => OverallResultList != null && OverallResultList.Count > 0;
 
-        public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
+        public bool IsInitialized { get; private set; } = false;
+
+		public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {
 	        try
 	        {
@@ -202,6 +204,14 @@ namespace LogsReader.Reader
 		        ClearForm(false);
 		        ValidationCheck(false);
 	        }
+        }
+
+        public void Initialize()
+        {
+	        if (IsInitialized) 
+		        return;
+	        TreeViewContainer.EnableSync();
+	        IsInitialized = true;
         }
 
         public override void ApplySettings()

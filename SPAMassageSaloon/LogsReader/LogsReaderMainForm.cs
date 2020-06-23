@@ -44,7 +44,7 @@ namespace LogsReader
 
         public LogsReaderFormGlobal Global { get; }
 
-        public Dictionary<TabPage, LogsReaderFormScheme> AllForms { get; } = new Dictionary<TabPage, LogsReaderFormScheme>(15);
+        public Dictionary<TabPage, LogsReaderFormScheme> SchemeForms { get; } = new Dictionary<TabPage, LogsReaderFormScheme>(15);
 
         public LogsReaderFormBase CurrentForm
         {
@@ -52,7 +52,7 @@ namespace LogsReader
             {
 	            if (MainTabControl.SelectedTab != null)
 	            {
-		            if (AllForms.TryGetValue(MainTabControl.SelectedTab, out var current))
+		            if (SchemeForms.TryGetValue(MainTabControl.SelectedTab, out var current))
 			            return current;
 		            else if (MainTabControl.SelectedTab.Name == GLOBAL_PAGE_NAME)
 			            return Global;
@@ -62,9 +62,9 @@ namespace LogsReader
             }
         }
 
-        public int ActiveProcessesCount => AllForms.Values.Count(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking));
+        public int ActiveProcessesCount => SchemeForms.Values.Count(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking));
 
-        public int ActiveTotalProgress => AllForms.Values.Where(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking)).Sum(x => x.Progress);
+        public int ActiveTotalProgress => SchemeForms.Values.Where(x => (x.Progress > 0 && x.Progress < 100) || (x.Progress == 0 && x.IsWorking)).Sum(x => x.Progress);
 
         static LogsReaderMainForm()
         {
@@ -137,7 +137,7 @@ namespace LogsReader
                 {
                     try
                     {
-                        var logsReader = new LogsReaderFormScheme(scheme)
+                        var schemeForm = new LogsReaderFormScheme(scheme)
                         {
                             Dock = DockStyle.Fill
                         };
@@ -150,10 +150,15 @@ namespace LogsReader
                             Margin = new Padding(0),
                             Padding = new Padding(0)
                         };
-                        page.Controls.Add(logsReader);
+                        page.Controls.Add(schemeForm);
 
                         MainTabControl.TabPages.Add(page);
-                        AllForms.Add(page, logsReader);
+                        SchemeForms.Add(page, schemeForm);
+
+                        schemeForm.Load += (sender, args) =>
+                        {
+	                        schemeForm.Initialize();
+                        };
                     }
                     catch (Exception ex)
                     {
@@ -170,7 +175,7 @@ namespace LogsReader
 	                ApplySettings();
 	                Global.ApplyFormSettings();
 
-	                foreach (var logsReader in AllForms.Values)
+	                foreach (var logsReader in SchemeForms.Values)
 	                {
 		                logsReader.ApplyFormSettings();
 		                logsReader.OnSchemeChanged += SaveSchemas;
@@ -209,7 +214,7 @@ namespace LogsReader
                 }
 	            else
 	            {
-		            if (AllForms.TryGetValue(page, out var reader))
+		            if (SchemeForms.TryGetValue(page, out var reader))
 			            RenderTabPage(page, e, reader.UserSettings.BackColor, reader.UserSettings.ForeColor);
                     else
 			            RenderTabPage(page, e, SCHEME_COLOR_BACK, SCHEME_COLOR_FORE);
@@ -241,7 +246,7 @@ namespace LogsReader
             try
             {
 	            Global.ApplySettings();
-                foreach (var logsReader in AllForms.Values)
+                foreach (var logsReader in SchemeForms.Values)
                     logsReader.ApplySettings();
             }
             catch (Exception)
@@ -258,7 +263,7 @@ namespace LogsReader
 			        LRSettings.Serialize(Settings);
 
 		        Global.SaveData();
-		        foreach (var logsReader in AllForms.Values)
+		        foreach (var logsReader in SchemeForms.Values)
 			        logsReader.SaveData();
 
 		        Properties.Settings.Default.FormLocation = Location;

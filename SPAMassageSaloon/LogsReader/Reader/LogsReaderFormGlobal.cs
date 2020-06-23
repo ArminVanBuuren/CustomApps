@@ -16,13 +16,15 @@ using Utils.WinForm.Expander;
 namespace LogsReader.Reader
 {
     public class LogsReaderFormGlobal : LogsReaderFormBase
-	{
-		private readonly Panel panelFlowDoc;
+    {
+	    private readonly Panel panelFlowDoc;
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
 
-		readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
-		readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
+		private readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
+		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
+
+		private readonly object syncGlobalAssignDgv = new object();
 
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
@@ -30,8 +32,7 @@ namespace LogsReader.Reader
 
 		public LogsReaderMainForm MainForm { get; private set; }
 
-		public override bool HasAnyResult => dgvFiles.RowCount > 0 
-		                                     && AllExpanders.Any(x => x.Key.HasAnyResult && x.Value.IsChecked);
+		public override bool HasAnyResult => InProcessing.Any(x => x.Item1.HasAnyResult);
 
 		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
         {
@@ -101,7 +102,7 @@ namespace LogsReader.Reader
 	    {
 		    MainForm = main;
 
-		    foreach (var readerForm in MainForm.AllForms.Values)
+		    foreach (var readerForm in MainForm.SchemeForms.Values)
 		    {
 			    var expander = CreateExpander(readerForm);
 			    AllExpanders.Add(readerForm, expander);
@@ -220,8 +221,15 @@ namespace LogsReader.Reader
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
+	        void OnTreeViewMouseDown(object sender, MouseEventArgs e)
+	        {
+		        if (!readerForm.IsInitialized)
+			        readerForm.Initialize();
+		        treeView.MouseDown -= OnTreeViewMouseDown;
+	        }
+			treeView.MouseDown += OnTreeViewMouseDown;
 
-	        expanderPanel.Controls.Add(buttonBack);
+			expanderPanel.Controls.Add(buttonBack);
 	        expanderPanel.Controls.Add(buttonFore);
 	        expanderPanel.Controls.Add(labelBack);
 	        expanderPanel.Controls.Add(labelFore);
@@ -246,7 +254,7 @@ namespace LogsReader.Reader
 			// если изменились значения прогресса поиска
 	        readerForm.OnProcessStatusChanged += (sender, args) =>
 	        {
-		        if (InProcessing == null)
+		        if (InProcessing.Count == 0)
 			        return;
 
 		        var countMatches = 0;
@@ -263,6 +271,7 @@ namespace LogsReader.Reader
 
 				base.ReportProcessStatus(countMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
 	        };
+			// событие при смене языка формы
 	        readerForm.OnAppliedSettings += (sender, args) =>
 	        {
 		        labelBack.Text = Resources.Txt_Global_Back;
@@ -301,18 +310,24 @@ namespace LogsReader.Reader
 			{
 				schemeExpander.Enabled = !readerForm.IsWorking;
 
-				if (InProcessing == null || InProcessing.IsAnyWorking)
+				if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
 					return;
 
-				IsWorking = false;
+				if (InProcessing.IsAnyWorking)
+				{
+					if (InProcessing.IsCompleted)
+						await AssignResult(alreadyUseFilter.Checked ? GetFilter() : null);
+					return;
+				}
 
-				var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 				// заполняем DataGrid
-				if (await AssignResult(filter))
+				if (await AssignResult(alreadyUseFilter.Checked ? GetFilter() : null))
 				{
 					Progress = 100;
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, InProcessing.Elapsed.ToReadableString()), ReportStatusType.Success);
 				}
+
+				IsWorking = false;
 			};
 
 			return schemeExpander;
@@ -357,7 +372,9 @@ namespace LogsReader.Reader
         class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
 		{
 	        private Stopwatch _watcher;
-			private Dictionary<string, (LogsReaderFormScheme, Task)> _items;
+			private readonly Dictionary<string, (LogsReaderFormScheme, Task)> _items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
+
+			public int Count => _items.Count;
 
 			public bool IsAnyWorking
 			{
@@ -365,12 +382,18 @@ namespace LogsReader.Reader
 				{
 					var isAnyWorking = _items != null && _items.Any(x => x.Value.Item1.IsWorking);
 					if (!isAnyWorking)
+					{
+						IsCompleted = true;
 						_watcher.Stop();
+					}
+
 					return isAnyWorking;
 				}
 			}
 
 			public TimeSpan Elapsed => _watcher.Elapsed;
+
+			public bool IsCompleted { get; private set; } = false;
 
 			public bool TryGetValue(string schemeName, out LogsReaderFormScheme result)
 			{
@@ -386,7 +409,7 @@ namespace LogsReader.Reader
 
 			public void Start(IEnumerable<LogsReaderFormScheme> readerFormCollection)
 			{
-				_items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
+				Clear();
 				_watcher = new Stopwatch();
 				_watcher.Start();
 
@@ -407,6 +430,12 @@ namespace LogsReader.Reader
 					.Where(x => x.Value.Item1.IsWorking)
 					.Select(x => x.Value.Item1))
 					reader.BtnSearch_Click(this, EventArgs.Empty);
+			}
+
+			public void Clear()
+			{
+				IsCompleted = false;
+				_items.Clear();
 			}
 
 			public IEnumerator<(LogsReaderFormScheme, Task)> GetEnumerator()
@@ -445,24 +474,21 @@ namespace LogsReader.Reader
 			}
 		}
 
-		protected override IEnumerable<DataTemplate> GetResultTemplates()
-		{
-			if (InProcessing == null)
-				return null;
+        protected override IEnumerable<DataTemplate> GetResultTemplates()
+        {
+	        var result = new List<DataTemplate>();
 
-			var result = new List<DataTemplate>();
+	        foreach (var schemeForm in InProcessing.Select(x => x.Item1))
+	        {
+		        if (!schemeForm.HasAnyResult || schemeForm.IsWorking)
+			        continue;
+		        result.AddRange(schemeForm.OverallResultList);
+	        }
 
-			foreach (var schemeForm in InProcessing
-				.Where(x => x.Item1.HasAnyResult)
-				.Select(x => x.Item1))
-			{
-				result.AddRange(schemeForm.OverallResultList);
-			}
+	        return result.OrderBy(x => x.Date).ThenBy(x => x.File).ThenBy(x => x.FoundLineID).ToList();
+        }
 
-			return result.OrderBy(x => x.Date).ThenBy(x => x.File).ThenBy(x => x.FoundLineID).ToList();
-		}
-
-		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+        internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
 			template = null;
 			var schemeName = row?.Cells["SchemeName"]?.Value?.ToString();
@@ -474,6 +500,12 @@ namespace LogsReader.Reader
 
 			template = templateResult;
 			return true;
+		}
+
+		protected override void ClearForm(bool saveData)
+		{
+			base.ClearForm(saveData);
+			InProcessing.Clear();
 		}
 
 		protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
@@ -488,69 +520,76 @@ namespace LogsReader.Reader
 		internal override void TxtPattern_TextChanged(object sender, EventArgs e)
 		{
 			base.TxtPattern_TextChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key))
 				schemeForm.txtPattern.Text = ((TextBox) sender).Text;
 		}
 
 		internal override void UseRegex_CheckedChanged(object sender, EventArgs e)
 		{
 			base.UseRegex_CheckedChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.useRegex.Checked = ((CheckBox)sender).Checked;
 		}
 
 		internal override void DateStartFilterOnValueChanged(object sender, EventArgs e)
 		{
 			base.DateStartFilterOnValueChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 			{
-				schemeForm.dateStartFilter.Checked = dateStartFilter.Checked;
 				schemeForm.dateStartFilter.Value = dateStartFilter.Value;
+				schemeForm.dateStartFilter.Checked = dateStartFilter.Checked;
+				schemeForm.DateStartFilterOnValueChanged(this, EventArgs.Empty);
 			}
 		}
 
 		internal override void DateEndFilterOnValueChanged(object sender, EventArgs e)
 		{
 			base.DateEndFilterOnValueChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 			{
-				schemeForm.dateEndFilter.Checked = dateEndFilter.Checked;
 				schemeForm.dateEndFilter.Value = dateEndFilter.Value;
+				schemeForm.dateEndFilter.Checked = dateEndFilter.Checked;
+				schemeForm.DateEndFilterOnValueChanged(this, EventArgs.Empty);
 			}
 		}
 
 		internal override void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			base.traceNameFilterComboBox_SelectedIndexChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.traceNameFilterComboBox.Text = ((ComboBox)sender).Text;
 		}
 
 		internal override void TraceNameFilter_TextChanged(object sender, EventArgs e)
 		{
 			base.TraceNameFilter_TextChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.traceNameFilter.Text = ((TextBox)sender).Text;
 		}
 
 		internal override void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			base.traceMessageFilterComboBox_SelectedIndexChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.traceMessageFilterComboBox.Text = ((ComboBox)sender).Text;
 		}
 
 		internal override void TraceMessageFilter_TextChanged(object sender, EventArgs e)
 		{
 			base.TraceMessageFilter_TextChanged(sender, e);
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.traceMessageFilter.Text = ((TextBox)sender).Text;
 		}
 
 		internal override void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
 		{
-			foreach (var schemeForm in AllExpanders.Keys)
+			foreach (var schemeForm in GetSelectedSchemas())
 				schemeForm.alreadyUseFilter.Checked = ((CheckBox)sender).Checked;
+		}
+
+		IEnumerable<LogsReaderFormScheme> GetSelectedSchemas()
+		{
+			return AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key).ToList();
 		}
 
 		protected override void ValidationCheck(bool clearStatus)
