@@ -6,21 +6,32 @@ namespace Utils
 {
 	public static class TIME
 	{
+		
+		/// <summary>
+		/// Перевести период дней в годы
+		/// </summary>
+		/// <param name="span"></param>
+		/// <returns></returns>
 		public static string ToReadableAgeString(this TimeSpan span)
 		{
 			return $"{span.Days / 365.25:0}";
 		}
 
+		/// <summary>
+		/// Первевести в человеко-читаемый формат периода
+		/// </summary>
+		/// <param name="span"></param>
+		/// <returns></returns>
 		public static string ToReadableString(this TimeSpan span)
 		{
 			var formatted = string.Format("{0}{1}{2}{3}",
-				span.Duration().Days > 0 ? $"{span.Days:0} {(span.Days == 1 ? Resources.day : (span.Days < 5 ? Resources.days2 : Resources.days5))}, " : string.Empty,
-				span.Duration().Hours > 0 ? $"{span.Hours:0} {(span.Hours == 1 ? Resources.hour : (span.Hours < 5 ? Resources.hours2 : Resources.hours5))}, " : string.Empty,
+				span.Duration().Days > 0 ? $"{span.Days:0} {(span.Days == 1 ? Resources.day : (Math.Abs(span.Days) < 5 ? Resources.days2 : Resources.days5))}, " : string.Empty,
+				span.Duration().Hours > 0 ? $"{span.Hours:0} {(span.Hours == 1 ? Resources.hour : Math.Abs(span.Hours) < 5 ? Resources.hours2 : Resources.hours5)}, " : string.Empty,
 				span.Duration().Minutes > 0
-					? $"{span.Minutes:0} {(span.Minutes == 1 ? Resources.minute : (span.Minutes < 5 ? Resources.minutes2 : Resources.minutes5))}, "
+					? $"{span.Minutes:0} {(span.Minutes == 1 ? Resources.minute : Math.Abs(span.Minutes) % 10 < 5 ? Resources.minutes2 : Resources.minutes5)}, "
 					: string.Empty,
 				span.Duration().Seconds > 0
-					? $"{span.Seconds:0} {(span.Seconds == 1 ? Resources.second : (span.Seconds < 5 ? Resources.seconds2 : Resources.seconds5))}"
+					? $"{span.Seconds:0} {(span.Seconds == 1 ? Resources.second : Math.Abs(span.Seconds) < 5 ? Resources.seconds2 : Resources.seconds5)}"
 					: string.Empty);
 
 			if (formatted.EndsWith(", "))
@@ -32,11 +43,24 @@ namespace Utils
 			return formatted;
 		}
 
+		/// <summary>
+		/// Попытка перевести дату учитывая разные культуры
+		/// </summary>
+		/// <param name="dateValue"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
 		public static bool TryParseAnyDate(string dateValue, out DateTime result)
 		{
 			return TryParseAnyDate(dateValue, DateTimeStyles.None, out result);
 		}
 
+		/// <summary>
+		/// Попытка перевести дату учитывая разные культуры
+		/// </summary>
+		/// <param name="dateValue"></param>
+		/// <param name="style"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
 		public static bool TryParseAnyDate(string dateValue, DateTimeStyles style, out DateTime result)
 		{
 			result = DateTime.MinValue;

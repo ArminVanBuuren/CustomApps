@@ -51,6 +51,20 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
+		static void Test_GetLastDigit()
+		{
+			System.Console.WriteLine(@"Enter a number:");
+			while (true)
+			{
+				var num = System.Console.ReadLine();
+				if (!int.TryParse(num, out var num1))
+					break;
+				var lastNumber = Math.Abs(num1) % 10;
+				System.Console.WriteLine(lastNumber);
+				System.Console.WriteLine(@"For repeat test Enter a number:");
+			}
+		}
+
 		static void Test_DelegateAllEventsTo()
 		{
 			var test_1 = new TestingEvents();
