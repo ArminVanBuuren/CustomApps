@@ -53,6 +53,13 @@ namespace Tester.Console
 
 		static void Test_GetLastDigit()
 		{
+			for (int i = 0; i < 51; i++)
+			{
+				var lastNumber = Math.Abs(i) % 10;
+				var time = new TimeSpan(0, 0, 0, i);
+				System.Console.WriteLine($"Number is {i} | Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
+			}
+
 			System.Console.WriteLine(@"Enter a number:");
 			while (true)
 			{
@@ -60,7 +67,9 @@ namespace Tester.Console
 				if (!int.TryParse(num, out var num1))
 					break;
 				var lastNumber = Math.Abs(num1) % 10;
-				System.Console.WriteLine(lastNumber);
+				var time = new TimeSpan(0, 0, 0, num1);
+
+				System.Console.WriteLine($"Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
 				System.Console.WriteLine(@"For repeat test Enter a number:");
 			}
 		}
