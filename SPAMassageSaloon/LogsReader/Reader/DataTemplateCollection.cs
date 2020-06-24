@@ -19,22 +19,22 @@ namespace LogsReader.Reader
         {
             _settings = settings;
             _values = new Dictionary<int, DataTemplate>(list.Count());
-            AddRange(DoOrdering(list));
+            AddRange(DoOrdering(list, _settings.OrderByItems));
         }
 
-        public IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input)
+        public static IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input, Dictionary<string, bool> orderBy)
         {
-            var result = input.AsQueryable();
+	        var result = input.AsQueryable();
             var i = 0;
-            foreach (var orderItem in _settings.OrderByItems)
+            foreach (var (columnName, byDescending) in orderBy)
             {
-                if (orderItem.Key.LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
-                {
-                    result = orderItem.Value
-                        ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>)result).ThenByDescending(param)
-                        : i == 0 ? result.OrderBy(param) : ((IOrderedQueryable<DataTemplate>)result).ThenBy(param);
-                    i++;
-                }
+	            if (columnName.LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+	            {
+		            result = byDescending
+			            ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)
+			            : i == 0 ? result.OrderBy(param) : ((IOrderedQueryable<DataTemplate>) result).ThenBy(param);
+		            i++;
+	            }
             }
             return result;
         }

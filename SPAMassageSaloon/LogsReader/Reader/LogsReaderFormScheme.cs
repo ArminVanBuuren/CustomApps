@@ -444,7 +444,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        protected override void ClearForm(bool saveData = true)
+        protected override void ClearForm(bool saveData)
         {
             base.ClearForm(saveData);
             OverallResultList?.Clear();

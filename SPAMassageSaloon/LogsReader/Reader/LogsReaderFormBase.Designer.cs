@@ -113,6 +113,7 @@ namespace LogsReader.Reader
 			this.SchemeName.ReadOnly = true;
 			this.SchemeName.Visible = false;
 			this.SchemeName.Width = 10;
+			this.SchemeName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// PrivateID
 			// 
@@ -123,6 +124,7 @@ namespace LogsReader.Reader
 			this.PrivateID.ReadOnly = true;
 			this.PrivateID.Visible = false;
 			this.PrivateID.Width = 10;
+			this.PrivateID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// IsMatched
 			// 
@@ -133,6 +135,7 @@ namespace LogsReader.Reader
 			this.IsMatched.ReadOnly = true;
 			this.IsMatched.Visible = false;
 			this.IsMatched.Width = 10;
+			this.IsMatched.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// ID
 			// 
@@ -142,6 +145,7 @@ namespace LogsReader.Reader
 			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
 			this.ID.Width = 30;
+			this.ID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// Server
 			// 
@@ -151,6 +155,7 @@ namespace LogsReader.Reader
 			this.Server.Name = "Server";
 			this.Server.ReadOnly = true;
 			this.Server.Width = 50;
+			this.Server.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// TraceName
 			// 
@@ -160,6 +165,7 @@ namespace LogsReader.Reader
 			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
 			this.TraceName.Width = 80;
+			this.TraceName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// DateOfTrace
 			// 
@@ -169,6 +175,7 @@ namespace LogsReader.Reader
 			this.DateOfTrace.Name = "DateOfTrace";
 			this.DateOfTrace.ReadOnly = true;
 			this.DateOfTrace.Width = 140;
+			this.DateOfTrace.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// File
 			// 
@@ -178,6 +185,7 @@ namespace LogsReader.Reader
 			this.File.Name = "FileNamePartial";
 			this.File.ReadOnly = true;
 			this.File.Width = 1000;
+			this.File.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// BTNSearch
 			// 

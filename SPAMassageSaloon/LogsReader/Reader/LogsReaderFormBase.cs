@@ -154,6 +154,7 @@ namespace LogsReader.Reader
 	            dgvFiles.AutoGenerateColumns = false;
 	            dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            dgvFiles.CellFormatting += DgvFiles_CellFormatting;
+	            dgvFiles.ColumnHeaderMouseClick += DgvFilesOnColumnHeaderMouseClick;
 
                 #region Initialize Controls
 
@@ -352,7 +353,7 @@ namespace LogsReader.Reader
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
-                        ClearForm(true);
+	                    BtnClear_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F7 when buttonFilter.Enabled:
                         buttonFilter_Click(this, EventArgs.Empty);
@@ -531,14 +532,16 @@ namespace LogsReader.Reader
             await AssignResult(null);
         }
 
+        private IEnumerable<DataTemplate> _currentDGVResult;
+
         protected async Task<bool> AssignResult(DataFilter filter)
         {
 	        ClearDGV();
 	        ClearErrorStatus();
 
-	        var result = GetResultTemplates();
+	        _currentDGVResult = GetResultTemplates();
 
-            if (result == null || !result.Any())
+            if (_currentDGVResult == null || !_currentDGVResult.Any())
 	        {
 		        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 		        return false;
@@ -546,16 +549,16 @@ namespace LogsReader.Reader
 
 	        if (filter != null)
 	        {
-		        result = filter.FilterCollection(result);
+		        _currentDGVResult = filter.FilterCollection(_currentDGVResult);
 
-		        if (!result.Any())
+		        if (!_currentDGVResult.Any())
 		        {
 			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
 			        return false;
 		        }
 	        }
 
-	        await dgvFiles.AssignCollectionAsync(result, null);
+	        await dgvFiles.AssignCollectionAsync(_currentDGVResult, null);
 
 	        buttonExport.Enabled = dgvFiles.RowCount > 0;
 
@@ -614,6 +617,47 @@ namespace LogsReader.Reader
             {
                 ReportStatus(ex.Message, ReportStatusType.Error);
             }
+        }
+
+        private int _prevSortedColumn = -1;
+        private bool _byDescending = true;
+
+        private async void DgvFilesOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+	        try
+	        {
+		        if(!HasAnyResult || _currentDGVResult == null)
+                    return;
+
+		        var byDescending = _prevSortedColumn != e.ColumnIndex || _prevSortedColumn == e.ColumnIndex && !_byDescending;
+		        var source = _currentDGVResult;
+
+                ClearDGV();
+                ClearErrorStatus();
+
+                dgvFiles.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
+
+                var columnName = dgvFiles.Columns[e.ColumnIndex].HeaderText;
+                var orderByOption = byDescending
+	                ? new Dictionary<string, bool>() {{columnName, false}}
+	                : new Dictionary<string, bool>() {{columnName, true}};
+                if(!orderByOption.ContainsKey("File"))
+	                orderByOption.Add("File", !byDescending);
+                if (!orderByOption.ContainsKey("FoundLineID"))
+                    orderByOption.Add("FoundLineID", !byDescending);
+
+                _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
+
+                await dgvFiles.AssignCollectionAsync(_currentDGVResult, null);
+
+                _prevSortedColumn = e.ColumnIndex;
+                _byDescending = byDescending;
+
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
         }
 
         protected virtual void СolorizationDGV(DataGridViewRow row, DataTemplate template)
@@ -808,7 +852,7 @@ namespace LogsReader.Reader
 	        buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
         }
 
-        private void BtnClear_Click(object sender, EventArgs e)
+        protected virtual void BtnClear_Click(object sender, EventArgs e)
         {
             ClearForm(true);
         }
@@ -822,7 +866,7 @@ namespace LogsReader.Reader
 
                 ClearDGV();
 
-                Progress = 0;
+                ReportProcessStatus(0, 0, 0, 0);
 
                 _completedFilesStatus.Text = @"0";
                 _totalFilesStatus.Text = @"0";
@@ -842,6 +886,10 @@ namespace LogsReader.Reader
         {
             try
             {
+	            _prevSortedColumn = -1;
+	            _currentDGVResult = null;
+	            _byDescending = true;
+
                 dgvFiles.DataSource = null;
                 dgvFiles.Rows.Clear();
                 dgvFiles.Refresh();

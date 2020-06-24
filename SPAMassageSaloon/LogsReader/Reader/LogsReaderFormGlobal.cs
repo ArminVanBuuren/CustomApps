@@ -315,10 +315,11 @@ namespace LogsReader.Reader
 
 				if (InProcessing.IsAnyWorking)
 				{
+					// если выполняется повторный поиск в определенной схеме, то возобновляем процесс и дисейблим грид
 					if (InProcessing.IsCompleted)
 					{
 						InProcessing.Continue();
-						await AssignResult(alreadyUseFilter.Checked ? GetFilter() : null);
+						IsWorking = true;
 						ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 					}
 
@@ -512,13 +513,13 @@ namespace LogsReader.Reader
 			return true;
 		}
 
-		protected override void ClearForm(bool saveData)
-		{
-			base.ClearForm(saveData);
-			InProcessing.Clear();
+        protected override void BtnClear_Click(object sender, EventArgs e)
+        {
+	        InProcessing.Clear();
+			base.BtnClear_Click(sender , e);
 		}
 
-		protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+        protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
 		{
 			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;
