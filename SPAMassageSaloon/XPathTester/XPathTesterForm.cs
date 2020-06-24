@@ -46,7 +46,6 @@ namespace XPathTester
                 xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
-                xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
 
                 KeyPreview = true;
                 KeyDown += XPathWindow_KeyDown;
@@ -139,7 +138,6 @@ namespace XPathTester
                 editor.TextChanged -= EditorOnTextChanged;
                 xpathResultDataGrid.MouseClick -= XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged -= XpathResultDataGrid_SelectionChanged;
-                xpathResultDataGrid.ColumnHeaderMouseClick -= XpathResultDataGrid_ColumnHeaderMouseClick;
 
                 var navigator = Result[id].Navigator;
                 var range = editor.GetRange(navigator.Start, navigator.End);
@@ -157,7 +155,6 @@ namespace XPathTester
                 editor.TextChanged += EditorOnTextChanged;
                 xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
-                xpathResultDataGrid.ColumnHeaderMouseClick += XpathResultDataGrid_ColumnHeaderMouseClick;
             }
         }
 
@@ -221,31 +218,6 @@ namespace XPathTester
 	                // ignored
                 }
             }
-        }
-
-        void XpathResultDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-	        try
-	        {
-		        if (Result == null)
-			        return;
-
-		        var columnName = xpathResultDataGrid.Columns[e.ColumnIndex].Name;
-		        var result = Result.AsQueryable();
-
-		        if (_prevSortedColumn == e.ColumnIndex)
-			        Result = new XPathCollection(result.OrderBy(columnName));
-		        else
-			        Result = new XPathCollection(result.OrderByDescending(columnName));
-
-		        _prevSortedColumn = e.ColumnIndex;
-
-		        UpdateResultDataGrid(Result);
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message);
-	        }
         }
 
         private void ButtonPrettyPrint_Click(object sender, EventArgs e)
