@@ -235,7 +235,7 @@ namespace LogsReader.Reader
 			                    }
 		                    }
 	                    }
-	                    catch (Exception ex)
+	                    catch (Exception)
 	                    {
 		                    // ignored
 	                    }

@@ -96,17 +96,11 @@ namespace SPAMassageSaloon
                     languageToolStripMenuItem.Text = Resources.Txt_Language;
                     aboutToolStripMenuItem.Text = Resources.Txt_About;   
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // ignored
                 }
             }
-        }
-
-        private string LastUpdatePackage
-        {
-            get => GetRegeditValue(nameof(LastUpdatePackage));
-            set => SetRegeditValue(nameof(LastUpdatePackage), value);
         }
 
         static MainForm()
@@ -173,7 +167,7 @@ namespace SPAMassageSaloon
                     AppUpdater.OnSuccessfulUpdated += AppUpdater_OnSuccessfulUpdated;
                     AppUpdater.Start();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // ignored
                 }
@@ -182,7 +176,7 @@ namespace SPAMassageSaloon
                 var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
                 var autor = new ToolStripButton("?")
-                    {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte) 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
+                    {Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0), Margin = new Padding(0, 0, 0, 2), ForeColor = Color.Blue};
                 autor.Click += (s, args) =>
                 {
                     Presenter.ShowOwner();
@@ -262,7 +256,7 @@ namespace SPAMassageSaloon
 
                 ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().Version, BuildTime, description).Trim(), MessageBoxIcon.Information, AppName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -275,7 +269,7 @@ namespace SPAMassageSaloon
                 SaveData();
                 AppUpdater.DoUpdate(args.Control);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 AppUpdater.Refresh();
             }
@@ -297,7 +291,7 @@ namespace SPAMassageSaloon
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }
@@ -510,7 +504,7 @@ namespace SPAMassageSaloon
                         var mdiButton = (MDIManagerButton)o;
                         mainForm.Text = $"{FormName}  [{mdiButton.mdiForm.Text.Trim()}]";
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // ignored
                     }
@@ -522,7 +516,7 @@ namespace SPAMassageSaloon
                         var mdiButton = (MDIManagerButton)o;
                         mdiButton.mdiForm.Activate();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // ignored
                     }
@@ -545,7 +539,7 @@ namespace SPAMassageSaloon
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -578,7 +572,7 @@ namespace SPAMassageSaloon
                     _about.Closed += About_Closed;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }
@@ -592,7 +586,7 @@ namespace SPAMassageSaloon
                 _about = null;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }

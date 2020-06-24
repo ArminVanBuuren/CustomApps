@@ -25,7 +25,6 @@ namespace XPathTester
 	        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
 
         private bool _isPasting = false;
-        private int _prevSortedColumn = -1;
 
         public XPathCollection Result { get; private set; }
 
@@ -213,7 +212,7 @@ namespace XPathTester
 		                _isPasting = false;
 	                }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 	                // ignored
                 }
@@ -274,7 +273,6 @@ namespace XPathTester
         {
             ReportStatus(string.Empty);
             xpathResultDataGrid.DataSource = null;
-            _prevSortedColumn = -1;
         }
 
         void ReportStatus(string message, bool? isException = true)
