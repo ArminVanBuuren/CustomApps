@@ -155,7 +155,7 @@
 {1}</value>
   </data>
   <data name="Txt_LRSettings_SettingsComment" xml:space="preserve">
-    <value>"Encoding" atributte is used when reading log files. The attribute "disableHintComments" to true - disables hinted comments.</value>
+    <value>"Encoding" atributte is used when reading log files. The attribute "disableHintComments" to true - disables hinted comments in config.</value>
   </data>
   <data name="Txt_Form_DateFilterComment" xml:space="preserve">
     <value>"Date" filter</value>

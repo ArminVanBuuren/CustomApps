@@ -198,6 +198,7 @@ namespace LogsReader.Reader
                     OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
                     Thread.Sleep(10);
                 }
+                OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
             }
             catch (Exception)
             {

@@ -1087,7 +1087,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &quot;Encoding&quot; atributte is used when reading log files. The attribute &quot;disableHintComments&quot; to true - disables hinted comments..
+        ///   Ищет локализованную строку, похожую на &quot;Encoding&quot; atributte is used when reading log files. The attribute &quot;disableHintComments&quot; to true - disables hinted comments in config..
         /// </summary>
         public static string Txt_LRSettings_SettingsComment {
             get {

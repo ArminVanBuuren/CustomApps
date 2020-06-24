@@ -18,7 +18,7 @@ namespace LogsReader.Config
     public class LRSettings
     {
         private static object _sync = new object();
-        private static bool _disableHintComments = false;
+        private static bool _disableHintComments = true;
 
         private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
 
@@ -53,9 +53,9 @@ namespace LogsReader.Config
         private static string FailedSettingsPath { get; }
 
         /// <summary>
-        /// Функция используется для сичтывания стринговых аттрибутов, для подставления результата парсинга включая кастомные функции
+        /// Функция используется для сичтывания стринговых аттрибутов, для установки результата парсинга включая кастомные функции. Дефолтное значение обязательно!
         /// </summary>
-        public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; }
+        public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; } = (template) => (match) => match.GetValueByReplacement(template);
 
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 

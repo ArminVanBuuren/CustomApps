@@ -155,7 +155,7 @@
 {1}</value>
   </data>
   <data name="Txt_LRSettings_SettingsComment" xml:space="preserve">
-    <value>Атрибут "encoding" используется при считывании лог файлов. Если задать атрибуту "disableHintComments" значение true, то комментарии с подсказками будут отключены.</value>
+    <value>Атрибут "encoding" используется при считывании лог файлов. Если задать атрибуту Если "disableHintComments" установить как true, то комментарии в конфиге будут отключены.</value>
   </data>
   <data name="Txt_Form_DateFilterComment" xml:space="preserve">
     <value>Фильтр по полю "Date"</value>
