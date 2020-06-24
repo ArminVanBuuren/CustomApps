@@ -54,25 +54,52 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Form.jpg" Margin="5, 5, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Form.jpg" Margin="5, 5, 10, 5"></Image>
                         </StackPanel>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="0" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Config.jpg" Margin="5, 5, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Config.jpg" Margin="5, 5, 10, 5"></Image>
                         </StackPanel>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+                        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="2" Grid.Column="0">
-                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Options.jpg" Margin="5, 10, 10, 10"></Image>
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Options.jpg" Margin="5, 5, 10, 5"></Image>
                         </StackPanel>
                         <Border Grid.Row="2" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
                         <Border Grid.Row="2" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="3" Grid.Column="0">
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_Global.jpg" Margin="5, 5, 10, 5"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="3" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="3" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+                        <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="4" Grid.Column="0">
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_CustomFunc_Config.jpg" Margin="5, 5, 10, 5"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="4" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="4" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
+
+                        <StackPanel Grid.Row="5" Grid.Column="0">
+                            <Image Source="/SPAMassageSaloon;component/Resources/About/LogsReader_CustomFunc_Form.jpg" Margin="5, 5, 10, 5"></Image>
+                        </StackPanel>
+                        <Border Grid.Row="5" Grid.Column="0" BorderBrush="#000" BorderThickness="0,0,1,1" Margin="1,0,0,-1"/>
+                        <Border Grid.Row="5" Grid.Column="0" BorderBrush="#bbb" BorderThickness="0,0,1,1" Margin="-1,0,1,0"/>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                             <Expander Margin="2" Padding="5" Name="LRDescription" Header="Description" IsExpanded="True" ExpandDirection="Right" >
@@ -132,11 +159,23 @@
                             <Expander Margin="2" Padding="5" Name="LRTraceParse" Header="TraceParse" IsExpanded="True" ExpandDirection="Right" Background="#192300FF">
                                 <TextBlock Name="LRTraceParseTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
-                            <Border BorderBrush="#000" BorderThickness="0,0,0,1" Margin="1,0,0,-1"/>
-                            <Border BorderBrush="#bbb" BorderThickness="0,0,0,1" Margin="-1,0,1,0"/>
+                        </StackPanel>
 
+                        <StackPanel Grid.Row="2" Grid.Column="1">
                             <Expander Margin="2" Padding="5" Name="LROptions" Header="Options" IsExpanded="True" ExpandDirection="Right" Background="#19FF00FF">
                                 <TextBlock Name="LROptionsTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Grid.Column="1">
+                            <Expander Margin="2" Padding="5" Name="LRGlobal" Header="Global" IsExpanded="True" ExpandDirection="Right" Background="#19FF00D1">
+                                <TextBlock Name="LRGlobalTxt" TextWrapping="Wrap"></TextBlock>
+                            </Expander>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Grid.Column="1">
+                            <Expander Margin="2" Padding="5" Name="LRCustomFunc" Header="Custom Func" IsExpanded="True" ExpandDirection="Right" Background="#19FF00FF">
+                                <TextBlock Name="LRCustomFuncTxt" TextWrapping="Wrap"></TextBlock>
                             </Expander>
                         </StackPanel>
                     </Grid>

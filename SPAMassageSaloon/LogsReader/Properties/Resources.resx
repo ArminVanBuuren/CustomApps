@@ -501,8 +501,7 @@ Input data:
     <value>..\resources\authorization.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
-    <value>Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
-      Example: &lt;Pattern ID="{getIDFunc('$1')}" Date="{getDateFunc('$2')}" TraceName="name = {getTraceNameFunc('$3')}" Description="description = {formatDescriptionFunc('$4', '$5')}" Message="Original = '$6' Result = {getMessageFunc('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
+    <value>Enumeration of custom functions. Used to adjust the displayed data, if this cannot be done by RegEx grouping. Applicable only in the attributes nodes - Pattern and TransactionPattern. Each class must implement the ICustomFunction interface which has only one function "Invoke". Format: "{custom_function_test('arg1', 'arg2', 'arg3', '$1 - test','$2')}"</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
     <value>Regex search is being completed faster.</value>
@@ -515,5 +514,11 @@ Input data:
   </data>
   <data name="Txt_Global_SelectAll" xml:space="preserve">
     <value>Select All</value>
+  </data>
+  <data name="Txt_Global_Info" xml:space="preserve">
+    <value>Allows you to perform a search on several schemes at once. All results are uploaded to the "Global" tab, and the results will be displayed in their own schemes.
+When you search again in certain schemes, the results will also be applied in the "Global" tab, if the scheme was originally selected.
+When you change the general search settings or filter fields in the "Global" tab - all changes will be made in all of the selected schemes.
+Colors schemes are adjustable.</value>
   </data>
 </root>

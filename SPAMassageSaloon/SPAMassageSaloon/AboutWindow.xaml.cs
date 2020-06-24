@@ -72,6 +72,12 @@ namespace SPAMassageSaloon
                                LogsReader.Properties.Resources.Txt_LogsReaderForm_LogsFolder;
             LROptionsTxt.Text = LogsReader.Properties.Resources.Txt_Form_trvMainComment;
 
+            LRGlobal.Header = "Global";
+            LRGlobalTxt.Text = LogsReader.Properties.Resources.Txt_Global_Info;
+
+            LRCustomFunc.Header = "Custom\r\nFunctions";
+            LRCustomFuncTxt.Text = LogsReader.Properties.Resources.Txt_LRSettings_CustomFunctionsComment;
+
             #endregion
 
             #region SPA Filter

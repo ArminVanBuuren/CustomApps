@@ -429,8 +429,7 @@
     <value>Лог файлы не найдены</value>
   </data>
   <data name="Txt_LRSettings_CustomFunctionsComment" xml:space="preserve">
-    <value>Набор кастомных функций. Могут применяться только в аттрибутах нод - Pattern и TransactionPattern. Используются для того чтобы корректировать отображаемые данные. Каждый класс должен реализовать интерфейс ICustomFunction. Формат: "{custom_function_test('arg1', '$1', '$2', '$3 - test')}"
-      Пример: &lt;Pattern ID="{getIDFunc('$1')}" Date="{getDateFunc('$2')}" TraceName="name = {getTraceNameFunc('$3')}" Description="description = {formatDescriptionFunc('$4', '$5')}" Message="Original = '$6' Result = {getMessageFunc('$6')}" &gt;(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+)&lt;/Pattern&gt;</value>
+    <value>Набор кастомных функций, позволяет регулировать отображение результатов поиска, если это невозможно сделать при помощи группировки регулярных выражений. Можно использовать только в атрибутах нод - "Pattern" и "TransactionPattern". Каждых класс должен реализовать интерфейс ICustomFunction который имеет всего одну функцию "Invoke". Количество входных аргументов - неограниченно. Формат: "{custom_function_test('arg1', 'arg2', 'arg3', '$1 - test','$2')}"</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
     <value>Поиск по регулярному выражению выполняется быстрее.</value>
@@ -443,5 +442,11 @@
   </data>
   <data name="Txt_Global_SelectAll" xml:space="preserve">
     <value>Выбрать Все</value>
+  </data>
+  <data name="Txt_Global_Info" xml:space="preserve">
+    <value>Позволяет выполнить поиск сразу по нескольким схемам. Все результаты выгружаются во вкладке "Global", а также результаты будут отображаться в собственных схемах. 
+При повторном поиске в определенных схемах, результаты также будут применяться во вкладке "Global", если схема была изначально выбрана.
+При изменении общих полей поиска или фильтра во вкладке "Global" - все изменения будут вноситься во всех выбранных схемах. 
+Цвета схем регулируются.</value>
   </data>
 </root>

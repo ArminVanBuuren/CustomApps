@@ -197,6 +197,15 @@
     <Resource Include="Resources\About\RegExTester_Form.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_Global.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_CustomFunc_Config.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\About\LogsReader_CustomFunc_Form.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Include="AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

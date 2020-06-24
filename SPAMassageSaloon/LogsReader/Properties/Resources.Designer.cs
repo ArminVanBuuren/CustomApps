@@ -559,6 +559,18 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Allows you to perform a search on several schemes at once. All results are uploaded to the &quot;Global&quot; tab, and the results will be displayed in their own schemes.
+        ///When you search again in certain schemes, the results will also be applied in the &quot;Global&quot; tab, if the scheme was originally selected.
+        ///When you change the general search settings or filter fields in the &quot;Global&quot; tab - all changes will be made in all of the selected schemes.
+        ///Colors schemes are adjustable..
+        /// </summary>
+        public static string Txt_Global_Info {
+            get {
+                return ResourceManager.GetString("Txt_Global_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Select All.
         /// </summary>
         public static string Txt_Global_SelectAll {
@@ -1009,8 +1021,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Applicable only in the attributes nodes - Pattern and TransactionPattern. Used to adjust the displayed data. Each class must implement the ICustomFunction interface. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;$1&apos;, &apos;$2&apos;, &apos;$3 - test&apos;)}&quot;
-        ///      Example: &lt;Pattern ID=&quot;{getIDFunc(&apos;$1&apos;)}&quot; Date=&quot;{getDateFunc(&apos;$2&apos;)}&quot; TraceName=&quot;name = {getTraceNameFunc(&apos;$3&apos;)}&quot; Description=&quot;description = {formatDescriptionFunc(&apos;$4&apos;, &apos;$5&apos;)}&quot; Message=&quot;Original = &apos;$6&apos; Result = {getMessageFunc(&apos;$6&apos;)}&quot; &gt;(.+?) [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на Enumeration of custom functions. Used to adjust the displayed data, if this cannot be done by RegEx grouping. Applicable only in the attributes nodes - Pattern and TransactionPattern. Each class must implement the ICustomFunction interface which has only one function &quot;Invoke&quot;. Format: &quot;{custom_function_test(&apos;arg1&apos;, &apos;arg2&apos;, &apos;arg3&apos;, &apos;$1 - test&apos;,&apos;$2&apos;)}&quot;.
         /// </summary>
         public static string Txt_LRSettings_CustomFunctionsComment {
             get {

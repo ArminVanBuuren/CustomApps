@@ -17,7 +17,7 @@ using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
-    public abstract partial class LogsReaderFormBase : UserControl, IUserForm
+	public abstract partial class LogsReaderFormBase : UserControl, IUserForm
     {
 	    private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
