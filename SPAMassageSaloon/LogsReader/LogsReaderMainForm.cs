@@ -173,13 +173,13 @@ namespace LogsReader
                 Shown += (s, e) =>
                 {
 	                ApplySettings();
-	                Global.ApplyFormSettings();
-
+	                
 	                foreach (var logsReader in SchemeForms.Values)
 	                {
 		                logsReader.ApplyFormSettings();
 		                logsReader.OnSchemeChanged += SaveSchemas;
 	                }
+	                Global.ApplyFormSettings();
                 };
                 Closing += (s, e) =>
                 {
@@ -245,9 +245,9 @@ namespace LogsReader
         {
             try
             {
-	            Global.ApplySettings();
-                foreach (var logsReader in SchemeForms.Values)
+	            foreach (var logsReader in SchemeForms.Values)
                     logsReader.ApplySettings();
+	            Global.ApplySettings();
             }
             catch (Exception)
             {

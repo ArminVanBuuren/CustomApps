@@ -24,8 +24,6 @@ namespace LogsReader.Reader
 		private readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
 		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
 
-		private readonly object syncGlobalAssignDgv = new object();
-
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
@@ -71,15 +69,12 @@ namespace LogsReader.Reader
 		        Size = new Size(96, 19),
 		        TabIndex = 1,
 		        Text = Resources.Txt_Global_SelectAll,
-		        UseVisualStyleBackColor = true
-	        };
-	        checkBoxSelectAll.CheckedChanged += (sender, args) =>
-	        {
-		        foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
-			        expander.IsChecked = checkBoxSelectAll.Checked;
-	        };
+		        UseVisualStyleBackColor = true,
+				Checked = UserSettings.GlobalSelectAllSchemas
+			};
+	        checkBoxSelectAll.CheckedChanged += CheckBoxSelectAllOnCheckedChanged;
 
-			var panelCollapseSelectAll = new Panel
+	        var panelCollapseSelectAll = new Panel
 	        {
 		        BorderStyle = BorderStyle.FixedSingle,
 		        Dock = DockStyle.Top,
@@ -102,20 +97,21 @@ namespace LogsReader.Reader
 	    {
 		    MainForm = main;
 
-		    foreach (var readerForm in MainForm.SchemeForms.Values)
+			foreach (var readerForm in MainForm.SchemeForms.Values)
 		    {
 			    var expander = CreateExpander(readerForm);
 			    AllExpanders.Add(readerForm, expander);
 			    flowPanelForExpanders.Controls.Add(expander);
 		    }
-
 		    SchemeExpander_ExpandCollapse(this, null);
+
+			// чекаем все валидные схемы
+		    CheckBoxSelectAllOnCheckedChanged(checkBoxSelectAll, EventArgs.Empty);
 	    }
 
 		public override void ApplySettings()
 		{
 			checkBoxSelectAll.Text = Resources.Txt_Global_SelectAll;
-
 			base.ApplySettings();
 		}
 
@@ -240,10 +236,26 @@ namespace LogsReader.Reader
 			// если выбирается схема в глобальной форме в checkbox
 	        schemeExpander.CheckedChanged += (sender, args) =>
 	        {
-				if(!schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
-					schemeExpander.BackColor = Color.DimGray;
-				else
-					schemeExpander.BackColor = expanderBorderColor.Invoke(readerForm);
+		        schemeExpander.BackColor = !schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled ? Color.DimGray : expanderBorderColor.Invoke(readerForm);
+		        
+		        if (schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
+				{
+					// обновляем инфу по всем выбранным схемам основываясь на глобальной
+					readerForm.txtPattern.Text = txtPattern.Text;
+					readerForm.useRegex.Checked = useRegex.Checked;
+					readerForm.dateStartFilter.Value = dateStartFilter.Value;
+					readerForm.dateStartFilter.Checked = dateStartFilter.Checked;
+					readerForm.DateStartFilterOnValueChanged(this, EventArgs.Empty);
+					readerForm.dateEndFilter.Value = dateEndFilter.Value;
+					readerForm.dateEndFilter.Checked = dateEndFilter.Checked;
+					readerForm.DateEndFilterOnValueChanged(this, EventArgs.Empty);
+					readerForm.traceNameFilterComboBox.Text = traceNameFilterComboBox.Text;
+					readerForm.traceNameFilter.Text = traceNameFilter.Text;
+					readerForm.traceMessageFilterComboBox.Text = traceMessageFilterComboBox.Text;
+					readerForm.traceMessageFilter.Text = traceMessageFilter.Text;
+					readerForm.alreadyUseFilter.Checked = alreadyUseFilter.Checked;
+				}
+
 				ValidationCheck(true);
 	        };
 			// горячие клавишы для добавления сервера, типов и директорий в глобальной форме так и в основной
@@ -291,10 +303,14 @@ namespace LogsReader.Reader
 				if (readerForm.BTNSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
-					if (schemeExpander.IsChecked != checkBoxSelectAll.Checked)
-						schemeExpander.IsChecked = checkBoxSelectAll.Checked;
-					else
-						ValidationCheck(true);
+					// выбираем только в случае если открыта Global форма
+					if (MainForm.CurrentForm == this)
+					{
+						if (schemeExpander.IsChecked != checkBoxSelectAll.Checked)
+							schemeExpander.IsChecked = checkBoxSelectAll.Checked;
+						else
+							ValidationCheck(true);
+					}
 				}
 				else
 				{
@@ -377,7 +393,7 @@ namespace LogsReader.Reader
 
         class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
 		{
-	        private Stopwatch _watcher;
+	        private Stopwatch _timeWatcher;
 			private readonly Dictionary<string, (LogsReaderFormScheme, Task)> _items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
 
 			public int Count => _items.Count;
@@ -390,14 +406,14 @@ namespace LogsReader.Reader
 					if (!isAnyWorking)
 					{
 						IsCompleted = true;
-						_watcher.Stop();
+						_timeWatcher.Stop();
 					}
 
 					return isAnyWorking;
 				}
 			}
 
-			public TimeSpan Elapsed => _watcher.Elapsed;
+			public TimeSpan Elapsed => _timeWatcher.Elapsed;
 
 			public bool IsCompleted { get; private set; } = false;
 
@@ -416,8 +432,8 @@ namespace LogsReader.Reader
 			public void Start(IEnumerable<LogsReaderFormScheme> readerFormCollection)
 			{
 				Clear();
-				_watcher = new Stopwatch();
-				_watcher.Start();
+				_timeWatcher = new Stopwatch();
+				_timeWatcher.Start();
 
 				foreach (var readerForm in readerFormCollection)
 				{
@@ -440,7 +456,7 @@ namespace LogsReader.Reader
 
 			public void Continue()
 			{
-				_watcher?.Start();
+				_timeWatcher?.Start();
 			}
 
 			public void Clear()
@@ -466,6 +482,9 @@ namespace LogsReader.Reader
 			{
 				try
 				{
+					base.BtnSearch_Click(sender, e);
+					InProcessing.Clear(); // реализовывать ClearForm в форме Global нельзя!
+
 					IsWorking = true;
 					ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 
@@ -485,11 +504,20 @@ namespace LogsReader.Reader
 			}
 		}
 
+        protected override void ChangeFormStatus()
+        {
+	        base.ChangeFormStatus();
+	        checkBoxSelectAll.Enabled = !IsWorking;
+        }
+
         protected override IEnumerable<DataTemplate> GetResultTemplates()
         {
 	        var result = new List<DataTemplate>();
 
-	        foreach (var schemeForm in InProcessing.Select(x => x.Item1))
+			foreach (var schemeForm in AllExpanders
+				.Where(x => x.Value.IsChecked)
+				.Select(x => x.Key)
+				.Intersect(InProcessing.Select(x => x.Item1)))
 	        {
 		        if (!schemeForm.HasAnyResult || schemeForm.IsWorking)
 			        continue;
@@ -513,13 +541,13 @@ namespace LogsReader.Reader
 			return true;
 		}
 
-        protected override void BtnClear_Click(object sender, EventArgs e)
-        {
-	        InProcessing.Clear();
-			base.BtnClear_Click(sender , e);
+		protected override void BtnClear_Click(object sender, EventArgs e)
+		{
+			InProcessing.Clear();
+			base.BtnClear_Click(sender, e);
 		}
 
-        protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+		protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
 		{
 			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;
@@ -528,14 +556,21 @@ namespace LogsReader.Reader
 			row.DefaultCellStyle.ForeColor = result.UserSettings.ForeColor;
 		}
 
-		internal override void TxtPattern_TextChanged(object sender, EventArgs e)
-		{
-			base.TxtPattern_TextChanged(sender, e);
-			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.txtPattern.Text = ((TextBox) sender).Text;
+        private void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
+        {
+			foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
+				expander.IsChecked = checkBoxSelectAll.Checked;
+			UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
 		}
 
-		internal override void UseRegex_CheckedChanged(object sender, EventArgs e)
+        internal override void TxtPattern_TextChanged(object sender, EventArgs e)
+        {
+	        base.TxtPattern_TextChanged(sender, e);
+	        foreach (var schemeForm in GetSelectedSchemas())
+		        schemeForm.txtPattern.Text = ((TextBox) sender).Text;
+        }
+
+        internal override void UseRegex_CheckedChanged(object sender, EventArgs e)
 		{
 			base.UseRegex_CheckedChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
@@ -605,9 +640,8 @@ namespace LogsReader.Reader
 
 		protected override void ValidationCheck(bool clearStatus)
 		{
-			BTNSearch.Enabled = !txtPattern.Text.IsNullOrEmpty() 
-			                    && AllExpanders.Any(x => x.Key.BTNSearch.Enabled && x.Value.IsChecked);
+			BTNSearch.Enabled = AllExpanders.Any(x => x.Key.BTNSearch.Enabled && x.Value.IsChecked);
 			base.ValidationCheck(clearStatus);
 		}
-	}
+    }
 }

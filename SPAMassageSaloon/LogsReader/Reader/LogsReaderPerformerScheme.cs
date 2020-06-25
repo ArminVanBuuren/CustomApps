@@ -41,6 +41,8 @@ namespace LogsReader.Reader
             }
         }
 
+        public int Total => _multiTaskingHandler?.Source.Count ?? 0;
+
         public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
 
         public IEnumerable<DataTemplate> ResultsOfError { get; private set; } = null;
@@ -79,7 +81,7 @@ namespace LogsReader.Reader
 		        maxThreads, 
 		        ThreadPriority.Lowest);
 
-	        new Action(CheckProgress).BeginInvoke(ProcessCompleted, null);
+	        new Action(CheckProgress).BeginInvoke(null, null);
 	        await _multiTaskingHandler.StartAsync();
 
 	        ResultsOfError = _multiTaskingHandler?.Result.CallBackList
@@ -192,13 +194,11 @@ namespace LogsReader.Reader
         {
             try
             {
-                var total = _multiTaskingHandler.Source.Count;
-                while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted && !IsDisposed)
+	            while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted && !IsDisposed)
                 {
-                    OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
+	                EnsureProcessReport();
                     Thread.Sleep(10);
                 }
-                OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, total);
             }
             catch (Exception)
             {
@@ -206,16 +206,16 @@ namespace LogsReader.Reader
             }
         }
 
-        void ProcessCompleted(IAsyncResult asyncResult)
+        public void EnsureProcessReport()
         {
-            try
-            {
-                OnProcessReport?.Invoke(CountMatches, 100, _multiTaskingHandler.Result.Count, _multiTaskingHandler.Source.Count());
+	        try
+	        {
+		        OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, Total);
             }
-            catch (Exception)
-            {
-                // ignored
-            }
+	        catch (Exception ex)
+	        {
+		        // ignored
+	        }
         }
 
         public override void Dispose()

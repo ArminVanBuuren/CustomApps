@@ -904,6 +904,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Please enter a search term.
+        /// </summary>
+        public static string Txt_LogsReaderForm_SearchPatternIsNull {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_SearchPatternIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Servers.
         /// </summary>
         public static string Txt_LogsReaderForm_Servers {

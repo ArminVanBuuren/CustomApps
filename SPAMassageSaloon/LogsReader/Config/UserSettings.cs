@@ -222,6 +222,18 @@ namespace LogsReader.Config
             }
         }
 
+        public bool GlobalSelectAllSchemas
+        {
+	        get
+	        {
+		        var resStr = GetValue(nameof(GlobalSelectAllSchemas));
+		        if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+			        return true;
+		        return res;
+	        }
+	        set => SetValue(nameof(GlobalSelectAllSchemas), value);
+        }
+
         static UserSettings()
         {
 	        try

@@ -271,8 +271,7 @@ namespace LogsReader.Reader
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
                 traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
                 if (UserSettings != null)
-                    traceMessageFilterComboBox.AssignValue(
-                        UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
+                    traceMessageFilterComboBox.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
                         traceMessageFilterComboBox_SelectedIndexChanged);
 
                 Tooltip.RemoveAll();
@@ -394,7 +393,11 @@ namespace LogsReader.Reader
             }
         }
 
-        internal abstract void BtnSearch_Click(object sender, EventArgs e);
+        internal virtual void BtnSearch_Click(object sender, EventArgs e)
+        {
+	        if (txtPattern.Text.IsNullOrEmpty())
+                throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
+        }
 
         protected void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
@@ -569,37 +572,46 @@ namespace LogsReader.Reader
 
         protected virtual void ChangeFormStatus()
         {
-            BTNSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
-            btnClear.Enabled = !IsWorking;
-            txtPattern.Enabled = !IsWorking;
+	        try
+	        {
+		        BTNSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
+		        btnClear.Enabled = !IsWorking;
+		        txtPattern.Enabled = !IsWorking;
 
-            foreach (var dgvChild in dgvFiles.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
-                dgvChild.Enabled = !IsWorking;
-            dgvFiles.Enabled = !IsWorking;
+		        foreach (var dgvChild in dgvFiles.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
+			        dgvChild.Enabled = !IsWorking;
+		        dgvFiles.Enabled = !IsWorking;
 
-            notepad.Enabled = !IsWorking;
-            descriptionText.Enabled = !IsWorking;
-            useRegex.Enabled = !IsWorking;
-            dateStartFilter.Enabled = !IsWorking;
-            dateEndFilter.Enabled = !IsWorking;
-            traceNameFilterComboBox.Enabled = !IsWorking;
-            traceNameFilter.Enabled = !IsWorking;
-            traceMessageFilterComboBox.Enabled = !IsWorking;
-            traceMessageFilter.Enabled = !IsWorking;
-            alreadyUseFilter.Enabled = !IsWorking;
-            buttonExport.Enabled = dgvFiles.RowCount > 0;
-            buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
+		        notepad.Enabled = !IsWorking;
+		        descriptionText.Enabled = !IsWorking;
+		        useRegex.Enabled = !IsWorking;
+		        dateStartFilter.Enabled = !IsWorking;
+		        dateEndFilter.Enabled = !IsWorking;
+		        traceNameFilterComboBox.Enabled = !IsWorking;
+		        traceNameFilter.Enabled = !IsWorking;
+		        traceMessageFilterComboBox.Enabled = !IsWorking;
+		        traceMessageFilter.Enabled = !IsWorking;
+		        alreadyUseFilter.Enabled = !IsWorking;
 
-            if (IsWorking)
-            {
-                ParentSplitContainer.Cursor = Cursors.WaitCursor;
-                ClearForm(true);
-                Focus();
+		        if (IsWorking)
+		        {
+			        ParentSplitContainer.Cursor = Cursors.WaitCursor;
+			        ClearForm(true);
+		        }
+		        else
+		        {
+			        ParentSplitContainer.Cursor = Cursors.Default;
+		        }
+
+		        buttonExport.Enabled = dgvFiles.RowCount > 0;
+		        buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
             }
-            else
-            {
-	            ParentSplitContainer.Cursor = Cursors.Default;
-                dgvFiles.Focus();
+	        finally
+	        {
+		        if (IsWorking)
+			        Focus();
+		        else
+			        dgvFiles.Focus();
             }
         }
 
@@ -682,7 +694,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        protected void DgvFiles_SelectionChanged(object sender, EventArgs e)
+        private async void DgvFiles_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
@@ -701,15 +713,18 @@ namespace LogsReader.Reader
 
                 descriptionText.Text = $"FoundLineID = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 
+                string messageString;
                 if (Message.Language == Language.XML || Message.Language == Language.HTML)
                 {
-                    var messageXML = XML.RemoveUnallowable(template.Message, " ");
-                    Message.Text = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
+	                var messageXML = XML.RemoveUnallowable(template.Message, " ");
+	                messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
                 }
                 else
                 {
-                    Message.Text = template.Message.TrimWhiteSpaces();
+	                messageString = template.Message.TrimWhiteSpaces();
                 }
+
+                Message.Text = messageString;
                 Message.DelayedEventsInterval = 10;
 
                 TraceMessage.Text = template.TraceMessage;

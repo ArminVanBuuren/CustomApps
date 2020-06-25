@@ -248,11 +248,13 @@ namespace LogsReader.Reader
         {
             if (!IsWorking)
             {
-                var stop = new Stopwatch();
+	            var timeWatcher = new Stopwatch();
                 try
                 {
-	                // получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
-	                var filter = alreadyUseFilter.Checked ? GetFilter() : null;
+	                base.BtnSearch_Click(sender, e);
+
+					// получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
+					var filter = alreadyUseFilter.Checked ? GetFilter() : null;
 
 	                // получение серверов по чекбоксам
 	                var servers = new List<string>();
@@ -272,7 +274,7 @@ namespace LogsReader.Reader
 	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
 	                MainReader.OnProcessReport += ReportProcessStatus;
 
-	                stop.Start();
+	                timeWatcher.Start();
 	                IsWorking = true;
 
 	                ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
@@ -288,10 +290,11 @@ namespace LogsReader.Reader
 
 	                // заполняем DataGrid
 	                if (await AssignResult(filter))
-		                ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, stop.Elapsed.ToReadableString()), ReportStatusType.Success);
+		                ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, timeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
-	                stop.Stop();
-                }
+	                timeWatcher.Stop();
+	                MainReader.EnsureProcessReport();
+				}
                 catch (Exception ex)
                 {
 	                ReportStatus(ex.Message, ReportStatusType.Error);
@@ -307,8 +310,8 @@ namespace LogsReader.Reader
 
 	                IsWorking = false;
 
-	                if (stop.IsRunning)
-		                stop.Stop();
+	                if (timeWatcher.IsRunning)
+		                timeWatcher.Stop();
                 }
             }
             else
@@ -431,7 +434,6 @@ namespace LogsReader.Reader
 			        ClearErrorStatus();
 
 		        BTNSearch.Enabled = settIsCorrect
-		                            && !txtPattern.Text.IsNullOrEmpty()
 		                            && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 		                            && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 		                            && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);

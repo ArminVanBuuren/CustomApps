@@ -521,4 +521,7 @@ When you search again in certain schemes, the results will also be applied in th
 When you change the general search settings or filter fields in the "Global" tab - all changes will be made in all of the selected schemes.
 Colors schemes are adjustable.</value>
   </data>
+  <data name="Txt_LogsReaderForm_SearchPatternIsNull" xml:space="preserve">
+    <value>Please enter a search term</value>
+  </data>
 </root>

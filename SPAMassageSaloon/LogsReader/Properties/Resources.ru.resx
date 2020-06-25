@@ -449,4 +449,7 @@
 При изменении общих полей поиска или фильтра во вкладке "Global" - все изменения будут вноситься во всех выбранных схемах. 
 Цвета схем регулируются.</value>
   </data>
+  <data name="Txt_LogsReaderForm_SearchPatternIsNull" xml:space="preserve">
+    <value>Пожалуйста введите критерий поиска</value>
+  </data>
 </root>

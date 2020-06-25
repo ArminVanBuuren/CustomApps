@@ -108,50 +108,50 @@ namespace LogsReader.Reader
 			// 
 			this.SchemeName.DataPropertyName = "SchemeName";
 			this.SchemeName.HeaderText = "SchemeName";
-			this.SchemeName.MinimumWidth = 10;
+			this.SchemeName.MinimumWidth = 5;
 			this.SchemeName.Name = "SchemeName";
 			this.SchemeName.ReadOnly = true;
 			this.SchemeName.Visible = false;
-			this.SchemeName.Width = 10;
+			this.SchemeName.Width = 5;
 			this.SchemeName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// PrivateID
 			// 
 			this.PrivateID.DataPropertyName = "PrivateID";
 			this.PrivateID.HeaderText = "PrivateID";
-			this.PrivateID.MinimumWidth = 10;
+			this.PrivateID.MinimumWidth = 5;
 			this.PrivateID.Name = "PrivateID";
 			this.PrivateID.ReadOnly = true;
 			this.PrivateID.Visible = false;
-			this.PrivateID.Width = 10;
+			this.PrivateID.Width = 5;
 			this.PrivateID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// IsMatched
 			// 
 			this.IsMatched.DataPropertyName = "IsMatched";
 			this.IsMatched.HeaderText = "IsMatched";
-			this.IsMatched.MinimumWidth = 10;
+			this.IsMatched.MinimumWidth = 5;
 			this.IsMatched.Name = "IsMatched";
 			this.IsMatched.ReadOnly = true;
 			this.IsMatched.Visible = false;
-			this.IsMatched.Width = 10;
+			this.IsMatched.Width = 5;
 			this.IsMatched.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// ID
 			// 
 			this.ID.DataPropertyName = "ID";
 			this.ID.HeaderText = "ID";
-			this.ID.MinimumWidth = 30;
+			this.ID.MinimumWidth = 35;
 			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
-			this.ID.Width = 30;
+			this.ID.Width = 35;
 			this.ID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// Server
 			// 
 			this.Server.DataPropertyName = "Server";
 			this.Server.HeaderText = "Server";
-			this.Server.MinimumWidth = 40;
+			this.Server.MinimumWidth = 48;
 			this.Server.Name = "Server";
 			this.Server.ReadOnly = true;
 			this.Server.Width = 50;
@@ -161,7 +161,7 @@ namespace LogsReader.Reader
 			// 
 			this.TraceName.DataPropertyName = "TraceName";
 			this.TraceName.HeaderText = "TraceName";
-			this.TraceName.MinimumWidth = 40;
+			this.TraceName.MinimumWidth = 75;
 			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
 			this.TraceName.Width = 80;
