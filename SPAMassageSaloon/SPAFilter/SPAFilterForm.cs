@@ -399,6 +399,11 @@ namespace SPAFilter
             dataGridProcesses.CellFormatting += DataGridProcesses_CellFormatting;
             dataGridOperations.CellFormatting += DataGridOperations_CellFormatting;
             dataGridScenarios.CellFormatting += DataGridScenariosResult_CellFormatting;
+            dataGridCommands.CellFormatting += (sender, e) =>
+            {
+	            var row = ((DataGridView)sender).Rows[e.RowIndex];
+	            row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+            };
 
             ProcessesButtonOpen.Click += ProcessesButtonOpen_Click;
             ProcessesTextBox.TextChanged += ProcessesTextBox_TextChanged;
@@ -479,7 +484,10 @@ namespace SPAFilter
 
                 var template = Filter.ServiceInstances[uniqueName];
                 if (template == null || template.IsCorrect)
+                {
+	                row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
                     return;
+                }
 
                 row.DefaultCellStyle.BackColor = Color.Yellow;
                 foreach (DataGridViewCell cell2 in row.Cells)
@@ -512,6 +520,10 @@ namespace SPAFilter
                 {
                     SetFailedRow(row, Resources.Form_GridView_NotFoundServiceCatalogCall);
                 }
+                else
+                {
+	                row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+                }
             }
             catch (Exception ex)
             {
@@ -537,6 +549,10 @@ namespace SPAFilter
                 else if (ROBPOperationsRadioButton.Checked && template is ROBPOperation robpOperation && robpOperation.IsFailed)
                 {
                     SetFailedRow(row, Resources.Form_GridView_IncorrectROBPOperation);
+                }
+                else
+                {
+	                row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
                 }
             }
             catch (Exception ex)
@@ -570,6 +586,10 @@ namespace SPAFilter
                 else if (template.IsSubScenario)
                 {
                     SetFailedRow(row, Resources.Form_GridView_IsSubScenario, Color.Aqua);
+                }
+                else
+                {
+	                row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
                 }
             }
             catch (Exception ex)
