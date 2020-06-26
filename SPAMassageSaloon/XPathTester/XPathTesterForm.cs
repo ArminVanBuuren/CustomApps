@@ -44,7 +44,11 @@ namespace XPathTester
                 xpathResultDataGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
                 xpathResultDataGrid.MouseClick += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
-                xpathResultDataGrid.RowPrePaint += XpathResultDataGrid_RowPrePaint;
+                xpathResultDataGrid.CellFormatting += (sender, e) =>
+                {
+	                var row = ((DataGridView)sender).Rows[e.RowIndex];
+                    row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+                };
 
                 KeyPreview = true;
                 KeyDown += XPathWindow_KeyDown;
@@ -65,19 +69,6 @@ namespace XPathTester
             finally
             {
                 CenterToScreen();
-            }
-        }
-
-        private void XpathResultDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            try
-            {
-                if (xpathResultDataGrid.RowCount > 0)
-                    xpathResultDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = xpathResultDataGrid.BackgroundColor;
-            }
-            catch (Exception)
-            {
-                // ignored
             }
         }
 

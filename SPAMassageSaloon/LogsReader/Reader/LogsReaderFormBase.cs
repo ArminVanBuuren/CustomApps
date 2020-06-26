@@ -31,6 +31,10 @@ namespace LogsReader.Reader
         private int _filesCompleted = 0;
         private int _totalFiles = 0;
 
+        private IEnumerable<DataTemplate> _currentDGVResult;
+        private DataGridViewColumn _oldSortedColumn;
+        private bool _byAscending = true;
+
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -155,7 +159,7 @@ namespace LogsReader.Reader
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.CellFormatting += DgvDataOnCellFormatting;
 	            DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
-
+	         
                 #region Initialize Controls
 
                 EditorMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Message", Language = Language.XML});
@@ -530,8 +534,6 @@ namespace LogsReader.Reader
             await AssignResult(null);
         }
 
-        private IEnumerable<DataTemplate> _currentDGVResult;
-
         protected async Task<bool> AssignResult(DataFilter filter)
         {
 	        try
@@ -692,40 +694,42 @@ namespace LogsReader.Reader
             }
         }
 
-        private int _prevSortedColumn = -1;
-        private bool _byDescending = true;
-
         private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
 	        try
 	        {
-		        if(!HasAnyResult || _currentDGVResult == null)
-                    return;
+		        if (!HasAnyResult || _currentDGVResult == null)
+			        return;
 
-		        var byDescending = _prevSortedColumn != e.ColumnIndex || _prevSortedColumn == e.ColumnIndex && !_byDescending;
+		        var oldSortedColumn = _oldSortedColumn; // поле очищается в методе ClearDGV
+		        var newColumn = DgvData.Columns[e.ColumnIndex];
+
+		        var byAscending = _oldSortedColumn?.Index != e.ColumnIndex || _oldSortedColumn?.Index == e.ColumnIndex && !_byAscending;
 		        var source = _currentDGVResult;
 
-                ClearDGV();
-                ClearErrorStatus();
+		        ClearDGV();
+		        ClearErrorStatus();
 
-                DgvData.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
+		        var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
+		        var orderByOption = byAscending
+			        ? new Dictionary<string, bool>() {{columnName, false}}
+			        : new Dictionary<string, bool>() {{columnName, true}};
+		        if (!orderByOption.ContainsKey("File"))
+			        orderByOption.Add("File", !byAscending);
+		        if (!orderByOption.ContainsKey("FoundLineID"))
+			        orderByOption.Add("FoundLineID", !byAscending);
 
-                var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
-                var orderByOption = byDescending
-	                ? new Dictionary<string, bool>() {{columnName, false}}
-	                : new Dictionary<string, bool>() {{columnName, true}};
-                if(!orderByOption.ContainsKey("File"))
-	                orderByOption.Add("File", !byDescending);
-                if (!orderByOption.ContainsKey("FoundLineID"))
-                    orderByOption.Add("FoundLineID", !byDescending);
+		        _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 
-                _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
+		        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
 
-                await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+		        if (oldSortedColumn != null)
+			        oldSortedColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
+		        if (newColumn != null)
+			        newColumn.HeaderCell.SortGlyphDirection = byAscending ? SortOrder.Ascending : SortOrder.Descending;
 
-                _prevSortedColumn = e.ColumnIndex;
-                _byDescending = byDescending;
-
+		        _oldSortedColumn = newColumn;
+		        _byAscending = byAscending;
 	        }
 	        catch (Exception ex)
 	        {
@@ -745,7 +749,7 @@ namespace LogsReader.Reader
 			        return;
 		        }
 
-		        row.DefaultCellStyle.BackColor = Color.White;
+		        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
 	        }
 	        else
 	        {
@@ -962,9 +966,9 @@ namespace LogsReader.Reader
         {
             try
             {
-	            _prevSortedColumn = -1;
+	            _oldSortedColumn = null;
 	            _currentDGVResult = null;
-	            _byDescending = true;
+	            _byAscending = true;
 
                 DgvData.DataSource = null;
                 DgvData.Rows.Clear();
