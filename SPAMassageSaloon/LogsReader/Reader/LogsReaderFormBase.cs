@@ -366,16 +366,16 @@ namespace LogsReader.Reader
                                 templateList.Insert(0, template);
                         }
 
-                        var clipboardText = new StringBuilder(templateList.Sum(x => x.TraceMessage.Length) + (templateList.Count * 10) + 250);
+                        var clipboardText = new StringBuilder();
                         foreach (var template in templateList)
                         {
-                            clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
-                                template.ID,
-                                template.ParentReader.FilePath,
-                                template.DateOfTrace,
-                                template.TraceName,
-                                template.Description,
-                                notepad.SelectedIndex <= 0 ? template.Message.Trim() : template.TraceMessage.Trim());
+	                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
+		                        template.ID,
+		                        template.ParentReader.FilePath,
+		                        template.DateOfTrace,
+		                        template.TraceName,
+		                        template.Description,
+		                        notepad.SelectedIndex <= 0 ? template.Message.Trim() : template.TraceMessage.Trim());
                         }
 
                         Clipboard.SetText(clipboardText.ToString());

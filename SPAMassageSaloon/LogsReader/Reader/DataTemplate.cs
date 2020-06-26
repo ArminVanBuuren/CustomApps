@@ -14,6 +14,7 @@ namespace LogsReader.Reader
 	    private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
         private string _traceName;
+        private string _message = string.Empty;
 
         internal DataTemplate(
 	        TraceReader traceReader, 
@@ -125,10 +126,14 @@ namespace LogsReader.Reader
         public string Description
         {
             get => _description;
-            private set => _description = value.Trim();
+            private set => _description = value.Trim().Replace("\0", "");
         }
 
-        public string Message { get; private set; } = string.Empty;
+        public string Message
+        {
+	        get => _message;
+	        private set => _message = value.Replace("\0", "");
+        }
 
         public string TraceMessage
         {
@@ -136,7 +141,7 @@ namespace LogsReader.Reader
             private set
             {
                 _traceMessage.Clear();
-                _traceMessage.Append(value);
+                _traceMessage.Append(value.Replace("\0", ""));
                 CountOfLines = value.Split('\n').Length;
             }
         }
@@ -145,13 +150,13 @@ namespace LogsReader.Reader
 
         internal void AppendPastLine(string line)
         {
-            _traceMessage.Insert(0, line + Environment.NewLine);
+            _traceMessage.Insert(0, line.Replace("\0", "") + Environment.NewLine);
             CountOfLines++;
         }
 
         internal void AppendNextLine(string line)
         {
-            _traceMessage.Append(Environment.NewLine + line);
+            _traceMessage.Append(Environment.NewLine + line.Replace("\0", ""));
             CountOfLines++;
         }
 
