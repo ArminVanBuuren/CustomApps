@@ -306,6 +306,7 @@ namespace LogsReader.Reader
 		                MainReader.OnProcessReport -= ReportProcessStatus;
 		                MainReader.Dispose();
 		                MainReader = null;
+		                Progress = 100;
 	                }
 
 	                IsWorking = false;

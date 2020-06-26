@@ -46,7 +46,7 @@ namespace LogsReader.Reader
 
 		public LogsReaderMainForm MainForm { get; private set; }
 
-		public override bool HasAnyResult => InProcessing.Any(x => x.Item1.HasAnyResult);
+		public override bool HasAnyResult => InProcessing.Any(x => x.Item1.HasAnyResult) && !InProcessing.IsAnyWorking;
 
 		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
         {
@@ -312,7 +312,7 @@ namespace LogsReader.Reader
 					totalFiles += schemeForm.TotalFiles;
 				}
 
-				base.ReportProcessStatus(countMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
+				ReportProcessStatus(countMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
 	        };
 			// событие при смене языка формы
 	        readerForm.OnAppliedSettings += (sender, args) =>
