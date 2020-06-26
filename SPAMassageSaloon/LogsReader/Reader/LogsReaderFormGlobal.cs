@@ -27,12 +27,12 @@ namespace LogsReader.Reader
 		{
 			if (schemeExpander.IsChecked)
 			{
-				return Color.LightSeaGreen;
+				return Color.FromArgb(0, 193, 0);
 			}
 			else
 			{
 				if (schemeExpander.CheckBoxEnabled)
-					return InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) ? Color.Gray : Color.Transparent;
+					return InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) ? Color.FromArgb(60, 60, 60) : Color.FromArgb(189, 189, 189);
 				else
 					return Color.Red;
 			}
@@ -284,7 +284,7 @@ namespace LogsReader.Reader
 					readerForm.ChbxAlreadyUseFilter.Checked = ChbxAlreadyUseFilter.Checked;
 				}
 
-				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders)
+				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders && !InProcessing.IsAnyWorking)
 					await AssignResult(null);
 
 				ValidationCheck(true);
