@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
+using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.Expander;
 
 namespace LogsReader.Reader
 {
-    public class LogsReaderFormGlobal : LogsReaderFormBase
+    public sealed class LogsReaderFormGlobal : LogsReaderFormBase
     {
 	    private readonly Panel panelFlowDoc;
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
@@ -34,64 +35,75 @@ namespace LogsReader.Reader
 
 		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
         {
-			#region Initialize Controls
-
-			flowPanelForExpanders = new AdvancedFlowLayoutPanel
+	        try
 	        {
-		        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
-		        Location = new Point(0, -1),
-		        Margin = new Padding(0),
-		        Name = "FlowPanelForExpanders",
-		        Size = new Size(147, 3623),
-		        TabIndex = 27
-	        };
+		        #region Initialize Controls
 
-	        panelFlowDoc = new Panel
+		        flowPanelForExpanders = new AdvancedFlowLayoutPanel
+		        {
+			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
+			        Location = new Point(0, -1),
+			        Margin = new Padding(0),
+			        Name = "FlowPanelForExpanders",
+			        Size = new Size(147, 3623),
+			        TabIndex = 27
+		        };
+
+		        panelFlowDoc = new Panel
+		        {
+			        AutoScroll = true,
+			        AutoScrollMinSize = new Size(0, 1500),
+			        Dock = DockStyle.Fill,
+			        Location = new Point(0, 27),
+			        Name = "PanelFlowDoc",
+			        Size = new Size(181, 439),
+			        TabIndex = 29
+		        };
+		        panelFlowDoc.Controls.Add(flowPanelForExpanders);
+
+		        checkBoxSelectAll = new CheckBox
+		        {
+			        AutoSize = true,
+			        CheckAlign = ContentAlignment.MiddleRight,
+			        Dock = DockStyle.Right,
+			        Location = new Point(80, 3),
+			        Name = "checkBoxSelectAll",
+			        Padding = new Padding(0, 0, 22, 0),
+			        Size = new Size(96, 19),
+			        TabIndex = 1,
+			        Text = Resources.Txt_Global_SelectAll,
+			        UseVisualStyleBackColor = true,
+			        Checked = UserSettings.GlobalSelectAllSchemas
+		        };
+		        checkBoxSelectAll.CheckedChanged += CheckBoxSelectAllOnCheckedChanged;
+
+		        var panelCollapseSelectAll = new Panel
+		        {
+			        BorderStyle = BorderStyle.FixedSingle,
+			        Dock = DockStyle.Top,
+			        Location = new Point(0, 0),
+			        Name = "panelCollapseSelectAll",
+			        Padding = new Padding(3),
+			        Size = new Size(181, 27),
+			        TabIndex = 28
+		        };
+		        panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
+
+		        MainSplitContainer.Panel1.Controls.Add(panelFlowDoc);
+		        MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
+		        MainSplitContainer.Panel1MinSize = 115;
+
+		        #endregion
+			}
+	        catch (Exception ex)
 	        {
-		        AutoScroll = true,
-		        AutoScrollMinSize = new Size(0, 1500),
-		        Dock = DockStyle.Fill,
-		        Location = new Point(0, 27),
-		        Name = "PanelFlowDoc",
-		        Size = new Size(181, 439),
-		        TabIndex = 29
-	        };
-	        panelFlowDoc.Controls.Add(flowPanelForExpanders);
-
-	        checkBoxSelectAll = new CheckBox
+		        ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
+	        }
+			finally
 	        {
-		        AutoSize = true,
-		        CheckAlign = ContentAlignment.MiddleRight,
-		        Dock = DockStyle.Right,
-		        Location = new Point(80, 3),
-		        Name = "checkBoxSelectAll",
-		        Padding = new Padding(0, 0, 22, 0),
-		        Size = new Size(96, 19),
-		        TabIndex = 1,
-		        Text = Resources.Txt_Global_SelectAll,
-		        UseVisualStyleBackColor = true,
-				Checked = UserSettings.GlobalSelectAllSchemas
-			};
-	        checkBoxSelectAll.CheckedChanged += CheckBoxSelectAllOnCheckedChanged;
-
-	        var panelCollapseSelectAll = new Panel
-	        {
-		        BorderStyle = BorderStyle.FixedSingle,
-		        Dock = DockStyle.Top,
-		        Location = new Point(0, 0),
-		        Name = "panelCollapseSelectAll",
-		        Padding = new Padding(3),
-		        Size = new Size(181, 27),
-		        TabIndex = 28
-	        };
-			panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
-
-			MainSplitContainer.Panel1.Controls.Add(panelFlowDoc);
-			MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
-			MainSplitContainer.Panel1MinSize = 115;
-
-			#endregion
-		}
+				ValidationCheck(false);
+			}
+        }
 
 		public void Initialize(LogsReaderMainForm main)
 	    {
@@ -217,6 +229,7 @@ namespace LogsReader.Reader
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
+			// должен вызваться всего один раз
 	        void OnTreeViewMouseDown(object sender, MouseEventArgs e)
 	        {
 		        if (!readerForm.IsInitialized)
