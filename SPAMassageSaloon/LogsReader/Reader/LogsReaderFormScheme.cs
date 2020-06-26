@@ -216,7 +216,9 @@ namespace LogsReader.Reader
 
         public override void ApplySettings()
         {
-	        OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
+	        base.ApplySettings();
+
+			OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
 	        RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
 	        MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
 	        MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
@@ -228,8 +230,6 @@ namespace LogsReader.Reader
 	        Tooltip.SetToolTip(TreeMain, Resources.Txt_Form_trvMainComment);
 
 	        TreeViewContainer.ApplySettings();
-
-            base.ApplySettings();
         }
 
         public override void SaveData()
@@ -254,7 +254,7 @@ namespace LogsReader.Reader
 	                base.BtnSearch_Click(sender, e);
 
 					// получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
-					var filter = alreadyUseFilter.Checked ? GetFilter() : null;
+					var filter = ChbxAlreadyUseFilter.Checked ? GetFilter() : null;
 
 	                // получение серверов по чекбоксам
 	                var servers = new List<string>();
@@ -271,7 +271,7 @@ namespace LogsReader.Reader
 	                // получение папок по чекбоксам
 	                var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
-	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, txtPattern.Text, useRegex.Checked, servers, fileTypes, folders, filter);
+	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, TbxPattern.Text, ChbxUseRegex.Checked, servers, fileTypes, folders, filter);
 	                MainReader.OnProcessReport += ReportProcessStatus;
 
 	                timeWatcher.Start();
@@ -433,7 +433,7 @@ namespace LogsReader.Reader
 		        if (settIsCorrect && clearStatus)
 			        ClearErrorStatus();
 
-		        BTNSearch.Enabled = settIsCorrect
+		        BtnSearch.Enabled = settIsCorrect
 		                            && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 		                            && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>().Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 		                            && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);

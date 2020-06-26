@@ -42,9 +42,9 @@ namespace LogsReader.Reader
 
         protected ToolTip Tooltip { get; }
 
-        protected Editor Message { get; }
+        protected Editor EditorMessage { get; }
 
-        protected Editor TraceMessage { get; }
+        protected Editor EditorTraceMessage { get; }
 
         /// <summary>
         /// Поиск логов начался или завершился
@@ -151,67 +151,67 @@ namespace LogsReader.Reader
 
             try
             {
-	            dgvFiles.AutoGenerateColumns = false;
-	            dgvFiles.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-	            dgvFiles.CellFormatting += DgvFiles_CellFormatting;
-	            dgvFiles.ColumnHeaderMouseClick += DgvFilesOnColumnHeaderMouseClick;
+	            DgvData.AutoGenerateColumns = false;
+	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+	            DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
                 #region Initialize Controls
 
-                Message = notepad.AddDocument(new BlankDocument {HeaderName = "Message", Language = Language.XML});
-                Message.BackBrush = null;
-                Message.BorderStyle = BorderStyle.FixedSingle;
-                Message.Cursor = Cursors.IBeam;
-                Message.DelayedEventsInterval = 1000;
-                Message.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-                Message.IsReplaceMode = false;
-                Message.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-                Message.LanguageChanged += Message_LanguageChanged;
+                EditorMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Message", Language = Language.XML});
+                EditorMessage.BackBrush = null;
+                EditorMessage.BorderStyle = BorderStyle.FixedSingle;
+                EditorMessage.Cursor = Cursors.IBeam;
+                EditorMessage.DelayedEventsInterval = 1000;
+                EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+                EditorMessage.IsReplaceMode = false;
+                EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+                EditorMessage.LanguageChanged += Message_LanguageChanged;
 
-                TraceMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Trace"});
-                TraceMessage.BackBrush = null;
-                TraceMessage.BorderStyle = BorderStyle.FixedSingle;
-                TraceMessage.Cursor = Cursors.IBeam;
-                TraceMessage.DelayedEventsInterval = 1000;
-                TraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-                TraceMessage.IsReplaceMode = false;
-                TraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-                TraceMessage.LanguageChanged += TraceMessage_LanguageChanged;
+                EditorTraceMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Trace"});
+                EditorTraceMessage.BackBrush = null;
+                EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
+                EditorTraceMessage.Cursor = Cursors.IBeam;
+                EditorTraceMessage.DelayedEventsInterval = 1000;
+                EditorTraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+                EditorTraceMessage.IsReplaceMode = false;
+                EditorTraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+                EditorTraceMessage.LanguageChanged += TraceMessage_LanguageChanged;
 
                 notepad.SelectEditor(0);
                 notepad.DefaultEncoding = defaultEncoding;
                 notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
                 notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
 
-                dateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
-                dateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
+                DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
+                DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
 
                 #endregion
 
                 #region Apply All Settings
 
-                txtPattern.AssignValue(UserSettings.PreviousSearch, TxtPattern_TextChanged);
-                useRegex.Checked = UserSettings.UseRegex;
-                dateStartFilter.Checked = UserSettings.DateStartChecked;
-                if (dateStartFilter.Checked)
-                    dateStartFilter.Value = _getStartDate.Invoke();
-                dateEndFilter.Checked = UserSettings.DateEndChecked;
-                if (dateEndFilter.Checked)
-                    dateEndFilter.Value = _getEndDate.Invoke();
-                traceNameFilter.AssignValue(UserSettings.TraceNameFilter, TraceNameFilter_TextChanged);
-                traceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TraceMessageFilter_TextChanged);
+                TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
+                ChbxUseRegex.Checked = UserSettings.UseRegex;
+                DateStartFilter.Checked = UserSettings.DateStartChecked;
+                if (DateStartFilter.Checked)
+                    DateStartFilter.Value = _getStartDate.Invoke();
+                DateEndFilter.Checked = UserSettings.DateEndChecked;
+                if (DateEndFilter.Checked)
+                    DateEndFilter.Value = _getEndDate.Invoke();
+                TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
+                TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
 
                 var langMessage = UserSettings.MessageLanguage;
                 var langTrace = UserSettings.TraceLanguage;
-                if (Message.Language != langMessage)
-                    Message.ChangeLanguage(langMessage);
-                if (TraceMessage.Language != langTrace)
-                    TraceMessage.ChangeLanguage(langTrace);
+                if (EditorMessage.Language != langMessage)
+                    EditorMessage.ChangeLanguage(langMessage);
+                if (EditorTraceMessage.Language != langTrace)
+                    EditorTraceMessage.ChangeLanguage(langTrace);
 
-                Message.WordWrap = UserSettings.MessageWordWrap;
-                Message.Highlights = UserSettings.MessageHighlights;
-                TraceMessage.WordWrap = UserSettings.TraceWordWrap;
-                TraceMessage.Highlights = UserSettings.TraceHighlights;
+                EditorMessage.WordWrap = UserSettings.MessageWordWrap;
+                EditorMessage.Highlights = UserSettings.MessageHighlights;
+                EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
+                EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
 
                 #endregion
             }
@@ -228,11 +228,11 @@ namespace LogsReader.Reader
                 if(UserSettings == null)
                     return;
 
-                for (var i = 0; i < dgvFiles.Columns.Count; i++)
+                for (var i = 0; i < DgvData.Columns.Count; i++)
                 {
                     var valueStr = UserSettings.GetValue("COL" + i);
                     if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
-                        dgvFiles.Columns[i].Width = value;
+                        DgvData.Columns[i].Width = value;
                 }
 
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
@@ -260,55 +260,50 @@ namespace LogsReader.Reader
                 _overallFound1.Text = Resources.Txt_LogsReaderForm_OverallFound_1;
                 _overallFound2.Text = Resources.Txt_LogsReaderForm_OverallFound_2;
 
-                traceNameFilterComboBox.Items.Clear();
-                traceNameFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
-                traceNameFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
+                CobxTraceNameFilter.Items.Clear();
+                CobxTraceNameFilter.Items.Add(Resources.Txt_LogsReaderForm_Contains);
+                CobxTraceNameFilter.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
                 if (UserSettings != null)
-                    traceNameFilterComboBox.AssignValue(UserSettings.TraceNameFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
-                        traceNameFilterComboBox_SelectedIndexChanged);
+                    CobxTraceNameFilter.AssignValue(UserSettings.TraceNameFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
+                        CobxTraceNameFilter_SelectedIndexChanged);
 
-                traceMessageFilterComboBox.Items.Clear();
-                traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_Contains);
-                traceMessageFilterComboBox.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
+                CobxTraceMessageFilter.Items.Clear();
+                CobxTraceMessageFilter.Items.Add(Resources.Txt_LogsReaderForm_Contains);
+                CobxTraceMessageFilter.Items.Add(Resources.Txt_LogsReaderForm_NotContains);
                 if (UserSettings != null)
-                    traceMessageFilterComboBox.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
-                        traceMessageFilterComboBox_SelectedIndexChanged);
+                    CobxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
+                        CobxTraceMessageFilter_SelectedIndexChanged);
 
                 Tooltip.RemoveAll();
-                Tooltip.SetToolTip(txtPattern, Resources.Txt_Form_SearchComment);
-                Tooltip.SetToolTip(useRegex, Resources.Txt_LRSettings_UseRegexComment);
-                Tooltip.SetToolTip(dateStartFilter, Resources.Txt_Form_DateFilterComment);
-                Tooltip.SetToolTip(dateEndFilter, Resources.Txt_Form_DateFilterComment);
-                Tooltip.SetToolTip(traceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
-                Tooltip.SetToolTip(traceMessageFilter, Resources.Txt_Form_TraceFilterComment);
-                Tooltip.SetToolTip(alreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
-                Tooltip.SetToolTip(buttonExport, Resources.Txt_LogsReaderForm_ExportComment);
+                Tooltip.SetToolTip(TbxPattern, Resources.Txt_Form_SearchComment);
+                Tooltip.SetToolTip(ChbxUseRegex, Resources.Txt_LRSettings_UseRegexComment);
+                Tooltip.SetToolTip(DateStartFilter, Resources.Txt_Form_DateFilterComment);
+                Tooltip.SetToolTip(DateEndFilter, Resources.Txt_Form_DateFilterComment);
+                Tooltip.SetToolTip(TbxTraceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
+                Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
+                Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
+                Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
 
-                useRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
-
-                BTNSearch.Text = Resources.Txt_LogsReaderForm_Search;
+                ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
+                BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
                 btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
                 btnClear.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_btnClear_Width), btnClear.Height);
-                buttonFilter.Text = Resources.Txt_LogsReaderForm_Filter;
-                buttonFilter.Padding = new Padding(3, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
-                buttonReset.Text = Resources.Txt_LogsReaderForm_Reset;
-                buttonReset.Padding = new Padding(2, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonReset_rightPadding), 0);
-                buttonExport.Text = Resources.Txt_LogsReaderForm_Export;
-                buttonExport.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_buttonExport_Width), buttonExport.Height);
-                alreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
-                alreadyUseFilter.Padding = new Padding(0, 0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
+                btnFilter.Text = Resources.Txt_LogsReaderForm_Filter;
+                btnFilter.Padding = new Padding(3, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
+                btnReset.Text = Resources.Txt_LogsReaderForm_Reset;
+                btnReset.Padding = new Padding(2, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonReset_rightPadding), 0);
+                btnExport.Text = Resources.Txt_LogsReaderForm_Export;
+                btnExport.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_buttonExport_Width), btnExport.Height);
+                ChbxAlreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
+                ChbxAlreadyUseFilter.Padding = new Padding(0, 0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
 
                 #endregion
 
-                ClearForm(false);
                 ReportStatus(string.Empty, ReportStatusType.Success);
-                ValidationCheck(false);
             }
             catch (Exception ex)
             {
-	            ClearForm(false);
-                ValidationCheck(false);
-                ReportStatus(ex.Message, ReportStatusType.Error);
+	            ReportStatus(ex.Message, ReportStatusType.Error);
             }
             finally
             {
@@ -324,9 +319,9 @@ namespace LogsReader.Reader
                 if (!_settingsLoaded || UserSettings == null)
                     return;
 
-                for (var i = 0; i < dgvFiles.Columns.Count; i++)
+                for (var i = 0; i < DgvData.Columns.Count; i++)
                 {
-                    UserSettings.SetValue("COL" + i, dgvFiles.Columns[i].Width);
+                    UserSettings.SetValue("COL" + i, DgvData.Columns[i].Width);
                 }
 
                 UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
@@ -345,27 +340,27 @@ namespace LogsReader.Reader
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.F5 when BTNSearch.Enabled && !IsWorking:
+                    case Keys.F5 when BtnSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.Escape when BTNSearch.Enabled && IsWorking:
+                    case Keys.Escape when BtnSearch.Enabled && IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.F6 when btnClear.Enabled:
 	                    BtnClear_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.F7 when buttonFilter.Enabled:
-                        buttonFilter_Click(this, EventArgs.Empty);
+                    case Keys.F7 when btnFilter.Enabled:
+                        BtnFilter_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.F8 when buttonReset.Enabled:
-                        buttonReset_Click(this, EventArgs.Empty);
+                    case Keys.F8 when btnReset.Enabled:
+                        BtnReset_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.S when e.Control && buttonExport.Enabled:
-                        ButtonExport_Click(this, EventArgs.Empty);
+                    case Keys.S when e.Control && btnExport.Enabled:
+                        BtnExport_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.C when e.Control && dgvFiles.SelectedRows.Count > 0:
+                    case Keys.C when e.Control && DgvData.SelectedRows.Count > 0:
                         var templateList = new List<DataTemplate>();
-                        foreach (DataGridViewRow row in dgvFiles.SelectedRows)
+                        foreach (DataGridViewRow row in DgvData.SelectedRows)
                         {
                             if (TryGetTemplate(row, out var template))
                                 templateList.Insert(0, template);
@@ -395,7 +390,7 @@ namespace LogsReader.Reader
 
         internal virtual void BtnSearch_Click(object sender, EventArgs e)
         {
-	        if (txtPattern.Text.IsNullOrEmpty())
+	        if (TbxPattern.Text.IsNullOrEmpty())
                 throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
         }
 
@@ -412,7 +407,7 @@ namespace LogsReader.Reader
 	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private async void ButtonExport_Click(object sender, EventArgs e)
+        private async void BtnExport_Click(object sender, EventArgs e)
         {
             if (IsWorking)
                 return;
@@ -429,7 +424,7 @@ namespace LogsReader.Reader
                     desctination = sfd.FileName;
                 }
 
-                BTNSearch.Enabled = btnClear.Enabled = buttonExport.Enabled = buttonFilter.Enabled = buttonReset.Enabled = false;
+                BtnSearch.Enabled = btnClear.Enabled = btnExport.Enabled = btnFilter.Enabled = btnReset.Enabled = false;
                 ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
@@ -438,7 +433,7 @@ namespace LogsReader.Reader
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
                     await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "File", "Date", "Trace name", "Description", notepad.SelectedIndex <= 0 ? "Message" : "Trace Message" }));
-                    foreach (DataGridViewRow row in dgvFiles.Rows)
+                    foreach (DataGridViewRow row in DgvData.Rows)
                     {
                         if(!TryGetTemplate(row, out var template))
                             continue;
@@ -454,7 +449,7 @@ namespace LogsReader.Reader
                         }));
                         writer.Flush();
 
-                        Progress = (int)Math.Round((double)(100 * ++i) / dgvFiles.RowCount);
+                        Progress = (int)Math.Round((double)(100 * ++i) / DgvData.RowCount);
                     }
                     writer.Close();
                 }
@@ -470,7 +465,7 @@ namespace LogsReader.Reader
                 Progress = 100;
                 btnClear.Enabled = true;
                 ValidationCheck(false);
-                dgvFiles.Focus();
+                DgvData.Focus();
             }
         }
 
@@ -508,7 +503,7 @@ namespace LogsReader.Reader
             return builder.ToString();
         }
 
-        private async void buttonFilter_Click(object sender, EventArgs e)
+        private async void BtnFilter_Click(object sender, EventArgs e)
         {
             try
             {
@@ -522,15 +517,15 @@ namespace LogsReader.Reader
 
         protected DataFilter GetFilter()
         {
-            return new DataFilter(dateStartFilter.Checked ? dateStartFilter.Value : DateTime.MinValue,
-                dateEndFilter.Checked ? dateEndFilter.Value : DateTime.MaxValue,
-                traceNameFilter.Text,
-                traceNameFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains),
-                traceMessageFilter.Text,
-                traceMessageFilterComboBox.Text.Like(Resources.Txt_LogsReaderForm_Contains));
+            return new DataFilter(DateStartFilter.Checked ? DateStartFilter.Value : DateTime.MinValue,
+                DateEndFilter.Checked ? DateEndFilter.Value : DateTime.MaxValue,
+                TbxTraceNameFilter.Text,
+                CobxTraceNameFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains),
+                TbxTraceMessageFilter.Text,
+                CobxTraceMessageFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains));
         }
 
-        private async void buttonReset_Click(object sender, EventArgs e)
+        private async void BtnReset_Click(object sender, EventArgs e)
         {
             await AssignResult(null);
         }
@@ -561,9 +556,9 @@ namespace LogsReader.Reader
 		        }
 	        }
 
-	        await dgvFiles.AssignCollectionAsync(_currentDGVResult, null);
+	        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
 
-	        buttonExport.Enabled = dgvFiles.RowCount > 0;
+	        btnExport.Enabled = DgvData.RowCount > 0;
 
             return true;
         }
@@ -574,24 +569,24 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        BTNSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
+		        BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
 		        btnClear.Enabled = !IsWorking;
-		        txtPattern.Enabled = !IsWorking;
+		        TbxPattern.Enabled = !IsWorking;
 
-		        foreach (var dgvChild in dgvFiles.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
+		        foreach (var dgvChild in DgvData.Controls.OfType<Control>()) // решает баг с задисейбленным скролл баром DataGridView
 			        dgvChild.Enabled = !IsWorking;
-		        dgvFiles.Enabled = !IsWorking;
+		        DgvData.Enabled = !IsWorking;
 
 		        notepad.Enabled = !IsWorking;
 		        descriptionText.Enabled = !IsWorking;
-		        useRegex.Enabled = !IsWorking;
-		        dateStartFilter.Enabled = !IsWorking;
-		        dateEndFilter.Enabled = !IsWorking;
-		        traceNameFilterComboBox.Enabled = !IsWorking;
-		        traceNameFilter.Enabled = !IsWorking;
-		        traceMessageFilterComboBox.Enabled = !IsWorking;
-		        traceMessageFilter.Enabled = !IsWorking;
-		        alreadyUseFilter.Enabled = !IsWorking;
+		        ChbxUseRegex.Enabled = !IsWorking;
+		        DateStartFilter.Enabled = !IsWorking;
+		        DateEndFilter.Enabled = !IsWorking;
+		        CobxTraceNameFilter.Enabled = !IsWorking;
+		        TbxTraceNameFilter.Enabled = !IsWorking;
+		        CobxTraceMessageFilter.Enabled = !IsWorking;
+		        TbxTraceMessageFilter.Enabled = !IsWorking;
+		        ChbxAlreadyUseFilter.Enabled = !IsWorking;
 
 		        if (IsWorking)
 		        {
@@ -603,19 +598,19 @@ namespace LogsReader.Reader
 			        ParentSplitContainer.Cursor = Cursors.Default;
 		        }
 
-		        buttonExport.Enabled = dgvFiles.RowCount > 0;
-		        buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
+		        btnExport.Enabled = DgvData.RowCount > 0;
+		        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
             }
 	        finally
 	        {
 		        if (IsWorking)
 			        Focus();
 		        else
-			        dgvFiles.Focus();
+			        DgvData.Focus();
             }
         }
 
-        protected void DgvFiles_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        protected void DgvDataOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
@@ -634,7 +629,7 @@ namespace LogsReader.Reader
         private int _prevSortedColumn = -1;
         private bool _byDescending = true;
 
-        private async void DgvFilesOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
 	        try
 	        {
@@ -647,9 +642,9 @@ namespace LogsReader.Reader
                 ClearDGV();
                 ClearErrorStatus();
 
-                dgvFiles.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
+                DgvData.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
 
-                var columnName = dgvFiles.Columns[e.ColumnIndex].HeaderText;
+                var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
                 var orderByOption = byDescending
 	                ? new Dictionary<string, bool>() {{columnName, false}}
 	                : new Dictionary<string, bool>() {{columnName, true}};
@@ -660,7 +655,7 @@ namespace LogsReader.Reader
 
                 _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 
-                await dgvFiles.AssignCollectionAsync(_currentDGVResult, null);
+                await DgvData.AssignCollectionAsync(_currentDGVResult, null);
 
                 _prevSortedColumn = e.ColumnIndex;
                 _byDescending = byDescending;
@@ -694,17 +689,17 @@ namespace LogsReader.Reader
 	        }
         }
 
-        private async void DgvFiles_SelectionChanged(object sender, EventArgs e)
+        private void DgvData_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
-                Message.Text = string.Empty;
-                TraceMessage.Text = string.Empty;
+                EditorMessage.Text = string.Empty;
+                EditorTraceMessage.Text = string.Empty;
 
-                if (dgvFiles.CurrentRow == null || dgvFiles.SelectedRows.Count == 0)
+                if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
                     return;
 
-                if(!TryGetTemplate(dgvFiles.SelectedRows[0], out var template))
+                if(!TryGetTemplate(DgvData.SelectedRows[0], out var template))
                     return;
 
                 var foundByTransactionValue = string.Empty;
@@ -714,7 +709,7 @@ namespace LogsReader.Reader
                 descriptionText.Text = $"FoundLineID = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 
                 string messageString;
-                if (Message.Language == Language.XML || Message.Language == Language.HTML)
+                if (EditorMessage.Language == Language.XML || EditorMessage.Language == Language.HTML)
                 {
 	                var messageXML = XML.RemoveUnallowable(template.Message, " ");
 	                messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
@@ -724,11 +719,11 @@ namespace LogsReader.Reader
 	                messageString = template.Message.TrimWhiteSpaces();
                 }
 
-                Message.Text = messageString;
-                Message.DelayedEventsInterval = 10;
+                EditorMessage.Text = messageString;
+                EditorMessage.DelayedEventsInterval = 10;
 
-                TraceMessage.Text = template.TraceMessage;
-                TraceMessage.DelayedEventsInterval = 10;
+                EditorTraceMessage.Text = template.TraceMessage;
+                EditorTraceMessage.DelayedEventsInterval = 10;
             }
             catch (Exception ex)
             {
@@ -736,23 +731,23 @@ namespace LogsReader.Reader
             }
             finally
             {
-                dgvFiles.Focus();
+                DgvData.Focus();
             }
         }
 
         internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
 
-        private void DgvFiles_MouseDown(object sender, MouseEventArgs e)
+        private void DgvData_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
                 if (e.Button != MouseButtons.Right)
                     return;
-                var hti = dgvFiles.HitTest(e.X, e.Y);
+                var hti = DgvData.HitTest(e.X, e.Y);
                 if (hti.RowIndex == -1)
                     return;
-                dgvFiles.ClearSelection();
-                dgvFiles.Rows[hti.RowIndex].Selected = true;
+                DgvData.ClearSelection();
+                DgvData.Rows[hti.RowIndex].Selected = true;
             }
             catch (Exception)
             {
@@ -760,13 +755,13 @@ namespace LogsReader.Reader
             }
         }
 
-        internal virtual void TxtPattern_TextChanged(object sender, EventArgs e)
+        internal virtual void TxtPatternOnTextChanged(object sender, EventArgs e)
         {
             UserSettings.PreviousSearch = ((TextBox)sender).Text;
             ValidationCheck(true);
         }
 
-        internal virtual void UseRegex_CheckedChanged(object sender, EventArgs e)
+        internal virtual void ChbxUseRegex_CheckedChanged(object sender, EventArgs e)
         {
             UserSettings.UseRegex = ((CheckBox)sender).Checked;
         }
@@ -774,25 +769,25 @@ namespace LogsReader.Reader
         internal virtual void DateStartFilterOnValueChanged(object sender, EventArgs e)
         {
 	        if (UserSettings != null)
-		        UserSettings.DateStartChecked = dateStartFilter.Checked;
+		        UserSettings.DateStartChecked = DateStartFilter.Checked;
 
-	        if (_oldDateStartChecked || !dateStartFilter.Checked)
+	        if (_oldDateStartChecked || !DateStartFilter.Checked)
 		        return;
 
 	        _oldDateStartChecked = true;
-	        dateStartFilter.Value = _getStartDate.Invoke();
+	        DateStartFilter.Value = _getStartDate.Invoke();
         }
 
         internal virtual void DateEndFilterOnValueChanged(object sender, EventArgs e)
         {
 	        if (UserSettings != null)
-		        UserSettings.DateEndChecked = dateEndFilter.Checked;
+		        UserSettings.DateEndChecked = DateEndFilter.Checked;
 
-	        if (_oldDateEndChecked || !dateEndFilter.Checked)
+	        if (_oldDateEndChecked || !DateEndFilter.Checked)
 		        return;
 
 	        _oldDateEndChecked = true;
-	        dateEndFilter.Value = _getEndDate.Invoke();
+	        DateEndFilter.Value = _getEndDate.Invoke();
         }
 
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -800,27 +795,27 @@ namespace LogsReader.Reader
             e.Handled = true;
         }
 
-        internal virtual void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        internal virtual void CobxTraceNameFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
 	        UserSettings.TraceNameFilterContains = ((ComboBox)sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
         }
 
-        internal virtual void TraceNameFilter_TextChanged(object sender, EventArgs e)
+        internal virtual void TbxTraceNameFilterOnTextChanged(object sender, EventArgs e)
         {
             UserSettings.TraceNameFilter = ((TextBox)sender).Text;
         }
 
-        internal virtual void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        internal virtual void CobxTraceMessageFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
 	        UserSettings.TraceMessageFilterContains = ((ComboBox)sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
         }
 
-        internal virtual void TraceMessageFilter_TextChanged(object sender, EventArgs e)
+        internal virtual void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e)
         {
             UserSettings.TraceMessageFilter = ((TextBox)sender).Text;
         }
 
-        internal virtual void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
+        internal virtual void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)
         {
 
         }
@@ -828,15 +823,15 @@ namespace LogsReader.Reader
         private void Message_LanguageChanged(object sender, EventArgs e)
         {
             var prev = UserSettings.MessageLanguage;
-            UserSettings.MessageLanguage = Message.Language;
-            if((prev == Language.HTML || prev == Language.XML) && (Message.Language == Language.XML || Message.Language == Language.HTML))
+            UserSettings.MessageLanguage = EditorMessage.Language;
+            if((prev == Language.HTML || prev == Language.XML) && (EditorMessage.Language == Language.XML || EditorMessage.Language == Language.HTML))
                 return;
-            DgvFiles_SelectionChanged(dgvFiles, EventArgs.Empty);
+            DgvData_SelectionChanged(DgvData, EventArgs.Empty);
         }
 
         private void TraceMessage_LanguageChanged(object sender, EventArgs e)
         {
-            UserSettings.TraceLanguage = TraceMessage.Language;
+            UserSettings.TraceLanguage = EditorTraceMessage.Language;
         }
 
         private void Notepad_WordWrapStateChanged(object sender, EventArgs e)
@@ -844,9 +839,9 @@ namespace LogsReader.Reader
             if (!(sender is Editor editor))
                 return;
 
-            if (editor == Message)
+            if (editor == EditorMessage)
                 UserSettings.MessageWordWrap = editor.WordWrap;
-            else if (editor == TraceMessage)
+            else if (editor == EditorTraceMessage)
                 UserSettings.TraceWordWrap = editor.WordWrap;
         }
 
@@ -855,16 +850,16 @@ namespace LogsReader.Reader
             if (!(sender is Editor editor))
                 return;
 
-            if (editor == Message)
+            if (editor == EditorMessage)
                 UserSettings.MessageHighlights = editor.Highlights;
-            else if (editor == TraceMessage)
+            else if (editor == EditorTraceMessage)
                 UserSettings.TraceHighlights = editor.Highlights;
         }
 
         protected virtual void ValidationCheck(bool clearStatus)
         {
-	        buttonExport.Enabled = dgvFiles.RowCount > 0;
-	        buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
+	        btnExport.Enabled = DgvData.RowCount > 0;
+	        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
         }
 
         protected virtual void BtnClear_Click(object sender, EventArgs e)
@@ -905,16 +900,18 @@ namespace LogsReader.Reader
 	            _currentDGVResult = null;
 	            _byDescending = true;
 
-                dgvFiles.DataSource = null;
-                dgvFiles.Rows.Clear();
-                dgvFiles.Refresh();
+                DgvData.DataSource = null;
+                DgvData.Rows.Clear();
+                DgvData.Refresh();
+
                 descriptionText.Text = string.Empty;
-                if (Message != null)
-                    Message.Text = string.Empty;
-                if (TraceMessage != null)
-                    TraceMessage.Text = string.Empty;
-                buttonExport.Enabled = false;
-                buttonFilter.Enabled = buttonReset.Enabled = HasAnyResult;
+                if (EditorMessage != null)
+                    EditorMessage.Text = string.Empty;
+                if (EditorTraceMessage != null)
+                    EditorTraceMessage.Text = string.Empty;
+
+                btnExport.Enabled = false;
+                btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
             }
             catch (Exception ex)
             {

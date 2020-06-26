@@ -252,6 +252,9 @@ namespace LogsReader.Reader
             IsSyncEnabled = true;
         }
 
+        /// <summary>
+        /// Включить синзронизацию всех TreeView
+        /// </summary>
         public void EnableSync()
         {
 	        _isSyncAllow = true;

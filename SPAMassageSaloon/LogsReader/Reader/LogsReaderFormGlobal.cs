@@ -21,8 +21,8 @@ namespace LogsReader.Reader
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
 
-		private readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.ForestGreen : Color.Red;
-		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BTNSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
+		private readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.ForestGreen : Color.Red;
+		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
 
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
@@ -111,8 +111,8 @@ namespace LogsReader.Reader
 
 		public override void ApplySettings()
 		{
-			checkBoxSelectAll.Text = Resources.Txt_Global_SelectAll;
 			base.ApplySettings();
+			checkBoxSelectAll.Text = Resources.Txt_Global_SelectAll;
 		}
 
 		ExpandCollapsePanel CreateExpander(LogsReaderFormScheme readerForm)
@@ -188,7 +188,7 @@ namespace LogsReader.Reader
 		        ButtonStyle = ExpandButtonStyle.Circle,
 		        CheckBoxShown = true,
 		        ExpandedHeight = 300,
-		        CheckBoxEnabled = readerForm.BTNSearch.Enabled,
+		        CheckBoxEnabled = readerForm.BtnSearch.Enabled,
 				BackColor = expanderBorderColor.Invoke(readerForm),
 				HeaderBorderBrush = Color.Azure,
 		        HeaderBackColor = buttonBack.BackColor,
@@ -241,19 +241,19 @@ namespace LogsReader.Reader
 		        if (schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
 				{
 					// обновляем инфу по всем выбранным схемам основываясь на глобальной
-					readerForm.txtPattern.Text = txtPattern.Text;
-					readerForm.useRegex.Checked = useRegex.Checked;
-					readerForm.dateStartFilter.Value = dateStartFilter.Value;
-					readerForm.dateStartFilter.Checked = dateStartFilter.Checked;
+					readerForm.TbxPattern.Text = TbxPattern.Text;
+					readerForm.ChbxUseRegex.Checked = ChbxUseRegex.Checked;
+					readerForm.DateStartFilter.Value = DateStartFilter.Value;
+					readerForm.DateStartFilter.Checked = DateStartFilter.Checked;
 					readerForm.DateStartFilterOnValueChanged(this, EventArgs.Empty);
-					readerForm.dateEndFilter.Value = dateEndFilter.Value;
-					readerForm.dateEndFilter.Checked = dateEndFilter.Checked;
+					readerForm.DateEndFilter.Value = DateEndFilter.Value;
+					readerForm.DateEndFilter.Checked = DateEndFilter.Checked;
 					readerForm.DateEndFilterOnValueChanged(this, EventArgs.Empty);
-					readerForm.traceNameFilterComboBox.Text = traceNameFilterComboBox.Text;
-					readerForm.traceNameFilter.Text = traceNameFilter.Text;
-					readerForm.traceMessageFilterComboBox.Text = traceMessageFilterComboBox.Text;
-					readerForm.traceMessageFilter.Text = traceMessageFilter.Text;
-					readerForm.alreadyUseFilter.Checked = alreadyUseFilter.Checked;
+					readerForm.CobxTraceNameFilter.Text = CobxTraceNameFilter.Text;
+					readerForm.TbxTraceNameFilter.Text = TbxTraceNameFilter.Text;
+					readerForm.CobxTraceMessageFilter.Text = CobxTraceMessageFilter.Text;
+					readerForm.TbxTraceMessageFilter.Text = TbxTraceMessageFilter.Text;
+					readerForm.ChbxAlreadyUseFilter.Checked = ChbxAlreadyUseFilter.Checked;
 				}
 
 				ValidationCheck(true);
@@ -295,12 +295,12 @@ namespace LogsReader.Reader
 		        ReportStatus(ex.Message, ReportStatusType.Error);
 	        };
 			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схеме
-			readerForm.BTNSearch.EnabledChanged += (sender, args) =>
+			readerForm.BtnSearch.EnabledChanged += (sender, args) =>
 			{
 				schemeExpander.BackColor = expanderBorderColor.Invoke(readerForm);
 				expanderPanel.BackColor = expanderPanelColor.Invoke(readerForm);
 
-				if (readerForm.BTNSearch.Enabled)
+				if (readerForm.BtnSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
 					// выбираем только в случае если открыта Global форма
@@ -343,7 +343,7 @@ namespace LogsReader.Reader
 				}
 
 				// заполняем DataGrid
-				if (await AssignResult(alreadyUseFilter.Checked ? GetFilter() : null))
+				if (await AssignResult(ChbxAlreadyUseFilter.Checked ? GetFilter() : null))
 				{
 					Progress = 100;
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, InProcessing.Elapsed.ToReadableString()), ReportStatusType.Success);
@@ -563,18 +563,18 @@ namespace LogsReader.Reader
 			UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
 		}
 
-        internal override void TxtPattern_TextChanged(object sender, EventArgs e)
+        internal override void TxtPatternOnTextChanged(object sender, EventArgs e)
         {
-	        base.TxtPattern_TextChanged(sender, e);
+	        base.TxtPatternOnTextChanged(sender, e);
 	        foreach (var schemeForm in GetSelectedSchemas())
-		        schemeForm.txtPattern.Text = ((TextBox) sender).Text;
+		        schemeForm.TbxPattern.Text = ((TextBox) sender).Text;
         }
 
-        internal override void UseRegex_CheckedChanged(object sender, EventArgs e)
+        internal override void ChbxUseRegex_CheckedChanged(object sender, EventArgs e)
 		{
-			base.UseRegex_CheckedChanged(sender, e);
+			base.ChbxUseRegex_CheckedChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.useRegex.Checked = ((CheckBox)sender).Checked;
+				schemeForm.ChbxUseRegex.Checked = ((CheckBox)sender).Checked;
 		}
 
 		internal override void DateStartFilterOnValueChanged(object sender, EventArgs e)
@@ -582,8 +582,8 @@ namespace LogsReader.Reader
 			base.DateStartFilterOnValueChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
 			{
-				schemeForm.dateStartFilter.Value = dateStartFilter.Value;
-				schemeForm.dateStartFilter.Checked = dateStartFilter.Checked;
+				schemeForm.DateStartFilter.Value = DateStartFilter.Value;
+				schemeForm.DateStartFilter.Checked = DateStartFilter.Checked;
 				schemeForm.DateStartFilterOnValueChanged(this, EventArgs.Empty);
 			}
 		}
@@ -593,44 +593,44 @@ namespace LogsReader.Reader
 			base.DateEndFilterOnValueChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
 			{
-				schemeForm.dateEndFilter.Value = dateEndFilter.Value;
-				schemeForm.dateEndFilter.Checked = dateEndFilter.Checked;
+				schemeForm.DateEndFilter.Value = DateEndFilter.Value;
+				schemeForm.DateEndFilter.Checked = DateEndFilter.Checked;
 				schemeForm.DateEndFilterOnValueChanged(this, EventArgs.Empty);
 			}
 		}
 
-		internal override void traceNameFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		internal override void CobxTraceNameFilter_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			base.traceNameFilterComboBox_SelectedIndexChanged(sender, e);
+			base.CobxTraceNameFilter_SelectedIndexChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.traceNameFilterComboBox.Text = ((ComboBox)sender).Text;
+				schemeForm.CobxTraceNameFilter.Text = ((ComboBox)sender).Text;
 		}
 
-		internal override void TraceNameFilter_TextChanged(object sender, EventArgs e)
+		internal override void TbxTraceNameFilterOnTextChanged(object sender, EventArgs e)
 		{
-			base.TraceNameFilter_TextChanged(sender, e);
+			base.TbxTraceNameFilterOnTextChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.traceNameFilter.Text = ((TextBox)sender).Text;
+				schemeForm.TbxTraceNameFilter.Text = ((TextBox)sender).Text;
 		}
 
-		internal override void traceMessageFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		internal override void CobxTraceMessageFilter_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			base.traceMessageFilterComboBox_SelectedIndexChanged(sender, e);
+			base.CobxTraceMessageFilter_SelectedIndexChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.traceMessageFilterComboBox.Text = ((ComboBox)sender).Text;
+				schemeForm.CobxTraceMessageFilter.Text = ((ComboBox)sender).Text;
 		}
 
-		internal override void TraceMessageFilter_TextChanged(object sender, EventArgs e)
+		internal override void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e)
 		{
-			base.TraceMessageFilter_TextChanged(sender, e);
+			base.TbxTraceMessageFilterOnTextChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.traceMessageFilter.Text = ((TextBox)sender).Text;
+				schemeForm.TbxTraceMessageFilter.Text = ((TextBox)sender).Text;
 		}
 
-		internal override void alreadyUseFilter_CheckedChanged(object sender, EventArgs e)
+		internal override void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)
 		{
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.alreadyUseFilter.Checked = ((CheckBox)sender).Checked;
+				schemeForm.ChbxAlreadyUseFilter.Checked = ((CheckBox)sender).Checked;
 		}
 
 		IEnumerable<LogsReaderFormScheme> GetSelectedSchemas()
@@ -640,7 +640,7 @@ namespace LogsReader.Reader
 
 		protected override void ValidationCheck(bool clearStatus)
 		{
-			BTNSearch.Enabled = AllExpanders.Any(x => x.Key.BTNSearch.Enabled && x.Value.IsChecked);
+			BtnSearch.Enabled = AllExpanders.Any(x => x.Key.BtnSearch.Enabled && x.Value.IsChecked);
 			base.ValidationCheck(clearStatus);
 		}
     }
