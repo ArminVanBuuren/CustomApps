@@ -534,33 +534,99 @@ namespace LogsReader.Reader
 
         protected async Task<bool> AssignResult(DataFilter filter)
         {
-	        ClearDGV();
-	        ClearErrorStatus();
-
-	        _currentDGVResult = GetResultTemplates();
-
-            if (_currentDGVResult == null || !_currentDGVResult.Any())
+	        try
 	        {
-		        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
-		        return false;
-	        }
-
-	        if (filter != null)
-	        {
-		        _currentDGVResult = filter.FilterCollection(_currentDGVResult);
-
-		        if (!_currentDGVResult.Any())
+		        // сохраняем предыдущую позицию в гриде
+		        var minIndex = -1;
+		        var maxIndex = -1;
+		        var countVisible = -1;
+		        var firstVisible = -1;
+		        if (DgvData.SelectedRows.Count > 0)
 		        {
-			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+			        var selCol = DgvData.SelectedRows.OfType<DataGridViewRow>();
+			        minIndex = selCol.First().Index;
+			        maxIndex = selCol.Last().Index;
+			        countVisible = DgvData.DisplayedRowCount(false);
+			        firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+		        }
+
+		        ClearDGV();
+		        ClearErrorStatus();
+
+		        _currentDGVResult = GetResultTemplates();
+
+		        if (_currentDGVResult == null || !_currentDGVResult.Any())
+		        {
+			        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 			        return false;
 		        }
+
+		        if (filter != null)
+		        {
+			        _currentDGVResult = filter.FilterCollection(_currentDGVResult);
+
+			        if (!_currentDGVResult.Any())
+			        {
+				        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+				        return false;
+			        }
+		        }
+
+		        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+
+		        btnExport.Enabled = DgvData.RowCount > 0;
+
+                // возвращаем позицию в гриде
+		        if (DgvData.RowCount > 0 && (minIndex > -1 || maxIndex > -1))
+		        {
+			        DgvData.ClearSelection();
+			        if (DgvData.RowCount > maxIndex && maxIndex > -1)
+			        {
+				        EnsureVisibleRow(DgvData, maxIndex, firstVisible, countVisible);
+			        }
+			        else if (DgvData.RowCount > minIndex && minIndex > -1)
+			        {
+				        EnsureVisibleRow(DgvData, minIndex, firstVisible, countVisible);
+			        }
+			        else
+			        {
+				        EnsureVisibleRow(DgvData, DgvData.RowCount - 1, firstVisible, countVisible);
+			        }
+		        }
+
+		        return true;
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+                return false;
+	        }
+        }
+
+        static void EnsureVisibleRow(DataGridView view, int rowToShow, int firstVisible, int countVisible)
+        {
+	        if (rowToShow < 0 || rowToShow >= view.RowCount)
+		        return;
+
+	        view.Rows[rowToShow].Selected = true;
+	        if (firstVisible <= -1 || countVisible <= -1)
+	        {
+		        view.FirstDisplayedScrollingRowIndex = rowToShow;
+                return;
 	        }
 
-	        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-
-	        btnExport.Enabled = DgvData.RowCount > 0;
-
-            return true;
+	        if (rowToShow < firstVisible)
+	        {
+		        view.FirstDisplayedScrollingRowIndex = rowToShow;
+	        }
+	        else if (rowToShow >= firstVisible + countVisible)
+	        {
+		        view.FirstDisplayedScrollingRowIndex = rowToShow - countVisible + 1;
+	        }
+	        else
+	        {
+		        view.FirstDisplayedScrollingRowIndex = firstVisible;
+	        }
         }
 
         protected abstract IEnumerable<DataTemplate> GetResultTemplates();

@@ -21,9 +21,24 @@ namespace LogsReader.Reader
 	    private readonly Panel panelFlowDoc;
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
+		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.FromArgb(155, 255, 176) : Color.FromArgb(255, 150, 170);
 
-		private readonly Func<LogsReaderFormScheme, Color> expanderBorderColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.ForestGreen : Color.Red;
-		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.FromArgb(217, 255, 217) : Color.FromArgb(255, 150, 170);
+		Color GetExpanderBorderColor(LogsReaderFormScheme readerForm, ExpandCollapsePanel schemeExpander)
+		{
+			if (schemeExpander.IsChecked)
+			{
+				return Color.LightSeaGreen;
+			}
+			else
+			{
+				if (schemeExpander.CheckBoxEnabled)
+					return InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) ? Color.Gray : Color.Transparent;
+				else
+					return Color.Red;
+			}
+		}
+
+		private bool _onAllChekingExpanders = false;
 
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
@@ -201,8 +216,7 @@ namespace LogsReader.Reader
 		        CheckBoxShown = true,
 		        ExpandedHeight = 300,
 		        CheckBoxEnabled = readerForm.BtnSearch.Enabled,
-				BackColor = expanderBorderColor.Invoke(readerForm),
-				HeaderBorderBrush = Color.Azure,
+		        HeaderBorderBrush = Color.Azure,
 		        HeaderBackColor = buttonBack.BackColor,
 		        ForeColor = buttonFore.BackColor,
 				HeaderLineColor = Color.White,
@@ -214,6 +228,7 @@ namespace LogsReader.Reader
 		        Padding = new Padding(2),
                 Margin = new Padding(3, 3, 3, 0)
 	        };
+			schemeExpander.BackColor = GetExpanderBorderColor(readerForm, schemeExpander);
 			
 			var expanderPanel = new Panel
 	        {
@@ -247,11 +262,11 @@ namespace LogsReader.Reader
 			// если закрываются или открываются схемы для глобальной формы в глобальной форме
 	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
 			// если выбирается схема в глобальной форме в checkbox
-	        schemeExpander.CheckedChanged += (sender, args) =>
+	        schemeExpander.CheckedChanged += async (sender, args) =>
 	        {
-		        schemeExpander.BackColor = !schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled ? Color.DimGray : expanderBorderColor.Invoke(readerForm);
-		        
-		        if (schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
+				schemeExpander.BackColor = GetExpanderBorderColor(readerForm, schemeExpander);
+
+				if (schemeExpander.IsChecked && schemeExpander.CheckBoxEnabled)
 				{
 					// обновляем инфу по всем выбранным схемам основываясь на глобальной
 					readerForm.TbxPattern.Text = TbxPattern.Text;
@@ -268,6 +283,9 @@ namespace LogsReader.Reader
 					readerForm.TbxTraceMessageFilter.Text = TbxTraceMessageFilter.Text;
 					readerForm.ChbxAlreadyUseFilter.Checked = ChbxAlreadyUseFilter.Checked;
 				}
+
+				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders)
+					await AssignResult(null);
 
 				ValidationCheck(true);
 	        };
@@ -310,9 +328,6 @@ namespace LogsReader.Reader
 			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схеме
 			readerForm.BtnSearch.EnabledChanged += (sender, args) =>
 			{
-				schemeExpander.BackColor = expanderBorderColor.Invoke(readerForm);
-				expanderPanel.BackColor = expanderPanelColor.Invoke(readerForm);
-
 				if (readerForm.BtnSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
@@ -333,6 +348,9 @@ namespace LogsReader.Reader
 					else
 						ValidationCheck(true);
 				}
+
+				schemeExpander.BackColor = GetExpanderBorderColor(readerForm, schemeExpander);
+				expanderPanel.BackColor = expanderPanelColor.Invoke(readerForm);
 			};
 			// если какая то форма схемы завершила поиск
 			readerForm.OnSearchChanged += async (sender, args) =>
@@ -569,12 +587,30 @@ namespace LogsReader.Reader
 			row.DefaultCellStyle.ForeColor = result.UserSettings.ForeColor;
 		}
 
-        private void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
+        private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
         {
-			foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
-				expander.IsChecked = checkBoxSelectAll.Checked;
-			UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
-		}
+	        try
+	        {
+		        _onAllChekingExpanders = true;
+
+		        foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
+			        expander.IsChecked = checkBoxSelectAll.Checked;
+
+		        if (InProcessing.Count > 0)
+			        await AssignResult(null);
+
+		        UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
+		        
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+	        finally
+	        {
+		        _onAllChekingExpanders = false;
+			}
+        }
 
         internal override void TxtPatternOnTextChanged(object sender, EventArgs e)
         {
