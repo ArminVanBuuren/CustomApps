@@ -714,8 +714,8 @@ namespace LogsReader.Reader
 		        var orderByOption = byAscending
 			        ? new Dictionary<string, bool>() {{columnName, false}}
 			        : new Dictionary<string, bool>() {{columnName, true}};
-		        if (!orderByOption.ContainsKey("File"))
-			        orderByOption.Add("File", !byAscending);
+		        if (!orderByOption.ContainsKey(File.HeaderText))
+			        orderByOption.Add(File.HeaderText, !byAscending);
 		        if (!orderByOption.ContainsKey("FoundLineID"))
 			        orderByOption.Add("FoundLineID", !byAscending);
 
