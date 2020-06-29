@@ -776,7 +776,7 @@ namespace LogsReader.Reader
                 if (!template.TransactionValue.IsNullOrEmptyTrim())
 	                foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
 
-                descriptionText.Text = $"FoundLineID = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
+                descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 
                 string messageString;
                 if (EditorMessage.Language == Language.XML || EditorMessage.Language == Language.HTML)
