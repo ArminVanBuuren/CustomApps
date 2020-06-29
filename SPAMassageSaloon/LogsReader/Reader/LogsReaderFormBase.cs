@@ -714,10 +714,10 @@ namespace LogsReader.Reader
 		        var orderByOption = byAscending
 			        ? new Dictionary<string, bool>() {{columnName, false}}
 			        : new Dictionary<string, bool>() {{columnName, true}};
-		        if (!orderByOption.ContainsKey(File.HeaderText))
-			        orderByOption.Add(File.HeaderText, !byAscending);
-		        if (!orderByOption.ContainsKey("FoundLineID"))
-			        orderByOption.Add("FoundLineID", !byAscending);
+		        if (!orderByOption.ContainsKey(nameof(DataTemplate.Tmp.File)))
+			        orderByOption.Add(nameof(DataTemplate.Tmp.File), !byAscending);
+		        if (!orderByOption.ContainsKey(nameof(DataTemplate.Tmp.FoundLineID)))
+			        orderByOption.Add(nameof(DataTemplate.Tmp.FoundLineID), !byAscending);
 
 		        _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 

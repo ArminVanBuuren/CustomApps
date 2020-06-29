@@ -23,7 +23,7 @@ namespace LogsReader.Config
 	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder() });
         
 	    private string _schemeName = "TEST";
-        private string _orderBy = "Date, File, FoundLineID";
+        private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
         private int _maxLines = 50;
         private int _maxThreads = -1;
         private int _rowsLimit = 999;
@@ -265,7 +265,7 @@ namespace LogsReader.Config
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
 			        MaxLines = 1;
 			        MaxThreads = -1;
-			        OrderBy = "Date desc, ID desc";
+			        OrderBy = $"{nameof(DataTemplate.Tmp.Date)} desc, {nameof(DataTemplate.Tmp.ID)} desc";
 			        _traceParce = new LRTraceParse(_schemeName);
 			        break;
 		        case "MGA":
@@ -289,7 +289,7 @@ namespace LogsReader.Config
 		        var orderStatement = orderItem.Split(' ');
 		        var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));
 
-		        if (!orderStatement[0].LikeAny(out var orderItem2, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+		        if (!orderStatement[0].LikeAny(out var orderItem2, DataTemplateCollection.OrderByFields))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
 
 		        result.Add(orderItem2, isDescending);

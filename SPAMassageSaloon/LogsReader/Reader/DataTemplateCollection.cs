@@ -9,17 +9,33 @@ namespace LogsReader.Reader
 {
     public class DataTemplateCollection : IEnumerable<DataTemplate>, IDisposable
     {
-        private readonly Dictionary<int, DataTemplate> _values;
-        private readonly LRSettingsScheme _settings;
+	    private static string[] orderByFields;
 
-        int _seqPrivateID;
-        int _seqID;
+	    internal static string[] OrderByFields
+	    {
+		    get
+		    {
+			    return orderByFields ?? (orderByFields = new[]
+			    {
+				    nameof(DataTemplate.Tmp.FoundLineID),
+				    nameof(DataTemplate.Tmp.ID),
+				    nameof(DataTemplate.Tmp.Server),
+				    nameof(DataTemplate.Tmp.TraceName),
+				    nameof(DataTemplate.Tmp.Date),
+				    nameof(DataTemplate.Tmp.File)
+			    });
+		    }
+	    }
+
+	    private readonly Dictionary<int, DataTemplate> _values;
+
+        private int _seqPrivateID;
+        private int _seqID;
 
         public DataTemplateCollection(LRSettingsScheme settings, IEnumerable<DataTemplate> list)
         {
-            _settings = settings;
-            _values = new Dictionary<int, DataTemplate>(list.Count());
-            AddRange(DoOrdering(list, _settings.OrderByItems));
+	        _values = new Dictionary<int, DataTemplate>(list.Count());
+            AddRange(DoOrdering(list, settings.OrderByItems));
         }
 
         public static IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input, Dictionary<string, bool> orderBy)
@@ -28,7 +44,7 @@ namespace LogsReader.Reader
             var i = 0;
             foreach (var (columnName, byDescending) in orderBy)
             {
-	            if (columnName.LikeAny(out var param, "FoundLineID", "ID", "Server", "TraceName", "Date", "File"))
+	            if (columnName.LikeAny(out var param, OrderByFields))
 	            {
 		            result = byDescending
 			            ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)

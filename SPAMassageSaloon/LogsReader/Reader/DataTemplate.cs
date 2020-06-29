@@ -11,6 +11,12 @@ namespace LogsReader.Reader
 {
     public class DataTemplate : ICloneable
     {
+	    private static DataTemplate _tmp;
+        /// <summary>
+        /// Темповый темплейт, во избежание ошибок. Если будут изменяться названия полей в <see cref="DataTemplate"/> то, они будут изменяться везде.
+        /// </summary>
+        internal static DataTemplate Tmp => _tmp ?? (_tmp = new DataTemplate(null, -1, null, "-1"));
+
 	    private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
         private string _traceName;
