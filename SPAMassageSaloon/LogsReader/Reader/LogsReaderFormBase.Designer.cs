@@ -26,7 +26,6 @@ namespace LogsReader.Reader
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsMatched = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -86,7 +85,6 @@ namespace LogsReader.Reader
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SchemeName,
             this.PrivateID,
-            this.IsMatched,
             this.ID,
             this.Server,
             this.TraceName,
@@ -106,10 +104,7 @@ namespace LogsReader.Reader
 			// 
 			// SchemeName
 			// 
-			this.SchemeName.DataPropertyName = "SchemeName";
-			this.SchemeName.HeaderText = "SchemeName";
 			this.SchemeName.MinimumWidth = 5;
-			this.SchemeName.Name = "SchemeName";
 			this.SchemeName.ReadOnly = true;
 			this.SchemeName.Visible = false;
 			this.SchemeName.Width = 5;
@@ -117,72 +112,43 @@ namespace LogsReader.Reader
 			// 
 			// PrivateID
 			// 
-			this.PrivateID.DataPropertyName = "PrivateID";
-			this.PrivateID.HeaderText = "PrivateID";
 			this.PrivateID.MinimumWidth = 5;
-			this.PrivateID.Name = "PrivateID";
 			this.PrivateID.ReadOnly = true;
 			this.PrivateID.Visible = false;
 			this.PrivateID.Width = 5;
 			this.PrivateID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
-			// IsMatched
-			// 
-			this.IsMatched.DataPropertyName = "IsMatched";
-			this.IsMatched.HeaderText = "IsMatched";
-			this.IsMatched.MinimumWidth = 5;
-			this.IsMatched.Name = "IsMatched";
-			this.IsMatched.ReadOnly = true;
-			this.IsMatched.Visible = false;
-			this.IsMatched.Width = 5;
-			this.IsMatched.SortMode = DataGridViewColumnSortMode.Programmatic;
-			// 
 			// ID
 			// 
-			this.ID.DataPropertyName = "ID";
-			this.ID.HeaderText = "ID";
 			this.ID.MinimumWidth = 35;
-			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
 			this.ID.Width = 35;
 			this.ID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// Server
 			// 
-			this.Server.DataPropertyName = "Server";
-			this.Server.HeaderText = "Server";
 			this.Server.MinimumWidth = 48;
-			this.Server.Name = "Server";
 			this.Server.ReadOnly = true;
 			this.Server.Width = 50;
 			this.Server.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// TraceName
 			// 
-			this.TraceName.DataPropertyName = "TraceName";
-			this.TraceName.HeaderText = "TraceName";
 			this.TraceName.MinimumWidth = 75;
-			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
 			this.TraceName.Width = 80;
 			this.TraceName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// DateOfTrace
 			// 
-			this.DateOfTrace.DataPropertyName = "DateOfTrace";
-			this.DateOfTrace.HeaderText = "Date";
 			this.DateOfTrace.MinimumWidth = 40;
-			this.DateOfTrace.Name = "DateOfTrace";
 			this.DateOfTrace.ReadOnly = true;
 			this.DateOfTrace.Width = 140;
 			this.DateOfTrace.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// File
 			// 
-			this.File.DataPropertyName = "FileNamePartial";
-			this.File.HeaderText = "File";
 			this.File.MinimumWidth = 40;
-			this.File.Name = "FileNamePartial";
 			this.File.ReadOnly = true;
 			this.File.Width = 1000;
 			this.File.SortMode = DataGridViewColumnSortMode.Programmatic;
@@ -295,7 +261,6 @@ namespace LogsReader.Reader
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(67, 15);
 			this.label7.TabIndex = 24;
-			this.label7.Text = "TraceName";
 			// 
 			// label9
 			// 
@@ -598,7 +563,6 @@ namespace LogsReader.Reader
         private Button btnExport;
         private DataGridViewTextBoxColumn SchemeName;
         private DataGridViewTextBoxColumn PrivateID;
-        private DataGridViewTextBoxColumn IsMatched;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Server;
         private DataGridViewTextBoxColumn TraceName;

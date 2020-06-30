@@ -11,7 +11,17 @@ namespace LogsReader.Reader
 {
     public class DataTemplate : ICloneable
     {
-	    private static DataTemplate _tmp;
+        // Названия столбцов. Менять не рекомендуется, но влияния нет.
+	    public const string HeaderID = "ID";
+        public const string HeaderServer = "Server";
+        public const string HeaderTraceName = "TraceName";
+        public const string HeaderDate = "Date";
+        public const string HeaderFile = "File";
+        public const string HeaderDescription = "Description";
+        public const string HeaderMessage = "Message";
+        public const string HeaderTraceMessage = "Full Trace";
+
+        private static DataTemplate _tmp;
         /// <summary>
         /// Темповый темплейт, во избежание ошибок. Если будут изменяться названия полей в <see cref="DataTemplate"/> то, они будут изменяться везде.
         /// </summary>
@@ -97,34 +107,33 @@ namespace LogsReader.Reader
 
         public Exception Error { get; }
 
-        [DGVColumn(ColumnPosition.Last, "SchemeName", false)]
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.SchemeName), false)]
         public string SchemeName => ParentReader.SchemeName;
 
-        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.PrivateID), false)]
         public int PrivateID { get; internal set; }
 
-        [DGVColumn(ColumnPosition.Last, "IsMatched", false)]
         public bool IsMatched { get; }
 
-        [DGVColumn(ColumnPosition.After, "ID")]
+        [DGVColumn(ColumnPosition.After, HeaderID)]
         public int ID { get; internal set; }
 
-        [DGVColumn(ColumnPosition.After, "Server")]
+        [DGVColumn(ColumnPosition.After, HeaderServer)]
         public string Server => ParentReader.Server;
 
-        [DGVColumn(ColumnPosition.After, "TraceName")]
+        [DGVColumn(ColumnPosition.After, HeaderTraceName)]
         public string TraceName
         {
             get => _traceName;
             private set => _traceName = value?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
         }
 
-        [DGVColumn(ColumnPosition.After, "Date")]
+        [DGVColumn(ColumnPosition.After, HeaderDate)]
         public string DateOfTrace { get; }
 
         public DateTime? Date { get; }
 
-        [DGVColumn(ColumnPosition.After, "File")]
+        [DGVColumn(ColumnPosition.After, HeaderFile)]
         public string FileNamePartial => ParentReader.FileNamePartial;
 
         public string File => ParentReader.FilePath;

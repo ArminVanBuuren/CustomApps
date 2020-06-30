@@ -561,7 +561,7 @@ namespace LogsReader.Reader
         internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
 			template = null;
-			var schemeName = row?.Cells["SchemeName"]?.Value?.ToString();
+			var schemeName = row?.Cells[nameof(DataTemplate.Tmp.SchemeName)]?.Value?.ToString();
 			if (schemeName == null
 			    || InProcessing == null
 			    || !InProcessing.TryGetValue(schemeName, out var readerForm)

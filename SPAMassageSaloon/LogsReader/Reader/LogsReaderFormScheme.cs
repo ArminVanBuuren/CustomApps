@@ -345,7 +345,7 @@ namespace LogsReader.Reader
             template = null;
             if (OverallResultList == null)
                 return false;
-            var privateID = (int)(row?.Cells["PrivateID"]?.Value ?? -1);
+            var privateID = (int)(row?.Cells[nameof(DataTemplate.Tmp.PrivateID)]?.Value ?? -1);
             if (privateID <= -1)
                 return false;
             template = OverallResultList[privateID];

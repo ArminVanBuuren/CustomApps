@@ -155,14 +155,47 @@ namespace LogsReader.Reader
 
             try
             {
-	            DgvData.AutoGenerateColumns = false;
+                #region Initialize DgvData
+
+                DgvData.AutoGenerateColumns = false;
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.CellFormatting += DgvDataOnCellFormatting;
 	            DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
-	         
+
+	            SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
+                SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
+
+                PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID);
+                PrivateID.Name = nameof(DataTemplate.Tmp.PrivateID);
+
+                ID.DataPropertyName = nameof(DataTemplate.Tmp.ID);
+                ID.Name = nameof(DataTemplate.Tmp.ID);
+                ID.HeaderText = DataTemplate.HeaderID;
+
+                Server.DataPropertyName = nameof(DataTemplate.Tmp.Server);
+                Server.Name = nameof(DataTemplate.Tmp.Server);
+                Server.HeaderText = DataTemplate.HeaderServer;
+
+                TraceName.DataPropertyName = nameof(DataTemplate.Tmp.TraceName);
+                TraceName.Name = nameof(DataTemplate.Tmp.TraceName);
+                TraceName.HeaderText = DataTemplate.HeaderTraceName;
+
+                DateOfTrace.DataPropertyName = nameof(DataTemplate.Tmp.DateOfTrace);
+                DateOfTrace.Name = nameof(DataTemplate.Tmp.DateOfTrace);
+                DateOfTrace.HeaderText = DataTemplate.HeaderDate;
+
+                File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
+                File.Name = nameof(DataTemplate.Tmp.FileNamePartial);
+                File.HeaderText = DataTemplate.HeaderFile;
+
+	            label7.Text = DataTemplate.HeaderTraceName;
+                label11.Text = DataTemplate.HeaderTraceMessage;
+
+                #endregion
+
                 #region Initialize Controls
 
-                EditorMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Message", Language = Language.XML});
+                EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
                 EditorMessage.BackBrush = null;
                 EditorMessage.BorderStyle = BorderStyle.FixedSingle;
                 EditorMessage.Cursor = Cursors.IBeam;
@@ -172,7 +205,7 @@ namespace LogsReader.Reader
                 EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
                 EditorMessage.LanguageChanged += Message_LanguageChanged;
 
-                EditorTraceMessage = notepad.AddDocument(new BlankDocument {HeaderName = "Trace"});
+                EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
                 EditorTraceMessage.BackBrush = null;
                 EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
                 EditorTraceMessage.Cursor = Cursors.IBeam;
@@ -371,15 +404,23 @@ namespace LogsReader.Reader
                         }
 
                         var clipboardText = new StringBuilder();
-                        foreach (var template in templateList)
+                        if (notepad.SelectedIndex == 0)
                         {
-	                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
-		                        template.ID,
-		                        template.ParentReader.FilePath,
-		                        template.DateOfTrace,
-		                        template.TraceName,
-		                        template.Description,
-		                        notepad.SelectedIndex <= 0 ? template.Message.Trim() : template.TraceMessage.Trim());
+	                        foreach (var template in templateList)
+	                        {
+		                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
+			                        template.ID,
+			                        template.ParentReader.FilePath,
+			                        template.DateOfTrace,
+			                        template.TraceName,
+			                        template.Description,
+			                        template.Message.Trim());
+                            }
+                        }
+                        else
+                        {
+	                        foreach (var template in templateList)
+		                        clipboardText.Append($"{template.ParentReader.FilePath}\t{template.TraceMessage.Trim()}\r\n");
                         }
 
                         Clipboard.SetText(clipboardText.ToString());
@@ -436,26 +477,55 @@ namespace LogsReader.Reader
                 Progress = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
-                    await writer.WriteLineAsync(GetCSVRow(new[] {"ID", "File", "Date", "Trace name", "Description", notepad.SelectedIndex <= 0 ? "Message" : "Trace Message" }));
-                    foreach (DataGridViewRow row in DgvData.Rows)
-                    {
-                        if(!TryGetTemplate(row, out var template))
-                            continue;
-
-                        await writer.WriteLineAsync(GetCSVRow(new[]
-                        {
-                            template.ID.ToString(),
-                            template.ParentReader.FilePath,
-                            template.DateOfTrace,
-                            template.TraceName,
-                            $"\"{template.Description}\"",
-                            notepad.SelectedIndex <= 0 ? $"\"{template.Message.Trim()}\"" : $"\"{template.TraceMessage.Trim()}\""
+	                if (notepad.SelectedIndex == 0)
+	                {
+		                await writer.WriteLineAsync(GetCSVRow(new[]
+		                {
+			                DataTemplate.HeaderID, DataTemplate.HeaderFile, DataTemplate.HeaderDate, DataTemplate.HeaderTraceName, DataTemplate.HeaderDescription, DataTemplate.HeaderMessage
                         }));
-                        writer.Flush();
 
-                        Progress = (int)Math.Round((double)(100 * ++i) / DgvData.RowCount);
-                    }
-                    writer.Close();
+                        foreach (DataGridViewRow row in DgvData.Rows)
+		                {
+			                if (!TryGetTemplate(row, out var template))
+				                continue;
+
+			                await writer.WriteLineAsync(
+				                GetCSVRow(new[]
+				                {
+					                template.ID.ToString(),
+					                template.ParentReader.FilePath,
+					                template.DateOfTrace,
+					                template.TraceName,
+					                $"\"{template.Description}\"",
+					                $"\"{template.Message.Trim()}\""
+				                }));
+			                writer.Flush();
+
+			                Progress = (int) Math.Round((double) (100 * ++i) / DgvData.RowCount);
+		                }
+	                }
+	                else
+	                {
+		                await writer.WriteLineAsync(GetCSVRow(new[] { DataTemplate.HeaderFile, DataTemplate.HeaderTraceMessage }));
+
+                        foreach (DataGridViewRow row in DgvData.Rows)
+		                {
+			                if (!TryGetTemplate(row, out var template))
+				                continue;
+
+			                await writer.WriteLineAsync(
+				                GetCSVRow(new[]
+				                {
+					                template.ParentReader.FilePath,
+					                $"\"{template.TraceMessage.Trim()}\""
+				                }));
+			                writer.Flush();
+
+			                Progress = (int) Math.Round((double) (100 * ++i) / DgvData.RowCount);
+		                }
+	                }
+
+	                writer.Close();
                 }
 
                 ReportStatus(string.Format(Resources.Txt_LogsReaderForm_SuccessExport, fileName), ReportStatusType.Success);
@@ -680,18 +750,22 @@ namespace LogsReader.Reader
 
         protected void DgvDataOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            try
-            {
-                var row = ((DataGridView) sender).Rows[e.RowIndex];
-                if(!TryGetTemplate(row, out var template))
-                    return;
-                row.Cells["FileNamePartial"].ToolTipText = template.File;
-                СolorizationDGV(row, template);
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+	        try
+	        {
+		        var row = ((DataGridView) sender).Rows[e.RowIndex];
+		        if (!TryGetTemplate(row, out var template))
+			        return;
+
+		        var cellFile = row.Cells[nameof(DataTemplate.Tmp.FileNamePartial)];
+		        if (cellFile != null)
+			        cellFile.ToolTipText = template.File;
+
+		        СolorizationDGV(row, template);
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
         }
 
         private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
