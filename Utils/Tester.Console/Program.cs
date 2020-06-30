@@ -39,6 +39,8 @@ namespace Tester.Console
 			
 			try
 			{
+
+
 				
 			}
 			catch (Exception e)
@@ -49,6 +51,19 @@ namespace Tester.Console
 			stopWatch.Stop();
 			System.Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
 			System.Console.ReadLine();
+		}
+
+		static void Sort()
+		{
+			var array = new[] { 1, 5, 7, 5, 2, 0 };
+			var dd = array.OrderBy(x => x);
+			var result = new int[array.Length];
+			for (var i = 0; i > array.Length; i++)
+			{
+				var res = array[i].CompareTo(array[i + 1]);
+			}
+
+			System.Console.WriteLine(string.Join(",", result));
 		}
 
 		static void Test_GetLastDigit()

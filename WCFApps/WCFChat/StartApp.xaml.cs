@@ -55,7 +55,7 @@ namespace WCFChat.Client
         void OpenOrReopenConnection()
         {
             mainProxy?.Abort();
-            InstanceContext context = new InstanceContext(mainWin);
+            var context = new InstanceContext(mainWin);
             mainProxy = new MainContractClient(context);
             mainProxy.Open();
             mainProxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);

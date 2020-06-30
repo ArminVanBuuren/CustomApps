@@ -37,7 +37,7 @@ namespace WCFChat.Client.BasicControl
                 if (Clouds.ContainsKey(cloud.Name))
                     return false;
 
-                WindowControl control = new WindowControl(mainWindow, initiator, cloud, transactionId);
+                var control = new WindowControl(mainWindow, initiator, cloud, transactionId);
                 control.AdminChangedUserList += AccessOrRemoveUser;
                 Clouds.Add(cloud.Name, control);
             }
@@ -105,7 +105,7 @@ namespace WCFChat.Client.BasicControl
                 if (!control.IsUniqueNames(newUser))
                     return;
 
-                string[] addr = address.Split(':');
+                var addr = address.Split(':');
                 control.AddWaiter(newUser, null, addr[0], addr[1]);
             }
         }
@@ -164,7 +164,7 @@ namespace WCFChat.Client.BasicControl
                 return;
             }
 
-            foreach (UserBindings userBind in control.AllUsers.Values)
+            foreach (var userBind in control.AllUsers.Values)
             {
                 userBind.CallBack.Terminate(cloud);
             }
@@ -185,7 +185,7 @@ namespace WCFChat.Client.BasicControl
                         return;
                     }
 
-                    RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty) OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+                    var prop = (RemoteEndpointMessageProperty) OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
 
                     WindowControl control;
                     if (!Clouds.TryGetValue(newUser.Name, out control))
@@ -196,7 +196,7 @@ namespace WCFChat.Client.BasicControl
                     }
 
                     UserBindings userForAccess;
-                    bool result = control.AllUsers.TryGetValue(newUser.GUID, out userForAccess);
+                    var result = control.AllUsers.TryGetValue(newUser.GUID, out userForAccess);
                     if (result)
                     {
                         switch (userForAccess.Status)
@@ -278,12 +278,12 @@ namespace WCFChat.Client.BasicControl
 
         void UpdateUserList(UserBindings createdUser, WindowControl control)
         {
-            List<User> allUsers = control.AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
+            var allUsers = control.AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
 
             if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
                 createdUser.CallBack.TransferHistory(allUsers, control.Messages());
 
-            foreach (UserBindings existUser in control.AllUsers.Values)
+            foreach (var existUser in control.AllUsers.Values)
             {
                 if (createdUser == existUser)
                     continue;
@@ -306,8 +306,8 @@ namespace WCFChat.Client.BasicControl
 
                     control.RemoveUser(userBind);
 
-                    List<User> allUsers = control.AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
-                    foreach (UserBindings existUser in control.AllUsers.Values)
+                    var allUsers = control.AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
+                    foreach (var existUser in control.AllUsers.Values)
                     {
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
                             existUser.CallBack.TransferHistory(allUsers, null);
@@ -335,7 +335,7 @@ namespace WCFChat.Client.BasicControl
 
                     control.SomeoneUserIsWriting(userBind, isWriting);
 
-                    foreach (UserBindings existUser in control.AllUsers.Values)
+                    foreach (var existUser in control.AllUsers.Values)
                     {
                         if(existUser.User.GUID == user.GUID)
                             continue;
@@ -366,7 +366,7 @@ namespace WCFChat.Client.BasicControl
 
                     control.SomeoneUserReceveMessage(message);
 
-                    foreach (UserBindings existUser in control.AllUsers.Values)
+                    foreach (var existUser in control.AllUsers.Values)
                     {
                         if (existUser.User.GUID == message.Sender.GUID)
                             continue;
@@ -395,10 +395,10 @@ namespace WCFChat.Client.BasicControl
 
             
             UserBindings userForAccess;
-            bool result = control.AllUsers.TryGetValue(user.GUID, out userForAccess);
+            var result = control.AllUsers.TryGetValue(user.GUID, out userForAccess);
             if (result)
             {
-                RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
+                var prop = (RemoteEndpointMessageProperty)OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name];
 
                 // если коллбек инициатора запроса и коллбек который мы сохранили отличаются, то реджектим
                 if (userForAccess.CallBack != CurrentCallback)

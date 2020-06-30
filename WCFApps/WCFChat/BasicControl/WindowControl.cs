@@ -51,7 +51,7 @@ namespace WCFChat.Client.BasicControl
 
         internal List<Message> Messages()
         {
-            List<Message> allMesages = new List<Message>();
+            var allMesages = new List<Message>();
             foreach (var block in DialogHistory.Blocks)
             {
                 if (block is MyParagraph mypar)
@@ -85,7 +85,7 @@ namespace WCFChat.Client.BasicControl
 
         public bool IsUniqueNames(User newUser)
         {
-            bool currentNameAlreadyExist = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
+            var currentNameAlreadyExist = AllUsers.Values.Any(p => p.User.Name.Equals(newUser.Name, StringComparison.CurrentCultureIgnoreCase));
             return !currentNameAlreadyExist;
         }
 
@@ -96,7 +96,7 @@ namespace WCFChat.Client.BasicControl
 
         public void AddWaiter(User newUser, IChatCallback callback, string address, string port)
         {
-            UserBindings userBind = new UserBindings(newUser, callback, address, port);
+            var userBind = new UserBindings(newUser, callback, address, port);
             AddUser(userBind, $"{address}:{port}");
         }
 
@@ -125,7 +125,7 @@ namespace WCFChat.Client.BasicControl
             if (guid == null)
                 return;
 
-            bool isExist = AllUsers.TryGetValue(guid, out var userBind);
+            var isExist = AllUsers.TryGetValue(guid, out var userBind);
             if (isExist)
             {
                 AllUsers.Remove(userBind.GUID.Value);
@@ -148,9 +148,9 @@ namespace WCFChat.Client.BasicControl
 
         void AddUser(UserBindings userBind, string address, string gridName, string textblockUser, string textblockStatus, string borderName)
         {
-            ListBoxItem newUserItem = new ListBoxItem();
+            var newUserItem = new ListBoxItem();
             newUserItem.Style = (Style)mainWindow.FindResource("ListBoxItemUser");
-            Grid cloneExist = UICustomCommands.XamlClone((Grid)mainWindow.FindResource(gridName));
+            var cloneExist = UICustomCommands.XamlClone((Grid)mainWindow.FindResource(gridName));
             TextBlock userName = null;
             TextBlock userStatus = null;
             Border userBackgound = null;
@@ -192,14 +192,14 @@ namespace WCFChat.Client.BasicControl
         {
             lock (sync)
             {
-                Button button = (Button)sender;
-                Grid parentGrid = (Grid)button.Parent;
-                TextBlock userName = parentGrid.Children.OfType<TextBlock>().FirstOrDefault(p => p.Name == "UserNameAdmin");
+                var button = (Button)sender;
+                var parentGrid = (Grid)button.Parent;
+                var userName = parentGrid.Children.OfType<TextBlock>().FirstOrDefault(p => p.Name == "UserNameAdmin");
 
                 if (userName == null)
                     return;
 
-                bool isExist = AllUsers.TryGetValue(userName.ToolTip.ToString(), out UserBindings userBind);
+                var isExist = AllUsers.TryGetValue(userName.ToolTip.ToString(), out var userBind);
 
                 if (button.Name.Equals("AcceptAdmin"))
                 {
@@ -233,10 +233,10 @@ namespace WCFChat.Client.BasicControl
             if (allUsers == null)
                 return;
 
-            foreach (User user in allUsers)
+            foreach (var user in allUsers)
             {
                 UserBindings userBind;
-                bool isExist = AllUsers.TryGetValue(user.GUID, out userBind);
+                var isExist = AllUsers.TryGetValue(user.GUID, out userBind);
                 if (isExist)
                 {
                     if (!userBind.Name.Value.Equals(user.Name, StringComparison.CurrentCultureIgnoreCase))
@@ -254,15 +254,15 @@ namespace WCFChat.Client.BasicControl
 
             if (allUsers.Count != AllUsers.Count)
             {
-                List<string> forRemove = new List<string>();
-                foreach (KeyValuePair<string, UserBindings> userBind in AllUsers)
+                var forRemove = new List<string>();
+                foreach (var userBind in AllUsers)
                 {
                     if (allUsers.All(p => p.GUID != userBind.Key))
                     {
                         forRemove.Add(userBind.Key);
                     }
                 }
-                foreach (string guid in forRemove)
+                foreach (var guid in forRemove)
                 {
                     RemoveUser(guid);
                 }
@@ -298,7 +298,7 @@ namespace WCFChat.Client.BasicControl
                 Messages.Add(msg);
                 if (newParagraph)
                 {
-                    Run userName = new Run($"{msg.Sender.Name:G}:");
+                    var userName = new Run($"{msg.Sender.Name:G}:");
                     userName.Foreground = Brushes.Aqua;
                     userName.Background = Brushes.Black;
                     //userName.ToolTip = msg.Time;
@@ -326,7 +326,7 @@ namespace WCFChat.Client.BasicControl
                 }
             }
 
-            MyParagraph par = new MyParagraph(msg);
+            var par = new MyParagraph(msg);
             DialogHistory.Blocks.Add(par);
         }
 
@@ -353,7 +353,7 @@ namespace WCFChat.Client.BasicControl
         {
             lock (sync)
             {
-                foreach (UserBindings existUser in AllUsers.Values)
+                foreach (var existUser in AllUsers.Values)
                 {
                     if (existUser.CallBack != null && ((System.ServiceModel.Channels.IChannel)existUser.CallBack).State == System.ServiceModel.CommunicationState.Opened)
                         existUser.CallBack.IsWritingCallback(Initiator.User, isWriting);
@@ -363,7 +363,7 @@ namespace WCFChat.Client.BasicControl
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string richText = new TextRange(DialogWindow.ContentStart, DialogWindow.ContentEnd).Text;
+            var richText = new TextRange(DialogWindow.ContentStart, DialogWindow.ContentEnd).Text;
             CurrentUserIsSaying(richText);
             DialogWindow.Blocks.Clear();
         }
@@ -372,7 +372,7 @@ namespace WCFChat.Client.BasicControl
         {
             lock (sync)
             {
-                Message adminSay = new Message()
+                var adminSay = new Message()
                 {
                     Sender = Initiator.User,
                     Content = msg,
@@ -381,7 +381,7 @@ namespace WCFChat.Client.BasicControl
 
                 SomeoneUserReceveMessage(adminSay);
 
-                foreach (UserBindings existUser in AllUsers.Values)
+                foreach (var existUser in AllUsers.Values)
                 {
                     if (existUser.CallBack != null && ((System.ServiceModel.Channels.IChannel)existUser.CallBack).State == System.ServiceModel.CommunicationState.Opened)
                         existUser.CallBack.Receive(adminSay);

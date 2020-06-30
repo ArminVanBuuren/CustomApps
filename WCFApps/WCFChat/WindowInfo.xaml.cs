@@ -12,7 +12,7 @@ namespace WCFChat.Client
 	public partial class WindowInfo
 	{
 	    public event EventHandler DecisionAccepted;
-		public WindowInfo(string title, string message):base(false, false)
+		public WindowInfo(string title, string message)
 		{
 		    Initialize(message);
             Title = title;
@@ -20,7 +20,7 @@ namespace WCFChat.Client
 		    AcceptNewUser.Visibility = Visibility.Collapsed;
         }
 
-	    public WindowInfo(string message) : base(false, false)
+	    public WindowInfo(string message)
 	    {
 	        Title = "Request";
 	        InfoGrid.Visibility = Visibility.Collapsed;

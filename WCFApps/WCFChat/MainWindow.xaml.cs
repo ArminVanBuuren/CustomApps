@@ -50,7 +50,7 @@ namespace WCFChat.Client
             InitializeComponent();
 
             currentServer = new MainWindowChatServer(this, RequestForAccessResult);
-            ServiceHost localHost = new ServiceHost(currentServer);
+            var localHost = new ServiceHost(currentServer);
             localHost.Open();
             localAddressUri = localHost.Description.Endpoints[0].Address.ToString();
 
@@ -83,7 +83,7 @@ namespace WCFChat.Client
 
         private void AddCloud_OnClick(object sender, RoutedEventArgs e)
         {
-            Auth auth = new Auth(RegeditKey, localAddressUri);
+            var auth = new Auth(RegeditKey, localAddressUri);
             auth.IsCreate += Auth_IsCreate;
             auth.IsConnect += Auth_IsConnect;
             auth.Focus();
@@ -93,7 +93,7 @@ namespace WCFChat.Client
 
         private void Auth_IsCreate(User user, Cloud cloud)
         {
-            string trnID = Guid.NewGuid().ToString("D");
+            var trnID = Guid.NewGuid().ToString("D");
             if (mainProxy == null)
             {
                 currentServer.CreateCloud(user, cloud, trnID);
@@ -161,9 +161,9 @@ namespace WCFChat.Client
             {
                 if (isAdmin)
                 {
-                    StackPanel curentCloud = new StackPanel();
+                    var curentCloud = new StackPanel();
                     curentCloud.Orientation = Orientation.Horizontal;
-                    CheckBox unbind = new CheckBox();
+                    var unbind = new CheckBox();
                     unbind.VerticalAlignment = VerticalAlignment.Center;
                     unbind.Margin = new Thickness(0, 0, 0, -4);
                     unbind.ToolTip = "Unbind chat from main server";
@@ -183,13 +183,13 @@ namespace WCFChat.Client
         {
             Dispatcher?.Invoke(() =>
             {
-                CheckBox unbindChk = (CheckBox) sender;
+                var unbindChk = (CheckBox) sender;
                 unbindChk.IsEnabled = false;
 
                 if (mainProxy != null)
                 {
-                    StackPanel panel = (StackPanel) unbindChk.Parent;
-                    Grid grid = (Grid) panel.Parent;
+                    var panel = (StackPanel) unbindChk.Parent;
+                    var grid = (Grid) panel.Parent;
                     mainProxy.UnbindAsync(grid.ToolTip.ToString());
                 }
             });
@@ -229,7 +229,7 @@ namespace WCFChat.Client
                 InnerWaiterCloud createCloud;
                 lock (sync)
                 {
-                    bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
+                    var isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
 
                     if (!isWaiting)
                         return;
@@ -271,7 +271,7 @@ namespace WCFChat.Client
 
         private void Auth_IsConnect(User user, Cloud cloud)
         {
-            string trnID = Guid.NewGuid().ToString("D");
+            var trnID = Guid.NewGuid().ToString("D");
             Grid newItemGrid;
             lock (sync)
             {
@@ -317,7 +317,7 @@ namespace WCFChat.Client
                 InnerWaiterCloud createCloud;
                 lock (sync)
                 {
-                    bool isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
+                    var isWaiting = listBoxAllClouds.TryGetValue(transactionID, out createCloud);
 
                     if (!isWaiting)
                         return;
@@ -371,7 +371,7 @@ namespace WCFChat.Client
         {
             Dispatcher?.Invoke(() =>
             {
-                object selectedItem = NameOfCloud.SelectedItem;
+                var selectedItem = NameOfCloud.SelectedItem;
                 var selectedListBoxItem = NameOfCloud.ItemContainerGenerator.ContainerFromItem(selectedItem);
                 if (selectedListBoxItem is Grid grid)
                 {
@@ -433,7 +433,7 @@ namespace WCFChat.Client
         {
             Dispatcher?.Invoke(() =>
             {
-                WindowInfo windowError = new WindowInfo(isError ? "Error" : "Warning", msg);
+                var windowError = new WindowInfo(isError ? "Error" : "Warning", msg);
                 windowError.Owner = this;
                 windowError.Focus();
                 windowError.ShowDialog();
