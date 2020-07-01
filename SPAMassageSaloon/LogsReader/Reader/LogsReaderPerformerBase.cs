@@ -44,6 +44,8 @@ namespace LogsReader.Reader
 
 		public int RowsLimit => _currentSettings.RowsLimit;
 
+		public (Func<string, TraceParseResult>, Func<string, bool>)? TraceParseCustomFunction { get; }
+
 		public LRTraceParsePatternItem[] TraceParsePatterns => _currentSettings.TraceParse.Patterns;
 
 		public LRTraceParseTransactionItem[] TransactionPatterns => _currentSettings.TraceParse.TransactionPatterns;
@@ -53,6 +55,8 @@ namespace LogsReader.Reader
 		public Regex StartTraceWith => _currentSettings.TraceParse.StartTraceWith;
 
 		public Regex EndTraceWith => _currentSettings.TraceParse.EndTraceWith;
+
+		public Regex IsTraceError => _currentSettings.TraceParse.IsTraceError;
 
 		public bool IsDisposed { get; private set; } = false;
 
@@ -92,6 +96,9 @@ namespace LogsReader.Reader
 				GetTraceReader = (data) => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
 			else
 				GetTraceReader = (data) => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
+
+			if (_currentSettings.TraceParse.IsCorrectCustomFunction)
+				TraceParseCustomFunction = _currentSettings.TraceParse.GetCustomFunction();
 		}
 
 		protected LogsReaderPerformerBase(LogsReaderPerformerBase control)
@@ -101,6 +108,7 @@ namespace LogsReader.Reader
 			_transactionValues = control._transactionValues;
 			IsMatchByTransactions = control.IsMatchByTransactions;
 			GetTraceReader = control.GetTraceReader;
+			TraceParseCustomFunction = control.TraceParseCustomFunction;
 		}
 
 		protected void ResetMatchFunc(string findMessage, bool useRegex)
@@ -123,13 +131,13 @@ namespace LogsReader.Reader
 		/// Добавить спарсенную транзакцию в общий список для всех лог файлов, текущей схемы
 		/// </summary>
 		/// <param name="trn"></param>
-		protected void AddTransactionValue(string trn)
+		protected bool AddTransactionValue(string trn)
 		{
 			if (trn.IsNullOrEmptyTrim())
-				return;
+				return false;
 
 			if (_transactionValues.ContainsKey(trn))
-				return;
+				return false;
 
 			_transactionValues.TryAdd(trn, new Regex(Regex.Escape(trn),
 				RegexOptions.Compiled | RegexOptions.CultureInvariant,
@@ -137,6 +145,8 @@ namespace LogsReader.Reader
 
 			if (_transactionValues.Count > 100)
 				_transactionValues.TryRemove(_transactionValues.First().Key, out _);
+
+			return true;
 		}
 
 		/// <summary>

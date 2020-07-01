@@ -224,7 +224,7 @@
     <value>Поле OrderBy - '{0}' - некорректно!</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrRegex" xml:space="preserve">
-    <value>Схема '{0}' в ноде 'TraceParse' - имеет некорректный Regex паттерн</value>
+    <value>Возникла ошибка при загрузке схемы '{0}'. Проверьте корректность Regex паттернов в нодах 'TraceParse\@Pattern'.</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrUnique" xml:space="preserve">
     <value>Столбцы должны быть уникальными!</value>
@@ -451,5 +451,8 @@
   </data>
   <data name="Txt_LogsReaderForm_SearchPatternIsNull" xml:space="preserve">
     <value>Пожалуйста введите критерий поиска</value>
+  </data>
+  <data name="Txt_LRSettingsScheme_ErrCustmFuncLoad" xml:space="preserve">
+    <value>Возникла ошибка при загрузке схемы '{0}' во время компиляции кастомных функций в ноде 'TraceParse\@Custom'.</value>
   </data>
 </root>

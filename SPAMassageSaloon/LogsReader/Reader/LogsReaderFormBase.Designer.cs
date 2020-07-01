@@ -26,6 +26,7 @@ namespace LogsReader.Reader
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.IsSuccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,9 +55,14 @@ namespace LogsReader.Reader
 			this.CobxTraceNameFilter = new System.Windows.Forms.ComboBox();
 			this.ChbxAlreadyUseFilter = new System.Windows.Forms.CheckBox();
 			this.btnExport = new System.Windows.Forms.Button();
+			this.labelError = new System.Windows.Forms.Label();
+			this.buttonNext = new System.Windows.Forms.Button();
+			this.buttonPrev = new System.Windows.Forms.Button();
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
+			this.CustomPanel = new System.Windows.Forms.Panel();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.notepad = new Utils.WinForm.Notepad.NotepadControl();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.EnumSplitContainer)).BeginInit();
@@ -70,11 +76,13 @@ namespace LogsReader.Reader
 			this.ParentSplitContainer.Panel2.SuspendLayout();
 			this.ParentSplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
+			this.MainSplitContainer.Panel1.SuspendLayout();
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// dgvFiles
+			// DgvData
 			// 
 			this.DgvData.AllowUserToAddRows = false;
 			this.DgvData.AllowUserToDeleteRows = false;
@@ -85,6 +93,7 @@ namespace LogsReader.Reader
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SchemeName,
             this.PrivateID,
+            this.IsSuccess,
             this.ID,
             this.Server,
             this.TraceName,
@@ -93,7 +102,7 @@ namespace LogsReader.Reader
 			this.DgvData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvData.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.DgvData.Location = new System.Drawing.Point(0, 0);
-			this.DgvData.Name = "dgvFiles";
+			this.DgvData.Name = "DgvData";
 			this.DgvData.ReadOnly = true;
 			this.DgvData.RowHeadersVisible = false;
 			this.DgvData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -104,63 +113,76 @@ namespace LogsReader.Reader
 			// 
 			// SchemeName
 			// 
-			this.SchemeName.MinimumWidth = 5;
+			this.SchemeName.Name = "SchemeName";
 			this.SchemeName.ReadOnly = true;
+			this.SchemeName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.SchemeName.Visible = false;
 			this.SchemeName.Width = 5;
-			this.SchemeName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// PrivateID
 			// 
-			this.PrivateID.MinimumWidth = 5;
+			this.PrivateID.Name = "PrivateID";
 			this.PrivateID.ReadOnly = true;
+			this.PrivateID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.PrivateID.Visible = false;
 			this.PrivateID.Width = 5;
-			this.PrivateID.SortMode = DataGridViewColumnSortMode.Programmatic;
+			// 
+			// IsSuccess
+			// 
+			this.IsSuccess.Name = "IsSuccess";
+			this.IsSuccess.ReadOnly = true;
+			this.IsSuccess.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IsSuccess.Visible = false;
+			this.IsSuccess.Width = 5;
 			// 
 			// ID
 			// 
 			this.ID.MinimumWidth = 35;
+			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
+			this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.ID.Width = 35;
-			this.ID.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// Server
 			// 
 			this.Server.MinimumWidth = 48;
+			this.Server.Name = "Server";
 			this.Server.ReadOnly = true;
+			this.Server.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.Server.Width = 50;
-			this.Server.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// TraceName
 			// 
 			this.TraceName.MinimumWidth = 75;
+			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
+			this.TraceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.TraceName.Width = 80;
-			this.TraceName.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// DateOfTrace
 			// 
 			this.DateOfTrace.MinimumWidth = 40;
+			this.DateOfTrace.Name = "DateOfTrace";
 			this.DateOfTrace.ReadOnly = true;
+			this.DateOfTrace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.DateOfTrace.Width = 140;
-			this.DateOfTrace.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
 			// File
 			// 
 			this.File.MinimumWidth = 40;
+			this.File.Name = "File";
 			this.File.ReadOnly = true;
+			this.File.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.File.Width = 1000;
-			this.File.SortMode = DataGridViewColumnSortMode.Programmatic;
 			// 
-			// BTNSearch
+			// BtnSearch
 			// 
 			this.BtnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.BtnSearch.BackColor = System.Drawing.SystemColors.Control;
 			this.BtnSearch.Image = global::LogsReader.Properties.Resources.find;
 			this.BtnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.BtnSearch.Location = new System.Drawing.Point(943, 2);
-			this.BtnSearch.Name = "BTNSearch";
+			this.BtnSearch.Name = "BtnSearch";
 			this.BtnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.BtnSearch.Size = new System.Drawing.Size(90, 24);
 			this.BtnSearch.TabIndex = 3;
@@ -183,12 +205,12 @@ namespace LogsReader.Reader
 			this.btnClear.UseVisualStyleBackColor = true;
 			this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
 			// 
-			// txtPattern
+			// TbxPattern
 			// 
 			this.TbxPattern.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxPattern.Location = new System.Drawing.Point(8, 3);
-			this.TbxPattern.Name = "txtPattern";
+			this.TbxPattern.Name = "TbxPattern";
 			this.TbxPattern.Size = new System.Drawing.Size(840, 23);
 			this.TbxPattern.TabIndex = 1;
 			this.TbxPattern.TextChanged += new System.EventHandler(this.TxtPatternOnTextChanged);
@@ -242,12 +264,12 @@ namespace LogsReader.Reader
 			this.descriptionText.TabIndex = 21;
 			this.descriptionText.Text = "";
 			// 
-			// useRegex
+			// ChbxUseRegex
 			// 
 			this.ChbxUseRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxUseRegex.AutoSize = true;
 			this.ChbxUseRegex.Location = new System.Drawing.Point(858, 6);
-			this.ChbxUseRegex.Name = "useRegex";
+			this.ChbxUseRegex.Name = "ChbxUseRegex";
 			this.ChbxUseRegex.Size = new System.Drawing.Size(79, 19);
 			this.ChbxUseRegex.TabIndex = 2;
 			this.ChbxUseRegex.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_UseRegex;
@@ -261,6 +283,7 @@ namespace LogsReader.Reader
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(67, 15);
 			this.label7.TabIndex = 24;
+			this.label7.Text = "TraceName";
 			// 
 			// label9
 			// 
@@ -271,35 +294,35 @@ namespace LogsReader.Reader
 			this.label9.TabIndex = 23;
 			this.label9.Text = "Date End";
 			// 
-			// traceNameFilter
+			// TbxTraceNameFilter
 			// 
 			this.TbxTraceNameFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxTraceNameFilter.Location = new System.Drawing.Point(403, 7);
-			this.TbxTraceNameFilter.Name = "traceNameFilter";
+			this.TbxTraceNameFilter.Name = "TbxTraceNameFilter";
 			this.TbxTraceNameFilter.Size = new System.Drawing.Size(444, 23);
 			this.TbxTraceNameFilter.TabIndex = 9;
 			this.TbxTraceNameFilter.TextChanged += new System.EventHandler(this.TbxTraceNameFilterOnTextChanged);
 			// 
-			// dateEndFilter
+			// DateEndFilter
 			// 
 			this.DateEndFilter.Checked = false;
 			this.DateEndFilter.CustomFormat = "dd.MM.yyyy HH:mm:ss";
 			this.DateEndFilter.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.DateEndFilter.Location = new System.Drawing.Point(68, 34);
-			this.DateEndFilter.Name = "dateEndFilter";
+			this.DateEndFilter.Name = "DateEndFilter";
 			this.DateEndFilter.ShowCheckBox = true;
 			this.DateEndFilter.ShowUpDown = true;
 			this.DateEndFilter.Size = new System.Drawing.Size(151, 23);
 			this.DateEndFilter.TabIndex = 6;
 			// 
-			// dateStartFilter
+			// DateStartFilter
 			// 
 			this.DateStartFilter.Checked = false;
 			this.DateStartFilter.CustomFormat = "dd.MM.yyyy HH:mm:ss";
 			this.DateStartFilter.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.DateStartFilter.Location = new System.Drawing.Point(68, 7);
-			this.DateStartFilter.Name = "dateStartFilter";
+			this.DateStartFilter.Name = "DateStartFilter";
 			this.DateStartFilter.ShowCheckBox = true;
 			this.DateStartFilter.ShowUpDown = true;
 			this.DateStartFilter.Size = new System.Drawing.Size(151, 23);
@@ -314,13 +337,13 @@ namespace LogsReader.Reader
 			this.label8.TabIndex = 22;
 			this.label8.Text = "Date Start";
 			// 
-			// buttonFilter
+			// btnFilter
 			// 
 			this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnFilter.Image = global::LogsReader.Properties.Resources.filter;
 			this.btnFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnFilter.Location = new System.Drawing.Point(853, 7);
-			this.btnFilter.Name = "buttonFilter";
+			this.btnFilter.Name = "btnFilter";
 			this.btnFilter.Padding = new System.Windows.Forms.Padding(5, 0, 7, 0);
 			this.btnFilter.Size = new System.Drawing.Size(100, 23);
 			this.btnFilter.TabIndex = 11;
@@ -329,13 +352,13 @@ namespace LogsReader.Reader
 			this.btnFilter.UseVisualStyleBackColor = true;
 			this.btnFilter.Click += new System.EventHandler(this.BtnFilter_Click);
 			// 
-			// buttonReset
+			// btnReset
 			// 
 			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReset.Image = global::LogsReader.Properties.Resources.reset2;
 			this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnReset.Location = new System.Drawing.Point(853, 34);
-			this.btnReset.Name = "buttonReset";
+			this.btnReset.Name = "btnReset";
 			this.btnReset.Padding = new System.Windows.Forms.Padding(2, 0, 7, 0);
 			this.btnReset.Size = new System.Drawing.Size(100, 23);
 			this.btnReset.TabIndex = 12;
@@ -349,16 +372,16 @@ namespace LogsReader.Reader
 			this.label11.AutoSize = true;
 			this.label11.Location = new System.Drawing.Point(225, 37);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(35, 15);
+			this.label11.Size = new System.Drawing.Size(57, 15);
 			this.label11.TabIndex = 30;
-			this.label11.Text = "Trace";
+			this.label11.Text = "Full Trace";
 			// 
-			// traceMessageFilter
+			// TbxTraceMessageFilter
 			// 
 			this.TbxTraceMessageFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxTraceMessageFilter.Location = new System.Drawing.Point(403, 34);
-			this.TbxTraceMessageFilter.Name = "traceMessageFilter";
+			this.TbxTraceMessageFilter.Name = "TbxTraceMessageFilter";
 			this.TbxTraceMessageFilter.Size = new System.Drawing.Size(444, 23);
 			this.TbxTraceMessageFilter.TabIndex = 10;
 			this.TbxTraceMessageFilter.TextChanged += new System.EventHandler(this.TbxTraceMessageFilterOnTextChanged);
@@ -388,7 +411,7 @@ namespace LogsReader.Reader
 			this.filterPanel.Size = new System.Drawing.Size(1152, 64);
 			this.filterPanel.TabIndex = 28;
 			// 
-			// traceMessageFilterComboBox
+			// CobxTraceMessageFilter
 			// 
 			this.CobxTraceMessageFilter.BackColor = System.Drawing.SystemColors.Window;
 			this.CobxTraceMessageFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -396,45 +419,45 @@ namespace LogsReader.Reader
 			this.CobxTraceMessageFilter.FormattingEnabled = true;
 			this.CobxTraceMessageFilter.Location = new System.Drawing.Point(298, 35);
 			this.CobxTraceMessageFilter.MaxDropDownItems = 2;
-			this.CobxTraceMessageFilter.Name = "traceMessageFilterComboBox";
+			this.CobxTraceMessageFilter.Name = "CobxTraceMessageFilter";
 			this.CobxTraceMessageFilter.Size = new System.Drawing.Size(102, 21);
 			this.CobxTraceMessageFilter.TabIndex = 8;
 			this.CobxTraceMessageFilter.SelectedIndexChanged += new System.EventHandler(this.CobxTraceMessageFilter_SelectedIndexChanged);
 			this.CobxTraceMessageFilter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
 			// 
-			// traceNameFilterComboBox
+			// CobxTraceNameFilter
 			// 
 			this.CobxTraceNameFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.CobxTraceNameFilter.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.CobxTraceNameFilter.FormattingEnabled = true;
 			this.CobxTraceNameFilter.Location = new System.Drawing.Point(298, 8);
 			this.CobxTraceNameFilter.MaxDropDownItems = 2;
-			this.CobxTraceNameFilter.Name = "traceNameFilterComboBox";
+			this.CobxTraceNameFilter.Name = "CobxTraceNameFilter";
 			this.CobxTraceNameFilter.Size = new System.Drawing.Size(102, 21);
 			this.CobxTraceNameFilter.TabIndex = 7;
 			this.CobxTraceNameFilter.SelectedIndexChanged += new System.EventHandler(this.CobxTraceNameFilter_SelectedIndexChanged);
 			this.CobxTraceNameFilter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_KeyPress);
 			// 
-			// alreadyUseFilter
+			// ChbxAlreadyUseFilter
 			// 
 			this.ChbxAlreadyUseFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxAlreadyUseFilter.AutoSize = true;
 			this.ChbxAlreadyUseFilter.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(962, 37);
-			this.ChbxAlreadyUseFilter.Name = "alreadyUseFilter";
+			this.ChbxAlreadyUseFilter.Name = "ChbxAlreadyUseFilter";
 			this.ChbxAlreadyUseFilter.Size = new System.Drawing.Size(158, 19);
 			this.ChbxAlreadyUseFilter.TabIndex = 14;
 			this.ChbxAlreadyUseFilter.Text = "Use filter when searching";
 			this.ChbxAlreadyUseFilter.UseVisualStyleBackColor = true;
 			this.ChbxAlreadyUseFilter.CheckedChanged += new System.EventHandler(this.ChbxAlreadyUseFilter_CheckedChanged);
 			// 
-			// buttonExport
+			// btnExport
 			// 
 			this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnExport.Image = global::LogsReader.Properties.Resources.save2;
 			this.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnExport.Location = new System.Drawing.Point(959, 7);
-			this.btnExport.Name = "buttonExport";
+			this.btnExport.Name = "btnExport";
 			this.btnExport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.btnExport.Size = new System.Drawing.Size(110, 23);
 			this.btnExport.TabIndex = 13;
@@ -442,6 +465,43 @@ namespace LogsReader.Reader
 			this.btnExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnExport.UseVisualStyleBackColor = true;
 			this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+			// 
+			// labelError
+			// 
+			this.labelError.AutoSize = true;
+			this.labelError.Image = global::LogsReader.Properties.Resources.error2;
+			this.labelError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelError.Location = new System.Drawing.Point(26, 4);
+			this.labelError.Name = "labelError";
+			this.labelError.Size = new System.Drawing.Size(53, 15);
+			this.labelError.TabIndex = 31;
+			this.labelError.Text = "       Error";
+			// 
+			// buttonNext
+			// 
+			this.buttonNext.BackColor = System.Drawing.Color.White;
+			this.buttonNext.Image = global::LogsReader.Properties.Resources.next_2;
+			this.buttonNext.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.buttonNext.Location = new System.Drawing.Point(82, 0);
+			this.buttonNext.Name = "buttonNext";
+			this.buttonNext.Size = new System.Drawing.Size(24, 24);
+			this.buttonNext.TabIndex = 1;
+			this.buttonNext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonNext.UseVisualStyleBackColor = false;
+			this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+			// 
+			// buttonPrev
+			// 
+			this.buttonPrev.BackColor = System.Drawing.Color.White;
+			this.buttonPrev.Image = global::LogsReader.Properties.Resources.previous_2;
+			this.buttonPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonPrev.Location = new System.Drawing.Point(3, 0);
+			this.buttonPrev.Name = "buttonPrev";
+			this.buttonPrev.Size = new System.Drawing.Size(24, 24);
+			this.buttonPrev.TabIndex = 0;
+			this.buttonPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.buttonPrev.UseVisualStyleBackColor = false;
+			this.buttonPrev.Click += new System.EventHandler(this.buttonPrev_Click);
 			// 
 			// searchPanel
 			// 
@@ -485,7 +545,13 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.MainSplitContainer.Location = new System.Drawing.Point(0, 0);
 			this.MainSplitContainer.Name = "MainSplitContainer";
-			this.MainSplitContainer.Panel1MinSize = 60;
+			// 
+			// MainSplitContainer.Panel1
+			// 
+			this.MainSplitContainer.Panel1.BackColor = System.Drawing.Color.White;
+			this.MainSplitContainer.Panel1.Controls.Add(this.CustomPanel);
+			this.MainSplitContainer.Panel1.Controls.Add(this.panel1);
+			this.MainSplitContainer.Panel1MinSize = 116;
 			// 
 			// MainSplitContainer.Panel2
 			// 
@@ -493,6 +559,27 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Size = new System.Drawing.Size(680, 470);
 			this.MainSplitContainer.SplitterDistance = 213;
 			this.MainSplitContainer.TabIndex = 0;
+			// 
+			// CustomPanel
+			// 
+			this.CustomPanel.BackColor = System.Drawing.SystemColors.Control;
+			this.CustomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.CustomPanel.Location = new System.Drawing.Point(0, 26);
+			this.CustomPanel.Name = "CustomPanel";
+			this.CustomPanel.Size = new System.Drawing.Size(209, 440);
+			this.CustomPanel.TabIndex = 1;
+			// 
+			// panel1
+			// 
+			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.labelError);
+			this.panel1.Controls.Add(this.buttonNext);
+			this.panel1.Controls.Add(this.buttonPrev);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(209, 26);
+			this.panel1.TabIndex = 2;
 			// 
 			// notepad
 			// 
@@ -539,9 +626,12 @@ namespace LogsReader.Reader
 			this.ParentSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ParentSplitContainer)).EndInit();
 			this.ParentSplitContainer.ResumeLayout(false);
+			this.MainSplitContainer.Panel1.ResumeLayout(false);
 			this.MainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -558,23 +648,25 @@ namespace LogsReader.Reader
         private Label label11;
         private Panel filterPanel;
         private SplitContainer EnumSplitContainer;
-        private RichTextBox descriptionText;
+        private SplitContainer ParentSplitContainer;
+        private SplitContainer MainSplitContainer;
+		private RichTextBox descriptionText;
         private Panel searchPanel;
         private Button btnExport;
         private DataGridViewTextBoxColumn SchemeName;
         private DataGridViewTextBoxColumn PrivateID;
+        private DataGridViewTextBoxColumn IsSuccess;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Server;
         private DataGridViewTextBoxColumn TraceName;
         private DataGridViewTextBoxColumn DateOfTrace;
         private DataGridViewTextBoxColumn File;
-        private SplitContainer ParentSplitContainer;
         private NotepadControl notepad;
 
         protected CustomDataGridView DgvData;
-        protected SplitContainer MainSplitContainer;
+        protected Panel CustomPanel;
 
-        internal Button BtnSearch;
+		internal Button BtnSearch;
         internal TextBox TbxPattern;
         internal CheckBox ChbxUseRegex;
         internal DateTimePicker DateStartFilter;
@@ -584,6 +676,10 @@ namespace LogsReader.Reader
         internal TextBox TbxTraceNameFilter;
         internal TextBox TbxTraceMessageFilter;
         internal CheckBox ChbxAlreadyUseFilter;
+		private Button buttonPrev;
+		private Button buttonNext;
+		private Label labelError;
+		private Panel panel1;
 	}
 }
 

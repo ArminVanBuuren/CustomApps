@@ -29,7 +29,7 @@ namespace LogsReader.Reader
 				        var appendedToTraceMessage = Found.TraceMessage + Environment.NewLine + line;
 				        // Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
 				        // Иначе строка относится к другому логу и завершается дополнение
-				        if (IsLineMatch(line) == null && IsTraceMatch(appendedToTraceMessage, out var newResult))
+				        if (!IsLineMatch(line) && IsTraceMatch(appendedToTraceMessage, out var newResult))
 				        {
 					        Found.MergeDataTemplates(newResult);
 					        return;

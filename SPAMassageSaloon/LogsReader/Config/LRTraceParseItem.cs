@@ -20,7 +20,6 @@ namespace LogsReader.Config
 			CDataItem = new XmlNode[] { new XmlDocument().CreateCDataSection(regexPattern) };
 		}
 
-
 		[XmlText]
 		public XmlNode[] CDataItem
 		{
@@ -30,15 +29,15 @@ namespace LogsReader.Config
 				RegexItem = GetCDataNode(value, true, out _cdataItem);
 				if (RegexItem != null)
 				{
-					IsCorrectRegex = true;
+					IsCorrect = true;
 					return;
 				}
 
-				IsCorrectRegex = false;
+				IsCorrect = false;
 			}
 		}
 
-		[XmlIgnore] internal override bool IsCorrectRegex { get; set; }
+		[XmlIgnore] internal override bool IsCorrect { get; set; }
 		[XmlIgnore] internal Regex RegexItem { get; private set; }
 	}
 }

@@ -100,13 +100,14 @@ namespace LogsReader.Reader
 			        Name = "panelCollapseSelectAll",
 			        Padding = new Padding(3),
 			        Size = new Size(181, 27),
+					BackColor = Color.FromArgb(251, 251, 251),
 			        TabIndex = 28
 		        };
 		        panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
 
-		        MainSplitContainer.Panel1.Controls.Add(panelFlowDoc);
-		        MainSplitContainer.Panel1.Controls.Add(panelCollapseSelectAll);
-		        MainSplitContainer.Panel1MinSize = 115;
+		        CustomPanel.Controls.Add(panelFlowDoc);
+		        CustomPanel.Controls.Add(panelCollapseSelectAll);
+		        CustomPanelMinSize = 126;
 
 		        #endregion
 			}

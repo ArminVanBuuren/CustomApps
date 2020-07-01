@@ -7,7 +7,14 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-    public delegate void FoundDataTemplate(DataTemplate item);
+	public enum TraceReaderSearchType
+	{
+		ByCustomFunctions = 0,
+		ByRegexPatterns = 1,
+		ByBoth = 3
+	}
+
+	public delegate void FoundDataTemplate(DataTemplate item);
 
     public abstract class TraceReader : LogsReaderPerformerBase
     {
@@ -101,21 +108,30 @@ namespace LogsReader.Reader
 
         public long Lines { get; protected set; } = 0;
 
-        protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) : base(control)
-        {
-	        PastTraceLines = new Queue<string>(MaxTraceLines);
+		public TraceReaderSearchType SearchType { get; }
 
-            Server = server;
-            FilePath = filePath;
-            File = new FileInfo(filePath);
+		protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) : base(control)
+		{
+			PastTraceLines = new Queue<string>(MaxTraceLines);
 
-            OriginalFolder = originalFolder;
-            FileNamePartial = IO.GetPartialPath(FilePath, OriginalFolder);
+			Server = server;
+			FilePath = filePath;
+			File = new FileInfo(filePath);
 
-            SearchByTransaction = TransactionPatterns != null && TransactionPatterns.Length > 0;
-        }
+			OriginalFolder = originalFolder;
+			FileNamePartial = IO.GetPartialPath(FilePath, OriginalFolder);
 
-        public abstract void ReadLine(string line);
+			if (TraceParseCustomFunction != null && TraceParsePatterns != null && TraceParsePatterns.Length > 0)
+				SearchType = TraceReaderSearchType.ByBoth;
+			else if (TraceParseCustomFunction != null)
+				SearchType = TraceReaderSearchType.ByCustomFunctions;
+			else if (TraceParsePatterns != null && TraceParsePatterns.Length > 0)
+				SearchType = TraceReaderSearchType.ByRegexPatterns;
+
+			SearchByTransaction = TransactionPatterns != null && TransactionPatterns.Length > 0;
+		}
+
+		public abstract void ReadLine(string line);
 
         protected bool IsMatched(string input)
         {
@@ -158,122 +174,216 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var traceParsePattern in TraceParsePatterns)
+            var foundLineId = failed?.FoundLineID ?? Lines;
+
+            switch (SearchType)
             {
-                Match match;
-                try
-                {
-	                match = traceParsePattern.RegexItem.Match(traceMessage);
-                }
-                catch (Exception ex)
-                {
-	                if (throwException)
-		                throw;
-
-	                result = new DataTemplate(this, failed?.FoundLineID ?? Lines, input, _trn, ex);
-	                return false;
-                }
-
-                if (match.Success && match.Value.Length == traceMessage.Length)
-                {
-                    var current = new DataTemplate(
-	                    this,
-                        failed?.FoundLineID ?? Lines,
-	                    traceParsePattern.GetParsingResult(match),
-	                    traceMessage,
-                        _trn);
-
-                    if (SearchByTransaction && TransactionPatterns != null && TransactionPatterns.Length > 0)
-                    {
-	                    try
-	                    {
-		                    foreach (var transactionParsePattern in TransactionPatterns)
-		                    {
-			                    var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
-			                    if (trnMatch.Success)
-			                    {
-				                    var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
-				                    AddTransactionValue(trnValue);
-
-				                    if (PastTraceLines.Count > 0)
-				                    {
-                                        // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
-                                        var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
-					                    innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
-					                    innerReader._trn = trnValue;
-					                    innerReader.Lines = (failed?.FoundLineID ?? Lines) - PastTraceLines.Count - 1; // возвращаемся обратно к первой сохраненной строке
-					                    innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
-
-					                    void OnPastFound(DataTemplate pastItem)
-					                    {
-						                    if (pastItem.IsMatched && !pastItem.Equals(current))
-						                    {
-							                    AddResult(pastItem);
-						                    }
-                                        }
-
-					                    innerReader.OnFound += OnPastFound;
-					                    foreach (var pastLine in PastTraceLines)
-					                    {
-						                    innerReader.ReadLine(pastLine);
-					                    }
-
-					                    try { innerReader.Commit(); }
-					                    catch (Exception)
-					                    {
-						                    // ignored
-					                    }
-                                        
-                                        innerReader.OnFound -= OnPastFound;
-
-                                        // очищаем предыдущие данные, т.к. трейс успешно был спарсен в текущем контексте
-                                        // и также в дочернем вызове был произведен поиск по транзакциям
-                                        PastTraceLines.Clear();
-				                    }
-
-				                    break;
-			                    }
-		                    }
-	                    }
-	                    catch (Exception)
-	                    {
-		                    // ignored
-	                    }
-                    }
-
-                    result = current;
-                    return true;
-                }
+				case TraceReaderSearchType.ByCustomFunctions:
+					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
+						return true;
+					break;
+				case TraceReaderSearchType.ByRegexPatterns:
+					if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
+						return true;
+					break;
+				case TraceReaderSearchType.ByBoth:
+					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
+						return true;
+					if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
+						return true;
+					break;
+				default:
+					throw new NotSupportedException();
             }
 
             result = new DataTemplate(this, Lines, traceMessage, _trn);
             return false;
         }
 
-        protected Match IsLineMatch(string input)
+        bool IsTraceMatchByCustomFunction(string traceMessage, long foundLineId, out DataTemplate result)
         {
-            // замена '\r' чинит баг с некорректным парсингом
-            var traceMessage = input.Replace("\r", string.Empty);
-            foreach (var traceParsePattern in TraceParsePatterns.Select(x => x.RegexItem))
-            {
-                Match match;
-                try
-                {
-                    match = traceParsePattern.Match(traceMessage);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-                
-                if (match.Success && match.Value.Length == traceMessage.Length)
-                    return match;
-            }
+			var traceParceResult = TraceParseCustomFunction.Value.Item1.Invoke(traceMessage);
+			if (traceParceResult.IsMatched)
+			{
+				var current = new DataTemplate(
+					this,
+					foundLineId,
+					traceParceResult,
+					traceMessage,
+					_trn);
 
-            return null;
+				TransactionsSearch(traceMessage, current);
+
+				result = current;
+				return true;
+			}
+
+			result = null;
+	        return false;
         }
 
-        public override bool Equals(object obj)
+		bool IsTraceMatchByRegexPatterns(string traceMessage, long foundLineId, out DataTemplate result, bool throwException)
+        {
+	        foreach (var traceParsePattern in TraceParsePatterns)
+	        {
+		        Match match;
+		        try
+		        {
+			        match = traceParsePattern.RegexItem.Match(traceMessage);
+		        }
+		        catch (Exception ex)
+		        {
+			        if (throwException)
+				        throw;
+
+			        result = new DataTemplate(this, foundLineId, traceMessage, _trn, ex);
+			        return false;
+		        }
+
+		        if (!match.Success || match.Value.Length != traceMessage.Length)
+			        continue;
+
+		        var current = new DataTemplate(
+			        this,
+			        foundLineId,
+			        traceParsePattern.GetParsingResult(match),
+			        traceMessage,
+			        _trn);
+
+		        TransactionsSearch(traceMessage, current);
+
+		        result = current;
+		        return true;
+	        }
+
+	        result = null;
+	        return false;
+        }
+
+        /// <summary>
+		/// поиск по транзакциям
+		/// </summary>
+		/// <param name="traceMessage">Успешно спарсенный трейс</param>
+		/// <param name="current">Успешно созданный темплейт</param>
+		void TransactionsSearch(string traceMessage, DataTemplate current)
+        {
+	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0) 
+		        return;
+
+	        try
+            {
+	            foreach (var transactionParsePattern in TransactionPatterns)
+	            {
+		            // пытаемся из успешного результата найти транзакцию
+		            var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
+		            if (!trnMatch.Success)
+			            continue;
+
+		            // Текущая транзакция. Подставляется из группировок regex replace mode
+		            var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
+		            if (!AddTransactionValue(trnValue)) // добавляем новую транзакцию в общую коллекцию спарсенных транзакций
+			            break; // если транзакция найдена, но по результатам replace mode значение пустое, или транзакция уже была в списках, то завершаем поиск транзакций
+
+		            // если сохранились предыдущие строки, то ищем текущую транзакцию в предыдущих строках
+		            if (PastTraceLines.Count > 0)
+		            {
+			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
+			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
+			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
+			            innerReader._trn = trnValue;
+			            innerReader.Lines = current.FoundLineID - PastTraceLines.Count - 1; // возвращаемся обратно к первой сохраненной строке
+			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
+
+			            void OnPastFound(DataTemplate pastItem)
+			            {
+				            if (pastItem.IsMatched && !pastItem.Equals(current))
+				            {
+					            AddResult(pastItem);
+				            }
+			            }
+
+			            innerReader.OnFound += OnPastFound;
+			            foreach (var pastLine in PastTraceLines)
+			            {
+				            innerReader.ReadLine(pastLine);
+			            }
+
+			            try
+			            {
+				            innerReader.Commit();
+			            }
+			            catch (Exception)
+			            {
+				            // ignored
+			            }
+
+			            innerReader.OnFound -= OnPastFound;
+
+			            // очищаем предыдущие данные, т.к. трейс успешно был спарсен в текущем контексте
+			            // и также в дочернем вызове был произведен поиск по транзакциям
+			            PastTraceLines.Clear();
+		            }
+
+		            break;
+	            }
+            }
+            catch (Exception)
+            {
+	            // ignored
+            }
+        }
+
+        protected bool IsLineMatch(string input)
+        {
+	        // замена '\r' чинит баг с некорректным парсингом
+	        var traceMessage = input.Replace("\r", string.Empty);
+
+			switch (SearchType)
+			{
+				case TraceReaderSearchType.ByCustomFunctions:
+					return IsLineMatchByCustomFunction(traceMessage);
+				case TraceReaderSearchType.ByRegexPatterns:
+					return IsLineMatchByRegexPatterns(traceMessage);
+				case TraceReaderSearchType.ByBoth:
+					if (IsLineMatchByCustomFunction(traceMessage))
+						return true;
+					if (IsLineMatchByRegexPatterns(traceMessage))
+						return true;
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+
+			return false;
+        }
+
+        protected bool IsLineMatchByCustomFunction(string traceMessage)
+        {
+	        return TraceParseCustomFunction.Value.Item2.Invoke(traceMessage);
+        }
+
+        protected bool IsLineMatchByRegexPatterns(string traceMessage)
+        {
+	        foreach (var traceParsePattern in TraceParsePatterns.Select(x => x.RegexItem))
+	        {
+		        Match match;
+		        try
+		        {
+			        match = traceParsePattern.Match(traceMessage);
+		        }
+		        catch (Exception)
+		        {
+			        return false;
+		        }
+
+		        if (match.Success && match.Value.Length == traceMessage.Length)
+			        return true;
+	        }
+
+			return false;
+        }
+
+		public override bool Equals(object obj)
         {
 	        var isEqual = false;
 	        if (obj is TraceReader input)

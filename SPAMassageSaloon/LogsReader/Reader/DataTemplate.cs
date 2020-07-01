@@ -2,16 +2,16 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using LogsReader.Config;
 using LogsReader.Properties;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
-using static LogsReader.Config.LRTraceParsePatternItem;
 
 namespace LogsReader.Reader
 {
     public class DataTemplate : ICloneable
     {
-        // Названия столбцов. Менять не рекомендуется, но влияния нет.
+        // Названия столбцов. Менять названия не рекомендуется, т.к. может запутать при настройке OrderBy. Но менять можно, влияния нет.
 	    public const string HeaderID = "ID";
         public const string HeaderServer = "Server";
         public const string HeaderTraceName = "TraceName";
@@ -35,11 +35,18 @@ namespace LogsReader.Reader
         internal DataTemplate(
 	        TraceReader traceReader, 
 	        long foundLineID,
-	        TraceParsePatternResult parseResult, 
+	        TraceParseResult parseResult, 
 	        string traceMessage,
 	        string trn)
         {
             IsMatched = true;
+
+            // проверка если нужно показать что трейс ошибочный
+            if (parseResult.IsSuccess && traceReader.IsTraceError != null)
+	            IsSuccess = !traceReader.IsTraceError.IsMatch(traceMessage);
+            else
+				IsSuccess = parseResult.IsSuccess;
+
             FoundLineID = foundLineID;
             ParentReader = traceReader;
 
@@ -66,6 +73,8 @@ namespace LogsReader.Reader
         internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn)
         {
             IsMatched = false;
+            IsSuccess = false;
+
             FoundLineID = foundLineID;
             ParentReader = traceReader;
 
@@ -77,6 +86,8 @@ namespace LogsReader.Reader
         internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn, Exception error)
         {
             IsMatched = false;
+            IsSuccess = false;
+
             FoundLineID = foundLineID;
             ParentReader = traceReader;
 
@@ -107,13 +118,16 @@ namespace LogsReader.Reader
 
         public Exception Error { get; }
 
+        public bool IsMatched { get; }
+
         [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.SchemeName), false)]
         public string SchemeName => ParentReader.SchemeName;
 
         [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.PrivateID), false)]
         public int PrivateID { get; internal set; }
 
-        public bool IsMatched { get; }
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsSuccess), false)]
+        public bool IsSuccess { get; }
 
         [DGVColumn(ColumnPosition.After, HeaderID)]
         public int ID { get; internal set; }

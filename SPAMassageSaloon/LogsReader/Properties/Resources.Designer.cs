@@ -113,6 +113,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap error2 {
+            get {
+                object obj = ResourceManager.GetObject("error2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap filter {
             get {
                 object obj = ResourceManager.GetObject("filter", resourceCulture);
@@ -198,6 +208,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap next_2 {
+            get {
+                object obj = ResourceManager.GetObject("next_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Ok {
             get {
                 object obj = ResourceManager.GetObject("Ok", resourceCulture);
@@ -221,6 +241,16 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap pingAll {
             get {
                 object obj = ResourceManager.GetObject("pingAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap previous_2 {
+            get {
+                object obj = ResourceManager.GetObject("previous_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -282,6 +312,15 @@ namespace LogsReader.Properties {
             get {
                 object obj = ResourceManager.GetObject("server_group", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         
@@ -1114,6 +1153,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred while loading the &apos;{0}&apos; scheme in compiling custom functions in &apos;TraceParse\@Custom&apos; node..
+        /// </summary>
+        public static string Txt_LRSettingsScheme_ErrCustmFuncLoad {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrCustmFuncLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на OrderBy item - &apos;{0}&apos; is incorrect! Please check..
         /// </summary>
         public static string Txt_LRSettingsScheme_ErrOrderBy {
@@ -1123,7 +1171,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Scheme &apos;{0}&apos; has incorrect Regex patterns in &apos;TraceParse&apos; node. Please check..
+        ///   Ищет локализованную строку, похожую на An error occurred while loading the &apos;{0}&apos; scheme. Please check Regex pattern(s) in &apos;TraceParse\@Pattern&apos; node(s)..
         /// </summary>
         public static string Txt_LRSettingsScheme_ErrRegex {
             get {

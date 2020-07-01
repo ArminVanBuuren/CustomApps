@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ICustomFunction.cs" />
+    <Compile Include="Config\ICustomFunctions.cs" />
     <Compile Include="Config\LRFolderGroup.cs" />
     <Compile Include="Config\LRFolder.cs" />
     <Compile Include="Config\LRGroupItem.cs" />
@@ -70,16 +70,17 @@
     <Compile Include="Config\LRTraceParseTransactionItem.cs" />
     <Compile Include="Config\LRTraceParsePatternItem.cs" />
     <Compile Include="Config\TraceParse.cs" />
+    <Compile Include="Config\TraceParsePatternResult.cs" />
     <Compile Include="CryptoNetworkCredential.cs" />
-    <Compile Include="Properties\Resources.ru.Designer.cs">
-      <DependentUpon>Resources.ru.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.ru.Designer.cs">
+      <DependentUpon>Resources.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Reader\Forms\AddFolder.cs">
       <SubType>Form</SubType>
@@ -230,9 +231,12 @@
     <Content Include="Resources\authorization.png" />
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\default.png" />
+    <Content Include="Resources\error2.png" />
+    <Content Include="Resources\next_2.png" />
     <Content Include="Resources\Ok.png" />
     <Content Include="Resources\ping.png" />
     <Content Include="Resources\pingAll.png" />
+    <Content Include="Resources\previous_2.png" />
     <Content Include="Resources\remove.png" />
   </ItemGroup>
   <ItemGroup>

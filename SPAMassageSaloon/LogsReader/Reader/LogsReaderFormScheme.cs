@@ -146,19 +146,19 @@ namespace LogsReader.Reader
 			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(1, 114),
 			        Name = "TreeMain",
-			        Size = new Size(208, 352),
+			        Size = new Size(208, 346),
 			        TabIndex = 19
 		        };
 
-		        MainSplitContainer.Panel1.Controls.Add(OrderByLabel);
-		        MainSplitContainer.Panel1.Controls.Add(MaxLinesLabel);
-		        MainSplitContainer.Panel1.Controls.Add(orderByText);
-		        MainSplitContainer.Panel1.Controls.Add(MaxThreadsLabel);
-		        MainSplitContainer.Panel1.Controls.Add(maxLinesStackText);
-		        MainSplitContainer.Panel1.Controls.Add(RowsLimitLabel);
-		        MainSplitContainer.Panel1.Controls.Add(maxThreadsText);
-		        MainSplitContainer.Panel1.Controls.Add(rowsLimitText);
-		        MainSplitContainer.Panel1.Controls.Add(TreeMain);
+		        CustomPanel.Controls.Add(OrderByLabel);
+		        CustomPanel.Controls.Add(MaxLinesLabel);
+		        CustomPanel.Controls.Add(orderByText);
+		        CustomPanel.Controls.Add(MaxThreadsLabel);
+		        CustomPanel.Controls.Add(maxLinesStackText);
+		        CustomPanel.Controls.Add(RowsLimitLabel);
+		        CustomPanel.Controls.Add(maxThreadsText);
+		        CustomPanel.Controls.Add(rowsLimitText);
+		        CustomPanel.Controls.Add(TreeMain);
 
 		        #endregion
 

@@ -114,6 +114,12 @@ namespace LogsReader.Reader
 	        }
         }
 
+        public int CustomPanelMinSize
+        {
+	        get => MainSplitContainer.Panel1MinSize;
+            set => MainSplitContainer.Panel1MinSize = value;
+        }
+
         public abstract bool HasAnyResult { get; }
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
@@ -159,14 +165,18 @@ namespace LogsReader.Reader
 
                 DgvData.AutoGenerateColumns = false;
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-	            DgvData.CellFormatting += DgvDataOnCellFormatting;
-	            DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
+                //DgvData.CellPainting += DgvData_CellPainting;
+                DgvData.CellFormatting += DgvDataOnCellFormatting;
+                DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
 	            SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
                 SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
 
                 PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID);
                 PrivateID.Name = nameof(DataTemplate.Tmp.PrivateID);
+
+                IsSuccess.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess);
+                IsSuccess.Name = nameof(DataTemplate.Tmp.IsSuccess);
 
                 ID.DataPropertyName = nameof(DataTemplate.Tmp.ID);
                 ID.Name = nameof(DataTemplate.Tmp.ID);
@@ -748,11 +758,14 @@ namespace LogsReader.Reader
             }
         }
 
-        protected void DgvDataOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void DgvDataOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+	        if (e.RowIndex < 0 || e.ColumnIndex < 0) 
+		        return;
+
 	        try
 	        {
-		        var row = ((DataGridView) sender).Rows[e.RowIndex];
+		        var row = ((DataGridView)sender).Rows[e.RowIndex];
 		        if (!TryGetTemplate(row, out var template))
 			        return;
 
@@ -760,11 +773,89 @@ namespace LogsReader.Reader
 		        if (cellFile != null)
 			        cellFile.ToolTipText = template.File;
 
-		        СolorizationDGV(row, template);
+		        if (template.IsSuccess)
+		        {
+			        if (template.Date == null)
+				        foreach (DataGridViewCell cell2 in row.Cells)
+					        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+			        СolorizationDGV(row, template);
+		        }
+		        else
+		        {
+			        row.DefaultCellStyle.BackColor = Color.Red;
+			        row.DefaultCellStyle.ForeColor = Color.White;
+			        row.DefaultCellStyle.Font = new Font(new FontFamily("Arial"), 9.5f, FontStyle.Bold);
+
+			        if (template.IsMatched) 
+				        return;
+			        foreach (DataGridViewCell cell2 in row.Cells)
+				        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+		        }
 	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+        }
+
+        protected virtual void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+        {
+	        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+        }
+
+        void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
+        {
+	        e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
+	        using (var p = new Pen(color, 2))
+	        {
+		        var rect = e.CellBounds;
+		        rect.Y = rect.Top + 1;
+		        rect.Height -= 2;
+		        e.Graphics.DrawRectangle(p, rect);
+	        }
+
+	        e.Handled = true;
+        }
+
+        private void buttonPrev_Click(object sender, EventArgs e)
+        {
+	        if (DgvData.SelectedRows.Count == 0)
+		        return;
+
+	        var countVisible = DgvData.DisplayedRowCount(false);
+	        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+
+	        var selected = DgvData.SelectedRows[0];
+	        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+		        .Where(x => x.Index < selected.Index
+		                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())).Reverse())
+	        {
+		        DgvData.ClearSelection();
+		        row.Selected = true;
+		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible 
+			        ? firstVisible 
+			        : row.Index;
+		        break;
+	        }
+        }
+
+        private void buttonNext_Click(object sender, EventArgs e)
+        {
+	        if (DgvData.SelectedRows.Count == 0)
+		        return;
+
+	        var countVisible = DgvData.DisplayedRowCount(false);
+            var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+
+	        var selected = DgvData.SelectedRows[0];
+	        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+		        .Where(x => x.Index > selected.Index
+		                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())))
+	        {
+		        DgvData.ClearSelection();
+		        row.Selected = true;
+		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible ? firstVisible : row.Index;
+                break;
 	        }
         }
 
@@ -808,28 +899,6 @@ namespace LogsReader.Reader
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
-        }
-
-        protected virtual void СolorizationDGV(DataGridViewRow row, DataTemplate template)
-        {
-	        if (template.IsMatched)
-	        {
-		        if (template.Date == null)
-		        {
-			        row.DefaultCellStyle.BackColor = Color.Yellow;
-			        foreach (DataGridViewCell cell2 in row.Cells)
-				        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-			        return;
-		        }
-
-		        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
-	        }
-	        else
-	        {
-		        row.DefaultCellStyle.BackColor = Color.LightPink;
-		        foreach (DataGridViewCell cell2 in row.Cells)
-			        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 	        }
         }
 

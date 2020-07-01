@@ -17,21 +17,15 @@ namespace LogsReader.Config
 		[XmlAttribute] public string Description { get; set; } = string.Empty;
 		[XmlAttribute] public string Message { get; set; } = string.Empty;
 
-		public TraceParsePatternResult GetParsingResult(Match match)
+		public TraceParseResult GetParsingResult(Match match)
 		{
 			return new TraceParsePatternResult(this, match);
 		}
 
-		public class TraceParsePatternResult
+		public class TraceParsePatternResult : TraceParseResult
 		{
 			public LRTraceParsePatternItem Parent { get; }
 			public Func<string, Func<Match, string>> MatchCalculationFunc { get; }
-
-			public string ID { get; }
-			public string Date { get; }
-			public string TraceName { get; }
-			public string Description { get; }
-			public string Message { get; }
 
 			internal TraceParsePatternResult(LRTraceParsePatternItem parent, Match match)
 			{

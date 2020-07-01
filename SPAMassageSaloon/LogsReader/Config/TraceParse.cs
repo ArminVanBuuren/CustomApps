@@ -12,14 +12,13 @@ namespace LogsReader.Config
 	{
 		public static readonly TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 10);
 
-		internal abstract bool IsCorrectRegex { get; set; }
+		internal abstract bool IsCorrect { get; set; }
 
-		protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult)
+		protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None)
 		{
 			cdataResult = null;
-			if (input != null)
-				if (input.Length > 0)
-					cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
+			if (input != null && input.Length > 0)
+				cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
 
 			if (cdataResult == null || cdataResult.Length == 0)
 				return null;
@@ -35,7 +34,7 @@ namespace LogsReader.Config
 			}
 			else
 			{
-				return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, MATCH_TIMEOUT);
+				return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, MATCH_TIMEOUT);
 			}
 		}
 	}

@@ -213,7 +213,7 @@ namespace LogsReader.Config
             {
                 if (value != null)
                 {
-                    if (value.Patterns.Length > 0)
+                    if (value.IsCorrect)
                         _traceParce = value;
                 }
             }
@@ -224,13 +224,16 @@ namespace LogsReader.Config
         {
             get
             {
-                if (!TraceParse.IsCorrectRegex)
-                {
-                    ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
-                    return false;
-                }
+	            if (!TraceParse.IsCorrect)
+	            {
+		            if (!TraceParse.IsCorrectPatterns)
+			            ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
+		            else if (!TraceParse.IsCorrectCustomFunction)
+			            ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrCustmFuncLoad, Name), ReportStatusType.Error);
+		            return false;
+	            }
 
-                return true;
+	            return true;
             }
         }
 
