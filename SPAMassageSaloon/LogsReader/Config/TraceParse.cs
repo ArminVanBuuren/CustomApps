@@ -34,7 +34,10 @@ namespace LogsReader.Config
 			}
 			else
 			{
-				return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, MATCH_TIMEOUT);
+				if (optional == RegexOptions.None)
+					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, MATCH_TIMEOUT);
+				else
+					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, MATCH_TIMEOUT);
 			}
 		}
 	}

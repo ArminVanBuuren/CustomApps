@@ -12,7 +12,7 @@ namespace LogsReader.Config
 	public class LRTraceParse : TraceParse
 	{
 		private CustomFunctions _customFunc;
-		private LRTraceParsePatternItem[] _traceParsePatterns = new LRTraceParsePatternItem[] {new LRTraceParsePatternItem()};
+		private LRTraceParsePatternItem[] _traceParsePatterns;
 		private LRTraceParseTransactionItem[] _transactionParsePatterns;
 		private XmlNode[] _startTraceWith;
 		private XmlNode[] _endTraceWith;
@@ -40,7 +40,7 @@ namespace LogsReader.Config
 						new LRTraceParseTransactionItem(@"\(trn=(\d+)\)") {Trn = "$1"}
 					};
 					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[")};
-					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})") };
+					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
 				case "SPA":
 					Patterns = new[]
@@ -52,7 +52,7 @@ namespace LogsReader.Config
 					{
 						new LRTraceParseTransactionItem(@"OriginalID\s*\>(.+?)\<") {Trn = "$1"}
 					};
-					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout") };
+					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout|Exception")};
 					break;
 				case "MGA":
 					Patterns = new[]
@@ -61,7 +61,7 @@ namespace LogsReader.Config
 							{Date = "$1", TraceName = "$2", Message = "$3"}
 					};
 					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)")};
-					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"dbresult=\d{2,}") };
+					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
 			}
 		}

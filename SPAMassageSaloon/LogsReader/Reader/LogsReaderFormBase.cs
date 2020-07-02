@@ -854,7 +854,9 @@ namespace LogsReader.Reader
 	        {
 		        DgvData.ClearSelection();
 		        row.Selected = true;
-		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible ? firstVisible : row.Index;
+		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible 
+			        ? firstVisible 
+			        : row.Index;
                 break;
 	        }
         }

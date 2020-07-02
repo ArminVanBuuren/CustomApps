@@ -203,7 +203,7 @@ namespace LogsReader.Reader
         bool IsTraceMatchByCustomFunction(string traceMessage, long foundLineId, out DataTemplate result)
         {
 			var traceParceResult = TraceParseCustomFunction.Value.Item1.Invoke(traceMessage);
-			if (traceParceResult.IsMatched)
+			if (traceParceResult != null && traceParceResult.IsMatched)
 			{
 				var current = new DataTemplate(
 					this,
