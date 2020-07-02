@@ -137,7 +137,9 @@
     <value>Attribute "displayDateFormat" sets the display date format.
         "Pattern" nodes are required settings, that are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Custom functions can be used in node attributes.
         "TransactionPattern" nodes are optional settings, that are used to search for transactions in the found trace. Slows down the processing speed, but contributes to a more detailed search. Custom functions can be used in node attributes.
-        "StartTraceWith" and "EndTraceWith" nodes are optional settings. Improve search speed, because what determines the exact boundary tracing. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.</value>
+        "StartTraceWith" and "EndTraceWith" nodes are optional settings. Improve search speed, because what determines the exact boundary tracing. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
+        "Custom" node - added the ability to use custom functions. It can be used with the “Pattern” settings and has a higher priority. Each class must implement the ICustomTraceParse interface. The main method - "IsTraceMatch" parses the target trace fragment. The "IsLineMatch" method - is called only when the optional StartWith or EndWith parameters are not set and asks for the possibility of adding lines to the previous successfully parsed trace.
+        "IsError" node is an optional setting for searching the logical result of an error in a found trace. The RegEx works with the Singleline, CultureInvariant, and IgnoreCase options.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
     <value>File types, specify with a comma. A search on the content of the file name, extension included.</value>
