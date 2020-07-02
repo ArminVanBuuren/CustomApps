@@ -51,7 +51,7 @@ namespace Utils
 			CustomAssembly = ExecuteCompiling();
 
 			Functions = new Dictionary<string, T>();
-			foreach (var type in CustomAssembly.ExportedTypes)
+			foreach (var type in CustomAssembly.DefinedTypes)
 			{
 				try
 				{
