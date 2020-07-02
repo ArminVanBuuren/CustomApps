@@ -16,18 +16,20 @@ namespace Utils
 	    /// </summary>
 	    public static CultureInfo CommonCulture => CultureInfo.InvariantCulture;
 
-	    internal static IEnumerable<CultureInfo> GetCurrentCultures()
+	    private static readonly HashSet<CultureInfo> current = new HashSet<CultureInfo>()
 	    {
-		    return new HashSet<CultureInfo>()
-		    {
-			    Thread.CurrentThread.CurrentCulture,
-			    CultureInfo.InstalledUICulture,
-			    CultureInfo.CurrentUICulture,
-			    CultureInfo.CurrentCulture,
-			    CultureInfo.InvariantCulture,
-			    CultureInfo.InstalledUICulture
-		    };
-	    }
+		    CultureInfo.InstalledUICulture,
+		    CultureInfo.CurrentUICulture,
+		    CultureInfo.CurrentCulture,
+		    CultureInfo.InvariantCulture,
+		    CultureInfo.InstalledUICulture
+	    };
+
+		internal static IEnumerable<CultureInfo> GetCurrentCultures()
+		{
+			current.Add(Thread.CurrentThread.CurrentCulture);
+			return current;
+		}
 
         /// <summary>
         /// Взвращает дефолтное значение если параметр равен null
