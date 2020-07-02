@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace Utils
 {
-	[Serializable, XmlRoot("CustomFunctions")]
+	[Serializable]
 	public class CustomFunctions
 	{
 		[XmlElement("Assemblies")]
