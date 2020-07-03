@@ -330,6 +330,8 @@ namespace LogsReader.Reader
                 Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
                 Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
                 Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
+                Tooltip.SetToolTip(buttonPrev, "SHIFT + F3");
+                Tooltip.SetToolTip(buttonNext, "F3");
 
                 ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
                 BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
@@ -387,7 +389,13 @@ namespace LogsReader.Reader
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.F5 when BtnSearch.Enabled && !IsWorking:
+	                case Keys.F3 when e.Shift:
+		                buttonPrev_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F3:
+		                buttonNext_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F5 when BtnSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when BtnSearch.Enabled && IsWorking:
