@@ -123,7 +123,8 @@ namespace LogsReader.Reader
         public abstract bool HasAnyResult { get; }
 
         readonly Font defaultFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Regular);
-        readonly Font errorFont = new Font(new FontFamily("Arial Narrow"), 10.3f, FontStyle.Bold);
+        readonly Font dgvFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5f, FontStyle.Regular);
+        readonly Font errorFont = new Font(LogsReaderMainForm.FailedFontFamily, 8.5f, FontStyle.Bold);
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
@@ -172,8 +173,8 @@ namespace LogsReader.Reader
 
                 DgvData.AutoGenerateColumns = false;
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-	            DgvData.DefaultCellStyle.Font = defaultFont;
-	            DgvData.Font = defaultFont;
+	            DgvData.DefaultCellStyle.Font = dgvFont;
+	            DgvData.Font = dgvFont;
 	            DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 

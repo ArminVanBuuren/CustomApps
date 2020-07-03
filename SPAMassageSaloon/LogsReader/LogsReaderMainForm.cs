@@ -19,7 +19,8 @@ namespace LogsReader
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
 	    public static readonly string MainFontFamily = "Segoe UI";
-	    public static readonly string DgvFontFamily = "Segoe UI";
+        public static readonly string DgvFontFamily = "Segoe UI";
+        public static readonly string FailedFontFamily = "Arial";
 
         private const string GLOBAL_PAGE_NAME = "Global";
 
@@ -93,17 +94,21 @@ namespace LogsReader
 	                _userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
 
                 //var privateFonts = new PrivateFontCollection();
-                ////Select your font from the resources.
-                //var fontLength = Resources.BebasNeue_Bold.Length;
-                //// create a buffer to read in to
-                //var fontdata = Resources.BebasNeue_Bold;
-                //// create an unsafe memory block for the font data
-                //var data = Marshal.AllocCoTaskMem(fontLength);
-                //// copy the bytes to the unsafe memory block
-                //Marshal.Copy(fontdata, 0, data, fontLength);
-                //// pass the font to the font collection
-                //privateFonts.AddMemoryFont(data, fontLength);
-                //DgvFontFamily = privateFonts.Families[0];
+                //foreach (var font in new [] { Resources.SegoeUI, Resources.BebasNeue_Bold, Resources.ARIALN })
+                //{
+	               // //Select your font from the resources.
+	               // var fontLength = font.Length;
+	               // // create an unsafe memory block for the font data
+	               // var data = Marshal.AllocCoTaskMem(fontLength);
+	               // // copy the bytes to the unsafe memory block
+	               // Marshal.Copy(font, 0, data, fontLength);
+	               // // pass the font to the font collection
+	               // privateFonts.AddMemoryFont(data, fontLength);
+                //}
+
+                //MainFontFamily = privateFonts.Families[0];
+                //DgvFontFamily = privateFonts.Families[1];
+                //FailedFontFamily = privateFonts.Families[2];
             }
         }
 
