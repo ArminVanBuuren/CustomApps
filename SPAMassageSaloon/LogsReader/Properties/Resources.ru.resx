@@ -457,4 +457,10 @@
   <data name="Txt_LRSettingsScheme_ErrCustmFuncLoad" xml:space="preserve">
     <value>Возникла ошибка при загрузке схемы '{0}' во время компиляции кастомных функций в ноде 'TraceParse\@Custom'.</value>
   </data>
+  <data name="Txt_LRSettingsScheme_ErrNode" xml:space="preserve">
+    <value>Схема "{0}" имеет некорректные настройки ноды "{1}".</value>
+  </data>
+  <data name="Txt_LRSettingsScheme_ErrSchemeName" xml:space="preserve">
+    <value>Аттрибут '@name' для всех схем логирования должен быть заполнен.</value>
+  </data>
 </root>

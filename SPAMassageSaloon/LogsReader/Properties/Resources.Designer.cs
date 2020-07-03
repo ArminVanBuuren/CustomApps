@@ -1162,6 +1162,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Scheme=&quot;{0}&quot; has incorrect node &quot;{1}&quot;. Please check..
+        /// </summary>
+        public static string Txt_LRSettingsScheme_ErrNode {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на OrderBy item - &apos;{0}&apos; is incorrect! Please check..
         /// </summary>
         public static string Txt_LRSettingsScheme_ErrOrderBy {
@@ -1176,6 +1185,15 @@ namespace LogsReader.Properties {
         public static string Txt_LRSettingsScheme_ErrRegex {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_ErrRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на The attribute &apos;@name&apos; of schemas must not be empty..
+        /// </summary>
+        public static string Txt_LRSettingsScheme_ErrSchemeName {
+            get {
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrSchemeName", resourceCulture);
             }
         }
         

@@ -23,11 +23,13 @@ namespace LogsReader.Config
 			get => _item;
 			set
 			{
-				if (value == null)
+				if (value == null || value.Length == 0)
 					return;
-				if (value.Length > 0)
-					_item = new XmlNode[] { new XmlDocument().CreateTextNode(value[0].Value.ReplaceUTFCodeToSymbol().ToUpper()) };
+				Value = value[0].Value.ReplaceUTFCodeToSymbol().ToUpper();
+				_item = new XmlNode[] {new XmlDocument().CreateTextNode(Value) };
 			}
 		}
+
+		internal string Value { get; private set;}
 	}
 }

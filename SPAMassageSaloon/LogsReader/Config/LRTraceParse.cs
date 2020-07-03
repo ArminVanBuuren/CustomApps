@@ -91,7 +91,7 @@ namespace LogsReader.Config
 			{
 				_customFunc = value;
 				// проверяем на валидность кастомной функции
-				if (_customFunc != null)
+				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 				{
 					var res = GetCustomFunction();
 					if (res != null)

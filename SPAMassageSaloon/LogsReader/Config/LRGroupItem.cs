@@ -6,7 +6,7 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("Group")]
 	public class LRGroupItem : LRItem
 	{
-		private string _groupName = "DEFAULT";
+		private string _groupName = string.Empty;
 
 		[XmlAttribute("name")]
 		public string GroupName

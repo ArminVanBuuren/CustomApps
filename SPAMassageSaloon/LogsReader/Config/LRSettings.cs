@@ -107,7 +107,7 @@ namespace LogsReader.Config
 	        set
 	        {
 		        _customFunc = value;
-		        if (_customFunc != null)
+		        if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 		        {
                     // если существуют кастомные функции, то при успешном паринге лога, будет производится вызов внутренних функций по шаблону для дальнейшей обработки записи
                     // функция GetValueByReplacement используется в качестве поиска группировок и подставления значений по шаблону

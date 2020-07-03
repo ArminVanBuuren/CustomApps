@@ -41,11 +41,12 @@ namespace LogsReader.Config
 			GroupItems = groupItems;
 		}
 
-		static Dictionary<string, IEnumerable<string>> GetGroups(LRGroupItem[] items)
+		static Dictionary<string, IEnumerable<string>> GetGroups(IEnumerable<LRGroupItem> items)
 		{
-			return items.ToDictionary(k => k.GroupName, v => v.Item[0].Value.Split(',')
-				.GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-				.Select(x => x.Key), StringComparer.InvariantCultureIgnoreCase);
+			return items
+				.ToDictionary(k => k.GroupName, v => v.Item[0].Value.Split(',')
+					.GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+					.Select(x => x.Key), StringComparer.InvariantCultureIgnoreCase);
 		}
 	}
 }

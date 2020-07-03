@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using LogsReader.Properties;
+using Utils;
 
 namespace LogsReader.Config
 {
@@ -22,6 +23,14 @@ namespace LogsReader.Config
 				try
 				{
 					var prevLogFolders = (value ?? _logsFolder).OrderBy(x => x.Item[0].Value).ToArray();
+
+					foreach (var folder in prevLogFolders)
+					{
+						var folderMatch = IO.CHECK_PATH.Match(folder.Value);
+						if (!folderMatch.Success)
+							throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, folder.Value));
+					}
+
 					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching, StringComparer.InvariantCultureIgnoreCase);
 
 					_logsFolder = prevLogFolders;

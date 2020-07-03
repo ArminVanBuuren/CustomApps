@@ -20,9 +20,9 @@ namespace LogsReader.Config
     {
 	    private LRGroups _servers = new LRGroups(new [] { new LRGroupItem("local", "localhost") });
 	    private LRGroups _fileTypes = new LRGroups(new []{ new LRGroupItem("type", "log") });
-	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder() });
+	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder(@"C:\", false) });
         
-	    private string _schemeName = "TEST";
+	    private string _schemeName = string.Empty;
         private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
         private int _maxLines = 50;
         private int _maxThreads = -1;
@@ -35,10 +35,10 @@ namespace LogsReader.Config
         [XmlAttribute("name")]
         public string Name
         {
-            get => _schemeName;
-            set => _schemeName = value.IsNullOrEmptyTrim()
-                ? _schemeName
-                : Regex.Replace(value, @"\s+", "");
+	        get => _schemeName;
+	        set => _schemeName = value.IsNullOrEmptyTrim()
+		        ? throw new Exception(Resources.Txt_LRSettingsScheme_ErrSchemeName)
+		        : Regex.Replace(value, @"\s+", "").ToUpperInvariant();
         }
 
         [XmlAttribute("encoding")]
@@ -79,7 +79,12 @@ namespace LogsReader.Config
         public LRGroups Servers
         {
 	        get => _servers;
-	        set => _servers = value ?? _servers;
+	        set
+	        {
+		        if (value == null || value.Groups.Count == 0 || value.Groups.Keys.Any(x => x.IsNullOrEmptyTrim()) || value.Groups.Values.Count == 0)
+			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
+		        _servers = value;
+	        }
         }
 
         [XmlAnyElement("FileTypesComment")]
@@ -93,7 +98,12 @@ namespace LogsReader.Config
         public LRGroups FileTypes
         {
 	        get => _fileTypes;
-	        set => _fileTypes = value ?? _fileTypes;
+	        set
+	        {
+		        if (value == null || value.Groups.Count == 0 || value.Groups.Keys.Any(x => x.IsNullOrEmptyTrim()) || value.Groups.Values.Count == 0)
+			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
+                _fileTypes = value ?? _fileTypes;
+	        }
         }
 
         [XmlAnyElement("LogsFolderComment")]
@@ -107,7 +117,12 @@ namespace LogsReader.Config
         public LRFolderGroup LogsFolder
         {
 	        get => _logsFolder;
-	        set => _logsFolder = value ?? _logsFolder;
+	        set
+	        {
+		        if (value == null || value.Folders.Count == 0 || value.Folders.Keys.Any(x => x.IsNullOrEmptyTrim()))
+			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "LogsFolderGroup"));
+                _logsFolder = value ?? _logsFolder;
+	        }
         }
 
         [XmlAnyElement("MaxLinesComment")]
