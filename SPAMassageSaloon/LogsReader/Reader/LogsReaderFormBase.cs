@@ -827,46 +827,62 @@ namespace LogsReader.Reader
 
         private void buttonPrev_Click(object sender, EventArgs e)
         {
-	        if (DgvData.SelectedRows.Count == 0)
-		        return;
-
-	        var countVisible = DgvData.DisplayedRowCount(false);
-	        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
-
-	        var selected = DgvData.SelectedRows[0];
-	        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-		        .Where(x => x.Index < selected.Index
-		                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())).Reverse())
+	        try
 	        {
-		        DgvData.ClearSelection();
-		        row.Selected = true;
-		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible 
-			        ? firstVisible 
-			        : row.Index;
-		        break;
+		        if (DgvData.SelectedRows.Count == 0)
+			        return;
+
+		        var countVisible = DgvData.DisplayedRowCount(false);
+		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+
+		        var selected = DgvData.SelectedRows[0];
+		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+			        .Where(x => x.Index < selected.Index
+			                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())).Reverse())
+		        {
+			        DgvData.ClearSelection();
+			        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
+				        ? firstVisible
+				        : row.Index;
+			        row.Selected = true;
+			        DgvData.CurrentCell = DgvData.Rows[row.Index].Cells[DgvData.CurrentCell.ColumnIndex];
+			        return;
+		        }
+            }
+	        catch (Exception)
+	        {
+		        // ignored
 	        }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-	        if (DgvData.SelectedRows.Count == 0)
-		        return;
-
-	        var countVisible = DgvData.DisplayedRowCount(false);
-            var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
-
-	        var selected = DgvData.SelectedRows[0];
-	        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-		        .Where(x => x.Index > selected.Index
-		                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())))
+	        try
 	        {
-		        DgvData.ClearSelection();
-		        row.Selected = true;
-		        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible 
-			        ? firstVisible 
-			        : row.Index;
-                break;
-	        }
+		        if (DgvData.SelectedRows.Count == 0)
+			        return;
+
+		        var countVisible = DgvData.DisplayedRowCount(false);
+		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+
+		        var selected = DgvData.SelectedRows[0];
+		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+			        .Where(x => x.Index > selected.Index
+			                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())))
+		        {
+			        DgvData.ClearSelection();
+			        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
+				        ? firstVisible
+				        : row.Index;
+			        row.Selected = true;
+			        DgvData.CurrentCell = DgvData.Rows[row.Index].Cells[DgvData.CurrentCell.ColumnIndex];
+			        return;
+                }
+            }
+	        catch (Exception)
+	        {
+		        // ignored
+            }
         }
 
         private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
