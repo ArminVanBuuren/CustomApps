@@ -18,8 +18,8 @@ using Utils.WinForm.Notepad;
 namespace LogsReader.Reader
 {
 	public abstract partial class LogsReaderFormBase : UserControl, IUserForm
-    {
-	    private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+	{
+		private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
         private bool _oldDateStartChecked;
@@ -122,11 +122,18 @@ namespace LogsReader.Reader
 
         public abstract bool HasAnyResult { get; }
 
+        readonly Font defaultFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Regular);
+        readonly Font errorFont = new Font(new FontFamily("Arial"), 9.2f, FontStyle.Bold);
+
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
 	        InitializeComponent();
 
 	        UserSettings = userSettings;
+
+	        base.Font = defaultFont;
+	        ChbxAlreadyUseFilter.Font = defaultFont;
+	        descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
 
             #region Initialize StripStatus
 
@@ -154,7 +161,7 @@ namespace LogsReader.Reader
             statusStrip.Items.Add(_overallFound2);
 
             statusStrip.Items.Add(new ToolStripSeparator());
-            _statusInfo = new ToolStripStatusLabel("") { Font = new Font("Segoe UI", 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
+            _statusInfo = new ToolStripStatusLabel("") { Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
             statusStrip.Items.Add(_statusInfo);
 
             #endregion
@@ -165,8 +172,9 @@ namespace LogsReader.Reader
 
                 DgvData.AutoGenerateColumns = false;
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-                //DgvData.CellPainting += DgvData_CellPainting;
-                DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.DefaultCellStyle.Font = defaultFont;
+	            DgvData.Font = defaultFont;
+	            DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
 	            SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
@@ -792,10 +800,11 @@ namespace LogsReader.Reader
 		        {
 			        row.DefaultCellStyle.BackColor = Color.Red;
 			        row.DefaultCellStyle.ForeColor = Color.White;
-			        row.DefaultCellStyle.Font = new Font(new FontFamily("Arial"), 9.5f, FontStyle.Bold);
+			        row.DefaultCellStyle.Font = errorFont;
 
 			        if (template.IsMatched) 
 				        return;
+
 			        foreach (DataGridViewCell cell2 in row.Cells)
 				        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 		        }

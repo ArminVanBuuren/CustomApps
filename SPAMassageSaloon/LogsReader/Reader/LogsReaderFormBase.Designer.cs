@@ -256,7 +256,6 @@ namespace LogsReader.Reader
 			// descriptionText
 			// 
 			this.descriptionText.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.descriptionText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.descriptionText.Location = new System.Drawing.Point(0, 0);
 			this.descriptionText.Name = "descriptionText";
 			this.descriptionText.ReadOnly = true;
@@ -442,7 +441,6 @@ namespace LogsReader.Reader
 			// 
 			this.ChbxAlreadyUseFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxAlreadyUseFilter.AutoSize = true;
-			this.ChbxAlreadyUseFilter.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(962, 37);
 			this.ChbxAlreadyUseFilter.Name = "ChbxAlreadyUseFilter";
 			this.ChbxAlreadyUseFilter.Size = new System.Drawing.Size(158, 19);
@@ -608,7 +606,6 @@ namespace LogsReader.Reader
 			this.Controls.Add(this.filterPanel);
 			this.Controls.Add(this.searchPanel);
 			this.Controls.Add(this.progressBar);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.MinimumSize = new System.Drawing.Size(0, 25);
 			this.Name = "LogsReaderFormBase";
 			this.Size = new System.Drawing.Size(1152, 594);

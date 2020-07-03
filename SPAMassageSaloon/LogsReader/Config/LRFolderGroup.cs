@@ -25,11 +25,8 @@ namespace LogsReader.Config
 					var prevLogFolders = (value ?? _logsFolder).OrderBy(x => x.Item[0].Value).ToArray();
 
 					foreach (var folder in prevLogFolders)
-					{
-						var folderMatch = IO.CHECK_PATH.Match(folder.Value);
-						if (!folderMatch.Success)
+						if (folder.Value.IsNullOrEmptyTrim() || !IO.CHECK_PATH.Match(folder.Value).Success)
 							throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, folder.Value));
-					}
 
 					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching, StringComparer.InvariantCultureIgnoreCase);
 

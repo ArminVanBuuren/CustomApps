@@ -81,7 +81,7 @@ namespace LogsReader.Config
 	        get => _servers;
 	        set
 	        {
-		        if (value == null || value.Groups.Count == 0 || value.Groups.Keys.Any(x => x.IsNullOrEmptyTrim()) || value.Groups.Values.Count == 0)
+		        if (value == null || value.Groups.Count == 0 || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() || !groupName.Value.Any() || groupName.Value.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
 		        _servers = value;
 	        }
@@ -100,9 +100,9 @@ namespace LogsReader.Config
 	        get => _fileTypes;
 	        set
 	        {
-		        if (value == null || value.Groups.Count == 0 || value.Groups.Keys.Any(x => x.IsNullOrEmptyTrim()) || value.Groups.Values.Count == 0)
-			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
-                _fileTypes = value ?? _fileTypes;
+		        if (value == null || value.Groups.Count == 0 || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() || !groupName.Value.Any() || groupName.Value.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
+                    throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
+                _fileTypes = value;
 	        }
         }
 
@@ -121,7 +121,7 @@ namespace LogsReader.Config
 	        {
 		        if (value == null || value.Folders.Count == 0 || value.Folders.Keys.Any(x => x.IsNullOrEmptyTrim()))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "LogsFolderGroup"));
-                _logsFolder = value ?? _logsFolder;
+                _logsFolder = value;
 	        }
         }
 

@@ -18,7 +18,10 @@ namespace LogsReader
 {
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
-	    private const string GLOBAL_PAGE_NAME = "Global";
+	    public static readonly string MainFontFamily = "Segoe UI";
+	    public static readonly string DgvFontFamily = "Segoe UI";
+
+        private const string GLOBAL_PAGE_NAME = "Global";
 
         private static readonly object credentialSync = new object();
 	    private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
@@ -88,6 +91,19 @@ namespace LogsReader
 	        {
                 if(_userCredentials == null)
 	                _userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
+
+                //var privateFonts = new PrivateFontCollection();
+                ////Select your font from the resources.
+                //var fontLength = Resources.BebasNeue_Bold.Length;
+                //// create a buffer to read in to
+                //var fontdata = Resources.BebasNeue_Bold;
+                //// create an unsafe memory block for the font data
+                //var data = Marshal.AllocCoTaskMem(fontLength);
+                //// copy the bytes to the unsafe memory block
+                //Marshal.Copy(fontdata, 0, data, fontLength);
+                //// pass the font to the font collection
+                //privateFonts.AddMemoryFont(data, fontLength);
+                //DgvFontFamily = privateFonts.Families[0];
             }
         }
 
@@ -125,7 +141,7 @@ namespace LogsReader
 	                Name = GLOBAL_PAGE_NAME,
 	                Text = GLOBAL_PAGE_NAME,
 	                UseVisualStyleBackColor = false,
-	                Font = new Font("Segoe UI", 8.5F),
+	                Font = new Font(MainFontFamily, 8.5F),
 	                Margin = new Padding(0),
 	                Padding = new Padding(0)
                 };
@@ -146,7 +162,7 @@ namespace LogsReader
                         {
                             Text = scheme.Name,
                             UseVisualStyleBackColor = false,
-                            Font = new Font("Segoe UI", 8.5F),
+                            Font = new Font(MainFontFamily, 8.5F),
                             Margin = new Padding(0),
                             Padding = new Padding(0)
                         };
