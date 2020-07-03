@@ -123,7 +123,7 @@ namespace LogsReader.Reader
         public abstract bool HasAnyResult { get; }
 
         readonly Font defaultFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Regular);
-        readonly Font errorFont = new Font(new FontFamily("Arial"), 9.2f, FontStyle.Bold);
+        readonly Font errorFont = new Font(new FontFamily("Arial Narrow"), 10.3f, FontStyle.Bold);
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
