@@ -463,4 +463,10 @@
   <data name="Txt_LRSettingsScheme_ErrSchemeName" xml:space="preserve">
     <value>Аттрибут '@name' для всех схем логирования должен быть заполнен.</value>
   </data>
+  <data name="Txt_LogsReaderForm_NextErrButt" xml:space="preserve">
+    <value>Следующая ошибка (F3)</value>
+  </data>
+  <data name="Txt_LogsReaderForm_PrevErrButt" xml:space="preserve">
+    <value>Предыдущая ошибка (SHIFT+F3)</value>
+  </data>
 </root>

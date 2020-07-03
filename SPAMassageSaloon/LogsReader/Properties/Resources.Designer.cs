@@ -844,6 +844,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Next error (F3).
+        /// </summary>
+        public static string Txt_LogsReaderForm_NextErrButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NextErrButt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на No filter results found.
         /// </summary>
         public static string Txt_LogsReaderForm_NoFilterResultsFound {
@@ -894,6 +903,15 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_OverallFound_2 {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Previous error (SHIFT+F3).
+        /// </summary>
+        public static string Txt_LogsReaderForm_PrevErrButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_PrevErrButt", resourceCulture);
             }
         }
         
