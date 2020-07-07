@@ -164,7 +164,7 @@ namespace LogsReader.Reader
 	            else
 	            {
                     // Если существующий трейс корректно спарсен, а новый не получилось спарсить, то оставляем в коллекции сущесвующий коректный
-		            if(existingItem.IsMatched && !item.IsMatched)
+		            if((existingItem.IsMatched && !item.IsMatched) || (existingItem.TraceMessage.Length <= item.TraceName.Length))
                         return;
 
 		            // Если найден еще один темплейт в той же строке и том же файле.
