@@ -239,16 +239,11 @@ namespace LogsReader.Config
         {
             get
             {
-	            if (!TraceParse.IsCorrect)
-	            {
-		            if (!TraceParse.IsCorrectPatterns)
-			            ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrRegex, Name), ReportStatusType.Error);
-		            else if (!TraceParse.IsCorrectCustomFunction)
-			            ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrCustmFuncLoad, Name), ReportStatusType.Error);
-		            return false;
-	            }
+	            if (TraceParse.IsCorrect) 
+		            return true;
 
-	            return true;
+	            ReportStatus?.Invoke(string.Format(Resources.Txt_LRSettingsScheme_ErrMandatory, Name), ReportStatusType.Error);
+	            return false;
             }
         }
 

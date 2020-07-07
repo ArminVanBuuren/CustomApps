@@ -83,6 +83,19 @@ namespace LogsReader.Config
 
 		[XmlAttribute("displayDateFormat")] public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
 
+		[XmlElement("Pattern")]
+		public LRTraceParsePatternItem[] Patterns
+		{
+			get => _traceParsePatterns;
+			set
+			{
+				if (value == null)
+					return;
+				if (value.Length > 0)
+					_traceParsePatterns = value;
+			}
+		}
+
 		[XmlElement("Custom")]
 		public CustomFunctions Custom
 		{
@@ -100,19 +113,6 @@ namespace LogsReader.Config
 				}
 
 				IsCorrectCustomFunction = false;
-			}
-		}
-
-		[XmlElement("Pattern")]
-		public LRTraceParsePatternItem[] Patterns
-		{
-			get => _traceParsePatterns;
-			set
-			{
-				if (value == null)
-					return;
-				if (value.Length > 0)
-					_traceParsePatterns = value;
 			}
 		}
 

@@ -1171,11 +1171,11 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на An error occurred while loading the &apos;{0}&apos; scheme in compiling custom functions in &apos;TraceParse\@Custom&apos; node..
+        ///   Ищет локализованную строку, похожую на Error loading schema &apos;{0}&apos;. Check the settings for &apos;TraceParse\@Pattern&apos; or &apos;TraceParse\@Custom&apos;..
         /// </summary>
-        public static string Txt_LRSettingsScheme_ErrCustmFuncLoad {
+        public static string Txt_LRSettingsScheme_ErrMandatory {
             get {
-                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrCustmFuncLoad", resourceCulture);
+                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrMandatory", resourceCulture);
             }
         }
         
@@ -1194,15 +1194,6 @@ namespace LogsReader.Properties {
         public static string Txt_LRSettingsScheme_ErrOrderBy {
             get {
                 return ResourceManager.GetString("Txt_LRSettingsScheme_ErrOrderBy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на An error occurred while loading the &apos;{0}&apos; scheme. Please check Regex pattern(s) in &apos;TraceParse\@Pattern&apos; node(s)..
-        /// </summary>
-        public static string Txt_LRSettingsScheme_ErrRegex {
-            get {
-                return ResourceManager.GetString("Txt_LRSettingsScheme_ErrRegex", resourceCulture);
             }
         }
         
@@ -1280,8 +1271,7 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format.
-        ///        &quot;Pattern&quot; nodes are required settings, that are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Custom functions can be used in node attributes.
-        ///        &quot;TransactionPattern&quot; nodes are optional settings, that are used to search for t [остаток строки не уместился]&quot;;.
+        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Also in the attributes you can use custo [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

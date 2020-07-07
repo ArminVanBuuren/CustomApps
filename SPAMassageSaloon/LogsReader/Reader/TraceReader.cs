@@ -121,12 +121,12 @@ namespace LogsReader.Reader
 			OriginalFolder = originalFolder;
 			FileNamePartial = IO.GetPartialPath(FilePath, OriginalFolder);
 
-			if (TraceParseCustomFunction != null && TraceParsePatterns != null && TraceParsePatterns.Length > 0)
+			if (TraceParsePatterns != null && TraceParsePatterns.Length > 0 && TraceParseCustomFunction != null)
 				SearchType = TraceReaderSearchType.ByBoth;
-			else if (TraceParseCustomFunction != null)
-				SearchType = TraceReaderSearchType.ByCustomFunctions;
 			else if (TraceParsePatterns != null && TraceParsePatterns.Length > 0)
 				SearchType = TraceReaderSearchType.ByRegexPatterns;
+			else if (TraceParseCustomFunction != null)
+				SearchType = TraceReaderSearchType.ByCustomFunctions;
 
 			SearchByTransaction = TransactionPatterns != null && TransactionPatterns.Length > 0;
 		}
@@ -178,18 +178,18 @@ namespace LogsReader.Reader
 
             switch (SearchType)
             {
+	            case TraceReaderSearchType.ByRegexPatterns:
+		            if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
+			            return true;
+		            break;
 				case TraceReaderSearchType.ByCustomFunctions:
 					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
 						return true;
 					break;
-				case TraceReaderSearchType.ByRegexPatterns:
-					if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
-						return true;
-					break;
 				case TraceReaderSearchType.ByBoth:
-					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
-						return true;
 					if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
+						return true;
+					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
 						return true;
 					break;
 				default:
@@ -340,14 +340,14 @@ namespace LogsReader.Reader
 
 			switch (SearchType)
 			{
-				case TraceReaderSearchType.ByCustomFunctions:
-					return IsLineMatchByCustomFunction(traceMessage);
 				case TraceReaderSearchType.ByRegexPatterns:
 					return IsLineMatchByRegexPatterns(traceMessage);
+				case TraceReaderSearchType.ByCustomFunctions:
+					return IsLineMatchByCustomFunction(traceMessage);
 				case TraceReaderSearchType.ByBoth:
-					if (IsLineMatchByCustomFunction(traceMessage))
-						return true;
 					if (IsLineMatchByRegexPatterns(traceMessage))
+						return true;
+					if (IsLineMatchByCustomFunction(traceMessage))
 						return true;
 					break;
 				default:

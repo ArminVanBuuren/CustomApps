@@ -135,10 +135,10 @@
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
     <value>Attribute "displayDateFormat" sets the display date format.
-        "Pattern" nodes are required settings, that are used for reading trace parameters. Selected from top to bottom, from the most accurate to the default. You must use groupings for setting data items. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Custom functions can be used in node attributes.
+        "Pattern" nodes are used for parsing and reading trace parameters. It can be used together with the "Custom" setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Also in the attributes you can use custom functions from the "CustomFunctions" setting, an example of the format: Date="custom_date_parse ('$ 1')".
+        "Custom" node - added the ability to use custom functions for parsing a trace. It can be used with the “Pattern” settings, and has a lower priority. Each class must implement the ICustomTraceParse interface. The main method - "IsTraceMatch" parses the target trace fragment. The "IsLineMatch" method - is called only when the optional StartWith or EndWith parameters are not set and asks for the possibility of adding lines to the previous successfully parsed trace.
         "TransactionPattern" nodes are optional settings, that are used to search for transactions in the found trace. Slows down the processing speed, but contributes to a more detailed search. Custom functions can be used in node attributes.
         "StartTraceWith" and "EndTraceWith" nodes are optional settings. Improve search speed, because what determines the exact boundary tracing. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
-        "Custom" node - added the ability to use custom functions. It can be used with the “Pattern” settings and has a higher priority. Each class must implement the ICustomTraceParse interface. The main method - "IsTraceMatch" parses the target trace fragment. The "IsLineMatch" method - is called only when the optional StartWith or EndWith parameters are not set and asks for the possibility of adding lines to the previous successfully parsed trace.
         "IsError" node is an optional setting for searching the logical result of an error in a found trace. The RegEx works with the Singleline, CultureInvariant, and IgnoreCase options.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
@@ -224,9 +224,6 @@ Input data:
   </data>
   <data name="Txt_LRSettingsScheme_ErrOrderBy" xml:space="preserve">
     <value>OrderBy item - '{0}' is incorrect! Please check.</value>
-  </data>
-  <data name="Txt_LRSettingsScheme_ErrRegex" xml:space="preserve">
-    <value>An error occurred while loading the '{0}' scheme. Please check Regex pattern(s) in 'TraceParse\@Pattern' node(s).</value>
   </data>
   <data name="Txt_LRSettingsScheme_ErrUnique" xml:space="preserve">
     <value>Columns must be unique!</value>
@@ -526,8 +523,8 @@ Colors schemes are adjustable.</value>
   <data name="Txt_LogsReaderForm_SearchPatternIsNull" xml:space="preserve">
     <value>Please enter a search term</value>
   </data>
-  <data name="Txt_LRSettingsScheme_ErrCustmFuncLoad" xml:space="preserve">
-    <value>An error occurred while loading the '{0}' scheme in compiling custom functions in 'TraceParse\@Custom' node.</value>
+  <data name="Txt_LRSettingsScheme_ErrMandatory" xml:space="preserve">
+    <value>Error loading schema '{0}'. Check the settings for 'TraceParse\@Pattern' or 'TraceParse\@Custom'.</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value />

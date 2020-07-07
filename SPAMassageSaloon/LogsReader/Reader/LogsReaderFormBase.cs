@@ -356,8 +356,6 @@ namespace LogsReader.Reader
                 ChbxAlreadyUseFilter.Padding = new Padding(0, 0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
 
                 #endregion
-
-                ReportStatus(string.Empty, ReportStatusType.Success);
             }
             catch (Exception ex)
             {
