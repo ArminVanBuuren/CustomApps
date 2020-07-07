@@ -148,16 +148,25 @@ namespace LogsReader.Reader
                 if (!Found.IsMatched)
                 {
                     if (IsTraceMatch(Found.TraceMessage, out var result, Found, true))
-                        AddResult(result);
+                    {
+	                    AddResult(result);
+                    }
                     else
-                        AddResult(Found);
+                    {
+	                    TransactionsSearch(Found.TraceMessage, Found);
+						AddResult(Found);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                if (!Found.IsMatched)
-                    AddResult(new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, _trn, ex));
-                throw;
+	            if (!Found.IsMatched)
+	            {
+		            Found = new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, _trn, ex);
+		            TransactionsSearch(Found.TraceMessage, Found);
+					AddResult(Found);
+	            }
+	            throw;
             }
             finally
             {

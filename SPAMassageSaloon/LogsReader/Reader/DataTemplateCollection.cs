@@ -57,25 +57,29 @@ namespace LogsReader.Reader
 
         public void AddRange(IEnumerable<DataTemplate> list)
         {
-            if (list.Any(x => x.ID != -1))
-            {
-                foreach (var template in list)
-                {
-                    template.PrivateID = ++_seqPrivateID;
-                    _values.Add(template.PrivateID, template);
-                }
-            }
-            else
-            {
-                foreach (var template in list)
-                {
-                    template.PrivateID = ++_seqPrivateID;
-                    if (template.ID == -1)
-                        template.ID = ++_seqID;
+			if(!list.Any())
+				return;
 
-                    _values.Add(template.PrivateID, template);
-                }
-            }
+	        var maxId = list.Max(x => x.ID);
+			if (maxId > -1)
+	        {
+		        _seqID = maxId > _seqID ? maxId : _seqID;
+
+				foreach (var template in list)
+		        {
+			        template.PrivateID = ++_seqPrivateID;
+			        _values.Add(template.PrivateID, template);
+		        }
+	        }
+	        else
+	        {
+		        foreach (var template in list)
+		        {
+			        template.PrivateID = ++_seqPrivateID;
+					template.ID = ++_seqID;
+					_values.Add(template.PrivateID, template);
+		        }
+	        }
         }
 
         public int Count => _values.Count;
