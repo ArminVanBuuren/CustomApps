@@ -52,8 +52,13 @@ namespace LogsReader.Reader
 				    _IsMatchedFunc = (input) =>
 				    {
 					    _trn = null;
+
 					    if (IsMatch.Invoke(input) || IsMatchByTransactions.Invoke(input, out _trn))
 						    return true;
+
+					    PastTraceLines.Enqueue(input);
+					    if (PastTraceLines.Count > MaxTraceLines)
+						    PastTraceLines.Dequeue();
 
 					    return false;
                     };
@@ -65,6 +70,10 @@ namespace LogsReader.Reader
 				    {
 					    if (IsMatch.Invoke(input))
 						    return true;
+
+					    PastTraceLines.Enqueue(input);
+					    if (PastTraceLines.Count > MaxTraceLines)
+						    PastTraceLines.Dequeue();
 
 					    return false;
 				    };
@@ -97,18 +106,9 @@ namespace LogsReader.Reader
 
         public FileInfo File { get; }
 
-        public long Lines { get; private set; } = 0;
+        public long Lines { get; protected set; } = 0;
 
-        protected void AddLine(string input)
-		{
-			PastTraceLines.Enqueue(input);
-			if (PastTraceLines.Count > MaxTraceLines)
-				PastTraceLines.Dequeue();
-
-			Lines++;
-		}
-
-        public TraceReaderSearchType SearchType { get; }
+		public TraceReaderSearchType SearchType { get; }
 
 		protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) : base(control)
 		{
@@ -183,8 +183,7 @@ namespace LogsReader.Reader
         {
             // замена '\r' чинит баг с некорректным парсингом
             var traceMessage = input.Replace("\r", string.Empty);
-            var length = traceMessage.Split('\n').Length;
-			var foundLineId = Lines - length + 1;
+            var foundLineId = failed?.FoundLineID ?? Lines;
 
             switch (SearchType)
             {
@@ -206,7 +205,7 @@ namespace LogsReader.Reader
 					throw new NotSupportedException();
             }
 
-            result = new DataTemplate(this, foundLineId, traceMessage, _trn);
+            result = new DataTemplate(this, Lines, traceMessage, _trn);
             return false;
         }
 
@@ -277,7 +276,7 @@ namespace LogsReader.Reader
 		/// <param name="current">Успешно созданный темплейт</param>
 		void TransactionsSearch(string traceMessage, DataTemplate current)
         {
-	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0)
+	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0) 
 		        return;
 
 	        try
@@ -301,7 +300,7 @@ namespace LogsReader.Reader
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
 			            innerReader._trn = trnValue;
-			            innerReader.Lines = Lines - PastTraceLines.Count ; // возвращаемся обратно к первой сохраненной строке
+			            innerReader.Lines = current.FoundLineID - PastTraceLines.Count - 1; // возвращаемся обратно к первой сохраненной строке
 			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
 			            void OnPastFound(DataTemplate pastItem)
