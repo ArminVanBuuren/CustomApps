@@ -165,7 +165,7 @@ namespace LogsReader.Config
 				foreach (var func in functions.Values)
 				{
 					var result = func.Item1.Invoke(input);
-					if (result.IsMatched) 
+					if (result != null) 
 						return result;
 				}
 
@@ -175,7 +175,8 @@ namespace LogsReader.Config
 			bool IsLineMatch(string input)
 			{
 				foreach (var func in functions.Values)
-					return func.Item2.Invoke(input);
+					if (func.Item2.Invoke(input))
+						return true;
 				return false;
 			}
 
