@@ -23,11 +23,11 @@ namespace LogsReader.Config
 
 		}
 
-		internal LRTraceParse(string name)
+		internal LRTraceParse(DefaultSettings set)
 		{
-			switch (name)
+			switch (set)
 			{
-				case "MG":
+				case DefaultSettings.MG:
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
@@ -42,7 +42,7 @@ namespace LogsReader.Config
 					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[")};
 					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
-				case "SPA":
+				case DefaultSettings.SPA:
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
@@ -54,7 +54,7 @@ namespace LogsReader.Config
 					};
 					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout|Exception")};
 					break;
-				case "MGA":
+				case DefaultSettings.MGA:
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?[-]{49,}(.+)")

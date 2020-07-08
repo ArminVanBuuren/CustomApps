@@ -14,13 +14,20 @@ using Utils;
 
 namespace LogsReader.Config
 {
+    internal enum DefaultSettings
+    {
+        MG = 0,
+        SPA = 1,
+        MGA = 2
+    }
+
 	[Serializable, XmlRoot("Settings")]
     public class LRSettings
     {
         private static object _sync = new object();
         private static bool _disableHintComments = true;
 
-        private LRSettingsScheme[] _schemes = new[] { new LRSettingsScheme("MG"), new LRSettingsScheme("SPA"), new LRSettingsScheme("MGA") };
+        private LRSettingsScheme[] _schemes;
 
         CustomFunctions _customFunc = new CustomFunctions
         {
@@ -79,17 +86,17 @@ namespace LogsReader.Config
             get => _schemes;
             set
             {
-                try
-                {
-                    _schemes = value ?? _schemes;
-                    Schemes = _schemes != null && _schemes.Length > 0
-                        ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
-                        : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
-                }
-                catch (ArgumentException ex)
-                {
-                    throw new ArgumentException(Resources.Txt_LRSettings_ErrUnique, ex);
-                }
+	            try
+	            {
+		            _schemes = value ?? new[] {new LRSettingsScheme(DefaultSettings.MG), new LRSettingsScheme(DefaultSettings.SPA), new LRSettingsScheme(DefaultSettings.MGA)};
+		            Schemes = _schemes.Length > 0
+			            ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
+			            : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
+	            }
+	            catch (ArgumentException ex)
+	            {
+		            throw new ArgumentException(Resources.Txt_LRSettings_ErrUnique, ex);
+	            }
             }
         }
 
@@ -208,6 +215,11 @@ namespace LogsReader.Config
             }
 
             return sett ?? new LRSettings();
+        }
+
+        internal void AssignDefaultSchemas()
+        {
+	        SchemeList = null;
         }
 
         public static XmlComment GetComment(string value)

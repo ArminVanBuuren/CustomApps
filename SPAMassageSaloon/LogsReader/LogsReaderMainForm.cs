@@ -154,6 +154,9 @@ namespace LogsReader
                 MainTabControl.TabPages.Add(globalPage);
 
                 Settings = LRSettings.Deserialize();
+                if (Settings.SchemeList == null)
+	                Settings.AssignDefaultSchemas();
+
                 foreach (var scheme in Settings.SchemeList)
                 {
                     try

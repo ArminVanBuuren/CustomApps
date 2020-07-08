@@ -249,22 +249,22 @@ namespace LogsReader.Config
 
         public LRSettingsScheme() { }
 
-        internal LRSettingsScheme(string schemeName)
+        internal LRSettingsScheme(DefaultSettings set)
         {
-	        switch (schemeName)
+	        _schemeName = set.ToString("G");
+	        _traceParce = new LRTraceParse(set);
+
+            switch (set)
 	        {
-		        case "MG":
-			        _schemeName = schemeName;
+		        case DefaultSettings.MG:
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", "mg1, mg2, mg3, mg4, mg5") });
 			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
 			        MaxThreads = -1;
 			        OrderBy = _orderBy;
-                    _traceParce = new LRTraceParse(_schemeName);
 			        break;
-		        case "SPA":
-			        _schemeName = schemeName;
+		        case DefaultSettings.SPA:
 			        Servers = new LRGroups(new[]
 			        {
 				        new LRGroupItem("UZ-BPM", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6"),
@@ -279,17 +279,14 @@ namespace LogsReader.Config
 			        MaxLines = 1;
 			        MaxThreads = -1;
 			        OrderBy = $"{nameof(DataTemplate.Tmp.Date)} desc, {nameof(DataTemplate.Tmp.ID)} desc";
-			        _traceParce = new LRTraceParse(_schemeName);
 			        break;
-		        case "MGA":
-			        _schemeName = schemeName;
+		        case DefaultSettings.MGA:
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
 			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, debug-all, debug-only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        MaxLines = 20000;
 			        MaxThreads = -1;
 			        OrderBy = _orderBy;
-                    _traceParce = new LRTraceParse(_schemeName);
 			        break;
 	        }
         }
