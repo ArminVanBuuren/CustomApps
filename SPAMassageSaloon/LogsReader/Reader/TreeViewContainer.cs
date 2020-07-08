@@ -284,7 +284,7 @@ namespace LogsReader.Reader
 			        case Keys.J when e.Control && Main.Enabled:
 				        AddFolder(this, EventArgs.Empty);
 				        break;
-			        case Keys.Delete:
+			        case Keys.Delete when _copyList.Any(x => x.Focused):
 				        RemoveSelected(this, EventArgs.Empty);
 				        break;
                     case Keys.Enter when Main.Enabled && Main.Focused:
