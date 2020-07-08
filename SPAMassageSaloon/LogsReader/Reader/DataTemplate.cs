@@ -70,16 +70,21 @@ namespace LogsReader.Reader
             TransactionValue = trn;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn) : this(traceReader, foundLineID, trn)
         {
-            IsMatched = false;
-            IsSuccess = false;
+	        TraceMessage = traceMessage;
+        }
 
-            FoundLineID = foundLineID;
-            ParentReader = traceReader;
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string trn)
+        {
+	        IsMatched = false;
+	        IsSuccess = false;
 
-            ID = -1;
-            TraceMessage = traceMessage;
+	        FoundLineID = foundLineID;
+	        ParentReader = traceReader;
+
+	        ID = -1;
+	        CountOfLines = 0;
             TransactionValue = trn;
         }
 
@@ -179,7 +184,10 @@ namespace LogsReader.Reader
 
         internal void AppendPastLine(string line)
         {
-            _traceMessage.Insert(0, line.Replace("\0", "") + Environment.NewLine);
+            if(CountOfLines == 0)
+				_traceMessage.Insert(0, line.Replace("\0", ""));
+            else
+	            _traceMessage.Insert(0, line.Replace("\0", "") + Environment.NewLine);
             CountOfLines++;
         }
 

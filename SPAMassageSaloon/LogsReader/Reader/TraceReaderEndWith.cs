@@ -10,8 +10,6 @@ namespace LogsReader.Reader
 
 	    public override void ReadLine(string line)
 	    {
-		    Lines++;
-
 		    if (Found != null)
 		    {
 			    // если стек лога превышает допустимый размер, то лог больше не дополняется
@@ -27,30 +25,34 @@ namespace LogsReader.Reader
 					    Commit();
 				    }
 
-				    return;
+				    Lines++;
+					return;
 			    }
 		    }
 
-		    if (!IsMatched(line))
+		    AddLine(line);
+
+			if (!IsMatched(line))
 			    return;
 
 		    Commit();
 
 
-		    Found = new DataTemplate(this, Lines, line, CurrentTransactionValue);
+			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
+			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
+			{
+				var pastLine = revercePastTraceLines.Peek();
+				// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
+				if (EndTraceWith.IsMatch(pastLine))
+					break;
+				Found.AppendPastLine(revercePastTraceLines.Dequeue());
+			}
 
-		    var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
-		    while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
-		    {
-			    // Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-			    if (EndTraceWith.IsMatch(Found.TraceMessage))
-				    break;
-			    Found.AppendPastLine(revercePastTraceLines.Dequeue());
-		    }
-
-			// сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
-		    if (!SearchByTransaction)
-			    PastTraceLines.Clear();
-	    }
+			if (SearchByTransaction)
+				PastTraceLines = new Queue<string>(revercePastTraceLines.Reverse());
+			else
+				PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
+		}
     }
 }
