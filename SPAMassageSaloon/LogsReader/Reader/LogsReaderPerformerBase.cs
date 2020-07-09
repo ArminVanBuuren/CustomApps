@@ -11,6 +11,7 @@ using Utils;
 namespace LogsReader.Reader
 {
 	public delegate V OutFuncDelegate<in T, U, out V>(T input, out U output);
+	public delegate V OutFuncDelegate2<in T, U, F, out V>(T input, out U output1, out F output2);
 
 	public abstract class LogsReaderPerformerBase : IDisposable
 	{
@@ -53,7 +54,7 @@ namespace LogsReader.Reader
 
 		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
 
-		public OutFuncDelegate<string, DateTime, bool> TryParseDate { get; }
+		public OutFuncDelegate2<string, DateTime, CultureInfo, bool> TryParseDate { get; }
 
 		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;
 
@@ -72,21 +73,29 @@ namespace LogsReader.Reader
 
 			if (_currentSettings.TraceParse.CultureList.Count > 0)
 			{
-				TryParseDate = (string dateValue, out DateTime result) =>
+				TryParseDate = (string dateValue, out DateTime result, out CultureInfo culture) =>
 				{
 					foreach (var cultureInfo in _currentSettings.TraceParse.CultureList)
 					{
 						if (DateTime.TryParse(dateValue, cultureInfo, DateTimeStyles.AllowWhiteSpaces, out result))
+						{
+							culture = cultureInfo;
 							return true;
+						}
 					}
 
+					culture = null;
 					result = DateTime.MinValue;
 					return false;
 				};
 			}
 			else
 			{
-				TryParseDate = (string dateValue, out DateTime result) => DateTime.TryParse(dateValue, out result);
+				TryParseDate = (string dateValue, out DateTime result, out CultureInfo culture) =>
+				{
+					culture = null;
+					return DateTime.TryParse(dateValue, out result);
+				};
 			}
 
 			_transactionValues = new ConcurrentDictionary<string, Regex>();

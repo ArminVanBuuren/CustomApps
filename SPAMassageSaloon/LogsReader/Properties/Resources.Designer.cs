@@ -1270,8 +1270,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format.
-        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Also in the attributes you can use custo [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format. Attribute &quot;cultureList&quot; using when trying to parse string Date, dafult value is empty and for trying to parse multiple cultures set value for example &quot;en-US;ru-RU&quot;
+        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in  [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

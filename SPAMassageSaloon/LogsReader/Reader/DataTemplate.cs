@@ -52,10 +52,10 @@ namespace LogsReader.Reader
 
             ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
-            if (!parseResult.Date.IsNullOrEmptyTrim() && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace))
+            if (!parseResult.Date.IsNullOrEmptyTrim() && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace, out var culture))
             {
-                Date = dateOfTrace;
-                DateOfTrace = Date.Value.ToString(traceReader.DisplayDateFormat);
+	            Date = dateOfTrace;
+	            DateOfTrace = culture != null ? Date.Value.ToString(traceReader.DisplayDateFormat, culture) : Date.Value.ToString(traceReader.DisplayDateFormat);
             }
             else
             {
