@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,7 +10,7 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public delegate V GetTransactionDelegate<in T, U, out V>(T input, out U output);
+	public delegate V OutFuncDelegate<in T, U, out V>(T input, out U output);
 
 	public abstract class LogsReaderPerformerBase : IDisposable
 	{
@@ -27,7 +28,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Проверяет на совпадение по найденным транзакциям
 		/// </summary>
-		protected GetTransactionDelegate<string, string, bool> IsMatchByTransactions { get; }
+		protected OutFuncDelegate<string, string, bool> IsMatchByTransactions { get; }
 
 		/// <summary>
 		/// Функция для получение определенного <see cref="TraceReader"/> согласно настройкам
@@ -52,6 +53,8 @@ namespace LogsReader.Reader
 
 		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
 
+		public OutFuncDelegate<string, DateTime, bool> TryParseDate { get; }
+
 		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;
 
 		public Regex EndTraceLineWith => _currentSettings.TraceParse.EndTraceLineWith;
@@ -66,6 +69,25 @@ namespace LogsReader.Reader
 			_currentSettings = settings;
 
 			ResetMatchFunc(findMessage, useRegex);
+
+			if (_currentSettings.TraceParse.CultureList.Count > 0)
+			{
+				TryParseDate = (string dateValue, out DateTime result) =>
+				{
+					foreach (var cultureInfo in _currentSettings.TraceParse.CultureList)
+					{
+						if (DateTime.TryParse(dateValue, cultureInfo, DateTimeStyles.AllowWhiteSpaces, out result))
+							return true;
+					}
+
+					result = DateTime.MinValue;
+					return false;
+				};
+			}
+			else
+			{
+				TryParseDate = (string dateValue, out DateTime result) => DateTime.TryParse(dateValue, out result);
+			}
 
 			_transactionValues = new ConcurrentDictionary<string, Regex>();
 			IsMatchByTransactions = (string input, out string output) =>
@@ -105,6 +127,7 @@ namespace LogsReader.Reader
 		{
 			_currentSettings = control._currentSettings;
 			IsMatch = control.IsMatch;
+			TryParseDate = control.TryParseDate;
 			_transactionValues = control._transactionValues;
 			IsMatchByTransactions = control.IsMatchByTransactions;
 			GetTraceReader = control.GetTraceReader;

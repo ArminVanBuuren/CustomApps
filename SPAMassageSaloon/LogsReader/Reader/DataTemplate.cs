@@ -52,15 +52,14 @@ namespace LogsReader.Reader
 
             ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
-            var dateValue = parseResult.Date ?? string.Empty;
-            if (TIME.TryParseAnyDate(dateValue.Replace(",", "."), DateTimeStyles.AllowWhiteSpaces, out var dateOfTrace))
+            if (!parseResult.Date.IsNullOrEmptyTrim() && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace))
             {
                 Date = dateOfTrace;
                 DateOfTrace = Date.Value.ToString(traceReader.DisplayDateFormat);
             }
             else
             {
-                DateOfTrace = dateValue;
+                DateOfTrace = string.Empty;
             }
 
             TraceName = parseResult.TraceName;

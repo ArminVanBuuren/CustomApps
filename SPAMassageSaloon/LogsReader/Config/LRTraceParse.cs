@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -11,6 +12,9 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("TraceParse")]
 	public class LRTraceParse : TraceParse
 	{
+		const string defCultures = "en-EN;ru-RU";
+
+		private string _cultureList = string.Empty;
 		private CustomFunctions _customFunc;
 		private LRTraceParsePatternItem[] _traceParsePatterns;
 		private LRTraceParseTransactionItem[] _transactionParsePatterns;
@@ -20,7 +24,7 @@ namespace LogsReader.Config
 
 		public LRTraceParse()
 		{
-
+			
 		}
 
 		internal LRTraceParse(DefaultSettings set)
@@ -84,6 +88,28 @@ namespace LogsReader.Config
 		[XmlIgnore] internal bool IsCorrectCustomFunction { get; private set; } = false;
 
 		[XmlAttribute("displayDateFormat")] public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
+
+		[XmlAttribute("cultureList")]
+		public string Culture
+		{
+			get => _cultureList;
+			set
+			{
+				CultureList.Clear();
+
+				if (value.IsNullOrEmptyTrim())
+					return;
+				else
+					AddCultureList(value);
+
+				if (CultureList.Count == 0)
+					AddCultureList(defCultures);
+
+				_cultureList = string.Join(";", CultureList.Select(x => x.Name));
+			}
+		}
+
+		[XmlIgnore] internal HashSet<CultureInfo> CultureList { get; } = new HashSet<CultureInfo>();
 
 		[XmlElement("Pattern")]
 		public LRTraceParsePatternItem[] Patterns
@@ -183,6 +209,21 @@ namespace LogsReader.Config
 			}
 
 			return (IsTraceMatch, IsLineMatch);
+		}
+
+		void AddCultureList(string list)
+		{
+			foreach (var cultureStr in list.Split(';'))
+			{
+				try
+				{
+					CultureList.Add(CultureInfo.GetCultureInfo(cultureStr));
+				}
+				catch (Exception)
+				{
+					// ignored
+				}
+			}
 		}
 	}
 }
