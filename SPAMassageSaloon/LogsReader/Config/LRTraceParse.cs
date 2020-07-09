@@ -58,6 +58,8 @@ namespace LogsReader.Config
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)\n\-{50,}")
+							{Date = "$1", TraceName = "$2", Message = "$3"},
+						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)")
 							{Date = "$1", TraceName = "$2", Message = "$3"}
 					};
 					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+\s+\(\w+\)") };
