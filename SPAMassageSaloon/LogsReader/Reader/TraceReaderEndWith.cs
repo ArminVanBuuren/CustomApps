@@ -19,14 +19,14 @@ namespace LogsReader.Reader
 			    }
 			    else
 			    {
-				    Found.AppendNextLine(line);
-				    if (EndTraceWith.IsMatch(line))
+				    Lines++;
+
+					Found.AppendNextLine(line);
+				    if (EndTraceLineWith.IsMatch(line))
 				    {
 					    Commit();
 				    }
-
-				    Lines++;
-					return;
+				    return;
 			    }
 		    }
 
@@ -44,7 +44,7 @@ namespace LogsReader.Reader
 			{
 				var pastLine = revercePastTraceLines.Peek();
 				// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-				if (EndTraceWith.IsMatch(pastLine))
+				if (EndTraceLineWith.IsMatch(pastLine))
 					break;
 				Found.AppendPastLine(revercePastTraceLines.Dequeue());
 			}

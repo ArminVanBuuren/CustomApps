@@ -19,7 +19,7 @@ namespace LogsReader.Reader
 			    }
 			    else
 			    {
-				    if (!StartTraceWith.IsMatch(line))
+				    if (!StartTraceLineWith.IsMatch(line))
 				    {
 					    Found.AppendNextLine(line);
 
@@ -46,7 +46,7 @@ namespace LogsReader.Reader
 			{
 				var pastLine = revercePastTraceLines.Dequeue();
 				Found.AppendPastLine(pastLine);
-				if (StartTraceWith.IsMatch(pastLine))
+				if (StartTraceLineWith.IsMatch(pastLine))
 					break;
 			}
 

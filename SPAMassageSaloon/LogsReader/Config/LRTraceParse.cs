@@ -14,8 +14,8 @@ namespace LogsReader.Config
 		private CustomFunctions _customFunc;
 		private LRTraceParsePatternItem[] _traceParsePatterns;
 		private LRTraceParseTransactionItem[] _transactionParsePatterns;
-		private XmlNode[] _startTraceWith;
-		private XmlNode[] _endTraceWith;
+		private XmlNode[] _startTraceLineWith;
+		private XmlNode[] _endTraceLineWith;
 		private XmlNode[] _isError;
 
 		public LRTraceParse()
@@ -57,10 +57,10 @@ namespace LogsReader.Config
 				case DefaultSettings.MGA:
 					Patterns = new[]
 					{
-						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?[-]{49,}(.+)")
+						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)\n\-{50,}")
 							{Date = "$1", TraceName = "$2", Message = "$3"}
 					};
-					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\)")};
+					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+\s+\(\w+\)") };
 					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
 			}
@@ -123,23 +123,23 @@ namespace LogsReader.Config
 			set => _transactionParsePatterns = value;
 		}
 
-		[XmlElement("StartTraceWith")]
+		[XmlElement("StartTraceLineWith")]
 		public XmlNode[] StartWith
 		{
-			get => _startTraceWith;
-			set => StartTraceWith = GetCDataNode(value, false, out _startTraceWith);
+			get => _startTraceLineWith;
+			set => StartTraceLineWith = GetCDataNode(value, false, out _startTraceLineWith);
 		}
 
-		[XmlIgnore] internal Regex StartTraceWith { get; private set; }
+		[XmlIgnore] internal Regex StartTraceLineWith { get; private set; }
 
-		[XmlElement("EndTraceWith")]
+		[XmlElement("EndTraceLineWith")]
 		public XmlNode[] EndWith
 		{
-			get => _endTraceWith;
-			set => EndTraceWith = GetCDataNode(value, false, out _endTraceWith);
+			get => _endTraceLineWith;
+			set => EndTraceLineWith = GetCDataNode(value, false, out _endTraceLineWith);
 		}
 
-		[XmlIgnore] internal Regex EndTraceWith { get; private set; }
+		[XmlIgnore] internal Regex EndTraceLineWith { get; private set; }
 
 		[XmlElement("IsError")]
 		public XmlNode[] IsError

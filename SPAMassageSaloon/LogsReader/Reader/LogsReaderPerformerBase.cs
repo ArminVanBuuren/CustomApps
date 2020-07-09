@@ -52,9 +52,9 @@ namespace LogsReader.Reader
 
 		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
 
-		public Regex StartTraceWith => _currentSettings.TraceParse.StartTraceWith;
+		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;
 
-		public Regex EndTraceWith => _currentSettings.TraceParse.EndTraceWith;
+		public Regex EndTraceLineWith => _currentSettings.TraceParse.EndTraceLineWith;
 
 		public Regex IsTraceError => _currentSettings.TraceParse.IsTraceError;
 
@@ -88,11 +88,11 @@ namespace LogsReader.Reader
 				return false;
 			};
 
-			if (_currentSettings.TraceParse.StartTraceWith != null && _currentSettings.TraceParse.EndTraceWith != null)
+			if (_currentSettings.TraceParse.StartTraceLineWith != null && _currentSettings.TraceParse.EndTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderStartWithEndWith(this, data.server, data.filePath, data.originalFolder);
-			else if (_currentSettings.TraceParse.StartTraceWith != null)
+			else if (_currentSettings.TraceParse.StartTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderStartWith(this, data.server, data.filePath, data.originalFolder);
-			else if (_currentSettings.TraceParse.EndTraceWith != null)
+			else if (_currentSettings.TraceParse.EndTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
 			else
 				GetTraceReader = (data) => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
