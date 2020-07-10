@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,8 +22,9 @@ namespace LogsReader.Config
 	    private LRGroups _servers = new LRGroups(new [] { new LRGroupItem("local", "localhost") });
 	    private LRGroups _fileTypes = new LRGroups(new []{ new LRGroupItem("type", "log") });
 	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder(@"C:\", false) });
-        
-	    private string _schemeName = string.Empty;
+
+	    private string _cultureListString = string.Empty;
+        private string _schemeName = string.Empty;
         private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
         private int _maxLines = 50;
         private int _maxThreads = -1;
@@ -65,8 +67,26 @@ namespace LogsReader.Config
             }
         }
 
-        [XmlIgnore]
-        public Encoding Encoding { get; private set; } = Encoding.GetEncoding("windows-1251");
+        [XmlIgnore] public Encoding Encoding { get; private set; } = Encoding.GetEncoding("windows-1251");
+
+        [XmlAttribute("cultureList")]
+        public string CultureListString
+        {
+	        get => _cultureListString;
+	        set
+	        {
+		        CultureList.Clear();
+
+		        if (value.IsNullOrEmptyTrim())
+			        return;
+		        else
+			        AddCultureList(value);
+
+		        _cultureListString = string.Join(";", CultureList.Select(x => x.Name));
+	        }
+        }
+
+        [XmlIgnore] internal HashSet<CultureInfo> CultureList { get; } = new HashSet<CultureInfo>();
 
         [XmlAnyElement("ServersComment")]
         public XmlComment ServersComment
@@ -288,6 +308,21 @@ namespace LogsReader.Config
 			        MaxThreads = -1;
 			        OrderBy = _orderBy;
 			        break;
+	        }
+        }
+
+        void AddCultureList(string list)
+        {
+	        foreach (var cultureStr in list.Split(';'))
+	        {
+		        try
+		        {
+			        CultureList.Add(CultureInfo.GetCultureInfo(cultureStr));
+		        }
+		        catch (Exception)
+		        {
+			        // ignored
+		        }
 	        }
         }
 

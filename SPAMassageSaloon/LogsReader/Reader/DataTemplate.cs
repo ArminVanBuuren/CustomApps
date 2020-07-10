@@ -33,40 +33,41 @@ namespace LogsReader.Reader
         private string _message = string.Empty;
 
         internal DataTemplate(
-	        TraceReader traceReader, 
+	        TraceReader traceReader,
 	        long foundLineID,
-	        TraceParseResult parseResult, 
+	        TraceParseResult parseResult,
 	        string traceMessage,
 	        string trn)
         {
-            IsMatched = true;
+	        IsMatched = true;
 
-            // проверка если нужно показать что трейс ошибочный
-            if (parseResult.IsSuccess && traceReader.IsTraceError != null)
-	            IsSuccess = !traceReader.IsTraceError.IsMatch(traceMessage);
-            else
-				IsSuccess = parseResult.IsSuccess;
+	        // проверка если нужно показать что трейс ошибочный
+	        if (parseResult.IsSuccess && traceReader.IsTraceError != null)
+		        IsSuccess = !traceReader.IsTraceError.IsMatch(traceMessage);
+	        else
+		        IsSuccess = parseResult.IsSuccess;
 
-            FoundLineID = foundLineID;
-            ParentReader = traceReader;
+	        FoundLineID = foundLineID;
+	        ParentReader = traceReader;
 
-            ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
+	        ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
-            if (!parseResult.Date.IsNullOrEmptyTrim() && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace, out var culture))
-            {
-	            Date = dateOfTrace;
-	            DateOfTrace = culture != null ? Date.Value.ToString(traceReader.DisplayDateFormat, culture) : Date.Value.ToString(traceReader.DisplayDateFormat);
-            }
-            else
-            {
-                DateOfTrace = string.Empty;
-            }
+	        if (!parseResult.Date.IsNullOrEmptyTrim()
+	            && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace, out var displayDate))
+	        {
+		        Date = dateOfTrace;
+		        DateOfTrace = displayDate;
+	        }
+	        else
+	        {
+		        DateOfTrace = string.Empty;
+	        }
 
-            TraceName = parseResult.TraceName;
-            Description = parseResult.Description;
-            Message = parseResult.Message;
-            TraceMessage = traceMessage;
-            TransactionValue = trn;
+	        TraceName = parseResult.TraceName;
+	        Description = parseResult.Description;
+	        Message = parseResult.Message;
+	        TraceMessage = traceMessage;
+	        TransactionValue = trn;
         }
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn) : this(traceReader, foundLineID, trn)

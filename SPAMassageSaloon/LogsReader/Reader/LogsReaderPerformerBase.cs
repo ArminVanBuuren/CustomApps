@@ -11,7 +11,7 @@ using Utils;
 namespace LogsReader.Reader
 {
 	public delegate V OutFuncDelegate<in T, U, out V>(T input, out U output);
-	public delegate V OutFuncDelegate2<in T, U, F, out V>(T input, out U output1, out F output2);
+	public delegate V DoubleOutFuncDelegate<in T, U, S, out V>(T input, out U output1, out S output2);
 
 	public abstract class LogsReaderPerformerBase : IDisposable
 	{
@@ -54,7 +54,7 @@ namespace LogsReader.Reader
 
 		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
 
-		public OutFuncDelegate2<string, DateTime, CultureInfo, bool> TryParseDate { get; }
+		public DoubleOutFuncDelegate<string, DateTime, string, bool> TryParseDate { get; }
 
 		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;
 
@@ -71,30 +71,42 @@ namespace LogsReader.Reader
 
 			ResetMatchFunc(findMessage, useRegex);
 
-			if (_currentSettings.TraceParse.CultureList.Count > 0)
+			Func<DateTime, string> getDisplayDate;
+			if (_currentSettings.TraceParse.DisplayCulture != null)
+				getDisplayDate = (date) => date.ToString(_currentSettings.TraceParse.DisplayDateFormat, _currentSettings.TraceParse.DisplayCulture);
+			else
+				getDisplayDate = (date) => date.ToString(_currentSettings.TraceParse.DisplayDateFormat);
+
+			if (_currentSettings.CultureList.Count > 0)
 			{
-				TryParseDate = (string dateValue, out DateTime result, out CultureInfo culture) =>
+				TryParseDate = (string dateValue, out DateTime result, out string displayDate) =>
 				{
-					foreach (var cultureInfo in _currentSettings.TraceParse.CultureList)
+					foreach (var cultureInfo in _currentSettings.CultureList)
 					{
 						if (DateTime.TryParse(dateValue, cultureInfo, DateTimeStyles.AllowWhiteSpaces, out result))
 						{
-							culture = cultureInfo;
+							displayDate = getDisplayDate(result);
 							return true;
 						}
 					}
 
-					culture = null;
+					displayDate = string.Empty;
 					result = DateTime.MinValue;
 					return false;
 				};
 			}
 			else
 			{
-				TryParseDate = (string dateValue, out DateTime result, out CultureInfo culture) =>
+				TryParseDate = (string dateValue, out DateTime result, out string displayDate) =>
 				{
-					culture = null;
-					return DateTime.TryParse(dateValue, out result);
+					if (DateTime.TryParse(dateValue, out result))
+					{
+						displayDate = getDisplayDate(result);
+						return true;
+					}
+
+					displayDate = string.Empty;
+					return false;
 				};
 			}
 

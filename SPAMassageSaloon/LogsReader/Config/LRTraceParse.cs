@@ -12,9 +12,7 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("TraceParse")]
 	public class LRTraceParse : TraceParse
 	{
-		const string defCultures = "en-EN;ru-RU";
-
-		private string _cultureList = string.Empty;
+		private string _culture = string.Empty;
 		private CustomFunctions _customFunc;
 		private LRTraceParsePatternItem[] _traceParsePatterns;
 		private LRTraceParseTransactionItem[] _transactionParsePatterns;
@@ -89,27 +87,30 @@ namespace LogsReader.Config
 
 		[XmlAttribute("displayDateFormat")] public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
 
-		[XmlAttribute("cultureList")]
-		public string Culture
+		[XmlAttribute("culture")] public string Culture
 		{
-			get => _cultureList;
+			get => _culture;
 			set
 			{
-				CultureList.Clear();
+				DisplayCulture = null;
+				_culture = string.Empty;
 
 				if (value.IsNullOrEmptyTrim())
 					return;
-				else
-					AddCultureList(value);
 
-				if (CultureList.Count == 0)
-					AddCultureList(defCultures);
-
-				_cultureList = string.Join(";", CultureList.Select(x => x.Name));
+				try
+				{
+					DisplayCulture = CultureInfo.GetCultureInfo(value);
+					_culture = DisplayCulture.Name;
+				}
+				catch (Exception)
+				{
+					// ignored
+				}
 			}
 		}
 
-		[XmlIgnore] internal HashSet<CultureInfo> CultureList { get; } = new HashSet<CultureInfo>();
+		[XmlIgnore] internal CultureInfo DisplayCulture { get; private set; }
 
 		[XmlElement("Pattern")]
 		public LRTraceParsePatternItem[] Patterns
@@ -209,21 +210,6 @@ namespace LogsReader.Config
 			}
 
 			return (IsTraceMatch, IsLineMatch);
-		}
-
-		void AddCultureList(string list)
-		{
-			foreach (var cultureStr in list.Split(';'))
-			{
-				try
-				{
-					CultureList.Add(CultureInfo.GetCultureInfo(cultureStr));
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-			}
 		}
 	}
 }
