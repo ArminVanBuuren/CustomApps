@@ -52,8 +52,6 @@ namespace LogsReader.Reader
 
 		public LRTraceParseTransactionItem[] TransactionPatterns => _currentSettings.TraceParse.TransactionPatterns;
 
-		public string DisplayDateFormat => _currentSettings.TraceParse.DisplayDateFormat;
-
 		public DoubleOutFuncDelegate<string, DateTime, string, bool> TryParseDate { get; }
 
 		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;

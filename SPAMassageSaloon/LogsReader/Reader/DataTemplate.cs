@@ -98,7 +98,7 @@ namespace LogsReader.Reader
 
             ID = -1;
             Date = DateTime.Now;
-            DateOfTrace = Date.Value.ToString(traceReader.DisplayDateFormat);
+            DateOfTrace = string.Empty;
 
             Error = error;
             TraceName = error.GetType().ToString();
