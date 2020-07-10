@@ -1153,7 +1153,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &quot;Encoding&quot; atributte is used when reading log files. The attribute &quot;disableHintComments&quot; to true - disables hinted comments in config..
+        ///   Ищет локализованную строку, похожую на Atributte &quot;encoding&quot; is used when reading log files. Attribute &quot;cultureList&quot; using when trying to parse string Date from trace, dafault value is empty and for trying to parse multiple cultures set value for example &quot;ru-RU;en-US&quot;. For disable comments in the config file, you should set &quot;disableHintComments&quot; attribute to true..
         /// </summary>
         public static string Txt_LRSettings_SettingsComment {
             get {
@@ -1270,8 +1270,8 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format. Attribute &quot;cultureList&quot; using when trying to parse string Date, dafult value is empty and for trying to parse multiple cultures set value for example &quot;en-US;ru-RU&quot;
-        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in  [остаток строки не уместился]&quot;;.
+        ///   Ищет локализованную строку, похожую на Attribute &quot;displayDateFormat&quot; sets the display date format. Attribute &quot;culture&quot; is used with the &quot;displayDateFormat&quot; attribute, default value is empty.
+        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline an [остаток строки не уместился]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {
