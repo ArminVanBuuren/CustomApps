@@ -498,6 +498,11 @@ namespace Utils.WinForm.Notepad
             return FCTB.GetRange(fromPlace, toPlace);
         }
 
+        public void Clear()
+        {
+	        FCTB.Clear();
+        }
+
         public new void Focus()
         {
             FCTB.Focus();
