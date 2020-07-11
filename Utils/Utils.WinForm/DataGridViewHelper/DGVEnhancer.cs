@@ -12,9 +12,9 @@ namespace Utils.WinForm.DataGridViewHelper
 {
     public static class DGVEnhancer
     {
-        [DllImport("user32.dll")]
-        private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
-        private const int WM_SETREDRAW = 11;
+	    [DllImport("user32.dll")]
+	    private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+	    private const int WM_SETREDRAW = 11;
 
         public static void SetRedraw(this DataGridView dgv, bool value)
         {
@@ -70,6 +70,14 @@ namespace Utils.WinForm.DataGridViewHelper
             {
                 return $"{PropertyName}=[{Attribute.ColumnName}]";
             }
+        }
+
+        public static void DoubleBuffered(this DataGridView dgv, bool setting)
+        {
+	        var dgvType = dgv.GetType();
+	        var pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+	        if (pi != null)
+		        pi.SetValue(dgv, setting, null);
         }
 
         public static async Task<DataTable> ToTableAsync<T>(this IEnumerable<T> data)
@@ -220,6 +228,8 @@ namespace Utils.WinForm.DataGridViewHelper
             var prevVisible = grid.RowHeadersVisible;
             try
             {
+	            grid.SetRedraw(false);
+
                 if (stretchColumnsToAllCells)
                 {
                     grid.BeginInit();
@@ -275,6 +285,8 @@ namespace Utils.WinForm.DataGridViewHelper
                     grid.RowHeadersVisible = prevVisible;
                     grid.EndInit();
                 }
+
+                grid.SetRedraw(true);
             }
         }
 

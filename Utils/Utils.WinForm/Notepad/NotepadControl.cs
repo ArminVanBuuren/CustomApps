@@ -34,7 +34,7 @@ namespace Utils.WinForm.Notepad
         public event EventHandler LanguageChanged;
         public event EventHandler WordWrapStateChanged;
         public event EventHandler WordHighlightsStateChanged;
-        public event EventHandler TabIndexChanged;
+        public event EventHandler SelectedIndexChanged;
 
         Dictionary<Editor, TabPage> ListOfEditors { get; } = new Dictionary<Editor, TabPage>();
 
@@ -191,7 +191,7 @@ namespace Utils.WinForm.Notepad
             _tabControl.Deselected += TabControlObj_Deselected;
             _tabControl.Selecting += RefreshForm;
             _tabControl.DrawItem += TabControlOnDrawItem;
-            _tabControl.TabIndexChanged += (sender, args) => { TabIndexChanged?.Invoke(this, EventArgs.Empty); };
+            _tabControl.SelectedIndexChanged += (sender, args) => { SelectedIndexChanged?.Invoke(this, EventArgs.Empty); };
         }
 
         #region Inner - AllowUserCloseItems
