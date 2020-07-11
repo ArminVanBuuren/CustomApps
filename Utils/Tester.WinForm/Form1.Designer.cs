@@ -37,15 +37,16 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.advancedFlowLayoutPanel1 = new Utils.WinForm.Expander.AdvancedFlowLayoutPanel();
 			this.expandCollapsePanel1 = new Utils.WinForm.Expander.ExpandCollapsePanel();
+			this.customTreeView1 = new Utils.WinForm.CustomTreeView();
+			this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
 			this.TestExpander = new Utils.WinForm.Expander.ExpandCollapsePanel();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-			this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
-			this.customTreeView1 = new Utils.WinForm.CustomTreeView();
+			this.editor1 = new Utils.WinForm.Notepad.Editor();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.advancedFlowLayoutPanel1.SuspendLayout();
 			this.expandCollapsePanel1.SuspendLayout();
-			this.TestExpander.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
+			this.TestExpander.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -103,7 +104,7 @@
 			// 
 			this.advancedFlowLayoutPanel1.Controls.Add(this.expandCollapsePanel1);
 			this.advancedFlowLayoutPanel1.Controls.Add(this.TestExpander);
-			this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(257, 54);
+			this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
 			this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
 			this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(397, 536);
 			this.advancedFlowLayoutPanel1.TabIndex = 6;
@@ -116,6 +117,7 @@
 			this.expandCollapsePanel1.BordersThickness = 3;
 			this.expandCollapsePanel1.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
 			this.expandCollapsePanel1.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
+			this.expandCollapsePanel1.CheckBoxEnabled = true;
 			this.expandCollapsePanel1.CheckBoxShown = true;
 			this.expandCollapsePanel1.Controls.Add(this.customTreeView1);
 			this.expandCollapsePanel1.Controls.Add(this.fastColoredTextBox1);
@@ -133,6 +135,46 @@
 			this.expandCollapsePanel1.Text = "TestTestTestTestTestTestTestTestTestTestTestTest";
 			this.expandCollapsePanel1.UseAnimation = true;
 			// 
+			// customTreeView1
+			// 
+			this.customTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+			this.customTreeView1.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+			this.customTreeView1.Location = new System.Drawing.Point(68, 219);
+			this.customTreeView1.Name = "customTreeView1";
+			this.customTreeView1.Size = new System.Drawing.Size(276, 97);
+			this.customTreeView1.TabIndex = 2;
+			// 
+			// fastColoredTextBox1
+			// 
+			this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+			this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
+			this.fastColoredTextBox1.BackBrush = null;
+			this.fastColoredTextBox1.CharHeight = 14;
+			this.fastColoredTextBox1.CharWidth = 8;
+			this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+			this.fastColoredTextBox1.IsReplaceMode = false;
+			this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 36);
+			this.fastColoredTextBox1.Name = "fastColoredTextBox1";
+			this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+			this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+			this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
+			this.fastColoredTextBox1.Size = new System.Drawing.Size(295, 150);
+			this.fastColoredTextBox1.TabIndex = 1;
+			this.fastColoredTextBox1.TabLength = 2;
+			this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+			this.fastColoredTextBox1.Zoom = 100;
+			// 
 			// TestExpander
 			// 
 			this.TestExpander.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -141,6 +183,7 @@
 			this.TestExpander.BordersThickness = 3;
 			this.TestExpander.ButtonSize = Utils.WinForm.Expander.ExpandButtonSize.Small;
 			this.TestExpander.ButtonStyle = Utils.WinForm.Expander.ExpandButtonStyle.Circle;
+			this.TestExpander.CheckBoxEnabled = true;
 			this.TestExpander.CheckBoxShown = true;
 			this.TestExpander.Controls.Add(this.richTextBox1);
 			this.TestExpander.ExpandedHeight = 319;
@@ -166,46 +209,25 @@
 			this.richTextBox1.TabIndex = 1;
 			this.richTextBox1.Text = "";
 			// 
-			// fastColoredTextBox1
+			// editor1
 			// 
-			this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-			this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
-			this.fastColoredTextBox1.BackBrush = null;
-			this.fastColoredTextBox1.CharHeight = 14;
-			this.fastColoredTextBox1.CharWidth = 8;
-			this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-			this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
-			this.fastColoredTextBox1.IsReplaceMode = false;
-			this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 36);
-			this.fastColoredTextBox1.Name = "fastColoredTextBox1";
-			this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
-			this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-			this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-			this.fastColoredTextBox1.Size = new System.Drawing.Size(295, 150);
-			this.fastColoredTextBox1.TabIndex = 1;
-			this.fastColoredTextBox1.TabLength = 2;
-			this.fastColoredTextBox1.Text = "fastColoredTextBox1";
-			this.fastColoredTextBox1.Zoom = 100;
-			// 
-			// customTreeView1
-			// 
-			this.customTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-			this.customTreeView1.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.customTreeView1.Location = new System.Drawing.Point(68, 219);
-			this.customTreeView1.Name = "customTreeView1";
-			this.customTreeView1.Size = new System.Drawing.Size(276, 97);
-			this.customTreeView1.TabIndex = 2;
+			this.editor1.BackBrush = null;
+			this.editor1.ColoredOnlyVisible = false;
+			this.editor1.DefaultEncoding = ((System.Text.Encoding)(resources.GetObject("editor1.DefaultEncoding")));
+			this.editor1.DelayedEventsInterval = 100;
+			this.editor1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+			this.editor1.HeaderName = null;
+			this.editor1.Highlights = false;
+			this.editor1.IsChanged = false;
+			this.editor1.IsReplaceMode = false;
+			this.editor1.Location = new System.Drawing.Point(464, 117);
+			this.editor1.Name = "editor1";
+			this.editor1.ReadOnly = false;
+			this.editor1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+			this.editor1.Size = new System.Drawing.Size(623, 494);
+			this.editor1.SizingGrip = true;
+			this.editor1.TabIndex = 7;
+			this.editor1.WordWrap = false;
 			// 
 			// Form1
 			// 
@@ -213,6 +235,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.ClientSize = new System.Drawing.Size(1125, 804);
+			this.Controls.Add(this.editor1);
 			this.Controls.Add(this.advancedFlowLayoutPanel1);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
@@ -224,8 +247,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.advancedFlowLayoutPanel1.ResumeLayout(false);
 			this.expandCollapsePanel1.ResumeLayout(false);
-			this.TestExpander.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
+			this.TestExpander.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -243,6 +266,7 @@
 		private Utils.WinForm.Expander.ExpandCollapsePanel expandCollapsePanel1;
 		private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
 		private Utils.WinForm.CustomTreeView customTreeView1;
+		private Utils.WinForm.Notepad.Editor editor1;
 	}
 }
 
