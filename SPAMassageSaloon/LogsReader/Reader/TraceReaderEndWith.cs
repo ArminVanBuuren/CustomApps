@@ -43,7 +43,7 @@ namespace LogsReader.Reader
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 			{
 				var pastLine = revercePastTraceLines.Peek();
-				// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
+				// Попытки спарсить сохраненные предыдущие строки как конец трассировки
 				if (EndTraceLineWith.IsMatch(pastLine))
 					break;
 				Found.AppendPastLine(revercePastTraceLines.Dequeue());

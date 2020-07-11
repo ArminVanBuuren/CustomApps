@@ -123,8 +123,8 @@ namespace LogsReader.Reader
         public abstract bool HasAnyResult { get; }
 
         readonly Font defaultFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Regular);
-        readonly Font dgvFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5f, FontStyle.Regular);
-        readonly Font errorFont = new Font(LogsReaderMainForm.FailedFontFamily, 8.5f, FontStyle.Bold);
+        readonly Font dgvFont = new Font(LogsReaderMainForm.DgvFontFamily, 8.25f, FontStyle.Regular);
+        readonly Font errorFont = new Font(LogsReaderMainForm.FailedFontFamily, 8.25f, FontStyle.Bold);
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
@@ -175,6 +175,11 @@ namespace LogsReader.Reader
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.DefaultCellStyle.Font = dgvFont;
 	            DgvData.Font = dgvFont;
+	            DgvData.DoubleBuffered(true);
+	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+	            foreach (DataGridViewColumn c in DgvData.Columns)
+		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 	            DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
@@ -238,6 +243,7 @@ namespace LogsReader.Reader
                 notepad.DefaultEncoding = defaultEncoding;
                 notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
                 notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
+                notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
 
                 DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
                 DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
@@ -938,48 +944,88 @@ namespace LogsReader.Reader
 
         private void DgvData_SelectionChanged(object sender, EventArgs e)
         {
-            try
-            {
-                EditorMessage.Text = string.Empty;
-                EditorTraceMessage.Text = string.Empty;
+	        try
+	        {
+		        if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
+			        return;
 
-                if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
-                    return;
+		        if (!TryGetTemplate(DgvData.SelectedRows[0], out var template))
+			        return;
 
-                if(!TryGetTemplate(DgvData.SelectedRows[0], out var template))
-                    return;
+		        var foundByTransactionValue = string.Empty;
+		        if (!template.TransactionValue.IsNullOrEmptyTrim())
+			        foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
 
-                var foundByTransactionValue = string.Empty;
-                if (!template.TransactionValue.IsNullOrEmptyTrim())
-	                foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
+		        descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 
-                descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
+		        SetMessage(template);
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+	        finally
+	        {
+		        DgvData.Focus();
+	        }
+        }
 
-                string messageString;
-                if (EditorMessage.Language == Language.XML || EditorMessage.Language == Language.HTML)
-                {
-	                var messageXML = XML.RemoveUnallowable(template.Message, " ");
-	                messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
-                }
-                else
-                {
-	                messageString = template.Message.TrimWhiteSpaces();
-                }
+        private void Notepad_TabIndexChanged(object sender, EventArgs e)
+        {
+	        try
+	        {
+		        if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
+			        return;
 
-                EditorMessage.Text = messageString;
-                EditorMessage.DelayedEventsInterval = 10;
+		        if (!TryGetTemplate(DgvData.SelectedRows[0], out var template))
+			        return;
+
+                SetMessage(template);
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+	        finally
+	        {
+		        DgvData.Focus();
+            }
+        }
+
+        private DataTemplate prevTemplateMessage;
+        private DataTemplate prevTemplateTraceMessage;
+
+        void SetMessage(DataTemplate template)
+        {
+	        if (notepad.CurrentEditor == EditorMessage)
+	        {
+		        if (prevTemplateMessage != null && prevTemplateMessage.Equals(template))
+			        return;
+
+		        var messageString = template.Message.TrimWhiteSpaces();
+		        if (EditorMessage.Language == Language.XML
+		            || EditorMessage.Language == Language.HTML
+		            || template.Message.Length <= 50000 && messageString.StartsWith("<") && messageString.EndsWith(">"))
+		        {
+			        var messageXML = XML.RemoveUnallowable(template.Message, " ");
+			        messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
+		        }
+
+		        EditorMessage.Text = messageString;
+		        EditorMessage.DelayedEventsInterval = 10;
+
+		        prevTemplateMessage = template;
+	        }
+	        else
+	        {
+		        if (prevTemplateTraceMessage != null && prevTemplateTraceMessage.Equals(template))
+			        return;
 
                 EditorTraceMessage.Text = template.TraceMessage;
-                EditorTraceMessage.DelayedEventsInterval = 10;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
-            finally
-            {
-                DgvData.Focus();
-            }
+		        EditorTraceMessage.DelayedEventsInterval = 10;
+
+		        prevTemplateTraceMessage = template;
+	        }
         }
 
         internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
@@ -1071,9 +1117,6 @@ namespace LogsReader.Reader
         {
             var prev = UserSettings.MessageLanguage;
             UserSettings.MessageLanguage = EditorMessage.Language;
-            if((prev == Language.HTML || prev == Language.XML) && (EditorMessage.Language == Language.XML || EditorMessage.Language == Language.HTML))
-                return;
-            DgvData_SelectionChanged(DgvData, EventArgs.Empty);
         }
 
         private void TraceMessage_LanguageChanged(object sender, EventArgs e)
@@ -1141,29 +1184,32 @@ namespace LogsReader.Reader
 
         protected void ClearDGV()
         {
-            try
-            {
-	            _oldSortedColumn = null;
-	            _currentDGVResult = null;
-	            _byAscending = true;
+	        try
+	        {
+		        _oldSortedColumn = null;
+		        _currentDGVResult = null;
+		        _byAscending = true;
 
-                DgvData.DataSource = null;
-                DgvData.Rows.Clear();
-                DgvData.Refresh();
+		        DgvData.DataSource = null;
+		        DgvData.Rows.Clear();
+		        DgvData.Refresh();
 
-                descriptionText.Text = string.Empty;
-                if (EditorMessage != null)
-                    EditorMessage.Text = string.Empty;
-                if (EditorTraceMessage != null)
-                    EditorTraceMessage.Text = string.Empty;
+		        descriptionText.Text = string.Empty;
+		        if (EditorMessage != null)
+			        EditorMessage.Text = string.Empty;
+		        if (EditorTraceMessage != null)
+			        EditorTraceMessage.Text = string.Empty;
 
-                btnExport.Enabled = false;
-                btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+		        prevTemplateMessage = null;
+		        prevTemplateTraceMessage = null;
+
+		        btnExport.Enabled = false;
+		        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
         }
 
         private bool _isLastWasError;

@@ -39,7 +39,7 @@ namespace LogsReader.Reader
 
 
 			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
-			// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
+			// Попытки спарсить предыдущие сохраненные строки как начало трассировки
 			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 			{

@@ -19,8 +19,8 @@ namespace LogsReader
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
 	    public static readonly string MainFontFamily = "Segoe UI";
-        public static readonly string DgvFontFamily = "Segoe UI";
-        public static readonly string FailedFontFamily = "Arial";
+        public static readonly string DgvFontFamily = "Courier New Bold";
+        public static readonly string FailedFontFamily = "Courier New Bold";
 
         private const string GLOBAL_PAGE_NAME = "Global";
 
