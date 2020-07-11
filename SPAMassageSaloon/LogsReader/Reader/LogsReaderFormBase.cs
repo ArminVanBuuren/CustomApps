@@ -175,12 +175,12 @@ namespace LogsReader.Reader
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.DefaultCellStyle.Font = dgvFont;
 	            DgvData.Font = dgvFont;
-	            DgvData.DoubleBuffered(true);
 	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
 		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.DoubleBuffered(true);
+                DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
 	            SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
@@ -887,7 +887,7 @@ namespace LogsReader.Reader
 			        DgvData.ClearSelection();
 			        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
 				        ? firstVisible
-				        : row.Index;
+				        : row.Index - countVisible >= 0 ? row.Index - countVisible : row.Index;
 			        row.Selected = true;
 			        DgvData.CurrentCell = DgvData.Rows[row.Index].Cells[DgvData.CurrentCell.ColumnIndex];
 			        return;
