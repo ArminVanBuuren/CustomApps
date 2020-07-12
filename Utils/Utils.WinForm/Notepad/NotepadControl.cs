@@ -220,8 +220,8 @@ namespace Utils.WinForm.Notepad
                     Tag = _tabControl.TabPages[_tabControl.SelectedIndex]
                 };
                 _closeMenuStrip.Items.Add(Resources.Txt_Close, Resources.notepad_closeItem);
-                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllButThis, Resources.notepad_closeAllButThis);
                 _closeMenuStrip.Items.Add(Resources.Txt_CloseAllDocuments, Resources.notepad_closeAllItems);
+                _closeMenuStrip.Items.Add(Resources.Txt_CloseAllButThis, Resources.notepad_closeAllButThis);
                 if (tabPage.Controls[0] is FileEditor fileEditor)
                 {
                     _closeMenuStrip.Items.Add(new ToolStripSeparator());
