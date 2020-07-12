@@ -16,12 +16,14 @@ namespace LogsReader.Reader.Forms
 		private const string PING_SERVER = "PingServer";
 		private const string REMOVE_SERVER = "RemoveServer";
 
-		private readonly Dictionary<string, List<string>> _serverGroups;
+		private readonly Dictionary<string, (int, List<string>)> _serverGroups;
 		private readonly HashSet<Panel> _serverPanels = new HashSet<Panel>();
 
 		private string _currentGroup = null;
 
-		public ServerGroupForm(string selectedGroup, Dictionary<string, List<string>> serverGroups)
+		private readonly string selectedGroupPriority = @"0";
+
+		public ServerGroupForm(string selectedGroup, Dictionary<string, (int, List<string>)> serverGroups)
 		{
 			InitializeComponent();
 
@@ -31,11 +33,12 @@ namespace LogsReader.Reader.Forms
 			MinimizeBox = false;
 			MaximizeBox = false;
 
-			labelGroup.Text = Resources.Txt_Forms_Group;
+			labelGroup.Text = Resources.Txt_Forms_GroupName;
 			groupBoxServers.Text = Resources.Txt_LogsReaderForm_Servers;
 			buttonAdd.Text = Resources.Txt_Forms_Add;
 			buttonRemoveAll.Text = Resources.Txt_Forms_RemoveAll;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
+			labelPriority.Text = Resources.Txt_Forms_GroupPriority;
 
 			_serverGroups = serverGroups;
 
@@ -45,6 +48,9 @@ namespace LogsReader.Reader.Forms
 			ComboboxGroup_SelectionChangeCommitted(this, EventArgs.Empty);
 			comboboxGroup.SelectionChangeCommitted += ComboboxGroup_SelectionChangeCommitted;
 			comboboxGroup.TextChanged += comboboxGroup_TextChanged;
+
+			if (_serverGroups.TryGetValue(selectedGroup, out var res))
+				textBoxGroupPriority.Text = selectedGroupPriority = res.Item1.ToString();
 
 			CenterToScreen();
 
@@ -63,14 +69,17 @@ namespace LogsReader.Reader.Forms
 			_serverPanels.Clear();
 			_currentGroup = comboboxGroup.SelectedItem.ToString();
 
-			if (_serverGroups.TryGetValue(_currentGroup, out var servers) && servers.Count > 0)
+			if (_serverGroups.TryGetValue(_currentGroup, out var servers) && servers.Item2.Count > 0)
 			{
-				foreach (var server in servers)
+				foreach (var server in servers.Item2)
 					AddServer(server);
+
+				textBoxGroupPriority.Text = servers.Item1.ToString();
 			}
 			else
 			{
 				AddServer(string.Empty);
+				textBoxGroupPriority.Text = selectedGroupPriority;
 			}
 
 			AssignForm();
@@ -145,10 +154,10 @@ namespace LogsReader.Reader.Forms
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
 				_serverGroups[_currentGroup] =
-					new List<string>(_serverPanels
+					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text), new List<string>(_serverPanels
 						.Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
 						.Where(x => !x.IsNullOrEmptyTrim())
-						.Distinct(StringComparer.InvariantCultureIgnoreCase));
+						.Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
 			Close();
@@ -302,6 +311,24 @@ namespace LogsReader.Reader.Forms
 				{
 					control.TabIndex = tabIndex++;
 				}
+			}
+		}
+
+		private void textBoxGroupPriority_TextChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				textBoxGroupPriority.TextChanged -= textBoxGroupPriority_TextChanged;
+				if (!textBoxGroupPriority.Text.IsNullOrEmptyTrim())
+					textBoxGroupPriority.Text = AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text).ToString();
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+			finally
+			{
+				textBoxGroupPriority.TextChanged += textBoxGroupPriority_TextChanged;
 			}
 		}
 	}

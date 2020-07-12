@@ -16,8 +16,8 @@ namespace LogsReader.Reader
 {
 	public abstract class LogsReaderPerformerFiles : LogsReaderPerformerBase
 	{
-		private readonly IEnumerable<string> _servers;
-		private readonly IEnumerable<string> _fileTypes;
+		private readonly IReadOnlyDictionary<string, int> _servers;
+		private readonly IReadOnlyDictionary<string, int> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
 
 		/// <summary>
@@ -32,9 +32,9 @@ namespace LogsReader.Reader
 		protected LogsReaderPerformerFiles(
 			LRSettingsScheme settings, 
 			string findMessage,  
-			bool useRegex, 
-			IEnumerable<string> servers, 
-			IEnumerable<string> fileTypes,
+			bool useRegex,
+			IReadOnlyDictionary<string, int> servers,
+			IReadOnlyDictionary<string, int> fileTypes,
 			IReadOnlyDictionary<string, bool> folders)
 			:base(settings, findMessage, useRegex)
 		{
@@ -57,7 +57,7 @@ namespace LogsReader.Reader
 		{
 			var kvpList = new List<TraceReader>();
 
-			foreach (var serverName in _servers)
+			foreach (var (serverName, serverPriority) in _servers)
 			{
 				if (IsStopPending)
 					return kvpList;
@@ -78,16 +78,23 @@ namespace LogsReader.Reader
 						continue;
 
 					var files = Directory.GetFiles(serverFolder, "*", isAllDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-					foreach (var fileLog in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
+					foreach (var traceReader in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
 					{
 						if (IsStopPending)
 							return kvpList;
 
-						if (!IsAllowedExtension(fileLog.File.Name))
+						if (!IsAllowedExtension(traceReader.File.Name))
 							continue;
 
-						if (_fileTypes.Any(x => fileLog.File.Name.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
-							kvpList.Add(fileLog);
+						foreach (var (fileType, filePriority) in _fileTypes)
+						{
+							if (traceReader.File.Name.IndexOf(fileType, StringComparison.InvariantCultureIgnoreCase) != -1)
+							{
+								traceReader.Priority = int.Parse($"1{serverPriority}{filePriority}");
+								kvpList.Add(traceReader);
+								break;
+							}
+						}
 					}
 				}
 			}

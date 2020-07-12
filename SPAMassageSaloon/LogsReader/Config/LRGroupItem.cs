@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Utils;
 
 namespace LogsReader.Config
 {
@@ -15,11 +16,30 @@ namespace LogsReader.Config
 			set => _groupName = value.ToUpper();
 		}
 
+		[XmlIgnore] internal int InternalPriority { get; set; } = 0;
+
+		[XmlAttribute("priority")]
+		public string Priority
+		{
+			get => InternalPriority.ToString();
+			set
+			{
+				if (!value.IsNullOrEmptyTrim() && int.TryParse(value, out var result) && result >= 0)
+				{
+					InternalPriority = result;
+					return;
+				}
+
+				InternalPriority = 0;
+			}
+		}
+
 		public LRGroupItem() : base(string.Empty) { }
 
-		internal LRGroupItem(string groupName, string items) : base(items)
+		internal LRGroupItem(string groupName, int priority, string items) : base(items)
 		{
 			GroupName = groupName;
+			Priority = priority.ToString();
 		}
 	}
 }

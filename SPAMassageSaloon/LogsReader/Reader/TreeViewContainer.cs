@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
@@ -95,8 +96,8 @@ namespace LogsReader.Reader
         public TreeViewContainer(
 	        LRSettingsScheme schemeSettings,
 	        CustomTreeView main,
-	        Dictionary<string, IEnumerable<string>> servers,
-	        Dictionary<string, IEnumerable<string>> fileTypes,
+	        Dictionary<string, (int, IEnumerable<string>)> servers,
+	        Dictionary<string, (int, IEnumerable<string>)> fileTypes,
 	        Dictionary<string, bool> folders)
         {
 	        CurrentSettings = schemeSettings;
@@ -468,7 +469,7 @@ namespace LogsReader.Reader
                     return;
 
                 var treeGroups = GetGroups(treeNode);
-                var clone = new Dictionary<string, List<string>>(treeGroups, treeGroups.Comparer);
+                var clone = new Dictionary<string, (int, List<string>)>(treeGroups, treeGroups.Comparer);
 
                 if (processingType == ProcessingType.Remove)
                 {
@@ -486,9 +487,9 @@ namespace LogsReader.Reader
                     {
                         var groupName = treeGroups.First().Key;
                         if (Current.SelectedNode?.Parent == treeNode)
-                            groupName = Current.SelectedNode.Text;
+                            groupName = GetGroupName(Current.SelectedNode);
                         else if (Current.SelectedNode?.Parent?.Parent == treeNode)
-                            groupName = Current.SelectedNode.Parent.Text;
+                            groupName = GetGroupName(Current.SelectedNode.Parent);
 
                         dialogResul = AddGroupForm.ShowGroupItemsForm(groupName, treeGroups, groupType);
                     }
@@ -502,14 +503,16 @@ namespace LogsReader.Reader
                 var groupItems = new List<LRGroupItem>(treeGroups.Count);
                 foreach (var (groupName, items) in treeGroups.OrderBy(x => x.Key))
                 {
-	                if (items.Count == 0 || items.All(x => x.IsNullOrEmptyTrim()))
+	                if (items.Item2.Count == 0 || items.Item2.All(x => x.IsNullOrEmptyTrim()))
 		                continue;
 
-	                var childTreeNode = GetGroupItems(groupName, items, groupType);
+	                var childTreeNode = GetGroupItems(groupName, items.Item1, items.Item2, groupType);
 	                nodes.Add(childTreeNode);
-	                groupItems.Add(new LRGroupItem(groupName, string.Join(", ", items)));
+	                groupItems.Add(new LRGroupItem(groupName, items.Item1, string.Join(", ", items.Item2)));
 
-	                if (!clone.TryGetValue(groupName, out var existGroup) || existGroup.Except(items).Any() || items.Except(existGroup).Any())
+	                if (!clone.TryGetValue(groupName, out var existGroup) 
+	                    || existGroup.Item2.Except(items.Item2).Any() 
+	                    || items.Item2.Except(existGroup.Item2).Any())
 		                childTreeNode.Expand();
                 }
 
@@ -564,14 +567,14 @@ namespace LogsReader.Reader
             }
         }
 
-        static Dictionary<string, List<string>> GetGroups(TreeNode treeNode)
+        static Dictionary<string, (int, List<string>)> GetGroups(TreeNode treeNode)
         {
-            return treeNode
-                .Nodes.OfType<TreeNode>()
-                .OrderBy(x => x.Text)
-                .ToDictionary(x => x.Text,
-                    x => new List<string>(x.Nodes.OfType<TreeNode>().Select(p => p.Text)),
-                    StringComparer.InvariantCultureIgnoreCase);
+            var result = new Dictionary<string, (int, List<string>)>(StringComparer.InvariantCultureIgnoreCase);
+	        foreach (var groupNode in treeNode.Nodes.OfType<TreeNode>().OrderBy(x => x.Text))
+	        {
+		        result.Add(GetGroupName(groupNode), (GetGroupPriority(groupNode), new List<string>(groupNode.Nodes.OfType<TreeNode>().Select(p => p.Text))));
+	        }
+            return result;
         }
 
         void SetFolder(TreeNode selectedNode, Dictionary<string, bool> items, bool showForm)
@@ -690,7 +693,7 @@ namespace LogsReader.Reader
             return folders;
         }
 
-        TreeNode GetGroupNodes(string name, string text, Dictionary<string, IEnumerable<string>> groups, GroupType groupType)
+        TreeNode GetGroupNodes(string name, string text, Dictionary<string, (int, IEnumerable<string>)> groups, GroupType groupType)
         {
             var parentTreeNode = new TreeNode(text)
             {
@@ -700,13 +703,13 @@ namespace LogsReader.Reader
             };
 
             foreach (var (groupName, items) in groups)
-                parentTreeNode.Nodes.Add(GetGroupItems(groupName, items, groupType));
+                parentTreeNode.Nodes.Add(GetGroupItems(groupName, items.Item1, items.Item2, groupType));
             parentTreeNode.Expand();
 
             return parentTreeNode;
         }
 
-        static TreeNode GetGroupItems(string groupName, IEnumerable<string> items, GroupType groupType)
+        static TreeNode GetGroupItems(string groupName, int priority, IEnumerable<string> items, GroupType groupType)
         {
             var parentName = ServerGroupTreeNodeName;
             var childName = ServerTreeNodeName;
@@ -716,7 +719,7 @@ namespace LogsReader.Reader
                 childName = FileTypeTreeNodeName;
             }
 
-            var groupTreeNode = new TreeNode(groupName.Trim().ToUpper())
+            var groupTreeNode = new TreeNode($"[{priority}] {groupName.Trim().ToUpper()}")
             {
                 Name = parentName
             };
@@ -922,6 +925,20 @@ namespace LogsReader.Reader
 			        // ignored
 		        }
 	        }
+        }
+
+        public static string GetGroupName(TreeNode node)
+        {
+	        return Regex.Replace(node.Text, @".+\]\s*(.+)$", "$1");
+        }
+
+        public static int GetGroupPriority(TreeNode node)
+        {
+	        var priority = 0;
+	        var parcePriority = Regex.Replace(node.Text, @"^\[(\d+)\].+$", "$1");
+	        if (!parcePriority.IsNullOrEmptyTrim() && int.TryParse(parcePriority, out var priorityParse) && priorityParse >= 0)
+		        priority = priorityParse;
+	        return priority;
         }
     }
 

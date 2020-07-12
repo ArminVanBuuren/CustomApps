@@ -9,9 +9,9 @@ namespace LogsReader.Config
 	[Serializable]
 	public class LRGroups
 	{
-		private LRGroupItem[] _groupItems = new []{ new LRGroupItem(string.Empty, string.Empty), }; 
+		private LRGroupItem[] _groupItems = new []{ new LRGroupItem(string.Empty, 0, string.Empty), }; 
 		
-		[XmlIgnore] public Dictionary<string, IEnumerable<string>> Groups { get; private set; }
+		[XmlIgnore] public Dictionary<string, (int, IEnumerable<string>)> Groups { get; private set; }
 
 		[XmlElement("Group")]
 		public LRGroupItem[] GroupItems
@@ -41,12 +41,14 @@ namespace LogsReader.Config
 			GroupItems = groupItems;
 		}
 
-		static Dictionary<string, IEnumerable<string>> GetGroups(IEnumerable<LRGroupItem> items)
+		static Dictionary<string, (int, IEnumerable<string>)> GetGroups(IEnumerable<LRGroupItem> items)
 		{
 			return items
-				.ToDictionary(k => k.GroupName, v => v.Item[0].Value.Split(',')
-					.GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-					.Select(x => x.Key), StringComparer.InvariantCultureIgnoreCase);
+				.ToDictionary(k => k.GroupName, v =>
+						(v.InternalPriority, v.Item[0].Value.Split(',')
+							.GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+							.Select(x => x.Key))
+					, StringComparer.InvariantCultureIgnoreCase);
 		}
 	}
 }

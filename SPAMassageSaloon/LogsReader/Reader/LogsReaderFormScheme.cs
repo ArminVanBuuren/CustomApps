@@ -249,71 +249,99 @@ namespace LogsReader.Reader
             if (!IsWorking)
             {
 	            var timeWatcher = new Stopwatch();
-                try
-                {
-	                base.BtnSearch_Click(sender, e);
+	            try
+	            {
+		            base.BtnSearch_Click(sender, e);
 
-					// получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
-					var filter = ChbxAlreadyUseFilter.Checked ? GetFilter() : null;
+		            // получение экземплярва фильтра, если необходимо выполнять фильтр во время поиска
+		            var filter = ChbxAlreadyUseFilter.Checked ? GetFilter() : null;
 
-	                // получение серверов по чекбоксам
-	                var servers = new List<string>();
-	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes)
-		                servers.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
-	                servers = servers.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+		            Dictionary<string, int> GetGroupItems(string parentNodeName)
+		            {
+			            var result = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+			            foreach (TreeNode groupNode in TreeMain.Nodes[parentNodeName].Nodes)
+			            {
+				            foreach (var item in groupNode.Nodes.OfType<TreeNode>()
+					            .Where(x => x.Checked)
+					            .Select(x => x.Text)
+					            .GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
+					            .Select(x => x.Key)
+					            .ToList())
+				            {
+					            if(result.TryGetValue(item, out var existPiority))
+					            {
+						            var currentPriority = TreeViewContainer.GetGroupPriority(groupNode);
+						            if (currentPriority < existPiority)
+							            result[item] = currentPriority;
+					            }
+								else
+								{
+									result.Add(item, TreeViewContainer.GetGroupPriority(groupNode));
+								}
+				            }
+			            }
 
-	                // получение названия файлов типов  по чекбоксам
-	                var fileTypes = new List<string>();
-	                foreach (TreeNode childTreeNode in TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes)
-		                fileTypes.AddRange(childTreeNode.Nodes.OfType<TreeNode>().Where(x => x.Checked).Select(x => x.Text));
-	                fileTypes = fileTypes.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key).ToList();
+			            return result;
+		            }
 
-	                // получение папок по чекбоксам
-	                var folders = TreeViewContainer.GetFolders(TreeMain, true);
+		            // получение серверов по чекбоксам
+		            var servers = GetGroupItems(TreeViewContainer.TRVServers);
+		            // получение названия файлов типов  по чекбоксам
+		            var fileTypes = GetGroupItems(TreeViewContainer.TRVTypes);
+		            // получение папок по чекбоксам
+		            var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
-	                MainReader = new LogsReaderPerformerScheme(CurrentSettings, TbxPattern.Text, ChbxUseRegex.Checked, servers, fileTypes, folders, filter);
-	                MainReader.OnProcessReport += ReportProcessStatus;
+		            MainReader = new LogsReaderPerformerScheme(
+			            CurrentSettings,
+			            TbxPattern.Text,
+			            ChbxUseRegex.Checked,
+			            servers,
+			            fileTypes,
+			            folders,
+			            filter);
 
-	                timeWatcher.Start();
-	                IsWorking = true;
+		            MainReader.OnProcessReport += ReportProcessStatus;
 
-	                ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
-	                await MainReader.GetTargetFilesAsync(); // получение файлов логов
+		            timeWatcher.Start();
+		            IsWorking = true;
 
-	                ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
-	                await MainReader.StartAsync(); // вополнение поиска
+		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
+		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-	                // результат выполнения
-	                OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
-	                if (MainReader.ResultsOfError != null)
-		                OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
+		            ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+		            await MainReader.StartAsync(); // вополнение поиска
 
-	                // заполняем DataGrid
-	                if (await AssignResult(filter))
-		                ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, timeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
+		            // результат выполнения
+		            OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
+		            if (MainReader.ResultsOfError != null)
+			            OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
-	                timeWatcher.Stop();
-	                MainReader.EnsureProcessReport();
-				}
-                catch (Exception ex)
-                {
-	                ReportStatus(ex.Message, ReportStatusType.Error);
-                }
-                finally
-                {
-	                if (MainReader != null)
-	                {
-		                MainReader.OnProcessReport -= ReportProcessStatus;
-		                MainReader.Dispose();
-		                MainReader = null;
-		                Progress = 100;
-	                }
+		            // заполняем DataGrid
+		            if (await AssignResult(filter))
+			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, timeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
-	                IsWorking = false;
+		            timeWatcher.Stop();
+		            MainReader.EnsureProcessReport();
+	            }
+	            catch (Exception ex)
+	            {
+		            ReportStatus(ex.Message, ReportStatusType.Error);
+	            }
+	            finally
+	            {
+		            if (MainReader != null)
+		            {
+			            MainReader.OnProcessReport -= ReportProcessStatus;
+			            MainReader.Dispose();
+			            MainReader = null;
+			            Progress = 100;
+		            }
 
-	                if (timeWatcher.IsRunning)
-		                timeWatcher.Stop();
-                }
+		            IsWorking = false;
+
+		            if (timeWatcher.IsRunning)
+			            timeWatcher.Stop();
+	            }
             }
             else
             {

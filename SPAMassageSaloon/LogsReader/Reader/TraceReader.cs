@@ -97,6 +97,8 @@ namespace LogsReader.Reader
 
         public FileInfo File { get; }
 
+		public int Priority { get; internal set; }
+
         public long Lines { get; protected set; } = 0;
 
         protected void AddLine(string input)

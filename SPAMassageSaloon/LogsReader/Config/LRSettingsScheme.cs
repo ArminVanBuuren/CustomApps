@@ -19,8 +19,8 @@ namespace LogsReader.Config
     [XmlRoot("Scheme")]
     public class LRSettingsScheme
     {
-	    private LRGroups _servers = new LRGroups(new [] { new LRGroupItem("local", "localhost") });
-	    private LRGroups _fileTypes = new LRGroups(new []{ new LRGroupItem("type", "log") });
+	    private LRGroups _servers = new LRGroups(new [] { new LRGroupItem("local", 0, "localhost") });
+	    private LRGroups _fileTypes = new LRGroups(new []{ new LRGroupItem("type", 0, "log") });
 	    private LRFolderGroup _logsFolder = new LRFolderGroup(new [] { new LRFolder(@"C:\", false) });
 
 	    private string _cultureListString = string.Empty;
@@ -101,7 +101,10 @@ namespace LogsReader.Config
 	        get => _servers;
 	        set
 	        {
-		        if (value == null || value.Groups.Count == 0 || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() || !groupName.Value.Any() || groupName.Value.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
+		        if (value == null 
+		            || value.Groups.Count == 0 
+		            || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() 
+		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
 		        _servers = value;
 	        }
@@ -120,7 +123,10 @@ namespace LogsReader.Config
 	        get => _fileTypes;
 	        set
 	        {
-		        if (value == null || value.Groups.Count == 0 || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() || !groupName.Value.Any() || groupName.Value.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
+		        if (value == null 
+		            || value.Groups.Count == 0 
+		            || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() 
+		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
                     throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
                 _fileTypes = value;
 	        }
@@ -277,8 +283,8 @@ namespace LogsReader.Config
             switch (set)
 	        {
 		        case DefaultSettings.MG:
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", "mg1, mg2, mg3, mg4, mg5") });
-			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4, mg5") });
+			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", 0, "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
 			        MaxThreads = -1;
@@ -287,13 +293,13 @@ namespace LogsReader.Config
 		        case DefaultSettings.SPA:
 			        Servers = new LRGroups(new[]
 			        {
-				        new LRGroupItem("UZ-BPM", "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6"),
-				        new LRGroupItem("UZ-SA", "spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6")
+				        new LRGroupItem("UZ-BPM",0, "spa-bpm1, spa-bpm2, spa-bpm3, spa-bpm4, spa-bpm5, spa-bpm6"),
+				        new LRGroupItem("UZ-SA", 0,"spa-sa1, spa-sa2, spa-sa3, spa-sa4, spa-sa5, spa-sa6")
                     });
 			        FileTypes = new LRGroups(new[]
 			        {
-				        new LRGroupItem("SPA.SA", "bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc"),
-				        new LRGroupItem("SPA.BPM", "spa.bpm")
+				        new LRGroupItem("SPA.SA", 0,"bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc"),
+				        new LRGroupItem("SPA.BPM", 0,"spa.bpm")
                     });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
 			        MaxLines = 1;
@@ -301,8 +307,8 @@ namespace LogsReader.Config
 			        OrderBy = $"{nameof(DataTemplate.Tmp.Date)} desc, {nameof(DataTemplate.Tmp.ID)} desc";
 			        break;
 		        case DefaultSettings.MGA:
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
-			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", "fast, slow, debug-all, debug-only") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
+			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", 0, "fast, slow, debug-all, debug-only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        MaxLines = 20000;
 			        MaxThreads = -1;

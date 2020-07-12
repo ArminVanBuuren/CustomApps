@@ -12,223 +12,258 @@ namespace LogsReader.Reader
 {
 	public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
-    public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
-    {
-        private readonly object _syncRootMatches = new object();
-        private int _countMatches;
+	public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
+	{
+		private readonly object _syncRootResult = new object();
+		private readonly object _syncRootMatches = new object();
 
-        private readonly object _syncRootResult = new object();
-        private readonly SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+		private int _countMatches;
 
-        private MTActionResult<TraceReader> _multiTaskingHandler;
+		private SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+		private List<MTActionResult<TraceReader>> _multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 
-        public event ReportProcessStatusHandler OnProcessReport;
+		public event ReportProcessStatusHandler OnProcessReport;
 
-        /// <summary>
-        /// Количество совпадений по критериям поиска
-        /// </summary>
-        public int CountMatches
-        {
-            get
-            {
-                lock (_syncRootMatches)
-                    return _countMatches;
-            }
-            internal set
-            {
-                lock (_syncRootMatches)
-                    _countMatches = value;
-            }
-        }
+		/// <summary>
+		/// Количество совпадений по критериям поиска
+		/// </summary>
+		public int CountMatches
+		{
+			get
+			{
+				lock (_syncRootMatches)
+					return _countMatches;
+			}
+			internal set
+			{
+				lock (_syncRootMatches)
+					_countMatches = value;
+			}
+		}
 
-        public int Total => _multiTaskingHandler?.Source.Count ?? 0;
+		public int TotalCount => TraceReaders != null && TraceReaders.Count > 0 ? TraceReaders.Count : 0;
 
-        public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
+		public int ResultCount => _multiTaskingHandlerList.Sum(x => x.Result.Count);
 
-        public IEnumerable<DataTemplate> ResultsOfError { get; private set; } = null;
+		public int PercentOfComplete => TotalCount > 0 ? (ResultCount * 100) / TotalCount : 0;
 
-        public DataFilter Filter { get; }
+		public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
 
-        public LogsReaderPerformerScheme(
-	        LRSettingsScheme settings,
-	        string findMessage,
-	        bool useRegex,
-	        IEnumerable<string> servers,
-	        IEnumerable<string> fileTypes,
-	        IReadOnlyDictionary<string, bool> folders, 
-	        DataFilter filter) 
-	        :base(settings, findMessage, useRegex, servers, fileTypes, folders)
-        {
-	        Filter = filter;
-        }
+		public List<DataTemplate> ResultsOfError { get; private set; } = new List<DataTemplate>();
 
-        public override async Task StartAsync()
-        {
-	        if (IsStopPending)
-		        return;
+		public DataFilter Filter { get; }
 
-	        if (TraceReaders == null)
-		        throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
-	        if (TraceReaders.Count <= 0)
-		        throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
+		public bool IsCompleted { get; private set; } = false;
 
-            // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-            var readers = TraceReaders
-	            .OrderByDescending(x => x.File.CreationTime.Date)
-	            .ThenByDescending(x => x.File.CreationTime.Hour)
-	            .ThenByDescending(x => x.File.LastWriteTime.Date)
-	            .ThenByDescending(x => x.File.LastWriteTime.Hour)
-	            .ThenByDescending(x => x.File.Length)
-	            .ToList();
+		public LogsReaderPerformerScheme(
+			LRSettingsScheme settings,
+			string findMessage,
+			bool useRegex,
+			IReadOnlyDictionary<string, int> servers,
+			IReadOnlyDictionary<string, int> fileTypes,
+			IReadOnlyDictionary<string, bool> folders,
+			DataFilter filter)
+			: base(settings, findMessage, useRegex, servers, fileTypes, folders)
+		{
+			Filter = filter;
+		}
 
-            var maxThreads = MaxThreads <= 0 ? TraceReaders.Count : MaxThreads;
-	        _multiTaskingHandler = new MTActionResult<TraceReader>(
-		        ReadData,
-		        readers, 
-		        maxThreads, 
-		        ThreadPriority.Lowest);
+		public override async Task StartAsync()
+		{
+			IsCompleted = false;
+			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
+			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 
-	        new Action(CheckProgress).BeginInvoke(null, null);
-	        await _multiTaskingHandler.StartAsync();
+			try
+			{
+				if (IsStopPending)
+					return;
 
-	        ResultsOfError = _multiTaskingHandler?.Result.CallBackList
-		        .Where(x => x.Error != null)
-		        .Aggregate(new List<DataTemplate>(), (listErr, x) =>
-	        {
-		        listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
-		        return listErr;
-	        });
-        }
+				if (TraceReaders == null)
+					throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
+				if (TraceReaders.Count <= 0)
+					throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
-        public void ReadData(TraceReader fileLog)
-        {
-            try
-            {
-	            if (IsStopPending)
-		            return;
+				ResultsOfError = new List<DataTemplate>();
 
-                fileLog.OnFound += AddResult;
+				new Action(CheckProgress).BeginInvoke(null, null);
 
-                // FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
-                using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-	                if (IsStopPending)
-		                return;
+				foreach (var traceReaders in TraceReaders.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
+				{
+					if (IsStopPending)
+						break;
 
-                    using (var inputReader = new StreamReader(inputStream, Encoding))
-	                {
-		                string line;
-		                while ((line = inputReader.ReadLine()) != null && !IsStopPending)
-		                {
-			                fileLog.ReadLine(line);
-		                }
-	                }
-                }
-            }
-            finally
-            {
-                try { fileLog.Commit(); }
-                catch
-                {
-                    // ignored
-                }
+					var readersOrders = traceReaders
+						.OrderByDescending(x => x.File.CreationTime.Date)
+						.ThenByDescending(x => x.File.CreationTime.Hour)
+						.ThenByDescending(x => x.File.LastWriteTime.Date)
+						.ThenByDescending(x => x.File.LastWriteTime.Hour)
+						.ThenByDescending(x => x.File.Length)
+						.ToList();
 
-                fileLog.OnFound -= AddResult;
-            }
-        }
+					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
+					var maxThreads = MaxThreads <= 0 ? TraceReaders.Count : MaxThreads;
+					var multiTaskingHandler = new MTActionResult<TraceReader>(
+						ReadData,
+						readersOrders,
+						maxThreads,
+						ThreadPriority.Lowest);
 
-        /// <summary>
-        /// Добавляем найденный трейс
-        /// </summary>
-        /// <param name="item"></param>
-        protected void AddResult(DataTemplate item)
-        {
-            if (Filter != null && !Filter.IsAllowed(item))
-                return;
+					_multiTaskingHandlerList.Add(multiTaskingHandler);
 
-            if (item.Error == null)
-                ++CountMatches;
+					await multiTaskingHandler.StartAsync();
 
-            lock (_syncRootResult)
-            {
-	            if (!_result.TryGetValue(item, out var existingItem))
-	            {
-		            var dateCurrent = item.Date ?? DateTime.MinValue;
-		            if (_result.Count >= RowsLimit)
-		            {
-			            var latest = _result.First().Key;
-			            if (latest.Date == null || latest.Date > dateCurrent)
-				            return;
+					var errors = multiTaskingHandler.Result.CallBackList
+						.Where(x => x.Error != null)
+						.Aggregate(new List<DataTemplate>(), (listErr, x) =>
+						{
+							listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
+							return listErr;
+						});
 
-			            _result.Remove(latest);
-			            _result.Add(item, item);
-		            }
-		            else
-		            {
-			            _result.Add(item, item);
-		            }
-	            }
-	            else
-	            {
-                    // Если существующий трейс корректно спарсен, а новый не получилось спарсить, то оставляем в коллекции сущесвующий коректный
-		            if(existingItem.IsMatched && !item.IsMatched)
-                        return;
+					ResultsOfError.AddRange(errors);
+				}
+			}
+			finally
+			{
+				IsCompleted = true;
+			}
+		}
 
-		            // Если найден еще один темплейт в той же строке и том же файле.
-		            // То перазаписываем, возможно это тот же темплейт только более дополненный.
-                    _result[item] = item;
-	            }
-            }
-        }
+		public void ReadData(TraceReader fileLog)
+		{
+			try
+			{
+				if (IsStopPending)
+					return;
 
-        public override void Stop()
-        {
-	        base.Stop();
-            _multiTaskingHandler?.Stop();
-        }
+				fileLog.OnFound += AddResult;
 
-        public override void Reset()
-        {
-	        _multiTaskingHandler?.Stop();
-	        _multiTaskingHandler = null;
-	        CountMatches = 0;
-	        _result.Clear();
-	        ResultsOfError = null;
-            base.Reset();
-        }
+				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
+				using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					if (IsStopPending)
+						return;
 
-        void CheckProgress()
-        {
-            try
-            {
-	            while (_multiTaskingHandler != null && !_multiTaskingHandler.IsCompleted && !IsDisposed)
-                {
-	                EnsureProcessReport();
-                    Thread.Sleep(10);
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
+					using (var inputReader = new StreamReader(inputStream, Encoding))
+					{
+						string line;
+						while ((line = inputReader.ReadLine()) != null && !IsStopPending)
+						{
+							fileLog.ReadLine(line);
+						}
+					}
+				}
+			}
+			finally
+			{
+				try
+				{
+					fileLog.Commit();
+				}
+				catch
+				{
+					// ignored
+				}
 
-        public void EnsureProcessReport()
-        {
-	        try
-	        {
-		        OnProcessReport?.Invoke(CountMatches, _multiTaskingHandler.PercentOfComplete, _multiTaskingHandler.Result.Count, Total);
-            }
-	        catch (Exception ex)
-	        {
-		        // ignored
-	        }
-        }
+				fileLog.OnFound -= AddResult;
+			}
+		}
 
-        public override void Dispose()
-        {
-	        Reset();
-	        base.Dispose();
-        }
-    }
+		/// <summary>
+		/// Добавляем найденный трейс
+		/// </summary>
+		/// <param name="item"></param>
+		protected void AddResult(DataTemplate item)
+		{
+			if (Filter != null && !Filter.IsAllowed(item))
+				return;
+
+			if (item.Error == null)
+				++CountMatches;
+
+			lock (_syncRootResult)
+			{
+				if (!_result.TryGetValue(item, out var existingItem))
+				{
+					var dateCurrent = item.Date ?? DateTime.MinValue;
+					if (_result.Count >= RowsLimit)
+					{
+						var latest = _result.First().Key;
+						if (latest.Date == null || latest.Date > dateCurrent)
+							return;
+
+						_result.Remove(latest);
+						_result.Add(item, item);
+					}
+					else
+					{
+						_result.Add(item, item);
+					}
+				}
+				else
+				{
+					// Если существующий трейс корректно спарсен, а новый не получилось спарсить, то оставляем в коллекции сущесвующий коректный
+					if (existingItem.IsMatched && !item.IsMatched)
+						return;
+
+					// Если найден еще один темплейт в той же строке и том же файле.
+					// То перазаписываем, возможно это тот же темплейт только более дополненный.
+					_result[item] = item;
+				}
+			}
+		}
+
+		public override void Stop()
+		{
+			base.Stop();
+			if (_multiTaskingHandlerList.Count > 0)
+				foreach (var tasks in _multiTaskingHandlerList)
+					tasks.Stop();
+			_multiTaskingHandlerList.Clear();
+		}
+
+		public override void Reset()
+		{
+			Stop();
+			CountMatches = 0;
+			_result.Clear();
+			ResultsOfError = null;
+			base.Reset();
+		}
+
+		void CheckProgress()
+		{
+			try
+			{
+				while (!IsCompleted)
+				{
+					EnsureProcessReport();
+					Thread.Sleep(10);
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		}
+
+		public void EnsureProcessReport()
+		{
+			try
+			{
+				OnProcessReport?.Invoke(CountMatches, PercentOfComplete, ResultCount, TotalCount);
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		}
+
+		public override void Dispose()
+		{
+			Reset();
+			base.Dispose();
+		}
+	}
 }
