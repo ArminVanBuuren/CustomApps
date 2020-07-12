@@ -72,8 +72,15 @@ namespace LogsReader.Reader
 	        if (TraceReaders.Count <= 0)
 		        throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
-	        // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-            var readers = TraceReaders.OrderByDescending(x => x.File.LastWriteTime).ThenByDescending(x => x.File.CreationTime).ToList();
+            // ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
+            var readers = TraceReaders
+	            .OrderByDescending(x => x.File.CreationTime.Date)
+	            .ThenByDescending(x => x.File.CreationTime.Hour)
+	            .ThenByDescending(x => x.File.LastWriteTime.Date)
+	            .ThenByDescending(x => x.File.LastWriteTime.Hour)
+	            .ThenByDescending(x => x.File.Length)
+	            .ToList();
+
             var maxThreads = MaxThreads <= 0 ? TraceReaders.Count : MaxThreads;
 	        _multiTaskingHandler = new MTActionResult<TraceReader>(
 		        ReadData,
