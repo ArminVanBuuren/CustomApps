@@ -29,13 +29,13 @@ namespace LogsReader.Reader
 			set
 			{
 				currentTemplate = value;
-				if (currentTemplate != null && this.Parent is TabPage page)
-				{
-					if (IsMain)
-						page.Text = $"({currentTemplate.ID})";
-					else
-						page.Text = $"({currentTemplate.ID}) {currentTemplate.TraceName}";
-				}
+				if (!(this.Parent is TabPage page))
+					return;
+
+				if (currentTemplate != null)
+					page.Text = IsMain ? $"({currentTemplate.ID})" : $"({currentTemplate.ID}) {currentTemplate.TraceName}";
+				else
+					page.Text = string.Empty;
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace LogsReader.Reader
 			EditorMessage?.Clear();
 			EditorTraceMessage?.Clear();
 
-			currentTemplate = null;
+			CurrentTemplate = null;
 			prevTemplateMessage = null;
 			prevTemplateTraceMessage = null;
 		}

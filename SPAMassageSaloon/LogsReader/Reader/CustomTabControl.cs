@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using LogsReader.Properties;
@@ -57,46 +58,47 @@ namespace LogsReader.Reader
 
         public void CloseAllButThis(object tab)
         {
-	        if (!(tab is CustomTabPage tabPage)) 
+	        if (!(tab is CustomTabPage tabPage))
 		        return;
 
-            var tabs = new List<CustomTabPage>(TabPages.Cast<CustomTabPage>());
-            foreach (var customTab in tabs.Where(x => x != tabPage && x.CanClose))
-            {
-                CloseTab(customTab);
-            }
+	        var tabs = new List<CustomTabPage>(TabPages.Cast<CustomTabPage>());
+	        foreach (var customTab in tabs.Where(x => x != tabPage && x.CanClose))
+		        CloseTab(customTab);
         }
 
         public void CloseAll()
         {
-            var tabs = new List<CustomTabPage>(TabPages.Cast<CustomTabPage>());
-            foreach (var tab in tabs.Where(x => x.CanClose))
-            {
-                CloseTab(tab);
-            }
+	        var tabs = new List<CustomTabPage>(TabPages.Cast<CustomTabPage>());
+	        foreach (var tab in tabs.Where(x => x.CanClose))
+		        CloseTab(tab);
         }
 
         private void CustomTabControl_MouseClick(object sender, MouseEventArgs e)
         {
-	        if (e.Button == MouseButtons.Right)
+	        try
 	        {
-		        for (var i = 0; i < TabPages.Count; ++i)
+		        if (e.Button == MouseButtons.Right)
 		        {
-			        if (GetTabRect(i).Contains(e.Location))
+			        for (var i = 0; i < TabPages.Count; ++i)
 			        {
-				        SelectTab(TabPages[i]);
-				        Strip.Show(this, e.Location);
+				        if (GetTabRect(i).Contains(e.Location))
+				        {
+					        SelectTab(TabPages[i]);
+					        Strip.Show(this, e.Location);
+				        }
 			        }
 		        }
+            }
+	        catch (Exception)
+	        {
+		        // ignored
 	        }
         }
 
         private void CustomTabControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (GetTabRect(SelectedIndex).Contains(e.Location))
-            {
-                CloseTab(SelectedTab);
-            }
+	        if (GetTabRect(SelectedIndex).Contains(e.Location))
+		        CloseTab(SelectedTab);
         }
     }
 }

@@ -803,19 +803,19 @@ namespace LogsReader.Reader
 	        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
         }
 
-        void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
-        {
-	        e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
-	        using (var p = new Pen(color, 2))
-	        {
-		        var rect = e.CellBounds;
-		        rect.Y = rect.Top + 1;
-		        rect.Height -= 2;
-		        e.Graphics.DrawRectangle(p, rect);
-	        }
+        //void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
+        //{
+	       // e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
+	       // using (var p = new Pen(color, 2))
+	       // {
+		      //  var rect = e.CellBounds;
+		      //  rect.Y = rect.Top + 1;
+		      //  rect.Height -= 2;
+		      //  e.Graphics.DrawRectangle(p, rect);
+	       // }
 
-	        e.Handled = true;
-        }
+	       // e.Handled = true;
+        //}
 
         private void buttonPrev_Click(object sender, EventArgs e)
         {
