@@ -24,30 +24,23 @@ namespace LogsReader.Reader
             if (startDate > endDate)
                 throw new Exception(Resources.Txt_DataFilter_ErrDate);
 
-            #region фильтр по дате начала
-
+            // фильтр по дате начала
             StartDate = startDate;
             if (StartDate > DateTime.MinValue)
                 _checkStartDate = input => input.Date != null && input.Date.Value >= StartDate;
             else
                 _checkStartDate = input => true;
 
-            #endregion
 
-
-            #region фильтр по дате конца
-
+            // фильтр по дате конца
             EndDate = endDate;
             if (EndDate < DateTime.MaxValue)
                 _checkEndDate = input => input.Date != null && input.Date.Value <= EndDate;
             else
                 _checkEndDate = input => true;
 
-            #endregion
 
-
-            #region фильтр по полю Trace
-
+            // фильтр по полю TraceName
             TraceNameFilterList = traceNameFilter.IsNullOrEmptyTrim()
                 ? new List<string>()
                 : traceNameFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
@@ -60,11 +53,8 @@ namespace LogsReader.Reader
             else
                 _checkTraceNameFilter = input => true;
 
-            #endregion
 
-
-            #region фильтр по полю Message
-
+            // фильтр по полю TraceMessage
             TraceMessageFilterList = traceMessageFilter.IsNullOrEmptyTrim()
                 ? new List<string>()
                 : traceMessageFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key)
@@ -76,8 +66,6 @@ namespace LogsReader.Reader
                     _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrEmptyTrim() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
             else
                 _checkTraceMessageFilter = input => true;
-
-            #endregion
         }
 
         public IEnumerable<DataTemplate> FilterCollection(IEnumerable<DataTemplate> input)
