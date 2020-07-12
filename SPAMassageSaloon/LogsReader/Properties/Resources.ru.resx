@@ -467,4 +467,13 @@
   <data name="Txt_LogsReaderForm_PrevErrButt" xml:space="preserve">
     <value>Предыдущая ошибка (SHIFT+F3)</value>
   </data>
+  <data name="Txt_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Txt_CloseAllButThis" xml:space="preserve">
+    <value>Закрыть все, кроме этой</value>
+  </data>
+  <data name="Txt_CloseAllDocuments" xml:space="preserve">
+    <value>Закрыть все документы</value>
+  </data>
 </root>

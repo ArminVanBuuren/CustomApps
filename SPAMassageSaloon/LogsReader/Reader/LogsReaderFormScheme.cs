@@ -47,7 +47,7 @@ namespace LogsReader.Reader
 
         public override bool HasAnyResult => OverallResultList != null && OverallResultList.Count > 0;
 
-        public bool IsInitialized { get; private set; } = false;
+        public bool IsTreeViewSynchronized { get; private set; } = false;
 
 		public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {
@@ -189,7 +189,7 @@ namespace LogsReader.Reader
 		        };
 		        TreeViewContainer.OnError += ex => { ReportStatus(ex.Message, ReportStatusType.Error); };
 
-		        var template = UserSettings.Template;
+				var template = UserSettings.Template;
 		        if (template != null)
 			        TreeViewContainer.UpdateContainerByTemplate(template);
 
@@ -200,18 +200,18 @@ namespace LogsReader.Reader
 		        ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
 	        }
 	        finally
-	        {
-		        ClearForm(false);
+			{
+				ClearForm(false);
 		        ValidationCheck(false);
 	        }
         }
 
-        public void Initialize()
+		public void SynchronizeTreeView()
         {
-	        if (IsInitialized) 
+	        if (IsTreeViewSynchronized) 
 		        return;
 	        TreeViewContainer.EnableSync();
-	        IsInitialized = true;
+	        IsTreeViewSynchronized = true;
         }
 
         public override void ApplySettings()

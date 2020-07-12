@@ -18,9 +18,14 @@ namespace LogsReader
 {
     public partial class LogsReaderMainForm : Form, ISaloonForm
     {
-	    public static readonly string MainFontFamily = "Segoe UI";
-        public static readonly string DgvFontFamily = "Courier New Bold";
-        public static readonly string FailedFontFamily = "Courier New Bold";
+	    public const string MainFontFamily = "Segoe UI";
+        public const string DgvFontFamily = "Courier New Bold";
+        public const string FailedFontFamily = "Courier New Bold";
+
+        public static readonly Font DefFont = new Font(MainFontFamily, 8.5F, FontStyle.Regular);
+        public static readonly Font TxtFont = new Font(MainFontFamily, 10F, FontStyle.Regular);
+        public static readonly Font DgvFont = new Font(DgvFontFamily, 8.25f, FontStyle.Regular);
+        public static readonly Font ErrFont = new Font(FailedFontFamily, 8.25f, FontStyle.Bold);
 
         private const string GLOBAL_PAGE_NAME = "Global";
 
@@ -132,92 +137,89 @@ namespace LogsReader
 
             try
             {
-                base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
-                KeyPreview = true;
+	            base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
+	            KeyPreview = true;
 
-                MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+	            MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
 
-                Global = new LogsReaderFormGlobal(Encoding.UTF8)
-                {
-	                Dock = DockStyle.Fill
-                };
-                var globalPage = new TabPage
-                {
-	                Name = GLOBAL_PAGE_NAME,
-	                Text = GLOBAL_PAGE_NAME,
-	                UseVisualStyleBackColor = false,
-	                Font = new Font(MainFontFamily, 8.5F),
-	                Margin = new Padding(0),
-	                Padding = new Padding(0)
-                };
-                globalPage.Controls.Add(Global);
-                MainTabControl.TabPages.Add(globalPage);
+	            Global = new LogsReaderFormGlobal(Encoding.UTF8)
+	            {
+		            Dock = DockStyle.Fill
+	            };
+	            var globalPage = new TabPage
+	            {
+		            Name = GLOBAL_PAGE_NAME,
+		            Text = GLOBAL_PAGE_NAME,
+		            UseVisualStyleBackColor = false,
+		            Font = new Font(MainFontFamily, 8.5F),
+		            Margin = new Padding(0),
+		            Padding = new Padding(0)
+	            };
+	            globalPage.Controls.Add(Global);
+	            MainTabControl.TabPages.Add(globalPage);
 
-                Settings = LRSettings.Deserialize();
-                if (Settings.SchemeList == null)
-	                Settings.AssignDefaultSchemas();
+	            Settings = LRSettings.Deserialize();
+	            if (Settings.SchemeList == null)
+		            Settings.AssignDefaultSchemas();
 
-                foreach (var scheme in Settings.SchemeList)
-                {
-                    try
-                    {
-                        var schemeForm = new LogsReaderFormScheme(scheme)
-                        {
-                            Dock = DockStyle.Fill
-                        };
+	            foreach (var scheme in Settings.SchemeList)
+	            {
+		            try
+		            {
+			            var schemeForm = new LogsReaderFormScheme(scheme)
+			            {
+				            Dock = DockStyle.Fill
+			            };
 
-                        var page = new TabPage
-                        {
-                            Text = scheme.Name,
-                            UseVisualStyleBackColor = false,
-                            Font = new Font(MainFontFamily, 8.5F),
-                            Margin = new Padding(0),
-                            Padding = new Padding(0)
-                        };
-                        page.Controls.Add(schemeForm);
+			            var page = new TabPage
+			            {
+				            Text = scheme.Name,
+				            UseVisualStyleBackColor = false,
+				            Font = new Font(MainFontFamily, 8.5F),
+				            Margin = new Padding(0),
+				            Padding = new Padding(0)
+			            };
+			            page.Controls.Add(schemeForm);
 
-                        MainTabControl.TabPages.Add(page);
-                        SchemeForms.Add(page, schemeForm);
+			            MainTabControl.TabPages.Add(page);
+			            SchemeForms.Add(page, schemeForm);
+		            }
+		            catch (Exception ex)
+		            {
+			            ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
+		            }
+	            }
 
-                        schemeForm.Load += (sender, args) =>
-                        {
-	                        schemeForm.Initialize();
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
-                    }
-                }
-
-                Global.Initialize(this);
+	            Global.Initialize(this);
 
 
-                MainTabControl.DrawItem += MainTabControl_DrawItem;
-                Shown += (s, e) =>
-                {
-	                ApplySettings();
-	                
-	                foreach (var logsReader in SchemeForms.Values)
-	                {
-		                logsReader.ApplyFormSettings();
-		                logsReader.OnSchemeChanged += SaveSchemas;
-	                }
-	                Global.ApplyFormSettings();
-                };
-                Closing += (s, e) =>
-                {
-	                SaveData();
-	                SerializeUserCreditails();
-                };
+	            MainTabControl.DrawItem += MainTabControl_DrawItem;
+	            Shown += (s, e) =>
+	            {
+		            ApplySettings();
+
+		            foreach (var schemeForm in SchemeForms.Values)
+		            {
+			            schemeForm.ApplyFormSettings();
+			            schemeForm.OnSchemeChanged += SaveSchemas;
+			            schemeForm.SynchronizeTreeView();
+					}
+
+		            Global.ApplyFormSettings();
+	            };
+	            Closing += (s, e) =>
+	            {
+		            SaveData();
+		            SerializeUserCreditails();
+	            };
             }
             catch (Exception ex)
             {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
+	            ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
             }
             finally
             {
-                CenterToScreen();
+	            CenterToScreen();
             }
         }
 

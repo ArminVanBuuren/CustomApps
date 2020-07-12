@@ -245,16 +245,8 @@ namespace LogsReader.Reader
 	        treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 	        treeView.Location = new Point(-1, 23);
 	        treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
-			// должен вызваться всего один раз
-	        void OnTreeViewMouseDown(object sender, MouseEventArgs e)
-	        {
-		        if (!readerForm.IsInitialized)
-			        readerForm.Initialize();
-		        treeView.MouseDown -= OnTreeViewMouseDown;
-	        }
-			treeView.MouseDown += OnTreeViewMouseDown;
 
-			expanderPanel.Controls.Add(buttonBack);
+	        expanderPanel.Controls.Add(buttonBack);
 	        expanderPanel.Controls.Add(buttonFore);
 	        expanderPanel.Controls.Add(labelBack);
 	        expanderPanel.Controls.Add(labelFore);

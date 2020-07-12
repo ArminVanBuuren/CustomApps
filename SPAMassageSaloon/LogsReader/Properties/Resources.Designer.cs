@@ -218,6 +218,36 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap notepad_closeAllButThis {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeAllButThis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap notepad_closeAllItems {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeAllItems", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap notepad_closeItem {
+            get {
+                object obj = ResourceManager.GetObject("notepad_closeItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Ok {
             get {
                 object obj = ResourceManager.GetObject("Ok", resourceCulture);
@@ -321,6 +351,33 @@ namespace LogsReader.Properties {
         public static string String1 {
             get {
                 return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Close.
+        /// </summary>
+        public static string Txt_Close {
+            get {
+                return ResourceManager.GetString("Txt_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Close All But This.
+        /// </summary>
+        public static string Txt_CloseAllButThis {
+            get {
+                return ResourceManager.GetString("Txt_CloseAllButThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Close All Documents.
+        /// </summary>
+        public static string Txt_CloseAllDocuments {
+            get {
+                return ResourceManager.GetString("Txt_CloseAllDocuments", resourceCulture);
             }
         }
         

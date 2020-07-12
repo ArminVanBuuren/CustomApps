@@ -6,14 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FastColoredTextBoxNS;
 using LogsReader.Config;
 using LogsReader.Properties;
 using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
-using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
@@ -46,10 +44,6 @@ namespace LogsReader.Reader
 
         protected ToolTip Tooltip { get; }
 
-        protected Editor EditorMessage { get; }
-
-        protected Editor EditorTraceMessage { get; }
-
         /// <summary>
         /// Поиск логов начался или завершился
         /// </summary>
@@ -72,6 +66,8 @@ namespace LogsReader.Reader
 		        ChangeFormStatus();
             }
         }
+
+        public Encoding DefaultEncoding { get; }
 
         /// <summary>
         /// Юзерские настройки 
@@ -122,19 +118,18 @@ namespace LogsReader.Reader
 
         public abstract bool HasAnyResult { get; }
 
-        readonly Font defaultFont = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Regular);
-        readonly Font dgvFont = new Font(LogsReaderMainForm.DgvFontFamily, 8.25f, FontStyle.Regular);
-        readonly Font errorFont = new Font(LogsReaderMainForm.FailedFontFamily, 8.25f, FontStyle.Bold);
+        public TraceItemView MainViewer { get; }
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
 	        InitializeComponent();
 
-	        UserSettings = userSettings;
+            DefaultEncoding = defaultEncoding;
+            UserSettings = userSettings;
 
-	        base.Font = defaultFont;
-	        ChbxAlreadyUseFilter.Font = defaultFont;
-	        descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
+	        base.Font = LogsReaderMainForm.DefFont;
+	        ChbxAlreadyUseFilter.Font = LogsReaderMainForm.DefFont;
+	        tabControlViewer.Font = LogsReaderMainForm.DgvFont;
 
             #region Initialize StripStatus
 
@@ -173,8 +168,8 @@ namespace LogsReader.Reader
 
                 DgvData.AutoGenerateColumns = false;
 	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-	            DgvData.DefaultCellStyle.Font = dgvFont;
-	            DgvData.Font = dgvFont;
+	            DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvFont;
+	            DgvData.Font = LogsReaderMainForm.DgvFont;
 	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
@@ -217,40 +212,10 @@ namespace LogsReader.Reader
 
                 #endregion
 
-                #region Initialize Controls
-
-                EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
-                EditorMessage.BackBrush = null;
-                EditorMessage.BorderStyle = BorderStyle.FixedSingle;
-                EditorMessage.Cursor = Cursors.IBeam;
-                EditorMessage.DelayedEventsInterval = 1000;
-                EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-                EditorMessage.IsReplaceMode = false;
-                EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-                EditorMessage.LanguageChanged += Message_LanguageChanged;
-
-                EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
-                EditorTraceMessage.BackBrush = null;
-                EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
-                EditorTraceMessage.Cursor = Cursors.IBeam;
-                EditorTraceMessage.DelayedEventsInterval = 1000;
-                EditorTraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-                EditorTraceMessage.IsReplaceMode = false;
-                EditorTraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-                EditorTraceMessage.LanguageChanged += TraceMessage_LanguageChanged;
-
-                notepad.SelectEditor(0);
-                notepad.DefaultEncoding = defaultEncoding;
-                notepad.WordWrapStateChanged += Notepad_WordWrapStateChanged;
-                notepad.WordHighlightsStateChanged += Notepad_WordHighlightsStateChanged;
-                notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
+                #region Apply All Settings
 
                 DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
                 DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
-
-                #endregion
-
-                #region Apply All Settings
 
                 TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
                 ChbxUseRegex.Checked = UserSettings.UseRegex;
@@ -263,17 +228,10 @@ namespace LogsReader.Reader
                 TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
                 TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
 
-                var langMessage = UserSettings.MessageLanguage;
-                var langTrace = UserSettings.TraceLanguage;
-                if (EditorMessage.Language != langMessage)
-                    EditorMessage.ChangeLanguage(langMessage);
-                if (EditorTraceMessage.Language != langTrace)
-                    EditorTraceMessage.ChangeLanguage(langTrace);
-
-                EditorMessage.WordWrap = UserSettings.MessageWordWrap;
-                EditorMessage.Highlights = UserSettings.MessageHighlights;
-                EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
-                EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
+                MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
+                tabControlViewer.DrawMode = TabDrawMode.Normal;
+                tabControlViewer.BackColor = Color.White;
+                AddViewer(MainViewer, null);
 
                 #endregion
             }
@@ -281,6 +239,27 @@ namespace LogsReader.Reader
             {
                 ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
             }
+        }
+
+        void AddViewer(TraceItemView traceViewer, DataTemplate template)
+        {
+	        var tabPage = new CustomTabPage
+            {
+	            UseVisualStyleBackColor = true,
+		        ForeColor = Color.Black,
+		        Margin = new Padding(0),
+		        Padding = new Padding(0),
+		        BorderStyle = BorderStyle.None,
+		        CanClose = !traceViewer.IsMain
+            };
+	        tabPage.Controls.Add(traceViewer);
+
+	        if (!traceViewer.IsMain && MainViewer != null)
+		        traceViewer.SplitterDistance = MainViewer.SplitterDistance;
+            traceViewer.Dock = DockStyle.Fill;
+	        traceViewer.ChangeTemplate(template);
+
+	        tabControlViewer.TabPages.Add(tabPage);
         }
 
         public void ApplyFormSettings()
@@ -299,11 +278,11 @@ namespace LogsReader.Reader
 
                 ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
                 MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                EnumSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(EnumSplitContainer), 25, 1000, EnumSplitContainer.SplitterDistance);
+                MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 1000, MainViewer.SplitterDistance);
 
                 ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
                 MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
-                EnumSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
+                MainViewer.SplitterMoved += (sender, args) => { SaveData(); };
             }
             catch (Exception ex)
             {
@@ -388,7 +367,7 @@ namespace LogsReader.Reader
 
                 UserSettings.SetValue(nameof(ParentSplitContainer), ParentSplitContainer.SplitterDistance);
                 UserSettings.SetValue(nameof(MainSplitContainer), MainSplitContainer.SplitterDistance);
-                UserSettings.SetValue(nameof(EnumSplitContainer), EnumSplitContainer.SplitterDistance);
+                UserSettings.SetValue(nameof(MainViewer), MainViewer.SplitterDistance);
             }
             catch (Exception ex)
             {
@@ -435,7 +414,7 @@ namespace LogsReader.Reader
                         }
 
                         var clipboardText = new StringBuilder();
-                        if (notepad.SelectedIndex == 0)
+                        if (MainViewer.CurrentEditor == MainViewer.EditorMessage)
                         {
 	                        foreach (var template in templateList)
 	                        {
@@ -508,7 +487,7 @@ namespace LogsReader.Reader
                 Progress = 0;
                 using (var writer = new StreamWriter(desctination, false, new UTF8Encoding(false)))
                 {
-	                if (notepad.SelectedIndex == 0)
+	                if (MainViewer.CurrentEditor == MainViewer.EditorMessage)
 	                {
 		                await writer.WriteLineAsync(GetCSVRow(new[]
 		                {
@@ -653,7 +632,7 @@ namespace LogsReader.Reader
 			        firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
 		        }
 
-		        ClearDGV();
+		        Clear();
 		        ClearErrorStatus();
 
 		        _currentDGVResult = GetResultTemplates();
@@ -746,8 +725,7 @@ namespace LogsReader.Reader
 			        dgvChild.Enabled = !IsWorking;
 		        DgvData.Enabled = !IsWorking;
 
-		        notepad.Enabled = !IsWorking;
-		        descriptionText.Enabled = !IsWorking;
+		        tabControlViewer.Enabled = !IsWorking;
 		        ChbxUseRegex.Enabled = !IsWorking;
 		        DateStartFilter.Enabled = !IsWorking;
 		        DateEndFilter.Enabled = !IsWorking;
@@ -805,7 +783,7 @@ namespace LogsReader.Reader
 		        {
 			        row.DefaultCellStyle.BackColor = Color.Red;
 			        row.DefaultCellStyle.ForeColor = Color.White;
-			        row.DefaultCellStyle.Font = errorFont;
+			        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 
 			        if (template.IsMatched) 
 				        return;
@@ -912,7 +890,7 @@ namespace LogsReader.Reader
 		        var byAscending = _oldSortedColumn?.Index != e.ColumnIndex || _oldSortedColumn?.Index == e.ColumnIndex && !_byAscending;
 		        var source = _currentDGVResult;
 
-		        ClearDGV();
+		        Clear();
 		        ClearErrorStatus();
 
 		        var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
@@ -946,19 +924,13 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
+		        if (DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 			        return;
 
-		        if (!TryGetTemplate(DgvData.SelectedRows[0], out var template))
-			        return;
+		        MainViewer.ChangeTemplate(template);
 
-		        var foundByTransactionValue = string.Empty;
-		        if (!template.TransactionValue.IsNullOrEmptyTrim())
-			        foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
-
-		        descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
-
-		        SetMessage(template);
+		        if (MainViewer.Parent is TabPage page)
+			        tabControlViewer.SelectTab(page);
 	        }
 	        catch (Exception ex)
 	        {
@@ -970,61 +942,22 @@ namespace LogsReader.Reader
 	        }
         }
 
-        private void Notepad_TabIndexChanged(object sender, EventArgs e)
+        private void DgvData_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 	        try
 	        {
-		        if (DgvData.CurrentRow == null || DgvData.SelectedRows.Count == 0)
+		        if (DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 			        return;
 
-		        if (!TryGetTemplate(DgvData.SelectedRows[0], out var template))
-			        return;
-
-                SetMessage(template);
-            }
+                AddViewer(new TraceItemView(DefaultEncoding, UserSettings, false), template);
+	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+	        }
 	        finally
 	        {
 		        DgvData.Focus();
-            }
-        }
-
-        private DataTemplate prevTemplateMessage;
-        private DataTemplate prevTemplateTraceMessage;
-
-        void SetMessage(DataTemplate template)
-        {
-	        if (notepad.CurrentEditor == EditorMessage)
-	        {
-		        if (prevTemplateMessage != null && prevTemplateMessage.Equals(template))
-			        return;
-
-		        var messageString = template.Message.TrimWhiteSpaces();
-		        if (EditorMessage.Language == Language.XML
-		            || EditorMessage.Language == Language.HTML
-		            || template.Message.Length <= 50000 && messageString.StartsWith("<") && messageString.EndsWith(">"))
-		        {
-			        var messageXML = XML.RemoveUnallowable(template.Message, " ");
-			        messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
-		        }
-
-		        EditorMessage.Text = messageString;
-		        EditorMessage.DelayedEventsInterval = 10;
-
-		        prevTemplateMessage = template;
-	        }
-	        else
-	        {
-		        if (prevTemplateTraceMessage != null && prevTemplateTraceMessage.Equals(template))
-			        return;
-
-                EditorTraceMessage.Text = template.TraceMessage;
-		        EditorTraceMessage.DelayedEventsInterval = 10;
-
-		        prevTemplateTraceMessage = template;
 	        }
         }
 
@@ -1113,39 +1046,6 @@ namespace LogsReader.Reader
 
         }
 
-        private void Message_LanguageChanged(object sender, EventArgs e)
-        {
-            var prev = UserSettings.MessageLanguage;
-            UserSettings.MessageLanguage = EditorMessage.Language;
-        }
-
-        private void TraceMessage_LanguageChanged(object sender, EventArgs e)
-        {
-            UserSettings.TraceLanguage = EditorTraceMessage.Language;
-        }
-
-        private void Notepad_WordWrapStateChanged(object sender, EventArgs e)
-        {
-            if (!(sender is Editor editor))
-                return;
-
-            if (editor == EditorMessage)
-                UserSettings.MessageWordWrap = editor.WordWrap;
-            else if (editor == EditorTraceMessage)
-                UserSettings.TraceWordWrap = editor.WordWrap;
-        }
-
-        private void Notepad_WordHighlightsStateChanged(object sender, EventArgs e)
-        {
-            if (!(sender is Editor editor))
-                return;
-
-            if (editor == EditorMessage)
-                UserSettings.MessageHighlights = editor.Highlights;
-            else if (editor == EditorTraceMessage)
-                UserSettings.TraceHighlights = editor.Highlights;
-        }
-
         protected virtual void ValidationCheck(bool clearStatus)
         {
 	        btnExport.Enabled = DgvData.RowCount > 0;
@@ -1164,7 +1064,7 @@ namespace LogsReader.Reader
                 if (saveData)
                     SaveData();
 
-                ClearDGV();
+                Clear();
 
                 ReportProcessStatus(0, 0, 0, 0);
 
@@ -1182,7 +1082,7 @@ namespace LogsReader.Reader
             }
         }
 
-        protected void ClearDGV()
+        protected void Clear()
         {
 	        try
 	        {
@@ -1194,16 +1094,15 @@ namespace LogsReader.Reader
 		        DgvData.Rows.Clear();
 		        DgvData.Refresh();
 
-		        descriptionText.Text = string.Empty;
-		        if (EditorMessage != null)
-			        EditorMessage.Text = string.Empty;
-		        if (EditorTraceMessage != null)
-			        EditorTraceMessage.Text = string.Empty;
+		        MainViewer.Clear();
+		        foreach (var page in tabControlViewer.TabPages.OfType<TabPage>().ToList())
+		        {
+			        if(page == MainViewer.Parent)
+                        continue;
+			        tabControlViewer.TabPages.Remove(page);
+		        }
 
-		        prevTemplateMessage = null;
-		        prevTemplateTraceMessage = null;
-
-		        btnExport.Enabled = false;
+                btnExport.Enabled = false;
 		        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
 	        }
 	        catch (Exception ex)
@@ -1252,5 +1151,5 @@ namespace LogsReader.Reader
 		        components?.Dispose();
 	        base.Dispose(disposing);
         }
-    }
+	}
 }

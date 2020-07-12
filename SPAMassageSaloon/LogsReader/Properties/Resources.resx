@@ -550,4 +550,22 @@ Colors schemes are adjustable.</value>
   <data name="Txt_LogsReaderForm_PrevErrButt" xml:space="preserve">
     <value>Previous error (SHIFT+F3)</value>
   </data>
+  <data name="Txt_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Txt_CloseAllButThis" xml:space="preserve">
+    <value>Close All But This</value>
+  </data>
+  <data name="Txt_CloseAllDocuments" xml:space="preserve">
+    <value>Close All Documents</value>
+  </data>
+  <data name="notepad_closeAllButThis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\notepad_closeallbutthis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_closeAllItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\notepad_closeallitems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notepad_closeItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\notepad_closeitem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

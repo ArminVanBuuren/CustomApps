@@ -82,6 +82,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Reader\CustomTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reader\Forms\AddFolder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +125,12 @@
       <DependentUpon>LogsReaderFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Reader\ReportStatusType.cs" />
+    <Compile Include="Reader\TraceItemView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reader\TraceItemView.Designer.cs">
+      <DependentUpon>TraceItemView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reader\TraceReader.cs" />
     <Compile Include="Reader\LogsReaderPerformerScheme.cs" />
     <Compile Include="Reader\LogsReaderFormScheme.cs">
@@ -182,6 +191,9 @@
     <EmbeddedResource Include="Reader\Forms\TypesGroupForm.resx">
       <DependentUpon>TypesGroupForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reader\TraceItemView.resx">
+      <DependentUpon>TraceItemView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -233,6 +245,9 @@
     <Content Include="Resources\default.png" />
     <Content Include="Resources\error2.png" />
     <Content Include="Resources\next_2.png" />
+    <Content Include="Resources\notepad_closeAllButThis.png" />
+    <Content Include="Resources\notepad_closeAllItems.png" />
+    <Content Include="Resources\notepad_closeItem.png" />
     <Content Include="Resources\Ok.png" />
     <Content Include="Resources\ping.png" />
     <Content Include="Resources\pingAll.png" />
