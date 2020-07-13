@@ -113,7 +113,8 @@ namespace LogsReader.Reader
 			{
 				output = null;
 
-				foreach (var regex in _transactionValues.Values.ToList())
+				var trnList = _transactionValues.Values.ToList();
+				foreach (var regex in trnList.Skip(Math.Max(0, trnList.Count - 100)))
 				{
 					if (regex == null)
 						continue;
@@ -184,9 +185,6 @@ namespace LogsReader.Reader
 			_transactionValues.TryAdd(trn, new Regex(Regex.Escape(trn),
 				RegexOptions.Compiled | RegexOptions.CultureInvariant,
 				new TimeSpan(0, 0, 1)));
-
-			if (_transactionValues.Count > 100)
-				_transactionValues.TryRemove(_transactionValues.First().Key, out _);
 
 			return true;
 		}

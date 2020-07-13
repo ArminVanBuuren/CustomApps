@@ -287,8 +287,7 @@ namespace LogsReader.Config
 			        FileTypes = new LRGroups(new []
 			        {
 				        new LRGroupItem("connectors", 0, "soapcon, smscon, ivrcon, emailcon"),
-				        new LRGroupItem("hnd", 1, "wcfhnd, dbcon"),
-				        new LRGroupItem("main", 2, "crmcon, dispatcher"),
+				        new LRGroupItem("hnd", 1, "crmcon, dispatcher, wcfhnd, dbcon")
 			        });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
