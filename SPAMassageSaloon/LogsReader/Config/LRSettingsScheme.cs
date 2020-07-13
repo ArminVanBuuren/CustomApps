@@ -290,7 +290,7 @@ namespace LogsReader.Config
 				        new LRGroupItem("hnd", 1, "crmcon, dispatcher, wcfhnd, dbcon")
 			        });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
-			        MaxLines = 100;
+			        MaxLines = 3000;
 			        MaxThreads = -1;
 			        OrderBy = _orderBy;
 			        break;
