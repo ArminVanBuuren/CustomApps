@@ -31,13 +31,13 @@ namespace LogsReader.Reader.Forms
 		private void InitializeComponent()
 		{
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.textBoxGroupPriority = new System.Windows.Forms.TextBox();
+			this.labelPriority = new System.Windows.Forms.Label();
 			this.comboboxGroup = new System.Windows.Forms.ComboBox();
 			this.labelGroupName = new System.Windows.Forms.Label();
 			this.richTextBoxTypes = new System.Windows.Forms.RichTextBox();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOK = new System.Windows.Forms.Button();
-			this.textBoxGroupPriority = new System.Windows.Forms.TextBox();
-			this.labelPriority = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -50,8 +50,27 @@ namespace LogsReader.Reader.Forms
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(549, 55);
+			this.panel1.Size = new System.Drawing.Size(557, 55);
 			this.panel1.TabIndex = 40;
+			// 
+			// textBoxGroupPriority
+			// 
+			this.textBoxGroupPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxGroupPriority.Location = new System.Drawing.Point(80, 30);
+			this.textBoxGroupPriority.Name = "textBoxGroupPriority";
+			this.textBoxGroupPriority.Size = new System.Drawing.Size(474, 20);
+			this.textBoxGroupPriority.TabIndex = 2;
+			this.textBoxGroupPriority.TextChanged += new System.EventHandler(this.textBoxGroupPriority_TextChanged);
+			// 
+			// labelPriority
+			// 
+			this.labelPriority.AutoSize = true;
+			this.labelPriority.Location = new System.Drawing.Point(7, 33);
+			this.labelPriority.Name = "labelPriority";
+			this.labelPriority.Size = new System.Drawing.Size(38, 13);
+			this.labelPriority.TabIndex = 102;
+			this.labelPriority.Text = "Priority";
 			// 
 			// comboboxGroup
 			// 
@@ -62,7 +81,7 @@ namespace LogsReader.Reader.Forms
 			this.comboboxGroup.Location = new System.Drawing.Point(80, 5);
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
-			this.comboboxGroup.Size = new System.Drawing.Size(466, 21);
+			this.comboboxGroup.Size = new System.Drawing.Size(474, 21);
 			this.comboboxGroup.TabIndex = 1;
 			// 
 			// labelGroupName
@@ -81,7 +100,7 @@ namespace LogsReader.Reader.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.richTextBoxTypes.Location = new System.Drawing.Point(10, 56);
 			this.richTextBoxTypes.Name = "richTextBoxTypes";
-			this.richTextBoxTypes.Size = new System.Drawing.Size(531, 153);
+			this.richTextBoxTypes.Size = new System.Drawing.Size(539, 81);
 			this.richTextBoxTypes.TabIndex = 3;
 			this.richTextBoxTypes.Text = "";
 			// 
@@ -90,7 +109,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(461, 211);
+			this.buttonCancel.Location = new System.Drawing.Point(469, 139);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 5;
@@ -103,7 +122,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(395, 211);
+			this.buttonOK.Location = new System.Drawing.Point(403, 139);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 4;
@@ -111,34 +130,16 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
 			// 
-			// textBoxGroupPriority
-			// 
-			this.textBoxGroupPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxGroupPriority.Location = new System.Drawing.Point(80, 30);
-			this.textBoxGroupPriority.Name = "textBoxGroupPriority";
-			this.textBoxGroupPriority.Size = new System.Drawing.Size(466, 20);
-			this.textBoxGroupPriority.TabIndex = 2;
-			this.textBoxGroupPriority.TextChanged += new System.EventHandler(this.textBoxGroupPriority_TextChanged);
-			// 
-			// labelPriority
-			// 
-			this.labelPriority.AutoSize = true;
-			this.labelPriority.Location = new System.Drawing.Point(7, 33);
-			this.labelPriority.Name = "labelPriority";
-			this.labelPriority.Size = new System.Drawing.Size(38, 13);
-			this.labelPriority.TabIndex = 102;
-			this.labelPriority.Text = "Priority";
-			// 
 			// TypesGroupForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(549, 238);
+			this.ClientSize = new System.Drawing.Size(557, 166);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.richTextBoxTypes);
 			this.Controls.Add(this.panel1);
+			this.MaximumSize = new System.Drawing.Size(725, 461);
 			this.MinimumSize = new System.Drawing.Size(179, 153);
 			this.Name = "TypesGroupForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
