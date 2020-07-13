@@ -131,7 +131,7 @@
     <value>Maximum amount of lines for trace stack. Whole trace must be parsed by the "TraceParse" patterns.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
-    <value>Servers for search. Specify with a comma.</value>
+    <value>Servers for search. Specify with a comma. The "Priority" attribute sets the order in which the search is performed on servers and file types. The value "0" sets the maximum priority.</value>
   </data>
   <data name="Txt_LRSettingsScheme_TraceParse" xml:space="preserve">
     <value>Attribute "displayDateFormat" sets the display date format. Attribute "culture" is used with the "displayDateFormat" attribute, default value is empty.
@@ -142,7 +142,7 @@
         "IsError" node is an optional setting for searching the logical result of an error in a found trace. The RegEx works with the Singleline, CultureInvariant, and IgnoreCase options.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Types" xml:space="preserve">
-    <value>File types, specify with a comma. A search on the content of the file name, extension included.</value>
+    <value>File types, specify with a comma. A search on the content of the file name, extension included. The "Priority" attribute sets the order in which the search is performed on servers and file types. The value "0" sets the maximum priority.</value>
   </data>
   <data name="Txt_LRSettings_Deserialize_Ex" xml:space="preserve">
     <value>Config "{0}" is incorrect! Moved to "{1}".

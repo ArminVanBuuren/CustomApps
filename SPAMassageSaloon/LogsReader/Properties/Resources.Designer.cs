@@ -1327,7 +1327,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Servers for search. Specify with a comma..
+        ///   Ищет локализованную строку, похожую на Servers for search. Specify with a comma. The &quot;Priority&quot; attribute sets the order in which the search is performed on servers and file types. The value &quot;0&quot; sets the maximum priority..
         /// </summary>
         public static string Txt_LRSettingsScheme_Servers {
             get {
@@ -1346,7 +1346,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на File types, specify with a comma. A search on the content of the file name, extension included..
+        ///   Ищет локализованную строку, похожую на File types, specify with a comma. A search on the content of the file name, extension included. The &quot;Priority&quot; attribute sets the order in which the search is performed on servers and file types. The value &quot;0&quot; sets the maximum priority..
         /// </summary>
         public static string Txt_LRSettingsScheme_Types {
             get {
