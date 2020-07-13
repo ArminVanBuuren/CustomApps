@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -635,6 +637,20 @@ namespace Utils
             where T : struct
         {
             return value.HasValue ? ToString(value.Value) : defaultValue;
+        }
+
+        public static string SecureStringToString(this SecureString value)
+        {
+	        var valuePtr = IntPtr.Zero;
+	        try
+	        {
+		        valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+		        return Marshal.PtrToStringUni(valuePtr);
+	        }
+	        finally
+	        {
+		        Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+	        }
         }
 
         static bool GetCharByUTFCode(string input, out char result)

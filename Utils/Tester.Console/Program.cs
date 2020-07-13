@@ -29,6 +29,11 @@ namespace Tester.Console
 		}
 	}
 
+	class  testClass
+	{
+		public int CountTest { get; } = 5;
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -39,9 +44,10 @@ namespace Tester.Console
 			
 			try
 			{
+				var list = new List<testClass>();
+				var res = list.Sum(x => x.CountTest / 5);
 
 
-				
 			}
 			catch (Exception e)
 			{
