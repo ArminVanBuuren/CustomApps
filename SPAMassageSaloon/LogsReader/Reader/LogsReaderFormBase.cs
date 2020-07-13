@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -41,6 +42,8 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _filtersCompleted2;
         private readonly ToolStripStatusLabel _overallFound1;
         private readonly ToolStripStatusLabel _overallFound2;
+
+        protected Stopwatch TimeWatcher { get; set; }= new Stopwatch();
 
         protected ToolTip Tooltip { get; }
 
@@ -457,6 +460,7 @@ namespace LogsReader.Reader
 		        Progress = percentOfProgeress;
 		        FilesCompleted = filesCompleted;
 		        TotalFiles = totalFiles;
+		        ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
             });
 
 	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);

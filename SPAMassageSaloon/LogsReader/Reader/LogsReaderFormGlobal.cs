@@ -358,7 +358,7 @@ namespace LogsReader.Reader
 					// если выполняется повторный поиск в определенной схеме, то возобновляем процесс и дисейблим грид
 					if (InProcessing.IsCompleted)
 					{
-						InProcessing.Continue();
+						TimeWatcher.Start();
 						IsWorking = true;
 						ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
 					}
@@ -366,11 +366,13 @@ namespace LogsReader.Reader
 					return;
 				}
 
+				TimeWatcher.Stop();
+
 				// заполняем DataGrid
 				if (await AssignResult(ChbxAlreadyUseFilter.Checked ? GetFilter() : null))
 				{
 					Progress = 100;
-					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, InProcessing.Elapsed.ToReadableString()), ReportStatusType.Success);
+					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 				}
 
 				IsWorking = false;
@@ -417,7 +419,6 @@ namespace LogsReader.Reader
 
         class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
 		{
-	        private Stopwatch _timeWatcher;
 			private readonly Dictionary<string, (LogsReaderFormScheme, Task)> _items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
 
 			public int Count => _items.Count;
@@ -430,14 +431,11 @@ namespace LogsReader.Reader
 					if (!isAnyWorking)
 					{
 						IsCompleted = true;
-						_timeWatcher.Stop();
 					}
 
 					return isAnyWorking;
 				}
 			}
-
-			public TimeSpan Elapsed => _timeWatcher.Elapsed;
 
 			public bool IsCompleted { get; private set; } = false;
 
@@ -456,8 +454,6 @@ namespace LogsReader.Reader
 			public void Start(IEnumerable<LogsReaderFormScheme> readerFormCollection)
 			{
 				Clear();
-				_timeWatcher = new Stopwatch();
-				_timeWatcher.Start();
 
 				foreach (var readerForm in readerFormCollection)
 				{
@@ -476,11 +472,6 @@ namespace LogsReader.Reader
 					.Where(x => x.Value.Item1.IsWorking)
 					.Select(x => x.Value.Item1))
 					reader.BtnSearch_Click(this, EventArgs.Empty);
-			}
-
-			public void Continue()
-			{
-				_timeWatcher?.Start();
 			}
 
 			public void Clear()
@@ -504,6 +495,7 @@ namespace LogsReader.Reader
 		{
 			if (!IsWorking)
 			{
+				TimeWatcher = new Stopwatch();
 				try
 				{
 					base.BtnSearch_Click(sender, e);
@@ -511,6 +503,8 @@ namespace LogsReader.Reader
 
 					IsWorking = true;
 					ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+
+					TimeWatcher.Start();
 
 					InProcessing.Start(AllExpanders
 						.Where(x => x.Value.IsChecked)

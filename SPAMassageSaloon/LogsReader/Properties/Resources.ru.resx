@@ -309,7 +309,7 @@
     <value>По Regex</value>
   </data>
   <data name="Txt_LogsReaderForm_Working" xml:space="preserve">
-    <value>Поиск...</value>
+    <value>Поиск...{0}</value>
   </data>
   <data name="Txt_LogsReaderPerformer_IncorrectSearchPattern" xml:space="preserve">
     <value>Паттерн "{0}" для поиска по регулярному выражению - некорректный!</value>

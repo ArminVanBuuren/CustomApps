@@ -1099,7 +1099,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Working....
+        ///   Ищет локализованную строку, похожую на Working...{0}.
         /// </summary>
         public static string Txt_LogsReaderForm_Working {
             get {

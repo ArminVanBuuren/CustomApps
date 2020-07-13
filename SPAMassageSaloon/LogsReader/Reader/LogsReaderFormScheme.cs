@@ -248,7 +248,7 @@ namespace LogsReader.Reader
         {
             if (!IsWorking)
             {
-	            var timeWatcher = new Stopwatch();
+	            TimeWatcher = new Stopwatch();
 	            try
 	            {
 		            base.BtnSearch_Click(sender, e);
@@ -268,16 +268,16 @@ namespace LogsReader.Reader
 					            .Select(x => x.Key)
 					            .ToList())
 				            {
-					            if(result.TryGetValue(item, out var existPiority))
+					            if (result.TryGetValue(item, out var existPiority))
 					            {
 						            var currentPriority = TreeViewContainer.GetGroupPriority(groupNode);
 						            if (currentPriority < existPiority)
 							            result[item] = currentPriority;
 					            }
-								else
-								{
-									result.Add(item, TreeViewContainer.GetGroupPriority(groupNode));
-								}
+					            else
+					            {
+						            result.Add(item, TreeViewContainer.GetGroupPriority(groupNode));
+					            }
 				            }
 			            }
 
@@ -302,13 +302,13 @@ namespace LogsReader.Reader
 
 		            MainReader.OnProcessReport += ReportProcessStatus;
 
-		            timeWatcher.Start();
+		            TimeWatcher.Start();
 		            IsWorking = true;
 
 		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-		            ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
+		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
 
 		            // результат выполнения
@@ -316,15 +316,19 @@ namespace LogsReader.Reader
 		            if (MainReader.ResultsOfError != null)
 			            OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
+		            MainReader.OnProcessReport -= ReportProcessStatus;
+
 		            // заполняем DataGrid
 		            if (await AssignResult(filter))
-			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, timeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
+			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
-		            timeWatcher.Stop();
+		            TimeWatcher.Stop();
 		            MainReader.EnsureProcessReport();
 	            }
 	            catch (Exception ex)
 	            {
+		            if (MainReader != null)
+			            MainReader.OnProcessReport -= ReportProcessStatus;
 		            ReportStatus(ex.Message, ReportStatusType.Error);
 	            }
 	            finally
@@ -339,8 +343,8 @@ namespace LogsReader.Reader
 
 		            IsWorking = false;
 
-		            if (timeWatcher.IsRunning)
-			            timeWatcher.Stop();
+		            if (TimeWatcher.IsRunning)
+			            TimeWatcher.Stop();
 	            }
             }
             else

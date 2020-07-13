@@ -323,7 +323,7 @@ Input data:
     <value>Use Regex</value>
   </data>
   <data name="Txt_LogsReaderForm_Working" xml:space="preserve">
-    <value>Working...</value>
+    <value>Working...{0}</value>
   </data>
   <data name="Txt_LogsReaderPerformer_IncorrectSearchPattern" xml:space="preserve">
     <value>Pattern "{0}" is incorrect for use as regular expression! Please check.</value>
