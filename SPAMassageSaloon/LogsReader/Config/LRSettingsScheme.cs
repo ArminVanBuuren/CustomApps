@@ -284,7 +284,12 @@ namespace LogsReader.Config
 	        {
 		        case DefaultSettings.MG:
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4, mg5") });
-			        FileTypes = new LRGroups(new [] { new LRGroupItem("default", 0, "crmcon, soapcon, smscon, ivrcon, emailcon, wcfhnd, dbcon, dispatcher") });
+			        FileTypes = new LRGroups(new []
+			        {
+				        new LRGroupItem("connectors", 0, "soapcon, smscon, ivrcon, emailcon"),
+				        new LRGroupItem("hnd", 1, "wcfhnd, dbcon"),
+				        new LRGroupItem("main", 2, "crmcon, dispatcher"),
+			        });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
 			        MaxThreads = -1;
