@@ -94,9 +94,7 @@ namespace LogsReader.Reader
 						break;
 
 					var readersOrders = traceReaders
-						.OrderByDescending(x => x.File.CreationTime.Date)
-						.ThenByDescending(x => x.File.CreationTime.Hour)
-						.ThenByDescending(x => x.File.LastWriteTime.Date)
+						.OrderByDescending(x => x.File.LastWriteTime.Date)
 						.ThenByDescending(x => x.File.LastWriteTime.Hour)
 						.ThenByDescending(x => x.File.Length)
 						.ToList();
