@@ -87,7 +87,7 @@ namespace LogsReader.Reader.Forms
 			}
 			catch (Exception)
 			{
-				// ignored
+				textBoxPriority.Text = @"0";
 			}
 			finally
 			{

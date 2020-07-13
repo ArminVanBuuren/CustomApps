@@ -21,7 +21,7 @@ namespace LogsReader.Config
 			{
 				try
 				{
-					var prevVal = (value ?? _groupItems).OrderBy(x => x.GroupName).ToArray();
+					var prevVal = (value ?? _groupItems).OrderBy(x => x.Priority).ThenBy(x => x.GroupName).ToArray();
 					var prevGroups = GetGroups(prevVal);
 
 					_groupItems = prevVal;

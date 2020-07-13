@@ -501,18 +501,20 @@ namespace LogsReader.Reader
                 // подготавливаем два списка для конфига и для TreeView из обновленного treeGroups
                 var nodes = new List<TreeNode>();
                 var groupItems = new List<LRGroupItem>(treeGroups.Count);
-                foreach (var (groupName, items) in treeGroups.OrderBy(x => x.Key))
+                foreach (var (groupName, (priority, items)) in treeGroups
+	                .OrderBy(x => x.Value.Item1)
+	                .ThenBy(x => x.Key))
                 {
-	                if (items.Item2.Count == 0 || items.Item2.All(x => x.IsNullOrEmptyTrim()))
+	                if (items.Count == 0 || items.All(x => x.IsNullOrEmptyTrim()))
 		                continue;
 
-	                var childTreeNode = GetGroupItems(groupName, items.Item1, items.Item2, groupType);
+	                var childTreeNode = GetGroupItems(groupName, priority, items, groupType);
 	                nodes.Add(childTreeNode);
-	                groupItems.Add(new LRGroupItem(groupName, items.Item1, string.Join(", ", items.Item2)));
+	                groupItems.Add(new LRGroupItem(groupName, priority, string.Join(", ", items)));
 
 	                if (!clone.TryGetValue(groupName, out var existGroup) 
-	                    || existGroup.Item2.Except(items.Item2).Any() 
-	                    || items.Item2.Except(existGroup.Item2).Any())
+	                    || existGroup.Item2.Except(items).Any()
+	                    || items.Except(existGroup.Item2).Any())
 		                childTreeNode.Expand();
                 }
 
@@ -569,12 +571,21 @@ namespace LogsReader.Reader
 
         static Dictionary<string, (int, List<string>)> GetGroups(TreeNode treeNode)
         {
-            var result = new Dictionary<string, (int, List<string>)>(StringComparer.InvariantCultureIgnoreCase);
-	        foreach (var groupNode in treeNode.Nodes.OfType<TreeNode>().OrderBy(x => x.Text))
+	        var result = new Dictionary<string, (int, List<string>)>(StringComparer.InvariantCultureIgnoreCase);
+	        foreach (var group in treeNode.Nodes.OfType<TreeNode>()
+		        .Select(x => new
+		        {
+			        name = GetGroupName(x),
+			        priority = GetGroupPriority(x),
+			        node = x
+		        })
+		        .OrderBy(x => x.priority)
+		        .ThenBy(x => x.name))
 	        {
-		        result.Add(GetGroupName(groupNode), (GetGroupPriority(groupNode), new List<string>(groupNode.Nodes.OfType<TreeNode>().Select(p => p.Text))));
+		        result.Add(group.name, (group.priority, new List<string>(group.node.Nodes.OfType<TreeNode>().Select(p => p.Text))));
 	        }
-            return result;
+
+	        return result;
         }
 
         void SetFolder(TreeNode selectedNode, Dictionary<string, bool> items, bool showForm)
@@ -676,7 +687,9 @@ namespace LogsReader.Reader
         public static Dictionary<string, bool> GetFolders(CustomTreeView treeView, bool getOnlyChecked)
         {
 	        var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
-            foreach (var folderWithType in treeView.Nodes[TRVFolders].Nodes.OfType<TreeNode>().Where(x => !getOnlyChecked || x.Checked).Select(x => x.Text))
+            foreach (var folderWithType in treeView.Nodes[TRVFolders].Nodes.OfType<TreeNode>()
+	            .Where(x => !getOnlyChecked || x.Checked)
+	            .Select(x => x.Text))
             {
                 var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
                 if (folders.TryGetValue(folder, out var type))
@@ -702,8 +715,8 @@ namespace LogsReader.Reader
                 NodeFont = _defaultParentFont
             };
 
-            foreach (var (groupName, items) in groups)
-                parentTreeNode.Nodes.Add(GetGroupItems(groupName, items.Item1, items.Item2, groupType));
+            foreach (var (groupName, (priority, items)) in groups)
+                parentTreeNode.Nodes.Add(GetGroupItems(groupName, priority, items, groupType));
             parentTreeNode.Expand();
 
             return parentTreeNode;
