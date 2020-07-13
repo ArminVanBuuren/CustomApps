@@ -592,6 +592,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Priority.
+        /// </summary>
+        public static string Txt_Forms_GroupPriority {
+            get {
+                return ResourceManager.GetString("Txt_Forms_GroupPriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на      OK.
         /// </summary>
         public static string Txt_Forms_OK {

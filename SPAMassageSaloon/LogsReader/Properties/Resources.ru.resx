@@ -476,4 +476,7 @@
   <data name="Txt_CloseAllDocuments" xml:space="preserve">
     <value>Закрыть все документы</value>
   </data>
+  <data name="Txt_Forms_GroupPriority" xml:space="preserve">
+    <value>Приоритет</value>
+  </data>
 </root>

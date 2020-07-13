@@ -37,6 +37,8 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.panelChooseGroup = new System.Windows.Forms.Panel();
+			this.textBoxGroupPriority = new System.Windows.Forms.TextBox();
+			this.labelPriority = new System.Windows.Forms.Label();
 			this.buttonPingAll = new System.Windows.Forms.Button();
 			this.buttonRemoveAll = new System.Windows.Forms.Button();
 			this.buttonAdd = new System.Windows.Forms.Button();
@@ -51,9 +53,9 @@ namespace LogsReader.Reader.Forms
 			this.labelGroup.AutoSize = true;
 			this.labelGroup.Location = new System.Drawing.Point(3, 6);
 			this.labelGroup.Name = "labelGroup";
-			this.labelGroup.Size = new System.Drawing.Size(36, 13);
+			this.labelGroup.Size = new System.Drawing.Size(67, 13);
 			this.labelGroup.TabIndex = 0;
-			this.labelGroup.Text = "Group";
+			this.labelGroup.Text = "Group Name";
 			// 
 			// comboboxGroup
 			// 
@@ -61,10 +63,10 @@ namespace LogsReader.Reader.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboboxGroup.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.comboboxGroup.FormattingEnabled = true;
-			this.comboboxGroup.Location = new System.Drawing.Point(49, 3);
+			this.comboboxGroup.Location = new System.Drawing.Point(76, 3);
 			this.comboboxGroup.MaxDropDownItems = 2;
 			this.comboboxGroup.Name = "comboboxGroup";
-			this.comboboxGroup.Size = new System.Drawing.Size(371, 21);
+			this.comboboxGroup.Size = new System.Drawing.Size(344, 21);
 			this.comboboxGroup.TabIndex = 99;
 			// 
 			// buttonCancel
@@ -95,13 +97,34 @@ namespace LogsReader.Reader.Forms
 			// 
 			// panelChooseGroup
 			// 
+			this.panelChooseGroup.Controls.Add(this.textBoxGroupPriority);
+			this.panelChooseGroup.Controls.Add(this.labelPriority);
 			this.panelChooseGroup.Controls.Add(this.comboboxGroup);
 			this.panelChooseGroup.Controls.Add(this.labelGroup);
 			this.panelChooseGroup.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panelChooseGroup.Location = new System.Drawing.Point(0, 0);
 			this.panelChooseGroup.Name = "panelChooseGroup";
-			this.panelChooseGroup.Size = new System.Drawing.Size(426, 26);
+			this.panelChooseGroup.Size = new System.Drawing.Size(426, 56);
 			this.panelChooseGroup.TabIndex = 39;
+			// 
+			// textBoxGroupPriority
+			// 
+			this.textBoxGroupPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxGroupPriority.Location = new System.Drawing.Point(76, 29);
+			this.textBoxGroupPriority.Name = "textBoxGroupPriority";
+			this.textBoxGroupPriority.Size = new System.Drawing.Size(344, 20);
+			this.textBoxGroupPriority.TabIndex = 101;
+			this.textBoxGroupPriority.TextChanged += new System.EventHandler(this.textBoxGroupPriority_TextChanged);
+			// 
+			// labelPriority
+			// 
+			this.labelPriority.AutoSize = true;
+			this.labelPriority.Location = new System.Drawing.Point(3, 32);
+			this.labelPriority.Name = "labelPriority";
+			this.labelPriority.Size = new System.Drawing.Size(38, 13);
+			this.labelPriority.TabIndex = 100;
+			this.labelPriority.Text = "Priority";
 			// 
 			// buttonPingAll
 			// 
@@ -150,7 +173,7 @@ namespace LogsReader.Reader.Forms
 			this.panelBottom.Controls.Add(this.buttonOK);
 			this.panelBottom.Controls.Add(this.buttonRemoveAll);
 			this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelBottom.Location = new System.Drawing.Point(0, 69);
+			this.panelBottom.Location = new System.Drawing.Point(0, 99);
 			this.panelBottom.Name = "panelBottom";
 			this.panelBottom.Size = new System.Drawing.Size(426, 30);
 			this.panelBottom.TabIndex = 44;
@@ -158,7 +181,7 @@ namespace LogsReader.Reader.Forms
 			// groupBoxServers
 			// 
 			this.groupBoxServers.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBoxServers.Location = new System.Drawing.Point(0, 26);
+			this.groupBoxServers.Location = new System.Drawing.Point(0, 56);
 			this.groupBoxServers.Name = "groupBoxServers";
 			this.groupBoxServers.Size = new System.Drawing.Size(426, 43);
 			this.groupBoxServers.TabIndex = 2;
@@ -169,7 +192,7 @@ namespace LogsReader.Reader.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(426, 99);
+			this.ClientSize = new System.Drawing.Size(426, 129);
 			this.Controls.Add(this.groupBoxServers);
 			this.Controls.Add(this.panelBottom);
 			this.Controls.Add(this.panelChooseGroup);
@@ -196,5 +219,7 @@ namespace LogsReader.Reader.Forms
 		private Button buttonAdd;
 		private Panel panelBottom;
 		private GroupBox groupBoxServers;
+		private Label labelPriority;
+		private TextBox textBoxGroupPriority;
 	}
 }
