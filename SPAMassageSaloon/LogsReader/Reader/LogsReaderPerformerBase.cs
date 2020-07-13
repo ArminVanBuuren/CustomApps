@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,10 @@ namespace LogsReader.Reader
 	{
 		private static long _seqBaseInstance = 0;
 		private readonly long _instanceId = 0;
+		private readonly object _syncTrn = new object();
 
 		private readonly LRSettingsScheme _currentSettings;
-		private readonly ConcurrentDictionary<string, Regex> _transactionValues;
+		private readonly Dictionary<string, Regex> _transactionValues;
 
 		/// <summary>
 		/// Проверяет на совпадение по обычному поиску
@@ -108,12 +110,15 @@ namespace LogsReader.Reader
 				};
 			}
 
-			_transactionValues = new ConcurrentDictionary<string, Regex>();
+			_transactionValues = new Dictionary<string, Regex>();
 			IsMatchByTransactions = (string input, out string output) =>
 			{
 				output = null;
 
-				var trnList = _transactionValues.Values.ToList();
+				List<Regex> trnList;
+				lock(_syncTrn)
+					trnList = _transactionValues.Values.ToList();
+
 				foreach (var regex in trnList.Skip(Math.Max(0, trnList.Count - 100)))
 				{
 					if (regex == null)
@@ -148,6 +153,7 @@ namespace LogsReader.Reader
 			_currentSettings = control._currentSettings;
 			IsMatch = control.IsMatch;
 			TryParseDate = control.TryParseDate;
+			_syncTrn = control._syncTrn;
 			_transactionValues = control._transactionValues;
 			IsMatchByTransactions = control.IsMatchByTransactions;
 			GetTraceReader = control.GetTraceReader;
@@ -179,12 +185,16 @@ namespace LogsReader.Reader
 			if (trn.IsNullOrEmptyTrim())
 				return false;
 
-			if (_transactionValues.ContainsKey(trn))
-				return false;
+			lock (_syncTrn)
+				if (_transactionValues.ContainsKey(trn))
+					return false;
 
-			_transactionValues.TryAdd(trn, new Regex(Regex.Escape(trn),
+			var regex = new Regex(Regex.Escape(trn),
 				RegexOptions.Compiled | RegexOptions.CultureInvariant,
-				new TimeSpan(0, 0, 1)));
+				new TimeSpan(0, 0, 1));
+
+			lock (_syncTrn)
+				_transactionValues.Add(trn, regex);
 
 			return true;
 		}
