@@ -82,7 +82,7 @@ namespace LogsReader.Reader.Forms
 			this.richTextBoxTypes.Location = new System.Drawing.Point(10, 56);
 			this.richTextBoxTypes.Name = "richTextBoxTypes";
 			this.richTextBoxTypes.Size = new System.Drawing.Size(531, 153);
-			this.richTextBoxTypes.TabIndex = 2;
+			this.richTextBoxTypes.TabIndex = 3;
 			this.richTextBoxTypes.Text = "";
 			// 
 			// buttonCancel
@@ -93,7 +93,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Location = new System.Drawing.Point(461, 211);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
-			this.buttonCancel.TabIndex = 4;
+			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = global::LogsReader.Properties.Resources.Txt_Forms_Cancel;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -106,7 +106,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Location = new System.Drawing.Point(395, 211);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
-			this.buttonOK.TabIndex = 3;
+			this.buttonOK.TabIndex = 4;
 			this.buttonOK.Text = global::LogsReader.Properties.Resources.Txt_Forms_OK;
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -118,7 +118,7 @@ namespace LogsReader.Reader.Forms
 			this.textBoxGroupPriority.Location = new System.Drawing.Point(80, 30);
 			this.textBoxGroupPriority.Name = "textBoxGroupPriority";
 			this.textBoxGroupPriority.Size = new System.Drawing.Size(466, 20);
-			this.textBoxGroupPriority.TabIndex = 103;
+			this.textBoxGroupPriority.TabIndex = 2;
 			this.textBoxGroupPriority.TextChanged += new System.EventHandler(this.textBoxGroupPriority_TextChanged);
 			// 
 			// labelPriority

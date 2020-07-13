@@ -90,7 +90,7 @@ namespace LogsReader.Reader.Forms
 			this.textBoxPriority.Location = new System.Drawing.Point(77, 29);
 			this.textBoxPriority.Name = "textBoxPriority";
 			this.textBoxPriority.Size = new System.Drawing.Size(196, 20);
-			this.textBoxPriority.TabIndex = 43;
+			this.textBoxPriority.TabIndex = 2;
 			this.textBoxPriority.TextChanged += new System.EventHandler(this.textBoxPriority_TextChanged);
 			// 
 			// labelPriority
