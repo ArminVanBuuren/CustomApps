@@ -73,6 +73,7 @@ namespace LogsReader.Reader
 			IsCompleted = false;
 			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+			ResultsOfError = new List<DataTemplate>();
 
 			try
 			{
@@ -83,8 +84,6 @@ namespace LogsReader.Reader
 					throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
 				if (TraceReaders.Count <= 0)
 					throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
-
-				ResultsOfError = new List<DataTemplate>();
 
 				new Action(CheckProgress).BeginInvoke(null, null);
 
