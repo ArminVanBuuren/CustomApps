@@ -294,18 +294,20 @@ namespace LogsReader.Reader
 			        return;
 
 		        var countMatches = 0;
+		        var countErrorMatches = 0;
 				var progress = 0;
 				var filesCompleted = 0;
 				var totalFiles = 0;
 				foreach (var schemeForm in InProcessing.Select(x => x.Item1))
 				{
 					countMatches += schemeForm.CountMatches;
+					countErrorMatches += schemeForm.CountErrorMatches;
 					progress += schemeForm.Progress;
 					filesCompleted += schemeForm.FilesCompleted;
 					totalFiles += schemeForm.TotalFiles;
 				}
 
-				ReportProcessStatus(countMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
+				ReportProcessStatus(countMatches, countErrorMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
 	        };
 			// событие при смене языка формы
 	        readerForm.OnAppliedSettings += (sender, args) =>
@@ -370,12 +372,10 @@ namespace LogsReader.Reader
 
 				// заполняем DataGrid
 				if (await AssignResult(ChbxAlreadyUseFilter.Checked ? GetFilter() : null))
-				{
-					Progress = 100;
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
-				}
 
 				IsWorking = false;
+				Progress = 100;
 			};
 
 			return schemeExpander;

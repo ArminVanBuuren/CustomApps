@@ -802,6 +802,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Errors:.
+        /// </summary>
+        public static string Txt_LogsReaderForm_Error {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Export [Ctrl+S].
         /// </summary>
         public static string Txt_LogsReaderForm_Export {
@@ -955,20 +964,11 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Overall found.
+        ///   Ищет локализованную строку, похожую на Found matches:.
         /// </summary>
-        public static string Txt_LogsReaderForm_OverallFound_1 {
+        public static string Txt_LogsReaderForm_OverallFound {
             get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на matches.
-        /// </summary>
-        public static string Txt_LogsReaderForm_OverallFound_2 {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound_2", resourceCulture);
+                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound", resourceCulture);
             }
         }
         

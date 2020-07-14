@@ -10,14 +10,16 @@ using Utils;
 
 namespace LogsReader.Reader
 {
-	public delegate void ReportProcessStatusHandler(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
+	public delegate void ReportProcessStatusHandler(int countMatches, int countErrorMatches, int percentOfProgeress, int filesCompleted, int totalFiles);
 
 	public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
 	{
 		private readonly object _syncRootResult = new object();
 		private readonly object _syncRootMatches = new object();
+		private readonly object _syncRootErrorMatches = new object();
 
-		private int _countMatches;
+		private int _countMatches = 0;
+		private int _countErrorMatches = 0;
 
 		private SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 		private List<MTActionResult<TraceReader>> _multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
@@ -34,10 +36,24 @@ namespace LogsReader.Reader
 				lock (_syncRootMatches)
 					return _countMatches;
 			}
-			internal set
+			private set
 			{
 				lock (_syncRootMatches)
 					_countMatches = value;
+			}
+		}
+
+		public int CountErrorMatches
+		{
+			get
+			{
+				lock (_syncRootErrorMatches)
+					return _countErrorMatches;
+			}
+			private set
+			{
+				lock (_syncRootErrorMatches)
+					_countErrorMatches = value;
 			}
 		}
 
@@ -74,6 +90,8 @@ namespace LogsReader.Reader
 			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 			ResultsOfError = new List<DataTemplate>();
+			CountMatches = 0;
+			CountErrorMatches = 0;
 
 			try
 			{
@@ -99,7 +117,7 @@ namespace LogsReader.Reader
 						.ToList();
 
 					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-					var maxThreads = MaxThreads <= 0 ? TraceReaders.Count : MaxThreads;
+					var maxThreads = MaxThreads <= 0 ? readersOrders.Count : MaxThreads;
 					var multiTaskingHandler = new MTActionResult<TraceReader>(
 						ReadData,
 						readersOrders,
@@ -179,6 +197,9 @@ namespace LogsReader.Reader
 			if (item.Error == null)
 				++CountMatches;
 
+			if (!item.IsSuccess)
+				++CountErrorMatches;
+
 			lock (_syncRootResult)
 			{
 				if (!_result.TryGetValue(item, out var existingItem))
@@ -217,13 +238,13 @@ namespace LogsReader.Reader
 			if (_multiTaskingHandlerList.Count > 0)
 				foreach (var tasks in _multiTaskingHandlerList)
 					tasks.Stop();
-			_multiTaskingHandlerList.Clear();
 		}
 
 		public override void Reset()
 		{
 			Stop();
 			CountMatches = 0;
+			CountErrorMatches = 0;
 			_result.Clear();
 			ResultsOfError = null;
 			base.Reset();
@@ -238,6 +259,7 @@ namespace LogsReader.Reader
 					EnsureProcessReport();
 					Thread.Sleep(10);
 				}
+				EnsureProcessReport();
 			}
 			catch (Exception)
 			{
@@ -249,7 +271,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				OnProcessReport?.Invoke(CountMatches, PercentOfComplete, ResultCount, TotalCount);
+				OnProcessReport?.Invoke(CountMatches, CountErrorMatches,!IsCompleted ? PercentOfComplete : 100, ResultCount, TotalCount);
 			}
 			catch (Exception)
 			{

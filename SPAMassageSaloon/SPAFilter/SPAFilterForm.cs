@@ -1550,12 +1550,19 @@ namespace SPAFilter
             if (IsInititializating)
                 return;
 
-            lock (_syncSaveData)
+            try
             {
-                using (var stream = new FileStream(SavedDataPath, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    new BinaryFormatter().Serialize(stream, this);
-                }
+	            lock (_syncSaveData)
+	            {
+		            using (var stream = new FileStream(SavedDataPath, FileMode.Create, FileAccess.ReadWrite))
+		            {
+			            new BinaryFormatter().Serialize(stream, this);
+		            }
+	            }
+            }
+            catch (Exception ex)
+            {
+	            ReportMessage.Show(ex);
             }
         }
 

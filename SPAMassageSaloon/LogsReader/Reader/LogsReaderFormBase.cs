@@ -27,6 +27,7 @@ namespace LogsReader.Reader
         private bool _isWorking;
 
         private int _countMatches = 0;
+        private int _countErrorMatches = 0;
         private int _filesCompleted = 0;
         private int _totalFiles = 0;
 
@@ -40,8 +41,9 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _totalFilesStatus;
         private readonly ToolStripStatusLabel _filtersCompleted1;
         private readonly ToolStripStatusLabel _filtersCompleted2;
-        private readonly ToolStripStatusLabel _overallFound1;
-        private readonly ToolStripStatusLabel _overallFound2;
+        private readonly ToolStripStatusLabel _overallFound;
+        private readonly ToolStripStatusLabel _errorFound;
+        private readonly ToolStripStatusLabel _errorFoundValue;
 
         protected Stopwatch TimeWatcher { get; set; }= new Stopwatch();
 
@@ -84,6 +86,16 @@ namespace LogsReader.Reader
 	        {
 		        _countMatches = value;
 		        _findedInfo.Text = _countMatches.ToString();
+	        }
+        }
+
+        public int CountErrorMatches
+        {
+	        get => _countErrorMatches;
+	        protected set
+	        {
+		        _countErrorMatches = value;
+		        _errorFoundValue.Text = _countErrorMatches.ToString();
 	        }
         }
 
@@ -151,13 +163,16 @@ namespace LogsReader.Reader
             statusStrip.Items.Add(_filtersCompleted2);
             statusStrip.Items.Add(_totalFilesStatus);
 
-            _overallFound1 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
+            _overallFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
             _findedInfo = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            _overallFound2 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingEnd };
+            _errorFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingEnd };
+            _errorFoundValue = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
             statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(_overallFound1);
+            statusStrip.Items.Add(_overallFound);
             statusStrip.Items.Add(_findedInfo);
-            statusStrip.Items.Add(_overallFound2);
+            statusStrip.Items.Add(new ToolStripSeparator());
+            statusStrip.Items.Add(_errorFound);
+            statusStrip.Items.Add(_errorFoundValue);
 
             statusStrip.Items.Add(new ToolStripSeparator());
             _statusInfo = new ToolStripStatusLabel("") { Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
@@ -301,8 +316,8 @@ namespace LogsReader.Reader
 
                 _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
-                _overallFound1.Text = Resources.Txt_LogsReaderForm_OverallFound_1;
-                _overallFound2.Text = Resources.Txt_LogsReaderForm_OverallFound_2;
+                _overallFound.Text = Resources.Txt_LogsReaderForm_OverallFound;
+                _errorFound.Text = Resources.Txt_LogsReaderForm_Error;
 
                 CobxTraceNameFilter.Items.Clear();
                 CobxTraceNameFilter.Items.Add(Resources.Txt_LogsReaderForm_Contains);
@@ -452,11 +467,12 @@ namespace LogsReader.Reader
                 throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
         }
 
-        protected void ReportProcessStatus(int countMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
+        protected void ReportProcessStatus(int countMatches, int countErrorMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
 	        this.SafeInvoke(() =>
 	        {
 		        CountMatches = countMatches;
+		        CountErrorMatches = countErrorMatches;
 		        Progress = percentOfProgeress;
 		        FilesCompleted = filesCompleted;
 		        TotalFiles = totalFiles;
@@ -1070,7 +1086,7 @@ namespace LogsReader.Reader
 
                 Clear();
 
-                ReportProcessStatus(0, 0, 0, 0);
+                ReportProcessStatus(0, 0, 0, 0, 0);
 
                 _completedFilesStatus.Text = @"0";
                 _totalFilesStatus.Text = @"0";

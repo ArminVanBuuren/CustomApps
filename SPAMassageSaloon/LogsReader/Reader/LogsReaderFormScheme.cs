@@ -316,35 +316,32 @@ namespace LogsReader.Reader
 		            if (MainReader.ResultsOfError != null)
 			            OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
-		            MainReader.OnProcessReport -= ReportProcessStatus;
-
 		            // заполняем DataGrid
 		            if (await AssignResult(filter))
 			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 		            TimeWatcher.Stop();
-		            MainReader.EnsureProcessReport();
 	            }
 	            catch (Exception ex)
 	            {
 		            if (MainReader != null)
 			            MainReader.OnProcessReport -= ReportProcessStatus;
-		            ReportStatus(ex.Message, ReportStatusType.Error);
+					ReportStatus(ex.Message, ReportStatusType.Error);
 	            }
 	            finally
 	            {
 		            if (MainReader != null)
 		            {
 			            MainReader.OnProcessReport -= ReportProcessStatus;
-			            MainReader.Dispose();
+						MainReader.Dispose();
 			            MainReader = null;
-			            Progress = 100;
 		            }
-
-		            IsWorking = false;
 
 		            if (TimeWatcher.IsRunning)
 			            TimeWatcher.Stop();
+
+		            IsWorking = false;
+					Progress = 100;
 	            }
             }
             else
