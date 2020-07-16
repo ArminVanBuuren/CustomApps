@@ -19,7 +19,7 @@ namespace LogsReader.Reader
     public abstract class TraceReader : LogsReaderPerformerBase
     {
 	    private bool _searchByTransaction;
-        private string _trn = null;
+        private (bool, string)? _trn = null;
 
         private Func<string, bool> _IsMatchedFunc;
 
@@ -36,7 +36,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Текущая транзакция, используется для DataTempalte 
         /// </summary>
-	    protected string CurrentTransactionValue => _trn;
+	    protected (bool, string)? CurrentTransactionValue => _trn;
 
 	    /// <summary>
 	    /// Разрешить поиск по транзакциям
@@ -52,22 +52,21 @@ namespace LogsReader.Reader
 				    _IsMatchedFunc = (input) =>
 				    {
 					    _trn = null;
-					    if (IsMatch.Invoke(input) || IsMatchByTransactions.Invoke(input, out _trn))
-						    return true;
+					    var result = IsMatch.Invoke(input);
 
-					    return false;
-                    };
+					    if (IsMatchByTransactions.Invoke(input, out var _trnValue))
+					    {
+						    _trn = (!result, _trnValue);
+							result = true;
+						}
+
+					    return result;
+				    };
 			    }
 			    else
 			    {
 				    _trn = null;
-                    _IsMatchedFunc = (input) =>
-				    {
-					    if (IsMatch.Invoke(input))
-						    return true;
-
-					    return false;
-				    };
+                    _IsMatchedFunc = (input) => IsMatch.Invoke(input);
                 }
 		    }
 	    }
@@ -286,7 +285,7 @@ namespace LogsReader.Reader
             {
 	            foreach (var transactionParsePattern in TransactionPatterns)
 	            {
-		            // пытаемся из успешного результата найти транзакцию
+		            // пытаемся из результата найти транзакцию
 		            var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
 		            if (!trnMatch.Success)
 			            continue;
@@ -302,7 +301,7 @@ namespace LogsReader.Reader
 			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
-			            innerReader._trn = trnValue;
+			            innerReader._trn = (true, trnValue);
 			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines; // возвращаемся обратно к первой сохраненной строке
 			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 

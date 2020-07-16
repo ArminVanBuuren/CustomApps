@@ -132,8 +132,8 @@ namespace LogsReader.Reader
 				return;
 
 			var foundByTransactionValue = string.Empty;
-			if (!template.TransactionValue.IsNullOrEmptyTrim())
-				foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue}\"";
+			if (template?.TransactionValue != null && template.TransactionValue.Value.Item1 && !template.TransactionValue.Value.Item2.IsNullOrEmptyTrim())
+				foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue.Value.Item2}\"";
 
 			descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
 

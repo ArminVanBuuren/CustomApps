@@ -45,7 +45,7 @@ namespace LogsReader.Config
 		{
 			return items
 				.ToDictionary(k => k.GroupName, v =>
-						(v.InternalPriority, v.Item[0].Value.Split(',')
+						(v.PriorityInternal, v.Item[0].Value.Split(',')
 							.GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
 							.Select(x => x.Key))
 					, StringComparer.InvariantCultureIgnoreCase);

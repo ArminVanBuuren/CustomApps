@@ -31,7 +31,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Проверяет на совпадение по найденным транзакциям
 		/// </summary>
-		protected OutFuncDelegate<string, string, bool> IsMatchByTransactions { get; }
+		internal OutFuncDelegate<string, string, bool> IsMatchByTransactions { get; }
 
 		/// <summary>
 		/// Функция для получение определенного <see cref="TraceReader"/> согласно настройкам

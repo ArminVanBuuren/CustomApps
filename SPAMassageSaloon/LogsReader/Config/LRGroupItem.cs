@@ -16,21 +16,21 @@ namespace LogsReader.Config
 			set => _groupName = value.ToUpper();
 		}
 
-		[XmlIgnore] internal int InternalPriority { get; set; } = 0;
+		[XmlIgnore] internal int PriorityInternal { get; set; } = 0;
 
 		[XmlAttribute("priority")]
 		public string Priority
 		{
-			get => InternalPriority.ToString();
+			get => PriorityInternal.ToString();
 			set
 			{
 				if (!value.IsNullOrEmptyTrim() && int.TryParse(value, out var result) && result >= 0)
 				{
-					InternalPriority = result;
+					PriorityInternal = result;
 					return;
 				}
 
-				InternalPriority = 0;
+				PriorityInternal = 0;
 			}
 		}
 

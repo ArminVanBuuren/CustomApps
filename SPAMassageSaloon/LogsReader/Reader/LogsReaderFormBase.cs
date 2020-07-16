@@ -221,6 +221,10 @@ namespace LogsReader.Reader
                 DateOfTrace.Name = nameof(DataTemplate.Tmp.DateOfTrace);
                 DateOfTrace.HeaderText = DataTemplate.HeaderDate;
 
+                ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSec);
+                ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSec);
+                ElapsedSec.HeaderText = DataTemplate.HeaderElapsedSec;
+
                 File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
                 File.Name = nameof(DataTemplate.Tmp.FileNamePartial);
                 File.HeaderText = DataTemplate.HeaderFile;

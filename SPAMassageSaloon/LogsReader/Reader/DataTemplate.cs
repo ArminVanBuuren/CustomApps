@@ -16,6 +16,7 @@ namespace LogsReader.Reader
         public const string HeaderServer = "Server";
         public const string HeaderTraceName = "TraceName";
         public const string HeaderDate = "Date";
+        public const string HeaderElapsedSec = "ElapsedSec";
         public const string HeaderFile = "File";
         public const string HeaderDescription = "Description";
         public const string HeaderMessage = "Message";
@@ -37,7 +38,7 @@ namespace LogsReader.Reader
 	        long foundLineID,
 	        TraceParseResult parseResult,
 	        string traceMessage,
-	        string trn)
+	        (bool, string)? trn)
         {
 	        IsMatched = true;
 
@@ -70,12 +71,12 @@ namespace LogsReader.Reader
 	        TransactionValue = trn;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn) : this(traceReader, foundLineID, trn)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, (bool, string)? trn) : this(traceReader, foundLineID, trn)
         {
 	        TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string trn)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, (bool, string)? trn)
         {
 	        IsMatched = false;
 	        IsSuccess = false;
@@ -88,7 +89,7 @@ namespace LogsReader.Reader
             TransactionValue = trn;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, string trn, Exception error)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, (bool, string)? trn, Exception error)
         {
             IsMatched = false;
             IsSuccess = false;
@@ -119,7 +120,7 @@ namespace LogsReader.Reader
 
         public long FoundLineID { get; }
 
-        public string TransactionValue { get; }
+        public (bool, string)? TransactionValue { get; private set; }
 
         public Exception Error { get; }
 
@@ -151,6 +152,11 @@ namespace LogsReader.Reader
         public string DateOfTrace { get; }
 
         public DateTime? Date { get; }
+
+        [DGVColumn(ColumnPosition.After, HeaderElapsedSec)]
+        public string ElapsedSec => ElapsedSecInternal >= 0 ? ElapsedSecInternal.ToString("0:0.000") : string.Empty;
+
+        internal double ElapsedSecInternal { get; set; } = -1;
 
         [DGVColumn(ColumnPosition.After, HeaderFile)]
         public string FileNamePartial => ParentReader.FileNamePartial;
@@ -201,6 +207,15 @@ namespace LogsReader.Reader
         {
             Message = input.Message;
             TraceMessage = input.TraceMessage;
+        }
+
+        internal void InitTransaction()
+        {
+	        if (TransactionValue != null)
+		        return;
+
+	        if (ParentReader.IsMatchByTransactions(TraceMessage, out var trn))
+		        TransactionValue = (false, trn);
         }
 
         public override bool Equals(object obj)

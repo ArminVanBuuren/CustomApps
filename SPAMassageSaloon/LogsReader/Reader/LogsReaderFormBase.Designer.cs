@@ -33,6 +33,7 @@ namespace LogsReader.Reader
 			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.TraceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DateOfTrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ElapsedSec = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.BtnSearch = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
@@ -102,6 +103,7 @@ namespace LogsReader.Reader
             this.Server,
             this.TraceName,
             this.DateOfTrace,
+            this.ElapsedSec,
             this.File});
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -160,7 +162,7 @@ namespace LogsReader.Reader
 			// 
 			// ID
 			// 
-			this.ID.MinimumWidth = 35;
+			this.ID.MinimumWidth = 30;
 			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
 			this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -168,7 +170,7 @@ namespace LogsReader.Reader
 			// 
 			// Server
 			// 
-			this.Server.MinimumWidth = 48;
+			this.Server.MinimumWidth = 45;
 			this.Server.Name = "Server";
 			this.Server.ReadOnly = true;
 			this.Server.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -189,6 +191,14 @@ namespace LogsReader.Reader
 			this.DateOfTrace.ReadOnly = true;
 			this.DateOfTrace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.DateOfTrace.Width = 140;
+			// 
+			// ElapsedSec
+			// 
+			this.ElapsedSec.MinimumWidth = 30;
+			this.ElapsedSec.Name = "ElapsedSec";
+			this.ElapsedSec.ReadOnly = true;
+			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.ElapsedSec.Width = 30;
 			// 
 			// File
 			// 
@@ -636,6 +646,7 @@ namespace LogsReader.Reader
         private DataGridViewTextBoxColumn Server;
         private DataGridViewTextBoxColumn TraceName;
         private DataGridViewTextBoxColumn DateOfTrace;
+        private DataGridViewTextBoxColumn ElapsedSec;
         private DataGridViewTextBoxColumn File;
         private CustomTabControl tabControlViewer;
 
