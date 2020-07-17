@@ -217,12 +217,12 @@ namespace LogsReader.Reader
                 TraceName.Name = nameof(DataTemplate.Tmp.TraceName);
                 TraceName.HeaderText = DataTemplate.HeaderTraceName;
 
-                DateOfTrace.DataPropertyName = nameof(DataTemplate.Tmp.DateOfTrace);
-                DateOfTrace.Name = nameof(DataTemplate.Tmp.DateOfTrace);
+                DateOfTrace.DataPropertyName = nameof(DataTemplate.Tmp.DateString);
+                DateOfTrace.Name = nameof(DataTemplate.Tmp.DateString);
                 DateOfTrace.HeaderText = DataTemplate.HeaderDate;
 
-                ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSec);
-                ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSec);
+                ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
+                ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
                 ElapsedSec.HeaderText = DataTemplate.HeaderElapsedSec;
 
                 File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
@@ -443,7 +443,7 @@ namespace LogsReader.Reader
 		                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
 			                        template.ID,
 			                        template.ParentReader.FilePath,
-			                        template.DateOfTrace,
+			                        template.DateString,
 			                        template.TraceName,
 			                        template.Description,
 			                        template.Message.Trim());
@@ -528,7 +528,7 @@ namespace LogsReader.Reader
 				                {
 					                template.ID.ToString(),
 					                template.ParentReader.FilePath,
-					                template.DateOfTrace,
+					                template.DateString,
 					                template.TraceName,
 					                $"\"{template.Description}\"",
 					                $"\"{template.Message.Trim()}\""

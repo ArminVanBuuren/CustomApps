@@ -38,14 +38,11 @@ namespace LogsReader.Reader
 	        _values = new Dictionary<int, DataTemplate>(list.Count());
             AddRange(DoOrdering(list, settings.OrderByItems));
 
-            foreach (var trnTemplates in _values.Values.Where(x => x.TransactionValue == null))
-	            trnTemplates.InitTransaction();
-
 	        foreach (var trnTemplates in _values.Values
 	            .Where(x => x.TransactionValue?.Item2 != null && !x.TransactionValue.Value.Item2.IsNullOrEmptyTrim() && x.Date != null)
 	            .GroupBy(x => x.TransactionValue.Value.Item2))
             {
-	            if(trnTemplates.Count() == 1)
+	            if(trnTemplates.Count() <= 1)
 					continue;
 
 				var i = 0;
@@ -55,7 +52,7 @@ namespace LogsReader.Reader
 					if (i == 0)
 						firstTemplate = template;
 
-					template.ElapsedSecInternal = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
+					template.ElapsedSec = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
 					i++;
 				}
             }

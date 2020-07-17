@@ -57,13 +57,13 @@ namespace LogsReader.Reader
 					    if (IsMatchByTransactions.Invoke(input, out var _trnValue))
 					    {
 						    _trn = (!result, _trnValue);
-							result = true;
-						}
+						    result = true;
+					    }
 
 					    return result;
 				    };
 			    }
-			    else
+				else
 			    {
 				    _trn = null;
                     _IsMatchedFunc = (input) => IsMatch.Invoke(input);
@@ -134,12 +134,12 @@ namespace LogsReader.Reader
 
 		public abstract void ReadLine(string line);
 
-        protected bool IsMatched(string input)
-        {
-	        return _IsMatchedFunc.Invoke(input);
-        }
+		protected bool IsMatched(string input)
+		{
+			return _IsMatchedFunc.Invoke(input);
+		}
 
-        public void Commit()
+		public void Commit()
         {
             if (Found == null)
                 return;
@@ -278,7 +278,7 @@ namespace LogsReader.Reader
 		/// <param name="current">Успешно созданный темплейт</param>
 		void TransactionsSearch(string traceMessage, DataTemplate current)
         {
-	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0)
+	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0 || current.TransactionValue != null)
 		        return;
 
 	        try
@@ -292,11 +292,21 @@ namespace LogsReader.Reader
 
 		            // Текущая транзакция. Подставляется из группировок regex replace mode
 		            var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
-		            if (!AddTransactionValue(trnValue)) // добавляем новую транзакцию в общую коллекцию спарсенных транзакций
-			            break; // если транзакция найдена, но по результатам replace mode значение пустое, или транзакция уже была в списках, то завершаем поиск транзакций
 
-		            // если сохранились предыдущие строки, то ищем текущую транзакцию в предыдущих строках
-		            if (PastTraceLines.Count > 0)
+					// ищем дальше, если результатам replace mode значение пустое
+					if (trnValue.IsNullOrEmptyTrim())
+						continue;
+
+					// указываем спарсенную транзакцию
+		            if (current.TransactionValue == null)
+			            current.TransactionValue = (false, trnValue);
+
+		            // добавляем новую транзакцию в общую коллекцию спарсенных транзакций
+					if (!AddTransactionValue(trnValue))
+			            break; // если транзакция найдена,, или транзакция уже была в списках, то завершаем поиск транзакций
+
+					// если сохранились предыдущие строки, то ищем текущую транзакцию в предыдущих строках
+					if (PastTraceLines.Count > 0)
 		            {
 			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));

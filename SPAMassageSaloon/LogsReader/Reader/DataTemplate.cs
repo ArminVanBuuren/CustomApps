@@ -48,7 +48,7 @@ namespace LogsReader.Reader
 	        else
 		        IsSuccess = parseResult.IsSuccess;
 
-	        FoundLineID = foundLineID;
+            FoundLineID = foundLineID;
 	        ParentReader = traceReader;
 
 	        ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
@@ -57,11 +57,11 @@ namespace LogsReader.Reader
 	            && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace, out var displayDate))
 	        {
 		        Date = dateOfTrace;
-		        DateOfTrace = displayDate;
+		        DateString = displayDate;
 	        }
 	        else
 	        {
-		        DateOfTrace = string.Empty;
+		        DateString = string.Empty;
 	        }
 
 	        TraceName = parseResult.TraceName;
@@ -99,7 +99,7 @@ namespace LogsReader.Reader
 
             ID = -1;
             Date = DateTime.Now;
-            DateOfTrace = string.Empty;
+            DateString = string.Empty;
 
             Error = error;
             TraceName = error.GetType().ToString();
@@ -120,7 +120,7 @@ namespace LogsReader.Reader
 
         public long FoundLineID { get; }
 
-        public (bool, string)? TransactionValue { get; private set; }
+        public (bool, string)? TransactionValue { get; internal set; }
 
         public Exception Error { get; }
 
@@ -149,14 +149,14 @@ namespace LogsReader.Reader
         }
 
         [DGVColumn(ColumnPosition.After, HeaderDate)]
-        public string DateOfTrace { get; }
+        public string DateString { get; }
 
         public DateTime? Date { get; }
 
         [DGVColumn(ColumnPosition.After, HeaderElapsedSec)]
-        public string ElapsedSec => ElapsedSecInternal >= 0 ? ElapsedSecInternal.ToString("0:0.000") : string.Empty;
+        public string ElapsedSecString => ElapsedSec > 0 ? ElapsedSec.ToString("0.000") : ElapsedSec == 0 ? "0" : string.Empty;
 
-        internal double ElapsedSecInternal { get; set; } = -1;
+        public double ElapsedSec { get; internal set; } = -1;
 
         [DGVColumn(ColumnPosition.After, HeaderFile)]
         public string FileNamePartial => ParentReader.FileNamePartial;
@@ -207,15 +207,6 @@ namespace LogsReader.Reader
         {
             Message = input.Message;
             TraceMessage = input.TraceMessage;
-        }
-
-        internal void InitTransaction()
-        {
-	        if (TransactionValue != null)
-		        return;
-
-	        if (ParentReader.IsMatchByTransactions(TraceMessage, out var trn))
-		        TransactionValue = (false, trn);
         }
 
         public override bool Equals(object obj)

@@ -178,7 +178,7 @@ namespace LogsReader.Reader
 			// 
 			// TraceName
 			// 
-			this.TraceName.MinimumWidth = 75;
+			this.TraceName.MinimumWidth = 72;
 			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
 			this.TraceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -194,11 +194,11 @@ namespace LogsReader.Reader
 			// 
 			// ElapsedSec
 			// 
-			this.ElapsedSec.MinimumWidth = 30;
+			this.ElapsedSec.MinimumWidth = 40;
 			this.ElapsedSec.Name = "ElapsedSec";
 			this.ElapsedSec.ReadOnly = true;
 			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ElapsedSec.Width = 30;
+			this.ElapsedSec.Width = 40;
 			// 
 			// File
 			// 

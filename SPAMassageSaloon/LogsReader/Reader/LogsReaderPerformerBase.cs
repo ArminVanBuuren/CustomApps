@@ -119,7 +119,7 @@ namespace LogsReader.Reader
 				lock(_syncTrn)
 					trnList = _transactionValues.Values.ToList();
 
-				foreach (var regex in trnList.Skip(Math.Max(0, trnList.Count - 100)))
+				foreach (var regex in trnList.Skip(Math.Max(0, RowsLimit == 0 ? trnList.Count : trnList.Count - RowsLimit / 2)))
 				{
 					if (regex == null)
 						continue;
@@ -182,9 +182,6 @@ namespace LogsReader.Reader
 		/// <param name="trn"></param>
 		protected bool AddTransactionValue(string trn)
 		{
-			if (trn.IsNullOrEmptyTrim())
-				return false;
-
 			lock (_syncTrn)
 				if (_transactionValues.ContainsKey(trn))
 					return false;
