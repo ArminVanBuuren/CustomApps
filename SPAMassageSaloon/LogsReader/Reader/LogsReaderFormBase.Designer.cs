@@ -162,11 +162,11 @@ namespace LogsReader.Reader
 			// 
 			// ID
 			// 
-			this.ID.MinimumWidth = 30;
+			this.ID.MinimumWidth = 25;
 			this.ID.Name = "ID";
 			this.ID.ReadOnly = true;
 			this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ID.Width = 35;
+			this.ID.Width = 30;
 			// 
 			// Server
 			// 
@@ -178,7 +178,7 @@ namespace LogsReader.Reader
 			// 
 			// TraceName
 			// 
-			this.TraceName.MinimumWidth = 72;
+			this.TraceName.MinimumWidth = 70;
 			this.TraceName.Name = "TraceName";
 			this.TraceName.ReadOnly = true;
 			this.TraceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -186,7 +186,7 @@ namespace LogsReader.Reader
 			// 
 			// DateOfTrace
 			// 
-			this.DateOfTrace.MinimumWidth = 40;
+			this.DateOfTrace.MinimumWidth = 37;
 			this.DateOfTrace.Name = "DateOfTrace";
 			this.DateOfTrace.ReadOnly = true;
 			this.DateOfTrace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -194,11 +194,11 @@ namespace LogsReader.Reader
 			// 
 			// ElapsedSec
 			// 
-			this.ElapsedSec.MinimumWidth = 47;
+			this.ElapsedSec.MinimumWidth = 46;
 			this.ElapsedSec.Name = "ElapsedSec";
 			this.ElapsedSec.ReadOnly = true;
 			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ElapsedSec.Width = 47;
+			this.ElapsedSec.Width = 46;
 			// 
 			// File
 			// 
