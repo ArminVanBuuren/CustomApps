@@ -137,7 +137,7 @@
     <value>Attribute "displayDateFormat" sets the display date format. Attribute "culture" is used with the "displayDateFormat" attribute, default value is empty.
         "Pattern" nodes are used for parsing and reading trace parameters. It can be used together with the "Custom" setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds. Also in the attributes you can use custom functions from the "CustomFunctions" setting, an example of the format: Date="custom_date_parse ('$ 1')".
         "Custom" node - added the ability to use custom functions for parsing a trace. It can be used with the “Pattern” settings, and has a lower priority. Each class must implement the ICustomTraceParse interface. The main method - "IsTraceMatch" parses the target trace fragment. The "IsLineMatch" method - is called only when the optional "StartTraceLineWith" or "EndTraceLineWith" parameters are not set and asks for the possibility of adding lines to the previous successfully parsed trace.
-        "TransactionPattern" nodes are optional settings, that are used to search for transactions in the found trace. Slows down the processing speed, but contributes to a more detailed search. Custom functions can be used in node attributes.
+        "TransactionPattern" nodes are optional settings, that are used to search for transactions in the found trace. Slows down the processing speed, but contributes to a more detailed search. Custom functions can be used in node attributes. The "ElapsedSec" field displays the execution time in the bundle of one transaction, the calculation is performed from the first transaction found.
         "StartTraceLineWith" and "EndTraceLineWith" nodes are optional settings. Improve search speed, because what determines the exact boundary tracing. Parsing is done line by line, and not the entire stack. Options can be used individually, as well as in one setting. Regular expression works only with options Singleline and CultureInvariant. Timeout execution - 10 seconds.
         "IsError" node is an optional setting for searching the logical result of an error in a found trace. The RegEx works with the Singleline, CultureInvariant, and IgnoreCase options.</value>
   </data>
@@ -172,7 +172,7 @@
     <value>Search with filter</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "File", "FoundLineID". "FoundLineID" is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
+    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "ElapsedSec", "File", "FoundLineID". "FoundLineID" is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>The limit on the count of lines. Reduces RAM usage.</value>

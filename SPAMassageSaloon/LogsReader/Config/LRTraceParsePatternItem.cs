@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using LogsReader.Reader;
 
 namespace LogsReader.Config
 {
@@ -11,11 +12,20 @@ namespace LogsReader.Config
 
 		internal LRTraceParsePatternItem(string regexPattern) : base(regexPattern) { }
 
-		[XmlAttribute] public string ID { get; set; } = string.Empty;
-		[XmlAttribute] public string Date { get; set; } = string.Empty;
-		[XmlAttribute] public string TraceName { get; set; } = string.Empty;
-		[XmlAttribute] public string Description { get; set; } = string.Empty;
-		[XmlAttribute] public string Message { get; set; } = string.Empty;
+		[XmlAttribute(nameof(DataTemplate.Tmp.ID))]
+		public string ID { get; set; } = string.Empty;
+
+		[XmlAttribute(nameof(DataTemplate.Tmp.Date))] 
+		public string Date { get; set; } = string.Empty;
+
+		[XmlAttribute(nameof(DataTemplate.Tmp.TraceName))] 
+		public string TraceName { get; set; } = string.Empty;
+
+		[XmlAttribute(DataTemplate.HeaderDescription)] 
+		public string Description { get; set; } = string.Empty;
+
+		[XmlAttribute(DataTemplate.HeaderMessage)] 
+		public string Message { get; set; } = string.Empty;
 
 		public TraceParseResult GetParsingResult(Match match)
 		{

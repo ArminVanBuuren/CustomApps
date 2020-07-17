@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using LogsReader.Config;
@@ -11,14 +10,7 @@ namespace LogsReader.Reader
 {
     public class DataTemplate : ICloneable
     {
-        // Названия столбцов. Менять названия не рекомендуется, т.к. может запутать при настройке OrderBy. Но менять можно, влияния нет.
-	    public const string HeaderID = "ID";
-        public const string HeaderServer = "Server";
-        public const string HeaderTraceName = "TraceName";
-        public const string HeaderDate = "Date";
-        public const string HeaderElapsedSec = "ElapsedSec";
-        public const string HeaderFile = "File";
-        public const string HeaderDescription = "Description";
+	    public const string HeaderDescription = "Description";
         public const string HeaderMessage = "Message";
         public const string HeaderTraceMessage = "Full Trace";
 
@@ -135,30 +127,30 @@ namespace LogsReader.Reader
         [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsSuccess), false)]
         public bool IsSuccess { get; }
 
-        [DGVColumn(ColumnPosition.After, HeaderID)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.ID))]
         public int ID { get; internal set; }
 
-        [DGVColumn(ColumnPosition.After, HeaderServer)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.Server))]
         public string Server => ParentReader.Server;
 
-        [DGVColumn(ColumnPosition.After, HeaderTraceName)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.TraceName))]
         public string TraceName
         {
             get => _traceName;
             private set => _traceName = value?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
         }
 
-        [DGVColumn(ColumnPosition.After, HeaderDate)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.Date))]
         public string DateString { get; }
 
         public DateTime? Date { get; }
 
-        [DGVColumn(ColumnPosition.After, HeaderElapsedSec)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.ElapsedSec))]
         public string ElapsedSecString => ElapsedSec > 0 ? ElapsedSec.ToString("0.000") : ElapsedSec == 0 ? "0" : string.Empty;
 
         public double ElapsedSec { get; internal set; } = -1;
 
-        [DGVColumn(ColumnPosition.After, HeaderFile)]
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.File))]
         public string FileNamePartial => ParentReader.FileNamePartial;
 
         public string File => ParentReader.FilePath;

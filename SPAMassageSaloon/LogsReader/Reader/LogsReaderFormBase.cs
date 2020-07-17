@@ -207,29 +207,29 @@ namespace LogsReader.Reader
 
                 ID.DataPropertyName = nameof(DataTemplate.Tmp.ID);
                 ID.Name = nameof(DataTemplate.Tmp.ID);
-                ID.HeaderText = DataTemplate.HeaderID;
+                ID.HeaderText = nameof(DataTemplate.Tmp.ID);
 
                 Server.DataPropertyName = nameof(DataTemplate.Tmp.Server);
                 Server.Name = nameof(DataTemplate.Tmp.Server);
-                Server.HeaderText = DataTemplate.HeaderServer;
+                Server.HeaderText = nameof(DataTemplate.Tmp.Server);
 
                 TraceName.DataPropertyName = nameof(DataTemplate.Tmp.TraceName);
                 TraceName.Name = nameof(DataTemplate.Tmp.TraceName);
-                TraceName.HeaderText = DataTemplate.HeaderTraceName;
+                TraceName.HeaderText = nameof(DataTemplate.Tmp.TraceName);
 
                 DateOfTrace.DataPropertyName = nameof(DataTemplate.Tmp.DateString);
                 DateOfTrace.Name = nameof(DataTemplate.Tmp.DateString);
-                DateOfTrace.HeaderText = DataTemplate.HeaderDate;
+                DateOfTrace.HeaderText = nameof(DataTemplate.Tmp.Date);
 
                 ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
                 ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
-                ElapsedSec.HeaderText = DataTemplate.HeaderElapsedSec;
+                ElapsedSec.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
 
                 File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
                 File.Name = nameof(DataTemplate.Tmp.FileNamePartial);
-                File.HeaderText = DataTemplate.HeaderFile;
+                File.HeaderText = nameof(DataTemplate.Tmp.File);
 
-	            label7.Text = DataTemplate.HeaderTraceName;
+	            label7.Text = nameof(DataTemplate.Tmp.TraceName);
                 label11.Text = DataTemplate.HeaderTraceMessage;
 
                 #endregion
@@ -515,7 +515,12 @@ namespace LogsReader.Reader
 	                {
 		                await writer.WriteLineAsync(GetCSVRow(new[]
 		                {
-			                DataTemplate.HeaderID, DataTemplate.HeaderFile, DataTemplate.HeaderDate, DataTemplate.HeaderTraceName, DataTemplate.HeaderDescription, DataTemplate.HeaderMessage
+			                nameof(DataTemplate.Tmp.ID),
+			                nameof(DataTemplate.Tmp.File),
+			                nameof(DataTemplate.Tmp.Date),
+			                nameof(DataTemplate.Tmp.TraceName), 
+			                DataTemplate.HeaderDescription, 
+			                DataTemplate.HeaderMessage
                         }));
 
                         foreach (DataGridViewRow row in DgvData.Rows)
@@ -540,7 +545,11 @@ namespace LogsReader.Reader
 	                }
 	                else
 	                {
-		                await writer.WriteLineAsync(GetCSVRow(new[] { DataTemplate.HeaderFile, DataTemplate.HeaderTraceMessage }));
+		                await writer.WriteLineAsync(GetCSVRow(new[]
+		                {
+			                nameof(DataTemplate.Tmp.File), 
+			                DataTemplate.HeaderTraceMessage
+		                }));
 
                         foreach (DataGridViewRow row in DgvData.Rows)
 		                {
