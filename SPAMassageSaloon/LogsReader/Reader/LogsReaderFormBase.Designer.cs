@@ -194,11 +194,11 @@ namespace LogsReader.Reader
 			// 
 			// ElapsedSec
 			// 
-			this.ElapsedSec.MinimumWidth = 40;
+			this.ElapsedSec.MinimumWidth = 47;
 			this.ElapsedSec.Name = "ElapsedSec";
 			this.ElapsedSec.ReadOnly = true;
 			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ElapsedSec.Width = 40;
+			this.ElapsedSec.Width = 47;
 			// 
 			// File
 			// 

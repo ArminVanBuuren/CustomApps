@@ -278,7 +278,7 @@ namespace LogsReader.Reader
 		/// <param name="current">Успешно созданный темплейт</param>
 		void TransactionsSearch(string traceMessage, DataTemplate current)
         {
-	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0 || current.TransactionValue != null)
+	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0)
 		        return;
 
 	        try
