@@ -155,7 +155,7 @@ namespace LogsReader.Reader
 				descriptionText.AppendText("\"", Color.Black);
 			}
 
-			if (CurrentTemplate.Description.Length > 0)
+			if (!CurrentTemplate.Description.IsNullOrEmptyTrim())
 			{
 				descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
 				descriptionText.AppendText(CurrentTemplate.Description);

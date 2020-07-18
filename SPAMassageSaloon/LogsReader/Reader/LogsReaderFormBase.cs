@@ -474,14 +474,35 @@ namespace LogsReader.Reader
 
         protected void ReportProcessStatus(int countMatches, int countErrorMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
         {
+	        if (!IsWorking)
+		        return;
+
 	        this.SafeInvoke(() =>
 	        {
+		        if (!IsWorking)
+			        return;
+
 		        CountMatches = countMatches;
 		        CountErrorMatches = countErrorMatches;
 		        Progress = percentOfProgeress;
 		        FilesCompleted = filesCompleted;
 		        TotalFiles = totalFiles;
 		        ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
+	        });
+
+	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void ClearStatus()
+        {
+	        this.SafeInvoke(() =>
+	        {
+		        CountMatches = 0;
+		        CountErrorMatches = 0;
+		        Progress = 0;
+		        FilesCompleted = 0;
+		        TotalFiles = 0;
+		        ReportStatus(string.Empty, ReportStatusType.Success);
             });
 
 	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
@@ -1100,13 +1121,11 @@ namespace LogsReader.Reader
 
                 Clear();
 
-                ReportProcessStatus(0, 0, 0, 0, 0);
+                ClearStatus();
 
                 _completedFilesStatus.Text = @"0";
                 _totalFilesStatus.Text = @"0";
                 _findedInfo.Text = @"0";
-
-                ReportStatus(string.Empty, ReportStatusType.Success);
 
                 STREAM.GarbageCollect();
             }

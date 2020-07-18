@@ -324,8 +324,16 @@ namespace LogsReader.Reader
 	            }
 	            catch (Exception ex)
 	            {
-		            if (MainReader != null)
-			            MainReader.OnProcessReport -= ReportProcessStatus;
+					if (MainReader != null)
+					{
+						MainReader.OnProcessReport -= ReportProcessStatus;
+						MainReader.Dispose();
+						MainReader = null;
+					}
+
+					if (IsWorking)
+						IsWorking = false;
+
 					ReportStatus(ex.Message, ReportStatusType.Error);
 	            }
 	            finally
@@ -333,14 +341,16 @@ namespace LogsReader.Reader
 		            if (MainReader != null)
 		            {
 			            MainReader.OnProcessReport -= ReportProcessStatus;
-						MainReader.Dispose();
+			            MainReader.Dispose();
 			            MainReader = null;
 		            }
 
-		            if (TimeWatcher.IsRunning)
+					if (IsWorking)
+						IsWorking = false;
+
+					if (TimeWatcher.IsRunning)
 			            TimeWatcher.Stop();
 
-		            IsWorking = false;
 					Progress = 100;
 	            }
             }
