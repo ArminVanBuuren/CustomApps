@@ -19,7 +19,7 @@ namespace LogsReader.Reader
     public abstract class TraceReader : LogsReaderPerformerBase
     {
 	    private bool _searchByTransaction;
-        private (bool, string)? _trn = null;
+        private TransactionValue _trn = null;
 
         private Func<string, bool> _IsMatchedFunc;
 
@@ -36,7 +36,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Текущая транзакция, используется для DataTempalte 
         /// </summary>
-	    protected (bool, string)? CurrentTransactionValue => _trn;
+	    protected TransactionValue CurrentTransactionValue => _trn;
 
 	    /// <summary>
 	    /// Разрешить поиск по транзакциям
@@ -56,7 +56,7 @@ namespace LogsReader.Reader
 
 					    if (IsMatchByTransactions.Invoke(input, out var _trnValue))
 					    {
-						    _trn = (!result, _trnValue);
+						    _trn = new TransactionValue(!result, _trnValue);
 						    result = true;
 					    }
 
@@ -298,10 +298,9 @@ namespace LogsReader.Reader
 						continue;
 
 					// указываем спарсенную транзакцию
-		            if (current.TransactionValue == null)
-			            current.TransactionValue = (false, trnValue);
+					current.AddTransaction(new TransactionValue(false, trnValue));
 
-		            // добавляем новую транзакцию в общую коллекцию спарсенных транзакций
+					// добавляем новую транзакцию в общую коллекцию спарсенных транзакций
 					if (!AddTransactionValue(trnValue))
 			            break; // если транзакция найдена,, или транзакция уже была в списках, то завершаем поиск транзакций
 
@@ -311,7 +310,7 @@ namespace LogsReader.Reader
 			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
-			            innerReader._trn = (true, trnValue);
+			            innerReader._trn = new TransactionValue(true, trnValue);
 			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines; // возвращаемся обратно к первой сохраненной строке
 			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 

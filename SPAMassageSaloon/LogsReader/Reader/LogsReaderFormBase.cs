@@ -298,9 +298,9 @@ namespace LogsReader.Reader
                         DgvData.Columns[i].Width = value;
                 }
 
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 1000, ParentSplitContainer.SplitterDistance);
-                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 1000, MainSplitContainer.SplitterDistance);
-                MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 1000, MainViewer.SplitterDistance);
+                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 2000, ParentSplitContainer.SplitterDistance);
+                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 2000, MainSplitContainer.SplitterDistance);
+                MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 2000, MainViewer.SplitterDistance);
 
                 ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
                 MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
@@ -440,11 +440,12 @@ namespace LogsReader.Reader
                         {
 	                        foreach (var template in templateList)
 	                        {
-		                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\r\n",
+		                        clipboardText.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\r\n",
 			                        template.ID,
 			                        template.ParentReader.FilePath,
 			                        template.DateString,
 			                        template.TraceName,
+			                        template.ElapsedSecString,
 			                        template.Description,
 			                        template.Message.Trim());
                             }
@@ -518,8 +519,8 @@ namespace LogsReader.Reader
 			                nameof(DataTemplate.Tmp.ID),
 			                nameof(DataTemplate.Tmp.File),
 			                nameof(DataTemplate.Tmp.Date),
-			                nameof(DataTemplate.Tmp.TraceName), 
-			                DataTemplate.HeaderDescription, 
+			                nameof(DataTemplate.Tmp.TraceName),
+			                DataTemplate.HeaderDescription,
 			                DataTemplate.HeaderMessage
                         }));
 

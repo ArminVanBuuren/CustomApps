@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
@@ -55,6 +56,9 @@ namespace LogsReader.Reader
 			IsMain = isMain;
 
 			InitializeComponent();
+
+			descriptionText.AutoWordSelection = true;
+			descriptionText.AutoWordSelection = false;
 
 			notepad.TabsFont = LogsReaderMainForm.DgvFont;
 			notepad.TextFont = LogsReaderMainForm.TxtFont;
@@ -131,11 +135,29 @@ namespace LogsReader.Reader
 			if (CurrentTemplate == null)
 				return;
 
-			var foundByTransactionValue = string.Empty;
-			if (template?.TransactionValue != null && template.TransactionValue.Value.Item1 && !template.TransactionValue.Value.Item2.IsNullOrEmptyTrim())
-				foundByTransactionValue = $" | Found by Trn = \"{template.TransactionValue.Value.Item2}\"";
+			descriptionText.Clear();
 
-			descriptionText.Text = $"{nameof(template.FoundLineID)} = {template.FoundLineID}{foundByTransactionValue}\r\n{template.Description}";
+			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}\r\n", Color.Black);
+
+			if (CurrentTemplate.TransactionValue.Any(x => !x.Trn.IsNullOrEmptyTrim()))
+			{
+				descriptionText.AppendText("Transactions = \"", Color.Black);
+				var i = 0;
+				foreach (var trn in CurrentTemplate.TransactionValue)
+				{
+					descriptionText.AppendText(trn.Trn, trn.FoundByTrn ? Color.Red : trn.IsFirst ? Color.Green : Color.Black);
+
+					i++;
+					if(CurrentTemplate.TransactionValue.Count > i)
+						descriptionText.AppendText("\", \"", Color.Black);
+				}
+				descriptionText.AppendText("\"\r\n", Color.Black);
+			}
+			descriptionText.AppendText($"{new string('-', 50)}\r\n");
+			descriptionText.AppendText(CurrentTemplate.Description);
+
+			descriptionText.AutoWordSelection = true;
+			descriptionText.AutoWordSelection = false;
 
 			SetMessage();
 		}
@@ -190,7 +212,7 @@ namespace LogsReader.Reader
 
 		public void Clear()
 		{
-			descriptionText.Text = string.Empty;
+			descriptionText.Clear();
 
 			EditorMessage?.Clear();
 			EditorTraceMessage?.Clear();

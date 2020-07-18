@@ -1309,7 +1309,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Allowed sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;ElapsedSec&quot;, &quot;File&quot;, &quot;FoundLineID&quot;. &quot;FoundLineID&quot; is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function..
+        ///   Ищет локализованную строку, похожую на Allowed sorting by fields: &quot;ID&quot;, &quot;Server&quot;, &quot;TraceName&quot;, &quot;Date&quot;, &quot;ElapsedSec&quot;, &quot;File&quot;, &quot;Priority&quot;, &quot;FoundLineID&quot;. &quot;FoundLineID&quot; is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the &quot;desc&quot; function. &quot;Priority&quot; is what was set when sorting the search order of files..
         /// </summary>
         public static string Txt_LRSettingsScheme_OrderBy {
             get {

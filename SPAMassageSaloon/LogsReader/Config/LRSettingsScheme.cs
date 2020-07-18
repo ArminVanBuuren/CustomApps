@@ -25,7 +25,7 @@ namespace LogsReader.Config
 
 	    private string _cultureListString = string.Empty;
         private string _schemeName = string.Empty;
-        private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
+        private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {DataTemplate.ReaderPriority}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
         private int _maxLines = 50;
         private int _maxThreads = -1;
         private int _rowsLimit = 999;

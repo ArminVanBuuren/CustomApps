@@ -23,8 +23,9 @@ namespace LogsReader.Reader
 				    nameof(DataTemplate.Tmp.TraceName),
 				    nameof(DataTemplate.Tmp.Date),
 				    nameof(DataTemplate.Tmp.ElapsedSec),
-				    nameof(DataTemplate.Tmp.File)
-			    });
+				    nameof(DataTemplate.Tmp.File),
+				    DataTemplate.ReaderPriority
+				});
 		    }
 	    }
 
@@ -39,20 +40,34 @@ namespace LogsReader.Reader
             AddRange(DoOrdering(list, settings.OrderByItems));
 
 	        foreach (var trnTemplates in _values.Values
-	            .Where(x => x.TransactionValue?.Item2 != null && !x.TransactionValue.Value.Item2.IsNullOrEmptyTrim() && x.Date != null)
-	            .GroupBy(x => x.TransactionValue.Value.Item2))
+	            .Where(template => template.Date != null && template.TransactionValue.Any(x => !x.Trn.IsNullOrEmptyTrim()))
+	            .SelectMany(x => x.TransactionValue.Select(x2 => x2.Trn), (parent, trnID) => new { parent, trnID })
+	            .OrderBy(x => x.parent.Date)
+	            .ThenBy(x => x.parent.FoundLineID)
+				.GroupBy(x => x.trnID))
             {
-	            if(trnTemplates.Count() <= 1)
+	            if (trnTemplates.Count() <= 1)
 					continue;
 
-				var i = 0;
+	            var i = 0;
 				DataTemplate firstTemplate = null;
-				foreach (var template in trnTemplates.OrderBy(x => x.Date))
+				foreach (var template in trnTemplates.Select(x => x.parent).OrderBy(x => x.Date).ThenBy(x => x.FoundLineID))
 				{
 					if (i == 0)
+					{
 						firstTemplate = template;
+						foreach (var trn in firstTemplate.TransactionValue)
+						{
+							if (trn.Trn == trnTemplates.Key)
+							{
+								trn.IsFirst = true;
+								break;
+							}
+						}
+					}
 
-					template.ElapsedSec = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
+					if (template.ElapsedSec < 0)
+						template.ElapsedSec = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
 					i++;
 				}
             }
@@ -61,15 +76,25 @@ namespace LogsReader.Reader
         public static IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input, Dictionary<string, bool> orderBy)
         {
 	        var result = input.AsQueryable();
-            var i = 0;
+	        var i = 0;
             foreach (var (columnName, byDescending) in orderBy)
             {
 	            if (columnName.LikeAny(out var param, OrderByFields))
 	            {
-		            result = byDescending
-			            ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)
-			            : i == 0 ? result.OrderBy(param) : ((IOrderedQueryable<DataTemplate>) result).ThenBy(param);
-		            i++;
+		            if (columnName.Equals(DataTemplate.ReaderPriority, StringComparison.InvariantCultureIgnoreCase))
+		            {
+			            // учитываем приоритет файла, если приоритет выше то и запись должна быть выше
+			            result = byDescending
+				            ? i == 0 ? result.OrderByDescending(x => x.ParentReader.Priority) : ((IOrderedQueryable<DataTemplate>)result).ThenByDescending(x => x.ParentReader.Priority)
+				            : i == 0 ? result.OrderBy(x => x.ParentReader.Priority) : ((IOrderedQueryable<DataTemplate>)result).ThenBy(x => x.ParentReader.Priority);
+					}
+					else
+					{
+						result = byDescending
+							? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)
+							: i == 0 ? result.OrderBy(param) : ((IOrderedQueryable<DataTemplate>) result).ThenBy(param);
+					}
+					i++;
 	            }
             }
             return result;

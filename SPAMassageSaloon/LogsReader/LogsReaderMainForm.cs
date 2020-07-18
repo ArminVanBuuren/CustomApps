@@ -183,6 +183,12 @@ namespace LogsReader
 
 			            MainTabControl.TabPages.Add(page);
 			            SchemeForms.Add(page, schemeForm);
+
+			            schemeForm.Load += (sender, args) =>
+			            {
+				            schemeForm.ApplyFormSettings();
+				            schemeForm.OnSchemeChanged += SaveSchemas;
+						};
 		            }
 		            catch (Exception ex)
 		            {
@@ -191,21 +197,19 @@ namespace LogsReader
 	            }
 
 	            Global.Initialize(this);
+	            Global.Load += (sender, args) =>
+	            {
+		            Global.ApplyFormSettings();
+	            };
 
 
-	            MainTabControl.DrawItem += MainTabControl_DrawItem;
+				MainTabControl.DrawItem += MainTabControl_DrawItem;
 	            Shown += (s, e) =>
 	            {
 		            ApplySettings();
 
 		            foreach (var schemeForm in SchemeForms.Values)
-		            {
-			            schemeForm.ApplyFormSettings();
-			            schemeForm.OnSchemeChanged += SaveSchemas;
 			            schemeForm.SynchronizeTreeView();
-					}
-
-		            Global.ApplyFormSettings();
 	            };
 	            Closing += (s, e) =>
 	            {

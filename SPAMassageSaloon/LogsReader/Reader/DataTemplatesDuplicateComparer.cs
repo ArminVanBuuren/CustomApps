@@ -7,7 +7,20 @@ namespace LogsReader.Reader
     {
         public int Compare(DataTemplate x, DataTemplate y)
         {
-	        if (x.Equals(y))
+	        switch (x)
+	        {
+                // равны
+		        case null when y == null:
+			        return 0;
+		        // y - больше
+		        case null:
+			        return 1;
+	        }
+            // x - больше
+	        if (y == null)
+		        return -1;
+
+            if (x.Equals(y) && x.FoundLineID != -1)
 		        return 0; // означает та же строка и тот же файл
 
             var xDate = x.Date ?? DateTime.MinValue;

@@ -172,7 +172,7 @@
     <value>Search with filter</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "ElapsedSec", "File", "FoundLineID". "FoundLineID" is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the "desc" function.</value>
+    <value>Allowed sorting by fields: "ID", "Server", "TraceName", "Date", "ElapsedSec", "File", "Priority", "FoundLineID". "FoundLineID" is the line number in the file by found trace, is indicated with Description. With a comma you can sort the fields, and you can also use the "desc" function. "Priority" is what was set when sorting the search order of files.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>The limit on the count of lines. Reduces RAM usage.</value>

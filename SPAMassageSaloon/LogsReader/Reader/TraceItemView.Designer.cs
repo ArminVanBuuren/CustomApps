@@ -61,6 +61,7 @@ namespace LogsReader.Reader
 			// 
 			// descriptionText
 			// 
+			this.descriptionText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.descriptionText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.descriptionText.Location = new System.Drawing.Point(0, 0);
 			this.descriptionText.Name = "descriptionText";

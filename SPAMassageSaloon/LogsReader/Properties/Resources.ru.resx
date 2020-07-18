@@ -173,7 +173,7 @@
     <value>Применить фильтр во время поиска</value>
   </data>
   <data name="Txt_LRSettingsScheme_OrderBy" xml:space="preserve">
-    <value>Допустима сортировка по полям: "ID", "Server", "TraceName", "Date", "ElapsedSec", "File", "FoundLineID". "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc.</value>
+    <value>Допустима сортировка по полям: "ID", "Server", "TraceName", "Date", "ElapsedSec", "File", "Priority", "FoundLineID". "FoundLineID" - номер строки в файле по найденному фрагменту, указывается вместе с Description. Через запятую можно указать несколько полей сортировки, а также использовать операцию desc. "Priority" - то что было установлено при сортировке порядка поиска файлов.</value>
   </data>
   <data name="Txt_LRSettingsScheme_RowsLimit" xml:space="preserve">
     <value>Ограничение по количеству строк. Сокращает использование оперативной памяти.</value>

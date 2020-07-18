@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using LogsReader.Config;
@@ -8,8 +9,40 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
 {
+	public class TransactionValue
+	{
+		public TransactionValue(bool foundByTrn, string trn)
+		{
+			FoundByTrn = foundByTrn;
+			Trn = trn;
+		}
+
+        public bool FoundByTrn { get; }
+		public string Trn { get; }
+		public bool IsFirst { get; internal set; } = false;
+	}
+
+	internal class TransactionValueEqualityComparer : IEqualityComparer<TransactionValue>
+	{
+		public bool Equals(TransactionValue x, TransactionValue y)
+		{
+			if (x == null && y == null)
+				return true;
+			if (x == null || y == null)
+				return false;
+
+			return (x.Trn.Equals(y.Trn) && x.FoundByTrn == y.FoundByTrn);
+		}
+
+		public int GetHashCode(TransactionValue obj)
+		{
+			return obj.Trn.GetHashCode() + obj.FoundByTrn.GetHashCode();
+		}
+	}
+
     public class DataTemplate : ICloneable
     {
+	    public const string ReaderPriority = "Priority";
 	    public const string HeaderDescription = "Description";
         public const string HeaderMessage = "Message";
         public const string HeaderTraceMessage = "Full Trace";
@@ -20,7 +53,7 @@ namespace LogsReader.Reader
         /// </summary>
         internal static DataTemplate Tmp => _tmp ?? (_tmp = new DataTemplate(null, -1, null, null));
 
-	    private readonly StringBuilder _traceMessage = new StringBuilder();
+        private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
         private string _traceName;
         private string _message = string.Empty;
@@ -30,7 +63,7 @@ namespace LogsReader.Reader
 	        long foundLineID,
 	        TraceParseResult parseResult,
 	        string traceMessage,
-	        (bool, string)? trn)
+	        TransactionValue trn)
         {
 	        IsMatched = true;
 
@@ -60,15 +93,16 @@ namespace LogsReader.Reader
 	        Description = parseResult.Description;
 	        Message = parseResult.Message;
 	        TraceMessage = traceMessage;
-	        TransactionValue = trn;
+
+	        AddTransaction(trn);
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, (bool, string)? trn) : this(traceReader, foundLineID, trn)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn) : this(traceReader, foundLineID, trn)
         {
 	        TraceMessage = traceMessage;
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, (bool, string)? trn)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, TransactionValue trn)
         {
 	        IsMatched = false;
 	        IsSuccess = false;
@@ -78,41 +112,44 @@ namespace LogsReader.Reader
 
 	        ID = -1;
 	        CountOfLines = 0;
-            TransactionValue = trn;
+
+	        AddTransaction(trn);
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, (bool, string)? trn, Exception error)
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn, Exception error)
         {
-            IsMatched = false;
-            IsSuccess = false;
+	        IsMatched = false;
+	        IsSuccess = false;
 
-            FoundLineID = foundLineID;
-            ParentReader = traceReader;
+	        FoundLineID = foundLineID;
+	        ParentReader = traceReader;
 
-            ID = -1;
-            Date = DateTime.Now;
-            DateString = string.Empty;
+	        ID = -1;
+	        Date = DateTime.Now;
+	        DateString = string.Empty;
 
-            Error = error;
-            TraceName = error.GetType().ToString();
-            Description = error.Message;
-            if (error is RegexMatchTimeoutException errorRegex)
-            {
-                Message = string.Format(Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
-            }
-            else
-            {
-                Message = error.ToString();
-            }
-            TraceMessage = traceMessage;
-            TransactionValue = trn;
+	        Error = error;
+	        TraceName = error.GetType().ToString();
+	        Description = error.Message;
+	        if (error is RegexMatchTimeoutException errorRegex)
+	        {
+		        Message = string.Format(Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
+	        }
+	        else
+	        {
+		        Message = error.ToString();
+	        }
+
+	        TraceMessage = traceMessage;
+
+	        AddTransaction(trn);
         }
 
         public TraceReader ParentReader { get; }
 
         public long FoundLineID { get; }
 
-        public (bool, string)? TransactionValue { get; internal set; }
+        public HashSet<TransactionValue> TransactionValue { get; } = new HashSet<TransactionValue>(new TransactionValueEqualityComparer());
 
         public Exception Error { get; }
 
@@ -199,6 +236,14 @@ namespace LogsReader.Reader
         {
             Message = input.Message;
             TraceMessage = input.TraceMessage;
+        }
+
+        internal void AddTransaction(TransactionValue trn)
+        {
+	        if (trn == null)
+		        return;
+
+	        TransactionValue.Add(trn);
         }
 
         public override bool Equals(object obj)
