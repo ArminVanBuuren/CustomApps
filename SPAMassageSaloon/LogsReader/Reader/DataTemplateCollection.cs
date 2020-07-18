@@ -43,29 +43,17 @@ namespace LogsReader.Reader
 	            .Where(template => template.Date != null && template.TransactionValue.Any(x => !x.Trn.IsNullOrEmptyTrim()))
 	            .SelectMany(x => x.TransactionValue.Select(x2 => x2.Trn), (parent, trnID) => new { parent, trnID })
 	            .OrderBy(x => x.parent.Date)
-	            .ThenBy(x => x.parent.FoundLineID)
-	            .ThenBy(x => x.parent.ParentReader.Priority)
-				.GroupBy(x => x.trnID))
+	            .GroupBy(x => x.trnID))
             {
 	            if (trnTemplates.Count() <= 1)
 					continue;
 
 	            var i = 0;
 				DataTemplate firstTemplate = null;
-				foreach (var template in trnTemplates.Select(x => x.parent).OrderBy(x => x.Date).ThenBy(x => x.FoundLineID))
+				foreach (var template in trnTemplates.Select(x => x.parent).OrderBy(x => x.Date))
 				{
 					if (i == 0)
-					{
 						firstTemplate = template;
-						foreach (var trn in firstTemplate.TransactionValue)
-						{
-							if (trn.Trn == trnTemplates.Key)
-							{
-								trn.IsFirst = true;
-								break;
-							}
-						}
-					}
 
 					if (template.ElapsedSec < 0)
 						template.ElapsedSec = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;

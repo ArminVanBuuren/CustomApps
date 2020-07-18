@@ -19,7 +19,6 @@ namespace LogsReader.Reader
 
         public bool FoundByTrn { get; }
 		public string Trn { get; }
-		public bool IsFirst { get; internal set; } = false;
 	}
 
 	internal class TransactionValueEqualityComparer : IEqualityComparer<TransactionValue>

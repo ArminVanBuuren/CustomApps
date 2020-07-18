@@ -145,7 +145,7 @@ namespace LogsReader.Reader
 				var i = 0;
 				foreach (var trn in CurrentTemplate.TransactionValue)
 				{
-					descriptionText.AppendText(trn.Trn, trn.FoundByTrn ? Color.Red : trn.IsFirst ? Color.Green : Color.Black);
+					descriptionText.AppendText(trn.Trn, trn.FoundByTrn ? Color.Green : Color.Black);
 
 					i++;
 					if(CurrentTemplate.TransactionValue.Count > i)
