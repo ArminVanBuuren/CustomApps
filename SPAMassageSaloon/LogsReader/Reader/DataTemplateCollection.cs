@@ -44,6 +44,7 @@ namespace LogsReader.Reader
 	            .SelectMany(x => x.TransactionValue.Select(x2 => x2.Trn), (parent, trnID) => new { parent, trnID })
 	            .OrderBy(x => x.parent.Date)
 	            .ThenBy(x => x.parent.FoundLineID)
+	            .ThenBy(x => x.parent.ParentReader.Priority)
 				.GroupBy(x => x.trnID))
             {
 	            if (trnTemplates.Count() <= 1)
