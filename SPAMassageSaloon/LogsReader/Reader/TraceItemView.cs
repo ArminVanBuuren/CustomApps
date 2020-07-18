@@ -139,16 +139,16 @@ namespace LogsReader.Reader
 
 			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}\r\n", Color.Black);
 
-			if (CurrentTemplate.TransactionValue.Any(x => !x.Trn.IsNullOrEmptyTrim()))
+			if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
 			{
 				descriptionText.AppendText("Transactions = \"", Color.Black);
 				var i = 0;
-				foreach (var trn in CurrentTemplate.TransactionValue)
+				foreach (var trn in CurrentTemplate.Transactions)
 				{
-					descriptionText.AppendText(trn.Trn, trn.FoundByTrn ? Color.Green : Color.Black);
+					descriptionText.AppendText(trn.Value.Trn, trn.Value.FoundByTrn ? Color.Green : Color.Black);
 
 					i++;
-					if(CurrentTemplate.TransactionValue.Count > i)
+					if(CurrentTemplate.Transactions.Count > i)
 						descriptionText.AppendText("\", \"", Color.Black);
 				}
 				descriptionText.AppendText("\"\r\n", Color.Black);

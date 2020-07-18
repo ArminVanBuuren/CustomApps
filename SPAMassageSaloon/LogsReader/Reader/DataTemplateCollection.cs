@@ -40,8 +40,8 @@ namespace LogsReader.Reader
             AddRange(DoOrdering(list, settings.OrderByItems));
 
 	        foreach (var trnTemplates in _values.Values
-	            .Where(template => template.Date != null && template.TransactionValue.Any(x => !x.Trn.IsNullOrEmptyTrim()))
-	            .SelectMany(x => x.TransactionValue.Select(x2 => x2.Trn), (parent, trnID) => new { parent, trnID })
+	            .Where(template => template.Date != null && template.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
+	            .SelectMany(x => x.Transactions.Select(x2 => x2.Value.Trn), (parent, trnID) => new { parent, trnID })
 	            .OrderBy(x => x.parent.Date)
 	            .GroupBy(x => x.trnID))
             {

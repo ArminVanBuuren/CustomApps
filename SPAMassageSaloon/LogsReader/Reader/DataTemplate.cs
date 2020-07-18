@@ -21,24 +21,6 @@ namespace LogsReader.Reader
 		public string Trn { get; }
 	}
 
-	internal class TransactionValueEqualityComparer : IEqualityComparer<TransactionValue>
-	{
-		public bool Equals(TransactionValue x, TransactionValue y)
-		{
-			if (x == null && y == null)
-				return true;
-			if (x == null || y == null)
-				return false;
-
-			return (x.Trn.Equals(y.Trn) && x.FoundByTrn == y.FoundByTrn);
-		}
-
-		public int GetHashCode(TransactionValue obj)
-		{
-			return obj.Trn.GetHashCode() + obj.FoundByTrn.GetHashCode();
-		}
-	}
-
     public class DataTemplate : ICloneable
     {
 	    public const string ReaderPriority = "Priority";
@@ -148,7 +130,7 @@ namespace LogsReader.Reader
 
         public long FoundLineID { get; }
 
-        public HashSet<TransactionValue> TransactionValue { get; } = new HashSet<TransactionValue>(new TransactionValueEqualityComparer());
+        public Dictionary<string, TransactionValue> Transactions { get; } = new Dictionary<string, TransactionValue>();
 
         public Exception Error { get; }
 
@@ -237,12 +219,23 @@ namespace LogsReader.Reader
             TraceMessage = input.TraceMessage;
         }
 
-        internal void AddTransaction(TransactionValue trn)
+        internal void AddTransaction(TransactionValue trnValue)
         {
-	        if (trn == null)
+	        if (trnValue == null)
 		        return;
 
-	        TransactionValue.Add(trn);
+	        if (Transactions.TryGetValue(trnValue.Trn, out var exist))
+	        {
+		        if (trnValue.FoundByTrn && !exist.FoundByTrn)
+		        {
+			        Transactions.Remove(exist.Trn);
+			        Transactions.Add(trnValue.Trn, trnValue);
+		        }
+	        }
+	        else
+	        {
+		        Transactions.Add(trnValue.Trn, trnValue);
+	        }
         }
 
         public override bool Equals(object obj)
