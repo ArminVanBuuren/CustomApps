@@ -48,16 +48,30 @@ namespace LogsReader.Reader
 	            if (trnTemplates.Count() <= 1)
 					continue;
 
-	            var i = 0;
-				DataTemplate firstTemplate = null;
-				foreach (var template in trnTemplates.Select(x => x.parent).OrderBy(x => x.Date))
-				{
-					if (i == 0)
-						firstTemplate = template;
+	            var trnList = trnTemplates.Select(x => x.parent)
+		            .OrderBy(x => x.Date)
+		            .ThenBy(x => x.ParentReader.Priority)
+		            .ThenBy(x => x.File)
+		            .ThenBy(x => x.FoundLineID);
 
-					if (template.ElapsedSec < 0)
-						template.ElapsedSec = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
-					i++;
+				var firstTemplate = trnList.First();
+				var totalElapsed = trnList.Last().Date.Value.Subtract(firstTemplate.Date.Value);
+				DataTemplate pastTemplate = null;
+				foreach (var template in trnList)
+				{
+					if (template.ElapsedSecTotal < 0)
+					{
+						if(pastTemplate == null)
+							template.ElapsedSec = 0;
+						else
+							template.ElapsedSec = template.Date.Value.Subtract(pastTemplate.Date.Value).TotalSeconds;
+
+						template.ElapsedSecFromFirst = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
+
+						template.ElapsedSecTotal = totalElapsed.TotalSeconds;
+					}
+
+					pastTemplate = template;
 				}
             }
         }

@@ -166,7 +166,30 @@ namespace LogsReader.Reader
         [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.ElapsedSec))]
         public string ElapsedSecString => ElapsedSec > 0 ? ElapsedSec.ToString("0.000") : ElapsedSec == 0 ? "0" : string.Empty;
 
+        public string ElapsedSecDescription
+        {
+	        get
+	        {
+		        if (ElapsedSecTotal > 0)
+		        {
+			        return $"Elapsed current=[{ElapsedSec:0.###} sec], processing=[{ElapsedSecFromFirst:0.###} sec], total=[{ElapsedSecTotal:0.###} sec]";
+		        }
+		        else if (ElapsedSecTotal == 0)
+		        {
+			        return "Elapsed 0 sec";
+		        }
+		        else
+		        {
+			        return string.Empty;
+		        }
+	        }
+        }
+
         public double ElapsedSec { get; internal set; } = -1;
+
+        public double ElapsedSecFromFirst { get; internal set; } = -1;
+
+        public double ElapsedSecTotal { get; internal set; } = -1;
 
         [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.File))]
         public string FileNamePartial => ParentReader.FileNamePartial;

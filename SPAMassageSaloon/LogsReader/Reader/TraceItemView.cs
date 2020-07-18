@@ -155,6 +155,9 @@ namespace LogsReader.Reader
 				descriptionText.AppendText("\"", Color.Black);
 			}
 
+			if (CurrentTemplate.ElapsedSecTotal >= 0)
+				descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
+
 			if (!CurrentTemplate.Description.IsNullOrEmptyTrim())
 			{
 				descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
