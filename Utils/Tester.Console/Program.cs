@@ -31,7 +31,12 @@ namespace Tester.Console
 
 	class  testClass
 	{
-		public int CountTest { get; } = 5;
+		private static int _test = 0;
+		public testClass()
+		{
+			CountTest = ++_test;
+		}
+		public int CountTest { get; }
 	}
 
 	class Program
@@ -44,10 +49,19 @@ namespace Tester.Console
 			
 			try
 			{
-				var list = new List<testClass>();
+				var list = new List<testClass>
+				{
+					new testClass(),
+					new testClass(),
+					new testClass(),
+					new testClass(),
+					new testClass()
+				};
 				var res = list.Sum(x => x.CountTest / 5);
 
-
+				var limit = 4;
+				var ss1 = Math.Max(0, limit == 0 ? list.Count : list.Count - limit / 2);
+				var ss2 = list.Skip(ss1).ToList();
 			}
 			catch (Exception e)
 			{
