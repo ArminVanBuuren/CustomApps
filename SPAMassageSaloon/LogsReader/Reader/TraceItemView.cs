@@ -137,24 +137,29 @@ namespace LogsReader.Reader
 
 			descriptionText.Clear();
 
-			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}\r\n", Color.Black);
+			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}", Color.Black);
 
 			if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
 			{
-				descriptionText.AppendText("Transactions = \"", Color.Black);
+				descriptionText.AppendText("\r\nTransactions = \"", Color.Black);
 				var i = 0;
-				foreach (var trn in CurrentTemplate.Transactions)
+				foreach (var (_, value) in CurrentTemplate.Transactions)
 				{
-					descriptionText.AppendText(trn.Value.Trn, trn.Value.FoundByTrn ? Color.Green : Color.Black);
+					descriptionText.AppendText(value.Trn, value.FoundByTrn ? Color.Green : Color.Black);
 
 					i++;
-					if(CurrentTemplate.Transactions.Count > i)
+					if (CurrentTemplate.Transactions.Count > i)
 						descriptionText.AppendText("\", \"", Color.Black);
 				}
-				descriptionText.AppendText("\"\r\n", Color.Black);
+
+				descriptionText.AppendText("\"", Color.Black);
 			}
-			descriptionText.AppendText($"{new string('-', 50)}\r\n");
-			descriptionText.AppendText(CurrentTemplate.Description);
+
+			if (CurrentTemplate.Description.Length > 0)
+			{
+				descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
+				descriptionText.AppendText(CurrentTemplate.Description);
+			}
 
 			descriptionText.AutoWordSelection = true;
 			descriptionText.AutoWordSelection = false;
