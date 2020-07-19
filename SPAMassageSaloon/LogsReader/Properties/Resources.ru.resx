@@ -479,4 +479,7 @@
   <data name="Txt_LogsReaderForm_Error" xml:space="preserve">
     <value>Ошибок:</value>
   </data>
+  <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
+    <value>Показывает информацию о транзакциях и затраченном времени выполнения</value>
+  </data>
 </root>

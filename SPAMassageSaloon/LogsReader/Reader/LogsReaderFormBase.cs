@@ -196,7 +196,7 @@ namespace LogsReader.Reader
                 DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
 
-	            SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
+                SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
                 SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
 
                 PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID);
@@ -250,6 +250,8 @@ namespace LogsReader.Reader
                 TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
                 TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
 
+                checkBoxShowTrns.Checked = UserSettings.ShowTransactions;
+
                 MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
                 tabControlViewer.DrawMode = TabDrawMode.Normal;
                 tabControlViewer.BackColor = Color.White;
@@ -265,7 +267,7 @@ namespace LogsReader.Reader
 
         void AddViewer(TraceItemView traceViewer, DataTemplate template)
         {
-	        var tabPage = new CustomTabPage
+	        var tabPage = new CustomTabPage(traceViewer)
             {
 	            UseVisualStyleBackColor = true,
 		        ForeColor = Color.Black,
@@ -274,12 +276,11 @@ namespace LogsReader.Reader
 		        BorderStyle = BorderStyle.None,
 		        CanClose = !traceViewer.IsMain
             };
-	        tabPage.Controls.Add(traceViewer);
 
 	        if (!traceViewer.IsMain && MainViewer != null)
 		        traceViewer.SplitterDistance = MainViewer.SplitterDistance;
             traceViewer.Dock = DockStyle.Fill;
-	        traceViewer.ChangeTemplate(template);
+	        traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
 
 	        tabControlViewer.TabPages.Add(tabPage);
         }
@@ -348,6 +349,7 @@ namespace LogsReader.Reader
                 Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
                 Tooltip.SetToolTip(buttonPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
                 Tooltip.SetToolTip(buttonNext, Resources.Txt_LogsReaderForm_NextErrButt);
+                Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
 
                 ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
                 BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
@@ -832,7 +834,16 @@ namespace LogsReader.Reader
 			        if (template.Date == null)
 				        foreach (DataGridViewCell cell2 in row.Cells)
 					        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-			        СolorizationDGV(row, template);
+
+			        if (checkBoxShowTrns.Checked && template.IsSelected)
+			        {
+				        row.DefaultCellStyle.BackColor = Color.FromArgb(62, 255, 176);
+				        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+			        else
+			        {
+				        СolorizationDGV(row, template);
+			        }
 		        }
 		        else
 		        {
@@ -858,18 +869,52 @@ namespace LogsReader.Reader
 	        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
         }
 
+        //DgvData.RowPostPaint += DgvData_RowPostPaint;
+        //private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        //{
+        // if (e.RowIndex < 0)
+        //  return;
+
+        // try
+        // {
+        //  var row = ((DataGridView)sender).Rows[e.RowIndex];
+        //  if (!TryGetTemplate(row, out var template))
+        //   return;
+        //        //Color.Red
+
+        //        //((DataGridView)sender).GridColor 
+        //        using (Pen pen = new Pen(Color.Red))
+        //        {
+        //         int penWidth = 1;
+
+        //         pen.Width = penWidth;
+
+        //         int x = e.RowBounds.Left + (penWidth / 2);
+        //         int y = e.RowBounds.Top + (penWidth / 2);
+        //         int width = e.RowBounds.Width - penWidth;
+        //         int height = e.RowBounds.Height - penWidth;
+
+        //         e.Graphics.DrawRectangle(pen, x, y, width, height);
+        //        }
+        //    }
+        // catch (Exception ex)
+        // {
+        //  ReportStatus(ex.Message, ReportStatusType.Error);
+        // }
+        //}
+
         //void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
         //{
-	       // e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
-	       // using (var p = new Pen(color, 2))
-	       // {
-		      //  var rect = e.CellBounds;
-		      //  rect.Y = rect.Top + 1;
-		      //  rect.Height -= 2;
-		      //  e.Graphics.DrawRectangle(p, rect);
-	       // }
+        //    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
+        //    using (var p = new Pen(color, 2))
+        //    {
+        //        var rect = e.CellBounds;
+        //        rect.Y = rect.Top + 1;
+        //        rect.Height -= 2;
+        //        e.Graphics.DrawRectangle(p, rect);
+        //    }
 
-	       // e.Handled = true;
+        //    e.Handled = true;
         //}
 
         private void buttonPrev_Click(object sender, EventArgs e)
@@ -982,9 +1027,12 @@ namespace LogsReader.Reader
 		        if (DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 			        return;
 
-		        MainViewer.ChangeTemplate(template);
+		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 
-		        if (MainViewer.Parent is TabPage page)
+		        if (checkBoxShowTrns.Checked && !noChanged)
+			        DgvData.Refresh();
+
+                if (MainViewer.Parent is TabPage page)
 			        tabControlViewer.SelectTab(page);
 	        }
 	        catch (Exception ex)
@@ -1071,6 +1119,16 @@ namespace LogsReader.Reader
 	        DateEndFilter.Value = _getEndDate.Invoke();
         }
 
+        private void checkBoxShowTrns_CheckedChanged(object sender, EventArgs e)
+        {
+	        UserSettings.ShowTransactions = checkBoxShowTrns.Checked;
+
+	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+		        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
+
+	        DgvData?.Refresh();
+        }
+
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
@@ -1135,6 +1193,20 @@ namespace LogsReader.Reader
             }
         }
 
+        internal void SelectTransactions()
+        {
+	        if (checkBoxShowTrns.Checked)
+		        MainViewer.SelectTransactions();
+            DgvData.Refresh();
+        }
+
+        internal void DeselectTransactions()
+        {
+	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+		        page.View.DeselectTransactions();
+	        DgvData.Refresh();
+        }
+
         protected void Clear()
         {
 	        try
@@ -1148,10 +1220,12 @@ namespace LogsReader.Reader
 		        DgvData.Refresh();
 
 		        MainViewer.Clear();
-		        foreach (var page in tabControlViewer.TabPages.OfType<TabPage>().ToList())
+		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        {
 			        if(page == MainViewer.Parent)
                         continue;
+
+			        page.View.Clear();
 			        tabControlViewer.TabPages.Remove(page);
 		        }
 

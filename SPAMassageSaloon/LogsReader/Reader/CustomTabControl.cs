@@ -8,16 +8,15 @@ namespace LogsReader.Reader
 {
     public sealed class CustomTabPage : TabPage
     {
-        public CustomTabPage()
+        public CustomTabPage(TraceItemView traceItemView)
         {
-        }
-
-        public CustomTabPage(string header)
-        {
-            Text = header;
+	        View = traceItemView;
+	        Controls.Add(traceItemView);
         }
 
         public bool CanClose { get; set; }
+
+        public TraceItemView View { get; }
     }
 
     public class CustomTabControl : TabControl
@@ -53,7 +52,10 @@ namespace LogsReader.Reader
         public void CloseTab(object tab)
         {
 	        if (tab is CustomTabPage tabPage && tabPage.CanClose)
-                TabPages.Remove(tabPage);
+	        {
+                tabPage.View.Clear();
+		        TabPages.Remove(tabPage);
+	        }
         }
 
         public void CloseAllButThis(object tab)

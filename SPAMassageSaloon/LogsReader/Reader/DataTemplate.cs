@@ -39,6 +39,8 @@ namespace LogsReader.Reader
         private string _traceName;
         private string _message = string.Empty;
 
+        readonly HashSet<DataTemplate> _trnBindings = new HashSet<DataTemplate>();
+
         internal DataTemplate(
 	        TraceReader traceReader,
 	        long foundLineID,
@@ -131,6 +133,10 @@ namespace LogsReader.Reader
         public long FoundLineID { get; }
 
         public Dictionary<string, TransactionValue> Transactions { get; } = new Dictionary<string, TransactionValue>();
+
+        public IEnumerable<DataTemplate> TransactionBindings => _trnBindings;
+
+        public bool IsSelected { get; internal set; } = false;
 
         public Exception Error { get; }
 
@@ -259,6 +265,11 @@ namespace LogsReader.Reader
 	        {
 		        Transactions.Add(trnValue.Trn, trnValue);
 	        }
+        }
+
+        internal void AddTransactionBindingList(IList<DataTemplate> list)
+        {
+	        _trnBindings.AddRange(list);
         }
 
         public override bool Equals(object obj)

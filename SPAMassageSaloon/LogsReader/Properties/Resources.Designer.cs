@@ -646,6 +646,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Shows information about transactions and elapsed execution time.
+        /// </summary>
+        public static string Txt_Forms_ShowTransactions {
+            get {
+                return ResourceManager.GetString("Txt_Forms_ShowTransactions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Back.
         /// </summary>
         public static string Txt_Global_Back {

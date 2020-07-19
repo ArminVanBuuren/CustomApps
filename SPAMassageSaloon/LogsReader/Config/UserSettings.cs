@@ -234,6 +234,18 @@ namespace LogsReader.Config
 	        set => SetValue(nameof(GlobalSelectAllSchemas), value);
         }
 
+        public bool ShowTransactions
+        {
+	        get
+	        {
+		        var resStr = GetValue(nameof(ShowTransactions));
+		        if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+			        return true;
+		        return res;
+	        }
+	        set => SetValue(nameof(ShowTransactions), value);
+        }
+
         static UserSettings()
         {
 	        try

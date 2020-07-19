@@ -202,9 +202,33 @@ namespace LogsReader
 		            Global.ApplyFormSettings();
 	            };
 
-
 				MainTabControl.DrawItem += MainTabControl_DrawItem;
-	            Shown += (s, e) =>
+
+				LogsReaderFormBase prevSelection = null;
+				MainTabControl.Selected += (sender, args) =>
+				{
+					var current = CurrentForm;
+
+					if (current == Global)
+					{
+						foreach (var schemeForm in SchemeForms.Values)
+							schemeForm.DeselectTransactions();
+						Global.SelectTransactions();
+					}
+					else if (prevSelection == Global)
+					{
+						Global.DeselectTransactions();
+						current.SelectTransactions();
+					}
+					else
+					{
+						current.SelectTransactions();
+					}
+
+					prevSelection = current;
+				};
+
+				Shown += (s, e) =>
 	            {
 		            ApplySettings();
 

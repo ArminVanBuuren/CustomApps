@@ -52,7 +52,8 @@ namespace LogsReader.Reader
 		            .OrderBy(x => x.Date)
 		            .ThenBy(x => x.ParentReader.Priority)
 		            .ThenBy(x => x.File)
-		            .ThenBy(x => x.FoundLineID);
+		            .ThenBy(x => x.FoundLineID)
+		            .ToList();
 
 				var firstTemplate = trnList.First();
 				var totalElapsed = trnList.Last().Date.Value.Subtract(firstTemplate.Date.Value);
@@ -69,6 +70,12 @@ namespace LogsReader.Reader
 						template.ElapsedSecFromFirst = template.Date.Value.Subtract(firstTemplate.Date.Value).TotalSeconds;
 
 						template.ElapsedSecTotal = totalElapsed.TotalSeconds;
+
+						template.AddTransactionBindingList(trnList);
+					}
+					else
+					{
+						template.AddTransactionBindingList(trnList);
 					}
 
 					pastTemplate = template;

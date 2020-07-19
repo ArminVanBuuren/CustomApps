@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -128,35 +129,97 @@ namespace LogsReader.Reader
 			notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
 		}
 
-		public void ChangeTemplate(DataTemplate template)
+		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
 		{
+			noChanged = true;
+			var prevTemplate = CurrentTemplate;
 			CurrentTemplate = template;
 
 			if (CurrentTemplate == null)
+			{
+				if (prevTemplate != null)
+					noChanged = DeselectTransactions(prevTemplate.TransactionBindings);
+				Clear();
 				return;
+			}
 
+			if (prevTemplate != null)
+			{
+				if (showTransactionsInformation)
+				{
+					var minus = prevTemplate.TransactionBindings.Except(CurrentTemplate.TransactionBindings); // разность последовательностей. Вычитаем лишнее.
+					var plus = CurrentTemplate.TransactionBindings.Except(prevTemplate.TransactionBindings); // разность последовательностей. Добавляем недостоющее.
+					var noChangedMinus = DeselectTransactions(minus);
+					var noChangedPlus = SelectTransactions(plus);
+					noChanged = noChangedMinus && noChangedPlus;
+				}
+				else
+				{
+					noChanged = DeselectTransactions(prevTemplate.TransactionBindings);
+				}
+			}
+			else
+			{
+				if (showTransactionsInformation)
+				{
+					noChanged = SelectTransactions(CurrentTemplate.TransactionBindings);
+				}
+				else
+				{
+					noChanged = DeselectTransactions(CurrentTemplate.TransactionBindings);
+				}
+			}
+
+			RefreshDescription(showTransactionsInformation);
+
+			SetMessage();
+		}
+
+		public void RefreshDescription(bool showTransactionInformation, out bool noChanged)
+		{
+			noChanged = true;
+			if (CurrentTemplate == null)
+			{
+				Clear();
+				return;
+			}
+
+			if (showTransactionInformation)
+				noChanged = SelectTransactions(CurrentTemplate.TransactionBindings);
+			else
+				noChanged = DeselectTransactions(CurrentTemplate.TransactionBindings);
+
+			RefreshDescription(showTransactionInformation);
+		}
+
+		void RefreshDescription(bool showTrnsInformation)
+		{
 			descriptionText.Clear();
 
 			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}", Color.Black);
 
-			if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
+			if (showTrnsInformation)
 			{
-				descriptionText.AppendText("\r\nTransactions = \"", Color.Black);
-				var i = 0;
-				foreach (var (_, value) in CurrentTemplate.Transactions)
+				if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
 				{
-					descriptionText.AppendText(value.Trn, value.FoundByTrn ? Color.Green : Color.Black);
+					descriptionText.AppendText("\r\nTransactions = \"", Color.Black);
+					var i = 0;
+					foreach (var (_, value) in CurrentTemplate.Transactions)
+					{
+						descriptionText.AppendText(value.Trn, value.FoundByTrn ? Color.Green : Color.Black);
 
-					i++;
-					if (CurrentTemplate.Transactions.Count > i)
-						descriptionText.AppendText("\", \"", Color.Black);
+						i++;
+						if (CurrentTemplate.Transactions.Count > i)
+							descriptionText.AppendText("\", \"", Color.Black);
+					}
+
+					descriptionText.AppendText("\"", Color.Black);
 				}
 
-				descriptionText.AppendText("\"", Color.Black);
-			}
+				if (CurrentTemplate.ElapsedSecTotal >= 0)
+					descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
 
-			if (CurrentTemplate.ElapsedSecTotal >= 0)
-				descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
+			}
 
 			if (!CurrentTemplate.Description.IsNullOrEmptyTrim())
 			{
@@ -166,8 +229,6 @@ namespace LogsReader.Reader
 
 			descriptionText.AutoWordSelection = true;
 			descriptionText.AutoWordSelection = false;
-
-			SetMessage();
 		}
 
 		private void Notepad_TabIndexChanged(object sender, EventArgs e)
@@ -184,8 +245,11 @@ namespace LogsReader.Reader
 
 		void SetMessage()
 		{
-			if(CurrentTemplate == null)
+			if (CurrentTemplate == null)
+			{
+				Clear();
 				return;
+			}
 
 			if (notepad.CurrentEditor == EditorMessage)
 			{
@@ -218,12 +282,56 @@ namespace LogsReader.Reader
 			}
 		}
 
+		public void SelectTransactions()
+		{
+			if (CurrentTemplate != null)
+				SelectTransactions(CurrentTemplate.TransactionBindings);
+		}
+
+		public void DeselectTransactions()
+		{
+			if (CurrentTemplate != null)
+				DeselectTransactions(CurrentTemplate.TransactionBindings);
+		}
+
+		static bool SelectTransactions(IEnumerable<DataTemplate> collection)
+		{
+			var noChanged = true;
+
+			foreach (var bindTrnTemplate in collection)
+			{
+				if (bindTrnTemplate.IsSelected) 
+					continue;
+				bindTrnTemplate.IsSelected = true;
+				noChanged = false;
+			}
+
+			return noChanged;
+		}
+
+		static bool DeselectTransactions(IEnumerable<DataTemplate> collection)
+		{
+			var noChanged = true;
+
+			foreach (var bindTrnTemplate in collection)
+			{
+				if (!bindTrnTemplate.IsSelected) 
+					continue;
+				bindTrnTemplate.IsSelected = false;
+				noChanged = false;
+			}
+
+			return noChanged;
+		}
+
 		public void Clear()
 		{
 			descriptionText.Clear();
 
 			EditorMessage?.Clear();
 			EditorTraceMessage?.Clear();
+
+			DeselectTransactions();
 
 			CurrentTemplate = null;
 			prevTemplateMessage = null;

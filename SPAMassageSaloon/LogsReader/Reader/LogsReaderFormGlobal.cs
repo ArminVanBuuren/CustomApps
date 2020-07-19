@@ -107,7 +107,7 @@ namespace LogsReader.Reader
 
 		        CustomPanel.Controls.Add(panelFlowDoc);
 		        CustomPanel.Controls.Add(panelCollapseSelectAll);
-		        CustomPanelMinSize = 126;
+		        CustomPanelMinSize = 130;
 
 		        #endregion
 			}
@@ -182,6 +182,8 @@ namespace LogsReader.Reader
 					readerForm.UserSettings.ForeColor = colorDialog.Color;
 					schemeExpander.ForeColor = colorDialog.Color;
 				}
+
+				DgvData.Refresh();
 			}
 
 			var buttonSize = new Size(20, 17);

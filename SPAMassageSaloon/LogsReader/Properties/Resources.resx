@@ -571,4 +571,7 @@ Colors schemes are adjustable.</value>
   <data name="Txt_LogsReaderForm_Error" xml:space="preserve">
     <value>Errors:</value>
   </data>
+  <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
+    <value>Shows information about transactions and elapsed execution time</value>
+  </data>
 </root>
