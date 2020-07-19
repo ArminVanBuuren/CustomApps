@@ -49,19 +49,7 @@ namespace Tester.Console
 			
 			try
 			{
-				var list = new List<testClass>
-				{
-					new testClass(),
-					new testClass(),
-					new testClass(),
-					new testClass(),
-					new testClass()
-				};
-				var res = list.Sum(x => x.CountTest / 5);
-
-				var limit = 4;
-				var ss1 = Math.Max(0, limit == 0 ? list.Count : list.Count - limit / 2);
-				var ss2 = list.Skip(ss1).ToList();
+				OracleCommandTest();
 			}
 			catch (Exception e)
 			{
@@ -73,17 +61,50 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
-		static void Sort()
+		static void Test_Linq()
 		{
-			var array = new[] { 1, 5, 7, 5, 2, 0 };
-			var dd = array.OrderBy(x => x);
-			var result = new int[array.Length];
-			for (var i = 0; i > array.Length; i++)
+			var list = new List<testClass>
 			{
-				var res = array[i].CompareTo(array[i + 1]);
+				new testClass(),
+				new testClass(),
+				new testClass(),
+				new testClass(),
+				new testClass()
+			};
+			var res = list.Sum(x => x.CountTest / 5);
+
+			var limit = 4;
+			var ss1 = Math.Max(0, limit == 0 ? list.Count : list.Count - limit / 2);
+			var ss2 = list.Skip(ss1).ToList();
+		}
+
+		static void Test_Sort()
+		{
+			var array = new[] { 4, 1, 5, 7, 5, 2, 0, 0, 2, 4, 1, 5, 7, 5, 2, 0, 0, 2 };
+
+			var iter = 0;
+
+			test:
+			iter++;
+
+			for (var i = 0; i < array.Length - 1; i++)
+			{
+				var a = array[i];
+				var b = array[i + 1];
+				var res = a.CompareTo(b);
+
+				if (res == 1)
+				{
+					array[i] = b;
+					array[i + 1] = a;
+					i = 0;
+				}
 			}
 
-			System.Console.WriteLine(string.Join(",", result));
+			if (iter <= 2)
+				goto test;
+
+			System.Console.WriteLine(string.Join(",", array));
 		}
 
 		static void Test_GetLastDigit()
@@ -220,13 +241,26 @@ namespace Tester.Console
 
 		public static void OracleCommandTest()
 		{
+			const string oradb = "Data Source=(DESCRIPTION =" 
+			                     + "(ADDRESS = (PROTOCOL = TCP)(HOST = msk-ora-cd-02.mtsit.local)(PORT = 1521))" 
+			                     + "(CONNECT_DATA ="
+			                     + "(SERVER = DEDICATED)" 
+			                     + "(SID = vip12)));" 
+			                     + "User Id=tf2_cust;Password=cust;";
 			const string connectionString = "Data Source=vip12;User ID=tf2_cust;Password=cust;Max Pool Size=1";
-			var connection = new OracleConnection(connectionString);
-			var command = connection.CreateCommand();
+			var connection = new OracleConnection(oradb);
+			try
 			{
-				command.CommandText = "SELECT sysdate FROM dual";
-				connection.Open();
-				command.ExecuteNonQuery();
+				var command = connection.CreateCommand();
+				{
+					command.CommandText = "SELECT sysdate - 100 FROM dual";
+					connection.Open();
+					System.Console.WriteLine(command.ExecuteScalar());
+				}
+			}
+			finally
+			{
+				connection.Close();
 			}
 		}
 
