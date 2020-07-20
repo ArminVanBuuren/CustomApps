@@ -207,25 +207,32 @@ namespace LogsReader
 				LogsReaderFormBase prevSelection = null;
 				MainTabControl.Selected += (sender, args) =>
 				{
-					var current = CurrentForm;
+					try
+					{
+						var current = CurrentForm;
 
-					if (current == Global)
-					{
-						foreach (var schemeForm in SchemeForms.Values)
-							schemeForm.DeselectTransactions();
-						Global.SelectTransactions();
-					}
-					else if (prevSelection == Global)
-					{
-						Global.DeselectTransactions();
-						current.SelectTransactions();
-					}
-					else
-					{
-						current.SelectTransactions();
-					}
+						if (current == Global)
+						{
+							foreach (var schemeForm in SchemeForms.Values)
+								schemeForm.DeselectTransactions();
+							Global.SelectTransactions();
+						}
+						else if (prevSelection == Global)
+						{
+							Global.DeselectTransactions();
+							current.SelectTransactions();
+						}
+						else
+						{
+							current.SelectTransactions();
+						}
 
-					prevSelection = current;
+						prevSelection = current;
+					}
+					catch (Exception)
+					{
+						// ignored
+					}
 				};
 
 				Shown += (s, e) =>

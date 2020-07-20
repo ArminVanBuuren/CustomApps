@@ -1121,12 +1121,19 @@ namespace LogsReader.Reader
 
         private void checkBoxShowTrns_CheckedChanged(object sender, EventArgs e)
         {
-	        UserSettings.ShowTransactions = checkBoxShowTrns.Checked;
+	        try
+	        {
+		        UserSettings.ShowTransactions = checkBoxShowTrns.Checked;
 
-	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
-		        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
+		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+			        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
 
-	        DgvData?.Refresh();
+		        DgvData?.Refresh();
+            }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
         }
 
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)

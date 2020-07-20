@@ -195,7 +195,8 @@ namespace LogsReader.Reader
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(3, 3),
 				Size = buttonSize,
-				UseVisualStyleBackColor = false
+				UseVisualStyleBackColor = false,
+				FlatAppearance = { BorderColor = Color.Black, BorderSize = 1 }
 			};
 			buttonBack.Click += ChangeColor;
 
@@ -206,7 +207,8 @@ namespace LogsReader.Reader
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(63, 3),
 				Size = buttonSize,
-				UseVisualStyleBackColor = false
+				UseVisualStyleBackColor = false,
+				FlatAppearance = { BorderColor = Color.Black, BorderSize = 1 }
 			};
 			buttonFore.Click += ChangeColor;
 
