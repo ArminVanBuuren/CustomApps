@@ -21,6 +21,7 @@ namespace LogsReader.Reader
 		private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
+        private bool _settingIsApplied = false;
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
@@ -287,30 +288,32 @@ namespace LogsReader.Reader
 
         public void ApplyFormSettings()
         {
-            try
-            {
-                if(UserSettings == null)
-                    return;
+	        try
+	        {
+		        if (UserSettings == null)
+			        return;
 
-                for (var i = 0; i < DgvData.Columns.Count; i++)
-                {
-                    var valueStr = UserSettings.GetValue("COL" + i);
-                    if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
-                        DgvData.Columns[i].Width = value;
-                }
+		        for (var i = 0; i < DgvData.Columns.Count; i++)
+		        {
+			        var valueStr = UserSettings.GetValue("COL" + i);
+			        if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
+				        DgvData.Columns[i].Width = value;
+		        }
 
-                ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 2000, ParentSplitContainer.SplitterDistance);
-                MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 2000, MainSplitContainer.SplitterDistance);
-                MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 2000, MainViewer.SplitterDistance);
+		        ParentSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(ParentSplitContainer), 25, 2000, ParentSplitContainer.SplitterDistance);
+		        MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 2000, MainSplitContainer.SplitterDistance);
+		        MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 2000, MainViewer.SplitterDistance);
 
-                ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
-                MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
-                MainViewer.SplitterMoved += (sender, args) => { SaveData(); };
+		        ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
+		        MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
+		        MainViewer.SplitterMoved += (sender, args) => { SaveData(); };
+
+		        _settingIsApplied = true;
             }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
         }
 
         public virtual void ApplySettings()
@@ -381,7 +384,7 @@ namespace LogsReader.Reader
         {
             try
             {
-                if (!_settingsLoaded || UserSettings == null)
+                if (!_settingsLoaded || UserSettings == null || !_settingIsApplied)
                     return;
 
                 for (var i = 0; i < DgvData.Columns.Count; i++)
