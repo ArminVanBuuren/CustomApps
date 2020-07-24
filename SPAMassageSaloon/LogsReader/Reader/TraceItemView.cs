@@ -294,13 +294,16 @@ namespace LogsReader.Reader
 				DeselectTransactions(CurrentTemplate.TransactionBindings);
 		}
 
-		static bool SelectTransactions(IEnumerable<DataTemplate> collection)
+		bool SelectTransactions(IEnumerable<DataTemplate> collection)
 		{
+			if (!IsMain)
+				return true;
+
 			var noChanged = true;
 
 			foreach (var bindTrnTemplate in collection)
 			{
-				if (bindTrnTemplate.IsSelected) 
+				if (bindTrnTemplate.IsSelected)
 					continue;
 				bindTrnTemplate.IsSelected = true;
 				noChanged = false;
@@ -309,13 +312,16 @@ namespace LogsReader.Reader
 			return noChanged;
 		}
 
-		static bool DeselectTransactions(IEnumerable<DataTemplate> collection)
+		bool DeselectTransactions(IEnumerable<DataTemplate> collection)
 		{
+			if (!IsMain)
+				return true;
+
 			var noChanged = true;
 
 			foreach (var bindTrnTemplate in collection)
 			{
-				if (!bindTrnTemplate.IsSelected) 
+				if (!bindTrnTemplate.IsSelected)
 					continue;
 				bindTrnTemplate.IsSelected = false;
 				noChanged = false;

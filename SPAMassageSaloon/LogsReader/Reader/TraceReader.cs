@@ -311,7 +311,7 @@ namespace LogsReader.Reader
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
 			            innerReader._trn = new TransactionValue(true, trnValue);
-			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines; // возвращаемся обратно к первой сохраненной строке
+			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines - 1; // возвращаемся обратно к первой сохраненной строке
 			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
 			            void OnPastFound(DataTemplate pastItem)
