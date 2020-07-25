@@ -141,7 +141,6 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
-				STREAM.GarbageCollect();
 				IsCompleted = true;
 			}
 		}
@@ -282,8 +281,13 @@ namespace LogsReader.Reader
 
 		public override void Dispose()
 		{
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders)
+					reader.Dispose();
+
 			Reset();
 			base.Dispose();
+			STREAM.GarbageCollect();
 		}
 	}
 }
