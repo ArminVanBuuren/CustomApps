@@ -223,7 +223,6 @@ namespace LogsReader.Reader
 		{
 			_transactionValues.Clear();
 			IsDisposed = true;
-			STREAM.GarbageCollect();
 		}
 	}
 }

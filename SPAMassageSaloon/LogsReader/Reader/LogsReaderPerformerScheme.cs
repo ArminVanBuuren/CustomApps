@@ -283,6 +283,7 @@ namespace LogsReader.Reader
 		{
 			Reset();
 			base.Dispose();
+			STREAM.GarbageCollect();
 		}
 	}
 }
