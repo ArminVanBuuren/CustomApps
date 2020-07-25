@@ -141,6 +141,7 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
+				STREAM.GarbageCollect();
 				IsCompleted = true;
 			}
 		}
@@ -283,7 +284,6 @@ namespace LogsReader.Reader
 		{
 			Reset();
 			base.Dispose();
-			STREAM.GarbageCollect();
 		}
 	}
 }
