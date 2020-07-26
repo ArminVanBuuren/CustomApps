@@ -260,13 +260,13 @@ Input data:
     <value>Unable to save file "{0}". {1}</value>
   </data>
   <data name="Txt_LogsReaderForm_Export" xml:space="preserve">
-    <value>Export [Ctrl+S]</value>
+    <value />
   </data>
   <data name="Txt_LogsReaderForm_Exporting" xml:space="preserve">
     <value>Exporting...</value>
   </data>
   <data name="Txt_LogsReaderForm_Filter" xml:space="preserve">
-    <value>Filter [F7]</value>
+    <value>         Filter [F7]</value>
   </data>
   <data name="Txt_LogsReaderForm_FilteTypes" xml:space="preserve">
     <value>File Types</value>
@@ -290,7 +290,7 @@ Input data:
     <value>Order By</value>
   </data>
   <data name="Txt_LogsReaderForm_Reset" xml:space="preserve">
-    <value>Reset [F8]</value>
+    <value>        Reset [F8]</value>
   </data>
   <data name="Txt_LogsReaderForm_RowsLimit" xml:space="preserve">
     <value>Rows Limit</value>
@@ -542,10 +542,10 @@ Colors schemes are adjustable.</value>
     <value>The attribute '@name' of schemas must not be empty.</value>
   </data>
   <data name="Txt_LogsReaderForm_NextErrButt" xml:space="preserve">
-    <value>Next error (F3)</value>
+    <value>Next error [F3]</value>
   </data>
   <data name="Txt_LogsReaderForm_PrevErrButt" xml:space="preserve">
-    <value>Previous error (SHIFT+F3)</value>
+    <value>Previous error [SHIFT+F3]</value>
   </data>
   <data name="Txt_Close" xml:space="preserve">
     <value>Close</value>
@@ -573,5 +573,20 @@ Colors schemes are adjustable.</value>
   </data>
   <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
     <value>Shows information about transactions and elapsed execution time</value>
+  </data>
+  <data name="highlight2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\highlight2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ColorBack" xml:space="preserve">
+    <value>Color background</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ColorFore" xml:space="preserve">
+    <value>Coloe foreground</value>
+  </data>
+  <data name="Txt_LogsReaderForm_HighlightTxt" xml:space="preserve">
+    <value>Execute filter and highlight [F1]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
+    <value>Reset highlights [F2]</value>
   </data>
 </root>

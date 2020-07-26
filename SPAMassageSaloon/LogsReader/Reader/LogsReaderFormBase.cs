@@ -36,6 +36,9 @@ namespace LogsReader.Reader
         private DataGridViewColumn _oldSortedColumn;
         private bool _byAscending = true;
 
+        private Color _formBackColor;
+        private Color _formForeColor;
+
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -46,9 +49,33 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
+        /// <summary>
+        /// Юзерские настройки 
+        /// </summary>
+        protected UserSettings UserSettings { get; }
+
         protected Stopwatch TimeWatcher { get; set; }= new Stopwatch();
 
         protected ToolTip Tooltip { get; }
+
+        protected bool ButtonHighlightEnabled
+        {
+	        get => buttonHighlightOn.Enabled;
+	        set
+	        {
+		        buttonHighlightOn.Enabled = buttonHighlightOff.Enabled = buttonHghlBack.Enabled = buttonHghlFore.Enabled = value;
+		        if (buttonHighlightOn.Enabled)
+		        {
+			        buttonHghlBack.BackColor = UserSettings.HghtBackColor;
+			        buttonHghlFore.BackColor = UserSettings.HghtForeColor;
+		        }
+		        else
+		        {
+			        buttonHghlBack.BackColor = Color.LightGray;
+			        buttonHghlFore.BackColor = Color.LightGray;
+		        }
+	        }
+        }
 
         /// <summary>
         /// Поиск логов начался или завершился
@@ -75,10 +102,17 @@ namespace LogsReader.Reader
 
         public Encoding DefaultEncoding { get; }
 
-        /// <summary>
-        /// Юзерские настройки 
-        /// </summary>
-        public UserSettings UserSettings { get; }
+        public Color FormBackColor
+        {
+	        get => _formBackColor;
+	        set => _formBackColor = UserSettings.BackColor = value;
+        }
+
+        public Color FormForeColor
+        {
+	        get => _formForeColor;
+	        set => _formForeColor = UserSettings.ForeColor = value;
+        }
 
         public int CountMatches
         {
@@ -143,7 +177,10 @@ namespace LogsReader.Reader
             DefaultEncoding = defaultEncoding;
             UserSettings = userSettings;
 
-	        base.Font = LogsReaderMainForm.DefFont;
+            _formBackColor = UserSettings.BackColor;
+            _formForeColor = UserSettings.ForeColor;
+
+            base.Font = LogsReaderMainForm.DefFont;
 	        ChbxAlreadyUseFilter.Font = LogsReaderMainForm.DefFont;
 	        tabControlViewer.Font = LogsReaderMainForm.DgvFont;
 
@@ -253,6 +290,61 @@ namespace LogsReader.Reader
 
                 checkBoxShowTrns.Checked = UserSettings.ShowTransactions;
 
+                var colorDialog = new ColorDialog
+                {
+	                AllowFullOpen = true,
+	                FullOpen = true,
+	                CustomColors = new[]
+	                {
+		                ColorTranslator.ToOle(LogsReaderMainForm.ERR_COLOR_BACK),
+		                ColorTranslator.ToOle(LogsReaderMainForm.TRN_COLOR_BACK),
+		                ColorTranslator.ToOle(LogsReaderMainForm.HGT_COLOR_BACK)
+	                }
+                };
+
+                void ChangeColor(object sender, EventArgs e)
+                {
+	                if (!(sender is Button button))
+		                return;
+
+	                colorDialog.Color = button.BackColor;
+
+	                if (colorDialog.ShowDialog() != DialogResult.OK)
+		                return;
+
+	                button.BackColor = colorDialog.Color;
+
+	                if (button == buttonErrorBack)
+		                UserSettings.ErrBackColor = colorDialog.Color;
+                    else if (button == buttonErrorFore)
+		                UserSettings.ErrForeColor = colorDialog.Color;
+	                else if (button == buttonTrnBack)
+		                UserSettings.TrnBackColor = colorDialog.Color;
+	                else if (button == buttonTrnFore)
+		                UserSettings.TrnForeColor = colorDialog.Color;
+	                else if (button == buttonHghlBack)
+		                UserSettings.HghtBackColor = colorDialog.Color;
+	                else if (button == buttonHghlFore)
+		                UserSettings.HghtForeColor = colorDialog.Color;
+
+	                DgvData.Refresh();
+                }
+
+                buttonErrorBack.BackColor = UserSettings.ErrBackColor;
+                buttonErrorFore.BackColor = UserSettings.ErrForeColor;
+                buttonTrnBack.BackColor = UserSettings.TrnBackColor;
+                buttonTrnFore.BackColor = UserSettings.TrnForeColor;
+                buttonHghlBack.BackColor = UserSettings.HghtBackColor;
+                buttonHghlFore.BackColor = UserSettings.HghtForeColor;
+                
+                buttonErrorBack.Click += ChangeColor;
+                buttonErrorFore.Click += ChangeColor;
+                buttonTrnBack.Click += ChangeColor;
+                buttonTrnFore.Click += ChangeColor;
+                buttonHghlBack.Click += ChangeColor;
+                buttonHghlFore.Click += ChangeColor;
+
+
                 MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
                 tabControlViewer.DrawMode = TabDrawMode.Normal;
                 tabControlViewer.BackColor = Color.White;
@@ -353,19 +445,23 @@ namespace LogsReader.Reader
                 Tooltip.SetToolTip(buttonPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
                 Tooltip.SetToolTip(buttonNext, Resources.Txt_LogsReaderForm_NextErrButt);
                 Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
+                Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
+                Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
+
+                Tooltip.SetToolTip(buttonErrorBack, Resources.Txt_LogsReaderForm_ColorBack);
+                Tooltip.SetToolTip(buttonTrnBack, Resources.Txt_LogsReaderForm_ColorBack);
+                Tooltip.SetToolTip(buttonHghlBack, Resources.Txt_LogsReaderForm_ColorBack);
+                Tooltip.SetToolTip(buttonErrorFore, Resources.Txt_LogsReaderForm_ColorFore);
+                Tooltip.SetToolTip(buttonTrnFore, Resources.Txt_LogsReaderForm_ColorFore);
+                Tooltip.SetToolTip(buttonHghlFore, Resources.Txt_LogsReaderForm_ColorFore);
 
                 ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
                 BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
                 btnClear.Text = Resources.Txt_LogsReaderForm_Clear;
                 btnClear.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_btnClear_Width), btnClear.Height);
                 btnFilter.Text = Resources.Txt_LogsReaderForm_Filter;
-                btnFilter.Padding = new Padding(3, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonFilter_rightPadding), 0);
                 btnReset.Text = Resources.Txt_LogsReaderForm_Reset;
-                btnReset.Padding = new Padding(2, 0, Convert.ToInt32(Resources.LogsReaderForm_buttonReset_rightPadding), 0);
-                btnExport.Text = Resources.Txt_LogsReaderForm_Export;
-                btnExport.Size = new Size(Convert.ToInt32(Resources.LogsReaderForm_buttonExport_Width), btnExport.Height);
                 ChbxAlreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
-                ChbxAlreadyUseFilter.Padding = new Padding(0, 0, Convert.ToInt32(Resources.LogsReaderForm_alreadyUseFilter_rightPadding), 0);
 
                 #endregion
             }
@@ -426,10 +522,16 @@ namespace LogsReader.Reader
                     case Keys.F7 when btnFilter.Enabled:
                         BtnFilter_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.F8 when btnReset.Enabled:
-                        BtnReset_Click(this, EventArgs.Empty);
-                        break;
-                    case Keys.S when e.Control && btnExport.Enabled:
+	                case Keys.F8 when btnReset.Enabled:
+		                BtnReset_Click(this, EventArgs.Empty);
+		                break;
+                    case Keys.F1 when ButtonHighlightEnabled:
+		                buttonHighlight_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F2 when ButtonHighlightEnabled:
+		                buttonHighlightOff_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.S when e.Control && btnExport.Enabled:
                         BtnExport_Click(this, EventArgs.Empty);
                         break;
                     case Keys.C when e.Control && DgvData.SelectedRows.Count > 0:
@@ -530,7 +632,7 @@ namespace LogsReader.Reader
                     desctination = sfd.FileName;
                 }
 
-                BtnSearch.Enabled = btnClear.Enabled = btnExport.Enabled = btnFilter.Enabled = btnReset.Enabled = false;
+                BtnSearch.Enabled = btnClear.Enabled = btnExport.Enabled = btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = false;
                 ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
@@ -651,7 +753,7 @@ namespace LogsReader.Reader
         {
             try
             {
-                await AssignResult(GetFilter());
+	            await AssignResult(GetFilter());
             }
             catch (Exception ex)
             {
@@ -671,7 +773,57 @@ namespace LogsReader.Reader
 
         private async void BtnReset_Click(object sender, EventArgs e)
         {
-            await AssignResult(null);
+	        try
+	        {
+		        await AssignResult(null);
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+        }
+
+        private void buttonHighlight_Click(object sender, EventArgs e)
+        {
+	        try
+	        {
+		        if (_currentDGVResult == null || !_currentDGVResult.Any())
+                    return;
+
+		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
+			        template.IsFiltered = false;
+
+                var filter = GetFilter();
+		        if (filter == null)
+			        return;
+
+		        foreach (var template in filter.FilterCollection(_currentDGVResult))
+			        template.IsFiltered = true;
+
+		        DgvData.Refresh();
+            }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+        }
+
+        private void buttonHighlightOff_Click(object sender, EventArgs e)
+        {
+	        try
+	        {
+		        if (_currentDGVResult == null || !_currentDGVResult.Any())
+			        return;
+
+		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
+			        template.IsFiltered = false;
+
+		        DgvData.Refresh();
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
         }
 
         protected async Task<bool> AssignResult(DataFilter filter)
@@ -703,7 +855,10 @@ namespace LogsReader.Reader
 			        return false;
 		        }
 
-		        if (filter != null)
+		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
+			        template.IsFiltered = false;
+
+                if (filter != null)
 		        {
 			        _currentDGVResult = filter.FilterCollection(_currentDGVResult);
 
@@ -740,6 +895,7 @@ namespace LogsReader.Reader
             }
 	        catch (Exception ex)
 	        {
+		        DgvData.Focus();
 		        ReportStatus(ex.Message, ReportStatusType.Error);
                 return false;
 	        }
@@ -806,7 +962,7 @@ namespace LogsReader.Reader
 		        }
 
 		        btnExport.Enabled = DgvData.RowCount > 0;
-		        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
+		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
             }
 	        finally
 	        {
@@ -840,8 +996,13 @@ namespace LogsReader.Reader
 
 			        if (checkBoxShowTrns.Checked && template.IsSelected)
 			        {
-				        row.DefaultCellStyle.BackColor = Color.FromArgb(62, 255, 176);
-				        row.DefaultCellStyle.ForeColor = Color.Black;
+				        row.DefaultCellStyle.BackColor = buttonTrnBack.BackColor;
+				        row.DefaultCellStyle.ForeColor = buttonTrnFore.BackColor;
+                    }
+                    else if (template.IsFiltered)
+			        {
+				        row.DefaultCellStyle.BackColor = buttonHghlBack.BackColor;
+				        row.DefaultCellStyle.ForeColor = buttonHghlFore.BackColor;
                     }
 			        else
 			        {
@@ -850,8 +1011,8 @@ namespace LogsReader.Reader
 		        }
 		        else
 		        {
-			        row.DefaultCellStyle.BackColor = Color.Red;
-			        row.DefaultCellStyle.ForeColor = Color.White;
+			        row.DefaultCellStyle.BackColor = buttonErrorBack.BackColor;
+			        row.DefaultCellStyle.ForeColor = buttonErrorFore.BackColor;
 			        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 
 			        if (template.IsMatched) 
@@ -1172,7 +1333,7 @@ namespace LogsReader.Reader
         protected virtual void ValidationCheck(bool clearStatus)
         {
 	        btnExport.Enabled = DgvData.RowCount > 0;
-	        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
+	        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
         }
 
         protected virtual void BtnClear_Click(object sender, EventArgs e)
@@ -1240,7 +1401,7 @@ namespace LogsReader.Reader
 		        }
 
                 btnExport.Enabled = false;
-		        btnFilter.Enabled = btnReset.Enabled = HasAnyResult;
+		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
 	        }
 	        catch (Exception ex)
 	        {

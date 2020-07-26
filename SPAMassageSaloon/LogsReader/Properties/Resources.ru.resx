@@ -264,13 +264,13 @@
     <value>Невозможно сохранить файл "{0}". {1}</value>
   </data>
   <data name="Txt_LogsReaderForm_Export" xml:space="preserve">
-    <value>Экспорт [Ctrl+S]</value>
+    <value />
   </data>
   <data name="Txt_LogsReaderForm_Exporting" xml:space="preserve">
     <value>Экспорт...</value>
   </data>
   <data name="Txt_LogsReaderForm_Filter" xml:space="preserve">
-    <value>Фильтр [F7]</value>
+    <value>       Фильтр [F7]</value>
   </data>
   <data name="Txt_LogsReaderForm_FinishedIn" xml:space="preserve">
     <value>Завершено. Время выполнения: {0}</value>
@@ -282,7 +282,7 @@
     <value>Логи не найдены</value>
   </data>
   <data name="Txt_LogsReaderForm_Reset" xml:space="preserve">
-    <value>Сброс [F8]</value>
+    <value>       Сброс [F8]</value>
   </data>
   <data name="Txt_LogsReaderForm_Search" xml:space="preserve">
     <value>Поиск [F5]</value>
@@ -481,5 +481,17 @@
   </data>
   <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
     <value>Показывает информацию о транзакциях и затраченном времени выполнения</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ColorBack" xml:space="preserve">
+    <value>Цвет фона</value>
+  </data>
+  <data name="Txt_LogsReaderForm_ColorFore" xml:space="preserve">
+    <value>Цвет текста</value>
+  </data>
+  <data name="Txt_LogsReaderForm_HighlightTxt" xml:space="preserve">
+    <value>Выполнить фильтр и подсветить [F1]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
+    <value>Сбросить подсветку [F2]</value>
   </data>
 </root>

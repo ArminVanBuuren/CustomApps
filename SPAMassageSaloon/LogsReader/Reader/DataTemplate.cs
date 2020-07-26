@@ -138,6 +138,8 @@ namespace LogsReader.Reader
 
         public bool IsSelected { get; internal set; } = false;
 
+        public bool IsFiltered { get; internal set; } = false;
+
         public Exception Error { get; }
 
         public bool IsMatched { get; }

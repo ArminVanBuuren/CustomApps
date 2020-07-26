@@ -151,6 +151,16 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap highlight2 {
+            get {
+                object obj = ResourceManager.GetObject("highlight2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon icon {
@@ -766,6 +776,24 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color background.
+        /// </summary>
+        public static string Txt_LogsReaderForm_ColorBack {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_ColorBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coloe foreground.
+        /// </summary>
+        public static string Txt_LogsReaderForm_ColorFore {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_ColorFore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contains.
         /// </summary>
         public static string Txt_LogsReaderForm_Contains {
@@ -820,7 +848,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export [Ctrl+S].
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string Txt_LogsReaderForm_Export {
             get {
@@ -865,7 +893,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter [F7].
+        ///   Looks up a localized string similar to          Filter [F7].
         /// </summary>
         public static string Txt_LogsReaderForm_Filter {
             get {
@@ -888,6 +916,24 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_FinishedIn {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_FinishedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Execute filter and highlight [F1].
+        /// </summary>
+        public static string Txt_LogsReaderForm_HighlightTxt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_HighlightTxt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset highlights [F2].
+        /// </summary>
+        public static string Txt_LogsReaderForm_HighlightTxtOff {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_HighlightTxtOff", resourceCulture);
             }
         }
         
@@ -928,7 +974,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next error (F3).
+        ///   Looks up a localized string similar to Next error [F3].
         /// </summary>
         public static string Txt_LogsReaderForm_NextErrButt {
             get {
@@ -982,7 +1028,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous error (SHIFT+F3).
+        ///   Looks up a localized string similar to Previous error [SHIFT+F3].
         /// </summary>
         public static string Txt_LogsReaderForm_PrevErrButt {
             get {
@@ -1009,7 +1055,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset [F8].
+        ///   Looks up a localized string similar to         Reset [F8].
         /// </summary>
         public static string Txt_LogsReaderForm_Reset {
             get {

@@ -107,7 +107,7 @@ namespace LogsReader.Reader
 
 		        CustomPanel.Controls.Add(panelFlowDoc);
 		        CustomPanel.Controls.Add(panelCollapseSelectAll);
-		        CustomPanelMinSize = 130;
+		        CustomPanelMinSize = 149;
 
 		        #endregion
 			}
@@ -174,12 +174,12 @@ namespace LogsReader.Reader
 
 				if (button == buttonBack)
 				{
-					readerForm.UserSettings.BackColor = colorDialog.Color;
+					readerForm.FormBackColor = colorDialog.Color;
 					schemeExpander.HeaderBackColor = colorDialog.Color;
 				}
 				else if (button == buttonFore)
 				{
-					readerForm.UserSettings.ForeColor = colorDialog.Color;
+					readerForm.FormForeColor = colorDialog.Color;
 					schemeExpander.ForeColor = colorDialog.Color;
 				}
 
@@ -191,7 +191,7 @@ namespace LogsReader.Reader
 			var labelBack = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(25, 3), Size = new Size(34, 15), Text = Resources.Txt_Global_Back };
 			buttonBack = new Button
 			{
-				BackColor = readerForm.UserSettings.BackColor,
+				BackColor = readerForm.FormBackColor,
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(3, 3),
 				Size = buttonSize,
@@ -203,7 +203,7 @@ namespace LogsReader.Reader
 			var labelFore = new Label { AutoSize = true, ForeColor = Color.Black, Location = new Point(85, 3), Size = new Size(34, 15), Text = Resources.Txt_Global_Fore };
 			buttonFore = new Button
 			{
-				BackColor = readerForm.UserSettings.ForeColor,
+				BackColor = readerForm.FormForeColor,
 				FlatStyle = FlatStyle.Flat,
 				Location = new Point(63, 3),
 				Size = buttonSize,
@@ -257,7 +257,12 @@ namespace LogsReader.Reader
 	        expanderPanel.Controls.Add(treeView);
 
 			// если закрываются или открываются схемы для глобальной формы в глобальной форме
-	        schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
+			schemeExpander.ExpandCollapse += (sender, args) =>
+			{
+				SchemeExpander_ExpandCollapse(sender, args);
+				panelFlowDoc.Invalidate();
+				panelFlowDoc.Refresh();
+			};
 			// если выбирается схема в глобальной форме в checkbox
 	        schemeExpander.CheckedChanged += async (sender, args) =>
 	        {
@@ -393,32 +398,39 @@ namespace LogsReader.Reader
 
         private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
         {
-			if(flowPanelForExpanders == null)
-				return;
-
-	        var height = 0;
-	        foreach (var expander in flowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
+	        try
 	        {
-		        if (expander.IsExpanded)
-			        height += expander.ExpandedHeight;
+		        if (flowPanelForExpanders == null)
+			        return;
+
+		        var height = 0;
+		        foreach (var expander in flowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
+		        {
+			        if (expander.IsExpanded)
+				        height += expander.ExpandedHeight;
+			        else
+				        height += expander.CollapsedHeight;
+
+			        height += expander.Margin.Top + expander.Margin.Bottom;
+		        }
+
+		        panelFlowDoc.AutoScrollMinSize = new Size(0, height);
+
+		        if (panelFlowDoc.VerticalScroll.Visible)
+		        {
+			        flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 16, height);
+			        checkBoxSelectAll.Padding = new Padding(0, 0, 23, 0);
+		        }
 		        else
-			        height += expander.CollapsedHeight;
-
-		        height += expander.Margin.Top + expander.Margin.Bottom;
+		        {
+			        flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 2, height);
+			        checkBoxSelectAll.Padding = new Padding(0, 0, 9, 0);
+		        }
+			}
+	        catch (Exception)
+	        {
+		        // ignored
 	        }
-
-            panelFlowDoc.AutoScrollMinSize = new Size(0, height);
-            
-            if (panelFlowDoc.VerticalScroll.Visible)
-            {
-	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 16, height);
-	            checkBoxSelectAll.Padding = new Padding(0, 0, 23, 0);
-            }
-            else
-            {
-	            flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 2, height);
-	            checkBoxSelectAll.Padding = new Padding(0, 0, 9, 0);
-            }
         }
 
         class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
@@ -574,8 +586,8 @@ namespace LogsReader.Reader
 			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;
 
-			row.DefaultCellStyle.BackColor = result.UserSettings.BackColor;
-			row.DefaultCellStyle.ForeColor = result.UserSettings.ForeColor;
+			row.DefaultCellStyle.BackColor = result.FormBackColor;
+			row.DefaultCellStyle.ForeColor = result.FormForeColor;
 		}
 
         private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)

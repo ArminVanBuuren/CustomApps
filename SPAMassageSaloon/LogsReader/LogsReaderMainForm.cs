@@ -34,10 +34,20 @@ namespace LogsReader
 
 	    public static readonly Color GLOBAL_COLOR_BACK = Color.FromArgb(255, 0, 206);
 	    public static readonly Color GLOBAL_COLOR_FORE = Color.White;
+
 	    public static readonly Color SCHEME_COLOR_BACK = Color.FromArgb(0, 200, 205);
 	    public static readonly Color SCHEME_COLOR_FORE = Color.White;
 
-	    public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
+	    public static readonly Color ERR_COLOR_BACK = Color.Red;
+	    public static readonly Color ERR_COLOR_FORE = Color.White;
+
+		public static readonly Color TRN_COLOR_BACK = Color.FromArgb(62, 255, 176);
+		public static readonly Color TRN_COLOR_FORE = Color.Black;
+
+		public static readonly Color HGT_COLOR_BACK = Color.Yellow;
+		public static readonly Color HGT_COLOR_FORE = Color.Black;
+
+		public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get
 		    {
@@ -276,7 +286,7 @@ namespace LogsReader
 	            else
 	            {
 		            if (SchemeForms.TryGetValue(page, out var reader))
-			            RenderTabPage(page, e, reader.UserSettings.BackColor, reader.UserSettings.ForeColor);
+			            RenderTabPage(page, e, reader.FormBackColor, reader.FormForeColor);
                     else
 			            RenderTabPage(page, e, SCHEME_COLOR_BACK, SCHEME_COLOR_FORE);
                 }

@@ -21,9 +21,9 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle139 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle140 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle141 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,6 +51,10 @@ namespace LogsReader.Reader
 			this.label11 = new System.Windows.Forms.Label();
 			this.TbxTraceMessageFilter = new System.Windows.Forms.TextBox();
 			this.filterPanel = new System.Windows.Forms.Panel();
+			this.buttonHighlightOff = new System.Windows.Forms.Button();
+			this.buttonHghlFore = new System.Windows.Forms.Button();
+			this.buttonHghlBack = new System.Windows.Forms.Button();
+			this.buttonHighlightOn = new System.Windows.Forms.Button();
 			this.CobxTraceMessageFilter = new System.Windows.Forms.ComboBox();
 			this.CobxTraceNameFilter = new System.Windows.Forms.ComboBox();
 			this.ChbxAlreadyUseFilter = new System.Windows.Forms.CheckBox();
@@ -63,10 +67,14 @@ namespace LogsReader.Reader
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.CustomPanel = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.buttonErrorFore = new System.Windows.Forms.Button();
+			this.buttonErrorBack = new System.Windows.Forms.Button();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.buttonTrnFore = new System.Windows.Forms.Button();
+			this.buttonTrnBack = new System.Windows.Forms.Button();
 			this.checkBoxShowTrns = new System.Windows.Forms.CheckBox();
 			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
 			this.searchPanel.SuspendLayout();
@@ -79,8 +87,8 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
+			this.panel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// DgvData
@@ -90,14 +98,14 @@ namespace LogsReader.Reader
 			this.DgvData.AllowUserToResizeRows = false;
 			this.DgvData.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.DgvData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			dataGridViewCellStyle139.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle139.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle139.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle139.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle139.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle139.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle139.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle139;
+			dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle28.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle28;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SchemeName,
@@ -109,27 +117,27 @@ namespace LogsReader.Reader
             this.DateOfTrace,
             this.ElapsedSec,
             this.File});
-			dataGridViewCellStyle140.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle140.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle140.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle140.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle140.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle140.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle140.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DgvData.DefaultCellStyle = dataGridViewCellStyle140;
+			dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DgvData.DefaultCellStyle = dataGridViewCellStyle29;
 			this.DgvData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvData.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.DgvData.Location = new System.Drawing.Point(0, 0);
 			this.DgvData.Name = "DgvData";
 			this.DgvData.ReadOnly = true;
-			dataGridViewCellStyle141.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle141.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle141.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle141.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle141.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle141.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle141;
+			dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle30;
 			this.DgvData.RowHeadersVisible = false;
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
@@ -237,7 +245,7 @@ namespace LogsReader.Reader
 			this.btnClear.Name = "btnClear";
 			this.btnClear.Size = new System.Drawing.Size(90, 24);
 			this.btnClear.TabIndex = 4;
-			this.btnClear.Text = "Clear [F6]";
+			this.btnClear.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Clear;
 			this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnClear.UseVisualStyleBackColor = true;
 			this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
@@ -350,11 +358,10 @@ namespace LogsReader.Reader
 			this.btnFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnFilter.Location = new System.Drawing.Point(853, 7);
 			this.btnFilter.Name = "btnFilter";
-			this.btnFilter.Padding = new System.Windows.Forms.Padding(5, 0, 7, 0);
 			this.btnFilter.Size = new System.Drawing.Size(100, 23);
 			this.btnFilter.TabIndex = 11;
-			this.btnFilter.Text = "Filter [F7]";
-			this.btnFilter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnFilter.Text = "          Filter [F7]";
+			this.btnFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnFilter.UseVisualStyleBackColor = true;
 			this.btnFilter.Click += new System.EventHandler(this.BtnFilter_Click);
 			// 
@@ -363,13 +370,12 @@ namespace LogsReader.Reader
 			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReset.Image = global::LogsReader.Properties.Resources.reset2;
 			this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnReset.Location = new System.Drawing.Point(853, 34);
+			this.btnReset.Location = new System.Drawing.Point(962, 7);
 			this.btnReset.Name = "btnReset";
-			this.btnReset.Padding = new System.Windows.Forms.Padding(2, 0, 7, 0);
 			this.btnReset.Size = new System.Drawing.Size(100, 23);
 			this.btnReset.TabIndex = 12;
-			this.btnReset.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Reset;
-			this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnReset.Text = "        Reset [F10]";
+			this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnReset.UseVisualStyleBackColor = true;
 			this.btnReset.Click += new System.EventHandler(this.BtnReset_Click);
 			// 
@@ -396,6 +402,10 @@ namespace LogsReader.Reader
 			// 
 			this.filterPanel.BackColor = System.Drawing.SystemColors.Control;
 			this.filterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.filterPanel.Controls.Add(this.buttonHighlightOff);
+			this.filterPanel.Controls.Add(this.buttonHghlFore);
+			this.filterPanel.Controls.Add(this.buttonHghlBack);
+			this.filterPanel.Controls.Add(this.buttonHighlightOn);
 			this.filterPanel.Controls.Add(this.CobxTraceMessageFilter);
 			this.filterPanel.Controls.Add(this.CobxTraceNameFilter);
 			this.filterPanel.Controls.Add(this.ChbxAlreadyUseFilter);
@@ -416,6 +426,60 @@ namespace LogsReader.Reader
 			this.filterPanel.Name = "filterPanel";
 			this.filterPanel.Size = new System.Drawing.Size(1152, 64);
 			this.filterPanel.TabIndex = 28;
+			// 
+			// buttonHighlightOff
+			// 
+			this.buttonHighlightOff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonHighlightOff.BackColor = System.Drawing.Color.DarkGray;
+			this.buttonHighlightOff.Image = global::LogsReader.Properties.Resources.highlight2;
+			this.buttonHighlightOff.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.buttonHighlightOff.Location = new System.Drawing.Point(915, 33);
+			this.buttonHighlightOff.Name = "buttonHighlightOff";
+			this.buttonHighlightOff.Padding = new System.Windows.Forms.Padding(7, 0, 0, 1);
+			this.buttonHighlightOff.Size = new System.Drawing.Size(38, 24);
+			this.buttonHighlightOff.TabIndex = 34;
+			this.buttonHighlightOff.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.buttonHighlightOff.UseVisualStyleBackColor = false;
+			this.buttonHighlightOff.Click += new System.EventHandler(this.buttonHighlightOff_Click);
+			// 
+			// buttonHghlFore
+			// 
+			this.buttonHghlFore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonHghlFore.BackColor = System.Drawing.Color.Black;
+			this.buttonHghlFore.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+			this.buttonHghlFore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonHghlFore.Location = new System.Drawing.Point(855, 45);
+			this.buttonHghlFore.Name = "buttonHghlFore";
+			this.buttonHghlFore.Size = new System.Drawing.Size(15, 10);
+			this.buttonHghlFore.TabIndex = 32;
+			this.buttonHghlFore.UseVisualStyleBackColor = false;
+			// 
+			// buttonHghlBack
+			// 
+			this.buttonHghlBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonHghlBack.BackColor = System.Drawing.Color.Yellow;
+			this.buttonHghlBack.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+			this.buttonHghlBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonHghlBack.Location = new System.Drawing.Point(855, 34);
+			this.buttonHghlBack.Name = "buttonHghlBack";
+			this.buttonHghlBack.Size = new System.Drawing.Size(15, 10);
+			this.buttonHghlBack.TabIndex = 31;
+			this.buttonHghlBack.UseVisualStyleBackColor = false;
+			// 
+			// buttonHighlightOn
+			// 
+			this.buttonHighlightOn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonHighlightOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+			this.buttonHighlightOn.Image = global::LogsReader.Properties.Resources.highlight2;
+			this.buttonHighlightOn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.buttonHighlightOn.Location = new System.Drawing.Point(873, 33);
+			this.buttonHighlightOn.Name = "buttonHighlightOn";
+			this.buttonHighlightOn.Padding = new System.Windows.Forms.Padding(7, 0, 0, 1);
+			this.buttonHighlightOn.Size = new System.Drawing.Size(38, 24);
+			this.buttonHighlightOn.TabIndex = 33;
+			this.buttonHighlightOn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.buttonHighlightOn.UseVisualStyleBackColor = false;
+			this.buttonHighlightOn.Click += new System.EventHandler(this.buttonHighlight_Click);
 			// 
 			// CobxTraceMessageFilter
 			// 
@@ -447,12 +511,11 @@ namespace LogsReader.Reader
 			// ChbxAlreadyUseFilter
 			// 
 			this.ChbxAlreadyUseFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChbxAlreadyUseFilter.AutoSize = true;
-			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(975, 37);
+			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(962, 37);
 			this.ChbxAlreadyUseFilter.Name = "ChbxAlreadyUseFilter";
-			this.ChbxAlreadyUseFilter.Size = new System.Drawing.Size(145, 17);
+			this.ChbxAlreadyUseFilter.Size = new System.Drawing.Size(179, 19);
 			this.ChbxAlreadyUseFilter.TabIndex = 14;
-			this.ChbxAlreadyUseFilter.Text = "Use filter when searching";
+			this.ChbxAlreadyUseFilter.Text = "UseFilterWhenSearching";
 			this.ChbxAlreadyUseFilter.UseVisualStyleBackColor = true;
 			this.ChbxAlreadyUseFilter.CheckedChanged += new System.EventHandler(this.ChbxAlreadyUseFilter_CheckedChanged);
 			// 
@@ -461,12 +524,11 @@ namespace LogsReader.Reader
 			this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnExport.Image = global::LogsReader.Properties.Resources.save2;
 			this.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnExport.Location = new System.Drawing.Point(959, 7);
+			this.btnExport.Location = new System.Drawing.Point(1068, 7);
 			this.btnExport.Name = "btnExport";
 			this.btnExport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.btnExport.Size = new System.Drawing.Size(110, 23);
+			this.btnExport.Size = new System.Drawing.Size(27, 23);
 			this.btnExport.TabIndex = 13;
-			this.btnExport.Text = "Export [Ctrl+S]";
 			this.btnExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnExport.UseVisualStyleBackColor = true;
 			this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
@@ -476,7 +538,7 @@ namespace LogsReader.Reader
 			this.labelError.AutoSize = true;
 			this.labelError.Image = global::LogsReader.Properties.Resources.error2;
 			this.labelError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelError.Location = new System.Drawing.Point(36, 5);
+			this.labelError.Location = new System.Drawing.Point(54, 5);
 			this.labelError.Name = "labelError";
 			this.labelError.Size = new System.Drawing.Size(47, 13);
 			this.labelError.TabIndex = 31;
@@ -484,10 +546,10 @@ namespace LogsReader.Reader
 			// 
 			// buttonNext
 			// 
-			this.buttonNext.BackColor = System.Drawing.Color.White;
+			this.buttonNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
 			this.buttonNext.Image = global::LogsReader.Properties.Resources.next_2;
 			this.buttonNext.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.buttonNext.Location = new System.Drawing.Point(95, 0);
+			this.buttonNext.Location = new System.Drawing.Point(113, 0);
 			this.buttonNext.Name = "buttonNext";
 			this.buttonNext.Size = new System.Drawing.Size(24, 24);
 			this.buttonNext.TabIndex = 1;
@@ -497,10 +559,10 @@ namespace LogsReader.Reader
 			// 
 			// buttonPrev
 			// 
-			this.buttonPrev.BackColor = System.Drawing.Color.White;
+			this.buttonPrev.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
 			this.buttonPrev.Image = global::LogsReader.Properties.Resources.previous_2;
 			this.buttonPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonPrev.Location = new System.Drawing.Point(4, 0);
+			this.buttonPrev.Location = new System.Drawing.Point(22, 0);
 			this.buttonPrev.Name = "buttonPrev";
 			this.buttonPrev.Size = new System.Drawing.Size(24, 24);
 			this.buttonPrev.TabIndex = 0;
@@ -556,7 +618,7 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel1.BackColor = System.Drawing.Color.White;
 			this.MainSplitContainer.Panel1.Controls.Add(this.CustomPanel);
 			this.MainSplitContainer.Panel1.Controls.Add(this.panel1);
-			this.MainSplitContainer.Panel1MinSize = 130;
+			this.MainSplitContainer.Panel1MinSize = 149;
 			// 
 			// MainSplitContainer.Panel2
 			// 
@@ -585,10 +647,76 @@ namespace LogsReader.Reader
 			this.panel1.Size = new System.Drawing.Size(209, 50);
 			this.panel1.TabIndex = 2;
 			// 
+			// panel3
+			// 
+			this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel3.Controls.Add(this.buttonErrorFore);
+			this.panel3.Controls.Add(this.buttonErrorBack);
+			this.panel3.Controls.Add(this.labelError);
+			this.panel3.Controls.Add(this.buttonPrev);
+			this.panel3.Controls.Add(this.buttonNext);
+			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel3.Location = new System.Drawing.Point(0, 0);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(209, 26);
+			this.panel3.TabIndex = 34;
+			// 
+			// buttonErrorFore
+			// 
+			this.buttonErrorFore.BackColor = System.Drawing.Color.Black;
+			this.buttonErrorFore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonErrorFore.Location = new System.Drawing.Point(3, 13);
+			this.buttonErrorFore.Name = "buttonErrorFore";
+			this.buttonErrorFore.Size = new System.Drawing.Size(15, 10);
+			this.buttonErrorFore.TabIndex = 35;
+			this.buttonErrorFore.UseVisualStyleBackColor = false;
+			// 
+			// buttonErrorBack
+			// 
+			this.buttonErrorBack.BackColor = System.Drawing.Color.Red;
+			this.buttonErrorBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonErrorBack.Location = new System.Drawing.Point(3, 2);
+			this.buttonErrorBack.Name = "buttonErrorBack";
+			this.buttonErrorBack.Size = new System.Drawing.Size(15, 10);
+			this.buttonErrorBack.TabIndex = 34;
+			this.buttonErrorBack.UseVisualStyleBackColor = false;
+			// 
+			// panel2
+			// 
+			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel2.Controls.Add(this.buttonTrnFore);
+			this.panel2.Controls.Add(this.buttonTrnBack);
+			this.panel2.Controls.Add(this.checkBoxShowTrns);
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel2.Location = new System.Drawing.Point(0, 22);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(209, 28);
+			this.panel2.TabIndex = 33;
+			// 
+			// buttonTrnFore
+			// 
+			this.buttonTrnFore.BackColor = System.Drawing.Color.Black;
+			this.buttonTrnFore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonTrnFore.Location = new System.Drawing.Point(3, 15);
+			this.buttonTrnFore.Name = "buttonTrnFore";
+			this.buttonTrnFore.Size = new System.Drawing.Size(15, 10);
+			this.buttonTrnFore.TabIndex = 37;
+			this.buttonTrnFore.UseVisualStyleBackColor = false;
+			// 
+			// buttonTrnBack
+			// 
+			this.buttonTrnBack.BackColor = System.Drawing.Color.Lime;
+			this.buttonTrnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonTrnBack.Location = new System.Drawing.Point(3, 4);
+			this.buttonTrnBack.Name = "buttonTrnBack";
+			this.buttonTrnBack.Size = new System.Drawing.Size(15, 10);
+			this.buttonTrnBack.TabIndex = 36;
+			this.buttonTrnBack.UseVisualStyleBackColor = false;
+			// 
 			// checkBoxShowTrns
 			// 
 			this.checkBoxShowTrns.AutoSize = true;
-			this.checkBoxShowTrns.Location = new System.Drawing.Point(4, 6);
+			this.checkBoxShowTrns.Location = new System.Drawing.Point(24, 6);
 			this.checkBoxShowTrns.Name = "checkBoxShowTrns";
 			this.checkBoxShowTrns.Size = new System.Drawing.Size(113, 17);
 			this.checkBoxShowTrns.TabIndex = 32;
@@ -606,28 +734,6 @@ namespace LogsReader.Reader
 			this.tabControlViewer.SelectedIndex = 0;
 			this.tabControlViewer.Size = new System.Drawing.Size(464, 488);
 			this.tabControlViewer.TabIndex = 0;
-			// 
-			// panel2
-			// 
-			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel2.Controls.Add(this.checkBoxShowTrns);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(0, 22);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(209, 28);
-			this.panel2.TabIndex = 33;
-			// 
-			// panel3
-			// 
-			this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel3.Controls.Add(this.labelError);
-			this.panel3.Controls.Add(this.buttonPrev);
-			this.panel3.Controls.Add(this.buttonNext);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel3.Location = new System.Drawing.Point(0, 0);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(209, 26);
-			this.panel3.TabIndex = 34;
 			// 
 			// LogsReaderFormBase
 			// 
@@ -655,10 +761,10 @@ namespace LogsReader.Reader
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
+			this.panel2.ResumeLayout(false);
+			this.panel2.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -709,6 +815,14 @@ namespace LogsReader.Reader
 		private CheckBox checkBoxShowTrns;
 		private Panel panel2;
 		private Panel panel3;
+		private Button buttonHighlightOn;
+		private Button buttonHghlBack;
+		private Button buttonHghlFore;
+		private Button buttonErrorFore;
+		private Button buttonErrorBack;
+		private Button buttonTrnFore;
+		private Button buttonTrnBack;
+		private Button buttonHighlightOff;
 	}
 }
 
