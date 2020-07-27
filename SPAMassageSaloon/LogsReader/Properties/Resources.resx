@@ -353,7 +353,7 @@ Input data:
     <value>Max Threads</value>
   </data>
   <data name="Txt_LogsReaderForm_ExportComment" xml:space="preserve">
-    <value>Export found or filtered data to csv file</value>
+    <value>Export found or filtered data to csv file [Ctrl+S]</value>
   </data>
   <data name="Txt_LogsReaderForm_Description" xml:space="preserve">
     <value>This is a universal application for searching and parsing applications logs, as well as convenient viewing.</value>

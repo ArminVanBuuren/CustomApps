@@ -2,8 +2,13 @@
 
 namespace SPAMassageSaloon.Common
 {
-    public class CustomDataGridView : DataGridView
+    public sealed class CustomDataGridView : DataGridView
     {
+	    public CustomDataGridView()
+	    {
+		    DoubleBuffered = true;
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
 

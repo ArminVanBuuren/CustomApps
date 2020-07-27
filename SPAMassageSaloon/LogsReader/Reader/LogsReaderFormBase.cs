@@ -223,16 +223,17 @@ namespace LogsReader.Reader
                 #region Initialize DgvData
 
                 DgvData.AutoGenerateColumns = false;
-	            DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+                DgvData.TabStop = false;
+                DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvFont;
 	            DgvData.Font = LogsReaderMainForm.DgvFont;
 	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
 		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            DgvData.DoubleBuffered(true);
-                DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
+                DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
 
                 SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
                 SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
@@ -788,24 +789,33 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        if (_currentDGVResult == null || !_currentDGVResult.Any())
-                    return;
+			        return;
 
 		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
 			        template.IsFiltered = false;
 
-                var filter = GetFilter();
+		        var filter = GetFilter();
 		        if (filter == null)
 			        return;
 
+		        var count = 0;
 		        foreach (var template in filter.FilterCollection(_currentDGVResult))
+		        {
+			        count++;
 			        template.IsFiltered = true;
+		        }
 
-		        DgvData.Refresh();
-            }
+		        if (count == 0)
+			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+                else
+			        ClearErrorStatus();
+
+                DgvData.Refresh();
+	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+	        }
         }
 
         private void buttonHighlightOff_Click(object sender, EventArgs e)
@@ -815,7 +825,9 @@ namespace LogsReader.Reader
 		        if (_currentDGVResult == null || !_currentDGVResult.Any())
 			        return;
 
-		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
+		        ClearErrorStatus();
+
+                foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
 			        template.IsFiltered = false;
 
 		        DgvData.Refresh();
@@ -870,6 +882,7 @@ namespace LogsReader.Reader
 		        }
 
 		        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+
 
 		        btnExport.Enabled = DgvData.RowCount > 0;
 

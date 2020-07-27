@@ -857,7 +857,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export found or filtered data to csv file.
+        ///   Looks up a localized string similar to Export found or filtered data to csv file [Ctrl+S].
         /// </summary>
         public static string Txt_LogsReaderForm_ExportComment {
             get {

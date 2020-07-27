@@ -339,7 +339,7 @@
     <value>Сервера</value>
   </data>
   <data name="Txt_LogsReaderForm_ExportComment" xml:space="preserve">
-    <value>Экспорт результата поиска или фильтра в csv файл</value>
+    <value>Экспорт результата поиска или фильтра в csv файл [Ctrl+S]</value>
   </data>
   <data name="Txt_LogsReaderForm_Description" xml:space="preserve">
     <value>Это универсальное приложение для поиска и считывания лог файлов, а также для удобного просмотра.</value>
