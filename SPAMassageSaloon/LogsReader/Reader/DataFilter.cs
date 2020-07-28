@@ -41,29 +41,29 @@ namespace LogsReader.Reader
 
 
             // фильтр по полю TraceName
-            TraceNameFilterList = traceNameFilter.IsNullOrEmptyTrim()
+            TraceNameFilterList = traceNameFilter.IsNullOrWhiteSpace()
                 ? new List<string>()
-                : traceNameFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key).ToList();
+                : traceNameFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrWhiteSpace()).Select(x => x.Key).ToList();
 
             if (TraceNameFilterList.Any())
                 if (traceNameContains)
-                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrEmptyTrim() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
+                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrWhiteSpace() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
                 else
-                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrEmptyTrim() && !TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
+                    _checkTraceNameFilter = input => !input.TraceName.IsNullOrWhiteSpace() && !TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
             else
                 _checkTraceNameFilter = input => true;
 
 
             // фильтр по полю TraceMessage
-            TraceMessageFilterList = traceMessageFilter.IsNullOrEmptyTrim()
+            TraceMessageFilterList = traceMessageFilter.IsNullOrWhiteSpace()
                 ? new List<string>()
-                : traceMessageFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrEmptyTrim()).Select(x => x.Key)
+                : traceMessageFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Where(x => !x.Key.IsNullOrWhiteSpace()).Select(x => x.Key)
                     .ToList();
             if (TraceMessageFilterList.Any())
                 if (traceMessageContains)
-                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrEmptyTrim() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrWhiteSpace() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
                 else
-                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrEmptyTrim() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+                    _checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrWhiteSpace() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
             else
                 _checkTraceMessageFilter = input => true;
         }

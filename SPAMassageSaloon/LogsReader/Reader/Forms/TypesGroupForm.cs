@@ -79,7 +79,7 @@ namespace LogsReader.Reader.Forms
 				_typesGroups[_currentGroup] =
 					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text), new List<string>(richTextBoxTypes.Text.Split(',')
 						.Select(x => x.Trim())
-						.Where(x => !x.IsNullOrEmptyTrim())
+						.Where(x => !x.IsNullOrWhiteSpace())
 						.Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
@@ -93,7 +93,7 @@ namespace LogsReader.Reader.Forms
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (comboboxGroup.Text.IsNullOrEmptyTrim() || (_typesGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim()))
+			if (comboboxGroup.Text.IsNullOrWhiteSpace() || (_typesGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim()))
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -112,7 +112,7 @@ namespace LogsReader.Reader.Forms
 			try
 			{
 				textBoxGroupPriority.TextChanged -= textBoxGroupPriority_TextChanged;
-				if (!textBoxGroupPriority.Text.IsNullOrEmptyTrim())
+				if (!textBoxGroupPriority.Text.IsNullOrWhiteSpace())
 					textBoxGroupPriority.Text = AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text).ToString();
 			}
 			catch (Exception)

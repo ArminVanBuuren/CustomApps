@@ -8,6 +8,7 @@ using FastColoredTextBoxNS;
 using Utils;
 using Utils.WinForm.Notepad;
 using LogsReader.Config;
+using Utils.WinForm;
 
 namespace LogsReader.Reader
 {
@@ -196,24 +197,27 @@ namespace LogsReader.Reader
 		{
 			descriptionText.Clear();
 
-			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}", Color.Black);
+			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}");
 
 			if (showTrnsInformation)
 			{
-				if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrEmptyTrim()))
+				if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrWhiteSpace()))
 				{
-					descriptionText.AppendText("\r\nTransactions = \"", Color.Black);
+					descriptionText.AppendText("\r\nTransactions = \"");
 					var i = 0;
 					foreach (var (_, value) in CurrentTemplate.Transactions)
 					{
-						descriptionText.AppendText(value.Trn, value.FoundByTrn ? Color.Green : Color.Black);
+						if(value.FoundByTrn)
+							descriptionText.AppendText(value.Trn, Color.Green);
+						else
+							descriptionText.AppendText(value.Trn);
 
 						i++;
 						if (CurrentTemplate.Transactions.Count > i)
-							descriptionText.AppendText("\", \"", Color.Black);
+							descriptionText.AppendText("\", \"");
 					}
 
-					descriptionText.AppendText("\"", Color.Black);
+					descriptionText.AppendText("\"");
 				}
 
 				if (CurrentTemplate.ElapsedSecTotal >= 0)
@@ -221,7 +225,7 @@ namespace LogsReader.Reader
 
 			}
 
-			if (!CurrentTemplate.Description.IsNullOrEmptyTrim())
+			if (!CurrentTemplate.Description.IsNullOrWhiteSpace())
 			{
 				descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
 				descriptionText.AppendText(CurrentTemplate.Description);

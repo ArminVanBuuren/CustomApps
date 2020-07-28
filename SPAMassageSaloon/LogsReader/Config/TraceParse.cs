@@ -24,7 +24,7 @@ namespace LogsReader.Config
 				return null;
 
 			var text = cdataResult[0].Value.ReplaceUTFCodeToSymbol();
-			if (text.IsNullOrEmptyTrim() && !isMandatory)
+			if (text.IsNullOrWhiteSpace() && !isMandatory)
 				return null;
 
 			if (!REGEX.Verify(text))

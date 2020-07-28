@@ -61,7 +61,7 @@ namespace LogsReader.Reader
 
 	        ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
-	        if (!parseResult.Date.IsNullOrEmptyTrim()
+	        if (!parseResult.Date.IsNullOrWhiteSpace()
 	            && traceReader.TryParseDate(parseResult.Date.Replace(",", "."), out var dateOfTrace, out var displayDate))
 	        {
 		        Date = dateOfTrace;

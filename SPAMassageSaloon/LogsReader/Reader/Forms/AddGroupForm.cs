@@ -82,7 +82,7 @@ namespace LogsReader.Reader.Forms
 			try
 			{
 				textBoxPriority.TextChanged -= textBoxPriority_TextChanged;
-				if (!textBoxPriority.Text.IsNullOrEmptyTrim())
+				if (!textBoxPriority.Text.IsNullOrWhiteSpace())
 					textBoxPriority.Text = GetGroupPriority(textBoxPriority.Text).ToString();
 			}
 			catch (Exception)
@@ -97,7 +97,7 @@ namespace LogsReader.Reader.Forms
 
 		internal static int GetGroupPriority(string value)
 		{
-			if (!value.IsNullOrEmptyTrim() && int.TryParse(value, out var result) && result >= 0)
+			if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0)
 				return result;
 			return 0;
 		}

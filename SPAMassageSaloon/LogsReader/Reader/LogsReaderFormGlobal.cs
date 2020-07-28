@@ -52,9 +52,11 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        #region Initialize Controls
+				ColorizeSelected = false;
 
-		        flowPanelForExpanders = new AdvancedFlowLayoutPanel
+				#region Initialize Controls
+
+				flowPanelForExpanders = new AdvancedFlowLayoutPanel
 		        {
 			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(0, -1),
@@ -107,7 +109,6 @@ namespace LogsReader.Reader
 
 		        CustomPanel.Controls.Add(panelFlowDoc);
 		        CustomPanel.Controls.Add(panelCollapseSelectAll);
-		        CustomPanelMinSize = 149;
 
 		        #endregion
 			}
@@ -581,7 +582,7 @@ namespace LogsReader.Reader
 			base.BtnClear_Click(sender, e);
 		}
 
-		protected override void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+		protected override void ColorizationDGV(DataGridViewRow row, DataTemplate template)
 		{
 			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;

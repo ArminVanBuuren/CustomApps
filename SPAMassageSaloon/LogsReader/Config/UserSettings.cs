@@ -32,7 +32,7 @@ namespace LogsReader.Config
             get
             {
                 var resStr = GetValue(nameof(UseRegex));
-                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
                     return true;
                 return res;
             }
@@ -111,7 +111,7 @@ namespace LogsReader.Config
             get
             {
                 var resStr = GetValue(nameof(MessageWordWrap));
-                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
                     return true;
                 return res;
             }
@@ -145,7 +145,7 @@ namespace LogsReader.Config
             get
             {
                 var resStr = GetValue(nameof(TraceWordWrap));
-                if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+                if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
                     return true;
                 return res;
             }
@@ -183,72 +183,6 @@ namespace LogsReader.Config
 		        return LogsReaderMainForm.SCHEME_COLOR_FORE;
 	        }
 	        set => SetValue(nameof(ForeColor), value.ToArgb());
-        }
-
-        public Color ErrBackColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(ErrBackColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.ERR_COLOR_BACK;
-	        }
-	        set => SetValue(nameof(ErrBackColor), value.ToArgb());
-        }
-
-        public Color ErrForeColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(ErrForeColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.ERR_COLOR_FORE;
-	        }
-	        set => SetValue(nameof(ErrForeColor), value.ToArgb());
-        }
-
-        public Color TrnBackColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(TrnBackColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.TRN_COLOR_BACK;
-	        }
-	        set => SetValue(nameof(TrnBackColor), value.ToArgb());
-        }
-
-        public Color TrnForeColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(TrnForeColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.TRN_COLOR_FORE;
-	        }
-	        set => SetValue(nameof(TrnForeColor), value.ToArgb());
-        }
-
-        public Color HghtBackColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(HghtBackColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.HGT_COLOR_BACK;
-	        }
-	        set => SetValue(nameof(HghtBackColor), value.ToArgb());
-        }
-
-        public Color HghtForeColor
-        {
-	        get
-	        {
-		        if (int.TryParse(GetValue(nameof(HghtForeColor)), out var res))
-			        return Color.FromArgb(res);
-		        return LogsReaderMainForm.HGT_COLOR_FORE;
-	        }
-	        set => SetValue(nameof(HghtForeColor), value.ToArgb());
         }
 
         public Dictionary<string, TreeNodeItem> Template
@@ -293,7 +227,7 @@ namespace LogsReader.Config
 	        get
 	        {
 		        var resStr = GetValue(nameof(GlobalSelectAllSchemas));
-		        if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+		        if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 			        return true;
 		        return res;
 	        }
@@ -305,7 +239,7 @@ namespace LogsReader.Config
 	        get
 	        {
 		        var resStr = GetValue(nameof(ShowTransactions));
-		        if (resStr.IsNullOrEmptyTrim() || !bool.TryParse(resStr, out var res))
+		        if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 			        return true;
 		        return res;
 	        }

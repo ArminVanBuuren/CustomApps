@@ -505,7 +505,7 @@ namespace LogsReader.Reader
 	                .OrderBy(x => x.Value.Item1)
 	                .ThenBy(x => x.Key))
                 {
-	                if (items.Count == 0 || items.All(x => x.IsNullOrEmptyTrim()))
+	                if (items.Count == 0 || items.All(x => x.IsNullOrWhiteSpace()))
 		                continue;
 
 	                var childTreeNode = GetGroupItems(groupName, priority, items, groupType);
@@ -603,7 +603,7 @@ namespace LogsReader.Reader
 
                     var result = folderForm.ShowDialog();
 
-                    if (result == DialogResult.Cancel || folderForm.FolderPath.IsNullOrEmptyTrim())
+                    if (result == DialogResult.Cancel || folderForm.FolderPath.IsNullOrWhiteSpace())
                         return;
 
                     if (items.TryGetValue(folderForm.FolderPath, out var allDirSearching1))
@@ -949,7 +949,7 @@ namespace LogsReader.Reader
         {
 	        var priority = 0;
 	        var parcePriority = Regex.Replace(node.Text, @"^\[(\d+)\].+$", "$1");
-	        if (!parcePriority.IsNullOrEmptyTrim() && int.TryParse(parcePriority, out var priorityParse) && priorityParse >= 0)
+	        if (!parcePriority.IsNullOrWhiteSpace() && int.TryParse(parcePriority, out var priorityParse) && priorityParse >= 0)
 		        priority = priorityParse;
 	        return priority;
         }

@@ -49,32 +49,38 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
+        protected static Tuple<int, Image> Img_Failed { get; private set; }
+
+        protected static Tuple<int, Image> Img_Filtered { get; private set; }
+
+        protected static Tuple<int, Image> Img_Selected { get; private set; }
+
+        protected static Tuple<int, Image> Img_Failed_Filtered { get; private set; }
+
+        protected static Tuple<int, Image> Img_Failed_Selected { get; private set; }
+
+        protected static Tuple<int, Image> Img_Filtered_Selected { get; private set; }
+
+        protected static Tuple<int, Image> Img_Failed_Filtered_Selected { get; private set; }
+
         /// <summary>
         /// Юзерские настройки 
         /// </summary>
         protected UserSettings UserSettings { get; }
 
-        protected Stopwatch TimeWatcher { get; set; }= new Stopwatch();
+        protected Stopwatch TimeWatcher { get; set; } = new Stopwatch();
 
         protected ToolTip Tooltip { get; }
+
+        /// <summary>
+        /// Подсвечивать выбранные транзвакции или помечать картинкой
+        /// </summary>
+        protected bool ColorizeSelected { get; set; } = false;
 
         protected bool ButtonHighlightEnabled
         {
 	        get => buttonHighlightOn.Enabled;
-	        set
-	        {
-		        buttonHighlightOn.Enabled = buttonHighlightOff.Enabled = buttonHghlBack.Enabled = buttonHghlFore.Enabled = value;
-		        if (buttonHighlightOn.Enabled)
-		        {
-			        buttonHghlBack.BackColor = UserSettings.HghtBackColor;
-			        buttonHghlFore.BackColor = UserSettings.HghtForeColor;
-		        }
-		        else
-		        {
-			        buttonHghlBack.BackColor = Color.LightGray;
-			        buttonHghlFore.BackColor = Color.LightGray;
-		        }
-	        }
+	        set => buttonHighlightOn.Enabled = buttonHighlightOff.Enabled = value;
         }
 
         /// <summary>
@@ -169,6 +175,33 @@ namespace LogsReader.Reader
         public abstract bool HasAnyResult { get; }
 
         public TraceItemView MainViewer { get; }
+
+        static LogsReaderFormBase()
+        {
+	        Tuple<int, Image> GetImage(int index, IEnumerable< Image> images)
+	        {
+		        var bmp = new Bitmap(images.Sum(x => x.Width), images.Max(x => x.Height));
+		        using (var g = Graphics.FromImage(bmp))
+		        {
+			        var x = 0;
+			        foreach (var img in images)
+			        {
+				        g.DrawImage(img, x, 0, img.Width, img.Height);
+				        x += img.Width;
+			        }
+		        }
+
+		        return new Tuple<int, Image>(index, bmp);
+	        }
+
+	        Img_Failed = new Tuple<int, Image>(1, Resources.Error1);
+	        Img_Filtered = new Tuple<int, Image>(2, Resources.filtered);
+	        Img_Selected = new Tuple<int, Image>(3, Resources.trn);
+            Img_Failed_Filtered = GetImage(4, new[] { Resources.Error1, Resources.filtered });
+	        Img_Failed_Selected = GetImage(5, new[] { Resources.Error1, Resources.trn });
+	        Img_Filtered_Selected = GetImage(6, new[] { Resources.filtered, Resources.trn });
+	        Img_Failed_Filtered_Selected = GetImage(7,new[] { Resources.Error1, Resources.filtered, Resources.trn });
+        }
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
@@ -291,61 +324,6 @@ namespace LogsReader.Reader
 
                 checkBoxShowTrns.Checked = UserSettings.ShowTransactions;
 
-                var colorDialog = new ColorDialog
-                {
-	                AllowFullOpen = true,
-	                FullOpen = true,
-	                CustomColors = new[]
-	                {
-		                ColorTranslator.ToOle(LogsReaderMainForm.ERR_COLOR_BACK),
-		                ColorTranslator.ToOle(LogsReaderMainForm.TRN_COLOR_BACK),
-		                ColorTranslator.ToOle(LogsReaderMainForm.HGT_COLOR_BACK)
-	                }
-                };
-
-                void ChangeColor(object sender, EventArgs e)
-                {
-	                if (!(sender is Button button))
-		                return;
-
-	                colorDialog.Color = button.BackColor;
-
-	                if (colorDialog.ShowDialog() != DialogResult.OK)
-		                return;
-
-	                button.BackColor = colorDialog.Color;
-
-	                if (button == buttonErrorBack)
-		                UserSettings.ErrBackColor = colorDialog.Color;
-                    else if (button == buttonErrorFore)
-		                UserSettings.ErrForeColor = colorDialog.Color;
-	                else if (button == buttonTrnBack)
-		                UserSettings.TrnBackColor = colorDialog.Color;
-	                else if (button == buttonTrnFore)
-		                UserSettings.TrnForeColor = colorDialog.Color;
-	                else if (button == buttonHghlBack)
-		                UserSettings.HghtBackColor = colorDialog.Color;
-	                else if (button == buttonHghlFore)
-		                UserSettings.HghtForeColor = colorDialog.Color;
-
-	                DgvData.Refresh();
-                }
-
-                buttonErrorBack.BackColor = UserSettings.ErrBackColor;
-                buttonErrorFore.BackColor = UserSettings.ErrForeColor;
-                buttonTrnBack.BackColor = UserSettings.TrnBackColor;
-                buttonTrnFore.BackColor = UserSettings.TrnForeColor;
-                buttonHghlBack.BackColor = UserSettings.HghtBackColor;
-                buttonHghlFore.BackColor = UserSettings.HghtForeColor;
-                
-                buttonErrorBack.Click += ChangeColor;
-                buttonErrorFore.Click += ChangeColor;
-                buttonTrnBack.Click += ChangeColor;
-                buttonTrnFore.Click += ChangeColor;
-                buttonHghlBack.Click += ChangeColor;
-                buttonHghlFore.Click += ChangeColor;
-
-
                 MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
                 tabControlViewer.DrawMode = TabDrawMode.Normal;
                 tabControlViewer.BackColor = Color.White;
@@ -389,7 +367,7 @@ namespace LogsReader.Reader
 		        for (var i = 0; i < DgvData.Columns.Count; i++)
 		        {
 			        var valueStr = UserSettings.GetValue("COL" + i);
-			        if (!valueStr.IsNullOrEmptyTrim() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
+			        if (!valueStr.IsNullOrWhiteSpace() && int.TryParse(valueStr, out var value) && value > 1 && value <= 1000)
 				        DgvData.Columns[i].Width = value;
 		        }
 
@@ -443,18 +421,13 @@ namespace LogsReader.Reader
                 Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
                 Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
                 Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
-                Tooltip.SetToolTip(buttonPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
-                Tooltip.SetToolTip(buttonNext, Resources.Txt_LogsReaderForm_NextErrButt);
+                Tooltip.SetToolTip(buttonErrPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
+                Tooltip.SetToolTip(buttonErrNext, Resources.Txt_LogsReaderForm_NextErrButt);
+                Tooltip.SetToolTip(buttonFilteredPrev, Resources.Txt_LogsReaderForm_PrevFilteredButt);
+                Tooltip.SetToolTip(buttonFilteredNext, Resources.Txt_LogsReaderForm_NextFilteredButt);
                 Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
                 Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
                 Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
-
-                Tooltip.SetToolTip(buttonErrorBack, Resources.Txt_LogsReaderForm_ColorBack);
-                Tooltip.SetToolTip(buttonTrnBack, Resources.Txt_LogsReaderForm_ColorBack);
-                Tooltip.SetToolTip(buttonHghlBack, Resources.Txt_LogsReaderForm_ColorBack);
-                Tooltip.SetToolTip(buttonErrorFore, Resources.Txt_LogsReaderForm_ColorFore);
-                Tooltip.SetToolTip(buttonTrnFore, Resources.Txt_LogsReaderForm_ColorFore);
-                Tooltip.SetToolTip(buttonHghlFore, Resources.Txt_LogsReaderForm_ColorFore);
 
                 ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
                 BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
@@ -506,12 +479,18 @@ namespace LogsReader.Reader
                 switch (e.KeyCode)
                 {
 	                case Keys.F3 when e.Shift:
-		                buttonPrev_Click(this, EventArgs.Empty);
+		                buttonErrorPrev_Click(this, EventArgs.Empty);
 		                break;
 	                case Keys.F3:
-		                buttonNext_Click(this, EventArgs.Empty);
+		                buttonErrorNext_Click(this, EventArgs.Empty);
 		                break;
-	                case Keys.F5 when BtnSearch.Enabled && !IsWorking:
+	                case Keys.F4 when e.Shift:
+		                buttonFilteredPrev_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F4:
+		                buttonFilteredNext_Click(this, EventArgs.Empty);
+		                break;
+                    case Keys.F5 when BtnSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when BtnSearch.Enabled && IsWorking:
@@ -810,7 +789,7 @@ namespace LogsReader.Reader
                 else
 			        ClearErrorStatus();
 
-                DgvData.Refresh();
+		        RefreshDataGrid();
 	        }
 	        catch (Exception ex)
 	        {
@@ -830,7 +809,7 @@ namespace LogsReader.Reader
                 foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
 			        template.IsFiltered = false;
 
-		        DgvData.Refresh();
+                RefreshDataGrid();
 	        }
 	        catch (Exception ex)
 	        {
@@ -994,56 +973,117 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        var row = ((DataGridView)sender).Rows[e.RowIndex];
-		        if (!TryGetTemplate(row, out var template))
-			        return;
-
-		        var cellFile = row.Cells[nameof(DataTemplate.Tmp.FileNamePartial)];
-		        if (cellFile != null)
-			        cellFile.ToolTipText = template.File;
-
-		        if (template.IsSuccess)
-		        {
-			        if (template.Date == null)
-				        foreach (DataGridViewCell cell2 in row.Cells)
-					        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-
-			        if (checkBoxShowTrns.Checked && template.IsSelected)
-			        {
-				        row.DefaultCellStyle.BackColor = buttonTrnBack.BackColor;
-				        row.DefaultCellStyle.ForeColor = buttonTrnFore.BackColor;
-                    }
-                    else if (template.IsFiltered)
-			        {
-				        row.DefaultCellStyle.BackColor = buttonHghlBack.BackColor;
-				        row.DefaultCellStyle.ForeColor = buttonHghlFore.BackColor;
-                    }
-			        else
-			        {
-				        СolorizationDGV(row, template);
-			        }
-		        }
-		        else
-		        {
-			        row.DefaultCellStyle.BackColor = buttonErrorBack.BackColor;
-			        row.DefaultCellStyle.ForeColor = buttonErrorFore.BackColor;
-			        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
-
-			        if (template.IsMatched) 
-				        return;
-
-			        foreach (DataGridViewCell cell2 in row.Cells)
-				        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
-		        }
+		        RefreshRow(row);
 	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+        }
+
+        void RefreshDataGrid()
+        {
+	        try
+	        {
+		        if (DgvData.RowCount == 0)
+			        return;
+
+		        var countVisible = DgvData.DisplayedRowCount(false);
+		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+
+		        var first = Math.Max(0, firstVisible - 5);
+		        var count = Math.Min(DgvData.RowCount - (first + 1), countVisible + 11);
+
+		        if (count <= 0)
+			        return;
+
+		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().ToList().GetRange(first, count))
+			        RefreshRow(row);
+            }
+	        catch (Exception)
+	        {
+		        // ignored
 	        }
         }
 
-        protected virtual void СolorizationDGV(DataGridViewRow row, DataTemplate template)
+        void RefreshRow(DataGridViewRow row)
         {
-	        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+            if (!TryGetTemplate(row, out var template))
+                return;
+
+            var cellFile = row.Cells[nameof(DataTemplate.Tmp.FileNamePartial)];
+            if (cellFile != null)
+                cellFile.ToolTipText = template.File;
+
+            if (template.IsSuccess)
+            {
+                if (template.Date == null)
+                    foreach (DataGridViewCell cell2 in row.Cells)
+                        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+            }
+            else
+            {
+                if (!template.IsMatched)
+                    foreach (DataGridViewCell cell2 in row.Cells)
+                        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+            }
+
+
+            var imgCell = ((TextAndImageCell)row.Cells[TraceName.Name]);
+
+            if (checkBoxShowTrns.Checked && template.IsSelected && !ColorizeSelected)
+            {
+	            if (!template.IsSuccess && template.IsFiltered)
+	            {
+		            imgCell.Image = Img_Failed_Filtered_Selected;
+	            }
+	            else if (!template.IsSuccess)
+	            {
+		            imgCell.Image = Img_Failed_Selected;
+	            }
+	            else if (template.IsFiltered)
+	            {
+		            imgCell.Image = Img_Filtered_Selected;
+	            }
+	            else
+	            {
+		            imgCell.Image = Img_Selected;
+	            }
+            }
+            else
+            {
+                if (!template.IsSuccess && template.IsFiltered)
+                {
+                    imgCell.Image = Img_Failed_Filtered;
+                }
+                else if (!template.IsSuccess)
+                {
+                    imgCell.Image = Img_Failed;
+                }
+                else if (template.IsFiltered)
+                {
+                    imgCell.Image = Img_Filtered;
+                }
+                else
+                {
+                    imgCell.Image = null;
+                }
+            }
+
+            ColorizationDGV(row, template);
+        }
+
+        protected virtual void ColorizationDGV(DataGridViewRow row, DataTemplate template)
+        {
+	        if (checkBoxShowTrns.Checked && template.IsSelected && ColorizeSelected)
+	        {
+		        row.DefaultCellStyle.BackColor = LogsReaderMainForm.TRN_COLOR_BACK;
+		        row.DefaultCellStyle.ForeColor = LogsReaderMainForm.TRN_COLOR_FORE;
+            }
+	        else
+	        {
+		        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+	        }
         }
 
         //DgvData.RowPostPaint += DgvData_RowPostPaint;
@@ -1094,7 +1134,17 @@ namespace LogsReader.Reader
         //    e.Handled = true;
         //}
 
-        private void buttonPrev_Click(object sender, EventArgs e)
+        private void buttonErrorPrev_Click(object sender, EventArgs e)
+        {
+	        SearchPrev(x=> !bool.Parse(x.Cells[IsSuccess.Name].Value.ToString()));
+        }
+
+        private void buttonFilteredPrev_Click(object sender, EventArgs e)
+        {
+	        //SearchPrev(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+        }
+
+        void SearchPrev(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {
@@ -1106,8 +1156,9 @@ namespace LogsReader.Reader
 
 		        var selected = DgvData.SelectedRows[0];
 		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-			        .Where(x => x.Index < selected.Index
-			                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())).Reverse())
+			        .Where(x => x.Index < selected.Index)
+			        .Where(condition)
+			        .Reverse())
 		        {
 			        DgvData.ClearSelection();
 			        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
@@ -1117,14 +1168,24 @@ namespace LogsReader.Reader
 			        DgvData.CurrentCell = DgvData.Rows[row.Index].Cells[DgvData.CurrentCell.ColumnIndex];
 			        return;
 		        }
-            }
+	        }
 	        catch (Exception)
 	        {
 		        // ignored
 	        }
         }
 
-        private void buttonNext_Click(object sender, EventArgs e)
+        private void buttonErrorNext_Click(object sender, EventArgs e)
+        {
+	        SearchNext(x => !bool.Parse(x.Cells[IsSuccess.Name].Value.ToString()));
+        }
+
+        private void buttonFilteredNext_Click(object sender, EventArgs e)
+        {
+	        //SearchNext(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+        }
+
+        void SearchNext(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {
@@ -1136,8 +1197,8 @@ namespace LogsReader.Reader
 
 		        var selected = DgvData.SelectedRows[0];
 		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-			        .Where(x => x.Index > selected.Index
-			                    && !bool.Parse(x.Cells[nameof(DataTemplate.Tmp.IsSuccess)].Value.ToString())))
+			        .Where(x => x.Index > selected.Index)
+			        .Where(condition))
 		        {
 			        DgvData.ClearSelection();
 			        DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
@@ -1146,12 +1207,12 @@ namespace LogsReader.Reader
 			        row.Selected = true;
 			        DgvData.CurrentCell = DgvData.Rows[row.Index].Cells[DgvData.CurrentCell.ColumnIndex];
 			        return;
-                }
-            }
+		        }
+	        }
 	        catch (Exception)
 	        {
 		        // ignored
-            }
+	        }
         }
 
         private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1207,9 +1268,9 @@ namespace LogsReader.Reader
 		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 
 		        if (checkBoxShowTrns.Checked && !noChanged)
-			        DgvData.Refresh();
+			        RefreshDataGrid();
 
-                if (MainViewer.Parent is TabPage page)
+		        if (MainViewer.Parent is TabPage page)
 			        tabControlViewer.SelectTab(page);
 	        }
 	        catch (Exception ex)
@@ -1381,14 +1442,14 @@ namespace LogsReader.Reader
         {
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
-            DgvData.Refresh();
+	        RefreshDataGrid();
         }
 
         internal void DeselectTransactions()
         {
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
-	        DgvData.Refresh();
+	        RefreshDataGrid();
         }
 
         protected void Clear()

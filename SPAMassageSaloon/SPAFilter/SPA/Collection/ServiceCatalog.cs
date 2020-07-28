@@ -219,7 +219,7 @@ namespace SPAFilter.SPA.Collection
                     }
                 }
 
-                if (hostType.IsNullOrEmptyTrim())
+                if (hostType.IsNullOrWhiteSpace())
                     throw new Exception(string.Format(Resources.ServiceCatalog_NoHostTypeAttr, rfsName));
                 if (processType.Like("CancelHostType"))
                     continue;
@@ -273,7 +273,7 @@ namespace SPAFilter.SPA.Collection
                     defaultLinkTypes.AddRange(linkTypes);
                 }
 
-                if (!baseRFSName.IsNullOrEmptyTrim())
+                if (!baseRFSName.IsNullOrWhiteSpace())
                 {
                     if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result))
                     {
@@ -343,7 +343,7 @@ namespace SPAFilter.SPA.Collection
 
                     continue;
                 }
-                else if (!parentRFSName.IsNullOrEmptyTrim())
+                else if (!parentRFSName.IsNullOrWhiteSpace())
                 {
                     if (CatalogRFSCollection.TryGetValue(parentRFSName, out var result))
                     {

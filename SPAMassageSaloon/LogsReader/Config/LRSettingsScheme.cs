@@ -38,7 +38,7 @@ namespace LogsReader.Config
         public string Name
         {
 	        get => _schemeName;
-	        set => _schemeName = value.IsNullOrEmptyTrim()
+	        set => _schemeName = value.IsNullOrWhiteSpace()
 		        ? throw new Exception(Resources.Txt_LRSettingsScheme_ErrSchemeName)
 		        : Regex.Replace(value, @"\s+", "").ToUpperInvariant();
         }
@@ -49,7 +49,7 @@ namespace LogsReader.Config
             get => Encoding.HeaderName;
             set
             {
-                if(value.IsNullOrEmptyTrim())
+                if(value.IsNullOrWhiteSpace())
                     return;
 
                 Encoding enc;
@@ -77,7 +77,7 @@ namespace LogsReader.Config
 	        {
 		        CultureList.Clear();
 
-		        if (value.IsNullOrEmptyTrim())
+		        if (value.IsNullOrWhiteSpace())
 			        return;
 		        else
 			        AddCultureList(value);
@@ -103,8 +103,8 @@ namespace LogsReader.Config
 	        {
 		        if (value == null 
 		            || value.Groups.Count == 0 
-		            || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() 
-		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
+		            || value.Groups.Any(groupName => groupName.Key.IsNullOrWhiteSpace() 
+		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
 		        _servers = value;
 	        }
@@ -125,8 +125,8 @@ namespace LogsReader.Config
 	        {
 		        if (value == null 
 		            || value.Groups.Count == 0 
-		            || value.Groups.Any(groupName => groupName.Key.IsNullOrEmptyTrim() 
-		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrEmptyTrim())))
+		            || value.Groups.Any(groupName => groupName.Key.IsNullOrWhiteSpace() 
+		                                             || !groupName.Value.Item2.Any() || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
                     throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
                 _fileTypes = value;
 	        }
@@ -145,7 +145,7 @@ namespace LogsReader.Config
 	        get => _logsFolder;
 	        set
 	        {
-		        if (value == null || value.Folders.Count == 0 || value.Folders.Keys.Any(x => x.IsNullOrEmptyTrim()))
+		        if (value == null || value.Folders.Count == 0 || value.Folders.Keys.Any(x => x.IsNullOrWhiteSpace()))
 			        throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "LogsFolderGroup"));
                 _logsFolder = value;
 	        }
@@ -206,7 +206,7 @@ namespace LogsReader.Config
             get => _orderBy;
             set
             {
-                if (value.IsNullOrEmptyTrim())
+                if (value.IsNullOrWhiteSpace())
                     return;
 
                 Dictionary<string, bool> result;
@@ -339,7 +339,7 @@ namespace LogsReader.Config
         internal static Dictionary<string, bool> CheckOrderByItem(string value)
         {
 	        var result = new Dictionary<string, bool>();
-	        foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrEmptyTrim()).Select(x => x.Trim()))
+	        foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrWhiteSpace()).Select(x => x.Trim()))
 	        {
 		        var orderStatement = orderItem.Split(' ');
 		        var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && (orderStatement[1].LikeAny("desc", "descending"));

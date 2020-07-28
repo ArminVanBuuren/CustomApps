@@ -294,7 +294,7 @@ namespace LogsReader.Reader
 		            var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
 
 					// ищем дальше, если результатам replace mode значение пустое
-					if (trnValue.IsNullOrEmptyTrim())
+					if (trnValue.IsNullOrWhiteSpace())
 						continue;
 
 					// указываем спарсенную транзакцию

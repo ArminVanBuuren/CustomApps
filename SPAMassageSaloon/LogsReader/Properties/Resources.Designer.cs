@@ -113,6 +113,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Error1 {
+            get {
+                object obj = ResourceManager.GetObject("Error1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap error2 {
             get {
                 object obj = ResourceManager.GetObject("error2", resourceCulture);
@@ -126,6 +136,16 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap filter {
             get {
                 object obj = ResourceManager.GetObject("filter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap filtered {
+            get {
+                object obj = ResourceManager.GetObject("filtered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -228,6 +248,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap next_arrow {
+            get {
+                object obj = ResourceManager.GetObject("next_arrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap notepad_closeAllButThis {
             get {
                 object obj = ResourceManager.GetObject("notepad_closeAllButThis", resourceCulture);
@@ -281,6 +311,16 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap pingAll {
             get {
                 object obj = ResourceManager.GetObject("pingAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap prev_arrow {
+            get {
+                object obj = ResourceManager.GetObject("prev_arrow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -361,6 +401,16 @@ namespace LogsReader.Properties {
         public static string String1 {
             get {
                 return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap trn {
+            get {
+                object obj = ResourceManager.GetObject("trn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -983,6 +1033,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next filtered item [F4].
+        /// </summary>
+        public static string Txt_LogsReaderForm_NextFilteredButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NextFilteredButt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No filter results found.
         /// </summary>
         public static string Txt_LogsReaderForm_NoFilterResultsFound {
@@ -1033,6 +1092,15 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_PrevErrButt {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_PrevErrButt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous filtered item [SHIFT+F4].
+        /// </summary>
+        public static string Txt_LogsReaderForm_PrevFilteredButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_PrevFilteredButt", resourceCulture);
             }
         }
         

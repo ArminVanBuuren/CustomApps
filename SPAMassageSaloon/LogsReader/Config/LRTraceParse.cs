@@ -95,7 +95,7 @@ namespace LogsReader.Config
 				DisplayCulture = null;
 				_culture = string.Empty;
 
-				if (value.IsNullOrEmptyTrim())
+				if (value.IsNullOrWhiteSpace())
 					return;
 
 				try

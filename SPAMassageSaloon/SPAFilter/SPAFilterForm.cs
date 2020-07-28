@@ -232,7 +232,7 @@ namespace SPAFilter
                 IsLoading = true;
 
                 ProcessesTextBox.Text = (string) TryGetSerializationValue(allSavedParams, "ADWFFW", string.Empty);
-                if (!ProcessesTextBox.Text.IsNullOrEmptyTrim())
+                if (!ProcessesTextBox.Text.IsNullOrWhiteSpace())
                 {
                     // RunSynchronously - не подходит, т.к. образуется дедлок, потому что асинхронный поток не пытается вернуться назад
                     //var task = Task.Run(() => AssignAsync(SPAProcessFilterType.Processes, false));
@@ -249,14 +249,14 @@ namespace SPAFilter
 
                 if (ROBPOperationsRadioButton.Checked)
                 {
-                    if (!ROBPOperationTextBox.Text.IsNullOrEmptyTrim())
+                    if (!ROBPOperationTextBox.Text.IsNullOrWhiteSpace())
                     {
                         //var taskROBP = Task.Run(() => AssignAsync(SPAProcessFilterType.ROBPOperations, false));
                         //taskROBP.Wait();
                         await AssignAsync(SPAProcessFilterType.ROBPOperations, false);
                     }
                 }
-                else if (!ServiceCatalogTextBox.Text.IsNullOrEmptyTrim())
+                else if (!ServiceCatalogTextBox.Text.IsNullOrWhiteSpace())
                 {
                     //var taskSC = Task.Run(() => AssignAsync(SPAProcessFilterType.SCOperations, false));
                     //taskSC.Wait();
@@ -1287,7 +1287,7 @@ namespace SPAFilter
                     Directory.CreateDirectory(ExportSCPath.Text);
 
                 string fileResult;
-                if (!OpenSCXlsx.Text.IsNullOrEmptyTrim() && File.Exists(OpenSCXlsx.Text))
+                if (!OpenSCXlsx.Text.IsNullOrWhiteSpace() && File.Exists(OpenSCXlsx.Text))
                 {
                     var file = new FileInfo(OpenSCXlsx.Text);
                     using (var progrAsync = new CustomProgressCalculation(progressBar, fileOperationsCount, file))
@@ -1529,7 +1529,7 @@ namespace SPAFilter
                 buttonFilter.Enabled = Filter.IsEnabledFilter;
                 buttonReset.Enabled = Filter.IsEnabledFilter;
                 PrintXMLButton.Enabled = Filter.WholeDriveItemsCount > 0 && IsFiltered;
-                ButtonGenerateSC.Enabled = Filter.CanGenerateSC && !ExportSCPath.Text.IsNullOrEmptyTrim() && ROBPOperationsRadioButton.Checked && IsFiltered;
+                ButtonGenerateSC.Enabled = Filter.CanGenerateSC && !ExportSCPath.Text.IsNullOrWhiteSpace() && ROBPOperationsRadioButton.Checked && IsFiltered;
             }
             catch (Exception)
             {

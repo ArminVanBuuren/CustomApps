@@ -266,7 +266,7 @@ namespace SPAFilter.SPA
             ProcessPath = processPath;
             Processes = null;
 
-            if(ProcessPath.IsNullOrEmptyTrim())
+            if(ProcessPath.IsNullOrWhiteSpace())
                 return;
 
             await Task.Factory.StartNew(() => FilterProcesses(null));
@@ -300,7 +300,7 @@ namespace SPAFilter.SPA
             Scenarios = null;
             Commands = null;
 
-            if(ROBPHostTypesPath.IsNullOrEmptyTrim())
+            if(ROBPHostTypesPath.IsNullOrWhiteSpace())
                 return;
 
             await Task.Factory.StartNew(() => FilterROBPOperations(null, null, null));
@@ -360,7 +360,7 @@ namespace SPAFilter.SPA
             Scenarios = null;
             Commands = null;
 
-            if(SCPath.IsNullOrEmptyTrim())
+            if(SCPath.IsNullOrWhiteSpace())
                 return;
 
             await Task.Factory.StartNew(() => FilterSCOperations(null, null, null));
@@ -457,7 +457,7 @@ namespace SPAFilter.SPA
                     Refresh(lastActivatorList);
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
-                if (!errors.IsNullOrEmptyTrim())
+                if (!errors.IsNullOrWhiteSpace())
                 {
                     ReportMessage(errors, Resources.Filter_AddActivator);
                 }
@@ -551,7 +551,7 @@ namespace SPAFilter.SPA
                 var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
-                if (!errors.IsNullOrEmptyTrim())
+                if (!errors.IsNullOrWhiteSpace())
                 {
                     ReportMessage(errors, "Refresh");
                 }
@@ -570,7 +570,7 @@ namespace SPAFilter.SPA
                 var result = MultiTasking.Run((sa) => sa.Reload(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
-                if (!errors.IsNullOrEmptyTrim())
+                if (!errors.IsNullOrWhiteSpace())
                 {
                     ReportMessage(errors, "Reload");
                 }

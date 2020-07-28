@@ -589,4 +589,25 @@ Colors schemes are adjustable.</value>
   <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
     <value>Reset highlights [F2]</value>
   </data>
+  <data name="Error1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\error1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="filtered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\filtered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="trn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="next_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\next_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prev_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\prev_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NextFilteredButt" xml:space="preserve">
+    <value>Next filtered item [F4]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_PrevFilteredButt" xml:space="preserve">
+    <value>Previous filtered item [SHIFT+F4]</value>
+  </data>
 </root>

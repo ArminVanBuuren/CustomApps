@@ -24,7 +24,7 @@ namespace LogsReader.Config
 			get => PriorityInternal.ToString();
 			set
 			{
-				if (!value.IsNullOrEmptyTrim() && int.TryParse(value, out var result) && result >= 0)
+				if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0)
 				{
 					PriorityInternal = result;
 					return;

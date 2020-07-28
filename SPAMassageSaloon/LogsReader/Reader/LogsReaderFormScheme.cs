@@ -53,7 +53,8 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        CurrentSettings = scheme;
+		        ColorizeSelected = true;
+				CurrentSettings = scheme;
 		        CurrentSettings.ReportStatus += ReportStatus;
 
 		        #region Initialize Controls

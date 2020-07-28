@@ -95,7 +95,7 @@ namespace LogsReader.Reader.Forms
 
 		private void textBoxUser_TextChanged(object sender, EventArgs e)
 		{
-			if (!textBoxUser.Text.IsNullOrEmptyTrim())
+			if (!textBoxUser.Text.IsNullOrWhiteSpace())
 			{
 				var domain_username = textBoxUser.Text.Split('\\');
 				if (domain_username.Length > 1)

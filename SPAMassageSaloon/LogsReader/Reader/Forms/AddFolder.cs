@@ -32,7 +32,7 @@ namespace LogsReader.Reader.Forms
 
 			labelFolder.Text = Resources.Txt_Forms_Folder;
 
-			buttonOK.Enabled = !folderPath.IsNullOrEmptyTrim();
+			buttonOK.Enabled = !folderPath.IsNullOrWhiteSpace();
 			SourceFolder = folderPath;
 			_lastDir = folderPath;
 			textBoxFolder.Text = folderPath;
@@ -67,7 +67,7 @@ namespace LogsReader.Reader.Forms
 
 		private void textBoxFolder_TextChanged(object sender, EventArgs e)
 		{
-			if (textBoxFolder.Text.IsNullOrEmptyTrim() || !IO.CHECK_PATH.IsMatch(textBoxFolder.Text))
+			if (textBoxFolder.Text.IsNullOrWhiteSpace() || !IO.CHECK_PATH.IsMatch(textBoxFolder.Text))
 			{
 				textBoxFolder.BackColor = Color.LightPink;
 				buttonOK.Enabled = false;
