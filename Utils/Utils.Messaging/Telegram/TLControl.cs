@@ -54,7 +54,7 @@ namespace Utils.Messaging.Telegram
 
         public async Task<string> SendCodeRequestAsync(string phoneNumber)
         {
-            if (phoneNumber.IsNullOrEmptyTrim())
+            if (phoneNumber.IsNullOrWhiteSpace())
                 throw new ArgumentException($"Argument '{nameof(phoneNumber)}' is empty. TLControl need your number to authenticate.");
 
             return await Client.SendCodeRequestAsync(phoneNumber);
@@ -62,7 +62,7 @@ namespace Utils.Messaging.Telegram
 
         public async Task<TLUser> MakeAuthAsync(string phoneNumber, string hash, string code, string password = null)
         {
-            if (phoneNumber.IsNullOrEmptyTrim())
+            if (phoneNumber.IsNullOrWhiteSpace())
                 throw new ArgumentException($"Argument '{nameof(phoneNumber)}' is empty. TLControl need your number to authenticate.");
 
             TLUser user;
@@ -72,7 +72,7 @@ namespace Utils.Messaging.Telegram
             }
             catch (CloudPasswordNeededException)
             {
-                if (password.IsNullOrEmptyTrim())
+                if (password.IsNullOrWhiteSpace())
                     throw;
 
                 var tlPassword = await Client.GetPasswordSetting();
@@ -117,7 +117,7 @@ namespace Utils.Messaging.Telegram
             var fileName = Path.GetFileName(photoFilePath);
 
             var capt = caption;
-            if (capt.IsNullOrEmptyTrim())
+            if (capt.IsNullOrWhiteSpace())
                 capt = fileName;
 
             var fileResult = (TLInputFile)await Client.UploadFile(fileName, new StreamReader(photoFilePath));
@@ -132,11 +132,11 @@ namespace Utils.Messaging.Telegram
             var fileName = Path.GetFileName(filePath);
 
             var capt = caption;
-            if (capt.IsNullOrEmptyTrim())
+            if (capt.IsNullOrWhiteSpace())
                 capt = fileName;
 
             var mimT = mimeType;
-            if (mimT.IsNullOrEmptyTrim())
+            if (mimT.IsNullOrWhiteSpace())
                 mimT = GetMimeTypeByFile(fileName);
 
             var fileResult = await Client.UploadFile(fileName, new StreamReader(filePath));

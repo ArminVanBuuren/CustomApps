@@ -195,7 +195,7 @@ namespace Utils.AppUpdater.Updater
         {
             try
             {
-                if (!DiretoryTempPath.IsNullOrEmptyTrim() && Directory.Exists(DiretoryTempPath))
+                if (!DiretoryTempPath.IsNullOrWhiteSpace() && Directory.Exists(DiretoryTempPath))
                     IO.DeleteReadOnlyDirectory(DiretoryTempPath);
             }
             catch (Exception)
@@ -212,7 +212,7 @@ namespace Utils.AppUpdater.Updater
         {
             try
             {
-                if (!FileTempPath.IsNullOrEmptyTrim() && File.Exists(FileTempPath))
+                if (!FileTempPath.IsNullOrWhiteSpace() && File.Exists(FileTempPath))
                 {
                     IO.GetAccessToFile(FileTempPath);
                     File.Delete(FileTempPath);

@@ -182,7 +182,7 @@ namespace Utils
 
 		public static bool Verify(string testPattern)
 		{
-			if (testPattern.IsNullOrEmptyTrim())
+			if (testPattern.IsNullOrWhiteSpace())
 				return false; //BAD PATTERN: Pattern is null or blank
 
 			try

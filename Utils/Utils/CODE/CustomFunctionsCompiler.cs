@@ -44,7 +44,7 @@ namespace Utils
 		public CustomFunctionsCompiler(CustomFunctions customFunctions, string customNamespace = null)
 		{
 			CustomFunctions = customFunctions;
-			Namespace = customNamespace.IsNullOrEmptyTrim() ? OUT_NAMESPACE : customNamespace;
+			Namespace = customNamespace.IsNullOrWhiteSpace() ? OUT_NAMESPACE : customNamespace;
 			FuncType = typeof(T);
 			
 			Code = GenerateCode();

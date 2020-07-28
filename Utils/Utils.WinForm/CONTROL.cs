@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Utils.WinForm
@@ -107,6 +109,34 @@ namespace Utils.WinForm
 
                 return func(arg);
             }
+        }
+
+        public static void AppendText(this RichTextBox box, string text, Color color)
+        {
+	        box.SelectionStart = box.TextLength;
+	        box.SelectionLength = 0;
+
+	        box.SelectionColor = color;
+	        box.AppendText(text);
+	        box.SelectionColor = box.ForeColor;
+        }
+
+        public static T Clone<T>(this T controlToClone) where T : Control
+        {
+	        var controlProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+	        var instance = Activator.CreateInstance<T>();
+
+	        foreach (var propInfo in controlProperties)
+	        {
+		        if (propInfo.CanWrite)
+		        {
+			        if (propInfo.Name != "WindowTarget")
+				        propInfo.SetValue(instance, propInfo.GetValue(controlToClone, null), null);
+		        }
+	        }
+
+	        return instance;
         }
     }
 }

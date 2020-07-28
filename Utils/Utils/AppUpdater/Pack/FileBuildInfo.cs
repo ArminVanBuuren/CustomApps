@@ -31,7 +31,7 @@ namespace Utils.AppUpdater.Pack
         public string Location
         {
             get => _location;
-            set => _location = value.IsNullOrEmptyTrim() ? throw new ArgumentNullException(Resources.InvalidFileLocation) : value;
+            set => _location = value.IsNullOrWhiteSpace() ? throw new ArgumentNullException(Resources.InvalidFileLocation) : value;
         }
 
         /// <summary>

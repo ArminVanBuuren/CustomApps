@@ -433,7 +433,7 @@ namespace Utils.WinForm.Notepad
         /// <param name="filePath"></param>
         public Editor AddFileDocument(string filePath)
         {
-            if (filePath.IsNullOrEmptyTrim())
+            if (filePath.IsNullOrWhiteSpace())
                 throw new ArgumentNullException(nameof(filePath));
 
             var existFileEditor = ListOfEditors.FirstOrDefault(x => x.Key is FileEditor fileEditor

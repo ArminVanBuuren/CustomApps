@@ -38,7 +38,7 @@ namespace Utils.ConditionEx
         {
             var waitSymol = 0;
             var closeCommand = 0;
-            if (expression.IsNullOrEmptyTrim())
+            if (expression.IsNullOrWhiteSpace())
                 throw new Exception("Expression is epmty!");
 
             var normalizeExpression = XML.NormalizeXmlValueFast(expression);

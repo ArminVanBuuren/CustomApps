@@ -173,7 +173,7 @@ namespace Utils.WinForm.DataGridViewHelper
                 {
                     var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
                     {
-                        Caption = newColumn.Attribute.ColumnName.IsNullOrEmptyTrim() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
+                        Caption = newColumn.Attribute.ColumnName.IsNullOrWhiteSpace() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
                     };
                     table.Columns.Add(dataColumn);
                     positionOfColumns.Add(newColumn.PropertyName, new KeyValuePair<int, DGVColumn>(columnPosition++, newColumn));
@@ -191,7 +191,7 @@ namespace Utils.WinForm.DataGridViewHelper
 
                     var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
                     {
-                        Caption = newColumn.Attribute.ColumnName.IsNullOrEmptyTrim() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
+                        Caption = newColumn.Attribute.ColumnName.IsNullOrWhiteSpace() ? newColumn.PropertyName : newColumn.Attribute.ColumnName
                     };
                     table.Columns.Add(dataColumn);
 
@@ -252,7 +252,7 @@ namespace Utils.WinForm.DataGridViewHelper
                     if(!column.Attribute.Visible)
                         dgvColumn.Visible = false;
 
-                    if (!column.Attribute.Format.IsNullOrEmptyTrim())
+                    if (!column.Attribute.Format.IsNullOrWhiteSpace())
                         dgvColumn.DefaultCellStyle.Format = column.Attribute.Format;
 
                     if (!dgvColumn.HeaderText.Equals(column.Attribute.ColumnName))

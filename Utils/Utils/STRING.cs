@@ -69,9 +69,9 @@ namespace Utils
             return string.IsNullOrEmpty(value);
         }
 
-        public static bool IsNullOrEmptyTrim(this string value)
+        public static bool IsNullOrWhiteSpace(this string value)
         {
-            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || value.TrimWhiteSpaces().Length <= 0;
+            return string.IsNullOrWhiteSpace(value);
         }
 
         public static bool IsNumber(this string value)

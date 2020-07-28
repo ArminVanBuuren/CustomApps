@@ -24,7 +24,7 @@ namespace Utils.AppUpdater
         internal ApplicationUpdaterArgs(BuildPackUpdater control, Exception exception, string message = null)
         {
             Control = control;
-            Error = message.IsNullOrEmptyTrim() ? exception : new Exception(message, exception);
+            Error = message.IsNullOrWhiteSpace() ? exception : new Exception(message, exception);
         }
 
         public BuildPackUpdater Control { get; }

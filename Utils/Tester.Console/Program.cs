@@ -43,13 +43,14 @@ namespace Tester.Console
 	{
 		static void Main(string[] args)
 		{
+			repeat:
 			System.Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
-			
+
 			try
 			{
-				OracleCommandTest();
+				
 			}
 			catch (Exception e)
 			{
@@ -58,6 +59,9 @@ namespace Tester.Console
 
 			stopWatch.Stop();
 			System.Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
+			System.Console.WriteLine("Press Enter for repeat");
+			if (System.Console.ReadKey().Key == ConsoleKey.Enter)
+				goto repeat;
 			System.Console.ReadLine();
 		}
 
