@@ -184,7 +184,7 @@ namespace LogsReader.Reader
 					schemeExpander.ForeColor = colorDialog.Color;
 				}
 
-				DgvData.Refresh();
+				RefreshAllRows();
 			}
 
 			var buttonSize = new Size(20, 17);
@@ -587,8 +587,11 @@ namespace LogsReader.Reader
 			if(!InProcessing.TryGetValue(template.SchemeName, out var result))
 				return;
 
-			row.DefaultCellStyle.BackColor = result.FormBackColor;
-			row.DefaultCellStyle.ForeColor = result.FormForeColor;
+			if(row.DefaultCellStyle.BackColor != result.FormBackColor)
+				row.DefaultCellStyle.BackColor = result.FormBackColor;
+
+			if (row.DefaultCellStyle.ForeColor != result.FormForeColor)
+				row.DefaultCellStyle.ForeColor = result.FormForeColor;
 		}
 
         private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)

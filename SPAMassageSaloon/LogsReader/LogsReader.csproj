@@ -244,10 +244,7 @@
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\default.png" />
     <Content Include="Resources\Error1.png" />
-    <Content Include="Resources\error2.png" />
     <Content Include="Resources\filtered.png" />
-    <Content Include="Resources\highlight2.png" />
-    <Content Include="Resources\next_2.png" />
     <Content Include="Resources\next_arrow.png" />
     <Content Include="Resources\notepad_closeAllButThis.png" />
     <Content Include="Resources\notepad_closeAllItems.png" />
@@ -255,7 +252,6 @@
     <Content Include="Resources\Ok.png" />
     <Content Include="Resources\ping.png" />
     <Content Include="Resources\pingAll.png" />
-    <Content Include="Resources\previous_2.png" />
     <Content Include="Resources\prev_arrow.png" />
     <Content Include="Resources\remove.png" />
     <Content Include="Resources\trn.png" />

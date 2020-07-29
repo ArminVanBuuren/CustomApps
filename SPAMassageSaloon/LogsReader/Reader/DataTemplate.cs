@@ -138,22 +138,11 @@ namespace LogsReader.Reader
 
         public bool IsSelected { get; internal set; } = false;
 
-        public bool IsFiltered { get; internal set; } = false;
-
         public Exception Error { get; }
 
         public bool IsMatched { get; }
 
-        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.SchemeName), false)]
-        public string SchemeName => ParentReader.SchemeName;
-
-        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.PrivateID), false)]
-        public int PrivateID { get; internal set; }
-
-        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsSuccess), false)]
-        public bool IsSuccess { get; }
-
-        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.ID))]
+        [DGVColumn(ColumnPosition.First, nameof(DataTemplate.Tmp.ID))]
         public int ID { get; internal set; }
 
         [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.Server))]
@@ -199,7 +188,22 @@ namespace LogsReader.Reader
 
         public double ElapsedSecTotal { get; internal set; } = -1;
 
-        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.File))]
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.SchemeName), false)]
+        public string SchemeName => ParentReader.SchemeName;
+
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.PrivateID), false)]
+        public int PrivateID { get; internal set; }
+
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsSuccess), false)]
+        public bool IsSuccess { get; }
+
+        /// <summary>
+        /// Свойство всегда false, он меняется только в DataGridView
+        /// </summary>
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsFiltered), false)]
+        public bool IsFiltered => false;
+
+        [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.File))]
         public string FileNamePartial => ParentReader.FileNamePartial;
 
         public string File => ParentReader.FilePath;

@@ -268,15 +268,6 @@ namespace LogsReader.Reader
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
                 DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
 
-                SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName);
-                SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
-
-                PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID);
-                PrivateID.Name = nameof(DataTemplate.Tmp.PrivateID);
-
-                IsSuccess.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess);
-                IsSuccess.Name = nameof(DataTemplate.Tmp.IsSuccess);
-
                 ID.DataPropertyName = nameof(DataTemplate.Tmp.ID);
                 ID.Name = nameof(DataTemplate.Tmp.ID);
                 ID.HeaderText = nameof(DataTemplate.Tmp.ID);
@@ -296,6 +287,18 @@ namespace LogsReader.Reader
                 ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
                 ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
                 ElapsedSec.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
+
+                SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName); // not visible
+                SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
+
+                PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID); // not visible
+                PrivateID.Name = nameof(DataTemplate.Tmp.PrivateID);
+
+                IsSuccess.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess); // not visible
+                IsSuccess.Name = nameof(DataTemplate.Tmp.IsSuccess);
+
+                IsFiltered.DataPropertyName = nameof(DataTemplate.Tmp.IsFiltered); // not visible
+                IsFiltered.Name = nameof(DataTemplate.Tmp.IsFiltered);
 
                 File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
                 File.Name = nameof(DataTemplate.Tmp.FileNamePartial);
@@ -765,55 +768,86 @@ namespace LogsReader.Reader
 
         private void buttonHighlight_Click(object sender, EventArgs e)
         {
-	        try
-	        {
-		        if (_currentDGVResult == null || !_currentDGVResult.Any())
-			        return;
+	        if (DgvData.RowCount == 0)
+		        return;
 
-		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
-			        template.IsFiltered = false;
+	        DataGridViewRow selected = null;
+            if(DgvData.SelectedRows.Count > 0)
+				selected = DgvData.SelectedRows[0];
 
-		        var filter = GetFilter();
-		        if (filter == null)
-			        return;
+            try
+            {
+	            var filter = GetFilter();
+	            if (filter == null)
+	            {
+		            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
+			            row.Cells[IsFiltered.Name].Value = false;
+		            return;
+	            }
 
-		        var count = 0;
-		        foreach (var template in filter.FilterCollection(_currentDGVResult))
-		        {
-			        count++;
-			        template.IsFiltered = true;
-		        }
 
-		        if (count == 0)
-			        ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
-                else
-			        ClearErrorStatus();
+	            var count = 0;
+	            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
+	            {
+		            var isFiltered = TryGetTemplate(row, out var template) && filter.IsAllowed(template);
+		            row.Cells[IsFiltered.Name].Value = isFiltered;
+		            if (isFiltered)
+			            count++;
+	            }
 
-		        RefreshDataGrid();
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+
+	            if (count == 0)
+		            ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+	            else
+		            ClearErrorStatus();
+
+	            RefreshAllRows();
+            }
+            catch (Exception ex)
+            {
+	            ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+            finally
+            {
+	            if (selected != null)
+	            {
+		            DgvData.ClearSelection();
+                    selected.Selected = true;
+                    DgvData.CurrentCell = DgvData.Rows[selected.Index].Cells[DgvData.CurrentCell.ColumnIndex];
+                }
+            }
         }
 
         private void buttonHighlightOff_Click(object sender, EventArgs e)
         {
-	        try
-	        {
-		        if (_currentDGVResult == null || !_currentDGVResult.Any())
-			        return;
+	        if (DgvData.RowCount == 0)
+		        return;
 
+	        DataGridViewRow selected = null;
+	        if (DgvData.SelectedRows.Count > 0)
+		        selected = DgvData.SelectedRows[0];
+
+            try
+	        {
 		        ClearErrorStatus();
 
-                foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
-			        template.IsFiltered = false;
+                foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
+	                row.Cells[IsFiltered.Name].Value = false;
 
-                RefreshDataGrid();
+                RefreshAllRows();
 	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
+            }
+            finally
+            {
+	            if (selected != null)
+	            {
+		            DgvData.ClearSelection();
+		            selected.Selected = true;
+		            DgvData.CurrentCell = DgvData.Rows[selected.Index].Cells[DgvData.CurrentCell.ColumnIndex];
+	            }
             }
         }
 
@@ -846,9 +880,6 @@ namespace LogsReader.Reader
 			        return false;
 		        }
 
-		        foreach (var template in _currentDGVResult.Where(x => x.IsFiltered))
-			        template.IsFiltered = false;
-
                 if (filter != null)
 		        {
 			        _currentDGVResult = filter.FilterCollection(_currentDGVResult);
@@ -861,9 +892,9 @@ namespace LogsReader.Reader
 		        }
 
 		        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+		        RefreshAllRows();
 
-
-		        btnExport.Enabled = DgvData.RowCount > 0;
+                btnExport.Enabled = DgvData.RowCount > 0;
 
                 // возвращаем позицию в гриде
 		        if (DgvData.RowCount > 0 && (minIndex > -1 || maxIndex > -1))
@@ -973,7 +1004,7 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        var row = ((DataGridView)sender).Rows[e.RowIndex];
-		        RefreshRow(row);
+		        RefreshRow(row, null, null);
 	        }
 	        catch (Exception ex)
 	        {
@@ -981,108 +1012,156 @@ namespace LogsReader.Reader
             }
         }
 
-        void RefreshDataGrid()
+        ///// <summary>
+        ///// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
+        ///// </summary>
+        //protected void RefreshVisibleRows()
+        //{
+        //    try
+        //    {
+	       //     if (DgvData.RowCount == 0)
+        //            return;
+
+        //        var countVisible = DgvData.DisplayedRowCount(false);
+        //        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
+
+        //        var first = Math.Max(0, firstVisibleRowIndex - 5);
+        //        var count = Math.Min(DgvData.RowCount - (first + 1), countVisible + 11);
+
+        //        if (count <= 0)
+        //            return;
+
+        //        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().ToList().GetRange(first, count))
+        //            RefreshRow(row, countVisible, firstVisibleRowIndex);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // ignored
+        //    }
+        //}
+
+        /// <summary>
+        /// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
+        /// </summary>
+        protected void RefreshAllRows()
         {
+	        if (DgvData.RowCount == 0)
+		        return;
+
+	        var countVisible = DgvData.DisplayedRowCount(false);
+	        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
+
+            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
+		        RefreshRow(row, countVisible, firstVisibleRowIndex);
+        }
+
+        protected void RefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+        {
+	        if (!TryGetTemplate(row, out var template))
+		        return;
+
 	        try
 	        {
-		        if (DgvData.RowCount == 0)
-			        return;
+		        if (template.IsSuccess)
+		        {
+			        if (template.Date == null)
+				        foreach (DataGridViewCell cell2 in row.Cells)
+					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DateValueIsIncorrect)
+						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+		        }
+		        else
+		        {
+			        if (!template.IsMatched)
+				        foreach (DataGridViewCell cell2 in row.Cells)
+					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DoesntMatchByPattern)
+						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+		        }
 
-		        var countVisible = DgvData.DisplayedRowCount(false);
-		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
+		        if ((row.Cells[File.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
+			        cellFile.ToolTipText = template.File;
 
-		        var first = Math.Max(0, firstVisible - 5);
-		        var count = Math.Min(DgvData.RowCount - (first + 1), countVisible + 11);
+                // меняем свойтсво Image только для строк которые показаны пользователю
+                // Т.к. для обновления свойтсва Image тратиться много времени
+                if (countVisible == null && firstVisibleRowIndex == null
+		            || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
+		        {
+			        if (!((row.Cells[TraceName.Name]) is TextAndImageCell imgCell))
+				        return;
 
-		        if (count <= 0)
-			        return;
+			        if (!(row.Cells[IsFiltered.Name] is DataGridViewCell isfilteredCell))
+				        return;
 
-		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().ToList().GetRange(first, count))
-			        RefreshRow(row);
-            }
+                    var isfiltered = bool.Parse(isfilteredCell.Value.ToString());
+
+			        if (checkBoxShowTrns.Checked && template.IsSelected && !ColorizeSelected)
+			        {
+				        if (!template.IsSuccess && isfiltered)
+				        {
+					        imgCell.Image = Img_Failed_Filtered_Selected;
+					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+				        }
+				        else if (!template.IsSuccess)
+				        {
+					        imgCell.Image = Img_Failed_Selected;
+					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+				        }
+				        else if (isfiltered)
+				        {
+					        imgCell.Image = Img_Filtered_Selected;
+				        }
+				        else
+				        {
+					        imgCell.Image = Img_Selected;
+				        }
+			        }
+			        else
+			        {
+				        if (!template.IsSuccess && isfiltered)
+				        {
+					        imgCell.Image = Img_Failed_Filtered;
+					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+				        }
+				        else if (!template.IsSuccess)
+				        {
+					        imgCell.Image = Img_Failed;
+					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+				        }
+				        else if (isfiltered)
+				        {
+					        imgCell.Image = Img_Filtered;
+				        }
+				        else if (imgCell.Image != null)
+				        {
+					        imgCell.Image = null;
+				        }
+			        }
+		        }
+	        }
 	        catch (Exception)
 	        {
 		        // ignored
 	        }
-        }
-
-        void RefreshRow(DataGridViewRow row)
-        {
-            if (!TryGetTemplate(row, out var template))
-                return;
-
-            var cellFile = row.Cells[nameof(DataTemplate.Tmp.FileNamePartial)];
-            if (cellFile != null)
-                cellFile.ToolTipText = template.File;
-
-            if (template.IsSuccess)
-            {
-                if (template.Date == null)
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-            }
-            else
-            {
-                if (!template.IsMatched)
-                    foreach (DataGridViewCell cell2 in row.Cells)
-                        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
-            }
-
-
-            var imgCell = ((TextAndImageCell)row.Cells[TraceName.Name]);
-
-            if (checkBoxShowTrns.Checked && template.IsSelected && !ColorizeSelected)
-            {
-	            if (!template.IsSuccess && template.IsFiltered)
-	            {
-		            imgCell.Image = Img_Failed_Filtered_Selected;
-	            }
-	            else if (!template.IsSuccess)
-	            {
-		            imgCell.Image = Img_Failed_Selected;
-	            }
-	            else if (template.IsFiltered)
-	            {
-		            imgCell.Image = Img_Filtered_Selected;
-	            }
-	            else
-	            {
-		            imgCell.Image = Img_Selected;
-	            }
-            }
-            else
-            {
-                if (!template.IsSuccess && template.IsFiltered)
-                {
-                    imgCell.Image = Img_Failed_Filtered;
-                }
-                else if (!template.IsSuccess)
-                {
-                    imgCell.Image = Img_Failed;
-                }
-                else if (template.IsFiltered)
-                {
-                    imgCell.Image = Img_Filtered;
-                }
-                else
-                {
-                    imgCell.Image = null;
-                }
-            }
-
-            ColorizationDGV(row, template);
+	        finally
+	        {
+		        ColorizationDGV(row, template);
+	        }
         }
 
         protected virtual void ColorizationDGV(DataGridViewRow row, DataTemplate template)
         {
 	        if (checkBoxShowTrns.Checked && template.IsSelected && ColorizeSelected)
 	        {
-		        row.DefaultCellStyle.BackColor = LogsReaderMainForm.TRN_COLOR_BACK;
-		        row.DefaultCellStyle.ForeColor = LogsReaderMainForm.TRN_COLOR_FORE;
+                if(row.DefaultCellStyle.BackColor != LogsReaderMainForm.TRN_COLOR_BACK)
+					row.DefaultCellStyle.BackColor = LogsReaderMainForm.TRN_COLOR_BACK;
+
+                if (row.DefaultCellStyle.ForeColor != LogsReaderMainForm.TRN_COLOR_FORE)
+                    row.DefaultCellStyle.ForeColor = LogsReaderMainForm.TRN_COLOR_FORE;
             }
 	        else
 	        {
-		        row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+		        var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+		        if (row.DefaultCellStyle.BackColor != color)
+			        row.DefaultCellStyle.BackColor = color;
 	        }
         }
 
@@ -1141,21 +1220,24 @@ namespace LogsReader.Reader
 
         private void buttonFilteredPrev_Click(object sender, EventArgs e)
         {
-	        //SearchPrev(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+	        SearchPrev(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
         }
 
         void SearchPrev(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {
-		        if (DgvData.SelectedRows.Count == 0)
+		        if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
 			        return;
 
 		        var countVisible = DgvData.DisplayedRowCount(false);
 		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
 
-		        var selected = DgvData.SelectedRows[0];
-		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+		        var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
+		        if (selected == null)
+			        return;
+
+                foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
 			        .Where(x => x.Index < selected.Index)
 			        .Where(condition)
 			        .Reverse())
@@ -1182,21 +1264,24 @@ namespace LogsReader.Reader
 
         private void buttonFilteredNext_Click(object sender, EventArgs e)
         {
-	        //SearchNext(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+	        SearchNext(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
         }
 
         void SearchNext(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {
-		        if (DgvData.SelectedRows.Count == 0)
+		        if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
 			        return;
 
 		        var countVisible = DgvData.DisplayedRowCount(false);
 		        var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
 
-		        var selected = DgvData.SelectedRows[0];
-		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
+		        var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
+                if(selected == null)
+                    return;
+
+                foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
 			        .Where(x => x.Index > selected.Index)
 			        .Where(condition))
 		        {
@@ -1243,8 +1328,9 @@ namespace LogsReader.Reader
 		        _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 
 		        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+		        RefreshAllRows();
 
-		        if (oldSortedColumn != null)
+                if (oldSortedColumn != null)
 			        oldSortedColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
 		        if (newColumn != null)
 			        newColumn.HeaderCell.SortGlyphDirection = byAscending ? SortOrder.Ascending : SortOrder.Descending;
@@ -1268,7 +1354,7 @@ namespace LogsReader.Reader
 		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 
 		        if (checkBoxShowTrns.Checked && !noChanged)
-			        RefreshDataGrid();
+			        RefreshAllRows();
 
 		        if (MainViewer.Parent is TabPage page)
 			        tabControlViewer.SelectTab(page);
@@ -1366,8 +1452,9 @@ namespace LogsReader.Reader
 		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 			        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
 
-		        DgvData?.Refresh();
-            }
+                RefreshAllRows();
+		        DgvData.Focus();
+	        }
 	        catch (Exception)
 	        {
 		        // ignored
@@ -1442,14 +1529,16 @@ namespace LogsReader.Reader
         {
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
-	        RefreshDataGrid();
+	        RefreshAllRows();
+	        DgvData.Focus();
         }
 
         internal void DeselectTransactions()
         {
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
-	        RefreshDataGrid();
+	        RefreshAllRows();
+	        DgvData.Focus();
         }
 
         protected void Clear()

@@ -123,16 +123,6 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap error2 {
-            get {
-                object obj = ResourceManager.GetObject("error2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap filter {
             get {
                 object obj = ResourceManager.GetObject("filter", resourceCulture);
@@ -166,16 +156,6 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap highlight2 {
-            get {
-                object obj = ResourceManager.GetObject("highlight2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -232,16 +212,6 @@ namespace LogsReader.Properties {
         public static string LogsReaderForm_buttonReset_rightPadding {
             get {
                 return ResourceManager.GetString("LogsReaderForm_buttonReset_rightPadding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap next_2 {
-            get {
-                object obj = ResourceManager.GetObject("next_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -321,16 +291,6 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap prev_arrow {
             get {
                 object obj = ResourceManager.GetObject("prev_arrow", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap previous_2 {
-            get {
-                object obj = ResourceManager.GetObject("previous_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -970,7 +930,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute filter and highlight [F1].
+        ///   Looks up a localized string similar to Run filter marked [F1].
         /// </summary>
         public static string Txt_LogsReaderForm_HighlightTxt {
             get {
@@ -979,7 +939,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset highlights [F2].
+        ///   Looks up a localized string similar to Reset marking [F2].
         /// </summary>
         public static string Txt_LogsReaderForm_HighlightTxtOff {
             get {

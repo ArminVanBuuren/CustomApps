@@ -489,15 +489,15 @@
     <value>Цвет текста</value>
   </data>
   <data name="Txt_LogsReaderForm_HighlightTxt" xml:space="preserve">
-    <value>Выполнить фильтр и подсветить [F1]</value>
+    <value>Выполнить фильтр с маркировкой [F1]</value>
   </data>
   <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
-    <value>Сбросить подсветку [F2]</value>
+    <value>Сбросить маркировку [F2]</value>
   </data>
   <data name="Txt_LogsReaderForm_NextFilteredButt" xml:space="preserve">
-    <value>Следующее отфильтрованное значение [F4]</value>
+    <value>Следующий отфильтрованный элемент [F4]</value>
   </data>
   <data name="Txt_LogsReaderForm_PrevFilteredButt" xml:space="preserve">
-    <value>Предыдущее отфильтрованное значение [SHIFT+F4]</value>
+    <value>Предыдущий отфильтрованный элемент [SHIFT+F4]</value>
   </data>
 </root>

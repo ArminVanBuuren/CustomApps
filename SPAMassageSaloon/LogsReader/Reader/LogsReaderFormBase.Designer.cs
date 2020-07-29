@@ -25,14 +25,15 @@ namespace LogsReader.Reader
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
-			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsSuccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.TraceName = new LogsReader.TextAndImageColumn();
 			this.DateOfTrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ElapsedSec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.IsSuccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.IsFiltered = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.BtnSearch = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
@@ -107,14 +108,15 @@ namespace LogsReader.Reader
 			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SchemeName,
-            this.PrivateID,
-            this.IsSuccess,
             this.ID,
             this.Server,
             this.TraceName,
             this.DateOfTrace,
             this.ElapsedSec,
+            this.SchemeName,
+            this.PrivateID,
+            this.IsSuccess,
+            this.IsFiltered,
             this.File});
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
@@ -146,30 +148,6 @@ namespace LogsReader.Reader
 			this.DgvData.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvData_CellDoubleClick);
 			this.DgvData.SelectionChanged += new System.EventHandler(this.DgvData_SelectionChanged);
 			this.DgvData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvData_MouseDown);
-			// 
-			// SchemeName
-			// 
-			this.SchemeName.Name = "SchemeName";
-			this.SchemeName.ReadOnly = true;
-			this.SchemeName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.SchemeName.Visible = false;
-			this.SchemeName.Width = 5;
-			// 
-			// PrivateID
-			// 
-			this.PrivateID.Name = "PrivateID";
-			this.PrivateID.ReadOnly = true;
-			this.PrivateID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.PrivateID.Visible = false;
-			this.PrivateID.Width = 5;
-			// 
-			// IsSuccess
-			// 
-			this.IsSuccess.Name = "IsSuccess";
-			this.IsSuccess.ReadOnly = true;
-			this.IsSuccess.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IsSuccess.Visible = false;
-			this.IsSuccess.Width = 5;
 			// 
 			// ID
 			// 
@@ -212,9 +190,41 @@ namespace LogsReader.Reader
 			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.ElapsedSec.Width = 46;
 			// 
+			// SchemeName
+			// 
+			this.SchemeName.Name = "SchemeName";
+			this.SchemeName.ReadOnly = true;
+			this.SchemeName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.SchemeName.Visible = false;
+			this.SchemeName.Width = 5;
+			// 
+			// PrivateID
+			// 
+			this.PrivateID.Name = "PrivateID";
+			this.PrivateID.ReadOnly = true;
+			this.PrivateID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.PrivateID.Visible = false;
+			this.PrivateID.Width = 5;
+			// 
+			// IsSuccess
+			// 
+			this.IsSuccess.Name = "IsSuccess";
+			this.IsSuccess.ReadOnly = true;
+			this.IsSuccess.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IsSuccess.Visible = false;
+			this.IsSuccess.Width = 5;
+			// 
+			// IsFiltered
+			// 
+			this.IsFiltered.Name = "IsFiltered";
+			this.IsFiltered.ReadOnly = true;
+			this.IsFiltered.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IsFiltered.Visible = false;
+			this.IsFiltered.Width = 5;
+			// 
 			// File
 			// 
-			this.File.MinimumWidth = 40;
+			this.File.MinimumWidth = 300;
 			this.File.Name = "File";
 			this.File.ReadOnly = true;
 			this.File.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
@@ -428,8 +438,8 @@ namespace LogsReader.Reader
 			// buttonHighlightOff
 			// 
 			this.buttonHighlightOff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonHighlightOff.BackColor = System.Drawing.Color.DarkGray;
-			this.buttonHighlightOff.Image = global::LogsReader.Properties.Resources.highlight2;
+			this.buttonHighlightOff.BackColor = System.Drawing.Color.Gray;
+			this.buttonHighlightOff.Image = global::LogsReader.Properties.Resources.filtered;
 			this.buttonHighlightOff.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.buttonHighlightOff.Location = new System.Drawing.Point(906, 33);
 			this.buttonHighlightOff.Name = "buttonHighlightOff";
@@ -444,7 +454,7 @@ namespace LogsReader.Reader
 			// 
 			this.buttonHighlightOn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonHighlightOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-			this.buttonHighlightOn.Image = global::LogsReader.Properties.Resources.highlight2;
+			this.buttonHighlightOn.Image = global::LogsReader.Properties.Resources.filtered;
 			this.buttonHighlightOn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.buttonHighlightOn.Location = new System.Drawing.Point(853, 33);
 			this.buttonHighlightOn.Name = "buttonHighlightOn";
@@ -698,7 +708,7 @@ namespace LogsReader.Reader
 			// checkBoxShowTrns
 			// 
 			this.checkBoxShowTrns.AutoSize = true;
-			this.checkBoxShowTrns.Location = new System.Drawing.Point(4, 6);
+			this.checkBoxShowTrns.Location = new System.Drawing.Point(4, 4);
 			this.checkBoxShowTrns.Name = "checkBoxShowTrns";
 			this.checkBoxShowTrns.Size = new System.Drawing.Size(113, 17);
 			this.checkBoxShowTrns.TabIndex = 32;
@@ -768,15 +778,16 @@ namespace LogsReader.Reader
         private SplitContainer MainSplitContainer;
         private Panel searchPanel;
         private Button btnExport;
-        private DataGridViewTextBoxColumn SchemeName;
-        private DataGridViewTextBoxColumn PrivateID;
-        private DataGridViewTextBoxColumn IsSuccess;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Server;
         private TextAndImageColumn TraceName;
         private DataGridViewTextBoxColumn DateOfTrace;
         private DataGridViewTextBoxColumn ElapsedSec;
-        private DataGridViewTextBoxColumn File;
+        private DataGridViewTextBoxColumn SchemeName;
+        private DataGridViewTextBoxColumn PrivateID;
+        private DataGridViewTextBoxColumn IsSuccess;
+        private DataGridViewTextBoxColumn IsFiltered;
+		private DataGridViewTextBoxColumn File;
         private CustomTabControl tabControlViewer;
 
 		protected CustomDataGridView DgvData;
