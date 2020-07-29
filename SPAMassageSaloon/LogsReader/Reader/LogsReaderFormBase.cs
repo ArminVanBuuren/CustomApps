@@ -1098,12 +1098,10 @@ namespace LogsReader.Reader
 				        if (!template.IsSuccess && isfiltered)
 				        {
 					        imgCell.Image = Img_Failed_Filtered_Selected;
-					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 				        }
 				        else if (!template.IsSuccess)
 				        {
 					        imgCell.Image = Img_Failed_Selected;
-					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 				        }
 				        else if (isfiltered)
 				        {
@@ -1119,12 +1117,10 @@ namespace LogsReader.Reader
 				        if (!template.IsSuccess && isfiltered)
 				        {
 					        imgCell.Image = Img_Failed_Filtered;
-					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 				        }
 				        else if (!template.IsSuccess)
 				        {
 					        imgCell.Image = Img_Failed;
-					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 				        }
 				        else if (isfiltered)
 				        {
@@ -1143,6 +1139,17 @@ namespace LogsReader.Reader
 	        }
 	        finally
 	        {
+		        if (!template.IsSuccess)
+		        {
+			        if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.ErrFont))
+				        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+		        }
+		        else
+		        {
+			        if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.DgvFont))
+						row.DefaultCellStyle.Font = LogsReaderMainForm.DgvFont;
+		        }
+
 		        ColorizationDGV(row, template);
 	        }
         }
