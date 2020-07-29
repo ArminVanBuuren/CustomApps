@@ -559,7 +559,10 @@ namespace LogsReader.Reader
 		        result.AddRange(schemeForm.OverallResultList);
 	        }
 
-	        return result.OrderBy(x => x.Date).ThenBy(x => x.File).ThenBy(x => x.FoundLineID).ToList();
+	        return result.OrderBy(x => x.Date)
+		        .ThenBy(x => x.ParentReader.Priority)
+		        .ThenBy(x => x.File)
+		        .ThenBy(x => x.FoundLineID).ToList();
         }
 
         internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
