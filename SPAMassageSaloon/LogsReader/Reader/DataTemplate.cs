@@ -24,8 +24,9 @@ namespace LogsReader.Reader
     public class DataTemplate : ICloneable
     {
 	    public const string ReaderPriority = "Priority";
-	    public const string HeaderDescription = "Description";
-        public const string HeaderMessage = "Message";
+	    public const string HeaderPrompt = "#";
+        public const string HeaderDescription = "Description";
+	    public const string HeaderMessage = "Message";
         public const string HeaderTraceMessage = "Full Trace";
 
         private static DataTemplate _tmp;
@@ -142,7 +143,10 @@ namespace LogsReader.Reader
 
         public bool IsMatched { get; }
 
-        [DGVColumn(ColumnPosition.First, nameof(DataTemplate.Tmp.ID))]
+        [DGVColumn(ColumnPosition.First, DataTemplate.HeaderPrompt, false)]
+        public object Prompt => null;
+
+        [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.ID))]
         public int ID { get; internal set; }
 
         [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.Server))]

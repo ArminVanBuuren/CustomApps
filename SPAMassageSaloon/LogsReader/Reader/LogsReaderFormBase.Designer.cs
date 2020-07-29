@@ -25,6 +25,7 @@ namespace LogsReader.Reader
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.Prompt = new LogsReader.TextAndImageColumn();
 			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.TraceName = new LogsReader.TextAndImageColumn();
@@ -108,7 +109,8 @@ namespace LogsReader.Reader
 			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
+			this.Prompt,
+			this.ID,
             this.Server,
             this.TraceName,
             this.DateOfTrace,
@@ -149,6 +151,15 @@ namespace LogsReader.Reader
 			this.DgvData.SelectionChanged += new System.EventHandler(this.DgvData_SelectionChanged);
 			this.DgvData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvData_MouseDown);
 			// 
+			// Prompt
+			// 
+			this.Prompt.Image = null;
+			this.Prompt.MinimumWidth = 23;
+			this.Prompt.Name = "Prompt";
+			this.Prompt.ReadOnly = true;
+			this.Prompt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.Prompt.Width = 23;
+			// 
 			// ID
 			// 
 			this.ID.MinimumWidth = 25;
@@ -166,7 +177,7 @@ namespace LogsReader.Reader
 			this.Server.Width = 50;
 			// 
 			// TraceName
-			// 
+			//
 			this.TraceName.Image = null;
 			this.TraceName.MinimumWidth = 70;
 			this.TraceName.Name = "TraceName";
@@ -778,6 +789,7 @@ namespace LogsReader.Reader
         private SplitContainer MainSplitContainer;
         private Panel searchPanel;
         private Button btnExport;
+        private TextAndImageColumn Prompt;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Server;
         private TextAndImageColumn TraceName;
