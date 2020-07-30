@@ -136,7 +136,7 @@ namespace TFSAssist
                 using (var regControl = new RegeditControl(Assembly.GetExecutingAssembly().GetAssemblyInfo().ApplicationName))
                 {
                     var clinetID = regControl["CliendID"]?.ToString();
-                    if (clinetID.IsNullOrEmptyTrim())
+                    if (clinetID.IsNullOrWhiteSpace())
                     {
                         clinetID = STRING.RandomNumbers(5);
                         regControl["CliendID"] = clinetID;
@@ -908,7 +908,7 @@ namespace TFSAssist
                 if (!(SetDebugLogging?.IsChecked == true && severity == WarnSeverity.Debug || severity == WarnSeverity.Normal || severity == WarnSeverity.Error || severity == WarnSeverity.Status))
                     return;
 
-                trace = new TraceHighlighter(dateLog, detailMessage.IsNullOrEmptyTrim() ? message : detailMessage);
+                trace = new TraceHighlighter(dateLog, detailMessage.IsNullOrWhiteSpace() ? message : detailMessage);
                 
                 lock (syncTraces)
                 {
@@ -1206,7 +1206,7 @@ namespace TFSAssist
             var caretIndex = AnyIntervalTextBox.CaretIndex;
             var oldValue = AnyIntervalTextBox.Text;
 
-            NUMBER.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
+            NUMERIC.GetOnlyNumberWithCaret(ref oldValue, ref caretIndex, 4);
 
             AnyIntervalTextBox.Text = oldValue;
             AnyIntervalTextBox.CaretIndex = caretIndex;
