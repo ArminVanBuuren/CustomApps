@@ -1383,7 +1383,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum amount of lines for trace stack. Whole trace must be parsed by the &quot;TraceParse&quot; patterns. Setting affects RAM..
+        ///   Looks up a localized string similar to Maximum amount of lines for trace stack. Whole trace must be parsed by the &quot;TraceParse&quot; patterns. The larger the value, the longer the time allocated to the search processing and affects RAM..
         /// </summary>
         public static string Txt_LRSettingsScheme_MaxTraceLines {
             get {

@@ -128,7 +128,7 @@
     <value>Maximum amount of threads. If the value is -1 then amount of threads corresponds to the ammount of processing files.</value>
   </data>
   <data name="Txt_LRSettingsScheme_MaxTraceLines" xml:space="preserve">
-    <value>Maximum amount of lines for trace stack. Whole trace must be parsed by the "TraceParse" patterns. Setting affects RAM.</value>
+    <value>Maximum amount of lines for trace stack. Whole trace must be parsed by the "TraceParse" patterns. The larger the value, the longer the time allocated to the search processing and affects RAM.</value>
   </data>
   <data name="Txt_LRSettingsScheme_Servers" xml:space="preserve">
     <value>Servers for search. Specify with a comma. The "Priority" attribute sets the order in which the search is performed on servers and file types. The value "0" sets the maximum priority.</value>
