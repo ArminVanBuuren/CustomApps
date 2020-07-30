@@ -1109,13 +1109,13 @@ namespace LogsReader.Reader
 
 		        // меняем свойтсво Image только для строк которые показаны пользователю
                 // Т.к. для обновления свойтсва Image тратиться много времени
-                if (countVisible == null && firstVisibleRowIndex == null)
-                    //|| countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
+                if (countVisible == null && firstVisibleRowIndex == null
+                    || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
                 {
-	                if (!((row.Cells[PromptColumn.Name]) is TextAndImageCell imgCellPrompt))
+	                if (!(row.Cells[PromptColumn.Name] is TextAndImageCell imgCellPrompt))
 		                return;
 
-	                if (!((row.Cells[TraceNameColumn.Name]) is TextAndImageCell imgCellTraceName))
+	                if (!(row.Cells[TraceNameColumn.Name] is TextAndImageCell imgCellTraceName))
 		                return;
 
 	                var isfiltered = false;
