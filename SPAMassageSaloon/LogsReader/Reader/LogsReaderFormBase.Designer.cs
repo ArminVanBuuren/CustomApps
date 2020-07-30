@@ -25,17 +25,17 @@ namespace LogsReader.Reader
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
-			this.Prompt = new LogsReader.TextAndImageColumn();
-			this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Server = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.TraceName = new LogsReader.TextAndImageColumn();
-			this.DateOfTrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ElapsedSec = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.SchemeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.PrivateID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsSuccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsFiltered = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.PromptColumn = new LogsReader.TextAndImageColumn();
+			this.IDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ServerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.TraceNameColumn = new LogsReader.TextAndImageColumn();
+			this.DateOfTraceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ElapsedSecColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.SchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.PrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.IsSuccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.IsFilteredColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.FileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.BtnSearch = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.TbxPattern = new System.Windows.Forms.TextBox();
@@ -109,17 +109,17 @@ namespace LogsReader.Reader
 			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.Prompt,
-			this.ID,
-            this.Server,
-            this.TraceName,
-            this.DateOfTrace,
-            this.ElapsedSec,
-            this.SchemeName,
-            this.PrivateID,
-            this.IsSuccess,
-            this.IsFiltered,
-            this.File});
+			this.PromptColumn,
+			this.IDColumn,
+            this.ServerColumn,
+            this.TraceNameColumn,
+            this.DateOfTraceColumn,
+            this.ElapsedSecColumn,
+            this.SchemeNameColumn,
+            this.PrivateIDColumn,
+            this.IsSuccessColumn,
+            this.IsFilteredColumn,
+            this.FileColumn});
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -153,93 +153,93 @@ namespace LogsReader.Reader
 			// 
 			// Prompt
 			// 
-			this.Prompt.Image = null;
-			this.Prompt.MinimumWidth = 23;
-			this.Prompt.Name = "Prompt";
-			this.Prompt.ReadOnly = true;
-			this.Prompt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.Prompt.Width = 23;
+			this.PromptColumn.Image = null;
+			this.PromptColumn.MinimumWidth = 23;
+			this.PromptColumn.Name = "Prompt";
+			this.PromptColumn.ReadOnly = true;
+			this.PromptColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.PromptColumn.Width = 23;
 			// 
 			// ID
 			// 
-			this.ID.MinimumWidth = 25;
-			this.ID.Name = "ID";
-			this.ID.ReadOnly = true;
-			this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ID.Width = 30;
+			this.IDColumn.MinimumWidth = 25;
+			this.IDColumn.Name = "ID";
+			this.IDColumn.ReadOnly = true;
+			this.IDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IDColumn.Width = 30;
 			// 
 			// Server
 			// 
-			this.Server.MinimumWidth = 45;
-			this.Server.Name = "Server";
-			this.Server.ReadOnly = true;
-			this.Server.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.Server.Width = 50;
+			this.ServerColumn.MinimumWidth = 45;
+			this.ServerColumn.Name = "Server";
+			this.ServerColumn.ReadOnly = true;
+			this.ServerColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.ServerColumn.Width = 50;
 			// 
 			// TraceName
 			//
-			this.TraceName.Image = null;
-			this.TraceName.MinimumWidth = 70;
-			this.TraceName.Name = "TraceName";
-			this.TraceName.ReadOnly = true;
-			this.TraceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.TraceName.Width = 80;
+			this.TraceNameColumn.Image = null;
+			this.TraceNameColumn.MinimumWidth = 70;
+			this.TraceNameColumn.Name = "TraceName";
+			this.TraceNameColumn.ReadOnly = true;
+			this.TraceNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.TraceNameColumn.Width = 80;
 			// 
 			// DateOfTrace
 			// 
-			this.DateOfTrace.MinimumWidth = 37;
-			this.DateOfTrace.Name = "DateOfTrace";
-			this.DateOfTrace.ReadOnly = true;
-			this.DateOfTrace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.DateOfTrace.Width = 140;
+			this.DateOfTraceColumn.MinimumWidth = 37;
+			this.DateOfTraceColumn.Name = "DateOfTrace";
+			this.DateOfTraceColumn.ReadOnly = true;
+			this.DateOfTraceColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DateOfTraceColumn.Width = 140;
 			// 
 			// ElapsedSec
 			// 
-			this.ElapsedSec.MinimumWidth = 46;
-			this.ElapsedSec.Name = "ElapsedSec";
-			this.ElapsedSec.ReadOnly = true;
-			this.ElapsedSec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ElapsedSec.Width = 46;
+			this.ElapsedSecColumn.MinimumWidth = 46;
+			this.ElapsedSecColumn.Name = "ElapsedSec";
+			this.ElapsedSecColumn.ReadOnly = true;
+			this.ElapsedSecColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.ElapsedSecColumn.Width = 46;
 			// 
 			// SchemeName
 			// 
-			this.SchemeName.Name = "SchemeName";
-			this.SchemeName.ReadOnly = true;
-			this.SchemeName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.SchemeName.Visible = false;
-			this.SchemeName.Width = 5;
+			this.SchemeNameColumn.Name = "SchemeName";
+			this.SchemeNameColumn.ReadOnly = true;
+			this.SchemeNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.SchemeNameColumn.Visible = false;
+			this.SchemeNameColumn.Width = 5;
 			// 
 			// PrivateID
 			// 
-			this.PrivateID.Name = "PrivateID";
-			this.PrivateID.ReadOnly = true;
-			this.PrivateID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.PrivateID.Visible = false;
-			this.PrivateID.Width = 5;
+			this.PrivateIDColumn.Name = "PrivateID";
+			this.PrivateIDColumn.ReadOnly = true;
+			this.PrivateIDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.PrivateIDColumn.Visible = false;
+			this.PrivateIDColumn.Width = 5;
 			// 
 			// IsSuccess
 			// 
-			this.IsSuccess.Name = "IsSuccess";
-			this.IsSuccess.ReadOnly = true;
-			this.IsSuccess.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IsSuccess.Visible = false;
-			this.IsSuccess.Width = 5;
+			this.IsSuccessColumn.Name = "IsSuccess";
+			this.IsSuccessColumn.ReadOnly = true;
+			this.IsSuccessColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IsSuccessColumn.Visible = false;
+			this.IsSuccessColumn.Width = 5;
 			// 
 			// IsFiltered
 			// 
-			this.IsFiltered.Name = "IsFiltered";
-			this.IsFiltered.ReadOnly = true;
-			this.IsFiltered.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IsFiltered.Visible = false;
-			this.IsFiltered.Width = 5;
+			this.IsFilteredColumn.Name = "IsFiltered";
+			this.IsFilteredColumn.ReadOnly = true;
+			this.IsFilteredColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.IsFilteredColumn.Visible = false;
+			this.IsFilteredColumn.Width = 5;
 			// 
 			// File
 			// 
-			this.File.MinimumWidth = 300;
-			this.File.Name = "File";
-			this.File.ReadOnly = true;
-			this.File.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.File.Width = 1000;
+			this.FileColumn.MinimumWidth = 300;
+			this.FileColumn.Name = "File";
+			this.FileColumn.ReadOnly = true;
+			this.FileColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.FileColumn.Width = 1000;
 			// 
 			// BtnSearch
 			// 
@@ -789,17 +789,17 @@ namespace LogsReader.Reader
         private SplitContainer MainSplitContainer;
         private Panel searchPanel;
         private Button btnExport;
-        private TextAndImageColumn Prompt;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn Server;
-        private TextAndImageColumn TraceName;
-        private DataGridViewTextBoxColumn DateOfTrace;
-        private DataGridViewTextBoxColumn ElapsedSec;
-        private DataGridViewTextBoxColumn SchemeName;
-        private DataGridViewTextBoxColumn PrivateID;
-        private DataGridViewTextBoxColumn IsSuccess;
-        private DataGridViewTextBoxColumn IsFiltered;
-		private DataGridViewTextBoxColumn File;
+        private TextAndImageColumn PromptColumn;
+        private DataGridViewTextBoxColumn IDColumn;
+        private DataGridViewTextBoxColumn ServerColumn;
+        private TextAndImageColumn TraceNameColumn;
+        private DataGridViewTextBoxColumn DateOfTraceColumn;
+        private DataGridViewTextBoxColumn ElapsedSecColumn;
+        private DataGridViewTextBoxColumn SchemeNameColumn;
+        private DataGridViewTextBoxColumn PrivateIDColumn;
+        private DataGridViewTextBoxColumn IsSuccessColumn;
+        private DataGridViewTextBoxColumn IsFilteredColumn;
+		private DataGridViewTextBoxColumn FileColumn;
         private CustomTabControl tabControlViewer;
 
 		protected CustomDataGridView DgvData;

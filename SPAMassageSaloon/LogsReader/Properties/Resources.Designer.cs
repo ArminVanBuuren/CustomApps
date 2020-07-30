@@ -1420,7 +1420,8 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Attribute &quot;displayDateFormat&quot; sets the display date format. Attribute &quot;culture&quot; is used with the &quot;displayDateFormat&quot; attribute, default value is empty.
-        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the default. To correctly display the results, RegEx groupings must be used in the attributes. Regular expression works only with options Singleline an [rest of string was truncated]&quot;;.
+        ///        Attribute &quot;transactionsMarkingType&quot; sets the type of marking displayed transactions. Available types - &quot;None&quot;, &quot;Both&quot;, &quot;Color&quot;, &quot;Prompt&quot;.
+        ///        &quot;Pattern&quot; nodes are used for parsing and reading trace parameters. It can be used together with the &quot;Custom&quot; setting, and has a higher priority. Selected from top to bottom, from the most accurate to the  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Txt_LRSettingsScheme_TraceParse {
             get {

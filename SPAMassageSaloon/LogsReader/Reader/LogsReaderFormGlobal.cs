@@ -44,6 +44,8 @@ namespace LogsReader.Reader
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
 
+		protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Prompt;
+
 		public LogsReaderMainForm MainForm { get; private set; }
 
 		public override bool HasAnyResult => InProcessing.Any(x => x.Item1.HasAnyResult) && !InProcessing.IsAnyWorking;
@@ -52,7 +54,7 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-				ColorizeSelected = false;
+		        CurrentTransactionsMarkingType = UserSettings.ShowTransactions ? DefaultTransactionsMarkingType : TransactionsMarkingType.None;
 
 				#region Initialize Controls
 
@@ -597,7 +599,12 @@ namespace LogsReader.Reader
 				row.DefaultCellStyle.ForeColor = result.FormForeColor;
 		}
 
-        private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
+		protected override void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType)
+		{
+			UserSettings.ShowTransactions = newType != TransactionsMarkingType.None;
+		}
+
+		private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
         {
 	        try
 	        {

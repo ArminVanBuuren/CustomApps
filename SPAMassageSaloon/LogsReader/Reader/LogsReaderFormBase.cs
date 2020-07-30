@@ -49,6 +49,9 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
+        private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
+        private TransactionsMarkingType _prevTransactionsMarkingType = TransactionsMarkingType.None;
+
         protected static Tuple<int, Image> Img_Failed { get; private set; }
 
         protected static Tuple<int, Image> Img_Filtered { get; private set; }
@@ -66,15 +69,36 @@ namespace LogsReader.Reader
 
         protected ToolTip Tooltip { get; }
 
-        /// <summary>
-        /// Подсвечивать выбранные транзвакции или помечать картинкой
-        /// </summary>
-        protected bool ColorizeSelected { get; set; } = false;
-
         protected bool ButtonHighlightEnabled
         {
 	        get => buttonHighlightOn.Enabled;
 	        set => buttonHighlightOn.Enabled = buttonHighlightOff.Enabled = value;
+        }
+
+        protected abstract TransactionsMarkingType DefaultTransactionsMarkingType { get; }
+
+        protected TransactionsMarkingType CurrentTransactionsMarkingType
+        {
+	        get => _currentTransactionsMarkingType;
+	        set
+	        {
+		        _currentTransactionsMarkingType = value;
+		        _prevTransactionsMarkingType = value == TransactionsMarkingType.None ? DefaultTransactionsMarkingType : value;
+                try
+		        {
+			        checkBoxShowTrns.CheckedChanged -= checkBoxShowTrns_CheckedChanged;
+			        checkBoxShowTrns.Checked = value != TransactionsMarkingType.None;
+                    checkBoxShowTrns_CheckedChanged(this, EventArgs.Empty);
+		        }
+		        catch (Exception)
+		        {
+			        // ignored
+		        }
+		        finally
+		        {
+			        checkBoxShowTrns.CheckedChanged += checkBoxShowTrns_CheckedChanged;
+                }
+	        }
         }
 
         /// <summary>
@@ -255,50 +279,54 @@ namespace LogsReader.Reader
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
 		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            Prompt.Visible = checkBoxShowTrns.Checked;
-                DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.CellFormatting += DgvDataOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
                 DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
+                DgvData.ColumnWidthChanged += (sender, args) =>
+                {
+	                if (PromptColumn.Width > PromptColumn.MinimumWidth)
+		                PromptColumn.Width = PromptColumn.MinimumWidth;
+                };
 
-                ID.DataPropertyName = nameof(DataTemplate.Tmp.ID);
-                ID.Name = nameof(DataTemplate.Tmp.ID);
-                ID.HeaderText = nameof(DataTemplate.Tmp.ID);
+                PromptColumn.DataPropertyName = nameof(DataTemplate.Tmp.Prompt);
+                PromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
+                PromptColumn.HeaderText = DataTemplate.HeaderPrompt;
 
-                Server.DataPropertyName = nameof(DataTemplate.Tmp.Server);
-                Server.Name = nameof(DataTemplate.Tmp.Server);
-                Server.HeaderText = nameof(DataTemplate.Tmp.Server);
+                IDColumn.DataPropertyName = nameof(DataTemplate.Tmp.ID);
+                IDColumn.Name = nameof(DataTemplate.Tmp.ID);
+                IDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
 
-                Prompt.DataPropertyName = nameof(DataTemplate.Tmp.Prompt);
-                Prompt.Name = nameof(DataTemplate.Tmp.Prompt);
-                Prompt.HeaderText = DataTemplate.HeaderPrompt;
+                ServerColumn.DataPropertyName = nameof(DataTemplate.Tmp.Server);
+                ServerColumn.Name = nameof(DataTemplate.Tmp.Server);
+                ServerColumn.HeaderText = nameof(DataTemplate.Tmp.Server);
 
-                TraceName.DataPropertyName = nameof(DataTemplate.Tmp.TraceName);
-                TraceName.Name = nameof(DataTemplate.Tmp.TraceName);
-                TraceName.HeaderText = nameof(DataTemplate.Tmp.TraceName);
+                TraceNameColumn.DataPropertyName = nameof(DataTemplate.Tmp.TraceName);
+                TraceNameColumn.Name = nameof(DataTemplate.Tmp.TraceName);
+                TraceNameColumn.HeaderText = nameof(DataTemplate.Tmp.TraceName);
 
-                DateOfTrace.DataPropertyName = nameof(DataTemplate.Tmp.DateString);
-                DateOfTrace.Name = nameof(DataTemplate.Tmp.DateString);
-                DateOfTrace.HeaderText = nameof(DataTemplate.Tmp.Date);
+                DateOfTraceColumn.DataPropertyName = nameof(DataTemplate.Tmp.DateString);
+                DateOfTraceColumn.Name = nameof(DataTemplate.Tmp.DateString);
+                DateOfTraceColumn.HeaderText = nameof(DataTemplate.Tmp.Date);
 
-                ElapsedSec.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
-                ElapsedSec.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
-                ElapsedSec.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
+                ElapsedSecColumn.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
+                ElapsedSecColumn.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
+                ElapsedSecColumn.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
 
-                SchemeName.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName); // not visible
-                SchemeName.Name = nameof(DataTemplate.Tmp.SchemeName);
+                SchemeNameColumn.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName); // not visible
+                SchemeNameColumn.Name = nameof(DataTemplate.Tmp.SchemeName);
 
-                PrivateID.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID); // not visible
-                PrivateID.Name = nameof(DataTemplate.Tmp.PrivateID);
+                PrivateIDColumn.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID); // not visible
+                PrivateIDColumn.Name = nameof(DataTemplate.Tmp.PrivateID);
 
-                IsSuccess.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess); // not visible
-                IsSuccess.Name = nameof(DataTemplate.Tmp.IsSuccess);
+                IsSuccessColumn.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess); // not visible
+                IsSuccessColumn.Name = nameof(DataTemplate.Tmp.IsSuccess);
 
-                IsFiltered.DataPropertyName = nameof(DataTemplate.Tmp.IsFiltered); // not visible
-                IsFiltered.Name = nameof(DataTemplate.Tmp.IsFiltered);
+                IsFilteredColumn.DataPropertyName = nameof(DataTemplate.Tmp.IsFiltered); // not visible
+                IsFilteredColumn.Name = nameof(DataTemplate.Tmp.IsFiltered);
 
-                File.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
-                File.Name = nameof(DataTemplate.Tmp.FileNamePartial);
-                File.HeaderText = nameof(DataTemplate.Tmp.File);
+                FileColumn.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
+                FileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
+                FileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
 
 	            label7.Text = nameof(DataTemplate.Tmp.TraceName);
                 label11.Text = DataTemplate.HeaderTraceMessage;
@@ -320,8 +348,6 @@ namespace LogsReader.Reader
                     DateEndFilter.Value = _getEndDate.Invoke();
                 TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
                 TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
-
-                checkBoxShowTrns.Checked = UserSettings.ShowTransactions;
 
                 MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
                 tabControlViewer.DrawMode = TabDrawMode.Normal;
@@ -477,7 +503,13 @@ namespace LogsReader.Reader
             {
                 switch (e.KeyCode)
                 {
-	                case Keys.F3 when e.Shift:
+	                case Keys.F1 when ButtonHighlightEnabled:
+		                buttonHighlight_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F2 when ButtonHighlightEnabled:
+		                buttonHighlightOff_Click(this, EventArgs.Empty);
+		                break;
+                    case Keys.F3 when e.Shift:
 		                buttonErrorPrev_Click(this, EventArgs.Empty);
 		                break;
 	                case Keys.F3:
@@ -503,12 +535,6 @@ namespace LogsReader.Reader
                         break;
 	                case Keys.F8 when btnReset.Enabled:
 		                BtnReset_Click(this, EventArgs.Empty);
-		                break;
-                    case Keys.F1 when ButtonHighlightEnabled:
-		                buttonHighlight_Click(this, EventArgs.Empty);
-		                break;
-	                case Keys.F2 when ButtonHighlightEnabled:
-		                buttonHighlightOff_Click(this, EventArgs.Empty);
 		                break;
 	                case Keys.S when e.Control && btnExport.Enabled:
                         BtnExport_Click(this, EventArgs.Empty);
@@ -777,7 +803,7 @@ namespace LogsReader.Reader
 	            if (filter == null)
 	            {
 		            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-			            row.Cells[IsFiltered.Name].Value = false;
+			            row.Cells[IsFilteredColumn.Name].Value = false;
 		            return;
 	            }
 
@@ -786,7 +812,7 @@ namespace LogsReader.Reader
 	            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
 	            {
 		            var isFiltered = TryGetTemplate(row, out var template) && filter.IsAllowed(template);
-		            row.Cells[IsFiltered.Name].Value = isFiltered;
+		            row.Cells[IsFilteredColumn.Name].Value = isFiltered;
 		            if (isFiltered)
 			            count++;
 	            }
@@ -828,7 +854,7 @@ namespace LogsReader.Reader
 		        ClearErrorStatus();
 
                 foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-	                row.Cells[IsFiltered.Name].Value = false;
+	                row.Cells[IsFilteredColumn.Name].Value = false;
 
                 RefreshAllRows();
 	        }
@@ -1078,22 +1104,22 @@ namespace LogsReader.Reader
 				        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
                 }
 
-		        if ((row.Cells[File.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
+		        if ((row.Cells[FileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
 			        cellFile.ToolTipText = template.File;
 
 		        // меняем свойтсво Image только для строк которые показаны пользователю
                 // Т.к. для обновления свойтсва Image тратиться много времени
-                if (countVisible == null && firstVisibleRowIndex == null
-                    || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
+                if (countVisible == null && firstVisibleRowIndex == null)
+                    //|| countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
                 {
-	                if (!((row.Cells[Prompt.Name]) is TextAndImageCell imgCellPrompt))
+	                if (!((row.Cells[PromptColumn.Name]) is TextAndImageCell imgCellPrompt))
 		                return;
 
-	                if (!((row.Cells[TraceName.Name]) is TextAndImageCell imgCellTraceName))
+	                if (!((row.Cells[TraceNameColumn.Name]) is TextAndImageCell imgCellTraceName))
 		                return;
 
 	                var isfiltered = false;
-	                if (row.Cells[IsFiltered.Name] is DataGridViewCell isfilteredCell)
+	                if (row.Cells[IsFilteredColumn.Name] is DataGridViewCell isfilteredCell)
 		                isfiltered = bool.Parse(isfilteredCell.Value.ToString());
 
 	                if (!template.IsSuccess)
@@ -1105,7 +1131,7 @@ namespace LogsReader.Reader
 		                imgCellTraceName.Image = isfiltered ? Img_Filtered : null;
 	                }
 
-	                imgCellPrompt.Image = template.IsSelected ? Img_Selected : null;
+	                imgCellPrompt.Image = template.IsSelected && PromptColumn.Visible ? Img_Selected : null;
                 }
 	        }
 	        catch (Exception)
@@ -1114,26 +1140,26 @@ namespace LogsReader.Reader
 	        }
 	        finally
 	        {
-		        ColorizationDGV(row, template);
+		        if (template.IsSelected && (CurrentTransactionsMarkingType == TransactionsMarkingType.Color || CurrentTransactionsMarkingType == TransactionsMarkingType.Both))
+		        {
+			        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.TRN_COLOR_BACK)
+				        row.DefaultCellStyle.BackColor = LogsReaderMainForm.TRN_COLOR_BACK;
+
+			        if (row.DefaultCellStyle.ForeColor != LogsReaderMainForm.TRN_COLOR_FORE)
+				        row.DefaultCellStyle.ForeColor = LogsReaderMainForm.TRN_COLOR_FORE;
+		        }
+		        else
+		        {
+			        ColorizationDGV(row, template);
+		        }
 	        }
         }
 
         protected virtual void ColorizationDGV(DataGridViewRow row, DataTemplate template)
         {
-	        if (checkBoxShowTrns.Checked && template.IsSelected && ColorizeSelected)
-	        {
-                if(row.DefaultCellStyle.BackColor != LogsReaderMainForm.TRN_COLOR_BACK)
-					row.DefaultCellStyle.BackColor = LogsReaderMainForm.TRN_COLOR_BACK;
-
-                if (row.DefaultCellStyle.ForeColor != LogsReaderMainForm.TRN_COLOR_FORE)
-                    row.DefaultCellStyle.ForeColor = LogsReaderMainForm.TRN_COLOR_FORE;
-            }
-	        else
-	        {
-		        var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
-		        if (row.DefaultCellStyle.BackColor != color)
-			        row.DefaultCellStyle.BackColor = color;
-	        }
+	        var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+	        if (row.DefaultCellStyle.BackColor != color)
+		        row.DefaultCellStyle.BackColor = color;
         }
 
         //DgvData.RowPostPaint += DgvData_RowPostPaint;
@@ -1186,12 +1212,12 @@ namespace LogsReader.Reader
 
         private void buttonErrorPrev_Click(object sender, EventArgs e)
         {
-	        SearchPrev(x=> !bool.Parse(x.Cells[IsSuccess.Name].Value.ToString()));
+	        SearchPrev(x=> !bool.Parse(x.Cells[IsSuccessColumn.Name].Value.ToString()));
         }
 
         private void buttonFilteredPrev_Click(object sender, EventArgs e)
         {
-	        SearchPrev(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+	        SearchPrev(x => bool.Parse(x.Cells[IsFilteredColumn.Name].Value.ToString()));
         }
 
         void SearchPrev(Func<DataGridViewRow, bool> condition)
@@ -1230,12 +1256,12 @@ namespace LogsReader.Reader
 
         private void buttonErrorNext_Click(object sender, EventArgs e)
         {
-	        SearchNext(x => !bool.Parse(x.Cells[IsSuccess.Name].Value.ToString()));
+	        SearchNext(x => !bool.Parse(x.Cells[IsSuccessColumn.Name].Value.ToString()));
         }
 
         private void buttonFilteredNext_Click(object sender, EventArgs e)
         {
-	        SearchNext(x => bool.Parse(x.Cells[IsFiltered.Name].Value.ToString()));
+	        SearchNext(x => bool.Parse(x.Cells[IsFilteredColumn.Name].Value.ToString()));
         }
 
         void SearchNext(Func<DataGridViewRow, bool> condition)
@@ -1282,7 +1308,7 @@ namespace LogsReader.Reader
 		        var newColumn = DgvData.Columns[e.ColumnIndex];
 
 		        var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
-		        if (columnName == Prompt.HeaderText)
+		        if (columnName == PromptColumn.HeaderText)
 			        return;
 
                 var byAscending = _oldSortedColumn?.Index != e.ColumnIndex || _oldSortedColumn?.Index == e.ColumnIndex && !_byAscending;
@@ -1321,7 +1347,7 @@ namespace LogsReader.Reader
         async Task AssignCurrentDgvResult()
         {
 	        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-	        Prompt.Visible = checkBoxShowTrns.Checked;
+	        PromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
 	        RefreshAllRows();
         }
 
@@ -1428,12 +1454,23 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        UserSettings.ShowTransactions = checkBoxShowTrns.Checked;
+		        if (tabControlViewer.TabCount > 0)
+			        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+				        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
 
-		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
-			        page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
+		        if (checkBoxShowTrns.Checked)
+		        {
+			        _currentTransactionsMarkingType = _prevTransactionsMarkingType == TransactionsMarkingType.None ? DefaultTransactionsMarkingType : _prevTransactionsMarkingType;
+		        }
+		        else
+		        {
+			        _prevTransactionsMarkingType = _currentTransactionsMarkingType;
+			        _currentTransactionsMarkingType = TransactionsMarkingType.None;
+		        }
 
-		        Prompt.Visible = checkBoxShowTrns.Checked;
+		        PromptColumn.Visible = _currentTransactionsMarkingType == TransactionsMarkingType.Both || _currentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+
+		        CheckBoxTransactionsMarkingTypeChanged(_currentTransactionsMarkingType);
 
 		        RefreshAllRows();
 		        DgvData.Focus();
@@ -1443,6 +1480,8 @@ namespace LogsReader.Reader
 		        // ignored
 	        }
         }
+
+        protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
 
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
         {

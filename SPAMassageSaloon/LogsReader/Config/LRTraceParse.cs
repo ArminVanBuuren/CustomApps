@@ -9,6 +9,15 @@ using Utils;
 
 namespace LogsReader.Config
 {
+	[Serializable]
+	public enum TransactionsMarkingType
+	{
+		None = 0,
+		Both = 1,
+		Color = 2,
+		Prompt = 4
+	}
+
 	[Serializable, XmlRoot("TraceParse")]
 	public class LRTraceParse : TraceParse
 	{
@@ -30,6 +39,7 @@ namespace LogsReader.Config
 			switch (set)
 			{
 				case DefaultSettings.MG:
+					SelectionTransactionsType = TransactionsMarkingType.Color;
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
@@ -45,6 +55,7 @@ namespace LogsReader.Config
 					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
 				case DefaultSettings.SPA:
+					SelectionTransactionsType = TransactionsMarkingType.Prompt;
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)")
@@ -57,6 +68,7 @@ namespace LogsReader.Config
 					IsError = new XmlNode[] {new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout|Exception")};
 					break;
 				case DefaultSettings.MGA:
+					SelectionTransactionsType = TransactionsMarkingType.Both;
 					Patterns = new[]
 					{
 						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)\n\-{50,}")
@@ -85,9 +97,11 @@ namespace LogsReader.Config
 		/// </summary>
 		[XmlIgnore] internal bool IsCorrectCustomFunction { get; private set; } = false;
 
-		[XmlAttribute("displayDateFormat")] public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
+		[XmlAttribute("displayDateFormat")] 
+		public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
 
-		[XmlAttribute("culture")] public string Culture
+		[XmlAttribute("culture")] 
+		public string Culture
 		{
 			get => _culture;
 			set
@@ -110,7 +124,19 @@ namespace LogsReader.Config
 			}
 		}
 
-		[XmlIgnore] internal CultureInfo DisplayCulture { get; private set; }
+		[XmlIgnore]
+		internal CultureInfo DisplayCulture { get; private set; }
+
+
+		[XmlAttribute("transactionsMarkingType")]
+		public string SelectionTransactionsTypeString
+		{
+			get => SelectionTransactionsType.ToString("G");
+			set => SelectionTransactionsType = !value.IsNullOrWhiteSpace() && Enum.TryParse(value, true, out TransactionsMarkingType type) ? type : TransactionsMarkingType.None;
+		}
+
+		[XmlIgnore] 
+		public TransactionsMarkingType SelectionTransactionsType { get; set; } = TransactionsMarkingType.Both;
 
 		[XmlElement("Pattern")]
 		public LRTraceParsePatternItem[] Patterns

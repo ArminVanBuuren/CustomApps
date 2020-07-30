@@ -24,7 +24,9 @@ namespace LogsReader.Reader
 	    private readonly TextBox rowsLimitText;
 	    private readonly CustomTreeView TreeMain;
 
-	    /// <summary>
+	    protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Both;
+
+		/// <summary>
 		/// Сохранить изменения в конфиг
 		/// </summary>
 		public event EventHandler OnSchemeChanged;
@@ -53,8 +55,7 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        ColorizeSelected = true;
-				CurrentSettings = scheme;
+		        CurrentSettings = scheme;
 		        CurrentSettings.ReportStatus += ReportStatus;
 
 		        #region Initialize Controls
@@ -161,11 +162,12 @@ namespace LogsReader.Reader
 		        CustomPanel.Controls.Add(rowsLimitText);
 		        CustomPanel.Controls.Add(TreeMain);
 
-		        #endregion
+				#endregion
 
-		        #region Options
+				#region Options
 
-		        maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
+				CurrentTransactionsMarkingType = CurrentSettings.TraceParse.SelectionTransactionsType;
+				maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
 		        maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
 		        rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
 		        orderByText.Text = CurrentSettings.OrderBy;
@@ -466,7 +468,13 @@ namespace LogsReader.Reader
             ValidationCheck(CurrentSettings.OrderBy.Equals(orderByText.Text, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        protected override void ValidationCheck(bool clearStatus)
+        protected override void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType)
+        {
+	        CurrentSettings.TraceParse.SelectionTransactionsType = newType;
+			OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		protected override void ValidationCheck(bool clearStatus)
         {
 	        try
 	        {
