@@ -57,6 +57,8 @@ namespace LogsReader.Reader
 			}
 		}
 
+		private List<List<TraceReader>> TraceReadersOrdered { get; } = new List<List<TraceReader>>();
+
 		public int TotalCount => TraceReaders != null && TraceReaders.Count > 0 ? TraceReaders.Count : 0;
 
 		public int ResultCount => _multiTaskingHandlerList.Sum(x => x.Result.Count);
@@ -82,45 +84,46 @@ namespace LogsReader.Reader
 			: base(settings, findMessage, useRegex, servers, fileTypes, folders)
 		{
 			Filter = filter;
+
+			if (TraceReaders == null)
+				throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
+
+			if (TraceReaders.Count <= 0)
+				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
+
+			foreach (var traceReaders in TraceReaders.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
+			{
+				var readersOrders = traceReaders
+					.OrderByDescending(x => x.File.LastWriteTime.Date)
+					.ThenByDescending(x => x.File.LastWriteTime.Hour)
+					.ThenByDescending(x => x.File.Length)
+					.ToList();
+
+				TraceReadersOrdered.Add(readersOrders);
+			}
 		}
 
 		public override async Task StartAsync()
 		{
-			IsCompleted = false;
-			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
-			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
-			ResultsOfError = new List<DataTemplate>();
-			CountMatches = 0;
-			CountErrorMatches = 0;
+			ClearBeforePreviousProcess();
+
+			if(TraceReadersOrdered.Count == 0 || IsStopPending)
+				return;
 
 			try
 			{
-				if (IsStopPending)
-					return;
-
-				if (TraceReaders == null)
-					throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
-				if (TraceReaders.Count <= 0)
-					throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
-
 				new Action(CheckProgress).BeginInvoke(null, null);
 
-				foreach (var traceReaders in TraceReaders.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
+				foreach (var traceReaders in TraceReadersOrdered)
 				{
 					if (IsStopPending)
 						break;
 
-					var readersOrders = traceReaders
-						.OrderByDescending(x => x.File.LastWriteTime.Date)
-						.ThenByDescending(x => x.File.LastWriteTime.Hour)
-						.ThenByDescending(x => x.File.Length)
-						.ToList();
-
 					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
-					var maxThreads = MaxThreads <= 0 ? readersOrders.Count : MaxThreads;
+					var maxThreads = MaxThreads <= 0 ? traceReaders.Count : MaxThreads;
 					var multiTaskingHandler = new MTActionResult<TraceReader>(
 						ReadData,
-						readersOrders,
+						traceReaders,
 						maxThreads,
 						ThreadPriority.Lowest);
 
@@ -145,11 +148,21 @@ namespace LogsReader.Reader
 			}
 		}
 
+		void ClearBeforePreviousProcess()
+		{
+			IsCompleted = false;
+			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
+			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+			ResultsOfError = new List<DataTemplate>();
+			CountMatches = 0;
+			CountErrorMatches = 0;
+		}
+
 		public void ReadData(TraceReader fileLog)
 		{
 			try
 			{
-				if (IsStopPending)
+				if (IsStopPending || !File.Exists(fileLog.FilePath))
 					return;
 
 				fileLog.OnFound += AddResult;

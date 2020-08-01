@@ -25,7 +25,7 @@ namespace LogsReader.Reader
 		/// </summary>
 		public bool IsStopPending { get; private set; } = false;
 
-		protected IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
+		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 

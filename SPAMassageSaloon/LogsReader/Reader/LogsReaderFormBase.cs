@@ -824,7 +824,7 @@ namespace LogsReader.Reader
 	            else
 		            ClearErrorStatus();
 
-	            RefreshAllRows();
+	            DgvData.Refresh();
             }
             catch (Exception ex)
             {
@@ -857,8 +857,8 @@ namespace LogsReader.Reader
                 foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
 	                row.Cells[IsFilteredColumn.Name].Value = false;
 
-                RefreshAllRows();
-	        }
+                DgvData.Refresh();
+            }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
@@ -1034,33 +1034,30 @@ namespace LogsReader.Reader
             }
         }
 
-        ///// <summary>
-        ///// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
-        ///// </summary>
-        //protected void RefreshVisibleRows()
-        //{
-        //    try
-        //    {
-	       //     if (DgvData.RowCount == 0)
-        //            return;
+        /// <summary>
+        /// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
+        /// </summary>
+        protected void RefreshVisibleRows()
+        {
+	        try
+	        {
+		        if (DgvData.RowCount == 0)
+			        return;
 
-        //        var countVisible = DgvData.DisplayedRowCount(false);
-        //        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
+		        var countVisible = DgvData.DisplayedRowCount(false);
+		        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
 
-        //        var first = Math.Max(0, firstVisibleRowIndex - 5);
-        //        var count = Math.Min(DgvData.RowCount - (first + 1), countVisible + 11);
+		        var firstIndex = Math.Max(0, firstVisibleRowIndex - 50);
+		        var lastIndex = Math.Min(DgvData.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
 
-        //        if (count <= 0)
-        //            return;
-
-        //        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().ToList().GetRange(first, count))
-        //            RefreshRow(row, countVisible, firstVisibleRowIndex);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // ignored
-        //    }
-        //}
+		        for (var i = firstIndex; i <= lastIndex; i++)
+			        RefreshRow(DgvData.Rows[i], countVisible, firstVisibleRowIndex);
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+        }
 
         /// <summary>
         /// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
@@ -1362,7 +1359,7 @@ namespace LogsReader.Reader
 		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 
 		        if (checkBoxShowTrns.Checked && !noChanged)
-			        RefreshAllRows();
+			        RefreshVisibleRows();
 
 		        if (MainViewer.Parent is TabPage page)
 			        tabControlViewer.SelectTab(page);
@@ -1553,7 +1550,7 @@ namespace LogsReader.Reader
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
 
-	        RefreshAllRows();
+	        RefreshVisibleRows();
 	        DgvData.Focus();
         }
 
@@ -1562,7 +1559,7 @@ namespace LogsReader.Reader
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
 
-	        RefreshAllRows();
+	        RefreshVisibleRows();
 	        DgvData.Focus();
         }
 
@@ -1654,9 +1651,11 @@ namespace LogsReader.Reader
 	        {
 		        buttonNextBlock.Text = @"<";
             }
-	        
-
-            
         }
-    }
+
+        protected virtual void CustomPanel_Resize(object sender, EventArgs e)
+        {
+
+        }
+	}
 }

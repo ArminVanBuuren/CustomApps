@@ -64,7 +64,7 @@ namespace LogsReader.Reader
 			        Location = new Point(0, -1),
 			        Margin = new Padding(0),
 			        Name = "FlowPanelForExpanders",
-			        Size = new Size(147, 3623),
+			        Size = new Size(147, 5000),
 			        TabIndex = 27
 		        };
 
@@ -75,7 +75,7 @@ namespace LogsReader.Reader
 			        Dock = DockStyle.Fill,
 			        Location = new Point(0, 27),
 			        Name = "PanelFlowDoc",
-			        Size = new Size(181, 439),
+			        Size = new Size(181, 5000),
 			        TabIndex = 29
 		        };
 		        panelFlowDoc.Controls.Add(flowPanelForExpanders);
@@ -134,10 +134,8 @@ namespace LogsReader.Reader
 			    AllExpanders.Add(readerForm, expander);
 			    flowPanelForExpanders.Controls.Add(expander);
 		    }
-		    SchemeExpander_ExpandCollapse(this, null);
-
 			// чекаем все валидные схемы
-		    CheckBoxSelectAllOnCheckedChanged(checkBoxSelectAll, EventArgs.Empty);
+			CheckBoxSelectAllOnCheckedChanged(checkBoxSelectAll, EventArgs.Empty);
 	    }
 
 		public override void ApplySettings()
@@ -399,7 +397,12 @@ namespace LogsReader.Reader
 	        SchemeExpander_ExpandCollapse(this, null);
         }
 
-        private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
+		protected override void CustomPanel_Resize(object sender, EventArgs args)
+		{
+			SchemeExpander_ExpandCollapse(this, null);
+		}
+
+		private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
         {
 	        try
 	        {

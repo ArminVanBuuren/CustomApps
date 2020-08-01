@@ -154,6 +154,7 @@
     <Compile Include="Reader\Forms\TypesGroupForm.Designer.cs">
       <DependentUpon>TypesGroupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reader\TraceReaderStatus.cs" />
     <Compile Include="Reader\TreeViewContainer.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Config\LRSettings.cs" />
