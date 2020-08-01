@@ -84,6 +84,11 @@ namespace LogsReader.Reader
 			: base(settings, findMessage, useRegex, servers, fileTypes, folders)
 		{
 			Filter = filter;
+		}
+
+		public override async Task GetTargetFilesAsync()
+		{
+			await base.GetTargetFilesAsync();
 
 			if (TraceReaders == null)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);

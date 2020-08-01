@@ -43,7 +43,7 @@ namespace LogsReader.Reader
 			_folders = folders;
 		}
 
-		public async Task GetTargetFilesAsync()
+		public virtual async Task GetTargetFilesAsync()
 		{
 			if (IsStopPending)
 				return;

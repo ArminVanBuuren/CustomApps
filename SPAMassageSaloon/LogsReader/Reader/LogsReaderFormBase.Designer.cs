@@ -21,9 +21,9 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.PromptColumn = new LogsReader.TextAndImageColumn();
 			this.IDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -134,14 +134,14 @@ namespace LogsReader.Reader
 			this.DgvData.AllowUserToResizeRows = false;
 			this.DgvData.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.DgvData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.PromptColumn,
@@ -155,27 +155,27 @@ namespace LogsReader.Reader
             this.IsSuccessColumn,
             this.IsFilteredColumn,
             this.FileColumn});
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DgvData.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DgvData.DefaultCellStyle = dataGridViewCellStyle8;
 			this.DgvData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvData.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.DgvData.Location = new System.Drawing.Point(0, 0);
 			this.DgvData.Name = "DgvData";
 			this.DgvData.ReadOnly = true;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			this.DgvData.RowHeadersVisible = false;
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
@@ -282,7 +282,7 @@ namespace LogsReader.Reader
 			this.BtnSearch.BackColor = System.Drawing.SystemColors.Control;
 			this.BtnSearch.Image = global::LogsReader.Properties.Resources.find;
 			this.BtnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.BtnSearch.Location = new System.Drawing.Point(792, 3);
+			this.BtnSearch.Location = new System.Drawing.Point(795, 3);
 			this.BtnSearch.Name = "BtnSearch";
 			this.BtnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.BtnSearch.Size = new System.Drawing.Size(90, 24);
@@ -297,7 +297,7 @@ namespace LogsReader.Reader
 			this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnClear.Image = global::LogsReader.Properties.Resources.clear1;
 			this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnClear.Location = new System.Drawing.Point(888, 3);
+			this.btnClear.Location = new System.Drawing.Point(891, 3);
 			this.btnClear.Name = "btnClear";
 			this.btnClear.Size = new System.Drawing.Size(90, 24);
 			this.btnClear.TabIndex = 4;
@@ -312,7 +312,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxPattern.Location = new System.Drawing.Point(8, 3);
 			this.TbxPattern.Name = "TbxPattern";
-			this.TbxPattern.Size = new System.Drawing.Size(696, 20);
+			this.TbxPattern.Size = new System.Drawing.Size(699, 20);
 			this.TbxPattern.TabIndex = 1;
 			this.TbxPattern.TextChanged += new System.EventHandler(this.TxtPatternOnTextChanged);
 			// 
@@ -338,7 +338,7 @@ namespace LogsReader.Reader
 			// 
 			this.ChbxUseRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxUseRegex.AutoSize = true;
-			this.ChbxUseRegex.Location = new System.Drawing.Point(710, 7);
+			this.ChbxUseRegex.Location = new System.Drawing.Point(713, 7);
 			this.ChbxUseRegex.Name = "ChbxUseRegex";
 			this.ChbxUseRegex.Size = new System.Drawing.Size(79, 17);
 			this.ChbxUseRegex.TabIndex = 2;
