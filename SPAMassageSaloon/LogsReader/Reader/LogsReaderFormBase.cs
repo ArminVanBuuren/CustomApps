@@ -221,6 +221,7 @@ namespace LogsReader.Reader
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
 	        InitializeComponent();
+	        buttonNextBlock_Click(this, EventArgs.Empty);
 
             DefaultEncoding = defaultEncoding;
             UserSettings = userSettings;
@@ -1636,5 +1637,26 @@ namespace LogsReader.Reader
 		        components?.Dispose();
 	        base.Dispose(disposing);
         }
-	}
+
+        private bool shownFilterPanel = false;
+        private void buttonNextBlock_Click(object sender, EventArgs e)
+        {
+	        shownFilterPanel = !shownFilterPanel;
+
+	        splitContainerTop.Panel1Collapsed = !shownFilterPanel;
+	        splitContainerTop.Panel2Collapsed = shownFilterPanel;
+
+            if (shownFilterPanel)
+	        {
+		        buttonNextBlock.Text = @">";
+            }
+	        else
+	        {
+		        buttonNextBlock.Text = @"<";
+            }
+	        
+
+            
+        }
+    }
 }
