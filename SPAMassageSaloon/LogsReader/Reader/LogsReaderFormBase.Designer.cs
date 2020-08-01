@@ -155,7 +155,7 @@ namespace LogsReader.Reader
 			// 
 			this.PromptColumn.Image = null;
 			this.PromptColumn.MinimumWidth = 23;
-			this.PromptColumn.Name = "Prompt";
+			this.PromptColumn.Name = "PromptColumn";
 			this.PromptColumn.ReadOnly = true;
 			this.PromptColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.PromptColumn.Width = 23;
@@ -163,7 +163,7 @@ namespace LogsReader.Reader
 			// ID
 			// 
 			this.IDColumn.MinimumWidth = 25;
-			this.IDColumn.Name = "ID";
+			this.IDColumn.Name = "IDColumn";
 			this.IDColumn.ReadOnly = true;
 			this.IDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.IDColumn.Width = 30;
@@ -171,7 +171,7 @@ namespace LogsReader.Reader
 			// Server
 			// 
 			this.ServerColumn.MinimumWidth = 45;
-			this.ServerColumn.Name = "Server";
+			this.ServerColumn.Name = "ServerColumn";
 			this.ServerColumn.ReadOnly = true;
 			this.ServerColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.ServerColumn.Width = 50;
@@ -180,7 +180,7 @@ namespace LogsReader.Reader
 			//
 			this.TraceNameColumn.Image = null;
 			this.TraceNameColumn.MinimumWidth = 70;
-			this.TraceNameColumn.Name = "TraceName";
+			this.TraceNameColumn.Name = "TraceNameColumn";
 			this.TraceNameColumn.ReadOnly = true;
 			this.TraceNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.TraceNameColumn.Width = 80;
@@ -188,7 +188,7 @@ namespace LogsReader.Reader
 			// DateOfTrace
 			// 
 			this.DateOfTraceColumn.MinimumWidth = 37;
-			this.DateOfTraceColumn.Name = "DateOfTrace";
+			this.DateOfTraceColumn.Name = "DateOfTraceColumn";
 			this.DateOfTraceColumn.ReadOnly = true;
 			this.DateOfTraceColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.DateOfTraceColumn.Width = 140;
@@ -196,14 +196,14 @@ namespace LogsReader.Reader
 			// ElapsedSec
 			// 
 			this.ElapsedSecColumn.MinimumWidth = 46;
-			this.ElapsedSecColumn.Name = "ElapsedSec";
+			this.ElapsedSecColumn.Name = "ElapsedSecColumn";
 			this.ElapsedSecColumn.ReadOnly = true;
 			this.ElapsedSecColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.ElapsedSecColumn.Width = 46;
 			// 
 			// SchemeName
 			// 
-			this.SchemeNameColumn.Name = "SchemeName";
+			this.SchemeNameColumn.Name = "SchemeNameColumn";
 			this.SchemeNameColumn.ReadOnly = true;
 			this.SchemeNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.SchemeNameColumn.Visible = false;
@@ -211,7 +211,7 @@ namespace LogsReader.Reader
 			// 
 			// PrivateID
 			// 
-			this.PrivateIDColumn.Name = "PrivateID";
+			this.PrivateIDColumn.Name = "PrivateIDColumn";
 			this.PrivateIDColumn.ReadOnly = true;
 			this.PrivateIDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.PrivateIDColumn.Visible = false;
@@ -219,7 +219,7 @@ namespace LogsReader.Reader
 			// 
 			// IsSuccess
 			// 
-			this.IsSuccessColumn.Name = "IsSuccess";
+			this.IsSuccessColumn.Name = "IsSuccessColumn";
 			this.IsSuccessColumn.ReadOnly = true;
 			this.IsSuccessColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.IsSuccessColumn.Visible = false;
@@ -227,7 +227,7 @@ namespace LogsReader.Reader
 			// 
 			// IsFiltered
 			// 
-			this.IsFilteredColumn.Name = "IsFiltered";
+			this.IsFilteredColumn.Name = "IsFilteredColumn";
 			this.IsFilteredColumn.ReadOnly = true;
 			this.IsFilteredColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.IsFilteredColumn.Visible = false;
@@ -236,7 +236,7 @@ namespace LogsReader.Reader
 			// File
 			// 
 			this.FileColumn.MinimumWidth = 300;
-			this.FileColumn.Name = "File";
+			this.FileColumn.Name = "FileColumn";
 			this.FileColumn.ReadOnly = true;
 			this.FileColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
 			this.FileColumn.Width = 1000;
