@@ -338,7 +338,10 @@ namespace LogsReader.Reader
                 DgvReader.ColumnHeaderMouseClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
 				DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
-				DgvReader.CellContentClick += (sender, args) => { };
+				DgvReader.CellContentClick += (sender, args) =>
+				{
+
+				};
 
 				DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
 
