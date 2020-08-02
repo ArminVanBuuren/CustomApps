@@ -41,6 +41,9 @@ namespace LogsReader
 		public static readonly Color TRN_COLOR_BACK = Color.FromArgb(62, 255, 176);
 		public static readonly Color TRN_COLOR_FORE = Color.Black;
 
+		public static readonly Color READER_COLOR_BACK_ERROR = Color.FromArgb(255, 174, 174);
+		public static readonly Color READER_COLOR_BACK_SUCCESS = Color.FromArgb(62, 255, 176);
+
 		public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
 	    {
 		    get

@@ -126,6 +126,8 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				traceReader.ThreadId = Task.CurrentId?.ToString() ?? "-1";
+
 				if (IsStopPending)
 				{
 					traceReader.Status = TraceReaderStatus.Cancelled;
@@ -139,7 +141,6 @@ namespace LogsReader.Reader
 				}
 
 				traceReader.OnFound += AddResult;
-				traceReader.ThreadId = Task.CurrentId?.ToString();
 
 				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
 				using (var inputStream = new FileStream(traceReader.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

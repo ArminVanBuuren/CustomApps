@@ -344,7 +344,7 @@ namespace LogsReader.Reader
 
 		            RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 
-					Progress = 100;
+		            Progress = 100;
 	            }
             }
             else
@@ -523,6 +523,7 @@ namespace LogsReader.Reader
             DgvReader.DataSource = null;
             DgvReader.Rows.Clear();
             DgvReader.Refresh();
+            DgvReader.ColumnHeadersVisible = false;
 
 			base.ClearForm(saveData);
 		}

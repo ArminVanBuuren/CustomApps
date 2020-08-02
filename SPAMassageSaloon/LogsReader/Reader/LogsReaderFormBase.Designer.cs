@@ -78,6 +78,7 @@ namespace LogsReader.Reader
 			this.buttonNextBlock = new System.Windows.Forms.Button();
 			this.splitContainerTop = new System.Windows.Forms.SplitContainer();
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.DgvReaderSelectColumn = new LogsReader.DgvCheckBoxColumn();
 			this.DgvReaderImageColumn = new LogsReader.DgvTextAndImageColumn();
 			this.DgvReaderFlowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -87,7 +88,6 @@ namespace LogsReader.Reader
 			this.DgvReaderCountMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderCountErrorMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
 			this.searchPanel.SuspendLayout();
@@ -167,11 +167,8 @@ namespace LogsReader.Reader
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
 			this.DgvData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvData.Size = new System.Drawing.Size(537, 462);
+			this.DgvData.Size = new System.Drawing.Size(537, 463);
 			this.DgvData.TabIndex = 20;
-			this.DgvData.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvData_CellDoubleClick);
-			this.DgvData.SelectionChanged += new System.EventHandler(this.DgvData_SelectionChanged);
-			this.DgvData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvData_MouseDown);
 			// 
 			// DgvDataPromptColumn
 			// 
@@ -269,7 +266,7 @@ namespace LogsReader.Reader
 			this.BtnSearch.BackColor = System.Drawing.SystemColors.Control;
 			this.BtnSearch.Image = global::LogsReader.Properties.Resources.find;
 			this.BtnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.BtnSearch.Location = new System.Drawing.Point(795, 3);
+			this.BtnSearch.Location = new System.Drawing.Point(937, 3);
 			this.BtnSearch.Name = "BtnSearch";
 			this.BtnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.BtnSearch.Size = new System.Drawing.Size(90, 24);
@@ -284,7 +281,7 @@ namespace LogsReader.Reader
 			this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnClear.Image = global::LogsReader.Properties.Resources.clear1;
 			this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnClear.Location = new System.Drawing.Point(891, 3);
+			this.btnClear.Location = new System.Drawing.Point(1033, 3);
 			this.btnClear.Name = "btnClear";
 			this.btnClear.Size = new System.Drawing.Size(90, 24);
 			this.btnClear.TabIndex = 4;
@@ -299,7 +296,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxPattern.Location = new System.Drawing.Point(8, 3);
 			this.TbxPattern.Name = "TbxPattern";
-			this.TbxPattern.Size = new System.Drawing.Size(699, 20);
+			this.TbxPattern.Size = new System.Drawing.Size(841, 20);
 			this.TbxPattern.TabIndex = 1;
 			this.TbxPattern.TextChanged += new System.EventHandler(this.TxtPatternOnTextChanged);
 			// 
@@ -314,7 +311,7 @@ namespace LogsReader.Reader
 			// statusStrip
 			// 
 			this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-			this.statusStrip.Location = new System.Drawing.Point(0, 466);
+			this.statusStrip.Location = new System.Drawing.Point(0, 467);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(680, 22);
 			this.statusStrip.SizingGrip = false;
@@ -325,7 +322,7 @@ namespace LogsReader.Reader
 			// 
 			this.ChbxUseRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxUseRegex.AutoSize = true;
-			this.ChbxUseRegex.Location = new System.Drawing.Point(713, 7);
+			this.ChbxUseRegex.Location = new System.Drawing.Point(855, 7);
 			this.ChbxUseRegex.Name = "ChbxUseRegex";
 			this.ChbxUseRegex.Size = new System.Drawing.Size(79, 17);
 			this.ChbxUseRegex.TabIndex = 2;
@@ -462,7 +459,7 @@ namespace LogsReader.Reader
 			this.filterPanel.Controls.Add(this.label9);
 			this.filterPanel.Controls.Add(this.label7);
 			this.filterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.filterPanel.Location = new System.Drawing.Point(0, 28);
+			this.filterPanel.Location = new System.Drawing.Point(0, 0);
 			this.filterPanel.MaximumSize = new System.Drawing.Size(5014, 59);
 			this.filterPanel.MinimumSize = new System.Drawing.Size(850, 2);
 			this.filterPanel.Name = "filterPanel";
@@ -599,7 +596,7 @@ namespace LogsReader.Reader
 			this.searchPanel.Location = new System.Drawing.Point(0, 0);
 			this.searchPanel.MinimumSize = new System.Drawing.Size(850, 0);
 			this.searchPanel.Name = "searchPanel";
-			this.searchPanel.Size = new System.Drawing.Size(1010, 28);
+			this.searchPanel.Size = new System.Drawing.Size(1152, 28);
 			this.searchPanel.TabIndex = 30;
 			// 
 			// ParentSplitContainer
@@ -619,7 +616,7 @@ namespace LogsReader.Reader
 			// ParentSplitContainer.Panel2
 			// 
 			this.ParentSplitContainer.Panel2.Controls.Add(this.tabControlViewer);
-			this.ParentSplitContainer.Size = new System.Drawing.Size(1152, 488);
+			this.ParentSplitContainer.Size = new System.Drawing.Size(1152, 489);
 			this.ParentSplitContainer.SplitterDistance = 680;
 			this.ParentSplitContainer.TabIndex = 32;
 			// 
@@ -641,7 +638,7 @@ namespace LogsReader.Reader
 			// MainSplitContainer.Panel2
 			// 
 			this.MainSplitContainer.Panel2.Controls.Add(this.DgvData);
-			this.MainSplitContainer.Size = new System.Drawing.Size(680, 466);
+			this.MainSplitContainer.Size = new System.Drawing.Size(680, 467);
 			this.MainSplitContainer.SplitterDistance = 135;
 			this.MainSplitContainer.TabIndex = 0;
 			// 
@@ -651,7 +648,7 @@ namespace LogsReader.Reader
 			this.CustomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.CustomPanel.Location = new System.Drawing.Point(0, 80);
 			this.CustomPanel.Name = "CustomPanel";
-			this.CustomPanel.Size = new System.Drawing.Size(131, 382);
+			this.CustomPanel.Size = new System.Drawing.Size(131, 383);
 			this.CustomPanel.TabIndex = 1;
 			this.CustomPanel.Resize += new System.EventHandler(this.CustomPanel_Resize);
 			// 
@@ -759,7 +756,7 @@ namespace LogsReader.Reader
 			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
 			this.tabControlViewer.Name = "tabControlViewer";
 			this.tabControlViewer.SelectedIndex = 0;
-			this.tabControlViewer.Size = new System.Drawing.Size(464, 484);
+			this.tabControlViewer.Size = new System.Drawing.Size(464, 485);
 			this.tabControlViewer.TabIndex = 0;
 			// 
 			// buttonNextBlock
@@ -770,7 +767,7 @@ namespace LogsReader.Reader
 			this.buttonNextBlock.MaximumSize = new System.Drawing.Size(21, 2000);
 			this.buttonNextBlock.MinimumSize = new System.Drawing.Size(21, 25);
 			this.buttonNextBlock.Name = "buttonNextBlock";
-			this.buttonNextBlock.Size = new System.Drawing.Size(21, 88);
+			this.buttonNextBlock.Size = new System.Drawing.Size(21, 59);
 			this.buttonNextBlock.TabIndex = 35;
 			this.buttonNextBlock.Text = ">";
 			this.buttonNextBlock.UseVisualStyleBackColor = false;
@@ -786,13 +783,12 @@ namespace LogsReader.Reader
 			// splitContainerTop.Panel1
 			// 
 			this.splitContainerTop.Panel1.Controls.Add(this.filterPanel);
-			this.splitContainerTop.Panel1.Controls.Add(this.searchPanel);
 			// 
 			// splitContainerTop.Panel2
 			// 
 			this.splitContainerTop.Panel2.Controls.Add(this.DgvReader);
 			this.splitContainerTop.Panel2MinSize = 0;
-			this.splitContainerTop.Size = new System.Drawing.Size(1127, 88);
+			this.splitContainerTop.Size = new System.Drawing.Size(1127, 59);
 			this.splitContainerTop.SplitterDistance = 1010;
 			this.splitContainerTop.TabIndex = 36;
 			// 
@@ -802,6 +798,7 @@ namespace LogsReader.Reader
 			this.DgvReader.AllowUserToDeleteRows = false;
 			this.DgvReader.AllowUserToResizeRows = false;
 			this.DgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.DgvReader.ColumnHeadersVisible = false;
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DgvReaderSelectColumn,
             this.DgvReaderImageColumn,
@@ -818,13 +815,39 @@ namespace LogsReader.Reader
 			this.DgvReader.ReadOnly = true;
 			this.DgvReader.RowHeadersVisible = false;
 			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvReader.Size = new System.Drawing.Size(113, 88);
+			this.DgvReader.Size = new System.Drawing.Size(113, 59);
+			this.DgvReader.MultiSelect = false;
+			this.DgvReader.RowTemplate.Height = 18;
 			this.DgvReader.TabIndex = 50;
+			
+			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+			this.splitContainer1.Name = "splitContainer1";
+			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.splitContainerTop);
+			this.splitContainer1.Panel1.Controls.Add(this.buttonNextBlock);
+			this.splitContainer1.Panel1MinSize = 63;
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.ParentSplitContainer);
+			this.splitContainer1.Panel2MinSize = 50;
+			this.splitContainer1.Size = new System.Drawing.Size(1152, 556);
+			this.splitContainer1.SplitterDistance = 63;
+			this.splitContainer1.TabIndex = 37;
 			// 
 			// DgvReaderSelectColumn
 			// 
-			this.DgvReaderSelectColumn.Checked = true;
-			this.DgvReaderSelectColumn.HeaderText = "#";
+			this.DgvReaderSelectColumn.Checked = false;
+			this.DgvReaderSelectColumn.HeaderText = "";
 			this.DgvReaderSelectColumn.MinimumWidth = 25;
 			this.DgvReaderSelectColumn.Name = "DgvReaderSelectColumn";
 			this.DgvReaderSelectColumn.ReadOnly = true;
@@ -834,18 +857,18 @@ namespace LogsReader.Reader
 			// 
 			this.DgvReaderImageColumn.HeaderText = "Status";
 			this.DgvReaderImageColumn.Image = null;
-			this.DgvReaderImageColumn.MinimumWidth = 45;
+			this.DgvReaderImageColumn.MinimumWidth = 80;
 			this.DgvReaderImageColumn.Name = "DgvReaderImageColumn";
 			this.DgvReaderImageColumn.ReadOnly = true;
-			this.DgvReaderImageColumn.Width = 45;
+			this.DgvReaderImageColumn.Width = 80;
 			// 
 			// DgvReaderFlowColumn
 			// 
 			this.DgvReaderFlowColumn.HeaderText = "Flow";
-			this.DgvReaderFlowColumn.MinimumWidth = 45;
+			this.DgvReaderFlowColumn.MinimumWidth = 37;
 			this.DgvReaderFlowColumn.Name = "DgvReaderFlowColumn";
 			this.DgvReaderFlowColumn.ReadOnly = true;
-			this.DgvReaderFlowColumn.Width = 45;
+			this.DgvReaderFlowColumn.Width = 37;
 			// 
 			// DgvReaderSchemeNameColumn
 			// 
@@ -866,54 +889,39 @@ namespace LogsReader.Reader
 			this.DgvReaderThreadIdColumn.HeaderText = "ThreadId";
 			this.DgvReaderThreadIdColumn.Name = "DgvReaderThreadIdColumn";
 			this.DgvReaderThreadIdColumn.ReadOnly = true;
+			this.DgvReaderThreadIdColumn.MinimumWidth = 60;
+			this.DgvReaderThreadIdColumn.Width = 60;
 			// 
 			// DgvReaderCountMatchesColumn
 			// 
 			this.DgvReaderCountMatchesColumn.HeaderText = "Matches";
 			this.DgvReaderCountMatchesColumn.Name = "DgvReaderCountMatchesColumn";
 			this.DgvReaderCountMatchesColumn.ReadOnly = true;
+			this.DgvReaderCountMatchesColumn.MinimumWidth = 58;
+			this.DgvReaderCountMatchesColumn.Width = 58;
 			// 
 			// DgvReaderCountErrorMatchesColumn
 			// 
 			this.DgvReaderCountErrorMatchesColumn.HeaderText = "Errors";
 			this.DgvReaderCountErrorMatchesColumn.Name = "DgvReaderCountErrorMatchesColumn";
 			this.DgvReaderCountErrorMatchesColumn.ReadOnly = true;
+			this.DgvReaderCountErrorMatchesColumn.MinimumWidth = 45;
+			this.DgvReaderCountErrorMatchesColumn.Width = 45;
 			// 
 			// DgvReaderFileColumn
 			// 
 			this.DgvReaderFileColumn.HeaderText = "File";
 			this.DgvReaderFileColumn.Name = "DgvReaderFileColumn";
 			this.DgvReaderFileColumn.ReadOnly = true;
-			this.DgvReaderFileColumn.Width = 1000;
-			// 
-			// splitContainer1
-			// 
-			this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer1.Name = "splitContainer1";
-			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainer1.Panel1
-			// 
-			this.splitContainer1.Panel1.Controls.Add(this.splitContainerTop);
-			this.splitContainer1.Panel1.Controls.Add(this.buttonNextBlock);
-			this.splitContainer1.Panel1MinSize = 92;
-			// 
-			// splitContainer1.Panel2
-			// 
-			this.splitContainer1.Panel2.Controls.Add(this.ParentSplitContainer);
-			this.splitContainer1.Panel2MinSize = 50;
-			this.splitContainer1.Size = new System.Drawing.Size(1152, 584);
-			this.splitContainer1.SplitterDistance = 92;
-			this.splitContainer1.TabIndex = 37;
+			this.DgvReaderFileColumn.MinimumWidth = 60;
+			this.DgvReaderFileColumn.Width = 60;
 			// 
 			// LogsReaderFormBase
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer1);
+			this.Controls.Add(this.searchPanel);
 			this.Controls.Add(this.progressBar);
 			this.MinimumSize = new System.Drawing.Size(0, 25);
 			this.Name = "LogsReaderFormBase";

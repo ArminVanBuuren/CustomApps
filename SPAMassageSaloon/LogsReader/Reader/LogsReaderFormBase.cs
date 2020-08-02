@@ -21,16 +21,16 @@ namespace LogsReader.Reader
 		private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
-        private bool _settingIsApplied = false;
+        private bool _settingIsApplied;
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
         private bool _isWorking;
 
-        private int _countMatches = 0;
-        private int _countErrorMatches = 0;
-        private int _filesCompleted = 0;
-        private int _totalFiles = 0;
+        private int _countMatches;
+        private int _countErrorMatches;
+        private int _filesCompleted;
+        private int _totalFiles;
 
         private IEnumerable<DataTemplate> _currentDGVResult;
         private DataGridViewColumn _oldSortedColumn;
@@ -280,7 +280,10 @@ namespace LogsReader.Reader
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
 		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            DgvData.CellFormatting += DataGridViewOnCellFormatting;
+	            DgvData.CellDoubleClick += DgvData_CellDoubleClick;
+	            DgvData.SelectionChanged += DgvData_SelectionChanged;
+	            DgvData.MouseDown += DgvData_MouseDown;
+				DgvData.CellFormatting += DataGridViewOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
                 DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
                 DgvData.ColumnWidthChanged += (sender, args) =>
@@ -332,7 +335,10 @@ namespace LogsReader.Reader
                 DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
                 foreach (DataGridViewColumn c in DgvReader.Columns)
 	                c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
+                DgvReader.ColumnHeaderMouseClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
+				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
+
+				DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
 
                 DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
 
@@ -610,6 +616,7 @@ namespace LogsReader.Reader
 			{
 				await DgvReader.AssignCollectionAsync(readers, null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				DgvReader.ColumnHeadersVisible = true;
 			}
 			catch (Exception ex)
 			{
@@ -642,7 +649,7 @@ namespace LogsReader.Reader
 					countMatches = readers.Sum(x => x.CountMatches);
 					countErrorMatches = readers.Sum(x => x.CountErrors);
 					totalFiles = readers.Count();
-					filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting || x.Status != TraceReaderStatus.Processing);
+					filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting && x.Status != TraceReaderStatus.Processing && !x.ThreadId.IsNullOrWhiteSpace());
 					var inProgress = TotalFiles - filesCompleted;
 					progress = 0;
 					if (inProgress > 0)
@@ -1231,6 +1238,12 @@ namespace LogsReader.Reader
 	        if (!TryGetReader(row, out var reader))
 		        return;
 
+	        DataGridViewRow selected = null;
+	        if (DgvReader.SelectedRows.Count > 0)
+		        selected = DgvReader.SelectedRows[0];
+	        if (selected == null)
+		        selected = DgvReader.CurrentRow;
+
 	        try
 	        {
 		        if (row.Cells[DgvReaderSelectColumn.Name] is DgvColumnCheckBoxHeaderCell cellCheckBox)
@@ -1238,42 +1251,55 @@ namespace LogsReader.Reader
 
 		        }
 
-				if (row.Cells[DgvReaderImageColumn.Name] is DgvTextAndImageCell cellImage)
-				{
-					Image img = null;
-					switch (reader.Status)
-					{
-						case TraceReaderStatus.Waiting:
-							img = Resources._default;
-							break;
-						case TraceReaderStatus.Processing:
-							img = Resources.next_arrow;
-							break;
-						case TraceReaderStatus.Cancelled:
-							img = Resources.cancel;
-							break;
-						case TraceReaderStatus.Failed:
-							img = Resources.Error1;
-							break;
-						case TraceReaderStatus.Finished:
-							img = Resources.Ok;
-							break;
-						default:
-							img = null;
-							break;
-					}
+		        if (row.Cells[DgvReaderImageColumn.Name] is DgvTextAndImageCell cellImage)
+		        {
+			        switch (reader.Status)
+			        {
+				        case TraceReaderStatus.Waiting:
+					        cellImage.Image = Resources._default;
+					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
+						        row.DefaultCellStyle.BackColor = Color.LightGray;
+					        break;
+				        case TraceReaderStatus.Processing:
+					        cellImage.Image = Resources.next_arrow;
+					        if (row.DefaultCellStyle.BackColor != Color.White)
+						        row.DefaultCellStyle.BackColor = Color.White;
+					        break;
+				        case TraceReaderStatus.Cancelled:
+					        cellImage.Image = Resources.cancel;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+					        break;
+				        case TraceReaderStatus.Failed:
+					        cellImage.Image = Resources.Error1;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+					        break;
+				        case TraceReaderStatus.Finished:
+					        cellImage.Image = Resources.Ok;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
+					        break;
+				        default:
+					        cellImage.Image = null;
+					        break;
+			        }
 
-					if (cellImage.Image != img)
-						cellImage.Image = img;
-				}
+			        cellImage.Value = reader.Status.ToString();
+		        }
 
-				row.Cells[DgvReaderThreadIdColumn.Name].Value = reader.ThreadId;
-				row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
-				row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
+		        row.Cells[DgvReaderThreadIdColumn.Name].Value = reader.ThreadId;
+		        row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
+		        row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
 	        }
 	        catch (Exception)
 	        {
 		        // ignored
+	        }
+	        finally
+	        {
+				if (selected != null)
+					selected.Selected = true;
 	        }
         }
 
@@ -1433,8 +1459,8 @@ namespace LogsReader.Reader
 		        ClearErrorStatus();
 
 		        var orderByOption = byAscending
-			        ? new Dictionary<string, bool>() {{columnName, false}}
-			        : new Dictionary<string, bool>() {{columnName, true}};
+			        ? new Dictionary<string, bool> {{columnName, false}}
+			        : new Dictionary<string, bool> {{columnName, true}};
 
 		        if (!orderByOption.ContainsKey(nameof(DataTemplate.Tmp.File)))
 			        orderByOption.Add(nameof(DataTemplate.Tmp.File), !byAscending);
@@ -1757,7 +1783,7 @@ namespace LogsReader.Reader
 	        base.Dispose(disposing);
         }
 
-        private bool shownFilterPanel = false;
+        private bool shownFilterPanel;
         private void buttonNextBlock_Click(object sender, EventArgs e)
         {
 	        shownFilterPanel = !shownFilterPanel;
