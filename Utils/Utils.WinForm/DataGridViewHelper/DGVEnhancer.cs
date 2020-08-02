@@ -187,7 +187,7 @@ namespace Utils.WinForm.DataGridViewHelper
                     var propertyName = column.DataPropertyName.IsNullOrEmpty() ? column.Name : column.DataPropertyName;
 
                     if (!columnList.TryGetValue(propertyName, out var newColumn))
-                        throw new Exception($"Not found property \"{propertyName}\" in class \"{typeof(T)}\" by DataPropertyName or Name of column in DataGridView.");
+                        continue;
 
                     var dataColumn = new DataColumn(newColumn.PropertyName, newColumn.PropertyType)
                     {
