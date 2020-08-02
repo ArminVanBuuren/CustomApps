@@ -263,12 +263,14 @@ namespace Utils.WinForm.Notepad
             Controls.Add(FCTB);
             Controls.Add(_statusStrip);
 
+            var toolStripItems = new List<ToolStripItem>();
+
             _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control };
             foreach (Language lang in Enum.GetValues(typeof(Language)))
                 _listOfLanguages.Items.Add(lang);
             _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
             _listOfLanguages.Size = new Size(100, _listOfLanguages.Size.Height);
-            _statusStrip.Items.Add(_listOfLanguages);
+            toolStripItems.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
             {
                 if (_listOfLanguages.SelectedItem is Language lang && FCTB.Language != lang)
@@ -279,7 +281,7 @@ namespace Utils.WinForm.Notepad
                 }
             };
 
-            _statusStrip.Items.Add(GetSeparator());
+            toolStripItems.Add(GetSeparator());
             _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 2, 0, 0) };
             _wordWrapping.CheckStateChanged += (s, e) =>
             {
@@ -290,9 +292,9 @@ namespace Utils.WinForm.Notepad
                 WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
-            _statusStrip.Items.Add(wordWrapToolStrip);
+            toolStripItems.Add(wordWrapToolStrip);
 
-            _statusStrip.Items.Add(GetSeparator());
+            toolStripItems.Add(GetSeparator());
             _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 2, 0, 0) };
             _highlights.CheckStateChanged += (s, e) =>
             {
@@ -304,36 +306,36 @@ namespace Utils.WinForm.Notepad
                 WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var highlightsToolStrip = new ToolStripControlHost(_highlights);
-            _statusStrip.Items.Add(highlightsToolStrip);
+            toolStripItems.Add(highlightsToolStrip);
 
-            _statusStrip.Items.Add(GetSeparator());
+            toolStripItems.Add(GetSeparator());
             _encodingInfo = GetStripLabel("");
-            _statusStrip.Items.Add(_encodingInfo);
+            toolStripItems.Add(_encodingInfo);
 
-            _statusStrip.Items.Add(GetSeparator());
-            _statusStrip.Items.Add(GetStripLabel("length:"));
+            toolStripItems.Add(GetSeparator());
+            toolStripItems.Add(GetStripLabel("length:"));
             _contentLengthInfo = GetStripLabel("");
-            _statusStrip.Items.Add(_contentLengthInfo);
-            _statusStrip.Items.Add(GetStripLabel("lines:"));
+            toolStripItems.Add(_contentLengthInfo);
+            toolStripItems.Add(GetStripLabel("lines:"));
             _contentLinesInfo = GetStripLabel("");
-            _statusStrip.Items.Add(_contentLinesInfo);
+            toolStripItems.Add(_contentLinesInfo);
 
-            _statusStrip.Items.Add(GetSeparator());
-            _statusStrip.Items.Add(GetStripLabel("Ln:"));
+            toolStripItems.Add(GetSeparator());
+            toolStripItems.Add(GetStripLabel("Ln:"));
             _currentLineInfo = GetStripLabel("");
-            _statusStrip.Items.Add(_currentLineInfo);
-            _statusStrip.Items.Add(GetStripLabel("Col:"));
+            toolStripItems.Add(_currentLineInfo);
+            toolStripItems.Add(GetStripLabel("Col:"));
             _currentPosition = GetStripLabel("");
-            _statusStrip.Items.Add(_currentPosition);
-            _statusStrip.Items.Add(GetStripLabel("Sel:"));
+            toolStripItems.Add(_currentPosition);
+            toolStripItems.Add(GetStripLabel("Sel:"));
             _selectedInfo = GetStripLabel("");
-            _statusStrip.Items.Add(_selectedInfo);
+            toolStripItems.Add(_selectedInfo);
+
+            _statusStrip.Items.AddRange(toolStripItems.ToArray());
 
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
-
-            RefreshForm();
 
             FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(this, args); };
             FCTB.Pasting += (sender, args) => { Pasting?.Invoke(this, args); };
@@ -375,13 +377,34 @@ namespace Utils.WinForm.Notepad
 
         internal void RefreshForm()
         {
-            _contentLengthInfo.Text = TextLength.ToString();
-            _contentLinesInfo.Text = LinesCount.ToString();
-            _currentLineInfo.Text = (Selection.FromLine + 1).ToString();
-            _currentPosition.Text = (Selection.FromX + 1).ToString();
-            _selectedInfo.Text = $"{SelectedText.Length}|{(SelectedText.Length > 0 ? SelectedText.Split('\n').Length : 0)}";
-            _encodingInfo.Text = Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
-            _listOfLanguages.Text = Language.ToString();
+	        var textLength = TextLength.ToString();
+	        var linesCount = LinesCount.ToString();
+	        var selectionLine = (Selection.FromLine + 1).ToString();
+	        var selectionX = (Selection.FromX + 1).ToString();
+	        var selectedText = $"{SelectedText.Length}|{(SelectedText.Length > 0 ? SelectedText.Split('\n').Length : 0)}";
+	        var encoding = Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
+	        var language = Language.ToString();
+
+	        if (_contentLengthInfo.Text != textLength)
+		        _contentLengthInfo.Text = textLength;
+
+	        if (_contentLinesInfo.Text != linesCount)
+		        _contentLinesInfo.Text = linesCount;
+
+	        if (_currentLineInfo.Text != selectionLine)
+		        _currentLineInfo.Text = selectionLine;
+
+	        if (_currentPosition.Text != selectionX)
+		        _currentPosition.Text = selectionX;
+
+	        if (_selectedInfo.Text != selectedText)
+		        _selectedInfo.Text = selectedText;
+
+	        if (_encodingInfo.Text != encoding)
+		        _encodingInfo.Text = encoding;
+
+	        if (_listOfLanguages.Text != language)
+		        _listOfLanguages.Text = language;
         }
 
         public void PrintXml(bool commitChanges = true)
