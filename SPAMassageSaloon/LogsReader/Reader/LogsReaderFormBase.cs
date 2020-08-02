@@ -337,10 +337,10 @@ namespace LogsReader.Reader
 	                c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 DgvReader.ColumnHeaderMouseClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
-
 				DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
+				DgvReader.CellContentClick += (sender, args) => { };
 
-                DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
+				DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
 
                 DgvReaderPrivateIDColumn.DataPropertyName = DgvReaderPrivateIDColumn.Name = "PrivateID";    // not visible
 
@@ -650,10 +650,9 @@ namespace LogsReader.Reader
 					countErrorMatches = readers.Sum(x => x.CountErrors);
 					totalFiles = readers.Count();
 					filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting && x.Status != TraceReaderStatus.Processing && !x.ThreadId.IsNullOrWhiteSpace());
-					var inProgress = TotalFiles - filesCompleted;
 					progress = 0;
-					if (inProgress > 0)
-						progress = (inProgress * 100) / TotalFiles;
+					if (filesCompleted > 0)
+						progress = (filesCompleted * 100) / TotalFiles;
 
 					if (CountMatches == countMatches && CountErrorMatches == countErrorMatches
 					                                 && TotalFiles == totalFiles && FilesCompleted == filesCompleted && Progress == progress)
@@ -1798,7 +1797,8 @@ namespace LogsReader.Reader
 	        else
 	        {
 		        buttonNextBlock.Text = @"<";
-            }
+		        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+			}
         }
 
         protected virtual void CustomPanel_Resize(object sender, EventArgs e)
