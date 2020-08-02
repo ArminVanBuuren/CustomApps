@@ -184,7 +184,7 @@ namespace LogsReader.Reader
 					schemeExpander.ForeColor = colorDialog.Color;
 				}
 
-				RefreshAllRows();
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
 			}
 
 			var buttonSize = new Size(20, 17);
@@ -303,21 +303,11 @@ namespace LogsReader.Reader
 		        if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
 			        return;
 
-		        var countMatches = 0;
-		        var countErrorMatches = 0;
-				var progress = 0;
-				var filesCompleted = 0;
-				var totalFiles = 0;
-				foreach (var schemeForm in InProcessing.Select(x => x.Item1))
-				{
-					countMatches += schemeForm.CountMatches;
-					countErrorMatches += schemeForm.CountErrorMatches;
-					progress += schemeForm.Progress;
-					filesCompleted += schemeForm.FilesCompleted;
-					totalFiles += schemeForm.TotalFiles;
-				}
+				var readers = InProcessing
+					.Where(x => x.Item1.MainReader?.TraceReaders != null)
+					.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values).ToList();
 
-				ReportProcessStatus(countMatches, countErrorMatches, progress / InProcessing.Count(), filesCompleted, totalFiles);
+				ReportProcessStatus(readers);
 	        };
 			// событие при смене языка формы
 	        readerForm.OnAppliedSettings += (sender, args) =>
@@ -385,6 +375,7 @@ namespace LogsReader.Reader
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
+				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				Progress = 100;
 			};
 
@@ -573,7 +564,7 @@ namespace LogsReader.Reader
         internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
 			template = null;
-			var schemeName = row?.Cells[nameof(DataTemplate.Tmp.SchemeName)]?.Value?.ToString();
+			var schemeName = row?.Cells[DgvDataSchemeNameColumn.Name]?.Value?.ToString();
 			if (schemeName == null
 			    || InProcessing == null
 			    || !InProcessing.TryGetValue(schemeName, out var readerForm)
@@ -583,6 +574,20 @@ namespace LogsReader.Reader
 			template = templateResult;
 			return true;
 		}
+
+        internal override bool TryGetReader(DataGridViewRow row, out TraceReader reader)
+        {
+	        reader = null;
+	        var schemeName = row?.Cells[DgvReaderSchemeNameColumn.Name]?.Value?.ToString();
+	        if (schemeName == null
+	            || InProcessing == null
+	            || !InProcessing.TryGetValue(schemeName, out var readerForm)
+	            || !readerForm.TryGetReader(row, out var readerResult))
+		        return false;
+
+	        reader = readerResult;
+	        return true;
+        }
 
 		protected override void BtnClear_Click(object sender, EventArgs e)
 		{

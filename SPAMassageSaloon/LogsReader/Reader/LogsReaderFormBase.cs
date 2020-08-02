@@ -52,13 +52,13 @@ namespace LogsReader.Reader
         private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
         private TransactionsMarkingType _prevTransactionsMarkingType = TransactionsMarkingType.None;
 
-        protected static Tuple<int, Image> Img_Failed { get; private set; }
+        protected static Image Img_Failed { get; private set; }
 
-        protected static Tuple<int, Image> Img_Filtered { get; private set; }
+        protected static Image Img_Filtered { get; private set; }
 
-        protected static Tuple<int, Image> Img_Selected { get; private set; }
+        protected static Image Img_Selected { get; private set; }
 
-        protected static Tuple<int, Image> Img_Failed_Filtered { get; private set; }
+        protected static Image Img_Failed_Filtered { get; private set; }
 
         /// <summary>
         /// Юзерские настройки 
@@ -121,7 +121,7 @@ namespace LogsReader.Reader
 	        {
 		        _isWorking = value;
 		        ChangeFormStatus();
-            }
+	        }
         }
 
         public Encoding DefaultEncoding { get; }
@@ -141,7 +141,7 @@ namespace LogsReader.Reader
         public int CountMatches
         {
 	        get => _countMatches;
-	        protected set
+	        private set
 	        {
 		        _countMatches = value;
 		        _findedInfo.Text = _countMatches.ToString();
@@ -151,7 +151,7 @@ namespace LogsReader.Reader
         public int CountErrorMatches
         {
 	        get => _countErrorMatches;
-	        protected set
+	        private set
 	        {
 		        _countErrorMatches = value;
 		        _errorFoundValue.Text = _countErrorMatches.ToString();
@@ -167,7 +167,7 @@ namespace LogsReader.Reader
         public int FilesCompleted
         {
 	        get => _filesCompleted;
-	        protected set
+	        private set
 	        {
 		        _filesCompleted = value;
 		        _completedFilesStatus.Text = _filesCompleted.ToString();
@@ -177,7 +177,7 @@ namespace LogsReader.Reader
         public int TotalFiles
         {
 	        get => _totalFiles;
-	        protected set
+	        private set
 	        {
 		        _totalFiles = value;
 		        _totalFilesStatus.Text = _totalFiles.ToString();
@@ -196,7 +196,7 @@ namespace LogsReader.Reader
 
         static LogsReaderFormBase()
         {
-	        Tuple<int, Image> GetImage(int index, IEnumerable< Image> images)
+	        Image GetImage(IEnumerable< Image> images)
 	        {
 		        var bmp = new Bitmap(images.Sum(x => x.Width), images.Max(x => x.Height));
 		        using (var g = Graphics.FromImage(bmp))
@@ -209,13 +209,13 @@ namespace LogsReader.Reader
 			        }
 		        }
 
-		        return new Tuple<int, Image>(index, bmp);
+		        return bmp;
 	        }
 
-	        Img_Failed = new Tuple<int, Image>(1, Resources.Error1);
-	        Img_Filtered = new Tuple<int, Image>(2, Resources.filtered);
-	        Img_Selected = new Tuple<int, Image>(3, Resources.trn);
-	        Img_Failed_Filtered = GetImage(4, new[] { Resources.Error1, Resources.filtered });
+	        Img_Failed = Resources.Error1;
+	        Img_Filtered = Resources.filtered;
+	        Img_Selected = Resources.trn;
+	        Img_Failed_Filtered = GetImage(new[] { Resources.Error1, Resources.filtered });
         }
 
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
@@ -280,57 +280,74 @@ namespace LogsReader.Reader
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 	            foreach (DataGridViewColumn c in DgvData.Columns)
 		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            DgvData.CellFormatting += DgvDataOnCellFormatting;
+	            DgvData.CellFormatting += DataGridViewOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
                 DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
                 DgvData.ColumnWidthChanged += (sender, args) =>
                 {
-	                if (PromptColumn.Width > PromptColumn.MinimumWidth)
-		                PromptColumn.Width = PromptColumn.MinimumWidth;
+	                if (DgvDataPromptColumn.Width > DgvDataPromptColumn.MinimumWidth)
+		                DgvDataPromptColumn.Width = DgvDataPromptColumn.MinimumWidth;
                 };
 
-                PromptColumn.DataPropertyName = nameof(DataTemplate.Tmp.Prompt);
-                PromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
-                PromptColumn.HeaderText = DataTemplate.HeaderPrompt;
+                DgvDataPromptColumn.DataPropertyName = DgvDataPromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
+                DgvDataPromptColumn.HeaderText = DataTemplate.HeaderPrompt;
 
-                IDColumn.DataPropertyName = nameof(DataTemplate.Tmp.ID);
-                IDColumn.Name = nameof(DataTemplate.Tmp.ID);
-                IDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
+                DgvDataIDColumn.DataPropertyName = DgvDataIDColumn.Name = DgvDataIDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
 
-                ServerColumn.DataPropertyName = nameof(DataTemplate.Tmp.Server);
-                ServerColumn.Name = nameof(DataTemplate.Tmp.Server);
-                ServerColumn.HeaderText = nameof(DataTemplate.Tmp.Server);
+                DgvDataServerColumn.DataPropertyName = DgvDataServerColumn.Name = DgvDataServerColumn.HeaderText = nameof(DataTemplate.Tmp.Server);
 
-                TraceNameColumn.DataPropertyName = nameof(DataTemplate.Tmp.TraceName);
-                TraceNameColumn.Name = nameof(DataTemplate.Tmp.TraceName);
-                TraceNameColumn.HeaderText = nameof(DataTemplate.Tmp.TraceName);
+                DgvDataTraceNameColumn.DataPropertyName = DgvDataTraceNameColumn.Name = nameof(DataTemplate.Tmp.TraceName);
+                DgvDataTraceNameColumn.HeaderText = nameof(DataTemplate.Tmp.TraceName);
 
-                DateOfTraceColumn.DataPropertyName = nameof(DataTemplate.Tmp.DateString);
-                DateOfTraceColumn.Name = nameof(DataTemplate.Tmp.DateString);
-                DateOfTraceColumn.HeaderText = nameof(DataTemplate.Tmp.Date);
+                DgvDataDateOfTraceColumn.DataPropertyName = DgvDataDateOfTraceColumn.Name = nameof(DataTemplate.Tmp.DateString);
+                DgvDataDateOfTraceColumn.HeaderText = nameof(DataTemplate.Tmp.Date);
 
-                ElapsedSecColumn.DataPropertyName = nameof(DataTemplate.Tmp.ElapsedSecString);
-                ElapsedSecColumn.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
-                ElapsedSecColumn.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
+                DgvDataElapsedSecColumn.DataPropertyName = DgvDataElapsedSecColumn.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
+                DgvDataElapsedSecColumn.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
 
-                SchemeNameColumn.DataPropertyName = nameof(DataTemplate.Tmp.SchemeName); // not visible
-                SchemeNameColumn.Name = nameof(DataTemplate.Tmp.SchemeName);
+                DgvDataSchemeNameColumn.DataPropertyName = DgvDataSchemeNameColumn.Name = nameof(DataTemplate.Tmp.SchemeName);// not visible
 
-                PrivateIDColumn.DataPropertyName = nameof(DataTemplate.Tmp.PrivateID); // not visible
-                PrivateIDColumn.Name = nameof(DataTemplate.Tmp.PrivateID);
+                DgvDataPrivateIDColumn.DataPropertyName = DgvDataPrivateIDColumn.Name = nameof(DataTemplate.Tmp.PrivateID); // not visible
 
-                IsSuccessColumn.DataPropertyName = nameof(DataTemplate.Tmp.IsSuccess); // not visible
-                IsSuccessColumn.Name = nameof(DataTemplate.Tmp.IsSuccess);
+                DgvDataIsSuccessColumn.DataPropertyName = DgvDataIsSuccessColumn.Name = nameof(DataTemplate.Tmp.IsSuccess); // not visible
 
-                IsFilteredColumn.DataPropertyName = nameof(DataTemplate.Tmp.IsFiltered); // not visible
-                IsFilteredColumn.Name = nameof(DataTemplate.Tmp.IsFiltered);
+                DgvDataIsFilteredColumn.DataPropertyName = DgvDataIsFilteredColumn.Name = nameof(DataTemplate.Tmp.IsFiltered); // not visible
 
-                FileColumn.DataPropertyName = nameof(DataTemplate.Tmp.FileNamePartial);
-                FileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
-                FileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
+                DgvDataFileColumn.DataPropertyName = DgvDataFileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
+                DgvDataFileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
 
 	            label7.Text = nameof(DataTemplate.Tmp.TraceName);
                 label11.Text = DataTemplate.HeaderTraceMessage;
+
+                #endregion
+
+                #region Initialize DgvProcessing
+
+                DgvReader.AutoGenerateColumns = false;
+                DgvReader.TabStop = false;
+                DgvReader.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+                DgvReader.DefaultCellStyle.Font = LogsReaderMainForm.DgvFont;
+                DgvReader.Font = LogsReaderMainForm.DgvFont;
+                DgvReader.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                foreach (DataGridViewColumn c in DgvReader.Columns)
+	                c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
+
+                DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
+
+                DgvReaderPrivateIDColumn.DataPropertyName = DgvReaderPrivateIDColumn.Name = "PrivateID";    // not visible
+
+                DgvReaderThreadIdColumn.DataPropertyName = DgvReaderThreadIdColumn.Name = DgvReaderThreadIdColumn.HeaderText = @"ThreadId";
+
+                DgvReaderCountMatchesColumn.DataPropertyName = DgvReaderCountMatchesColumn.Name = "CountMatches";
+                DgvReaderCountMatchesColumn.HeaderText = "Matches";
+
+                DgvReaderCountErrorMatchesColumn.DataPropertyName = DgvReaderCountErrorMatchesColumn.Name = "CountErrors";
+                DgvReaderCountErrorMatchesColumn.HeaderText = @"Errors";
+
+                DgvReaderFileColumn.DataPropertyName = DgvReaderFileColumn.Name = "FilePath";
+                DgvReaderFileColumn.HeaderText = "File";
 
                 #endregion
 
@@ -585,28 +602,72 @@ namespace LogsReader.Reader
                 throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
         }
 
-        protected void ReportProcessStatus(int countMatches, int countErrorMatches, int percentOfProgeress, int filesCompleted, int totalFiles)
-        {
-	        if (!IsWorking)
-		        return;
+        private readonly object syncRootStatus = new object();
 
-	        this.SafeInvoke(() =>
-	        {
-		        if (!IsWorking)
-			        return;
+		protected async Task UploadReaders(IEnumerable<TraceReader> readers)
+		{
+			try
+			{
+				await DgvReader.AssignCollectionAsync(readers, null, true);
+				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
+		}
 
-		        CountMatches = countMatches;
-		        CountErrorMatches = countErrorMatches;
-		        Progress = percentOfProgeress;
-		        FilesCompleted = filesCompleted;
-		        TotalFiles = totalFiles;
-		        ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
-	        });
+		protected void ReportProcessStatus(IEnumerable<TraceReader> readers)
+		{
+			if (!IsWorking)
+				return;
 
-	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
-        }
+			var isChanged = false;
 
-        void ClearStatus()
+			this.SafeInvoke(() =>
+			{
+				if (!IsWorking)
+					return;
+
+				var countMatches = 0;
+				var countErrorMatches = 0;
+				var totalFiles = 0;
+				var filesCompleted = 0;
+				var progress = 0;
+
+				lock (syncRootStatus)
+				{
+					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
+
+					countMatches = readers.Sum(x => x.CountMatches);
+					countErrorMatches = readers.Sum(x => x.CountErrors);
+					totalFiles = readers.Count();
+					filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting || x.Status != TraceReaderStatus.Processing);
+					var inProgress = TotalFiles - filesCompleted;
+					progress = 0;
+					if (inProgress > 0)
+						progress = (inProgress * 100) / TotalFiles;
+
+					if (CountMatches == countMatches && CountErrorMatches == countErrorMatches
+					                                 && TotalFiles == totalFiles && FilesCompleted == filesCompleted && Progress == progress)
+						return;
+				}
+
+				CountMatches = countMatches;
+				CountErrorMatches = countErrorMatches;
+				TotalFiles = totalFiles;
+				FilesCompleted = filesCompleted;
+				Progress = progress;
+				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				isChanged = true;
+
+			});
+
+			if (isChanged)
+				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		void ClearStatus()
         {
 	        this.SafeInvoke(() =>
 	        {
@@ -804,7 +865,7 @@ namespace LogsReader.Reader
 	            if (filter == null)
 	            {
 		            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-			            row.Cells[IsFilteredColumn.Name].Value = false;
+			            row.Cells[DgvDataIsFilteredColumn.Name].Value = false;
 		            return;
 	            }
 
@@ -813,7 +874,7 @@ namespace LogsReader.Reader
 	            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
 	            {
 		            var isFiltered = TryGetTemplate(row, out var template) && filter.IsAllowed(template);
-		            row.Cells[IsFilteredColumn.Name].Value = isFiltered;
+		            row.Cells[DgvDataIsFilteredColumn.Name].Value = isFiltered;
 		            if (isFiltered)
 			            count++;
 	            }
@@ -855,7 +916,7 @@ namespace LogsReader.Reader
 		        ClearErrorStatus();
 
                 foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-	                row.Cells[IsFilteredColumn.Name].Value = false;
+	                row.Cells[DgvDataIsFilteredColumn.Name].Value = false;
 
                 DgvData.Refresh();
             }
@@ -1018,40 +1079,45 @@ namespace LogsReader.Reader
             }
         }
 
-        private void DgvDataOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void DataGridViewOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
 	        if (e.RowIndex < 0 || e.ColumnIndex < 0) 
 		        return;
 
 	        try
 	        {
-		        var row = ((DataGridView)sender).Rows[e.RowIndex];
-		        RefreshRow(row, null, null);
+		        var dgv = (DataGridView) sender;
+		        var row = dgv.Rows[e.RowIndex];
+
+		        if (dgv == DgvData)
+			        DgvDataRefreshRow(row, null, null);
+		        else if (dgv == DgvReader)
+			        DgvReaderRefreshRow(row, null, null);
 	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+	        }
         }
 
         /// <summary>
         /// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
         /// </summary>
-        protected void RefreshVisibleRows()
+        protected static void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
         {
 	        try
 	        {
-		        if (DgvData.RowCount == 0)
+		        if (dgv == null || dgv.RowCount == 0)
 			        return;
 
-		        var countVisible = DgvData.DisplayedRowCount(false);
-		        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
+		        var countVisible = dgv.DisplayedRowCount(false);
+		        var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
 		        var firstIndex = Math.Max(0, firstVisibleRowIndex - 50);
-		        var lastIndex = Math.Min(DgvData.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
+		        var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
 
 		        for (var i = firstIndex; i <= lastIndex; i++)
-			        RefreshRow(DgvData.Rows[i], countVisible, firstVisibleRowIndex);
+			        refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
 	        }
 	        catch (Exception)
 	        {
@@ -1062,19 +1128,19 @@ namespace LogsReader.Reader
         /// <summary>
         /// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
         /// </summary>
-        protected void RefreshAllRows()
+        protected static void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
         {
-	        if (DgvData.RowCount == 0)
+	        if (dgv == null || dgv.RowCount == 0)
 		        return;
 
-	        var countVisible = DgvData.DisplayedRowCount(false);
-	        var firstVisibleRowIndex = DgvData.FirstDisplayedScrollingRowIndex;
+	        var countVisible = dgv.DisplayedRowCount(false);
+	        var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
-            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-		        RefreshRow(row, countVisible, firstVisibleRowIndex);
+            foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
+	            refreshRow(row, countVisible, firstVisibleRowIndex);
         }
 
-        protected void RefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+        protected void DgvDataRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
         {
 	        if (!TryGetTemplate(row, out var template))
 		        return;
@@ -1102,7 +1168,7 @@ namespace LogsReader.Reader
 				        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
                 }
 
-		        if ((row.Cells[FileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
+		        if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
 			        cellFile.ToolTipText = template.File;
 
 		        // меняем свойтсво Image только для строк которые показаны пользователю
@@ -1110,14 +1176,14 @@ namespace LogsReader.Reader
                 if (countVisible == null && firstVisibleRowIndex == null
                     || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
                 {
-	                if (!(row.Cells[PromptColumn.Name] is TextAndImageCell imgCellPrompt))
+	                if (!(row.Cells[DgvDataPromptColumn.Name] is DgvTextAndImageCell imgCellPrompt))
 		                return;
 
-	                if (!(row.Cells[TraceNameColumn.Name] is TextAndImageCell imgCellTraceName))
+	                if (!(row.Cells[DgvDataTraceNameColumn.Name] is DgvTextAndImageCell imgCellTraceName))
 		                return;
 
 	                var isfiltered = false;
-	                if (row.Cells[IsFilteredColumn.Name] is DataGridViewCell isfilteredCell)
+	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell)
 		                isfiltered = bool.Parse(isfilteredCell.Value.ToString());
 
 	                if (!template.IsSuccess)
@@ -1129,7 +1195,7 @@ namespace LogsReader.Reader
 		                imgCellTraceName.Image = isfiltered ? Img_Filtered : null;
 	                }
 
-	                imgCellPrompt.Image = template.IsSelected && PromptColumn.Visible ? Img_Selected : null;
+	                imgCellPrompt.Image = template.IsSelected && DgvDataPromptColumn.Visible ? Img_Selected : null;
                 }
 	        }
 	        catch (Exception)
@@ -1158,6 +1224,57 @@ namespace LogsReader.Reader
 	        var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
 	        if (row.DefaultCellStyle.BackColor != color)
 		        row.DefaultCellStyle.BackColor = color;
+        }
+
+        protected void DgvReaderRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+        {
+	        if (!TryGetReader(row, out var reader))
+		        return;
+
+	        try
+	        {
+		        if (row.Cells[DgvReaderSelectColumn.Name] is DgvColumnCheckBoxHeaderCell cellCheckBox)
+		        {
+
+		        }
+
+				if (row.Cells[DgvReaderImageColumn.Name] is DgvTextAndImageCell cellImage)
+				{
+					Image img = null;
+					switch (reader.Status)
+					{
+						case TraceReaderStatus.Waiting:
+							img = Resources._default;
+							break;
+						case TraceReaderStatus.Processing:
+							img = Resources.next_arrow;
+							break;
+						case TraceReaderStatus.Cancelled:
+							img = Resources.cancel;
+							break;
+						case TraceReaderStatus.Failed:
+							img = Resources.Error1;
+							break;
+						case TraceReaderStatus.Finished:
+							img = Resources.Ok;
+							break;
+						default:
+							img = null;
+							break;
+					}
+
+					if (cellImage.Image != img)
+						cellImage.Image = img;
+				}
+
+				row.Cells[DgvReaderThreadIdColumn.Name].Value = reader.ThreadId;
+				row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
+				row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
         }
 
         //DgvData.RowPostPaint += DgvData_RowPostPaint;
@@ -1210,12 +1327,12 @@ namespace LogsReader.Reader
 
         private void buttonErrorPrev_Click(object sender, EventArgs e)
         {
-	        SearchPrev(x=> !bool.Parse(x.Cells[IsSuccessColumn.Name].Value.ToString()));
+	        SearchPrev(x=> !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value.ToString()));
         }
 
         private void buttonFilteredPrev_Click(object sender, EventArgs e)
         {
-	        SearchPrev(x => bool.Parse(x.Cells[IsFilteredColumn.Name].Value.ToString()));
+	        SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value.ToString()));
         }
 
         void SearchPrev(Func<DataGridViewRow, bool> condition)
@@ -1254,12 +1371,12 @@ namespace LogsReader.Reader
 
         private void buttonErrorNext_Click(object sender, EventArgs e)
         {
-	        SearchNext(x => !bool.Parse(x.Cells[IsSuccessColumn.Name].Value.ToString()));
+	        SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value.ToString()));
         }
 
         private void buttonFilteredNext_Click(object sender, EventArgs e)
         {
-	        SearchNext(x => bool.Parse(x.Cells[IsFilteredColumn.Name].Value.ToString()));
+	        SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value.ToString()));
         }
 
         void SearchNext(Func<DataGridViewRow, bool> condition)
@@ -1306,7 +1423,7 @@ namespace LogsReader.Reader
 		        var newColumn = DgvData.Columns[e.ColumnIndex];
 
 		        var columnName = DgvData.Columns[e.ColumnIndex].HeaderText;
-		        if (columnName == PromptColumn.HeaderText)
+		        if (columnName == DgvDataPromptColumn.HeaderText)
 			        return;
 
                 var byAscending = _oldSortedColumn?.Index != e.ColumnIndex || _oldSortedColumn?.Index == e.ColumnIndex && !_byAscending;
@@ -1345,8 +1462,8 @@ namespace LogsReader.Reader
         async Task AssignCurrentDgvResult()
         {
 	        await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-	        PromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-	        RefreshAllRows();
+	        DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+	        RefreshAllRows(DgvData, DgvDataRefreshRow);
         }
 
         private void DgvData_SelectionChanged(object sender, EventArgs e)
@@ -1359,7 +1476,7 @@ namespace LogsReader.Reader
 		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 
 		        if (checkBoxShowTrns.Checked && !noChanged)
-			        RefreshVisibleRows();
+			        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 
 		        if (MainViewer.Parent is TabPage page)
 			        tabControlViewer.SelectTab(page);
@@ -1394,6 +1511,8 @@ namespace LogsReader.Reader
         }
 
         internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
+
+        internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
         private void DgvData_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1466,11 +1585,11 @@ namespace LogsReader.Reader
 			        _currentTransactionsMarkingType = TransactionsMarkingType.None;
 		        }
 
-		        PromptColumn.Visible = _currentTransactionsMarkingType == TransactionsMarkingType.Both || _currentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+		        DgvDataPromptColumn.Visible = _currentTransactionsMarkingType == TransactionsMarkingType.Both || _currentTransactionsMarkingType == TransactionsMarkingType.Prompt;
 
 		        CheckBoxTransactionsMarkingTypeChanged(_currentTransactionsMarkingType);
 
-		        RefreshAllRows();
+		        RefreshAllRows(DgvData, DgvDataRefreshRow);
 		        DgvData.Focus();
 	        }
 	        catch (Exception)
@@ -1524,25 +1643,28 @@ namespace LogsReader.Reader
 
         protected virtual void ClearForm(bool saveData)
         {
-            try
-            {
-                if (saveData)
-                    SaveData();
+	        try
+	        {
+		        if (saveData)
+			        SaveData();
 
-                Clear();
+		        Clear();
 
-                ClearStatus();
+		        ClearStatus();
 
-                _completedFilesStatus.Text = @"0";
-                _totalFilesStatus.Text = @"0";
-                _findedInfo.Text = @"0";
-
-                STREAM.GarbageCollect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
+		        CountMatches = 0;
+		        CountErrorMatches = 0;
+				FilesCompleted = 0;
+		        TotalFiles = 0;
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+	        finally
+	        {
+		        STREAM.GarbageCollect();
+			}
         }
 
         internal void SelectTransactions()
@@ -1550,7 +1672,7 @@ namespace LogsReader.Reader
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
 
-	        RefreshVisibleRows();
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 	        DgvData.Focus();
         }
 
@@ -1559,7 +1681,7 @@ namespace LogsReader.Reader
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
 
-	        RefreshVisibleRows();
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 	        DgvData.Focus();
         }
 
@@ -1575,7 +1697,7 @@ namespace LogsReader.Reader
 		        DgvData.Rows.Clear();
 		        DgvData.Refresh();
 
-		        MainViewer.Clear();
+				MainViewer.Clear();
 		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        {
 			        if(page == MainViewer.Parent)

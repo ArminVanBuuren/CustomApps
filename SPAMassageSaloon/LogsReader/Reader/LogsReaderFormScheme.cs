@@ -294,7 +294,9 @@ namespace LogsReader.Reader
 		            // получение папок по чекбоксам
 		            var folders = TreeViewContainer.GetFolders(TreeMain, true);
 
-		            MainReader = new LogsReaderPerformerScheme(
+		            IsWorking = true;
+
+					MainReader = new LogsReaderPerformerScheme(
 			            CurrentSettings,
 			            TbxPattern.Text,
 			            ChbxUseRegex.Checked,
@@ -303,15 +305,15 @@ namespace LogsReader.Reader
 			            folders,
 			            filter);
 
-		            MainReader.OnProcessReport += ReportProcessStatus;
-
 		            TimeWatcher.Start();
-		            IsWorking = true;
 
 		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
+		            await UploadReaders(MainReader.TraceReaders.Values.OrderBy(x => x.Priority)); // загружаем ридеры в таблицу прогресса
+		            new Action(CheckProgress).BeginInvoke(null, null);
+
+					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
 
 		            // результат выполнения
@@ -327,32 +329,20 @@ namespace LogsReader.Reader
 	            }
 	            catch (Exception ex)
 	            {
-					if (MainReader != null)
-					{
-						MainReader.OnProcessReport -= ReportProcessStatus;
-						MainReader.Dispose();
-						MainReader = null;
-					}
-
-					if (IsWorking)
-						IsWorking = false;
+		            if (IsWorking)
+			            IsWorking = false;
 
 					ReportStatus(ex.Message, ReportStatusType.Error);
 	            }
 	            finally
 	            {
-		            if (MainReader != null)
-		            {
-			            MainReader.OnProcessReport -= ReportProcessStatus;
-			            MainReader.Dispose();
-			            MainReader = null;
-		            }
+		            if (IsWorking)
+			            IsWorking = false;
 
-					if (IsWorking)
-						IsWorking = false;
-
-					if (TimeWatcher.IsRunning)
+		            if (TimeWatcher.IsRunning)
 			            TimeWatcher.Stop();
+
+		            RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 
 					Progress = 100;
 	            }
@@ -364,7 +354,23 @@ namespace LogsReader.Reader
             }
         }
 
-        protected override IEnumerable<DataTemplate> GetResultTemplates()
+        void CheckProgress()
+        {
+	        try
+	        {
+		        while (IsWorking)
+		        {
+			        ReportProcessStatus(MainReader.TraceReaders.Values);
+			        System.Threading.Thread.Sleep(50);
+		        }
+	        }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
+        }
+
+		protected override IEnumerable<DataTemplate> GetResultTemplates()
         {
 	        return OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
         }
@@ -387,14 +393,25 @@ namespace LogsReader.Reader
             template = null;
             if (OverallResultList == null)
                 return false;
-            var privateID = (int)(row?.Cells[nameof(DataTemplate.Tmp.PrivateID)]?.Value ?? -1);
+            var privateID = (int)(row?.Cells[DgvDataPrivateIDColumn.Name]?.Value ?? -1);
             if (privateID <= -1)
                 return false;
             template = OverallResultList[privateID];
             return template != null;
         }
 
-        private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
+        internal override bool TryGetReader(DataGridViewRow row, out TraceReader reader)
+        {
+	        reader = null;
+	        if (MainReader == null)
+		        return false;
+	        var privateID = (int)(row?.Cells[DgvReaderPrivateIDColumn.Name]?.Value ?? -1);
+	        if (privateID <= -1)
+		        return false;
+	        return MainReader.TraceReaders.TryGetValue(privateID, out reader);
+        }
+
+		private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var value))
                 MaxLinesStackTextSave(value);
@@ -497,10 +514,18 @@ namespace LogsReader.Reader
 
         protected override void ClearForm(bool saveData)
         {
-            base.ClearForm(saveData);
-            OverallResultList?.Clear();
+	        OverallResultList?.Clear();
             OverallResultList = null;
-        }
+
+            MainReader?.Dispose();
+            MainReader = null;
+
+            DgvReader.DataSource = null;
+            DgvReader.Rows.Clear();
+            DgvReader.Refresh();
+
+			base.ClearForm(saveData);
+		}
 
         public override string ToString()
         {

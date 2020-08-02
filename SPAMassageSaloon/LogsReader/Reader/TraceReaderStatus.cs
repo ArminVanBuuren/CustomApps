@@ -5,6 +5,7 @@
 		Waiting = 0,
 		Processing = 1,
 		Cancelled = 2,
-		Finished = 4
+		Failed = 4,
+		Finished = 8
 	}
 }

@@ -26,14 +26,14 @@ namespace LogsReader
 		}
 	}
 
-	public class TextAndImageColumn : DataGridViewTextBoxColumn
+	public class DgvTextAndImageColumn : DataGridViewTextBoxColumn
 	{
-		private Tuple<int, Image> imageValue;
+		private Image imageValue;
 		private Size imageSize;
 
-		public TextAndImageColumn()
+		public DgvTextAndImageColumn()
 		{
-			CellTemplate = new TextAndImageCell();
+			CellTemplate = new DgvTextAndImageCell();
 		}
 
 		public sealed override DataGridViewCell CellTemplate
@@ -42,7 +42,7 @@ namespace LogsReader
 			set => base.CellTemplate = value;
 		}
 
-		public Tuple<int, Image> Image
+		public Image Image
 		{
 			get => imageValue;
 			set
@@ -54,7 +54,7 @@ namespace LogsReader
 
 				if (imageValue != null)
 				{
-					imageSize = imageValue.Item2.Size;
+					imageSize = imageValue.Size;
 
 					if (InheritedStyle != null)
 					{
@@ -69,13 +69,13 @@ namespace LogsReader
 			}
 		}
 
-		private TextAndImageCell TextAndImageCellTemplate => CellTemplate as TextAndImageCell;
+		private DgvTextAndImageCell TextAndImageCellTemplate => CellTemplate as DgvTextAndImageCell;
 
 		internal Size ImageSize => imageSize;
 
 		public override object Clone()
 		{
-			if (base.Clone() is TextAndImageColumn c)
+			if (base.Clone() is DgvTextAndImageColumn c)
 			{
 				c.imageValue = imageValue;
 				c.imageSize = imageSize;
@@ -86,14 +86,14 @@ namespace LogsReader
 		}
 	}
 
-	public class TextAndImageCell : DataGridViewTextBoxCell
+	public class DgvTextAndImageCell : DataGridViewTextBoxCell
 	{
-		private Tuple<int, Image> imageValue;
+		private Image imageValue;
 		private Size imageSize;
 
-		private TextAndImageColumn OwningTextAndImageColumn => OwningColumn as TextAndImageColumn;
+		private DgvTextAndImageColumn OwningTextAndImageColumn => OwningColumn as DgvTextAndImageColumn;
 
-		public Tuple<int, Image> Image
+		public Image Image
 		{
 			get
 			{
@@ -111,9 +111,9 @@ namespace LogsReader
 
 				imageValue = value;
 
-				if (value != null)
+				if (imageValue != null)
 				{
-					imageSize = value.Item2.Size;
+					imageSize = imageValue.Size;
 
 					var inheritedPadding = InheritedStyle.Padding;
 					Style.Padding = new Padding(imageSize.Width + 2, inheritedPadding.Top, inheritedPadding.Right, inheritedPadding.Bottom);
@@ -125,12 +125,10 @@ namespace LogsReader
 			}
 		}
 
-		protected override void Paint(Graphics graphics, Rectangle clipBounds,
-			Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState,
-			object value, object formattedValue, string errorText,
+		protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, 
+			DataGridViewElementStates cellState, object value, object formattedValue, string errorText,
 			DataGridViewCellStyle cellStyle,
-			DataGridViewAdvancedBorderStyle advancedBorderStyle,
-			DataGridViewPaintParts paintParts)
+			DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
 		{
 			// Paint the base content
 			base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState,
@@ -146,14 +144,14 @@ namespace LogsReader
 			var point = new Point(cellBounds.Location.X, cellBounds.Location.Y);
 			point.X = point.X + 2;
 			graphics.SetClip(cellBounds);
-			graphics.DrawImageUnscaled(Image.Item2, point);
+			graphics.DrawImageUnscaled(Image, point);
 
 			graphics.EndContainer(container);
 		}
 
 		public override object Clone()
 		{
-			if (base.Clone() is TextAndImageCell c)
+			if (base.Clone() is DgvTextAndImageCell c)
 			{
 				c.imageValue = imageValue;
 				c.imageSize = imageSize;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
 {
@@ -19,9 +20,8 @@ namespace LogsReader.Reader
     public abstract class TraceReader : LogsReaderPerformerBase
     {
 	    private bool _searchByTransaction;
-        private TransactionValue _trn = null;
 
-        private Func<string, bool> _IsMatchedFunc;
+	    private Func<string, bool> _IsMatchedFunc;
 
 	    /// <summary>
         /// Сохраненные данный которые не спарсились по основному поиску и по транзакциям
@@ -36,9 +36,9 @@ namespace LogsReader.Reader
         /// <summary>
         /// Текущая транзакция, используется для DataTempalte 
         /// </summary>
-	    protected TransactionValue CurrentTransactionValue => _trn;
+	    protected TransactionValue CurrentTransactionValue { get; private set; } = null;
 
-	    /// <summary>
+        /// <summary>
 	    /// Разрешить поиск по транзакциям
 	    /// </summary>
 	    protected bool SearchByTransaction
@@ -51,12 +51,12 @@ namespace LogsReader.Reader
 			    {
 				    _IsMatchedFunc = (input) =>
 				    {
-					    _trn = null;
+					    CurrentTransactionValue = null;
 					    var result = IsMatch.Invoke(input);
 
 					    if (IsMatchByTransactions.Invoke(input, out var _trnValue))
 					    {
-						    _trn = new TransactionValue(!result, _trnValue);
+						    CurrentTransactionValue = new TransactionValue(!result, _trnValue);
 						    result = true;
 					    }
 
@@ -65,7 +65,7 @@ namespace LogsReader.Reader
 			    }
 				else
 			    {
-				    _trn = null;
+				    CurrentTransactionValue = null;
                     _IsMatchedFunc = (input) => IsMatch.Invoke(input);
                 }
 		    }
@@ -76,7 +76,27 @@ namespace LogsReader.Reader
         /// </summary>
 	    public event FoundDataTemplate OnFound;
 
-        public string Server { get; }
+        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
+        public int PrivateID { get; internal set; }
+
+		public TraceReaderStatus Status { get; internal set; } = TraceReaderStatus.Waiting;
+
+		[DGVColumn(ColumnPosition.Last, "ThreadID", true)]
+		public string ThreadId { get; internal set; }
+
+		/// <summary>
+		/// Количество совпадений по критериям поиска
+		/// </summary>
+		[DGVColumn(ColumnPosition.Last, "Matches", true)]
+		public int CountMatches { get; private set; }
+
+		/// <summary>
+		/// Количество ошибочных трейсов
+		/// </summary>
+		[DGVColumn(ColumnPosition.Last, "Errors", true)]
+		public int CountErrors { get; private set; }
+
+		public string Server { get; }
 
         /// <summary>
         /// Отсекается часть пути из первичных настроек (OriginalFolder) от основного пути к файлу (FilePath)
@@ -84,10 +104,11 @@ namespace LogsReader.Reader
         /// </summary>
         public string FileNamePartial { get; }
 
-        /// <summary>
-        /// Содержит в себе полный путь к файлу, включая сервер "\\LOCALHOST\C$\TEST\soapcon.log"
-        /// </summary>
-        public string FilePath { get; }
+		/// <summary>
+		/// Содержит в себе полный путь к файлу, включая сервер "\\LOCALHOST\C$\TEST\soapcon.log"
+		/// </summary>
+		[DGVColumn(ColumnPosition.After, "File", true)]
+		public string FilePath { get; }
 
         /// <summary>
         /// Содержит в себе исходную настройку пути к директории "C:\TEST"
@@ -163,7 +184,7 @@ namespace LogsReader.Reader
             {
 	            if (!Found.IsMatched)
 	            {
-		            Found = new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, _trn, ex);
+		            Found = new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, CurrentTransactionValue, ex);
 		            TransactionsSearch(Found.TraceMessage, Found);
 					AddResult(Found);
 	            }
@@ -176,8 +197,14 @@ namespace LogsReader.Reader
         }
 
         protected void AddResult(DataTemplate item)
-        {
-            OnFound?.Invoke(item);
+		{
+			if (item.Error == null)
+				++CountMatches;
+
+			if (!item.IsSuccess)
+				++CountErrors;
+
+			OnFound?.Invoke(item);
         }
 
         protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
@@ -207,7 +234,7 @@ namespace LogsReader.Reader
 					throw new NotSupportedException();
             }
 
-            result = new DataTemplate(this, foundLineId, traceMessage, _trn);
+            result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue);
             return false;
         }
 
@@ -221,7 +248,7 @@ namespace LogsReader.Reader
 					foundLineId,
 					traceParceResult,
 					traceMessage,
-					_trn);
+					CurrentTransactionValue);
 
 				TransactionsSearch(traceMessage, current);
 
@@ -247,7 +274,7 @@ namespace LogsReader.Reader
 			        if (throwException)
 				        throw;
 
-			        result = new DataTemplate(this, foundLineId, traceMessage, _trn, ex);
+			        result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue, ex);
 			        return false;
 		        }
 
@@ -259,7 +286,7 @@ namespace LogsReader.Reader
 			        foundLineId,
 			        traceParsePattern.GetParsingResult(match),
 			        traceMessage,
-			        _trn);
+			        CurrentTransactionValue);
 
 		        TransactionsSearch(traceMessage, current);
 
@@ -310,7 +337,7 @@ namespace LogsReader.Reader
 			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
 			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
-			            innerReader._trn = new TransactionValue(true, trnValue);
+			            innerReader.CurrentTransactionValue = new TransactionValue(true, trnValue);
 			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines - 1; // возвращаемся обратно к первой сохраненной строке
 			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
@@ -425,6 +452,12 @@ namespace LogsReader.Reader
         {
             return FilePath;
         }
+
+        public override void Clear()
+        {
+	        PastTraceLines.Clear();
+			base.Clear();
+		}
 
         public override void Dispose()
         {

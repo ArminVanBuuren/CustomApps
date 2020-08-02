@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text.RegularExpressions;
 using LogsReader.Config;
 using LogsReader.Properties;
 using Utils;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
 {
@@ -38,6 +38,7 @@ namespace LogsReader.Reader
 		/// </summary>
 		protected Func<(string server, string filePath, string originalFolder), TraceReader> GetTraceReader { get; }
 
+		[DGVColumn(ColumnPosition.After, "SchemeName", false)]
 		public string SchemeName => _currentSettings.Name;
 
 		public Encoding Encoding => _currentSettings.Encoding;
@@ -217,6 +218,12 @@ namespace LogsReader.Reader
 		{
 			var hash = _currentSettings.GetHashCode() + 13;
 			return hash;
+		}
+
+		public virtual void Clear()
+		{
+			lock (_syncTrn)
+				_transactionValues.Clear();
 		}
 
 		public virtual void Dispose()

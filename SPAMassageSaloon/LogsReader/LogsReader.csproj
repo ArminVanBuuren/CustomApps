@@ -54,9 +54,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm, Version=2.0.7472.32137, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Utils.WinForm, Version=1.0.7514.20444, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Debug\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +72,7 @@
     <Compile Include="Config\TraceParse.cs" />
     <Compile Include="Config\TraceParsePatternResult.cs" />
     <Compile Include="CryptoNetworkCredential.cs" />
+    <Compile Include="DgvHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -180,6 +181,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\LogsReaderFormBase.resx">
       <DependentUpon>LogsReaderFormBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LogsReaderMainForm.resx">
       <DependentUpon>LogsReaderMainForm.cs</DependentUpon>

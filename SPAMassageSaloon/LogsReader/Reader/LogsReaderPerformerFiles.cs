@@ -16,6 +16,8 @@ namespace LogsReader.Reader
 {
 	public abstract class LogsReaderPerformerFiles : LogsReaderPerformerBase
 	{
+		private bool _isStopPending = false;
+
 		private readonly IReadOnlyDictionary<string, int> _servers;
 		private readonly IReadOnlyDictionary<string, int> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
@@ -23,9 +25,22 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Запрос на ожидание остановки выполнения поиска
 		/// </summary>
-		public bool IsStopPending { get; private set; } = false;
+		public bool IsStopPending
+		{
+			get => _isStopPending;
+			private set
+			{
+				_isStopPending = value;
 
-		public IReadOnlyCollection<TraceReader> TraceReaders { get; private set; }
+				if (_isStopPending && TraceReaders != null)
+				{
+					foreach (var reader in TraceReaders.Values.Where(x => x.Status == TraceReaderStatus.Waiting))
+						reader.Status = TraceReaderStatus.Cancelled;
+				}
+			}
+		}
+
+		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; private set; }
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
@@ -48,24 +63,25 @@ namespace LogsReader.Reader
 			if (IsStopPending)
 				return;
 
-			TraceReaders = new ReadOnlyCollection<TraceReader>(await Task<List<TraceReader>>.Factory.StartNew(GetFileLogs));
+			TraceReaders = new ReadOnlyDictionary<int, TraceReader>(await Task<Dictionary<int, TraceReader>>.Factory.StartNew(GetFileLogs));
 			if (TraceReaders == null || TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 		}
 
-		List<TraceReader> GetFileLogs()
+		Dictionary<int, TraceReader> GetFileLogs()
 		{
-			var kvpList = new List<TraceReader>();
+			var readerIndex = -1;
+			var traceReaders = new Dictionary<int, TraceReader>();
 
 			foreach (var (serverName, serverPriority) in _servers)
 			{
 				if (IsStopPending)
-					return kvpList;
+					return traceReaders;
 
 				foreach (var (originalFolder, isAllDirectories) in _folders)
 				{
 					if (IsStopPending)
-						return kvpList;
+						return traceReaders;
 
 					var folderMatch = IO.CHECK_PATH.Match(originalFolder);
 					if (!folderMatch.Success)
@@ -81,7 +97,7 @@ namespace LogsReader.Reader
 					foreach (var traceReader in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
 					{
 						if (IsStopPending)
-							return kvpList;
+							return traceReaders;
 
 						if (!IsAllowedExtension(traceReader.File.Name))
 							continue;
@@ -90,8 +106,9 @@ namespace LogsReader.Reader
 						{
 							if (traceReader.File.Name.IndexOf(fileType, StringComparison.InvariantCultureIgnoreCase) != -1)
 							{
+								traceReader.PrivateID = ++readerIndex;
 								traceReader.Priority = int.Parse($"1{serverPriority}{filePriority}");
-								kvpList.Add(traceReader);
+								traceReaders.Add(traceReader.PrivateID, traceReader);
 								break;
 							}
 						}
@@ -106,7 +123,7 @@ namespace LogsReader.Reader
 			//var lines = getCountLines.Result.Values.Select(x => x.Result).Sum(x => x);
 			//stop.Stop();
 
-			return kvpList;
+			return traceReaders;
 		}
 
 		bool IsExistAndAvailable(string serverFolder, string server, string serverRoot, string folderPath)

@@ -15,47 +15,8 @@ namespace LogsReader.Reader
 	public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
 	{
 		private readonly object _syncRootResult = new object();
-		private readonly object _syncRootMatches = new object();
-		private readonly object _syncRootErrorMatches = new object();
-
-		private int _countMatches = 0;
-		private int _countErrorMatches = 0;
-
 		private SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 		private List<MTActionResult<TraceReader>> _multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
-
-		public event ReportProcessStatusHandler OnProcessReport;
-
-		/// <summary>
-		/// Количество совпадений по критериям поиска
-		/// </summary>
-		public int CountMatches
-		{
-			get
-			{
-				lock (_syncRootMatches)
-					return _countMatches;
-			}
-			private set
-			{
-				lock (_syncRootMatches)
-					_countMatches = value;
-			}
-		}
-
-		public int CountErrorMatches
-		{
-			get
-			{
-				lock (_syncRootErrorMatches)
-					return _countErrorMatches;
-			}
-			private set
-			{
-				lock (_syncRootErrorMatches)
-					_countErrorMatches = value;
-			}
-		}
 
 		private List<List<TraceReader>> TraceReadersOrdered { get; } = new List<List<TraceReader>>();
 
@@ -96,7 +57,7 @@ namespace LogsReader.Reader
 			if (TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
-			foreach (var traceReaders in TraceReaders.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
+			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
 				var readersOrders = traceReaders
 					.OrderByDescending(x => x.File.LastWriteTime.Date)
@@ -110,15 +71,13 @@ namespace LogsReader.Reader
 
 		public override async Task StartAsync()
 		{
-			ClearBeforePreviousProcess();
+			ClearPreviousProcess();
 
 			if(TraceReadersOrdered.Count == 0 || IsStopPending)
 				return;
 
 			try
 			{
-				new Action(CheckProgress).BeginInvoke(null, null);
-
 				foreach (var traceReaders in TraceReadersOrdered)
 				{
 					if (IsStopPending)
@@ -149,57 +108,85 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
+				TraceReadersOrdered.Clear();
+				STREAM.GarbageCollect();
 				IsCompleted = true;
 			}
 		}
 
-		void ClearBeforePreviousProcess()
+		void ClearPreviousProcess()
 		{
 			IsCompleted = false;
 			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 			ResultsOfError = new List<DataTemplate>();
-			CountMatches = 0;
-			CountErrorMatches = 0;
 		}
 
-		public void ReadData(TraceReader fileLog)
+		public void ReadData(TraceReader traceReader)
 		{
 			try
 			{
-				if (IsStopPending || !File.Exists(fileLog.FilePath))
+				if (IsStopPending)
+				{
+					traceReader.Status = TraceReaderStatus.Cancelled;
 					return;
+				}
 
-				fileLog.OnFound += AddResult;
+				if (!File.Exists(traceReader.FilePath))
+				{
+					traceReader.Status = TraceReaderStatus.Finished;
+					return;
+				}
+
+				traceReader.OnFound += AddResult;
+				traceReader.ThreadId = Task.CurrentId?.ToString();
 
 				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
-				using (var inputStream = new FileStream(fileLog.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				using (var inputStream = new FileStream(traceReader.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				{
 					if (IsStopPending)
-						return;
-
-					using (var inputReader = new StreamReader(inputStream, Encoding))
 					{
+						traceReader.Status = TraceReaderStatus.Cancelled;
+						return;
+					}
+
+					using (var streamReader = new StreamReader(inputStream, Encoding))
+					{
+						traceReader.Status = TraceReaderStatus.Processing;
 						string line;
-						while ((line = inputReader.ReadLine()) != null && !IsStopPending)
+						while ((line = streamReader.ReadLine()) != null)
 						{
-							fileLog.ReadLine(line);
+							traceReader.ReadLine(line);
+
+							if (IsStopPending)
+							{
+								traceReader.Status = TraceReaderStatus.Cancelled;
+								return;
+							}
 						}
 					}
 				}
+
+				traceReader.Status = TraceReaderStatus.Finished;
+			}
+			catch (Exception)
+			{
+				traceReader.Status = TraceReaderStatus.Failed;
+				throw;
 			}
 			finally
 			{
 				try
 				{
-					fileLog.Commit();
+					traceReader.Commit();
+					traceReader.Clear();
 				}
 				catch
 				{
 					// ignored
 				}
 
-				fileLog.OnFound -= AddResult;
+				traceReader.OnFound -= AddResult;
 			}
 		}
 
@@ -211,12 +198,6 @@ namespace LogsReader.Reader
 		{
 			if (Filter != null && !Filter.IsAllowed(item))
 				return;
-
-			if (item.Error == null)
-				++CountMatches;
-
-			if (!item.IsSuccess)
-				++CountErrorMatches;
 
 			lock (_syncRootResult)
 			{
@@ -261,51 +242,19 @@ namespace LogsReader.Reader
 		public override void Reset()
 		{
 			Stop();
-			CountMatches = 0;
-			CountErrorMatches = 0;
 			_result.Clear();
 			ResultsOfError = null;
 			base.Reset();
 		}
 
-		void CheckProgress()
-		{
-			try
-			{
-				while (!IsCompleted)
-				{
-					EnsureProcessReport();
-					Thread.Sleep(10);
-				}
-				EnsureProcessReport();
-			}
-			catch (Exception)
-			{
-				// ignored
-			}
-		}
-
-		public void EnsureProcessReport()
-		{
-			try
-			{
-				OnProcessReport?.Invoke(CountMatches, CountErrorMatches,!IsCompleted ? PercentOfComplete : 100, ResultCount, TotalCount);
-			}
-			catch (Exception)
-			{
-				// ignored
-			}
-		}
-
 		public override void Dispose()
 		{
 			if (TraceReaders != null)
-				foreach (var reader in TraceReaders)
+				foreach (var reader in TraceReaders.Values)
 					reader.Dispose();
 
 			Reset();
 			base.Dispose();
-			STREAM.GarbageCollect();
 		}
 	}
 }

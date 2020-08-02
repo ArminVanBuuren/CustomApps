@@ -21,21 +21,21 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
-			this.PromptColumn = new LogsReader.TextAndImageColumn();
-			this.IDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ServerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.TraceNameColumn = new LogsReader.TextAndImageColumn();
-			this.DateOfTraceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ElapsedSecColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.SchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.PrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsSuccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.IsFilteredColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.FileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataPromptColumn = new LogsReader.DgvTextAndImageColumn();
+			this.DgvDataIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataServerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataTraceNameColumn = new LogsReader.DgvTextAndImageColumn();
+			this.DgvDataDateOfTraceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataElapsedSecColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataIsSuccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataIsFilteredColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvDataFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.BtnSearch = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.TbxPattern = new System.Windows.Forms.TextBox();
@@ -77,29 +77,16 @@ namespace LogsReader.Reader
 			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			this.buttonNextBlock = new System.Windows.Forms.Button();
 			this.splitContainerTop = new System.Windows.Forms.SplitContainer();
-			this.DgvFileProcessStatus = new System.Windows.Forms.DataGridView();
-			this.ProcessingSelectColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.ProcessingImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
-			this.ProcessingFlowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.ProcessingThreadId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ProcessingCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ProcessingSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ProcessingFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.textAndImageColumn1 = new LogsReader.TextAndImageColumn();
-			this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.textAndImageColumn2 = new LogsReader.TextAndImageColumn();
-			this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.DgvReaderSelectColumn = new LogsReader.DgvCheckBoxColumn();
+			this.DgvReaderImageColumn = new LogsReader.DgvTextAndImageColumn();
+			this.DgvReaderFlowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.DgvReaderSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderThreadIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderCountMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderCountErrorMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
@@ -120,7 +107,7 @@ namespace LogsReader.Reader
 			this.splitContainerTop.Panel1.SuspendLayout();
 			this.splitContainerTop.Panel2.SuspendLayout();
 			this.splitContainerTop.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.DgvFileProcessStatus)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.DgvReader)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -134,48 +121,48 @@ namespace LogsReader.Reader
 			this.DgvData.AllowUserToResizeRows = false;
 			this.DgvData.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.DgvData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.PromptColumn,
-            this.IDColumn,
-            this.ServerColumn,
-            this.TraceNameColumn,
-            this.DateOfTraceColumn,
-            this.ElapsedSecColumn,
-            this.SchemeNameColumn,
-            this.PrivateIDColumn,
-            this.IsSuccessColumn,
-            this.IsFilteredColumn,
-            this.FileColumn});
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DgvData.DefaultCellStyle = dataGridViewCellStyle8;
+            this.DgvDataPromptColumn,
+            this.DgvDataIDColumn,
+            this.DgvDataServerColumn,
+            this.DgvDataTraceNameColumn,
+            this.DgvDataDateOfTraceColumn,
+            this.DgvDataElapsedSecColumn,
+            this.DgvDataSchemeNameColumn,
+            this.DgvDataPrivateIDColumn,
+            this.DgvDataIsSuccessColumn,
+            this.DgvDataIsFilteredColumn,
+            this.DgvDataFileColumn});
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DgvData.DefaultCellStyle = dataGridViewCellStyle2;
 			this.DgvData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvData.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.DgvData.Location = new System.Drawing.Point(0, 0);
 			this.DgvData.Name = "DgvData";
 			this.DgvData.ReadOnly = true;
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			this.DgvData.RowHeadersVisible = false;
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
@@ -186,95 +173,95 @@ namespace LogsReader.Reader
 			this.DgvData.SelectionChanged += new System.EventHandler(this.DgvData_SelectionChanged);
 			this.DgvData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DgvData_MouseDown);
 			// 
-			// PromptColumn
+			// DgvDataPromptColumn
 			// 
-			this.PromptColumn.Image = null;
-			this.PromptColumn.MinimumWidth = 23;
-			this.PromptColumn.Name = "PromptColumn";
-			this.PromptColumn.ReadOnly = true;
-			this.PromptColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.PromptColumn.Width = 23;
+			this.DgvDataPromptColumn.Image = null;
+			this.DgvDataPromptColumn.MinimumWidth = 23;
+			this.DgvDataPromptColumn.Name = "DgvDataPromptColumn";
+			this.DgvDataPromptColumn.ReadOnly = true;
+			this.DgvDataPromptColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataPromptColumn.Width = 23;
 			// 
-			// IDColumn
+			// DgvDataIDColumn
 			// 
-			this.IDColumn.MinimumWidth = 25;
-			this.IDColumn.Name = "IDColumn";
-			this.IDColumn.ReadOnly = true;
-			this.IDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IDColumn.Width = 30;
+			this.DgvDataIDColumn.MinimumWidth = 25;
+			this.DgvDataIDColumn.Name = "DgvDataIDColumn";
+			this.DgvDataIDColumn.ReadOnly = true;
+			this.DgvDataIDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataIDColumn.Width = 30;
 			// 
-			// ServerColumn
+			// DgvDataServerColumn
 			// 
-			this.ServerColumn.MinimumWidth = 45;
-			this.ServerColumn.Name = "ServerColumn";
-			this.ServerColumn.ReadOnly = true;
-			this.ServerColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ServerColumn.Width = 50;
+			this.DgvDataServerColumn.MinimumWidth = 45;
+			this.DgvDataServerColumn.Name = "DgvDataServerColumn";
+			this.DgvDataServerColumn.ReadOnly = true;
+			this.DgvDataServerColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataServerColumn.Width = 50;
 			// 
-			// TraceNameColumn
+			// DgvDataTraceNameColumn
 			// 
-			this.TraceNameColumn.Image = null;
-			this.TraceNameColumn.MinimumWidth = 70;
-			this.TraceNameColumn.Name = "TraceNameColumn";
-			this.TraceNameColumn.ReadOnly = true;
-			this.TraceNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.TraceNameColumn.Width = 80;
+			this.DgvDataTraceNameColumn.Image = null;
+			this.DgvDataTraceNameColumn.MinimumWidth = 70;
+			this.DgvDataTraceNameColumn.Name = "DgvDataTraceNameColumn";
+			this.DgvDataTraceNameColumn.ReadOnly = true;
+			this.DgvDataTraceNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataTraceNameColumn.Width = 80;
 			// 
-			// DateOfTraceColumn
+			// DgvDataDateOfTraceColumn
 			// 
-			this.DateOfTraceColumn.MinimumWidth = 37;
-			this.DateOfTraceColumn.Name = "DateOfTraceColumn";
-			this.DateOfTraceColumn.ReadOnly = true;
-			this.DateOfTraceColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.DateOfTraceColumn.Width = 140;
+			this.DgvDataDateOfTraceColumn.MinimumWidth = 37;
+			this.DgvDataDateOfTraceColumn.Name = "DgvDataDateOfTraceColumn";
+			this.DgvDataDateOfTraceColumn.ReadOnly = true;
+			this.DgvDataDateOfTraceColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataDateOfTraceColumn.Width = 140;
 			// 
-			// ElapsedSecColumn
+			// DgvDataElapsedSecColumn
 			// 
-			this.ElapsedSecColumn.MinimumWidth = 46;
-			this.ElapsedSecColumn.Name = "ElapsedSecColumn";
-			this.ElapsedSecColumn.ReadOnly = true;
-			this.ElapsedSecColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.ElapsedSecColumn.Width = 46;
+			this.DgvDataElapsedSecColumn.MinimumWidth = 46;
+			this.DgvDataElapsedSecColumn.Name = "DgvDataElapsedSecColumn";
+			this.DgvDataElapsedSecColumn.ReadOnly = true;
+			this.DgvDataElapsedSecColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataElapsedSecColumn.Width = 46;
 			// 
-			// SchemeNameColumn
+			// DgvDataSchemeNameColumn
 			// 
-			this.SchemeNameColumn.Name = "SchemeNameColumn";
-			this.SchemeNameColumn.ReadOnly = true;
-			this.SchemeNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.SchemeNameColumn.Visible = false;
-			this.SchemeNameColumn.Width = 5;
+			this.DgvDataSchemeNameColumn.Name = "DgvDataSchemeNameColumn";
+			this.DgvDataSchemeNameColumn.ReadOnly = true;
+			this.DgvDataSchemeNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataSchemeNameColumn.Visible = false;
+			this.DgvDataSchemeNameColumn.Width = 5;
 			// 
-			// PrivateIDColumn
+			// DgvDataPrivateIDColumn
 			// 
-			this.PrivateIDColumn.Name = "PrivateIDColumn";
-			this.PrivateIDColumn.ReadOnly = true;
-			this.PrivateIDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.PrivateIDColumn.Visible = false;
-			this.PrivateIDColumn.Width = 5;
+			this.DgvDataPrivateIDColumn.Name = "DgvDataPrivateIDColumn";
+			this.DgvDataPrivateIDColumn.ReadOnly = true;
+			this.DgvDataPrivateIDColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataPrivateIDColumn.Visible = false;
+			this.DgvDataPrivateIDColumn.Width = 5;
 			// 
-			// IsSuccessColumn
+			// DgvDataIsSuccessColumn
 			// 
-			this.IsSuccessColumn.Name = "IsSuccessColumn";
-			this.IsSuccessColumn.ReadOnly = true;
-			this.IsSuccessColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IsSuccessColumn.Visible = false;
-			this.IsSuccessColumn.Width = 5;
+			this.DgvDataIsSuccessColumn.Name = "DgvDataIsSuccessColumn";
+			this.DgvDataIsSuccessColumn.ReadOnly = true;
+			this.DgvDataIsSuccessColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataIsSuccessColumn.Visible = false;
+			this.DgvDataIsSuccessColumn.Width = 5;
 			// 
-			// IsFilteredColumn
+			// DgvDataIsFilteredColumn
 			// 
-			this.IsFilteredColumn.Name = "IsFilteredColumn";
-			this.IsFilteredColumn.ReadOnly = true;
-			this.IsFilteredColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.IsFilteredColumn.Visible = false;
-			this.IsFilteredColumn.Width = 5;
+			this.DgvDataIsFilteredColumn.Name = "DgvDataIsFilteredColumn";
+			this.DgvDataIsFilteredColumn.ReadOnly = true;
+			this.DgvDataIsFilteredColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataIsFilteredColumn.Visible = false;
+			this.DgvDataIsFilteredColumn.Width = 5;
 			// 
-			// FileColumn
+			// DgvDataFileColumn
 			// 
-			this.FileColumn.MinimumWidth = 300;
-			this.FileColumn.Name = "FileColumn";
-			this.FileColumn.ReadOnly = true;
-			this.FileColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.FileColumn.Width = 1000;
+			this.DgvDataFileColumn.MinimumWidth = 300;
+			this.DgvDataFileColumn.Name = "DgvDataFileColumn";
+			this.DgvDataFileColumn.ReadOnly = true;
+			this.DgvDataFileColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+			this.DgvDataFileColumn.Width = 1000;
 			// 
 			// BtnSearch
 			// 
@@ -803,186 +790,101 @@ namespace LogsReader.Reader
 			// 
 			// splitContainerTop.Panel2
 			// 
-			this.splitContainerTop.Panel2.Controls.Add(this.DgvFileProcessStatus);
+			this.splitContainerTop.Panel2.Controls.Add(this.DgvReader);
 			this.splitContainerTop.Panel2MinSize = 0;
 			this.splitContainerTop.Size = new System.Drawing.Size(1127, 88);
 			this.splitContainerTop.SplitterDistance = 1010;
 			this.splitContainerTop.TabIndex = 36;
 			// 
-			// DgvFileProcessStatus
+			// DgvReader
 			// 
-			this.DgvFileProcessStatus.AllowUserToAddRows = false;
-			this.DgvFileProcessStatus.AllowUserToDeleteRows = false;
-			this.DgvFileProcessStatus.AllowUserToResizeRows = false;
-			this.DgvFileProcessStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.DgvFileProcessStatus.ColumnHeadersVisible = false;
-			this.DgvFileProcessStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ProcessingSelectColumn,
-            this.ProcessingImageColumn,
-            this.ProcessingFlowColumn,
-            this.ProcessingThreadId,
-            this.ProcessingCount,
-            this.ProcessingSchemeNameColumn,
-            this.ProcessingFileColumn});
-			this.DgvFileProcessStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.DgvFileProcessStatus.Location = new System.Drawing.Point(0, 0);
-			this.DgvFileProcessStatus.Name = "DgvFileProcessStatus";
-			this.DgvFileProcessStatus.ReadOnly = true;
-			this.DgvFileProcessStatus.RowHeadersVisible = false;
-			this.DgvFileProcessStatus.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvFileProcessStatus.Size = new System.Drawing.Size(113, 88);
-			this.DgvFileProcessStatus.TabIndex = 50;
+			this.DgvReader.AllowUserToAddRows = false;
+			this.DgvReader.AllowUserToDeleteRows = false;
+			this.DgvReader.AllowUserToResizeRows = false;
+			this.DgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DgvReaderSelectColumn,
+            this.DgvReaderImageColumn,
+            this.DgvReaderFlowColumn,
+            this.DgvReaderSchemeNameColumn,
+            this.DgvReaderPrivateIDColumn,
+            this.DgvReaderThreadIdColumn,
+            this.DgvReaderCountMatchesColumn,
+            this.DgvReaderCountErrorMatchesColumn,
+            this.DgvReaderFileColumn});
+			this.DgvReader.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.DgvReader.Location = new System.Drawing.Point(0, 0);
+			this.DgvReader.Name = "DgvReader";
+			this.DgvReader.ReadOnly = true;
+			this.DgvReader.RowHeadersVisible = false;
+			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.DgvReader.Size = new System.Drawing.Size(113, 88);
+			this.DgvReader.TabIndex = 50;
 			// 
-			// ProcessingSelectColumn
+			// DgvReaderSelectColumn
 			// 
-			this.ProcessingSelectColumn.HeaderText = "#";
-			this.ProcessingSelectColumn.MinimumWidth = 25;
-			this.ProcessingSelectColumn.Name = "ProcessingSelectColumn";
-			this.ProcessingSelectColumn.ReadOnly = true;
-			this.ProcessingSelectColumn.Width = 25;
+			this.DgvReaderSelectColumn.Checked = true;
+			this.DgvReaderSelectColumn.HeaderText = "#";
+			this.DgvReaderSelectColumn.MinimumWidth = 25;
+			this.DgvReaderSelectColumn.Name = "DgvReaderSelectColumn";
+			this.DgvReaderSelectColumn.ReadOnly = true;
+			this.DgvReaderSelectColumn.Width = 25;
 			// 
-			// ProcessingImageColumn
+			// DgvReaderImageColumn
 			// 
-			this.ProcessingImageColumn.HeaderText = "Status";
-			this.ProcessingImageColumn.MinimumWidth = 45;
-			this.ProcessingImageColumn.Name = "ProcessingImageColumn";
-			this.ProcessingImageColumn.ReadOnly = true;
-			this.ProcessingImageColumn.Width = 45;
+			this.DgvReaderImageColumn.HeaderText = "Status";
+			this.DgvReaderImageColumn.Image = null;
+			this.DgvReaderImageColumn.MinimumWidth = 45;
+			this.DgvReaderImageColumn.Name = "DgvReaderImageColumn";
+			this.DgvReaderImageColumn.ReadOnly = true;
+			this.DgvReaderImageColumn.Width = 45;
 			// 
-			// ProcessingFlowColumn
+			// DgvReaderFlowColumn
 			// 
-			this.ProcessingFlowColumn.HeaderText = "Flow";
-			this.ProcessingFlowColumn.MinimumWidth = 45;
-			this.ProcessingFlowColumn.Name = "ProcessingFlowColumn";
-			this.ProcessingFlowColumn.ReadOnly = true;
-			this.ProcessingFlowColumn.Width = 45;
+			this.DgvReaderFlowColumn.HeaderText = "Flow";
+			this.DgvReaderFlowColumn.MinimumWidth = 45;
+			this.DgvReaderFlowColumn.Name = "DgvReaderFlowColumn";
+			this.DgvReaderFlowColumn.ReadOnly = true;
+			this.DgvReaderFlowColumn.Width = 45;
 			// 
-			// ProcessingThreadId
+			// DgvReaderSchemeNameColumn
 			// 
-			this.ProcessingThreadId.HeaderText = "ProcessingThreadId";
-			this.ProcessingThreadId.Name = "ProcessingThreadId";
-			this.ProcessingThreadId.ReadOnly = true;
+			this.DgvReaderSchemeNameColumn.HeaderText = "SchemeName";
+			this.DgvReaderSchemeNameColumn.Name = "DgvReaderSchemeNameColumn";
+			this.DgvReaderSchemeNameColumn.ReadOnly = true;
+			this.DgvReaderSchemeNameColumn.Visible = false;
 			// 
-			// ProcessingCount
+			// DgvReaderPrivateIDColumn
 			// 
-			this.ProcessingCount.HeaderText = "ProcessingCount";
-			this.ProcessingCount.Name = "ProcessingCount";
-			this.ProcessingCount.ReadOnly = true;
+			this.DgvReaderPrivateIDColumn.HeaderText = "PrivateID";
+			this.DgvReaderPrivateIDColumn.Name = "DgvReaderPrivateIDColumn";
+			this.DgvReaderPrivateIDColumn.ReadOnly = true;
+			this.DgvReaderPrivateIDColumn.Visible = false;
 			// 
-			// ProcessingSchemeNameColumn
+			// DgvReaderThreadIdColumn
 			// 
-			this.ProcessingSchemeNameColumn.HeaderText = "SchemeName";
-			this.ProcessingSchemeNameColumn.Name = "ProcessingSchemeNameColumn";
-			this.ProcessingSchemeNameColumn.ReadOnly = true;
-			this.ProcessingSchemeNameColumn.Visible = false;
+			this.DgvReaderThreadIdColumn.HeaderText = "ThreadId";
+			this.DgvReaderThreadIdColumn.Name = "DgvReaderThreadIdColumn";
+			this.DgvReaderThreadIdColumn.ReadOnly = true;
 			// 
-			// ProcessingFileColumn
+			// DgvReaderCountMatchesColumn
 			// 
-			this.ProcessingFileColumn.HeaderText = "File";
-			this.ProcessingFileColumn.Name = "ProcessingFileColumn";
-			this.ProcessingFileColumn.ReadOnly = true;
-			this.ProcessingFileColumn.Width = 1000;
+			this.DgvReaderCountMatchesColumn.HeaderText = "Matches";
+			this.DgvReaderCountMatchesColumn.Name = "DgvReaderCountMatchesColumn";
+			this.DgvReaderCountMatchesColumn.ReadOnly = true;
 			// 
-			// dataGridViewTextBoxColumn1
+			// DgvReaderCountErrorMatchesColumn
 			// 
-			this.dataGridViewTextBoxColumn1.HeaderText = "ProcessingThreadId";
-			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+			this.DgvReaderCountErrorMatchesColumn.HeaderText = "Errors";
+			this.DgvReaderCountErrorMatchesColumn.Name = "DgvReaderCountErrorMatchesColumn";
+			this.DgvReaderCountErrorMatchesColumn.ReadOnly = true;
 			// 
-			// dataGridViewTextBoxColumn2
+			// DgvReaderFileColumn
 			// 
-			this.dataGridViewTextBoxColumn2.HeaderText = "ProcessingCount";
-			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-			// 
-			// dataGridViewTextBoxColumn3
-			// 
-			this.dataGridViewTextBoxColumn3.HeaderText = "SchemeName";
-			this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-			this.dataGridViewTextBoxColumn3.Visible = false;
-			// 
-			// dataGridViewTextBoxColumn4
-			// 
-			this.dataGridViewTextBoxColumn4.HeaderText = "File";
-			this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-			this.dataGridViewTextBoxColumn4.Width = 1000;
-			// 
-			// textAndImageColumn1
-			// 
-			this.textAndImageColumn1.Image = null;
-			this.textAndImageColumn1.MinimumWidth = 23;
-			this.textAndImageColumn1.Name = "textAndImageColumn1";
-			this.textAndImageColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.textAndImageColumn1.Width = 23;
-			// 
-			// dataGridViewTextBoxColumn5
-			// 
-			this.dataGridViewTextBoxColumn5.MinimumWidth = 25;
-			this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-			this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn5.Width = 30;
-			// 
-			// dataGridViewTextBoxColumn6
-			// 
-			this.dataGridViewTextBoxColumn6.MinimumWidth = 45;
-			this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-			this.dataGridViewTextBoxColumn6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn6.Width = 50;
-			// 
-			// textAndImageColumn2
-			// 
-			this.textAndImageColumn2.Image = null;
-			this.textAndImageColumn2.MinimumWidth = 70;
-			this.textAndImageColumn2.Name = "textAndImageColumn2";
-			this.textAndImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.textAndImageColumn2.Width = 80;
-			// 
-			// dataGridViewTextBoxColumn7
-			// 
-			this.dataGridViewTextBoxColumn7.MinimumWidth = 37;
-			this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-			this.dataGridViewTextBoxColumn7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn7.Width = 140;
-			// 
-			// dataGridViewTextBoxColumn8
-			// 
-			this.dataGridViewTextBoxColumn8.MinimumWidth = 46;
-			this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
-			this.dataGridViewTextBoxColumn8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn8.Width = 46;
-			// 
-			// dataGridViewTextBoxColumn9
-			// 
-			this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
-			this.dataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn9.Visible = false;
-			this.dataGridViewTextBoxColumn9.Width = 5;
-			// 
-			// dataGridViewTextBoxColumn10
-			// 
-			this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
-			this.dataGridViewTextBoxColumn10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn10.Visible = false;
-			this.dataGridViewTextBoxColumn10.Width = 5;
-			// 
-			// dataGridViewTextBoxColumn11
-			// 
-			this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
-			this.dataGridViewTextBoxColumn11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn11.Visible = false;
-			this.dataGridViewTextBoxColumn11.Width = 5;
-			// 
-			// dataGridViewTextBoxColumn12
-			// 
-			this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
-			this.dataGridViewTextBoxColumn12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn12.Visible = false;
-			this.dataGridViewTextBoxColumn12.Width = 5;
-			// 
-			// dataGridViewTextBoxColumn13
-			// 
-			this.dataGridViewTextBoxColumn13.MinimumWidth = 300;
-			this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
-			this.dataGridViewTextBoxColumn13.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-			this.dataGridViewTextBoxColumn13.Width = 1000;
+			this.DgvReaderFileColumn.HeaderText = "File";
+			this.DgvReaderFileColumn.Name = "DgvReaderFileColumn";
+			this.DgvReaderFileColumn.ReadOnly = true;
+			this.DgvReaderFileColumn.Width = 1000;
 			// 
 			// splitContainer1
 			// 
@@ -1041,7 +943,7 @@ namespace LogsReader.Reader
 			this.splitContainerTop.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerTop)).EndInit();
 			this.splitContainerTop.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.DgvFileProcessStatus)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.DgvReader)).EndInit();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -1065,20 +967,21 @@ namespace LogsReader.Reader
         private SplitContainer MainSplitContainer;
         private Panel searchPanel;
         private Button btnExport;
-        private TextAndImageColumn PromptColumn;
-        private DataGridViewTextBoxColumn IDColumn;
-        private DataGridViewTextBoxColumn ServerColumn;
-        private TextAndImageColumn TraceNameColumn;
-        private DataGridViewTextBoxColumn DateOfTraceColumn;
-        private DataGridViewTextBoxColumn ElapsedSecColumn;
-        private DataGridViewTextBoxColumn SchemeNameColumn;
-        private DataGridViewTextBoxColumn PrivateIDColumn;
-        private DataGridViewTextBoxColumn IsSuccessColumn;
-        private DataGridViewTextBoxColumn IsFilteredColumn;
-		private DataGridViewTextBoxColumn FileColumn;
+
+        protected CustomDataGridView DgvData;
+		private DgvTextAndImageColumn DgvDataPromptColumn;
+        private DataGridViewTextBoxColumn DgvDataIDColumn;
+        private DataGridViewTextBoxColumn DgvDataServerColumn;
+        private DgvTextAndImageColumn DgvDataTraceNameColumn;
+        private DataGridViewTextBoxColumn DgvDataDateOfTraceColumn;
+        private DataGridViewTextBoxColumn DgvDataElapsedSecColumn;
+        protected DataGridViewTextBoxColumn DgvDataSchemeNameColumn;
+        protected DataGridViewTextBoxColumn DgvDataPrivateIDColumn;
+        private DataGridViewTextBoxColumn DgvDataIsSuccessColumn;
+        private DataGridViewTextBoxColumn DgvDataIsFilteredColumn;
+		private DataGridViewTextBoxColumn DgvDataFileColumn;
         private CustomTabControl tabControlViewer;
 
-		protected CustomDataGridView DgvData;
         protected Panel CustomPanel;
 
 		internal Button BtnSearch;
@@ -1106,30 +1009,18 @@ namespace LogsReader.Reader
 		private Button buttonFilteredNext;
 		private Button buttonNextBlock;
 		private SplitContainer splitContainerTop;
-		protected DataGridView DgvFileProcessStatus;
-		private DataGridViewCheckBoxColumn ProcessingSelectColumn;
-		private DataGridViewImageColumn ProcessingImageColumn;
-		private DataGridViewButtonColumn ProcessingFlowColumn;
-		private DataGridViewTextBoxColumn ProcessingThreadId;
-		private DataGridViewTextBoxColumn ProcessingCount;
-		private DataGridViewTextBoxColumn ProcessingSchemeNameColumn;
-		private DataGridViewTextBoxColumn ProcessingFileColumn;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-		private TextAndImageColumn textAndImageColumn1;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-		private TextAndImageColumn textAndImageColumn2;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
 		private SplitContainer splitContainer1;
+
+		protected CustomDataGridView DgvReader;
+		private DgvCheckBoxColumn DgvReaderSelectColumn;
+		private DgvTextAndImageColumn DgvReaderImageColumn;
+		private DataGridViewButtonColumn DgvReaderFlowColumn;
+		protected DataGridViewTextBoxColumn DgvReaderSchemeNameColumn;
+		protected DataGridViewTextBoxColumn DgvReaderPrivateIDColumn;
+		private DataGridViewTextBoxColumn DgvReaderThreadIdColumn;
+		private DataGridViewTextBoxColumn DgvReaderCountMatchesColumn;
+		private DataGridViewTextBoxColumn DgvReaderCountErrorMatchesColumn;
+		private DataGridViewTextBoxColumn DgvReaderFileColumn;
 	}
 }
 
