@@ -761,7 +761,7 @@ namespace LogsReader.Reader
 			// 
 			// buttonNextBlock
 			// 
-			this.buttonNextBlock.BackColor = System.Drawing.Color.LightGray;
+			this.buttonNextBlock.BackColor = System.Drawing.Color.White;
 			this.buttonNextBlock.Dock = System.Windows.Forms.DockStyle.Right;
 			this.buttonNextBlock.Location = new System.Drawing.Point(1127, 0);
 			this.buttonNextBlock.MaximumSize = new System.Drawing.Size(21, 2000);
