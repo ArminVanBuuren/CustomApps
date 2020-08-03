@@ -1242,40 +1242,43 @@ namespace LogsReader.Reader
 
 	        try
 	        {
-		        if (!(row.Cells[DgvReaderStatusColumn.Name] is DgvTextAndImageCell cellImage))
-			        return;
-
-		        switch (reader.Status)
+		        if (row.Cells[DgvReaderStatusColumn.Name] is DgvTextAndImageCell cellImage)
 		        {
-			        case TraceReaderStatus.Waiting:
-				        cellImage.Image = Resources.waiting;
-				        if (row.DefaultCellStyle.BackColor != Color.LightGray)
-					        row.DefaultCellStyle.BackColor = Color.LightGray;
-				        break;
-			        case TraceReaderStatus.Processing:
-				        cellImage.Image = Resources.processing;
-				        if (row.DefaultCellStyle.BackColor != Color.White)
-					        row.DefaultCellStyle.BackColor = Color.White;
-				        break;
-			        case TraceReaderStatus.Aborted:
-				        cellImage.Image = Resources.aborted;
-				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
-					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-				        break;
-			        case TraceReaderStatus.Failed:
-				        cellImage.Image = Resources.failed;
-				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
-					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-				        break;
-			        case TraceReaderStatus.Finished:
-				        cellImage.Image = Resources.finished;
-				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
-					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
-				        break;
-			        default:
-				        cellImage.Image = null;
-				        break;
-		        }
+
+			        switch (reader.Status)
+			        {
+				        case TraceReaderStatus.Waiting:
+					        cellImage.Image = Resources.waiting;
+					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
+						        row.DefaultCellStyle.BackColor = Color.LightGray;
+					        break;
+				        case TraceReaderStatus.Processing:
+					        cellImage.Image = Resources.processing;
+					        if (row.DefaultCellStyle.BackColor != Color.White)
+						        row.DefaultCellStyle.BackColor = Color.White;
+					        break;
+				        case TraceReaderStatus.Aborted:
+					        cellImage.Image = Resources.aborted;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+					        break;
+				        case TraceReaderStatus.Failed:
+					        cellImage.Image = Resources.failed;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+					        break;
+				        case TraceReaderStatus.Finished:
+					        cellImage.Image = Resources.finished;
+					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
+						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
+					        break;
+				        default:
+					        cellImage.Image = null;
+					        break;
+			        }
+
+			        cellImage.Value = reader.Status.ToString("G");
+				}
 
 		        if (row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort)
 		        {
@@ -1288,7 +1291,6 @@ namespace LogsReader.Reader
 				        cellAbort.Enabled = true;
 				}
 
-				cellImage.Value = reader.Status.ToString("G");
 		        row.Cells[DgvReaderThreadIdColumn.Name].Value = reader.ThreadId;
 		        row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
 		        row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
