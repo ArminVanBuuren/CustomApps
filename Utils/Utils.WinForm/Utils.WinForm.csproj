@@ -96,7 +96,10 @@
     <Compile Include="CustomTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataGridViewHelper\Columns\DgvCheckBoxColumn.cs" />
     <Compile Include="DataGridViewHelper\DGVColumnAttribute.cs" />
+    <Compile Include="DataGridViewHelper\Columns\DgvDisableButtonColumn.cs" />
+    <Compile Include="DataGridViewHelper\Columns\DgvTextAndImageColumn.cs" />
     <Compile Include="Expander\AdvancedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
