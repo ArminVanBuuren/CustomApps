@@ -1,8 +1,8 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 using SPAMassageSaloon.Common;
 using Utils.WinForm;
+using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
 {
@@ -25,10 +25,10 @@ namespace LogsReader.Reader
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
-			this.DgvDataPromptColumn = new LogsReader.DgvTextAndImageColumn();
+			this.DgvDataPromptColumn = new DgvTextAndImageColumn();
 			this.DgvDataIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvDataServerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.DgvDataTraceNameColumn = new LogsReader.DgvTextAndImageColumn();
+			this.DgvDataTraceNameColumn = new DgvTextAndImageColumn();
 			this.DgvDataDateOfTraceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvDataElapsedSecColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvDataSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,9 +78,9 @@ namespace LogsReader.Reader
 			this.buttonNextBlock = new System.Windows.Forms.Button();
 			this.splitContainerTop = new System.Windows.Forms.SplitContainer();
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
-			this.DgvReaderSelectColumn = new LogsReader.DgvCheckBoxColumn();
-			this.DgvReaderImageColumn = new LogsReader.DgvTextAndImageColumn();
-			this.DgvReaderFlowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.DgvReaderSelectColumn = new DgvCheckBoxColumn();
+			this.DgvReaderStatusColumn = new DgvTextAndImageColumn();
+			this.DgvReaderAbortColumn = new DgvDisableButtonColumn();
 			this.DgvReaderSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderThreadIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -167,7 +167,7 @@ namespace LogsReader.Reader
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
 			this.DgvData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvData.Size = new System.Drawing.Size(537, 461);
+			this.DgvData.Size = new System.Drawing.Size(537, 462);
 			this.DgvData.TabIndex = 20;
 			// 
 			// DgvDataPromptColumn
@@ -311,7 +311,7 @@ namespace LogsReader.Reader
 			// statusStrip
 			// 
 			this.statusStrip.GripMargin = new System.Windows.Forms.Padding(1);
-			this.statusStrip.Location = new System.Drawing.Point(0, 465);
+			this.statusStrip.Location = new System.Drawing.Point(0, 466);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(680, 22);
 			this.statusStrip.SizingGrip = false;
@@ -463,7 +463,7 @@ namespace LogsReader.Reader
 			this.filterPanel.MaximumSize = new System.Drawing.Size(5014, 61);
 			this.filterPanel.MinimumSize = new System.Drawing.Size(850, 2);
 			this.filterPanel.Name = "filterPanel";
-			this.filterPanel.Size = new System.Drawing.Size(1010, 61);
+			this.filterPanel.Size = new System.Drawing.Size(1010, 60);
 			this.filterPanel.TabIndex = 28;
 			// 
 			// buttonHighlightOff
@@ -616,7 +616,7 @@ namespace LogsReader.Reader
 			// ParentSplitContainer.Panel2
 			// 
 			this.ParentSplitContainer.Panel2.Controls.Add(this.tabControlViewer);
-			this.ParentSplitContainer.Size = new System.Drawing.Size(1152, 487);
+			this.ParentSplitContainer.Size = new System.Drawing.Size(1152, 488);
 			this.ParentSplitContainer.SplitterDistance = 680;
 			this.ParentSplitContainer.TabIndex = 32;
 			// 
@@ -638,7 +638,7 @@ namespace LogsReader.Reader
 			// MainSplitContainer.Panel2
 			// 
 			this.MainSplitContainer.Panel2.Controls.Add(this.DgvData);
-			this.MainSplitContainer.Size = new System.Drawing.Size(680, 465);
+			this.MainSplitContainer.Size = new System.Drawing.Size(680, 466);
 			this.MainSplitContainer.SplitterDistance = 135;
 			this.MainSplitContainer.TabIndex = 0;
 			// 
@@ -648,7 +648,7 @@ namespace LogsReader.Reader
 			this.CustomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.CustomPanel.Location = new System.Drawing.Point(0, 80);
 			this.CustomPanel.Name = "CustomPanel";
-			this.CustomPanel.Size = new System.Drawing.Size(131, 381);
+			this.CustomPanel.Size = new System.Drawing.Size(131, 382);
 			this.CustomPanel.TabIndex = 1;
 			this.CustomPanel.Resize += new System.EventHandler(this.CustomPanel_Resize);
 			// 
@@ -756,7 +756,7 @@ namespace LogsReader.Reader
 			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
 			this.tabControlViewer.Name = "tabControlViewer";
 			this.tabControlViewer.SelectedIndex = 0;
-			this.tabControlViewer.Size = new System.Drawing.Size(464, 483);
+			this.tabControlViewer.Size = new System.Drawing.Size(464, 484);
 			this.tabControlViewer.TabIndex = 0;
 			// 
 			// buttonNextBlock
@@ -767,7 +767,7 @@ namespace LogsReader.Reader
 			this.buttonNextBlock.MaximumSize = new System.Drawing.Size(21, 2000);
 			this.buttonNextBlock.MinimumSize = new System.Drawing.Size(21, 25);
 			this.buttonNextBlock.Name = "buttonNextBlock";
-			this.buttonNextBlock.Size = new System.Drawing.Size(21, 61);
+			this.buttonNextBlock.Size = new System.Drawing.Size(21, 60);
 			this.buttonNextBlock.TabIndex = 35;
 			this.buttonNextBlock.Text = ">";
 			this.buttonNextBlock.UseVisualStyleBackColor = false;
@@ -788,7 +788,7 @@ namespace LogsReader.Reader
 			// 
 			this.splitContainerTop.Panel2.Controls.Add(this.DgvReader);
 			this.splitContainerTop.Panel2MinSize = 0;
-			this.splitContainerTop.Size = new System.Drawing.Size(1127, 61);
+			this.splitContainerTop.Size = new System.Drawing.Size(1127, 60);
 			this.splitContainerTop.SplitterDistance = 1010;
 			this.splitContainerTop.TabIndex = 36;
 			// 
@@ -801,8 +801,8 @@ namespace LogsReader.Reader
 			this.DgvReader.ColumnHeadersVisible = false;
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DgvReaderSelectColumn,
-            this.DgvReaderImageColumn,
-            this.DgvReaderFlowColumn,
+            this.DgvReaderStatusColumn,
+            this.DgvReaderAbortColumn,
             this.DgvReaderSchemeNameColumn,
             this.DgvReaderPrivateIDColumn,
             this.DgvReaderThreadIdColumn,
@@ -817,38 +817,39 @@ namespace LogsReader.Reader
 			this.DgvReader.RowHeadersVisible = false;
 			this.DgvReader.RowTemplate.Height = 18;
 			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvReader.Size = new System.Drawing.Size(113, 61);
+			this.DgvReader.Size = new System.Drawing.Size(113, 60);
 			this.DgvReader.TabIndex = 50;
 			// 
 			// DgvReaderSelectColumn
 			// 
-			this.DgvReaderSelectColumn.Checked = false;
+			this.DgvReaderSelectColumn.Checked = true;
 			this.DgvReaderSelectColumn.HeaderText = "";
 			this.DgvReaderSelectColumn.MinimumWidth = 25;
 			this.DgvReaderSelectColumn.Name = "DgvReaderSelectColumn";
 			this.DgvReaderSelectColumn.ReadOnly = true;
 			this.DgvReaderSelectColumn.Width = 25;
 			// 
-			// DgvReaderImageColumn
+			// DgvReaderStatusColumn
 			// 
-			this.DgvReaderImageColumn.HeaderText = "Status";
-			this.DgvReaderImageColumn.Image = null;
-			this.DgvReaderImageColumn.MinimumWidth = 80;
-			this.DgvReaderImageColumn.Name = "DgvReaderImageColumn";
-			this.DgvReaderImageColumn.ReadOnly = true;
-			this.DgvReaderImageColumn.Width = 80;
+			this.DgvReaderStatusColumn.HeaderText = "Status";
+			this.DgvReaderStatusColumn.Image = null;
+			this.DgvReaderStatusColumn.MinimumWidth = 80;
+			this.DgvReaderStatusColumn.Name = "DgvReaderStatusColumn";
+			this.DgvReaderStatusColumn.ReadOnly = true;
+			this.DgvReaderStatusColumn.Width = 80;
 			// 
-			// DgvReaderFlowColumn
+			// DgvReaderAbortColumn
 			// 
-			this.DgvReaderFlowColumn.HeaderText = "Flow";
-			this.DgvReaderFlowColumn.MinimumWidth = 37;
-			this.DgvReaderFlowColumn.Name = "DgvReaderFlowColumn";
-			this.DgvReaderFlowColumn.ReadOnly = true;
-			this.DgvReaderFlowColumn.Width = 37;
+			this.DgvReaderAbortColumn.HeaderText = "Flow";
+			this.DgvReaderAbortColumn.MinimumWidth = 40;
+			this.DgvReaderAbortColumn.Name = "DgvReaderAbortColumn";
+			this.DgvReaderAbortColumn.ReadOnly = true;
+			this.DgvReaderAbortColumn.Width = 40;
 			// 
 			// DgvReaderSchemeNameColumn
 			// 
 			this.DgvReaderSchemeNameColumn.HeaderText = "SchemeName";
+			this.DgvReaderSchemeNameColumn.DataPropertyName = "SchemeName";
 			this.DgvReaderSchemeNameColumn.Name = "DgvReaderSchemeNameColumn";
 			this.DgvReaderSchemeNameColumn.ReadOnly = true;
 			this.DgvReaderSchemeNameColumn.Visible = false;
@@ -856,6 +857,7 @@ namespace LogsReader.Reader
 			// DgvReaderPrivateIDColumn
 			// 
 			this.DgvReaderPrivateIDColumn.HeaderText = "PrivateID";
+			this.DgvReaderPrivateIDColumn.DataPropertyName = "PrivateID";
 			this.DgvReaderPrivateIDColumn.Name = "DgvReaderPrivateIDColumn";
 			this.DgvReaderPrivateIDColumn.ReadOnly = true;
 			this.DgvReaderPrivateIDColumn.Visible = false;
@@ -863,6 +865,7 @@ namespace LogsReader.Reader
 			// DgvReaderThreadIdColumn
 			// 
 			this.DgvReaderThreadIdColumn.HeaderText = "ThreadId";
+			this.DgvReaderThreadIdColumn.DataPropertyName = "ThreadId";
 			this.DgvReaderThreadIdColumn.MinimumWidth = 60;
 			this.DgvReaderThreadIdColumn.Name = "DgvReaderThreadIdColumn";
 			this.DgvReaderThreadIdColumn.ReadOnly = true;
@@ -871,6 +874,7 @@ namespace LogsReader.Reader
 			// DgvReaderCountMatchesColumn
 			// 
 			this.DgvReaderCountMatchesColumn.HeaderText = "Matches";
+			this.DgvReaderCountMatchesColumn.DataPropertyName = "CountMatches";
 			this.DgvReaderCountMatchesColumn.MinimumWidth = 58;
 			this.DgvReaderCountMatchesColumn.Name = "DgvReaderCountMatchesColumn";
 			this.DgvReaderCountMatchesColumn.ReadOnly = true;
@@ -879,6 +883,7 @@ namespace LogsReader.Reader
 			// DgvReaderCountErrorMatchesColumn
 			// 
 			this.DgvReaderCountErrorMatchesColumn.HeaderText = "Errors";
+			this.DgvReaderCountErrorMatchesColumn.DataPropertyName = "CountErrors";
 			this.DgvReaderCountErrorMatchesColumn.MinimumWidth = 45;
 			this.DgvReaderCountErrorMatchesColumn.Name = "DgvReaderCountErrorMatchesColumn";
 			this.DgvReaderCountErrorMatchesColumn.ReadOnly = true;
@@ -887,6 +892,7 @@ namespace LogsReader.Reader
 			// DgvReaderFileColumn
 			// 
 			this.DgvReaderFileColumn.HeaderText = "File";
+			this.DgvReaderFileColumn.DataPropertyName = "FilePath";
 			this.DgvReaderFileColumn.MinimumWidth = 60;
 			this.DgvReaderFileColumn.Name = "DgvReaderFileColumn";
 			this.DgvReaderFileColumn.ReadOnly = true;
@@ -905,14 +911,14 @@ namespace LogsReader.Reader
 			// 
 			this.splitContainer1.Panel1.Controls.Add(this.splitContainerTop);
 			this.splitContainer1.Panel1.Controls.Add(this.buttonNextBlock);
-			this.splitContainer1.Panel1MinSize = 65;
+			this.splitContainer1.Panel1MinSize = 63;
 			// 
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.ParentSplitContainer);
 			this.splitContainer1.Panel2MinSize = 50;
 			this.splitContainer1.Size = new System.Drawing.Size(1152, 556);
-			this.splitContainer1.SplitterDistance = 65;
+			this.splitContainer1.SplitterDistance = 64;
 			this.splitContainer1.TabIndex = 37;
 			// 
 			// LogsReaderFormBase
@@ -1020,8 +1026,8 @@ namespace LogsReader.Reader
 
 		protected CustomDataGridView DgvReader;
 		private DgvCheckBoxColumn DgvReaderSelectColumn;
-		private DgvTextAndImageColumn DgvReaderImageColumn;
-		private DataGridViewButtonColumn DgvReaderFlowColumn;
+		private DgvTextAndImageColumn DgvReaderStatusColumn;
+		private DgvDisableButtonColumn DgvReaderAbortColumn;
 		protected DataGridViewTextBoxColumn DgvReaderSchemeNameColumn;
 		protected DataGridViewTextBoxColumn DgvReaderPrivateIDColumn;
 		private DataGridViewTextBoxColumn DgvReaderThreadIdColumn;

@@ -35,7 +35,7 @@ namespace LogsReader.Reader
 				if (_isStopPending && TraceReaders != null)
 				{
 					foreach (var reader in TraceReaders.Values.Where(x => x.Status == TraceReaderStatus.Waiting))
-						reader.Status = TraceReaderStatus.Cancelled;
+						reader.Status = TraceReaderStatus.Aborted;
 				}
 			}
 		}

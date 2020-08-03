@@ -128,9 +128,9 @@ namespace LogsReader.Reader
 			{
 				traceReader.ThreadId = Task.CurrentId?.ToString() ?? "-1";
 
-				if (IsStopPending)
+				if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
 				{
-					traceReader.Status = TraceReaderStatus.Cancelled;
+					traceReader.Status = TraceReaderStatus.Aborted;
 					return;
 				}
 
@@ -145,9 +145,9 @@ namespace LogsReader.Reader
 				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
 				using (var inputStream = new FileStream(traceReader.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				{
-					if (IsStopPending)
+					if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
 					{
-						traceReader.Status = TraceReaderStatus.Cancelled;
+						traceReader.Status = TraceReaderStatus.Aborted;
 						return;
 					}
 
@@ -157,13 +157,13 @@ namespace LogsReader.Reader
 						string line;
 						while ((line = streamReader.ReadLine()) != null)
 						{
-							traceReader.ReadLine(line);
-
-							if (IsStopPending)
+							if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
 							{
-								traceReader.Status = TraceReaderStatus.Cancelled;
+								traceReader.Status = TraceReaderStatus.Aborted;
 								return;
 							}
+
+							traceReader.ReadLine(line);
 						}
 					}
 				}

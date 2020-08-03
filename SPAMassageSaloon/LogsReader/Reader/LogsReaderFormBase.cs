@@ -196,7 +196,7 @@ namespace LogsReader.Reader
 
         static LogsReaderFormBase()
         {
-	        Image GetImage(IEnumerable< Image> images)
+	        Image GetImage(IEnumerable<Image> images)
 	        {
 		        var bmp = new Bitmap(images.Sum(x => x.Width), images.Max(x => x.Height));
 		        using (var g = Graphics.FromImage(bmp))
@@ -340,23 +340,17 @@ namespace LogsReader.Reader
 				DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
 				DgvReader.CellContentClick += (sender, args) =>
 				{
+					if (args.ColumnIndex != DgvReaderAbortColumn.Index || args.RowIndex < 0)
+						return;
 
+					var row = DgvReader.Rows[args.RowIndex];
+					if (!(row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort)
+					    || !cellAbort.Enabled
+					    || !TryGetReader(DgvReader.Rows[args.RowIndex], out var reader))
+						return;
+
+					reader.Status = TraceReaderStatus.Aborted;
 				};
-
-				DgvReaderSchemeNameColumn.DataPropertyName = DgvReaderSchemeNameColumn.Name = "SchemeName"; // not visible
-
-                DgvReaderPrivateIDColumn.DataPropertyName = DgvReaderPrivateIDColumn.Name = "PrivateID";    // not visible
-
-                DgvReaderThreadIdColumn.DataPropertyName = DgvReaderThreadIdColumn.Name = DgvReaderThreadIdColumn.HeaderText = @"ThreadId";
-
-                DgvReaderCountMatchesColumn.DataPropertyName = DgvReaderCountMatchesColumn.Name = "CountMatches";
-                DgvReaderCountMatchesColumn.HeaderText = "Matches";
-
-                DgvReaderCountErrorMatchesColumn.DataPropertyName = DgvReaderCountErrorMatchesColumn.Name = "CountErrors";
-                DgvReaderCountErrorMatchesColumn.HeaderText = @"Errors";
-
-                DgvReaderFileColumn.DataPropertyName = DgvReaderFileColumn.Name = "FilePath";
-                DgvReaderFileColumn.HeaderText = "File";
 
                 #endregion
 
@@ -1248,48 +1242,53 @@ namespace LogsReader.Reader
 
 	        try
 	        {
-		        if (row.Cells[DgvReaderSelectColumn.Name] is DgvColumnCheckBoxHeaderCell cellCheckBox)
-		        {
+		        if (!(row.Cells[DgvReaderStatusColumn.Name] is DgvTextAndImageCell cellImage))
+			        return;
 
+		        switch (reader.Status)
+		        {
+			        case TraceReaderStatus.Waiting:
+				        cellImage.Image = Resources.waiting;
+				        if (row.DefaultCellStyle.BackColor != Color.LightGray)
+					        row.DefaultCellStyle.BackColor = Color.LightGray;
+				        break;
+			        case TraceReaderStatus.Processing:
+				        cellImage.Image = Resources.processing;
+				        if (row.DefaultCellStyle.BackColor != Color.White)
+					        row.DefaultCellStyle.BackColor = Color.White;
+				        break;
+			        case TraceReaderStatus.Aborted:
+				        cellImage.Image = Resources.aborted;
+				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+				        break;
+			        case TraceReaderStatus.Failed:
+				        cellImage.Image = Resources.failed;
+				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
+					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
+				        break;
+			        case TraceReaderStatus.Finished:
+				        cellImage.Image = Resources.finished;
+				        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
+					        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
+				        break;
+			        default:
+				        cellImage.Image = null;
+				        break;
 		        }
 
-		        if (row.Cells[DgvReaderImageColumn.Name] is DgvTextAndImageCell cellImage)
+		        if (row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort)
 		        {
-			        switch (reader.Status)
-			        {
-				        case TraceReaderStatus.Waiting:
-					        cellImage.Image = Resources._default;
-					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
-						        row.DefaultCellStyle.BackColor = Color.LightGray;
-					        break;
-				        case TraceReaderStatus.Processing:
-					        cellImage.Image = Resources.next_arrow;
-					        if (row.DefaultCellStyle.BackColor != Color.White)
-						        row.DefaultCellStyle.BackColor = Color.White;
-					        break;
-				        case TraceReaderStatus.Cancelled:
-					        cellImage.Image = Resources.cancel;
-					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
-						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        break;
-				        case TraceReaderStatus.Failed:
-					        cellImage.Image = Resources.Error1;
-					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
-						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        break;
-				        case TraceReaderStatus.Finished:
-					        cellImage.Image = Resources.Ok;
-					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
-						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
-					        break;
-				        default:
-					        cellImage.Image = null;
-					        break;
-			        }
+			        if (cellAbort.Value == null || cellAbort.Value.ToString() != "Abort")
+				        cellAbort.Value = "Abort";
 
-			        cellImage.Value = reader.Status.ToString();
-		        }
+			        if (cellAbort.Enabled && reader.Status != TraceReaderStatus.Processing)
+				        cellAbort.Enabled = false;
+			        else if (!cellAbort.Enabled && reader.Status == TraceReaderStatus.Processing)
+				        cellAbort.Enabled = true;
+				}
 
+				cellImage.Value = reader.Status.ToString("G");
 		        row.Cells[DgvReaderThreadIdColumn.Name].Value = reader.ThreadId;
 		        row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
 		        row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
