@@ -501,4 +501,61 @@
   <data name="Txt_LogsReaderForm_PrevFilteredButt" xml:space="preserve">
     <value>Предыдущий отфильтрованный элемент [SHIFT+F4]</value>
   </data>
+  <data name="TxtReader_BtnAbort" xml:space="preserve">
+    <value>Прервать</value>
+  </data>
+  <data name="TxtReader_BtnPause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="TxtReader_BtnResume" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="TxtReader_DgvCreationTime" xml:space="preserve">
+    <value>Создан</value>
+  </data>
+  <data name="TxtReader_DgvErrors" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="TxtReader_DgvFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TxtReader_DgvFlow" xml:space="preserve">
+    <value>Поток</value>
+  </data>
+  <data name="TxtReader_DgvLastWrite" xml:space="preserve">
+    <value>Записан</value>
+  </data>
+  <data name="TxtReader_DgvMatches" xml:space="preserve">
+    <value>Совпадения</value>
+  </data>
+  <data name="TxtReader_DgvProcess" xml:space="preserve">
+    <value>Процесс</value>
+  </data>
+  <data name="TxtReader_DgvSize" xml:space="preserve">
+    <value>Размер</value>
+  </data>
+  <data name="TxtReader_DgvStatus" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="TxtReader_DgvThreadID" xml:space="preserve">
+    <value>ThreadID</value>
+  </data>
+  <data name="TxtReader_StatusAborted" xml:space="preserve">
+    <value>Прерван</value>
+  </data>
+  <data name="TxtReader_StatusFailed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="TxtReader_StatusFinished" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="TxtReader_StatusOnPause" xml:space="preserve">
+    <value>Приостановлен</value>
+  </data>
+  <data name="TxtReader_StatusProcessing" xml:space="preserve">
+    <value>Обработка</value>
+  </data>
+  <data name="TxtReader_StatusWaiting" xml:space="preserve">
+    <value>Ожидает</value>
+  </data>
 </root>

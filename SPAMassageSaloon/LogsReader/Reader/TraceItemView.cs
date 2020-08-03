@@ -62,7 +62,7 @@ namespace LogsReader.Reader
 			descriptionText.AutoWordSelection = true;
 			descriptionText.AutoWordSelection = false;
 
-			notepad.TabsFont = LogsReaderMainForm.DgvFont;
+			notepad.TabsFont = LogsReaderMainForm.DgvDataFont;
 			notepad.TextFont = LogsReaderMainForm.TxtFont;
 
 			descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);

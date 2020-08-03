@@ -153,10 +153,16 @@ namespace LogsReader.Reader
 
 					using (var streamReader = new StreamReader(inputStream, Encoding))
 					{
-						traceReader.Status = TraceReaderStatus.Processing;
+						if (traceReader.Status != TraceReaderStatus.OnPause)
+							traceReader.Status = TraceReaderStatus.Processing;
+
 						string line;
 						while ((line = streamReader.ReadLine()) != null)
 						{
+							if(traceReader.Status == TraceReaderStatus.OnPause)
+								while (traceReader.Status == TraceReaderStatus.OnPause && !IsStopPending)
+									Thread.Sleep(50);
+
 							if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
 							{
 								traceReader.Status = TraceReaderStatus.Aborted;

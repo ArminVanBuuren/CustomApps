@@ -255,6 +255,7 @@
     <Content Include="Resources\notepad_closeAllItems.png" />
     <Content Include="Resources\notepad_closeItem.png" />
     <Content Include="Resources\Ok.png" />
+    <Content Include="Resources\onPause.png" />
     <Content Include="Resources\ping.png" />
     <Content Include="Resources\pingAll.png" />
     <Content Include="Resources\prev_arrow.png" />

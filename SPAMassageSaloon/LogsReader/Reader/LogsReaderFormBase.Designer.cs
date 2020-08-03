@@ -80,6 +80,7 @@ namespace LogsReader.Reader
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.DgvReaderSelectColumn = new DgvCheckBoxColumn();
 			this.DgvReaderStatusColumn = new DgvTextAndImageColumn();
+			this.DgvReaderProcessColumn = new DgvDisableButtonColumn();
 			this.DgvReaderAbortColumn = new DgvDisableButtonColumn();
 			this.DgvReaderSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -87,6 +88,9 @@ namespace LogsReader.Reader
 			this.DgvReaderCountMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderCountErrorMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderFileCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderFileLastWriteTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderFileSizeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
@@ -802,20 +806,25 @@ namespace LogsReader.Reader
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DgvReaderSelectColumn,
             this.DgvReaderStatusColumn,
+            this.DgvReaderProcessColumn,
             this.DgvReaderAbortColumn,
             this.DgvReaderSchemeNameColumn,
             this.DgvReaderPrivateIDColumn,
             this.DgvReaderThreadIdColumn,
             this.DgvReaderCountMatchesColumn,
             this.DgvReaderCountErrorMatchesColumn,
-            this.DgvReaderFileColumn});
+            this.DgvReaderFileColumn,
+            DgvReaderFileCreationTimeColumn,
+            DgvReaderFileLastWriteTimeColumn,
+            DgvReaderFileSizeColumn
+			});
 			this.DgvReader.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvReader.Location = new System.Drawing.Point(0, 0);
 			this.DgvReader.MultiSelect = false;
 			this.DgvReader.Name = "DgvReader";
 			this.DgvReader.ReadOnly = true;
 			this.DgvReader.RowHeadersVisible = false;
-			this.DgvReader.RowTemplate.Height = 18;
+			this.DgvReader.RowTemplate.Height = 19;
 			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.DgvReader.Size = new System.Drawing.Size(113, 60);
 			this.DgvReader.TabIndex = 50;
@@ -833,18 +842,26 @@ namespace LogsReader.Reader
 			// 
 			this.DgvReaderStatusColumn.HeaderText = "Status";
 			this.DgvReaderStatusColumn.Image = null;
-			this.DgvReaderStatusColumn.MinimumWidth = 80;
+			this.DgvReaderStatusColumn.MinimumWidth = 110;
 			this.DgvReaderStatusColumn.Name = "DgvReaderStatusColumn";
 			this.DgvReaderStatusColumn.ReadOnly = true;
-			this.DgvReaderStatusColumn.Width = 80;
+			this.DgvReaderStatusColumn.Width = 110;
+			// 
+			// DgvReaderProcessColumn
+			// 
+			this.DgvReaderProcessColumn.HeaderText = "Process";
+			this.DgvReaderProcessColumn.MinimumWidth = 78;
+			this.DgvReaderProcessColumn.Name = "DgvReaderProcessColumn";
+			this.DgvReaderProcessColumn.ReadOnly = true;
+			this.DgvReaderProcessColumn.Width = 78;
 			// 
 			// DgvReaderAbortColumn
 			// 
 			this.DgvReaderAbortColumn.HeaderText = "Flow";
-			this.DgvReaderAbortColumn.MinimumWidth = 40;
+			this.DgvReaderAbortColumn.MinimumWidth = 70;
 			this.DgvReaderAbortColumn.Name = "DgvReaderAbortColumn";
 			this.DgvReaderAbortColumn.ReadOnly = true;
-			this.DgvReaderAbortColumn.Width = 40;
+			this.DgvReaderAbortColumn.Width = 70;
 			// 
 			// DgvReaderSchemeNameColumn
 			// 
@@ -875,19 +892,19 @@ namespace LogsReader.Reader
 			// 
 			this.DgvReaderCountMatchesColumn.HeaderText = "Matches";
 			this.DgvReaderCountMatchesColumn.DataPropertyName = "CountMatches";
-			this.DgvReaderCountMatchesColumn.MinimumWidth = 58;
+			this.DgvReaderCountMatchesColumn.MinimumWidth = 75;
 			this.DgvReaderCountMatchesColumn.Name = "DgvReaderCountMatchesColumn";
 			this.DgvReaderCountMatchesColumn.ReadOnly = true;
-			this.DgvReaderCountMatchesColumn.Width = 58;
+			this.DgvReaderCountMatchesColumn.Width = 80;
 			// 
 			// DgvReaderCountErrorMatchesColumn
 			// 
 			this.DgvReaderCountErrorMatchesColumn.HeaderText = "Errors";
 			this.DgvReaderCountErrorMatchesColumn.DataPropertyName = "CountErrors";
-			this.DgvReaderCountErrorMatchesColumn.MinimumWidth = 45;
+			this.DgvReaderCountErrorMatchesColumn.MinimumWidth = 55;
 			this.DgvReaderCountErrorMatchesColumn.Name = "DgvReaderCountErrorMatchesColumn";
 			this.DgvReaderCountErrorMatchesColumn.ReadOnly = true;
-			this.DgvReaderCountErrorMatchesColumn.Width = 45;
+			this.DgvReaderCountErrorMatchesColumn.Width = 55;
 			// 
 			// DgvReaderFileColumn
 			// 
@@ -897,6 +914,33 @@ namespace LogsReader.Reader
 			this.DgvReaderFileColumn.Name = "DgvReaderFileColumn";
 			this.DgvReaderFileColumn.ReadOnly = true;
 			this.DgvReaderFileColumn.Width = 60;
+			// 
+			// DgvReaderFileCreationTimeColumn
+			// 
+			this.DgvReaderFileCreationTimeColumn.HeaderText = "CreationTime";
+			this.DgvReaderFileCreationTimeColumn.DataPropertyName = "CreationTime";
+			this.DgvReaderFileCreationTimeColumn.MinimumWidth = 30;
+			this.DgvReaderFileCreationTimeColumn.Name = "DgvReaderFileCreationTimeColumn";
+			this.DgvReaderFileCreationTimeColumn.ReadOnly = true;
+			this.DgvReaderFileCreationTimeColumn.Width = 30;
+			// 
+			// DgvReaderFileLastWriteTimeColumn
+			// 
+			this.DgvReaderFileLastWriteTimeColumn.HeaderText = "LastWrite";
+			this.DgvReaderFileLastWriteTimeColumn.DataPropertyName = "LastWriteTime";
+			this.DgvReaderFileLastWriteTimeColumn.MinimumWidth = 30;
+			this.DgvReaderFileLastWriteTimeColumn.Name = "DgvReaderFileLastWriteTimeColumn";
+			this.DgvReaderFileLastWriteTimeColumn.ReadOnly = true;
+			this.DgvReaderFileLastWriteTimeColumn.Width = 30;
+			// 
+			// DgvReaderFileSizeColumn
+			// 
+			this.DgvReaderFileSizeColumn.HeaderText = "Size";
+			this.DgvReaderFileSizeColumn.DataPropertyName = "Size";
+			this.DgvReaderFileSizeColumn.MinimumWidth = 30;
+			this.DgvReaderFileSizeColumn.Name = "DgvReaderFileSizeColumn";
+			this.DgvReaderFileSizeColumn.ReadOnly = true;
+			this.DgvReaderFileSizeColumn.Width = 30;
 			// 
 			// splitContainer1
 			// 
@@ -1027,6 +1071,7 @@ namespace LogsReader.Reader
 		protected CustomDataGridView DgvReader;
 		private DgvCheckBoxColumn DgvReaderSelectColumn;
 		private DgvTextAndImageColumn DgvReaderStatusColumn;
+		private DgvDisableButtonColumn DgvReaderProcessColumn;
 		private DgvDisableButtonColumn DgvReaderAbortColumn;
 		protected DataGridViewTextBoxColumn DgvReaderSchemeNameColumn;
 		protected DataGridViewTextBoxColumn DgvReaderPrivateIDColumn;
@@ -1034,6 +1079,9 @@ namespace LogsReader.Reader
 		private DataGridViewTextBoxColumn DgvReaderCountMatchesColumn;
 		private DataGridViewTextBoxColumn DgvReaderCountErrorMatchesColumn;
 		private DataGridViewTextBoxColumn DgvReaderFileColumn;
+		private DataGridViewTextBoxColumn DgvReaderFileCreationTimeColumn;
+		private DataGridViewTextBoxColumn DgvReaderFileLastWriteTimeColumn;
+		private DataGridViewTextBoxColumn DgvReaderFileSizeColumn;
 	}
 }
 

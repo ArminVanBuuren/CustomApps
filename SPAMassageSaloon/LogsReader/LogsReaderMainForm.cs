@@ -24,7 +24,8 @@ namespace LogsReader
 
         public static readonly Font DefFont = new Font(MainFontFamily, 8.5F, FontStyle.Regular);
         public static readonly Font TxtFont = new Font(MainFontFamily, 10F, FontStyle.Regular);
-        public static readonly Font DgvFont = new Font(DgvFontFamily, 8.25f, FontStyle.Regular);
+        public static readonly Font DgvDataFont = new Font(DgvFontFamily, 8.25f, FontStyle.Regular);
+        public static readonly Font DgvReaderFont = new Font(DgvFontFamily, 8, FontStyle.Regular);
         public static readonly Font ErrFont = new Font(FailedFontFamily, 8.25f, FontStyle.Bold);
 
         private const string GLOBAL_PAGE_NAME = "Global";

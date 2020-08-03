@@ -298,6 +298,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap onPause {
+            get {
+                object obj = ResourceManager.GetObject("onPause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ping {
             get {
                 object obj = ResourceManager.GetObject("ping", resourceCulture);
@@ -1512,6 +1522,177 @@ namespace LogsReader.Properties {
         public static string Txt_ServerGroups_ErrUnique {
             get {
                 return ResourceManager.GetString("Txt_ServerGroups_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abort.
+        /// </summary>
+        public static string TxtReader_BtnAbort {
+            get {
+                return ResourceManager.GetString("TxtReader_BtnAbort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause.
+        /// </summary>
+        public static string TxtReader_BtnPause {
+            get {
+                return ResourceManager.GetString("TxtReader_BtnPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        public static string TxtReader_BtnResume {
+            get {
+                return ResourceManager.GetString("TxtReader_BtnResume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CreationTime.
+        /// </summary>
+        public static string TxtReader_DgvCreationTime {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvCreationTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string TxtReader_DgvErrors {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string TxtReader_DgvFile {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flow.
+        /// </summary>
+        public static string TxtReader_DgvFlow {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvFlow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LastWrite.
+        /// </summary>
+        public static string TxtReader_DgvLastWrite {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvLastWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matches.
+        /// </summary>
+        public static string TxtReader_DgvMatches {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Process.
+        /// </summary>
+        public static string TxtReader_DgvProcess {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string TxtReader_DgvSize {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string TxtReader_DgvStatus {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ThreadID.
+        /// </summary>
+        public static string TxtReader_DgvThreadID {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvThreadID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aborted.
+        /// </summary>
+        public static string TxtReader_StatusAborted {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed.
+        /// </summary>
+        public static string TxtReader_StatusFailed {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string TxtReader_StatusFinished {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspended.
+        /// </summary>
+        public static string TxtReader_StatusOnPause {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusOnPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing.
+        /// </summary>
+        public static string TxtReader_StatusProcessing {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting.
+        /// </summary>
+        public static string TxtReader_StatusWaiting {
+            get {
+                return ResourceManager.GetString("TxtReader_StatusWaiting", resourceCulture);
             }
         }
         

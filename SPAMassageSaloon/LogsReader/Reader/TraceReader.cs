@@ -110,10 +110,19 @@ namespace LogsReader.Reader
 		[DGVColumn(ColumnPosition.After, "File", true)]
 		public string FilePath { get; }
 
-        /// <summary>
-        /// Содержит в себе исходную настройку пути к директории "C:\TEST"
-        /// </summary>
-        public string OriginalFolder { get; }
+		[DGVColumn(ColumnPosition.After, "CreationTime", true)]
+		public DateTime CreationTime => File.CreationTime;
+
+		[DGVColumn(ColumnPosition.After, "LastWriteTime", true)]
+		public DateTime LastWriteTime => File.LastWriteTime;
+
+		[DGVColumn(ColumnPosition.After, "Size", true)]
+		public string Size => $"{File.Length.ToMegabytes()} Mb";
+
+		/// <summary>
+		/// Содержит в себе исходную настройку пути к директории "C:\TEST"
+		/// </summary>
+		public string OriginalFolder { get; }
 
         public FileInfo File { get; }
 
