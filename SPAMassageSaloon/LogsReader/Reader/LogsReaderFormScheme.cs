@@ -85,7 +85,7 @@ namespace LogsReader.Reader
 			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(84, 85),
 			        Name = "orderByText",
-			        Size = new Size(122, 23),
+			        Size = new Size(43, 23),
 			        TabIndex = 18
 		        };
 		        orderByText.Leave += OrderByText_Leave;
@@ -105,7 +105,7 @@ namespace LogsReader.Reader
 			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(84, 7),
 			        Name = "maxLinesStackText",
-			        Size = new Size(122, 23),
+			        Size = new Size(43, 23),
 			        TabIndex = 15
 		        };
 		        maxLinesStackText.TextChanged += MaxLinesStackText_TextChanged;
@@ -126,7 +126,7 @@ namespace LogsReader.Reader
 			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(84, 33),
 			        Name = "maxThreadsText",
-			        Size = new Size(122, 23),
+			        Size = new Size(43, 23),
 			        TabIndex = 16
 		        };
 		        maxThreadsText.TextChanged += MaxThreadsText_TextChanged;
@@ -137,7 +137,7 @@ namespace LogsReader.Reader
 			        Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(84, 59),
 			        Name = "rowsLimitText",
-			        Size = new Size(122, 23),
+			        Size = new Size(43, 23),
 			        TabIndex = 17
 		        };
 		        rowsLimitText.TextChanged += RowsLimitText_TextChanged;
@@ -148,7 +148,7 @@ namespace LogsReader.Reader
 			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(1, 114),
 			        Name = "TreeMain",
-			        Size = new Size(208, 346),
+			        Size = new Size(130, 266),
 			        TabIndex = 19
 		        };
 
