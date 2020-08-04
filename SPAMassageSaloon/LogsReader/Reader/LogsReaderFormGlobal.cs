@@ -440,10 +440,10 @@ namespace LogsReader.Reader
 			        checkBoxSelectAll.Padding = new Padding(0, 0, 9, 0);
 		        }
 			}
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>

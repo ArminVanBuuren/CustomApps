@@ -371,10 +371,10 @@ namespace LogsReader.Reader
 			        System.Threading.Thread.Sleep(50);
 		        }
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
 		protected override IEnumerable<DataTemplate> GetResultTemplates()
@@ -513,10 +513,10 @@ namespace LogsReader.Reader
 
 		        base.ValidationCheck(clearStatus);
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         protected override void ClearForm(bool saveData)

@@ -92,10 +92,10 @@ namespace LogsReader.Reader
 			        checkBoxShowTrns.Checked = value != TransactionsMarkingType.None;
                     checkBoxShowTrns_CheckedChanged(this, EventArgs.Empty);
 		        }
-		        catch (Exception)
+		        catch (Exception ex)
 		        {
-			        // ignored
-		        }
+					ReportStatus(ex.Message, ReportStatusType.Error);
+				}
 		        finally
 		        {
 			        checkBoxShowTrns.CheckedChanged += checkBoxShowTrns_CheckedChanged;
@@ -1174,7 +1174,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
         /// </summary>
-        protected static void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+        protected void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
         {
 	        try
 	        {
@@ -1190,10 +1190,10 @@ namespace LogsReader.Reader
 		        for (var i = firstIndex; i <= lastIndex; i++)
 			        refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         /// <summary>
@@ -1270,10 +1270,10 @@ namespace LogsReader.Reader
 	                imgCellPrompt.Image = template.IsSelected && DgvDataPromptColumn.Visible ? Img_Selected : null;
                 }
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
 	        finally
 	        {
 		        if (template.IsSelected && (CurrentTransactionsMarkingType == TransactionsMarkingType.Color || CurrentTransactionsMarkingType == TransactionsMarkingType.Both))
@@ -1425,10 +1425,10 @@ namespace LogsReader.Reader
 				if (cellErrors.Value == null || cellErrors.Value.ToString() != reader.CountErrors.ToString())
 					cellErrors.Value = reader.CountErrors;
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
 	        finally
 	        {
 		        if (selected != null)
@@ -1522,10 +1522,10 @@ namespace LogsReader.Reader
 			        return;
 		        }
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         private void buttonErrorNext_Click(object sender, EventArgs e)
@@ -1565,10 +1565,10 @@ namespace LogsReader.Reader
 			        return;
 		        }
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         private async void DgvDataOnColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1685,10 +1685,10 @@ namespace LogsReader.Reader
                 DgvData.ClearSelection();
                 DgvData.Rows[hti.RowIndex].Selected = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
-            }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         internal virtual void TxtPatternOnTextChanged(object sender, EventArgs e)
@@ -1751,10 +1751,10 @@ namespace LogsReader.Reader
 		        RefreshAllRows(DgvData, DgvDataRefreshRow);
 		        DgvData.Focus();
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
         }
 
         protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
@@ -1816,10 +1816,10 @@ namespace LogsReader.Reader
 				FilesCompleted = 0;
 		        TotalFiles = 0;
 	        }
-	        catch (Exception)
+	        catch (Exception ex)
 	        {
-		        // ignored
-	        }
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
 	        finally
 	        {
 		        STREAM.GarbageCollect();
@@ -1879,19 +1879,22 @@ namespace LogsReader.Reader
 
         protected void ReportStatus(string message, ReportStatusType type)
         {
-            if (!message.IsNullOrEmpty())
-            {
-                _statusInfo.BackColor = type == ReportStatusType.Error ? Color.Red : type == ReportStatusType.Warning ? Color.Yellow : Color.Green;
-                _statusInfo.ForeColor = type == ReportStatusType.Warning ? Color.Black : Color.White;
-                _statusInfo.Text = message.Replace("\r", "").Replace("\n", " ");
-            }
-            else
-            {
-                _statusInfo.BackColor = SystemColors.Control;
-                _statusInfo.ForeColor = Color.Black;
-                _statusInfo.Text = string.Empty;
-            }
-            _isLastWasError = type == ReportStatusType.Error || type == ReportStatusType.Warning;
+	        this.SafeInvoke(() =>
+	        {
+		        if (!message.IsNullOrEmpty())
+		        {
+			        _statusInfo.BackColor = type == ReportStatusType.Error ? Color.Red : type == ReportStatusType.Warning ? Color.Yellow : Color.Green;
+			        _statusInfo.ForeColor = type == ReportStatusType.Warning ? Color.Black : Color.White;
+			        _statusInfo.Text = message.Replace("\r", "").Replace("\n", " ");
+		        }
+		        else
+		        {
+			        _statusInfo.BackColor = SystemColors.Control;
+			        _statusInfo.ForeColor = Color.Black;
+			        _statusInfo.Text = string.Empty;
+		        }
+		        _isLastWasError = type == ReportStatusType.Error || type == ReportStatusType.Warning;
+			});
         }
 
         protected void ClearErrorStatus()
@@ -1919,19 +1922,28 @@ namespace LogsReader.Reader
         private bool shownFilterPanel;
         private void buttonNextBlock_Click(object sender, EventArgs e)
         {
-	        shownFilterPanel = !shownFilterPanel;
-
-	        splitContainerTop.Panel1Collapsed = !shownFilterPanel;
-	        splitContainerTop.Panel2Collapsed = shownFilterPanel;
-
-            if (shownFilterPanel)
+	        try
 	        {
-		        buttonNextBlock.Text = @">";
-            }
-	        else
+		        shownFilterPanel = !shownFilterPanel;
+
+		        splitContainerTop.Panel1Collapsed = !shownFilterPanel;
+		        splitContainerTop.Panel2Collapsed = shownFilterPanel;
+
+		        if (shownFilterPanel)
+		        {
+			        splitContainerMainFilter.SplitterDistance = 65;
+			        buttonNextBlock.Text = @">";
+		        }
+		        else
+		        {
+			        buttonNextBlock.Text = @"<";
+			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+			        splitContainerMainFilter.SplitterDistance = splitContainerMainFilter.Height / 3;
+				}
+			}
+	        catch (Exception ex)
 	        {
-		        buttonNextBlock.Text = @"<";
-		        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+				ReportStatus(ex.Message, ReportStatusType.Error);
 			}
         }
 

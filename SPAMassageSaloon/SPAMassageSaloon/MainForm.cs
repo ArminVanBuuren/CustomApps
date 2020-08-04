@@ -55,6 +55,8 @@ namespace SPAMassageSaloon
 
         public bool IsActivated { get; private set; }
 
+        public bool IsMinimized { get; private set; }
+
         public NationalLanguage Language
         {
             get => _language;
@@ -227,6 +229,7 @@ namespace SPAMassageSaloon
                 };
                 Activated += (o, args) => IsActivated = true;
                 Deactivate += (o, args) => IsActivated = false;
+                Resize += (o, args) => { IsMinimized = WindowState == FormWindowState.Minimized; };
             }
             catch (Exception ex)
             {
@@ -328,22 +331,11 @@ namespace SPAMassageSaloon
                     })
                     : null;
 
-                void Monitoring()
+                void Monitoring(string cpuUsage, string threadsUsage, string ramUsage)
                 {
-                    if (WindowState != FormWindowState.Minimized)
-                    {
-                        double percent = 0;
-                        if (appCPU != null)
-                            double.TryParse(appCPU.NextValue().ToString(), out percent);
-                        var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
-                        var currentProcess = Process.GetCurrentProcess();
-                        var threadsUsage = $"{currentProcess.Threads.Count,-2}";
-                        var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-
-                        _cpuUsage.Text = cpuUsage;
-                        _threadsUsage.Text = threadsUsage;
-                        _ramUsage.Text = ramUsage;
-                    }
+	                _cpuUsage.Text = cpuUsage;
+                    _threadsUsage.Text = threadsUsage;
+                    _ramUsage.Text = ramUsage;
 
                     var processCount = 0;
                     var totalProgress = 0;
@@ -364,8 +356,25 @@ namespace SPAMassageSaloon
 
                 while (!FormOnClosing)
                 {
-                    try { this.SafeInvoke(Monitoring); }
-                    catch (InvalidOperationException) { }
+	                try
+	                {
+                        if(IsMinimized)
+                            continue;
+
+		                double percent = 0;
+		                if (appCPU != null)
+			                double.TryParse(appCPU.NextValue().ToString(), out percent);
+		                var cpuUsage = $"{(int)(percent / Environment.ProcessorCount),3}%";
+		                var currentProcess = Process.GetCurrentProcess();
+		                var threadsUsage = $"{currentProcess.Threads.Count,-2}";
+		                var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+
+                        this.SafeInvoke(() => Monitoring(cpuUsage, threadsUsage, ramUsage));
+	                }
+	                catch (InvalidOperationException)
+	                {
+                        // ignored
+	                }
                     Thread.Sleep(1000);
                 }
             }
