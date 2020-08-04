@@ -5,17 +5,34 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
+	/// <summary>
+    /// Многопоточная обработка данных
+    /// </summary>
 	public class MultiTasking
     {
-	    public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
+        public static async Task<MTCallBackList<Action, bool>> RunAsync(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
         {
             return await Task<MTCallBackList<Action, bool>>.Factory.StartNew(() => Run(actions, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static MTCallBackList<Action, bool> Run(IEnumerable<Action> actions, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Action, bool>_{actions.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Action, bool>_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var result = new MTCallBackList<Action, bool>();
                 var listOfTasks = new List<Task>();
@@ -61,11 +78,25 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync(IEnumerable<Action> actions, Action<MTCallBackList<Action, bool>> callback, MultiTaskingTemplate mtTemplate)
         {
             await Task.Factory.StartNew(() => Run(actions, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run(IEnumerable<Action> actions, Action<MTCallBackList<Action, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var result = Run(actions, mtTemplate);
@@ -74,15 +105,29 @@ namespace Utils
                 Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<Action, bool>)callbackItem), result);
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync(IEnumerable<Action> actions, Action<MTCallBack<Action, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(actions, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <param name="actions">Коллекция методов по асинхронной обработке</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run(IEnumerable<Action> actions, Action<MTCallBack<Action, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{actions.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var listOfTasks = new List<Task>();
                 foreach (var action in actions)
@@ -142,16 +187,31 @@ namespace Utils
             }
         }
 
-
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static async Task<MTCallBackList<Func<TResult>, TResult>> RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, MultiTaskingTemplate mtTemplate = null)
         {
             return await Task<MTCallBackList<Func<TResult>, TResult>>.Factory.StartNew(() => Run(funcs, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static MTCallBackList<Func<TResult>, TResult> Run<TResult>(IEnumerable<Func<TResult>> funcs, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Func<TResult>>_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<Func<TResult>>_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var result = new MTCallBackList<Func<TResult>, TResult>();
                 var listOfTasks = new List<Task>();
@@ -197,11 +257,27 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBackList<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(funcs, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBackList<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var result = Run(funcs, mtTemplate);
@@ -210,15 +286,31 @@ namespace Utils
                 Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<Func<TResult>, TResult>)callbackItem), result);
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBack<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(funcs, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="funcs">Коллекция функций по асинхронной обработке</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TResult>(IEnumerable<Func<TResult>> funcs, Action<MTCallBack<Func<TResult>, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TResult).GetHashCode() + funcs.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var listOfTasks = new List<Task>();
                 foreach (var func in funcs)
@@ -278,15 +370,33 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static async Task<MTCallBackList<TSource, bool>> RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             return await Task<MTCallBackList<TSource, bool>>.Factory.StartNew(() => Run(action, data, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static MTCallBackList<TSource, bool> Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, bool>_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, bool>_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var result = new MTCallBackList<TSource, bool>();
                 var listOfTasks = new List<Task>();
@@ -332,11 +442,29 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBackList<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(action, data, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBackList<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var result = Run(action, data, mtTemplate);
@@ -345,15 +473,33 @@ namespace Utils
                 Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<TSource, bool>)callbackItem), result);
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBack<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(action, data, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <param name="action">Метод по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TSource>(Action<TSource> action, IEnumerable<TSource> data, Action<MTCallBack<TSource, bool>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{typeof(TSource).GetHashCode() + action.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var listOfTasks = new List<Task>();
                 foreach (var item in data)
@@ -413,15 +559,35 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static async Task<MTCallBackList<TSource, TResult>> RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             return await Task<MTCallBackList<TSource, TResult>>.Factory.StartNew(() => Run(func, data, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
+        /// <returns>Коллекция завершенных элементов</returns>
         public static MTCallBackList<TSource, TResult> Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var result = new MTCallBackList<TSource, TResult>();
                 var listOfTasks = new List<Task>();
@@ -467,11 +633,31 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Коллекция завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBackList<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(func, data, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Отправляет коллекцию завершенных элементов</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBackList<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var result = Run(func, data, mtTemplate);
@@ -480,15 +666,35 @@ namespace Utils
                 Task.Factory.StartNew((callbackItem) => callback.Invoke((MTCallBackList<TSource, TResult>) callbackItem), result);
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static async Task RunAsync<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBack<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             await Task.Factory.StartNew(() => Run(func, data, callback, mtTemplate));
         }
 
+        /// <summary>
+        /// Многопоточная обработка коллекции элементов.
+        /// Настройка ограничения по количеству потоков, работают только в контексте вызывающего потока. Ограничения по умолчания - 2 потока.
+        /// </summary>
+        /// <typeparam name="TSource">Тип элементов коллекции</typeparam>
+        /// <typeparam name="TResult">Результат обработки элемента функции</typeparam>
+        /// <param name="func">Функция по асинхронной обработке коллекции</param>
+        /// <param name="data">Коллекция которую нужно обработать асинхронно</param>
+        /// <param name="callback">Метод CallBack при завершении выполнения одного из элемента коллекции</param>
+        /// <param name="mtTemplate">Настройки многопоточного выполнения. Ограничения по количеству потоков, отмена выполнения, приоретизация потоков.</param>
         public static void Run<TSource, TResult>(Func<TSource, TResult> func, IEnumerable<TSource> data, Action<MTCallBack<TSource, TResult>> callback, MultiTaskingTemplate mtTemplate = null)
         {
             var mt = mtTemplate ?? new MultiTaskingTemplate();
-            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{typeof(TSource).GetHashCode() + typeof(TResult).GetHashCode() + func.GetHashCode() + 3}"))
+            using (var pool = new Semaphore(mt.MaxThreads, mt.MaxThreads, $"MultiTasking<TSource, TResult>_{Thread.CurrentThread.ManagedThreadId}"))
             {
                 var listOfTasks = new List<Task>();
                 foreach (var item in data)
