@@ -317,7 +317,7 @@ namespace LogsReader.Reader
 		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-		            await UploadReaders(MainReader.TraceReaders.Values.OrderBy(x => x.Priority)); // загружаем ридеры в таблицу прогресса
+		            await UploadReaders(MainReader.TraceReaders.Values); // загружаем ридеры в таблицу прогресса
 		            new Action(CheckProgress).BeginInvoke(null, null);
 
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);

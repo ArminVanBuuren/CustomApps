@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -228,7 +229,7 @@ namespace LogsReader.Reader
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
 	        InitializeComponent();
-	        buttonNextBlock_Click(this, EventArgs.Empty);
+	        buttonNextBlock_Click(null, EventArgs.Empty);
 
             DefaultEncoding = defaultEncoding;
             UserSettings = userSettings;
@@ -472,13 +473,13 @@ namespace LogsReader.Reader
 	        }
         }
 
-        public virtual void ApplySettings()
+        #region Change Language
+
+		public virtual void ApplySettings()
         {
             try
             {
-				#region Change Language
-
-				_filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
+	            _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
                 _overallFound.Text = Resources.Txt_LogsReaderForm_OverallFound;
                 _errorFound.Text = Resources.Txt_LogsReaderForm_Error;
@@ -523,9 +524,7 @@ namespace LogsReader.Reader
                 DgvReaderAbortColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvAbortMinWidth);
                 DgvReaderCountMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountMatchesMinWidth);
                 DgvReaderCountErrorMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountErrorMatchesMinWidth);
-
-                #endregion
-			}
+            }
             catch (Exception ex)
             {
 	            ReportStatus(ex.Message, ReportStatusType.Error);
@@ -560,6 +559,8 @@ namespace LogsReader.Reader
 	        Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
 	        Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
         }
+
+        #endregion
 
 		public virtual void SaveData()
         {
@@ -674,9 +675,10 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				await DgvReader.AssignCollectionAsync(readers, null, true);
+				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.Priority), null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
+				//DgvReader.Sort(DgvReaderThreadIdColumn, ListSortDirection.Descending);
 				OnUploadReaders?.Invoke(this, EventArgs.Empty);
 			}
 			catch (Exception ex)
@@ -1919,6 +1921,7 @@ namespace LogsReader.Reader
 	        base.Dispose(disposing);
         }
 
+        private int prevReadersDistance = -1;
         private bool shownFilterPanel;
         private void buttonNextBlock_Click(object sender, EventArgs e)
         {
@@ -1931,6 +1934,8 @@ namespace LogsReader.Reader
 
 		        if (shownFilterPanel)
 		        {
+			        if (sender != null)
+				        prevReadersDistance = splitContainerMainFilter.SplitterDistance;
 			        splitContainerMainFilter.SplitterDistance = 65;
 			        buttonNextBlock.Text = @">";
 		        }
@@ -1938,7 +1943,7 @@ namespace LogsReader.Reader
 		        {
 			        buttonNextBlock.Text = @"<";
 			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
-			        splitContainerMainFilter.SplitterDistance = splitContainerMainFilter.Height / 3;
+			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height / 3;
 				}
 			}
 	        catch (Exception ex)

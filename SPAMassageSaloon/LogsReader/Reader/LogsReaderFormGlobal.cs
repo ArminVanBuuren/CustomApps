@@ -319,8 +319,6 @@ namespace LogsReader.Reader
 		        var readers = InProcessing
 			        .Where(x => x.Item1.MainReader?.TraceReaders != null)
 			        .SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
-					.OrderBy(x => x.SchemeName)
-					.ThenBy(x => x.Priority)
 			        .ToList();
 
 		        await UploadReaders(readers);
