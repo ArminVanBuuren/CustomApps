@@ -957,7 +957,7 @@ namespace LogsReader.Reader
 		            ClearErrorStatus();
 
 	            DgvData.Refresh();
-            }
+			}
             catch (Exception ex)
             {
 	            ReportStatus(ex.Message, ReportStatusType.Error);
@@ -990,7 +990,7 @@ namespace LogsReader.Reader
 	                row.Cells[DgvDataIsFilteredColumn.Name].Value = false;
 
                 DgvData.Refresh();
-            }
+			}
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
@@ -1234,7 +1234,6 @@ namespace LogsReader.Reader
 				        foreach (DataGridViewCell cell2 in row.Cells)
 					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DoesntMatchByPattern)
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
-
 
 			        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
 			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))

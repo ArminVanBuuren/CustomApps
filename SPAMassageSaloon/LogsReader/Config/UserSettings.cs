@@ -228,7 +228,7 @@ namespace LogsReader.Config
 	        {
 		        var resStr = GetValue(nameof(GlobalSelectAllSchemas));
 		        if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
-			        return true;
+			        return false;
 		        return res;
 	        }
 	        set => SetValue(nameof(GlobalSelectAllSchemas), value);
