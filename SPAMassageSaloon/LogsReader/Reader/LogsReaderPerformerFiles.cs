@@ -19,7 +19,7 @@ namespace LogsReader.Reader
 		private bool _isStopPending = false;
 
 		private readonly IReadOnlyDictionary<string, int> _servers;
-		private readonly IReadOnlyDictionary<string, int> _fileTypes;
+		private readonly IReadOnlyDictionary<string[], int> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
 
 		/// <summary>
@@ -54,7 +54,10 @@ namespace LogsReader.Reader
 			:base(settings, findMessage, useRegex)
 		{
 			_servers = servers;
-			_fileTypes = fileTypes;
+			var fileTypesNew = new Dictionary<string[], int>();
+			foreach (var (fileType, priority) in fileTypes)
+				fileTypesNew.Add(fileType.Split('*'), priority);
+			_fileTypes = new ReadOnlyDictionary<string[], int>(fileTypesNew);
 			_folders = folders;
 		}
 
@@ -83,15 +86,24 @@ namespace LogsReader.Reader
 					if (IsStopPending)
 						return traceReaders;
 
+					string serverFolder;
 					var folderMatch = IO.CHECK_PATH.Match(originalFolder);
-					if (!folderMatch.Success)
-						throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, originalFolder));
+					if (folderMatch.Success)
+					{
+						var serverRoot = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$";
+						serverFolder = $"{serverRoot}\\{folderMatch.Groups["FULL"]}"; // @"\\LOCALHOST\D$\TEST\MG2\CRMCON_CRMCON_01_data.log.2020-06-06.0"
 
-					var serverRoot = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$";
-					var serverFolder = $"{serverRoot}\\{folderMatch.Groups["FULL"]}";
+						if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
+							continue;
+					}
+					else
+					{
+						var serverRoot = $"\\\\{serverName}";
+						serverFolder = $"{serverRoot}\\{originalFolder}"; // @"\\MSK-DEV-FORIS\forislog\mg\CRMCON_CRMCON_MTS_activity.log.2020-08-04.0"
 
-					if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
-						continue;
+						if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
+							continue;
+					}
 
 					var files = Directory.GetFiles(serverFolder, "*", isAllDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 					foreach (var traceReader in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
@@ -104,7 +116,30 @@ namespace LogsReader.Reader
 
 						foreach (var (fileType, filePriority) in _fileTypes)
 						{
-							if (traceReader.File.Name.IndexOf(fileType, StringComparison.InvariantCultureIgnoreCase) != -1)
+							var lastIndex = -1;
+							foreach (var fileTypePart in fileType)
+							{
+								var index = traceReader.File.Name.IndexOf(fileTypePart, StringComparison.InvariantCultureIgnoreCase);
+								if (index == -1)
+								{
+									lastIndex = -1;
+									break;
+								}
+								else
+								{
+									if (index >= lastIndex)
+									{
+										lastIndex = index + fileTypePart.Length;
+									}
+									else
+									{
+										lastIndex = -1;
+										break;
+									}
+								}
+							}
+
+							if (lastIndex != -1)
 							{
 								traceReader.PrivateID = ++readerIndex;
 								traceReader.Priority = int.Parse($"1{serverPriority}{filePriority}");

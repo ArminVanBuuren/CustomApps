@@ -67,7 +67,7 @@ namespace LogsReader.Reader.Forms
 
 		private void textBoxFolder_TextChanged(object sender, EventArgs e)
 		{
-			if (textBoxFolder.Text.IsNullOrWhiteSpace() || !IO.CHECK_PATH.IsMatch(textBoxFolder.Text))
+			if (textBoxFolder.Text.IsNullOrWhiteSpace())
 			{
 				textBoxFolder.BackColor = Color.LightPink;
 				buttonOK.Enabled = false;

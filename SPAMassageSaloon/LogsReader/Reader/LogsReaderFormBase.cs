@@ -335,8 +335,7 @@ namespace LogsReader.Reader
                 DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
                 foreach (DataGridViewColumn c in DgvReader.Columns)
 	                c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-				//DgvReader.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-				DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 				DgvReaderAbortColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 				DgvReader.ColumnHeaderMouseClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
