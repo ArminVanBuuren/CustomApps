@@ -21,7 +21,9 @@ namespace LogsReader.Reader
 		private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
-        private bool _settingIsApplied;
+        private readonly object syncRootStatus = new object();
+
+		private bool _settingIsApplied;
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
@@ -102,9 +104,14 @@ namespace LogsReader.Reader
         }
 
         /// <summary>
-        /// Поиск логов начался или завершился
+        /// При загрузке ридеров
         /// </summary>
-        public event EventHandler OnProcessStatusChanged;
+        public event EventHandler OnUploadReaders;
+
+		/// <summary>
+		/// Поиск логов начался или завершился
+		/// </summary>
+		public event EventHandler OnProcessStatusChanged;
 
         /// <summary>
         /// При смене языка
@@ -663,15 +670,14 @@ namespace LogsReader.Reader
                 throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
         }
 
-        private readonly object syncRootStatus = new object();
-
-		protected async Task UploadReaders(IEnumerable<TraceReader> readers)
+        protected async Task UploadReaders(IEnumerable<TraceReader> readers)
 		{
 			try
 			{
 				await DgvReader.AssignCollectionAsync(readers, null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
+				OnUploadReaders?.Invoke(this, EventArgs.Empty);
 			}
 			catch (Exception ex)
 			{

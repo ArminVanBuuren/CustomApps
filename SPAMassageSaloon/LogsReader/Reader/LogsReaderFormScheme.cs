@@ -410,7 +410,7 @@ namespace LogsReader.Reader
         internal override bool TryGetReader(DataGridViewRow row, out TraceReader reader)
         {
 	        reader = null;
-	        if (MainReader == null)
+	        if (MainReader?.TraceReaders == null)
 		        return false;
 	        var privateID = (int)(row?.Cells[DgvReaderPrivateIDColumn.Name]?.Value ?? -1);
 	        if (privateID <= -1)

@@ -305,12 +305,28 @@ namespace LogsReader.Reader
 
 				var readers = InProcessing
 					.Where(x => x.Item1.MainReader?.TraceReaders != null)
-					.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values).ToList();
+					.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
+					.ToList();
 
 				ReportProcessStatus(readers);
 	        };
+	        // При загрузке ридеров
+	        readerForm.OnUploadReaders += async (sender, args) =>
+	        {
+		        if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
+			        return;
+
+		        var readers = InProcessing
+			        .Where(x => x.Item1.MainReader?.TraceReaders != null)
+			        .SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
+					.OrderBy(x => x.SchemeName)
+					.ThenBy(x => x.Priority)
+			        .ToList();
+
+		        await UploadReaders(readers);
+	        };
 			// событие при смене языка формы
-	        readerForm.OnAppliedSettings += (sender, args) =>
+			readerForm.OnAppliedSettings += (sender, args) =>
 	        {
 		        labelBack.Text = Resources.Txt_Global_Back;
 		        labelFore.Text = Resources.Txt_Global_Fore;
