@@ -1553,6 +1553,33 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 55.
+        /// </summary>
+        public static string TxtReader_DgvAbortMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvAbortMinWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 45.
+        /// </summary>
+        public static string TxtReader_DgvCountErrorMatchesMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvCountErrorMatchesMinWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 55.
+        /// </summary>
+        public static string TxtReader_DgvCountMatchesMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvCountMatchesMinWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CreationTime.
         /// </summary>
         public static string TxtReader_DgvCreationTime {
@@ -1616,6 +1643,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 55.
+        /// </summary>
+        public static string TxtReader_DgvProcessMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvProcessMinWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size.
         /// </summary>
         public static string TxtReader_DgvSize {
@@ -1630,6 +1666,15 @@ namespace LogsReader.Properties {
         public static string TxtReader_DgvStatus {
             get {
                 return ResourceManager.GetString("TxtReader_DgvStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 80.
+        /// </summary>
+        public static string TxtReader_DgvStatusMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvStatusMinWidth", resourceCulture);
             }
         }
         

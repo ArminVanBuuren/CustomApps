@@ -348,12 +348,14 @@ namespace LogsReader.Reader
 
 					var row = DgvReader.Rows[args.RowIndex];
 
-					if (args.ColumnIndex == DgvReaderAbortColumn.Index 
+					if (args.ColumnIndex == DgvReaderAbortColumn.Index
 					    && row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort
 					    && cellAbort.Enabled
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader1))
 					{
-						reader1.Status = TraceReaderStatus.Aborted;
+						if (reader1.Status == TraceReaderStatus.Waiting || reader1.Status == TraceReaderStatus.Processing || reader1.Status == TraceReaderStatus.OnPause)
+							reader1.Status = TraceReaderStatus.Aborted;
+						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
 
@@ -362,7 +364,17 @@ namespace LogsReader.Reader
 					    && cellPauseResume.Enabled
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader2))
 					{
-						reader2.Status = reader2.Status == TraceReaderStatus.OnPause ? TraceReaderStatus.Processing : TraceReaderStatus.OnPause;
+						switch (reader2.Status)
+						{
+							case TraceReaderStatus.OnPause:
+								reader2.Status = reader2.ThreadId.IsNullOrEmpty() ? TraceReaderStatus.Waiting : TraceReaderStatus.Processing;
+								break;
+							case TraceReaderStatus.Waiting:
+							case TraceReaderStatus.Processing:
+								reader2.Status = TraceReaderStatus.OnPause;
+								break;
+						}
+						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
 
@@ -455,17 +467,6 @@ namespace LogsReader.Reader
             {
 				#region Change Language
 
-				DgvReaderStatusColumn.HeaderText = Resources.TxtReader_DgvStatus;
-				DgvReaderProcessColumn.HeaderText = Resources.TxtReader_DgvProcess;
-				DgvReaderAbortColumn.HeaderText = Resources.TxtReader_DgvFlow;
-				DgvReaderThreadIdColumn.HeaderText = Resources.TxtReader_DgvThreadID;
-				DgvReaderCountMatchesColumn.HeaderText = Resources.TxtReader_DgvMatches;
-				DgvReaderCountErrorMatchesColumn.HeaderText = Resources.TxtReader_DgvErrors;
-				DgvReaderFileColumn.HeaderText = Resources.TxtReader_DgvFile;
-				DgvReaderFileCreationTimeColumn.HeaderText = Resources.TxtReader_DgvCreationTime;
-				DgvReaderFileLastWriteTimeColumn.HeaderText = Resources.TxtReader_DgvLastWrite;
-				DgvReaderFileSizeColumn.HeaderText = Resources.TxtReader_DgvSize;
-
 				_filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
                 _overallFound.Text = Resources.Txt_LogsReaderForm_OverallFound;
@@ -510,7 +511,24 @@ namespace LogsReader.Reader
                 btnReset.Text = Resources.Txt_LogsReaderForm_Reset;
                 ChbxAlreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
 
-				#endregion
+                DgvReaderStatusColumn.HeaderText = Resources.TxtReader_DgvStatus;
+                DgvReaderProcessColumn.HeaderText = Resources.TxtReader_DgvProcess;
+                DgvReaderAbortColumn.HeaderText = Resources.TxtReader_DgvFlow;
+                DgvReaderThreadIdColumn.HeaderText = Resources.TxtReader_DgvThreadID;
+                DgvReaderCountMatchesColumn.HeaderText = Resources.TxtReader_DgvMatches;
+                DgvReaderCountErrorMatchesColumn.HeaderText = Resources.TxtReader_DgvErrors;
+                DgvReaderFileColumn.HeaderText = Resources.TxtReader_DgvFile;
+                DgvReaderFileCreationTimeColumn.HeaderText = Resources.TxtReader_DgvCreationTime;
+                DgvReaderFileLastWriteTimeColumn.HeaderText = Resources.TxtReader_DgvLastWrite;
+                DgvReaderFileSizeColumn.HeaderText = Resources.TxtReader_DgvSize;
+
+                DgvReaderStatusColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvStatusMinWidth);
+                DgvReaderProcessColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvProcessMinWidth);
+                DgvReaderAbortColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvAbortMinWidth);
+                DgvReaderCountMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountMatchesMinWidth);
+                DgvReaderCountErrorMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountErrorMatchesMinWidth);
+
+                #endregion
 			}
             catch (Exception ex)
             {
@@ -659,38 +677,42 @@ namespace LogsReader.Reader
 			{
 				if (!IsWorking)
 					return;
-
-				var countMatches = 0;
-				var countErrorMatches = 0;
-				var totalFiles = 0;
-				var filesCompleted = 0;
-				var progress = 0;
-
-				lock (syncRootStatus)
+				try
 				{
-					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
+					var countMatches = 0;
+					var countErrorMatches = 0;
+					var totalFiles = 0;
+					var filesCompleted = 0;
+					var progress = 0;
 
-					countMatches = readers.Sum(x => x.CountMatches);
-					countErrorMatches = readers.Sum(x => x.CountErrors);
-					totalFiles = readers.Count();
-					filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting && x.Status != TraceReaderStatus.Processing && x.Status != TraceReaderStatus.OnPause && !x.ThreadId.IsNullOrWhiteSpace());
-					progress = 0;
-					if (filesCompleted > 0 && TotalFiles > 0)
-						progress = (filesCompleted * 100) / TotalFiles;
+					lock (syncRootStatus)
+					{
+						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
 
-					if (CountMatches == countMatches && CountErrorMatches == countErrorMatches
-					                                 && TotalFiles == totalFiles && FilesCompleted == filesCompleted && Progress == progress)
-						return;
+						countMatches = readers.Sum(x => x.CountMatches);
+						countErrorMatches = readers.Sum(x => x.CountErrors);
+						totalFiles = readers.Count();
+						filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting && x.Status != TraceReaderStatus.Processing && x.Status != TraceReaderStatus.OnPause && !x.ThreadId.IsNullOrWhiteSpace());
+						progress = 0;
+						if (filesCompleted > 0 && TotalFiles > 0)
+							progress = (filesCompleted * 100) / TotalFiles;
+
+						if (CountMatches == countMatches && CountErrorMatches == countErrorMatches
+						                                 && TotalFiles == totalFiles && FilesCompleted == filesCompleted && Progress == progress)
+							return;
+					}
+
+					CountMatches = countMatches;
+					CountErrorMatches = countErrorMatches;
+					TotalFiles = totalFiles;
+					FilesCompleted = filesCompleted;
+					Progress = progress;
+					isChanged = true;
 				}
-
-				CountMatches = countMatches;
-				CountErrorMatches = countErrorMatches;
-				TotalFiles = totalFiles;
-				FilesCompleted = filesCompleted;
-				Progress = progress;
-				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
-				isChanged = true;
-
+				finally
+				{
+					RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				}
 			});
 
 			if (isChanged)
@@ -1355,9 +1377,6 @@ namespace LogsReader.Reader
 						        cellImage.Value = Resources.TxtReader_StatusFinished;
 					        CanPause(false);
 					        break;
-				        default:
-					        cellImage.Image = null;
-					        break;
 			        }
 		        }
 
@@ -1378,8 +1397,13 @@ namespace LogsReader.Reader
 		        if (cellThreadId.Value == null || cellThreadId.Value.ToString() != reader.ThreadId)
 			        cellThreadId.Value = reader.ThreadId;
 
-		        row.Cells[DgvReaderCountMatchesColumn.Name].Value = reader.CountMatches;
-		        row.Cells[DgvReaderCountErrorMatchesColumn.Name].Value = reader.CountErrors;
+		        var cellMatches = row.Cells[DgvReaderCountMatchesColumn.Name];
+				if(cellMatches.Value == null || cellMatches.Value.ToString() != reader.CountMatches.ToString())
+					cellMatches.Value = reader.CountMatches;
+
+				var cellErrors = row.Cells[DgvReaderCountErrorMatchesColumn.Name];
+				if (cellErrors.Value == null || cellErrors.Value.ToString() != reader.CountErrors.ToString())
+					cellErrors.Value = reader.CountErrors;
 	        }
 	        catch (Exception)
 	        {

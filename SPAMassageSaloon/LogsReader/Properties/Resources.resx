@@ -626,6 +626,15 @@ Colors schemes are adjustable.</value>
   <data name="TxtReader_BtnResume" xml:space="preserve">
     <value>Resume</value>
   </data>
+  <data name="TxtReader_DgvAbortMinWidth" xml:space="preserve">
+    <value>55</value>
+  </data>
+  <data name="TxtReader_DgvCountErrorMatchesMinWidth" xml:space="preserve">
+    <value>45</value>
+  </data>
+  <data name="TxtReader_DgvCountMatchesMinWidth" xml:space="preserve">
+    <value>55</value>
+  </data>
   <data name="TxtReader_DgvCreationTime" xml:space="preserve">
     <value>CreationTime</value>
   </data>
@@ -647,11 +656,17 @@ Colors schemes are adjustable.</value>
   <data name="TxtReader_DgvProcess" xml:space="preserve">
     <value>Process</value>
   </data>
+  <data name="TxtReader_DgvProcessMinWidth" xml:space="preserve">
+    <value>55</value>
+  </data>
   <data name="TxtReader_DgvSize" xml:space="preserve">
     <value>Size</value>
   </data>
   <data name="TxtReader_DgvStatus" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="TxtReader_DgvStatusMinWidth" xml:space="preserve">
+    <value>80</value>
   </data>
   <data name="TxtReader_DgvThreadID" xml:space="preserve">
     <value>ThreadID</value>

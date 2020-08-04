@@ -144,7 +144,7 @@ namespace LogsReader
         {
             InitializeComponent();
 
-            try
+			try
             {
 	            base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
 	            KeyPreview = true;

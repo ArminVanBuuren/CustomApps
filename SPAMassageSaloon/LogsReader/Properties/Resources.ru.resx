@@ -510,6 +510,15 @@
   <data name="TxtReader_BtnResume" xml:space="preserve">
     <value>Продолжить</value>
   </data>
+  <data name="TxtReader_DgvAbortMinWidth" xml:space="preserve">
+    <value>70</value>
+  </data>
+  <data name="TxtReader_DgvCountErrorMatchesMinWidth" xml:space="preserve">
+    <value>55</value>
+  </data>
+  <data name="TxtReader_DgvCountMatchesMinWidth" xml:space="preserve">
+    <value>75</value>
+  </data>
   <data name="TxtReader_DgvCreationTime" xml:space="preserve">
     <value>Создан</value>
   </data>
@@ -531,11 +540,17 @@
   <data name="TxtReader_DgvProcess" xml:space="preserve">
     <value>Процесс</value>
   </data>
+  <data name="TxtReader_DgvProcessMinWidth" xml:space="preserve">
+    <value>78</value>
+  </data>
   <data name="TxtReader_DgvSize" xml:space="preserve">
     <value>Размер</value>
   </data>
   <data name="TxtReader_DgvStatus" xml:space="preserve">
     <value>Статус</value>
+  </data>
+  <data name="TxtReader_DgvStatusMinWidth" xml:space="preserve">
+    <value>110</value>
   </data>
   <data name="TxtReader_DgvThreadID" xml:space="preserve">
     <value>ThreadID</value>

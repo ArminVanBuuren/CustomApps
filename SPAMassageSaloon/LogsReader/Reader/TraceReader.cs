@@ -82,7 +82,7 @@ namespace LogsReader.Reader
 		public TraceReaderStatus Status { get; internal set; } = TraceReaderStatus.Waiting;
 
 		[DGVColumn(ColumnPosition.Last, "ThreadID", true)]
-		public string ThreadId { get; internal set; }
+		public string ThreadId { get; internal set; } = string.Empty;
 
 		/// <summary>
 		/// Количество совпадений по критериям поиска

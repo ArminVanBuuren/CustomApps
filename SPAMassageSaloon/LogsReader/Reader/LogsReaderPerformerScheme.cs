@@ -126,7 +126,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				traceReader.ThreadId = Task.CurrentId?.ToString() ?? "-1";
+				traceReader.ThreadId = Thread.CurrentThread.ManagedThreadId.ToString();
 
 				if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
 				{
