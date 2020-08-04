@@ -116,30 +116,23 @@ namespace LogsReader.Reader
 
 						foreach (var (fileType, filePriority) in _fileTypes)
 						{
-							var lastIndex = -1;
+							var index = -1;
+							var fileName = traceReader.File.Name;
 							foreach (var fileTypePart in fileType)
 							{
-								var index = traceReader.File.Name.IndexOf(fileTypePart, StringComparison.InvariantCultureIgnoreCase);
-								if (index == -1)
+								index = fileName.IndexOf(fileTypePart, StringComparison.InvariantCultureIgnoreCase);
+								if (index > -1)
 								{
-									lastIndex = -1;
-									break;
+									var indexWithWord = index + fileTypePart.Length;
+									fileName = fileName.Substring(indexWithWord, fileName.Length - indexWithWord);
 								}
 								else
 								{
-									if (index >= lastIndex)
-									{
-										lastIndex = index + fileTypePart.Length;
-									}
-									else
-									{
-										lastIndex = -1;
-										break;
-									}
+									break;
 								}
 							}
 
-							if (lastIndex != -1)
+							if (index > -1)
 							{
 								traceReader.PrivateID = ++readerIndex;
 								traceReader.Priority = int.Parse($"1{serverPriority}{filePriority}");

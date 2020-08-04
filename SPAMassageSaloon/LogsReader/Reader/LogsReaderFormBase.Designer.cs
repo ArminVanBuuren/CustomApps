@@ -937,10 +937,10 @@ namespace LogsReader.Reader
 			// 
 			this.DgvReaderFileSizeColumn.HeaderText = "Size";
 			this.DgvReaderFileSizeColumn.DataPropertyName = "Size";
-			this.DgvReaderFileSizeColumn.MinimumWidth = 30;
+			this.DgvReaderFileSizeColumn.MinimumWidth = 60;
 			this.DgvReaderFileSizeColumn.Name = "DgvReaderFileSizeColumn";
 			this.DgvReaderFileSizeColumn.ReadOnly = true;
-			this.DgvReaderFileSizeColumn.Width = 30;
+			this.DgvReaderFileSizeColumn.Width = 60;
 			// 
 			// splitContainer1
 			// 
