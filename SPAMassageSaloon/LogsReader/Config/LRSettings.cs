@@ -59,6 +59,8 @@ namespace LogsReader.Config
 
         private static string FailedSettingsPath { get; }
 
+        public static bool DisableHintTooltip { get; private set; } = true;
+
         /// <summary>
         /// Функция используется для сичтывания стринговых аттрибутов, для установки результата парсинга включая кастомные функции. Дефолтное значение обязательно!
         /// </summary>
@@ -80,7 +82,14 @@ namespace LogsReader.Config
 	        set => _disableHintComments = value;
         }
 
-        [XmlElement("Scheme", IsNullable = false)]
+        [XmlAttribute("disableHintToolTip")] 
+        public bool DisableHintHintToolTip
+        {
+	        get => DisableHintTooltip;
+	        set => DisableHintTooltip = value;
+        }
+
+	    [XmlElement("Scheme", IsNullable = false)]
         public LRSettingsScheme[] SchemeList
         {
             get => _schemes;

@@ -235,7 +235,12 @@ namespace LogsReader.Reader
 
             #region Initialize StripStatus
 
-            Tooltip = new ToolTip { InitialDelay = 50 };
+            Tooltip = new ToolTip
+            {
+	            AutoPopDelay = 15000,
+				InitialDelay = 100,
+				ReshowDelay = 500
+			};
 
             var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
@@ -485,22 +490,7 @@ namespace LogsReader.Reader
                     CobxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilterContains ? Resources.Txt_LogsReaderForm_Contains : Resources.Txt_LogsReaderForm_NotContains,
                         CobxTraceMessageFilter_SelectedIndexChanged);
 
-                Tooltip.RemoveAll();
-                Tooltip.SetToolTip(TbxPattern, Resources.Txt_Form_SearchComment);
-                Tooltip.SetToolTip(ChbxUseRegex, Resources.Txt_LRSettings_UseRegexComment);
-                Tooltip.SetToolTip(DateStartFilter, Resources.Txt_Form_DateFilterComment);
-                Tooltip.SetToolTip(DateEndFilter, Resources.Txt_Form_DateFilterComment);
-                Tooltip.SetToolTip(TbxTraceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
-                Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
-                Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
-                Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
-                Tooltip.SetToolTip(buttonErrPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
-                Tooltip.SetToolTip(buttonErrNext, Resources.Txt_LogsReaderForm_NextErrButt);
-                Tooltip.SetToolTip(buttonFilteredPrev, Resources.Txt_LogsReaderForm_PrevFilteredButt);
-                Tooltip.SetToolTip(buttonFilteredNext, Resources.Txt_LogsReaderForm_NextFilteredButt);
-                Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
-                Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
-                Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
+                ApplyTooltip();
 
                 ChbxUseRegex.Text = Resources.Txt_LogsReaderForm_UseRegex;
                 BtnSearch.Text = IsWorking ? Resources.Txt_LogsReaderForm_Stop : Resources.Txt_LogsReaderForm_Search;
@@ -540,7 +530,31 @@ namespace LogsReader.Reader
             }
         }
 
-        public virtual void SaveData()
+        protected virtual void ApplyTooltip()
+        {
+	        Tooltip.RemoveAll();
+
+	        if (LRSettings.DisableHintTooltip)
+		        return;
+
+	        Tooltip.SetToolTip(TbxPattern, Resources.Txt_Form_SearchComment);
+	        Tooltip.SetToolTip(ChbxUseRegex, Resources.Txt_LRSettings_UseRegexComment);
+	        Tooltip.SetToolTip(DateStartFilter, Resources.Txt_Form_DateFilterComment);
+	        Tooltip.SetToolTip(DateEndFilter, Resources.Txt_Form_DateFilterComment);
+	        Tooltip.SetToolTip(TbxTraceNameFilter, Resources.Txt_Form_TraceNameFilterComment);
+	        Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
+	        Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
+	        Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
+	        Tooltip.SetToolTip(buttonErrPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
+	        Tooltip.SetToolTip(buttonErrNext, Resources.Txt_LogsReaderForm_NextErrButt);
+	        Tooltip.SetToolTip(buttonFilteredPrev, Resources.Txt_LogsReaderForm_PrevFilteredButt);
+	        Tooltip.SetToolTip(buttonFilteredNext, Resources.Txt_LogsReaderForm_NextFilteredButt);
+	        Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
+	        Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
+	        Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
+        }
+
+		public virtual void SaveData()
         {
             try
             {

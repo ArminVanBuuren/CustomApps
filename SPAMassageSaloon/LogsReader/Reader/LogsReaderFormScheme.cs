@@ -226,13 +226,20 @@ namespace LogsReader.Reader
 	        MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
 	        MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
 
-	        Tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
+	        TreeViewContainer.ApplySettings();
+        }
+
+        protected override void ApplyTooltip()
+        {
+			if (LRSettings.DisableHintTooltip)
+				return;
+
+			base.ApplyTooltip();
+			Tooltip.SetToolTip(maxThreadsText, Resources.Txt_LRSettingsScheme_MaxThreads);
 	        Tooltip.SetToolTip(maxLinesStackText, Resources.Txt_LRSettingsScheme_MaxTraceLines);
 	        Tooltip.SetToolTip(rowsLimitText, Resources.Txt_LRSettingsScheme_RowsLimit);
 	        Tooltip.SetToolTip(orderByText, Resources.Txt_LRSettingsScheme_OrderBy);
 	        Tooltip.SetToolTip(TreeMain, Resources.Txt_Form_trvMainComment);
-
-	        TreeViewContainer.ApplySettings();
         }
 
         public override void SaveData()

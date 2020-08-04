@@ -286,8 +286,12 @@ namespace LogsReader.Config
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4, mg5") });
 			        FileTypes = new LRGroups(new []
 			        {
-				        new LRGroupItem("connectors", 0, "soapcon, smscon, ivrcon, emailcon"),
-				        new LRGroupItem("hnds", 1, "crmcon, dispatcher, wcfhnd, dbcon")
+				        new LRGroupItem("cntrs-data", 0, "soapcon*data, smscon*sms*data, smscon*ussd*data, ivrcon*data, emailcon*data"),
+				        new LRGroupItem("cntrs-error", 0, "soapcon*error, smscon*sms*error, smscon*ussd*error, ivrcon*error, emailcon*error"),
+				        new LRGroupItem("cntrs-activity", 0, "soapcon*activity, smscon*sms*activity, smscon*ussd*activity, ivrcon*activity, emailcon*activity"),
+				        new LRGroupItem("hnds-data", 1, "crmcon*data, dispatcher, wcfhnd*data, dbcon*data"),
+				        new LRGroupItem("hnds-error", 1, "crmcon*error, wcfhnd*error, dbcon*error"),
+				        new LRGroupItem("hnds-activity", 1, "crmcon*activity, wcfhnd*activity, dbcon*activity"),
 			        });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
