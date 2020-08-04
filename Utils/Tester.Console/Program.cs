@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
@@ -50,7 +51,12 @@ namespace Tester.Console
 
 			try
 			{
-				
+				//var res = Directory.GetFiles(@"\\msk-dev-foris\FORISLOG\mg");
+				var FileNamePartial1 = IO.GetPartialPath(@"\\LOCALHOST\D$\TEST\MG2\CRMCON_CRMCON_01_data.log.2020-06-06.0",
+					@"D:\TEST\MG2");
+
+				var FileNamePartial2 = IO.GetPartialPath(@"\\MSK-DEV-FORIS\forislog\mg\CRMCON_CRMCON_MTS_activity.log.2020-08-04.0",
+					@"forislog\mg");
 			}
 			catch (Exception e)
 			{

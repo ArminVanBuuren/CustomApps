@@ -60,9 +60,14 @@ namespace Utils
 
 		public static string GetPartialPath(string path, string excludePath)
 		{
-			var logsPathWithoutRoot = excludePath.Replace(Path.GetPathRoot(excludePath), string.Empty, StringComparison.InvariantCultureIgnoreCase);
-			var filePathWithoutRoot = path.Replace(Path.GetPathRoot(path), string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim('\\');
-			return filePathWithoutRoot.Substring(logsPathWithoutRoot.Length, filePathWithoutRoot.Length - logsPathWithoutRoot.Length).Trim('\\');
+			var excludeRoot = Path.GetPathRoot(excludePath);
+			var logsPathWithoutRoot = !excludeRoot.IsNullOrWhiteSpace() ? excludePath.Replace(excludeRoot, string.Empty, StringComparison.InvariantCultureIgnoreCase) : excludePath;
+			var last = path.LastIndexOf(logsPathWithoutRoot, StringComparison.CurrentCultureIgnoreCase);
+			if (last == -1)
+				return path;
+
+			var indexStart = last + logsPathWithoutRoot.Length;
+			return path.Substring(indexStart, path.Length - indexStart).Trim('\\');
 		}
 
 		public static string SafeReadFile(string filePath, Encoding encoding = null)
