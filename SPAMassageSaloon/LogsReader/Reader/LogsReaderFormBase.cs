@@ -1235,8 +1235,10 @@ namespace LogsReader.Reader
 					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DoesntMatchByPattern)
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 
-			        if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.ErrFont))
-				        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+
+			        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
+			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
+						cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
                 }
 
 		        if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
