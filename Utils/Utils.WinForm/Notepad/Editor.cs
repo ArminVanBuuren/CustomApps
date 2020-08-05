@@ -16,6 +16,7 @@ namespace Utils.WinForm.Notepad
         private bool _isDisposed = false;
         private bool _coloredOnlyVisible = false;
         private Encoding _default = Encoding.Default;
+        private Language _editorLanguage;
 
         private readonly FastColoredTextBox FCTB;
         private readonly StatusStrip _statusStrip;
@@ -86,7 +87,24 @@ namespace Utils.WinForm.Notepad
             {
                 try
                 {
-                    FCTB.Text = Source = value;
+	                FCTB.Clear();
+
+                    // костыль. Если строка очень длинная то меняем язык на простой, иначе зависает
+	                var isLargeline = value.Split('\n').Any(x => x.Length > 5000);
+	                if (isLargeline && FCTB.Language != Language.Custom)
+	                {
+		                FCTB.ClearStylesBuffer();
+		                FCTB.Range.ClearStyle(StyleIndex.All);
+		                FCTB.Language = Language.Custom;
+                    }
+	                else if (FCTB.Language != Language)
+	                {
+		                FCTB.ClearStylesBuffer();
+		                FCTB.Range.ClearStyle(StyleIndex.All);
+		                FCTB.Language = Language;
+                    }
+
+	                FCTB.Text = Source = value;
                     FCTB.IsChanged = false;
                     FCTB.ClearUndo();
                 }
@@ -105,8 +123,15 @@ namespace Utils.WinForm.Notepad
 
         public bool WordWrap
         {
-            get => FCTB.WordWrap;
-            set => _wordWrapping.Checked = FCTB.WordWrap = value;
+	        get => FCTB.WordWrap;
+	        set
+	        {
+		        if (_wordWrapping.Checked == value && FCTB.WordWrap == value)
+			        return;
+
+		        _wordWrapping.Checked = FCTB.WordWrap = value;
+		        WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public bool Highlights
@@ -193,7 +218,11 @@ namespace Utils.WinForm.Notepad
         [Browsable(false)]
         public string SelectedText => FCTB.SelectedText;
 
-        public Language Language => FCTB.Language;
+        public Language Language
+        {
+	        get => _editorLanguage;
+	        private set => _editorLanguage = FCTB.Language = value;
+        }
 
         public bool ColoredOnlyVisible
         {
@@ -250,6 +279,7 @@ namespace Utils.WinForm.Notepad
                 BorderStyle = BorderStyle.None,
                 MinimumSize = new Size(100, 0)
             };
+            _editorLanguage = FCTB.Language;
 
             _statusStrip = new StatusStrip
             {
@@ -273,7 +303,7 @@ namespace Utils.WinForm.Notepad
             toolStripItems.Add(_listOfLanguages);
             _listOfLanguages.SelectedIndexChanged += (sender, args) =>
             {
-                if (_listOfLanguages.SelectedItem is Language lang && FCTB.Language != lang)
+                if (_listOfLanguages.SelectedItem is Language lang && Language != lang)
                 {
                     bool isChanged = ChangeLanguage(lang);
                     if (isChanged)
@@ -289,7 +319,6 @@ namespace Utils.WinForm.Notepad
                     return;
 
                 WordWrap = _wordWrapping.Checked;
-                WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             };
             var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
             toolStripItems.Add(wordWrapToolStrip);
@@ -403,15 +432,15 @@ namespace Utils.WinForm.Notepad
 	        if (_encodingInfo.Text != encoding)
 		        _encodingInfo.Text = encoding;
 
-	        if (_listOfLanguages.Text != language)
-		        _listOfLanguages.Text = language;
+            if (_listOfLanguages.Text != language)
+                _listOfLanguages.Text = language;
         }
 
         public void PrintXml(bool commitChanges = true)
         {
             try
             {
-                if (FCTB.Language == Language.XML && Text.IsXml(out var document))
+                if (Language == Language.XML && Text.IsXml(out var document))
                 {
                     var prettyPrintedXml = document.PrintXml();
                     if (commitChanges)
@@ -441,11 +470,11 @@ namespace Utils.WinForm.Notepad
             if (_listOfLanguages.Items.Cast<Language>().All(x => x != language))
                 return false;
 
-            bool isChanged = FCTB.Language != language;
+            bool isChanged = Language != language;
 
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.Language = language;
+            Language = language;
             if (ColoredOnlyVisible)
                 FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
             else

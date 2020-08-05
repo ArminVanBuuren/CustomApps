@@ -158,6 +158,19 @@ namespace FastColoredTextBoxNS
                         x += dx;
                     }
                 }
+
+                //else
+                //{
+	               // var list = new char[range.End.iChar - range.Start.iChar];
+	               // var j = 0;
+	               // for (var i = range.Start.iChar; i < range.End.iChar; i++)
+	               // {
+		              //  list[j] = line[i].c;
+		              //  j++;
+	               // }
+
+	               // gr.DrawString(new string(list), f, ForeBrush, x, y, stringFormat);
+                //}
             }
         }
 
