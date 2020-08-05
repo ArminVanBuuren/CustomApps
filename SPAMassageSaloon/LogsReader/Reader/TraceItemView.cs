@@ -52,6 +52,8 @@ namespace LogsReader.Reader
 
 		public bool IsMain { get; }
 
+		private Language MessageLanguage { get; set; }
+
 		public TraceItemView(Encoding defaultEncoding, UserSettings userSettings, bool isMain)
 		{
 			UserSettings = userSettings;
@@ -93,7 +95,7 @@ namespace LogsReader.Reader
 			notepad.SelectEditor(0);
 			notepad.DefaultEncoding = defaultEncoding;
 
-			var langMessage = UserSettings.MessageLanguage;
+			var langMessage = MessageLanguage = UserSettings.MessageLanguage;
 			var langTrace = UserSettings.TraceLanguage;
 			if (EditorMessage.Language != langMessage)
 				EditorMessage.ChangeLanguage(langMessage);
@@ -102,8 +104,8 @@ namespace LogsReader.Reader
 
 			if (isMain)
 			{
-				EditorMessage.LanguageChanged += (sender, args) => { UserSettings.MessageLanguage = EditorMessage.Language; };
-				EditorTraceMessage.LanguageChanged += (sender, args) => { UserSettings.TraceLanguage = EditorTraceMessage.Language; };
+				EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
+				EditorTraceMessage.LanguageChanged += EditorTraceMessage_LanguageChanged;
 
 				notepad.WordWrapStateChanged += (sender, args) =>
 				{
@@ -128,6 +130,16 @@ namespace LogsReader.Reader
 			}
 
 			notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
+		}
+
+		private void EditorMessage_LanguageChanged(object sender, EventArgs e)
+		{
+			UserSettings.MessageLanguage = MessageLanguage = EditorMessage.Language;
+		}
+
+		private void EditorTraceMessage_LanguageChanged(object sender, EventArgs e)
+		{
+			UserSettings.TraceLanguage = EditorTraceMessage.Language;
 		}
 
 		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
@@ -260,16 +272,33 @@ namespace LogsReader.Reader
 				if (prevTemplateMessage != null && prevTemplateMessage.Equals(CurrentTemplate))
 					return;
 
+				var isXml = false;
 				var messageString = CurrentTemplate.Message.Trim();
 				if (EditorMessage.Language == Language.XML
 				    || EditorMessage.Language == Language.HTML
 				    || CurrentTemplate.Message.Length <= 50000 && messageString.StartsWith("<") && messageString.EndsWith(">"))
 				{
 					var messageXML = XML.RemoveUnallowable(CurrentTemplate.Message, " ");
-					messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.Trim();
+					isXml = messageXML.IsXml(out var xmlDoc);
+					messageString = isXml ? xmlDoc.PrintXml() : messageXML.Trim();
 				}
 
-				AssignText(EditorMessage, messageString);
+				// костыль. Если реально документ не XML, то не делать прорисовку. Если большой текст то очень долго прорисовывает как XML. Если Custom то прорисока быстрая
+				if (EditorMessage.Language == Language.XML && !isXml)
+				{
+					EditorMessage.LanguageChanged -= EditorMessage_LanguageChanged;
+					EditorMessage.ChangeLanguage(Language.Custom);
+					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
+				}
+				else if (MessageLanguage == Language.XML && EditorMessage.Language != Language.XML && isXml)
+				{
+					EditorMessage.LanguageChanged -= EditorMessage_LanguageChanged;
+					EditorMessage.ChangeLanguage(Language.XML);
+					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
+				}
+
+				EditorMessage.Text = messageString;
+				EditorMessage.DelayedEventsInterval = 10;
 
 				prevTemplateMessage = CurrentTemplate;
 			}
@@ -278,16 +307,11 @@ namespace LogsReader.Reader
 				if (prevTemplateTraceMessage != null && prevTemplateTraceMessage.Equals(CurrentTemplate))
 					return;
 
-				AssignText(EditorTraceMessage, CurrentTemplate.TraceMessage);
+				EditorTraceMessage.Text = CurrentTemplate.TraceMessage;
+				EditorTraceMessage.DelayedEventsInterval = 10;
 
 				prevTemplateTraceMessage = CurrentTemplate;
 			}
-		}
-
-		static void AssignText(Editor editor, string input)
-		{
-			editor.Text = input;
-			editor.DelayedEventsInterval = 10;
 		}
 
 		public void SelectTransactions()
