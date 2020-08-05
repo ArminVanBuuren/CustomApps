@@ -269,8 +269,7 @@ namespace LogsReader.Reader
 					messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.Trim();
 				}
 
-				EditorMessage.Text = messageString;
-				EditorMessage.DelayedEventsInterval = 10;
+				AssignText(EditorMessage, messageString);
 
 				prevTemplateMessage = CurrentTemplate;
 			}
@@ -279,11 +278,16 @@ namespace LogsReader.Reader
 				if (prevTemplateTraceMessage != null && prevTemplateTraceMessage.Equals(CurrentTemplate))
 					return;
 
-				EditorTraceMessage.Text = CurrentTemplate.TraceMessage;
-				EditorTraceMessage.DelayedEventsInterval = 10;
+				AssignText(EditorTraceMessage, CurrentTemplate.TraceMessage);
 
 				prevTemplateTraceMessage = CurrentTemplate;
 			}
+		}
+
+		static void AssignText(Editor editor, string input)
+		{
+			editor.Text = input;
+			editor.DelayedEventsInterval = 10;
 		}
 
 		public void SelectTransactions()

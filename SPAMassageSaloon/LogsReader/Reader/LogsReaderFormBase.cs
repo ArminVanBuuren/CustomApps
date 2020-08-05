@@ -1897,7 +1897,7 @@ namespace LogsReader.Reader
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
 
-	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+	        RefreshAllRows(DgvData, DgvDataRefreshRow);
 	        DgvData.Focus();
         }
 
@@ -1906,7 +1906,7 @@ namespace LogsReader.Reader
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
 
-	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+	        RefreshAllRows(DgvData, DgvDataRefreshRow);
 	        DgvData.Focus();
         }
 
