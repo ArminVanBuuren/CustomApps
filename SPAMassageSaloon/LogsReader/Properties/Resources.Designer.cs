@@ -1571,6 +1571,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 30.
+        /// </summary>
+        public static string TxtReader_DgvCountLastWriteTimeMinWidth {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvCountLastWriteTimeMinWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 55.
         /// </summary>
         public static string TxtReader_DgvCountMatchesMinWidth {

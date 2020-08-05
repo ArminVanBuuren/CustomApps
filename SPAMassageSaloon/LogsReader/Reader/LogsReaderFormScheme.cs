@@ -329,7 +329,7 @@ namespace LogsReader.Reader
 			            OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
 		            // заполняем DataGrid
-		            if (await AssignResult(filter))
+		            if (await AssignResult(filter, true))
 			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 		            TimeWatcher.Stop();
@@ -368,7 +368,7 @@ namespace LogsReader.Reader
 		        var count = MainReader.TraceReaders.Values.Count();
 		        var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
 
-				while (IsWorking)
+				while (IsWorking && MainReader?.TraceReaders != null)
 		        {
 			        ReportProcessStatus(MainReader.TraceReaders.Values);
 			        System.Threading.Thread.Sleep(delay);

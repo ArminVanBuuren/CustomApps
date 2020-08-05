@@ -28,7 +28,7 @@ namespace LogsReader.Config
         private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {DataTemplate.ReaderPriority}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
         private int _maxLines = 50;
         private int _maxThreads = -1;
-        private int _rowsLimit = 999;
+        private int _rowsLimit = 9999;
         
         private LRTraceParse _traceParce = new LRTraceParse();
 

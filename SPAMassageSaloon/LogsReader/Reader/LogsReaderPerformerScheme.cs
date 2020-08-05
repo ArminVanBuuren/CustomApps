@@ -63,6 +63,7 @@ namespace LogsReader.Reader
 				var readersOrders = traceReaders
 					.OrderByDescending(x => x.File.LastWriteTime.Date)
 					.ThenByDescending(x => x.File.LastWriteTime.Hour)
+					.ThenBy(x => x.File.LastWriteTime.Minute)
 					.ThenByDescending(x => x.File.Length)
 					.ToList();
 
