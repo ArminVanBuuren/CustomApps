@@ -38,7 +38,7 @@ namespace LogsReader.Reader
 		/// </summary>
 		protected Func<(string server, string filePath, string originalFolder), TraceReader> GetTraceReader { get; }
 
-		[DGVColumn(ColumnPosition.After, "SchemeName", false)]
+		[DGVColumn(ColumnPosition.After, "SchemeName")]
 		public string SchemeName => _currentSettings.Name;
 
 		public Encoding Encoding => _currentSettings.Encoding;

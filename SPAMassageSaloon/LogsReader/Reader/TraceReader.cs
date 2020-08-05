@@ -76,24 +76,27 @@ namespace LogsReader.Reader
         /// </summary>
 	    public event FoundDataTemplate OnFound;
 
-        [DGVColumn(ColumnPosition.Last, "PrivateID", false)]
+        [DGVColumn(ColumnPosition.After, "ID", true)]
+        public int ID { get; internal set; }
+
+		[DGVColumn(ColumnPosition.After, "PrivateID", false)]
         public int PrivateID { get; internal set; }
 
 		public TraceReaderStatus Status { get; internal set; } = TraceReaderStatus.Waiting;
 
-		[DGVColumn(ColumnPosition.Last, "ThreadID", true)]
+		[DGVColumn(ColumnPosition.After, "ThreadID", true)]
 		public string ThreadId { get; internal set; } = string.Empty;
 
 		/// <summary>
 		/// Количество совпадений по критериям поиска
 		/// </summary>
-		[DGVColumn(ColumnPosition.Last, "Matches", true)]
+		[DGVColumn(ColumnPosition.After, "Matches", true)]
 		public int CountMatches { get; private set; }
 
 		/// <summary>
 		/// Количество ошибочных трейсов
 		/// </summary>
-		[DGVColumn(ColumnPosition.Last, "Errors", true)]
+		[DGVColumn(ColumnPosition.After, "Errors", true)]
 		public int CountErrors { get; private set; }
 
 		public string Server { get; }

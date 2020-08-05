@@ -57,6 +57,7 @@ namespace LogsReader.Reader
 			if (TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
+			var id = 0;
 			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
 				var readersOrders = traceReaders
@@ -64,6 +65,9 @@ namespace LogsReader.Reader
 					.ThenByDescending(x => x.File.LastWriteTime.Hour)
 					.ThenByDescending(x => x.File.Length)
 					.ToList();
+
+				foreach (var reader in readersOrders)
+					reader.ID = ++id;
 
 				TraceReadersOrdered.Add(readersOrders);
 			}

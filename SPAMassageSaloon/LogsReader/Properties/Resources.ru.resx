@@ -573,4 +573,7 @@
   <data name="TxtReader_StatusWaiting" xml:space="preserve">
     <value>Ожидает</value>
   </data>
+  <data name="TxtReader_DgvScheme" xml:space="preserve">
+    <value>Схема</value>
+  </data>
 </root>

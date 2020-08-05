@@ -508,6 +508,7 @@ namespace LogsReader.Reader
                 btnReset.Text = Resources.Txt_LogsReaderForm_Reset;
                 ChbxAlreadyUseFilter.Text = Resources.Txt_LogsReaderForm_UseFilterWhenSearching;
 
+                DgvReaderSchemeNameColumn.HeaderText = Resources.TxtReader_DgvScheme;
                 DgvReaderStatusColumn.HeaderText = Resources.TxtReader_DgvStatus;
                 DgvReaderProcessColumn.HeaderText = Resources.TxtReader_DgvProcess;
                 DgvReaderAbortColumn.HeaderText = Resources.TxtReader_DgvFlow;
@@ -675,7 +676,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.Priority), null, true);
+				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
 				//DgvReader.Sort(DgvReaderThreadIdColumn, ListSortDirection.Descending);

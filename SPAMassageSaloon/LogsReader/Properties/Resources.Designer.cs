@@ -1652,6 +1652,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheme.
+        /// </summary>
+        public static string TxtReader_DgvScheme {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size.
         /// </summary>
         public static string TxtReader_DgvSize {
