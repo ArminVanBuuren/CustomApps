@@ -924,7 +924,7 @@ namespace LogsReader.Reader
 			this.splitContainerMainFilter.Panel2MinSize = 50;
 			this.splitContainerMainFilter.Panel2Collapsed = true;
 			this.splitContainerMainFilter.Size = new System.Drawing.Size(1152, 556);
-			this.splitContainerMainFilter.SplitterDistance = 286;
+			this.splitContainerMainFilter.SplitterDistance = 450;
 			this.splitContainerMainFilter.TabIndex = 37;
 			// 
 			// LogsReaderFormBase

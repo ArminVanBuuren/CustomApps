@@ -1992,19 +1992,20 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        shownProcessReadesPanel = !shownProcessReadesPanel;
-		        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
 
 		        if (shownProcessReadesPanel)
 		        {
 			        _openProcessingReadersBtn.Text = @"ᐯ";
 			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
 			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
-		        }
+			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
+				}
 		        else
 		        {
 					if (sender != null)
 						prevReadersDistance = splitContainerMainFilter.SplitterDistance;
 					_openProcessingReadersBtn.Text = @"ᐱ";
+					splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
 				}
 			}
 	        catch (Exception ex)
