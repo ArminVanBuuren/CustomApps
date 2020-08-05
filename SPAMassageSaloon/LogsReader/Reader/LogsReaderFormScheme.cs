@@ -51,6 +51,8 @@ namespace LogsReader.Reader
 
         public bool IsTreeViewSynchronized { get; private set; } = false;
 
+        public override RefreshDataType DgvDataAfterAssign => RefreshDataType.VisibleRows;
+
 		public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {
 	        try
@@ -348,8 +350,6 @@ namespace LogsReader.Reader
 
 		            if (TimeWatcher.IsRunning)
 			            TimeWatcher.Stop();
-
-		            RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 
 		            Progress = 100;
 	            }

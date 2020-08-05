@@ -156,7 +156,7 @@ namespace LogsReader.Reader
         public string TraceName
         {
             get => _traceName;
-            private set => _traceName = value?.Replace("\r", string.Empty).Replace("\n", string.Empty).TrimWhiteSpaces() ?? string.Empty;
+            private set => _traceName = value?.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim() ?? string.Empty;
         }
 
         [DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.Date))]

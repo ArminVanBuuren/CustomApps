@@ -50,6 +50,8 @@ namespace LogsReader.Reader
 
 		public override bool HasAnyResult => InProcessing.Any(x => x.Item1.HasAnyResult) && !InProcessing.IsAnyWorking;
 
+		public override RefreshDataType DgvDataAfterAssign => RefreshDataType.AllRows;
+
 		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
         {
 	        try
@@ -391,7 +393,6 @@ namespace LogsReader.Reader
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
-				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				Progress = 100;
 			};
 

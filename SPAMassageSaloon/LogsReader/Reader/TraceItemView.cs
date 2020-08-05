@@ -260,13 +260,13 @@ namespace LogsReader.Reader
 				if (prevTemplateMessage != null && prevTemplateMessage.Equals(CurrentTemplate))
 					return;
 
-				var messageString = CurrentTemplate.Message.TrimWhiteSpaces();
+				var messageString = CurrentTemplate.Message.Trim();
 				if (EditorMessage.Language == Language.XML
 				    || EditorMessage.Language == Language.HTML
 				    || CurrentTemplate.Message.Length <= 50000 && messageString.StartsWith("<") && messageString.EndsWith(">"))
 				{
 					var messageXML = XML.RemoveUnallowable(CurrentTemplate.Message, " ");
-					messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.TrimWhiteSpaces();
+					messageString = messageXML.IsXml(out var xmlDoc) ? xmlDoc.PrintXml() : messageXML.Trim();
 				}
 
 				EditorMessage.Text = messageString;

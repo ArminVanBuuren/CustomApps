@@ -17,6 +17,12 @@ using Utils.WinForm.DataGridViewHelper;
 
 namespace LogsReader.Reader
 {
+	public enum RefreshDataType
+	{
+		VisibleRows = 0,
+		AllRows = 1,
+	}
+
 	public abstract partial class LogsReaderFormBase : UserControl, IUserForm
 	{
 		private readonly Func<DateTime> _getStartDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -42,6 +48,7 @@ namespace LogsReader.Reader
         private Color _formBackColor;
         private Color _formForeColor;
 
+        private readonly ToolStripButton _openProcessingReadersBtn;
         private readonly ToolStripStatusLabel _statusInfo;
         private readonly ToolStripStatusLabel _findedInfo;
         private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -205,7 +212,9 @@ namespace LogsReader.Reader
 
 		public abstract bool HasAnyResult { get; }
 
-        public TraceItemView MainViewer { get; }
+		public abstract RefreshDataType DgvDataAfterAssign { get; }
+
+		public TraceItemView MainViewer { get; }
 
         static LogsReaderFormBase()
         {
@@ -234,9 +243,8 @@ namespace LogsReader.Reader
         protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
         {
 	        InitializeComponent();
-	        buttonNextBlock_Click(null, EventArgs.Empty);
 
-            DefaultEncoding = defaultEncoding;
+	        DefaultEncoding = defaultEncoding;
             UserSettings = userSettings;
 
             _formBackColor = UserSettings.BackColor;
@@ -255,37 +263,46 @@ namespace LogsReader.Reader
 				ReshowDelay = 500
 			};
 
-            var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
+			var toolToolStripCollection = new List<ToolStripItem>();
+			var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
             var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-            _filtersCompleted1 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
+            _openProcessingReadersBtn = new ToolStripButton { Text = "ᐯᐱ", Font = base.Font, Margin = statusStripItemsPaddingStart };
+            _openProcessingReadersBtn.Click += buttonNextBlock_Click;
+            buttonNextBlock_Click(null, EventArgs.Empty);
+			toolToolStripCollection.Add(_openProcessingReadersBtn);
+            toolToolStripCollection.Add(new ToolStripSeparator());
+
+			_filtersCompleted1 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
             _completedFilesStatus = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
             _filtersCompleted2 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
             _totalFilesStatus = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingEnd };
-            statusStrip.Items.Add(_filtersCompleted1);
-            statusStrip.Items.Add(_completedFilesStatus);
-            statusStrip.Items.Add(_filtersCompleted2);
-            statusStrip.Items.Add(_totalFilesStatus);
+            toolToolStripCollection.Add(_filtersCompleted1);
+            toolToolStripCollection.Add(_completedFilesStatus);
+            toolToolStripCollection.Add(_filtersCompleted2);
+            toolToolStripCollection.Add(_totalFilesStatus);
 
             _overallFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
             _findedInfo = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
             _errorFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingEnd };
             _errorFoundValue = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(_overallFound);
-            statusStrip.Items.Add(_findedInfo);
-            statusStrip.Items.Add(new ToolStripSeparator());
-            statusStrip.Items.Add(_errorFound);
-            statusStrip.Items.Add(_errorFoundValue);
+            toolToolStripCollection.Add(new ToolStripSeparator());
+            toolToolStripCollection.Add(_overallFound);
+            toolToolStripCollection.Add(_findedInfo);
+            toolToolStripCollection.Add(new ToolStripSeparator());
+            toolToolStripCollection.Add(_errorFound);
+            toolToolStripCollection.Add(_errorFoundValue);
 
-            statusStrip.Items.Add(new ToolStripSeparator());
+            toolToolStripCollection.Add(new ToolStripSeparator());
             _statusInfo = new ToolStripStatusLabel("") { Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
-            statusStrip.Items.Add(_statusInfo);
+            toolToolStripCollection.Add(_statusInfo);
 
-            #endregion
+            statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
 
-            try
+			#endregion
+
+			try
             {
                 #region Initialize DgvData
 
@@ -1228,16 +1245,17 @@ namespace LogsReader.Reader
 
 	        try
 	        {
-		        if (template.IsSuccess)
+		        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
+				if (template.IsSuccess)
 		        {
 			        if (template.Date == null)
 				        foreach (DataGridViewCell cell2 in row.Cells)
 					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DateValueIsIncorrect)
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
 
-			        if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.DgvDataFont))
-				        row.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
-                }
+			        if(!Equals(cellTraceName.Style.Font, LogsReaderMainForm.DgvDataFont))
+						cellTraceName.Style.Font = LogsReaderMainForm.DgvDataFont;
+		        }
 		        else
 		        {
 			        if (!template.IsMatched)
@@ -1245,7 +1263,6 @@ namespace LogsReader.Reader
 					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DoesntMatchByPattern)
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 
-			        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
 			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
 						cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
                 }
@@ -1643,7 +1660,12 @@ namespace LogsReader.Reader
 
 			await DgvData.AssignCollectionAsync(_currentDGVResult, null);
 	        DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-	        RefreshAllRows(DgvData, DgvDataRefreshRow);
+			
+	        if (DgvDataAfterAssign == RefreshDataType.AllRows)
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
+			else
+				RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+
 	        btnExport.Enabled = DgvData.RowCount > 0;
 
 	        if (selectedPrivateID > -1 && !selectedSchemeName.IsNullOrWhiteSpace())
@@ -1790,7 +1812,7 @@ namespace LogsReader.Reader
 
 		        CheckBoxTransactionsMarkingTypeChanged(_currentTransactionsMarkingType);
 
-		        RefreshAllRows(DgvData, DgvDataRefreshRow);
+		        RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 		        DgvData.Focus();
 	        }
 	        catch (Exception ex)
@@ -1964,28 +1986,25 @@ namespace LogsReader.Reader
         }
 
         private int prevReadersDistance = -1;
-        private bool shownFilterPanel;
+        private bool shownProcessReadesPanel = true;
         private void buttonNextBlock_Click(object sender, EventArgs e)
         {
 	        try
 	        {
-		        shownFilterPanel = !shownFilterPanel;
+		        shownProcessReadesPanel = !shownProcessReadesPanel;
+		        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
 
-		        splitContainerTop.Panel1Collapsed = !shownFilterPanel;
-		        splitContainerTop.Panel2Collapsed = shownFilterPanel;
-
-		        if (shownFilterPanel)
+		        if (shownProcessReadesPanel)
 		        {
-			        if (sender != null)
-				        prevReadersDistance = splitContainerMainFilter.SplitterDistance;
-			        splitContainerMainFilter.SplitterDistance = 65;
-			        buttonNextBlock.Text = @">";
+			        _openProcessingReadersBtn.Text = @"ᐯ";
+			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
 		        }
 		        else
 		        {
-			        buttonNextBlock.Text = @"<";
-			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
-			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height / 3;
+					if (sender != null)
+						prevReadersDistance = splitContainerMainFilter.SplitterDistance;
+					_openProcessingReadersBtn.Text = @"ᐱ";
 				}
 			}
 	        catch (Exception ex)
