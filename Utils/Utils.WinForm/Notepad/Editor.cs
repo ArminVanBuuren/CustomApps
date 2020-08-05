@@ -91,12 +91,15 @@ namespace Utils.WinForm.Notepad
 
                     // костыль. Если строка очень длинная то меняем язык на простой, иначе зависает
 	                var isLargeline = value.Split('\n').Any(x => x.Length > 5000);
-	                if (isLargeline && FCTB.Language != Language.Custom)
+	                if (isLargeline)
 	                {
-		                FCTB.ClearStylesBuffer();
-		                FCTB.Range.ClearStyle(StyleIndex.All);
-		                FCTB.Language = Language.Custom;
-                    }
+		                if (FCTB.Language != Language.Custom)
+		                {
+			                FCTB.ClearStylesBuffer();
+			                FCTB.Range.ClearStyle(StyleIndex.All);
+			                FCTB.Language = Language.Custom;
+		                }
+	                }
 	                else if (FCTB.Language != Language)
 	                {
 		                FCTB.ClearStylesBuffer();
