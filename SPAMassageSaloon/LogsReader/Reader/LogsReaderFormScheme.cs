@@ -365,10 +365,13 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        while (IsWorking)
+		        var count = MainReader.TraceReaders.Values.Count();
+		        var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
+
+				while (IsWorking)
 		        {
 			        ReportProcessStatus(MainReader.TraceReaders.Values);
-			        System.Threading.Thread.Sleep(50);
+			        System.Threading.Thread.Sleep(delay);
 		        }
 	        }
 	        catch (Exception ex)
