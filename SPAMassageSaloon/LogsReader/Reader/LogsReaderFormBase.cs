@@ -304,9 +304,9 @@ namespace LogsReader.Reader
 
 			try
             {
-                #region Initialize DgvData
+				#region Initialize DgvData
 
-                DgvData.AutoGenerateColumns = false;
+				DgvData.AutoGenerateColumns = false;
                 DgvData.TabStop = false;
                 DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
 	            DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
@@ -354,14 +354,14 @@ namespace LogsReader.Reader
                 DgvDataFileColumn.DataPropertyName = DgvDataFileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
                 DgvDataFileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
 
-	            label7.Text = nameof(DataTemplate.Tmp.TraceName);
+				label7.Text = nameof(DataTemplate.Tmp.TraceName);
                 label11.Text = DataTemplate.HeaderTraceMessage;
 
                 #endregion
 
-                #region Initialize DgvProcessing
+				#region Initialize DgvProcessing
 
-                DgvReader.AutoGenerateColumns = false;
+				DgvReader.AutoGenerateColumns = false;
                 DgvReader.TabStop = false;
                 DgvReader.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
                 DgvReader.DefaultCellStyle.Font = LogsReaderMainForm.DgvReaderFont;
@@ -411,14 +411,13 @@ namespace LogsReader.Reader
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
-
 				};
 
-                #endregion
+				#endregion
 
-                #region Apply All Settings
+				#region Apply All Settings
 
-                DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
+				DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
                 DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
 
                 TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
@@ -1206,47 +1205,47 @@ namespace LogsReader.Reader
 	        }
         }
 
-        /// <summary>
-        /// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
-        /// </summary>
-        protected void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
-        {
-	        try
-	        {
-		        if (dgv == null || dgv.RowCount == 0)
-			        return;
+		/// <summary>
+		/// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
+		/// </summary>
+		protected void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+		{
+			try
+			{
+				if (dgv == null || dgv.RowCount == 0)
+					return;
 
-		        var countVisible = dgv.DisplayedRowCount(false);
-		        var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
+				var countVisible = dgv.DisplayedRowCount(false);
+				var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
-		        var firstIndex = Math.Max(0, firstVisibleRowIndex - 50);
-		        var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
+				var firstIndex = Math.Max(0, firstVisibleRowIndex - 50);
+				var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
 
-		        for (var i = firstIndex; i <= lastIndex; i++)
-			        refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
-	        }
-	        catch (Exception ex)
-	        {
+				for (var i = firstIndex; i <= lastIndex; i++)
+					refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
+			}
+			catch (Exception ex)
+			{
 				ReportStatus(ex.Message, ReportStatusType.Error);
 			}
-        }
+		}
 
-        /// <summary>
-        /// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
-        /// </summary>
-        protected static void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
-        {
-	        if (dgv == null || dgv.RowCount == 0)
-		        return;
+		/// <summary>
+		/// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
+		/// </summary>
+		protected static void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+		{
+			if (dgv == null || dgv.RowCount == 0)
+				return;
 
-	        var countVisible = dgv.DisplayedRowCount(false);
-	        var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
+			var countVisible = dgv.DisplayedRowCount(false);
+			var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
-            foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
-	            refreshRow(row, countVisible, firstVisibleRowIndex);
-        }
+			foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
+				refreshRow(row, countVisible, firstVisibleRowIndex);
+		}
 
-        protected void DgvDataRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+		protected void DgvDataRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
         {
 	        if (!TryGetTemplate(row, out var template))
 		        return;
@@ -2007,6 +2006,9 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
+				if(sender != null)
+					LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+
 		        shownProcessReadesPanel = !shownProcessReadesPanel;
 
 		        if (shownProcessReadesPanel)
@@ -2015,19 +2017,27 @@ namespace LogsReader.Reader
 			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
 			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
 			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
-				}
+		        }
 		        else
 		        {
-					if (sender != null)
-						prevReadersDistance = splitContainerMainFilter.SplitterDistance;
-					_openProcessingReadersBtn.Text = @"ᐱ";
-					splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
-				}
-			}
+			        if (sender != null)
+				        prevReadersDistance = splitContainerMainFilter.SplitterDistance;
+			        _openProcessingReadersBtn.Text = @"ᐱ";
+			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
+		        }
+	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
-			}
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+	        finally
+	        {
+		        if (sender != null)
+		        {
+			        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+			        this.Refresh();
+		        }
+	        }
         }
 
         protected virtual void CustomPanel_Resize(object sender, EventArgs e)

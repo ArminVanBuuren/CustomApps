@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
@@ -142,129 +143,131 @@ namespace LogsReader
 
         public LogsReaderMainForm()
         {
-            InitializeComponent();
+	        InitializeComponent();
+	        try
+	        {
+		        this.SuspendLayout();
 
-			try
-            {
-	            base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
-	            KeyPreview = true;
+		        MainTabControl.SuspendLayout();
+		        MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
 
-	            MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+		        base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
+		        KeyPreview = true;
 
-	            Global = new LogsReaderFormGlobal(Encoding.UTF8)
-	            {
-		            Dock = DockStyle.Fill
-	            };
-	            var globalPage = new TabPage
-	            {
-		            Name = GLOBAL_PAGE_NAME,
-		            Text = GLOBAL_PAGE_NAME,
-		            UseVisualStyleBackColor = false,
-		            Font = new Font(MainFontFamily, 8.5F),
-		            Margin = new Padding(0),
-		            Padding = new Padding(0)
-	            };
-	            globalPage.Controls.Add(Global);
-	            MainTabControl.TabPages.Add(globalPage);
+		        Global = new LogsReaderFormGlobal(Encoding.UTF8) {Dock = DockStyle.Fill};
+		        Global.SuspendLayout();
+		        var globalPage = new TabPage
+		        {
+			        Name = GLOBAL_PAGE_NAME,
+			        Text = GLOBAL_PAGE_NAME,
+			        UseVisualStyleBackColor = false,
+			        Font = new Font(MainFontFamily, 8.5F),
+			        Margin = new Padding(0),
+			        Padding = new Padding(0)
+		        };
+		        globalPage.Controls.Add(Global);
+		        MainTabControl.TabPages.Add(globalPage);
 
-	            Settings = LRSettings.Deserialize();
-	            if (Settings.SchemeList == null)
-		            Settings.AssignDefaultSchemas();
+		        Settings = LRSettings.Deserialize();
+		        if (Settings.SchemeList == null)
+			        Settings.AssignDefaultSchemas();
 
-	            foreach (var scheme in Settings.SchemeList)
-	            {
-		            try
-		            {
-			            var schemeForm = new LogsReaderFormScheme(scheme)
-			            {
-				            Dock = DockStyle.Fill
-			            };
+		        foreach (var scheme in Settings.SchemeList)
+		        {
+			        var schemeForm = new LogsReaderFormScheme(scheme) {Dock = DockStyle.Fill};
+			        try
+			        {
+				        schemeForm.SuspendLayout();
 
-			            var page = new TabPage
-			            {
-				            Text = scheme.Name,
-				            UseVisualStyleBackColor = false,
-				            Font = new Font(MainFontFamily, 8.5F),
-				            Margin = new Padding(0),
-				            Padding = new Padding(0)
-			            };
-			            page.Controls.Add(schemeForm);
+				        var page = new TabPage
+				        {
+					        Text = scheme.Name,
+					        UseVisualStyleBackColor = false,
+					        Font = new Font(MainFontFamily, 8.5F),
+					        Margin = new Padding(0),
+					        Padding = new Padding(0)
+				        };
+				        page.Controls.Add(schemeForm);
 
-			            MainTabControl.TabPages.Add(page);
-			            SchemeForms.Add(page, schemeForm);
+				        MainTabControl.TabPages.Add(page);
+				        SchemeForms.Add(page, schemeForm);
 
-			            schemeForm.Load += (sender, args) =>
-			            {
-				            schemeForm.ApplyFormSettings();
-				            schemeForm.OnSchemeChanged += SaveSchemas;
-						};
-		            }
-		            catch (Exception ex)
-		            {
-			            ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
-		            }
-	            }
+				        schemeForm.Load += (sender, args) =>
+				        {
+					        schemeForm.ApplyFormSettings();
+					        schemeForm.OnSchemeChanged += SaveSchemas;
+				        };
+			        }
+			        catch (Exception ex)
+			        {
+				        ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error, Resources.Txt_Main_LoadScheme);
+			        }
+			        finally
+			        {
+				        schemeForm.ResumeLayout();
+			        }
+		        }
 
-	            Global.Initialize(this);
-	            Global.Load += (sender, args) =>
-	            {
-		            Global.ApplyFormSettings();
-	            };
+		        Global.Initialize(this);
+		        Global.Load += (sender, args) => { Global.ApplyFormSettings(); };
 
-				MainTabControl.DrawItem += MainTabControl_DrawItem;
+		        MainTabControl.DrawItem += MainTabControl_DrawItem;
+		        LogsReaderFormBase prevSelection = null;
+		        MainTabControl.Selected += (sender, args) =>
+		        {
+			        try
+			        {
+				        var current = CurrentForm;
 
-				LogsReaderFormBase prevSelection = null;
-				MainTabControl.Selected += (sender, args) =>
-				{
-					try
-					{
-						var current = CurrentForm;
+				        if (current == Global)
+				        {
+					        foreach (var schemeForm in SchemeForms.Values)
+						        schemeForm.DeselectTransactions();
+					        Global.SelectTransactions();
+				        }
+				        else if (prevSelection == Global)
+				        {
+					        Global.DeselectTransactions();
+					        current.SelectTransactions();
+				        }
+				        else
+				        {
+					        current.SelectTransactions();
+				        }
 
-						if (current == Global)
-						{
-							foreach (var schemeForm in SchemeForms.Values)
-								schemeForm.DeselectTransactions();
-							Global.SelectTransactions();
-						}
-						else if (prevSelection == Global)
-						{
-							Global.DeselectTransactions();
-							current.SelectTransactions();
-						}
-						else
-						{
-							current.SelectTransactions();
-						}
+				        prevSelection = current;
+			        }
+			        catch (Exception)
+			        {
+				        // ignored
+			        }
+		        };
 
-						prevSelection = current;
-					}
-					catch (Exception)
-					{
-						// ignored
-					}
-				};
+		        Shown += (s, e) =>
+		        {
+			        ApplySettings();
 
-				Shown += (s, e) =>
-	            {
-		            ApplySettings();
+			        foreach (var schemeForm in SchemeForms.Values)
+				        schemeForm.SynchronizeTreeView();
+		        };
+		        Closing += (s, e) =>
+		        {
+			        SaveData();
+			        SerializeUserCreditails();
+		        };
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
+	        }
+	        finally
+	        {
+		        CenterToScreen();
 
-		            foreach (var schemeForm in SchemeForms.Values)
-			            schemeForm.SynchronizeTreeView();
-	            };
-	            Closing += (s, e) =>
-	            {
-		            SaveData();
-		            SerializeUserCreditails();
-	            };
-            }
-            catch (Exception ex)
-            {
-	            ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
-            }
-            finally
-            {
-	            CenterToScreen();
-            }
+		        Global?.ResumeLayout();
+		        MainTabControl.ResumeLayout();
+		        this.ResumeLayout();
+	        }
         }
 
         static async void SaveSchemas(object sender, EventArgs args)
@@ -346,5 +349,9 @@ namespace LogsReader
 		        // ignored
 	        }
         }
-    }
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
+        public const int WM_SETREDRAW = 0xB;
+	}
 }

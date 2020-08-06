@@ -61,75 +61,83 @@ namespace LogsReader.Reader
 
 			InitializeComponent();
 
-			descriptionText.AutoWordSelection = true;
-			descriptionText.AutoWordSelection = false;
-
-			notepad.TabsFont = LogsReaderMainForm.DgvDataFont;
-			notepad.TextFont = LogsReaderMainForm.TxtFont;
-
-			descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
-
-			EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
-			EditorMessage.BackBrush = null;
-			EditorMessage.BorderStyle = BorderStyle.FixedSingle;
-			EditorMessage.Cursor = Cursors.IBeam;
-			EditorMessage.DelayedEventsInterval = 1000;
-			EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-			EditorMessage.IsReplaceMode = false;
-			EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-
-			EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
-			EditorTraceMessage.BackBrush = null;
-			EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
-			EditorTraceMessage.Cursor = Cursors.IBeam;
-			EditorTraceMessage.DelayedEventsInterval = 1000;
-			EditorTraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
-			EditorTraceMessage.IsReplaceMode = false;
-			EditorTraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-
-			EditorMessage.WordWrap = UserSettings.MessageWordWrap;
-			EditorMessage.Highlights = UserSettings.MessageHighlights;
-			EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
-			EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
-
-			notepad.SelectEditor(0);
-			notepad.DefaultEncoding = defaultEncoding;
-
-			var langMessage = MessageLanguage = UserSettings.MessageLanguage;
-			var langTrace = UserSettings.TraceLanguage;
-			if (EditorMessage.Language != langMessage)
-				EditorMessage.ChangeLanguage(langMessage);
-			if (EditorTraceMessage.Language != langTrace)
-				EditorTraceMessage.ChangeLanguage(langTrace);
-
-			if (isMain)
+			try
 			{
-				EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
-				EditorTraceMessage.LanguageChanged += EditorTraceMessage_LanguageChanged;
+				notepad.SuspendLayout();
+				descriptionText.AutoWordSelection = true;
+				descriptionText.AutoWordSelection = false;
 
-				notepad.WordWrapStateChanged += (sender, args) =>
+				notepad.TabsFont = LogsReaderMainForm.DgvDataFont;
+				notepad.TextFont = LogsReaderMainForm.TxtFont;
+
+				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
+
+				EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
+				EditorMessage.BackBrush = null;
+				EditorMessage.BorderStyle = BorderStyle.FixedSingle;
+				EditorMessage.Cursor = Cursors.IBeam;
+				EditorMessage.DelayedEventsInterval = 1000;
+				EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+				EditorMessage.IsReplaceMode = false;
+				EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+
+				EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
+				EditorTraceMessage.BackBrush = null;
+				EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
+				EditorTraceMessage.Cursor = Cursors.IBeam;
+				EditorTraceMessage.DelayedEventsInterval = 1000;
+				EditorTraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
+				EditorTraceMessage.IsReplaceMode = false;
+				EditorTraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+
+				EditorMessage.WordWrap = UserSettings.MessageWordWrap;
+				EditorMessage.Highlights = UserSettings.MessageHighlights;
+				EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
+				EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
+
+				notepad.SelectEditor(0);
+				notepad.DefaultEncoding = defaultEncoding;
+
+				var langMessage = MessageLanguage = UserSettings.MessageLanguage;
+				var langTrace = UserSettings.TraceLanguage;
+				if (EditorMessage.Language != langMessage)
+					EditorMessage.ChangeLanguage(langMessage);
+				if (EditorTraceMessage.Language != langTrace)
+					EditorTraceMessage.ChangeLanguage(langTrace);
+
+				if (isMain)
 				{
-					if (!(sender is Editor editor))
-						return;
+					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
+					EditorTraceMessage.LanguageChanged += EditorTraceMessage_LanguageChanged;
 
-					if (editor == EditorMessage)
-						UserSettings.MessageWordWrap = editor.WordWrap;
-					else if (editor == EditorTraceMessage)
-						UserSettings.TraceWordWrap = editor.WordWrap;
-				};
-				notepad.WordHighlightsStateChanged += (sender, args) =>
-				{
-					if (!(sender is Editor editor))
-						return;
+					notepad.WordWrapStateChanged += (sender, args) =>
+					{
+						if (!(sender is Editor editor))
+							return;
 
-					if (editor == EditorMessage)
-						UserSettings.MessageHighlights = editor.Highlights;
-					else if (editor == EditorTraceMessage)
-						UserSettings.TraceHighlights = editor.Highlights;
-				};
+						if (editor == EditorMessage)
+							UserSettings.MessageWordWrap = editor.WordWrap;
+						else if (editor == EditorTraceMessage)
+							UserSettings.TraceWordWrap = editor.WordWrap;
+					};
+					notepad.WordHighlightsStateChanged += (sender, args) =>
+					{
+						if (!(sender is Editor editor))
+							return;
+
+						if (editor == EditorMessage)
+							UserSettings.MessageHighlights = editor.Highlights;
+						else if (editor == EditorTraceMessage)
+							UserSettings.TraceHighlights = editor.Highlights;
+					};
+				}
+
+				notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
 			}
-
-			notepad.SelectedIndexChanged += Notepad_TabIndexChanged;
+			finally
+			{
+				notepad.ResumeLayout();
+			}
 		}
 
 		private void EditorMessage_LanguageChanged(object sender, EventArgs e)
@@ -219,7 +227,7 @@ namespace LogsReader.Reader
 					var i = 0;
 					foreach (var (_, value) in CurrentTemplate.Transactions)
 					{
-						if(value.FoundByTrn)
+						if (value.FoundByTrn)
 							descriptionText.AppendText(value.Trn, Color.Green);
 						else
 							descriptionText.AppendText(value.Trn);

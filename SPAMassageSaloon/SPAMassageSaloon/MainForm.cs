@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -184,25 +185,28 @@ namespace SPAMassageSaloon
                     Presenter.ShowOwner();
                     STREAM.GarbageCollect();
                 };
-                statusStrip.Items.Add(autor);
-                statusStrip.Items.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                var toolToolStripCollection = new List<ToolStripItem>();
+                toolToolStripCollection.Add(autor);
+                toolToolStripCollection.Add(new ToolStripSeparator());
+
+                toolToolStripCollection.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
                 _cpuUsage = new ToolStripStatusLabel("    ") { Font = this.Font, Margin = new Padding(-7, 2, 1, 2) };
-                statusStrip.Items.Add(_cpuUsage);
-                statusStrip.Items.Add(new ToolStripSeparator());
+                toolToolStripCollection.Add(_cpuUsage);
+                toolToolStripCollection.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                toolToolStripCollection.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
                 _threadsUsage = new ToolStripStatusLabel("  ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
-                statusStrip.Items.Add(_threadsUsage);
-                statusStrip.Items.Add(new ToolStripSeparator());
+                toolToolStripCollection.Add(_threadsUsage);
+                toolToolStripCollection.Add(new ToolStripSeparator());
 
-                statusStrip.Items.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
+                toolToolStripCollection.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
                 _ramUsage = new ToolStripStatusLabel("       ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
-                statusStrip.Items.Add(_ramUsage);
-                statusStrip.Items.Add(new ToolStripSeparator());
-                CountOfDefaultStatusItems = statusStrip.Items.Count;
+                toolToolStripCollection.Add(_ramUsage);
+                toolToolStripCollection.Add(new ToolStripSeparator());
+                CountOfDefaultStatusItems = toolToolStripCollection.Count;
                 statusStrip.ItemRemoved += (o, args) => { if(statusStrip?.Items.Count == CountOfDefaultStatusItems) base.Text = FormName; };
+                statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
 
                 Closing += (o, args) =>
                 {
@@ -450,32 +454,39 @@ namespace SPAMassageSaloon
 
         public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
         {
-            try
-            {
-                if (!newInstance && ActivateMdiForm(out T form))
-                    return form;
+	        if (!newInstance && ActivateMdiForm(out T form))
+		        return form;
 
-                form = formMaker.Invoke();
-                if (form == null)
-                    return null;
+	        try
+	        {
+		        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
 
-                form.MdiParent = this;
-                //  form.WindowState = FormWindowState.Maximized;
+		        form = formMaker.Invoke();
+		        if (form == null)
+			        return null;
 
-                form.TopLevel = false;
-                form.ControlBox = false;
-                form.Dock = DockStyle.Fill;
-                form.FormBorderStyle = FormBorderStyle.None;
+		        form.MdiParent = this;
+		        //  form.WindowState = FormWindowState.Maximized;
 
-                form.Load += MDIManagerButton_Load;
-                form.Show();
+		        form.TopLevel = false;
+		        form.ControlBox = false;
+		        form.Dock = DockStyle.Fill;
+		        form.FormBorderStyle = FormBorderStyle.None;
+
+		        form.Load += MDIManagerButton_Load;
+		        form.Show();
 
                 return form;
-            }
-            catch (Exception ex)
-            {
-                ReportMessage.Show(ex);
-                return null;
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportMessage.Show(ex);
+		        return null;
+	        }
+	        finally
+	        {
+		        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+                this.Refresh();
             }
         }
 

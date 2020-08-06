@@ -445,8 +445,7 @@ namespace LogsReader.Reader
 	        }
 	        finally
 	        {
-		        panelFlowDoc.Invalidate();
-		        panelFlowDoc.Refresh();
+		        this.Refresh();
 			}
         }
 

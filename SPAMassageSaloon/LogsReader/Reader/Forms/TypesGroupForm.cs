@@ -127,7 +127,6 @@ namespace LogsReader.Reader.Forms
 
 		private void TypesGroupForm_Resize(object sender, EventArgs e)
 		{
-			this.Invalidate();
 			this.Refresh();
 		}
 	}
