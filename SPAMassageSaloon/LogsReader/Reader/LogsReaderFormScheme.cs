@@ -351,7 +351,9 @@ namespace LogsReader.Reader
 		            if (TimeWatcher.IsRunning)
 			            TimeWatcher.Stop();
 
-		            Progress = 100;
+		            if (MainReader?.TraceReaders != null)
+						ReportProcessStatus(MainReader.TraceReaders.Values);
+					Progress = 100;
 	            }
             }
             else
@@ -373,7 +375,10 @@ namespace LogsReader.Reader
 			        ReportProcessStatus(MainReader.TraceReaders.Values);
 			        System.Threading.Thread.Sleep(delay);
 		        }
-	        }
+
+				if(MainReader?.TraceReaders != null)
+					ReportProcessStatus(MainReader.TraceReaders.Values);
+			}
 	        catch (Exception ex)
 	        {
 				ReportStatus(ex.Message, ReportStatusType.Error);
@@ -398,7 +403,13 @@ namespace LogsReader.Reader
 	        OnSearchChanged?.Invoke(this, EventArgs.Empty);
 		}
 
-        internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
+		protected override void BtnClear_Click(object sender, EventArgs e)
+		{
+			base.BtnClear_Click(sender, e);
+			OnSearchChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
         {
             template = null;
             if (OverallResultList == null)
@@ -536,7 +547,7 @@ namespace LogsReader.Reader
             DgvReader.ColumnHeadersVisible = false;
 
 			base.ClearForm(saveData);
-		}
+        }
 
         public override string ToString()
         {

@@ -59,7 +59,20 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
-        private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
+        private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
+        private string Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+        private string Txt_LogsReaderForm_DoesntMatchByPattern = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+        private string TxtReader_BtnPause = Resources.TxtReader_BtnPause;
+        private string TxtReader_BtnResume = Resources.TxtReader_BtnResume;
+        private string TxtReader_StatusWaiting = Resources.TxtReader_StatusWaiting;
+        private string TxtReader_StatusProcessing = Resources.TxtReader_StatusProcessing;
+        private string TxtReader_StatusOnPause = Resources.TxtReader_StatusOnPause;
+        private string TxtReader_StatusAborted = Resources.TxtReader_StatusAborted;
+        private string TxtReader_StatusFailed = Resources.TxtReader_StatusFailed;
+        private string TxtReader_StatusFinished = Resources.TxtReader_StatusFinished;
+        private string TxtReader_BtnAbort = Resources.TxtReader_BtnAbort;
+
+		private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
         private TransactionsMarkingType _prevTransactionsMarkingType = TransactionsMarkingType.None;
 
         protected static Image Img_Failed { get; private set; }
@@ -70,10 +83,17 @@ namespace LogsReader.Reader
 
         protected static Image Img_Failed_Filtered { get; private set; }
 
-        /// <summary>
-        /// Юзерские настройки 
-        /// </summary>
-        protected UserSettings UserSettings { get; }
+        private Bitmap waiting = Resources.waiting;
+        private Bitmap processing = Resources.processing;
+        private Bitmap onPause = Resources.onPause;
+        private Bitmap aborted = Resources.aborted;
+        private Bitmap failed = Resources.failed;
+        private Bitmap finished = Resources.finished;
+
+		/// <summary>
+		/// Юзерские настройки 
+		/// </summary>
+		protected UserSettings UserSettings { get; }
 
         protected Stopwatch TimeWatcher { get; set; } = new Stopwatch();
 
@@ -320,15 +340,7 @@ namespace LogsReader.Reader
 	            DgvData.MouseDown += DgvData_MouseDown;
 				DgvData.CellFormatting += DataGridViewOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
-                DgvData.DataBindingComplete += (sender, args) =>
-                {
-	                DgvData.ClearSelection();
-					if (DgvDataAfterAssign == RefreshDataType.AllRows)
-						RefreshAllRows(DgvData, DgvDataRefreshRow);
-					else
-						RefreshVisibleRows(DgvData, DgvDataRefreshRow);
-					DgvData.ResumeLayout();
-				};
+                DgvData.DataBindingComplete += (sender, args) => { DgvData.ClearSelection(); };
                 DgvData.ColumnWidthChanged += (sender, args) =>
                 {
 	                if (DgvDataPromptColumn.Width > DgvDataPromptColumn.MinimumWidth)
@@ -555,7 +567,20 @@ namespace LogsReader.Reader
                 DgvReaderCountMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountMatchesMinWidth);
                 DgvReaderCountErrorMatchesColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountErrorMatchesMinWidth);
                 DgvReaderFileLastWriteTimeColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvCountLastWriteTimeMinWidth);
-            }
+
+                Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
+                Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+                Txt_LogsReaderForm_DoesntMatchByPattern = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+                TxtReader_BtnPause = Resources.TxtReader_BtnPause;
+                TxtReader_BtnResume = Resources.TxtReader_BtnResume;
+                TxtReader_StatusWaiting = Resources.TxtReader_StatusWaiting;
+                TxtReader_StatusProcessing = Resources.TxtReader_StatusProcessing;
+                TxtReader_StatusOnPause = Resources.TxtReader_StatusOnPause;
+                TxtReader_StatusAborted = Resources.TxtReader_StatusAborted;
+                TxtReader_StatusFailed = Resources.TxtReader_StatusFailed;
+                TxtReader_StatusFinished = Resources.TxtReader_StatusFinished;
+                TxtReader_BtnAbort = Resources.TxtReader_BtnAbort;
+			}
             catch (Exception ex)
             {
 	            ReportStatus(ex.Message, ReportStatusType.Error);
@@ -706,11 +731,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				DgvReader.SuspendLayout();
-				DgvReader.ClearSelection();
-				DgvReader.DataSource = null;
-				DgvReader.Rows.Clear();
-				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
+				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true); // SuspendLayout и ResumeLayout не юзать!
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
 				//DgvReader.Sort(DgvReaderThreadIdColumn, ListSortDirection.Descending);
@@ -719,10 +740,6 @@ namespace LogsReader.Reader
 			catch (Exception ex)
 			{
 				ReportStatus(ex.Message, ReportStatusType.Error);
-			}
-			finally
-			{
-				DgvReader.ResumeLayout();
 			}
 		}
 
@@ -747,7 +764,7 @@ namespace LogsReader.Reader
 
 					lock (syncRootStatus)
 					{
-						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
+						ReportStatus(string.Format(Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
 
 						countMatches = readers.Sum(x => x.CountMatches);
 						countErrorMatches = readers.Sum(x => x.CountErrors);
@@ -1059,7 +1076,14 @@ namespace LogsReader.Reader
 			        firstVisibleIndex = DgvData.FirstDisplayedScrollingRowIndex;
 		        }
 
-		        _currentDGVResult = GetResultTemplates();
+		        if (DgvData.DataSource != null || DgvData.RowCount > 0)
+		        {
+			        DgvData.DataSource = null;
+			        DgvData.Rows.Clear();
+			        DgvData.Refresh();
+		        }
+
+				_currentDGVResult = GetResultTemplates();
 
 		        if (_currentDGVResult == null || !_currentDGVResult.Any())
 		        {
@@ -1265,15 +1289,15 @@ namespace LogsReader.Reader
 		        {
 			        if (template.Date == null && row.Index > 0)
 				        foreach (DataGridViewCell cell2 in row.Cells)
-					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DateValueIsIncorrect)
-						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
+					        if (cell2.ToolTipText != Txt_LogsReaderForm_DateValueIsIncorrect)
+						        cell2.ToolTipText = Txt_LogsReaderForm_DateValueIsIncorrect;
 		        }
 				else if (row.Index > 0) // Костыль. Если стиль первой строки изменить то это применится ко всем строкам. Ебучий майкрософт. А если менять фонт для остальных неимоверно все тупит
 		        {
 			        if (!template.IsMatched)
 				        foreach (DataGridViewCell cell2 in row.Cells)
-					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DoesntMatchByPattern)
-						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
+					        if (cell2.ToolTipText != Txt_LogsReaderForm_DoesntMatchByPattern)
+						        cell2.ToolTipText = Txt_LogsReaderForm_DoesntMatchByPattern;
 
 			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
 				        cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
@@ -1368,8 +1392,8 @@ namespace LogsReader.Reader
 					        cellPauseResume.Enabled = false;
 			        }
 
-			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != Resources.TxtReader_BtnPause)
-				        cellPauseResume.Value = Resources.TxtReader_BtnPause;
+			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != TxtReader_BtnPause)
+				        cellPauseResume.Value = TxtReader_BtnPause;
 		        }
 
 		        void AllowedResume()
@@ -1379,8 +1403,8 @@ namespace LogsReader.Reader
 
 			        if (!cellPauseResume.Enabled)
 				        cellPauseResume.Enabled = true;
-			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != Resources.TxtReader_BtnResume)
-				        cellPauseResume.Value = Resources.TxtReader_BtnResume;
+			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != TxtReader_BtnResume)
+				        cellPauseResume.Value = TxtReader_BtnResume;
 		        }
 
 		        if (row.Cells[DgvReaderStatusColumn.Name] is DgvTextAndImageCell cellImage)
@@ -1389,51 +1413,51 @@ namespace LogsReader.Reader
 			        switch (reader.Status)
 			        {
 				        case TraceReaderStatus.Waiting:
-					        cellImage.Image = Resources.waiting;
+					        cellImage.Image = waiting;
 					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
 						        row.DefaultCellStyle.BackColor = Color.LightGray;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusWaiting)
-						        cellImage.Value = Resources.TxtReader_StatusWaiting;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusWaiting)
+						        cellImage.Value = TxtReader_StatusWaiting;
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.Processing:
-					        cellImage.Image = Resources.processing;
+					        cellImage.Image = processing;
 					        if (row.DefaultCellStyle.BackColor != Color.White)
 						        row.DefaultCellStyle.BackColor = Color.White;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusProcessing)
-						        cellImage.Value = Resources.TxtReader_StatusProcessing;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusProcessing)
+						        cellImage.Value = TxtReader_StatusProcessing;
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.OnPause:
-					        cellImage.Image = Resources.onPause;
+					        cellImage.Image = onPause;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusOnPause)
-						        cellImage.Value = Resources.TxtReader_StatusOnPause;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusOnPause)
+						        cellImage.Value = TxtReader_StatusOnPause;
 					        AllowedResume();
 					        break;
 				        case TraceReaderStatus.Aborted:
-					        cellImage.Image = Resources.aborted;
+					        cellImage.Image = aborted;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusAborted)
-						        cellImage.Value = Resources.TxtReader_StatusAborted;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusAborted)
+						        cellImage.Value = TxtReader_StatusAborted;
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Failed:
-					        cellImage.Image = Resources.failed;
+					        cellImage.Image = failed;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusFailed)
-						        cellImage.Value = Resources.TxtReader_StatusFailed;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFailed)
+						        cellImage.Value = TxtReader_StatusFailed;
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Finished:
-					        cellImage.Image = Resources.finished;
+					        cellImage.Image = finished;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != Resources.TxtReader_StatusFinished)
-						        cellImage.Value = Resources.TxtReader_StatusFinished;
+					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFinished)
+						        cellImage.Value = TxtReader_StatusFinished;
 					        CanPause(false);
 					        break;
 			        }
@@ -1441,8 +1465,8 @@ namespace LogsReader.Reader
 
 		        if (row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort)
 		        {
-			        if (cellAbort.Value == null || cellAbort.Value.ToString() != Resources.TxtReader_BtnAbort)
-				        cellAbort.Value = Resources.TxtReader_BtnAbort;
+			        if (cellAbort.Value == null || cellAbort.Value.ToString() != TxtReader_BtnAbort)
+				        cellAbort.Value = TxtReader_BtnAbort;
 
 			        if (cellAbort.Enabled &&
 			            (reader.Status == TraceReaderStatus.Aborted || reader.Status == TraceReaderStatus.Failed || reader.Status == TraceReaderStatus.Finished))
@@ -1665,10 +1689,6 @@ namespace LogsReader.Reader
 			}
 
 			ClearErrorStatus();
-			DgvData.SuspendLayout();
-			DgvData.ClearSelection();
-			DgvData.DataSource = null;
-			DgvData.Rows.Clear();
 
 			//var testList = new List<DataTemplate>();
 			//var succ = false;
@@ -1680,7 +1700,14 @@ namespace LogsReader.Reader
 			//	testList.Add(tmp);
 			//}
 
-			await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+			await DgvData.AssignCollectionAsync(_currentDGVResult, null); // SuspendLayout и ResumeLayout не юзать!
+
+			if (DgvDataAfterAssign == RefreshDataType.AllRows)
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
+			else
+				RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+			DgvData.ResumeLayout();
+
 			DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
 			btnExport.Enabled = DgvData.RowCount > 0;
 
@@ -1913,8 +1940,8 @@ namespace LogsReader.Reader
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
 
-	        RefreshAllRows(DgvData, DgvDataRefreshRow);
-	        DgvData.Focus();
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow); // не менять наRefreshAllRows. Производительность катастрофически падает
+			DgvData.Focus();
         }
 
         internal void DeselectTransactions()
@@ -1922,8 +1949,8 @@ namespace LogsReader.Reader
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
 
-	        RefreshAllRows(DgvData, DgvDataRefreshRow);
-	        DgvData.Focus();
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);  // не менять наRefreshAllRows. Производительность катастрофически падает
+			DgvData.Focus();
         }
 
         protected void Clear()
@@ -1934,11 +1961,14 @@ namespace LogsReader.Reader
 		        _currentDGVResult = null;
 		        _byAscending = true;
 
-		        DgvData.DataSource = null;
-		        DgvData.Rows.Clear();
-		        DgvData.Refresh();
+		        if (DgvData.DataSource != null || DgvData.RowCount > 0)
+		        {
+			        DgvData.DataSource = null;
+			        DgvData.Rows.Clear();
+			        DgvData.Refresh();
+		        }
 
-				MainViewer.Clear();
+		        MainViewer.Clear();
 		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        {
 			        if(page == MainViewer.Parent)
