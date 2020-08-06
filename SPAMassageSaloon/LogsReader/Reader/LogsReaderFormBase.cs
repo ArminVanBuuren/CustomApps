@@ -309,7 +309,7 @@ namespace LogsReader.Reader
 				DgvData.AutoGenerateColumns = false;
                 DgvData.TabStop = false;
                 DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-	            DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
+                DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
 	            DgvData.Font = LogsReaderMainForm.DgvDataFont;
 	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
@@ -320,14 +320,22 @@ namespace LogsReader.Reader
 	            DgvData.MouseDown += DgvData_MouseDown;
 				DgvData.CellFormatting += DataGridViewOnCellFormatting;
                 DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
-                DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
+                DgvData.DataBindingComplete += (sender, args) =>
+                {
+	                DgvData.ClearSelection();
+					if (DgvDataAfterAssign == RefreshDataType.AllRows)
+						RefreshAllRows(DgvData, DgvDataRefreshRow);
+					else
+						RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+					DgvData.ResumeLayout();
+				};
                 DgvData.ColumnWidthChanged += (sender, args) =>
                 {
 	                if (DgvDataPromptColumn.Width > DgvDataPromptColumn.MinimumWidth)
 		                DgvDataPromptColumn.Width = DgvDataPromptColumn.MinimumWidth;
                 };
 
-                DgvDataPromptColumn.DataPropertyName = DgvDataPromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
+				DgvDataPromptColumn.DataPropertyName = DgvDataPromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
                 DgvDataPromptColumn.HeaderText = DataTemplate.HeaderPrompt;
 
                 DgvDataIDColumn.DataPropertyName = DgvDataIDColumn.Name = DgvDataIDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
@@ -1253,17 +1261,14 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
-				if (template.IsSuccess)
+		        if (template.IsSuccess)
 		        {
-			        if (template.Date == null)
+			        if (template.Date == null && row.Index > 0)
 				        foreach (DataGridViewCell cell2 in row.Cells)
 					        if (cell2.ToolTipText != Resources.Txt_LogsReaderForm_DateValueIsIncorrect)
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
-
-			        if(!Equals(cellTraceName.Style.Font, LogsReaderMainForm.DgvDataFont))
-						cellTraceName.Style.Font = LogsReaderMainForm.DgvDataFont;
 		        }
-		        else
+				else if (row.Index > 0) // Костыль. Если стиль первой строки изменить то это применится ко всем строкам. Ебучий майкрософт. А если менять фонт для остальных неимоверно все тупит
 		        {
 			        if (!template.IsMatched)
 				        foreach (DataGridViewCell cell2 in row.Cells)
@@ -1271,10 +1276,10 @@ namespace LogsReader.Reader
 						        cell2.ToolTipText = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
 
 			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
-						cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
-                }
+				        cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
+				}
 
-		        if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
+				if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
 			        cellFile.ToolTipText = template.File;
 
 		        // меняем свойтсво Image только для строк которые показаны пользователю
@@ -1660,28 +1665,24 @@ namespace LogsReader.Reader
 			}
 
 			ClearErrorStatus();
+			DgvData.SuspendLayout();
+			DgvData.ClearSelection();
+			DgvData.DataSource = null;
+			DgvData.Rows.Clear();
 
-			try
-			{
-				DgvData.SuspendLayout();
-				DgvData.ClearSelection();
-				DgvData.DataSource = null;
-				DgvData.Rows.Clear();
+			//var testList = new List<DataTemplate>();
+			//var succ = false;
+			//foreach (var tmp in _currentDGVResult)
+			//{
+			//	if (tmp.IsSuccess && !succ)
+			//		continue;
+			//	succ = true;
+			//	testList.Add(tmp);
+			//}
 
-				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-			}
-			finally
-			{
-				DgvData.ResumeLayout();
-			}
-
-			if (DgvDataAfterAssign == RefreshDataType.AllRows)
-				RefreshAllRows(DgvData, DgvDataRefreshRow);
-			else
-				RefreshVisibleRows(DgvData, DgvDataRefreshRow);
-
-	        btnExport.Enabled = DgvData.RowCount > 0;
+			await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+			DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+			btnExport.Enabled = DgvData.RowCount > 0;
 
 	        if (selectedPrivateID > -1 && !selectedSchemeName.IsNullOrWhiteSpace())
 	        {

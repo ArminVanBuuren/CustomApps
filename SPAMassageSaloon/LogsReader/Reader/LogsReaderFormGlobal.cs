@@ -578,7 +578,8 @@ namespace LogsReader.Reader
 	        return result.OrderBy(x => x.Date)
 		        .ThenBy(x => x.ParentReader.Priority)
 		        .ThenBy(x => x.File)
-		        .ThenBy(x => x.FoundLineID).ToList();
+		        .ThenBy(x => x.FoundLineID)
+		        .ToList();
         }
 
         internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)

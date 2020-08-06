@@ -33,7 +33,7 @@ namespace LogsReader.Reader
         /// <summary>
         /// Темповый темплейт, во избежание ошибок. Если будут изменяться названия полей в <see cref="DataTemplate"/> то, они будут изменяться везде.
         /// </summary>
-        internal static DataTemplate Tmp => _tmp ?? (_tmp = new DataTemplate(null, -1, null, null));
+        internal static DataTemplate Tmp => _tmp ?? (_tmp = new DataTemplate());
 
         private readonly StringBuilder _traceMessage = new StringBuilder();
         private string _description;
@@ -41,6 +41,8 @@ namespace LogsReader.Reader
         private string _message = string.Empty;
 
         readonly HashSet<DataTemplate> _trnBindings = new HashSet<DataTemplate>();
+
+        DataTemplate() { IsSuccess = true; }
 
         internal DataTemplate(
 	        TraceReader traceReader,
@@ -200,7 +202,7 @@ namespace LogsReader.Reader
 
         [DGVColumn(ColumnPosition.Last, nameof(DataTemplate.Tmp.IsSuccess), false)]
         public bool IsSuccess { get; }
-
+	    
         /// <summary>
         /// Свойство всегда false, он меняется только в DataGridView
         /// </summary>
