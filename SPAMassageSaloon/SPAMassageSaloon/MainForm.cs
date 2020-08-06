@@ -216,11 +216,6 @@ namespace SPAMassageSaloon
                         Settings.Default.FormSize = Size;
                         Settings.Default.FormState = WindowState;
                         Settings.Default.Save();
-                        using (var reg = new RegeditControl(this.GetAssemblyInfo().ApplicationName))
-                        {
-                            reg.Remove("UpdateAlreadyShown");
-                            reg.Remove("LastUpdatePackage");
-                        }
                     }
                     catch (Exception)
                     {
@@ -472,10 +467,8 @@ namespace SPAMassageSaloon
 		        form.ControlBox = false;
 		        form.Dock = DockStyle.Fill;
 		        form.FormBorderStyle = FormBorderStyle.None;
-
 		        form.Load += MDIManagerButton_Load;
 		        form.Show();
-
                 return form;
 	        }
 	        catch (Exception ex)
@@ -487,7 +480,9 @@ namespace SPAMassageSaloon
 	        {
 		        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
                 this.Refresh();
-            }
+                this.Focus();
+                this.Activate();
+	        }
         }
 
         private bool ActivateMdiForm<T>(out T form) where T : Form
@@ -531,15 +526,40 @@ namespace SPAMassageSaloon
                 };
                 button.Click += (o, args) =>
                 {
-                    try
-                    {
-                        var mdiButton = (MDIManagerButton)o;
-                        mdiButton.mdiForm.Activate();
+	                try
+	                {
+		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+		                var mdiButton = (MDIManagerButton) o;
+		                mdiButton.mdiForm.Activate();
+	                }
+	                catch (Exception)
+	                {
+		                // ignored
+	                }
+	                finally
+	                {
+		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+		                mainForm.Refresh();
                     }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
+                };
+                button.MClose += (o, args) =>
+                {
+	                try
+	                {
+		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+		                var mdiButton = (MDIManagerButton)o;
+		                mdiButton.mdiForm.Close();
+	                }
+	                catch (Exception)
+	                {
+		                // ignored
+	                }
+	                finally
+	                {
+		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+		                mainForm.Refresh();
+		                mainForm.Activate();
+	                }
                 };
 
                 switch (sender)

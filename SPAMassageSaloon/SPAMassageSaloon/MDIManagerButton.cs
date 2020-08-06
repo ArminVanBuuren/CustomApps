@@ -11,6 +11,7 @@ namespace SPAMassageSaloon
         public Form mdiForm { get; private set; }
         public event EventHandler MClick;
         public event EventHandler Activated;
+        public event EventHandler MClose;
 
         private int btnTop, btnLeft;
         private Rectangle btnRectangle;
@@ -66,7 +67,7 @@ namespace SPAMassageSaloon
             {
                 case MouseButtons.Left:
                     if (mouseOnCloseBtn)
-                        mdiForm.Close();
+	                    MClose?.Invoke(sender, e);
                     else
                         MClick?.Invoke(sender, e);
                     break;
