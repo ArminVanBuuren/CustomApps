@@ -699,6 +699,10 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				DgvReader.SuspendLayout();
+				DgvReader.ClearSelection();
+				DgvReader.DataSource = null;
+				DgvReader.Rows.Clear();
 				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
@@ -708,6 +712,10 @@ namespace LogsReader.Reader
 			catch (Exception ex)
 			{
 				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
+			finally
+			{
+				DgvReader.ResumeLayout();
 			}
 		}
 
@@ -1652,16 +1660,24 @@ namespace LogsReader.Reader
 				selectedRangeToFirstVisible = DgvData.SelectedRows[0].Index - DgvData.FirstDisplayedScrollingRowIndex;
 			}
 
-			DgvData.ClearSelection();
-			DgvData.DataSource = null;
-			DgvData.Rows.Clear();
-			DgvData.Refresh();
 			ClearErrorStatus();
 
-			await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-	        DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-			
-	        if (DgvDataAfterAssign == RefreshDataType.AllRows)
+			try
+			{
+				DgvData.SuspendLayout();
+				DgvData.ClearSelection();
+				DgvData.DataSource = null;
+				DgvData.Rows.Clear();
+
+				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+			}
+			finally
+			{
+				DgvData.ResumeLayout();
+			}
+
+			if (DgvDataAfterAssign == RefreshDataType.AllRows)
 				RefreshAllRows(DgvData, DgvDataRefreshRow);
 			else
 				RefreshVisibleRows(DgvData, DgvDataRefreshRow);
@@ -1996,9 +2012,9 @@ namespace LogsReader.Reader
 		        if (shownProcessReadesPanel)
 		        {
 			        _openProcessingReadersBtn.Text = @"ᐯ";
-			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
 			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
 			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
+			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
 				}
 		        else
 		        {

@@ -732,13 +732,13 @@ namespace LogsReader.Reader
                 childName = FileTypeTreeNodeName;
             }
 
-            var groupTreeNode = new TreeNode($"[{priority}] {groupName.Trim().ToUpper()}")
+            var groupTreeNode = new TreeNode($"[{priority}] {groupName.Trim()}")
             {
                 Name = parentName
             };
             foreach (var item in items.Distinct(StringComparer.InvariantCultureIgnoreCase).OrderBy(p => p))
             {
-                var child = groupTreeNode.Nodes.Add(item.Trim().ToUpper());
+                var child = groupTreeNode.Nodes.Add(item.Trim());
                 child.Name = childName;
                 SetIndexImageTreeNode(child);
             }

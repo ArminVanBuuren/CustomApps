@@ -25,7 +25,7 @@ namespace LogsReader.Config
 			{
 				if (value == null || value.Length == 0)
 					return;
-				Value = value[0].Value?.ReplaceUTFCodeToSymbol().ToUpper();
+				Value = value[0].Value?.ReplaceUTFCodeToSymbol();
 				_item = new XmlNode[] {new XmlDocument().CreateTextNode(Value) };
 			}
 		}

@@ -124,5 +124,11 @@ namespace LogsReader.Reader.Forms
 				textBoxGroupPriority.TextChanged += textBoxGroupPriority_TextChanged;
 			}
 		}
+
+		private void TypesGroupForm_Resize(object sender, EventArgs e)
+		{
+			this.Invalidate();
+			this.Refresh();
+		}
 	}
 }

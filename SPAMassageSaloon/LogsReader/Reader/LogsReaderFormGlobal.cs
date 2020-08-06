@@ -265,8 +265,6 @@ namespace LogsReader.Reader
 			schemeExpander.ExpandCollapse += (sender, args) =>
 			{
 				SchemeExpander_ExpandCollapse(sender, args);
-				panelFlowDoc.Invalidate();
-				panelFlowDoc.Refresh();
 			};
 			// если выбирается схема в глобальной форме в checkbox
 	        schemeExpander.CheckedChanged += async (sender, args) =>
@@ -412,11 +410,11 @@ namespace LogsReader.Reader
 
 		private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
         {
-	        try
-	        {
-		        if (flowPanelForExpanders == null)
-			        return;
+	        if (flowPanelForExpanders == null || panelFlowDoc == null)
+		        return;
 
+			try
+	        {
 		        var height = 0;
 		        foreach (var expander in flowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
 		        {
@@ -440,10 +438,15 @@ namespace LogsReader.Reader
 			        flowPanelForExpanders.Size = new Size(panelFlowDoc.Size.Width - 2, height);
 			        checkBoxSelectAll.Padding = new Padding(0, 0, 9, 0);
 		        }
-			}
+	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex.Message, ReportStatusType.Error);
+	        }
+	        finally
+	        {
+		        panelFlowDoc.Invalidate();
+		        panelFlowDoc.Refresh();
 			}
         }
 

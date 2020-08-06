@@ -144,6 +144,7 @@ namespace LogsReader.Reader.Forms
 			this.Name = "TypesGroupForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "File Types Group";
+			this.Resize += new System.EventHandler(this.TypesGroupForm_Resize);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.ResumeLayout(false);

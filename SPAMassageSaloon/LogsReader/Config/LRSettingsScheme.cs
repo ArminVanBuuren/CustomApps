@@ -283,15 +283,15 @@ namespace LogsReader.Config
             switch (set)
 	        {
 		        case DefaultSettings.MG:
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4, mg5") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4") });
 			        FileTypes = new LRGroups(new []
 			        {
-				        new LRGroupItem("cntrs-data", 0, "soapcon*data, smscon*sms*data, smscon*ussd*data, ivrcon*data, emailcon*data"),
-				        new LRGroupItem("cntrs-error", 0, "soapcon*error, smscon*sms*error, smscon*ussd*error, ivrcon*error, emailcon*error"),
-				        new LRGroupItem("cntrs-activity", 0, "soapcon*activity, smscon*sms*activity, smscon*ussd*activity, ivrcon*activity, emailcon*activity"),
-				        new LRGroupItem("hnds-data", 1, "crmcon*data, dispatcher, wcfhnd*data, dbcon*data"),
-				        new LRGroupItem("hnds-error", 1, "crmcon*error, wcfhnd*error, dbcon*error"),
-				        new LRGroupItem("hnds-activity", 1, "crmcon*activity, wcfhnd*activity, dbcon*activity"),
+				        new LRGroupItem("Connectors-Activity", 0, "SOAPCON*Activity, SMSCON*SMS*Activity, SMSCON*USSD*Activity, IVRCON*Activity, EMAILCON*Activity"),
+                        new LRGroupItem("Connectors-Data", 0, "SOAPCON*Data, SMSCON*SMS*Data, SMSCON*USSD*Data, IVRCON*Data, EMAILCON*Data"),
+				        new LRGroupItem("Connectors-Error", 0, "SOAPCON*Error, SMSCON*SMS*Error, SMSCON*USSD*Error, IVRCON*Error, EMAILCON*Error"),
+				        new LRGroupItem("Handlers-Activity", 1, "CRMCON*Activity, WCF*Activity, DBCON*Activity"),
+                        new LRGroupItem("Handlers-Data", 1, "CRMCON*Data, DISPATCHER, WCF*Data, DBCON*Data"),
+				        new LRGroupItem("Handlers-Error", 1, "CRMCON*Error, WCF*Error, DBCON*Error"),
 			        });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true)});
 			        MaxLines = 100;
@@ -306,7 +306,7 @@ namespace LogsReader.Config
                     });
 			        FileTypes = new LRGroups(new[]
 			        {
-				        new LRGroupItem("SPA.SA", 0,"bms, bsp, content, eir, am, scp, hlr, mca, mg, rbt, smsc"),
+				        new LRGroupItem("SPA.SA", 0,"BMS, BSP, Content, EIR, AM, SCP, HLR*ZTE, HLR*Huawei, MCA, MG, RBT, SMSC"),
 				        new LRGroupItem("SPA.BPM", 0,"spa.bpm")
                     });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
@@ -315,8 +315,8 @@ namespace LogsReader.Config
 			        OrderBy = $"{nameof(DataTemplate.Tmp.Date)} desc, {nameof(DataTemplate.Tmp.ID)} desc";
 			        break;
 		        case DefaultSettings.MGA:
-			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4, crm-mg5") });
-			        FileTypes = new LRGroups(new[] { new LRGroupItem("default", 0, "fast, slow, debug-all, debug-only") });
+			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4") });
+			        FileTypes = new LRGroups(new[] { new LRGroupItem("Default", 0, "Fast, Slow, debug-all, debug-only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        MaxLines = 20000;
 			        MaxThreads = -1;

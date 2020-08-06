@@ -13,7 +13,7 @@ namespace LogsReader.Config
 		public string GroupName
 		{
 			get => _groupName;
-			set => _groupName = value.ToUpper();
+			set => _groupName = value;
 		}
 
 		[XmlIgnore] internal int PriorityInternal { get; set; } = 0;

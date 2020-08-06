@@ -200,6 +200,7 @@ namespace LogsReader.Reader.Forms
 			this.Name = "ServerGroupForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Server Group";
+			this.Resize += new System.EventHandler(this.ServerGroupForm_Resize);
 			this.panelChooseGroup.ResumeLayout(false);
 			this.panelChooseGroup.PerformLayout();
 			this.panelBottom.ResumeLayout(false);
