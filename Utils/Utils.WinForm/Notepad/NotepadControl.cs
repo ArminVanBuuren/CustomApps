@@ -14,6 +14,7 @@ using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
+	[Designer(typeof(TabControl))]
     public partial class NotepadControl : UserControl, IEnumerable<KeyValuePair<Editor, TabPage>>
     {
         private bool _wordWrap = false;
@@ -639,6 +640,18 @@ namespace Utils.WinForm.Notepad
                     _tabControl.SelectedIndex = tabIndex - 1;
                 }
             }
+        }
+
+        public new void SuspendLayout()
+        {
+	        base.SuspendLayout();
+	        _tabControl?.SuspendLayout();
+        }
+
+        public new void ResumeLayout()
+        {
+	        _tabControl?.ResumeLayout();
+            base.ResumeLayout();
         }
 
         public new void Focus()

@@ -320,6 +320,18 @@ namespace Utils.WinForm.Notepad
             WindowIsClosed = true;
         }
 
+        public new void SuspendLayout()
+        {
+	        base.SuspendLayout();
+	        NotepadControlItem?.SuspendLayout();
+        }
+
+        public new void ResumeLayout()
+        {
+	        NotepadControlItem?.ResumeLayout();
+            base.ResumeLayout();
+        }
+
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fileToolStripMenuItem.Text = Resources.Notepad_File;

@@ -9,6 +9,7 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
+	[Designer(typeof(RichTextBox))]
     public partial class Editor : UserControl, IDisposable
     {
         protected static readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
@@ -261,121 +262,130 @@ namespace Utils.WinForm.Notepad
         public Editor()
         {
             InitializeComponent();
+            FCTB = new FastColoredTextBox();
+            _statusStrip = new StatusStrip();
 
-            BorderStyle = BorderStyle.None;
-
-            FCTB = new FastColoredTextBox
+            try
             {
-                AutoCompleteBracketsList = new[] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''},
-                AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);",
-                AutoScrollMinSize = new Size(27, 14),
-                BackBrush = null,
-                CharHeight = 14,
-                CharWidth = 8,
-                DisabledColor = Color.FromArgb(100, 180, 180, 180),
-                IsReplaceMode = false,
-                Paddings = new Padding(0),
-                ImeMode = ImeMode.Off,
-                TabLength = 2,
-                Zoom = 100,
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.None,
-                MinimumSize = new Size(100, 0)
-            };
-            _editorLanguage = FCTB.Language;
+                this.SuspendLayout();
+                FCTB.SuspendLayout();
+                _statusStrip.SuspendLayout();
 
-            _statusStrip = new StatusStrip
-            {
-                Cursor = Cursors.Default,
-                ForeColor = Color.Black,
-                LayoutStyle = ToolStripLayoutStyle.Flow,
-                Padding = new Padding(0, 2, 0, 0),
-                MinimumSize = new Size(710, 0)
-            };
+                BorderStyle = BorderStyle.None;
 
-            Controls.Add(FCTB);
-            Controls.Add(_statusStrip);
+                FCTB.AutoCompleteBracketsList = new[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
+                FCTB.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);";
+                FCTB.AutoScrollMinSize = new Size(27, 14);
+                FCTB.BackBrush = null;
+                FCTB.CharHeight = 14;
+                FCTB.CharWidth = 8;
+                FCTB.DisabledColor = Color.FromArgb(100, 180, 180, 180);
+                FCTB.IsReplaceMode = false;
+                FCTB.Paddings = new Padding(0);
+                FCTB.ImeMode = ImeMode.Off;
+                FCTB.TabLength = 2;
+                FCTB.Zoom = 100;
+                FCTB.Dock = DockStyle.Fill;
+                FCTB.BorderStyle = BorderStyle.None;
+                FCTB.MinimumSize = new Size(100, 0);
+                _editorLanguage = FCTB.Language;
 
-            var toolStripItems = new List<ToolStripItem>();
+                _statusStrip.Cursor = Cursors.Default;
+                _statusStrip.ForeColor = Color.Black;
+                _statusStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
+                _statusStrip.Padding = new Padding(0, 2, 0, 0);
+                _statusStrip.MinimumSize = new Size(710, 0);
 
-            _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control };
-            foreach (Language lang in Enum.GetValues(typeof(Language)))
-                _listOfLanguages.Items.Add(lang);
-            _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
-            _listOfLanguages.Size = new Size(100, _listOfLanguages.Size.Height);
-            toolStripItems.Add(_listOfLanguages);
-            _listOfLanguages.SelectedIndexChanged += (sender, args) =>
-            {
-                if (_listOfLanguages.SelectedItem is Language lang && Language != lang)
+                Controls.Add(FCTB);
+                Controls.Add(_statusStrip);
+
+                var toolStripItems = new List<ToolStripItem>();
+
+                _listOfLanguages = new ToolStripComboBox { BackColor = SystemColors.Control };
+                foreach (Language lang in Enum.GetValues(typeof(Language)))
+                    _listOfLanguages.Items.Add(lang);
+                _listOfLanguages.DropDownStyle = ComboBoxStyle.DropDownList;
+                _listOfLanguages.Size = new Size(100, _listOfLanguages.Size.Height);
+                toolStripItems.Add(_listOfLanguages);
+                _listOfLanguages.SelectedIndexChanged += (sender, args) =>
                 {
-                    bool isChanged = ChangeLanguage(lang);
-                    if (isChanged)
-                        LanguageChanged?.Invoke(this, EventArgs.Empty);
-                }
-            };
+                    if (_listOfLanguages.SelectedItem is Language lang && Language != lang)
+                    {
+                        bool isChanged = ChangeLanguage(lang);
+                        if (isChanged)
+                            LanguageChanged?.Invoke(this, EventArgs.Empty);
+                    }
+                };
 
-            toolStripItems.Add(GetSeparator());
-            _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 2, 0, 0) };
-            _wordWrapping.CheckStateChanged += (s, e) =>
+                toolStripItems.Add(GetSeparator());
+                _wordWrapping = new CheckBox { BackColor = Color.Transparent, Text = @"Wrap", Checked = WordWrap, Padding = new Padding(5, 2, 0, 0) };
+                _wordWrapping.CheckStateChanged += (s, e) =>
+                {
+                    if (WordWrap == _wordWrapping.Checked)
+                        return;
+
+                    WordWrap = _wordWrapping.Checked;
+                };
+                var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
+                toolStripItems.Add(wordWrapToolStrip);
+
+                toolStripItems.Add(GetSeparator());
+                _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 2, 0, 0) };
+                _highlights.CheckStateChanged += (s, e) =>
+                {
+                    FCTB.VisibleRange.ClearStyle(SameWordsStyle);
+                    if (Highlights)
+                        FCTB.SelectionChangedDelayed += FCTB_SelectionChangedDelayed;
+                    else
+                        FCTB.SelectionChangedDelayed -= FCTB_SelectionChangedDelayed;
+                    WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
+                };
+                var highlightsToolStrip = new ToolStripControlHost(_highlights);
+                toolStripItems.Add(highlightsToolStrip);
+
+                toolStripItems.Add(GetSeparator());
+                _encodingInfo = GetStripLabel("");
+                toolStripItems.Add(_encodingInfo);
+
+                toolStripItems.Add(GetSeparator());
+                toolStripItems.Add(GetStripLabel("length:"));
+                _contentLengthInfo = GetStripLabel("");
+                toolStripItems.Add(_contentLengthInfo);
+                toolStripItems.Add(GetStripLabel("lines:"));
+                _contentLinesInfo = GetStripLabel("");
+                toolStripItems.Add(_contentLinesInfo);
+
+                toolStripItems.Add(GetSeparator());
+                toolStripItems.Add(GetStripLabel("Ln:"));
+                _currentLineInfo = GetStripLabel("");
+                toolStripItems.Add(_currentLineInfo);
+                toolStripItems.Add(GetStripLabel("Col:"));
+                _currentPosition = GetStripLabel("");
+                toolStripItems.Add(_currentPosition);
+                toolStripItems.Add(GetStripLabel("Sel:"));
+                _selectedInfo = GetStripLabel("");
+                toolStripItems.Add(_selectedInfo);
+
+                _statusStrip.Items.AddRange(toolStripItems.ToArray());
+
+                FCTB.ClearStylesBuffer();
+                FCTB.Range.ClearStyle(StyleIndex.All);
+                FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
+
+                FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(this, args); };
+                FCTB.Pasting += (sender, args) => { Pasting?.Invoke(this, args); };
+                FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(this, args); };
+                FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(this, args); };
+                FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
+                FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
+                FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
+            }
+            finally
             {
-                if (WordWrap == _wordWrapping.Checked)
-                    return;
-
-                WordWrap = _wordWrapping.Checked;
-            };
-            var wordWrapToolStrip = new ToolStripControlHost(_wordWrapping);
-            toolStripItems.Add(wordWrapToolStrip);
-
-            toolStripItems.Add(GetSeparator());
-            _highlights = new CheckBox { BackColor = Color.Transparent, Text = @"Highlights", Checked = false, Padding = new Padding(5, 2, 0, 0) };
-            _highlights.CheckStateChanged += (s, e) =>
-            {
-                FCTB.VisibleRange.ClearStyle(SameWordsStyle);
-                if (Highlights)
-                    FCTB.SelectionChangedDelayed += FCTB_SelectionChangedDelayed;
-                else
-                    FCTB.SelectionChangedDelayed -= FCTB_SelectionChangedDelayed;
-                WordHighlightsStateChanged?.Invoke(this, EventArgs.Empty);
-            };
-            var highlightsToolStrip = new ToolStripControlHost(_highlights);
-            toolStripItems.Add(highlightsToolStrip);
-
-            toolStripItems.Add(GetSeparator());
-            _encodingInfo = GetStripLabel("");
-            toolStripItems.Add(_encodingInfo);
-
-            toolStripItems.Add(GetSeparator());
-            toolStripItems.Add(GetStripLabel("length:"));
-            _contentLengthInfo = GetStripLabel("");
-            toolStripItems.Add(_contentLengthInfo);
-            toolStripItems.Add(GetStripLabel("lines:"));
-            _contentLinesInfo = GetStripLabel("");
-            toolStripItems.Add(_contentLinesInfo);
-
-            toolStripItems.Add(GetSeparator());
-            toolStripItems.Add(GetStripLabel("Ln:"));
-            _currentLineInfo = GetStripLabel("");
-            toolStripItems.Add(_currentLineInfo);
-            toolStripItems.Add(GetStripLabel("Col:"));
-            _currentPosition = GetStripLabel("");
-            toolStripItems.Add(_currentPosition);
-            toolStripItems.Add(GetStripLabel("Sel:"));
-            _selectedInfo = GetStripLabel("");
-            toolStripItems.Add(_selectedInfo);
-
-            _statusStrip.Items.AddRange(toolStripItems.ToArray());
-
-            FCTB.ClearStylesBuffer();
-            FCTB.Range.ClearStyle(StyleIndex.All);
-            FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
-
-            FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(this, args); };
-            FCTB.Pasting += (sender, args) => { Pasting?.Invoke(this, args); };
-            FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(this, args); };
-            FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(this, args); };
-            FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
-            FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
-            FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
+	            _statusStrip.ResumeLayout();
+	            FCTB.ResumeLayout();
+                this.ResumeLayout();
+            }
         }
 
         private void FctbOnVisibleRangeChangedDelayed(object sender, EventArgs e)

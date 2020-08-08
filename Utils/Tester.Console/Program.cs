@@ -51,12 +51,58 @@ namespace Tester.Console
 
 			try
 			{
-				//var res = Directory.GetFiles(@"\\msk-dev-foris\FORISLOG\mg");
-				var FileNamePartial1 = IO.GetPartialPath(@"\\LOCALHOST\D$\TEST\MG2\CRMCON_CRMCON_01_data.log.2020-06-06.0",
-					@"D:\TEST\MG2");
+				int a = 0;
+				if (false || (true && true) && true)
+				{
+					a++;
+				}
 
-				var FileNamePartial2 = IO.GetPartialPath(@"\\MSK-DEV-FORIS\forislog\mg\CRMCON_CRMCON_MTS_activity.log.2020-08-04.0",
-					@"forislog\mg");
+				if (true || (false && true) && true)
+				{
+					a++;
+				}
+
+				if (true || (true && true) && false)
+				{
+					a++;
+				}
+
+				if (false || (true && true) && true)
+				{
+					a++;
+				}
+
+				if (false || (true && true) && false)
+				{
+					a++;
+				}
+
+				var b = 0;
+				if (false || (true && true && true))
+				{
+					b++;
+				}
+
+				if (true || (false && true && true))
+				{
+					b++;
+				}
+
+				if (true || (true && true && false))
+				{
+					b++;
+				}
+
+				if (false || (true && true && true))
+				{
+					b++;
+				}
+
+				if (false || (true && true && false))
+				{
+					b++;
+				}
+
 			}
 			catch (Exception e)
 			{
