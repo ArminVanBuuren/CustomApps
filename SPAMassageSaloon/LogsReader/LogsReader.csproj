@@ -261,6 +261,7 @@
     <Content Include="Resources\prev_arrow.png" />
     <Content Include="Resources\processing.png" />
     <Content Include="Resources\remove.png" />
+    <Content Include="Resources\select.png" />
     <Content Include="Resources\trn.png" />
     <Content Include="Resources\waiting.png" />
   </ItemGroup>

@@ -288,7 +288,15 @@ namespace LogsReader.Reader
             var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
             var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-            _openProcessingReadersBtn = new ToolStripButton { Text = "ᐯᐱ", Font = base.Font, Margin = statusStripItemsPaddingStart };
+            _openProcessingReadersBtn = new ToolStripButton
+            {
+	            Text = "ᐯᐱ", 
+	            Font = new Font("Verdana", 8.5f, FontStyle.Bold, GraphicsUnit.Point, 0), 
+	            BackColor = Color.FromArgb(54, 187, 156) , 
+	            ForeColor = Color.White, 
+	            Margin = new Padding(0, 2, 0, 2),
+				Padding = new Padding(1, 0, 0, 0)
+            };
             _openProcessingReadersBtn.Click += buttonNextBlock_Click;
             buttonNextBlock_Click(null, EventArgs.Empty);
 			toolToolStripCollection.Add(_openProcessingReadersBtn);
@@ -828,7 +836,7 @@ namespace LogsReader.Reader
                     desctination = sfd.FileName;
                 }
 
-                BtnSearch.Enabled = btnClear.Enabled = btnExport.Enabled = btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = false;
+                BtnSearch.Enabled = btnClear.Enabled = buttonSelectTraceNames.Enabled = btnExport.Enabled = btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = false;
                 ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
                 fileName = Path.GetFileName(desctination);
 
@@ -949,8 +957,7 @@ namespace LogsReader.Reader
         {
             try
             {
-	            await AssignResult(GetFilter(), false);
-	            IsDgvDataFiltered = true;
+	            IsDgvDataFiltered = await AssignResult(GetFilter(), false);
             }
             catch (Exception ex)
             {
@@ -974,7 +981,7 @@ namespace LogsReader.Reader
 	        {
 		        await AssignResult(null, false);
 		        IsDgvDataFiltered = false;
-			}
+	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex.Message, ReportStatusType.Error);
@@ -1204,7 +1211,7 @@ namespace LogsReader.Reader
 			        ParentSplitContainer.Cursor = Cursors.Default;
 		        }
 
-		        btnExport.Enabled = DgvData.RowCount > 0;
+		        buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
 		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
             }
 	        finally
@@ -1709,7 +1716,7 @@ namespace LogsReader.Reader
 			DgvData.ResumeLayout();
 
 			DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-			btnExport.Enabled = DgvData.RowCount > 0;
+			buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
 
 	        if (selectedPrivateID > -1 && !selectedSchemeName.IsNullOrWhiteSpace())
 	        {
@@ -1898,7 +1905,7 @@ namespace LogsReader.Reader
 
         protected virtual void ValidationCheck(bool clearStatus)
         {
-	        btnExport.Enabled = DgvData.RowCount > 0;
+	        buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
 	        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
         }
 
@@ -1978,7 +1985,7 @@ namespace LogsReader.Reader
 			        tabControlViewer.TabPages.Remove(page);
 		        }
 
-                btnExport.Enabled = false;
+		        buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
 		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
 	        }
 	        catch (Exception ex)
@@ -2075,5 +2082,10 @@ namespace LogsReader.Reader
         {
 
         }
+
+		private void buttonSelectTraceNames_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

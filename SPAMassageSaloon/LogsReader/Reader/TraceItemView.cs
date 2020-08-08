@@ -64,6 +64,7 @@ namespace LogsReader.Reader
 			try
 			{
 				notepad.SuspendLayout();
+
 				descriptionText.AutoWordSelection = true;
 				descriptionText.AutoWordSelection = false;
 
