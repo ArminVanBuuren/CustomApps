@@ -65,15 +65,15 @@ namespace LogsReader.Reader
 			{
 				notepad.SuspendLayout();
 
-				descriptionText.AutoWordSelection = true;
-				descriptionText.AutoWordSelection = false;
-
 				notepad.TabsFont = LogsReaderMainForm.DgvDataFont;
 				notepad.TextFont = LogsReaderMainForm.TxtFont;
 
+				descriptionText.AutoWordSelection = true;
+				descriptionText.AutoWordSelection = false;
 				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
 
 				EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
+				EditorMessage.AutoPrintToXml = true;
 				EditorMessage.BackBrush = null;
 				EditorMessage.BorderStyle = BorderStyle.FixedSingle;
 				EditorMessage.Cursor = Cursors.IBeam;
@@ -281,32 +281,7 @@ namespace LogsReader.Reader
 				if (prevTemplateMessage != null && prevTemplateMessage.Equals(CurrentTemplate))
 					return;
 
-				var isXml = false;
-				var messageString = CurrentTemplate.Message.Trim();
-				if (EditorMessage.Language == Language.XML
-				    || EditorMessage.Language == Language.HTML
-				    || CurrentTemplate.Message.Length <= 50000 && messageString.StartsWith("<") && messageString.EndsWith(">"))
-				{
-					var messageXML = XML.RemoveUnallowable(CurrentTemplate.Message, " ");
-					isXml = messageXML.IsXml(out var xmlDoc);
-					messageString = isXml ? xmlDoc.PrintXml() : messageXML.Trim();
-				}
-
-				// костыль. Если реально документ не XML, то не делать прорисовку. Если большой текст то очень долго прорисовывает как XML. Если Custom то прорисока быстрая
-				if (EditorMessage.Language == Language.XML && !isXml)
-				{
-					EditorMessage.LanguageChanged -= EditorMessage_LanguageChanged;
-					EditorMessage.ChangeLanguage(Language.Custom);
-					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
-				}
-				else if (MessageLanguage == Language.XML && EditorMessage.Language != Language.XML && isXml)
-				{
-					EditorMessage.LanguageChanged -= EditorMessage_LanguageChanged;
-					EditorMessage.ChangeLanguage(Language.XML);
-					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
-				}
-
-				EditorMessage.Text = messageString;
+				EditorMessage.Text = CurrentTemplate.Message.Trim();
 				EditorMessage.DelayedEventsInterval = 10;
 
 				prevTemplateMessage = CurrentTemplate;
