@@ -14,8 +14,7 @@ using Utils.WinForm.Properties;
 
 namespace Utils.WinForm.Notepad
 {
-	[Designer(typeof(TabControl))]
-    public partial class NotepadControl : UserControl, IEnumerable<KeyValuePair<Editor, TabPage>>
+	public partial class NotepadControl : UserControl, IEnumerable<KeyValuePair<Editor, TabPage>>
     {
         private bool _wordWrap = false;
         private bool _highlights = false;

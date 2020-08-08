@@ -5,7 +5,6 @@ using System.Windows.Forms;
 
 namespace Utils.WinForm
 {
-	[Designer(typeof(Splitter))]
 	public class VerticalSeparator : Control
 	{
 		private Color lineColor;

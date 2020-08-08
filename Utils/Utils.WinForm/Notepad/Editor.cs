@@ -9,8 +9,7 @@ using FastColoredTextBoxNS;
 
 namespace Utils.WinForm.Notepad
 {
-	[Designer(typeof(RichTextBox))]
-    public partial class Editor : UserControl, IDisposable
+	public partial class Editor : UserControl, IDisposable
     {
         protected static readonly MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
         private string _source = null;
