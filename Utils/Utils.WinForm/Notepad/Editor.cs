@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -21,15 +22,24 @@ namespace Utils.WinForm.Notepad
         private readonly FastColoredTextBox FCTB;
         private readonly StatusStrip _statusStrip;
 
-        readonly ToolStripLabel _contentLengthInfo;
-        readonly ToolStripLabel _contentLinesInfo;
-        readonly ToolStripLabel _currentLineInfo;
-        readonly ToolStripLabel _currentPosition;
-        readonly ToolStripLabel _selectedInfo;
-        readonly ToolStripLabel _encodingInfo;
-        readonly ToolStripComboBox _listOfLanguages;
-        readonly CheckBox _wordWrapping;
-        readonly CheckBox _highlights;
+        private readonly Style XmlLiteAttributeStyle;
+        private readonly Style XmlLiteAttributeValueStyle;
+        private readonly Style XmlLiteCDataStyle;
+        private readonly Style XmlLiteTagNameStyle;
+        private readonly Regex _xmlLiteCommentRegex;
+        private readonly Regex _xmlLiteTagRegex;
+        private readonly Regex _xmlLiteAttrRegex;
+        private readonly Regex _xmlLiteAttrValRegex;
+
+        private readonly ToolStripLabel _contentLengthInfo;
+        private readonly ToolStripLabel _contentLinesInfo;
+        private readonly ToolStripLabel _currentLineInfo;
+        private readonly ToolStripLabel _currentPosition;
+        private readonly ToolStripLabel _selectedInfo;
+        private readonly ToolStripLabel _encodingInfo;
+        private readonly ToolStripComboBox _listOfLanguages;
+        private readonly CheckBox _wordWrapping;
+        private readonly CheckBox _highlights;
 
         public event EventHandler KeyPressed;
         public event EventHandler Pasting;
@@ -80,6 +90,18 @@ namespace Utils.WinForm.Notepad
         [Browsable(false)]
         public bool IsContentChanged => !Text.Equals(Source, StringComparison.Ordinal);
 
+        private bool _autoPrintToXml = false;
+        public bool AutoPrintToXml
+        {
+	        get => _autoPrintToXml;
+	        set
+	        {
+		        _autoPrintToXml = value;
+		        if (_autoPrintToXml)
+			        ChageStyleIfLargeLine();
+	        }
+        }
+
         public override string Text
         {
             get => FCTB.Text;
@@ -87,29 +109,9 @@ namespace Utils.WinForm.Notepad
             {
                 try
                 {
-	                FCTB.Clear();
-
-                    // костыль. Если строка очень длинная то меняем язык на простой, иначе зависает
-	                var isLargeline = value.Split('\n').Any(x => x.Length > 5000);
-	                if (isLargeline)
-	                {
-		                if (FCTB.Language != Language.Custom)
-		                {
-			                FCTB.ClearStylesBuffer();
-			                FCTB.Range.ClearStyle(StyleIndex.All);
-			                FCTB.Language = Language.Custom;
-		                }
-	                }
-	                else if (FCTB.Language != Language)
-	                {
-		                FCTB.ClearStylesBuffer();
-		                FCTB.Range.ClearStyle(StyleIndex.All);
-		                FCTB.Language = Language;
-                    }
-
-	                FCTB.Text = Source = value;
-                    FCTB.IsChanged = false;
-                    FCTB.ClearUndo();
+	                //FCTB.Clear();
+	                Source = value;
+	                ChageStyleIfLargeLine();
                 }
                 catch (Exception)
                 {
@@ -133,6 +135,7 @@ namespace Utils.WinForm.Notepad
 			        return;
 
 		        _wordWrapping.Checked = FCTB.WordWrap = value;
+		        ChageStyleIfLargeLine();
 		        WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -295,6 +298,15 @@ namespace Utils.WinForm.Notepad
                 _statusStrip.Padding = new Padding(0, 2, 0, 0);
                 _statusStrip.MinimumSize = new Size(710, 0);
 
+                XmlLiteAttributeStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.RedStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.RedStyle).FontStyle);
+                XmlLiteAttributeValueStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).FontStyle);
+                XmlLiteCDataStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).FontStyle);
+                XmlLiteTagNameStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).FontStyle);
+                _xmlLiteCommentRegex = new Regex(@"<!--.*?-->|<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexOptions.Singleline | RegexOptions.Compiled);
+                _xmlLiteTagRegex = new Regex(@"(?<range><[!\w:]+)|(?<range></[\w:]+>)|<\?|<|/>|</|>|\?>", RegexOptions.Compiled);
+                _xmlLiteAttrRegex = new Regex(@"(?<range>\w+\=)", RegexOptions.Compiled);
+                _xmlLiteAttrValRegex = new Regex(@"\=\""(?<range>.+?)\""", RegexOptions.Compiled);
+
                 Controls.Add(FCTB);
                 Controls.Add(_statusStrip);
 
@@ -371,11 +383,11 @@ namespace Utils.WinForm.Notepad
                 FCTB.Range.ClearStyle(StyleIndex.All);
                 FCTB.ClearUndo(); // если убрать метод то при Undo все вернется к пустоте а не к исходнику
 
+                FCTB.TextChanged += FCTB_TextChanged;
                 FCTB.KeyPressed += (sender, args) => { KeyPressed?.Invoke(this, args); };
                 FCTB.Pasting += (sender, args) => { Pasting?.Invoke(this, args); };
                 FCTB.TextChangedDelayed += (sender, args) => { TextChangedDelayed?.Invoke(this, args); };
                 FCTB.TextChanging += (sender, args) => { TextChanging?.Invoke(this, args); };
-                FCTB.TextChanged += (sender, args) => { TextChangedChanged(this, args); TextChanged?.Invoke(this, args); };
                 FCTB.SelectionChanged += (sender, args) => { RefreshForm(); SelectionChanged?.Invoke(this, args); };
                 FCTB.SelectionChangedDelayed += (sender, args) => { SelectionChangedDelayed?.Invoke(this, args); };
             }
@@ -386,6 +398,89 @@ namespace Utils.WinForm.Notepad
                 this.ResumeLayout();
             }
         }
+
+        /// <summary>
+        /// костыль. Если строка очень длинная то меняем язык на простой, иначе зависает все нахуй текст врапован
+        /// </summary>
+        void ChageStyleIfLargeLine()
+        {
+	        void TryConvertToXml()
+	        {
+		        var messageXML = XML.RemoveUnallowable(Source, @" ");
+		        var isXml = messageXML.IsXml(out var xmlDoc);
+		        Source = isXml ? xmlDoc.PrintXml() : messageXML.Trim();
+	        }
+
+	        if (AutoPrintToXml)
+	        {
+		        if (Language == Language.XML || Language == Language.HTML)
+		        {
+			        TryConvertToXml();
+		        }
+		        else
+		        {
+			        var trimWhiteSpace = Source.Trim();
+			        if (trimWhiteSpace.StartsWith(@"<") && trimWhiteSpace.EndsWith(@">"))
+				        TryConvertToXml();
+		        }
+	        }
+
+	        var satisfied = IsLanguageSatisfied(Source);
+
+	        if (FCTB.Text == Source && !satisfied)
+		        FCTB.Text += @"\0";
+	        else
+		        FCTB.Text = Source;
+
+	        FCTB.IsChanged = true;
+	        FCTB.ClearUndo();
+        }
+
+        bool IsLanguageSatisfied(string input)
+        {
+	        if (FCTB.WordWrap && input.Split('\n').Any(x => x.Length > 3000))
+	        {
+		        if (FCTB.Language != Language.Custom)
+		        {
+			        FCTB.Language = Language.Custom;
+		        }
+	        }
+	        else if (FCTB.Language != Language)
+	        {
+		        FCTB.IsChanged = true;
+		        FCTB.ClearStylesBuffer();
+		        FCTB.Range.ClearStyle(StyleIndex.All);
+		        FCTB.Language = Language;
+		        FCTB.SyntaxHighlighter.HighlightSyntax(FCTB.Language, FCTB.Range);
+	        }
+
+	        return FCTB.Language == Language;
+        }
+        private void FCTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+	        if (!FCTB.Text.IsNullOrEmpty() && (Language == Language.XML || Language == Language.HTML) && !IsLanguageSatisfied(FCTB.Text))
+		        XmlLiteSyntaxHighlight(e);
+
+	        TextChangedChanged(this, e); 
+	        TextChanged?.Invoke(this, e);
+        }
+
+        private void XmlLiteSyntaxHighlight(TextChangedEventArgs e)
+        {
+	        e.ChangedRange.ClearStyle(
+		        FCTB.SyntaxHighlighter.XmlAttributeStyle,
+		        FCTB.SyntaxHighlighter.XmlAttributeValueStyle,
+		        FCTB.SyntaxHighlighter.XmlCDataStyle,
+		        FCTB.SyntaxHighlighter.XmlTagNameStyle);
+
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.XmlCDataStyle, _xmlLiteCommentRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.XmlAttributeStyle, _xmlLiteAttrRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.XmlAttributeValueStyle, _xmlLiteAttrValRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.XmlTagNameStyle, _xmlLiteTagRegex);
+
+	        e.ChangedRange.ClearFoldingMarkers();
+        }
+
 
         private void FctbOnVisibleRangeChangedDelayed(object sender, EventArgs e)
         {
@@ -418,34 +513,43 @@ namespace Utils.WinForm.Notepad
 
         internal void RefreshForm()
         {
-	        var textLength = TextLength.ToString();
-	        var linesCount = LinesCount.ToString();
-	        var selectionLine = (Selection.FromLine + 1).ToString();
-	        var selectionX = (Selection.FromX + 1).ToString();
-	        var selectedText = $"{SelectedText.Length}|{(SelectedText.Length > 0 ? SelectedText.Split('\n').Length : 0)}";
-	        var encoding = Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
-	        var language = Language.ToString();
+	        try
+	        {
+		        _statusStrip.SuspendLayout();
 
-	        if (_contentLengthInfo.Text != textLength)
-		        _contentLengthInfo.Text = textLength;
+		        var textLength = TextLength.ToString();
+		        var linesCount = LinesCount.ToString();
+		        var selectionLine = (Selection.FromLine + 1).ToString();
+		        var selectionX = (Selection.FromX + 1).ToString();
+		        var selectedText = $"{SelectedText.Length}|{(SelectedText.Length > 0 ? SelectedText.Split('\n').Length : 0)}";
+		        var encoding = Encoding?.HeaderName ?? DefaultEncoding.HeaderName;
+		        var language = Language.ToString();
 
-	        if (_contentLinesInfo.Text != linesCount)
-		        _contentLinesInfo.Text = linesCount;
+		        if (_contentLengthInfo.Text != textLength)
+			        _contentLengthInfo.Text = textLength;
 
-	        if (_currentLineInfo.Text != selectionLine)
-		        _currentLineInfo.Text = selectionLine;
+		        if (_contentLinesInfo.Text != linesCount)
+			        _contentLinesInfo.Text = linesCount;
 
-	        if (_currentPosition.Text != selectionX)
-		        _currentPosition.Text = selectionX;
+		        if (_currentLineInfo.Text != selectionLine)
+			        _currentLineInfo.Text = selectionLine;
 
-	        if (_selectedInfo.Text != selectedText)
-		        _selectedInfo.Text = selectedText;
+		        if (_currentPosition.Text != selectionX)
+			        _currentPosition.Text = selectionX;
 
-	        if (_encodingInfo.Text != encoding)
-		        _encodingInfo.Text = encoding;
+		        if (_selectedInfo.Text != selectedText)
+			        _selectedInfo.Text = selectedText;
 
-            if (_listOfLanguages.Text != language)
-                _listOfLanguages.Text = language;
+		        if (_encodingInfo.Text != encoding)
+			        _encodingInfo.Text = encoding;
+
+		        if (_listOfLanguages.Text != language)
+			        _listOfLanguages.Text = language;
+            }
+	        finally
+	        {
+		        _statusStrip.ResumeLayout();
+            }
         }
 
         public void PrintXml(bool commitChanges = true)
@@ -487,6 +591,9 @@ namespace Utils.WinForm.Notepad
             FCTB.ClearStylesBuffer();
             FCTB.Range.ClearStyle(StyleIndex.All);
             Language = language;
+
+            ChageStyleIfLargeLine();
+
             if (ColoredOnlyVisible)
                 FCTB.OnSyntaxHighlight(new TextChangedEventArgs(FCTB.VisibleRange));
             else

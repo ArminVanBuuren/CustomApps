@@ -19,17 +19,21 @@ namespace Tester
         string lang = "CSharp (custom highlighter)";
 
         //styles
-        TextStyle BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        TextStyle BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        TextStyle GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        TextStyle MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
-        TextStyle GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        TextStyle BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
-        TextStyle MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
+        public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
+        public readonly Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
+        public readonly Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
+        public readonly Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
+        public readonly Style MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
+        public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
         MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
         public PowerfulSample()
         {
+	        InitXML();
             InitializeComponent();
         }
 
@@ -51,50 +55,69 @@ namespace Tester
                     break;//for highlighting of other languages, we using built-in FastColoredTextBox highlighter
             }
 
-            if (fctb.Text.Trim().StartsWith("<?xml"))
-            {
-                fctb.Language = Language.XML;
+            //if (fctb.Text.Trim().StartsWith("<?xml"))
+            //{
+            //    fctb.Language = Language.XML;
 
-                fctb.ClearStylesBuffer();
-                fctb.Range.ClearStyle(StyleIndex.All);
-                InitStylesPriority();
-                fctb.AutoIndentNeeded -= fctb_AutoIndentNeeded;
+            //    fctb.ClearStylesBuffer();
+            //    fctb.Range.ClearStyle(StyleIndex.All);
+            //    InitStylesPriority();
+            //    fctb.AutoIndentNeeded -= fctb_AutoIndentNeeded;
 
-                fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
-            }
-        }   
+            //    fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
+            //}
+        }
+
+        protected Regex XMLCommentRegex, XMLTagRegex, XMLAttrRegex, XMLAttrValRegex;
+
+        protected void InitXML()
+        {
+	        XMLCommentRegex = new Regex(@"<!--.*?-->|<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexOptions.Singleline | RegexOptions.Compiled);
+	        XMLTagRegex = new Regex(@"(?<range><[!\w:]+)|(?<range></[\w:]+>)|<\?|<|/>|</|>|\?>", RegexOptions.Compiled);
+	        XMLAttrRegex = new Regex(@"(?<range>\w+\=)", RegexOptions.Compiled);
+	        XMLAttrValRegex = new Regex(@"\=\""(?<range>.+?)\""", RegexOptions.Compiled);
+
+	        XmlTagStyle = MaroonStyle;
+	        XmlAttributeStyle = RedStyle;
+	        XmlAttributeValueStyle = BlueStyle;
+	        XMLCommentStyle = BlackStyle;
+        }
+
+        /// <summary>
+        /// XML attribute style
+        /// </summary>
+        public Style XmlAttributeStyle { get; set; }
+
+        /// <summary>
+        /// XML attribute value style
+        /// </summary>
+        public Style XmlAttributeValueStyle { get; set; }
+
+        /// <summary>
+        /// XML tag name style
+        /// </summary>
+        public Style XmlTagStyle { get; set; }
+
+        /// <summary>
+        /// XML CData style
+        /// </summary>
+        public Style XMLCommentStyle { get; set; }
 
         private void CSharpSyntaxHighlight(TextChangedEventArgs e)
         {
-            fctb.LeftBracket = '(';
-            fctb.RightBracket = ')';
-            fctb.LeftBracket2 = '\x0';
-            fctb.RightBracket2 = '\x0';
-            //clear style of changed range
-            e.ChangedRange.ClearStyle(BlueStyle, BoldStyle, GrayStyle, MagentaStyle, GreenStyle, BrownStyle);
+            //fctb.LeftBracket = '<';
+            //fctb.RightBracket = '>';
+            //fctb.LeftBracket2 = '(';
+            //fctb.RightBracket2 = ')';
 
-            //string highlighting
-            e.ChangedRange.SetStyle(BrownStyle, @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'");
-            //comment highlighting
-            e.ChangedRange.SetStyle(GreenStyle, @"//.*$", RegexOptions.Multiline);
-            e.ChangedRange.SetStyle(GreenStyle, @"(/\*.*?\*/)|(/\*.*)", RegexOptions.Singleline);
-            e.ChangedRange.SetStyle(GreenStyle, @"(/\*.*?\*/)|(.*\*/)", RegexOptions.Singleline|RegexOptions.RightToLeft);
-            //number highlighting
-            e.ChangedRange.SetStyle(MagentaStyle, @"\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b");
-            //attribute highlighting
-            e.ChangedRange.SetStyle(GrayStyle, @"^\s*(?<range>\[.+?\])\s*$", RegexOptions.Multiline);
-            //class name highlighting
-            e.ChangedRange.SetStyle(BoldStyle, @"\b(class|struct|enum|interface)\s+(?<range>\w+?)\b");
-            //keyword highlighting
-            e.ChangedRange.SetStyle(BlueStyle, @"\b(abstract|as|base|bool|break|byte|case|catch|char|checked|class|const|continue|decimal|default|delegate|do|double|else|enum|event|explicit|extern|false|finally|fixed|float|for|foreach|goto|if|implicit|in|int|interface|internal|is|lock|long|namespace|new|null|object|operator|out|override|params|private|protected|public|readonly|ref|return|sbyte|sealed|short|sizeof|stackalloc|static|string|struct|switch|this|throw|true|try|typeof|uint|ulong|unchecked|unsafe|ushort|using|virtual|void|volatile|while|add|alias|ascending|descending|dynamic|from|get|global|group|into|join|let|orderby|partial|remove|select|set|value|var|where|yield)\b|#region\b|#endregion\b");
+            e.ChangedRange.ClearStyle(XmlAttributeStyle, XmlAttributeValueStyle, XMLCommentStyle, XmlTagStyle);
 
-            //clear folding markers
+            e.ChangedRange.SetStyle(XMLCommentStyle, XMLCommentRegex);
+            e.ChangedRange.SetStyle(XmlAttributeStyle, XMLAttrRegex);
+            e.ChangedRange.SetStyle(XmlAttributeValueStyle, XMLAttrValRegex);
+            e.ChangedRange.SetStyle(XmlTagStyle, XMLTagRegex);
+
             e.ChangedRange.ClearFoldingMarkers();
-
-            //set folding markers
-            e.ChangedRange.SetFoldingMarkers("{", "}");//allow to collapse brackets block
-            e.ChangedRange.SetFoldingMarkers(@"#region\b", @"#endregion\b");//allow to collapse #region blocks
-            e.ChangedRange.SetFoldingMarkers(@"/\*", @"\*/");//allow to collapse comment block
         }
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
