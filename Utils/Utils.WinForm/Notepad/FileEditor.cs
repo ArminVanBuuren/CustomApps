@@ -164,6 +164,7 @@ namespace Utils.WinForm.Notepad
         protected override void TextChangedChanged(Editor editor, TextChangedEventArgs args)
         {
             FileChanged?.Invoke(this, new FileEditorEventArgs(this, WatcherChangeTypes.Changed));
+            base.TextChangedChanged(this, args);
         }
 
         public void SaveDocument(string newFileDestination = null)

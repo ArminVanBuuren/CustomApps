@@ -109,7 +109,7 @@ namespace Utils.WinForm.Notepad
             {
                 try
                 {
-	                //FCTB.Clear();
+	                FCTB.Clear();
 	                Source = value;
 	                ChageStyleIfLargeLine();
                 }
@@ -135,7 +135,6 @@ namespace Utils.WinForm.Notepad
 			        return;
 
 		        _wordWrapping.Checked = FCTB.WordWrap = value;
-		        ChageStyleIfLargeLine();
 		        WordWrapStateChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -438,12 +437,10 @@ namespace Utils.WinForm.Notepad
 
         bool IsLanguageSatisfied(string input)
         {
-	        if (FCTB.WordWrap && input.Split('\n').Any(x => x.Length > 3000))
+	        if (input.Split('\n').Any(x => x.Length > 1200))
 	        {
 		        if (FCTB.Language != Language.Custom)
-		        {
 			        FCTB.Language = Language.Custom;
-		        }
 	        }
 	        else if (FCTB.Language != Language)
 	        {
@@ -458,11 +455,13 @@ namespace Utils.WinForm.Notepad
         }
         private void FCTB_TextChanged(object sender, TextChangedEventArgs e)
         {
-	        if (!FCTB.Text.IsNullOrEmpty() && (Language == Language.XML || Language == Language.HTML) && !IsLanguageSatisfied(FCTB.Text))
+	        if (!FCTB.Text.IsNullOrEmpty() 
+	            && (Language == Language.XML || Language == Language.HTML) 
+	            && !IsLanguageSatisfied(FCTB.Text) 
+	            && !FCTB.Text.Split('\n').Any(x => x.Length > 13000))
 		        XmlLiteSyntaxHighlight(e);
 
-	        TextChangedChanged(this, e); 
-	        TextChanged?.Invoke(this, e);
+	        TextChangedChanged(this, e);
         }
 
         private void XmlLiteSyntaxHighlight(TextChangedEventArgs e)
@@ -639,7 +638,7 @@ namespace Utils.WinForm.Notepad
 
         protected virtual void TextChangedChanged(Editor editor, TextChangedEventArgs args)
         {
-
+	        TextChanged?.Invoke(this, args);
         }
 
         public void DoSelectionVisible()
