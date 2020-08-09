@@ -34,6 +34,8 @@ namespace LogsReader.Reader
 
 		public bool IsCompleted { get; private set; } = false;
 
+		public bool HasOutOfMemoryException { get; private set; } = false;
+
 		public LogsReaderPerformerScheme(
 			LRSettingsScheme settings,
 			string findMessage,
@@ -85,7 +87,7 @@ namespace LogsReader.Reader
 			{
 				foreach (var traceReaders in TraceReadersOrdered)
 				{
-					if (IsStopPending)
+					if (IsStopPending || HasOutOfMemoryException)
 						break;
 
 					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
@@ -114,8 +116,15 @@ namespace LogsReader.Reader
 			finally
 			{
 				TraceReadersOrdered.Clear();
+
+				if (HasOutOfMemoryException)
+					ClearInternal();
+
 				STREAM.GarbageCollect();
 				IsCompleted = true;
+
+				if (HasOutOfMemoryException)
+					throw new OutOfMemoryException("Too large items found.");
 			}
 		}
 
@@ -133,9 +142,9 @@ namespace LogsReader.Reader
 			{
 				traceReader.ThreadId = Thread.CurrentThread.ManagedThreadId.ToString();
 
-				if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
+				if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
 				{
-					traceReader.Status = TraceReaderStatus.Aborted;
+					traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
 					return;
 				}
 
@@ -150,9 +159,9 @@ namespace LogsReader.Reader
 				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
 				using (var inputStream = new FileStream(traceReader.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				{
-					if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
+					if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
 					{
-						traceReader.Status = TraceReaderStatus.Aborted;
+						traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
 						return;
 					}
 
@@ -164,13 +173,13 @@ namespace LogsReader.Reader
 						string line;
 						while ((line = streamReader.ReadLine()) != null)
 						{
-							if(traceReader.Status == TraceReaderStatus.OnPause)
-								while (traceReader.Status == TraceReaderStatus.OnPause && !IsStopPending)
+							if (traceReader.Status == TraceReaderStatus.OnPause)
+								while (traceReader.Status == TraceReaderStatus.OnPause && !IsStopPending && !HasOutOfMemoryException)
 									Thread.Sleep(50);
 
-							if (IsStopPending || traceReader.Status == TraceReaderStatus.Aborted)
+							if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
 							{
-								traceReader.Status = TraceReaderStatus.Aborted;
+								traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
 								return;
 							}
 
@@ -180,6 +189,11 @@ namespace LogsReader.Reader
 				}
 
 				traceReader.Status = TraceReaderStatus.Finished;
+			}
+			catch (OutOfMemoryException ex)
+			{
+				traceReader.Status = TraceReaderStatus.Failed;
+				HasOutOfMemoryException = true;
 			}
 			catch (Exception)
 			{
@@ -243,29 +257,39 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public override void Stop()
+		public override void Clear()
 		{
-			base.Stop();
-			if (_multiTaskingHandlerList.Count > 0)
-				foreach (var tasks in _multiTaskingHandlerList)
-					tasks.Stop();
+			ClearInternal();
+			HasOutOfMemoryException = false;
+		}
+
+		public void ClearInternal()
+		{
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values)
+					reader.Clear();
+			_result?.Clear();
+			ClearPreviousProcess();
 		}
 
 		public override void Reset()
 		{
 			Stop();
-			_result.Clear();
+			_result?.Clear();
 			ResultsOfError = null;
 			base.Reset();
 		}
 
+		public override void Stop()
+		{
+			base.Stop();
+			if (_multiTaskingHandlerList != null)
+				foreach (var tasks in _multiTaskingHandlerList)
+					tasks.Stop();
+		}
+
 		public override void Dispose()
 		{
-			if (TraceReaders != null)
-				foreach (var reader in TraceReaders.Values)
-					reader.Dispose();
-
-			Reset();
 			base.Dispose();
 		}
 	}

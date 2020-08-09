@@ -46,7 +46,10 @@ namespace XPathTester
                 xpathResultDataGrid.SelectionChanged += XpathResultDataGrid_SelectionChanged;
                 xpathResultDataGrid.CellFormatting += (sender, e) =>
                 {
-	                var row = ((DataGridView)sender).Rows[e.RowIndex];
+	                if (e.RowIndex < 0 || e.ColumnIndex < 0)
+		                return;
+
+                    var row = ((DataGridView)sender).Rows[e.RowIndex];
                     row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
                 };
 

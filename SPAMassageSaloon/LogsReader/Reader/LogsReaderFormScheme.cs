@@ -341,7 +341,7 @@ namespace LogsReader.Reader
 		            if (IsWorking)
 			            IsWorking = false;
 
-					ReportStatus(ex.Message, ReportStatusType.Error);
+					ReportStatus($"{ex.GetType().Name}: {ex.Message}", ReportStatusType.Error);
 	            }
 	            finally
 	            {

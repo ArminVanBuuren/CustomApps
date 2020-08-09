@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
+using LogsReader.Reader.Forms;
 using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
@@ -59,6 +60,13 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
+        private readonly Bitmap imgWaiting = Resources.waiting;
+        private readonly Bitmap imgProcessing = Resources.processing;
+        private readonly Bitmap imgOnPause = Resources.onPause;
+        private readonly Bitmap imgAborted = Resources.aborted;
+        private readonly Bitmap imgFailed = Resources.failed;
+        private readonly Bitmap imgFinished = Resources.finished;
+
         private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
         private string Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
         private string Txt_LogsReaderForm_DoesntMatchByPattern = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
@@ -82,13 +90,6 @@ namespace LogsReader.Reader
         protected static Image Img_Selected { get; private set; }
 
         protected static Image Img_Failed_Filtered { get; private set; }
-
-        private Bitmap waiting = Resources.waiting;
-        private Bitmap processing = Resources.processing;
-        private Bitmap onPause = Resources.onPause;
-        private Bitmap aborted = Resources.aborted;
-        private Bitmap failed = Resources.failed;
-        private Bitmap finished = Resources.finished;
 
 		/// <summary>
 		/// Юзерские настройки 
@@ -1069,20 +1070,6 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        // сохраняем предыдущую позицию в гриде
-				var minIndex = -1;
-		        var maxIndex = -1;
-		        var countVisible = -1;
-		        var firstVisibleIndex = -1;
-		        if (DgvData.SelectedRows.Count > 0)
-		        {
-			        var selCol = DgvData.SelectedRows.OfType<DataGridViewRow>();
-			        minIndex = selCol.First().Index;
-			        maxIndex = selCol.Last().Index;
-			        countVisible = DgvData.DisplayedRowCount(false);
-			        firstVisibleIndex = DgvData.FirstDisplayedScrollingRowIndex;
-		        }
-
 		        if (DgvData.DataSource != null || DgvData.RowCount > 0)
 		        {
 			        DgvData.DataSource = null;
@@ -1109,26 +1096,8 @@ namespace LogsReader.Reader
 			        }
 		        }
 
-                var isSelected = await AssignCurrentDgvResult(isNewData);
-
-                // возвращаем позицию в гриде
-				if (DgvData.RowCount > 0 && (minIndex > -1 || maxIndex > -1) && !isSelected)
-		        {
-			        if (DgvData.RowCount > maxIndex && maxIndex > -1)
-					{
-						EnsureVisibleRow(DgvData, maxIndex, firstVisibleIndex, countVisible);
-					}
-					else if (DgvData.RowCount > minIndex && minIndex > -1)
-					{
-						EnsureVisibleRow(DgvData, minIndex, firstVisibleIndex, countVisible);
-					}
-					else
-					{
-						EnsureVisibleRow(DgvData, DgvData.RowCount - 1, firstVisibleIndex, countVisible);
-					}
-				}
-
-		        return true;
+                await AssignCurrentDgvResult(isNewData);
+                return true;
             }
 	        catch (Exception ex)
 	        {
@@ -1218,9 +1187,7 @@ namespace LogsReader.Reader
 	        {
 		        if (IsWorking)
 			        Focus();
-		        else
-			        DgvData.Focus();
-            }
+	        }
         }
 
         private void DataGridViewOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1272,16 +1239,23 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
 		/// </summary>
-		protected static void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+		protected void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
 		{
 			if (dgv == null || dgv.RowCount == 0)
 				return;
 
-			var countVisible = dgv.DisplayedRowCount(false);
-			var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
+			try
+			{
+				var countVisible = dgv.DisplayedRowCount(false);
+				var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
-			foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
-				refreshRow(row, countVisible, firstVisibleRowIndex);
+				foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
+					refreshRow(row, countVisible, firstVisibleRowIndex);
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex.Message, ReportStatusType.Error);
+			}
 		}
 
 		protected void DgvDataRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
@@ -1420,7 +1394,7 @@ namespace LogsReader.Reader
 			        switch (reader.Status)
 			        {
 				        case TraceReaderStatus.Waiting:
-					        cellImage.Image = waiting;
+					        cellImage.Image = imgWaiting;
 					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
 						        row.DefaultCellStyle.BackColor = Color.LightGray;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusWaiting)
@@ -1428,7 +1402,7 @@ namespace LogsReader.Reader
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.Processing:
-					        cellImage.Image = processing;
+					        cellImage.Image = imgProcessing;
 					        if (row.DefaultCellStyle.BackColor != Color.White)
 						        row.DefaultCellStyle.BackColor = Color.White;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusProcessing)
@@ -1436,7 +1410,7 @@ namespace LogsReader.Reader
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.OnPause:
-					        cellImage.Image = onPause;
+					        cellImage.Image = imgOnPause;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusOnPause)
@@ -1444,7 +1418,7 @@ namespace LogsReader.Reader
 					        AllowedResume();
 					        break;
 				        case TraceReaderStatus.Aborted:
-					        cellImage.Image = aborted;
+					        cellImage.Image = imgAborted;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusAborted)
@@ -1452,7 +1426,7 @@ namespace LogsReader.Reader
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Failed:
-					        cellImage.Image = failed;
+					        cellImage.Image = imgFailed;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFailed)
@@ -1460,7 +1434,7 @@ namespace LogsReader.Reader
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Finished:
-					        cellImage.Image = finished;
+					        cellImage.Image = imgFinished;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
 					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFinished)
@@ -1685,65 +1659,118 @@ namespace LogsReader.Reader
 
         async Task<bool> AssignCurrentDgvResult(bool isNewData)
 		{
-			var selectedSchemeName = string.Empty;
-			var selectedPrivateID = -1;
-			var selectedRangeToFirstVisible = -1;
-			if (!isNewData && DgvData.SelectedRows.Count > 0 && int.TryParse(DgvData.SelectedRows[0].Cells[DgvDataPrivateIDColumn.Name].Value?.ToString(), out var privateID2))
+			try
 			{
-				selectedSchemeName = DgvData.SelectedRows[0].Cells[DgvDataSchemeNameColumn.Name].Value?.ToString();
-				selectedPrivateID = privateID2;
-				selectedRangeToFirstVisible = DgvData.SelectedRows[0].Index - DgvData.FirstDisplayedScrollingRowIndex;
+				DgvData.CellFormatting -= DataGridViewOnCellFormatting;
+				DgvData.SuspendLayout();
+
+				//// сохраняем предыдущую позицию в гриде
+				//var minIndex = -1;
+				//var maxIndex = -1;
+				//var countVisible = -1;
+				//var firstVisibleIndex = -1;
+				//if (DgvData.SelectedRows.Count > 0)
+				//{
+				//	var selCol = DgvData.SelectedRows.OfType<DataGridViewRow>();
+				//	minIndex = selCol.First().Index;
+				//	maxIndex = selCol.Last().Index;
+				//	countVisible = DgvData.DisplayedRowCount(false);
+				//	firstVisibleIndex = DgvData.FirstDisplayedScrollingRowIndex;
+				//}
+
+				var selectedSchemeName = string.Empty;
+				var selectedPrivateID = -1;
+				var selectedRangeToFirstVisible = -1;
+				if (!isNewData && DgvData.SelectedRows.Count > 0 && int.TryParse(DgvData.SelectedRows[0].Cells[DgvDataPrivateIDColumn.Name].Value?.ToString(), out var privateID2))
+				{
+					selectedSchemeName = DgvData.SelectedRows[0].Cells[DgvDataSchemeNameColumn.Name].Value?.ToString();
+					selectedPrivateID = privateID2;
+					selectedRangeToFirstVisible = DgvData.SelectedRows[0].Index - DgvData.FirstDisplayedScrollingRowIndex;
+				}
+
+				ClearErrorStatus();
+
+				//var testList = new List<DataTemplate>();
+				//var succ = false;
+				//foreach (var tmp in _currentDGVResult)
+				//{
+				//	if (tmp.IsSuccess && !succ)
+				//		continue;
+				//	succ = true;
+				//	testList.Add(tmp);
+				//}
+
+
+				//DgvData.ClearSelection();
+				await DgvData.AssignCollectionAsync(_currentDGVResult, null); // SuspendLayout и ResumeLayout не юзать!
+				//DgvData.ClearSelection();
+
+				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
+				buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
+
+				if (selectedPrivateID > -1 && !selectedSchemeName.IsNullOrWhiteSpace())
+				{
+					// возвращяем к предыдущей выбранной строке (происходит при фильтре и сортировке)
+					// если новые данные (нового поиска) то не возвращает
+					foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
+					{
+						if (!Equals(row.Cells[DgvDataPrivateIDColumn.Name].Value, selectedPrivateID) ||
+							!Equals(row.Cells[DgvDataSchemeNameColumn.Name].Value, selectedSchemeName))
+							continue;
+
+						var firstVisible = row.Index - selectedRangeToFirstVisible;
+						if (firstVisible > -1 && DgvData.RowCount > firstVisible)
+							DgvData.FirstDisplayedScrollingRowIndex = firstVisible;
+						SelectRow(row);
+						return true;
+					}
+				}
+
+				//// возвращаем позицию в гриде
+				//if (DgvData.RowCount > 0 && (minIndex > -1 || maxIndex > -1) && !isSelected)
+				//{
+				// if (DgvData.RowCount > maxIndex && maxIndex > -1)
+				// {
+				//  EnsureVisibleRow(DgvData, maxIndex, firstVisibleIndex, countVisible);
+				// }
+				// else if (DgvData.RowCount > minIndex && minIndex > -1)
+				// {
+				//  EnsureVisibleRow(DgvData, minIndex, firstVisibleIndex, countVisible);
+				// }
+				// else
+				// {
+				//  EnsureVisibleRow(DgvData, DgvData.RowCount - 1, firstVisibleIndex, countVisible);
+				// }
+				//}
+
+				//if (DgvData.SelectedRows.Count > 0 || DgvData.SelectedCells.Count > 0 || DgvData.SelectedColumns.Count > 0)
+				//{
+				//	var countVisible = DgvData.DisplayedRowCount(false);
+				//	if (countVisible > 0 && DgvData.RowCount > countVisible / 2)
+				//		SelectRow(DgvData.Rows[countVisible / 2]);
+				//}
+
+
+				return false;
 			}
+			finally
+			{
+				if (DgvDataAfterAssign == RefreshDataType.AllRows)
+					RefreshAllRows(DgvData, DgvDataRefreshRow);
+				else
+					RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 
-			ClearErrorStatus();
-
-			//var testList = new List<DataTemplate>();
-			//var succ = false;
-			//foreach (var tmp in _currentDGVResult)
-			//{
-			//	if (tmp.IsSuccess && !succ)
-			//		continue;
-			//	succ = true;
-			//	testList.Add(tmp);
-			//}
-
-			await DgvData.AssignCollectionAsync(_currentDGVResult, null); // SuspendLayout и ResumeLayout не юзать!
-
-			if (DgvDataAfterAssign == RefreshDataType.AllRows)
-				RefreshAllRows(DgvData, DgvDataRefreshRow);
-			else
-				RefreshVisibleRows(DgvData, DgvDataRefreshRow);
-			DgvData.ResumeLayout();
-
-			DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
-			buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
-
-	        if (selectedPrivateID > -1 && !selectedSchemeName.IsNullOrWhiteSpace())
-	        {
-				// возвращяем к предыдущей выбранной строке (происходит при фильтре и сортировке)
-				// если новые данные (нового поиска) то не возвращает
-		        foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
-		        {
-			        if (!Equals(row.Cells[DgvDataPrivateIDColumn.Name].Value, selectedPrivateID) ||
-			            !Equals(row.Cells[DgvDataSchemeNameColumn.Name].Value, selectedSchemeName)) 
-				        continue;
-
-			        var firstVisible = row.Index - selectedRangeToFirstVisible;
-			        if (firstVisible > -1 && DgvData.RowCount > firstVisible)
-				        DgvData.FirstDisplayedScrollingRowIndex = firstVisible;
-			        SelectRow(row);
-			        return true;
-		        }
-	        }
-
-	        return false;
+				DgvData.Focus();
+				DgvData.CellFormatting += DataGridViewOnCellFormatting;
+				DgvData.ResumeLayout();
+			}
 		}
 
         private void DgvData_SelectionChanged(object sender, EventArgs e)
         {
 	        try
 	        {
-		        if (DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
+		        if (DgvData.IsSuspendLayout || DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 			        return;
 
 		        MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
@@ -2083,9 +2110,23 @@ namespace LogsReader.Reader
 
         }
 
-		private void buttonSelectTraceNames_Click(object sender, EventArgs e)
-		{
+        private async void buttonSelectTraceNames_Click(object sender, EventArgs e)
+        {
+	        if (_currentDGVResult == null || !_currentDGVResult.Any())
+		        return;
 
-		}
+	        var filtered = _currentDGVResult
+		        .GroupBy(x => x.TraceName, StringComparer.CurrentCultureIgnoreCase)
+		        .Select(x => new TraceNameFilter(x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
+		        .OrderBy(x => x.TraceName);
+
+	        var result = (await TraceNameFilterForm.Get(filtered)).ShowDialog();
+
+			if(result == DialogResult.OK)
+			{
+
+			}
+
+        }
 	}
 }

@@ -357,18 +357,22 @@ namespace SPAMassageSaloon
                 {
 	                try
 	                {
-                        if(IsMinimized)
-                            continue;
+		                if (IsMinimized)
+			                continue;
 
 		                double percent = 0;
 		                if (appCPU != null)
 			                double.TryParse(appCPU.NextValue().ToString(), out percent);
-		                var cpuUsage = $"{(int)(percent / Environment.ProcessorCount),3}%";
+		                var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
 		                var currentProcess = Process.GetCurrentProcess();
 		                var threadsUsage = $"{currentProcess.Threads.Count,-2}";
 		                var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
 
-                        this.SafeInvoke(() => Monitoring(cpuUsage, threadsUsage, ramUsage));
+		                this.SafeInvoke(() => Monitoring(cpuUsage, threadsUsage, ramUsage));
+	                }
+	                catch (OutOfMemoryException)
+	                {
+                        Thread.Sleep(10000); // wait 10 sec
 	                }
 	                catch (InvalidOperationException)
 	                {

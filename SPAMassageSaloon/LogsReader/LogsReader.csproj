@@ -85,6 +85,12 @@
     <Compile Include="Reader\CustomTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reader\Forms\TraceNameFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\TraceNameFilterForm.Designer.cs">
+      <DependentUpon>TraceNameFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reader\Forms\AddFolder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,7 @@
     <Compile Include="Reader\TraceItemView.Designer.cs">
       <DependentUpon>TraceItemView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reader\TraceNameFilter.cs" />
     <Compile Include="Reader\TraceReader.cs" />
     <Compile Include="Reader\LogsReaderPerformerScheme.cs" />
     <Compile Include="Reader\LogsReaderFormScheme.cs">
@@ -165,6 +172,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\TraceNameFilterForm.resx">
+      <DependentUpon>TraceNameFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\Forms\AddFolder.resx">
       <DependentUpon>AddFolder.cs</DependentUpon>

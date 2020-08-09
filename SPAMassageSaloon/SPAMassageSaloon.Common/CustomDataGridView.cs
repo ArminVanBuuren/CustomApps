@@ -4,7 +4,9 @@ namespace SPAMassageSaloon.Common
 {
     public sealed class CustomDataGridView : DataGridView
     {
-	    public CustomDataGridView()
+        public bool IsSuspendLayout { get; private set; }
+
+        public CustomDataGridView()
 	    {
 		    DoubleBuffered = true;
         }
@@ -26,6 +28,18 @@ namespace SPAMassageSaloon.Common
                     base.OnKeyDown(e);
                     break;
             }
+        }
+
+        public new void SuspendLayout()
+        {
+            base.SuspendLayout();
+            IsSuspendLayout = true;
+        }
+
+        public new void ResumeLayout()
+        {
+            base.ResumeLayout();
+            IsSuspendLayout = false;
         }
     }
 }
