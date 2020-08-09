@@ -349,9 +349,5 @@ namespace LogsReader
 		        // ignored
 	        }
         }
-
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
-        public const int WM_SETREDRAW = 0xB;
-	}
+    }
 }

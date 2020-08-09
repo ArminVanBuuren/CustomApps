@@ -46,10 +46,15 @@ namespace LogsReader.Reader.Forms
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
-				if (args.KeyCode == Keys.Enter && buttonOK.Enabled)
-					buttonOK_Click(this, EventArgs.Empty);
-				else if (args.KeyCode == Keys.Escape)
-					Close();
+				switch (args.KeyCode)
+				{
+					case Keys.Enter when buttonOK.Enabled:
+						buttonOK_Click(this, EventArgs.Empty);
+						break;
+					case Keys.Escape:
+						Close();
+						break;
+				}
 			};
 		}
 

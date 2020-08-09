@@ -458,7 +458,7 @@ namespace SPAMassageSaloon
 
 	        try
 	        {
-		        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+		        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 0, 0);
 
 		        form = formMaker.Invoke();
 		        if (form == null)
@@ -482,7 +482,7 @@ namespace SPAMassageSaloon
 	        }
 	        finally
 	        {
-		        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+		        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 1, 0);
                 this.Refresh();
                 this.Focus();
                 this.Activate();
@@ -532,7 +532,7 @@ namespace SPAMassageSaloon
                 {
 	                try
 	                {
-		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 0, 0);
 		                var mdiButton = (MDIManagerButton) o;
 		                mdiButton.mdiForm.Activate();
 	                }
@@ -542,7 +542,7 @@ namespace SPAMassageSaloon
 	                }
 	                finally
 	                {
-		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 1, 0);
 		                mainForm.Refresh();
                     }
                 };
@@ -550,7 +550,7 @@ namespace SPAMassageSaloon
                 {
 	                try
 	                {
-		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 0, 0);
 		                var mdiButton = (MDIManagerButton)o;
 		                mdiButton.mdiForm.Close();
 	                }
@@ -560,7 +560,7 @@ namespace SPAMassageSaloon
 	                }
 	                finally
 	                {
-		                LogsReaderMainForm.SendMessage(mainForm.Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 1, 0);
 		                mainForm.Refresh();
 		                mainForm.Activate();
 	                }

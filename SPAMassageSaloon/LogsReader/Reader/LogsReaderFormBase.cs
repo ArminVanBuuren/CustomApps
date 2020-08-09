@@ -740,7 +740,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true); // SuspendLayout и ResumeLayout не юзать!
+				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
 				//DgvReader.Sort(DgvReaderThreadIdColumn, ListSortDirection.Descending);
@@ -1299,7 +1299,7 @@ namespace LogsReader.Reader
 		                return;
 
 	                var isfiltered = false;
-	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell)
+	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell && isfilteredCell?.Value != null)
 		                isfiltered = bool.Parse(isfilteredCell.Value.ToString());
 
 	                if (!template.IsSuccess)
@@ -1373,7 +1373,7 @@ namespace LogsReader.Reader
 					        cellPauseResume.Enabled = false;
 			        }
 
-			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != TxtReader_BtnPause)
+			        if (cellPauseResume.Value == null || cellPauseResume.Value?.ToString() != TxtReader_BtnPause)
 				        cellPauseResume.Value = TxtReader_BtnPause;
 		        }
 
@@ -1384,7 +1384,7 @@ namespace LogsReader.Reader
 
 			        if (!cellPauseResume.Enabled)
 				        cellPauseResume.Enabled = true;
-			        if (cellPauseResume.Value == null || cellPauseResume.Value.ToString() != TxtReader_BtnResume)
+			        if (cellPauseResume.Value == null || cellPauseResume.Value?.ToString() != TxtReader_BtnResume)
 				        cellPauseResume.Value = TxtReader_BtnResume;
 		        }
 
@@ -1397,7 +1397,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgWaiting;
 					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
 						        row.DefaultCellStyle.BackColor = Color.LightGray;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusWaiting)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusWaiting)
 						        cellImage.Value = TxtReader_StatusWaiting;
 					        CanPause(true);
 					        break;
@@ -1405,7 +1405,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgProcessing;
 					        if (row.DefaultCellStyle.BackColor != Color.White)
 						        row.DefaultCellStyle.BackColor = Color.White;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusProcessing)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusProcessing)
 						        cellImage.Value = TxtReader_StatusProcessing;
 					        CanPause(true);
 					        break;
@@ -1413,7 +1413,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgOnPause;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusOnPause)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusOnPause)
 						        cellImage.Value = TxtReader_StatusOnPause;
 					        AllowedResume();
 					        break;
@@ -1421,7 +1421,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgAborted;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusAborted)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusAborted)
 						        cellImage.Value = TxtReader_StatusAborted;
 					        CanPause(false);
 					        break;
@@ -1429,7 +1429,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgFailed;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFailed)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusFailed)
 						        cellImage.Value = TxtReader_StatusFailed;
 					        CanPause(false);
 					        break;
@@ -1437,7 +1437,7 @@ namespace LogsReader.Reader
 					        cellImage.Image = imgFinished;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
-					        if (cellImage.Value == null || cellImage.Value.ToString() != TxtReader_StatusFinished)
+					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusFinished)
 						        cellImage.Value = TxtReader_StatusFinished;
 					        CanPause(false);
 					        break;
@@ -1446,7 +1446,7 @@ namespace LogsReader.Reader
 
 		        if (row.Cells[DgvReaderAbortColumn.Name] is DgvDisableButtonCell cellAbort)
 		        {
-			        if (cellAbort.Value == null || cellAbort.Value.ToString() != TxtReader_BtnAbort)
+			        if (cellAbort.Value == null || cellAbort.Value?.ToString() != TxtReader_BtnAbort)
 				        cellAbort.Value = TxtReader_BtnAbort;
 
 			        if (cellAbort.Enabled &&
@@ -1458,15 +1458,15 @@ namespace LogsReader.Reader
 		        }
 
 		        var cellThreadId = row.Cells[DgvReaderThreadIdColumn.Name];
-		        if (cellThreadId.Value == null || cellThreadId.Value.ToString() != reader.ThreadId)
+		        if (cellThreadId.Value == null || cellThreadId.Value?.ToString() != reader.ThreadId)
 			        cellThreadId.Value = reader.ThreadId;
 
 		        var cellMatches = row.Cells[DgvReaderCountMatchesColumn.Name];
-				if(cellMatches.Value == null || cellMatches.Value.ToString() != reader.CountMatches.ToString())
+				if(cellMatches.Value == null || cellMatches.Value?.ToString() != reader.CountMatches.ToString())
 					cellMatches.Value = reader.CountMatches;
 
 				var cellErrors = row.Cells[DgvReaderCountErrorMatchesColumn.Name];
-				if (cellErrors.Value == null || cellErrors.Value.ToString() != reader.CountErrors.ToString())
+				if (cellErrors.Value == null || cellErrors.Value?.ToString() != reader.CountErrors.ToString())
 					cellErrors.Value = reader.CountErrors;
 	        }
 	        catch (Exception ex)
@@ -1702,7 +1702,7 @@ namespace LogsReader.Reader
 
 
 				//DgvData.ClearSelection();
-				await DgvData.AssignCollectionAsync(_currentDGVResult, null); // SuspendLayout и ResumeLayout не юзать!
+				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
 				//DgvData.ClearSelection();
 
 				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
@@ -2072,7 +2072,7 @@ namespace LogsReader.Reader
 	        try
 	        {
 				if(sender != null)
-					LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 0, 0);
+					Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 0, 0);
 
 		        shownProcessReadesPanel = !shownProcessReadesPanel;
 
@@ -2099,7 +2099,7 @@ namespace LogsReader.Reader
 	        {
 		        if (sender != null)
 		        {
-			        LogsReaderMainForm.SendMessage(Handle, LogsReaderMainForm.WM_SETREDRAW, 1, 0);
+			        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 1, 0);
 			        this.Refresh();
 		        }
 	        }
@@ -2115,18 +2115,23 @@ namespace LogsReader.Reader
 	        if (_currentDGVResult == null || !_currentDGVResult.Any())
 		        return;
 
-	        var filtered = _currentDGVResult
-		        .GroupBy(x => x.TraceName, StringComparer.CurrentCultureIgnoreCase)
-		        .Select(x => new TraceNameFilter(x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
-		        .OrderBy(x => x.TraceName);
+	        var alreadyAddedTraceNames = TbxTraceNameFilter.Text.Split(',')
+		        .Select(x => x.Trim())
+		        .GroupBy(x => x)
+		        .ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
 
-	        var result = (await TraceNameFilterForm.Get(filtered)).ShowDialog();
 
-			if(result == DialogResult.OK)
-			{
+			var filtered = _currentDGVResult
+		        .GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
+		        .Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
+		        .OrderBy(x => x.TraceName)
+		        .ToDictionary(x => x.TraceName);
 
-			}
+	        var form = await TraceNameFilterForm.Get(filtered);
+	        var result = form.ShowDialog();
 
+	        if (result == DialogResult.OK)
+		        TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName))?.Trim();
         }
 	}
 }

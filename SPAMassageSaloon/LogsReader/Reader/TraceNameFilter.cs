@@ -9,14 +9,18 @@ namespace LogsReader.Reader
 {
 	public class TraceNameFilter
 	{
-		public TraceNameFilter(string traceName, int countMatches, int countErrors)
+		public TraceNameFilter(bool @checked, string traceName, int countMatches, int countErrors)
 		{
+			Checked = @checked;
 			TraceName = traceName;
 			CountMatches = countMatches;
 			CountErrors = countErrors;
 		}
 
-		[DGVColumn(ColumnPosition.First, nameof(DataTemplate.Tmp.TraceName))]
+		//[DGVColumn(ColumnPosition.First, "Checked")]
+		public bool Checked { get; set; } = false;
+
+		[DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.TraceName))]
 		public string TraceName { get; }
 
 		/// <summary>

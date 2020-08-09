@@ -58,7 +58,7 @@ namespace LogsReader.Reader
 	        {
 		        CurrentTransactionsMarkingType = UserSettings.ShowTransactions ? DefaultTransactionsMarkingType : TransactionsMarkingType.None;
 
-		        DgvReaderSchemeNameColumn.Visible = true;
+				DgvReaderSchemeNameColumn.Visible = true;
 
 				#region Initialize Controls
 
