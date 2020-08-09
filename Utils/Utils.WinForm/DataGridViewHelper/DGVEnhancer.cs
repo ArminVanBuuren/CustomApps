@@ -80,6 +80,22 @@ namespace Utils.WinForm.DataGridViewHelper
 		        pi.SetValue(dgv, setting, null);
         }
 
+        public static void CheckCheckBoxColumn(this DataGridView dataGridView, DgvCheckBoxColumn checkBoxColumn)
+        {
+	        if (checkBoxColumn.Checked)
+	        {
+		        if (dataGridView.Rows.OfType<DataGridViewRow>()
+			        .Any(row => row.Cells[checkBoxColumn.Index] is DgvCheckBoxCell cellCheckBox && !cellCheckBox.Checked))
+			        checkBoxColumn.Checked = false;
+	        }
+	        else
+	        {
+		        if (dataGridView.Rows.OfType<DataGridViewRow>()
+			        .All(row => row.Cells[checkBoxColumn.Index] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked))
+			        checkBoxColumn.Checked = true;
+	        }
+        }
+
         public static async Task<DataTable> ToTableAsync<T>(this IEnumerable<T> data)
         {
             return await Task.Factory.StartNew(data.ToTable);

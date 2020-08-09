@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -10,8 +11,16 @@ namespace Utils.WinForm.DataGridViewHelper
 	{
 		private readonly DgvColumnCheckBoxHeaderCell datagridViewCheckBoxHeaderCell;
 
+		public sealed override DataGridViewCell CellTemplate
+		{
+			get => base.CellTemplate;
+			set => base.CellTemplate = value;
+		}
+
 		public DgvCheckBoxColumn()
 		{
+			CellTemplate = new DgvCheckBoxCell(); 
+
 			datagridViewCheckBoxHeaderCell = new DgvColumnCheckBoxHeaderCell();
 
 			HeaderCell = datagridViewCheckBoxHeaderCell;
@@ -39,7 +48,10 @@ namespace Utils.WinForm.DataGridViewHelper
 
 			foreach (DataGridViewRow row in DataGridView.Rows)
 				if (!row.Cells[columnIndex].ReadOnly)
-					row.Cells[columnIndex].Value = state;
+					if (row.Cells[columnIndex] is DgvCheckBoxCell dgvCbxCell)
+						dgvCbxCell.Checked = state;
+					else
+						row.Cells[columnIndex].Value = state;
 
 			DataGridView.RefreshEdit();
 		}
@@ -112,6 +124,88 @@ namespace Utils.WinForm.DataGridViewHelper
 			}
 
 			base.OnMouseClick(e);
+		}
+	}
+
+	public class DgvCheckBoxCell : DataGridViewCheckBoxCell
+	{
+		Point checkBoxLocation;
+		Size checkBoxSize;
+		Point _cellLocation = new Point();
+		CheckBoxState _cbState = CheckBoxState.UncheckedNormal;
+		
+		public event CheckBoxClickedHandler OnCheckBoxClicked;
+
+		public bool Checked
+		{
+			get => _cbState == CheckBoxState.CheckedNormal;
+			set
+			{
+				_cbState = value ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
+				DataGridView?.InvalidateCell(this);
+			}
+		}
+
+		protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
+			DataGridViewElementStates dataGridViewElementState, object value, object formattedValue, string errorText,
+			DataGridViewCellStyle cellStyle,
+			DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
+		{
+			base.Paint(graphics, clipBounds, cellBounds, rowIndex,
+				dataGridViewElementState, value,
+				formattedValue, errorText, cellStyle,
+				advancedBorderStyle, paintParts);
+
+			var p = new Point();
+			var s = CheckBoxRenderer.GetGlyphSize(graphics, CheckBoxState.UncheckedNormal);
+
+			p.X = Math.Max(0, (cellBounds.Location.X + cellBounds.Width / 2 - s.Width / 2) - 1);
+			p.Y = Math.Max(0, (cellBounds.Location.Y + cellBounds.Height / 2 - s.Height / 2) - 1);
+
+			_cellLocation = cellBounds.Location;
+			checkBoxLocation = p;
+			checkBoxSize = s;
+			CheckBoxRenderer.DrawCheckBox(graphics, checkBoxLocation, _cbState);
+		}
+
+		protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
+		{
+			var p = new Point(e.X + _cellLocation.X, e.Y + _cellLocation.Y);
+			if (p.X >= checkBoxLocation.X && p.X <=
+			                              checkBoxLocation.X + checkBoxSize.Width
+			                              && p.Y >= checkBoxLocation.Y && p.Y <=
+			                              checkBoxLocation.Y + checkBoxSize.Height)
+			{
+				Checked = !Checked;
+				if (OnCheckBoxClicked != null)
+				{
+					OnCheckBoxClicked(e.ColumnIndex, Checked);
+					DataGridView.InvalidateCell(this);
+				}
+
+				CheckColumn();
+			}
+
+			base.OnMouseClick(e);
+		}
+
+		void CheckColumn()
+		{
+			if(DataGridView == null || !(DataGridView.Columns[ColumnIndex] is DgvCheckBoxColumn column))
+				return;
+
+			DataGridView.CheckCheckBoxColumn(column);
+		}
+
+		public override object Clone()
+		{
+			if (base.Clone() is DgvCheckBoxCell c)
+			{
+				c.Checked = Checked;
+				return c;
+			}
+
+			return null;
 		}
 	}
 
