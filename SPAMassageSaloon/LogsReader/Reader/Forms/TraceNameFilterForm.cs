@@ -30,6 +30,8 @@ namespace LogsReader.Reader.Forms
 
 			//buttonOK.Enabled = !folderPath.IsNullOrWhiteSpace();
 
+			
+
 			CenterToScreen();
 
 			KeyPreview = true;
