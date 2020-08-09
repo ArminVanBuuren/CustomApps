@@ -1033,7 +1033,7 @@ namespace LogsReader.Reader
             }
             finally
             {
-	            SelectRow(selected, selectedCellIndex);
+	            DgvData.SelectRow(selected, selectedCellIndex);
             }
         }
 
@@ -1062,7 +1062,7 @@ namespace LogsReader.Reader
             }
             finally
             {
-	            SelectRow(selected, selectedCellIndex);
+	            DgvData.SelectRow(selected, selectedCellIndex);
 			}
         }
 
@@ -1107,18 +1107,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        void SelectRow(DataGridViewRow row, int cellIndex = -1)
-        {
-	        if (row == null)
-		        return;
-
-	        DgvData.ClearSelection();
-	        row.Selected = true;
-	        if (cellIndex > -1 && row.Cells[cellIndex].Visible)
-		        DgvData.CurrentCell = row.Cells[cellIndex];
-	        else
-		        DgvData.CurrentCell = row.Cells.OfType<DataGridViewCell>().FirstOrDefault(x => x.Visible);
-        }
+        
 
         static void EnsureVisibleRow(DataGridView view, int rowToShow, int firstVisible, int countVisible)
         {
@@ -1561,7 +1550,7 @@ namespace LogsReader.Reader
 				        ? firstVisible
 				        : row.Index;
 
-			        SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
+			        DgvData.SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
 			        return;
 		        }
 	        }
@@ -1603,7 +1592,7 @@ namespace LogsReader.Reader
 				        ? firstVisible
 				        : row.Index - countVisible >= 0 ? row.Index - countVisible : row.Index;
 
-					SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
+			        DgvData.SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
 					return;
 		        }
 	        }
@@ -1721,7 +1710,7 @@ namespace LogsReader.Reader
 						var firstVisible = row.Index - selectedRangeToFirstVisible;
 						if (firstVisible > -1 && DgvData.RowCount > firstVisible)
 							DgvData.FirstDisplayedScrollingRowIndex = firstVisible;
-						SelectRow(row);
+						DgvData.SelectRow(row);
 						return true;
 					}
 				}
@@ -2112,7 +2101,8 @@ namespace LogsReader.Reader
 
         private async void buttonSelectTraceNames_Click(object sender, EventArgs e)
         {
-	        if (_currentDGVResult == null || !_currentDGVResult.Any())
+	        var original = GetResultTemplates();
+	        if (original == null || !original.Any())
 		        return;
 
 	        var alreadyAddedTraceNames = TbxTraceNameFilter.Text.Split(',')
@@ -2121,8 +2111,8 @@ namespace LogsReader.Reader
 		        .ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
 
 
-			var filtered = _currentDGVResult
-		        .GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
+			var filtered = original
+				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
 		        .Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
 		        .OrderBy(x => x.TraceName)
 		        .ToDictionary(x => x.TraceName);

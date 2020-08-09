@@ -183,18 +183,25 @@ namespace LogsReader.Reader
 		/// <param name="trn"></param>
 		protected bool AddTransactionValue(string trn)
 		{
-			lock (_syncTrn)
-				if (_transactionValues.ContainsKey(trn))
-					return false;
+			try
+			{
+				lock (_syncTrn)
+					if (_transactionValues.ContainsKey(trn))
+						return false;
 
-			var regex = new Regex(Regex.Escape(trn),
-				RegexOptions.Compiled | RegexOptions.CultureInvariant,
-				new TimeSpan(0, 0, 1));
+				var regex = new Regex(Regex.Escape(trn),
+					RegexOptions.Compiled | RegexOptions.CultureInvariant,
+					new TimeSpan(0, 0, 1));
 
-			lock (_syncTrn)
-				_transactionValues.Add(trn, regex);
+				lock (_syncTrn)
+					_transactionValues.Add(trn, regex);
 
-			return true;
+				return true;
+			}
+			catch (Exception)
+			{
+				return false; // есть вероятность что тот же элемен может добавится меду двумя локами (для разных файлов), а два раза делать ContainsKey увеличит время выполнения поиска
+			}
 		}
 
 		/// <summary>

@@ -126,6 +126,7 @@ namespace LogsReader.Reader.Forms
 			this.SelectColumn.Checked = false;
 			this.SelectColumn.MinimumWidth = 25;
 			this.SelectColumn.Name = "SelectColumn";
+			this.SelectColumn.HeaderText = "";
 			this.SelectColumn.ReadOnly = false;
 			this.SelectColumn.TrueValue = true;
 			this.SelectColumn.FalseValue = false;

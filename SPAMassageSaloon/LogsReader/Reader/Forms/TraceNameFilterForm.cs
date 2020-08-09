@@ -48,6 +48,12 @@ namespace LogsReader.Reader.Forms
 				}
 				DgvTraceNames.Refresh();
 			};
+			DgvTraceNames.Resize += (sender, args) => DgvTraceNames.Invalidate();
+			DgvTraceNames.Sorted += (sender, args) =>
+			{
+				if(DgvTraceNames.RowCount > 0)
+					DgvTraceNames.SelectRow(DgvTraceNames.Rows[0]);
+			};
 
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
@@ -62,28 +68,20 @@ namespace LogsReader.Reader.Forms
 						break;
 				}
 			};
-			
 		}
 
 		public static async Task<TraceNameFilterForm> Get(IDictionary<string, TraceNameFilter> traceNames)
 		{
 			var form = new TraceNameFilterForm(traceNames);
-			try
-			{
-				await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
-				form.DgvTraceNames.CheckCheckBoxColumn(form.SelectColumn);
-				
-				form.RefreshAllRows();
+			await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
+			form.DgvTraceNames.CheckCheckBoxColumn(form.SelectColumn);
 
-				form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count())));
-				form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
+			form.RefreshAllRows();
 
-				return form;
-			}
-			finally
-			{
-				form.DgvTraceNames.Refresh();
-			}
+			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count())));
+			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
+
+			return form;
 		}
 
 		void RefreshAllRows()
@@ -100,8 +98,7 @@ namespace LogsReader.Reader.Forms
 			if (row == null)
 				return;
 
-			var isChecked = bool.TryParse(row.Cells[SelectColumn.Name]?.Value?.ToString(), out var value) && value;
-			var color = isChecked
+			var color = row.Cells[SelectColumn.Name] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked
 				? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS
 				: row.Index.IsParity()
 					? Color.White
@@ -120,7 +117,7 @@ namespace LogsReader.Reader.Forms
 					continue;
 
 				if (TraceNames.TryGetValue(traceNameCell, out var traceNameFilter))
-					traceNameFilter.Checked = bool.TryParse(row.Cells[SelectColumn.Name]?.Value?.ToString(), out var isChecked) && isChecked;
+					traceNameFilter.Checked = row.Cells[SelectColumn.Name] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked;
 			}
 
 			DialogResult = DialogResult.OK;
