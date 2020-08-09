@@ -190,7 +190,7 @@ namespace LogsReader.Reader
 
 				traceReader.Status = TraceReaderStatus.Finished;
 			}
-			catch (OutOfMemoryException ex)
+			catch (OutOfMemoryException)
 			{
 				traceReader.Status = TraceReaderStatus.Failed;
 				HasOutOfMemoryException = true;

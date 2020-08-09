@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Properties;
@@ -20,9 +21,7 @@ namespace LogsReader.Reader.Forms
 			{
 				if (args.RowIndex < 0 || args.ColumnIndex < 0)
 					return;
-
-				var row = ((DataGridView)sender).Rows[args.RowIndex];
-				row.DefaultCellStyle.BackColor = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+				ColorizationRow(((DataGridView) sender).Rows[args.RowIndex]);
 			};
 
 			Icon = Icon.FromHandle(Resources.filter.GetHicon());
@@ -47,7 +46,31 @@ namespace LogsReader.Reader.Forms
 		{
 			var form = new TraceNameFilterForm();
 			await form.DgvTraceNames.AssignCollectionAsync(traceNames, null, true);
+			form.RefreshAllRows();
+
+			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count())));
+			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
+
 			return form;
+		}
+
+		void RefreshAllRows()
+		{
+			if (DgvTraceNames == null || DgvTraceNames.RowCount == 0)
+				return;
+
+			foreach (var row in DgvTraceNames.Rows.OfType<DataGridViewRow>())
+				ColorizationRow(row);
+		}
+
+		protected virtual void ColorizationRow(DataGridViewRow row)
+		{
+			if(row == null)
+				return;
+
+			var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+			if (row.DefaultCellStyle.BackColor != color)
+				row.DefaultCellStyle.BackColor = color;
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
