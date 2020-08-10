@@ -480,11 +480,11 @@ namespace LogsReader.Reader
 
         internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
 
-        protected abstract IEnumerable<TraceReader> GetResultReaders();
-
         internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
         protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+
+        protected abstract void ButtonPause_Click(object sender, EventArgs e);
 
 		void AddViewer(TraceItemView traceViewer, DataTemplate template)
         {
@@ -2025,12 +2025,7 @@ namespace LogsReader.Reader
 
         }
 
-        protected virtual void buttonPause_Click(object sender, EventArgs e)
-        {
-
-        }
-
-		internal void SelectTransactions()
+        internal void SelectTransactions()
         {
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();

@@ -69,6 +69,8 @@ namespace LogsReader.Reader
 			this.buttonErrNext = new System.Windows.Forms.Button();
 			this.buttonErrPrev = new System.Windows.Forms.Button();
 			this.searchPanel = new System.Windows.Forms.Panel();
+			this.verticalSeparator2 = new Utils.WinForm.VerticalSeparator();
+			this.buttonPause = new System.Windows.Forms.Button();
 			this.ParentSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.CustomPanel = new System.Windows.Forms.Panel();
@@ -80,6 +82,7 @@ namespace LogsReader.Reader
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.checkBoxShowTrns = new System.Windows.Forms.CheckBox();
+			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.DgvReaderIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,9 +98,6 @@ namespace LogsReader.Reader
 			this.DgvReaderFileCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileLastWriteTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.splitContainerMainFilter = new System.Windows.Forms.SplitContainer();
-			this.buttonPause = new System.Windows.Forms.Button();
-			this.verticalSeparator2 = new Utils.WinForm.VerticalSeparator();
-			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
 			this.searchPanel.SuspendLayout();
@@ -630,6 +630,30 @@ namespace LogsReader.Reader
 			this.searchPanel.Size = new System.Drawing.Size(1152, 28);
 			this.searchPanel.TabIndex = 30;
 			// 
+			// verticalSeparator2
+			// 
+			this.verticalSeparator2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.verticalSeparator2.LineColor = System.Drawing.Color.LightGray;
+			this.verticalSeparator2.Location = new System.Drawing.Point(1022, 3);
+			this.verticalSeparator2.Name = "verticalSeparator2";
+			this.verticalSeparator2.Size = new System.Drawing.Size(10, 22);
+			this.verticalSeparator2.TabIndex = 39;
+			this.verticalSeparator2.Text = "verticalSeparator2";
+			// 
+			// buttonPause
+			// 
+			this.buttonPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPause.BackColor = System.Drawing.Color.White;
+			this.buttonPause.Enabled = false;
+			this.buttonPause.FlatAppearance.BorderSize = 0;
+			this.buttonPause.Image = global::LogsReader.Properties.Resources.onPause;
+			this.buttonPause.Location = new System.Drawing.Point(999, 3);
+			this.buttonPause.Name = "buttonPause";
+			this.buttonPause.Size = new System.Drawing.Size(23, 23);
+			this.buttonPause.TabIndex = 5;
+			this.buttonPause.UseVisualStyleBackColor = false;
+			this.buttonPause.Click += new System.EventHandler(this.ButtonPause_Click);
+			// 
 			// ParentSplitContainer
 			// 
 			this.ParentSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -778,6 +802,17 @@ namespace LogsReader.Reader
 			this.checkBoxShowTrns.Text = "Show transactions";
 			this.checkBoxShowTrns.UseVisualStyleBackColor = true;
 			this.checkBoxShowTrns.CheckedChanged += new System.EventHandler(this.checkBoxShowTrns_CheckedChanged);
+			// 
+			// tabControlViewer
+			// 
+			this.tabControlViewer.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+			this.tabControlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlViewer.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
+			this.tabControlViewer.Name = "tabControlViewer";
+			this.tabControlViewer.SelectedIndex = 0;
+			this.tabControlViewer.Size = new System.Drawing.Size(464, 492);
+			this.tabControlViewer.TabIndex = 0;
 			// 
 			// DgvReader
 			// 
@@ -973,40 +1008,6 @@ namespace LogsReader.Reader
 			this.splitContainerMainFilter.Size = new System.Drawing.Size(1152, 496);
 			this.splitContainerMainFilter.SplitterDistance = 65;
 			this.splitContainerMainFilter.TabIndex = 37;
-			// 
-			// buttonPause
-			// 
-			this.buttonPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonPause.BackColor = System.Drawing.Color.White;
-			this.buttonPause.FlatAppearance.BorderSize = 0;
-			this.buttonPause.Image = global::LogsReader.Properties.Resources.onPause;
-			this.buttonPause.Location = new System.Drawing.Point(999, 3);
-			this.buttonPause.Name = "buttonPause";
-			this.buttonPause.Size = new System.Drawing.Size(23, 23);
-			this.buttonPause.TabIndex = 5;
-			this.buttonPause.UseVisualStyleBackColor = false;
-			this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
-			// 
-			// verticalSeparator2
-			// 
-			this.verticalSeparator2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.verticalSeparator2.LineColor = System.Drawing.Color.LightGray;
-			this.verticalSeparator2.Location = new System.Drawing.Point(1022, 3);
-			this.verticalSeparator2.Name = "verticalSeparator2";
-			this.verticalSeparator2.Size = new System.Drawing.Size(10, 22);
-			this.verticalSeparator2.TabIndex = 39;
-			this.verticalSeparator2.Text = "verticalSeparator2";
-			// 
-			// tabControlViewer
-			// 
-			this.tabControlViewer.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.tabControlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControlViewer.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
-			this.tabControlViewer.Name = "tabControlViewer";
-			this.tabControlViewer.SelectedIndex = 0;
-			this.tabControlViewer.Size = new System.Drawing.Size(464, 492);
-			this.tabControlViewer.TabIndex = 0;
 			// 
 			// LogsReaderFormBase
 			// 

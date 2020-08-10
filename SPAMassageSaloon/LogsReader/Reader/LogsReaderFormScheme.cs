@@ -432,6 +432,14 @@ namespace LogsReader.Reader
 	        return MainReader.TraceReaders.TryGetValue(privateID, out reader);
         }
 
+        protected override void ButtonPause_Click(object sender, EventArgs e)
+		{
+			if (MainReader?.TraceReaders == null)
+				return;
+
+
+		}
+
 		private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(maxLinesStackText.Text, out var value))
