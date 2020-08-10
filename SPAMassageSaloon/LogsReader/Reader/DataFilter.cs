@@ -74,27 +74,6 @@ namespace LogsReader.Reader
         }
 
         /// <summary>
-        /// Корявенько работает, т.к. дата lastwrite иногда не совпадает с датой записи из файле
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public bool IsAllowed(FileInfo file)
-        {
-            //if (Filter != null && !Filter.IsAllowed(fileLog.File))
-            //    continue;
-
-            // если фильтр даты начала больше даты последней записи в файл, то пропускаем
-            if (DateTime.Compare(StartDate, file.LastWriteTime) > 0)
-                return false;
-
-            // если фильтр даты конца меньше даты создания файла и даты последней записи, то пропускаем
-            if (DateTime.Compare(EndDate, file.CreationTime) < 0 && DateTime.Compare(EndDate, file.LastWriteTime) < 0)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
         /// Проверям по фильтру. Если был задан дополнительный поиск по фильтру
         /// </summary>
         /// <param name="input"></param>

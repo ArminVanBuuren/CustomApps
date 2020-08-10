@@ -26,8 +26,6 @@ namespace LogsReader.Reader.Forms
 			CountMatchesColumn.HeaderText = Resources.TxtReader_DgvMatches;
 			CountErrorsColumn.HeaderText = Resources.TxtReader_DgvErrors;
 
-			//buttonOK.Enabled = !folderPath.IsNullOrWhiteSpace();
-
 			CenterToScreen();
 
 			DgvTraceNames.CellFormatting += (sender, args) =>

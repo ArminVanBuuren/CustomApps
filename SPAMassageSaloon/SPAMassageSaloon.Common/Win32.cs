@@ -1,16 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SPAMassageSaloon.Common
 {
-	public class Win32
+	public static class Win32
 	{
 		[DllImport("user32.dll")]
 		public static extern int SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
 		public const int WM_SETREDRAW = 0xB;
+
+		public static void SuspendHandle(this Control control)
+		{
+			Win32.SendMessage(control.Handle, Win32.WM_SETREDRAW, 0, 0);
+		}
+
+		public static void ResumeHandle(this Control control)
+		{
+			Win32.SendMessage(control.Handle, Win32.WM_SETREDRAW, 1, 0);
+			control.Refresh();
+		}
 	}
 }

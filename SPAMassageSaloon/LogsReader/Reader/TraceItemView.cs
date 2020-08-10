@@ -52,8 +52,6 @@ namespace LogsReader.Reader
 
 		public bool IsMain { get; }
 
-		private Language MessageLanguage { get; set; }
-
 		public TraceItemView(Encoding defaultEncoding, UserSettings userSettings, bool isMain)
 		{
 			UserSettings = userSettings;
@@ -70,7 +68,7 @@ namespace LogsReader.Reader
 
 				descriptionText.AutoWordSelection = true;
 				descriptionText.AutoWordSelection = false;
-				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, System.Drawing.FontStyle.Bold);
+				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, FontStyle.Bold);
 
 				EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
 				EditorMessage.AutoPrintToXml = true;
@@ -99,7 +97,7 @@ namespace LogsReader.Reader
 				notepad.SelectEditor(0);
 				notepad.DefaultEncoding = defaultEncoding;
 
-				var langMessage = MessageLanguage = UserSettings.MessageLanguage;
+				var langMessage = UserSettings.MessageLanguage;
 				var langTrace = UserSettings.TraceLanguage;
 				if (EditorMessage.Language != langMessage)
 					EditorMessage.ChangeLanguage(langMessage);
@@ -108,8 +106,8 @@ namespace LogsReader.Reader
 
 				if (isMain)
 				{
-					EditorMessage.LanguageChanged += EditorMessage_LanguageChanged;
-					EditorTraceMessage.LanguageChanged += EditorTraceMessage_LanguageChanged;
+					EditorMessage.LanguageChanged += (sender, args) => { UserSettings.MessageLanguage = EditorMessage.Language; };
+					EditorTraceMessage.LanguageChanged += (sender, args) => { UserSettings.TraceLanguage = EditorTraceMessage.Language; };
 
 					notepad.WordWrapStateChanged += (sender, args) =>
 					{
@@ -139,16 +137,6 @@ namespace LogsReader.Reader
 			{
 				notepad.ResumeLayout();
 			}
-		}
-
-		private void EditorMessage_LanguageChanged(object sender, EventArgs e)
-		{
-			UserSettings.MessageLanguage = MessageLanguage = EditorMessage.Language;
-		}
-
-		private void EditorTraceMessage_LanguageChanged(object sender, EventArgs e)
-		{
-			UserSettings.TraceLanguage = EditorTraceMessage.Language;
 		}
 
 		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
@@ -216,44 +204,52 @@ namespace LogsReader.Reader
 
 		void RefreshDescription(bool showTrnsInformation)
 		{
-			descriptionText.Clear();
-
-			descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}");
-
-			if (showTrnsInformation)
+			try
 			{
-				if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrWhiteSpace()))
-				{
-					descriptionText.AppendText("\r\nTransactions = \"");
-					var i = 0;
-					foreach (var (_, value) in CurrentTemplate.Transactions)
-					{
-						if (value.FoundByTrn)
-							descriptionText.AppendText(value.Trn, Color.Green);
-						else
-							descriptionText.AppendText(value.Trn);
+				descriptionText.SuspendLayout();
+				descriptionText.Clear();
 
-						i++;
-						if (CurrentTemplate.Transactions.Count > i)
-							descriptionText.AppendText("\", \"");
+				descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}");
+
+				if (showTrnsInformation)
+				{
+					if (CurrentTemplate.Transactions.Any(x => !x.Value.Trn.IsNullOrWhiteSpace()))
+					{
+						descriptionText.AppendText("\r\nTransactions = \"");
+						var i = 0;
+						foreach (var (_, value) in CurrentTemplate.Transactions)
+						{
+							if (value.FoundByTrn)
+								descriptionText.AppendText(value.Trn, Color.Green);
+							else
+								descriptionText.AppendText(value.Trn);
+
+							i++;
+							if (CurrentTemplate.Transactions.Count > i)
+								descriptionText.AppendText("\", \"");
+						}
+
+						descriptionText.AppendText("\"");
 					}
 
-					descriptionText.AppendText("\"");
+					if (CurrentTemplate.ElapsedSecTotal >= 0)
+						descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
+
 				}
 
-				if (CurrentTemplate.ElapsedSecTotal >= 0)
-					descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
+				if (!CurrentTemplate.Description.IsNullOrWhiteSpace())
+				{
+					descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
+					descriptionText.AppendText(CurrentTemplate.Description);
+				}
 
+				descriptionText.AutoWordSelection = true;
+				descriptionText.AutoWordSelection = false;
 			}
-
-			if (!CurrentTemplate.Description.IsNullOrWhiteSpace())
+			finally
 			{
-				descriptionText.AppendText($"\r\n{new string('-', 50)}\r\n");
-				descriptionText.AppendText(CurrentTemplate.Description);
+				descriptionText.ResumeLayout();
 			}
-
-			descriptionText.AutoWordSelection = true;
-			descriptionText.AutoWordSelection = false;
 		}
 
 		private void Notepad_TabIndexChanged(object sender, EventArgs e)

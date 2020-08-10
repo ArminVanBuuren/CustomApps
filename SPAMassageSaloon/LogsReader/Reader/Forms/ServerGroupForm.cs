@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Properties;
+using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
 
@@ -71,24 +72,32 @@ namespace LogsReader.Reader.Forms
 
 		private void ComboboxGroup_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			_serverPanels.Clear();
-			_currentGroup = comboboxGroup.SelectedItem.ToString();
-
-			if (_serverGroups.TryGetValue(_currentGroup, out var servers) && servers.Item2.Count > 0)
+			try
 			{
-				foreach (var server in servers.Item2)
-					AddServer(server);
+				this.SuspendHandle();
+				_serverPanels.Clear();
+				_currentGroup = comboboxGroup.SelectedItem.ToString();
 
-				textBoxGroupPriority.Text = servers.Item1.ToString();
+				if (_serverGroups.TryGetValue(_currentGroup, out var servers) && servers.Item2.Count > 0)
+				{
+					foreach (var server in servers.Item2)
+						AddServer(server);
+
+					textBoxGroupPriority.Text = servers.Item1.ToString();
+				}
+				else
+				{
+					AddServer(string.Empty);
+					textBoxGroupPriority.Text = selectedGroupPriority;
+				}
+
+				AssignForm();
+				buttonOK.Enabled = true;
 			}
-			else
+			finally
 			{
-				AddServer(string.Empty);
-				textBoxGroupPriority.Text = selectedGroupPriority;
+				this.ResumeHandle();
 			}
-
-			AssignForm();
-			buttonOK.Enabled = true;
 		}
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
@@ -109,16 +118,32 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			AddServer(string.Empty);
-			AssignForm();
+			try
+			{
+				this.SuspendHandle();
+				AddServer(string.Empty);
+				AssignForm();
+			}
+			finally
+			{
+				this.ResumeHandle();
+			}
 		}
 
 		private void buttonRemoveAll_Click(object sender, EventArgs e)
 		{
-			foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+			try
 			{
-				var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == REMOVE_SERVER);
-				button?.PerformClick();
+				this.SuspendHandle();
+				foreach (var panel in groupBoxServers.Controls.OfType<Panel>().ToList())
+				{
+					var button = panel.Controls.OfType<Button>().ToList().FirstOrDefault(x => x.Name == REMOVE_SERVER);
+					button?.PerformClick();
+				}
+			}
+			finally
+			{
+				this.ResumeHandle();
 			}
 		}
 
@@ -200,14 +225,15 @@ namespace LogsReader.Reader.Forms
 			};
 			buttonRemove.Click += (sender, args) =>
 			{
+				if (IsDisposed)
+					return;
+
 				try
 				{
-					if (IsDisposed)
-						return;
-
+					this.SuspendLayout();
 					_serverPanels.Remove(serverTemplate);
 
-					if(_serverPanels.Count == 0)
+					if (_serverPanels.Count == 0)
 						AddServer(string.Empty);
 
 					AssignForm();
@@ -215,6 +241,10 @@ namespace LogsReader.Reader.Forms
 				catch (Exception ex)
 				{
 					// igored
+				}
+				finally
+				{
+					this.ResumeLayout();
 				}
 			};
 
@@ -259,7 +289,9 @@ namespace LogsReader.Reader.Forms
 									try
 									{
 										var reply = pinger.Send(serverText2, 10000);
-										color = reply != null && reply.Status == IPStatus.Success ? Color.LightGreen : Color.LightPink;
+										color = reply != null && reply.Status == IPStatus.Success 
+											? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS 
+											: Color.LightPink;
 									}
 									catch (Exception)
 									{

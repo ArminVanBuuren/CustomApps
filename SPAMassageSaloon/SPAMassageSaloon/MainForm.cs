@@ -458,7 +458,7 @@ namespace SPAMassageSaloon
 
 	        try
 	        {
-		        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 0, 0);
+		        this.SuspendHandle();
 
 		        form = formMaker.Invoke();
 		        if (form == null)
@@ -482,9 +482,8 @@ namespace SPAMassageSaloon
 	        }
 	        finally
 	        {
-		        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 1, 0);
-                this.Refresh();
-                this.Focus();
+		        this.ResumeHandle();
+		        this.Focus();
                 this.Activate();
 	        }
         }
@@ -532,7 +531,7 @@ namespace SPAMassageSaloon
                 {
 	                try
 	                {
-		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 0, 0);
+		                mainForm.SuspendHandle();
 		                var mdiButton = (MDIManagerButton) o;
 		                mdiButton.mdiForm.Activate();
 	                }
@@ -542,15 +541,14 @@ namespace SPAMassageSaloon
 	                }
 	                finally
 	                {
-		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 1, 0);
-		                mainForm.Refresh();
-                    }
+		                mainForm.ResumeHandle();
+	                }
                 };
                 button.MClose += (o, args) =>
                 {
 	                try
 	                {
-		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 0, 0);
+		                mainForm.SuspendHandle();
 		                var mdiButton = (MDIManagerButton)o;
 		                mdiButton.mdiForm.Close();
 	                }
@@ -560,8 +558,7 @@ namespace SPAMassageSaloon
 	                }
 	                finally
 	                {
-		                Win32.SendMessage(mainForm.Handle, Win32.WM_SETREDRAW, 1, 0);
-		                mainForm.Refresh();
+		                mainForm.ResumeHandle();
 		                mainForm.Activate();
 	                }
                 };

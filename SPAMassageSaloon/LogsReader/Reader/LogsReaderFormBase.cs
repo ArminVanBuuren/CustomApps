@@ -1212,9 +1212,10 @@ namespace LogsReader.Reader
 
 				var countVisible = dgv.DisplayedRowCount(false);
 				var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
+				var above = CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt ? 2 : 30;
 
-				var firstIndex = Math.Max(0, firstVisibleRowIndex - 50);
-				var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + 50);
+				var firstIndex = Math.Max(0, firstVisibleRowIndex - above);
+				var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + above);
 
 				for (var i = firstIndex; i <= lastIndex; i++)
 					refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
@@ -1646,7 +1647,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        async Task<bool> AssignCurrentDgvResult(bool isNewData)
+        private async Task AssignCurrentDgvResult(bool isNewData)
 		{
 			try
 			{
@@ -1711,7 +1712,7 @@ namespace LogsReader.Reader
 						if (firstVisible > -1 && DgvData.RowCount > firstVisible)
 							DgvData.FirstDisplayedScrollingRowIndex = firstVisible;
 						DgvData.SelectRow(row);
-						return true;
+						return;
 					}
 				}
 
@@ -1738,9 +1739,6 @@ namespace LogsReader.Reader
 				//	if (countVisible > 0 && DgvData.RowCount > countVisible / 2)
 				//		SelectRow(DgvData.Rows[countVisible / 2]);
 				//}
-
-
-				return false;
 			}
 			finally
 			{
@@ -2060,15 +2058,16 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-				if(sender != null)
-					Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 0, 0);
+		        if (sender != null)
+			        this.SuspendHandle();
 
 		        shownProcessReadesPanel = !shownProcessReadesPanel;
 
 		        if (shownProcessReadesPanel)
 		        {
 			        _openProcessingReadersBtn.Text = @"ᐯ";
-			        splitContainerMainFilter.SplitterDistance = prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
+			        splitContainerMainFilter.SplitterDistance =
+				        prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
 			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
 			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
 		        }
@@ -2087,10 +2086,7 @@ namespace LogsReader.Reader
 	        finally
 	        {
 		        if (sender != null)
-		        {
-			        Win32.SendMessage(Handle, Win32.WM_SETREDRAW, 1, 0);
-			        this.Refresh();
-		        }
+			        this.ResumeHandle();
 	        }
         }
 

@@ -168,7 +168,7 @@ namespace LogsReader.Reader.Forms
 			this.Controls.Add(this.DgvTraceNames);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
-			this.MaximumSize = new System.Drawing.Size(500, 620);
+			this.MaximumSize = new System.Drawing.Size(700, 620);
 			this.MinimumSize = new System.Drawing.Size(171, 93);
 			this.Name = "TraceNameFilterForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
