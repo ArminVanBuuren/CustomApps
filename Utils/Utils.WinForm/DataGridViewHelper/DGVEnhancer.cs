@@ -72,6 +72,19 @@ namespace Utils.WinForm.DataGridViewHelper
             }
         }
 
+        public static void SelectRow(this DataGridView dgv, DataGridViewRow row, int cellIndex = -1)
+        {
+	        if (dgv == null || row == null)
+		        return;
+
+	        dgv.ClearSelection();
+	        row.Selected = true;
+	        if (cellIndex > -1 && row.Cells[cellIndex].Visible)
+		        dgv.CurrentCell = row.Cells[cellIndex];
+	        else
+		        dgv.CurrentCell = row.Cells.OfType<DataGridViewCell>().FirstOrDefault(x => x.Visible);
+        }
+
         public static void DoubleBuffered(this DataGridView dgv, bool setting)
         {
 	        var dgvType = dgv.GetType();
