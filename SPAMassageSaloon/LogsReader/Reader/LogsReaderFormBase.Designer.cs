@@ -95,6 +95,8 @@ namespace LogsReader.Reader
 			this.DgvReaderFileCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileLastWriteTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.splitContainerMainFilter = new System.Windows.Forms.SplitContainer();
+			this.buttonPause = new System.Windows.Forms.Button();
+			this.verticalSeparator2 = new Utils.WinForm.VerticalSeparator();
 			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
@@ -270,10 +272,10 @@ namespace LogsReader.Reader
 			this.BtnSearch.BackColor = System.Drawing.SystemColors.Control;
 			this.BtnSearch.Image = global::LogsReader.Properties.Resources.find;
 			this.BtnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.BtnSearch.Location = new System.Drawing.Point(934, 3);
+			this.BtnSearch.Location = new System.Drawing.Point(906, 3);
 			this.BtnSearch.Name = "BtnSearch";
 			this.BtnSearch.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-			this.BtnSearch.Size = new System.Drawing.Size(90, 24);
+			this.BtnSearch.Size = new System.Drawing.Size(90, 23);
 			this.BtnSearch.TabIndex = 3;
 			this.BtnSearch.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Search;
 			this.BtnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -287,7 +289,7 @@ namespace LogsReader.Reader
 			this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnClear.Location = new System.Drawing.Point(1033, 3);
 			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(90, 24);
+			this.btnClear.Size = new System.Drawing.Size(90, 23);
 			this.btnClear.TabIndex = 4;
 			this.btnClear.Text = global::LogsReader.Properties.Resources.Txt_LogsReaderForm_Clear;
 			this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -300,7 +302,7 @@ namespace LogsReader.Reader
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.TbxPattern.Location = new System.Drawing.Point(8, 3);
 			this.TbxPattern.Name = "TbxPattern";
-			this.TbxPattern.Size = new System.Drawing.Size(832, 20);
+			this.TbxPattern.Size = new System.Drawing.Size(811, 20);
 			this.TbxPattern.TabIndex = 1;
 			this.TbxPattern.TextChanged += new System.EventHandler(this.TxtPatternOnTextChanged);
 			// 
@@ -326,7 +328,7 @@ namespace LogsReader.Reader
 			// 
 			this.ChbxUseRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ChbxUseRegex.AutoSize = true;
-			this.ChbxUseRegex.Location = new System.Drawing.Point(846, 7);
+			this.ChbxUseRegex.Location = new System.Drawing.Point(825, 6);
 			this.ChbxUseRegex.Name = "ChbxUseRegex";
 			this.ChbxUseRegex.Size = new System.Drawing.Size(79, 17);
 			this.ChbxUseRegex.TabIndex = 2;
@@ -501,8 +503,8 @@ namespace LogsReader.Reader
 			this.buttonHighlightOff.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.buttonHighlightOff.Location = new System.Drawing.Point(933, 30);
 			this.buttonHighlightOff.Name = "buttonHighlightOff";
-			this.buttonHighlightOff.Padding = new System.Windows.Forms.Padding(11, 0, 0, 1);
-			this.buttonHighlightOff.Size = new System.Drawing.Size(47, 24);
+			this.buttonHighlightOff.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
+			this.buttonHighlightOff.Size = new System.Drawing.Size(47, 23);
 			this.buttonHighlightOff.TabIndex = 34;
 			this.buttonHighlightOff.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.buttonHighlightOff.UseVisualStyleBackColor = false;
@@ -516,8 +518,8 @@ namespace LogsReader.Reader
 			this.buttonHighlightOn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.buttonHighlightOn.Location = new System.Drawing.Point(880, 30);
 			this.buttonHighlightOn.Name = "buttonHighlightOn";
-			this.buttonHighlightOn.Padding = new System.Windows.Forms.Padding(11, 0, 0, 1);
-			this.buttonHighlightOn.Size = new System.Drawing.Size(47, 24);
+			this.buttonHighlightOn.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
+			this.buttonHighlightOn.Size = new System.Drawing.Size(47, 23);
 			this.buttonHighlightOn.TabIndex = 33;
 			this.buttonHighlightOn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.buttonHighlightOn.UseVisualStyleBackColor = false;
@@ -553,7 +555,7 @@ namespace LogsReader.Reader
 			// ChbxAlreadyUseFilter
 			// 
 			this.ChbxAlreadyUseFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(991, 34);
+			this.ChbxAlreadyUseFilter.Location = new System.Drawing.Point(991, 33);
 			this.ChbxAlreadyUseFilter.Name = "ChbxAlreadyUseFilter";
 			this.ChbxAlreadyUseFilter.Size = new System.Drawing.Size(179, 19);
 			this.ChbxAlreadyUseFilter.TabIndex = 14;
@@ -615,6 +617,8 @@ namespace LogsReader.Reader
 			// searchPanel
 			// 
 			this.searchPanel.BackColor = System.Drawing.SystemColors.Control;
+			this.searchPanel.Controls.Add(this.verticalSeparator2);
+			this.searchPanel.Controls.Add(this.buttonPause);
 			this.searchPanel.Controls.Add(this.TbxPattern);
 			this.searchPanel.Controls.Add(this.ChbxUseRegex);
 			this.searchPanel.Controls.Add(this.BtnSearch);
@@ -780,6 +784,14 @@ namespace LogsReader.Reader
 			this.DgvReader.AllowUserToAddRows = false;
 			this.DgvReader.AllowUserToDeleteRows = false;
 			this.DgvReader.AllowUserToResizeRows = false;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvReader.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.DgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvReader.ColumnHeadersVisible = false;
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -796,27 +808,6 @@ namespace LogsReader.Reader
             this.DgvReaderFileSizeColumn,
             this.DgvReaderFileCreationTimeColumn,
             this.DgvReaderFileLastWriteTimeColumn});
-			this.DgvReader.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.DgvReader.Location = new System.Drawing.Point(0, 0);
-			this.DgvReader.MultiSelect = false;
-			this.DgvReader.Name = "DgvReader";
-			this.DgvReader.ReadOnly = true;
-			this.DgvReader.RowHeadersVisible = false;
-			this.DgvReader.RowTemplate.Height = 19;
-			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvReader.Size = new System.Drawing.Size(146, 42);
-			this.DgvReader.TabIndex = 50;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvReader.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-
-			this.DgvReader.GridColor = Color.DarkGray;
-
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -825,8 +816,12 @@ namespace LogsReader.Reader
 			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.DgvReader.DefaultCellStyle = dataGridViewCellStyle5;
-
-
+			this.DgvReader.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.DgvReader.GridColor = System.Drawing.Color.DarkGray;
+			this.DgvReader.Location = new System.Drawing.Point(0, 0);
+			this.DgvReader.MultiSelect = false;
+			this.DgvReader.Name = "DgvReader";
+			this.DgvReader.ReadOnly = true;
 			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -835,6 +830,11 @@ namespace LogsReader.Reader
 			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.DgvReader.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			this.DgvReader.RowHeadersVisible = false;
+			this.DgvReader.RowTemplate.Height = 19;
+			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.DgvReader.Size = new System.Drawing.Size(146, 42);
+			this.DgvReader.TabIndex = 50;
 			// 
 			// DgvReaderIDColumn
 			// 
@@ -974,6 +974,29 @@ namespace LogsReader.Reader
 			this.splitContainerMainFilter.SplitterDistance = 65;
 			this.splitContainerMainFilter.TabIndex = 37;
 			// 
+			// buttonPause
+			// 
+			this.buttonPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPause.BackColor = System.Drawing.Color.White;
+			this.buttonPause.FlatAppearance.BorderSize = 0;
+			this.buttonPause.Image = global::LogsReader.Properties.Resources.onPause;
+			this.buttonPause.Location = new System.Drawing.Point(999, 3);
+			this.buttonPause.Name = "buttonPause";
+			this.buttonPause.Size = new System.Drawing.Size(23, 23);
+			this.buttonPause.TabIndex = 5;
+			this.buttonPause.UseVisualStyleBackColor = false;
+			this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
+			// 
+			// verticalSeparator2
+			// 
+			this.verticalSeparator2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.verticalSeparator2.LineColor = System.Drawing.Color.LightGray;
+			this.verticalSeparator2.Location = new System.Drawing.Point(1022, 3);
+			this.verticalSeparator2.Name = "verticalSeparator2";
+			this.verticalSeparator2.Size = new System.Drawing.Size(10, 22);
+			this.verticalSeparator2.TabIndex = 39;
+			this.verticalSeparator2.Text = "verticalSeparator2";
+			// 
 			// tabControlViewer
 			// 
 			this.tabControlViewer.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
@@ -1099,6 +1122,8 @@ namespace LogsReader.Reader
 		private DataGridViewTextBoxColumn DgvReaderFileLastWriteTimeColumn;
 		private VerticalSeparator verticalSeparator1;
 		private Button buttonSelectTraceNames;
+		private Button buttonPause;
+		private VerticalSeparator verticalSeparator2;
 	}
 }
 

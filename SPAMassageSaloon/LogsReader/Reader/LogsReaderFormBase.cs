@@ -42,7 +42,10 @@ namespace LogsReader.Reader
         private int _filesCompleted;
         private int _totalFiles;
 
-        private IEnumerable<DataTemplate> _currentDGVResult;
+        private int _prevReadersDistance = -1;
+        private bool _shownProcessReadesPanel = true;
+
+		private IEnumerable<DataTemplate> _currentDGVResult;
         private DataGridViewColumn _oldSortedColumn;
         private bool _byAscending = true;
 
@@ -473,7 +476,17 @@ namespace LogsReader.Reader
             }
         }
 
-        void AddViewer(TraceItemView traceViewer, DataTemplate template)
+        protected abstract IEnumerable<DataTemplate> GetResultTemplates();
+
+        internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
+
+        protected abstract IEnumerable<TraceReader> GetResultReaders();
+
+        internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
+
+        protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+
+		void AddViewer(TraceItemView traceViewer, DataTemplate template)
         {
 	        var tabPage = new CustomTabPage(traceViewer)
             {
@@ -1107,8 +1120,6 @@ namespace LogsReader.Reader
 	        }
         }
 
-        
-
         static void EnsureVisibleRow(DataGridView view, int rowToShow, int firstVisible, int countVisible)
         {
 	        if (rowToShow < 0 || rowToShow >= view.RowCount)
@@ -1134,8 +1145,6 @@ namespace LogsReader.Reader
 		        view.FirstDisplayedScrollingRowIndex = firstVisible;
 	        }
         }
-
-        protected abstract IEnumerable<DataTemplate> GetResultTemplates();
 
         protected virtual void ChangeFormStatus()
         {
@@ -1470,6 +1479,67 @@ namespace LogsReader.Reader
 	        }
         }
 
+		private void buttonNextBlock_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				if (sender != null)
+					this.SuspendHandle();
+
+				_shownProcessReadesPanel = !_shownProcessReadesPanel;
+
+				if (_shownProcessReadesPanel)
+				{
+					_openProcessingReadersBtn.Text = @"ᐯ";
+					splitContainerMainFilter.SplitterDistance =
+						_prevReadersDistance > 0 ? _prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
+					splitContainerMainFilter.Panel2Collapsed = !_shownProcessReadesPanel;
+					RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+				}
+				else
+				{
+					if (sender != null)
+						_prevReadersDistance = splitContainerMainFilter.SplitterDistance;
+					_openProcessingReadersBtn.Text = @"ᐱ";
+					splitContainerMainFilter.Panel2Collapsed = !_shownProcessReadesPanel;
+				}
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex);
+			}
+			finally
+			{
+				if (sender != null)
+					this.ResumeHandle();
+			}
+		}
+
+		private async void buttonSelectTraceNames_Click(object sender, EventArgs e)
+		{
+			var original = GetResultTemplates();
+			if (original == null || !original.Any())
+				return;
+
+			var alreadyAddedTraceNames = TbxTraceNameFilter.Text.Split(',')
+				.Select(x => x.Trim())
+				.GroupBy(x => x)
+				.ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
+
+
+			var filtered = original
+				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
+				.Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
+				.OrderBy(x => x.TraceName)
+				.ToDictionary(x => x.TraceName);
+
+			var form = await TraceNameFilterForm.Get(filtered);
+			var result = form.ShowDialog();
+
+			if (result == DialogResult.OK)
+				TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName))?.Trim();
+		}
+
 		//DgvData.RowPostPaint += DgvData_RowPostPaint;
 		//private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
 		//{
@@ -1797,11 +1867,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
-
-        internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
-
-        private void DgvData_MouseDown(object sender, MouseEventArgs e)
+		private void DgvData_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
@@ -1885,8 +1951,6 @@ namespace LogsReader.Reader
 			}
         }
 
-        protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
-
         private void ComboBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
@@ -1956,7 +2020,17 @@ namespace LogsReader.Reader
 			}
         }
 
-        internal void SelectTransactions()
+        protected virtual void CustomPanel_Resize(object sender, EventArgs e)
+        {
+
+        }
+
+        protected virtual void buttonPause_Click(object sender, EventArgs e)
+        {
+
+        }
+
+		internal void SelectTransactions()
         {
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
@@ -2057,74 +2131,6 @@ namespace LogsReader.Reader
 	        if (disposing)
 		        components?.Dispose();
 	        base.Dispose(disposing);
-        }
-
-        private int prevReadersDistance = -1;
-        private bool shownProcessReadesPanel = true;
-        private void buttonNextBlock_Click(object sender, EventArgs e)
-        {
-	        try
-	        {
-		        if (sender != null)
-			        this.SuspendHandle();
-
-		        shownProcessReadesPanel = !shownProcessReadesPanel;
-
-		        if (shownProcessReadesPanel)
-		        {
-			        _openProcessingReadersBtn.Text = @"ᐯ";
-			        splitContainerMainFilter.SplitterDistance =
-				        prevReadersDistance > 0 ? prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
-			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
-			        RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
-		        }
-		        else
-		        {
-			        if (sender != null)
-				        prevReadersDistance = splitContainerMainFilter.SplitterDistance;
-			        _openProcessingReadersBtn.Text = @"ᐱ";
-			        splitContainerMainFilter.Panel2Collapsed = !shownProcessReadesPanel;
-		        }
-	        }
-	        catch (Exception ex)
-	        {
-				ReportStatus(ex);
-			}
-	        finally
-	        {
-		        if (sender != null)
-			        this.ResumeHandle();
-	        }
-        }
-
-        protected virtual void CustomPanel_Resize(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void buttonSelectTraceNames_Click(object sender, EventArgs e)
-        {
-	        var original = GetResultTemplates();
-	        if (original == null || !original.Any())
-		        return;
-
-	        var alreadyAddedTraceNames = TbxTraceNameFilter.Text.Split(',')
-		        .Select(x => x.Trim())
-		        .GroupBy(x => x)
-		        .ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
-
-
-			var filtered = original
-				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
-		        .Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
-		        .OrderBy(x => x.TraceName)
-		        .ToDictionary(x => x.TraceName);
-
-	        var form = await TraceNameFilterForm.Get(filtered);
-	        var result = form.ShowDialog();
-
-	        if (result == DialogResult.OK)
-		        TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName))?.Trim();
         }
 	}
 }
