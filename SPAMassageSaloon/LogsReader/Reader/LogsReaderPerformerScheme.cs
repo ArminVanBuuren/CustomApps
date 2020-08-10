@@ -59,6 +59,7 @@ namespace LogsReader.Reader
 			if (TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
+			TraceReadersOrdered.Clear();
 			var id = 0;
 			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
@@ -204,15 +205,22 @@ namespace LogsReader.Reader
 			{
 				try
 				{
-					traceReader.Commit();
-					traceReader.Clear();
+					if (HasOutOfMemoryException)
+					{
+						traceReader.OnFound -= AddResult;
+						traceReader.Dispose();
+					}
+					else
+					{
+						traceReader.Commit();
+						traceReader.Clear();
+						traceReader.OnFound -= AddResult;
+					}
 				}
 				catch
 				{
 					// ignored
 				}
-
-				traceReader.OnFound -= AddResult;
 			}
 		}
 
@@ -263,7 +271,7 @@ namespace LogsReader.Reader
 			HasOutOfMemoryException = false;
 		}
 
-		public void ClearInternal()
+		void ClearInternal()
 		{
 			if (TraceReaders != null)
 				foreach (var reader in TraceReaders.Values)

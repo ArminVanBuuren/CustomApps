@@ -473,6 +473,7 @@ namespace LogsReader.Reader
 
         public override void Dispose()
         {
+	        Found = null;
 	        PastTraceLines.Clear();
 	        base.Dispose();
         }

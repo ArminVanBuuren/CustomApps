@@ -22,6 +22,7 @@ using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using Timer2 = System.Windows.Forms.Timer;
 
 namespace SPAMassageSaloon
 {
@@ -106,6 +107,8 @@ namespace SPAMassageSaloon
             }
         }
 
+        protected bool IsSuspended { get; private set; } = false;
+
         static MainForm()
         {
             var currentAssembly = Assembly.GetExecutingAssembly();
@@ -128,7 +131,7 @@ namespace SPAMassageSaloon
 
                 try
                 {
-                    ToolStripManager.LoadSettings(this);
+	                ToolStripManager.LoadSettings(this);
                     InitializeToolbarsMenu();
 
                     if (!IsMdiChild)
@@ -317,16 +320,27 @@ namespace SPAMassageSaloon
                 var taskBarNotify = TaskbarManager.IsPlatformSupported
                     ? (Action<int, int>) ((processesCount, totalProgress) =>
                     {
-                        if (processesCount == 0)
-                        {
-                            TaskbarManager.Instance.SetOverlayIcon(null, "");
-                            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+	                    if (IsSuspended)
+							return;
+
+	                    try
+	                    {
+		                    if (processesCount == 0)
+		                    {
+			                    TaskbarManager.Instance.SetOverlayIcon(null, "");
+			                    TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+		                    }
+		                    else
+		                    {
+			                    SetTaskBarOverlay(processesCount);
+			                    TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
+		                    }
                         }
-                        else
-                        {
-                            SetTaskBarOverlay(processesCount);
-                            TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
-                        }
+	                    catch (Exception)
+	                    {
+		                    // ignored
+	                    }
+                        
                     })
                     : null;
 
@@ -584,6 +598,18 @@ namespace SPAMassageSaloon
             {
                 // ignored
             }
+        }
+
+        void SuspendHandle()
+        {
+	        IsSuspended = true;
+	        Win32.SuspendHandle(this);
+        }
+
+        void ResumeHandle()
+        {
+	        IsSuspended = false;
+	        Win32.ResumeHandle(this);
         }
 
         private void toolButtonAbout_ButtonClick(object sender, EventArgs e)

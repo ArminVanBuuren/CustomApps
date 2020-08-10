@@ -123,7 +123,7 @@ namespace LogsReader.Reader
 		        }
 		        catch (Exception ex)
 		        {
-					ReportStatus(ex.Message, ReportStatusType.Error);
+					ReportStatus(ex);
 				}
 		        finally
 		        {
@@ -519,8 +519,8 @@ namespace LogsReader.Reader
             }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
         }
 
         #region Change Language
@@ -592,8 +592,8 @@ namespace LogsReader.Reader
 			}
             catch (Exception ex)
             {
-	            ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
             finally
             {
                 _settingsLoaded = true;
@@ -645,8 +645,8 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
         }
 
         public virtual void LogsReaderKeyDown(object sender, KeyEventArgs e)
@@ -726,8 +726,8 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
         }
 
         internal virtual void BtnSearch_Click(object sender, EventArgs e)
@@ -748,7 +748,7 @@ namespace LogsReader.Reader
 			}
 			catch (Exception ex)
 			{
-				ReportStatus(ex.Message, ReportStatusType.Error);
+				ReportStatus(ex);
 			}
 		}
 
@@ -962,8 +962,8 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-                ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
         }
 
         protected DataFilter GetFilter()
@@ -985,8 +985,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
         }
 
         private void buttonHighlight_Click(object sender, EventArgs e)
@@ -1029,8 +1029,8 @@ namespace LogsReader.Reader
 			}
             catch (Exception ex)
             {
-	            ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
             finally
             {
 	            DgvData.SelectRow(selected, selectedCellIndex);
@@ -1058,8 +1058,8 @@ namespace LogsReader.Reader
 			}
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-            }
+				ReportStatus(ex);
+			}
             finally
             {
 	            DgvData.SelectRow(selected, selectedCellIndex);
@@ -1102,8 +1102,8 @@ namespace LogsReader.Reader
 	        catch (Exception ex)
 	        {
 		        DgvData.Focus();
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-                return false;
+				ReportStatus(ex);
+				return false;
 	        }
         }
 
@@ -1196,8 +1196,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
         }
 
 		/// <summary>
@@ -1222,7 +1222,7 @@ namespace LogsReader.Reader
 			}
 			catch (Exception ex)
 			{
-				ReportStatus(ex.Message, ReportStatusType.Error);
+				ReportStatus(ex);
 			}
 		}
 
@@ -1244,7 +1244,7 @@ namespace LogsReader.Reader
 			}
 			catch (Exception ex)
 			{
-				ReportStatus(ex.Message, ReportStatusType.Error);
+				ReportStatus(ex);
 			}
 		}
 
@@ -1306,7 +1306,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
 	        finally
 	        {
@@ -1461,7 +1461,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
 	        finally
 	        {
@@ -1470,55 +1470,55 @@ namespace LogsReader.Reader
 	        }
         }
 
-        //DgvData.RowPostPaint += DgvData_RowPostPaint;
-        //private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        //{
-        // if (e.RowIndex < 0)
-        //  return;
+		//DgvData.RowPostPaint += DgvData_RowPostPaint;
+		//private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+		//{
+		// if (e.RowIndex < 0)
+		//  return;
 
-        // try
-        // {
-        //  var row = ((DataGridView)sender).Rows[e.RowIndex];
-        //  if (!TryGetTemplate(row, out var template))
-        //   return;
-        //        //Color.Red
+		// try
+		// {
+		//  var row = ((DataGridView)sender).Rows[e.RowIndex];
+		//  if (!TryGetTemplate(row, out var template))
+		//   return;
+		//        //Color.Red
 
-        //        //((DataGridView)sender).GridColor 
-        //        using (Pen pen = new Pen(Color.Red))
-        //        {
-        //         int penWidth = 1;
+		//        //((DataGridView)sender).GridColor 
+		//        using (Pen pen = new Pen(Color.Red))
+		//        {
+		//         int penWidth = 1;
 
-        //         pen.Width = penWidth;
+		//         pen.Width = penWidth;
 
-        //         int x = e.RowBounds.Left + (penWidth / 2);
-        //         int y = e.RowBounds.Top + (penWidth / 2);
-        //         int width = e.RowBounds.Width - penWidth;
-        //         int height = e.RowBounds.Height - penWidth;
+		//         int x = e.RowBounds.Left + (penWidth / 2);
+		//         int y = e.RowBounds.Top + (penWidth / 2);
+		//         int width = e.RowBounds.Width - penWidth;
+		//         int height = e.RowBounds.Height - penWidth;
 
-        //         e.Graphics.DrawRectangle(pen, x, y, width, height);
-        //        }
-        //    }
-        // catch (Exception ex)
-        // {
-        //  ReportStatus(ex.Message, ReportStatusType.Error);
-        // }
-        //}
+		//         e.Graphics.DrawRectangle(pen, x, y, width, height);
+		//        }
+		//    }
+		// catch (Exception ex)
+		// {
+		//  ReportStatus(ex);
+		// }
+		//}
 
-        //void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
-        //{
-        //    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
-        //    using (var p = new Pen(color, 2))
-        //    {
-        //        var rect = e.CellBounds;
-        //        rect.Y = rect.Top + 1;
-        //        rect.Height -= 2;
-        //        e.Graphics.DrawRectangle(p, rect);
-        //    }
+		//void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
+		//{
+		//    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
+		//    using (var p = new Pen(color, 2))
+		//    {
+		//        var rect = e.CellBounds;
+		//        rect.Y = rect.Top + 1;
+		//        rect.Height -= 2;
+		//        e.Graphics.DrawRectangle(p, rect);
+		//    }
 
-        //    e.Handled = true;
-        //}
+		//    e.Handled = true;
+		//}
 
-        private void buttonErrorPrev_Click(object sender, EventArgs e)
+		private void buttonErrorPrev_Click(object sender, EventArgs e)
         {
 	        SearchPrev(x=> !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
         }
@@ -1557,7 +1557,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
         }
 
@@ -1599,7 +1599,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
         }
 
@@ -1643,8 +1643,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
         }
 
         private async Task AssignCurrentDgvResult(bool isNewData)
@@ -1770,8 +1770,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
 	        finally
 	        {
 		        DgvData.Focus();
@@ -1789,8 +1789,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
 	        finally
 	        {
 		        DgvData.Focus();
@@ -1815,7 +1815,7 @@ namespace LogsReader.Reader
             }
             catch (Exception ex)
             {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+	            ReportStatus(ex);
 			}
         }
 
@@ -1881,7 +1881,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
         }
 
@@ -1948,7 +1948,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
 	        finally
 	        {
@@ -2004,11 +2004,18 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 	        }
         }
 
         private bool _isLastWasError;
+
+        protected void ReportStatus(Exception ex)
+        {
+	        ReportStatus(ex.GetType().Name != nameof(Exception) && ex.GetType().Name != nameof(ArgumentException) 
+		        ? $"{ex.GetType().Name}: {ex.Message}" 
+		        : ex.Message, ReportStatusType.Error);
+		}
 
         protected void ReportStatus(string message, ReportStatusType type)
         {
@@ -2081,8 +2088,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
 	        finally
 	        {
 		        if (sender != null)

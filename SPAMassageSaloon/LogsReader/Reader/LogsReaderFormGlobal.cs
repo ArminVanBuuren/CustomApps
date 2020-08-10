@@ -332,10 +332,7 @@ namespace LogsReader.Reader
 		        labelFore.Text = Resources.Txt_Global_Fore;
 	        };
 			// в случае какой то неизвестной ошибки панели TreeView
-			readerForm.TreeViewContainer.OnError += ex =>
-	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        };
+			readerForm.TreeViewContainer.OnError += ReportStatus;
 			// если юзер выбрал допустимые кейсы для поиска в определенной схеме, то разблочиваем кнопку поиска в глобальной схеме
 			readerForm.BtnSearch.EnabledChanged += (sender, args) =>
 			{
@@ -441,8 +438,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
 	        finally
 	        {
 		        panelFlowDoc.Invalidate();
@@ -545,7 +542,7 @@ namespace LogsReader.Reader
 				}
 				catch (Exception ex)
 				{
-					ReportStatus(ex.Message, ReportStatusType.Error);
+					ReportStatus(ex);
 				}
 			}
 			else
@@ -650,8 +647,8 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-		        ReportStatus(ex.Message, ReportStatusType.Error);
-	        }
+				ReportStatus(ex);
+			}
 	        finally
 	        {
 		        _onAllChekingExpanders = false;

@@ -192,7 +192,7 @@ namespace LogsReader.Reader
 			        if (onSchemeChanged)
 				        OnSchemeChanged?.Invoke(this, EventArgs.Empty);
 		        };
-		        TreeViewContainer.OnError += ex => { ReportStatus(ex.Message, ReportStatusType.Error); };
+		        TreeViewContainer.OnError += ReportStatus;
 
 				var template = UserSettings.Template;
 		        if (template != null)
@@ -341,7 +341,7 @@ namespace LogsReader.Reader
 		            if (IsWorking)
 			            IsWorking = false;
 
-					ReportStatus($"{ex.GetType().Name}: {ex.Message}", ReportStatusType.Error);
+					ReportStatus(ex);
 	            }
 	            finally
 	            {
@@ -381,7 +381,7 @@ namespace LogsReader.Reader
 			}
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
         }
 
@@ -529,7 +529,7 @@ namespace LogsReader.Reader
 	        }
 	        catch (Exception ex)
 	        {
-				ReportStatus(ex.Message, ReportStatusType.Error);
+		        ReportStatus(ex);
 			}
         }
 
