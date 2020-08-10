@@ -403,14 +403,15 @@ namespace Utils.WinForm.Notepad
         /// </summary>
         void ChageStyleIfLargeLine()
         {
+	        bool? isXml = null;
 	        void TryConvertToXml()
 	        {
 		        var messageXML = XML.RemoveUnallowable(Source, @" ");
-		        var isXml = messageXML.IsXml(out var xmlDoc);
-		        Source = isXml ? xmlDoc.PrintXml() : messageXML.Trim();
+		        isXml = messageXML.IsXml(out var xmlDoc);
+		        Source = isXml.Value ? xmlDoc.PrintXml() : messageXML.Trim();
 	        }
 
-	        if (AutoPrintToXml)
+	        if (AutoPrintToXml && !Source.IsNullOrEmpty())
 	        {
 		        if (Language == Language.XML || Language == Language.HTML)
 		        {
@@ -424,7 +425,7 @@ namespace Utils.WinForm.Notepad
 		        }
 	        }
 
-	        var satisfied = IsLanguageSatisfied(Source);
+	        var satisfied = IsLanguageSatisfied(Source, isXml);
 
 	        if (FCTB.Text == Source && !satisfied)
 		        FCTB.Text += @"\0";
@@ -435,9 +436,10 @@ namespace Utils.WinForm.Notepad
 	        FCTB.ClearUndo();
         }
 
-        bool IsLanguageSatisfied(string input)
+        bool IsLanguageSatisfied(string input, bool? isXml)
         {
-	        if (input.Split('\n').Any(x => x.Length > 1200))
+	        if (!input.IsNullOrEmpty() && (input.Split('\n').Any(x => x.Length > 1200)
+	                                       || (Language == Language.XML && (isXml != null && !isXml.Value || isXml == null && !input.IsXml(out _)))))
 	        {
 		        if (FCTB.Language != Language.Custom)
 			        FCTB.Language = Language.Custom;
@@ -453,13 +455,12 @@ namespace Utils.WinForm.Notepad
 
 	        return FCTB.Language == Language;
         }
+
         private void FCTB_TextChanged(object sender, TextChangedEventArgs e)
         {
-	        if (!FCTB.Text.IsNullOrEmpty() 
-	            && (Language == Language.XML || Language == Language.HTML) 
-	            && !IsLanguageSatisfied(FCTB.Text) 
-	            && !FCTB.Text.Split('\n').Any(x => x.Length > 13000))
-		        XmlLiteSyntaxHighlight(e);
+	        if (!FCTB.Text.IsNullOrEmpty() && !IsLanguageSatisfied(FCTB.Text, null))
+                if((Language == Language.XML || Language == Language.HTML) && !FCTB.Text.Split('\n').Any(x => x.Length > 13000))
+					XmlLiteSyntaxHighlight(e);
 
 	        TextChangedChanged(this, e);
         }

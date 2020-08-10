@@ -87,7 +87,7 @@ namespace Utils
             if (string.IsNullOrEmpty(contextSource))
                 return null;
 
-            var source = contextSource.TrimWhiteSpaces();
+            var source = contextSource.Trim();
             if (!source.StartsWith("<") || !source.EndsWith(">") || XML.IsUnallowable(contextSource))
                 return null;
 
