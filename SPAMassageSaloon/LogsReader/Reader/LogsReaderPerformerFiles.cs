@@ -298,7 +298,7 @@ namespace LogsReader.Reader
 		{
 			// Processing и OnPause должны сами оcтановиться по свойству IsStopPending
 			if (TraceReaders != null)
-				foreach (var reader in TraceReaders.Values.Where(x => x.Status == TraceReaderStatus.Waiting))
+				foreach (var reader in TraceReaders.Values.Where(x => x.ThreadId.IsNullOrEmpty()))
 					reader.Abort();
 		}
 
