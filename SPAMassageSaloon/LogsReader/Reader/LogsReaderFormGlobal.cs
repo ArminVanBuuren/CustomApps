@@ -303,7 +303,14 @@ namespace LogsReader.Reader
 	        readerForm.OnProcessStatusChanged += (sender, args) =>
 	        {
 		        if (IsInProcessing(readerForm, out var readers))
-					ReportProcessStatus(readers);
+		        {
+			        ReportProcessStatus(readers);
+
+			        if (InProcessing.All(x => x.Item1.OnPause))
+				        base.PauseAll(); // меняем иконку на пуск
+			        else
+				        base.ResumeAll(); // меняем иконку на паузу
+				}
 	        };
 	        // При загрузке ридеров
 	        readerForm.OnUploadReaders += async (sender, args) =>
@@ -369,12 +376,23 @@ namespace LogsReader.Reader
 
 				TimeWatcher.Stop();
 
+				MainViewer.Clear();
+
 				// заполняем DataGrid
 				if (await AssignResult(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, true))
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
 				Progress = 100;
+			};
+			readerForm.OnClear += async (sender, args) =>
+			{
+				if (IsInProcessing(readerForm, out var readers))
+				{
+					MainViewer.Clear();
+					await UploadReaders(readers);
+					STREAM.GarbageCollect();
+				}
 			};
 
 			return schemeExpander;
@@ -390,18 +408,20 @@ namespace LogsReader.Reader
 				.Where(x => x.Item1.MainReader?.TraceReaders != null)
 				.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
 				.ToList();
-
+			
 			return true;
 		}
 
 		internal override void PauseAll()
 		{
+			base.PauseAll();
 			foreach (var reader in InProcessing)
 				reader.Item1.PauseAll();
 		}
 
 		internal override void ResumeAll()
 		{
+			base.ResumeAll();
 			foreach (var reader in InProcessing)
 				reader.Item1.ResumeAll();
 		}
@@ -567,8 +587,10 @@ namespace LogsReader.Reader
         protected override void ChangeFormStatus()
         {
 	        base.ChangeFormStatus();
-	        checkBoxSelectAll.Enabled = !IsWorking;
-        }
+	        
+	        checkBoxSelectAll.Cursor = Cursors.Default;
+			panelFlowDoc.Cursor = Cursors.Default;
+		}
 
         protected override IEnumerable<DataTemplate> GetResultTemplates()
         {
@@ -622,7 +644,7 @@ namespace LogsReader.Reader
 		protected override void BtnClear_Click(object sender, EventArgs e)
 		{
 			InProcessing.Clear();
-			base.BtnClear_Click(sender, e);
+			base.BtnClear_Click(this, e);
 		}
 
 		protected override void ColorizationDGV(DataGridViewRow row, DataTemplate template)

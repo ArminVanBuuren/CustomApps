@@ -70,7 +70,12 @@ namespace LogsReader.Reader
         private readonly Bitmap imgFailed = Resources.failed;
         private readonly Bitmap imgFinished = Resources.finished;
 
-        private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
+        private readonly Bitmap imgPlay = Resources.bt_play;
+        private readonly Padding paddingPlay = new Padding(0, 0, 1, 0);
+        private readonly Bitmap imgPause = Resources.onPause;
+        private readonly Padding paddingPause = new Padding(0, 0, 0, 0);
+
+		private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
         private string Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
         private string Txt_LogsReaderForm_DoesntMatchByPattern = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
         private string TxtReader_BtnPause = Resources.TxtReader_BtnPause;
@@ -477,29 +482,39 @@ namespace LogsReader.Reader
 
         internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
-        internal abstract void PauseAll();
+        internal virtual void PauseAll()
+        {
+			if(buttonPause.Image != imgPlay)
+				buttonPause.Image = imgPlay;
+			if (buttonPause.Padding != paddingPlay)
+				buttonPause.Padding = paddingPlay;
+        }
 
-        internal abstract void ResumeAll();
+        internal virtual void ResumeAll()
+        {
+	        if (buttonPause.Image != imgPause)
+		        buttonPause.Image = imgPause;
+	        if (buttonPause.Padding != paddingPause)
+		        buttonPause.Padding = paddingPause;
+        }
 
 		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
 
-        private void ButtonPause_Click(object sender, EventArgs e)
-        {
-	        OnPause = !OnPause;
+		private void ButtonPause_Click(object sender, EventArgs e)
+		{
+			OnPause = !OnPause;
 
-	        if (OnPause)
-	        {
-		        buttonPause.Image = Resources.bt_play;
-		        buttonPause.Padding = new Padding(0, 0, 1, 0);
+			if (OnPause)
+			{
 				PauseAll();
+				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
 			}
-	        else
-	        {
-		        buttonPause.Image = Resources.onPause;
-				buttonPause.Padding = new Padding(0, 0, 0, 0);
+			else
+			{
 				ResumeAll();
-	        }
-        }
+				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
 
 		void AddViewer(TraceItemView traceViewer, DataTemplate template)
         {
@@ -768,10 +783,16 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				//var prevSortedColumn = DgvReader.SortedColumn;
+				//var prevSortOrder = DgvReader.SortOrder;
+
 				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
 				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeadersVisible = true;
-				//DgvReader.Sort(DgvReaderThreadIdColumn, ListSortDirection.Descending);
+
+				//if(prevSortOrder != SortOrder.None)
+				//	DgvReader.Sort(prevSortedColumn, prevSortOrder == SortOrder.Ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
+				
 				OnUploadReaders?.Invoke(this, EventArgs.Empty);
 			}
 			catch (Exception ex)
@@ -829,21 +850,6 @@ namespace LogsReader.Reader
 			if (isChanged)
 				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
 		}
-
-		void ClearStatus()
-        {
-	        this.SafeInvoke(() =>
-	        {
-		        CountMatches = 0;
-		        CountErrorMatches = 0;
-		        Progress = 0;
-		        FilesCompleted = 0;
-		        TotalFiles = 0;
-		        ReportStatus(string.Empty, ReportStatusType.Success);
-            });
-
-	        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
-        }
 
         private async void BtnExport_Click(object sender, EventArgs e)
         {
@@ -1190,7 +1196,7 @@ namespace LogsReader.Reader
 			        statusStrip.Cursor = Cursors.Default;
 			        panel1.Cursor = Cursors.Default;
 
-					ClearForm(true);
+					Clear(true);
 		        }
 		        else
 		        {
@@ -2008,35 +2014,75 @@ namespace LogsReader.Reader
 
         protected virtual void BtnClear_Click(object sender, EventArgs e)
         {
-            ClearForm(true);
+	        Clear(true);
         }
 
-        protected virtual void ClearForm(bool saveData)
+        protected void Clear(bool saveData)
         {
 	        try
 	        {
-		        if (saveData)
-			        SaveData();
-
-		        Clear();
-
-		        ClearStatus();
-
-		        CountMatches = 0;
-		        CountErrorMatches = 0;
-				FilesCompleted = 0;
-		        TotalFiles = 0;
-
-		        IsDgvDataFiltered = false;
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex);
+		        ClearForm(saveData);
+		        ClearData();
 			}
-	        finally
+			finally
 	        {
 		        STREAM.GarbageCollect();
+	        }
+        }
+
+        protected void ClearForm(bool saveData)
+		{
+			try
+			{
+				if (saveData)
+					SaveData();
+
+				_oldSortedColumn = null;
+				_currentDGVResult = null;
+				_byAscending = true;
+
+				if (DgvData.DataSource != null || DgvData.RowCount > 0)
+				{
+					DgvData.DataSource = null;
+					DgvData.Rows.Clear();
+					DgvData.Refresh();
+				}
+
+				MainViewer.Clear();
+				foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+				{
+					if (page == MainViewer.Parent)
+						continue;
+
+					page.View.Clear();
+					tabControlViewer.TabPages.Remove(page);
+				}
+
+				buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
+				btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
+
+				CountMatches = 0;
+				CountErrorMatches = 0;
+				Progress = 0;
+				FilesCompleted = 0;
+				TotalFiles = 0;
+				ReportStatus(string.Empty, ReportStatusType.Success);
+
+				IsDgvDataFiltered = false;
 			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex);
+			}
+			finally
+			{
+				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
+        protected virtual void ClearData()
+        {
+
         }
 
         protected virtual void CustomPanel_Resize(object sender, EventArgs e)
@@ -2049,7 +2095,7 @@ namespace LogsReader.Reader
 	        if (checkBoxShowTrns.Checked)
 		        MainViewer.SelectTransactions();
 
-	        RefreshVisibleRows(DgvData, DgvDataRefreshRow); // не менять наRefreshAllRows. Производительность катастрофически падает
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow); // не менять на RefreshAllRows. Производительность катастрофически падает
 			DgvData.Focus();
         }
 
@@ -2058,42 +2104,8 @@ namespace LogsReader.Reader
 	        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
 		        page.View.DeselectTransactions();
 
-	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);  // не менять наRefreshAllRows. Производительность катастрофически падает
+	        RefreshVisibleRows(DgvData, DgvDataRefreshRow);  // не менять на RefreshAllRows. Производительность катастрофически падает
 			DgvData.Focus();
-        }
-
-        protected void Clear()
-        {
-	        try
-	        {
-		        _oldSortedColumn = null;
-		        _currentDGVResult = null;
-		        _byAscending = true;
-
-		        if (DgvData.DataSource != null || DgvData.RowCount > 0)
-		        {
-			        DgvData.DataSource = null;
-			        DgvData.Rows.Clear();
-			        DgvData.Refresh();
-		        }
-
-		        MainViewer.Clear();
-		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
-		        {
-			        if(page == MainViewer.Parent)
-                        continue;
-
-			        page.View.Clear();
-			        tabControlViewer.TabPages.Remove(page);
-		        }
-
-		        buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
-		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
-	        }
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex);
-	        }
         }
 
         private bool _isLastWasError;

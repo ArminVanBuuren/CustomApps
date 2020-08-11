@@ -36,6 +36,11 @@ namespace LogsReader.Reader
 		/// </summary>
         public event EventHandler OnSearchChanged;
 
+	    /// <summary>
+	    /// Происходит при полной очистке
+	    /// </summary>
+		public event EventHandler OnClear;
+
         /// <summary>
         /// Текущая схема настроек
         /// </summary>
@@ -206,7 +211,7 @@ namespace LogsReader.Reader
 	        }
 	        finally
 			{
-				ClearForm(false);
+				Clear(false);
 		        ValidationCheck(false);
 	        }
         }
@@ -368,7 +373,8 @@ namespace LogsReader.Reader
 	        try
 	        {
 		        var count = MainReader.TraceReaders.Values.Count();
-		        var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
+		        //var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
+		        var delay = 400; // лучше сделать статичную задержку, т.к. если используется глобальная и в одном из схем задержка не большая, то глобальная будет минимальной, что уменьшит производительность
 
 				while (IsWorking && MainReader?.TraceReaders != null)
 		        {
@@ -403,12 +409,6 @@ namespace LogsReader.Reader
 	        OnSearchChanged?.Invoke(this, EventArgs.Empty);
 		}
 
-		protected override void BtnClear_Click(object sender, EventArgs e)
-		{
-			base.BtnClear_Click(sender, e);
-			OnSearchChanged?.Invoke(this, EventArgs.Empty);
-		}
-
 		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
         {
             template = null;
@@ -434,11 +434,13 @@ namespace LogsReader.Reader
 
         internal override void PauseAll()
         {
+	        base.PauseAll();
 	        MainReader?.Pause();
 		}
 
         internal override void ResumeAll()
         {
+	        base.ResumeAll();
 	        MainReader?.Resume();
         }
 
@@ -543,7 +545,21 @@ namespace LogsReader.Reader
 			}
         }
 
-        protected override void ClearForm(bool saveData)
+		protected override void BtnClear_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				base.BtnClear_Click(this, e);
+				OnSearchChanged?.Invoke(this, EventArgs.Empty);
+				OnClear?.Invoke(this, EventArgs.Empty);
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex);
+			}
+		}
+
+		protected override void ClearData()
         {
 	        OverallResultList?.Clear();
             OverallResultList = null;
@@ -556,10 +572,10 @@ namespace LogsReader.Reader
             DgvReader.Refresh();
             DgvReader.ColumnHeadersVisible = false;
 
-			base.ClearForm(saveData);
+            base.ClearData();
         }
 
-        public override string ToString()
+		public override string ToString()
         {
             return CurrentSettings?.ToString() ?? base.ToString();
         }

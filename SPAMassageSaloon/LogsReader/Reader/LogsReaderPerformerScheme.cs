@@ -119,7 +119,6 @@ namespace LogsReader.Reader
 				if (HasOutOfMemoryException)
 					ClearInternal();
 
-				STREAM.GarbageCollect();
 				IsCompleted = true;
 
 				if (HasOutOfMemoryException)
@@ -210,6 +209,8 @@ namespace LogsReader.Reader
 			base.Clear();
 
 			ClearPreviousProcess();
+
+			STREAM.GarbageCollect();
 		}
 
 		/// <summary>
