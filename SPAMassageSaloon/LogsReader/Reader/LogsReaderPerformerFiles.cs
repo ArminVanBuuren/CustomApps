@@ -16,31 +16,11 @@ namespace LogsReader.Reader
 {
 	public abstract class LogsReaderPerformerFiles : LogsReaderPerformerBase
 	{
-		private bool _isStopPending = false;
-
 		private readonly IReadOnlyDictionary<string, int> _servers;
 		private readonly IReadOnlyDictionary<string[], int> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
 
-		/// <summary>
-		/// Запрос на ожидание остановки выполнения поиска
-		/// </summary>
-		public bool IsStopPending
-		{
-			get => _isStopPending;
-			private set
-			{
-				_isStopPending = value;
-
-				if (_isStopPending && TraceReaders != null)
-				{
-					foreach (var reader in TraceReaders.Values.Where(x => x.Status != TraceReaderStatus.Failed && x.Status != TraceReaderStatus.Finished))
-						reader.Status = TraceReaderStatus.Aborted;
-				}
-			}
-		}
-
-		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; private set; }
+		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; protected set; }
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
@@ -65,6 +45,8 @@ namespace LogsReader.Reader
 		{
 			if (IsStopPending)
 				return;
+
+			Reset();
 
 			TraceReaders = new ReadOnlyDictionary<int, TraceReader>(await Task<Dictionary<int, TraceReader>>.Factory.StartNew(GetFileLogs));
 			if (TraceReaders == null || TraceReaders.Count <= 0)
@@ -143,14 +125,6 @@ namespace LogsReader.Reader
 					}
 				}
 			}
-
-			//var stop = new Stopwatch();
-			//stop.Start();
-			//var getCountLines = new MTFuncResult<FileLog, long>((input) => IO.CountLinesReader(input.FilePath), kvpList, kvpList.Count, ThreadPriority.Lowest);
-			//getCountLines.Start();
-			//var lines = getCountLines.Result.Values.Select(x => x.Result).Sum(x => x);
-			//stop.Stop();
-
 			return traceReaders;
 		}
 
@@ -306,14 +280,32 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public abstract Task StartAsync();
-
-		public virtual void Stop()
+		public override void Pause()
 		{
-			IsStopPending = true;
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values)
+					reader.Pause();
 		}
 
-		public virtual void Reset()
+		public override void Resume()
+		{
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values)
+					reader.Resume();
+		}
+
+		public override void Abort()
+		{
+			// Processing и OnPause должны сами оcтановиться по свойству IsStopPending
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values.Where(x => x.Status == TraceReaderStatus.Waiting))
+					reader.Abort();
+		}
+
+		/// <summary>
+		/// Останавливаем все процессы
+		/// </summary>
+		public override void Clear()
 		{
 			//if (Connections != null)
 			//{
@@ -332,15 +324,21 @@ namespace LogsReader.Reader
 			//	Connections.Clear();
 			//}
 
-			TraceReaders = null;
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values)
+					reader.Clear();
 
-			IsStopPending = false;
+			base.Clear();
 		}
 
-		public override void Dispose()
+		public void Reset()
 		{
-			Reset();
-			base.Dispose();
+			if (TraceReaders != null)
+				foreach (var reader in TraceReaders.Values)
+					reader.Dispose();
+
+			TraceReaders = null;
+			base.Clear();
 		}
 
 		static bool IsAllowedExtension(string fileName)

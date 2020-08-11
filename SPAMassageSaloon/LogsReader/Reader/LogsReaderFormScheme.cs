@@ -53,7 +53,7 @@ namespace LogsReader.Reader
 
         public override RefreshDataType DgvDataAfterAssign => RefreshDataType.VisibleRows;
 
-		public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
+        public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
         {
 	        try
 	        {
@@ -358,7 +358,7 @@ namespace LogsReader.Reader
             }
             else
             {
-                MainReader?.Stop();
+                MainReader?.Abort();
                 ReportStatus(Resources.Txt_LogsReaderForm_Stopping, ReportStatusType.Success);
             }
         }
@@ -432,13 +432,15 @@ namespace LogsReader.Reader
 	        return MainReader.TraceReaders.TryGetValue(privateID, out reader);
         }
 
-        protected override void ButtonPause_Click(object sender, EventArgs e)
-		{
-			if (MainReader?.TraceReaders == null)
-				return;
-
-
+        internal override void PauseAll()
+        {
+	        MainReader?.Pause();
 		}
+
+        internal override void ResumeAll()
+        {
+	        MainReader?.Resume();
+        }
 
 		private void MaxLinesStackText_TextChanged(object sender, EventArgs e)
         {

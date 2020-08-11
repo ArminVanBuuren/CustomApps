@@ -54,9 +54,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm, Version=1.0.7525.27757, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Utils.WinForm, Version=1.0.7527.17854, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Debug\Utils.WinForm.dll</HintPath>
+      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +254,7 @@
     <Content Include="Resources\aborted.png" />
     <Content Include="Resources\add.png" />
     <Content Include="Resources\authorization.png" />
+    <Content Include="Resources\bt_play.png" />
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\default.png" />
     <Content Include="Resources\Error1.png" />

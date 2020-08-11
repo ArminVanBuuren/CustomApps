@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Utils;
 using Utils.WinForm.DataGridViewHelper;
 
@@ -82,10 +83,10 @@ namespace LogsReader.Reader
 		[DGVColumn(ColumnPosition.After, "PrivateID", false)]
         public int PrivateID { get; internal set; }
 
-		public TraceReaderStatus Status { get; internal set; } = TraceReaderStatus.Waiting;
+		public TraceReaderStatus Status { get; private set; } = TraceReaderStatus.Waiting;
 
 		[DGVColumn(ColumnPosition.After, "ThreadID", true)]
-		public string ThreadId { get; internal set; } = string.Empty;
+		public string ThreadId { get; private set; } = string.Empty;
 
 		/// <summary>
 		/// Количество совпадений по критериям поиска
@@ -163,6 +164,114 @@ namespace LogsReader.Reader
 				SearchType = TraceReaderSearchType.ByCustomFunctions;
 
 			SearchByTransaction = TransactionPatterns != null && TransactionPatterns.Length > 0;
+		}
+
+		public void Start()
+		{
+			try
+			{
+				ThreadId = Thread.CurrentThread.ManagedThreadId.ToString();
+
+				bool IsStopStatus()
+				{
+					if (HasOutOfMemoryException)
+					{
+						Status = TraceReaderStatus.Failed;
+						return true;
+					}
+					else if (IsStopPending || Status == TraceReaderStatus.Aborted)
+					{
+						Status = TraceReaderStatus.Aborted;
+						return true;
+					}
+
+					return false;
+				}
+
+				if (IsStopStatus())
+					return;
+
+				if (!File.Exists)
+				{
+					Status = TraceReaderStatus.Finished;
+					return;
+				}
+
+				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
+				using (var inputStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					if (IsStopStatus())
+						return;
+
+					using (var streamReader = new StreamReader(inputStream, Encoding))
+					{
+						if (Status != TraceReaderStatus.OnPause)
+							Status = TraceReaderStatus.Processing;
+
+						string line;
+						while ((line = streamReader.ReadLine()) != null)
+						{
+							if (Status == TraceReaderStatus.OnPause)
+								while (Status == TraceReaderStatus.OnPause && !IsStopPending && !HasOutOfMemoryException)
+									Thread.Sleep(50);
+
+							if(IsStopStatus())
+								return;
+
+							ReadLine(line);
+						}
+					}
+				}
+
+				Status = TraceReaderStatus.Finished;
+			}
+			catch (OutOfMemoryException)
+			{
+				Status = TraceReaderStatus.Failed;
+				HasOutOfMemoryException = true;
+			}
+			catch (Exception)
+			{
+				Status = TraceReaderStatus.Failed;
+				throw;
+			}
+			finally
+			{
+				try
+				{
+					if (HasOutOfMemoryException)
+					{
+						Clear();
+					}
+					else
+					{
+						Commit();
+						Clear();
+					}
+				}
+				catch
+				{
+					// ignored
+				}
+			}
+		}
+
+		public override void Pause()
+		{
+			if (Status == TraceReaderStatus.Waiting || Status == TraceReaderStatus.Processing)
+				Status = TraceReaderStatus.OnPause;
+		}
+
+		public override void Resume()
+		{
+			if (Status == TraceReaderStatus.OnPause)
+				Status = ThreadId.IsNullOrEmpty() ? TraceReaderStatus.Waiting : TraceReaderStatus.Processing;
+		}
+
+		public override void Abort()
+		{
+			if (Status == TraceReaderStatus.Waiting || Status == TraceReaderStatus.Processing || Status == TraceReaderStatus.OnPause)
+				Status = TraceReaderStatus.Aborted;
 		}
 
 		public abstract void ReadLine(string line);
@@ -442,6 +551,16 @@ namespace LogsReader.Reader
 			return false;
         }
 
+        /// <summary>
+		/// Останавливаем и очищаем
+		/// </summary>
+        public override void Clear()
+        {
+	        Found = null;
+			Abort();
+	        PastTraceLines.Clear();
+        }
+
 		public override bool Equals(object obj)
         {
 	        var isEqual = false;
@@ -465,17 +584,9 @@ namespace LogsReader.Reader
             return FilePath;
         }
 
-        public override void Clear()
-        {
-	        PastTraceLines.Clear();
-			base.Clear();
-		}
-
         public override void Dispose()
         {
-	        Found = null;
-	        PastTraceLines.Clear();
-	        base.Dispose();
+	        Clear();
         }
     }
 }

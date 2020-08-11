@@ -14,19 +14,43 @@ namespace LogsReader.Reader
 	public delegate V OutFuncDelegate<in T, U, out V>(T input, out U output);
 	public delegate V DoubleOutFuncDelegate<in T, U, S, out V>(T input, out U output1, out S output2);
 
-	public abstract class LogsReaderPerformerBase : IDisposable
+	public interface IReaderPerformer
+	{
+		LRSettingsScheme Settings { get; }
+
+		bool IsStopPending { get; }
+
+		bool HasOutOfMemoryException { get; }
+	}
+
+	internal class ReaderPerformer : IReaderPerformer
+	{
+		public LogsReaderPerformerBase Base { get; set; }
+
+		/// <summary>
+		/// Основные настройки
+		/// </summary>
+		public LRSettingsScheme Settings { get; set; }
+
+		/// <summary>
+		/// Запрос на ожидание остановки выполнения поиска
+		/// </summary>
+		public bool IsStopPending { get; set; }
+
+		/// <summary>
+		/// Если возникла ошибка переолнения памяти
+		/// </summary>
+		public bool HasOutOfMemoryException { get; set; } = false;
+	}
+
+	public abstract class LogsReaderPerformerBase : IReaderPerformer, IDisposable
 	{
 		private static long _seqBaseInstance = 0;
 		private readonly long _instanceId = 0;
 		private readonly object _syncTrn = new object();
-
-		private readonly LRSettingsScheme _currentSettings;
 		private readonly Dictionary<string, Regex> _transactionValues;
 
-		/// <summary>
-		/// Проверяет на совпадение по обычному поиску
-		/// </summary>
-		protected Func<string, bool> IsMatch { get; private set; }
+		private ReaderPerformer Parent { get; }
 
 		/// <summary>
 		/// Проверяет на совпадение по найденным транзакциям
@@ -34,55 +58,77 @@ namespace LogsReader.Reader
 		internal OutFuncDelegate<string, string, bool> IsMatchByTransactions { get; }
 
 		/// <summary>
+		/// Проверяет на совпадение по обычному поиску
+		/// </summary>
+		protected Func<string, bool> IsMatch { get; private set; }
+
+		/// <summary>
 		/// Функция для получение определенного <see cref="TraceReader"/> согласно настройкам
 		/// </summary>
 		protected Func<(string server, string filePath, string originalFolder), TraceReader> GetTraceReader { get; }
 
+		public LRSettingsScheme Settings => Parent.Settings;
+
+		public bool IsStopPending
+		{
+			get => Parent.IsStopPending;
+			protected set => Parent.IsStopPending = value;
+		}
+
+		public bool HasOutOfMemoryException
+		{
+			get => Parent.HasOutOfMemoryException;
+			protected set => Parent.HasOutOfMemoryException = value;
+		}
+
 		[DGVColumn(ColumnPosition.After, "SchemeName")]
-		public string SchemeName => _currentSettings.Name;
+		public string SchemeName => Settings.Name;
 
-		public Encoding Encoding => _currentSettings.Encoding;
+		public Encoding Encoding => Settings.Encoding;
 
-		public int MaxTraceLines => _currentSettings.MaxLines;
+		public int MaxTraceLines => Settings.MaxLines;
 
-		public int MaxThreads => _currentSettings.MaxThreads;
+		public int MaxThreads => Settings.MaxThreads;
 
-		public int RowsLimit => _currentSettings.RowsLimit;
+		public int RowsLimit => Settings.RowsLimit;
 
 		public (Func<string, TraceParseResult>, Func<string, bool>)? TraceParseCustomFunction { get; }
 
-		public LRTraceParsePatternItem[] TraceParsePatterns => _currentSettings.TraceParse.Patterns;
+		public LRTraceParsePatternItem[] TraceParsePatterns => Settings.TraceParse.Patterns;
 
-		public LRTraceParseTransactionItem[] TransactionPatterns => _currentSettings.TraceParse.TransactionPatterns;
+		public LRTraceParseTransactionItem[] TransactionPatterns => Settings.TraceParse.TransactionPatterns;
 
 		public DoubleOutFuncDelegate<string, DateTime, string, bool> TryParseDate { get; }
 
-		public Regex StartTraceLineWith => _currentSettings.TraceParse.StartTraceLineWith;
+		public Regex StartTraceLineWith => Settings.TraceParse.StartTraceLineWith;
 
-		public Regex EndTraceLineWith => _currentSettings.TraceParse.EndTraceLineWith;
+		public Regex EndTraceLineWith => Settings.TraceParse.EndTraceLineWith;
 
-		public Regex IsTraceError => _currentSettings.TraceParse.IsTraceError;
-
-		public bool IsDisposed { get; private set; } = false;
+		public Regex IsTraceError => Settings.TraceParse.IsTraceError;
 
 		protected LogsReaderPerformerBase(LRSettingsScheme settings, string findMessage, bool useRegex)
 		{
-			_instanceId = ++_seqBaseInstance;
-			_currentSettings = settings;
+			Parent = new ReaderPerformer
+			{
+				Base = this,
+				Settings = settings
+			};
 
+			_instanceId = ++_seqBaseInstance;
+			
 			ResetMatchFunc(findMessage, useRegex);
 
 			Func<DateTime, string> getDisplayDate;
-			if (_currentSettings.TraceParse.DisplayCulture != null)
-				getDisplayDate = (date) => date.ToString(_currentSettings.TraceParse.DisplayDateFormat, _currentSettings.TraceParse.DisplayCulture);
+			if (Settings.TraceParse.DisplayCulture != null)
+				getDisplayDate = (date) => date.ToString(Settings.TraceParse.DisplayDateFormat, Settings.TraceParse.DisplayCulture);
 			else
-				getDisplayDate = (date) => date.ToString(_currentSettings.TraceParse.DisplayDateFormat);
+				getDisplayDate = (date) => date.ToString(Settings.TraceParse.DisplayDateFormat);
 
-			if (_currentSettings.CultureList.Count > 0)
+			if (Settings.CultureList.Count > 0)
 			{
 				TryParseDate = (string dateValue, out DateTime result, out string displayDate) =>
 				{
-					foreach (var cultureInfo in _currentSettings.CultureList)
+					foreach (var cultureInfo in Settings.CultureList)
 					{
 						if (DateTime.TryParse(dateValue, cultureInfo, DateTimeStyles.AllowWhiteSpaces, out result))
 						{
@@ -136,22 +182,22 @@ namespace LogsReader.Reader
 				return false;
 			};
 
-			if (_currentSettings.TraceParse.StartTraceLineWith != null && _currentSettings.TraceParse.EndTraceLineWith != null)
+			if (Settings.TraceParse.StartTraceLineWith != null && Settings.TraceParse.EndTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderStartWithEndWith(this, data.server, data.filePath, data.originalFolder);
-			else if (_currentSettings.TraceParse.StartTraceLineWith != null)
+			else if (Settings.TraceParse.StartTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderStartWith(this, data.server, data.filePath, data.originalFolder);
-			else if (_currentSettings.TraceParse.EndTraceLineWith != null)
+			else if (Settings.TraceParse.EndTraceLineWith != null)
 				GetTraceReader = (data) => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
 			else
 				GetTraceReader = (data) => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
 
-			if (_currentSettings.TraceParse.IsCorrectCustomFunction)
-				TraceParseCustomFunction = _currentSettings.TraceParse.GetCustomFunction();
+			if (Settings.TraceParse.IsCorrectCustomFunction)
+				TraceParseCustomFunction = Settings.TraceParse.GetCustomFunction();
 		}
 
 		protected LogsReaderPerformerBase(LogsReaderPerformerBase control)
 		{
-			_currentSettings = control._currentSettings;
+			Parent = control.Parent;
 			IsMatch = control.IsMatch;
 			TryParseDate = control.TryParseDate;
 			_syncTrn = control._syncTrn;
@@ -204,6 +250,12 @@ namespace LogsReader.Reader
 			}
 		}
 
+		public abstract void Pause();
+
+		public abstract void Resume();
+
+		public abstract void Abort();
+
 		/// <summary>
 		/// Сравниваются только базовые настройки и инстанс. Игнорируется изменения настроек поиска свойства IsMatch.
 		/// </summary>
@@ -213,7 +265,7 @@ namespace LogsReader.Reader
 		{
 			var isEqual = false;
 			if (obj is LogsReaderPerformerBase input)
-				isEqual = _currentSettings == input._currentSettings && _instanceId == input._instanceId;
+				isEqual = Settings == input.Settings && _instanceId == input._instanceId;
 			return isEqual;
 		}
 
@@ -223,7 +275,7 @@ namespace LogsReader.Reader
 		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			var hash = _currentSettings.GetHashCode() + 13;
+			var hash = Settings.GetHashCode() + 13;
 			return hash;
 		}
 
@@ -233,10 +285,6 @@ namespace LogsReader.Reader
 				_transactionValues.Clear();
 		}
 
-		public virtual void Dispose()
-		{
-			_transactionValues.Clear();
-			IsDisposed = true;
-		}
+		public abstract void Dispose();
 	}
 }

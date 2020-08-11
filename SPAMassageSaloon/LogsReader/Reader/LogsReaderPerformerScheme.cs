@@ -34,8 +34,6 @@ namespace LogsReader.Reader
 
 		public bool IsCompleted { get; private set; } = false;
 
-		public bool HasOutOfMemoryException { get; private set; } = false;
-
 		public LogsReaderPerformerScheme(
 			LRSettingsScheme settings,
 			string findMessage,
@@ -77,7 +75,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public override async Task StartAsync()
+		public async Task StartAsync()
 		{
 			ClearPreviousProcess();
 
@@ -129,98 +127,16 @@ namespace LogsReader.Reader
 			}
 		}
 
-		void ClearPreviousProcess()
-		{
-			IsCompleted = false;
-			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
-			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
-			ResultsOfError = new List<DataTemplate>();
-		}
-
 		public void ReadData(TraceReader traceReader)
 		{
 			try
 			{
-				traceReader.ThreadId = Thread.CurrentThread.ManagedThreadId.ToString();
-
-				if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
-				{
-					traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
-					return;
-				}
-
-				if (!File.Exists(traceReader.FilePath))
-				{
-					traceReader.Status = TraceReaderStatus.Finished;
-					return;
-				}
-
 				traceReader.OnFound += AddResult;
-
-				// FileShare должен быть ReadWrite. Иначе, если файл используется другим процессом то доступ к чтению файла будет запрещен.
-				using (var inputStream = new FileStream(traceReader.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-				{
-					if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
-					{
-						traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
-						return;
-					}
-
-					using (var streamReader = new StreamReader(inputStream, Encoding))
-					{
-						if (traceReader.Status != TraceReaderStatus.OnPause)
-							traceReader.Status = TraceReaderStatus.Processing;
-
-						string line;
-						while ((line = streamReader.ReadLine()) != null)
-						{
-							if (traceReader.Status == TraceReaderStatus.OnPause)
-								while (traceReader.Status == TraceReaderStatus.OnPause && !IsStopPending && !HasOutOfMemoryException)
-									Thread.Sleep(50);
-
-							if (IsStopPending || HasOutOfMemoryException || traceReader.Status == TraceReaderStatus.Aborted)
-							{
-								traceReader.Status = HasOutOfMemoryException ? TraceReaderStatus.Failed : TraceReaderStatus.Aborted;
-								return;
-							}
-
-							traceReader.ReadLine(line);
-						}
-					}
-				}
-
-				traceReader.Status = TraceReaderStatus.Finished;
-			}
-			catch (OutOfMemoryException)
-			{
-				traceReader.Status = TraceReaderStatus.Failed;
-				HasOutOfMemoryException = true;
-			}
-			catch (Exception)
-			{
-				traceReader.Status = TraceReaderStatus.Failed;
-				throw;
+				traceReader.Start();
 			}
 			finally
 			{
-				try
-				{
-					if (HasOutOfMemoryException)
-					{
-						traceReader.OnFound -= AddResult;
-						traceReader.Dispose();
-					}
-					else
-					{
-						traceReader.Commit();
-						traceReader.Clear();
-						traceReader.OnFound -= AddResult;
-					}
-				}
-				catch
-				{
-					// ignored
-				}
+				traceReader.OnFound -= AddResult;
 			}
 		}
 
@@ -265,40 +181,55 @@ namespace LogsReader.Reader
 			}
 		}
 
+		public override void Abort()
+		{
+			IsStopPending = true;
+
+			if (_multiTaskingHandlerList != null)
+				foreach (var tasks in _multiTaskingHandlerList)
+					tasks.Stop();
+
+			base.Abort();
+		}
+
 		public override void Clear()
 		{
 			ClearInternal();
 			HasOutOfMemoryException = false;
 		}
 
+		/// <summary>
+		/// Останавливаем и очищаем. Но оставляем ошибку с памятью
+		/// </summary>
 		void ClearInternal()
 		{
-			if (TraceReaders != null)
-				foreach (var reader in TraceReaders.Values)
-					reader.Clear();
-			_result?.Clear();
-			ClearPreviousProcess();
-		}
-
-		public override void Reset()
-		{
-			Stop();
-			_result?.Clear();
-			ResultsOfError = null;
-			base.Reset();
-		}
-
-		public override void Stop()
-		{
-			base.Stop();
 			if (_multiTaskingHandlerList != null)
 				foreach (var tasks in _multiTaskingHandlerList)
 					tasks.Stop();
+
+			base.Clear();
+
+			ClearPreviousProcess();
+		}
+
+		/// <summary>
+		/// Очищаем все статусы процессинга
+		/// </summary>
+		void ClearPreviousProcess()
+		{
+			IsCompleted = false;
+			IsStopPending = false;
+			_multiTaskingHandlerList?.Clear();
+			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
+			_result?.Clear();
+			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+			ResultsOfError?.Clear();
+			ResultsOfError = new List<DataTemplate>();
 		}
 
 		public override void Dispose()
 		{
-			base.Dispose();
+			Clear();
 		}
 	}
 }

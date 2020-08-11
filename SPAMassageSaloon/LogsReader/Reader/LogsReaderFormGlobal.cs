@@ -302,28 +302,14 @@ namespace LogsReader.Reader
 			// если изменились значения прогресса поиска
 	        readerForm.OnProcessStatusChanged += (sender, args) =>
 	        {
-		        if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
-			        return;
-
-				var readers = InProcessing
-					.Where(x => x.Item1.MainReader?.TraceReaders != null)
-					.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
-					.ToList();
-
-				ReportProcessStatus(readers);
+		        if (IsInProcessing(readerForm, out var readers))
+					ReportProcessStatus(readers);
 	        };
 	        // При загрузке ридеров
 	        readerForm.OnUploadReaders += async (sender, args) =>
 	        {
-		        if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
-			        return;
-
-		        var readers = InProcessing
-			        .Where(x => x.Item1.MainReader?.TraceReaders != null)
-			        .SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
-			        .ToList();
-
-		        await UploadReaders(readers);
+		        if (IsInProcessing(readerForm, out var readers))
+			        await UploadReaders(readers);
 	        };
 			// событие при смене языка формы
 			readerForm.OnAppliedSettings += (sender, args) =>
@@ -393,6 +379,32 @@ namespace LogsReader.Reader
 
 			return schemeExpander;
         }
+
+		bool IsInProcessing(LogsReaderFormScheme readerForm, out List<TraceReader> readers)
+		{
+			readers = null;
+			if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
+				return false;
+
+			readers = InProcessing
+				.Where(x => x.Item1.MainReader?.TraceReaders != null)
+				.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
+				.ToList();
+
+			return true;
+		}
+
+		internal override void PauseAll()
+		{
+			foreach (var reader in InProcessing)
+				reader.Item1.PauseAll();
+		}
+
+		internal override void ResumeAll()
+		{
+			foreach (var reader in InProcessing)
+				reader.Item1.ResumeAll();
+		}
 
 		protected override void OnResize(EventArgs e)
         {

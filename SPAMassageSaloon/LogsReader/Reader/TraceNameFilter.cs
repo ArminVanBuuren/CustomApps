@@ -17,7 +17,6 @@ namespace LogsReader.Reader
 			CountErrors = countErrors;
 		}
 
-		//[DGVColumn(ColumnPosition.First, "Checked")]
 		public bool Checked { get; set; } = false;
 
 		[DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.TraceName))]

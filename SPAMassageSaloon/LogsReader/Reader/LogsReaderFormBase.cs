@@ -240,7 +240,9 @@ namespace LogsReader.Reader
 
 		public TraceItemView MainViewer { get; }
 
-        static LogsReaderFormBase()
+		public bool OnPause { get; protected set; } = false;
+
+		static LogsReaderFormBase()
         {
 	        Image GetImage(IEnumerable<Image> images)
 	        {
@@ -419,8 +421,7 @@ namespace LogsReader.Reader
 					    && cellAbort.Enabled
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader1))
 					{
-						if (reader1.Status == TraceReaderStatus.Waiting || reader1.Status == TraceReaderStatus.Processing || reader1.Status == TraceReaderStatus.OnPause)
-							reader1.Status = TraceReaderStatus.Aborted;
+						reader1.Abort();
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
@@ -430,16 +431,10 @@ namespace LogsReader.Reader
 					    && cellPauseResume.Enabled
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader2))
 					{
-						switch (reader2.Status)
-						{
-							case TraceReaderStatus.OnPause:
-								reader2.Status = reader2.ThreadId.IsNullOrEmpty() ? TraceReaderStatus.Waiting : TraceReaderStatus.Processing;
-								break;
-							case TraceReaderStatus.Waiting:
-							case TraceReaderStatus.Processing:
-								reader2.Status = TraceReaderStatus.OnPause;
-								break;
-						}
+						if (reader2.Status == TraceReaderStatus.OnPause)
+							reader2.Resume();
+						else
+							reader2.Pause();
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
@@ -482,9 +477,29 @@ namespace LogsReader.Reader
 
         internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
-        protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+        internal abstract void PauseAll();
 
-        protected abstract void ButtonPause_Click(object sender, EventArgs e);
+        internal abstract void ResumeAll();
+
+		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+	        OnPause = !OnPause;
+
+	        if (OnPause)
+	        {
+		        buttonPause.Image = Resources.bt_play;
+		        buttonPause.Padding = new Padding(0, 0, 1, 0);
+				PauseAll();
+			}
+	        else
+	        {
+		        buttonPause.Image = Resources.onPause;
+				buttonPause.Padding = new Padding(0, 0, 0, 0);
+				ResumeAll();
+	        }
+        }
 
 		void AddViewer(TraceItemView traceViewer, DataTemplate template)
         {
@@ -767,15 +782,10 @@ namespace LogsReader.Reader
 
 		protected void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
-			if (!IsWorking)
-				return;
-
 			var isChanged = false;
 
 			this.SafeInvoke(() =>
 			{
-				if (!IsWorking)
-					return;
 				try
 				{
 					var countMatches = 0;
@@ -786,7 +796,8 @@ namespace LogsReader.Reader
 
 					lock (syncRootStatus)
 					{
-						ReportStatus(string.Format(Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
+						if (IsWorking)
+							ReportStatus(string.Format(Txt_LogsReaderForm_Working, $" ({TimeWatcher.Elapsed.ToReadableString()})"), ReportStatusType.Success);
 
 						countMatches = readers.Sum(x => x.CountMatches);
 						countErrorMatches = readers.Sum(x => x.CountErrors);
@@ -805,7 +816,8 @@ namespace LogsReader.Reader
 					CountErrorMatches = countErrorMatches;
 					TotalFiles = totalFiles;
 					FilesCompleted = filesCompleted;
-					Progress = progress;
+					if (IsWorking)
+						Progress = progress;
 					isChanged = true;
 				}
 				finally
@@ -1168,10 +1180,17 @@ namespace LogsReader.Reader
 		        TbxTraceMessageFilter.Enabled = !IsWorking;
 		        ChbxAlreadyUseFilter.Enabled = !IsWorking;
 
-		        if (IsWorking)
+		        buttonPause.Enabled = IsWorking;
+		        buttonPause.Image = Resources.onPause;
+		        buttonPause.Padding = new Padding(0, 0, 0, 0);
+
+				if (IsWorking)
 		        {
 			        ParentSplitContainer.Cursor = Cursors.WaitCursor;
-			        ClearForm(true);
+			        statusStrip.Cursor = Cursors.Default;
+			        panel1.Cursor = Cursors.Default;
+
+					ClearForm(true);
 		        }
 		        else
 		        {
@@ -1180,7 +1199,7 @@ namespace LogsReader.Reader
 
 		        buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
 		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
-            }
+	        }
 	        finally
 	        {
 		        if (IsWorking)
@@ -1529,7 +1548,7 @@ namespace LogsReader.Reader
 
 			var filtered = original
 				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
-				.Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.IsSuccess), x.Count(m => !m.IsSuccess)))
+				.Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.Error == null), x.Count(m => !m.IsSuccess)))
 				.OrderBy(x => x.TraceName)
 				.ToDictionary(x => x.TraceName);
 
