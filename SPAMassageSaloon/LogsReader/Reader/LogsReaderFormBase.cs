@@ -66,16 +66,14 @@ namespace LogsReader.Reader
         private readonly Bitmap imgWaiting = Resources.waiting;
         private readonly Bitmap imgProcessing = Resources.processing;
         private readonly Bitmap imgOnPause = Resources.onPause;
-        private readonly Bitmap imgAborted = Resources.aborted;
+        private readonly Padding paddingOnPause = new Padding(0, 0, 0, 0);
+		private readonly Bitmap imgAborted = Resources.aborted;
         private readonly Bitmap imgFailed = Resources.failed;
         private readonly Bitmap imgFinished = Resources.finished;
-
         private readonly Bitmap imgPlay = Resources.bt_play;
         private readonly Padding paddingPlay = new Padding(0, 0, 1, 0);
-        private readonly Bitmap imgPause = Resources.onPause;
-        private readonly Padding paddingPause = new Padding(0, 0, 0, 0);
 
-		private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
+        private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
         private string Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
         private string Txt_LogsReaderForm_DoesntMatchByPattern = Resources.Txt_LogsReaderForm_DoesntMatchByPattern;
         private string TxtReader_BtnPause = Resources.TxtReader_BtnPause;
@@ -492,10 +490,10 @@ namespace LogsReader.Reader
 
         internal virtual void ResumeAll()
         {
-	        if (buttonPause.Image != imgPause)
-		        buttonPause.Image = imgPause;
-	        if (buttonPause.Padding != paddingPause)
-		        buttonPause.Padding = paddingPause;
+	        if (buttonPause.Image != imgOnPause)
+		        buttonPause.Image = imgOnPause;
+	        if (buttonPause.Padding != paddingOnPause)
+		        buttonPause.Padding = paddingOnPause;
         }
 
 		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
@@ -1187,8 +1185,8 @@ namespace LogsReader.Reader
 		        ChbxAlreadyUseFilter.Enabled = !IsWorking;
 
 		        buttonPause.Enabled = IsWorking;
-		        buttonPause.Image = Resources.onPause;
-		        buttonPause.Padding = new Padding(0, 0, 0, 0);
+		        buttonPause.Image = imgOnPause;
+		        buttonPause.Padding = paddingOnPause;
 
 				if (IsWorking)
 		        {
