@@ -372,7 +372,7 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        var count = MainReader.TraceReaders.Values.Count();
+		        //var count = MainReader.TraceReaders.Values.Count();
 		        //var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
 		        var delay = 400; // лучше сделать статичную задержку, т.к. если используется глобальная и в одном из схем задержка не большая, то глобальная будет минимальной, что уменьшит производительность
 
