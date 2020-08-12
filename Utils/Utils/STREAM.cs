@@ -2,12 +2,18 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Utils
 {
     public static class STREAM
     {
+        public static async Task GarbageCollectAsync()
+        {
+	        await Task.Factory.StartNew(GarbageCollect);
+        }
+
         public static void GarbageCollect()
         {
             for (var i = 0; i < 3; i++)
