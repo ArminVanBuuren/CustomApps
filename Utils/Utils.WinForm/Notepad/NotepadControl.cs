@@ -492,20 +492,28 @@ namespace Utils.WinForm.Notepad
         {
             var index = _tabControl.TabPages.Count;
 
-            var tabPage = new TabPage
+            var tabPage = new TabPage();
+            try
             {
-                Text = editor.HeaderName + new string(' ', 2),
-                UseVisualStyleBackColor = true,
-                ForeColor = TabsForeColor,
-                Margin = new Padding(0),
-                Padding = new Padding(0),
-                BorderStyle = BorderStyle.None
-            };
-            tabPage.Controls.Add(editor);
+	            tabPage.SuspendLayout();
 
-            _tabControl.TabPages.Add(tabPage);
-            if (_tabControl.TabPages.Count == index)
-                _tabControl.TabPages.Insert(index, editor.HeaderName);
+	            tabPage.Text = editor.HeaderName + new string(' ', 2);
+	            tabPage.UseVisualStyleBackColor = true;
+	            tabPage.ForeColor = TabsForeColor;
+	            tabPage.Margin = new Padding(0);
+	            tabPage.Padding = new Padding(0);
+	            tabPage.BorderStyle = BorderStyle.None;
+
+	            tabPage.Controls.Add(editor);
+
+	            _tabControl.TabPages.Add(tabPage);
+	            if (_tabControl.TabPages.Count == index)
+					_tabControl.TabPages.Insert(index, editor.HeaderName);
+            }
+            finally
+            {
+	            tabPage.ResumeLayout();
+            }
 
             _tabControl.SelectedIndex = index;
 
