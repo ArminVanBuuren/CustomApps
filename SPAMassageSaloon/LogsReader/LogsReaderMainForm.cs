@@ -254,6 +254,18 @@ namespace LogsReader
 		        {
 			        SaveData();
 			        SerializeUserCreditails();
+
+			        foreach (var schemeForm in SchemeForms.Values)
+			        {
+				        schemeForm.OnSchemeChanged -= SaveSchemas;
+				        schemeForm.Clear();
+					}
+
+			        Global.Clear();
+		        };
+		        Closed += async (sender, args) =>
+		        {
+					await STREAM.GarbageCollectAsync();
 		        };
 	        }
 	        catch (Exception ex)

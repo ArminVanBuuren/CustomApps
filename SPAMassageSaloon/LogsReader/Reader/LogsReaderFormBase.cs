@@ -1174,7 +1174,7 @@ namespace LogsReader.Reader
 			        statusStrip.Cursor = Cursors.Default;
 			        panel1.Cursor = Cursors.Default;
 
-			        Clear(true);
+			        Clear(true, true);
 		        }
 		        else
 		        {
@@ -2038,20 +2038,26 @@ namespace LogsReader.Reader
 
         protected virtual void BtnClear_Click(object sender, EventArgs e)
         {
-	        Clear(true);
+	        Clear(true, true);
         }
 
-        protected void Clear(bool saveData)
+        public void Clear()
+        {
+	        Clear(false, false);
+		}
+
+        protected async void Clear(bool saveData, bool collect)
         {
 	        try
 	        {
 		        ClearForm(saveData);
 		        ClearData();
-			}
-			finally
-	        {
-		        STREAM.GarbageCollect();
 	        }
+	        finally
+	        {
+		        if (collect)
+					await STREAM.GarbageCollectAsync();
+			}
         }
 
         protected void ClearForm(bool saveData)

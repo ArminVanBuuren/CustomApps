@@ -200,7 +200,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Останавливаем и очищаем. Но оставляем ошибку с памятью
 		/// </summary>
-		void ClearInternal()
+		async void ClearInternal()
 		{
 			if (_multiTaskingHandlerList != null)
 				foreach (var tasks in _multiTaskingHandlerList)
@@ -210,7 +210,7 @@ namespace LogsReader.Reader
 
 			ClearPreviousProcess();
 
-			STREAM.GarbageCollect();
+			await STREAM.GarbageCollectAsync();
 		}
 
 		/// <summary>

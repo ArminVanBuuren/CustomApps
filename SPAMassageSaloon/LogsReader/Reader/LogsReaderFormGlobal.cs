@@ -385,7 +385,7 @@ namespace LogsReader.Reader
 				{
 					MainViewer.Clear();
 					await UploadReaders(GetResultReaders());
-					STREAM.GarbageCollect();
+					await STREAM.GarbageCollectAsync();
 				}
 			};
 

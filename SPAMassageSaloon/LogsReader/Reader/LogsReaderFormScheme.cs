@@ -211,7 +211,7 @@ namespace LogsReader.Reader
 	        }
 	        finally
 			{
-				Clear(false);
+				Clear();
 		        ValidationCheck(false);
 	        }
         }
