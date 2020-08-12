@@ -1114,32 +1114,6 @@ namespace LogsReader.Reader
 	        }
         }
 
-        static void EnsureVisibleRow(DataGridView view, int rowToShow, int firstVisible, int countVisible)
-        {
-	        if (rowToShow < 0 || rowToShow >= view.RowCount)
-		        return;
-
-	        view.Rows[rowToShow].Selected = true;
-	        if (firstVisible <= -1 || countVisible <= -1)
-	        {
-		        view.FirstDisplayedScrollingRowIndex = rowToShow;
-                return;
-	        }
-
-	        if (rowToShow < firstVisible)
-	        {
-		        view.FirstDisplayedScrollingRowIndex = rowToShow;
-	        }
-	        else if (rowToShow >= firstVisible + countVisible)
-	        {
-		        view.FirstDisplayedScrollingRowIndex = rowToShow - countVisible + 1;
-	        }
-	        else
-	        {
-		        view.FirstDisplayedScrollingRowIndex = firstVisible;
-	        }
-        }
-
         protected virtual void ChangeFormStatus()
         {
 	        try
