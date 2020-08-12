@@ -93,20 +93,23 @@ namespace Utils.WinForm.DataGridViewHelper
 		        pi.SetValue(dgv, setting, null);
         }
 
-        public static void CheckCheckBoxColumn(this DataGridView dataGridView, DgvCheckBoxColumn checkBoxColumn)
+        public static void CheckStatusHeader(this DataGridView dataGridView, DgvCheckBoxColumn checkBoxColumn)
         {
-	        if (checkBoxColumn.Checked)
+            if(checkBoxColumn == null || !(checkBoxColumn.HeaderCell is DgvColumnCheckBoxHeaderCell headerCell))
+                return;
+
+	        if (headerCell.Checked)
 	        {
 		        if (dataGridView.Rows.OfType<DataGridViewRow>()
 			        .Any(row => row.Cells[checkBoxColumn.Index] is DgvCheckBoxCell cellCheckBox && !cellCheckBox.Checked))
-			        checkBoxColumn.Checked = false;
+			        headerCell.UpdateState(false, true);
 	        }
 	        else
 	        {
 		        if (dataGridView.Rows.OfType<DataGridViewRow>()
 			        .All(row => row.Cells[checkBoxColumn.Index] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked))
-			        checkBoxColumn.Checked = true;
-	        }
+			        headerCell.UpdateState(true, true);
+            }
         }
 
         public static async Task<DataTable> ToTableAsync<T>(this IEnumerable<T> data)
