@@ -435,7 +435,12 @@ namespace SPAMassageSaloon
 
         private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
         {
-            ShowMdiForm(() => new LogsReaderMainForm());
+            ShowMdiForm(() =>
+            {
+	            var form = new LogsReaderMainForm();
+	            form.Closed += (o, args) => form.Dispose();
+	            return form;
+            });
         }
 
         private void toolStripSpaFilterButton_Click(object sender, EventArgs e)

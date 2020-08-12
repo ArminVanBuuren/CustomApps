@@ -397,6 +397,12 @@ namespace LogsReader.Reader
 
 				#region Initialize DgvProcessing
 
+				DgvReaderSelectColumn.CellTemplate = new DgvCheckBoxCell
+				{
+					Checked = true,
+					Enabled = false
+				};
+
 				DgvReader.AutoGenerateColumns = false;
 				DgvReader.TabStop = false;
 				DgvReader.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
@@ -408,6 +414,8 @@ namespace LogsReader.Reader
 					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 				DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 				DgvReaderAbortColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+				DgvReader.Resize += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
+				DgvReader.Scroll += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
 				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.CellContentClick += (sender, args) =>
@@ -1033,7 +1041,6 @@ namespace LogsReader.Reader
 		            return;
 	            }
 
-
 	            var count = 0;
 	            foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
 	            {
@@ -1042,7 +1049,6 @@ namespace LogsReader.Reader
 		            if (isFiltered)
 			            count++;
 	            }
-
 
 	            if (count == 0)
 		            ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
@@ -1157,10 +1163,9 @@ namespace LogsReader.Reader
 		        buttonPause.Image = imgOnPause;
 		        buttonPause.Padding = paddingOnPause;
 
-		        if (DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader)
-			        dgvChkbxColumnHeader.Enabled = !IsWorking;
+		        ChangeStateDgvReaderBoxes(!IsWorking, true);
 
-		        if (IsWorking)
+				if (IsWorking)
 		        {
 			        new Action(CheckProgress).BeginInvoke(null, null);
 
@@ -1185,22 +1190,27 @@ namespace LogsReader.Reader
 	        }
         }
 
+		void ChangeStateDgvReaderBoxes(bool enabled, bool @checked)
+		{
+			if (!(DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader))
+				return;
+
+			dgvChkbxColumnHeader.Enabled = enabled;
+			dgvChkbxColumnHeader.Checked = @checked;
+
+			foreach (var row in DgvReader.Rows.OfType<DataGridViewRow>())
+			{
+				if (row.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell cell)
+				{
+					cell.Enabled = enabled;
+					cell.Checked = @checked;
+				}
+			}
+		}
+
         protected async Task UploadReaders(IEnumerable<TraceReader> readers)
         {
-	        void DgvReaderOnDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-	        {
-		        if (!(DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader)) 
-			        return;
-		        dgvChkbxColumnHeader.Enabled = !IsWorking;
-		        dgvChkbxColumnHeader.Checked = true;
-
-		        foreach (var row in DgvReader.Rows.OfType<DataGridViewRow>())
-			        if (row.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell cell)
-				        cell.Checked = true;
-			}
-
-	        DgvReader.DataBindingComplete += DgvReaderOnDataBindingComplete;
-			try
+	        try
 	        {
 		        //var prevSortedColumn = DgvReader.SortedColumn;
 		        //var prevSortOrder = DgvReader.SortOrder;
@@ -1217,10 +1227,6 @@ namespace LogsReader.Reader
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex);
-	        }
-	        finally
-	        {
-		        DgvReader.DataBindingComplete -= DgvReaderOnDataBindingComplete;
 	        }
         }
 
@@ -1554,6 +1560,7 @@ namespace LogsReader.Reader
 						_prevReadersDistance > 0 ? _prevReadersDistance : splitContainerMainFilter.Height - splitContainerMainFilter.Height / 3;
 					splitContainerMainFilter.Panel2Collapsed = !_shownProcessReadesPanel;
 					RefreshAllRows(DgvReader, DgvReaderRefreshRow); // надо обновить при первой загрузке, иначе не прорисовываются
+					DgvReader.Refresh();
 				}
 				else
 				{
