@@ -268,149 +268,148 @@ namespace LogsReader.Reader
 	        Img_Failed_Filtered = GetImage(new[] { Resources.Error1, Resources.filtered });
         }
 
-        protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
-        {
-	        InitializeComponent();
+		protected LogsReaderFormBase(Encoding defaultEncoding, UserSettings userSettings)
+		{
+			InitializeComponent();
 
-	        DefaultEncoding = defaultEncoding;
-            UserSettings = userSettings;
+			DefaultEncoding = defaultEncoding;
+			UserSettings = userSettings;
 
-            _formBackColor = UserSettings.BackColor;
-            _formForeColor = UserSettings.ForeColor;
+			_formBackColor = UserSettings.BackColor;
+			_formForeColor = UserSettings.ForeColor;
 
-            base.Font = LogsReaderMainForm.DefFont;
-	        ChbxAlreadyUseFilter.Font = LogsReaderMainForm.DefFont;
-	        tabControlViewer.Font = LogsReaderMainForm.DgvDataFont;
+			base.Font = LogsReaderMainForm.DefFont;
+			ChbxAlreadyUseFilter.Font = LogsReaderMainForm.DefFont;
+			tabControlViewer.Font = LogsReaderMainForm.DgvDataFont;
 
-            #region Initialize StripStatus
+			#region Initialize StripStatus
 
-            Tooltip = new ToolTip
-            {
-	            AutoPopDelay = 15000,
+			Tooltip = new ToolTip
+			{
+				AutoPopDelay = 15000,
 				InitialDelay = 100,
 				ReshowDelay = 500
 			};
 
 			var toolToolStripCollection = new List<ToolStripItem>();
 			var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
-            var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
-            var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
+			var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
+			var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
 
-            _openProcessingReadersBtn = new ToolStripButton
-            {
-	            Text = @"ᐯᐱ", 
-	            Font = new Font("Verdana", 8.5f, FontStyle.Bold, GraphicsUnit.Point, 0), 
-	            BackColor = Color.FromArgb(54, 187, 156) , 
-	            ForeColor = Color.White, 
-	            Margin = new Padding(0, 2, 0, 2),
+			_openProcessingReadersBtn = new ToolStripButton
+			{
+				Text = @"ᐯᐱ",
+				Font = new Font("Verdana", 8.5f, FontStyle.Bold, GraphicsUnit.Point, 0),
+				BackColor = Color.FromArgb(54, 187, 156),
+				ForeColor = Color.White,
+				Margin = new Padding(0, 2, 0, 2),
 				Padding = new Padding(1, 0, 0, 0)
-            };
-            _openProcessingReadersBtn.Click += buttonNextBlock_Click;
-            buttonNextBlock_Click(null, EventArgs.Empty);
+			};
+			_openProcessingReadersBtn.Click += buttonNextBlock_Click;
+			buttonNextBlock_Click(null, EventArgs.Empty);
 			toolToolStripCollection.Add(_openProcessingReadersBtn);
-            toolToolStripCollection.Add(new ToolStripSeparator());
+			toolToolStripCollection.Add(new ToolStripSeparator());
 
-			_filtersCompleted1 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
-            _completedFilesStatus = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            _filtersCompleted2 = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            _totalFilesStatus = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingEnd };
-            toolToolStripCollection.Add(_filtersCompleted1);
-            toolToolStripCollection.Add(_completedFilesStatus);
-            toolToolStripCollection.Add(_filtersCompleted2);
-            toolToolStripCollection.Add(_totalFilesStatus);
+			_filtersCompleted1 = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingStart};
+			_completedFilesStatus = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
+			_filtersCompleted2 = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
+			_totalFilesStatus = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingEnd};
+			toolToolStripCollection.Add(_filtersCompleted1);
+			toolToolStripCollection.Add(_completedFilesStatus);
+			toolToolStripCollection.Add(_filtersCompleted2);
+			toolToolStripCollection.Add(_totalFilesStatus);
 
-            _overallFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingStart };
-            _findedInfo = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            _errorFound = new ToolStripStatusLabel { Font = base.Font, Margin = statusStripItemsPaddingEnd };
-            _errorFoundValue = new ToolStripStatusLabel("0") { Font = base.Font, Margin = statusStripItemsPaddingMiddle };
-            toolToolStripCollection.Add(new ToolStripSeparator());
-            toolToolStripCollection.Add(_overallFound);
-            toolToolStripCollection.Add(_findedInfo);
-            toolToolStripCollection.Add(new ToolStripSeparator());
-            toolToolStripCollection.Add(_errorFound);
-            toolToolStripCollection.Add(_errorFoundValue);
+			_overallFound = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingStart};
+			_findedInfo = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
+			_errorFound = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingEnd};
+			_errorFoundValue = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
+			toolToolStripCollection.Add(new ToolStripSeparator());
+			toolToolStripCollection.Add(_overallFound);
+			toolToolStripCollection.Add(_findedInfo);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+			toolToolStripCollection.Add(_errorFound);
+			toolToolStripCollection.Add(_errorFoundValue);
 
-            toolToolStripCollection.Add(new ToolStripSeparator());
-            _statusInfo = new ToolStripStatusLabel("") { Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart };
-            toolToolStripCollection.Add(_statusInfo);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+			_statusInfo = new ToolStripStatusLabel("") {Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
+			toolToolStripCollection.Add(_statusInfo);
 
-            statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
+			statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
 
 			#endregion
 
 			try
-            {
+			{
 				#region Initialize DgvData
 
 				DgvData.AutoGenerateColumns = false;
-                DgvData.TabStop = false;
-                DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
-                DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
-	            DgvData.Font = LogsReaderMainForm.DgvDataFont;
-	            DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-	            DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-	            foreach (DataGridViewColumn c in DgvData.Columns)
-		            c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-	            DgvData.CellDoubleClick += DgvData_CellDoubleClick;
-	            DgvData.SelectionChanged += DgvData_SelectionChanged;
-	            DgvData.MouseDown += DgvData_MouseDown;
+				DgvData.TabStop = false;
+				DgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+				DgvData.DefaultCellStyle.Font = LogsReaderMainForm.DgvDataFont;
+				DgvData.Font = LogsReaderMainForm.DgvDataFont;
+				DgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+				DgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+				foreach (DataGridViewColumn c in DgvData.Columns)
+					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+				DgvData.CellDoubleClick += DgvData_CellDoubleClick;
+				DgvData.SelectionChanged += DgvData_SelectionChanged;
+				DgvData.MouseDown += DgvData_MouseDown;
 				DgvData.CellFormatting += DataGridViewOnCellFormatting;
-                DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
-                DgvData.DataBindingComplete += (sender, args) => { DgvData.ClearSelection(); };
-                DgvData.ColumnWidthChanged += (sender, args) =>
-                {
-	                if (DgvDataPromptColumn.Width > DgvDataPromptColumn.MinimumWidth)
-		                DgvDataPromptColumn.Width = DgvDataPromptColumn.MinimumWidth;
-                };
+				DgvData.ColumnHeaderMouseClick += DgvDataOnColumnHeaderMouseClick;
+				DgvData.DataBindingComplete += (sender, args) => DgvData.ClearSelection();
+				DgvData.ColumnWidthChanged += (sender, args) =>
+				{
+					if (DgvDataPromptColumn.Width > DgvDataPromptColumn.MinimumWidth)
+						DgvDataPromptColumn.Width = DgvDataPromptColumn.MinimumWidth;
+				};
 
 				DgvDataPromptColumn.DataPropertyName = DgvDataPromptColumn.Name = nameof(DataTemplate.Tmp.Prompt);
-                DgvDataPromptColumn.HeaderText = DataTemplate.HeaderPrompt;
+				DgvDataPromptColumn.HeaderText = DataTemplate.HeaderPrompt;
 
-                DgvDataIDColumn.DataPropertyName = DgvDataIDColumn.Name = DgvDataIDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
+				DgvDataIDColumn.DataPropertyName = DgvDataIDColumn.Name = DgvDataIDColumn.HeaderText = nameof(DataTemplate.Tmp.ID);
 
-                DgvDataServerColumn.DataPropertyName = DgvDataServerColumn.Name = DgvDataServerColumn.HeaderText = nameof(DataTemplate.Tmp.Server);
+				DgvDataServerColumn.DataPropertyName = DgvDataServerColumn.Name = DgvDataServerColumn.HeaderText = nameof(DataTemplate.Tmp.Server);
 
-                DgvDataTraceNameColumn.DataPropertyName = DgvDataTraceNameColumn.Name = nameof(DataTemplate.Tmp.TraceName);
-                DgvDataTraceNameColumn.HeaderText = nameof(DataTemplate.Tmp.TraceName);
+				DgvDataTraceNameColumn.DataPropertyName = DgvDataTraceNameColumn.Name = nameof(DataTemplate.Tmp.TraceName);
+				DgvDataTraceNameColumn.HeaderText = nameof(DataTemplate.Tmp.TraceName);
 
-                DgvDataDateOfTraceColumn.DataPropertyName = DgvDataDateOfTraceColumn.Name = nameof(DataTemplate.Tmp.DateString);
-                DgvDataDateOfTraceColumn.HeaderText = nameof(DataTemplate.Tmp.Date);
+				DgvDataDateOfTraceColumn.DataPropertyName = DgvDataDateOfTraceColumn.Name = nameof(DataTemplate.Tmp.DateString);
+				DgvDataDateOfTraceColumn.HeaderText = nameof(DataTemplate.Tmp.Date);
 
-                DgvDataElapsedSecColumn.DataPropertyName = DgvDataElapsedSecColumn.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
-                DgvDataElapsedSecColumn.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
+				DgvDataElapsedSecColumn.DataPropertyName = DgvDataElapsedSecColumn.Name = nameof(DataTemplate.Tmp.ElapsedSecString);
+				DgvDataElapsedSecColumn.HeaderText = nameof(DataTemplate.Tmp.ElapsedSec);
 
-                DgvDataSchemeNameColumn.DataPropertyName = DgvDataSchemeNameColumn.Name = nameof(DataTemplate.Tmp.SchemeName);// not visible
+				DgvDataSchemeNameColumn.DataPropertyName = DgvDataSchemeNameColumn.Name = nameof(DataTemplate.Tmp.SchemeName); // not visible
 
-                DgvDataPrivateIDColumn.DataPropertyName = DgvDataPrivateIDColumn.Name = nameof(DataTemplate.Tmp.PrivateID); // not visible
+				DgvDataPrivateIDColumn.DataPropertyName = DgvDataPrivateIDColumn.Name = nameof(DataTemplate.Tmp.PrivateID); // not visible
 
-                DgvDataIsSuccessColumn.DataPropertyName = DgvDataIsSuccessColumn.Name = nameof(DataTemplate.Tmp.IsSuccess); // not visible
+				DgvDataIsSuccessColumn.DataPropertyName = DgvDataIsSuccessColumn.Name = nameof(DataTemplate.Tmp.IsSuccess); // not visible
 
-                DgvDataIsFilteredColumn.DataPropertyName = DgvDataIsFilteredColumn.Name = nameof(DataTemplate.Tmp.IsFiltered); // not visible
+				DgvDataIsFilteredColumn.DataPropertyName = DgvDataIsFilteredColumn.Name = nameof(DataTemplate.Tmp.IsFiltered); // not visible
 
-                DgvDataFileColumn.DataPropertyName = DgvDataFileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
-                DgvDataFileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
+				DgvDataFileColumn.DataPropertyName = DgvDataFileColumn.Name = nameof(DataTemplate.Tmp.FileNamePartial);
+				DgvDataFileColumn.HeaderText = nameof(DataTemplate.Tmp.File);
 
 				label7.Text = nameof(DataTemplate.Tmp.TraceName);
-                label11.Text = DataTemplate.HeaderTraceMessage;
+				label11.Text = DataTemplate.HeaderTraceMessage;
 
-                #endregion
+				#endregion
 
 				#region Initialize DgvProcessing
 
 				DgvReader.AutoGenerateColumns = false;
-                DgvReader.TabStop = false;
-                DgvReader.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-                DgvReader.DefaultCellStyle.Font = LogsReaderMainForm.DgvReaderFont;
-                DgvReader.Font = LogsReaderMainForm.DgvReaderFont;
-                DgvReader.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-                foreach (DataGridViewColumn c in DgvReader.Columns)
-	                c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+				DgvReader.TabStop = false;
+				DgvReader.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+				DgvReader.DefaultCellStyle.Font = LogsReaderMainForm.DgvReaderFont;
+				DgvReader.Font = LogsReaderMainForm.DgvReaderFont;
+				DgvReader.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+				DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+				foreach (DataGridViewColumn c in DgvReader.Columns)
+					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+				DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 				DgvReaderAbortColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-				DgvReader.ColumnHeaderMouseClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
-				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => { RefreshAllRows(DgvReader, DgvReaderRefreshRow); };
-				DgvReader.DataBindingComplete += (sender, args) => DgvReader.ClearSelection();
+				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.CellContentClick += (sender, args) =>
 				{
 					if (args.RowIndex < 0)
@@ -434,9 +433,19 @@ namespace LogsReader.Reader
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader2))
 					{
 						if (reader2.Status == TraceReaderStatus.OnPause)
+						{
 							reader2.Resume();
+							// если какой то запустили, но до этого все поставили на паузу, то обновляем статус и кнопку
+							ResumeState();
+						}
 						else
+						{
 							reader2.Pause();
+							// если все остановили вручную, то обновляем статус и кнопку
+							if (!GetResultReaders().Any(x => x.Status == TraceReaderStatus.Waiting || x.Status == TraceReaderStatus.Processing))
+								PauseState();
+						}
+
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
@@ -447,33 +456,33 @@ namespace LogsReader.Reader
 				#region Apply All Settings
 
 				DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
-                DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
+				DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
 
-                TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
-                ChbxUseRegex.Checked = UserSettings.UseRegex;
-                DateStartFilter.Checked = UserSettings.DateStartChecked;
-                if (DateStartFilter.Checked)
-                    DateStartFilter.Value = _getStartDate.Invoke();
-                DateEndFilter.Checked = UserSettings.DateEndChecked;
-                if (DateEndFilter.Checked)
-                    DateEndFilter.Value = _getEndDate.Invoke();
-                TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
-                TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
+				TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
+				ChbxUseRegex.Checked = UserSettings.UseRegex;
+				DateStartFilter.Checked = UserSettings.DateStartChecked;
+				if (DateStartFilter.Checked)
+					DateStartFilter.Value = _getStartDate.Invoke();
+				DateEndFilter.Checked = UserSettings.DateEndChecked;
+				if (DateEndFilter.Checked)
+					DateEndFilter.Value = _getEndDate.Invoke();
+				TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
+				TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
 
-                MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
-                tabControlViewer.DrawMode = TabDrawMode.Normal;
-                tabControlViewer.BackColor = Color.White;
-                AddViewer(MainViewer, null);
+				MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
+				tabControlViewer.DrawMode = TabDrawMode.Normal;
+				tabControlViewer.BackColor = Color.White;
+				AddViewer(MainViewer, null);
 
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
-            }
-        }
+				#endregion
+			}
+			catch (Exception ex)
+			{
+				ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_Initialization);
+			}
+		}
 
-        protected abstract IEnumerable<DataTemplate> GetResultTemplates();
+		protected abstract IEnumerable<DataTemplate> GetResultTemplates();
 
         protected abstract IEnumerable<TraceReader> GetResultReaders();
 
@@ -485,25 +494,33 @@ namespace LogsReader.Reader
         {
 	        if (!IsWorking)
 		        return;
-
-			OnPause = true;
-			if (buttonPause.Image != imgPlay)
-				buttonPause.Image = imgPlay;
-			if (buttonPause.Padding != paddingPlay)
-				buttonPause.Padding = paddingPlay;
+	        PauseState();
         }
+
+        void PauseState()
+        {
+	        OnPause = true;
+			if (buttonPause.Image != imgPlay)
+		        buttonPause.Image = imgPlay;
+	        if (buttonPause.Padding != paddingPlay)
+		        buttonPause.Padding = paddingPlay;
+		}
 
         internal virtual void ResumeAll()
         {
 	        if (!IsWorking)
 		        return;
-
-	        OnPause = false;
-	        if (buttonPause.Image != imgOnPause)
-		        buttonPause.Image = imgOnPause;
-	        if (buttonPause.Padding != paddingOnPause)
-		        buttonPause.Padding = paddingOnPause;
+	        ResumeState();
         }
+
+		void ResumeState()
+		{
+			OnPause = false;
+			if (buttonPause.Image != imgOnPause)
+				buttonPause.Image = imgOnPause;
+			if (buttonPause.Padding != paddingOnPause)
+				buttonPause.Padding = paddingOnPause;
+		}
 
 		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
 
@@ -1140,7 +1157,10 @@ namespace LogsReader.Reader
 		        buttonPause.Image = imgOnPause;
 		        buttonPause.Padding = paddingOnPause;
 
-				if (IsWorking)
+		        if (DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader)
+			        dgvChkbxColumnHeader.Enabled = !IsWorking;
+
+		        if (IsWorking)
 		        {
 			        new Action(CheckProgress).BeginInvoke(null, null);
 
@@ -1167,7 +1187,20 @@ namespace LogsReader.Reader
 
         protected async Task UploadReaders(IEnumerable<TraceReader> readers)
         {
-	        try
+	        void DgvReaderOnDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+	        {
+		        if (!(DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader)) 
+			        return;
+		        dgvChkbxColumnHeader.Enabled = !IsWorking;
+		        dgvChkbxColumnHeader.Checked = true;
+
+		        foreach (var row in DgvReader.Rows.OfType<DataGridViewRow>())
+			        if (row.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell cell)
+				        cell.Checked = true;
+			}
+
+	        DgvReader.DataBindingComplete += DgvReaderOnDataBindingComplete;
+			try
 	        {
 		        //var prevSortedColumn = DgvReader.SortedColumn;
 		        //var prevSortOrder = DgvReader.SortOrder;
@@ -1185,9 +1218,13 @@ namespace LogsReader.Reader
 	        {
 		        ReportStatus(ex);
 	        }
+	        finally
+	        {
+		        DgvReader.DataBindingComplete -= DgvReaderOnDataBindingComplete;
+	        }
         }
 
-		void CheckProgress()
+        void CheckProgress()
         {
 	        try
 	        {
@@ -1412,7 +1449,6 @@ namespace LogsReader.Reader
 
 		        if (row.Cells[DgvReaderStatusColumn.Name] is DgvTextAndImageCell cellImage)
 		        {
-
 			        switch (reader.Status)
 			        {
 				        case TraceReaderStatus.Waiting:
@@ -2086,8 +2122,11 @@ namespace LogsReader.Reader
 
         protected virtual void ClearData()
         {
-
-        }
+	        DgvReader.DataSource = null;
+	        DgvReader.Rows.Clear();
+	        DgvReader.Refresh();
+	        DgvReader.ColumnHeadersVisible = false;
+		}
 
         protected virtual void CustomPanel_Resize(object sender, EventArgs e)
         {

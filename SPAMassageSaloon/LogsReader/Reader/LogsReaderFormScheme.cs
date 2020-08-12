@@ -329,16 +329,16 @@ namespace LogsReader.Reader
 		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
 
-		            // результат выполнения
-		            OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
-		            if (MainReader.ResultsOfError != null)
-			            OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
+					// результат выполнения
+					OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
+					if (MainReader.ResultsOfError != null)
+						OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
-		            // заполняем DataGrid
-		            if (await AssignResult(filter, true))
-			            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
+					// заполняем DataGrid
+					if (await AssignResult(filter, true))
+						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
-		            TimeWatcher.Stop();
+					TimeWatcher.Stop();
 	            }
 	            catch (Exception ex)
 	            {
@@ -546,12 +546,6 @@ namespace LogsReader.Reader
             OverallResultList = null;
 
             MainReader?.Dispose();
-            MainReader = null;
-
-            DgvReader.DataSource = null;
-            DgvReader.Rows.Clear();
-            DgvReader.Refresh();
-            DgvReader.ColumnHeadersVisible = false;
 
             base.ClearData();
         }

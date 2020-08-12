@@ -72,7 +72,7 @@ namespace LogsReader.Reader.Forms
 		{
 			var form = new TraceNameFilterForm(traceNames);
 			await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
-			form.DgvTraceNames.CheckCheckBoxColumn(form.SelectColumn);
+			form.DgvTraceNames.CheckStatusHeader(form.SelectColumn);
 
 			form.RefreshAllRows();
 

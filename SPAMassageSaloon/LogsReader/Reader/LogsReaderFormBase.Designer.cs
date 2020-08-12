@@ -83,6 +83,7 @@ namespace LogsReader.Reader
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.checkBoxShowTrns = new System.Windows.Forms.CheckBox();
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.DgvReaderSelectColumn = new Utils.WinForm.DataGridViewHelper.DgvCheckBoxColumn();
 			this.DgvReaderIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderSchemeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -819,6 +820,7 @@ namespace LogsReader.Reader
 			this.DgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvReader.ColumnHeadersVisible = false;
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DgvReaderSelectColumn,
             this.DgvReaderIDColumn,
             this.DgvReaderPrivateIDColumn,
             this.DgvReaderSchemeNameColumn,
@@ -845,7 +847,6 @@ namespace LogsReader.Reader
 			this.DgvReader.Location = new System.Drawing.Point(0, 0);
 			this.DgvReader.MultiSelect = false;
 			this.DgvReader.Name = "DgvReader";
-			this.DgvReader.ReadOnly = true;
 			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -859,6 +860,17 @@ namespace LogsReader.Reader
 			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.DgvReader.Size = new System.Drawing.Size(146, 42);
 			this.DgvReader.TabIndex = 50;
+			// 
+			// DgvReaderSelectColumn
+			// 
+			this.DgvReaderSelectColumn.Checked = true;
+			this.DgvReaderSelectColumn.MinimumWidth = 25;
+			this.DgvReaderSelectColumn.Name = "DgvReaderSelectColumn";
+			this.DgvReaderSelectColumn.HeaderText = "";
+			this.DgvReaderSelectColumn.ReadOnly = false;
+			this.DgvReaderSelectColumn.TrueValue = true;
+			this.DgvReaderSelectColumn.FalseValue = false;
+			this.DgvReaderSelectColumn.Width = 25;
 			// 
 			// DgvReaderIDColumn
 			// 
@@ -1108,6 +1120,7 @@ namespace LogsReader.Reader
 		private SplitContainer splitContainerMainFilter;
 
 		protected CustomDataGridView DgvReader;
+		private Utils.WinForm.DataGridViewHelper.DgvCheckBoxColumn DgvReaderSelectColumn;
 		private DataGridViewTextBoxColumn DgvReaderIDColumn;
 		protected DataGridViewTextBoxColumn DgvReaderPrivateIDColumn;
 		protected DataGridViewTextBoxColumn DgvReaderSchemeNameColumn;

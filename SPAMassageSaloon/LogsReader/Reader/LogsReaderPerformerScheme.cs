@@ -231,6 +231,7 @@ namespace LogsReader.Reader
 		public override void Dispose()
 		{
 			Clear();
+			Reset();
 		}
 	}
 }
