@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -299,7 +298,7 @@ namespace LogsReader.Reader
 
             _openProcessingReadersBtn = new ToolStripButton
             {
-	            Text = "ᐯᐱ", 
+	            Text = @"ᐯᐱ", 
 	            Font = new Font("Verdana", 8.5f, FontStyle.Bold, GraphicsUnit.Point, 0), 
 	            BackColor = Color.FromArgb(54, 187, 156) , 
 	            ForeColor = Color.White, 
@@ -476,13 +475,19 @@ namespace LogsReader.Reader
 
         protected abstract IEnumerable<DataTemplate> GetResultTemplates();
 
+        protected abstract IEnumerable<TraceReader> GetResultReaders();
+
         internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
 
         internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
         internal virtual void PauseAll()
         {
-			if(buttonPause.Image != imgPlay)
+	        if (!IsWorking)
+		        return;
+
+			OnPause = true;
+			if (buttonPause.Image != imgPlay)
 				buttonPause.Image = imgPlay;
 			if (buttonPause.Padding != paddingPlay)
 				buttonPause.Padding = paddingPlay;
@@ -490,6 +495,10 @@ namespace LogsReader.Reader
 
         internal virtual void ResumeAll()
         {
+	        if (!IsWorking)
+		        return;
+
+	        OnPause = false;
 	        if (buttonPause.Image != imgOnPause)
 		        buttonPause.Image = imgOnPause;
 	        if (buttonPause.Padding != paddingOnPause)
@@ -503,15 +512,9 @@ namespace LogsReader.Reader
 			OnPause = !OnPause;
 
 			if (OnPause)
-			{
 				PauseAll();
-				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
-			}
 			else
-			{
 				ResumeAll();
-				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
-			}
 		}
 
 		void AddViewer(TraceItemView traceViewer, DataTemplate template)
@@ -777,29 +780,7 @@ namespace LogsReader.Reader
                 throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
         }
 
-        protected async Task UploadReaders(IEnumerable<TraceReader> readers)
-		{
-			try
-			{
-				//var prevSortedColumn = DgvReader.SortedColumn;
-				//var prevSortOrder = DgvReader.SortOrder;
-
-				await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
-				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
-				DgvReader.ColumnHeadersVisible = true;
-
-				//if(prevSortOrder != SortOrder.None)
-				//	DgvReader.Sort(prevSortedColumn, prevSortOrder == SortOrder.Ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
-				
-				OnUploadReaders?.Invoke(this, EventArgs.Empty);
-			}
-			catch (Exception ex)
-			{
-				ReportStatus(ex);
-			}
-		}
-
-		protected void ReportProcessStatus(IEnumerable<TraceReader> readers)
+		protected virtual void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
 			var isChanged = false;
 
@@ -844,9 +825,6 @@ namespace LogsReader.Reader
 					RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				}
 			});
-
-			if (isChanged)
-				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
 		}
 
         private async void BtnExport_Click(object sender, EventArgs e)
@@ -1190,11 +1168,13 @@ namespace LogsReader.Reader
 
 				if (IsWorking)
 		        {
-			        ParentSplitContainer.Cursor = Cursors.WaitCursor;
+			        new Action(CheckProgress).BeginInvoke(null, null);
+
+					ParentSplitContainer.Cursor = Cursors.WaitCursor;
 			        statusStrip.Cursor = Cursors.Default;
 			        panel1.Cursor = Cursors.Default;
 
-					Clear(true);
+			        Clear(true);
 		        }
 		        else
 		        {
@@ -1211,7 +1191,53 @@ namespace LogsReader.Reader
 	        }
         }
 
-        private void DataGridViewOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        protected async Task UploadReaders(IEnumerable<TraceReader> readers)
+        {
+	        try
+	        {
+		        //var prevSortedColumn = DgvReader.SortedColumn;
+		        //var prevSortOrder = DgvReader.SortOrder;
+
+		        await DgvReader.AssignCollectionAsync(readers.OrderBy(x => x.SchemeName).ThenBy(x => x.ID), null, true);
+		        RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+		        DgvReader.ColumnHeadersVisible = true;
+
+		        //if(prevSortOrder != SortOrder.None)
+		        //	DgvReader.Sort(prevSortedColumn, prevSortOrder == SortOrder.Ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
+
+		        OnUploadReaders?.Invoke(this, EventArgs.Empty);
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex);
+	        }
+        }
+
+		void CheckProgress()
+        {
+	        try
+	        {
+		        while (IsWorking)
+		        {
+			        var readers = GetResultReaders();
+			        var count = readers.Count();
+			        var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 400 : 200 : 100;
+
+			        ReportProcessStatus(readers);
+			        System.Threading.Thread.Sleep(delay);
+		        }
+
+		        var readersAfterWorking = GetResultReaders();
+		        if (readersAfterWorking.Any())
+			        ReportProcessStatus(readersAfterWorking);
+	        }
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex);
+	        }
+        }
+
+		private void DataGridViewOnCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
 	        if (e.RowIndex < 0 || e.ColumnIndex < 0) 
 		        return;
@@ -1321,7 +1347,7 @@ namespace LogsReader.Reader
 		                return;
 
 	                var isfiltered = false;
-	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell && isfilteredCell?.Value != null)
+	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell && isfilteredCell.Value != null)
 		                isfiltered = bool.Parse(isfilteredCell.Value.ToString());
 
 	                if (!template.IsSuccess)
@@ -1560,7 +1586,7 @@ namespace LogsReader.Reader
 			var result = form.ShowDialog();
 
 			if (result == DialogResult.OK)
-				TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName))?.Trim();
+				TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName)).Trim();
 		}
 
 		//DgvData.RowPostPaint += DgvData_RowPostPaint;

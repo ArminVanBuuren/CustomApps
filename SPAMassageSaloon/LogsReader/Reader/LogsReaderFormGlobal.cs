@@ -302,21 +302,14 @@ namespace LogsReader.Reader
 			// если изменились значения прогресса поиска
 	        readerForm.OnProcessStatusChanged += (sender, args) =>
 	        {
-		        if (IsInProcessing(readerForm, out var readers))
-		        {
-			        ReportProcessStatus(readers);
-
-			        if (InProcessing.All(x => x.Item1.OnPause))
-				        base.PauseAll(); // меняем иконку на пуск
-			        else
-				        base.ResumeAll(); // меняем иконку на паузу
-				}
+		        if (InProcessing.ContainsKey(readerForm))
+			        ReportProcessStatus(GetResultReaders());
 	        };
 	        // При загрузке ридеров
 	        readerForm.OnUploadReaders += async (sender, args) =>
 	        {
-		        if (IsInProcessing(readerForm, out var readers))
-			        await UploadReaders(readers);
+		        if (InProcessing.ContainsKey(readerForm))
+			        await UploadReaders(GetResultReaders());
 	        };
 			// событие при смене языка формы
 			readerForm.OnAppliedSettings += (sender, args) =>
@@ -358,7 +351,7 @@ namespace LogsReader.Reader
 			{
 				schemeExpander.Enabled = !readerForm.IsWorking;
 
-				if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
+				if (!InProcessing.ContainsKey(readerForm))
 					return;
 
 				if (InProcessing.IsAnyWorking)
@@ -383,14 +376,15 @@ namespace LogsReader.Reader
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
+				ReportProcessStatus(GetResultReaders());
 				Progress = 100;
 			};
 			readerForm.OnClear += async (sender, args) =>
 			{
-				if (IsInProcessing(readerForm, out var readers))
+				if (InProcessing.ContainsKey(readerForm))
 				{
 					MainViewer.Clear();
-					await UploadReaders(readers);
+					await UploadReaders(GetResultReaders());
 					STREAM.GarbageCollect();
 				}
 			};
@@ -398,18 +392,14 @@ namespace LogsReader.Reader
 			return schemeExpander;
         }
 
-		bool IsInProcessing(LogsReaderFormScheme readerForm, out List<TraceReader> readers)
+		protected override void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
-			readers = null;
-			if (InProcessing.Count == 0 || !InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _))
-				return false;
+			base.ReportProcessStatus(readers);
 
-			readers = InProcessing
-				.Where(x => x.Item1.MainReader?.TraceReaders != null)
-				.SelectMany(x => x.Item1.MainReader?.TraceReaders.Values)
-				.ToList();
-			
-			return true;
+			if (InProcessing.Where(x => x.Item1.IsWorking).All(x => x.Item1.OnPause))
+				base.PauseAll(); // меняем иконку на пуск
+			else
+				base.ResumeAll(); // меняем иконку на паузу
 		}
 
 		internal override void PauseAll()
@@ -500,6 +490,11 @@ namespace LogsReader.Reader
 			}
 
 			public bool IsCompleted { get; private set; } = false;
+
+			public bool ContainsKey(LogsReaderFormScheme readerForm)
+			{
+				return TryGetValue(readerForm.CurrentSettings.Name, out var _);
+			}
 
 			public bool TryGetValue(string schemeName, out LogsReaderFormScheme result)
 			{
@@ -612,6 +607,14 @@ namespace LogsReader.Reader
 		        .ThenBy(x => x.FoundLineID)
 		        .ToList();
         }
+
+        protected override IEnumerable<TraceReader> GetResultReaders()
+        {
+	        return InProcessing
+		        .Where(x => x.Item1.MainReader?.TraceReaders?.Values != null)
+		        .SelectMany(x => x.Item1.MainReader.TraceReaders.Values)
+		        .ToList();
+		}
 
         internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{

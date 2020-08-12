@@ -325,9 +325,8 @@ namespace LogsReader.Reader
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
 		            await UploadReaders(MainReader.TraceReaders.Values); // загружаем ридеры в таблицу прогресса
-		            new Action(CheckProgress).BeginInvoke(null, null);
 
-					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
+		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
 
 		            // результат выполнения
@@ -368,35 +367,17 @@ namespace LogsReader.Reader
             }
         }
 
-        void CheckProgress()
-        {
-	        try
-	        {
-		        //var count = MainReader.TraceReaders.Values.Count();
-		        //var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 500 : 200 : 100;
-		        var delay = 400; // лучше сделать статичную задержку, т.к. если используется глобальная и в одном из схем задержка не большая, то глобальная будет минимальной, что уменьшит производительность
-
-				while (IsWorking && MainReader?.TraceReaders != null)
-		        {
-			        ReportProcessStatus(MainReader.TraceReaders.Values);
-			        System.Threading.Thread.Sleep(delay);
-		        }
-
-				if(MainReader?.TraceReaders != null)
-					ReportProcessStatus(MainReader.TraceReaders.Values);
-			}
-	        catch (Exception ex)
-	        {
-		        ReportStatus(ex);
-			}
-        }
-
 		protected override IEnumerable<DataTemplate> GetResultTemplates()
         {
 	        return OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
         }
 
-        protected override void ChangeFormStatus()
+		protected override IEnumerable<TraceReader> GetResultReaders()
+		{
+			return MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : new List<TraceReader>(MainReader.TraceReaders.Values);
+		}
+
+		protected override void ChangeFormStatus()
         {
 	        base.ChangeFormStatus();
 
