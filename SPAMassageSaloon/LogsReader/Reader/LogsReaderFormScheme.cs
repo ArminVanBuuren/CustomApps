@@ -261,6 +261,14 @@ namespace LogsReader.Reader
 	        TreeViewContainer.MainFormKeyDown(TreeMain, e);
         }
 
+        internal override void RefreshButtonPauseState(TraceReader reader)
+        {
+			if(reader.Settings != CurrentSettings)
+				return;
+
+	        base.RefreshButtonPauseState(reader);
+        }
+
         internal override async void BtnSearch_Click(object sender, EventArgs e)
         {
             if (!IsWorking)
@@ -324,7 +332,7 @@ namespace LogsReader.Reader
 		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-		            await UploadReaders(MainReader.TraceReaders.Values); // загружаем ридеры в таблицу прогресса
+		            await UploadReadersAsync(MainReader.TraceReaders.Values); // загружаем ридеры в таблицу прогресса
 
 		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
@@ -335,7 +343,7 @@ namespace LogsReader.Reader
 						OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
 					// заполняем DataGrid
-					if (await AssignResult(filter, true))
+					if (await AssignResultAsync(filter, true))
 						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 					TimeWatcher.Stop();

@@ -62,15 +62,15 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
-        private readonly Bitmap imgWaiting = Resources.waiting;
-        private readonly Bitmap imgProcessing = Resources.processing;
-        private readonly Bitmap imgOnPause = Resources.onPause;
-        private readonly Padding paddingOnPause = new Padding(0, 0, 0, 0);
-		private readonly Bitmap imgAborted = Resources.aborted;
-        private readonly Bitmap imgFailed = Resources.failed;
-        private readonly Bitmap imgFinished = Resources.finished;
+        private readonly Bitmap imgOnWaiting = Resources.waiting;
+        private readonly Bitmap imgOnProcessing = Resources.processing;
+        private readonly Bitmap imgPause = Resources.onPause;
+        private readonly Padding paddingImgPause = new Padding(0, 0, 0, 0);
+		private readonly Bitmap imgOnAborted = Resources.aborted;
+        private readonly Bitmap imgOnFailed = Resources.failed;
+        private readonly Bitmap imgOnFinished = Resources.finished;
         private readonly Bitmap imgPlay = Resources.bt_play;
-        private readonly Padding paddingPlay = new Padding(0, 0, 1, 0);
+        private readonly Padding paddingImgPlay = new Padding(0, 0, 1, 0);
 
         private string Txt_LogsReaderForm_Working = Resources.Txt_LogsReaderForm_Working;
         private string Txt_LogsReaderForm_DateValueIsIncorrect = Resources.Txt_LogsReaderForm_DateValueIsIncorrect;
@@ -402,6 +402,8 @@ namespace LogsReader.Reader
 					Checked = true,
 					Enabled = false
 				};
+				DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+				DgvReaderAbortColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
 				DgvReader.AutoGenerateColumns = false;
 				DgvReader.TabStop = false;
@@ -412,8 +414,6 @@ namespace LogsReader.Reader
 				DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 				foreach (DataGridViewColumn c in DgvReader.Columns)
 					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-				DgvReaderProcessColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-				DgvReaderAbortColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 				DgvReader.Resize += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
 				DgvReader.Scroll += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
 				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
@@ -440,20 +440,7 @@ namespace LogsReader.Reader
 					    && cellPauseResume.Enabled
 					    && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader2))
 					{
-						if (reader2.Status == TraceReaderStatus.OnPause)
-						{
-							reader2.Resume();
-							// если какой то запустили, но до этого все поставили на паузу, то обновляем статус и кнопку
-							ResumeState();
-						}
-						else
-						{
-							reader2.Pause();
-							// если все остановили вручную, то обновляем статус и кнопку
-							if (!GetResultReaders().Any(x => x.Status == TraceReaderStatus.Waiting || x.Status == TraceReaderStatus.Processing))
-								PauseState();
-						}
-
+						RefreshButtonPauseState(reader2);
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 						return;
 					}
@@ -494,26 +481,34 @@ namespace LogsReader.Reader
 
         protected abstract IEnumerable<TraceReader> GetResultReaders();
 
-        internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
+        protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+
+		internal abstract bool TryGetTemplate(DataGridViewRow row, out DataTemplate template);
 
         internal abstract bool TryGetReader(DataGridViewRow row, out TraceReader reader);
 
-        internal virtual void PauseAll()
+        #region Pause - Resume Button
+
+		internal virtual void RefreshButtonPauseState(TraceReader reader)
         {
-	        if (!IsWorking)
-		        return;
-	        PauseState();
+	        if (reader.Status == TraceReaderStatus.OnPause)
+	        {
+		        reader.Resume();
+		        // если какой то запустили, но до этого все поставили на паузу, то обновляем статус и кнопку
+		        ResumeState();
+	        }
+	        else
+	        {
+		        reader.Pause();
+		        // если все остановили вручную, то обновляем статус и кнопку
+		        if (!GetResultReaders().Any(x => x.Status == TraceReaderStatus.Waiting || x.Status == TraceReaderStatus.Processing))
+			        PauseState();
+	        }
         }
 
-        void PauseState()
-        {
-	        OnPause = true;
-			if (buttonPause.Image != imgPlay)
-		        buttonPause.Image = imgPlay;
-	        if (buttonPause.Padding != paddingPlay)
-		        buttonPause.Padding = paddingPlay;
-		}
-
+		/// <summary>
+		/// Запускаем все приостановленные процессы
+		/// </summary>
         internal virtual void ResumeAll()
         {
 	        if (!IsWorking)
@@ -524,13 +519,29 @@ namespace LogsReader.Reader
 		void ResumeState()
 		{
 			OnPause = false;
-			if (buttonPause.Image != imgOnPause)
-				buttonPause.Image = imgOnPause;
-			if (buttonPause.Padding != paddingOnPause)
-				buttonPause.Padding = paddingOnPause;
+			if (buttonPause.Image != imgPause)
+				buttonPause.Image = imgPause;
+			if (buttonPause.Padding != paddingImgPause)
+				buttonPause.Padding = paddingImgPause;
 		}
 
-		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
+		/// <summary>
+		/// Приостанавливаем все процессы
+		/// </summary>
+		internal virtual void PauseAll()
+		{
+			if (!IsWorking)
+				return;
+			PauseState();
+		}
+		void PauseState()
+		{
+			OnPause = true;
+			if (buttonPause.Image != imgPlay)
+				buttonPause.Image = imgPlay;
+			if (buttonPause.Padding != paddingImgPlay)
+				buttonPause.Padding = paddingImgPlay;
+		}
 
 		private void ButtonPause_Click(object sender, EventArgs e)
 		{
@@ -542,25 +553,7 @@ namespace LogsReader.Reader
 				ResumeAll();
 		}
 
-		void AddViewer(TraceItemView traceViewer, DataTemplate template)
-        {
-	        var tabPage = new CustomTabPage(traceViewer)
-            {
-	            UseVisualStyleBackColor = true,
-		        ForeColor = Color.Black,
-		        Margin = new Padding(0),
-		        Padding = new Padding(0),
-		        BorderStyle = BorderStyle.None,
-		        CanClose = !traceViewer.IsMain
-            };
-
-	        if (!traceViewer.IsMain && MainViewer != null)
-		        traceViewer.SplitterDistance = MainViewer.SplitterDistance;
-            traceViewer.Dock = DockStyle.Fill;
-	        traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
-
-	        tabControlViewer.TabPages.Add(tabPage);
-        }
+		#endregion
 
         public void ApplyFormSettings()
         {
@@ -990,7 +983,7 @@ namespace LogsReader.Reader
         {
             try
             {
-	            IsDgvDataFiltered = await AssignResult(GetFilter(), false);
+	            IsDgvDataFiltered = await AssignResultAsync(GetFilter(), false);
             }
             catch (Exception ex)
             {
@@ -1012,7 +1005,7 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        await AssignResult(null, false);
+		        await AssignResultAsync(null, false);
 		        IsDgvDataFiltered = false;
 	        }
 	        catch (Exception ex)
@@ -1096,7 +1089,7 @@ namespace LogsReader.Reader
 			}
         }
 
-        protected async Task<bool> AssignResult(DataFilter filter, bool isNewData)
+        protected async Task<bool> AssignResultAsync(DataFilter filter, bool isNewData)
         {
 	        try
 	        {
@@ -1126,7 +1119,7 @@ namespace LogsReader.Reader
 			        }
 		        }
 
-                await AssignCurrentDgvResult(isNewData);
+                await AssignCurrentDgvResultAsync(isNewData);
                 return true;
             }
 	        catch (Exception ex)
@@ -1160,8 +1153,8 @@ namespace LogsReader.Reader
 		        ChbxAlreadyUseFilter.Enabled = !IsWorking;
 
 		        buttonPause.Enabled = IsWorking;
-		        buttonPause.Image = imgOnPause;
-		        buttonPause.Padding = paddingOnPause;
+		        buttonPause.Image = imgPause;
+		        buttonPause.Padding = paddingImgPause;
 
 		        ChangeStateDgvReaderBoxes(!IsWorking, true);
 
@@ -1208,7 +1201,13 @@ namespace LogsReader.Reader
 			}
 		}
 
-        protected async Task UploadReaders(IEnumerable<TraceReader> readers)
+
+		/// <summary>
+		/// Загружаются все TraceReader во время поиска
+		/// </summary>
+		/// <param name="readers"></param>
+		/// <returns></returns>
+		protected async Task UploadReadersAsync(IEnumerable<TraceReader> readers)
         {
 	        try
 	        {
@@ -1230,6 +1229,9 @@ namespace LogsReader.Reader
 	        }
         }
 
+		/// <summary>
+		/// Обновляет все статусы во время поиска
+		/// </summary>
         void CheckProgress()
         {
 	        try
@@ -1458,7 +1460,7 @@ namespace LogsReader.Reader
 			        switch (reader.Status)
 			        {
 				        case TraceReaderStatus.Waiting:
-					        cellImage.Image = imgWaiting;
+					        cellImage.Image = imgOnWaiting;
 					        if (row.DefaultCellStyle.BackColor != Color.LightGray)
 						        row.DefaultCellStyle.BackColor = Color.LightGray;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusWaiting)
@@ -1466,7 +1468,7 @@ namespace LogsReader.Reader
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.Processing:
-					        cellImage.Image = imgProcessing;
+					        cellImage.Image = imgOnProcessing;
 					        if (row.DefaultCellStyle.BackColor != Color.White)
 						        row.DefaultCellStyle.BackColor = Color.White;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusProcessing)
@@ -1474,7 +1476,7 @@ namespace LogsReader.Reader
 					        CanPause(true);
 					        break;
 				        case TraceReaderStatus.OnPause:
-					        cellImage.Image = imgOnPause;
+					        cellImage.Image = imgPause;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ONPAUSE;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusOnPause)
@@ -1482,7 +1484,7 @@ namespace LogsReader.Reader
 					        AllowedResume();
 					        break;
 				        case TraceReaderStatus.Aborted:
-					        cellImage.Image = imgAborted;
+					        cellImage.Image = imgOnAborted;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusAborted)
@@ -1490,7 +1492,7 @@ namespace LogsReader.Reader
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Failed:
-					        cellImage.Image = imgFailed;
+					        cellImage.Image = imgOnFailed;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_ERROR)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_ERROR;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusFailed)
@@ -1498,7 +1500,7 @@ namespace LogsReader.Reader
 					        CanPause(false);
 					        break;
 				        case TraceReaderStatus.Finished:
-					        cellImage.Image = imgFinished;
+					        cellImage.Image = imgOnFinished;
 					        if (row.DefaultCellStyle.BackColor != LogsReaderMainForm.READER_COLOR_BACK_SUCCESS)
 						        row.DefaultCellStyle.BackColor = LogsReaderMainForm.READER_COLOR_BACK_SUCCESS;
 					        if (cellImage.Value == null || cellImage.Value?.ToString() != TxtReader_StatusFinished)
@@ -1599,7 +1601,7 @@ namespace LogsReader.Reader
 				.OrderBy(x => x.TraceName)
 				.ToDictionary(x => x.TraceName);
 
-			var form = await TraceNameFilterForm.Get(filtered);
+			var form = await TraceNameFilterForm.GetAsync(filtered);
 			var result = form.ShowDialog();
 
 			if (result == DialogResult.OK)
@@ -1767,7 +1769,7 @@ namespace LogsReader.Reader
 
 		        _currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 
-		        await AssignCurrentDgvResult(false);
+		        await AssignCurrentDgvResultAsync(false);
 
 		        if (oldSortedColumn != null)
 			        oldSortedColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
@@ -1783,26 +1785,17 @@ namespace LogsReader.Reader
 			}
         }
 
-        private async Task AssignCurrentDgvResult(bool isNewData)
+        /// <summary>
+		/// Основной метод загрузки данных
+		/// </summary>
+		/// <param name="isNewData"></param>
+		/// <returns></returns>
+        private async Task AssignCurrentDgvResultAsync(bool isNewData)
 		{
 			try
 			{
 				DgvData.CellFormatting -= DataGridViewOnCellFormatting;
 				DgvData.SuspendLayout();
-
-				//// сохраняем предыдущую позицию в гриде
-				//var minIndex = -1;
-				//var maxIndex = -1;
-				//var countVisible = -1;
-				//var firstVisibleIndex = -1;
-				//if (DgvData.SelectedRows.Count > 0)
-				//{
-				//	var selCol = DgvData.SelectedRows.OfType<DataGridViewRow>();
-				//	minIndex = selCol.First().Index;
-				//	maxIndex = selCol.Last().Index;
-				//	countVisible = DgvData.DisplayedRowCount(false);
-				//	firstVisibleIndex = DgvData.FirstDisplayedScrollingRowIndex;
-				//}
 
 				var selectedSchemeName = string.Empty;
 				var selectedPrivateID = -1;
@@ -1816,21 +1809,8 @@ namespace LogsReader.Reader
 
 				ClearErrorStatus();
 
-				//var testList = new List<DataTemplate>();
-				//var succ = false;
-				//foreach (var tmp in _currentDGVResult)
-				//{
-				//	if (tmp.IsSuccess && !succ)
-				//		continue;
-				//	succ = true;
-				//	testList.Add(tmp);
-				//}
-
-
-				//DgvData.ClearSelection();
 				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-				//DgvData.ClearSelection();
-
+				
 				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
 				buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
 
@@ -1851,30 +1831,6 @@ namespace LogsReader.Reader
 						return;
 					}
 				}
-
-				//// возвращаем позицию в гриде
-				//if (DgvData.RowCount > 0 && (minIndex > -1 || maxIndex > -1) && !isSelected)
-				//{
-				// if (DgvData.RowCount > maxIndex && maxIndex > -1)
-				// {
-				//  EnsureVisibleRow(DgvData, maxIndex, firstVisibleIndex, countVisible);
-				// }
-				// else if (DgvData.RowCount > minIndex && minIndex > -1)
-				// {
-				//  EnsureVisibleRow(DgvData, minIndex, firstVisibleIndex, countVisible);
-				// }
-				// else
-				// {
-				//  EnsureVisibleRow(DgvData, DgvData.RowCount - 1, firstVisibleIndex, countVisible);
-				// }
-				//}
-
-				//if (DgvData.SelectedRows.Count > 0 || DgvData.SelectedCells.Count > 0 || DgvData.SelectedColumns.Count > 0)
-				//{
-				//	var countVisible = DgvData.DisplayedRowCount(false);
-				//	if (countVisible > 0 && DgvData.RowCount > countVisible / 2)
-				//		SelectRow(DgvData.Rows[countVisible / 2]);
-				//}
 			}
 			finally
 			{
@@ -1931,6 +1887,26 @@ namespace LogsReader.Reader
 	        {
 		        DgvData.Focus();
 	        }
+        }
+
+        void AddViewer(TraceItemView traceViewer, DataTemplate template)
+        {
+	        var tabPage = new CustomTabPage(traceViewer)
+	        {
+		        UseVisualStyleBackColor = true,
+		        ForeColor = Color.Black,
+		        Margin = new Padding(0),
+		        Padding = new Padding(0),
+		        BorderStyle = BorderStyle.None,
+		        CanClose = !traceViewer.IsMain
+	        };
+
+	        if (!traceViewer.IsMain && MainViewer != null)
+		        traceViewer.SplitterDistance = MainViewer.SplitterDistance;
+	        traceViewer.Dock = DockStyle.Fill;
+	        traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
+
+	        tabControlViewer.TabPages.Add(tabPage);
         }
 
 		private void DgvData_MouseDown(object sender, MouseEventArgs e)

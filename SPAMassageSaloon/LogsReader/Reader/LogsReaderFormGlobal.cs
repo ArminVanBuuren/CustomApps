@@ -290,7 +290,7 @@ namespace LogsReader.Reader
 				}
 
 				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders && !InProcessing.IsAnyWorking)
-					await AssignResult(null, false);
+					await AssignResultAsync(null, false);
 
 				ValidationCheck(true);
 	        };
@@ -309,7 +309,7 @@ namespace LogsReader.Reader
 	        readerForm.OnUploadReaders += async (sender, args) =>
 	        {
 		        if (InProcessing.ContainsKey(readerForm))
-			        await UploadReaders(GetResultReaders());
+			        await UploadReadersAsync(GetResultReaders());
 	        };
 			// событие при смене языка формы
 			readerForm.OnAppliedSettings += (sender, args) =>
@@ -372,7 +372,7 @@ namespace LogsReader.Reader
 				MainViewer.Clear();
 
 				// заполняем DataGrid
-				if (await AssignResult(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, true))
+				if (await AssignResultAsync(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, true))
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
@@ -384,13 +384,20 @@ namespace LogsReader.Reader
 				if (InProcessing.ContainsKey(readerForm))
 				{
 					MainViewer.Clear();
-					await UploadReaders(GetResultReaders());
+					await UploadReadersAsync(GetResultReaders());
 					await STREAM.GarbageCollectAsync();
 				}
 			};
 
 			return schemeExpander;
         }
+
+		internal override void RefreshButtonPauseState(TraceReader reader)
+		{
+			// отправляем непосредственно в форму где создана, для общей синзронизации кнопки
+			if (InProcessing.TryGetValue(reader.SchemeName, out var schemeForm))
+				schemeForm.RefreshButtonPauseState(reader);
+		}
 
 		protected override void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
@@ -677,7 +684,7 @@ namespace LogsReader.Reader
 			        expander.IsChecked = checkBoxSelectAll.Checked;
 
 		        if (InProcessing.Count > 0)
-			        await AssignResult(null, false);
+			        await AssignResultAsync(null, false);
 
 		        UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
 		        

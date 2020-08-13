@@ -69,7 +69,7 @@ namespace LogsReader.Reader.Forms
 			};
 		}
 
-		public static async Task<TraceNameFilterForm> Get(IDictionary<string, TraceNameFilter> traceNames)
+		public static async Task<TraceNameFilterForm> GetAsync(IDictionary<string, TraceNameFilter> traceNames)
 		{
 			var form = new TraceNameFilterForm(traceNames);
 			await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
