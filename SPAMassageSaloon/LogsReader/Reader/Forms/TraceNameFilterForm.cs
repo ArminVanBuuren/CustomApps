@@ -46,8 +46,8 @@ namespace LogsReader.Reader.Forms
 				}
 				DgvTraceNames.Refresh();
 			};
-			DgvTraceNames.Resize += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
-			DgvTraceNames.Scroll += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
+			//DgvTraceNames.Resize += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
+			//DgvTraceNames.Scroll += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
 			DgvTraceNames.Sorted += (sender, args) =>
 			{
 				if(DgvTraceNames.RowCount > 0)

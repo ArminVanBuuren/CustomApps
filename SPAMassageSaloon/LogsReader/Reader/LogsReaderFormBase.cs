@@ -414,8 +414,8 @@ namespace LogsReader.Reader
 				DgvReader.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 				foreach (DataGridViewColumn c in DgvReader.Columns)
 					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-				DgvReader.Resize += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
-				DgvReader.Scroll += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
+				//DgvReader.Resize += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
+				//DgvReader.Scroll += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
 				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.Sorted += (sender, args) => DgvReader.CheckStatusHeader(DgvReaderSelectColumn);
@@ -2047,65 +2047,55 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        ClearForm(saveData);
+		        if (saveData)
+			        SaveData();
+
+		        _oldSortedColumn = null;
+		        _currentDGVResult = null;
+		        _byAscending = true;
+
+		        if (DgvData.DataSource != null || DgvData.RowCount > 0)
+		        {
+			        DgvData.DataSource = null;
+			        DgvData.Rows.Clear();
+			        DgvData.Refresh();
+		        }
+
+		        MainViewer.Clear();
+		        foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+		        {
+			        if (page == MainViewer.Parent)
+				        continue;
+
+			        page.View.Clear();
+			        tabControlViewer.TabPages.Remove(page);
+		        }
+
+		        CountMatches = 0;
+		        CountErrorMatches = 0;
+		        Progress = 0;
+		        FilesCompleted = 0;
+		        TotalFiles = 0;
+		        ReportStatus(string.Empty, ReportStatusType.Success);
+
+		        IsDgvDataFiltered = false;
+
 		        ClearData();
+
+		        buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
+		        btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
+			}
+	        catch (Exception ex)
+	        {
+		        ReportStatus(ex);
 	        }
-	        finally
+			finally
 	        {
 		        if (collect)
 					await STREAM.GarbageCollectAsync();
+		        OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
 			}
         }
-
-        protected void ClearForm(bool saveData)
-		{
-			try
-			{
-				if (saveData)
-					SaveData();
-
-				_oldSortedColumn = null;
-				_currentDGVResult = null;
-				_byAscending = true;
-
-				if (DgvData.DataSource != null || DgvData.RowCount > 0)
-				{
-					DgvData.DataSource = null;
-					DgvData.Rows.Clear();
-					DgvData.Refresh();
-				}
-
-				MainViewer.Clear();
-				foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
-				{
-					if (page == MainViewer.Parent)
-						continue;
-
-					page.View.Clear();
-					tabControlViewer.TabPages.Remove(page);
-				}
-
-				buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
-				btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
-
-				CountMatches = 0;
-				CountErrorMatches = 0;
-				Progress = 0;
-				FilesCompleted = 0;
-				TotalFiles = 0;
-				ReportStatus(string.Empty, ReportStatusType.Success);
-
-				IsDgvDataFiltered = false;
-			}
-			catch (Exception ex)
-			{
-				ReportStatus(ex);
-			}
-			finally
-			{
-				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
-			}
-		}
 
         protected virtual void ClearData()
         {
