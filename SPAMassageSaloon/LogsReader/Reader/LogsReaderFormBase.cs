@@ -418,6 +418,7 @@ namespace LogsReader.Reader
 				DgvReader.Scroll += (sender, args) => DgvReader.Invalidate(); // необходим для столбца checkox
 				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				DgvReader.Sorted += (sender, args) => DgvReader.CheckStatusHeader(DgvReaderSelectColumn);
 				DgvReader.CellContentClick += (sender, args) =>
 				{
 					if (args.RowIndex < 0)
@@ -800,8 +801,6 @@ namespace LogsReader.Reader
 
 		protected virtual void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
-			var isChanged = false;
-
 			this.SafeInvoke(() =>
 			{
 				try
@@ -836,7 +835,6 @@ namespace LogsReader.Reader
 					FilesCompleted = filesCompleted;
 					if (IsWorking)
 						Progress = progress;
-					isChanged = true;
 				}
 				finally
 				{
@@ -1185,6 +1183,12 @@ namespace LogsReader.Reader
 
 		void ChangeStateDgvReaderBoxes(bool enabled, bool @checked)
 		{
+			DgvReaderSelectColumn.CellTemplate = new DgvCheckBoxCell
+			{
+				Checked = @checked,
+				Enabled = enabled
+			};
+
 			if (!(DgvReaderSelectColumn.HeaderCell is DgvColumnCheckBoxHeaderCell dgvChkbxColumnHeader))
 				return;
 
