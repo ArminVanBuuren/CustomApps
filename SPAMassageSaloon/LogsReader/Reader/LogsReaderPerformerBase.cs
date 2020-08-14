@@ -163,10 +163,11 @@ namespace LogsReader.Reader
 				output = null;
 
 				List<Regex> trnList;
-				lock(_syncTrn)
+				lock (_syncTrn)
 					trnList = _transactionValues.Values.ToList();
 
-				foreach (var regex in trnList.Skip(Math.Max(0, RowsLimit == 0 ? trnList.Count : trnList.Count - RowsLimit / 2)))
+				var trnsLimit = trnList.Skip(Math.Max(0, RowsLimit == 0 ? trnList.Count : trnList.Count - RowsLimit / 2));
+				foreach (var regex in trnsLimit)
 				{
 					if (regex == null)
 						continue;
