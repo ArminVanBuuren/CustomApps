@@ -576,7 +576,7 @@ Colors schemes are adjustable.</value>
     <value>Run filter marked [F1]</value>
   </data>
   <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
-    <value>Reset marking [F2]</value>
+    <value>Reset marking [SHIFT + F1]</value>
   </data>
   <data name="Error1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\error1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -594,10 +594,10 @@ Colors schemes are adjustable.</value>
     <value>..\resources\prev_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Txt_LogsReaderForm_NextFilteredButt" xml:space="preserve">
-    <value>Next filtered item [F4]</value>
+    <value>Next filtered item [F2]</value>
   </data>
   <data name="Txt_LogsReaderForm_PrevFilteredButt" xml:space="preserve">
-    <value>Previous filtered item [SHIFT+F4]</value>
+    <value>Previous filtered item [SHIFT+F2]</value>
   </data>
   <data name="aborted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\aborted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -700,5 +700,32 @@ Colors schemes are adjustable.</value>
   </data>
   <data name="bt_play" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\bt_play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bt_play1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\bt_play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrowError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\arrowerror.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrowFiltered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\arrowfiltered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrowTrn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\arrowtrn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\backerror.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backFiltered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\backfiltered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backTrn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\backtrn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NextTrnButt" xml:space="preserve">
+    <value>Next transaction [F4]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_PrevTrnButt" xml:space="preserve">
+    <value>Previous transaction [SHIFT+F4]</value>
   </data>
 </root>

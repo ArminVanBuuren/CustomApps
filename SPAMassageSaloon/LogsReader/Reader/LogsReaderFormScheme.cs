@@ -155,7 +155,7 @@ namespace LogsReader.Reader
 			        Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right,
 			        Location = new Point(1, 114),
 			        Name = "TreeMain",
-			        Size = new Size(130, 266),
+			        Size = new Size(130, 326),
 			        TabIndex = 19
 		        };
 

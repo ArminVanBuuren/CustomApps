@@ -93,6 +93,36 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap arrowError {
+            get {
+                object obj = ResourceManager.GetObject("arrowError", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap arrowFiltered {
+            get {
+                object obj = ResourceManager.GetObject("arrowFiltered", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap arrowTrn {
+            get {
+                object obj = ResourceManager.GetObject("arrowTrn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap authorization {
             get {
                 object obj = ResourceManager.GetObject("authorization", resourceCulture);
@@ -103,9 +133,49 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap backError {
+            get {
+                object obj = ResourceManager.GetObject("backError", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap backFiltered {
+            get {
+                object obj = ResourceManager.GetObject("backFiltered", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap backTrn {
+            get {
+                object obj = ResourceManager.GetObject("backTrn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap bt_play {
             get {
                 object obj = ResourceManager.GetObject("bt_play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap bt_play1 {
+            get {
+                object obj = ResourceManager.GetObject("bt_play1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1009,7 +1079,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset marking [F2].
+        ///   Looks up a localized string similar to Reset marking [SHIFT + F1].
         /// </summary>
         public static string Txt_LogsReaderForm_HighlightTxtOff {
             get {
@@ -1063,11 +1133,20 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next filtered item [F4].
+        ///   Looks up a localized string similar to Next filtered item [F2].
         /// </summary>
         public static string Txt_LogsReaderForm_NextFilteredButt {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_NextFilteredButt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next transaction [F4].
+        /// </summary>
+        public static string Txt_LogsReaderForm_NextTrnButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_NextTrnButt", resourceCulture);
             }
         }
         
@@ -1126,11 +1205,20 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous filtered item [SHIFT+F4].
+        ///   Looks up a localized string similar to Previous filtered item [SHIFT+F2].
         /// </summary>
         public static string Txt_LogsReaderForm_PrevFilteredButt {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_PrevFilteredButt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous transaction [SHIFT+F4].
+        /// </summary>
+        public static string Txt_LogsReaderForm_PrevTrnButt {
+            get {
+                return ResourceManager.GetString("Txt_LogsReaderForm_PrevTrnButt", resourceCulture);
             }
         }
         

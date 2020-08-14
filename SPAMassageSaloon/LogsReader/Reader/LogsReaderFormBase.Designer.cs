@@ -22,12 +22,12 @@ namespace LogsReader.Reader
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle169 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle170 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle171 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle172 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle173 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle174 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.DgvDataPromptColumn = new Utils.WinForm.DataGridViewHelper.DgvTextAndImageColumn();
 			this.DgvDataIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,9 +65,6 @@ namespace LogsReader.Reader
 			this.CobxTraceNameFilter = new System.Windows.Forms.ComboBox();
 			this.ChbxAlreadyUseFilter = new System.Windows.Forms.CheckBox();
 			this.btnExport = new System.Windows.Forms.Button();
-			this.labelError = new System.Windows.Forms.Label();
-			this.buttonErrNext = new System.Windows.Forms.Button();
-			this.buttonErrPrev = new System.Windows.Forms.Button();
 			this.searchPanel = new System.Windows.Forms.Panel();
 			this.verticalSeparator2 = new Utils.WinForm.VerticalSeparator();
 			this.buttonPause = new System.Windows.Forms.Button();
@@ -75,13 +72,9 @@ namespace LogsReader.Reader
 			this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.CustomPanel = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel4 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.buttonFilteredPrev = new System.Windows.Forms.Button();
-			this.buttonFilteredNext = new System.Windows.Forms.Button();
-			this.panel3 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.panelShowTrns = new System.Windows.Forms.Panel();
 			this.checkBoxShowTrns = new System.Windows.Forms.CheckBox();
+			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
 			this.DgvReaderSelectColumn = new Utils.WinForm.DataGridViewHelper.DgvCheckBoxColumn();
 			this.DgvReaderIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -98,7 +91,6 @@ namespace LogsReader.Reader
 			this.DgvReaderFileCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileLastWriteTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.splitContainerMainFilter = new System.Windows.Forms.SplitContainer();
-			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
 			((System.ComponentModel.ISupportInitialize)(this.DgvData)).BeginInit();
 			this.filterPanel.SuspendLayout();
 			this.searchPanel.SuspendLayout();
@@ -111,9 +103,7 @@ namespace LogsReader.Reader
 			this.MainSplitContainer.Panel2.SuspendLayout();
 			this.MainSplitContainer.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.panel4.SuspendLayout();
-			this.panel3.SuspendLayout();
-			this.panel2.SuspendLayout();
+			this.panelShowTrns.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DgvReader)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerMainFilter)).BeginInit();
 			this.splitContainerMainFilter.Panel1.SuspendLayout();
@@ -128,14 +118,14 @@ namespace LogsReader.Reader
 			this.DgvData.AllowUserToResizeRows = false;
 			this.DgvData.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.DgvData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle169.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle169.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle169.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle169.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle169.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle169.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle169.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle169;
 			this.DgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DgvDataPromptColumn,
@@ -149,27 +139,27 @@ namespace LogsReader.Reader
             this.DgvDataIsSuccessColumn,
             this.DgvDataIsFilteredColumn,
             this.DgvDataFileColumn});
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DgvData.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle170.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle170.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle170.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle170.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle170.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle170.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle170.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DgvData.DefaultCellStyle = dataGridViewCellStyle170;
 			this.DgvData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvData.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.DgvData.Location = new System.Drawing.Point(0, 0);
 			this.DgvData.Name = "DgvData";
 			this.DgvData.ReadOnly = true;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle171.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle171.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle171.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle171.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle171.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle171.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle171.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle171;
 			this.DgvData.RowHeadersVisible = false;
 			this.DgvData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvData.RowTemplate.Height = 18;
@@ -578,43 +568,6 @@ namespace LogsReader.Reader
 			this.btnExport.UseVisualStyleBackColor = true;
 			this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
 			// 
-			// labelError
-			// 
-			this.labelError.AutoSize = true;
-			this.labelError.Image = global::LogsReader.Properties.Resources.Error1;
-			this.labelError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelError.Location = new System.Drawing.Point(36, 5);
-			this.labelError.Name = "labelError";
-			this.labelError.Size = new System.Drawing.Size(47, 13);
-			this.labelError.TabIndex = 31;
-			this.labelError.Text = "      Error";
-			// 
-			// buttonErrNext
-			// 
-			this.buttonErrNext.BackColor = System.Drawing.Color.White;
-			this.buttonErrNext.FlatAppearance.BorderSize = 0;
-			this.buttonErrNext.Image = global::LogsReader.Properties.Resources.next_arrow;
-			this.buttonErrNext.Location = new System.Drawing.Point(93, 0);
-			this.buttonErrNext.Name = "buttonErrNext";
-			this.buttonErrNext.Size = new System.Drawing.Size(24, 24);
-			this.buttonErrNext.TabIndex = 1;
-			this.buttonErrNext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonErrNext.UseVisualStyleBackColor = false;
-			this.buttonErrNext.Click += new System.EventHandler(this.buttonErrorNext_Click);
-			// 
-			// buttonErrPrev
-			// 
-			this.buttonErrPrev.BackColor = System.Drawing.Color.White;
-			this.buttonErrPrev.FlatAppearance.BorderSize = 0;
-			this.buttonErrPrev.Image = global::LogsReader.Properties.Resources.prev_arrow;
-			this.buttonErrPrev.Location = new System.Drawing.Point(7, 0);
-			this.buttonErrPrev.Name = "buttonErrPrev";
-			this.buttonErrPrev.Size = new System.Drawing.Size(24, 24);
-			this.buttonErrPrev.TabIndex = 0;
-			this.buttonErrPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.buttonErrPrev.UseVisualStyleBackColor = false;
-			this.buttonErrPrev.Click += new System.EventHandler(this.buttonErrorPrev_Click);
-			// 
 			// searchPanel
 			// 
 			this.searchPanel.BackColor = System.Drawing.SystemColors.Control;
@@ -702,96 +655,31 @@ namespace LogsReader.Reader
 			// 
 			this.CustomPanel.BackColor = System.Drawing.SystemColors.Control;
 			this.CustomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.CustomPanel.Location = new System.Drawing.Point(0, 80);
+			this.CustomPanel.Location = new System.Drawing.Point(0, 104);
 			this.CustomPanel.Name = "CustomPanel";
-			this.CustomPanel.Size = new System.Drawing.Size(131, 390);
+			this.CustomPanel.Size = new System.Drawing.Size(131, 366);
 			this.CustomPanel.TabIndex = 1;
 			this.CustomPanel.Resize += new System.EventHandler(this.CustomPanel_Resize);
 			// 
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.panel1.Controls.Add(this.panel4);
-			this.panel1.Controls.Add(this.panel3);
-			this.panel1.Controls.Add(this.panel2);
+			this.panel1.Controls.Add(this.panelShowTrns);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(131, 80);
+			this.panel1.Size = new System.Drawing.Size(131, 26);
 			this.panel1.TabIndex = 2;
 			// 
-			// panel4
+			// panelShowTrns
 			// 
-			this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel4.Controls.Add(this.label1);
-			this.panel4.Controls.Add(this.buttonFilteredPrev);
-			this.panel4.Controls.Add(this.buttonFilteredNext);
-			this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel4.Location = new System.Drawing.Point(0, 26);
-			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(131, 26);
-			this.panel4.TabIndex = 35;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Image = global::LogsReader.Properties.Resources.filtered;
-			this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label1.Location = new System.Drawing.Point(29, 5);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(59, 13);
-			this.label1.TabIndex = 31;
-			this.label1.Text = "      Filtered";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// buttonFilteredPrev
-			// 
-			this.buttonFilteredPrev.BackColor = System.Drawing.Color.White;
-			this.buttonFilteredPrev.FlatAppearance.BorderSize = 0;
-			this.buttonFilteredPrev.Image = global::LogsReader.Properties.Resources.prev_arrow;
-			this.buttonFilteredPrev.Location = new System.Drawing.Point(4, 0);
-			this.buttonFilteredPrev.Name = "buttonFilteredPrev";
-			this.buttonFilteredPrev.Size = new System.Drawing.Size(24, 24);
-			this.buttonFilteredPrev.TabIndex = 0;
-			this.buttonFilteredPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.buttonFilteredPrev.UseVisualStyleBackColor = false;
-			this.buttonFilteredPrev.Click += new System.EventHandler(this.buttonFilteredPrev_Click);
-			// 
-			// buttonFilteredNext
-			// 
-			this.buttonFilteredNext.BackColor = System.Drawing.Color.White;
-			this.buttonFilteredNext.FlatAppearance.BorderSize = 0;
-			this.buttonFilteredNext.Image = global::LogsReader.Properties.Resources.next_arrow;
-			this.buttonFilteredNext.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.buttonFilteredNext.Location = new System.Drawing.Point(96, 0);
-			this.buttonFilteredNext.Name = "buttonFilteredNext";
-			this.buttonFilteredNext.Size = new System.Drawing.Size(24, 24);
-			this.buttonFilteredNext.TabIndex = 1;
-			this.buttonFilteredNext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonFilteredNext.UseVisualStyleBackColor = false;
-			this.buttonFilteredNext.Click += new System.EventHandler(this.buttonFilteredNext_Click);
-			// 
-			// panel3
-			// 
-			this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel3.Controls.Add(this.labelError);
-			this.panel3.Controls.Add(this.buttonErrPrev);
-			this.panel3.Controls.Add(this.buttonErrNext);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel3.Location = new System.Drawing.Point(0, 0);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(131, 26);
-			this.panel3.TabIndex = 34;
-			// 
-			// panel2
-			// 
-			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel2.Controls.Add(this.checkBoxShowTrns);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(0, 52);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(131, 28);
-			this.panel2.TabIndex = 33;
+			this.panelShowTrns.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelShowTrns.Controls.Add(this.checkBoxShowTrns);
+			this.panelShowTrns.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panelShowTrns.Location = new System.Drawing.Point(0, 78);
+			this.panelShowTrns.Name = "panelShowTrns";
+			this.panelShowTrns.Size = new System.Drawing.Size(131, 26);
+			this.panelShowTrns.TabIndex = 33;
 			// 
 			// checkBoxShowTrns
 			// 
@@ -804,19 +692,30 @@ namespace LogsReader.Reader
 			this.checkBoxShowTrns.UseVisualStyleBackColor = true;
 			this.checkBoxShowTrns.CheckedChanged += new System.EventHandler(this.checkBoxShowTrns_CheckedChanged);
 			// 
+			// tabControlViewer
+			// 
+			this.tabControlViewer.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+			this.tabControlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlViewer.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
+			this.tabControlViewer.Name = "tabControlViewer";
+			this.tabControlViewer.SelectedIndex = 0;
+			this.tabControlViewer.Size = new System.Drawing.Size(464, 492);
+			this.tabControlViewer.TabIndex = 0;
+			// 
 			// DgvReader
 			// 
 			this.DgvReader.AllowUserToAddRows = false;
 			this.DgvReader.AllowUserToDeleteRows = false;
 			this.DgvReader.AllowUserToResizeRows = false;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvReader.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle172.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle172.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle172.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle172.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle172.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle172.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle172.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvReader.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle172;
 			this.DgvReader.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.DgvReader.ColumnHeadersVisible = false;
 			this.DgvReader.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -834,27 +733,27 @@ namespace LogsReader.Reader
             this.DgvReaderFileSizeColumn,
             this.DgvReaderFileCreationTimeColumn,
             this.DgvReaderFileLastWriteTimeColumn});
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.DgvReader.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle173.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle173.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle173.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle173.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle173.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle173.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle173.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.DgvReader.DefaultCellStyle = dataGridViewCellStyle173;
 			this.DgvReader.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.DgvReader.GridColor = System.Drawing.Color.DarkGray;
 			this.DgvReader.Location = new System.Drawing.Point(0, 0);
 			this.DgvReader.MultiSelect = false;
 			this.DgvReader.Name = "DgvReader";
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.DgvReader.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle174.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle174.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle174.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle174.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle174.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle174.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle174.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.DgvReader.RowHeadersDefaultCellStyle = dataGridViewCellStyle174;
 			this.DgvReader.RowHeadersVisible = false;
 			this.DgvReader.RowTemplate.Height = 19;
 			this.DgvReader.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -864,12 +763,11 @@ namespace LogsReader.Reader
 			// DgvReaderSelectColumn
 			// 
 			this.DgvReaderSelectColumn.Checked = true;
+			this.DgvReaderSelectColumn.FalseValue = false;
+			this.DgvReaderSelectColumn.HeaderText = "";
 			this.DgvReaderSelectColumn.MinimumWidth = 25;
 			this.DgvReaderSelectColumn.Name = "DgvReaderSelectColumn";
-			this.DgvReaderSelectColumn.HeaderText = "";
-			this.DgvReaderSelectColumn.ReadOnly = false;
 			this.DgvReaderSelectColumn.TrueValue = true;
-			this.DgvReaderSelectColumn.FalseValue = false;
 			this.DgvReaderSelectColumn.Width = 25;
 			// 
 			// DgvReaderIDColumn
@@ -1010,17 +908,6 @@ namespace LogsReader.Reader
 			this.splitContainerMainFilter.SplitterDistance = 65;
 			this.splitContainerMainFilter.TabIndex = 37;
 			// 
-			// tabControlViewer
-			// 
-			this.tabControlViewer.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.tabControlViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControlViewer.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.tabControlViewer.Location = new System.Drawing.Point(0, 0);
-			this.tabControlViewer.Name = "tabControlViewer";
-			this.tabControlViewer.SelectedIndex = 0;
-			this.tabControlViewer.Size = new System.Drawing.Size(464, 492);
-			this.tabControlViewer.TabIndex = 0;
-			// 
 			// LogsReaderFormBase
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1047,12 +934,8 @@ namespace LogsReader.Reader
 			((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).EndInit();
 			this.MainSplitContainer.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.panel4.ResumeLayout(false);
-			this.panel4.PerformLayout();
-			this.panel3.ResumeLayout(false);
-			this.panel3.PerformLayout();
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
+			this.panelShowTrns.ResumeLayout(false);
+			this.panelShowTrns.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DgvReader)).EndInit();
 			this.splitContainerMainFilter.Panel1.ResumeLayout(false);
 			this.splitContainerMainFilter.Panel2.ResumeLayout(false);
@@ -1091,10 +974,8 @@ namespace LogsReader.Reader
         private DataGridViewTextBoxColumn DgvDataIsFilteredColumn;
 		private DataGridViewTextBoxColumn DgvDataFileColumn;
         private CustomTabControl tabControlViewer;
-
         protected Panel CustomPanel;
-
-		internal Button BtnSearch;
+        internal Button BtnSearch;
         internal TextBox TbxPattern;
         internal CheckBox ChbxUseRegex;
         internal DateTimePicker DateStartFilter;
@@ -1104,19 +985,11 @@ namespace LogsReader.Reader
         internal TextBox TbxTraceNameFilter;
         internal TextBox TbxTraceMessageFilter;
         internal CheckBox ChbxAlreadyUseFilter;
-		private Button buttonErrPrev;
-		private Button buttonErrNext;
-		private Label labelError;
-		private Panel panel1;
+        private Panel panel1;
 		private CheckBox checkBoxShowTrns;
-		private Panel panel2;
-		private Panel panel3;
+		private Panel panelShowTrns;
 		private Button buttonHighlightOn;
 		private Button buttonHighlightOff;
-		private Panel panel4;
-		private Label label1;
-		private Button buttonFilteredPrev;
-		private Button buttonFilteredNext;
 		private SplitContainer splitContainerMainFilter;
 
 		protected CustomDataGridView DgvReader;

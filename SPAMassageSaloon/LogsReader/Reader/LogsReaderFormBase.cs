@@ -62,7 +62,14 @@ namespace LogsReader.Reader
         private readonly ToolStripStatusLabel _errorFound;
         private readonly ToolStripStatusLabel _errorFoundValue;
 
-        private readonly Bitmap imgOnWaiting = Resources.waiting;
+        private readonly ToolStripButton buttonFilteredPrev;
+        private readonly ToolStripButton buttonFilteredNext;
+        private readonly ToolStripButton buttonErrPrev;
+		private readonly ToolStripButton buttonErrNext;
+		private readonly ToolStripButton buttonTrnPrev;
+		private readonly ToolStripButton buttonTrnNext;
+
+		private readonly Bitmap imgOnWaiting = Resources.waiting;
         private readonly Bitmap imgOnProcessing = Resources.processing;
         private readonly Bitmap imgPause = Resources.onPause;
         private readonly Padding paddingImgPause = new Padding(0, 0, 0, 0);
@@ -310,6 +317,34 @@ namespace LogsReader.Reader
 			toolToolStripCollection.Add(_openProcessingReadersBtn);
 			toolToolStripCollection.Add(new ToolStripSeparator());
 
+			buttonFilteredPrev = new ToolStripButton {Image = Resources.backFiltered, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0)};
+			buttonFilteredPrev.Click += buttonFilteredPrev_Click;
+			toolToolStripCollection.Add(buttonFilteredPrev);
+			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.filtered });
+			buttonFilteredNext = new ToolStripButton { Image = Resources.arrowFiltered, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonFilteredNext.Click += buttonFilteredNext_Click;
+			toolToolStripCollection.Add(buttonFilteredNext);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+
+			buttonErrPrev = new ToolStripButton { Image = Resources.backError, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonErrPrev.Click += buttonErrorPrev_Click;
+			toolToolStripCollection.Add(buttonErrPrev);
+			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.Error1 });
+			buttonErrNext = new ToolStripButton { Image = Resources.arrowError, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonErrNext.Click += buttonErrorNext_Click;
+			toolToolStripCollection.Add(buttonErrNext);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+
+			buttonTrnPrev = new ToolStripButton {Image = Resources.backTrn, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0)};
+			buttonTrnPrev.Click += buttonTrnPrev_Click;
+			toolToolStripCollection.Add(buttonTrnPrev);
+			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.trn });
+			buttonTrnNext = new ToolStripButton {Image = Resources.arrowTrn, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0)};
+			buttonTrnNext.Click += buttonTrnNext_Click;
+			toolToolStripCollection.Add(buttonTrnNext);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+
+
 			_filtersCompleted1 = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingStart};
 			_completedFilesStatus = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
 			_filtersCompleted2 = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
@@ -334,6 +369,9 @@ namespace LogsReader.Reader
 			_statusInfo = new ToolStripStatusLabel("") {Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
 			toolToolStripCollection.Add(_statusInfo);
 
+			//statusStrip.MaximumSize = new Size(99999, 22);
+			statusStrip.ShowItemToolTips = true;
+			statusStrip.ImageScalingSize = new Size(13, 15);
 			statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
 
 			#endregion
@@ -679,14 +717,17 @@ namespace LogsReader.Reader
 	        Tooltip.SetToolTip(TbxTraceMessageFilter, Resources.Txt_Form_TraceFilterComment);
 	        Tooltip.SetToolTip(ChbxAlreadyUseFilter, Resources.Txt_Form_AlreadyUseFilterComment);
 	        Tooltip.SetToolTip(btnExport, Resources.Txt_LogsReaderForm_ExportComment);
-	        Tooltip.SetToolTip(buttonErrPrev, Resources.Txt_LogsReaderForm_PrevErrButt);
-	        Tooltip.SetToolTip(buttonErrNext, Resources.Txt_LogsReaderForm_NextErrButt);
-	        Tooltip.SetToolTip(buttonFilteredPrev, Resources.Txt_LogsReaderForm_PrevFilteredButt);
-	        Tooltip.SetToolTip(buttonFilteredNext, Resources.Txt_LogsReaderForm_NextFilteredButt);
 	        Tooltip.SetToolTip(checkBoxShowTrns, Resources.Txt_Forms_ShowTransactions);
 	        Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
 	        Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
-        }
+
+			buttonFilteredPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevFilteredButt;
+	        buttonFilteredNext.ToolTipText = Resources.Txt_LogsReaderForm_NextFilteredButt;
+	        buttonErrPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevErrButt;
+	        buttonErrNext.ToolTipText = Resources.Txt_LogsReaderForm_NextErrButt;
+	        buttonTrnPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevTrnButt;
+	        buttonTrnNext.ToolTipText = Resources.Txt_LogsReaderForm_NextTrnButt;
+		}
 
         #endregion
 
@@ -718,25 +759,31 @@ namespace LogsReader.Reader
             {
                 switch (e.KeyCode)
                 {
-	                case Keys.F1 when ButtonHighlightEnabled:
+	                case Keys.F1 when ButtonHighlightEnabled && !e.Shift:
 		                buttonHighlight_Click(this, EventArgs.Empty);
 		                break;
-	                case Keys.F2 when ButtonHighlightEnabled:
+	                case Keys.F1 when ButtonHighlightEnabled && e.Shift:
 		                buttonHighlightOff_Click(this, EventArgs.Empty);
 		                break;
-                    case Keys.F3 when e.Shift:
-		                buttonErrorPrev_Click(this, EventArgs.Empty);
-		                break;
-	                case Keys.F3:
-		                buttonErrorNext_Click(this, EventArgs.Empty);
-		                break;
-	                case Keys.F4 when e.Shift:
+	                case Keys.F2 when e.Shift:
 		                buttonFilteredPrev_Click(this, EventArgs.Empty);
 		                break;
-	                case Keys.F4:
-		                buttonFilteredNext_Click(this, EventArgs.Empty);
+	                case Keys.F2 when !e.Shift:
+						buttonFilteredNext_Click(this, EventArgs.Empty);
 		                break;
-                    case Keys.F5 when BtnSearch.Enabled && !IsWorking:
+					case Keys.F3 when e.Shift:
+		                buttonErrorPrev_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F3 when !e.Shift:
+						buttonErrorNext_Click(this, EventArgs.Empty);
+		                break;
+	                case Keys.F4 when e.Shift:
+						buttonTrnPrev_Click(this, EventArgs.Empty);
+						break;
+	                case Keys.F4 when !e.Shift:
+						buttonTrnNext_Click(this, EventArgs.Empty);
+						break;
+	                case Keys.F5 when BtnSearch.Enabled && !IsWorking:
                         BtnSearch_Click(this, EventArgs.Empty);
                         break;
                     case Keys.Escape when BtnSearch.Enabled && IsWorking:
@@ -1660,17 +1707,22 @@ namespace LogsReader.Reader
 		//    e.Handled = true;
 		//}
 
+		private void buttonFilteredPrev_Click(object sender, EventArgs e)
+		{
+			SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
+		}
+
 		private void buttonErrorPrev_Click(object sender, EventArgs e)
         {
 	        SearchPrev(x=> !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
         }
 
-        private void buttonFilteredPrev_Click(object sender, EventArgs e)
-        {
-	        SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
-        }
+		private void buttonTrnPrev_Click(object sender, EventArgs e)
+		{
+			SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected);
+		}
 
-        void SearchPrev(Func<DataGridViewRow, bool> condition)
+		void SearchPrev(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {
@@ -1703,17 +1755,22 @@ namespace LogsReader.Reader
 			}
         }
 
-        private void buttonErrorNext_Click(object sender, EventArgs e)
-        {
-	        SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
-        }
-
         private void buttonFilteredNext_Click(object sender, EventArgs e)
         {
 	        SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
         }
 
-        void SearchNext(Func<DataGridViewRow, bool> condition)
+		private void buttonErrorNext_Click(object sender, EventArgs e)
+        {
+	        SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
+        }
+
+		private void buttonTrnNext_Click(object sender, EventArgs e)
+		{
+			SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected);
+		}
+
+		void SearchNext(Func<DataGridViewRow, bool> condition)
         {
 	        try
 	        {

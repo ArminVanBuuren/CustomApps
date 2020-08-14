@@ -253,7 +253,13 @@
   <ItemGroup>
     <Content Include="Resources\aborted.png" />
     <Content Include="Resources\add.png" />
+    <Content Include="Resources\arrowError.png" />
+    <Content Include="Resources\arrowFiltered.png" />
+    <Content Include="Resources\arrowTrn.png" />
     <Content Include="Resources\authorization.png" />
+    <Content Include="Resources\backError.png" />
+    <Content Include="Resources\backFiltered.png" />
+    <Content Include="Resources\backTrn.png" />
     <Content Include="Resources\bt_play.png" />
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\default.png" />

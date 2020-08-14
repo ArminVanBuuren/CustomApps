@@ -493,13 +493,13 @@
     <value>Выполнить фильтр с маркировкой [F1]</value>
   </data>
   <data name="Txt_LogsReaderForm_HighlightTxtOff" xml:space="preserve">
-    <value>Сбросить маркировку [F2]</value>
+    <value>Сбросить маркировку [SHIFT + F1]</value>
   </data>
   <data name="Txt_LogsReaderForm_NextFilteredButt" xml:space="preserve">
-    <value>Следующий отфильтрованный элемент [F4]</value>
+    <value>Следующий отфильтрованный элемент [F2]</value>
   </data>
   <data name="Txt_LogsReaderForm_PrevFilteredButt" xml:space="preserve">
-    <value>Предыдущий отфильтрованный элемент [SHIFT+F4]</value>
+    <value>Предыдущий отфильтрованный элемент [SHIFT+F2]</value>
   </data>
   <data name="TxtReader_BtnAbort" xml:space="preserve">
     <value>Прервать</value>
@@ -578,5 +578,11 @@
   </data>
   <data name="TxtReader_DgvScheme" xml:space="preserve">
     <value>Схема</value>
+  </data>
+  <data name="Txt_LogsReaderForm_NextTrnButt" xml:space="preserve">
+    <value>Следующая транзакция [F4]</value>
+  </data>
+  <data name="Txt_LogsReaderForm_PrevTrnButt" xml:space="preserve">
+    <value>Предыдущая транзакция [SHIFT+F4]</value>
   </data>
 </root>
