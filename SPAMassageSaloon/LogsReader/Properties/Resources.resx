@@ -217,9 +217,6 @@ Input data:
   <data name="Txt_LogsReaderForm_NotContains" xml:space="preserve">
     <value>Not Contains</value>
   </data>
-  <data name="Txt_LogsReaderForm_OverallFound" xml:space="preserve">
-    <value>Found matches:</value>
-  </data>
   <data name="Txt_LRSettingsScheme_ErrOrderBy" xml:space="preserve">
     <value>OrderBy item - '{0}' is incorrect! Please check.</value>
   </data>
@@ -559,9 +556,6 @@ Colors schemes are adjustable.</value>
   </data>
   <data name="Txt_Forms_GroupPriority" xml:space="preserve">
     <value>Priority</value>
-  </data>
-  <data name="Txt_LogsReaderForm_Error" xml:space="preserve">
-    <value>Errors:</value>
   </data>
   <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
     <value>Shows information about transactions and elapsed execution time</value>

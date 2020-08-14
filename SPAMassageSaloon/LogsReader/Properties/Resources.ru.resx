@@ -218,9 +218,6 @@
   <data name="Txt_LogsReaderForm_NotContains" xml:space="preserve">
     <value>Не содержит</value>
   </data>
-  <data name="Txt_LogsReaderForm_OverallFound" xml:space="preserve">
-    <value>Всего найдено:</value>
-  </data>
   <data name="Txt_LRSettingsScheme_ErrOrderBy" xml:space="preserve">
     <value>Поле OrderBy - '{0}' - некорректно!</value>
   </data>
@@ -476,9 +473,6 @@
   </data>
   <data name="Txt_Forms_GroupPriority" xml:space="preserve">
     <value>Приоритет</value>
-  </data>
-  <data name="Txt_LogsReaderForm_Error" xml:space="preserve">
-    <value>Ошибок:</value>
   </data>
   <data name="Txt_Forms_ShowTransactions" xml:space="preserve">
     <value>Показывает информацию о транзакциях и затраченном времени выполнения</value>

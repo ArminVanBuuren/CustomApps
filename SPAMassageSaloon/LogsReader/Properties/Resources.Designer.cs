@@ -989,15 +989,6 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors:.
-        /// </summary>
-        public static string Txt_LogsReaderForm_Error {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string Txt_LogsReaderForm_Export {
@@ -1183,15 +1174,6 @@ namespace LogsReader.Properties {
         public static string Txt_LogsReaderForm_OrderBy {
             get {
                 return ResourceManager.GetString("Txt_LogsReaderForm_OrderBy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Found matches:.
-        /// </summary>
-        public static string Txt_LogsReaderForm_OverallFound {
-            get {
-                return ResourceManager.GetString("Txt_LogsReaderForm_OverallFound", resourceCulture);
             }
         }
         

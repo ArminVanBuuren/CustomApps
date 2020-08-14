@@ -299,6 +299,7 @@ namespace LogsReader.Reader
 			};
 
 			var toolToolStripCollection = new List<ToolStripItem>();
+			var toolToolStripCollection2 = new List<ToolStripItem>();
 			var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
 			var statusStripItemsPaddingMiddle = new Padding(-3, 2, 0, 2);
 			var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
@@ -316,34 +317,6 @@ namespace LogsReader.Reader
 			buttonNextBlock_Click(null, EventArgs.Empty);
 			toolToolStripCollection.Add(_openProcessingReadersBtn);
 			toolToolStripCollection.Add(new ToolStripSeparator());
-
-			buttonFilteredPrev = new ToolStripButton {Image = Resources.backFiltered, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0)};
-			buttonFilteredPrev.Click += buttonFilteredPrev_Click;
-			toolToolStripCollection.Add(buttonFilteredPrev);
-			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.filtered });
-			buttonFilteredNext = new ToolStripButton { Image = Resources.arrowFiltered, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
-			buttonFilteredNext.Click += buttonFilteredNext_Click;
-			toolToolStripCollection.Add(buttonFilteredNext);
-			toolToolStripCollection.Add(new ToolStripSeparator());
-
-			buttonErrPrev = new ToolStripButton { Image = Resources.backError, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0) };
-			buttonErrPrev.Click += buttonErrorPrev_Click;
-			toolToolStripCollection.Add(buttonErrPrev);
-			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.Error1 });
-			buttonErrNext = new ToolStripButton { Image = Resources.arrowError, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
-			buttonErrNext.Click += buttonErrorNext_Click;
-			toolToolStripCollection.Add(buttonErrNext);
-			toolToolStripCollection.Add(new ToolStripSeparator());
-
-			buttonTrnPrev = new ToolStripButton {Image = Resources.backTrn, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0)};
-			buttonTrnPrev.Click += buttonTrnPrev_Click;
-			toolToolStripCollection.Add(buttonTrnPrev);
-			toolToolStripCollection.Add(new ToolStripStatusLabel { Image = Resources.trn });
-			buttonTrnNext = new ToolStripButton {Image = Resources.arrowTrn, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0)};
-			buttonTrnNext.Click += buttonTrnNext_Click;
-			toolToolStripCollection.Add(buttonTrnNext);
-			toolToolStripCollection.Add(new ToolStripSeparator());
-
 
 			_filtersCompleted1 = new ToolStripStatusLabel {Font = base.Font, Margin = statusStripItemsPaddingStart};
 			_completedFilesStatus = new ToolStripStatusLabel("0") {Font = base.Font, Margin = statusStripItemsPaddingMiddle};
@@ -364,8 +337,8 @@ namespace LogsReader.Reader
 			toolToolStripCollection.Add(new ToolStripSeparator());
 			toolToolStripCollection.Add(_errorFound);
 			toolToolStripCollection.Add(_errorFoundValue);
-
 			toolToolStripCollection.Add(new ToolStripSeparator());
+
 			_statusInfo = new ToolStripStatusLabel("") {Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
 			toolToolStripCollection.Add(_statusInfo);
 
@@ -373,6 +346,37 @@ namespace LogsReader.Reader
 			statusStrip.ShowItemToolTips = true;
 			statusStrip.ImageScalingSize = new Size(13, 15);
 			statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
+
+
+			buttonErrPrev = new ToolStripButton { Image = Resources.backError, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonErrPrev.Click += buttonErrorPrev_Click;
+			toolToolStripCollection2.Add(buttonErrPrev);
+			toolToolStripCollection2.Add(new ToolStripStatusLabel { Image = Resources.Error1 });
+			buttonErrNext = new ToolStripButton { Image = Resources.arrowError, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonErrNext.Click += buttonErrorNext_Click;
+			toolToolStripCollection2.Add(buttonErrNext);
+			toolToolStripCollection2.Add(new ToolStripSeparator());
+
+			buttonFilteredPrev = new ToolStripButton { Image = Resources.backFiltered, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonFilteredPrev.Click += buttonFilteredPrev_Click;
+			toolToolStripCollection2.Add(buttonFilteredPrev);
+			toolToolStripCollection2.Add(new ToolStripStatusLabel { Image = Resources.filtered });
+			buttonFilteredNext = new ToolStripButton { Image = Resources.arrowFiltered, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonFilteredNext.Click += buttonFilteredNext_Click;
+			toolToolStripCollection2.Add(buttonFilteredNext);
+			toolToolStripCollection2.Add(new ToolStripSeparator());
+
+			buttonTrnPrev = new ToolStripButton { Image = Resources.backTrn, Margin = new Padding(0, 2, 2, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonTrnPrev.Click += buttonTrnPrev_Click;
+			toolToolStripCollection2.Add(buttonTrnPrev);
+			toolToolStripCollection2.Add(new ToolStripStatusLabel { Image = Resources.trn });
+			buttonTrnNext = new ToolStripButton { Image = Resources.arrowTrn, Margin = new Padding(2, 2, 0, 2), Padding = new Padding(0, 0, 0, 0) };
+			buttonTrnNext.Click += buttonTrnNext_Click;
+			toolToolStripCollection2.Add(buttonTrnNext);
+
+			statusStripBtns.ShowItemToolTips = true;
+			statusStripBtns.ImageScalingSize = new Size(13, 15);
+			statusStripBtns.Items.AddRange(toolToolStripCollection2.ToArray());
 
 			#endregion
 
@@ -632,8 +636,8 @@ namespace LogsReader.Reader
             {
 	            _filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
                 _filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
-                _overallFound.Text = Resources.Txt_LogsReaderForm_OverallFound;
-                _errorFound.Text = Resources.Txt_LogsReaderForm_Error;
+                _overallFound.Text = $"{Resources.TxtReader_DgvMatches}:";
+                _errorFound.Text = $"{Resources.TxtReader_DgvErrors}:";
 
                 CobxTraceNameFilter.Items.Clear();
                 CobxTraceNameFilter.Items.Add(Resources.Txt_LogsReaderForm_Contains);
