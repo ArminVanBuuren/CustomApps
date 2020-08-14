@@ -276,8 +276,12 @@ namespace LogsReader.Reader
 		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			var hash = Settings.GetHashCode() + 13;
-			return hash;
+			unchecked
+			{
+				var hash = 11;
+				hash = hash * 15 + Settings.GetHashCode();
+				return hash;
+			}
 		}
 
 		public virtual void Clear()

@@ -343,7 +343,7 @@ namespace LogsReader.Reader
 						OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
 
 					// заполняем DataGrid
-					if (await AssignResultAsync(filter, true))
+					if (await AssignResultAsync(filter, null, true))
 						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 					TimeWatcher.Stop();

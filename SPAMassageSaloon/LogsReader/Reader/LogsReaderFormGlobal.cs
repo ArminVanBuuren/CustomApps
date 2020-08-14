@@ -262,10 +262,7 @@ namespace LogsReader.Reader
 	        expanderPanel.Controls.Add(treeView);
 
 			// если закрываются или открываются схемы для глобальной формы в глобальной форме
-			schemeExpander.ExpandCollapse += (sender, args) =>
-			{
-				SchemeExpander_ExpandCollapse(sender, args);
-			};
+			schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;
 			// если выбирается схема в глобальной форме в checkbox
 	        schemeExpander.CheckedChanged += async (sender, args) =>
 	        {
@@ -290,7 +287,7 @@ namespace LogsReader.Reader
 				}
 
 				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders && !InProcessing.IsAnyWorking)
-					await AssignResultAsync(null, false);
+					await AssignResultAsync(null, null,false);
 
 				ValidationCheck(true);
 	        };
@@ -372,7 +369,7 @@ namespace LogsReader.Reader
 				MainViewer.Clear();
 
 				// заполняем DataGrid
-				if (await AssignResultAsync(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, true))
+				if (await AssignResultAsync(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, null, true))
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 
 				IsWorking = false;
@@ -401,6 +398,9 @@ namespace LogsReader.Reader
 
 		protected override void ReportProcessStatus(IEnumerable<TraceReader> readers)
 		{
+			if(InProcessing.Count == 0)
+				return;
+
 			base.ReportProcessStatus(readers);
 
 			if (InProcessing.Where(x => x.Item1.IsWorking).All(x => x.Item1.OnPause))
@@ -684,7 +684,7 @@ namespace LogsReader.Reader
 			        expander.IsChecked = checkBoxSelectAll.Checked;
 
 		        if (InProcessing.Count > 0)
-			        await AssignResultAsync(null, false);
+			        await AssignResultAsync(null, null, false);
 
 		        UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
 		        

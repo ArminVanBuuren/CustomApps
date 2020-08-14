@@ -575,8 +575,13 @@ namespace LogsReader.Reader
         /// <returns></returns>
         public override int GetHashCode()
         {
-	        var hash = FilePath.GetHashCode() + base.GetHashCode();
-            return hash;
+	        unchecked
+	        {
+		        var hash = 30;
+		        hash = hash * 14 + FilePath.GetHashCode();
+		        hash = hash * 14 + base.GetHashCode();
+				return hash;
+			}
         }
 
         public override string ToString()

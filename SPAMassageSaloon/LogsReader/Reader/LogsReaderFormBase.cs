@@ -29,14 +29,16 @@ namespace LogsReader.Reader
         private readonly Func<DateTime> _getEndDate = () => new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
         private readonly object syncRootStatus = new object();
+        private readonly object onPauseSync = new object();
 
 		private bool _settingIsApplied;
         private bool _oldDateStartChecked;
         private bool _oldDateEndChecked;
         private bool _settingsLoaded;
         private bool _isWorking;
+        private bool _onPause = false;
 
-        private int _countMatches;
+		private int _countMatches;
         private int _countErrorMatches;
         private int _filesCompleted;
         private int _totalFiles;
@@ -238,18 +240,25 @@ namespace LogsReader.Reader
             set => MainSplitContainer.Panel1MinSize = value;
         }
 
-		/// <summary>
-		/// Если выполнили фильтр (не подсвечивая)
-		/// </summary>
-        protected bool IsDgvDataFiltered { get; private set; } = false;
-
-		public abstract bool HasAnyResult { get; }
+        public abstract bool HasAnyResult { get; }
 
 		public abstract RefreshDataType DgvDataAfterAssign { get; }
 
 		public TraceItemView MainViewer { get; }
 
-		public bool OnPause { get; protected set; } = false;
+		public bool OnPause
+		{
+			get
+			{
+				lock (onPauseSync)
+					return _onPause;
+			}
+			protected set
+			{
+				lock (onPauseSync)
+					_onPause = value;
+			}
+		}
 
 		static LogsReaderFormBase()
         {
@@ -342,7 +351,6 @@ namespace LogsReader.Reader
 			_statusInfo = new ToolStripStatusLabel("") {Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold), Margin = statusStripItemsPaddingStart};
 			toolToolStripCollection.Add(_statusInfo);
 
-			//statusStrip.MaximumSize = new Size(99999, 22);
 			statusStrip.ShowItemToolTips = true;
 			statusStrip.ImageScalingSize = new Size(13, 15);
 			statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
@@ -577,6 +585,7 @@ namespace LogsReader.Reader
 				return;
 			PauseState();
 		}
+
 		void PauseState()
 		{
 			OnPause = true;
@@ -616,9 +625,9 @@ namespace LogsReader.Reader
 		        MainSplitContainer.SplitterDistance = UserSettings.GetValue(nameof(MainSplitContainer), 25, 2000, MainSplitContainer.SplitterDistance);
 		        MainViewer.SplitterDistance = UserSettings.GetValue(nameof(MainViewer), 25, 2000, MainViewer.SplitterDistance);
 
-		        ParentSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
-		        MainSplitContainer.SplitterMoved += (sender, args) => { SaveData(); };
-		        MainViewer.SplitterMoved += (sender, args) => { SaveData(); };
+		        ParentSplitContainer.SplitterMoved += (sender, args) => SaveData();
+		        MainSplitContainer.SplitterMoved += (sender, args) => SaveData();
+		        MainViewer.SplitterMoved += (sender, args) => SaveData();
 
 		        _settingIsApplied = true;
             }
@@ -1032,7 +1041,20 @@ namespace LogsReader.Reader
         {
             try
             {
-	            IsDgvDataFiltered = await AssignResultAsync(GetFilter(), false);
+	            if (DgvReader.RowCount > 0)
+	            {
+		            var selectedFilePaths = DgvReader.Rows.OfType<DataGridViewRow>()
+			            .Where(x => x.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell selectCell && selectCell.Checked)
+			            .Select(x => x.Cells[DgvReaderFileColumn.Name]?.Value?.ToString())
+			            .Where(x => !x.IsNullOrWhiteSpace())
+			            .ToHashSet(x => x, StringComparer.InvariantCultureIgnoreCase);
+
+		            await AssignResultAsync(GetFilter(), x => selectedFilePaths.Contains(x.ParentReader.FilePath), false);
+				}
+	            else
+	            {
+					await AssignResultAsync(GetFilter(), null, false);
+				}
             }
             catch (Exception ex)
             {
@@ -1054,8 +1076,7 @@ namespace LogsReader.Reader
         {
 	        try
 	        {
-		        await AssignResultAsync(null, false);
-		        IsDgvDataFiltered = false;
+		        await AssignResultAsync(null, null, false);
 	        }
 	        catch (Exception ex)
 	        {
@@ -1138,7 +1159,7 @@ namespace LogsReader.Reader
 			}
         }
 
-        protected async Task<bool> AssignResultAsync(DataFilter filter, bool isNewData)
+		protected async Task<bool> AssignResultAsync(DataFilter filter, Func<DataTemplate, bool> condition, bool isNewData)
         {
 	        try
 	        {
@@ -1148,10 +1169,11 @@ namespace LogsReader.Reader
 			        DgvData.Rows.Clear();
 			        DgvData.Refresh();
 		        }
+		        MainViewer?.Clear();
 
-				_currentDGVResult = GetResultTemplates();
+				_currentDGVResult = condition != null ? GetResultTemplates().Where(condition) : GetResultTemplates();
 
-		        if (_currentDGVResult == null || !_currentDGVResult.Any())
+				if (_currentDGVResult == null || !_currentDGVResult.Any())
 		        {
 			        ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 			        return false;
@@ -1395,16 +1417,25 @@ namespace LogsReader.Reader
 					        if (cell2.ToolTipText != Txt_LogsReaderForm_DateValueIsIncorrect)
 						        cell2.ToolTipText = Txt_LogsReaderForm_DateValueIsIncorrect;
 		        }
-				else if (row.Index > 0) // Костыль. Если стиль первой строки изменить то это применится ко всем строкам. Ебучий майкрософт. А если менять фонт для остальных неимоверно все тупит
+				else
 		        {
-			        if (!template.IsMatched)
-				        foreach (DataGridViewCell cell2 in row.Cells)
-					        if (cell2.ToolTipText != Txt_LogsReaderForm_DoesntMatchByPattern)
-						        cell2.ToolTipText = Txt_LogsReaderForm_DoesntMatchByPattern;
+			        // Костыль. Если изменить стиль ячейки первой строки, то это применится ко всем ячейкам. Ебучий майкрософт. А если менять фонт для остальных неимоверно все тупит
+					if (row.Index == 0)
+			        {
+						if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.ErrFont))
+							row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+			        }
+			        else
+			        {
+				        if (!template.IsMatched)
+					        foreach (DataGridViewCell cell2 in row.Cells)
+						        if (cell2.ToolTipText != Txt_LogsReaderForm_DoesntMatchByPattern)
+							        cell2.ToolTipText = Txt_LogsReaderForm_DoesntMatchByPattern;
 
-			        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
-				        cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
-				}
+				        if (!Equals(cellTraceName.Style.Font, LogsReaderMainForm.ErrFont))
+					        cellTraceName.Style.Font = LogsReaderMainForm.ErrFont;
+			        }
+		        }
 
 				if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
 			        cellFile.ToolTipText = template.File;
@@ -2138,8 +2169,6 @@ namespace LogsReader.Reader
 		        FilesCompleted = 0;
 		        TotalFiles = 0;
 		        ReportStatus(string.Empty, ReportStatusType.Success);
-
-		        IsDgvDataFiltered = false;
 
 		        ClearData();
 

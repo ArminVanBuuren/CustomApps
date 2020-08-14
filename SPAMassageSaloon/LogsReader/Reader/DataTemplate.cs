@@ -298,8 +298,13 @@ namespace LogsReader.Reader
         /// <returns></returns>
         public override int GetHashCode()
         {
-	        var hash = FoundLineID.GetHashCode() + ParentReader.GetHashCode();
-            return hash;
+	        unchecked
+            {
+	            var hash = 67;
+	            hash = hash * 7 + FoundLineID.GetHashCode();
+	            hash = hash * 7 + ParentReader.GetHashCode();
+	            return hash;
+            }
         }
 
         public object Clone()

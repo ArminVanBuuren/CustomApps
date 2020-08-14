@@ -24,8 +24,13 @@ namespace SPAFilter.SPA.Components.SRI
 
         public int GetHashCode(XmlNode obj)
         {
-            var name = obj.Attributes?["name"]?.Value;
-            return name == null ? obj.GetHashCode() : name.ToLower().GetHashCode();
+	        unchecked
+            {
+	            var hash = 12;
+	            var name = obj.Attributes?["name"]?.Value;
+                hash = hash * 17 + (name == null ? obj.GetHashCode() : name.ToLower().GetHashCode());
+	            return hash;
+            }
         }
     }
 }
