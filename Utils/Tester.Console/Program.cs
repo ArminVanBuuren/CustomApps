@@ -40,6 +40,13 @@ namespace Tester.Console
 		public int CountTest { get; }
 	}
 
+	class test1
+	{
+		public bool IsWorking { get; set; } = true;
+		public bool OnPause { get; set; } = true;
+	}
+
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -51,58 +58,32 @@ namespace Tester.Console
 
 			try
 			{
-				int a = 0;
-				if (false || (true && true) && true)
+				var test = new List<test1>()
 				{
-					a++;
-				}
+					new test1
+					{
+						IsWorking = true,
+						OnPause = false
+					},
+					new test1
+					{
+						IsWorking = true,
+						OnPause = true
+					},
+					new test1
+					{
+						IsWorking = true,
+						OnPause = true
+					},
+					new test1
+					{
+						IsWorking = false,
+						OnPause = true
+					},
+				};
 
-				if (true || (false && true) && true)
-				{
-					a++;
-				}
 
-				if (true || (true && true) && false)
-				{
-					a++;
-				}
-
-				if (false || (true && true) && true)
-				{
-					a++;
-				}
-
-				if (false || (true && true) && false)
-				{
-					a++;
-				}
-
-				var b = 0;
-				if (false || (true && true && true))
-				{
-					b++;
-				}
-
-				if (true || (false && true && true))
-				{
-					b++;
-				}
-
-				if (true || (true && true && false))
-				{
-					b++;
-				}
-
-				if (false || (true && true && true))
-				{
-					b++;
-				}
-
-				if (false || (true && true && false))
-				{
-					b++;
-				}
-
+				var ff = test.Where(x => !x.IsWorking).All(x => x.OnPause);
 			}
 			catch (Exception e)
 			{
