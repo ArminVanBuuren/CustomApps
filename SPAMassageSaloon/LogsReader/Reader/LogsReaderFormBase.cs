@@ -211,7 +211,11 @@ namespace LogsReader.Reader
         public int Progress
         {
 	        get => IsWorking ? progressBar.Value : 100;
-	        protected set => progressBar.Value = value;
+	        protected set
+	        {
+		        if (value >= 0 && value <= 100)
+			        progressBar.Value = value;
+	        }
         }
 
         public int FilesCompleted
