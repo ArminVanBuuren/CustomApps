@@ -48,7 +48,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(399, 346);
+			this.buttonCancel.Location = new System.Drawing.Point(399, 521);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 5;
@@ -61,7 +61,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(333, 346);
+			this.buttonOK.Location = new System.Drawing.Point(333, 521);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 4;
@@ -79,22 +79,6 @@ namespace LogsReader.Reader.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.DgvTraceNames.BackgroundColor = System.Drawing.SystemColors.Menu;
 			this.DgvTraceNames.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.DgvTraceNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.DgvTraceNames.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SelectColumn,
-            this.TraceNameColumn,
-            this.CountMatchesColumn,
-            this.CountErrorsColumn});
-			this.DgvTraceNames.Location = new System.Drawing.Point(5, 3);
-			this.DgvTraceNames.MultiSelect = false;
-			this.DgvTraceNames.Name = "DgvTraceNames";
-			this.DgvTraceNames.ReadOnly = false;
-			this.DgvTraceNames.RowHeadersVisible = false;
-			this.DgvTraceNames.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.DgvTraceNames.RowTemplate.Height = 18;
-			this.DgvTraceNames.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvTraceNames.Size = new System.Drawing.Size(474, 341);
-			this.DgvTraceNames.TabIndex = 6;
 			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -103,7 +87,12 @@ namespace LogsReader.Reader.Forms
 			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.DgvTraceNames.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-			this.DgvTraceNames.GridColor = System.Drawing.SystemColors.ControlLight;
+			this.DgvTraceNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.DgvTraceNames.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SelectColumn,
+            this.TraceNameColumn,
+            this.CountMatchesColumn,
+            this.CountErrorsColumn});
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -112,6 +101,10 @@ namespace LogsReader.Reader.Forms
 			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.DgvTraceNames.DefaultCellStyle = dataGridViewCellStyle2;
+			this.DgvTraceNames.GridColor = System.Drawing.SystemColors.ControlLight;
+			this.DgvTraceNames.Location = new System.Drawing.Point(5, 3);
+			this.DgvTraceNames.MultiSelect = false;
+			this.DgvTraceNames.Name = "DgvTraceNames";
 			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -120,16 +113,22 @@ namespace LogsReader.Reader.Forms
 			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.DgvTraceNames.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			this.DgvTraceNames.RowHeadersVisible = false;
+			this.DgvTraceNames.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.DgvTraceNames.RowTemplate.Height = 18;
+			this.DgvTraceNames.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.DgvTraceNames.Size = new System.Drawing.Size(474, 516);
+			this.DgvTraceNames.TabIndex = 6;
 			// 
 			// SelectColumn
 			// 
 			this.SelectColumn.Checked = false;
+			this.SelectColumn.FalseValue = false;
+			this.SelectColumn.HeaderText = "";
 			this.SelectColumn.MinimumWidth = 25;
 			this.SelectColumn.Name = "SelectColumn";
-			this.SelectColumn.HeaderText = "";
 			this.SelectColumn.ReadOnly = false;
 			this.SelectColumn.TrueValue = true;
-			this.SelectColumn.FalseValue = false;
 			this.SelectColumn.Width = 25;
 			// 
 			// TraceNameColumn
@@ -164,7 +163,7 @@ namespace LogsReader.Reader.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(484, 373);
+			this.ClientSize = new System.Drawing.Size(484, 548);
 			this.Controls.Add(this.DgvTraceNames);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);

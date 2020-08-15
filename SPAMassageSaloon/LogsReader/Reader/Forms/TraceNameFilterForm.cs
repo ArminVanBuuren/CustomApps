@@ -46,8 +46,6 @@ namespace LogsReader.Reader.Forms
 				}
 				DgvTraceNames.Refresh();
 			};
-			//DgvTraceNames.Resize += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
-			//DgvTraceNames.Scroll += (sender, args) => DgvTraceNames.Invalidate(); // необходим для столбца checkox
 			DgvTraceNames.Sorted += (sender, args) =>
 			{
 				if(DgvTraceNames.RowCount > 0)
@@ -77,7 +75,7 @@ namespace LogsReader.Reader.Forms
 
 			form.RefreshAllRows();
 
-			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count())));
+			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count() + 3)) + 5);
 			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
 
 			return form;

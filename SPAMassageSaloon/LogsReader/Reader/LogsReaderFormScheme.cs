@@ -332,7 +332,7 @@ namespace LogsReader.Reader
 		            ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 		            await MainReader.GetTargetFilesAsync(); // получение файлов логов
 
-		            await UploadReadersAsync(MainReader.TraceReaders.Values); // загружаем ридеры в таблицу прогресса
+		            await UploadReadersAsync(); // загружаем ридеры в таблицу прогресса
 
 		            ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 		            await MainReader.StartAsync(); // вополнение поиска
@@ -380,7 +380,7 @@ namespace LogsReader.Reader
 	        return OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
         }
 
-		protected override IEnumerable<TraceReader> GetResultReaders()
+		internal override IEnumerable<TraceReader> GetResultReaders()
 		{
 			return MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : new List<TraceReader>(MainReader.TraceReaders.Values);
 		}

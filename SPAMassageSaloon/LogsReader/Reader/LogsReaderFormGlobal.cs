@@ -306,7 +306,7 @@ namespace LogsReader.Reader
 	        readerForm.OnUploadReaders += async (sender, args) =>
 	        {
 		        if (InProcessing.ContainsKey(readerForm))
-			        await UploadReadersAsync(GetResultReaders());
+			        await UploadReadersAsync();
 	        };
 			// событие при смене языка формы
 			readerForm.OnAppliedSettings += (sender, args) =>
@@ -381,7 +381,7 @@ namespace LogsReader.Reader
 				if (InProcessing.ContainsKey(readerForm))
 				{
 					MainViewer.Clear();
-					await UploadReadersAsync(GetResultReaders());
+					await UploadReadersAsync();
 					await STREAM.GarbageCollectAsync();
 				}
 			};
@@ -615,11 +615,10 @@ namespace LogsReader.Reader
 		        .ToList();
         }
 
-        protected override IEnumerable<TraceReader> GetResultReaders()
+        internal override IEnumerable<TraceReader> GetResultReaders()
         {
 	        return InProcessing
-		        .Where(x => x.Item1.MainReader?.TraceReaders?.Values != null)
-		        .SelectMany(x => x.Item1.MainReader.TraceReaders.Values)
+		        .SelectMany(x => x.Item1.GetResultReaders())
 		        .ToList();
 		}
 
