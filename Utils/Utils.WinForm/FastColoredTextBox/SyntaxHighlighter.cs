@@ -22,6 +22,11 @@ namespace FastColoredTextBoxNS
         public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
         public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+
+        public readonly Style XmlGreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
+        public readonly Style XmlBlueStyle = new TextStyle(new SolidBrush(Color.FromArgb(0, 0, 254)), null, FontStyle.Regular);
+        public readonly Style XmlRedStyle = new TextStyle(new SolidBrush(Color.FromArgb(254, 0, 0)), null, FontStyle.Regular);
+        public readonly Style XmlMagentaStyle = new TextStyle(new SolidBrush(Color.FromArgb(128, 0, 254)), null, FontStyle.Bold);
         //
         protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
             new Dictionary<string, SyntaxDescriptor>();
@@ -641,12 +646,12 @@ namespace FastColoredTextBoxNS
                     HtmlEntityStyle = RedStyle;
                     break;
                 case Language.XML:
-                    CommentStyle = GreenStyle;
-                    XmlTagBracketStyle = BlueStyle;
-                    XmlTagNameStyle = MaroonStyle;
-                    XmlAttributeStyle = RedStyle;
-                    XmlAttributeValueStyle = BlueStyle;
-                    XmlEntityStyle = RedStyle;
+                    CommentStyle = XmlGreenStyle;
+                    XmlTagBracketStyle = XmlBlueStyle;
+                    XmlTagNameStyle = XmlBlueStyle;
+                    XmlAttributeStyle = XmlRedStyle;
+                    XmlAttributeValueStyle = XmlMagentaStyle;
+                    XmlEntityStyle = XmlRedStyle;
                     XmlCDataStyle = BlackStyle;
                     break;
                 case Language.JS:

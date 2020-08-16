@@ -22,10 +22,10 @@ namespace Utils.WinForm.Notepad
         private readonly FastColoredTextBox FCTB;
         private readonly StatusStrip _statusStrip;
 
-        private readonly Style XmlLiteAttributeStyle;
-        private readonly Style XmlLiteAttributeValueStyle;
-        private readonly Style XmlLiteCDataStyle;
-        private readonly Style XmlLiteTagNameStyle;
+        //private readonly Style XmlLiteAttributeStyle;
+        //private readonly Style XmlLiteAttributeValueStyle;
+        //private readonly Style XmlLiteCDataStyle;
+        //private readonly Style XmlLiteTagNameStyle;
         private readonly Regex _xmlLiteCommentRegex;
         private readonly Regex _xmlLiteTagRegex;
         private readonly Regex _xmlLiteAttrRegex;
@@ -297,10 +297,10 @@ namespace Utils.WinForm.Notepad
                 _statusStrip.Padding = new Padding(0, 2, 0, 0);
                 _statusStrip.MinimumSize = new Size(710, 0);
 
-                XmlLiteAttributeStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.RedStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.RedStyle).FontStyle);
-                XmlLiteAttributeValueStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).FontStyle);
-                XmlLiteCDataStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).FontStyle);
-                XmlLiteTagNameStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).FontStyle);
+                //XmlLiteAttributeStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.RedStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.RedStyle).FontStyle);
+                //XmlLiteAttributeValueStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlueStyle).FontStyle);
+                //XmlLiteCDataStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.BlackStyle).FontStyle);
+                //XmlLiteTagNameStyle = new TextStyle(((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).ForeBrush, null, ((TextStyle)FCTB.SyntaxHighlighter.MaroonStyle).FontStyle);
                 _xmlLiteCommentRegex = new Regex(@"<!--.*?-->|<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexOptions.Singleline | RegexOptions.Compiled);
                 _xmlLiteTagRegex = new Regex(@"(?<range><[!\w:]+)|(?<range></[\w:]+>)|<\?|<|/>|</|>|\?>", RegexOptions.Compiled);
                 _xmlLiteAttrRegex = new Regex(@"(?<range>\w+\=)", RegexOptions.Compiled);
