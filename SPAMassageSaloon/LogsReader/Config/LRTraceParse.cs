@@ -42,9 +42,9 @@ namespace LogsReader.Config
 					SelectionTransactionsType = TransactionsMarkingType.Color;
 					Patterns = new[]
 					{
-						new LRTraceParsePatternItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.*?)(\<.+\>)(.*)") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
-						new LRTraceParsePatternItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.+?)\s+(.+)") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
-						new LRTraceParsePatternItem(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)") {Date = "$1", TraceName = "$2", Message = "$3"}
+						new LRTraceParsePatternItem(@"^(.+?)\s*\[\s*(.+?)\s*\]\s*(.*?)(\<.+\>)(.*)$") {Date = "$1", TraceName = "$2", Description = "$3$5", Message = "$4"},
+						new LRTraceParsePatternItem(@"^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+?)\s+(.+)$") {Date = "$1", TraceName = "$2", Description = "$3", Message = "$4"},
+						new LRTraceParsePatternItem(@"^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$") {Date = "$1", TraceName = "$2", Message = "$3"}
 					};
 					TransactionPatterns = new[]
 					{
@@ -71,9 +71,9 @@ namespace LogsReader.Config
 					SelectionTransactionsType = TransactionsMarkingType.Both;
 					Patterns = new[]
 					{
-						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)\n\-{50,}")
+						new LRTraceParsePatternItem(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)\n\-{50,}$")
 							{Date = "$1", TraceName = "$2", Message = "$3"},
-						new LRTraceParsePatternItem(@"(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)")
+						new LRTraceParsePatternItem(@"^(\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+)\s+\((\w+)\).*?\-{50,}(.+)$")
 							{Date = "$1", TraceName = "$2", Message = "$3"}
 					};
 					StartWith = new XmlNode[] {new XmlDocument().CreateCDataSection(@"^\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+\s+\(\w+\)") };
