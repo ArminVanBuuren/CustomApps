@@ -75,7 +75,7 @@ namespace LogsReader.Reader.Forms
 
 			form.RefreshAllRows();
 
-			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(130, (630 / 30) * Math.Min(30, traceNames.Count() + 3)) + 5);
+			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(0, 19 * Math.Min(25, traceNames.Count())) + 92);
 			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
 
 			return form;

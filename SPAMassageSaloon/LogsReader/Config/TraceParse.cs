@@ -10,7 +10,7 @@ namespace LogsReader.Config
 	[Serializable]
 	public abstract class TraceParse
 	{
-		public static readonly TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 10);
+		public static readonly TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 0, 0, 10000);
 
 		internal abstract bool IsCorrect { get; set; }
 

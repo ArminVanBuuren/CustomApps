@@ -48,7 +48,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.Image = global::LogsReader.Properties.Resources.cancel;
 			this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonCancel.Location = new System.Drawing.Point(399, 521);
+			this.buttonCancel.Location = new System.Drawing.Point(420, 448);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 25);
 			this.buttonCancel.TabIndex = 5;
@@ -61,7 +61,7 @@ namespace LogsReader.Reader.Forms
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.Image = global::LogsReader.Properties.Resources.Ok;
 			this.buttonOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonOK.Location = new System.Drawing.Point(333, 521);
+			this.buttonOK.Location = new System.Drawing.Point(354, 448);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(60, 25);
 			this.buttonOK.TabIndex = 4;
@@ -117,7 +117,7 @@ namespace LogsReader.Reader.Forms
 			this.DgvTraceNames.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.DgvTraceNames.RowTemplate.Height = 18;
 			this.DgvTraceNames.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DgvTraceNames.Size = new System.Drawing.Size(474, 516);
+			this.DgvTraceNames.Size = new System.Drawing.Size(495, 443);
 			this.DgvTraceNames.TabIndex = 6;
 			// 
 			// SelectColumn
@@ -127,7 +127,6 @@ namespace LogsReader.Reader.Forms
 			this.SelectColumn.HeaderText = "";
 			this.SelectColumn.MinimumWidth = 25;
 			this.SelectColumn.Name = "SelectColumn";
-			this.SelectColumn.ReadOnly = false;
 			this.SelectColumn.TrueValue = true;
 			this.SelectColumn.Width = 25;
 			// 
@@ -163,12 +162,12 @@ namespace LogsReader.Reader.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(484, 548);
+			this.ClientSize = new System.Drawing.Size(505, 475);
 			this.Controls.Add(this.DgvTraceNames);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.MaximumSize = new System.Drawing.Size(700, 620);
-			this.MinimumSize = new System.Drawing.Size(171, 93);
+			this.MinimumSize = new System.Drawing.Size(200, 92);
 			this.Name = "TraceNameFilterForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Trace Filter";
