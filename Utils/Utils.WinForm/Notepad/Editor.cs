@@ -304,7 +304,7 @@ namespace Utils.WinForm.Notepad
                 _xmlLiteCommentRegex = new Regex(@"<!--.*?-->|<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexOptions.Singleline | RegexOptions.Compiled);
                 _xmlLiteTagRegex = new Regex(@"(?<range><[!\w:]+)|(?<range></[\w:]+>)|<\?|<|/>|</|>|\?>", RegexOptions.Compiled);
                 _xmlLiteAttrRegex = new Regex(@"(?<range>\w+\=)", RegexOptions.Compiled);
-                _xmlLiteAttrValRegex = new Regex(@"\=\""(?<range>.+?)\""", RegexOptions.Compiled);
+                _xmlLiteAttrValRegex = new Regex(@"\=\""(?<range>.*?)\""", RegexOptions.Compiled);
 
                 Controls.Add(FCTB);
                 Controls.Add(_statusStrip);
