@@ -30,8 +30,9 @@ namespace LogsReader.Reader
 			bool useRegex,
 			IReadOnlyDictionary<string, int> servers,
 			IReadOnlyDictionary<string, int> fileTypes,
-			IReadOnlyDictionary<string, bool> folders)
-			:base(settings, findMessage, useRegex)
+			IReadOnlyDictionary<string, bool> folders,
+			DataFilter filter)
+			:base(settings, findMessage, useRegex, filter)
 		{
 			_servers = servers;
 			var fileTypesNew = new Dictionary<string[], int>();

@@ -106,17 +106,21 @@ namespace LogsReader.Reader
 
 		public Regex IsTraceError => Settings.TraceParse.IsTraceError;
 
-		protected LogsReaderPerformerBase(LRSettingsScheme settings, string findMessage, bool useRegex)
+		public DataFilter Filter { get; }
+
+		protected LogsReaderPerformerBase(LRSettingsScheme settings, string findMessage, bool useRegex, DataFilter filter)
 		{
+			_instanceId = ++_seqBaseInstance;
+
 			Parent = new ReaderPerformer
 			{
 				Base = this,
 				Settings = settings
 			};
 
-			_instanceId = ++_seqBaseInstance;
-			
 			ResetMatchFunc(findMessage, useRegex);
+
+			Filter = filter;
 
 			Func<DateTime, string> getDisplayDate;
 			if (Settings.TraceParse.DisplayCulture != null)

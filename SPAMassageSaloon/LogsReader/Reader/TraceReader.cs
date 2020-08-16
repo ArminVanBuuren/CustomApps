@@ -319,6 +319,9 @@ namespace LogsReader.Reader
 
         protected void AddResult(DataTemplate item)
 		{
+			if (Filter != null && !Filter.IsAllowed(item))
+				return;
+
 			if (item.Error == null)
 				++CountMatches;
 

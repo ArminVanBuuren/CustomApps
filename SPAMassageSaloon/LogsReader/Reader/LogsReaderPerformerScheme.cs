@@ -30,8 +30,6 @@ namespace LogsReader.Reader
 
 		public List<DataTemplate> ResultsOfError { get; private set; } = new List<DataTemplate>();
 
-		public DataFilter Filter { get; }
-
 		public bool IsCompleted { get; private set; } = false;
 
 		public LogsReaderPerformerScheme(
@@ -42,10 +40,7 @@ namespace LogsReader.Reader
 			IReadOnlyDictionary<string, int> fileTypes,
 			IReadOnlyDictionary<string, bool> folders,
 			DataFilter filter)
-			: base(settings, findMessage, useRegex, servers, fileTypes, folders)
-		{
-			Filter = filter;
-		}
+			: base(settings, findMessage, useRegex, servers, fileTypes, folders, filter) { }
 
 		public override async Task GetTargetFilesAsync()
 		{
@@ -145,9 +140,6 @@ namespace LogsReader.Reader
 		/// <param name="item"></param>
 		protected void AddResult(DataTemplate item)
 		{
-			if (Filter != null && !Filter.IsAllowed(item))
-				return;
-
 			lock (_syncRootResult)
 			{
 				if (!_result.TryGetValue(item, out var existingItem))
