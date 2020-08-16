@@ -210,6 +210,7 @@ namespace LogsReader.Reader
 			IsMatchByTransactions = control.IsMatchByTransactions;
 			GetTraceReader = control.GetTraceReader;
 			TraceParseCustomFunction = control.TraceParseCustomFunction;
+			Filter = control.Filter;
 		}
 
 		protected void ResetMatchFunc(string findMessage, bool useRegex)
