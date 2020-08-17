@@ -1643,6 +1643,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string TxtReader_CheckBoxes {
+            get {
+                return ResourceManager.GetString("TxtReader_CheckBoxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 55.
         /// </summary>
         public static string TxtReader_DgvAbortMinWidth {

@@ -579,4 +579,7 @@
   <data name="Txt_LogsReaderForm_PrevTrnButt" xml:space="preserve">
     <value>Предыдущая транзакция [SHIFT+F4]</value>
   </data>
+  <data name="TxtReader_CheckBoxes" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
 </root>

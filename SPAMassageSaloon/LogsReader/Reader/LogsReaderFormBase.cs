@@ -737,13 +737,14 @@ namespace LogsReader.Reader
 	        Tooltip.SetToolTip(buttonHighlightOn, Resources.Txt_LogsReaderForm_HighlightTxt);
 	        Tooltip.SetToolTip(buttonHighlightOff, Resources.Txt_LogsReaderForm_HighlightTxtOff);
 
-			buttonFilteredPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevFilteredButt;
+	        buttonFilteredPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevFilteredButt;
 	        buttonFilteredNext.ToolTipText = Resources.Txt_LogsReaderForm_NextFilteredButt;
 	        buttonErrPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevErrButt;
 	        buttonErrNext.ToolTipText = Resources.Txt_LogsReaderForm_NextErrButt;
 	        buttonTrnPrev.ToolTipText = Resources.Txt_LogsReaderForm_PrevTrnButt;
 	        buttonTrnNext.ToolTipText = Resources.Txt_LogsReaderForm_NextTrnButt;
-		}
+	        DgvReaderSelectColumn.ToolTipText = Resources.TxtReader_CheckBoxes;
+        }
 
         #endregion
 

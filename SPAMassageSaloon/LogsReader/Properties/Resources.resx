@@ -722,4 +722,7 @@ Colors schemes are adjustable.</value>
   <data name="Txt_LogsReaderForm_PrevTrnButt" xml:space="preserve">
     <value>Previous transaction [SHIFT+F4]</value>
   </data>
+  <data name="TxtReader_CheckBoxes" xml:space="preserve">
+    <value>Filter</value>
+  </data>
 </root>
