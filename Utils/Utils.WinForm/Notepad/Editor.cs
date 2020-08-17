@@ -428,7 +428,7 @@ namespace Utils.WinForm.Notepad
 	        var satisfied = IsLanguageSatisfied(Source, isXml);
 
 	        if (FCTB.Text == Source && !satisfied)
-		        FCTB.Text += @"\0";
+		        FCTB.Text += "\0";
 	        else
 		        FCTB.Text = Source;
 
@@ -460,9 +460,12 @@ namespace Utils.WinForm.Notepad
         {
 	        if (!FCTB.Text.IsNullOrEmpty() && !IsLanguageSatisfied(FCTB.Text, null))
                 if((Language == Language.XML || Language == Language.HTML) && !FCTB.Text.Split('\n').Any(x => x.Length > 13000))
-					XmlLiteSyntaxHighlight(e);
+                    if(Language == Language.XML)
+						XmlLiteSyntaxHighlight(e);
+					else
+	                    HtmlLiteSyntaxHighlight(e);
 
-	        TextChangedChanged(this, e);
+            TextChangedChanged(this, e);
         }
 
         private void XmlLiteSyntaxHighlight(TextChangedEventArgs e)
@@ -481,6 +484,21 @@ namespace Utils.WinForm.Notepad
 	        e.ChangedRange.ClearFoldingMarkers();
         }
 
+        private void HtmlLiteSyntaxHighlight(TextChangedEventArgs e)
+        {
+	        e.ChangedRange.ClearStyle(
+		        FCTB.SyntaxHighlighter.XmlCDataStyle,
+		        FCTB.SyntaxHighlighter.AttributeStyle,
+		        FCTB.SyntaxHighlighter.AttributeValueStyle,
+		        FCTB.SyntaxHighlighter.TagNameStyle);
+
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.XmlCDataStyle, _xmlLiteCommentRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.AttributeStyle, _xmlLiteAttrRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.AttributeValueStyle, _xmlLiteAttrValRegex);
+	        e.ChangedRange.SetStyle(FCTB.SyntaxHighlighter.TagNameStyle, _xmlLiteTagRegex);
+
+	        e.ChangedRange.ClearFoldingMarkers();
+        }
 
         private void FctbOnVisibleRangeChangedDelayed(object sender, EventArgs e)
         {
