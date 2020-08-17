@@ -306,8 +306,8 @@ namespace LogsReader.Config
                     });
 			        FileTypes = new LRGroups(new[]
 			        {
-				        new LRGroupItem("SPA.SA", 0,"BMS, BSP, Content, EIR, AM, SCP, HLR*ZTE, HLR*Huawei, MCA, MG, RBT, SMSC"),
-				        new LRGroupItem("SPA.BPM", 0,"spa.bpm")
+				        new LRGroupItem("SPA.SA", 0,"AM, BMS, HLR*Huawei, HLR*ZTE, MCA, RBT, SCP, SMSC"),
+				        new LRGroupItem("SPA.BPM", 0,"SPA.BPM")
                     });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
 			        MaxLines = 1;
@@ -316,7 +316,7 @@ namespace LogsReader.Config
 			        break;
 		        case DefaultSettings.MGA:
 			        Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4") });
-			        FileTypes = new LRGroups(new[] { new LRGroupItem("Default", 0, "Fast, Slow, debug-all, debug-only") });
+			        FileTypes = new LRGroups(new[] {new LRGroupItem("Default", 0, "Debug-All, Debug-Only") });
 			        LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 			        MaxLines = 20000;
 			        MaxThreads = -1;
