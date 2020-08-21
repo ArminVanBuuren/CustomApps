@@ -58,32 +58,15 @@ namespace Tester.Console
 
 			try
 			{
-				var test = new List<test1>()
-				{
-					new test1
-					{
-						IsWorking = true,
-						OnPause = false
-					},
-					new test1
-					{
-						IsWorking = true,
-						OnPause = true
-					},
-					new test1
-					{
-						IsWorking = true,
-						OnPause = true
-					},
-					new test1
-					{
-						IsWorking = false,
-						OnPause = true
-					},
-				};
 
+				var expiredDate = DateTime.Now.AddDays(-120);
+				var EnableDocFlowEdoDeliveryMethod = false;
+				var ContactTypeCode = "Edo";
 
-				var ff = test.Where(x => !x.IsWorking).All(x => x.OnPause);
+				System.Console.WriteLine($"Visible = {!(ContactTypeCode == "ToHand" || (ContactTypeCode == "Edo" && EnableDocFlowEdoDeliveryMethod))}");
+
+				System.Console.WriteLine($"Now:{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff} Expired:{expiredDate:dd.MM.yyyy HH:mm:ss.fff} HourMSec:{TimeSpan.FromHours(1).TotalMilliseconds}");
+
 			}
 			catch (Exception e)
 			{

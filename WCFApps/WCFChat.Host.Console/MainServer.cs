@@ -89,11 +89,37 @@ namespace WCFChat.Host.Console
 
     [ServiceBehavior(Namespace = "http://localhost/services", 
         InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    public class MainServer : IMainContract, IChat
+    public class MainServer : IMainContract, IChat, IDisposable
     {
+	    private Timer _expiredRequestsCleaner;
+	    private readonly double _cleanupInterval = TimeSpan.FromSeconds(5).TotalMilliseconds;
+
         public MainServer()
         {
-            
+	        _expiredRequestsCleaner = new Timer { Interval = 5000 };
+	        _expiredRequestsCleaner.Elapsed += RemoveExpiredRequests;
+	        _expiredRequestsCleaner.Start();
+        }
+
+        private void RemoveExpiredRequests(object sender, ElapsedEventArgs e)
+        {
+	        try
+	        {
+		        _expiredRequestsCleaner.Enabled = false;
+		        
+		        System.Console.WriteLine($"[{System.Threading.Thread.CurrentThread.ManagedThreadId}] Cleaning Started");
+		        System.Threading.Thread.Sleep(10000);
+		        System.Console.WriteLine($"[{System.Threading.Thread.CurrentThread.ManagedThreadId}] Cleaning Finished");
+            }
+	        catch (Exception ex)
+	        {
+		        //
+	        }
+	        finally
+	        {
+		        _expiredRequestsCleaner.Interval = _cleanupInterval;
+		        _expiredRequestsCleaner.Enabled = true;
+	        }
         }
 
 
@@ -502,6 +528,13 @@ namespace WCFChat.Host.Console
             if (!isExist)
                 return false;
             return true;
+        }
+
+        public void Dispose()
+        {
+	        System.Console.WriteLine($"[{System.Threading.Thread.CurrentThread.ManagedThreadId}] Disposed");
+            _expiredRequestsCleaner.Stop();
+	        _expiredRequestsCleaner.Dispose();
         }
     }
 }

@@ -94,6 +94,9 @@ namespace WCFChat.Host.Console
             }
 
             System.Console.ReadLine();
+            host?.Close();
+            System.Threading.Thread.Sleep(1000);
+            //System.Console.ReadLine();
         }
     }
 }
