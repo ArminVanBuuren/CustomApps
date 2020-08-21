@@ -46,9 +46,43 @@ namespace Tester.Console
 		public bool OnPause { get; set; } = true;
 	}
 
-
 	class Program
 	{
+
+		static string _temp = @"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
+<html>
+<head>
+    <meta http-equiv=""Content-Type"" content=""text/html charset=UTF-8"" />
+</head>
+<body link=""blue"" vlink=""blue"" alink=""blue"">
+    <table cellpadding=""0"" cellspacing=""0"" border=""0"">
+        <tr>
+            <td>
+                <table style=""color:#222;font-family:Calibri;padding-top:8px;font-weight: bold; font-size:11px;"" border=""0"" cellpadding=""0"" cellspacing=""0"">
+                    <tr>
+                        <td>
+              Уважаемый клиент!<br/><br/>
+              Заказанные Вами документы находятся во вложении.<br/><br/>
+              Обратите внимание! Большинство сервисных операций по вашему мобильному или фиксированному контракту вы можете осуществлять самостоятельно в режиме онлайн через сервисы самообслуживания:<br/>
+              •  «Виртуальный менеджер» для корпоративных клиентов мобильной связи: 
+                <a href=""https://mts.ru/business/podderzhka/obsluzhivanie-klientov/virtualniy-menedzher"">https://mts.ru/business/podderzhka/obsluzhivanie-klientov/virtualniy-menedzher</a><br/>
+              •  Для частных клиентов мобильной связи «Личный кабинет МТС»: 
+                <a href=""https://login.mts.ru/amserver/UI/Login"">https://login.mts.ru/amserver/UI/Login</a> и «Мой МТС»: 
+                <a href=""https://mts.ru/personal/mobilnaya-svyaz/uslugi/mobilnaya-svyaz/moy-mts "">https://mts.ru/personal/mobilnaya-svyaz/uslugi/mobilnaya-svyaz/moy-mts</a><br/>
+              •  Личные кабинеты для фиксированной связи: <a href=""https://mts.ru/business/cabinetlinks"">https://mts.ru/business/cabinetlinks</a><br/><br/>
+              Операции совершаются в режиме онлайн и из любой точки мира, где есть интернет.<br/>
+              Данное сообщение было создано автоматически, пожалуйста, не отвечайте на него.<br/><br/>
+              Ответы на часто задаваемые вопросы Вы найдёте по ссылке: <a href=""https://mts.ru/personal/faq/mob_connect"">https://mts.ru/personal/faq/mob_connect</a><br/><br/>
+              The correspondence ordered by you is in the attachment.
+            </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>";
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -58,14 +92,16 @@ namespace Tester.Console
 
 			try
 			{
+				//var text = IO.SafeReadFile(@"C:\temp\htmlText.xml");
+				var dd = _temp.IsXml(out var xml);
 
-				var expiredDate = DateTime.Now.AddDays(-120);
-				var EnableDocFlowEdoDeliveryMethod = false;
-				var ContactTypeCode = "Edo";
+				//var expiredDate = DateTime.Now.AddDays(-120);
+				//var EnableDocFlowEdoDeliveryMethod = false;
+				//var ContactTypeCode = "Edo";
 
-				System.Console.WriteLine($"Visible = {!(ContactTypeCode == "ToHand" || (ContactTypeCode == "Edo" && EnableDocFlowEdoDeliveryMethod))}");
+				//System.Console.WriteLine($"Visible = {!(ContactTypeCode == "ToHand" || (ContactTypeCode == "Edo" && EnableDocFlowEdoDeliveryMethod))}");
 
-				System.Console.WriteLine($"Now:{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff} Expired:{expiredDate:dd.MM.yyyy HH:mm:ss.fff} HourMSec:{TimeSpan.FromHours(1).TotalMilliseconds}");
+				//System.Console.WriteLine($"Now:{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff} Expired:{expiredDate:dd.MM.yyyy HH:mm:ss.fff} HourMSec:{TimeSpan.FromHours(1).TotalMilliseconds}");
 
 			}
 			catch (Exception e)

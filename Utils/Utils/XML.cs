@@ -94,10 +94,11 @@ namespace Utils
             try
             {
                 var xmlDoc = new XmlDocument();
+                xmlDoc.XmlResolver = null;
                 xmlDoc.LoadXml(contextSource);
                 return xmlDoc;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

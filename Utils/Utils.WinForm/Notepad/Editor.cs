@@ -413,7 +413,7 @@ namespace Utils.WinForm.Notepad
 
 	        if (AutoPrintToXml && !Source.IsNullOrEmpty())
 	        {
-		        if (Language == Language.XML || Language == Language.HTML)
+		        if (Language == Language.XML)
 		        {
 			        TryConvertToXml();
 		        }
