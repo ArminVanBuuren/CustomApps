@@ -6,6 +6,12 @@ namespace SPAMassageSaloon.Common
     {
         public bool IsSuspendLayout { get; private set; }
 
+        public bool DoubleBuffered2
+        {
+	        get => DoubleBuffered;
+	        set => DoubleBuffered = value;
+        }
+
         public CustomDataGridView()
 	    {
 		    DoubleBuffered = true;
