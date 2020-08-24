@@ -13,8 +13,9 @@ namespace SPAMassageSaloon.Common
         }
 
         public CustomDataGridView()
-	    {
-		    DoubleBuffered = true;
+        {
+	        if (!SystemInformation.TerminalServerSession)
+		        DoubleBuffered = true;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

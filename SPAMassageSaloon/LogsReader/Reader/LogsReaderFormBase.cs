@@ -1984,12 +1984,15 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
-				if (DgvDataAfterAssign == RefreshDataType.AllRows)
-					RefreshAllRows(DgvData, DgvDataRefreshRow);
-				else
-					RefreshVisibleRows(DgvData, DgvDataRefreshRow);
+				//if (DgvDataAfterAssign == RefreshDataType.AllRows)
+				//	RefreshAllRows(DgvData, DgvDataRefreshRow);
+				//else
+				//	RefreshVisibleRows(DgvData, DgvDataRefreshRow);
 
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
+				DgvData.Refresh();
 				DgvData.Focus();
+
 				DgvData.CellFormatting += DataGridViewOnCellFormatting;
 				DgvData.ResumeLayout();
 			}
