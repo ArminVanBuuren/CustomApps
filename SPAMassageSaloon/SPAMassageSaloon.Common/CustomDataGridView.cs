@@ -14,7 +14,7 @@ namespace SPAMassageSaloon.Common
 
         public CustomDataGridView()
         {
-	        if (!SystemInformation.TerminalServerSession)
+	        //if (!SystemInformation.TerminalServerSession)
 		        DoubleBuffered = true;
         }
 
