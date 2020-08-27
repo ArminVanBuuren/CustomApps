@@ -87,18 +87,139 @@ namespace Utils.WinForm.Notepad
             set => NotepadControlItem.AllowUserCloseItems = value;
         }
 
+        private readonly ToolStripMenuItem fileToolStripMenuItem;
+        private readonly ToolStripMenuItem saveToolStripMenuItem;
+        private readonly ToolStripMenuItem saveAsToolStripMenuItem;
+        private readonly ToolStripMenuItem newToolStripMenuItem;
+        private readonly ToolStripMenuItem openToolStripMenuItem;
+        private readonly ToolStripMenuItem closeToolStripMenuItem;
+        private readonly ToolStripMenuItem formatXmlF5ToolStripMenuItem;
+        private NotepadControl NotepadControlItem;
+
         public Notepad()
         {
             InitializeComponent();
 
             KeyPreview = true; // для того чтобы работали горячие клавиши по всей форме и всем контролам
 
+            // 
+            // NotepadControlItem
+            // 
+            NotepadControlItem = new NotepadControl
+            {
+	            AllowUserCloseItems = false,
+	            Dock = DockStyle.Fill,
+	            Highlights = false,
+	            Location = new Point(0, 0),
+	            Name = "NotepadControlItem",
+	            ReadOnly = false,
+	            SelectedIndex = -1,
+	            Size = new Size(1035, 648),
+	            SizingGrip = false,
+	            TabIndex = 3,
+	            TabsFont = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204),
+	            TabsForeColor = Color.Green,
+	            TextFont = new Font("Segoe UI", 9F),
+	            TextForeColor = Color.Black,
+	            WordWrap = true
+            };
+
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            formatXmlF5ToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
+            closeToolStripMenuItem = new ToolStripMenuItem();
+
+            // 
+            // MainMenuStrip
+            // 
+            MainMenuStrip = new MenuStrip
+            {
+	            AccessibleRole = AccessibleRole.None,
+	            BackColor = Color.White,
+	            LayoutStyle = ToolStripLayoutStyle.Flow,
+	            Location = new Point(0, 0),
+	            Name = "MainMenuStrip",
+	            RenderMode = ToolStripRenderMode.Professional,
+	            Size = new Size(1035, 23),
+	            TabIndex = 2,
+	            Text = "mainMenuStrip"
+            };
+            MainMenuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            Controls.Add(NotepadControlItem);
+            Controls.Add(MainMenuStrip);
+
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+            newToolStripMenuItem,
+            openToolStripMenuItem,
+            new ToolStripSeparator(),
+            formatXmlF5ToolStripMenuItem,
+            new ToolStripSeparator(),
+            saveToolStripMenuItem,
+            saveAsToolStripMenuItem,
+            new ToolStripSeparator(),
+            closeToolStripMenuItem});
+            fileToolStripMenuItem.Font = new Font("Segoe UI", 8F);
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 17);
+            fileToolStripMenuItem.Text = Resources.Notepad_File;
+            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             fileToolStripMenuItem.DropDownItemClicked += FileToolStripMenuItem_DropDownItemClicked;
+            // 
+            // newToolStripMenuItem
+            // 
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(205, 22);
+            newToolStripMenuItem.Text = Resources.Notepad_New;
+            newToolStripMenuItem.Image = Resources.notepad_newItem;
+            newToolStripMenuItem.TextAlign = ContentAlignment.MiddleRight;
+            newToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
+            // 
+            // openToolStripMenuItem
+            // 
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(205, 22);
+            openToolStripMenuItem.Text = Resources.Notepad_Open;
+            openToolStripMenuItem.Image = Resources.notepad_openFile;
+            // 
+            // formatXmlF5ToolStripMenuItem
+            // 
+            formatXmlF5ToolStripMenuItem.Name = "formatXmlF5ToolStripMenuItem";
+            formatXmlF5ToolStripMenuItem.Size = new Size(205, 22);
+            formatXmlF5ToolStripMenuItem.Text = "XML Pretty Print     F5";
+            formatXmlF5ToolStripMenuItem.Image = Resources.notepad_XMLPretty;
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(205, 22);
+            saveToolStripMenuItem.Text = Resources.Notepad_Save;
+            saveToolStripMenuItem.Image = Resources.notepad_saveItem;
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            saveAsToolStripMenuItem.Size = new Size(205, 22);
+            saveAsToolStripMenuItem.Text = Resources.Notepad_SaveAs;
+            saveAsToolStripMenuItem.Image = Resources.notepad_saveItemAs;
+            // 
+            // closeToolStripMenuItem
+            // 
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(205, 22);
+            closeToolStripMenuItem.Text = Resources.Notepad_CLose;
+            closeToolStripMenuItem.Image = Resources.notepad_closeWindow;
 
             Closed += XmlNotepad_Closed;
             KeyDown += Notepad_KeyDown;
 
             NotepadControlItem.OnRefresh += NotepadControlItem_OnRefresh;
+            NotepadControlItem.Dock = DockStyle.Fill;
         }
 
         private void NotepadControlItem_OnRefresh(object sender, EventArgs e)

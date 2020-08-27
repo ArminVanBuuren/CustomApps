@@ -58,11 +58,9 @@ namespace Tester.WinForm
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+	            //Application.Run(new Form1());
 
-                //var notepad = new Notepad {AllowUserCloseItems = true};
-                //notepad.SizingGrip = true;
-                //Application.Run(notepad);
+	            Application.Run(new Notepad { AllowUserCloseItems = true, SizingGrip = true });
             }
             catch (Exception e)
             {

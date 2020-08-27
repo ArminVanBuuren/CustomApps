@@ -51,7 +51,6 @@
             this.Name = "NotepadControl";
             this.Size = new System.Drawing.Size(1361, 714);
             this.ResumeLayout(false);
-
         }
 
         #endregion
