@@ -1352,9 +1352,9 @@ namespace LogsReader.Reader
 		        var row = dgv.Rows[e.RowIndex];
 
 		        if (dgv == DgvData)
-			        DgvDataRefreshRow(row, null, null);
+			        DgvDataRefreshRow(row, true);
 		        else if (dgv == DgvReader)
-			        DgvReaderRefreshRow(row, null, null);
+			        DgvReaderRefreshRow(row, true);
 	        }
 	        catch (Exception ex)
 	        {
@@ -1365,7 +1365,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Чтобы обновлялись не все строки, а только те что показаны. Т.к. для обновления свойтсва Image тратиться много времени
 		/// </summary>
-		protected void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+		protected void RefreshVisibleRows(CustomDataGridView dgv, Action<DataGridViewRow, bool> refreshRow)
 		{
 			try
 			{
@@ -1374,13 +1374,13 @@ namespace LogsReader.Reader
 
 				var countVisible = dgv.DisplayedRowCount(false);
 				var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
-				var above = CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt ? 2 : 30;
+				var above = CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt ? 2 : 100;
 
 				var firstIndex = Math.Max(0, firstVisibleRowIndex - above);
 				var lastIndex = Math.Min(dgv.RowCount - 1, firstVisibleRowIndex + countVisible + above);
 
-				for (var i = firstIndex; i <= lastIndex; i++)
-					refreshRow(dgv.Rows[i], countVisible, firstVisibleRowIndex);
+				for (var index = firstIndex; index <= lastIndex; index++)
+					refreshRow(dgv.Rows[index], firstVisibleRowIndex - 5 <= index && index <= firstVisibleRowIndex + countVisible + 5);
 			}
 			catch (Exception ex)
 			{
@@ -1391,7 +1391,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Вызывается после присвоения значений в DatagridView, чтобы отрисовать все строки
 		/// </summary>
-		protected void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, int?, int?> refreshRow)
+		protected void RefreshAllRows(CustomDataGridView dgv, Action<DataGridViewRow, bool> refreshRow)
 		{
 			if (dgv == null || dgv.RowCount == 0)
 				return;
@@ -1402,7 +1402,7 @@ namespace LogsReader.Reader
 				var firstVisibleRowIndex = dgv.FirstDisplayedScrollingRowIndex;
 
 				foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
-					refreshRow(row, countVisible, firstVisibleRowIndex);
+					refreshRow(row, firstVisibleRowIndex - 5 <= row.Index && row.Index <= firstVisibleRowIndex + countVisible + 5);
 			}
 			catch (Exception ex)
 			{
@@ -1410,13 +1410,17 @@ namespace LogsReader.Reader
 			}
 		}
 
-		protected void DgvDataRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+		protected void DgvDataRefreshRow(DataGridViewRow row, bool refreshHeavy)
         {
 	        if (!TryGetTemplate(row, out var template))
 		        return;
 
 	        try
 	        {
+		        // обновение картинки и Font самый тяжелый процесс, поэтому обновляем только то что видно
+		        if (!refreshHeavy)
+			        return;
+
 		        var cellTraceName = row.Cells[DgvDataTraceNameColumn.Name];
 		        if (template.IsSuccess)
 		        {
@@ -1425,13 +1429,13 @@ namespace LogsReader.Reader
 					        if (cell2.ToolTipText != Txt_LogsReaderForm_DateValueIsIncorrect)
 						        cell2.ToolTipText = Txt_LogsReaderForm_DateValueIsIncorrect;
 		        }
-				else
+		        else
 		        {
 			        // Костыль. Если изменить стиль ячейки первой строки, то это применится ко всем ячейкам. Ебучий майкрософт. А если менять фонт для остальных неимоверно все тупит
-					if (row.Index == 0)
+			        if (row.Index == 0)
 			        {
-						if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.ErrFont))
-							row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
+				        if (!Equals(row.DefaultCellStyle.Font, LogsReaderMainForm.ErrFont))
+					        row.DefaultCellStyle.Font = LogsReaderMainForm.ErrFont;
 			        }
 			        else
 			        {
@@ -1445,38 +1449,30 @@ namespace LogsReader.Reader
 			        }
 		        }
 
-				if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
+		        if ((row.Cells[DgvDataFileColumn.Name] is DataGridViewCell cellFile) && cellFile.ToolTipText != template.File)
 			        cellFile.ToolTipText = template.File;
 
-				// обновение картинки самый тяжелый процесс, поэтому обновляем только то что видно
-				if (countVisible == null && firstVisibleRowIndex == null || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
-                {
-	                if (!(row.Cells[DgvDataPromptColumn.Name] is DgvTextAndImageCell imgCellPrompt))
-		                return;
+		        if (!(row.Cells[DgvDataPromptColumn.Name] is DgvTextAndImageCell imgCellPrompt))
+			        return;
 
-	                if (!(row.Cells[DgvDataTraceNameColumn.Name] is DgvTextAndImageCell imgCellTraceName))
-		                return;
+		        if (!(row.Cells[DgvDataTraceNameColumn.Name] is DgvTextAndImageCell imgCellTraceName))
+			        return;
 
-	                var isfiltered = false;
-	                if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell && isfilteredCell.Value != null)
-		                isfiltered = bool.Parse(isfilteredCell.Value.ToString());
+		        var isfiltered = false;
+		        if (row.Cells[DgvDataIsFilteredColumn.Name] is DataGridViewCell isfilteredCell && isfilteredCell.Value != null)
+			        isfiltered = bool.Parse(isfilteredCell.Value.ToString());
 
-	                if (!template.IsSuccess)
-	                {
-		                imgCellTraceName.Image = isfiltered ? Img_Failed_Filtered : Img_Failed;
-	                }
-	                else
-	                {
-		                imgCellTraceName.Image = isfiltered ? Img_Filtered : null;
-	                }
+		        if (!template.IsSuccess)
+			        imgCellTraceName.Image = isfiltered ? Img_Failed_Filtered : Img_Failed;
+		        else
+			        imgCellTraceName.Image = isfiltered ? Img_Filtered : null;
 
-	                imgCellPrompt.Image = template.IsSelected && DgvDataPromptColumn.Visible ? Img_Selected : null;
-                }
+		        imgCellPrompt.Image = template.IsSelected && DgvDataPromptColumn.Visible ? Img_Selected : null;
 	        }
 	        catch (Exception ex)
 	        {
 		        ReportStatus(ex);
-			}
+	        }
 	        finally
 	        {
 		        if (template.IsSelected && (CurrentTransactionsMarkingType == TransactionsMarkingType.Color || CurrentTransactionsMarkingType == TransactionsMarkingType.Both))
@@ -1496,12 +1492,12 @@ namespace LogsReader.Reader
 
         protected virtual void ColorizationDGV(DataGridViewRow row, DataTemplate template)
         {
-	        var color = row.Index.IsParity() ? Color.White : Color.FromArgb(245, 245, 245);
+	        var color = row.Index.IsParity() ? LogsReaderMainForm.SCHEME_DGV_COLOR_BACK_1 : LogsReaderMainForm.SCHEME_DGV_COLOR_BACK_2;
 	        if (row.DefaultCellStyle.BackColor != color)
 		        row.DefaultCellStyle.BackColor = color;
         }
 
-        protected void DgvReaderRefreshRow(DataGridViewRow row, int? countVisible, int? firstVisibleRowIndex)
+        protected void DgvReaderRefreshRow(DataGridViewRow row, bool refreshHeavy)
         {
 	        if (!TryGetReader(row, out var reader))
 		        return;
@@ -1597,10 +1593,8 @@ namespace LogsReader.Reader
 						cellImage.Value = statusText;
 
 					// обновение картинки самый тяжелый процесс, поэтому обновляем только то что видно
-					if (countVisible == null && firstVisibleRowIndex == null || countVisible != null && firstVisibleRowIndex != null && row.Index >= firstVisibleRowIndex - 5 && row.Index <= firstVisibleRowIndex + countVisible + 5)
-					{
+					if (refreshHeavy)
 						cellImage.Image = img;
-					}
 				}
 
 				if (row.DefaultCellStyle.BackColor != backColor)
@@ -1984,11 +1978,7 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
-				if (DgvDataAfterAssign == RefreshDataType.AllRows)
-					RefreshAllRows(DgvData, DgvDataRefreshRow);
-				else
-					RefreshVisibleRows(DgvData, DgvDataRefreshRow);
-
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
 				DgvData.Refresh();
 				DgvData.Focus();
 

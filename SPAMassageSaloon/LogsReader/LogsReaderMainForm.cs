@@ -37,7 +37,10 @@ namespace LogsReader
 	    public static readonly Color GLOBAL_COLOR_BACK = Color.FromArgb(255, 0, 206);
 	    public static readonly Color GLOBAL_COLOR_FORE = Color.White;
 
-	    public static readonly Color SCHEME_COLOR_BACK = Color.FromArgb(0, 200, 205);
+	    public static readonly Color SCHEME_DGV_COLOR_BACK_1 = Color.White;
+	    public static readonly Color SCHEME_DGV_COLOR_BACK_2 = Color.FromArgb(245, 245, 245);
+
+		public static readonly Color SCHEME_COLOR_BACK = Color.FromArgb(0, 200, 205);
 	    public static readonly Color SCHEME_COLOR_FORE = Color.White;
 
 		public static readonly Color TRN_COLOR_BACK = Color.FromArgb(62, 255, 176);
