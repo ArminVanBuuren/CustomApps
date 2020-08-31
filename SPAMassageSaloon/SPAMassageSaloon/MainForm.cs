@@ -344,46 +344,26 @@ namespace SPAMassageSaloon
                     })
                     : null;
 
-                void Monitoring(string cpuUsage, string threadsUsage, string ramUsage)
-                {
-	                _cpuUsage.Text = cpuUsage;
-                    _threadsUsage.Text = threadsUsage;
-                    _ramUsage.Text = ramUsage;
-
-                    var processCount = 0;
-                    var totalProgress = 0;
-                    foreach (var form in MdiChildren.OfType<ISaloonForm>())
-                    {
-                        if (form is Form child && child.IsDisposed)
-                            continue;
-                        processCount += form.ActiveProcessesCount;
-                        totalProgress += form.ActiveTotalProgress;
-                    }
-
-                    if (_countOfLastProcess > 0 && processCount == 0)
-                        FlashWindow.Flash(this);
-
-                    taskBarNotify?.Invoke(processCount, totalProgress);
-                    _countOfLastProcess = processCount;
-                }
-
+                var cpuUsage = "0";
+                var threadsUsage = "0";
+                var ramUsage = "0";
                 while (!FormOnClosing)
                 {
 	                try
 	                {
-		                if (IsMinimized)
-			                continue;
+		                if (!IsMinimized)
+		                {
+			                double percent = 0;
+			                if (appCPU != null)
+				                double.TryParse(appCPU.NextValue().ToString(), out percent);
+			                cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
+			                var currentProcess = Process.GetCurrentProcess();
+			                threadsUsage = $"{currentProcess.Threads.Count,-2}";
+			                ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
+		                }
 
-		                double percent = 0;
-		                if (appCPU != null)
-			                double.TryParse(appCPU.NextValue().ToString(), out percent);
-		                var cpuUsage = $"{(int) (percent / Environment.ProcessorCount),3}%";
-		                var currentProcess = Process.GetCurrentProcess();
-		                var threadsUsage = $"{currentProcess.Threads.Count,-2}";
-		                var ramUsage = $"{currentProcess.PrivateMemorySize64.ToFileSize(),-5}";
-
-		                this.SafeInvoke(() => Monitoring(cpuUsage, threadsUsage, ramUsage));
-	                }
+		                this.SafeInvoke(() => Monitoring(cpuUsage, threadsUsage, ramUsage, taskBarNotify));
+                    }
 	                catch (OutOfMemoryException)
 	                {
 		                Thread.Sleep(10000); // wait 10 sec
@@ -402,6 +382,29 @@ namespace SPAMassageSaloon
             {
                 ReportMessage.Show(ex.ToString(), MessageBoxIcon.Error, Resources.Txt_SystemResourceMonitoring);
             }
+        }
+
+        void Monitoring(string cpuUsage, string threadsUsage, string ramUsage, Action<int, int> taskBarNotify)
+        {
+	        _cpuUsage.Text = cpuUsage;
+	        _threadsUsage.Text = threadsUsage;
+	        _ramUsage.Text = ramUsage;
+
+	        var processCount = 0;
+	        var totalProgress = 0;
+	        foreach (var form in MdiChildren.OfType<ISaloonForm>())
+	        {
+		        if (form is Form child && child.IsDisposed)
+			        continue;
+		        processCount += form.ActiveProcessesCount;
+		        totalProgress += form.ActiveTotalProgress;
+	        }
+
+	        if (_countOfLastProcess > 0 && processCount == 0)
+		        FlashWindow.Flash(this);
+
+	        taskBarNotify?.Invoke(processCount, totalProgress);
+	        _countOfLastProcess = processCount;
         }
 
         private static void SetTaskBarOverlay(int countItem)

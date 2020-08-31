@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
@@ -383,7 +382,7 @@ namespace LogsReader
 					SCHEME_DGV_ROW_BACK_COLOR_1 = Color.White;
 					SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(245, 245, 245);
 					SCHEME_DGV_ROW_FORE_COLOR = Color.Black;
-					SCHEME_DGV_GRID_COLOR = System.Drawing.SystemColors.ControlLight;
+					SCHEME_DGV_GRID_COLOR = SystemColors.ControlLight;
 					break;
 				case Themes.Dark:
 					CONTENT_COLOR = Color.FromArgb(43, 43, 43);
@@ -426,7 +425,7 @@ namespace LogsReader
 
 		        Global.Clear();
 	        }
-	        catch (Exception e)
+	        catch (Exception)
 	        {
 		        // ignored
 	        }
