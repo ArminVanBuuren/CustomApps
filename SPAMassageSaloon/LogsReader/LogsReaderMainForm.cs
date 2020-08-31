@@ -37,8 +37,19 @@ namespace LogsReader
 	    public static readonly Color GLOBAL_COLOR_BACK = Color.FromArgb(255, 0, 206);
 	    public static readonly Color GLOBAL_COLOR_FORE = Color.White;
 
-	    public static readonly Color SCHEME_DGV_COLOR_BACK_1 = Color.White;
-	    public static readonly Color SCHEME_DGV_COLOR_BACK_2 = Color.FromArgb(245, 245, 245);
+	    public static Color BODY_COLOR = Color.FromArgb(239, 239, 239);
+		public static Color CONTENT_COLOR = Color.White;
+	    public static Color FOOTER_COLOR = Color.FromArgb(239, 239, 239);
+	    public static Color TEXT_COLOR = Color.Black;
+	    public static Color TAB_BACK_COLOR = Color.DimGray;
+	    public static Color TAB_FORE_COLOR = Color.White;
+	    public static Color BORDER_COLOR = Color.FromArgb(172, 172, 172);
+	    public static Color BUTTON_BACK_COLOR = Color.FromArgb(224, 224, 224);
+	    public static Color BUTTON_FORE_COLOR = Color.Black;
+		public static Color SCHEME_DGV_ROW_BACK_COLOR_1 = Color.White;
+		public static Color SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(245, 245, 245);
+	    public static Color SCHEME_DGV_ROW_FORE_COLOR = Color.Black;
+	    public static Color SCHEME_DGV_GRID_COLOR = System.Drawing.SystemColors.ControlLight;
 
 		public static readonly Color SCHEME_COLOR_BACK = Color.FromArgb(0, 200, 205);
 	    public static readonly Color SCHEME_COLOR_FORE = Color.White;
@@ -270,6 +281,8 @@ namespace LogsReader
 		        Global?.ResumeLayout();
 		        MainTabControl.ResumeLayout();
 		        this.ResumeLayout();
+
+		        //ChangeTheme(Themes.Dark);
 	        }
         }
 
@@ -298,7 +311,7 @@ namespace LogsReader
             }
             else
             {
-                RenderTabPage(page, e, Color.DimGray, Color.White);
+                RenderTabPage(page, e, TAB_BACK_COLOR, TAB_FORE_COLOR);
             }
         }
 
@@ -353,7 +366,55 @@ namespace LogsReader
 	        }
         }
 
-        public new async void Dispose()
+        public void ChangeTheme(Themes theme)
+        {
+	        switch (theme)
+	        {
+				case Themes.Default:
+					CONTENT_COLOR = Color.White;
+					FOOTER_COLOR = Color.FromArgb(239, 239, 239);
+					BODY_COLOR = Color.FromArgb(239, 239, 239);
+					TEXT_COLOR = Color.Black;
+					TAB_BACK_COLOR = Color.DimGray;
+					TAB_FORE_COLOR = Color.White;
+					BORDER_COLOR = Color.FromArgb(172, 172, 172);
+					BUTTON_BACK_COLOR = Color.FromArgb(224, 224, 224);
+					BUTTON_FORE_COLOR = Color.Black;
+					SCHEME_DGV_ROW_BACK_COLOR_1 = Color.White;
+					SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(245, 245, 245);
+					SCHEME_DGV_ROW_FORE_COLOR = Color.Black;
+					SCHEME_DGV_GRID_COLOR = System.Drawing.SystemColors.ControlLight;
+					break;
+				case Themes.Dark:
+					CONTENT_COLOR = Color.FromArgb(43, 43, 43);
+					FOOTER_COLOR = Color.FromArgb(60, 63, 65);
+					BODY_COLOR = Color.FromArgb(60, 63, 65);
+					TEXT_COLOR = Color.LightGray;
+					TAB_BACK_COLOR = Color.FromArgb(45, 45, 45);
+					TAB_FORE_COLOR = Color.FromArgb(149, 149, 149);
+					BORDER_COLOR = Color.FromArgb(50, 50, 50);
+					BUTTON_BACK_COLOR = Color.FromArgb(50, 50, 51);
+					BUTTON_FORE_COLOR = Color.FromArgb(136, 141, 142);
+					SCHEME_DGV_ROW_BACK_COLOR_1 = Color.FromArgb(55, 55, 61);
+					SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(37, 37, 38);
+					SCHEME_DGV_ROW_FORE_COLOR = Color.LightGray;
+					SCHEME_DGV_GRID_COLOR = BORDER_COLOR;
+					break;
+			}
+
+	        this.BackColor = BODY_COLOR;
+	        this.ForeColor = TEXT_COLOR;
+
+	        MainTabControl.BackColor = BODY_COLOR;
+	        MainTabControl.ForeColor = TEXT_COLOR;
+	        MainTabControl.Refresh();
+
+			Global.ChangeTheme(theme);
+	        foreach (var logsReader in SchemeForms.Values)
+		        logsReader.ChangeTheme(theme);
+		}
+
+		public new async void Dispose()
         {
 	        try
 	        {
@@ -375,5 +436,5 @@ namespace LogsReader
 		        base.Dispose();
 	        }
         }
-	}
+    }
 }

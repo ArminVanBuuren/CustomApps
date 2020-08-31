@@ -19,6 +19,7 @@ namespace LogsReader.Reader
     public sealed class LogsReaderFormGlobal : LogsReaderFormBase
     {
 	    private readonly Panel panelFlowDoc;
+	    private readonly Panel panelCollapseSelectAll;
 		private readonly AdvancedFlowLayoutPanel flowPanelForExpanders;
 		private readonly CheckBox checkBoxSelectAll;
 		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = (readerForm) => readerForm.BtnSearch.Enabled ? Color.FromArgb(155, 255, 176) : Color.FromArgb(255, 150, 170);
@@ -100,7 +101,7 @@ namespace LogsReader.Reader
 		        };
 		        checkBoxSelectAll.CheckedChanged += CheckBoxSelectAllOnCheckedChanged;
 
-		        var panelCollapseSelectAll = new Panel
+		        panelCollapseSelectAll = new Panel
 		        {
 			        BorderStyle = BorderStyle.FixedSingle,
 			        Dock = DockStyle.Top,
@@ -777,6 +778,14 @@ namespace LogsReader.Reader
 		{
 			BtnSearch.Enabled = AllExpanders.Any(x => x.Key.BtnSearch.Enabled && x.Value.IsChecked);
 			base.ValidationCheck(clearStatus);
+		}
+
+		public override void ChangeTheme(Themes theme)
+		{
+			base.ChangeTheme(theme);
+
+			panelCollapseSelectAll.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			checkBoxSelectAll.ForeColor = LogsReaderMainForm.TEXT_COLOR;
 		}
     }
 }

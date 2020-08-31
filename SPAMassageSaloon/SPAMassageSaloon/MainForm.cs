@@ -386,13 +386,16 @@ namespace SPAMassageSaloon
 	                }
 	                catch (OutOfMemoryException)
 	                {
-                        Thread.Sleep(10000); // wait 10 sec
+		                Thread.Sleep(10000); // wait 10 sec
 	                }
 	                catch (InvalidOperationException)
 	                {
-                        // ignored
+		                // ignored
 	                }
-                    Thread.Sleep(1000);
+	                finally
+	                {
+		                Thread.Sleep(1000);
+                    }
                 }
             }
             catch (Exception ex)

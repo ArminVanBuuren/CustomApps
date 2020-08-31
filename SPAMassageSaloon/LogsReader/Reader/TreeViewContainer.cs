@@ -93,6 +93,24 @@ namespace LogsReader.Reader
 	        }
         }
 
+        public Color BackColor
+        {
+	        set
+	        {
+		        foreach (var treeView in _copyList)
+			        treeView.BackColor = value;
+	        }
+        }
+
+        public Color ForeColor
+        {
+	        set
+	        {
+		        foreach (var treeView in _copyList)
+			        treeView.ForeColor = value;
+	        }
+        }
+
         public TreeViewContainer(
 	        LRSettingsScheme schemeSettings,
 	        CustomTreeView main,

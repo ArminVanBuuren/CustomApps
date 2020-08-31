@@ -1630,6 +1630,11 @@ namespace SPAFilter
             return false;
         }
 
+        public void ChangeTheme(Themes theme)
+        {
+            // ignored
+        }
+
         //private void AddActivatorButton_Paint(object sender, PaintEventArgs e)
         //{
         //    DrawButton(AddActivatorButton, Properties.Resources.icons8_plus_20, e);

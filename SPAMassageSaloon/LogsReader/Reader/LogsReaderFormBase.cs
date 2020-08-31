@@ -770,7 +770,7 @@ namespace LogsReader.Reader
 			}
         }
 
-        public virtual void LogsReaderKeyDown(object sender, KeyEventArgs e)
+		public virtual void LogsReaderKeyDown(object sender, KeyEventArgs e)
         {
             try
             {
@@ -818,7 +818,7 @@ namespace LogsReader.Reader
 	                case Keys.S when e.Control && btnExport.Enabled:
                         BtnExport_Click(this, EventArgs.Empty);
                         break;
-                    case Keys.C when e.Control && DgvData.SelectedRows.Count > 0:
+                    case Keys.C when e.Control && DgvData.SelectedRows.Count > 0 && DgvData.Focused:
                         var templateList = new List<DataTemplate>();
                         foreach (DataGridViewRow row in DgvData.SelectedRows)
                         {
@@ -1492,9 +1492,11 @@ namespace LogsReader.Reader
 
         protected virtual void ColorizationDGV(DataGridViewRow row, DataTemplate template)
         {
-	        var color = row.Index.IsParity() ? LogsReaderMainForm.SCHEME_DGV_COLOR_BACK_1 : LogsReaderMainForm.SCHEME_DGV_COLOR_BACK_2;
+	        var color = row.Index.IsParity() ? LogsReaderMainForm.SCHEME_DGV_ROW_BACK_COLOR_1 : LogsReaderMainForm.SCHEME_DGV_ROW_BACK_COLOR_2;
 	        if (row.DefaultCellStyle.BackColor != color)
 		        row.DefaultCellStyle.BackColor = color;
+	        if (row.DefaultCellStyle.ForeColor != LogsReaderMainForm.SCHEME_DGV_ROW_FORE_COLOR)
+		        row.DefaultCellStyle.ForeColor = LogsReaderMainForm.SCHEME_DGV_ROW_FORE_COLOR;
         }
 
         protected void DgvReaderRefreshRow(DataGridViewRow row, bool refreshHeavy)
@@ -2302,11 +2304,96 @@ namespace LogsReader.Reader
             _statusInfo.Text = string.Empty;
         }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        public virtual void ChangeTheme(Themes theme)
+        {
+	        this.BackColor = LogsReaderMainForm.BODY_COLOR;
+	        CustomPanel.BackColor = LogsReaderMainForm.BODY_COLOR;
+			panelShowTrns.BackColor = LogsReaderMainForm.BODY_COLOR;
+			filterPanel.BackColor = LogsReaderMainForm.BODY_COLOR;
+			searchPanel.BackColor = LogsReaderMainForm.BODY_COLOR;
+			tabControlViewer.BackColor = LogsReaderMainForm.BODY_COLOR;
+
+			this.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			CustomPanel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			panelShowTrns.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			filterPanel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			searchPanel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			tabControlViewer.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+
+			//---------
+
+			DgvData.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			TbxPattern.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			DateStartFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			DateEndFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			CobxTraceNameFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			CobxTraceMessageFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			TbxTraceNameFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			TbxTraceMessageFilter.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+
+			DgvData.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			TbxPattern.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			DateStartFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			DateEndFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			CobxTraceNameFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			CobxTraceMessageFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			TbxTraceNameFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			TbxTraceMessageFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+
+			//---------
+
+			checkBoxShowTrns.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			ChbxUseRegex.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			ChbxAlreadyUseFilter.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+
+			//---------
+
+			BtnSearch.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			buttonPause.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			btnClear.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			buttonSelectTraceNames.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			btnFilter.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			btnReset.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+			btnExport.FlatAppearance.BorderColor = LogsReaderMainForm.BORDER_COLOR;
+
+			BtnSearch.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			buttonPause.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			btnClear.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			buttonSelectTraceNames.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			btnFilter.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			btnReset.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+			btnExport.BackColor = LogsReaderMainForm.BUTTON_BACK_COLOR;
+
+			BtnSearch.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			buttonPause.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			btnClear.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			buttonSelectTraceNames.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			btnFilter.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			btnReset.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+			btnExport.ForeColor = LogsReaderMainForm.BUTTON_FORE_COLOR;
+
+			//---------
+
+			DgvData.BackColor = LogsReaderMainForm.CONTENT_COLOR;
+			DgvData.BackgroundColor = LogsReaderMainForm.CONTENT_COLOR;
+			DgvData.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+			DgvData.GridColor = LogsReaderMainForm.SCHEME_DGV_GRID_COLOR;
+			DgvData.Refresh();
+
+			//---------
+
+			statusStripBtns.BackColor = LogsReaderMainForm.FOOTER_COLOR;
+			statusStripBtns.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+
+			statusStrip.BackColor = LogsReaderMainForm.FOOTER_COLOR;
+			statusStrip.ForeColor = LogsReaderMainForm.TEXT_COLOR;
+        }
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
         {
 	        UserSettings?.Dispose();
 

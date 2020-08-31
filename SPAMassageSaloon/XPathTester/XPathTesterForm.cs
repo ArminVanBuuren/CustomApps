@@ -299,5 +299,10 @@ namespace XPathTester
         {
             
         }
+
+        public void ChangeTheme(Themes theme)
+        {
+	        // ignored
+        }
     }
 }

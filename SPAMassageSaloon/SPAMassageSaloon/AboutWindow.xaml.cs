@@ -136,6 +136,11 @@ namespace SPAMassageSaloon
             #endregion
         }
 
+        public void ChangeTheme(Themes theme)
+        {
+            
+        }
+
         public void SaveData()
         {
             
