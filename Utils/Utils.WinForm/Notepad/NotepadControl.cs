@@ -490,70 +490,85 @@ namespace Utils.WinForm.Notepad
 
         void InitializePage(Editor editor, bool convertToFileEditor = false)
         {
-            var index = _tabControl.TabPages.Count;
+	        try
+	        {
+		        _tabControl.SuspendHandle();
 
-            var tabPage = new TabPage();
-            try
-            {
-	            tabPage.SuspendLayout();
+                var index = _tabControl.TabPages.Count;
 
-	            tabPage.Text = editor.HeaderName + new string(' ', 2);
-	            tabPage.UseVisualStyleBackColor = true;
-	            tabPage.ForeColor = TabsForeColor;
-	            tabPage.Margin = new Padding(0);
-	            tabPage.Padding = new Padding(0);
-	            tabPage.BorderStyle = BorderStyle.None;
+                var tabPage = new TabPage();
+                try
+                {
+                    tabPage.SuspendLayout();
 
-	            tabPage.Controls.Add(editor);
+                    tabPage.Text = editor.HeaderName + new string(' ', 2);
+                    tabPage.UseVisualStyleBackColor = true;
+                    tabPage.ForeColor = TabsForeColor;
+                    tabPage.Margin = new Padding(0);
+                    tabPage.Padding = new Padding(0);
+                    tabPage.BorderStyle = BorderStyle.None;
 
-	            _tabControl.TabPages.Add(tabPage);
-	            if (_tabControl.TabPages.Count == index)
-					_tabControl.TabPages.Insert(index, editor.HeaderName);
+                    tabPage.Controls.Add(editor);
+
+                    _tabControl.TabPages.Add(tabPage);
+                    if (_tabControl.TabPages.Count == index)
+                        _tabControl.TabPages.Insert(index, editor.HeaderName);
+                }
+                finally
+                {
+                    tabPage.ResumeLayout();
+                }
+
+                _tabControl.SelectedIndex = index;
+
+                editor.BorderStyle = BorderStyle.None;
+                editor.Dock = DockStyle.Fill;
+                editor.ForeColor = TextForeColor;
+                editor.WordWrap = WordWrap;
+                editor.Highlights = Highlights;
+                editor.ReadOnly = ReadOnly;
+                editor.SizingGrip = SizingGrip;
+                editor.Font = TextFont;
+                editor.DefaultEncoding = DefaultEncoding;
+
+                // в конвертируемом FileEditor уже делегируются прошлые эвенты от класса Editor
+                if (!convertToFileEditor)
+                {
+                    editor.LanguageChanged += (sender, args) => { LanguageChanged?.Invoke(sender, args); };
+                    editor.WordWrapStateChanged += (sender, args) => { WordWrapStateChanged?.Invoke(sender, args); };
+                    editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
+                }
+
+                if (editor is FileEditor fileEditor)
+                    fileEditor.FileChanged += EditorOnSomethingChanged;
+
+                ListOfEditors.Add(editor, tabPage);
+
+                if (_tabControl.TabCount == 1)
+                    RefreshForm(this, null);
             }
-            finally
-            {
-	            tabPage.ResumeLayout();
-            }
-
-            _tabControl.SelectedIndex = index;
-
-            editor.BorderStyle = BorderStyle.None;
-            editor.Dock = DockStyle.Fill;
-            editor.ForeColor = TextForeColor;
-            editor.WordWrap = WordWrap;
-            editor.Highlights = Highlights;
-            editor.ReadOnly = ReadOnly;
-            editor.SizingGrip = SizingGrip;
-            editor.Font = TextFont;
-            editor.DefaultEncoding = DefaultEncoding;
-
-            // в конвертируемом FileEditor уже делегируются прошлые эвенты от класса Editor
-            if (!convertToFileEditor)
-            {
-                editor.LanguageChanged += (sender, args) => { LanguageChanged?.Invoke(sender, args); };
-                editor.WordWrapStateChanged += (sender, args) => { WordWrapStateChanged?.Invoke(sender, args); };
-                editor.WordHighlightsStateChanged += (sender, args) => { WordHighlightsStateChanged?.Invoke(sender, args); };
-            }
-
-            if (editor is FileEditor fileEditor)
-                fileEditor.FileChanged += EditorOnSomethingChanged;
-
-            ListOfEditors.Add(editor, tabPage);
-
-            if (_tabControl.TabCount == 1)
-                RefreshForm(this, null);
+	        finally
+	        {
+		        _tabControl.ResumeHandle();
+	        }
         }
 
         int FinnalizePage(Editor removeEditor)
         {
             if (removeEditor == null || !ListOfEditors.TryGetValue(removeEditor, out var tabPage))
                 return -1;
-
-            var prevSelectedIndex = _tabControl.SelectedIndex;
-            _tabControl.TabPages.Remove(tabPage);
-            ListOfEditors.Remove(removeEditor);
-            removeEditor.Dispose();
-            return prevSelectedIndex;
+            try
+            {
+	            var prevSelectedIndex = _tabControl.SelectedIndex;
+	            _tabControl.TabPages.Remove(tabPage);
+	            ListOfEditors.Remove(removeEditor);
+	            removeEditor.Dispose();
+	            return prevSelectedIndex;
+            }
+            finally
+            {
+	            _tabControl.Invalidate();
+            }
         }
 
         void EditorOnSomethingChanged(object sender, EventArgs args)
@@ -619,33 +634,43 @@ namespace Utils.WinForm.Notepad
             if (!(editor is Editor editor2))
                 return;
 
-            var prevSelectedIndex = FinnalizePage(editor2);
 
-            if (!calcSelectionTab)
-                return;
-
-            if (_tabControl.TabPages.Count > 0)
+            try
             {
-                if (prevSelectedIndex == tabIndex && _lastSelectedPage > tabIndex)
-                {
-                    _tabControl.SelectedIndex = _lastSelectedPage - 1;
-                }
-                else if (prevSelectedIndex == tabIndex && _lastSelectedPage < tabIndex)
-                {
-                    _tabControl.SelectedIndex = _lastSelectedPage;
-                }
-                else if (prevSelectedIndex > tabIndex)
-                {
-                    _tabControl.SelectedIndex = prevSelectedIndex - 1;
-                }
-                else if (prevSelectedIndex < tabIndex)
-                {
-                    _tabControl.SelectedIndex = prevSelectedIndex;
-                }
-                else if (tabIndex > 0)
-                {
-                    _tabControl.SelectedIndex = tabIndex - 1;
-                }
+	            _tabControl.SuspendLayout();
+
+	            var prevSelectedIndex = FinnalizePage(editor2);
+
+	            if (!calcSelectionTab)
+		            return;
+
+	            if (_tabControl.TabPages.Count > 0)
+	            {
+		            if (prevSelectedIndex == tabIndex && _lastSelectedPage > tabIndex)
+		            {
+			            _tabControl.SelectedIndex = _lastSelectedPage - 1;
+		            }
+		            else if (prevSelectedIndex == tabIndex && _lastSelectedPage < tabIndex)
+		            {
+			            _tabControl.SelectedIndex = _lastSelectedPage;
+		            }
+		            else if (prevSelectedIndex > tabIndex)
+		            {
+			            _tabControl.SelectedIndex = prevSelectedIndex - 1;
+		            }
+		            else if (prevSelectedIndex < tabIndex)
+		            {
+			            _tabControl.SelectedIndex = prevSelectedIndex;
+		            }
+		            else if (tabIndex > 0)
+		            {
+			            _tabControl.SelectedIndex = tabIndex - 1;
+		            }
+	            }
+            }
+            finally
+            {
+	            _tabControl.ResumeLayout();
             }
         }
 
