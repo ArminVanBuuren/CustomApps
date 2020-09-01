@@ -13,10 +13,7 @@ namespace SPAFilter.SPA.SC
             HostOperation = hostOperation;
         }
 
-        public string GetBaseCFSResource()
-        {
-            return $"<Resource name=\"{Name}\" useType=\"Mandatory\" />";
-        }
+        public string GetBaseCFSResource() => $"<Resource name=\"{Name}\" useType=\"Mandatory\" />";
 
         public string GetChildCFSResource(string serviceCode)
         {
@@ -29,9 +26,6 @@ namespace SPAFilter.SPA.SC
             return $"<Resource name=\"{Name}\" value=\"{resourceValue}\" />";
         }
 
-        public override string ToXml()
-        {
-            return $"<Resource name=\"{Name}\" description=\"{Description}\"/>";
-        }
+        public override string ToXml() => $"<Resource name=\"{Name}\" description=\"{Description}\"/>";
     }
 }

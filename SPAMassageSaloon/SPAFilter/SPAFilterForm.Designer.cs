@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using SPAMassageSaloon.Common.StyleControls;
 
 namespace SPAFilter
 {
@@ -51,15 +52,15 @@ namespace SPAFilter
             this.removeServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
             this.refreshServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
             this.reloadServiceInstancesButton = new System.Windows.Forms.ToolStripButton();
-            this.dataGridServiceInstances = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.dataGridServiceInstances = new CustomDataGridView();
             this.Processes = new System.Windows.Forms.TabPage();
-            this.dataGridProcesses = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.dataGridProcesses = new CustomDataGridView();
             this.Operations = new System.Windows.Forms.TabPage();
-            this.dataGridOperations = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.dataGridOperations = new CustomDataGridView();
             this.Scenarios = new System.Windows.Forms.TabPage();
-            this.dataGridScenarios = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.dataGridScenarios = new CustomDataGridView();
             this.Commands = new System.Windows.Forms.TabPage();
-            this.dataGridCommands = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.dataGridCommands = new CustomDataGridView();
             this.GenerateSC = new System.Windows.Forms.TabPage();
             this.RootSCExportPathButton = new System.Windows.Forms.Button();
             this.ExportPathLabel = new System.Windows.Forms.Label();
@@ -757,8 +758,8 @@ namespace SPAFilter
         private System.Windows.Forms.TabPage Operations;
         private System.Windows.Forms.TabPage Scenarios;
         private System.Windows.Forms.TabPage Commands;
-        private SPAMassageSaloon.Common.CustomDataGridView dataGridScenarios;
-        private SPAMassageSaloon.Common.CustomDataGridView dataGridCommands;
+        private CustomDataGridView dataGridScenarios;
+        private CustomDataGridView dataGridCommands;
         private CustomProgressBar progressBar;
         private System.Windows.Forms.Button ButtonGenerateSC;
         private System.Windows.Forms.TabPage GenerateSC;
@@ -776,14 +777,14 @@ namespace SPAFilter
         private System.Windows.Forms.RadioButton ROBPOperationsRadioButton;
         private System.Windows.Forms.RadioButton ServiceCatalogRadioButton;
         private System.Windows.Forms.TabPage ServiceInstances;
-        private SPAMassageSaloon.Common.CustomDataGridView dataGridServiceInstances;
+        private CustomDataGridView dataGridServiceInstances;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton addServiceInstancesButton;
         private System.Windows.Forms.ToolStripButton removeServiceInstancesButton;
         private System.Windows.Forms.ToolStripButton refreshServiceInstancesButton;
         private System.Windows.Forms.Panel panelTop;
-        private SPAMassageSaloon.Common.CustomDataGridView dataGridProcesses;
-        private SPAMassageSaloon.Common.CustomDataGridView dataGridOperations;
+        private CustomDataGridView dataGridProcesses;
+        private CustomDataGridView dataGridOperations;
         private Button ServiceCatalogOpenButton;
         private ToolStripButton reloadServiceInstancesButton;
         private Button buttonReset;

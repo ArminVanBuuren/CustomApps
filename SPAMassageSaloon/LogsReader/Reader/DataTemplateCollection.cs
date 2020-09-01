@@ -146,15 +146,9 @@ namespace LogsReader.Reader
             _values.Clear();
         }
 
-        public IEnumerator<DataTemplate> GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
+        public IEnumerator<DataTemplate> GetEnumerator() => _values.Values.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _values.Values.GetEnumerator();
 
         public void Dispose()
         {

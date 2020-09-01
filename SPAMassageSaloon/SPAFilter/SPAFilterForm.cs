@@ -168,10 +168,7 @@ namespace SPAFilter
 
         public int ActiveTotalProgress => _progressMonitor?.PercentComplete ?? 0;
 
-        static SPAFilterForm()
-        {
-            SavedDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SPAFilter)}.bin");
-        }
+        static SPAFilterForm() => SavedDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SPAFilter)}.bin");
 
         public static SPAFilterForm GetControl()
         {
@@ -294,10 +291,8 @@ namespace SPAFilter
             }
         }
 
-        static object TryGetSerializationValue(IReadOnlyDictionary<string, object> allSavedParams, string key, object defaultResult)
-        {
-            return allSavedParams.TryGetValue(key, out var res) && res != null ? res : defaultResult;
-        }
+        static object TryGetSerializationValue(IReadOnlyDictionary<string, object> allSavedParams, string key, object defaultResult) 
+	        => allSavedParams.TryGetValue(key, out var res) && res != null ? res : defaultResult;
 
         async Task AssignServiceInstanes(IEnumerable<string> configurationApplicationList)
         {

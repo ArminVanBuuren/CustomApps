@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using SPAMassageSaloon.Common;
+using SPAMassageSaloon.Common.StyleControls;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
 
@@ -28,7 +29,7 @@ namespace LogsReader.Reader
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			this.DgvData = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.DgvData = new CustomDataGridView();
 			this.DgvDataPromptColumn = new Utils.WinForm.DataGridViewHelper.DgvTextAndImageColumn();
 			this.DgvDataIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvDataServerColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,7 +77,7 @@ namespace LogsReader.Reader
 			this.panelBtns = new System.Windows.Forms.Panel();
 			this.checkBoxShowTrns = new System.Windows.Forms.CheckBox();
 			this.tabControlViewer = new LogsReader.Reader.CustomTabControl();
-			this.DgvReader = new SPAMassageSaloon.Common.CustomDataGridView();
+			this.DgvReader = new CustomDataGridView();
 			this.DgvReaderSelectColumn = new Utils.WinForm.DataGridViewHelper.DgvCheckBoxColumn();
 			this.DgvReaderIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderPrivateIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();

@@ -5,17 +5,12 @@ namespace SPAFilter.SPA.SC
     public abstract class SComponentBase
     {
         public virtual string Name { get; protected set; }
+
         public virtual string Description { get; protected set; }
 
-        public virtual string ToXml()
-        {
-            return string.Empty;
-        }
+        public virtual string ToXml() => string.Empty;
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 
     /// <inheritdoc />

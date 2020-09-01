@@ -83,9 +83,6 @@ namespace SPAFilter.SPA.SC
             }
         }
 
-        public override string ToString()
-        {
-            return $"Dependence = {DependenceServices.Count} Restricted = {RestrictedServices.Count}";
-        }
+        public override string ToString() => $"Dependence = {DependenceServices.Count} Restricted = {RestrictedServices.Count}";
     }
 }

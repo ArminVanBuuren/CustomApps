@@ -24,10 +24,7 @@ namespace SPAFilter.SPA.Collection
 
         public bool AnyHasCatalogCall => this.Any(x => x.HasCatalogCall);
 
-        public CollectionBusinessProcess() : base()
-        {
-            _allOperationsName = new SortedList<string, bool>(StringComparer.InvariantCultureIgnoreCase);
-        }
+        public CollectionBusinessProcess() : base() => _allOperationsName = new SortedList<string, bool>(StringComparer.InvariantCultureIgnoreCase);
 
         public override void AddRange(IEnumerable<BusinessProcess> collection)
         {

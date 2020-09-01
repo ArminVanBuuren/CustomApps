@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace SPAMassageSaloon.Common
+namespace SPAMassageSaloon.Common.StyleControls
 {
     public sealed class CustomDataGridView : DataGridView
     {
@@ -12,11 +12,8 @@ namespace SPAMassageSaloon.Common
 	        set => DoubleBuffered = value;
         }
 
-        public CustomDataGridView()
-        {
-	        //if (!SystemInformation.TerminalServerSession)
-		        DoubleBuffered = true;
-        }
+        //if (!SystemInformation.TerminalServerSession)
+        public CustomDataGridView() => DoubleBuffered = true;
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

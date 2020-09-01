@@ -14,10 +14,7 @@ namespace SPAMassageSaloon
     {
         private static readonly ImageSource IconImage;
 
-        static AboutWindow()
-        {
-            IconImage = Properties.Resources.about3.ToImageSource();
-        }
+        static AboutWindow() => IconImage = Properties.Resources.about3.ToImageSource();
 
         public AboutWindow()
         {

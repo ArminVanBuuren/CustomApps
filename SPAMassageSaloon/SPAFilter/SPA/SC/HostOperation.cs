@@ -54,9 +54,6 @@ namespace SPAFilter.SPA.SC
             }
         }
 
-        public override string ToString()
-        {
-            return HostOperationName;
-        }
+        public override string ToString() => HostOperationName;
     }
 }

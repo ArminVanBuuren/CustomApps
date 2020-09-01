@@ -42,7 +42,7 @@ namespace LogsReader.Reader
 
         readonly HashSet<DataTemplate> _trnBindings = new HashSet<DataTemplate>();
 
-        DataTemplate() { IsSuccess = true; }
+        DataTemplate() => IsSuccess = true;
 
         internal DataTemplate(
 	        TraceReader traceReader,
@@ -83,10 +83,7 @@ namespace LogsReader.Reader
 	        AddTransaction(trn);
         }
 
-        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn) : this(traceReader, foundLineID, trn)
-        {
-	        TraceMessage = traceMessage;
-        }
+        internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn) : this(traceReader, foundLineID, trn) => TraceMessage = traceMessage;
 
         internal DataTemplate(TraceReader traceReader, long foundLineID, TransactionValue trn)
         {
@@ -307,14 +304,8 @@ namespace LogsReader.Reader
             }
         }
 
-        public object Clone()
-        {
-	        return this.MemberwiseClone();
-        }
+        public object Clone() => this.MemberwiseClone();
 
-        public override string ToString()
-        {
-            return ParentReader.ToString();
-        }
+        public override string ToString() => ParentReader.ToString();
     }
 }

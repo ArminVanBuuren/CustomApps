@@ -77,9 +77,7 @@ namespace LogsReader.Reader
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public bool IsAllowed(DataTemplate input)
-        {
-            return _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameFilter(input) && _checkTraceMessageFilter(input);
-        }
+        public bool IsAllowed(DataTemplate input) 
+	        => _checkStartDate(input) && _checkEndDate(input) && _checkTraceNameFilter(input) && _checkTraceMessageFilter(input);
     }
 }

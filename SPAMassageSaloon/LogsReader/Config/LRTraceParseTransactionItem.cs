@@ -13,10 +13,7 @@ namespace LogsReader.Config
 
 		[XmlAttribute] public string Trn { get; set; } = string.Empty;
 
-		public TraceParseTransactionResult GetParsingResult(Match match)
-		{
-			return new TraceParseTransactionResult(this, match);
-		}
+		public TraceParseTransactionResult GetParsingResult(Match match) => new TraceParseTransactionResult(this, match);
 
 		public class TraceParseTransactionResult
 		{

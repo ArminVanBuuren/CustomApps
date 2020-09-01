@@ -375,15 +375,11 @@ namespace LogsReader.Reader
             }
         }
 
-		protected override IEnumerable<DataTemplate> GetResultTemplates()
-        {
-	        return OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
-        }
+		protected override IEnumerable<DataTemplate> GetResultTemplates() 
+			=> OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
 
-		internal override IEnumerable<TraceReader> GetResultReaders()
-		{
-			return MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : new List<TraceReader>(MainReader.TraceReaders.Values);
-		}
+		internal override IEnumerable<TraceReader> GetResultReaders() 
+			=> MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : new List<TraceReader>(MainReader.TraceReaders.Values);
 
 		protected override void ChangeFormStatus()
         {
@@ -558,10 +554,7 @@ namespace LogsReader.Reader
             base.ClearData();
         }
 
-		public override string ToString()
-        {
-            return CurrentSettings?.ToString() ?? base.ToString();
-        }
+		public override string ToString() => CurrentSettings?.ToString() ?? base.ToString();
 
 		public override void ChangeTheme(Themes theme)
 		{

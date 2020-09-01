@@ -276,10 +276,7 @@ namespace LogsReader.Reader
 
 		public abstract void ReadLine(string line);
 
-		protected bool IsMatched(string input)
-		{
-			return _IsMatchedFunc.Invoke(input);
-		}
+		protected bool IsMatched(string input) => _IsMatchedFunc.Invoke(input);
 
 		public void Commit()
         {
@@ -528,10 +525,7 @@ namespace LogsReader.Reader
 			return false;
         }
 
-        protected bool IsLineMatchByCustomFunction(string traceMessage)
-        {
-	        return TraceParseCustomFunction.Value.Item2.Invoke(traceMessage);
-        }
+        protected bool IsLineMatchByCustomFunction(string traceMessage) => TraceParseCustomFunction.Value.Item2.Invoke(traceMessage);
 
         protected bool IsLineMatchByRegexPatterns(string traceMessage)
         {
@@ -587,10 +581,7 @@ namespace LogsReader.Reader
 			}
         }
 
-        public override string ToString()
-        {
-            return FilePath;
-        }
+        public override string ToString() => FilePath;
 
         public override void Dispose()
         {

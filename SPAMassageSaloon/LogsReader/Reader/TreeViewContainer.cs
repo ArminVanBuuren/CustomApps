@@ -958,10 +958,7 @@ namespace LogsReader.Reader
 	        }
         }
 
-        public static string GetGroupName(TreeNode node)
-        {
-	        return Regex.Replace(node.Text, @".+\]\s*(.+)$", "$1");
-        }
+        public static string GetGroupName(TreeNode node) => Regex.Replace(node.Text, @".+\]\s*(.+)$", "$1");
 
         public static int GetGroupPriority(TreeNode node)
         {

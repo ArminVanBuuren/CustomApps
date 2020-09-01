@@ -499,10 +499,7 @@ namespace LogsReader.Reader
 
 			public bool IsCompleted { get; private set; } = false;
 
-			public bool ContainsKey(LogsReaderFormScheme readerForm)
-			{
-				return TryGetValue(readerForm.CurrentSettings.Name, out var _);
-			}
+			public bool ContainsKey(LogsReaderFormScheme readerForm) => TryGetValue(readerForm.CurrentSettings.Name, out var _);
 
 			public bool TryGetValue(string schemeName, out LogsReaderFormScheme result)
 			{
@@ -545,15 +542,9 @@ namespace LogsReader.Reader
 				_items.Clear();
 			}
 
-			public IEnumerator<(LogsReaderFormScheme, Task)> GetEnumerator()
-			{
-				return _items.Values.GetEnumerator();
-			}
+			public IEnumerator<(LogsReaderFormScheme, Task)> GetEnumerator() => _items.Values.GetEnumerator();
 
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return _items.Values.GetEnumerator();
-			}
+			IEnumerator IEnumerable.GetEnumerator() => _items.Values.GetEnumerator();
 		}
 
         internal override void BtnSearch_Click(object sender, EventArgs e)

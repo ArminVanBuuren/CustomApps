@@ -17,9 +17,6 @@ namespace LogsReader.Config
 
 		public LRFolder() : base(string.Empty) { }
 
-		internal LRFolder(string folderPath, bool allDirSearching) : base(folderPath)
-		{
-			_allDirSearching = allDirSearching;
-		}
+		internal LRFolder(string folderPath, bool allDirSearching) : base(folderPath) => _allDirSearching = allDirSearching;
 	}
 }

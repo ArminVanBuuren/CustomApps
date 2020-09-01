@@ -13,10 +13,7 @@ namespace SPAFilter.SPA.Collection
 
         readonly Dictionary<IObjectTemplate, T> _collection;
 
-        public CollectionTemplate()
-        {
-            _collection = new Dictionary<IObjectTemplate, T>(50);
-        }
+        public CollectionTemplate() => _collection = new Dictionary<IObjectTemplate, T>(50);
 
         public CollectionTemplate(IEnumerable<T> collection)
         {
@@ -113,9 +110,6 @@ namespace SPAFilter.SPA.Collection
             Clear();
         }
 
-        public override string ToString()
-        {
-            return $"Count = {_collection.Count}";
-        }
+        public override string ToString() => $"Count = {_collection.Count}";
     }
 }

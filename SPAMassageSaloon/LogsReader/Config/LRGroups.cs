@@ -36,10 +36,7 @@ namespace LogsReader.Config
 
 		public LRGroups() { }
 
-		internal LRGroups(LRGroupItem[] groupItems)
-		{
-			GroupItems = groupItems;
-		}
+		internal LRGroups(LRGroupItem[] groupItems) => GroupItems = groupItems;
 
 		static Dictionary<string, (int, IEnumerable<string>)> GetGroups(IEnumerable<LRGroupItem> items)
 		{

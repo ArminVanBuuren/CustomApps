@@ -12,9 +12,6 @@ namespace SPAFilter.SPA.Components
         [DGVColumn(ColumnPosition.After, "Command")]
         public override string Name { get; set; }
 
-        public Command(ServiceInstance parent, string path) : base(path)
-        {
-            _parent = parent;
-        }
+        public Command(ServiceInstance parent, string path) : base(path) => _parent = parent;
     }
 }

@@ -26,9 +26,6 @@ namespace SPAFilter.SPA.SC
 
         protected internal CFS ParentCFS { get; }
         protected internal LinkType Link { get; private set; }
-        public override string ToString()
-        {
-            return $"{ParentCFS.Name} = {Link:G}";
-        }
+        public override string ToString() => $"{ParentCFS.Name} = {Link:G}";
     }
 }

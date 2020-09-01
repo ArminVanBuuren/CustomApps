@@ -10,10 +10,7 @@ namespace LogsReader.Config
 	{
 		private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
 
-		public LRTraceParseItem()
-		{
-			CDataItem = _cdataItem;
-		}
+		public LRTraceParseItem() => CDataItem = _cdataItem;
 
 		internal LRTraceParseItem(string regexPattern)
 		{

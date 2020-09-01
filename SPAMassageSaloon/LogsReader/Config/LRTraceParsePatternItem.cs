@@ -27,10 +27,7 @@ namespace LogsReader.Config
 		[XmlAttribute(DataTemplate.HeaderMessage)] 
 		public string Message { get; set; } = string.Empty;
 
-		public TraceParseResult GetParsingResult(Match match)
-		{
-			return new TraceParsePatternResult(this, match);
-		}
+		public TraceParseResult GetParsingResult(Match match) => new TraceParsePatternResult(this, match);
 
 		public class TraceParsePatternResult : TraceParseResult
 		{

@@ -5,11 +5,8 @@ namespace SPAFilter.SPA
 {
     public class SAComparer : IEqualityComparer<ISAComponent>
     {
-        public bool Equals(ISAComponent x, ISAComponent y)
-        {
-            return x != null && y != null && x.Name.Like(y.Name) && x.HostTypeName.Like(y.HostTypeName);
-        }
-
+        public bool Equals(ISAComponent x, ISAComponent y) 
+	        => x != null && y != null && x.Name.Like(y.Name) && x.HostTypeName.Like(y.HostTypeName);
 
         public int GetHashCode(ISAComponent obj)
         {

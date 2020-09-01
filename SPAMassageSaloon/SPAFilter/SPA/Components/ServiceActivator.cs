@@ -77,9 +77,6 @@ namespace SPAFilter.SPA.Components
             return serviceInstances;
         }
 
-        public override string ToString()
-        {
-            return string.Join(";", Instances);
-        }
+        public override string ToString() => string.Join(";", Instances);
     }
 }

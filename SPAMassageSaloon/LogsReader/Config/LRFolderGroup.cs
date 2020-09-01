@@ -42,9 +42,6 @@ namespace LogsReader.Config
 
 		public LRFolderGroup() { }
 
-		internal LRFolderGroup(LRFolder[] folders)
-		{
-			LogsFolder = folders;
-		}
+		internal LRFolderGroup(LRFolder[] folders) => LogsFolder = folders;
 	}
 }

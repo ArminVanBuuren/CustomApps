@@ -21,10 +21,7 @@ namespace XPathTester
 	    [DGVColumn(ColumnPosition.Last, "Value")]
 	    public string Value => Navigator.Value?.Trim().Replace("\r", "").Replace("\n", "");
 
-	    public DGVXPathResult(XPathNavigatorResult navigator)
-        {
-	        Navigator = navigator;
-        }
+	    public DGVXPathResult(XPathNavigatorResult navigator) => Navigator = navigator;
     }
 
     public class XPathCollection : IEnumerable<DGVXPathResult>
@@ -45,14 +42,8 @@ namespace XPathTester
 
         public DGVXPathResult this[int id] => _values.TryGetValue(id, out var result) ? result : null;
 
-        public IEnumerator<DGVXPathResult> GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
+        public IEnumerator<DGVXPathResult> GetEnumerator() => _values.Values.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _values.Values.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _values.Values.GetEnumerator();
     }
 }

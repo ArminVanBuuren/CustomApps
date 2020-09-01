@@ -24,10 +24,7 @@ namespace SPAFilter.SPA.Components.SRI
         public DistinctList<XmlNode> RFSDependencyList { get; } = new DistinctList<XmlNode>();
         public DistinctList<XmlNode> ScenarioList { get; } = new DistinctList<XmlNode>();
 
-        internal RFSBindings(CatalogOperation baseOperation)
-        {
-            Base = baseOperation;
-        }
+        internal RFSBindings(CatalogOperation baseOperation) => Base = baseOperation;
 
         internal RFSBindings(CatalogOperation baseOperation, string rfsName, XPathNavigator navigator)
         {

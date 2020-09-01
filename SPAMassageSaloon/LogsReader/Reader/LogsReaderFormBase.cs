@@ -11,6 +11,7 @@ using LogsReader.Config;
 using LogsReader.Properties;
 using LogsReader.Reader.Forms;
 using SPAMassageSaloon.Common;
+using SPAMassageSaloon.Common.StyleControls;
 using Utils;
 using Utils.WinForm;
 using Utils.WinForm.DataGridViewHelper;
@@ -1070,15 +1071,13 @@ namespace LogsReader.Reader
 				.ToHashSet(x => x, StringComparer.InvariantCultureIgnoreCase);
 		}
 
-        protected DataFilter GetFilter()
-        {
-            return new DataFilter(DateStartFilter.Checked ? DateStartFilter.Value : DateTime.MinValue,
-                DateEndFilter.Checked ? DateEndFilter.Value : DateTime.MaxValue,
-                TbxTraceNameFilter.Text,
-                CobxTraceNameFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains),
-                TbxTraceMessageFilter.Text,
-                CobxTraceMessageFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains));
-        }
+        protected DataFilter GetFilter() =>
+	        new DataFilter(DateStartFilter.Checked ? DateStartFilter.Value : DateTime.MinValue,
+		        DateEndFilter.Checked ? DateEndFilter.Value : DateTime.MaxValue,
+		        TbxTraceNameFilter.Text,
+		        CobxTraceNameFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains),
+		        TbxTraceMessageFilter.Text,
+		        CobxTraceMessageFilter.Text.Like(Resources.Txt_LogsReaderForm_Contains));
 
         private async void BtnReset_Click(object sender, EventArgs e)
         {

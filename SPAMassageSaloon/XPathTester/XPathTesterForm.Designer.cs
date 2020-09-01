@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using SPAMassageSaloon.Common.StyleControls;
 using Utils.WinForm.Notepad;
 
 namespace XPathTester
@@ -37,7 +38,7 @@ namespace XPathTester
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFind = new System.Windows.Forms.Button();
             this.editor = new Utils.WinForm.Notepad.Editor();
-            this.xpathResultDataGrid = new SPAMassageSaloon.Common.CustomDataGridView();
+            this.xpathResultDataGrid = new CustomDataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NodeType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NodeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -251,7 +252,7 @@ namespace XPathTester
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonFind;
         private Editor editor;
-        private SPAMassageSaloon.Common.CustomDataGridView xpathResultDataGrid;
+        private CustomDataGridView xpathResultDataGrid;
         private System.Windows.Forms.Button buttonPrettyPrint;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private Panel panel1;

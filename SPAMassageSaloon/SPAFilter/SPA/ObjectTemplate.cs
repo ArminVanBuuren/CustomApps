@@ -6,10 +6,7 @@ namespace SPAFilter.SPA
     public sealed class BlankTemplate : ObjectTemplate
     {
         public override string UniqueName { get; protected set; }
-        public BlankTemplate(string uniqueId)
-        {
-            UniqueName = uniqueId;
-        }
+        public BlankTemplate(string uniqueId) => UniqueName = uniqueId;
     }
 
     public abstract class ObjectTemplate : IObjectTemplate, IComparable
@@ -43,14 +40,8 @@ namespace SPAFilter.SPA
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            return UniqueName.GetHashCode();
-        }
+        public override int GetHashCode() => UniqueName.GetHashCode();
 
-        public override string ToString()
-        {
-            return UniqueName;
-        }
+        public override string ToString() => UniqueName;
     }
 }
