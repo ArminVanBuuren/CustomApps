@@ -12,13 +12,5 @@
         void ApplySettings();
 
         void SaveData();
-
-        void ChangeTheme(Themes theme);
-    }
-
-    public enum Themes
-    {
-        Default = 0,
-        Dark = 1
     }
 }

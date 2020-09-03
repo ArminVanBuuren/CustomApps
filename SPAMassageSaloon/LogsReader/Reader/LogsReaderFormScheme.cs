@@ -555,30 +555,5 @@ namespace LogsReader.Reader
         }
 
 		public override string ToString() => CurrentSettings?.ToString() ?? base.ToString();
-
-		public override void ChangeTheme(Themes theme)
-		{
-			base.ChangeTheme(theme);
-
-			OrderByLabel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			MaxLinesLabel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			MaxThreadsLabel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			RowsLimitLabel.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-
-			//---------
-
-			orderByText.BackColor = LogsReaderMainForm.CONTENT_COLOR;
-			maxLinesStackText.BackColor = LogsReaderMainForm.CONTENT_COLOR;
-			maxThreadsText.BackColor = LogsReaderMainForm.CONTENT_COLOR;
-			rowsLimitText.BackColor = LogsReaderMainForm.CONTENT_COLOR;
-
-			orderByText.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			maxLinesStackText.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			maxThreadsText.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-			rowsLimitText.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-
-			TreeViewContainer.BackColor = LogsReaderMainForm.BODY_COLOR;
-			TreeViewContainer.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-		}
     }
 }

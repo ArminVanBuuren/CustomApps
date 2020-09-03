@@ -770,13 +770,5 @@ namespace LogsReader.Reader
 			BtnSearch.Enabled = AllExpanders.Any(x => x.Key.BtnSearch.Enabled && x.Value.IsChecked);
 			base.ValidationCheck(clearStatus);
 		}
-
-		public override void ChangeTheme(Themes theme)
-		{
-			base.ChangeTheme(theme);
-
-			panelCollapseSelectAll.BackColor = LogsReaderMainForm.CONTENT_COLOR;
-			checkBoxSelectAll.ForeColor = LogsReaderMainForm.TEXT_COLOR;
-		}
     }
 }

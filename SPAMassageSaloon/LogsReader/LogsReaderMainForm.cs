@@ -280,8 +280,6 @@ namespace LogsReader
 		        Global?.ResumeLayout();
 		        MainTabControl.ResumeLayout();
 		        this.ResumeLayout();
-
-		        //ChangeTheme(Themes.Dark);
 	        }
         }
 
@@ -364,54 +362,6 @@ namespace LogsReader
 		        // ignored
 	        }
         }
-
-        public void ChangeTheme(Themes theme)
-        {
-	        switch (theme)
-	        {
-				case Themes.Default:
-					CONTENT_COLOR = Color.White;
-					FOOTER_COLOR = Color.FromArgb(239, 239, 239);
-					BODY_COLOR = Color.FromArgb(239, 239, 239);
-					TEXT_COLOR = Color.Black;
-					TAB_BACK_COLOR = Color.DimGray;
-					TAB_FORE_COLOR = Color.White;
-					BORDER_COLOR = Color.FromArgb(172, 172, 172);
-					BUTTON_BACK_COLOR = Color.FromArgb(224, 224, 224);
-					BUTTON_FORE_COLOR = Color.Black;
-					SCHEME_DGV_ROW_BACK_COLOR_1 = Color.White;
-					SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(245, 245, 245);
-					SCHEME_DGV_ROW_FORE_COLOR = Color.Black;
-					SCHEME_DGV_GRID_COLOR = SystemColors.ControlLight;
-					break;
-				case Themes.Dark:
-					CONTENT_COLOR = Color.FromArgb(43, 43, 43);
-					FOOTER_COLOR = Color.FromArgb(60, 63, 65);
-					BODY_COLOR = Color.FromArgb(60, 63, 65);
-					TEXT_COLOR = Color.LightGray;
-					TAB_BACK_COLOR = Color.FromArgb(45, 45, 45);
-					TAB_FORE_COLOR = Color.FromArgb(149, 149, 149);
-					BORDER_COLOR = Color.FromArgb(50, 50, 50);
-					BUTTON_BACK_COLOR = Color.FromArgb(50, 50, 51);
-					BUTTON_FORE_COLOR = Color.FromArgb(136, 141, 142);
-					SCHEME_DGV_ROW_BACK_COLOR_1 = Color.FromArgb(55, 55, 61);
-					SCHEME_DGV_ROW_BACK_COLOR_2 = Color.FromArgb(37, 37, 38);
-					SCHEME_DGV_ROW_FORE_COLOR = Color.LightGray;
-					SCHEME_DGV_GRID_COLOR = BORDER_COLOR;
-					break;
-			}
-
-	        this.BackColor = BODY_COLOR;
-	        this.ForeColor = TEXT_COLOR;
-
-	        MainTabControl.BackColor = BODY_COLOR;
-	        MainTabControl.ForeColor = TEXT_COLOR;
-	        MainTabControl.Refresh();
-
-			Global.ChangeTheme(theme);
-	        foreach (var logsReader in SchemeForms.Values)
-		        logsReader.ChangeTheme(theme);
-		}
 
 		public new async void Dispose()
         {
