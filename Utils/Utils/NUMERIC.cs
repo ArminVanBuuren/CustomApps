@@ -11,6 +11,27 @@ namespace Utils
 		static readonly Regex getNotNumber = new Regex(@"[^0-9]", RegexOptions.Compiled);
 
 		/// <summary>
+		/// Возвращает числа в правильном падеже
+		/// </summary>
+		/// <param name="num"></param>
+		/// <param name="word1"></param>
+		/// <param name="word2"></param>
+		/// <param name="word5"></param>
+		/// <returns></returns>
+		public static string GetWordInCorrectCase(this int num, string word1, string word2, string word5)
+		{
+			var dd = num % 100;
+			if (dd >= 11 && dd <= 19)
+				return word5;
+			var d = num % 10;
+			if (d == 1)
+				return word1;
+			if (d >= 2 && d <= 4)
+				return word2;
+			return word5;
+		}
+
+		/// <summary>
 		/// Обработчик который корректно провыеряет поле, чтобы ввод был строго числовой. Также вставляется позиция корретки
 		/// </summary>
 		/// <param name="oldValue"></param>

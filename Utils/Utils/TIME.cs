@@ -24,21 +24,13 @@ namespace Utils
 		/// <returns></returns>
 		public static string ToReadableString(this TimeSpan span)
 		{
-			var lastDigitDay = Math.Abs(span.Days) % 10;
-			var lastDigitHrs = Math.Abs(span.Hours) % 10;
-			var lastDigitMin = Math.Abs(span.Minutes) % 10;
-			var lastDigitSec = Math.Abs(span.Seconds) % 10;
+			var duration = span.Duration();
 			var formatted = string.Format("{0}{1}{2}{3}",
-				span.Duration().Days > 0
-					? $"{span.Days:0} {(lastDigitDay == 1 && (span.Days == 1 || span.Days > 20) ? Resources.day : lastDigitDay < 5 && lastDigitDay > 0 && (span.Days < 5 || span.Days > 20) ? Resources.days2 : Resources.days5)}, " : string.Empty,
-				span.Duration().Hours > 0 
-					? $"{span.Hours:0} {(lastDigitHrs == 1 && (span.Hours == 1 || span.Hours > 20) ? Resources.hour : lastDigitHrs < 5 && lastDigitHrs > 0 && (span.Hours < 5 || span.Hours > 20) ? Resources.hours2 : Resources.hours5)}, " : string.Empty,
-				span.Duration().Minutes > 0
-					? $"{span.Minutes:0} {(lastDigitMin == 1 && (span.Minutes == 1 || span.Minutes > 20) ? Resources.minute : lastDigitMin < 5 && lastDigitMin > 0 && (span.Minutes < 5 || span.Minutes > 20) ? Resources.minutes2 : Resources.minutes5)}, "
-					: string.Empty,
-				span.Duration().Seconds > 0
-					? $"{span.Seconds:0} {(lastDigitSec == 1 && (span.Seconds == 1 || span.Seconds > 20) ? Resources.second : lastDigitSec < 5 && lastDigitSec > 0 && (span.Seconds < 5 || span.Seconds > 20) ? Resources.seconds2 : Resources.seconds5)}"
-					: string.Empty);
+				duration.Days > 0 ? duration.Days.GetWordInCorrectCase(Resources.day, Resources.days2, Resources.days5) : string.Empty,
+				duration.Hours > 0 ? duration.Hours.GetWordInCorrectCase(Resources.hour, Resources.hours2, Resources.hours5) : string.Empty,
+				duration.Minutes > 0 ? duration.Minutes.GetWordInCorrectCase(Resources.minute, Resources.minutes2, Resources.minutes5) : string.Empty,
+				duration.Seconds > 0 ? duration.Seconds.GetWordInCorrectCase(Resources.second, Resources.seconds2, Resources.seconds5) : string.Empty
+			);
 
 			if (formatted.EndsWith(", "))
 				formatted = formatted.Substring(0, formatted.Length - 2);
