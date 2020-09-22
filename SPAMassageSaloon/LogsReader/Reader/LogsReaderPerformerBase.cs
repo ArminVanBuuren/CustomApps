@@ -220,7 +220,7 @@ namespace LogsReader.Reader
 				if (!REGEX.Verify(findMessage))
 					throw new ArgumentException(string.Format(Resources.Txt_LogsReaderPerformer_IncorrectSearchPattern, findMessage));
 
-				var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, new TimeSpan(0, 0, 1));
+				var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
 				IsMatch = input => searchPattern.IsMatch(input);
 			}
 			else
@@ -241,9 +241,7 @@ namespace LogsReader.Reader
 					if (_transactionValues.ContainsKey(trn))
 						return false;
 
-				var regex = new Regex(Regex.Escape(trn),
-					RegexOptions.Compiled | RegexOptions.CultureInvariant,
-					new TimeSpan(0, 0, 1));
+				var regex = new Regex(Regex.Escape(trn), RegexOptions.Compiled | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
 
 				lock (_syncTrn)
 					_transactionValues.Add(trn, regex);

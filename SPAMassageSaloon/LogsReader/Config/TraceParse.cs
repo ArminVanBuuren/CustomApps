@@ -10,8 +10,6 @@ namespace LogsReader.Config
 	[Serializable]
 	public abstract class TraceParse
 	{
-		public static readonly TimeSpan MATCH_TIMEOUT = new TimeSpan(0, 0, 0, 0, 10000);
-
 		internal abstract bool IsCorrect { get; set; }
 
 		protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None)
@@ -35,9 +33,9 @@ namespace LogsReader.Config
 			else
 			{
 				if (optional == RegexOptions.None)
-					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, MATCH_TIMEOUT);
+					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, LRSettings.PARSING_MATCH_TIMEOUT);
 				else
-					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, MATCH_TIMEOUT);
+					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, LRSettings.PARSING_MATCH_TIMEOUT);
 			}
 		}
 	}

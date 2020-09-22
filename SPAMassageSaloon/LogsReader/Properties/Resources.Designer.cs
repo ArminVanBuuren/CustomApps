@@ -599,7 +599,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use options of invariant culture and ignoring the case. When Regex option of  search is used timeout of completing is 1 second..
+        ///   Looks up a localized string similar to Use options of invariant culture and ignoring the case. When the Regex search option is used, the completion timeout is set in the &apos;@searchingRegExTimeOut&apos; attribute in milliseconds..
         /// </summary>
         public static string Txt_Form_SearchComment {
             get {

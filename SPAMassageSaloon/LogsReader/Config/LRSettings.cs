@@ -66,6 +66,10 @@ namespace LogsReader.Config
         /// </summary>
         public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; } = (template) => (match) => match.GetValueByReplacement(template);
 
+        public static TimeSpan SEARCHING_MATCH_TIMEOUT { get; private set; } = new TimeSpan(0, 0, 0, 0, 1000);
+
+        public static TimeSpan PARSING_MATCH_TIMEOUT { get; private set; } = new TimeSpan(0, 0, 0, 0, 10000);
+
         [XmlIgnore] public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
 
         [XmlAnyElement(nameof(Resources.Txt_LRSettings_PreviousSearchComment))]
@@ -73,6 +77,30 @@ namespace LogsReader.Config
         {
             get => GetComment($"{Resources.Txt_LRSettings_UseRegexComment} {Resources.Txt_LRSettings_SettingsComment}");
             set { }
+        }
+
+        [XmlAttribute("searchingRegExTimeOutMSec")]
+        public double SearchingRegExTimeOut
+        {
+	        get => SEARCHING_MATCH_TIMEOUT.TotalMilliseconds;
+	        set
+	        {
+		        var val = (int)value;
+		        if (val > 0)
+                    SEARCHING_MATCH_TIMEOUT = new TimeSpan(0, 0, 0, 0, val);
+	        }
+        }
+
+        [XmlAttribute("parsingTraceRegExTimeOutMSec")]
+        public double ParsingTraceRegExTimeOut
+        {
+	        get => PARSING_MATCH_TIMEOUT.TotalMilliseconds;
+	        set
+	        {
+		        var val = (int) value;
+		        if (val > 0)
+                    PARSING_MATCH_TIMEOUT = new TimeSpan(0, 0, 0, 0, val);
+	        }
         }
 
         [XmlAttribute("disableHintComments")]
