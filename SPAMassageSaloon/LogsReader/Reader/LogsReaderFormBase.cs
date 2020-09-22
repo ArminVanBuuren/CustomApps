@@ -1690,6 +1690,7 @@ namespace LogsReader.Reader
 				.ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
 
 			var filtered = original
+				.Where(x => x?.TraceName != null)
 				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
 				.Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.Error == null), x.Count(m => !m.IsSuccess)))
 				.OrderBy(x => x.TraceName)
