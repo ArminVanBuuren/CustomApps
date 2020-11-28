@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,6 +84,154 @@ namespace Tester.Console
 </body>
 </html>";
 
+		public enum EquipmentAction
+		{
+			Test1,
+			Test2,
+			Test3
+		}
+
+		public enum SaEquipmentAction
+		{
+			Test1,
+			Test2,
+			Test3
+		}
+
+		class test1 : test
+		{
+			public string Commnet { get; set; }
+		}
+
+		class test2 : test
+		{
+			public string Commnet { get; set; }
+		}
+
+		class test
+		{
+			public EquipmentAction EquipmentAction { get; set; }
+		}
+
+
+		public class ordertest1 : Ordertest
+		{
+			public string PersonalAccount { get; set; }
+			
+			public string Test1 { get; set; }
+		}
+
+		public class ordertest2 : Ordertest
+		{
+			public string PersonalAccount { get; set; }
+		
+			public string Test2 { get; set; }
+		}
+
+		public interface iordertest
+		{
+			string PersonalAccount { get; set; }
+			string PersonalAccountId { get; set; }
+			string Uri { get; set; }
+		}
+
+		public class Ordertest
+		{
+			public string PersonalAccountId { get; set; }
+			public string Uri { get; set; }
+		}
+
+		static void Testttt()
+		{
+			var list1 = new List<ordertest1>
+				{
+					new ordertest1
+					{
+						PersonalAccount = "1111",
+						PersonalAccountId = "1111",
+						Uri = "1111",
+						Test1 = "1111"
+					},
+					new ordertest1
+					{
+						PersonalAccount = "2222",
+						PersonalAccountId = "2222",
+						Uri = "2222",
+						Test1 = "2222"
+					}
+				};
+
+			var list2 = new List<ordertest2>
+				{
+					new ordertest2
+					{
+						PersonalAccount = "3333",
+						PersonalAccountId = "3333",
+						Uri = "3333",
+						Test2 = "3333"
+					},
+					new ordertest2
+					{
+						PersonalAccount = "4444",
+						PersonalAccountId = "4444",
+						Uri = "4444",
+						Test2 = "4444"
+					}
+				};
+
+			Testing(list1);
+			Testing(list2);
+
+
+			//var request = new test1();
+			//request.EquipmentAction = (EquipmentAction)1;
+			//var testest = (test)request;
+			//var dddd = (test2)testest;
+
+			//var test = (SaEquipmentAction)Enum.Parse(typeof(SaEquipmentAction), request.EquipmentAction.ToString());
+		}
+
+		public static DateTime GetLastExecutionDate(string lastExecutionDateStr)
+		{
+			if (string.IsNullOrEmpty(lastExecutionDateStr)
+			   || !DateTime.TryParse(lastExecutionDateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastExecutionDate))
+				return DateTime.Now.AddMinutes(-15);
+			return lastExecutionDate.AddSeconds(-1);
+		}
+
+		public class OrderDocumentData
+		{
+			/// <summary>
+			/// Номер родительской заявки
+			/// </summary>
+			
+			public long OrderId { get; set; }
+
+			/// <summary>
+			/// Дата доставки 
+			/// </summary>
+			
+			public DateTime DeliveryDate { get; set; }
+
+			/// <summary>
+			/// Получатель корреспонденции 
+			/// </summary>
+			
+			public string RecipientFullName { get; set; }
+
+			/// <summary>
+			/// Статус доставки 
+			/// </summary>
+			
+			public string DeliveryStatusCode { get; set; }
+
+			/// <summary>
+			/// Причина недоставки 
+			/// </summary>
+			
+			public string ReasonNoDeliveryCode { get; set; }
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -92,7 +241,46 @@ namespace Tester.Console
 
 			try
 			{
+				//var d = 111111;
+				//var ss = new OrderDocumentData();
 
+				//var ss1 = new List<int>();
+
+				//var sss = ss1.ConvertAll(x => x.ToString());
+
+				//var startString = string.Empty;
+
+				//test:
+				//var start = GetLastExecutionDate(startString);
+				//System.Console.WriteLine($"Start. - {start.ToString("G")}");
+
+				//Thread.Sleep(1000);
+
+				var i = 0;
+				var test11 = (from dd in new string[] { "test", "ste", "efef" } 
+							  select (i++, dd)).ToArray();
+
+				new string[] { "test", "ste", "efef" }.Select(x => (i++, x)).ToArray();
+
+				OrderDocumentData datatest = null;
+				if (datatest is OrderDocumentData datatest11)
+				{
+					System.Console.WriteLine("true!!");
+				}
+
+				object test = "test";
+				string test2 = "test";
+				var list = new List<string>();
+				var sss = list.SingleOrDefault(x => x == "");
+			
+				System.Console.WriteLine(test2.Equals(test));
+
+				//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
+				//System.Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
+				//System.Console.WriteLine($"Stop. - {DateTime.Parse("2020-11-11T17:00:00")}\r\n...........................");
+
+				//Thread.Sleep(5000);
+				//goto test;
 			}
 			catch (Exception e)
 			{
@@ -105,6 +293,32 @@ namespace Tester.Console
 			if (System.Console.ReadKey().Key == ConsoleKey.Enter)
 				goto repeat;
 			System.Console.ReadLine();
+		}
+
+		/// <summary>
+		/// WF2 сохраняет контекстные переменные в самом конце выполнения процесса.
+		/// </summary>
+		/// <param name="currentStartDate">Дата запуска текущего процесса</param>
+		/// <param name="latestStartDateStr">Дата запуска последнего процесса</param>
+		/// <returns></returns>
+		public static string UpdateLatestStartDate(DateTime currentStartDate, string latestStartDateStr)
+		{
+			var dd = currentStartDate.AddSeconds(-1);
+
+			if (string.IsNullOrEmpty(latestStartDateStr)
+				|| !DateTime.TryParse(latestStartDateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var latestStartDate)
+				|| currentStartDate > latestStartDate)
+				return currentStartDate.ToString(CultureInfo.InvariantCulture);
+
+			return latestStartDateStr;
+		}
+
+		static void Testing(IEnumerable<Ordertest> test)
+		{
+			foreach(var dd in test)
+			{
+				System.Console.WriteLine($"{dd.PersonalAccountId} + {dd.Uri}");
+			}
 		}
 
 		static void Test_Linq()
