@@ -72,7 +72,7 @@ namespace Tester.Console
 		public int FormatId { get; set; }
 	}
 
-	class Program
+    static class Program
 	{
 
 
@@ -171,10 +171,6 @@ namespace Tester.Console
 					}
 				};
 
-			Testing(list1);
-			Testing(list2);
-
-
 			//var request = new test1();
 			//request.EquipmentAction = (EquipmentAction)1;
 			//var testest = (test)request;
@@ -236,24 +232,24 @@ namespace Tester.Console
 
 				//Thread.Sleep(1000);
 
-				var i = 0;
-				var test11 = (from dd in new string[] { "test", "ste", "efef" } 
-							  select (i++, dd)).ToArray();
+				//var i = 0;
+				//var test11 = (from dd in new string[] { "test", "ste", "efef" } 
+				//			  select (i++, dd)).ToArray();
 
-				new string[] { "test", "ste", "efef" }.Select(x => (i++, x)).ToArray();
+				//new string[] { "test", "ste", "efef" }.Select(x => (i++, x)).ToArray();
 
-				OrderDocumentData datatest = null;
-				if (datatest is OrderDocumentData datatest11)
-				{
-					System.Console.WriteLine("true!!");
-				}
+				//OrderDocumentData datatest = null;
+				//if (datatest is OrderDocumentData datatest11)
+				//{
+				//	System.Console.WriteLine("true!!");
+				//}
 
-				object test = "test";
-				string test2 = "test";
-				var list = new List<string>();
-				var sss = list.SingleOrDefault(x => x == "");
+				//object test = "test";
+				//string test2 = "test";
+				//var list = new List<string>();
+				//var sss = list.SingleOrDefault(x => x == "");
 			
-				System.Console.WriteLine(test2.Equals(test));
+				//System.Console.WriteLine(test2.Equals(test));
 
 				//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
 				//System.Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
@@ -261,6 +257,30 @@ namespace Tester.Console
 
 				//Thread.Sleep(5000);
 				//goto test;
+
+                var test = new OrderAttributeContainer
+                {
+                    TableAttributes = new Dictionary<string, TableValuePaged>()
+                    {
+                        {
+                            "EdmDeliveryStatus", new TableValuePaged
+                            {
+                                Columns = new Dictionary<string, List<object>>
+                                {
+                                    {
+                                        "EdmDeliveryStatusCode", new List<object>
+                                        {
+                                            "10", "44"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                
+                System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
 			}
 			catch (Exception e)
 			{
@@ -274,6 +294,24 @@ namespace Tester.Console
 				goto repeat;
 			System.Console.ReadLine();
 		}
+
+        class OrderAttributeContainer
+        {
+			public Dictionary<string, TableValuePaged> TableAttributes { get; set; }
+
+		}
+
+        class TableValuePaged
+        {
+            public Dictionary<string, List<object>> Columns { get; set; }
+        }
+
+
+		private static bool IsTableValueChanged<T>(this OrderAttributeContainer order, string tableName, string attrName, T newValue)
+            where T : class
+            => order.TableAttributes.IsNullOrEmpty() || !order.TableAttributes.TryGetValue(tableName, out var tableValue)
+                                                     || tableValue.Columns.IsNullOrEmpty() || !tableValue.Columns.TryGetValue(attrName, out var attrValueList)
+                                                     || attrValueList.IsNullOrEmpty() || !newValue.Equals(attrValueList.Last());
 
 		static void Test_Linq()
 		{
@@ -375,7 +413,7 @@ namespace Tester.Console
 				;
 		}
 
-		void Test_SpecifyOrderBy()
+		static void Test_SpecifyOrderBy()
 		{
 			var data = new string[]
 			{
