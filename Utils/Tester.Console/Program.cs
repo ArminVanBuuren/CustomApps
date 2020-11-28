@@ -47,42 +47,34 @@ namespace Tester.Console
 		public bool OnPause { get; set; } = true;
 	}
 
+	static class test
+	{
+		internal static bool MatchInteraction(this InteractionInfo x, InteractionInfo y)
+		{
+			return (!string.IsNullOrEmpty(x.FnsId) && x.FnsId == y.FnsId)
+			       || (x.Operator.Code == y.Operator.Code && x.Counteragent.Inn == y.Counteragent.Inn);
+		}
+	}
+
+	class DocumentItem
+	{
+		public List<DeliveryMethod> DeliveryMethods { get; set; }
+	}
+
+	class DeliveryMethod
+	{
+		public int Code { get; set; }
+		public List<DocumentFormat> Formats { get; set; }
+	}
+
+	class DocumentFormat
+	{
+		public int FormatId { get; set; }
+	}
+
 	class Program
 	{
 
-		static string _temp = @"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
-<html>
-<head>
-    <meta http-equiv=""Content-Type"" content=""text/html charset=UTF-8"" />
-</head>
-<body link=""blue"" vlink=""blue"" alink=""blue"">
-    <table cellpadding=""0"" cellspacing=""0"" border=""0"">
-        <tr>
-            <td>
-                <table style=""color:#222;font-family:Calibri;padding-top:8px;font-weight: bold; font-size:11px;"" border=""0"" cellpadding=""0"" cellspacing=""0"">
-                    <tr>
-                        <td>
-              Уважаемый клиент!<br/><br/>
-              Заказанные Вами документы находятся во вложении.<br/><br/>
-              Обратите внимание! Большинство сервисных операций по вашему мобильному или фиксированному контракту вы можете осуществлять самостоятельно в режиме онлайн через сервисы самообслуживания:<br/>
-              •  «Виртуальный менеджер» для корпоративных клиентов мобильной связи: 
-                <a href=""https://mts.ru/business/podderzhka/obsluzhivanie-klientov/virtualniy-menedzher"">https://mts.ru/business/podderzhka/obsluzhivanie-klientov/virtualniy-menedzher</a><br/>
-              •  Для частных клиентов мобильной связи «Личный кабинет МТС»: 
-                <a href=""https://login.mts.ru/amserver/UI/Login"">https://login.mts.ru/amserver/UI/Login</a> и «Мой МТС»: 
-                <a href=""https://mts.ru/personal/mobilnaya-svyaz/uslugi/mobilnaya-svyaz/moy-mts "">https://mts.ru/personal/mobilnaya-svyaz/uslugi/mobilnaya-svyaz/moy-mts</a><br/>
-              •  Личные кабинеты для фиксированной связи: <a href=""https://mts.ru/business/cabinetlinks"">https://mts.ru/business/cabinetlinks</a><br/><br/>
-              Операции совершаются в режиме онлайн и из любой точки мира, где есть интернет.<br/>
-              Данное сообщение было создано автоматически, пожалуйста, не отвечайте на него.<br/><br/>
-              Ответы на часто задаваемые вопросы Вы найдёте по ссылке: <a href=""https://mts.ru/personal/faq/mob_connect"">https://mts.ru/personal/faq/mob_connect</a><br/><br/>
-              The correspondence ordered by you is in the attachment.
-            </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>";
 
 		public enum EquipmentAction
 		{
@@ -241,18 +233,6 @@ namespace Tester.Console
 
 			try
 			{
-				//var d = 111111;
-				//var ss = new OrderDocumentData();
-
-				//var ss1 = new List<int>();
-
-				//var sss = ss1.ConvertAll(x => x.ToString());
-
-				//var startString = string.Empty;
-
-				//test:
-				//var start = GetLastExecutionDate(startString);
-				//System.Console.WriteLine($"Start. - {start.ToString("G")}");
 
 				//Thread.Sleep(1000);
 
@@ -293,32 +273,6 @@ namespace Tester.Console
 			if (System.Console.ReadKey().Key == ConsoleKey.Enter)
 				goto repeat;
 			System.Console.ReadLine();
-		}
-
-		/// <summary>
-		/// WF2 сохраняет контекстные переменные в самом конце выполнения процесса.
-		/// </summary>
-		/// <param name="currentStartDate">Дата запуска текущего процесса</param>
-		/// <param name="latestStartDateStr">Дата запуска последнего процесса</param>
-		/// <returns></returns>
-		public static string UpdateLatestStartDate(DateTime currentStartDate, string latestStartDateStr)
-		{
-			var dd = currentStartDate.AddSeconds(-1);
-
-			if (string.IsNullOrEmpty(latestStartDateStr)
-				|| !DateTime.TryParse(latestStartDateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var latestStartDate)
-				|| currentStartDate > latestStartDate)
-				return currentStartDate.ToString(CultureInfo.InvariantCulture);
-
-			return latestStartDateStr;
-		}
-
-		static void Testing(IEnumerable<Ordertest> test)
-		{
-			foreach(var dd in test)
-			{
-				System.Console.WriteLine($"{dd.PersonalAccountId} + {dd.Uri}");
-			}
 		}
 
 		static void Test_Linq()
