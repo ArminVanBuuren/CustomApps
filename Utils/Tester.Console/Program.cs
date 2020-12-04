@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Security;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
@@ -248,7 +250,7 @@ namespace Tester.Console
 				//string test2 = "test";
 				//var list = new List<string>();
 				//var sss = list.SingleOrDefault(x => x == "");
-			
+
 				//System.Console.WriteLine(test2.Equals(test));
 
 				//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -258,29 +260,117 @@ namespace Tester.Console
 				//Thread.Sleep(5000);
 				//goto test;
 
-                var test = new OrderAttributeContainer
+                var tesss1 = new List<OrderDocumentRequestTemp>
                 {
-                    TableAttributes = new Dictionary<string, TableValuePaged>()
+                    new OrderDocumentRequestTemp
                     {
+                        DocumentTypeId = 1,
+                        ContractNumber = "111"
+                    },
+                    new OrderDocumentRequestTemp
+                    {
+                        DocumentTypeId = 3,
+                        ContractNumber = "222"
+                    },
+                    new OrderDocumentRequestTemp
+                    {
+                        DocumentTypeId = 1,
+                        ContractNumber = "333"
+                    },
+                    new OrderDocumentRequestTemp
+                    {
+                        DocumentTypeId = 2,
+                        ContractNumber = "444"
+                    }
+                };
+
+                var testttt = tesss1.GroupBy(x => x.DocumentTypeId).Select(x => x.ToList());
+
+
+
+				var psList = GetOrderDocumentByPersonalAccountRequests();
+                var cList = GetOrderDocumentByContractRequests();
+
+                void tesss(IEnumerable<OrderDocumentRequestTemp> items)
+                {
+                    foreach (var data in items)
+                    {
+						System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
+						foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
                         {
-                            "EdmDeliveryStatus", new TableValuePaged
+                            System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
+                            foreach (var row in table.Rows.OfType<DataRow>())
                             {
-                                Columns = new Dictionary<string, List<object>>
+                                System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
+
+                                foreach (var column in table.Columns.OfType<DataColumn>())
                                 {
-                                    {
-                                        "EdmDeliveryStatusCode", new List<object>
-                                        {
-                                            "10", "44"
-                                        }
-                                    }
+                                    System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
                                 }
                             }
                         }
                     }
-                };
+				}
 
-                
-                System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
+                void Tessst2(Dictionary<string, List<DocParameter>> items)
+                {
+                    System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
+				}
+
+                tesss(psList);
+                System.Console.WriteLine(new string('-', 25));
+
+				tesss(cList);
+                System.Console.WriteLine(new string('-', 25));
+
+				var psParams = new Dictionary<string, List<DocParameter>>();
+                foreach (var fff in psList)
+                {
+                    psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
+                }
+                Tessst2(psParams);
+                System.Console.WriteLine(new string('-', 25));
+
+				var cParams = new Dictionary<string, List<DocParameter>>();
+				foreach (var fff2 in cList)
+                {
+                    cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
+				}
+                Tessst2(cParams);
+				System.Console.WriteLine(new string('-', 25));
+
+
+				//            long? test1 = int.MaxValue;
+
+				//            int? test2 = test1 <= int.MaxValue ? (int?) test1 : null;
+
+				//            test1 = null;
+				//            int? test3 = test1 <= int.MaxValue ? (int?) test1 : null;
+
+
+				//var test = new OrderAttributeContainer
+				//            {
+				//                TableAttributes = new Dictionary<string, TableValuePaged>()
+				//                {
+				//                    {
+				//                        "EdmDeliveryStatus", new TableValuePaged
+				//                        {
+				//                            Columns = new Dictionary<string, List<object>>
+				//                            {
+				//                                {
+				//                                    "EdmDeliveryStatusCode", new List<object>
+				//                                    {
+				//                                        "10", "44"
+				//                                    }
+				//                                }
+				//                            }
+				//                        }
+				//                    }
+				//                }
+				//            };
+
+
+				//System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
 			}
 			catch (Exception e)
 			{
@@ -295,7 +385,255 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
-        class OrderAttributeContainer
+        [Serializable]
+        public class DocParameter
+		{
+            public DocParameter()
+            {
+            }
+
+            public DocParameter(string name, DocParameterItem[] items)
+            {
+                this.Name = name;
+                this.Items = items;
+            }
+
+            
+            public string Name { get; set; }
+
+            public DocParameterItem[] Items { get; set; }
+
+            public override string ToString() => $"Table Name='{Name}' Count={Items.Length}";
+
+            public string ToString2() => $"{ToString()}{string.Join("", Items.Select(x => $"\r\n\t{x.ToString2()}"))}";
+		}
+
+        [Serializable]
+        public class DocParameterItem
+		{
+            public DocParameterItem()
+            {
+            }
+
+            public DocParameterItem(DocProperty[] properties)
+            {
+                this.Properties = properties;
+            }
+
+            public DocProperty[] Properties { get; set; }
+
+            public override string ToString() => $"Row Count={Properties.Length}";
+
+            public string ToString2() => $"{ToString()}{string.Join("", Properties.Select(x => $"\r\n\t\t{x}"))}";
+		}
+
+        [Serializable]
+        public class DocProperty
+		{
+            public DocProperty()
+            {
+            }
+
+            public DocProperty(string name, object value)
+            {
+                this.Name = name;
+                this.Value = value;
+            }
+
+            public string Name { get; set; }
+
+            public object Value { get; set; }
+
+            public override string ToString() => $"Name='{Name}' Value='{Value}'";
+        }
+
+        public class OrderDocumentRequestTemp
+        {
+            [DataMember]
+            public Guid DataItemId { get; set; }
+
+            /// <summary>
+            /// Номер контракта
+            /// </summary>
+            [DataMember]
+            public string ContractNumber { get; set; }
+
+            /// <summary>
+            /// Номер лицевого счета
+            /// </summary>
+            [DataMember]
+            public string[] PersonalAccountNumbers { get; set; }
+
+            /// <summary>
+            /// Идентификатор наименования документа
+            /// </summary>
+            [DataMember]
+            public int DocumentNameId { get; set; }
+
+            /// <summary>
+            /// Идентификатор типа документа
+            /// </summary>
+            [DataMember]
+            public int DocumentTypeId { get; set; }
+
+            /// <summary>
+            /// Номер заявки Order Storage, с которой связан заказ документа в Doc
+            /// </summary>
+            [DataMember]
+            public long OrderId { get; set; }
+
+            /// <summary>
+            /// Дополнительные параметры, передаваемые в Doc.
+            /// Если бы сейчас был жив Сталин, он бы любителями DataSet'ов баню топил
+            /// </summary>
+            [DataMember]
+            public DataSet AdditionalParameters { get; set; }
+
+            /// <summary>
+            /// Время жизни документа в днях
+            /// </summary>
+            [DataMember]
+            public int DaysOfDocumentLife { get; set; }
+
+            /// <summary>
+            /// Идентификтор заявки на формирование документа, возвращаемый системой Doc
+            /// </summary>
+            [DataMember]
+            public long DocRequestId { get; set; }
+
+            /// <summary>
+            /// Ссылка на заказанный документ
+            /// </summary>
+            [DataMember]
+            public string Uri { get; set; }
+
+			/// <summary>
+			/// Идентификатор поставщика услуг.
+			/// </summary>
+			[DataMember]
+			public long ServiceProviderId { get; set; }
+
+            public override string ToString() => $"ContractNumber='{ContractNumber}'";
+		}
+
+		public static IEnumerable<OrderDocumentRequestTemp> GetOrderDocumentByPersonalAccountRequests()
+        {
+            var list = new List<string> {"1", "2", "3", "4", "5", "6"};
+            var temp = new[] {"121212121212", "34343434343", "5454545454", "56565665565", "767676767676", "787878787878"};
+
+			return list.Select(paGroup => new OrderDocumentRequestTemp
+            {
+                DataItemId = Guid.NewGuid(),
+                PersonalAccountNumbers = temp,
+                ContractNumber = paGroup,
+                DaysOfDocumentLife = 999,
+                DocumentNameId = 1111,
+                DocumentTypeId = 1111,
+                AdditionalParameters = GetParameters(temp.ToList(), DateTime.MinValue, DateTime.MaxValue),
+                ServiceProviderId = 123456789
+            });
+        }
+
+        public static IEnumerable<OrderDocumentRequestTemp> GetOrderDocumentByContractRequests()
+        {
+            var list = new List<string> { "1", "2", "3", "4", "5", "6" };
+
+			return list.Select(c => new OrderDocumentRequestTemp
+            {
+                DataItemId = Guid.NewGuid(),
+                ContractNumber = c,
+                DaysOfDocumentLife = 999,
+                DocumentNameId = 2222,
+                DocumentTypeId = 2222,
+                AdditionalParameters = GetParameters(long.Parse(c), c + "_12345", DateTime.MinValue, DateTime.MaxValue),
+                ServiceProviderId = 123456789
+			});
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000")]
+        private static DataSet GetParameters(long contractId, string contractNumber, DateTime dateFrom, DateTime dateTo)
+        {
+            DataSet result = CreateDataSet();
+
+            DataTable contractTable = result.Tables.Add("Contract");
+            contractTable.Columns.Add("Id", typeof(long));
+            contractTable.Columns.AddNumberColumn(typeof(string));
+            contractTable.Rows.Add(contractId, contractNumber);
+
+            result.AddPeriodsTable(dateFrom, dateTo);
+
+            return result;
+        }
+
+        private static readonly DateTime _dateTimeNullValue = new DateTime(100, 1, 1);
+        private static DataSet GetParameters(List<string> personalAccounts, DateTime dateFrom, DateTime dateTo)
+        {
+            DataSet result = CreateDataSet();
+
+            var personalAccountWithPeriodListTable = result.Tables.Add("PersonalAccountWithPeriodList");
+            personalAccountWithPeriodListTable.Columns.AddNumberColumn(typeof(long));
+            personalAccountWithPeriodListTable.Columns.AddFromColumn();
+            personalAccountWithPeriodListTable.Columns.AddToColumn();
+
+            personalAccounts.ForEach(personalAccount =>
+            {
+                personalAccountWithPeriodListTable.Rows.Add
+                (
+                    long.Parse(personalAccount, CultureInfo.InvariantCulture),
+                    DateTime.MinValue,
+					DateTime.MaxValue
+				);
+            });
+
+            result.AddPeriodsTable(dateFrom, dateTo);
+
+            return result;
+        }
+
+        private static void AddPeriodsTable(this DataSet dataSet, DateTime dateFrom, DateTime dateTo)
+        {
+            DataTable periodTable = dataSet.Tables.Add("DocumentPeriod");
+            periodTable.Columns.AddFromColumn();
+            periodTable.Columns.AddToColumn();
+            periodTable.Rows.Add(dateFrom, dateTo);
+        }
+
+		private static DataSet CreateDataSet() => new DataSet("I_Additional_Params");
+        private static void AddNumberColumn(this DataColumnCollection columns, Type type) => columns.Add("Number", type);
+        private static void AddFromColumn(this DataColumnCollection columns) => columns.Add("From", typeof(DateTime));
+        private static void AddToColumn(this DataColumnCollection columns) => columns.Add("To", typeof(DateTime));
+
+        private static List<DocParameter> ConvertToListParameters(this DataSet additionalParameters)
+        {
+            var result = new List<DocParameter>();
+
+            if (additionalParameters.Tables.Count == 0)
+                return result;
+
+            var dd = additionalParameters.Tables.OfType<DataTable>();
+
+            result.AddRange(
+                from table in additionalParameters.Tables.OfType<DataTable>()
+                from row in table.Rows.OfType<DataRow>()
+                select CreateDocParameter(table.TableName, table.Columns.OfType<DataColumn>(), row));
+
+            return result;
+        }
+
+        private static DocParameter CreateDocParameter(string name, IEnumerable<DataColumn> columns, DataRow row)
+            => new DocParameter
+            {
+                Name = name,
+                Items = new[]
+                {
+                    new DocParameterItem
+                    {
+                        Properties = columns.Select(col => new DocProperty{ Name = col.ColumnName, Value = row[col.ColumnName] } ).ToArray()
+                    }
+                }
+            };
+
+		class OrderAttributeContainer
         {
 			public Dictionary<string, TableValuePaged> TableAttributes { get; set; }
 
