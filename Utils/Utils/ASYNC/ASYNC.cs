@@ -8,11 +8,29 @@ namespace Utils
 {
     public static class ASYNC
     {
+        private static readonly TaskFactory factory = new TaskFactory(default,
+                TaskCreationOptions.None,
+                TaskContinuationOptions.None,
+                TaskScheduler.Default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="task"></param>
+        public static void RunSync(this Func<Task> task)
+            => factory.StartNew(task).Unwrap().GetAwaiter().GetResult();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="task"></param>
+        public static T RunSync<T>(this Func<Task<T>> task)
+            => factory.StartNew(task).Unwrap().GetAwaiter().GetResult();
+
         /// <summary T="method which has a void return value synchronously">
         /// Execute an async Task
         /// </summary>
-        /// <param name="task" T="method to execute">Task</param>
-        public static void RunSync(Func<Task> task)
+        public static void RunSync2(this Func<Task> task)
         {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
@@ -44,7 +62,7 @@ namespace Utils
         /// <typeparam name="T">Return Type</typeparam>
         /// <param name="task">Task&lt;T&gt; method to execute</param>
         /// <returns></returns>
-        public static T RunSync<T>(Func<Task<T>> task)
+        public static T RunSync2<T>(Func<Task<T>> task)
         {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
@@ -76,7 +94,7 @@ namespace Utils
             if (await Task.WhenAny(task, Task.Delay(millisecondsTimeout)) == task)
             {
                 // task completed within timeout
-                return task.Result;
+                return await task.ConfigureAwait(false);
             }
 
             // timeout logic

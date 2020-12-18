@@ -9,10 +9,16 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Security;
 using System.Security.Policy;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using Microsoft.XmlDiffPatch;
 using Oracle.ManagedDataAccess.Client;
+using Org.XmlUnit;
+using Org.XmlUnit.Builder;
+using Org.XmlUnit.Diff;
 using Utils;
 
 namespace Tester.Console
@@ -222,7 +228,67 @@ namespace Tester.Console
 			public string ReasonNoDeliveryCode { get; set; }
 		}
 
-		static void Main(string[] args)
+		private static void CompareXml(string file1, string file2)
+		{
+			XmlReader reader1 = XmlReader.Create(new StringReader(file1));
+			XmlReader reader2 = XmlReader.Create(new StringReader(file2));
+
+			string diffFile = @"C:\tmp\1.txt";
+			StringBuilder differenceStringBuilder = new StringBuilder();
+
+			FileStream fs = new FileStream(diffFile, FileMode.Create);
+			XmlWriter diffGramWriter = XmlWriter.Create(fs);
+
+			XmlDiff xmldiff = new XmlDiff(
+				XmlDiffOptions.IgnoreChildOrder 
+				| XmlDiffOptions.IgnoreNamespaces 
+				| XmlDiffOptions.IgnorePrefixes
+				| XmlDiffOptions.IgnoreWhitespace
+				| XmlDiffOptions.IgnoreComments
+				| XmlDiffOptions.IgnoreDtd);
+			bool bIdentical = xmldiff.Compare(file1, file2, false, diffGramWriter);
+
+			diffGramWriter.Close();
+		}
+
+		public static void CompareXml2(string file1, string file2)
+		{
+			ISource control = Input.FromFile(file1).Build();
+			ISource test = Input.FromFile(file2).Build();
+			IDifferenceEngine diff = new DOMDifferenceEngine();
+			diff.DifferenceListener += (comparison, outcome) => 
+			{
+				try
+				{
+					System.Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
+				}	
+				catch(Exception ex)
+				{
+					System.Console.WriteLine(ex);
+				}
+			};
+			diff.Compare(control, test);
+		}
+
+        
+
+
+        class Testbase
+        {
+
+        }
+
+        class Tesing : Testbase
+		{
+
+        }
+
+        class Tesitng2 : Tesing
+		{
+
+        }
+
+        static void Main(string[] args)
 		{
 			repeat:
 			System.Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
@@ -230,8 +296,39 @@ namespace Tester.Console
 			stopWatch.Start();
 
 			try
-			{
+            {
+                var asynnc = new Func<Task<bool>>(async () =>
+                {
+                    System.Console.Write("Working");
+                    for (var i = 0; i < 10; i++)
+                    {
+                        Thread.Sleep(500);
+                        System.Console.Write(".");
+                    }
 
+                    System.Console.WriteLine("\r\nFinished");
+                    return false;
+                });
+
+                //var func = Task.Factory.StartNew<bool>(asynnc);
+                asynnc.RunSync();
+                asynnc.RunSync2();
+
+				//var subsOnMe = IO.SafeReadFile(@"C:\tmp\подписаныНаМеня.txt");
+				//var mySubs = IO.SafeReadFile(@"C:\tmp\моиПодписки.txt");
+
+
+				//var subsOnMe1 = subsOnMe.Split('\n').Select(x => x.Trim()).ToList();
+				//var mySubs1 = mySubs.Split('\n').Select(x => x.Trim()).ToList();
+
+				//System.Console.WriteLine($"На меня не подписаны:");
+				//mySubs1.Except(subsOnMe1).ForEach(x => System.Console.WriteLine(x));
+
+				//System.Console.WriteLine($"\r\nЯ не подписан на:");
+				//subsOnMe1.Except(mySubs1).ForEach(x => System.Console.WriteLine(x));
+
+				//CompareXml2(@"C:\tmp\expected.txt", @"C:\tmp\sent.txt");
+				//return;	
 				//Thread.Sleep(1000);
 
 				//var i = 0;
@@ -260,84 +357,90 @@ namespace Tester.Console
 				//Thread.Sleep(5000);
 				//goto test;
 
-                var tesss1 = new List<OrderDocumentRequestTemp>
-                {
-                    new OrderDocumentRequestTemp
-                    {
-                        DocumentTypeId = 1,
-                        ContractNumber = "111"
-                    },
-                    new OrderDocumentRequestTemp
-                    {
-                        DocumentTypeId = 3,
-                        ContractNumber = "222"
-                    },
-                    new OrderDocumentRequestTemp
-                    {
-                        DocumentTypeId = 1,
-                        ContractNumber = "333"
-                    },
-                    new OrderDocumentRequestTemp
-                    {
-                        DocumentTypeId = 2,
-                        ContractNumber = "444"
-                    }
-                };
-
-                var testttt = tesss1.GroupBy(x => x.DocumentTypeId).Select(x => x.ToList());
+				//var testtt  = $"{DateTime.Now:dd.MM.yyyy_HH-mm-ss-ff}";
 
 
+				//var tesss1 = new List<OrderDocumentRequestTemp>
+				//            {
+				//                new OrderDocumentRequestTemp
+				//                {
+				//                    DocumentTypeId = 1,
+				//                    ContractNumber = "6"
+				//                },
+				//                new OrderDocumentRequestTemp
+				//                {
+				//                    DocumentTypeId = 3,
+				//                    ContractNumber = "222"
+				//                },
+				//                new OrderDocumentRequestTemp
+				//                {
+				//                    DocumentTypeId = 1,
+				//                    ContractNumber = "333"
+				//                },
+				//                new OrderDocumentRequestTemp
+				//                {
+				//                    DocumentTypeId = 2,
+				//                    ContractNumber = "444"
+				//                }
+				//            };
 
-				var psList = GetOrderDocumentByPersonalAccountRequests();
-                var cList = GetOrderDocumentByContractRequests();
 
-                void tesss(IEnumerable<OrderDocumentRequestTemp> items)
-                {
-                    foreach (var data in items)
-                    {
-						System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
-						foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
-                        {
-                            System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
-                            foreach (var row in table.Rows.OfType<DataRow>())
-                            {
-                                System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
+				//var ssss = tesss1.Max(x => x.ContractNumber);
 
-                                foreach (var column in table.Columns.OfType<DataColumn>())
-                                {
-                                    System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
-                                }
-                            }
-                        }
-                    }
-				}
+				//var testttt = tesss1.GroupBy(x => x.DocumentTypeId).Select(x => x.ToList());
 
-                void Tessst2(Dictionary<string, List<DocParameter>> items)
-                {
-                    System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
-				}
 
-                tesss(psList);
-                System.Console.WriteLine(new string('-', 25));
 
-				tesss(cList);
-                System.Console.WriteLine(new string('-', 25));
+				//var psList = GetOrderDocumentByPersonalAccountRequests();
+				//            var cList = GetOrderDocumentByContractRequests();
 
-				var psParams = new Dictionary<string, List<DocParameter>>();
-                foreach (var fff in psList)
-                {
-                    psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
-                }
-                Tessst2(psParams);
-                System.Console.WriteLine(new string('-', 25));
+				//            void tesss(IEnumerable<OrderDocumentRequestTemp> items)
+				//            {
+				//                foreach (var data in items)
+				//                {
+				//		System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
+				//		foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
+				//                    {
+				//                        System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
+				//                        foreach (var row in table.Rows.OfType<DataRow>())
+				//                        {
+				//                            System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
 
-				var cParams = new Dictionary<string, List<DocParameter>>();
-				foreach (var fff2 in cList)
-                {
-                    cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
-				}
-                Tessst2(cParams);
-				System.Console.WriteLine(new string('-', 25));
+				//                            foreach (var column in table.Columns.OfType<DataColumn>())
+				//                            {
+				//                                System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
+				//                            }
+				//                        }
+				//                    }
+				//                }
+				//}
+
+				//            void Tessst2(Dictionary<string, List<DocParameter>> items)
+				//            {
+				//                System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
+				//}
+
+				//            tesss(psList);
+				//            System.Console.WriteLine(new string('-', 25));
+
+				//tesss(cList);
+				//            System.Console.WriteLine(new string('-', 25));
+
+				//var psParams = new Dictionary<string, List<DocParameter>>();
+				//            foreach (var fff in psList)
+				//            {
+				//                psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
+				//            }
+				//            Tessst2(psParams);
+				//            System.Console.WriteLine(new string('-', 25));
+
+				//var cParams = new Dictionary<string, List<DocParameter>>();
+				//foreach (var fff2 in cList)
+				//            {
+				//                cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
+				//}
+				//            Tessst2(cParams);
+				//System.Console.WriteLine(new string('-', 25));
 
 
 				//            long? test1 = int.MaxValue;
