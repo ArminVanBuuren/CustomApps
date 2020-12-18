@@ -24,7 +24,7 @@ namespace Utils
         /// 
         /// </summary>
         /// <param name="task"></param>
-        public static T RunSync<T>(this Func<Task<T>> task)
+        public static TResult RunSync<TResult>(this Func<Task<TResult>> task)
             => factory.StartNew(task).Unwrap().GetAwaiter().GetResult();
 
         /// <summary T="method which has a void return value synchronously">
