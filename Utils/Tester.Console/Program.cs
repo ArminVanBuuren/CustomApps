@@ -29,6 +29,7 @@ namespace Tester.Console
 	}
 
 	public delegate void DelegateTest(string value);
+
 	public class TestingEvents
 	{
 		public event DelegateTest DelegateTest;
@@ -39,13 +40,15 @@ namespace Tester.Console
 		}
 	}
 
-	class  testClass
+	class testClass
 	{
 		private static int _test = 0;
+
 		public testClass()
 		{
 			CountTest = ++_test;
 		}
+
 		public int CountTest { get; }
 	}
 
@@ -80,7 +83,7 @@ namespace Tester.Console
 		public int FormatId { get; set; }
 	}
 
-    static class Program
+	static class Program
 	{
 
 
@@ -117,14 +120,14 @@ namespace Tester.Console
 		public class ordertest1 : Ordertest
 		{
 			public string PersonalAccount { get; set; }
-			
+
 			public string Test1 { get; set; }
 		}
 
 		public class ordertest2 : Ordertest
 		{
 			public string PersonalAccount { get; set; }
-		
+
 			public string Test2 { get; set; }
 		}
 
@@ -144,40 +147,40 @@ namespace Tester.Console
 		static void Testttt()
 		{
 			var list1 = new List<ordertest1>
+			{
+				new ordertest1
 				{
-					new ordertest1
-					{
-						PersonalAccount = "1111",
-						PersonalAccountId = "1111",
-						Uri = "1111",
-						Test1 = "1111"
-					},
-					new ordertest1
-					{
-						PersonalAccount = "2222",
-						PersonalAccountId = "2222",
-						Uri = "2222",
-						Test1 = "2222"
-					}
-				};
+					PersonalAccount = "1111",
+					PersonalAccountId = "1111",
+					Uri = "1111",
+					Test1 = "1111"
+				},
+				new ordertest1
+				{
+					PersonalAccount = "2222",
+					PersonalAccountId = "2222",
+					Uri = "2222",
+					Test1 = "2222"
+				}
+			};
 
 			var list2 = new List<ordertest2>
+			{
+				new ordertest2
 				{
-					new ordertest2
-					{
-						PersonalAccount = "3333",
-						PersonalAccountId = "3333",
-						Uri = "3333",
-						Test2 = "3333"
-					},
-					new ordertest2
-					{
-						PersonalAccount = "4444",
-						PersonalAccountId = "4444",
-						Uri = "4444",
-						Test2 = "4444"
-					}
-				};
+					PersonalAccount = "3333",
+					PersonalAccountId = "3333",
+					Uri = "3333",
+					Test2 = "3333"
+				},
+				new ordertest2
+				{
+					PersonalAccount = "4444",
+					PersonalAccountId = "4444",
+					Uri = "4444",
+					Test2 = "4444"
+				}
+			};
 
 			//var request = new test1();
 			//request.EquipmentAction = (EquipmentAction)1;
@@ -190,7 +193,7 @@ namespace Tester.Console
 		public static DateTime GetLastExecutionDate(string lastExecutionDateStr)
 		{
 			if (string.IsNullOrEmpty(lastExecutionDateStr)
-			   || !DateTime.TryParse(lastExecutionDateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastExecutionDate))
+			    || !DateTime.TryParse(lastExecutionDateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastExecutionDate))
 				return DateTime.Now.AddMinutes(-15);
 			return lastExecutionDate.AddSeconds(-1);
 		}
@@ -200,31 +203,31 @@ namespace Tester.Console
 			/// <summary>
 			/// Номер родительской заявки
 			/// </summary>
-			
+
 			public long OrderId { get; set; }
 
 			/// <summary>
 			/// Дата доставки 
 			/// </summary>
-			
+
 			public DateTime DeliveryDate { get; set; }
 
 			/// <summary>
 			/// Получатель корреспонденции 
 			/// </summary>
-			
+
 			public string RecipientFullName { get; set; }
 
 			/// <summary>
 			/// Статус доставки 
 			/// </summary>
-			
+
 			public string DeliveryStatusCode { get; set; }
 
 			/// <summary>
 			/// Причина недоставки 
 			/// </summary>
-			
+
 			public string ReasonNoDeliveryCode { get; set; }
 		}
 
@@ -240,8 +243,8 @@ namespace Tester.Console
 			XmlWriter diffGramWriter = XmlWriter.Create(fs);
 
 			XmlDiff xmldiff = new XmlDiff(
-				XmlDiffOptions.IgnoreChildOrder 
-				| XmlDiffOptions.IgnoreNamespaces 
+				XmlDiffOptions.IgnoreChildOrder
+				| XmlDiffOptions.IgnoreNamespaces
 				| XmlDiffOptions.IgnorePrefixes
 				| XmlDiffOptions.IgnoreWhitespace
 				| XmlDiffOptions.IgnoreComments
@@ -256,13 +259,13 @@ namespace Tester.Console
 			ISource control = Input.FromFile(file1).Build();
 			ISource test = Input.FromFile(file2).Build();
 			IDifferenceEngine diff = new DOMDifferenceEngine();
-			diff.DifferenceListener += (comparison, outcome) => 
+			diff.DifferenceListener += (comparison, outcome) =>
 			{
 				try
 				{
 					System.Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
-				}	
-				catch(Exception ex)
+				}
+				catch (Exception ex)
 				{
 					System.Console.WriteLine(ex);
 				}
@@ -270,49 +273,53 @@ namespace Tester.Console
 			diff.Compare(control, test);
 		}
 
-        
 
 
-        class Testbase
-        {
 
-        }
-
-        class Tesing : Testbase
+		class Testbase
 		{
 
-        }
+		}
 
-        class Tesitng2 : Tesing
+		class Tesing : Testbase
 		{
 
-        }
+		}
 
-        static void Main(string[] args)
+		class Tesitng2 : Tesing
+		{
+			public List<string> Prop { get; set; }
+		}
+
+		static void Main(string[] args)
 		{
 			repeat:
-			System.Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
+			System.Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
 
 			try
-            {
-                var asynnc = new Func<Task<bool>>(async () =>
-                {
-                    System.Console.Write("Working");
-                    for (var i = 0; i < 10; i++)
-                    {
-                        Thread.Sleep(500);
-                        System.Console.Write(".");
-                    }
+			{
+				var sss = new List<Tesitng2> {new Tesitng2 { }};
+				System.Console.WriteLine("1. - " + (sss.FirstOrDefault(x => !x.Prop.IsEmpty()) ?? sss.First()).Prop?.FirstOrDefault());
+				//System.Console.WriteLine("2. - " + (sss.FirstOrDefault(x => x.Prop == "1112") ?? sss.First()).Prop?.FirstOrDefault());
 
-                    System.Console.WriteLine("\r\nFinished");
-                    return false;
-                });
+				var asynnc = new Func<Task<bool>>(async () =>
+				{
+					System.Console.Write("Working");
+					for (var i = 0; i < 10; i++)
+					{
+						Thread.Sleep(500);
+						System.Console.Write(".");
+					}
 
-                //var func = Task.Factory.StartNew<bool>(asynnc);
-                asynnc.RunSync();
-                asynnc.RunSync2();
+					System.Console.WriteLine("\r\nFinished");
+					return false;
+				});
+
+				//var func = Task.Factory.StartNew<bool>(asynnc);
+				asynnc.RunSync();
+				//asynnc.RunSync2();
 
 				//var subsOnMe = IO.SafeReadFile(@"C:\tmp\подписаныНаМеня.txt");
 				//var mySubs = IO.SafeReadFile(@"C:\tmp\моиПодписки.txt");
@@ -488,127 +495,126 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
-        [Serializable]
-        public class DocParameter
+		[Serializable]
+		public class DocParameter
 		{
-            public DocParameter()
-            {
-            }
+			public DocParameter()
+			{
+			}
 
-            public DocParameter(string name, DocParameterItem[] items)
-            {
-                this.Name = name;
-                this.Items = items;
-            }
+			public DocParameter(string name, DocParameterItem[] items)
+			{
+				this.Name = name;
+				this.Items = items;
+			}
 
-            
-            public string Name { get; set; }
 
-            public DocParameterItem[] Items { get; set; }
+			public string Name { get; set; }
 
-            public override string ToString() => $"Table Name='{Name}' Count={Items.Length}";
+			public DocParameterItem[] Items { get; set; }
 
-            public string ToString2() => $"{ToString()}{string.Join("", Items.Select(x => $"\r\n\t{x.ToString2()}"))}";
+			public override string ToString() => $"Table Name='{Name}' Count={Items.Length}";
+
+			public string ToString2() => $"{ToString()}{string.Join("", Items.Select(x => $"\r\n\t{x.ToString2()}"))}";
 		}
 
-        [Serializable]
-        public class DocParameterItem
+		[Serializable]
+		public class DocParameterItem
 		{
-            public DocParameterItem()
-            {
-            }
+			public DocParameterItem()
+			{
+			}
 
-            public DocParameterItem(DocProperty[] properties)
-            {
-                this.Properties = properties;
-            }
+			public DocParameterItem(DocProperty[] properties)
+			{
+				this.Properties = properties;
+			}
 
-            public DocProperty[] Properties { get; set; }
+			public DocProperty[] Properties { get; set; }
 
-            public override string ToString() => $"Row Count={Properties.Length}";
+			public override string ToString() => $"Row Count={Properties.Length}";
 
-            public string ToString2() => $"{ToString()}{string.Join("", Properties.Select(x => $"\r\n\t\t{x}"))}";
+			public string ToString2() => $"{ToString()}{string.Join("", Properties.Select(x => $"\r\n\t\t{x}"))}";
 		}
 
-        [Serializable]
-        public class DocProperty
+		[Serializable]
+		public class DocProperty
 		{
-            public DocProperty()
-            {
-            }
+			public DocProperty()
+			{
+			}
 
-            public DocProperty(string name, object value)
-            {
-                this.Name = name;
-                this.Value = value;
-            }
+			public DocProperty(string name, object value)
+			{
+				this.Name = name;
+				this.Value = value;
+			}
 
-            public string Name { get; set; }
+			public string Name { get; set; }
 
-            public object Value { get; set; }
+			public object Value { get; set; }
 
-            public override string ToString() => $"Name='{Name}' Value='{Value}'";
-        }
+			public override string ToString() => $"Name='{Name}' Value='{Value}'";
+		}
 
-        public class OrderDocumentRequestTemp
-        {
-            [DataMember]
-            public Guid DataItemId { get; set; }
+		public class OrderDocumentRequestTemp
+		{
+			[DataMember] public Guid DataItemId { get; set; }
 
-            /// <summary>
-            /// Номер контракта
-            /// </summary>
-            [DataMember]
-            public string ContractNumber { get; set; }
+			/// <summary>
+			/// Номер контракта
+			/// </summary>
+			[DataMember]
+			public string ContractNumber { get; set; }
 
-            /// <summary>
-            /// Номер лицевого счета
-            /// </summary>
-            [DataMember]
-            public string[] PersonalAccountNumbers { get; set; }
+			/// <summary>
+			/// Номер лицевого счета
+			/// </summary>
+			[DataMember]
+			public string[] PersonalAccountNumbers { get; set; }
 
-            /// <summary>
-            /// Идентификатор наименования документа
-            /// </summary>
-            [DataMember]
-            public int DocumentNameId { get; set; }
+			/// <summary>
+			/// Идентификатор наименования документа
+			/// </summary>
+			[DataMember]
+			public int DocumentNameId { get; set; }
 
-            /// <summary>
-            /// Идентификатор типа документа
-            /// </summary>
-            [DataMember]
-            public int DocumentTypeId { get; set; }
+			/// <summary>
+			/// Идентификатор типа документа
+			/// </summary>
+			[DataMember]
+			public int DocumentTypeId { get; set; }
 
-            /// <summary>
-            /// Номер заявки Order Storage, с которой связан заказ документа в Doc
-            /// </summary>
-            [DataMember]
-            public long OrderId { get; set; }
+			/// <summary>
+			/// Номер заявки Order Storage, с которой связан заказ документа в Doc
+			/// </summary>
+			[DataMember]
+			public long OrderId { get; set; }
 
-            /// <summary>
-            /// Дополнительные параметры, передаваемые в Doc.
-            /// Если бы сейчас был жив Сталин, он бы любителями DataSet'ов баню топил
-            /// </summary>
-            [DataMember]
-            public DataSet AdditionalParameters { get; set; }
+			/// <summary>
+			/// Дополнительные параметры, передаваемые в Doc.
+			/// Если бы сейчас был жив Сталин, он бы любителями DataSet'ов баню топил
+			/// </summary>
+			[DataMember]
+			public DataSet AdditionalParameters { get; set; }
 
-            /// <summary>
-            /// Время жизни документа в днях
-            /// </summary>
-            [DataMember]
-            public int DaysOfDocumentLife { get; set; }
+			/// <summary>
+			/// Время жизни документа в днях
+			/// </summary>
+			[DataMember]
+			public int DaysOfDocumentLife { get; set; }
 
-            /// <summary>
-            /// Идентификтор заявки на формирование документа, возвращаемый системой Doc
-            /// </summary>
-            [DataMember]
-            public long DocRequestId { get; set; }
+			/// <summary>
+			/// Идентификтор заявки на формирование документа, возвращаемый системой Doc
+			/// </summary>
+			[DataMember]
+			public long DocRequestId { get; set; }
 
-            /// <summary>
-            /// Ссылка на заказанный документ
-            /// </summary>
-            [DataMember]
-            public string Uri { get; set; }
+			/// <summary>
+			/// Ссылка на заказанный документ
+			/// </summary>
+			[DataMember]
+			public string Uri { get; set; }
 
 			/// <summary>
 			/// Идентификатор поставщика услуг.
@@ -616,143 +622,144 @@ namespace Tester.Console
 			[DataMember]
 			public long ServiceProviderId { get; set; }
 
-            public override string ToString() => $"ContractNumber='{ContractNumber}'";
+			public override string ToString() => $"ContractNumber='{ContractNumber}'";
 		}
 
 		public static IEnumerable<OrderDocumentRequestTemp> GetOrderDocumentByPersonalAccountRequests()
-        {
-            var list = new List<string> {"1", "2", "3", "4", "5", "6"};
-            var temp = new[] {"121212121212", "34343434343", "5454545454", "56565665565", "767676767676", "787878787878"};
+		{
+			var list = new List<string> {"1", "2", "3", "4", "5", "6"};
+			var temp = new[] {"121212121212", "34343434343", "5454545454", "56565665565", "767676767676", "787878787878"};
 
 			return list.Select(paGroup => new OrderDocumentRequestTemp
-            {
-                DataItemId = Guid.NewGuid(),
-                PersonalAccountNumbers = temp,
-                ContractNumber = paGroup,
-                DaysOfDocumentLife = 999,
-                DocumentNameId = 1111,
-                DocumentTypeId = 1111,
-                AdditionalParameters = GetParameters(temp.ToList(), DateTime.MinValue, DateTime.MaxValue),
-                ServiceProviderId = 123456789
-            });
-        }
+			{
+				DataItemId = Guid.NewGuid(),
+				PersonalAccountNumbers = temp,
+				ContractNumber = paGroup,
+				DaysOfDocumentLife = 999,
+				DocumentNameId = 1111,
+				DocumentTypeId = 1111,
+				AdditionalParameters = GetParameters(temp.ToList(), DateTime.MinValue, DateTime.MaxValue),
+				ServiceProviderId = 123456789
+			});
+		}
 
-        public static IEnumerable<OrderDocumentRequestTemp> GetOrderDocumentByContractRequests()
-        {
-            var list = new List<string> { "1", "2", "3", "4", "5", "6" };
+		public static IEnumerable<OrderDocumentRequestTemp> GetOrderDocumentByContractRequests()
+		{
+			var list = new List<string> {"1", "2", "3", "4", "5", "6"};
 
 			return list.Select(c => new OrderDocumentRequestTemp
-            {
-                DataItemId = Guid.NewGuid(),
-                ContractNumber = c,
-                DaysOfDocumentLife = 999,
-                DocumentNameId = 2222,
-                DocumentTypeId = 2222,
-                AdditionalParameters = GetParameters(long.Parse(c), c + "_12345", DateTime.MinValue, DateTime.MaxValue),
-                ServiceProviderId = 123456789
+			{
+				DataItemId = Guid.NewGuid(),
+				ContractNumber = c,
+				DaysOfDocumentLife = 999,
+				DocumentNameId = 2222,
+				DocumentTypeId = 2222,
+				AdditionalParameters = GetParameters(long.Parse(c), c + "_12345", DateTime.MinValue, DateTime.MaxValue),
+				ServiceProviderId = 123456789
 			});
-        }
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000")]
-        private static DataSet GetParameters(long contractId, string contractNumber, DateTime dateFrom, DateTime dateTo)
-        {
-            DataSet result = CreateDataSet();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000")]
+		private static DataSet GetParameters(long contractId, string contractNumber, DateTime dateFrom, DateTime dateTo)
+		{
+			DataSet result = CreateDataSet();
 
-            DataTable contractTable = result.Tables.Add("Contract");
-            contractTable.Columns.Add("Id", typeof(long));
-            contractTable.Columns.AddNumberColumn(typeof(string));
-            contractTable.Rows.Add(contractId, contractNumber);
+			DataTable contractTable = result.Tables.Add("Contract");
+			contractTable.Columns.Add("Id", typeof(long));
+			contractTable.Columns.AddNumberColumn(typeof(string));
+			contractTable.Rows.Add(contractId, contractNumber);
 
-            result.AddPeriodsTable(dateFrom, dateTo);
+			result.AddPeriodsTable(dateFrom, dateTo);
 
-            return result;
-        }
+			return result;
+		}
 
-        private static readonly DateTime _dateTimeNullValue = new DateTime(100, 1, 1);
-        private static DataSet GetParameters(List<string> personalAccounts, DateTime dateFrom, DateTime dateTo)
-        {
-            DataSet result = CreateDataSet();
+		private static readonly DateTime _dateTimeNullValue = new DateTime(100, 1, 1);
 
-            var personalAccountWithPeriodListTable = result.Tables.Add("PersonalAccountWithPeriodList");
-            personalAccountWithPeriodListTable.Columns.AddNumberColumn(typeof(long));
-            personalAccountWithPeriodListTable.Columns.AddFromColumn();
-            personalAccountWithPeriodListTable.Columns.AddToColumn();
+		private static DataSet GetParameters(List<string> personalAccounts, DateTime dateFrom, DateTime dateTo)
+		{
+			DataSet result = CreateDataSet();
 
-            personalAccounts.ForEach(personalAccount =>
-            {
-                personalAccountWithPeriodListTable.Rows.Add
-                (
-                    long.Parse(personalAccount, CultureInfo.InvariantCulture),
-                    DateTime.MinValue,
+			var personalAccountWithPeriodListTable = result.Tables.Add("PersonalAccountWithPeriodList");
+			personalAccountWithPeriodListTable.Columns.AddNumberColumn(typeof(long));
+			personalAccountWithPeriodListTable.Columns.AddFromColumn();
+			personalAccountWithPeriodListTable.Columns.AddToColumn();
+
+			personalAccounts.ForEach(personalAccount =>
+			{
+				personalAccountWithPeriodListTable.Rows.Add
+				(
+					long.Parse(personalAccount, CultureInfo.InvariantCulture),
+					DateTime.MinValue,
 					DateTime.MaxValue
 				);
-            });
+			});
 
-            result.AddPeriodsTable(dateFrom, dateTo);
+			result.AddPeriodsTable(dateFrom, dateTo);
 
-            return result;
-        }
+			return result;
+		}
 
-        private static void AddPeriodsTable(this DataSet dataSet, DateTime dateFrom, DateTime dateTo)
-        {
-            DataTable periodTable = dataSet.Tables.Add("DocumentPeriod");
-            periodTable.Columns.AddFromColumn();
-            periodTable.Columns.AddToColumn();
-            periodTable.Rows.Add(dateFrom, dateTo);
-        }
+		private static void AddPeriodsTable(this DataSet dataSet, DateTime dateFrom, DateTime dateTo)
+		{
+			DataTable periodTable = dataSet.Tables.Add("DocumentPeriod");
+			periodTable.Columns.AddFromColumn();
+			periodTable.Columns.AddToColumn();
+			periodTable.Rows.Add(dateFrom, dateTo);
+		}
 
 		private static DataSet CreateDataSet() => new DataSet("I_Additional_Params");
-        private static void AddNumberColumn(this DataColumnCollection columns, Type type) => columns.Add("Number", type);
-        private static void AddFromColumn(this DataColumnCollection columns) => columns.Add("From", typeof(DateTime));
-        private static void AddToColumn(this DataColumnCollection columns) => columns.Add("To", typeof(DateTime));
+		private static void AddNumberColumn(this DataColumnCollection columns, Type type) => columns.Add("Number", type);
+		private static void AddFromColumn(this DataColumnCollection columns) => columns.Add("From", typeof(DateTime));
+		private static void AddToColumn(this DataColumnCollection columns) => columns.Add("To", typeof(DateTime));
 
-        private static List<DocParameter> ConvertToListParameters(this DataSet additionalParameters)
-        {
-            var result = new List<DocParameter>();
+		private static List<DocParameter> ConvertToListParameters(this DataSet additionalParameters)
+		{
+			var result = new List<DocParameter>();
 
-            if (additionalParameters.Tables.Count == 0)
-                return result;
+			if (additionalParameters.Tables.Count == 0)
+				return result;
 
-            var dd = additionalParameters.Tables.OfType<DataTable>();
+			var dd = additionalParameters.Tables.OfType<DataTable>();
 
-            result.AddRange(
-                from table in additionalParameters.Tables.OfType<DataTable>()
-                from row in table.Rows.OfType<DataRow>()
-                select CreateDocParameter(table.TableName, table.Columns.OfType<DataColumn>(), row));
+			result.AddRange(
+				from table in additionalParameters.Tables.OfType<DataTable>()
+				from row in table.Rows.OfType<DataRow>()
+				select CreateDocParameter(table.TableName, table.Columns.OfType<DataColumn>(), row));
 
-            return result;
-        }
+			return result;
+		}
 
-        private static DocParameter CreateDocParameter(string name, IEnumerable<DataColumn> columns, DataRow row)
-            => new DocParameter
-            {
-                Name = name,
-                Items = new[]
-                {
-                    new DocParameterItem
-                    {
-                        Properties = columns.Select(col => new DocProperty{ Name = col.ColumnName, Value = row[col.ColumnName] } ).ToArray()
-                    }
-                }
-            };
+		private static DocParameter CreateDocParameter(string name, IEnumerable<DataColumn> columns, DataRow row)
+			=> new DocParameter
+			{
+				Name = name,
+				Items = new[]
+				{
+					new DocParameterItem
+					{
+						Properties = columns.Select(col => new DocProperty {Name = col.ColumnName, Value = row[col.ColumnName]}).ToArray()
+					}
+				}
+			};
 
 		class OrderAttributeContainer
-        {
+		{
 			public Dictionary<string, TableValuePaged> TableAttributes { get; set; }
 
 		}
 
-        class TableValuePaged
-        {
-            public Dictionary<string, List<object>> Columns { get; set; }
-        }
+		class TableValuePaged
+		{
+			public Dictionary<string, List<object>> Columns { get; set; }
+		}
 
 
 		private static bool IsTableValueChanged<T>(this OrderAttributeContainer order, string tableName, string attrName, T newValue)
-            where T : class
-            => order.TableAttributes.IsNullOrEmpty() || !order.TableAttributes.TryGetValue(tableName, out var tableValue)
-                                                     || tableValue.Columns.IsNullOrEmpty() || !tableValue.Columns.TryGetValue(attrName, out var attrValueList)
-                                                     || attrValueList.IsNullOrEmpty() || !newValue.Equals(attrValueList.Last());
+			where T : class
+			=> order.TableAttributes.IsNullOrEmpty() || !order.TableAttributes.TryGetValue(tableName, out var tableValue)
+			                                         || tableValue.Columns.IsNullOrEmpty() || !tableValue.Columns.TryGetValue(attrName, out var attrValueList)
+			                                         || attrValueList.IsNullOrEmpty() || !newValue.Equals(attrValueList.Last());
 
 		static void Test_Linq()
 		{
@@ -773,7 +780,7 @@ namespace Tester.Console
 
 		static void Test_Sort()
 		{
-			var array = new[] { 4, 1, 5, 7, 5, 2, 0, 0, 2, 4, 1, 5, 7, 5, 2, 0, 0, 2 };
+			var array = new[] {4, 1, 5, 7, 5, 2, 0, 0, 2, 4, 1, 5, 7, 5, 2, 0, 0, 2};
 
 			var iter = 0;
 
@@ -839,14 +846,14 @@ namespace Tester.Console
 		{
 			var parameters = new[]
 			{
-				new  { PropType = "Type_2", PropValue = "Value_3" },
-				new  { PropType = "Type_3", PropValue = "Value_2" },
-				new  { PropType = "Type_3", PropValue = "Value_2" },
-				new  { PropType = "Type_3", PropValue = "Value_3" },
-				new  { PropType = "Type_1", PropValue = "Value_1" },
-				new  { PropType = "Type_1", PropValue = "Value_2" },
+				new {PropType = "Type_2", PropValue = "Value_3"},
+				new {PropType = "Type_3", PropValue = "Value_2"},
+				new {PropType = "Type_3", PropValue = "Value_2"},
+				new {PropType = "Type_3", PropValue = "Value_3"},
+				new {PropType = "Type_1", PropValue = "Value_1"},
+				new {PropType = "Type_1", PropValue = "Value_2"},
 			};
-			var data = parameters.Select(x => new { x.PropType, x.PropValue })
+			var data = parameters.Select(x => new {x.PropType, x.PropValue})
 					.Distinct()
 					.OrderBy(x => x.PropValue)
 					.ToLookup(x => x.PropType, x => x.PropValue)
@@ -865,13 +872,14 @@ namespace Tester.Console
 				"ProductStatusCode",
 				"Test"
 			};
-			var preferences = new HashSet<string> { "DateFrom", "SERVICE_CODE", "SourceTypeCode", "ProductStatusCode", "ExternalServiceCode" };
+			var preferences = new HashSet<string> {"DateFrom", "SERVICE_CODE", "SourceTypeCode", "ProductStatusCode", "ExternalServiceCode"};
 			var orderedData = data.OrderBy(item => preferences.Concat(data).ToList().IndexOf(item));
 		}
 
 		static void Test_CustomFunction()
 		{
-			var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }" + Environment.NewLine;
+			var codeFunc = @"public class Test1 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }" +
+			               Environment.NewLine;
 			codeFunc += @"public class Test2 : ICustomFunction { public string Invoke(string[] args) { return ""[SUCCESS]="" + string.Join("","", args); } }";
 			//var codeFunc = "";
 			var customFunc = new CustomFunctions
@@ -934,11 +942,11 @@ namespace Tester.Console
 
 		public static void OracleCommandTest()
 		{
-			const string oradb = "Data Source=(DESCRIPTION =" 
-			                     + "(ADDRESS = (PROTOCOL = TCP)(HOST = msk-ora-cd-02.mtsit.local)(PORT = 1521))" 
+			const string oradb = "Data Source=(DESCRIPTION ="
+			                     + "(ADDRESS = (PROTOCOL = TCP)(HOST = msk-ora-cd-02.mtsit.local)(PORT = 1521))"
 			                     + "(CONNECT_DATA ="
-			                     + "(SERVER = DEDICATED)" 
-			                     + "(SID = vip12)));" 
+			                     + "(SERVER = DEDICATED)"
+			                     + "(SID = vip12)));"
 			                     + "User Id=tf2_cust;Password=cust;";
 			const string connectionString = "Data Source=vip12;User ID=tf2_cust;Password=cust;Max Pool Size=1";
 			var connection = new OracleConnection(oradb);
@@ -1146,7 +1154,7 @@ namespace Tester.Console
 					}, data);
 					listOfTask.Add(task);
 				}
-				
+
 				Task.WaitAll(listOfTask.ToArray());
 				System.Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Raw completed");
 			});
