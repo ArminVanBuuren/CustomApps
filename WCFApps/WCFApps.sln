@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFChat.Client", "WCFChat\WCFChat.Client.csproj", "{68D2F157-0F79-4146-825F-52D10286BA6B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFChat.Host.Console", "WCF
 	ProjectSection(ProjectDependencies) = postProject
 		{3FCE8EE5-5197-4564-8621-AA3DBC42DA5E} = {3FCE8EE5-5197-4564-8621-AA3DBC42DA5E}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFChat.Contracts", "WCFChat.Contracts\WCFChat.Contracts.csproj", "{E61AD648-2018-4EE1-800C-2C4B80270191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0816D222-BB3E-4609-A754-374C6F5C7575}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0816D222-BB3E-4609-A754-374C6F5C7575}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0816D222-BB3E-4609-A754-374C6F5C7575}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61AD648-2018-4EE1-800C-2C4B80270191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61AD648-2018-4EE1-800C-2C4B80270191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61AD648-2018-4EE1-800C-2C4B80270191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61AD648-2018-4EE1-800C-2C4B80270191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

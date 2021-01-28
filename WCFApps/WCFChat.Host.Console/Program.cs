@@ -16,6 +16,7 @@ namespace WCFChat.Host.Console
 
         static void Main(string[] args)
         {
+
             ServiceHost host = null;
             //ServiceHost host2 = null;
             try
@@ -83,6 +84,7 @@ namespace WCFChat.Host.Console
             }
             finally
             {
+	            
                 if (host != null && host.State == CommunicationState.Opened)
                 {
                     System.Console.WriteLine("Host Opened!\r\nProcessing...");

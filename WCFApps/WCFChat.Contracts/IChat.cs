@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Timers;
 
-namespace WCFChat.Service
+namespace WCFChat.Contracts
 {
     [DataContract]
     public enum ServerResult

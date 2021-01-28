@@ -16,10 +16,10 @@ namespace WCFChat.Client.ServiceReference1 {
     public interface IMainContract {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
-        void CreateCloud(WCFChat.Service.Cloud cloud, string transactionID);
+        void CreateCloud(WCFChat.Contracts.Cloud cloud, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
-        System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.Cloud cloud, string transactionID);
+        System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Contracts.Cloud cloud, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
         void Unbind(string transactionID);
@@ -28,29 +28,29 @@ namespace WCFChat.Client.ServiceReference1 {
         System.Threading.Tasks.Task UnbindAsync(string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
-        void GetCloud(WCFChat.Service.User user, string transactionID);
+        void GetCloud(WCFChat.Contracts.User user, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
-        System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user, string transactionID);
+        System.Threading.Tasks.Task GetCloudAsync(WCFChat.Contracts.User user, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
-        void RemoveOrAccessUser(WCFChat.Service.ServerResult result, WCFChat.Service.User user);
+        void RemoveOrAccessUser(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
-        System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Service.ServerResult result, WCFChat.Service.User user);
+        System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IMainContractCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloudResult")]
-        void CreateCloudResult(WCFChat.Service.CloudResult result, string transactionID);
+        void CreateCloudResult(WCFChat.Contracts.CloudResult result, string transactionID);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RequestForAccess")]
-        void RequestForAccess(WCFChat.Service.User user, string address);
+        void RequestForAccess(WCFChat.Contracts.User user, string address);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloudResult")]
-        void GetCloudResult(WCFChat.Service.ServerResult result, WCFChat.Service.Cloud cloud, string transactionID);
+        void GetCloudResult(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.Cloud cloud, string transactionID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -81,11 +81,11 @@ namespace WCFChat.Client.ServiceReference1 {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void CreateCloud(WCFChat.Service.Cloud cloud, string transactionID) {
+        public void CreateCloud(WCFChat.Contracts.Cloud cloud, string transactionID) {
             base.Channel.CreateCloud(cloud, transactionID);
         }
         
-        public System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Service.Cloud cloud, string transactionID) {
+        public System.Threading.Tasks.Task CreateCloudAsync(WCFChat.Contracts.Cloud cloud, string transactionID) {
             return base.Channel.CreateCloudAsync(cloud, transactionID);
         }
         
@@ -97,19 +97,19 @@ namespace WCFChat.Client.ServiceReference1 {
             return base.Channel.UnbindAsync(transactionID);
         }
         
-        public void GetCloud(WCFChat.Service.User user, string transactionID) {
+        public void GetCloud(WCFChat.Contracts.User user, string transactionID) {
             base.Channel.GetCloud(user, transactionID);
         }
         
-        public System.Threading.Tasks.Task GetCloudAsync(WCFChat.Service.User user, string transactionID) {
+        public System.Threading.Tasks.Task GetCloudAsync(WCFChat.Contracts.User user, string transactionID) {
             return base.Channel.GetCloudAsync(user, transactionID);
         }
         
-        public void RemoveOrAccessUser(WCFChat.Service.ServerResult result, WCFChat.Service.User user) {
+        public void RemoveOrAccessUser(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user) {
             base.Channel.RemoveOrAccessUser(result, user);
         }
         
-        public System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Service.ServerResult result, WCFChat.Service.User user) {
+        public System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user) {
             return base.Channel.RemoveOrAccessUserAsync(result, user);
         }
     }
@@ -119,47 +119,47 @@ namespace WCFChat.Client.ServiceReference1 {
     public interface IChat {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
-        void Connect(WCFChat.Service.User user);
+        void Connect(WCFChat.Contracts.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
-        System.Threading.Tasks.Task ConnectAsync(WCFChat.Service.User user);
+        System.Threading.Tasks.Task ConnectAsync(WCFChat.Contracts.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Say")]
-        void Say(WCFChat.Service.Message message);
+        void Say(WCFChat.Contracts.Message message);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Say")]
-        System.Threading.Tasks.Task SayAsync(WCFChat.Service.Message message);
+        System.Threading.Tasks.Task SayAsync(WCFChat.Contracts.Message message);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWriting")]
-        void IsWriting(WCFChat.Service.User user, [System.ServiceModel.MessageParameterAttribute(Name="isWriting")] bool isWriting1);
+        void IsWriting(WCFChat.Contracts.User user, [System.ServiceModel.MessageParameterAttribute(Name="isWriting")] bool isWriting1);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWriting")]
-        System.Threading.Tasks.Task IsWritingAsync(WCFChat.Service.User user, bool isWriting);
+        System.Threading.Tasks.Task IsWritingAsync(WCFChat.Contracts.User user, bool isWriting);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/services/chat/IChat/Disconnect")]
-        void Disconnect(WCFChat.Service.User user);
+        void Disconnect(WCFChat.Contracts.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/services/chat/IChat/Disconnect")]
-        System.Threading.Tasks.Task DisconnectAsync(WCFChat.Service.User user);
+        System.Threading.Tasks.Task DisconnectAsync(WCFChat.Contracts.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IChatCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/ConnectResult")]
-        void ConnectResult(WCFChat.Service.ServerResult result);
+        void ConnectResult(WCFChat.Contracts.ServerResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/TransferHistory", ReplyAction="http://localhost/services/chat/IChat/TransferHistoryResponse")]
-        void TransferHistory(WCFChat.Service.User[] users, WCFChat.Service.Message[] messages);
+        void TransferHistory(WCFChat.Contracts.User[] users, WCFChat.Contracts.Message[] messages);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/Receive", ReplyAction="http://localhost/services/chat/IChat/ReceiveResponse")]
-        void Receive(WCFChat.Service.Message msg);
+        void Receive(WCFChat.Contracts.Message msg);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWritingCallback")]
-        void IsWritingCallback(WCFChat.Service.User client, bool isWriting);
+        void IsWritingCallback(WCFChat.Contracts.User client, bool isWriting);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Terminate")]
-        void Terminate(WCFChat.Service.Cloud cloud);
+        void Terminate(WCFChat.Contracts.Cloud cloud);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -190,35 +190,35 @@ namespace WCFChat.Client.ServiceReference1 {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void Connect(WCFChat.Service.User user) {
+        public void Connect(WCFChat.Contracts.User user) {
             base.Channel.Connect(user);
         }
         
-        public System.Threading.Tasks.Task ConnectAsync(WCFChat.Service.User user) {
+        public System.Threading.Tasks.Task ConnectAsync(WCFChat.Contracts.User user) {
             return base.Channel.ConnectAsync(user);
         }
         
-        public void Say(WCFChat.Service.Message message) {
+        public void Say(WCFChat.Contracts.Message message) {
             base.Channel.Say(message);
         }
         
-        public System.Threading.Tasks.Task SayAsync(WCFChat.Service.Message message) {
+        public System.Threading.Tasks.Task SayAsync(WCFChat.Contracts.Message message) {
             return base.Channel.SayAsync(message);
         }
         
-        public void IsWriting(WCFChat.Service.User user, bool isWriting1) {
+        public void IsWriting(WCFChat.Contracts.User user, bool isWriting1) {
             base.Channel.IsWriting(user, isWriting1);
         }
         
-        public System.Threading.Tasks.Task IsWritingAsync(WCFChat.Service.User user, bool isWriting) {
+        public System.Threading.Tasks.Task IsWritingAsync(WCFChat.Contracts.User user, bool isWriting) {
             return base.Channel.IsWritingAsync(user, isWriting);
         }
         
-        public void Disconnect(WCFChat.Service.User user) {
+        public void Disconnect(WCFChat.Contracts.User user) {
             base.Channel.Disconnect(user);
         }
         
-        public System.Threading.Tasks.Task DisconnectAsync(WCFChat.Service.User user) {
+        public System.Threading.Tasks.Task DisconnectAsync(WCFChat.Contracts.User user) {
             return base.Channel.DisconnectAsync(user);
         }
     }

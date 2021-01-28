@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utils.UIControls.Tools;
 using Utils;
-using WCFChat.Service;
+using WCFChat.Contracts;
 
 namespace WCFChat.Client.BasicControl
 {

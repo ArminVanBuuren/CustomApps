@@ -5,16 +5,16 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
-using WCFChat.Service;
+using WCFChat.Contracts;
 using System.Timers;
 using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
-using Message = WCFChat.Service.Message;
+using Message = WCFChat.Contracts.Message;
 
 namespace WCFChat.Client.BasicControl
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    public class MainWindowChatServer : WCFChat.Service.IChat
+    public class MainWindowChatServer : WCFChat.Contracts.IChat
     {
         protected object sync = new object();
         private AccessResult OnRemoveOrAccessUser;

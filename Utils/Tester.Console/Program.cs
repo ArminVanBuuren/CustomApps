@@ -300,187 +300,7 @@ namespace Tester.Console
 
 			try
 			{
-				var sss = new List<Tesitng2> {new Tesitng2 { }};
-				System.Console.WriteLine("1. - " + (sss.FirstOrDefault(x => !x.Prop.IsEmpty()) ?? sss.First()).Prop?.FirstOrDefault());
-				//System.Console.WriteLine("2. - " + (sss.FirstOrDefault(x => x.Prop == "1112") ?? sss.First()).Prop?.FirstOrDefault());
-
-				var asynnc = new Func<Task<bool>>(async () =>
-				{
-					System.Console.Write("Working");
-					for (var i = 0; i < 10; i++)
-					{
-						Thread.Sleep(500);
-						System.Console.Write(".");
-					}
-
-					System.Console.WriteLine("\r\nFinished");
-					return false;
-				});
-
-				//var func = Task.Factory.StartNew<bool>(asynnc);
-				asynnc.RunSync();
-				//asynnc.RunSync2();
-
-				//var subsOnMe = IO.SafeReadFile(@"C:\tmp\подписаныНаМеня.txt");
-				//var mySubs = IO.SafeReadFile(@"C:\tmp\моиПодписки.txt");
-
-
-				//var subsOnMe1 = subsOnMe.Split('\n').Select(x => x.Trim()).ToList();
-				//var mySubs1 = mySubs.Split('\n').Select(x => x.Trim()).ToList();
-
-				//System.Console.WriteLine($"На меня не подписаны:");
-				//mySubs1.Except(subsOnMe1).ForEach(x => System.Console.WriteLine(x));
-
-				//System.Console.WriteLine($"\r\nЯ не подписан на:");
-				//subsOnMe1.Except(mySubs1).ForEach(x => System.Console.WriteLine(x));
-
-				//CompareXml2(@"C:\tmp\expected.txt", @"C:\tmp\sent.txt");
-				//return;	
-				//Thread.Sleep(1000);
-
-				//var i = 0;
-				//var test11 = (from dd in new string[] { "test", "ste", "efef" } 
-				//			  select (i++, dd)).ToArray();
-
-				//new string[] { "test", "ste", "efef" }.Select(x => (i++, x)).ToArray();
-
-				//OrderDocumentData datatest = null;
-				//if (datatest is OrderDocumentData datatest11)
-				//{
-				//	System.Console.WriteLine("true!!");
-				//}
-
-				//object test = "test";
-				//string test2 = "test";
-				//var list = new List<string>();
-				//var sss = list.SingleOrDefault(x => x == "");
-
-				//System.Console.WriteLine(test2.Equals(test));
-
-				//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
-				//System.Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
-				//System.Console.WriteLine($"Stop. - {DateTime.Parse("2020-11-11T17:00:00")}\r\n...........................");
-
-				//Thread.Sleep(5000);
-				//goto test;
-
-				//var testtt  = $"{DateTime.Now:dd.MM.yyyy_HH-mm-ss-ff}";
-
-
-				//var tesss1 = new List<OrderDocumentRequestTemp>
-				//            {
-				//                new OrderDocumentRequestTemp
-				//                {
-				//                    DocumentTypeId = 1,
-				//                    ContractNumber = "6"
-				//                },
-				//                new OrderDocumentRequestTemp
-				//                {
-				//                    DocumentTypeId = 3,
-				//                    ContractNumber = "222"
-				//                },
-				//                new OrderDocumentRequestTemp
-				//                {
-				//                    DocumentTypeId = 1,
-				//                    ContractNumber = "333"
-				//                },
-				//                new OrderDocumentRequestTemp
-				//                {
-				//                    DocumentTypeId = 2,
-				//                    ContractNumber = "444"
-				//                }
-				//            };
-
-
-				//var ssss = tesss1.Max(x => x.ContractNumber);
-
-				//var testttt = tesss1.GroupBy(x => x.DocumentTypeId).Select(x => x.ToList());
-
-
-
-				//var psList = GetOrderDocumentByPersonalAccountRequests();
-				//            var cList = GetOrderDocumentByContractRequests();
-
-				//            void tesss(IEnumerable<OrderDocumentRequestTemp> items)
-				//            {
-				//                foreach (var data in items)
-				//                {
-				//		System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
-				//		foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
-				//                    {
-				//                        System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
-				//                        foreach (var row in table.Rows.OfType<DataRow>())
-				//                        {
-				//                            System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
-
-				//                            foreach (var column in table.Columns.OfType<DataColumn>())
-				//                            {
-				//                                System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
-				//                            }
-				//                        }
-				//                    }
-				//                }
-				//}
-
-				//            void Tessst2(Dictionary<string, List<DocParameter>> items)
-				//            {
-				//                System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
-				//}
-
-				//            tesss(psList);
-				//            System.Console.WriteLine(new string('-', 25));
-
-				//tesss(cList);
-				//            System.Console.WriteLine(new string('-', 25));
-
-				//var psParams = new Dictionary<string, List<DocParameter>>();
-				//            foreach (var fff in psList)
-				//            {
-				//                psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
-				//            }
-				//            Tessst2(psParams);
-				//            System.Console.WriteLine(new string('-', 25));
-
-				//var cParams = new Dictionary<string, List<DocParameter>>();
-				//foreach (var fff2 in cList)
-				//            {
-				//                cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
-				//}
-				//            Tessst2(cParams);
-				//System.Console.WriteLine(new string('-', 25));
-
-
-				//            long? test1 = int.MaxValue;
-
-				//            int? test2 = test1 <= int.MaxValue ? (int?) test1 : null;
-
-				//            test1 = null;
-				//            int? test3 = test1 <= int.MaxValue ? (int?) test1 : null;
-
-
-				//var test = new OrderAttributeContainer
-				//            {
-				//                TableAttributes = new Dictionary<string, TableValuePaged>()
-				//                {
-				//                    {
-				//                        "EdmDeliveryStatus", new TableValuePaged
-				//                        {
-				//                            Columns = new Dictionary<string, List<object>>
-				//                            {
-				//                                {
-				//                                    "EdmDeliveryStatusCode", new List<object>
-				//                                    {
-				//                                        "10", "44"
-				//                                    }
-				//                                }
-				//                            }
-				//                        }
-				//                    }
-				//                }
-				//            };
-
-
-				//System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
+				System.Console.WriteLine(Testtest());
 			}
 			catch (Exception e)
 			{
@@ -493,6 +313,244 @@ namespace Tester.Console
 			if (System.Console.ReadKey().Key == ConsoleKey.Enter)
 				goto repeat;
 			System.Console.ReadLine();
+		}
+
+		static string Testtest()
+		{
+			var documentTypeId = 415;
+			switch (documentTypeId)
+			{
+				case 273:
+				case 274:
+				case 901:
+					return "Edo";
+				case 324:
+				case 415:
+					return "Pdf";
+				case 357:
+				case 610:
+				case 611:
+					return "Xml";
+				default:
+					return "-1";
+			}
+		}
+
+		static void Test()
+		{
+			var test = "05-10-20 10:55 - 05.10.21 10:55";
+
+			//foreach (var time in test.Split('-'))
+			//{
+			//	if (DateTime.TryParse(time, CultureInfo.InvariantCulture, DateTimeStyles.None, out var res))
+			//		System.Console.WriteLine(res.ToString("G"));
+
+			//	if (DateTime.TryParseExact(time, "dd.mm.yyyy hh24:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var res2))
+			//		System.Console.WriteLine("second: " + res2.ToString("G"));
+			//}
+
+
+			//var periods = Regex.Split(test, @"(\d+.)+");
+
+			var periods = Regex.Matches(test, @"(\d+.)+");
+			if (periods.Count >= 1 && DateTime.TryParse(periods[0].Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var start))
+				System.Console.WriteLine(start.ToString("G"));
+			if (periods.Count > 1 && DateTime.TryParse(periods[1].Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var end))
+				System.Console.WriteLine(end.ToString("G"));
+
+			return;
+
+			
+
+
+
+			return;
+
+			var cells = new string[] { "1", "2", "3", "4" };
+			System.Console.WriteLine($"\"{string.Join("\", \"", cells.Select(x => x))}\"");
+			return;
+
+			var sss = new List<Tesitng2> { new Tesitng2 { } };
+			System.Console.WriteLine("1. - " + (sss.FirstOrDefault(x => !x.Prop.IsEmpty()) ?? sss.First()).Prop?.FirstOrDefault());
+			//System.Console.WriteLine("2. - " + (sss.FirstOrDefault(x => x.Prop == "1112") ?? sss.First()).Prop?.FirstOrDefault());
+
+			var asynnc = new Func<Task<bool>>(async () =>
+			{
+				System.Console.Write("Working");
+				for (var i = 0; i < 10; i++)
+				{
+					Thread.Sleep(500);
+					System.Console.Write(".");
+				}
+
+				System.Console.WriteLine("\r\nFinished");
+				return false;
+			});
+
+			//var func = Task.Factory.StartNew<bool>(asynnc);
+			asynnc.RunSync();
+			//asynnc.RunSync2();
+
+			//var subsOnMe = IO.SafeReadFile(@"C:\tmp\подписаныНаМеня.txt");
+			//var mySubs = IO.SafeReadFile(@"C:\tmp\моиПодписки.txt");
+
+
+			//var subsOnMe1 = subsOnMe.Split('\n').Select(x => x.Trim()).ToList();
+			//var mySubs1 = mySubs.Split('\n').Select(x => x.Trim()).ToList();
+
+			//System.Console.WriteLine($"На меня не подписаны:");
+			//mySubs1.Except(subsOnMe1).ForEach(x => System.Console.WriteLine(x));
+
+			//System.Console.WriteLine($"\r\nЯ не подписан на:");
+			//subsOnMe1.Except(mySubs1).ForEach(x => System.Console.WriteLine(x));
+
+			//CompareXml2(@"C:\tmp\expected.txt", @"C:\tmp\sent.txt");
+			//return;	
+			//Thread.Sleep(1000);
+
+			//var i = 0;
+			//var test11 = (from dd in new string[] { "test", "ste", "efef" } 
+			//			  select (i++, dd)).ToArray();
+
+			//new string[] { "test", "ste", "efef" }.Select(x => (i++, x)).ToArray();
+
+			//OrderDocumentData datatest = null;
+			//if (datatest is OrderDocumentData datatest11)
+			//{
+			//	System.Console.WriteLine("true!!");
+			//}
+
+			//object test = "test";
+			//string test2 = "test";
+			//var list = new List<string>();
+			//var sss = list.SingleOrDefault(x => x == "");
+
+			//System.Console.WriteLine(test2.Equals(test));
+
+			//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
+			//System.Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
+			//System.Console.WriteLine($"Stop. - {DateTime.Parse("2020-11-11T17:00:00")}\r\n...........................");
+
+			//Thread.Sleep(5000);
+			//goto test;
+
+			//var testtt  = $"{DateTime.Now:dd.MM.yyyy_HH-mm-ss-ff}";
+
+
+			//var tesss1 = new List<OrderDocumentRequestTemp>
+			//            {
+			//                new OrderDocumentRequestTemp
+			//                {
+			//                    DocumentTypeId = 1,
+			//                    ContractNumber = "6"
+			//                },
+			//                new OrderDocumentRequestTemp
+			//                {
+			//                    DocumentTypeId = 3,
+			//                    ContractNumber = "222"
+			//                },
+			//                new OrderDocumentRequestTemp
+			//                {
+			//                    DocumentTypeId = 1,
+			//                    ContractNumber = "333"
+			//                },
+			//                new OrderDocumentRequestTemp
+			//                {
+			//                    DocumentTypeId = 2,
+			//                    ContractNumber = "444"
+			//                }
+			//            };
+
+
+			//var ssss = tesss1.Max(x => x.ContractNumber);
+
+			//var testttt = tesss1.GroupBy(x => x.DocumentTypeId).Select(x => x.ToList());
+
+
+
+			//var psList = GetOrderDocumentByPersonalAccountRequests();
+			//            var cList = GetOrderDocumentByContractRequests();
+
+			//            void tesss(IEnumerable<OrderDocumentRequestTemp> items)
+			//            {
+			//                foreach (var data in items)
+			//                {
+			//		System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
+			//		foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
+			//                    {
+			//                        System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
+			//                        foreach (var row in table.Rows.OfType<DataRow>())
+			//                        {
+			//                            System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
+
+			//                            foreach (var column in table.Columns.OfType<DataColumn>())
+			//                            {
+			//                                System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
+			//                            }
+			//                        }
+			//                    }
+			//                }
+			//}
+
+			//            void Tessst2(Dictionary<string, List<DocParameter>> items)
+			//            {
+			//                System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
+			//}
+
+			//            tesss(psList);
+			//            System.Console.WriteLine(new string('-', 25));
+
+			//tesss(cList);
+			//            System.Console.WriteLine(new string('-', 25));
+
+			//var psParams = new Dictionary<string, List<DocParameter>>();
+			//            foreach (var fff in psList)
+			//            {
+			//                psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
+			//            }
+			//            Tessst2(psParams);
+			//            System.Console.WriteLine(new string('-', 25));
+
+			//var cParams = new Dictionary<string, List<DocParameter>>();
+			//foreach (var fff2 in cList)
+			//            {
+			//                cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
+			//}
+			//            Tessst2(cParams);
+			//System.Console.WriteLine(new string('-', 25));
+
+
+			//            long? test1 = int.MaxValue;
+
+			//            int? test2 = test1 <= int.MaxValue ? (int?) test1 : null;
+
+			//            test1 = null;
+			//            int? test3 = test1 <= int.MaxValue ? (int?) test1 : null;
+
+
+			//var test = new OrderAttributeContainer
+			//            {
+			//                TableAttributes = new Dictionary<string, TableValuePaged>()
+			//                {
+			//                    {
+			//                        "EdmDeliveryStatus", new TableValuePaged
+			//                        {
+			//                            Columns = new Dictionary<string, List<object>>
+			//                            {
+			//                                {
+			//                                    "EdmDeliveryStatusCode", new List<object>
+			//                                    {
+			//                                        "10", "44"
+			//                                    }
+			//                                }
+			//                            }
+			//                        }
+			//                    }
+			//                }
+			//            };
+
+
+			//System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
 		}
 
 		[Serializable]

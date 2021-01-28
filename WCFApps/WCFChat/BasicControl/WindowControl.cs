@@ -10,7 +10,7 @@ using System.Windows.Media;
 using Utils.UIControls.Main;
 using Utils.UIControls.Tools;
 using Utils;
-using WCFChat.Service;
+using WCFChat.Contracts;
 using Timer = System.Timers.Timer;
 
 namespace WCFChat.Client.BasicControl

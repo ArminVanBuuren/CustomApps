@@ -19,11 +19,12 @@ using System.Windows.Markup;
 using System.Xml;
 using System.Resources;
 using System.Windows.Data;
-using WCFChat.Service;
-using Message = WCFChat.Service.Message;
+using WCFChat.Contracts;
+using Message = WCFChat.Contracts.Message;
 using Utils;
 using WCFChat.Client.BasicControl;
 using WCFChat.Client.ServiceReference1;
+using WCFChat.Contracts;
 
 namespace WCFChat.Client
 {

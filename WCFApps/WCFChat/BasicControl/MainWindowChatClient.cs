@@ -8,7 +8,8 @@ using System.Windows.Threading;
 using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
 using WCFChat.Client.ServiceReference1;
-using WCFChat.Service;
+using WCFChat.Contracts;
+using WCFChat.Contracts;
 
 namespace WCFChat.Client.BasicControl
 {
@@ -89,7 +90,7 @@ namespace WCFChat.Client.BasicControl
     }
 
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : Service.IChatCallback
+    class MainWindowChatClient : ServiceReference1.IChatCallback
     {
         protected object sync = new object();
         private InstanceContext context;
@@ -135,6 +136,11 @@ namespace WCFChat.Client.BasicControl
             //    default:
             //        throw new ArgumentOutOfRangeException(nameof(result), result, null);
             //}
+        }
+
+        public void TransferHistory(User[] users, Message[] messages)
+        {
+	        throw new NotImplementedException();
         }
 
         public void IsWritingCallback(User client, bool isWriting)
