@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,7 +11,7 @@ using System.Windows.Media;
 using Utils.UIControls.Main;
 using Utils.UIControls.Tools;
 using Utils;
-using WCFChat.Contracts;
+using WCFChat.Client.ServiceReference1;
 using Timer = System.Timers.Timer;
 
 namespace WCFChat.Client.BasicControl
@@ -49,9 +50,9 @@ namespace WCFChat.Client.BasicControl
         internal UserBindings Initiator { get; private set; }
         public Cloud CurrentCloud { get; private set; }
 
-        internal List<Message> Messages()
+        internal List<ChatMessage> Messages()
         {
-            var allMesages = new List<Message>();
+            var allMesages = new List<ChatMessage>();
             foreach (var block in DialogHistory.Blocks)
             {
                 if (block is MyParagraph mypar)
@@ -94,7 +95,7 @@ namespace WCFChat.Client.BasicControl
 
         }
 
-        public void AddWaiter(User newUser, IChatContractCallback callback, string address, string port)
+        public void AddWaiter(User newUser, IChatServiceCallback callback, string address, string port)
         {
             var userBind = new UserBindings(newUser, callback, address, port);
             AddUser(userBind, $"{address}:{port}");
@@ -284,16 +285,16 @@ namespace WCFChat.Client.BasicControl
         internal class MyParagraph : Paragraph
         {
             public string GUID { get; }
-            public List<Message> Messages { get; } = new List<Message>();
+            public List<ChatMessage> Messages { get; } = new List<ChatMessage>();
 
-            internal MyParagraph(Message msg)
+            internal MyParagraph(ChatMessage msg)
             {
                 LineHeight = 1;
                 GUID = msg.Sender.GUID;
                 AddMessage(msg, true);
             }
 
-            public void AddMessage(Message msg, bool newParagraph = false)
+            public void AddMessage(ChatMessage msg, bool newParagraph = false)
             {
                 Messages.Add(msg);
                 if (newParagraph)
@@ -315,7 +316,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        public void SomeoneUserReceveMessage(Message msg)
+        public void SomeoneUserReceveMessage(ChatMessage msg)
         {
             if (DialogHistory.Blocks.LastBlock is MyParagraph exist)
             {
@@ -372,7 +373,7 @@ namespace WCFChat.Client.BasicControl
         {
             lock (sync)
             {
-                var adminSay = new Message()
+                var adminSay = new ChatMessage()
                 {
                     Sender = Initiator.User,
                     Content = msg,

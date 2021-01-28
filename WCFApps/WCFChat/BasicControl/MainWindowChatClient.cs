@@ -8,8 +8,6 @@ using System.Windows.Threading;
 using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
 using WCFChat.Client.ServiceReference1;
-using WCFChat.Contracts;
-using WCFChat.Contracts;
 
 namespace WCFChat.Client.BasicControl
 {
@@ -17,7 +15,7 @@ namespace WCFChat.Client.BasicControl
     {
         private InstanceContext context;
         public string TransactionId { get; }
-        public ChatClient Proxy { get; private set; }
+        public ChatServiceClient Proxy { get; private set; }
         public User Initiator { get; }
         public Cloud JoinToCloud { get; }
 
@@ -28,7 +26,7 @@ namespace WCFChat.Client.BasicControl
             Initiator = initiator;
             JoinToCloud = joinToCloud;
 
-            Proxy = new ChatClient(context);
+            Proxy = new ChatServiceClient(context);
             Proxy.Open();
             Proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
             Proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
@@ -39,7 +37,7 @@ namespace WCFChat.Client.BasicControl
         void OpenOrReopenConnection()
         {
             Proxy.Abort();
-            Proxy = new ChatClient(context);
+            Proxy = new ChatServiceClient(context);
             Proxy.Open();
             Proxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
             Proxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
@@ -90,12 +88,12 @@ namespace WCFChat.Client.BasicControl
     }
 
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    class MainWindowChatClient : ServiceReference1.IChatCallback
+    class MainWindowChatClient : IChatServiceCallback
     {
         protected object sync = new object();
         private InstanceContext context;
         private UIWindow mainWindow;
-        public Dictionary<ChatClient, WindowControl> Clouds { get; } = new Dictionary<ChatClient, WindowControl>();
+        public Dictionary<ChatServiceClient, WindowControl> Clouds { get; } = new Dictionary<ChatServiceClient, WindowControl>();
 
         public Dictionary<string, ChatWaiter> currentWaiterToCloud = new Dictionary<string, ChatWaiter>();
 
@@ -138,7 +136,7 @@ namespace WCFChat.Client.BasicControl
             //}
         }
 
-        public void TransferHistory(User[] users, Message[] messages)
+        public void TransferHistory(User[] users, ChatMessage[] messages)
         {
 	        throw new NotImplementedException();
         }
@@ -179,7 +177,7 @@ namespace WCFChat.Client.BasicControl
             //proxy?.IsWritingAsync(Initiator.User, isWriting);
         }
 
-        public void Receive(Message msg)
+        public void Receive(ChatMessage msg)
         {
             //lock (sync)
             //{
@@ -203,7 +201,7 @@ namespace WCFChat.Client.BasicControl
             //proxy?.Abort();
         }
 
-        public void TransferHistory(List<User> users, List<Message> messages)
+        public void TransferHistory(List<User> users, List<ChatMessage> messages)
         {
             //lock (sync)
             //{

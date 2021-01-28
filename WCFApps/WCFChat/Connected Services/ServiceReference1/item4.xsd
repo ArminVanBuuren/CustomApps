@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://localhost/services/chat" elementFormDefault="qualified" targetNamespace="http://localhost/services/chat" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" />
+<xs:schema xmlns:tns="http://localhost/Chat/Services/v001" elementFormDefault="qualified" targetNamespace="http://localhost/Chat/Services/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://localhost/Server/Entities/v001" />
+  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://localhost/Chat/Entities/v001" />
   <xs:element name="Connect">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q1:User" />
+        <xs:element xmlns:q1="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q1:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Say">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="message" nillable="true" type="q2:Message" />
+        <xs:element xmlns:q2="http://localhost/Chat/Entities/v001" minOccurs="0" name="message" nillable="true" type="q2:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="IsWriting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q3:User" />
+        <xs:element xmlns:q3="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q3:User" />
         <xs:element minOccurs="0" name="isWriting" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
@@ -26,22 +27,22 @@
   <xs:element name="Disconnect">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q4:User" />
+        <xs:element xmlns:q4="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q4:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConnectResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="result" type="q5:ServerResult" />
+        <xs:element xmlns:q5="http://localhost/Chat/Entities/v001" minOccurs="0" name="result" type="q5:ServerResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TransferHistory">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="users" nillable="true" type="q6:ArrayOfUser" />
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="messages" nillable="true" type="q7:ArrayOfMessage" />
+        <xs:element xmlns:q6="http://localhost/Server/Entities/v001" minOccurs="0" name="users" nillable="true" type="q6:ArrayOfUser" />
+        <xs:element xmlns:q7="http://localhost/Chat/Entities/v001" minOccurs="0" name="messages" nillable="true" type="q7:ArrayOfChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -53,7 +54,7 @@
   <xs:element name="Receive">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="msg" nillable="true" type="q8:Message" />
+        <xs:element xmlns:q8="http://localhost/Chat/Entities/v001" minOccurs="0" name="msg" nillable="true" type="q8:ChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -65,7 +66,7 @@
   <xs:element name="IsWritingCallback">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="client" nillable="true" type="q9:User" />
+        <xs:element xmlns:q9="http://localhost/Server/Entities/v001" minOccurs="0" name="client" nillable="true" type="q9:User" />
         <xs:element minOccurs="0" name="isWriting" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
@@ -73,7 +74,7 @@
   <xs:element name="Terminate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="cloud" nillable="true" type="q10:Cloud" />
+        <xs:element xmlns:q10="http://localhost/Server/Entities/v001" minOccurs="0" name="cloud" nillable="true" type="q10:Cloud" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

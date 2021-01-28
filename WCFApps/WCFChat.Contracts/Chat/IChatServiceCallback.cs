@@ -12,7 +12,7 @@ namespace WCFChat.Contracts.Chat
 		void ConnectResult(ServerResult result);
 
 		[OperationContract(IsOneWay = false)]
-		void TransferHistory(List<User> users, List<Message> messages);
+		void TransferHistory(List<User> users, List<ChatMessage> messages);
 
 		[OperationContract(IsOneWay = false)]
 		void Receive(ChatMessage msg);

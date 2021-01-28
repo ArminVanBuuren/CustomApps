@@ -19,18 +19,15 @@ using System.Windows.Markup;
 using System.Xml;
 using System.Resources;
 using System.Windows.Data;
-using WCFChat.Contracts;
-using Message = WCFChat.Contracts.Message;
 using Utils;
 using WCFChat.Client.BasicControl;
 using WCFChat.Client.ServiceReference1;
-using WCFChat.Contracts;
 
 namespace WCFChat.Client
 {
     public delegate void AccessResult(ServerResult result, User user);
 
-    public partial class MainWindow : ServiceReference1.IMainContractCallback
+    public partial class MainWindow : IMainServiceCallback
     {
         static string RegeditKey => Guid.NewGuid().ToString("D");
         static MainWindow()
@@ -39,7 +36,7 @@ namespace WCFChat.Client
         }
 
         private object sync = new object();
-        private MainContractClient mainProxy;
+        private MainServiceClient mainProxy;
         private MainWindowChatServer currentServer;
         private MainWindowChatClient currentClient;
         private string localAddressUri;
@@ -58,12 +55,12 @@ namespace WCFChat.Client
             currentClient = new MainWindowChatClient(this);
         }
 
-        public void UpdateProxy(MainContractClient newMainProxy)
+        public void UpdateProxy(MainServiceClient newMainProxy)
         {
-            mainProxy = newMainProxy ?? throw new ArgumentException(nameof(MainContractClient));
+            mainProxy = newMainProxy ?? throw new ArgumentException(nameof(MainServiceClient));
         }
 
-        void ServiceReference1.IMainContractCallback.RequestForAccess(User user, string address)
+        void IMainServiceCallback.RequestForAccess(User user, string address)
         {
             if (currentServer != null)
             {
@@ -223,7 +220,7 @@ namespace WCFChat.Client
             });
         }
 
-        void ServiceReference1.IMainContractCallback.CreateCloudResult(CloudResult result, string transactionID)
+        void IMainServiceCallback.CreateCloudResult(CloudResult result, string transactionID)
         {
             Dispatcher?.Invoke(() =>
             {
@@ -293,9 +290,9 @@ namespace WCFChat.Client
                     {
                         return ex.Message;
                     }
-                }).ContinueWith((antecedent) =>
+                }).ContinueWith(async (antecedent) =>
                 {
-                    if (antecedent.Result.IsNullOrEmpty())
+                    if ((await antecedent.ConfigureAwait(false)).IsNullOrEmpty())
                     {
                         ActiveWaitCloud(newItemGrid);
                     }
@@ -311,7 +308,7 @@ namespace WCFChat.Client
             }
         }
 
-        void ServiceReference1.IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud, string transactionID)
+        void IMainServiceCallback.GetCloudResult(ServerResult result, Cloud cloud, string transactionID)
         {
             Dispatcher?.Invoke(() =>
             {

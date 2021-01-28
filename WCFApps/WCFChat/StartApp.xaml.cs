@@ -24,7 +24,7 @@ namespace WCFChat.Client
     {
         private bool isClosing = false;
         private MainWindow mainWin;
-        private MainContractClient mainProxy = null;
+        private MainServiceClient mainProxy = null;
         public StartApp()
         {
             InitializeComponent();
@@ -56,7 +56,7 @@ namespace WCFChat.Client
         {
             mainProxy?.Abort();
             var context = new InstanceContext(mainWin);
-            mainProxy = new MainContractClient(context);
+            mainProxy = new MainServiceClient(context);
             mainProxy.Open();
             mainProxy.InnerDuplexChannel.Faulted += new EventHandler(InnerDuplexChannel_Faulted);
             mainProxy.InnerDuplexChannel.Opened += new EventHandler(InnerDuplexChannel_Opened);
@@ -66,9 +66,9 @@ namespace WCFChat.Client
 
         public void ConnectionCompleted(Task<bool> antecedent)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(async () =>
             {
-                if (antecedent.Result)
+	            if (await antecedent.ConfigureAwait(false))
                 {
                     mainWin.Show();
                     this.Visibility = Visibility.Collapsed;

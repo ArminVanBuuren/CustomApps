@@ -32,7 +32,7 @@ namespace WCFChat.Service
             Cloud = cloud;
         }
         public CloudArgs Cloud { get; }
-        public List<Message> Messages { get; } = new List<Message>();
+        public List<ChatMessage> Messages { get; } = new List<ChatMessage>();
         public List<CloudUser> CloudUserCollection { get; } = new List<CloudUser>();
     }
 

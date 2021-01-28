@@ -507,7 +507,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
         void ConnectResult(WCFChat.ClientConsole.ServiceReference1.ServerResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://localhost/Chat/Services/v001/IChatService/TransferHistory", ReplyAction="http://localhost/Chat/Services/v001/IChatService/TransferHistoryResponse")]
-        void TransferHistory(WCFChat.ClientConsole.ServiceReference1.User[] users, System.ServiceModel.Channels.Message[] messages);
+        void TransferHistory(WCFChat.ClientConsole.ServiceReference1.User[] users, WCFChat.ClientConsole.ServiceReference1.ChatMessage[] messages);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://localhost/Chat/Services/v001/IChatService/Receive", ReplyAction="http://localhost/Chat/Services/v001/IChatService/ReceiveResponse")]
         void Receive(WCFChat.ClientConsole.ServiceReference1.ChatMessage msg);

@@ -2,7 +2,6 @@
 <xs:schema xmlns:tns="http://localhost/Chat/Services/v001" elementFormDefault="qualified" targetNamespace="http://localhost/Chat/Services/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://localhost/Server/Entities/v001" />
   <xs:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://localhost/Chat/Entities/v001" />
-  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.ServiceModel.Channels" />
   <xs:element name="Connect">
     <xs:complexType>
       <xs:sequence>
@@ -43,7 +42,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q6="http://localhost/Server/Entities/v001" minOccurs="0" name="users" nillable="true" type="q6:ArrayOfUser" />
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/System.ServiceModel.Channels" minOccurs="0" name="messages" nillable="true" type="q7:ArrayOfMessage" />
+        <xs:element xmlns:q7="http://localhost/Chat/Entities/v001" minOccurs="0" name="messages" nillable="true" type="q7:ArrayOfChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

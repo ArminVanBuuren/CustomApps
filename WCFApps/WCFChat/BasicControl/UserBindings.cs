@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utils.UIControls.Tools;
 using Utils;
-using WCFChat.Contracts;
+using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client.BasicControl
 {
@@ -36,7 +36,7 @@ namespace WCFChat.Client.BasicControl
             Port = string.Empty;
         }
 
-        internal UserBindings(User user, IChatContractCallback callback, string address, string port)
+        internal UserBindings(User user, IChatServiceCallback callback, string address, string port)
         {
             InitBase(user);
             CallBack = callback;
@@ -90,7 +90,7 @@ namespace WCFChat.Client.BasicControl
         public UIPropertyValue<string> Name { get; private set; }
         public User User { get; private set; }
 
-        internal IChatContractCallback CallBack { get; set; }
+        internal IChatServiceCallback CallBack { get; set; }
         public UIPropertyValue<string> Address { get; }
         public string Port { get; }
         internal UserControlUI UIControls { get; private set; }

@@ -70,4 +70,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
+  <xs:complexType name="ArrayOfChatMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ChatMessage" nillable="true" type="tns:ChatMessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfChatMessage" nillable="true" type="tns:ArrayOfChatMessage" />
 </xs:schema>

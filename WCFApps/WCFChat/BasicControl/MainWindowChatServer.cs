@@ -5,12 +5,10 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
-using WCFChat.Contracts;
 using System.Timers;
 using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
-using WCFChat.Contracts.Chat;
-using Message = WCFChat.Contracts.Message;
+using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client.BasicControl
 {
@@ -282,7 +280,7 @@ namespace WCFChat.Client.BasicControl
             var allUsers = control.AllUsers.Values.Where(p => p.CallBack != null || p.Status == UserStatus.Admin).Select(p => p.User).ToList();
 
             if (((IChannel)createdUser.CallBack).State == CommunicationState.Opened)
-                createdUser.CallBack.TransferHistory(allUsers, control.Messages());
+                createdUser.CallBack.TransferHistory(allUsers.ToArray(), control.Messages().ToArray());
 
             foreach (var existUser in control.AllUsers.Values)
             {
@@ -290,7 +288,7 @@ namespace WCFChat.Client.BasicControl
                     continue;
 
                 if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
-                    existUser.CallBack.TransferHistory(allUsers, null);
+                    existUser.CallBack.TransferHistory(allUsers.ToArray(), null);
             }
         }
 
@@ -311,7 +309,7 @@ namespace WCFChat.Client.BasicControl
                     foreach (var existUser in control.AllUsers.Values)
                     {
                         if (existUser.CallBack != null && ((IChannel)existUser.CallBack).State == CommunicationState.Opened)
-                            existUser.CallBack.TransferHistory(allUsers, null);
+                            existUser.CallBack.TransferHistory(allUsers.ToArray(), null);
                     }
                 }
                 catch (Exception e)
@@ -354,7 +352,7 @@ namespace WCFChat.Client.BasicControl
 
         
 
-        void IChatService.Say(Message message)
+        void IChatService.Say(ChatMessage message)
         {
             lock (sync)
             {
@@ -412,6 +410,26 @@ namespace WCFChat.Client.BasicControl
                 }
             }
             return false;
+        }
+
+        public Task ConnectAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SayAsync(ChatMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task IsWritingAsync(User user, bool isWriting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DisconnectAsync(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

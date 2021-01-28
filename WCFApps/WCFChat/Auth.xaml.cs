@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Utils;
-using WCFChat.Contracts;
+using WCFChat.Client.ServiceReference1;
 
 namespace WCFChat.Client
 {
