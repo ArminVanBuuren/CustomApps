@@ -38,6 +38,13 @@ namespace WCFChat.Client.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
         System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Test")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(WCFChat.Contracts.Entities.EdmContact))]
+        void Test(WCFChat.Contracts.Entities.ContactBase baseContact);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Test")]
+        System.Threading.Tasks.Task TestAsync(WCFChat.Contracts.Entities.ContactBase baseContact);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -111,6 +118,14 @@ namespace WCFChat.Client.ServiceReference1 {
         
         public System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.Contracts.ServerResult result, WCFChat.Contracts.User user) {
             return base.Channel.RemoveOrAccessUserAsync(result, user);
+        }
+        
+        public void Test(WCFChat.Contracts.Entities.ContactBase baseContact) {
+            base.Channel.Test(baseContact);
+        }
+        
+        public System.Threading.Tasks.Task TestAsync(WCFChat.Contracts.Entities.ContactBase baseContact) {
+            return base.Channel.TestAsync(baseContact);
         }
     }
     

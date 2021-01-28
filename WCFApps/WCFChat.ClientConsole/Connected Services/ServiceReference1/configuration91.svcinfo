@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="KQbCsW24bI6z0SKRV67borjLulwVZ9ukQCPFlGj1Pyc=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="cFhtTVYlYmpgeGgXTCKctBLhho1HrIX/+0UCHIAlqBU=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="wsDualHttpBinding" name="WSDualHttpBinding_IMainContract1">
+    <bindingConfiguration bindingType="wsDualHttpBinding" name="WSDualHttpBinding_IMainContract">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IMainContract1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IMainContract</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -95,10 +95,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="wsDualHttpBinding" name="WSDualHttpBinding_IChat1">
+    <bindingConfiguration bindingType="wsDualHttpBinding" name="WSDualHttpBinding_IChat">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IChat1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IChat</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -191,7 +191,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSDualHttpBinding_IMainContract1" contract="ServiceReference1.IMainContract" bindingType="wsDualHttpBinding" address="http://localhost:8040/MainServer" bindingConfiguration="WSDualHttpBinding_IMainContract1">
+    <endpoint name="WSDualHttpBinding_IMainContract" contract="ServiceReference1.IMainContract" bindingType="wsDualHttpBinding" address="http://localhost:8040/MainServer" bindingConfiguration="WSDualHttpBinding_IMainContract">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://localhost:8040/MainServer</serializedValue>
@@ -203,7 +203,7 @@
           <serializedValue>wsDualHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IMainContract1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IMainContract</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ServiceReference1.IMainContract</serializedValue>
@@ -266,7 +266,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IMainContract1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IMainContract</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -276,7 +276,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="WSDualHttpBinding_IChat1" contract="ServiceReference1.IChat" bindingType="wsDualHttpBinding" address="http://localhost:8040/ChatServer" bindingConfiguration="WSDualHttpBinding_IChat1">
+    <endpoint name="WSDualHttpBinding_IChat" contract="ServiceReference1.IChat" bindingType="wsDualHttpBinding" address="http://localhost:8040/ChatServer" bindingConfiguration="WSDualHttpBinding_IChat">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://localhost:8040/ChatServer</serializedValue>
@@ -288,7 +288,7 @@
           <serializedValue>wsDualHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IChat1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IChat</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ServiceReference1.IChat</serializedValue>
@@ -351,7 +351,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSDualHttpBinding_IChat1</serializedValue>
+          <serializedValue>WSDualHttpBinding_IChat</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

@@ -12,6 +12,7 @@
       <xs:extension base="tns:ContactBase">
         <xs:sequence>
           <xs:element minOccurs="0" name="FnsId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TestTest" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

@@ -14,9 +14,13 @@ namespace WCFChat.Contracts.Entities
 		[DataMember]
 		public string FnsId { get; set; }
 
+		[DataMember]
+		public string TestTest { get; set; }
+
 		/// <summary>
 		/// Возвращает код типа контакта.
 		/// </summary>
+		[DataMember]
 		public override string ContactTypeCode => "Edo";
 	}
 }

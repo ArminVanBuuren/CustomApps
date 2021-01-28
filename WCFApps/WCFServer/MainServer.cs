@@ -300,7 +300,13 @@ namespace WCFChat.Service
 
         public void Test(ContactBase baseContact)
         {
-	        throw new NotImplementedException();
+            if (baseContact is EdmContact edmContact)
+                Console.WriteLine($"This is EdmContact FnsId: {edmContact.FnsId}");
+            else
+	            Console.WriteLine($"This is {baseContact.GetType()}");
+            
+            Console.WriteLine(baseContact.Guid);
+	        Console.WriteLine(baseContact.ContactTypeCode);
         }
 
 
