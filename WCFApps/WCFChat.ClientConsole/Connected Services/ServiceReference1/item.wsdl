@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://localhost/services/server" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost/services/server" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://localhost/Server/Services/v001" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost/Server/Services/v001" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://localhost/services/server/Imports">
-      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd0" namespace="http://localhost/services/server" />
+    <xsd:schema targetNamespace="http://localhost/Server/Services/v001/Imports">
+      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd0" namespace="http://localhost/Server/Services/v001" />
       <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" />
-      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001" />
+      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://localhost/Server/Entities/v001" />
+      <xsd:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://localhost/Chat/Entities/v001" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IMainContract_CreateCloud_InputMessage">
+  <wsdl:message name="IMainService_CreateCloud_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateCloud" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_Unbind_InputMessage">
+  <wsdl:message name="IMainService_Unbind_InputMessage">
     <wsdl:part name="parameters" element="tns:Unbind" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_GetCloud_InputMessage">
+  <wsdl:message name="IMainService_GetCloud_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCloud" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_RemoveOrAccessUser_InputMessage">
+  <wsdl:message name="IMainService_RemoveOrAccessUser_InputMessage">
     <wsdl:part name="parameters" element="tns:RemoveOrAccessUser" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_Test_InputMessage">
+  <wsdl:message name="IMainService_Test_InputMessage">
     <wsdl:part name="parameters" element="tns:Test" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_CreateCloudResult_OutputCallbackMessage">
+  <wsdl:message name="IMainService_CreateCloudResult_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:CreateCloudResult" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_RequestForAccess_OutputCallbackMessage">
+  <wsdl:message name="IMainService_RequestForAccess_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:RequestForAccess" />
   </wsdl:message>
-  <wsdl:message name="IMainContract_GetCloudResult_OutputCallbackMessage">
+  <wsdl:message name="IMainService_GetCloudResult_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetCloudResult" />
   </wsdl:message>
-  <wsdl:portType name="IMainContract">
+  <wsdl:portType name="IMainService">
     <wsdl:operation name="CreateCloud">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/CreateCloud" message="tns:IMainContract_CreateCloud_InputMessage" />
+      <wsdl:input wsaw:Action="http://localhost/Server/Services/v001/IMainService/CreateCloud" message="tns:IMainService_CreateCloud_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Unbind">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/Unbind" message="tns:IMainContract_Unbind_InputMessage" />
+      <wsdl:input wsaw:Action="http://localhost/Server/Services/v001/IMainService/Unbind" message="tns:IMainService_Unbind_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCloud">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/GetCloud" message="tns:IMainContract_GetCloud_InputMessage" />
+      <wsdl:input wsaw:Action="http://localhost/Server/Services/v001/IMainService/GetCloud" message="tns:IMainService_GetCloud_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="RemoveOrAccessUser">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser" message="tns:IMainContract_RemoveOrAccessUser_InputMessage" />
+      <wsdl:input wsaw:Action="http://localhost/Server/Services/v001/IMainService/RemoveOrAccessUser" message="tns:IMainService_RemoveOrAccessUser_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Test">
-      <wsdl:input wsaw:Action="http://localhost/services/server/IMainContract/Test" message="tns:IMainContract_Test_InputMessage" />
+      <wsdl:input wsaw:Action="http://localhost/Server/Services/v001/IMainService/Test" message="tns:IMainService_Test_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CreateCloudResult">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/CreateCloudResult" message="tns:IMainContract_CreateCloudResult_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://localhost/Server/Services/v001/IMainService/CreateCloudResult" message="tns:IMainService_CreateCloudResult_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="RequestForAccess">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/RequestForAccess" message="tns:IMainContract_RequestForAccess_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://localhost/Server/Services/v001/IMainService/RequestForAccess" message="tns:IMainService_RequestForAccess_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCloudResult">
-      <wsdl:output wsaw:Action="http://localhost/services/server/IMainContract/GetCloudResult" message="tns:IMainContract_GetCloudResult_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://localhost/Server/Services/v001/IMainService/GetCloudResult" message="tns:IMainService_GetCloudResult_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

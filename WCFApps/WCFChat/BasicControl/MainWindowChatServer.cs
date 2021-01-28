@@ -9,16 +9,17 @@ using WCFChat.Contracts;
 using System.Timers;
 using Utils.UIControls.Main;
 using WCFChat.Client.BasicControl;
+using WCFChat.Contracts.Chat;
 using Message = WCFChat.Contracts.Message;
 
 namespace WCFChat.Client.BasicControl
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    public class MainWindowChatServer : WCFChat.Contracts.IChat
+    public class MainWindowChatServer : IChatService
     {
         protected object sync = new object();
         private AccessResult OnRemoveOrAccessUser;
-        public IChatCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
+        public IChatServiceCallback CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
         public bool CurrentCallbackIsOpen => ((IChannel)CurrentCallback).State == CommunicationState.Opened;
 
         internal Dictionary<string, WindowControl> Clouds { get; } = new Dictionary<string, WindowControl>(StringComparer.CurrentCultureIgnoreCase);
@@ -172,7 +173,7 @@ namespace WCFChat.Client.BasicControl
             Clouds.Remove(cloud.Name);
         }
 
-        void IChat.Connect(User newUser)
+        void IChatService.Connect(User newUser)
         {
             lock (sync)
             {
@@ -293,7 +294,7 @@ namespace WCFChat.Client.BasicControl
             }
         }
 
-        void IChat.Disconnect(User user)
+        void IChatService.Disconnect(User user)
         {
             lock (sync)
             {
@@ -322,7 +323,7 @@ namespace WCFChat.Client.BasicControl
 
         
 
-        void IChat.IsWriting(User user, bool isWriting)
+        void IChatService.IsWriting(User user, bool isWriting)
         {
             lock (sync)
             {
@@ -353,7 +354,7 @@ namespace WCFChat.Client.BasicControl
 
         
 
-        void IChat.Say(Message message)
+        void IChatService.Say(Message message)
         {
             lock (sync)
             {

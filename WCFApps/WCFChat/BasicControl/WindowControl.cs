@@ -94,7 +94,7 @@ namespace WCFChat.Client.BasicControl
 
         }
 
-        public void AddWaiter(User newUser, IChatCallback callback, string address, string port)
+        public void AddWaiter(User newUser, IChatContractCallback callback, string address, string port)
         {
             var userBind = new UserBindings(newUser, callback, address, port);
             AddUser(userBind, $"{address}:{port}");

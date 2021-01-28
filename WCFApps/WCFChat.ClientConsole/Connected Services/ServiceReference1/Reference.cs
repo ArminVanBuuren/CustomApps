@@ -15,7 +15,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Cloud", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Cloud", Namespace="http://localhost/Server/Entities/v001")]
     [System.SerializableAttribute()]
     public partial class Cloud : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -75,7 +75,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://localhost/Server/Entities/v001")]
     [System.SerializableAttribute()]
     public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -148,7 +148,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ServerResult", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServerResult", Namespace="http://localhost/Chat/Entities/v001")]
     public enum ServerResult : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -178,7 +178,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ContactBase", Namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ContactBase", Namespace="http://localhost/Chat/Entities/v001")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WCFChat.ClientConsole.ServiceReference1.EdmContact))]
     public partial class ContactBase : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -224,7 +224,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="EdmContact", Namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="EdmContact", Namespace="http://localhost/Chat/Entities/v001")]
     [System.SerializableAttribute()]
     public partial class EdmContact : WCFChat.ClientConsole.ServiceReference1.ContactBase {
         
@@ -262,7 +262,7 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CloudResult", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CloudResult", Namespace="http://localhost/Server/Entities/v001")]
     public enum CloudResult : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -280,9 +280,9 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Message", Namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ChatMessage", Namespace="http://localhost/Chat/Entities/v001")]
     [System.SerializableAttribute()]
-    public partial class Message : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ChatMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -355,78 +355,78 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/services/server", ConfigurationName="ServiceReference1.IMainContract", CallbackContract=typeof(WCFChat.ClientConsole.ServiceReference1.IMainContractCallback))]
-    public interface IMainContract {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/Server/Services/v001", ConfigurationName="ServiceReference1.IMainService", CallbackContract=typeof(WCFChat.ClientConsole.ServiceReference1.IMainServiceCallback))]
+    public interface IMainService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/CreateCloud")]
         void CreateCloud(WCFChat.ClientConsole.ServiceReference1.Cloud cloud, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloud")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/CreateCloud")]
         System.Threading.Tasks.Task CreateCloudAsync(WCFChat.ClientConsole.ServiceReference1.Cloud cloud, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/Unbind")]
         void Unbind(string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Unbind")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/Unbind")]
         System.Threading.Tasks.Task UnbindAsync(string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/GetCloud")]
         void GetCloud(WCFChat.ClientConsole.ServiceReference1.User user, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloud")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/GetCloud")]
         System.Threading.Tasks.Task GetCloudAsync(WCFChat.ClientConsole.ServiceReference1.User user, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/RemoveOrAccessUser")]
         void RemoveOrAccessUser(WCFChat.ClientConsole.ServiceReference1.ServerResult result, WCFChat.ClientConsole.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RemoveOrAccessUser")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/RemoveOrAccessUser")]
         System.Threading.Tasks.Task RemoveOrAccessUserAsync(WCFChat.ClientConsole.ServiceReference1.ServerResult result, WCFChat.ClientConsole.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Test")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/Test")]
         void Test(WCFChat.ClientConsole.ServiceReference1.ContactBase baseContact);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/Test")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/Test")]
         System.Threading.Tasks.Task TestAsync(WCFChat.ClientConsole.ServiceReference1.ContactBase baseContact);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IMainContractCallback {
+    public interface IMainServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/CreateCloudResult")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/CreateCloudResult")]
         void CreateCloudResult(WCFChat.ClientConsole.ServiceReference1.CloudResult result, string transactionID);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/RequestForAccess")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/RequestForAccess")]
         void RequestForAccess(WCFChat.ClientConsole.ServiceReference1.User user, string address);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/server/IMainContract/GetCloudResult")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Server/Services/v001/IMainService/GetCloudResult")]
         void GetCloudResult(WCFChat.ClientConsole.ServiceReference1.ServerResult result, WCFChat.ClientConsole.ServiceReference1.Cloud cloud, string transactionID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IMainContractChannel : WCFChat.ClientConsole.ServiceReference1.IMainContract, System.ServiceModel.IClientChannel {
+    public interface IMainServiceChannel : WCFChat.ClientConsole.ServiceReference1.IMainService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class MainContractClient : System.ServiceModel.DuplexClientBase<WCFChat.ClientConsole.ServiceReference1.IMainContract>, WCFChat.ClientConsole.ServiceReference1.IMainContract {
+    public partial class MainServiceClient : System.ServiceModel.DuplexClientBase<WCFChat.ClientConsole.ServiceReference1.IMainService>, WCFChat.ClientConsole.ServiceReference1.IMainService {
         
-        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public MainServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public MainServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public MainServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public MainServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public MainContractClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public MainServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
@@ -472,78 +472,78 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/services/chat", ConfigurationName="ServiceReference1.IChat", CallbackContract=typeof(WCFChat.ClientConsole.ServiceReference1.IChatCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
-    public interface IChat {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://localhost/Chat/Services/v001", ConfigurationName="ServiceReference1.IChatService", CallbackContract=typeof(WCFChat.ClientConsole.ServiceReference1.IChatServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
+    public interface IChatService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/Connect")]
         void Connect(WCFChat.ClientConsole.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Connect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/Connect")]
         System.Threading.Tasks.Task ConnectAsync(WCFChat.ClientConsole.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Say")]
-        void Say(WCFChat.ClientConsole.ServiceReference1.Message message);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/Say")]
+        void Say(WCFChat.ClientConsole.ServiceReference1.ChatMessage message);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Say")]
-        System.Threading.Tasks.Task SayAsync(WCFChat.ClientConsole.ServiceReference1.Message message);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/Say")]
+        System.Threading.Tasks.Task SayAsync(WCFChat.ClientConsole.ServiceReference1.ChatMessage message);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWriting")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/IsWriting")]
         void IsWriting(WCFChat.ClientConsole.ServiceReference1.User user, [System.ServiceModel.MessageParameterAttribute(Name="isWriting")] bool isWriting1);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWriting")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/IsWriting")]
         System.Threading.Tasks.Task IsWritingAsync(WCFChat.ClientConsole.ServiceReference1.User user, bool isWriting);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/services/chat/IChat/Disconnect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/Chat/Services/v001/IChatService/Disconnect")]
         void Disconnect(WCFChat.ClientConsole.ServiceReference1.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/services/chat/IChat/Disconnect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://localhost/Chat/Services/v001/IChatService/Disconnect")]
         System.Threading.Tasks.Task DisconnectAsync(WCFChat.ClientConsole.ServiceReference1.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatCallback {
+    public interface IChatServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/ConnectResult")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/ConnectResult")]
         void ConnectResult(WCFChat.ClientConsole.ServiceReference1.ServerResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/TransferHistory", ReplyAction="http://localhost/services/chat/IChat/TransferHistoryResponse")]
-        void TransferHistory(WCFChat.ClientConsole.ServiceReference1.User[] users, WCFChat.ClientConsole.ServiceReference1.Message[] messages);
+        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/Chat/Services/v001/IChatService/TransferHistory", ReplyAction="http://localhost/Chat/Services/v001/IChatService/TransferHistoryResponse")]
+        void TransferHistory(WCFChat.ClientConsole.ServiceReference1.User[] users, System.ServiceModel.Channels.Message[] messages);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/services/chat/IChat/Receive", ReplyAction="http://localhost/services/chat/IChat/ReceiveResponse")]
-        void Receive(WCFChat.ClientConsole.ServiceReference1.Message msg);
+        [System.ServiceModel.OperationContractAttribute(Action="http://localhost/Chat/Services/v001/IChatService/Receive", ReplyAction="http://localhost/Chat/Services/v001/IChatService/ReceiveResponse")]
+        void Receive(WCFChat.ClientConsole.ServiceReference1.ChatMessage msg);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/IsWritingCallback")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/IsWritingCallback")]
         void IsWritingCallback(WCFChat.ClientConsole.ServiceReference1.User client, bool isWriting);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/services/chat/IChat/Terminate")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://localhost/Chat/Services/v001/IChatService/Terminate")]
         void Terminate(WCFChat.ClientConsole.ServiceReference1.Cloud cloud);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatChannel : WCFChat.ClientConsole.ServiceReference1.IChat, System.ServiceModel.IClientChannel {
+    public interface IChatServiceChannel : WCFChat.ClientConsole.ServiceReference1.IChatService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ChatClient : System.ServiceModel.DuplexClientBase<WCFChat.ClientConsole.ServiceReference1.IChat>, WCFChat.ClientConsole.ServiceReference1.IChat {
+    public partial class ChatServiceClient : System.ServiceModel.DuplexClientBase<WCFChat.ClientConsole.ServiceReference1.IChatService>, WCFChat.ClientConsole.ServiceReference1.IChatService {
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public ChatServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public ChatServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public ChatServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public ChatServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public ChatServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
@@ -555,11 +555,11 @@ namespace WCFChat.ClientConsole.ServiceReference1 {
             return base.Channel.ConnectAsync(user);
         }
         
-        public void Say(WCFChat.ClientConsole.ServiceReference1.Message message) {
+        public void Say(WCFChat.ClientConsole.ServiceReference1.ChatMessage message) {
             base.Channel.Say(message);
         }
         
-        public System.Threading.Tasks.Task SayAsync(WCFChat.ClientConsole.ServiceReference1.Message message) {
+        public System.Threading.Tasks.Task SayAsync(WCFChat.ClientConsole.ServiceReference1.ChatMessage message) {
             return base.Channel.SayAsync(message);
         }
         

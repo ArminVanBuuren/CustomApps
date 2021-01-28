@@ -45,11 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IChat.cs" />
-    <Compile Include="Entities\ContactBase.cs" />
-    <Compile Include="Entities\EdmContact.cs" />
-    <Compile Include="IMainContract.cs" />
-    <Compile Include="Namespace.cs" />
+    <Compile Include="Chat\Entities\ChatMessage.cs" />
+    <Compile Include="Chat\Entities\ServerPrivelege.cs" />
+    <Compile Include="Chat\Entities\ServerResult.cs" />
+    <Compile Include="Chat\IChatServiceCallback.cs" />
+    <Compile Include="Chat\Namespace.cs" />
+    <Compile Include="Main\Entities\Cloud.cs" />
+    <Compile Include="Main\Entities\CloudResult.cs" />
+    <Compile Include="Main\Entities\User.cs" />
+    <Compile Include="Chat\IChatService.cs" />
+    <Compile Include="Main\Entities\Contacts\ContactBase.cs" />
+    <Compile Include="Main\Entities\Contacts\EdmContact.cs" />
+    <Compile Include="Main\IMainService.cs" />
+    <Compile Include="Main\IMainServiceCallback.cs" />
+    <Compile Include="Main\Namespace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

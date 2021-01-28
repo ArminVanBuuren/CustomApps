@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace WCFChat.Contracts.Entities
+namespace WCFChat.Contracts.Main.Entities.Contacts
 {
 	/// <summary>
 	/// Представляет абстрактный контакт.
 	/// </summary>
-	[DataContract(Namespace = Namespace.ContractsV001)]
+	[DataContract(Namespace = Chat.Namespace.EntitiesV001)]
 	[KnownType(typeof(EdmContact))]
 	public abstract class ContactBase
 	{

@@ -10,7 +10,7 @@ namespace WCFChat.ClientConsole
 {
 	class Program
 	{
-		private static MainContractClient mainProxy;
+		private static MainServiceClient mainProxy;
 		private static MainCallback mainCallBack;
 
 		static readonly object sync = new object();
@@ -90,7 +90,7 @@ namespace WCFChat.ClientConsole
 			Console.WriteLine("Try to connect..");
 			mainProxy?.Abort();
 			var context = new InstanceContext(mainCallBack);
-			mainProxy = new MainContractClient(context);
+			mainProxy = new MainServiceClient(context);
 			mainProxy.Open();
 			mainProxy.InnerDuplexChannel.Faulted += InnerDuplexChannel_Faulted;
 			mainProxy.InnerDuplexChannel.Opened += InnerDuplexChannel_Opened;
@@ -139,7 +139,7 @@ namespace WCFChat.ClientConsole
         }
 	}
 
-	public class MainCallback : IMainContractCallback
+	public class MainCallback : IMainServiceCallback
 	{
 		public void CreateCloudResult(CloudResult result, string transactionID)
 		{

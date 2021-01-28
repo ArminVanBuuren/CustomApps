@@ -1,11 +1,11 @@
 ﻿using System.Runtime.Serialization;
 
-namespace WCFChat.Contracts.Entities
+namespace WCFChat.Contracts.Main.Entities.Contacts
 {
 	/// <summary>
 	/// Представляет контакт "ЭДО".
 	/// </summary>
-	[DataContract(Namespace = Namespace.ContractsV001)]
+	[DataContract(Namespace = Chat.Namespace.EntitiesV001)]
 	public sealed class EdmContact : ContactBase
 	{
 		/// <summary>

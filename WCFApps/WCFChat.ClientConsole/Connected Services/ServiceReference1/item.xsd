@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://localhost/services/server" elementFormDefault="qualified" targetNamespace="http://localhost/services/server" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" />
-  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001" />
+<xs:schema xmlns:tns="http://localhost/Server/Services/v001" elementFormDefault="qualified" targetNamespace="http://localhost/Server/Services/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd2" namespace="http://localhost/Server/Entities/v001" />
+  <xs:import schemaLocation="http://localhost:8040/?xsd=xsd3" namespace="http://localhost/Chat/Entities/v001" />
   <xs:element name="CreateCloud">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="cloud" nillable="true" type="q1:Cloud" />
+        <xs:element xmlns:q1="http://localhost/Server/Entities/v001" minOccurs="0" name="cloud" nillable="true" type="q1:Cloud" />
         <xs:element minOccurs="0" name="transactionID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -20,7 +20,7 @@
   <xs:element name="GetCloud">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q2:User" />
+        <xs:element xmlns:q2="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q2:User" />
         <xs:element minOccurs="0" name="transactionID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -28,22 +28,22 @@
   <xs:element name="RemoveOrAccessUser">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="result" type="q3:ServerResult" />
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q4:User" />
+        <xs:element xmlns:q3="http://localhost/Chat/Entities/v001" minOccurs="0" name="result" type="q3:ServerResult" />
+        <xs:element xmlns:q4="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q4:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Test">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001" minOccurs="0" name="baseContact" nillable="true" type="q5:ContactBase" />
+        <xs:element xmlns:q5="http://localhost/Chat/Entities/v001" minOccurs="0" name="baseContact" nillable="true" type="q5:ContactBase" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateCloudResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="result" type="q6:CloudResult" />
+        <xs:element xmlns:q6="http://localhost/Server/Entities/v001" minOccurs="0" name="result" type="q6:CloudResult" />
         <xs:element minOccurs="0" name="transactionID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -51,7 +51,7 @@
   <xs:element name="RequestForAccess">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="user" nillable="true" type="q7:User" />
+        <xs:element xmlns:q7="http://localhost/Server/Entities/v001" minOccurs="0" name="user" nillable="true" type="q7:User" />
         <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -59,8 +59,8 @@
   <xs:element name="GetCloudResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="result" type="q8:ServerResult" />
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WCFChat.Contracts" minOccurs="0" name="cloud" nillable="true" type="q9:Cloud" />
+        <xs:element xmlns:q8="http://localhost/Chat/Entities/v001" minOccurs="0" name="result" type="q8:ServerResult" />
+        <xs:element xmlns:q9="http://localhost/Server/Entities/v001" minOccurs="0" name="cloud" nillable="true" type="q9:Cloud" />
         <xs:element minOccurs="0" name="transactionID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

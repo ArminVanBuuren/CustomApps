@@ -30,7 +30,7 @@ namespace WCFChat.Client
 {
     public delegate void AccessResult(ServerResult result, User user);
 
-    public partial class MainWindow : IMainContractCallback
+    public partial class MainWindow : ServiceReference1.IMainContractCallback
     {
         static string RegeditKey => Guid.NewGuid().ToString("D");
         static MainWindow()
@@ -63,7 +63,7 @@ namespace WCFChat.Client
             mainProxy = newMainProxy ?? throw new ArgumentException(nameof(MainContractClient));
         }
 
-        void IMainContractCallback.RequestForAccess(User user, string address)
+        void ServiceReference1.IMainContractCallback.RequestForAccess(User user, string address)
         {
             if (currentServer != null)
             {
@@ -223,7 +223,7 @@ namespace WCFChat.Client
             });
         }
 
-        void IMainContractCallback.CreateCloudResult(CloudResult result, string transactionID)
+        void ServiceReference1.IMainContractCallback.CreateCloudResult(CloudResult result, string transactionID)
         {
             Dispatcher?.Invoke(() =>
             {
@@ -311,7 +311,7 @@ namespace WCFChat.Client
             }
         }
 
-        void IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud, string transactionID)
+        void ServiceReference1.IMainContractCallback.GetCloudResult(ServerResult result, Cloud cloud, string transactionID)
         {
             Dispatcher?.Invoke(() =>
             {

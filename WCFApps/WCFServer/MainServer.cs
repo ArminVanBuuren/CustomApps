@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using WCFChat.Service;
 using System.Timers;
-using Message = WCFChat.Contracts.Message;
-using WCFChat.Contracts;
-using WCFChat.Contracts.Entities;
+using WCFChat.Contracts.Chat;
+using WCFChat.Contracts.Chat.Entities;
+using WCFChat.Contracts.Main;
+using WCFChat.Contracts.Main.Entities;
+using WCFChat.Contracts.Main.Entities.Contacts;
 
 namespace WCFChat.Service
 {
     class CloudUser
     {
-        public CloudUser(User user, IChatCallback callBack, CloudArgs cloudBind)
+        public CloudUser(User user, IChatServiceCallback callBack, CloudArgs cloudBind)
         {
             User = user;
             CallBack = callBack;
             CloudBind = cloudBind;
         }
         public User User { get; }
-        public IChatCallback CallBack { get; }
+        public IChatServiceCallback CallBack { get; }
         public CloudArgs CloudBind { get; }
     }
 
@@ -37,17 +38,17 @@ namespace WCFChat.Service
 
     class CloudArgs
     {
-        public CloudArgs(Cloud cloud, IMainCallback authorCallBack, bool localServer):this(cloud, authorCallBack)
+        public CloudArgs(Cloud cloud, IMainServiceCallback authorCallBack, bool localServer):this(cloud, authorCallBack)
         {
             IsLocalServer = localServer;
         }
-        public CloudArgs(Cloud cloud, IMainCallback authorCallBack)
+        public CloudArgs(Cloud cloud, IMainServiceCallback authorCallBack)
         {
             CloudConfig = cloud;
             AuthorCallBack = authorCallBack;
         }
         public Cloud CloudConfig { get; }
-        public IMainCallback AuthorCallBack { get; }
+        public IMainServiceCallback AuthorCallBack { get; }
         public bool IsAvailable { get; set; } = true;
         public bool IsLocalServer { get; } = false;
     }
@@ -91,7 +92,7 @@ namespace WCFChat.Service
 
     [ServiceBehavior(Namespace = "http://localhost/services", 
         InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    public class MainServer : IMainContract, IChat, IDisposable
+    public class MainServer : IMainService, IChatService, IDisposable
     {
 	    private Timer _expiredRequestsCleaner;
 	    private readonly double _cleanupInterval = TimeSpan.FromSeconds(5).TotalMilliseconds;
@@ -128,11 +129,11 @@ namespace WCFChat.Service
         object syncObj = new object();
 
         CloudCollection Clouds { get; } = new CloudCollection();
-        Dictionary<User, KeyValuePair<string, IMainCallback>> waitForAccessToCloud = new Dictionary<User, KeyValuePair<string, IMainCallback>>();
-        public IMainCallback Main_CurrentCallback => OperationContext.Current.GetCallbackChannel<IMainCallback>();
+        Dictionary<User, KeyValuePair<string, IMainServiceCallback>> waitForAccessToCloud = new Dictionary<User, KeyValuePair<string, IMainServiceCallback>>();
+        public IMainServiceCallback Main_CurrentCallback => OperationContext.Current.GetCallbackChannel<IMainServiceCallback>();
         public bool Main_CurrentCallbackIsOpen => ((IChannel) Main_CurrentCallback).State == CommunicationState.Opened;
         ServiceHost host = null;
-        Dictionary<string, KeyValuePair<Cloud, IMainCallback>> cloudInMainServer = new Dictionary<string, KeyValuePair<Cloud, IMainCallback>>();
+        Dictionary<string, KeyValuePair<Cloud, IMainServiceCallback>> cloudInMainServer = new Dictionary<string, KeyValuePair<Cloud, IMainServiceCallback>>();
 
 
         public void CreateCloud(Cloud cloud, string transactionID)
@@ -246,7 +247,7 @@ namespace WCFChat.Service
                             if (((IChannel) cloudCreator).State == CommunicationState.Opened)
                             {
                                 cloudCreator.RequestForAccess(user, address);
-                                waitForAccessToCloud.Add(user, new KeyValuePair<string, IMainCallback>(transactionID, Main_CurrentCallback));
+                                waitForAccessToCloud.Add(user, new KeyValuePair<string, IMainServiceCallback>(transactionID, Main_CurrentCallback));
                                 return;
                             }
                             else
@@ -311,7 +312,7 @@ namespace WCFChat.Service
 
 
         Dictionary<CloudArgs, CloudBinding> clouds = new Dictionary<CloudArgs, CloudBinding>();
-        public IChatCallback Chat_CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatCallback>();
+        public IChatServiceCallback Chat_CurrentCallback => OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
         public bool Chat_CurrentCallbackIsOpen => ((IChannel)Chat_CurrentCallback).State == CommunicationState.Opened;
         private CloudCollection MainClouds;
         MainServer(CloudCollection Clouds)
@@ -495,7 +496,7 @@ namespace WCFChat.Service
             }
         }
 
-        public void Say(Message message)
+        public void Say(ChatMessage message)
         {
             lock (syncObj)
             {
