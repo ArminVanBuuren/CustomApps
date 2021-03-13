@@ -54,10 +54,10 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Utils, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Armin.Utils.2021.3.13.51853\lib\net452\Utils.dll</HintPath>
+      <HintPath>..\packages\Armin.Utils.2021.3.13.152358\lib\net452\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Armin.Utils.WinForm.2021.3.13.52830\lib\net452\Utils.WinForm.dll</HintPath>
+      <HintPath>..\packages\Armin.Utils.WinForm.2021.3.13.153120\lib\net452\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
