@@ -31,7 +31,7 @@
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="Armin.Utils" Version="2021.3.13.51853" />
+    <PackageReference Include="Armin.Utils" Version="2021.3.13.152358" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Design" />
