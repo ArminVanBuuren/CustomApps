@@ -107,7 +107,7 @@
       <Version>2021.3.13.152358</Version>
     </PackageReference>
     <PackageReference Include="Armin.Utils.UIControls">
-      <Version>2021.3.13.42628</Version>
+      <Version>2021.3.13.155215</Version>
     </PackageReference>
     <PackageReference Include="Armin.Utils.WinForm">
       <Version>2021.3.13.153120</Version>
