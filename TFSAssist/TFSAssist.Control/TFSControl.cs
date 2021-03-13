@@ -153,7 +153,7 @@ namespace TFSAssist.Control
 
             _log.OnWriteLog($"Address=[{Settings.MailOption.Address.Value}] UserName=[{Settings.MailOption.UserName.Value}] Exchange URI=[{Settings.MailOption.ExchangeUri.Value}]");
 
-            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrEmptyTrim() && !Settings.MailOption.UserName.Value.IsNullOrEmptyTrim())
+            if (!Settings.MailOption.ExchangeUri.Value.IsNullOrWhiteSpace() && !Settings.MailOption.UserName.Value.IsNullOrWhiteSpace())
             {
                 var domain_username = Settings.MailOption.UserName.Value.Split('\\');
                 if (domain_username.Length == 2)
@@ -164,7 +164,7 @@ namespace TFSAssist.Control
                 _exchangeService.Url = new Uri(Settings.MailOption.ExchangeUri.Value);
                 //AlternateIdBase response = _exchangeService.ConvertId(new AlternateId(IdFormat.EwsId, "Placeholder", domain_username[1].Trim()), IdFormat.EwsId);
             }
-            else if (!Settings.MailOption.Address.Value.IsNullOrEmptyTrim() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
+            else if (!Settings.MailOption.Address.Value.IsNullOrWhiteSpace() && _checkEmailAddress.IsMatch(Settings.MailOption.Address.Value)) // Необходим только Email Address и пароль, т.к. вызывается другой способ подключения
             {
                 _exchangeService.Credentials = new NetworkCredential(Settings.MailOption.Address.Value, _mailPassword);
                 _exchangeService.AutodiscoverUrl(Settings.MailOption.Address.Value, RedirectionUrlValidationCallback);
@@ -246,7 +246,7 @@ namespace TFSAssist.Control
             var collectionUri = new Uri(Settings.TFSOption.TFSUri.Value);
 
             // Коннект по кастомному логину и паролю
-            if (!Settings.TFSOption.TFSUserName.Value.IsNullOrEmptyTrim())
+            if (!Settings.TFSOption.TFSUserName.Value.IsNullOrWhiteSpace())
             {
                 var tfs_domain_username = Settings.TFSOption.TFSUserName.Value.Split('\\');
                 if (tfs_domain_username.Length != 2 || tfs_domain_username[0].IsNullOrEmpty() || tfs_domain_username[1].IsNullOrEmpty())
@@ -563,7 +563,7 @@ namespace TFSAssist.Control
             createdTfsId = string.Empty;
             //запускаем скрипт по поиску дублей
             var query = itemExec.ReplaceParcedValues(Settings.TFSOption.GetDublicateTFS[0].Value);
-            if (!query.IsNullOrEmptyTrim())
+            if (!query.IsNullOrWhiteSpace())
             {
                 _log.OnWriteLog($"Check duplicates. Query=[{query}]", true);
                 var workQuery = _workItemStore.Query(query);

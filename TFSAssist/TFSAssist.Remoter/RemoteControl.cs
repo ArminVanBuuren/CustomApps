@@ -469,7 +469,7 @@ namespace TFSAssist.Remoter
                                     entireLogs = $"{entireLogs}\r\n\r\n{new string('=', 15)}\r\n\r\n{currentLogs}";
                                 }
 
-                                if (entireLogs.IsNullOrEmptyTrim())
+                                if (entireLogs.IsNullOrWhiteSpace())
                                 {
                                     SendMessageToUserHost("Log is empty.");
                                     break;
@@ -499,7 +499,7 @@ namespace TFSAssist.Remoter
 
                             default:
                                 var parentResult = _callParent?.Invoke(command.ToString("G"));
-                                if (!parentResult.IsNullOrEmptyTrim())
+                                if (!parentResult.IsNullOrWhiteSpace())
                                 {
                                     if(parentResult.Length <= 800)
                                         SendMessageToUserHost(parentResult);

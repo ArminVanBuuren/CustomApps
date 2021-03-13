@@ -340,7 +340,7 @@ namespace TFSAssist.Remoter
                 resultCamInfo = resultCamInfo + "\r\n\r\n" + _encDevices;
             }
 
-            if (resultCamInfo.IsNullOrEmptyTrim())
+            if (resultCamInfo.IsNullOrWhiteSpace())
                 resultCamInfo = "No cam device found.";
             else
                 resultCamInfo = currentDevices.Trim() + "\r\n===================\r\n" + resultCamInfo;

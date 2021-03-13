@@ -161,9 +161,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils">
-      <HintPath>..\..\Utils\Utils\bin\x86\Release\Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CertificateCallback.cs" />
@@ -203,6 +200,10 @@
   <ItemGroup>
     <None Include="Resources\Example_Config.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Armin.Utils">
+      <Version>2021.3.13.152358</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
