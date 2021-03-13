@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
-using Utils.WinForm.Properties;
+using Utils.Properties;
 
 namespace Utils.WinForm.Notepad
 {

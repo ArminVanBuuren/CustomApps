@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using Utils.WinForm.Properties;
+using Utils.Properties;
 
 namespace Utils.WinForm.Notepad
 {
@@ -37,7 +37,7 @@ namespace Utils.WinForm.Notepad
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.ClientSize = new System.Drawing.Size(1035, 648);
-			this.Icon = global::Utils.WinForm.Properties.Resources.note;
+			this.Icon = global::Utils.Properties.Resources.note;
 			this.Name = "Notepad";
 			this.Text = "Notepad";
 			this.ResumeLayout(false);

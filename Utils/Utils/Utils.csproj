@@ -1,272 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A734B4E4-A5BF-4566-AC89-FC58D02B2D5F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <Deterministic>False</Deterministic>
     <RootNamespace>Utils</RootNamespace>
     <AssemblyName>Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net452</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Authors>Khovanskiy Utils (vkhovanskiy@gmail.com)</Authors>
+    <Company>Khovanskiy</Company>
+    <Description>Utils</Description>
+    <Copyright>© Khovanskiy. All rights reserved.</Copyright>
+    <RepositoryUrl>https://arminvanbuuren.visualstudio.com/CustomApp</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>Khovanskiy;Utils;Updater;Extensions;Async;BigMath;IO</PackageTags>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>Armin.Utils</PackageId>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\Utils.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\Utils.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x86\Debug\Utils.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x86\Release\Utils.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Debug\Utils.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <Optimize>true</Optimize>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Release\Utils.xml</DocumentationFile>
-  </PropertyGroup>
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+  </Target>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppUpdater\BuildNumber.cs" />
-    <Compile Include="AppUpdater\IUpdaterProject.cs" />
-    <Compile Include="AppUpdater\UpdaterProjectSimple.cs" />
-    <Compile Include="AppUpdater\Updater\BuildPackUpdater.cs" />
-    <Compile Include="AppUpdater\Updater\BuildUpdater.cs" />
-    <Compile Include="AppUpdater\Updater\BuildUpdaterSimple.cs" />
-    <Compile Include="AppUpdater\Updater\UpdaterProcessingArgs.cs" />
-    <Compile Include="AppUpdater\Updater\BuildPackUpdaterBase.cs" />
-    <Compile Include="ASSEMBLY\ASSEMBLY.cs" />
-    <Compile Include="AppUpdater\Pack\BuildPackInfo.cs" />
-    <Compile Include="AppUpdater\Pack\BuildsInfo.cs" />
-    <Compile Include="AppUpdater\Updater\BuildUpdaterBase.cs" />
-    <Compile Include="AppUpdater\Updater\BuildPackUpdaterSimple.cs" />
-    <Compile Include="AppUpdater\Hasher.cs" />
-    <Compile Include="AppUpdater\ApplicationUpdaterArgs.cs" />
-    <Compile Include="ASSEMBLY\AssemblyInfo.cs" />
-    <Compile Include="ASYNC\MTActionResult.cs" />
-    <Compile Include="ASYNC\MTCallBack.cs" />
-    <Compile Include="ASYNC\MTCallbackException.cs" />
-    <Compile Include="ASYNC\MTCallBackList.cs" />
-    <Compile Include="ASYNC\MTCallbackTimeoutException.cs" />
-    <Compile Include="ASYNC\MTFuncResult.cs" />
-    <Compile Include="ASYNC\MultiTaskingResult.cs" />
-    <Compile Include="ASYNC\MultiTaskingTemplate.cs" />
-    <Compile Include="ASYNC\PriorityScheduler.cs" />
-    <Compile Include="ATTRIBUTES.cs" />
-    <Compile Include="BOOLEAN.cs" />
-    <Compile Include="CMD.cs" />
-    <Compile Include="CODE\CustomFunctions.cs" />
-    <Compile Include="CODE\CustomFunctionsCompiler.cs" />
-    <Compile Include="CollectionHelper\DistinctList.cs" />
-    <Compile Include="CollectionHelper\DoubleDictionary.cs" />
-    <Compile Include="CollectionHelper\DuplicateKeyComparer.cs" />
-    <Compile Include="CollectionHelper\HashtableComparer.cs" />
-    <Compile Include="CollectionHelper\PriorityQueue.cs" />
-    <Compile Include="COLLECTIONS.cs" />
-    <Compile Include="ConditionEx\Base\Condition.cs" />
-    <Compile Include="ConditionEx\ConditionOperatorType.cs" />
-    <Compile Include="ConditionEx\Base\DynamicParameter.cs" />
-    <Compile Include="ConditionEx\DynamicObject.cs" />
-    <Compile Include="ConditionEx\ExpressionBuilder.cs" />
-    <Compile Include="ConditionEx\Collections\ConditionBlock.cs" />
-    <Compile Include="ConditionEx\Collections\ConditionCollection.cs" />
-    <Compile Include="ConditionEx\Collections\ExpressionCollection.cs" />
-    <Compile Include="ConditionEx\Expression.cs" />
-    <Compile Include="ConditionEx\Base\Parameter.cs" />
-    <Compile Include="ConditionEx\ExpressionBuilderException.cs" />
-    <Compile Include="ConditionEx\ICondition.cs" />
-    <Compile Include="ConditionEx\IExpression.cs" />
-    <Compile Include="ConditionEx\LogicalGroupType.cs" />
-    <Compile Include="Crypto\AES.cs" />
-    <Compile Include="Crypto\DH.cs" />
-    <Compile Include="ASYNC\ASYNC.cs" />
-    <Compile Include="DELEGATES.cs" />
-    <Compile Include="Handles\Address.cs" />
-    <Compile Include="Handles\CollectionSizes.cs" />
-    <Compile Include="Handles\ResourceHelper.cs" />
-    <Compile Include="Handles\GitControl.cs" />
-    <Compile Include="Handles\MathProgression.cs" />
-    <Compile Include="Handles\MemStatus.cs" />
-    <Compile Include="Handles\PathProperty.cs" />
-    <Compile Include="IO\ImpersonationHelper.cs" />
-    <Compile Include="IO\NetworkConnection.cs" />
-    <Compile Include="IO\NetworkShare.cs" />
-    <Compile Include="ASYNC\MultiTasking.cs" />
-    <Compile Include="HOST.cs" />
-    <Compile Include="HtmlAgilityPack\crc32.cs" />
-    <Compile Include="HtmlAgilityPack\EncodingFoundException.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlAttribute.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlAttributeCollection.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlCmdLine.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlCommentNode.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlConsoleListener.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlDocument.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlDocument.PathMethods.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlDocument.Xpath.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlElementFlag.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlEntity.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNameTable.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNode.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNode.Encapsulator.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNode.Xpath.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNodeCollection.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNodeNavigator.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlNodeType.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlParseError.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlParseErrorCode.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlTextNode.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlWeb.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlWeb.Xpath.cs" />
-    <Compile Include="HtmlAgilityPack\HtmlWebException.cs" />
-    <Compile Include="HtmlAgilityPack\InvalidProgramException.cs" />
-    <Compile Include="HtmlAgilityPack\IOLibrary.cs" />
-    <Compile Include="HtmlAgilityPack\Metro\HtmlWeb.cs" />
-    <Compile Include="HtmlAgilityPack\Metro\InvalidProgramException.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocument.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocumentCodeFragment.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocumentFragment.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocumentFragmentList.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocumentFragmentType.cs" />
-    <Compile Include="HtmlAgilityPack\MixedCodeDocumentTextFragment.cs" />
-    <Compile Include="HtmlAgilityPack\NameValuePair.cs" />
-    <Compile Include="HtmlAgilityPack\NameValuePairList.cs" />
-    <Compile Include="HtmlAgilityPack\Trace.cs" />
-    <Compile Include="HtmlAgilityPack\Trace.FullFramework.cs" />
-    <Compile Include="HtmlAgilityPack\Utilities.cs" />
-    <Compile Include="NUMERIC.cs" />
-    <Compile Include="IO\IO.cs" />
-    <Compile Include="Handles\ProcessEx.cs" />
-    <Compile Include="MATH.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handles\RegeditControl.cs" />
-    <Compile Include="Properties\Resources.ru.Designer.cs">
-      <DependentUpon>Resources.ru.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="CODE\FormatItem.cs" />
-    <Compile Include="REGEX.cs" />
-    <Compile Include="SERIALIZATION.cs" />
-    <Compile Include="Handles\SerialHelper.cs" />
-    <Compile Include="SERVER.cs" />
-    <Compile Include="STREAM.cs" />
-    <Compile Include="STRING.cs" />
-    <Compile Include="AppUpdater\Pack\FileBuildInfo.cs" />
-    <Compile Include="AppUpdater\ApplicationUpdater.cs" />
-    <Compile Include="BigMath\BigInteger.cs" />
-    <Compile Include="BigMath\Int128.cs" />
-    <Compile Include="BigMath\Int256.cs" />
-    <Compile Include="BigMath\Utils\ArrayUtils.cs" />
-    <Compile Include="BigMath\Utils\Crc32.cs" />
-    <Compile Include="BigMath\Utils\ExtendedBitConverter.cs" />
-    <Compile Include="BigMath\Utils\MathUtils.cs" />
-    <Compile Include="Ionic.Zlib\CRC32.cs" />
-    <Compile Include="Ionic.Zlib\Deflate.cs" />
-    <Compile Include="Ionic.Zlib\DeflateStream.cs" />
-    <Compile Include="Ionic.Zlib\GZipStream.cs" />
-    <Compile Include="Ionic.Zlib\Inflate.cs" />
-    <Compile Include="Ionic.Zlib\InfTree.cs" />
-    <Compile Include="Ionic.Zlib\ParallelDeflateOutputStream.cs" />
-    <Compile Include="Ionic.Zlib\Tree.cs" />
-    <Compile Include="Ionic.Zlib\Zlib.cs" />
-    <Compile Include="Ionic.Zlib\ZlibBaseStream.cs" />
-    <Compile Include="Ionic.Zlib\ZlibCodec.cs" />
-    <Compile Include="Ionic.Zlib\ZlibConstants.cs" />
-    <Compile Include="Ionic.Zlib\ZlibStream.cs" />
-    <Compile Include="TIME.cs" />
-    <Compile Include="CODE\CODE.cs" />
-    <Compile Include="COMMON.cs" />
-    <Compile Include="WEB.cs" />
-    <Compile Include="Handles\WebDownload.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WIN32.cs" />
-    <Compile Include="XML.cs" />
-    <Compile Include="XmlRtfStyle\RtfAlignment.cs" />
-    <Compile Include="XmlRtfStyle\RtfBuilder.cs" />
-    <Compile Include="XmlRtfStyle\RtfFontStyles.cs" />
-    <Compile Include="XmlRtfStyle\RtfFromXml.cs" />
-    <Compile Include="XPATH.cs" />
-    <Compile Include="ZIP.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

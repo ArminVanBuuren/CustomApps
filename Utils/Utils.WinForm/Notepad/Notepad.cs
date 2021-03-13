@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Utils.WinForm.Properties;
+using Utils.Properties;
 
 namespace Utils.WinForm.Notepad
 {

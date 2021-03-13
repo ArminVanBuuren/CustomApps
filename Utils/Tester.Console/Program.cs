@@ -19,7 +19,9 @@ using Oracle.ManagedDataAccess.Client;
 using Org.XmlUnit;
 using Org.XmlUnit.Builder;
 using Org.XmlUnit.Diff;
+using TLSharp.Core.MTProto.Crypto;
 using Utils;
+using Utils.Crypto;
 
 namespace Tester.Console
 {
@@ -198,7 +200,7 @@ namespace Tester.Console
 			return lastExecutionDate.AddSeconds(-1);
 		}
 
-		public class OrderDocumentData
+		public class OrderDocumentData : IEquatable<OrderDocumentData>
 		{
 			/// <summary>
 			/// Номер родительской заявки
@@ -229,6 +231,34 @@ namespace Tester.Console
 			/// </summary>
 
 			public string ReasonNoDeliveryCode { get; set; }
+
+			public bool Equals(OrderDocumentData other)
+			{
+				if (ReferenceEquals(null, other)) return false;
+				if (ReferenceEquals(this, other)) return true;
+				return OrderId == other.OrderId && DeliveryDate.Equals(other.DeliveryDate) && RecipientFullName == other.RecipientFullName && DeliveryStatusCode == other.DeliveryStatusCode && ReasonNoDeliveryCode == other.ReasonNoDeliveryCode;
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != this.GetType()) return false;
+				return Equals((OrderDocumentData) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					var hashCode = OrderId.GetHashCode();
+					hashCode = (hashCode * 397) ^ DeliveryDate.GetHashCode();
+					hashCode = (hashCode * 397) ^ (RecipientFullName != null ? RecipientFullName.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (DeliveryStatusCode != null ? DeliveryStatusCode.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (ReasonNoDeliveryCode != null ? ReasonNoDeliveryCode.GetHashCode() : 0);
+					return hashCode;
+				}
+			}
 		}
 
 		private static void CompareXml(string file1, string file2)
@@ -278,7 +308,28 @@ namespace Tester.Console
 
 		class Testbase
 		{
+			static int i = 0;
+			private readonly int _curI = 0;
+			public Testbase() => _curI = i++;
+			public string Test { get; set; }
 
+			public override bool Equals(object obj)
+			{
+				System.Console.WriteLine("Equals");
+				return base.Equals(obj);
+			}
+
+			public override int GetHashCode()
+			{
+				System.Console.WriteLine("GetHashCode");
+				return 1;
+			}
+
+			public static bool operator ==(Testbase left, Testbase right) => Equals(left, right);
+
+			public static bool operator !=(Testbase left, Testbase right) => !Equals(left, right);
+
+			public override string ToString() => GetHashCode().ToString();
 		}
 
 		class Tesing : Testbase
@@ -291,6 +342,90 @@ namespace Tester.Console
 			public List<string> Prop { get; set; }
 		}
 
+		public class ChangeBillAttributesRequest
+		{
+			public ChangeBillAttributesOperationRules OperationRules { get; set; }
+		}
+
+		public enum ChangeBillAttributesOperationRules
+		{
+			/// <summary>
+			/// Нет правил
+			/// </summary>
+			[EnumMember]
+			None = 0,
+
+			/// <summary>
+			/// Использовать переменные по умолчанию
+			/// </summary>
+			[EnumMember]
+			UseDefaultValues = 1,
+
+			/// <summary>
+			/// Игнорируем ошибку изменения не нужны
+			/// </summary>
+			[EnumMember]
+			IgnoreErrorChangesNotNeed = 2,
+		}
+
+		class PersonalAccount
+		{
+			public string PersonalAccountNumber { get; set;  }
+		}
+
+		public class FieldRules
+		{
+			/// <summary>
+			/// Точная длина входных данных.
+			/// </summary>
+			[DataMember]
+			public int ExactLength { get; set; }
+
+			/// <summary>
+			/// Минимальная длина входных данных.
+			/// </summary>
+			[DataMember]
+			public int MinLength { get; set; }
+
+			/// <summary>
+			/// Максимальная длина входных данных.
+			/// </summary>
+			[DataMember]
+			public int MaxLength { get; set; }
+
+			/// <summary>
+			/// Регулярное выражение для проверки входных данных.
+			/// </summary>
+			[DataMember]
+			public string Regexp { get; set; }
+
+			public override string ToString()
+				=> $"ExactLength={ExactLength} MinLength={MinLength} MaxLength={MaxLength}";
+		}
+
+		class InputDataRestrictions
+		{
+			public int? FieldLength { get; set; }
+			public int? MinFieldLength { get; set; }
+			public int? MaxFieldLength { get; set; }
+
+
+		}
+
+		static FieldRules MapToFieldRules(this InputDataRestrictions dataRestrictions)
+		{
+			int exactLength = dataRestrictions.FieldLength ?? 0;
+			int minLength = dataRestrictions.MinFieldLength ?? 0;
+			int maxLength = dataRestrictions.MaxFieldLength ?? 0;
+
+			return new FieldRules
+			{
+				ExactLength = exactLength,
+				MinLength = dataRestrictions.MinFieldLength ?? Math.Min(exactLength, maxLength),
+				MaxLength = dataRestrictions.MaxFieldLength ?? Math.Max(minLength, exactLength),
+			};
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -300,7 +435,137 @@ namespace Tester.Console
 
 			try
 			{
-				System.Console.WriteLine(Testtest());
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = null,
+					MinFieldLength = null,
+					MaxFieldLength = null,
+				}));
+
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = 10,
+					MinFieldLength = null,
+					MaxFieldLength = null,
+				}));
+
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = 10,
+					MinFieldLength = null,
+					MaxFieldLength = 20,
+				}));
+
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = null,
+					MinFieldLength = 10,
+					MaxFieldLength = 20,
+				}));
+
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = null,
+					MinFieldLength = 10,
+					MaxFieldLength = null,
+				}));
+
+				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
+				{
+					FieldLength = null,
+					MinFieldLength = null,
+					MaxFieldLength = 20,
+				}));
+
+
+				//var test1 = new Testbase();
+				//var test2 = new Testbase();
+				//var dict = new Dictionary<Testbase, Testbase>
+				//{
+				//	{test1, test1}, 
+				//	{test2, test2}
+				//};
+
+				//foreach (var test in dict)
+				//{
+				//	System.Console.WriteLine(test);
+				//}
+
+				//System.Console.WriteLine(nameof(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed));
+
+				//var dd = default(int).ToString(CultureInfo.InvariantCulture);
+				//var ddd = Convert.ToDateTime(default(DateTime).ToString(CultureInfo.InvariantCulture));
+
+				//var dddd = new List<PersonalAccount> { new PersonalAccount() { PersonalAccountNumber = "111" } }.SingleOrDefault(x => x == new PersonalAccount());
+
+				////System.Console.WriteLine(test1 == test2);
+				//var Request = new ChangeBillAttributesRequest
+				//{
+				//	OperationRules = ChangeBillAttributesOperationRules.UseDefaultValues
+				//};
+
+				//var CheckNeedChanges = new Func<bool>(() => true);
+
+				//var pans = new List<PersonalAccount>
+				//{
+				//	new PersonalAccount {PersonalAccountNumber = "11111"},
+				//	new PersonalAccount {PersonalAccountNumber = "22222"},
+				//	new PersonalAccount {PersonalAccountNumber = "33333"},
+				//	new PersonalAccount {PersonalAccountNumber = "44444"},
+				//	new PersonalAccount {PersonalAccountNumber = "55555"},
+				//};
+
+				//var pans2 = new List<string>
+				//{
+				//	"33333",
+				//	"55555",
+				//};
+
+				//var dd1 = pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222");
+
+				//if (pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222"))
+				//{
+
+				//}
+				//else
+				//{
+				//	System.Console.WriteLine("111");
+				//}
+
+				//pans.Select(x => x.PersonalAccountNumber).Except(pans2).ForEach(System.Console.WriteLine);
+
+
+
+				var buttons = new List<Button> { new Button(), new Button()};
+				for (var b = 0; b < buttons.Count; b++)
+				{
+					var elem = buttons[b];
+					var b1 = b;
+					elem.onclick += (s, arg) => { System.Console.WriteLine(b1); };
+					// все три обработчика берут b из одной области видимости!
+				}
+
+				foreach (var VARIABLE in buttons)
+				{
+					VARIABLE.Send();
+				}
+
+				//if (Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges())
+				//{
+				//	System.Console.WriteLine($"222");
+				//}
+				//else
+				//{
+				//	System.Console.WriteLine($"111");
+				//}
+
+				//var result1 = !Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) && !CheckNeedChanges();
+				//var result2 = !(Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges());
+
+				//System.Console.WriteLine($"result1: = {result1}");
+				//System.Console.WriteLine($"result2: = {result2}");
+
+				//System.Console.WriteLine(Testtest());
 			}
 			catch (Exception e)
 			{
@@ -315,8 +580,42 @@ namespace Tester.Console
 			System.Console.ReadLine();
 		}
 
+		class Button
+		{
+			public event EventHandler onclick;
+
+			public void Send()
+			{
+				onclick?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
+		static void DivMod()
+		{
+			var test = System.Console.ReadLine();
+			var a1 = int.Parse(test.Split(' ')[0]);
+			var a2 = int.Parse(test.Split(' ')[1]);
+			var dd1 = a1 / a2;
+			var dd2 = a1 % a2;
+
+			System.Console.WriteLine(dd1);
+			System.Console.WriteLine(dd2);
+		}
+
+		public enum BalanceAdjustmentType
+		{
+			/// <summary>Неизвестно</summary>
+			[EnumMember] Unknown,
+			/// <summary>Обычный обещанный платеж.</summary>
+			[EnumMember] PromisedPayment,
+			/// <summary>Обещанный платеж в обеспечении рассрочки.</summary>
+			[EnumMember] Instalment,
+		}
+
 		static string Testtest()
 		{
+			System.Console.WriteLine(nameof(BalanceAdjustmentType.PromisedPayment));
+
 			var documentTypeId = 415;
 			switch (documentTypeId)
 			{
@@ -338,6 +637,8 @@ namespace Tester.Console
 
 		static void Test()
 		{
+			
+
 			var test = "05-10-20 10:55 - 05.10.21 10:55";
 
 			//foreach (var time in test.Split('-'))

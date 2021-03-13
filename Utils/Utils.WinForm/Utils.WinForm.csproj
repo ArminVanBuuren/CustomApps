@@ -1,326 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E4433085-2226-40E5-80E9-1AF136E70F5B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Utils.WinForm</RootNamespace>
+    <Deterministic>False</Deterministic>
+    <RootNamespace>Utils</RootNamespace>
     <AssemblyName>Utils.WinForm</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net452</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Authors>Khovanskiy Utils.WinForm (vkhovanskiy@gmail.com)</Authors>
+    <Company>Khovanskiy</Company>
+    <Description>Utils.WinForm</Description>
+    <Copyright>© Khovanskiy. All rights reserved.</Copyright>
+    <RepositoryUrl>https://arminvanbuuren.visualstudio.com/CustomApp</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>Khovanskiy;Utils.WinForm;Forms;Controls;Win32;Notepad</PackageTags>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>Armin.Utils.WinForm</PackageId>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Debug\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Release\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x86\Debug\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <Optimize>true</Optimize>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x86\Release\Utils.WinForm.xml</DocumentationFile>
-  </PropertyGroup>
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+  </Target>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Armin.Utils" Version="2021.3.13.51853" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CONTROL.cs" />
-    <Compile Include="CustomProgressBar\IProgressBar.cs" />
-    <Compile Include="CustomProgressBar\ProgressCalculationAsync.cs" />
-    <Compile Include="CustomProgressBar\XpProgressBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomRenderer.cs" />
-    <Compile Include="CustomTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGridViewHelper\Columns\DgvCheckBoxColumn.cs" />
-    <Compile Include="DataGridViewHelper\DGVColumnAttribute.cs" />
-    <Compile Include="DataGridViewHelper\Columns\DgvDisableButtonColumn.cs" />
-    <Compile Include="DataGridViewHelper\Columns\DgvTextAndImageColumn.cs" />
-    <Compile Include="Expander\AdvancedFlowLayoutPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Expander\ExpandCollapseButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Expander\ExpandCollapseButton.designer.cs">
-      <DependentUpon>ExpandCollapseButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Expander\ExpandCollapseEventArgs.cs" />
-    <Compile Include="Expander\ExpandCollapsePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Expander\ExpandCollapsePanel.designer.cs">
-      <DependentUpon>ExpandCollapsePanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Expander\ExpandCollapsePanelActionList.cs" />
-    <Compile Include="Expander\ExpandCollapsePanelDesigner.cs" />
-    <Compile Include="FlashWindow.cs" />
-    <Compile Include="Handles\FormLocation.cs" />
-    <Compile Include="AsyncHelper\AbortableBackgroundWorker.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomProgressBar\ProgressBarUtils.cs" />
-    <Compile Include="CustomProgressBar\ProgressBarWithPercent.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGridViewHelper\DGVEnhancer.cs" />
-    <Compile Include="DRAWING.cs" />
-    <Compile Include="FastColoredTextBox\AutocompleteItem.cs" />
-    <Compile Include="FastColoredTextBox\AutocompleteMenu.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\Bookmarks.cs" />
-    <Compile Include="FastColoredTextBox\Char.cs" />
-    <Compile Include="FastColoredTextBox\CommandManager.cs" />
-    <Compile Include="FastColoredTextBox\Commands.cs" />
-    <Compile Include="FastColoredTextBox\DocumentMap.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\EncodingDetector.cs" />
-    <Compile Include="FastColoredTextBox\ExportToHTML.cs" />
-    <Compile Include="FastColoredTextBox\ExportToRTF.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\FileTextSource.cs" />
-    <Compile Include="FastColoredTextBox\FindForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\FindForm.designer.cs">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox\GoToForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\GoToForm.designer.cs">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox\Hints.cs" />
-    <Compile Include="FastColoredTextBox\Hotkeys.cs" />
-    <Compile Include="FastColoredTextBox\HotkeysEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\HotkeysEditorForm.designer.cs">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox\LimitedStack.cs" />
-    <Compile Include="FastColoredTextBox\Line.cs" />
-    <Compile Include="FastColoredTextBox\LinesAccessor.cs" />
-    <Compile Include="FastColoredTextBox\MacrosManager.cs" />
-    <Compile Include="FastColoredTextBox\Place.cs" />
-    <Compile Include="FastColoredTextBox\PlatformType.cs" />
-    <Compile Include="FastColoredTextBox\Range.cs" />
-    <Compile Include="FastColoredTextBox\ReplaceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\ReplaceForm.designer.cs">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox\Ruler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\Ruler.designer.cs">
-      <DependentUpon>Ruler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox\Style.cs" />
-    <Compile Include="FastColoredTextBox\SyntaxDescriptor.cs" />
-    <Compile Include="FastColoredTextBox\SyntaxHighlighter.cs" />
-    <Compile Include="FastColoredTextBox\TextSource.cs" />
-    <Compile Include="FastColoredTextBox\TypeDescriptor.cs" />
-    <Compile Include="FastColoredTextBox\UnfocusablePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextBox\VisualMarker.cs" />
-    <Compile Include="Folder.cs" />
-    <Compile Include="Notepad\BlankDocument.cs" />
-    <Compile Include="Notepad\Editor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Notepad\Editor.Designer.cs">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notepad\FileEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Notepad\FileEditor.Designer.cs">
-      <DependentUpon>FileEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notepad\FileEditorEventArgs.cs" />
-    <Compile Include="Notepad\NotepadControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Notepad\NotepadControl.Designer.cs">
-      <DependentUpon>NotepadControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notepad\Notepad.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Notepad\Notepad.Designer.cs">
-      <DependentUpon>Notepad.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PasswordTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.ru.Designer.cs">
-      <DependentUpon>Resources.ru.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="VerticalSeparator.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Expander\AdvancedFlowLayoutPanel.resx">
-      <DependentUpon>AdvancedFlowLayoutPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Expander\ExpandCollapseButton.resx">
-      <DependentUpon>ExpandCollapseButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Expander\ExpandCollapsePanel.resx">
-      <DependentUpon>ExpandCollapsePanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox.resx">
-      <DependentUpon>FastColoredTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FindForm.resx">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\GoToForm.resx">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\HotkeysEditorForm.resx">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\ReplaceForm.resx">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notepad\Editor.resx">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notepad\FileEditor.resx">
-      <DependentUpon>FileEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notepad\NotepadControl.resx">
-      <DependentUpon>NotepadControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notepad\Notepad.resx">
-      <DependentUpon>Notepad.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Project>{a734b4e4-a5bf-4566-ac89-fc58d02b2d5f}</Project>
-      <Name>Utils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Notepad\Resources\notepad_addTad.png" />
-    <Content Include="Notepad\Resources\notepad_closeAllButThis.png" />
-    <Content Include="Notepad\Resources\notepad_closeTab.png" />
-    <Content Include="Notepad\Resources\notepad_closeAllItems.png" />
-    <Content Include="Notepad\Resources\notepad_closeItem.png" />
-    <Content Include="Notepad\Resources\notepad_closeWindow.png" />
-    <Content Include="Notepad\Resources\notepad_copyFolderPath.png" />
-    <Content Include="Notepad\Resources\notepad_newItem.png" />
-    <Content Include="Notepad\Resources\notepad_openFile.png" />
-    <Content Include="Notepad\Resources\notepad_openFolder.png" />
-    <Content Include="Notepad\Resources\notepad_saveItem.png" />
-    <Content Include="Notepad\Resources\notepad_saveItemAs.png" />
-    <Content Include="Notepad\Resources\notepad_XMLPretty.png" />
-    <None Include="Expander\Resources\expander_downarrow.png" />
-    <None Include="Expander\Resources\expander_Upload.png" />
-    <None Include="Expander\Resources\expander_up_256.png" />
-    <None Include="Expander\Resources\expander_icon-expand.png" />
-    <None Include="Expander\Resources\expander_icon_struct_hide_collapsed.png" />
-    <None Include="Expander\Resources\expander_Expand.png" />
-    <None Include="Notepad\Resources\note.ico" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

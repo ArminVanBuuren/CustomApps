@@ -67,7 +67,7 @@ namespace Utils.WinForm.Expander
 			// 
 			// pictureBox
 			// 
-			this.pictureBox.Image = global::Utils.WinForm.Properties.Resources.expander_downarrow;
+			this.pictureBox.Image = global::Utils.Properties.Resources.expander_downarrow;
 			this.pictureBox.Location = new System.Drawing.Point(3, 0);
 			this.pictureBox.Name = "pictureBox";
 			this.pictureBox.Size = new System.Drawing.Size(35, 35);

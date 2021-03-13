@@ -39,7 +39,7 @@ namespace Utils
             {
                 try
                 {
-                    await task();
+                    await task().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
