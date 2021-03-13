@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SPAMassageSaloon</RootNamespace>
     <AssemblyName>SPAMassageSaloon</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -53,15 +53,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils">
-      <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="Utils.UIControls">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.UIControls\bin\Release\Utils.UIControls.dll</HintPath>
-    </Reference>
-    <Reference Include="Utils.WinForm">
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +103,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Armin.Utils">
+      <Version>2021.3.13.51853</Version>
+    </PackageReference>
+    <PackageReference Include="Armin.Utils.UIControls">
+      <Version>2021.3.13.42628</Version>
+    </PackageReference>
+    <PackageReference Include="Armin.Utils.WinForm">
+      <Version>2021.3.13.52830</Version>
+    </PackageReference>
     <PackageReference Include="Costura.Fody">
       <Version>3.3.3</Version>
     </PackageReference>

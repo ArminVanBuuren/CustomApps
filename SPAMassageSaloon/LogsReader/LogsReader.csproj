@@ -8,9 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>LogsReader</RootNamespace>
     <AssemblyName>LogsReader</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,10 +36,6 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,14 +48,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=1.0.7538.26443, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CustomApp\Utils\Utils\bin\Release\Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="Utils.WinForm, Version=1.0.7538.25065, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CustomApp\Utils\Utils.WinForm\bin\Release\Utils.WinForm.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ICustomFunctions.cs" />
@@ -283,6 +273,12 @@
     <Content Include="Resources\waiting.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Armin.Utils">
+      <Version>2021.3.13.51853</Version>
+    </PackageReference>
+    <PackageReference Include="Armin.Utils.WinForm">
+      <Version>2021.3.13.52830</Version>
+    </PackageReference>
     <PackageReference Include="System.ValueTuple">
       <Version>4.3.0</Version>
     </PackageReference>
