@@ -104,7 +104,7 @@
       <HintPath>..\packages\Armin.Utils.2021.3.13.152358\lib\net452\Utils.dll</HintPath>
     </Reference>
     <Reference Include="Utils.UIControls, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Armin.Utils.UIControls.2021.3.13.42628\lib\net452\Utils.UIControls.dll</HintPath>
+      <HintPath>..\packages\Armin.Utils.UIControls.2021.3.13.155215\lib\net452\Utils.UIControls.dll</HintPath>
     </Reference>
     <Reference Include="Utils.WinForm, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Armin.Utils.WinForm.2021.3.13.153120\lib\net452\Utils.WinForm.dll</HintPath>
