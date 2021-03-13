@@ -16,11 +16,11 @@
     <Version>1.1.0</Version>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
-    <Authors>Khovanskiy Utils.WinForm (vkhovanskiy@gmail.com)</Authors>
+    <Authors>Vladimir Khovanskiy (vkhovanskiy@gmail.com)</Authors>
     <Company>Khovanskiy</Company>
     <Description>Utils.WinForm</Description>
     <Copyright>© Khovanskiy. All rights reserved.</Copyright>
-    <RepositoryUrl>https://arminvanbuuren.visualstudio.com/CustomApp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ArminVanBuuren/Builds</RepositoryUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageTags>Khovanskiy;Utils.WinForm;Forms;Controls;Win32;Notepad</PackageTags>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
