@@ -27,8 +27,6 @@ namespace SPAFilter.SPA.Collection
         }
 
         public void FetchOperations()
-        {
-            Operations = new CollectionTemplate<IOperation>(this.SelectMany(x => x.Operations).OrderBy(x => x.HostTypeName).ThenBy(x => x.Name).ToList());
-        }
+	        => Operations = new CollectionTemplate<IOperation>(this.SelectMany(x => x.Operations).OrderBy(x => x.HostTypeName).ThenBy(x => x.Name).ToList());
     }
 }

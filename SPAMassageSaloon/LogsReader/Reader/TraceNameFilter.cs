@@ -21,7 +21,7 @@ namespace LogsReader.Reader
 		/// Количество совпадений по имени трейса
 		/// </summary>
 		[DGVColumn(ColumnPosition.After, "Matches", true)]
-		public int CountMatches { get;}
+		public int CountMatches { get; }
 
 		/// <summary>
 		/// Количество ошибок по имени трейса

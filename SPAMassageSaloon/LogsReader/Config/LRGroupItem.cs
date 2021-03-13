@@ -7,16 +7,11 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("Group")]
 	public class LRGroupItem : LRItem
 	{
-		private string _groupName = string.Empty;
-
 		[XmlAttribute("name")]
-		public string GroupName
-		{
-			get => _groupName;
-			set => _groupName = value;
-		}
+		public string GroupName { get; set; } = string.Empty;
 
-		[XmlIgnore] internal int PriorityInternal { get; set; } = 0;
+		[XmlIgnore]
+		internal int PriorityInternal { get; set; } = 0;
 
 		[XmlAttribute("priority")]
 		public string Priority
@@ -34,7 +29,9 @@ namespace LogsReader.Config
 			}
 		}
 
-		public LRGroupItem() : base(string.Empty) { }
+		public LRGroupItem() : base(string.Empty)
+		{
+		}
 
 		internal LRGroupItem(string groupName, int priority, string items) : base(items)
 		{

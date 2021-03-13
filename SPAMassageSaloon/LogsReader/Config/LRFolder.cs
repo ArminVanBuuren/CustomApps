@@ -6,17 +6,13 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("Folder")]
 	public class LRFolder : LRItem
 	{
-		private bool _allDirSearching = true;
-
 		[XmlAttribute("allDirSearching")]
-		public bool AllDirSearching
+		public bool AllDirSearching { get; set; } = true;
+
+		public LRFolder() : base(string.Empty)
 		{
-			get => _allDirSearching;
-			set => _allDirSearching = value;
 		}
 
-		public LRFolder() : base(string.Empty) { }
-
-		internal LRFolder(string folderPath, bool allDirSearching) : base(folderPath) => _allDirSearching = allDirSearching;
+		internal LRFolder(string folderPath, bool allDirSearching) : base(folderPath) => AllDirSearching = allDirSearching;
 	}
 }

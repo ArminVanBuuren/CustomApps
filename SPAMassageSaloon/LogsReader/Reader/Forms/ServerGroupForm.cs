@@ -101,7 +101,8 @@ namespace LogsReader.Reader.Forms
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (comboboxGroup.Text.IsNullOrWhiteSpace() || (_serverGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim()))
+			if (comboboxGroup.Text.IsNullOrWhiteSpace() ||
+			    _serverGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim())
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -183,19 +184,18 @@ namespace LogsReader.Reader.Forms
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
 				_serverGroups[_currentGroup] =
-					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text), new List<string>(_serverPanels
-						.Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
-						.Where(x => !x.IsNullOrWhiteSpace())
-						.Distinct(StringComparer.InvariantCultureIgnoreCase)));
+					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text),
+					 new List<string>(_serverPanels
+					                  .Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
+					                  .Where(x => !x.IsNullOrWhiteSpace())
+					                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
 			Close();
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
+			=> Close();
 
 		void AddServer(string serverText)
 		{
@@ -204,7 +204,7 @@ namespace LogsReader.Reader.Forms
 
 			var textBoxServer = new TextBox
 			{
-				Anchor = (AnchorStyles.Top | AnchorStyles.Left) | AnchorStyles.Right,
+				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
 				Location = new Point(10, 6),
 				Size = new Size(30, 20),
 				Text = serverText
@@ -229,7 +229,7 @@ namespace LogsReader.Reader.Forms
 
 				try
 				{
-					this.SuspendLayout();
+					SuspendLayout();
 					_serverPanels.Remove(serverTemplate);
 
 					if (_serverPanels.Count == 0)
@@ -243,7 +243,7 @@ namespace LogsReader.Reader.Forms
 				}
 				finally
 				{
-					this.ResumeLayout();
+					ResumeLayout();
 				}
 			};
 
@@ -288,9 +288,9 @@ namespace LogsReader.Reader.Forms
 									try
 									{
 										var reply = pinger.Send(serverText2, 10000);
-										color = reply != null && reply.Status == IPStatus.Success 
-											? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS 
-											: Color.LightPink;
+										color = reply != null && reply.Status == IPStatus.Success
+											        ? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS
+											        : Color.LightPink;
 									}
 									catch (Exception)
 									{
@@ -305,7 +305,6 @@ namespace LogsReader.Reader.Forms
 									{
 										this.SafeInvoke(() =>
 										{
-
 											if (IsDisposed || textBoxServer.IsDisposed)
 												return;
 
@@ -369,8 +368,6 @@ namespace LogsReader.Reader.Forms
 		}
 
 		private void ServerGroupForm_Resize(object sender, EventArgs e)
-		{
-			this.Refresh();
-		}
+			=> Refresh();
 	}
 }

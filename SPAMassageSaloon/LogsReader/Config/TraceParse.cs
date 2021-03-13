@@ -16,7 +16,12 @@ namespace LogsReader.Config
 		{
 			cdataResult = null;
 			if (input != null && input.Length > 0)
-				cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
+				cdataResult = input[0].NodeType == XmlNodeType.CDATA
+					              ? input
+					              : new XmlNode[]
+					              {
+						              new XmlDocument().CreateCDataSection(input[0].Value)
+					              };
 
 			if (cdataResult == null || cdataResult.Length == 0)
 				return null;
@@ -30,13 +35,12 @@ namespace LogsReader.Config
 				ReportMessage.Show(string.Format(Properties.Resources.Txt_LRTraceParse_ErrPattern, text), MessageBoxIcon.Error, "TraceParse Reader");
 				return null;
 			}
-			else
-			{
-				if (optional == RegexOptions.None)
-					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, LRSettings.PARSING_MATCH_TIMEOUT);
-				else
-					return new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional, LRSettings.PARSING_MATCH_TIMEOUT);
-			}
+
+			return optional == RegexOptions.None
+				       ? new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline,
+				                   LRSettings.PARSING_MATCH_TIMEOUT)
+				       : new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional,
+				                   LRSettings.PARSING_MATCH_TIMEOUT);
 		}
 	}
 }

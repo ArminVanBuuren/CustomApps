@@ -129,16 +129,9 @@ namespace SPAFilter.SPA.Components
         }
 
         public static string GetDir(string basePath, string rootPath)
-        {
-            if (Path.IsPathRooted(rootPath))
-                return rootPath;
-            else
-                return IO.EvaluateFirstMatchPath(rootPath, basePath);
-        }
+	        => Path.IsPathRooted(rootPath) ? rootPath : IO.EvaluateFirstMatchPath(rootPath, basePath);
 
         void ShowError(string message)
-        {
-            ReportMessage.Show(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
-        }
+	        => ReportMessage.Show(message, MessageBoxIcon.Error, $"{FilePath} \\ {HardwareID}", false);
     }
 }

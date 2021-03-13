@@ -48,8 +48,8 @@ namespace SPAFilter
             var xslxRdServiceIterators = fileKb / 4;
             double hundredPercentIterators = SCIterators + xslxRdServiceIterators;
 
-            SCPercent = (SCIterators * 100) / hundredPercentIterators;
-            XslxServicesPercent = (xslxRdServiceIterators * 100) / hundredPercentIterators;
+            SCPercent = SCIterators * 100 / hundredPercentIterators;
+            XslxServicesPercent = xslxRdServiceIterators * 100 / hundredPercentIterators;
 
             if (fileKb > 200)
             {
@@ -66,9 +66,9 @@ namespace SPAFilter
                 // ------------------------------------------
 
                 if (SCPercent > 1)
-                    XslxServicesIterators = (int)((XslxServicesPercent * SCIterators) / SCPercent);
+                    XslxServicesIterators = (int)(XslxServicesPercent * SCIterators / SCPercent);
                 else
-                    XslxServicesIterators = (90 * SCIterators) / 10;
+                    XslxServicesIterators = 90 * SCIterators / 10;
 
                 GetXslxPartsIterators();
 
@@ -76,7 +76,7 @@ namespace SPAFilter
             }
             else
             {
-                XslxServicesIterators = (10 * SCIterators) / 90;
+                XslxServicesIterators = 10 * SCIterators / 90;
 
                 GetXslxPartsIterators();
 
@@ -92,7 +92,7 @@ namespace SPAFilter
         void GetXslxPartsIterators()
         {
             _openFileIterator = XslxServicesIterators / 7;                                    // обработку файлов делим на 7 частей. 1/7 часть занимает открытие файла
-            _loadFileIterator = XslxServicesIterators - (_openFileIterator * 2);               // 5/7 занимает считывание данных
+            _loadFileIterator = XslxServicesIterators - _openFileIterator * 2;               // 5/7 занимает считывание данных
             _readLinesIterator = XslxServicesIterators - _loadFileIterator - _openFileIterator; // 1/7 часть считывание всех строк
         }
 
@@ -102,7 +102,7 @@ namespace SPAFilter
                 return;
 
             var cancel = false;
-            var mSecEachPart = ((int) (xslxRdService.Length / 1900)) / 7; // примерное количество миллисекунд на каждый часть обработки
+            var mSecEachPart = (int) (xslxRdService.Length / 1900) / 7; // примерное количество миллисекунд на каждый часть обработки
 
             var processChecking = new Func<int, int, int>((iterations, sleepMSec) =>
             {
@@ -134,7 +134,7 @@ namespace SPAFilter
                     _progressCalc.Append(_openFileIterator - openRes);
             };
 
-            _offlineCalcWhenStartRead = () => { result = processChecking.BeginInvoke(_loadFileIterator, (mSecEachPart * 5) / _loadFileIterator, null, null); };
+            _offlineCalcWhenStartRead = () => { result = processChecking.BeginInvoke(_loadFileIterator, mSecEachPart * 5 / _loadFileIterator, null, null); };
 
             _offlineCalcWhenStopRead = () =>
             {
@@ -147,9 +147,7 @@ namespace SPAFilter
         }
 
         public void BeginOpenXslxFile()
-        {
-            _offlineCalcWhenStartOpen?.Invoke();
-        }
+	        => _offlineCalcWhenStartOpen?.Invoke();
 
         public void BeginReadXslxFile()
         {
@@ -181,9 +179,7 @@ namespace SPAFilter
         }
 
         public void ReadXslxFileLine()
-        {
-            _calcReadLine?.Invoke();
-        }
+	        => _calcReadLine?.Invoke();
 
         public void EndOpenXslxFile()
         {
@@ -194,19 +190,13 @@ namespace SPAFilter
         }
 
         public void Append()
-        {
-            _progressCalc++;
-        }
+	        => _progressCalc++;
 
         public void Append(int value)
-        {
-            _progressCalc.Append(value);
-        }
+	        => _progressCalc.Append(value);
 
         public void AddBootPercent(int percent)
-        {
-            _progressCalc.AddBootPercent(percent);
-        }
+	        => _progressCalc.AddBootPercent(percent);
 
         public override string ToString() => _progressCalc?.ToString() ?? "";
 

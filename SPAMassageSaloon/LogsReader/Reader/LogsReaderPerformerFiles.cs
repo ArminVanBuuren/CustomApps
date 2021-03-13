@@ -24,15 +24,14 @@ namespace LogsReader.Reader
 
 		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
 
-		protected LogsReaderPerformerFiles(
-			LRSettingsScheme settings, 
-			string findMessage,  
-			bool useRegex,
-			IReadOnlyDictionary<string, int> servers,
-			IReadOnlyDictionary<string, int> fileTypes,
-			IReadOnlyDictionary<string, bool> folders,
-			DataFilter filter)
-			:base(settings, findMessage, useRegex, filter)
+		protected LogsReaderPerformerFiles(LRSettingsScheme settings,
+		                                   string findMessage,
+		                                   bool useRegex,
+		                                   IReadOnlyDictionary<string, int> servers,
+		                                   IReadOnlyDictionary<string, int> fileTypes,
+		                                   IReadOnlyDictionary<string, bool> folders,
+		                                   DataFilter filter)
+			: base(settings, findMessage, useRegex, filter)
 		{
 			_servers = servers;
 			var fileTypesNew = new Dictionary<string[], int>();
@@ -126,6 +125,7 @@ namespace LogsReader.Reader
 					}
 				}
 			}
+
 			return traceReaders;
 		}
 
@@ -162,9 +162,9 @@ namespace LogsReader.Reader
 
 
 			foreach (var credential in LogsReaderMainForm.Credentials
-				.OrderByDescending(x => x.Value)
-				.Select(x => x.Key)
-				.ToList())
+			                                             .OrderByDescending(x => x.Value)
+			                                             .Select(x => x.Key)
+			                                             .ToList())
 			{
 				if (IsStopPending)
 					return false;
@@ -189,9 +189,8 @@ namespace LogsReader.Reader
 				if (IsStopPending)
 					return false;
 
-				authorizationForm = new AddUserCredentials(
-					$"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(),
-					authorizationForm?.Credential?.UserName);
+				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(),
+				                                           authorizationForm?.Credential?.UserName);
 
 				if (authorizationForm.ShowDialog() == DialogResult.OK)
 				{
@@ -417,7 +416,8 @@ namespace LogsReader.Reader
 				case ".doc":
 				case ".odt":
 				case ".pdf":
-				case ".wpd": return false;
+				case ".wpd":
+					return false;
 			}
 
 			return true;

@@ -30,7 +30,10 @@ namespace LogsReader.Reader.Forms
 
 			CenterToScreen();
 
-			_contextMenuStrip = new ContextMenuStrip { Tag = labelInformation };
+			_contextMenuStrip = new ContextMenuStrip
+			{
+				Tag = labelInformation
+			};
 			_contextMenuStrip.Items.Add("Copy text", null, (sender, args) => { Clipboard.SetText(labelInformation.Text); });
 			labelInformation.MouseClick += Information_MouseClick;
 
@@ -83,7 +86,7 @@ namespace LogsReader.Reader.Forms
 			labelInformation.AutoSize = true;
 
 			var formHeight = groupBoxInfo.Size.Height + panelAuthorization.Size.Height + 40;
-			
+
 			Size = new Size(Size.Width, formHeight);
 			MinimumSize = new Size(MinimumSize.Width, formHeight);
 			MaximumSize = new Size(999, formHeight);
@@ -94,9 +97,7 @@ namespace LogsReader.Reader.Forms
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
+			=> Close();
 
 		private void textBoxUser_TextChanged(object sender, EventArgs e)
 		{
@@ -117,9 +118,7 @@ namespace LogsReader.Reader.Forms
 		}
 
 		private void textBoxPassword_TextChanged(object sender, EventArgs e)
-		{
-			Check();
-		}
+			=> Check();
 
 		void Check()
 		{
@@ -128,6 +127,7 @@ namespace LogsReader.Reader.Forms
 				buttonOK.Enabled = true;
 				return;
 			}
+
 			buttonOK.Enabled = false;
 		}
 	}

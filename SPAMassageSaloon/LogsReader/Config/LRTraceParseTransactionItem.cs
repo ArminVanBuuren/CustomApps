@@ -7,11 +7,16 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("TransactionPattern")]
 	public class LRTraceParseTransactionItem : LRTraceParseItem
 	{
-		public LRTraceParseTransactionItem() { }
+		public LRTraceParseTransactionItem()
+		{
+		}
 
-		internal LRTraceParseTransactionItem(string regexPattern) : base(regexPattern) { }
+		internal LRTraceParseTransactionItem(string regexPattern) : base(regexPattern)
+		{
+		}
 
-		[XmlAttribute] public string Trn { get; set; } = string.Empty;
+		[XmlAttribute]
+		public string Trn { get; set; } = string.Empty;
 
 		public TraceParseTransactionResult GetParsingResult(Match match) => new TraceParseTransactionResult(this, match);
 

@@ -34,10 +34,7 @@ namespace SPAFilter.SPA
             if (!(input is IObjectTemplate inputTemplate))
                 return false;
 
-            if (UniqueName.Equals(inputTemplate.UniqueName))
-                return true;
-
-            return false;
+            return UniqueName.Equals(inputTemplate.UniqueName);
         }
 
         public override int GetHashCode() => UniqueName.GetHashCode();

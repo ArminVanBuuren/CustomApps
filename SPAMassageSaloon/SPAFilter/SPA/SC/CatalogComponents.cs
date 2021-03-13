@@ -166,10 +166,7 @@ namespace SPAFilter.SPA.SC
                           where myRow.Field<string>("SERVICE_CODE") == serviceCode
                           select myRow["SERVICE_NAME"];
 
-            if (!results.Any())
-                return null;
-
-            return results.First().ToString();
+            return !results.Any() ? null : results.First().ToString();
         }
 
         public void GenerateRFS()

@@ -30,7 +30,7 @@ namespace SPAFilter.SPA
         public string ROBPHostTypesPath { get; private set; }
         public string SCPath { get; private set; }
 
-        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && ((!ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath)) || (!SCPath.IsNullOrEmpty() || File.Exists(SCPath)));
+        public bool IsEnabledFilter => !ProcessPath.IsNullOrEmpty() && Directory.Exists(ProcessPath) && (!ROBPHostTypesPath.IsNullOrEmpty() && Directory.Exists(ROBPHostTypesPath) || !SCPath.IsNullOrEmpty() || File.Exists(SCPath));
         public bool CanGenerateSC => (HostTypes?.DriveOperationsCount ?? 0) > 0 && !(HostTypes is ServiceCatalog);
         public int WholeDriveItemsCount => (Processes?.Count ?? 0) + (HostTypes?.DriveOperationsCount ?? 0) + (ServiceInstances?.Count ?? 0) + (Scenarios?.Count ?? 0) + (Commands?.Count ?? 0);
 
@@ -42,9 +42,7 @@ namespace SPAFilter.SPA
         public CollectionTemplate<Command> Commands { get; private set; }
 
         public async Task DataFilterAsync(string filterProcess, string filterHT, string filterOp, bool bindWithFilter, ProgressCalculationAsync progressCalc)
-        {
-            await Task.Factory.StartNew(() => DataFilter(filterProcess, filterHT, filterOp, bindWithFilter, progressCalc));
-        }
+	        => await Task.Factory.StartNew(() => DataFilter(filterProcess, filterHT, filterOp, bindWithFilter, progressCalc));
 
         void DataFilter(string filterProcess, string filterHT, string filterOp, bool bindWithFilter, ProgressCalculationAsync progressCalc)
         {
@@ -62,21 +60,21 @@ namespace SPAFilter.SPA
                     if (filterProcess[0] == '%' && filterProcess[filterProcess.Length - 1] == '%')
                     {
                         var filterProcessContains = filterProcess.Substring(1, filterProcess.Length - 2);
-                        bpFilter = (bp) => bp.Name.StringContains(filterProcessContains);
+                        bpFilter = bp => bp.Name.StringContains(filterProcessContains);
                     }
                     else if (filterProcess[0] == '%')
                     {
                         var filterProcessContains = filterProcess.Substring(1, filterProcess.Length - 1);
-                        bpFilter = (bp) => bp.Name.EndsWith(filterProcessContains, StringComparison.CurrentCultureIgnoreCase);
+                        bpFilter = bp => bp.Name.EndsWith(filterProcessContains, StringComparison.CurrentCultureIgnoreCase);
                     }
                     else if (filterProcess[filterProcess.Length - 1] == '%')
                     {
                         var filterProcessContains = filterProcess.Substring(0, filterProcess.Length - 1);
-                        bpFilter = (bp) => bp.Name.StartsWith(filterProcessContains, StringComparison.InvariantCultureIgnoreCase);
+                        bpFilter = bp => bp.Name.StartsWith(filterProcessContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
-                        bpFilter = (bp) => bp.Name.Like(filterProcess);
+                        bpFilter = bp => bp.Name.Like(filterProcess);
                     }
                 }
 
@@ -92,21 +90,21 @@ namespace SPAFilter.SPA
                     if (filterHT[0] == '%' && filterHT[filterHT.Length - 1] == '%')
                     {
                         var filterNEContains = filterHT.Substring(1, filterHT.Length - 2);
-                        htFilter = (ht) => ht.Name.StringContains(filterNEContains);
+                        htFilter = ht => ht.Name.StringContains(filterNEContains);
                     }
                     else if (filterHT[0] == '%')
                     {
                         var filterNEContains = filterHT.Substring(1, filterHT.Length - 1);
-                        htFilter = (ht) => ht.Name.EndsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
+                        htFilter = ht => ht.Name.EndsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else if (filterHT[filterHT.Length - 1] == '%')
                     {
                         var filterNEContains = filterHT.Substring(0, filterHT.Length - 1);
-                        htFilter = (ht) => ht.Name.StartsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
+                        htFilter = ht => ht.Name.StartsWith(filterNEContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
-                        htFilter = (ht) => ht.Name.Like(filterHT);
+                        htFilter = ht => ht.Name.Like(filterHT);
                     }
                 }
 
@@ -115,21 +113,21 @@ namespace SPAFilter.SPA
                     if (filterOp[0] == '%' && filterOp[filterOp.Length - 1] == '%')
                     {
                         var filterOPContains = filterOp.Substring(1, filterOp.Length - 2);
-                        opFilter = (op) => op.Name.StringContains(filterOPContains);
+                        opFilter = op => op.Name.StringContains(filterOPContains);
                     }
                     else if (filterOp[0] == '%')
                     {
                         var filterOPContains = filterOp.Substring(1, filterOp.Length - 1);
-                        opFilter = (op) => op.Name.EndsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
+                        opFilter = op => op.Name.EndsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else if (filterOp[filterOp.Length - 1] == '%')
                     {
                         var filterOPContains = filterOp.Substring(0, filterOp.Length - 1);
-                        opFilter = (op) => op.Name.StartsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
+                        opFilter = op => op.Name.StartsWith(filterOPContains, StringComparison.InvariantCultureIgnoreCase);
                     }
                     else
                     {
-                        opFilter = (op) => op.Name.Like(filterOp);
+                        opFilter = op => op.Name.Like(filterOp);
                     }
                 }
 
@@ -407,7 +405,7 @@ namespace SPAFilter.SPA
             {
                 // удаляем операции которых не используются ни в одном бизнес процессе
                 if (opFilter == null)
-                    opFilter = (op) => true;
+                    opFilter = op => true;
 
                 foreach (var operation in hostType.Operations.Select(x => x).ToList())
                     if (!allBPOperations.ContainsKey(operation.Name) || !opFilter.Invoke(operation))
@@ -438,18 +436,14 @@ namespace SPAFilter.SPA
                 lock (ACTIVATORS_SYNC)
                     lastActivatorList = new List<ServiceActivator>(_activators.Values);
 
-                var result = MultiTasking.Run((inputFile) =>
+                var result = MultiTasking.Run(inputFile =>
                 {
                     lock (ACTIVATORS_SYNC)
                     {
-                        if (_activators.ContainsKey(inputFile))
-                        {
-                            throw new Exception(string.Format(Resources.Filter_ActivatorAlreadyExist, inputFile));
-                        }
-                        else
-                        {
-                            _activators.Add(inputFile, new ServiceActivator(inputFile));
-                        }
+	                    if (_activators.ContainsKey(inputFile))
+							throw new Exception(string.Format(Resources.Filter_ActivatorAlreadyExist, inputFile));
+	                    
+	                    _activators.Add(inputFile, new ServiceActivator(inputFile));
                     }
                 }, filePathList, new MultiTaskingTemplate(filePathList.Count(), ThreadPriority.Lowest));
 
@@ -465,81 +459,73 @@ namespace SPAFilter.SPA
         }
 
         public async Task RemoveActivatorAsync(IEnumerable<string> filePathList)
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lock (ACTIVATORS_SYNC)
-                {
-                    foreach (var filePath in filePathList)
-                    {
-                        if (_activators.ContainsKey(filePath))
-                        {
-                            _activators.Remove(filePath);
-                        }
-                    }
+	        => await Task.Factory.StartNew(() =>
+	        {
+		        lock (ACTIVATORS_SYNC)
+		        {
+			        foreach (var filePath in filePathList)
+			        {
+				        if (_activators.ContainsKey(filePath))
+				        {
+					        _activators.Remove(filePath);
+				        }
+			        }
 
-                    Refresh(_activators.Values);
-                }
-            });
-        }
+			        Refresh(_activators.Values);
+		        }
+	        });
 
         public async Task RemoveInstanceAsync(IEnumerable<string> uniqueNamesOfInstances)
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lock (ACTIVATORS_SYNC)
-                {
-                    foreach (var uniqueName in uniqueNamesOfInstances)
-                    {
-                        var instance = ServiceInstances[uniqueName];
-                        instance.Parent.Instances.Remove(instance);
-                    }
+	        => await Task.Factory.StartNew(() =>
+	        {
+		        lock (ACTIVATORS_SYNC)
+		        {
+			        foreach (var uniqueName in uniqueNamesOfInstances)
+			        {
+				        var instance = ServiceInstances[uniqueName];
+				        instance.Parent.Instances.Remove(instance);
+			        }
 
-                    foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
-                        _activators.Remove(activator.FilePath);
+			        foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
+				        _activators.Remove(activator.FilePath);
 
-                    Refresh(_activators.Values);
-                }
-            });
-        }
+			        Refresh(_activators.Values);
+		        }
+	        });
 
         public async Task RefreshActivatorsAsync()
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lock (ACTIVATORS_SYNC)
-                {
-                    if (ServiceInstances != null)
-                        foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
-                            _activators.Remove(activator.FilePath);
+	        => await Task.Factory.StartNew(() =>
+	        {
+		        lock (ACTIVATORS_SYNC)
+		        {
+			        if (ServiceInstances != null)
+				        foreach (var activator in ServiceInstances.Select(x => x.Parent).Where(x => x.Instances.Count == 0))
+					        _activators.Remove(activator.FilePath);
 
-                    if (_activators != null)
-                    {
-                        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
-                            _activators.Remove(fileActivator);
+			        if (_activators != null)
+			        {
+				        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
+					        _activators.Remove(fileActivator);
 
-                        Refresh(_activators.Values);
-                    }
-                }
-            });
-        }
+				        Refresh(_activators.Values);
+			        }
+		        }
+	        });
 
         public async Task ReloadActivatorsAsync()
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lock (ACTIVATORS_SYNC)
-                {
-                    if (_activators != null)
-                    {
-                        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
-                            _activators.Remove(fileActivator);
+	        => await Task.Factory.StartNew(() =>
+	        {
+		        lock (ACTIVATORS_SYNC)
+		        {
+			        if (_activators != null)
+			        {
+				        foreach (var fileActivator in _activators.Where(x => !File.Exists(x.Key)).Select(x => x.Key).ToList())
+					        _activators.Remove(fileActivator);
 
-                        Reload(_activators.Values);
-                    }
-                }
-            });
-        }
+				        Reload(_activators.Values);
+			        }
+		        }
+	        });
 
         /// <summary>
         /// Перезагрузить все экземпляры активаторов, сценарии и комманды.
@@ -548,7 +534,7 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var result = MultiTasking.Run((sa) => sa.Refresh(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
+                var result = MultiTasking.Run(sa => sa.Refresh(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrWhiteSpace())
@@ -567,7 +553,7 @@ namespace SPAFilter.SPA
         {
             if (activators != null && activators.Any())
             {
-                var result = MultiTasking.Run((sa) => sa.Reload(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
+                var result = MultiTasking.Run(sa => sa.Reload(), activators, new MultiTaskingTemplate(activators.Count(), ThreadPriority.Lowest));
 
                 var errors = string.Join(Environment.NewLine, result.CallBackList.Where(x => x.Error != null).Select(x => x.Error.Message));
                 if (!errors.IsNullOrWhiteSpace())
@@ -640,9 +626,7 @@ namespace SPAFilter.SPA
         }
 
         public async Task<string> GetServiceCatalogAsync(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
-        {
-            return await Task.Factory.StartNew(() => GetServiceCatalog(rdServices, exportFilePath, progressCalc));
-        }
+	        => await Task.Factory.StartNew(() => GetServiceCatalog(rdServices, exportFilePath, progressCalc));
 
         string GetServiceCatalog(DataTable rdServices, string exportFilePath, CustomProgressCalculation progressCalc)
         {
@@ -672,7 +656,7 @@ namespace SPAFilter.SPA
             _cancellationPrintXML = new CancellationTokenSource();
             try
             {
-                await Task.Factory.StartNew((token) => PrintXML((CancellationToken)token, progrAsync, stringErrors), _cancellationPrintXML.Token);
+                await Task.Factory.StartNew(token => PrintXML((CancellationToken)token, progrAsync, stringErrors), _cancellationPrintXML.Token);
             }
             catch (OperationCanceledException)
             {
@@ -685,9 +669,7 @@ namespace SPAFilter.SPA
         }
 
         public void PrintXMLAbort()
-        {
-            _cancellationPrintXML?.Cancel();
-        }
+	        => _cancellationPrintXML?.Cancel();
 
         void PrintXML(CancellationToken token, ProgressCalculationAsync progrAsync, CustomStringBuilder stringErrors)
         {
@@ -757,8 +739,6 @@ namespace SPAFilter.SPA
         }
 
         void ReportMessage(string message, string caption = null, MessageBoxIcon icon = MessageBoxIcon.Error)
-        {
-            SPAMassageSaloon.Common.ReportMessage.Show(message, icon, caption, false);
-        }
+	        => SPAMassageSaloon.Common.ReportMessage.Show(message, icon, caption, false);
     }
 }

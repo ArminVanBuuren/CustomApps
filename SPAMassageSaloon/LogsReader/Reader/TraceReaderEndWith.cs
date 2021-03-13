@@ -3,39 +3,42 @@ using System.Linq;
 
 namespace LogsReader.Reader
 {
-    public class TraceReaderEndWith : TraceReader
-    {
-	    public TraceReaderEndWith(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) 
-	        : base(control, server, filePath, originalFolder) { }
+	public class TraceReaderEndWith : TraceReader
+	{
+		public TraceReaderEndWith(LogsReaderPerformerBase control, string server, string filePath, string originalFolder)
+			: base(control, server, filePath, originalFolder)
+		{
+		}
 
-	    public override void ReadLine(string line)
-	    {
-		    if (Found != null)
-		    {
-			    // если стек лога превышает допустимый размер, то лог больше не дополняется
-			    if (Found.CountOfLines >= MaxTraceLines)
-			    {
-				    Commit();
-			    }
-			    else
-			    {
-				    Lines++;
+		public override void ReadLine(string line)
+		{
+			if (Found != null)
+			{
+				// если стек лога превышает допустимый размер, то лог больше не дополняется
+				if (Found.CountOfLines >= MaxTraceLines)
+				{
+					Commit();
+				}
+				else
+				{
+					Lines++;
 
 					Found.AppendNextLine(line);
-				    if (EndTraceLineWith.IsMatch(line))
-				    {
-					    Commit();
-				    }
-				    return;
-			    }
-		    }
+					if (EndTraceLineWith.IsMatch(line))
+					{
+						Commit();
+					}
 
-		    AddLine(line);
+					return;
+				}
+			}
+
+			AddLine(line);
 
 			if (!IsMatched(line))
-			    return;
+				return;
 
-		    Commit();
+			Commit();
 
 
 			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
@@ -54,5 +57,5 @@ namespace LogsReader.Reader
 			else
 				PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
 		}
-    }
+	}
 }

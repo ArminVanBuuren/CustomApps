@@ -20,7 +20,7 @@ namespace LogsReader.Reader.Forms
 			_groupType = groupType;
 
 			Icon = Icon.FromHandle(_groupType == GroupType.Server ? Resources.server_group.GetHicon() : Resources.types_group.GetHicon());
-			
+
 			base.Text = Resources.Txt_Forms_AddGroup;
 			labelGroupName.Text = Resources.Txt_Forms_GroupName;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
@@ -55,9 +55,7 @@ namespace LogsReader.Reader.Forms
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
+			=> Close();
 
 		public static DialogResult ShowGroupItemsForm(string groupName, Dictionary<string, (int, List<string>)> groups, GroupType groupType)
 		{

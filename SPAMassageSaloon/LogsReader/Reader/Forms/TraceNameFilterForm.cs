@@ -32,7 +32,7 @@ namespace LogsReader.Reader.Forms
 			{
 				if (args.RowIndex < 0 || args.ColumnIndex < 0)
 					return;
-				ColorizationRow(((DataGridView)sender).Rows[args.RowIndex]);
+				ColorizationRow(((DataGridView) sender).Rows[args.RowIndex]);
 			};
 			DgvTraceNames.DataBindingComplete += (sender, args) =>
 			{
@@ -44,11 +44,12 @@ namespace LogsReader.Reader.Forms
 						continue;
 					checkedCell.Checked = traceNameFilter.Checked;
 				}
+
 				DgvTraceNames.Refresh();
 			};
 			DgvTraceNames.Sorted += (sender, args) =>
 			{
-				if(DgvTraceNames.RowCount > 0)
+				if (DgvTraceNames.RowCount > 0)
 					DgvTraceNames.SelectRow(DgvTraceNames.Rows[0]);
 			};
 
@@ -96,10 +97,10 @@ namespace LogsReader.Reader.Forms
 				return;
 
 			var color = row.Cells[SelectColumn.Name] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked
-				? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS
-				: row.Index.IsParity()
-					? Color.White
-					: Color.FromArgb(245, 245, 245);
+				            ? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS
+				            : row.Index.IsParity()
+					            ? Color.White
+					            : Color.FromArgb(245, 245, 245);
 
 			if (row.DefaultCellStyle.BackColor != color)
 				row.DefaultCellStyle.BackColor = color;
@@ -110,7 +111,7 @@ namespace LogsReader.Reader.Forms
 			foreach (var row in DgvTraceNames.Rows.OfType<DataGridViewRow>())
 			{
 				var traceNameCell = row.Cells[TraceNameColumn.Name]?.Value.ToString();
-				if(traceNameCell == null)
+				if (traceNameCell == null)
 					continue;
 
 				if (TraceNames.TryGetValue(traceNameCell, out var traceNameFilter))

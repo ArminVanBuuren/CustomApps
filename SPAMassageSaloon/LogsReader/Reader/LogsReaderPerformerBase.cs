@@ -12,6 +12,7 @@ using Utils.WinForm.DataGridViewHelper;
 namespace LogsReader.Reader
 {
 	public delegate V OutFuncDelegate<in T, U, out V>(T input, out U output);
+
 	public delegate V DoubleOutFuncDelegate<in T, U, S, out V>(T input, out U output1, out S output2);
 
 	public interface IReaderPerformer
@@ -124,9 +125,9 @@ namespace LogsReader.Reader
 
 			Func<DateTime, string> getDisplayDate;
 			if (Settings.TraceParse.DisplayCulture != null)
-				getDisplayDate = (date) => date.ToString(Settings.TraceParse.DisplayDateFormat, Settings.TraceParse.DisplayCulture);
+				getDisplayDate = date => date.ToString(Settings.TraceParse.DisplayDateFormat, Settings.TraceParse.DisplayCulture);
 			else
-				getDisplayDate = (date) => date.ToString(Settings.TraceParse.DisplayDateFormat);
+				getDisplayDate = date => date.ToString(Settings.TraceParse.DisplayDateFormat);
 
 			if (Settings.CultureList.Count > 0)
 			{
@@ -188,13 +189,13 @@ namespace LogsReader.Reader
 			};
 
 			if (Settings.TraceParse.StartTraceLineWith != null && Settings.TraceParse.EndTraceLineWith != null)
-				GetTraceReader = (data) => new TraceReaderStartWithEndWith(this, data.server, data.filePath, data.originalFolder);
+				GetTraceReader = data => new TraceReaderStartWithEndWith(this, data.server, data.filePath, data.originalFolder);
 			else if (Settings.TraceParse.StartTraceLineWith != null)
-				GetTraceReader = (data) => new TraceReaderStartWith(this, data.server, data.filePath, data.originalFolder);
+				GetTraceReader = data => new TraceReaderStartWith(this, data.server, data.filePath, data.originalFolder);
 			else if (Settings.TraceParse.EndTraceLineWith != null)
-				GetTraceReader = (data) => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
+				GetTraceReader = data => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
 			else
-				GetTraceReader = (data) => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
+				GetTraceReader = data => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
 
 			if (Settings.TraceParse.IsCorrectCustomFunction)
 				TraceParseCustomFunction = Settings.TraceParse.GetCustomFunction();

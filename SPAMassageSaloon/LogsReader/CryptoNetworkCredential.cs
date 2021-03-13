@@ -10,7 +10,7 @@ namespace LogsReader
 	[Serializable]
 	public class CryptoNetworkCredential
 	{
-		[field: NonSerialized] 
+		[field: NonSerialized]
 		private IReadOnlyList<NetworkCredential> _value;
 
 		internal string UserName { get; }

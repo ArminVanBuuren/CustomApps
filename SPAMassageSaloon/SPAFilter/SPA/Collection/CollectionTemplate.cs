@@ -22,9 +22,7 @@ namespace SPAFilter.SPA.Collection
         }
 
         public virtual void AddRange(IEnumerable<T> collection)
-        {
-            AddCollection(collection);
-        }
+	        => AddCollection(collection);
 
         void AddCollection(IEnumerable<T> collection)
         {
@@ -106,9 +104,7 @@ namespace SPAFilter.SPA.Collection
         }
 
         public void Dispose()
-        {
-            Clear();
-        }
+	        => Clear();
 
         public override string ToString() => $"Count = {_collection.Count}";
     }

@@ -658,29 +658,19 @@ namespace SPAFilter
         #region DataGrid hot keys and Row double click
 
         private void DataGridServiceInstances_DoubleClick(object sender, EventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridServiceInstances);
-        }
+	        => CallAndCheckDataGridKey(dataGridServiceInstances);
 
         private void DataGridProcessesResults_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridProcesses);
-        }
+	        => CallAndCheckDataGridKey(dataGridProcesses);
 
         private void DataGridOperationsResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridOperations);
-        }
+	        => CallAndCheckDataGridKey(dataGridOperations);
 
         private void DataGridScenariosResult_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridScenarios);
-        }
+	        => CallAndCheckDataGridKey(dataGridScenarios);
 
         private void DataGridCommandsResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            CallAndCheckDataGridKey(dataGridCommands);
-        }
+	        => CallAndCheckDataGridKey(dataGridCommands);
 
         //[DllImport("user32.dll")]
         //private static extern short GetAsyncKeyState(Keys vKey);
@@ -715,7 +705,7 @@ namespace SPAFilter
                     {
                         if (!GetCurrentDataGridView(out var grid)
                             || !grid.Focused
-                            || (grid == dataGridOperations && !ROBPOperationsRadioButton.Checked)
+                            || grid == dataGridOperations && !ROBPOperationsRadioButton.Checked
                             || !GetCellItemSelectedRows(grid, out var filesPath)
                             || filesPath.Count == 0)
                             return;
@@ -724,7 +714,7 @@ namespace SPAFilter
                         if (userResult != DialogResult.OK)
                             return;
 
-                        await DoLongExecutionTasksAsync(MultiTasking.RunAsync((filePath) =>
+                        await DoLongExecutionTasksAsync(MultiTasking.RunAsync(filePath =>
                         {
                             try
                             {
@@ -933,24 +923,16 @@ namespace SPAFilter
         }
 
         private async void AddActivatorButton_Click(object sender, EventArgs e)
-        {
-            await AssignAsync(SPAProcessFilterType.AddActivators);
-        }
+	        => await AssignAsync(SPAProcessFilterType.AddActivators);
 
         private async void RemoveActivatorButton_Click(object sender, EventArgs e)
-        {
-            await AssignAsync(SPAProcessFilterType.RemoveActivators);
-        }
+	        => await AssignAsync(SPAProcessFilterType.RemoveActivators);
 
         private async void RefreshActivatorButton_Click(object sender, EventArgs e)
-        {
-            await AssignAsync(SPAProcessFilterType.RefreshActivators);
-        }
+	        => await AssignAsync(SPAProcessFilterType.RefreshActivators);
 
         private async void ReloadActivatorButton_Click(object sender, EventArgs e)
-        {
-            await AssignAsync(SPAProcessFilterType.ReloadActivators);
-        }
+	        => await AssignAsync(SPAProcessFilterType.ReloadActivators);
 
         async Task AssignAsync(SPAProcessFilterType type, bool saveSettings = true)
         {
@@ -1151,14 +1133,10 @@ namespace SPAFilter
         }
 
         private async void FilterButton_Click(object sender, EventArgs e)
-        {
-            await DoFilter(ProcessesComboBox.Text, NetSettComboBox.Text, OperationComboBox.Text);
-        }
+	        => await DoFilter(ProcessesComboBox.Text, NetSettComboBox.Text, OperationComboBox.Text);
 
         private async void buttonReset_Click(object sender, EventArgs e)
-        {
-            await DoFilter(string.Empty, string.Empty, string.Empty);
-        }
+	        => await DoFilter(string.Empty, string.Empty, string.Empty);
 
         async Task DoFilter(string filterProcess, string filterHT, string filterOp)
         {
@@ -1243,9 +1221,7 @@ namespace SPAFilter
         }
 
         private void OpenSCXlsx_TextChanged(object sender, EventArgs e)
-        {
-            SaveData();
-        }
+	        => SaveData();
 
         private void RootSCExportPathButton_Click(object sender, EventArgs e)
         {
@@ -1371,13 +1347,11 @@ namespace SPAFilter
         }
 
         private void PrintXMLButton_Click_Cancel(object sender, EventArgs e)
-        {
-            Filter.PrintXMLAbort();
-        }
+	        => Filter.PrintXMLAbort();
 
         async void OpenEditor(IEnumerable<BlankDocument> documentList, IEnumerable<string> filesList)
         {
-            if ((documentList != null && !documentList.Any()) || (filesList != null && !filesList.Any()))
+            if (documentList != null && !documentList.Any() || filesList != null && !filesList.Any())
                 return;
 
             try
@@ -1436,9 +1410,7 @@ namespace SPAFilter
         public static readonly string[] MandatoryXslxColumns = new string[] { "#", "SPA_SERVICE_CODE", "GLOBAL_SERVICE_CODE", "SERVICE_NAME", "SERVICE_FULL_NAME", "SERVICE_FULL_NAME2", "DESCRIPTION", "SERVICE_CODE", "SERVICE_NAME2", "EXTERNAL_CODE", "EXTERNAL_CODE2" };
 
         public async Task<DataTable> GetRDServicesFromXslxAsync(FileInfo file, CustomProgressCalculation progressCalc)
-        {
-            return await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progressCalc));
-        }
+	        => await Task<DataTable>.Factory.StartNew(() => GetRDServicesFromXslx(file, progressCalc));
 
         static DataTable GetRDServicesFromXslx(FileInfo file, CustomProgressCalculation progressCalc)
         {

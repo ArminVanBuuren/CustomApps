@@ -223,7 +223,7 @@ namespace SPAFilter.SPA.Collection
                     throw new Exception(string.Format(Resources.ServiceCatalog_NoHostTypeAttr, rfsName));
                 if (processType.Like("CancelHostType"))
                     continue;
-                if(CatalogRFSCollection.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => (p.Bindings.Base is CatalogRFSOperation operation) && operation.RFSName.Like(rfsName)))
+                if(CatalogRFSCollection.TryGetValue(rfsName, out var rfsOP) && !rfsOP.All(p => p.Bindings.Base is CatalogRFSOperation operation && operation.RFSName.Like(rfsName)))
                     throw new Exception(string.Format(Resources.ServiceCatalog_AlreadyExist, rfsName));
                 
                 var defaultLinkTypes = new List<string> { "Add", "Remove" };
@@ -343,29 +343,30 @@ namespace SPAFilter.SPA.Collection
 
                     continue;
                 }
-                else if (!parentRFSName.IsNullOrWhiteSpace())
+
+                if (!parentRFSName.IsNullOrWhiteSpace())
                 {
-                    if (CatalogRFSCollection.TryGetValue(parentRFSName, out var result))
-                    {
-                        foreach (var parentRFS in result)
-                        {
-                            parentRFS.ChildRFSList.Add(rfsCFSs.Key);
-                            AddChildCFS(parentRFS, cfsList);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var linkType in defaultLinkTypes)
-                        {
-                            var parentRFS = AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
-                            AddChildCFS(parentRFS, cfsList);
-                        }
-                    }
+	                if (CatalogRFSCollection.TryGetValue(parentRFSName, out var result))
+	                {
+		                foreach (var parentRFS in result)
+		                {
+			                parentRFS.ChildRFSList.Add(rfsCFSs.Key);
+			                AddChildCFS(parentRFS, cfsList);
+		                }
+	                }
+	                else
+	                {
+		                foreach (var linkType in defaultLinkTypes)
+		                {
+			                var parentRFS = AddBaseRFS(null, rfsCFSs, parentRFSName, linkType, hostType, navigator);
+			                AddChildCFS(parentRFS, cfsList);
+		                }
+	                }
 
-                    if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result2))
-                        CatalogRFSCollection.Add(rfsName, result2);
+	                if (CatalogRFSCollection.TryGetValue(baseRFSName, out var result2))
+		                CatalogRFSCollection.Add(rfsName, result2);
 
-                    continue;
+	                continue;
                 }
 
                 var oneTimeLinkTypes = new DistinctList<string>();

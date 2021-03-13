@@ -21,10 +21,8 @@ namespace SPAFilter.SPA.SC
         }
 
         protected internal void CombineSameHostOperation(HostOperation hostOp)
-        {
-            //XML_BODY.AddRange(hostOp.XML_BODY);
-            BindServices.AddRange(hostOp.BindServices);
-        }
+	        //XML_BODY.AddRange(hostOp.XML_BODY);
+	        => BindServices.AddRange(hostOp.BindServices);
 
         internal void AddChildRFS(CFS cfs, LinkType linkType)
         {

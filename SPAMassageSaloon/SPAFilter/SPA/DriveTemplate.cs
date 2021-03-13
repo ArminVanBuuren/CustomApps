@@ -22,7 +22,7 @@ namespace SPAFilter.SPA
             get
             {
                 if (_fileInfo != null && _fileInfo.Exists)
-                    return Math.Round(((double)_fileInfo.Length / 1024), 2);
+                    return Math.Round((double)_fileInfo.Length / 1024, 2);
 
                 return -1;
             }

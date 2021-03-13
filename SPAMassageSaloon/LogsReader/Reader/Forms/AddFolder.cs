@@ -9,7 +9,6 @@ namespace LogsReader.Reader.Forms
 {
 	public partial class AddFolder : Form
 	{
-		
 		private readonly bool _sourceAllDirSearching = false;
 
 		private string _lastDir;
@@ -66,9 +65,7 @@ namespace LogsReader.Reader.Forms
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
+			=> Close();
 
 		private void textBoxFolder_TextChanged(object sender, EventArgs e)
 		{
@@ -85,7 +82,7 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonOpenFolder_Click(object sender, EventArgs e)
 		{
-			if (!Folder.Open(_lastDir, out var folderResult)) 
+			if (!Folder.Open(_lastDir, out var folderResult))
 				return;
 
 			_lastDir = folderResult;

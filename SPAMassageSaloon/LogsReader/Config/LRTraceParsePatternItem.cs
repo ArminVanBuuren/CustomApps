@@ -8,23 +8,27 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("Pattern")]
 	public class LRTraceParsePatternItem : LRTraceParseItem
 	{
-		public LRTraceParsePatternItem() { }
+		public LRTraceParsePatternItem()
+		{
+		}
 
-		internal LRTraceParsePatternItem(string regexPattern) : base(regexPattern) { }
+		internal LRTraceParsePatternItem(string regexPattern) : base(regexPattern)
+		{
+		}
 
 		[XmlAttribute(nameof(DataTemplate.Tmp.ID))]
 		public string ID { get; set; } = string.Empty;
 
-		[XmlAttribute(nameof(DataTemplate.Tmp.Date))] 
+		[XmlAttribute(nameof(DataTemplate.Tmp.Date))]
 		public string Date { get; set; } = string.Empty;
 
-		[XmlAttribute(nameof(DataTemplate.Tmp.TraceName))] 
+		[XmlAttribute(nameof(DataTemplate.Tmp.TraceName))]
 		public string TraceName { get; set; } = string.Empty;
 
-		[XmlAttribute(DataTemplate.HeaderDescription)] 
+		[XmlAttribute(DataTemplate.HeaderDescription)]
 		public string Description { get; set; } = string.Empty;
 
-		[XmlAttribute(DataTemplate.HeaderMessage)] 
+		[XmlAttribute(DataTemplate.HeaderMessage)]
 		public string Message { get; set; } = string.Empty;
 
 		public TraceParseResult GetParsingResult(Match match) => new TraceParsePatternResult(this, match);

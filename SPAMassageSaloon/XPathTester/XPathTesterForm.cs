@@ -152,9 +152,7 @@ namespace XPathTester
         }
 
         private void EditorOnPasting(object sender, EventArgs e)
-        {
-            _isPasting = true;
-        }
+	        => _isPasting = true;
 
         void EditorOnTextChanged(object sender, EventArgs eventArgs)
         {
@@ -240,7 +238,7 @@ namespace XPathTester
 	        {
 		        var getNodeNamesValue = Regex.Replace(XPathText.Text, @"^\s*(name|local-name)\s*\((.+?)\)$", "$2", RegexOptions.IgnoreCase);
 
-		        var navigator = await Task<XPathNavigator2>.Factory.StartNew((input) => XPATH.Select((string) input, getNodeNamesValue), editor.Text);
+		        var navigator = await Task<XPathNavigator2>.Factory.StartNew(input => XPATH.Select((string) input, getNodeNamesValue), editor.Text);
 		        if (navigator.Result.Any())
 		        {
 			        Result = new XPathCollection(navigator.Result);

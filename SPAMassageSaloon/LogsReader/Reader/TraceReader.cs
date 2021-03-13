@@ -18,70 +18,70 @@ namespace LogsReader.Reader
 
 	public delegate void FoundDataTemplate(DataTemplate item);
 
-    public abstract class TraceReader : LogsReaderPerformerBase
-    {
-	    private bool _searchByTransaction;
+	public abstract class TraceReader : LogsReaderPerformerBase
+	{
+		private bool _searchByTransaction;
 
-	    private Func<string, bool> _IsMatchedFunc;
+		private Func<string, bool> _IsMatchedFunc;
 
-	    /// <summary>
-        /// Сохраненные данный которые не спарсились по основному поиску и по транзакциям
-        /// </summary>
-        protected Queue<string> PastTraceLines { get; set; }
+		/// <summary>
+		/// Сохраненные данный которые не спарсились по основному поиску и по транзакциям
+		/// </summary>
+		protected Queue<string> PastTraceLines { get; set; }
 
-	    /// <summary>
-        /// Прошлый успешный результат, который возможно будет дополняться
-        /// </summary>
-	    protected DataTemplate Found { get; set; }
+		/// <summary>
+		/// Прошлый успешный результат, который возможно будет дополняться
+		/// </summary>
+		protected DataTemplate Found { get; set; }
 
-        /// <summary>
-        /// Текущая транзакция, используется для DataTempalte 
-        /// </summary>
-	    protected TransactionValue CurrentTransactionValue { get; private set; } = null;
+		/// <summary>
+		/// Текущая транзакция, используется для DataTempalte 
+		/// </summary>
+		protected TransactionValue CurrentTransactionValue { get; private set; } = null;
 
-        /// <summary>
-	    /// Разрешить поиск по транзакциям
-	    /// </summary>
-	    protected bool SearchByTransaction
-	    {
-		    get => _searchByTransaction;
-		    set
-		    {
-			    _searchByTransaction = value;
-			    if (_searchByTransaction)
-			    {
-				    _IsMatchedFunc = (input) =>
-				    {
-					    CurrentTransactionValue = null;
-					    var result = IsMatch.Invoke(input);
+		/// <summary>
+		/// Разрешить поиск по транзакциям
+		/// </summary>
+		protected bool SearchByTransaction
+		{
+			get => _searchByTransaction;
+			set
+			{
+				_searchByTransaction = value;
+				if (_searchByTransaction)
+				{
+					_IsMatchedFunc = input =>
+					{
+						CurrentTransactionValue = null;
+						var result = IsMatch.Invoke(input);
 
-					    if (IsMatchByTransactions.Invoke(input, out var _trnValue))
-					    {
-						    CurrentTransactionValue = new TransactionValue(!result, _trnValue);
-						    result = true;
-					    }
+						if (IsMatchByTransactions.Invoke(input, out var _trnValue))
+						{
+							CurrentTransactionValue = new TransactionValue(!result, _trnValue);
+							result = true;
+						}
 
-					    return result;
-				    };
-			    }
+						return result;
+					};
+				}
 				else
-			    {
-				    CurrentTransactionValue = null;
-                    _IsMatchedFunc = (input) => IsMatch.Invoke(input);
-                }
-		    }
-	    }
+				{
+					CurrentTransactionValue = null;
+					_IsMatchedFunc = input => IsMatch.Invoke(input);
+				}
+			}
+		}
 
-        /// <summary>
-        /// Генерирует событие при найденном трейсе
-        /// </summary>
-	    public event FoundDataTemplate OnFound;
+		/// <summary>
+		/// Генерирует событие при найденном трейсе
+		/// </summary>
+		public event FoundDataTemplate OnFound;
 
-        [DGVColumn(ColumnPosition.After, "ID", true)]
-        public int ID { get; internal set; }
+		[DGVColumn(ColumnPosition.After, "ID", true)]
+		public int ID { get; internal set; }
 
 		[DGVColumn(ColumnPosition.After, "PrivateID", false)]
-        public int PrivateID { get; internal set; }
+		public int PrivateID { get; internal set; }
 
 		public TraceReaderStatus Status { get; private set; } = TraceReaderStatus.Waiting;
 
@@ -102,11 +102,11 @@ namespace LogsReader.Reader
 
 		public string Server { get; }
 
-        /// <summary>
-        /// Отсекается часть пути из первичных настроек (OriginalFolder) от основного пути к файлу (FilePath)
-        /// Пример - отсекается "\\LOCALHOST\C$\TEST" от "\\LOCALHOST\C$\TEST\soapcon.log" - получается soapcon.log
-        /// </summary>
-        public string FileNamePartial { get; }
+		/// <summary>
+		/// Отсекается часть пути из первичных настроек (OriginalFolder) от основного пути к файлу (FilePath)
+		/// Пример - отсекается "\\LOCALHOST\C$\TEST" от "\\LOCALHOST\C$\TEST\soapcon.log" - получается soapcon.log
+		/// </summary>
+		public string FileNamePartial { get; }
 
 		/// <summary>
 		/// Содержит в себе полный путь к файлу, включая сервер "\\LOCALHOST\C$\TEST\soapcon.log"
@@ -128,13 +128,13 @@ namespace LogsReader.Reader
 		/// </summary>
 		public string OriginalFolder { get; }
 
-        public FileInfo File { get; }
+		public FileInfo File { get; }
 
 		public int Priority { get; internal set; }
 
-        public long Lines { get; protected set; } = 0;
+		public long Lines { get; protected set; } = 0;
 
-        protected void AddLine(string input)
+		protected void AddLine(string input)
 		{
 			PastTraceLines.Enqueue(input);
 			if (PastTraceLines.Count > MaxTraceLines)
@@ -143,7 +143,7 @@ namespace LogsReader.Reader
 			Lines++;
 		}
 
-        public TraceReaderSearchType SearchType { get; }
+		public TraceReaderSearchType SearchType { get; }
 
 		protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) : base(control)
 		{
@@ -179,7 +179,8 @@ namespace LogsReader.Reader
 						Status = TraceReaderStatus.Failed;
 						return true;
 					}
-					else if (IsStopPending || Status == TraceReaderStatus.Aborted)
+
+					if (IsStopPending || Status == TraceReaderStatus.Aborted)
 					{
 						Status = TraceReaderStatus.Aborted;
 						return true;
@@ -215,7 +216,7 @@ namespace LogsReader.Reader
 								while (Status == TraceReaderStatus.OnPause && !IsStopPending && !HasOutOfMemoryException)
 									Thread.Sleep(50);
 
-							if(IsStopStatus())
+							if (IsStopStatus())
 								return;
 
 							ReadLine(line);
@@ -279,42 +280,43 @@ namespace LogsReader.Reader
 		protected bool IsMatched(string input) => _IsMatchedFunc.Invoke(input);
 
 		public void Commit()
-        {
-            if (Found == null)
-                return;
+		{
+			if (Found == null)
+				return;
 
-            try
-            {
-                if (!Found.IsMatched)
-                {
-                    if (IsTraceMatch(Found.TraceMessage, out var result, Found, true))
-                    {
-	                    AddResult(result);
-                    }
-                    else
-                    {
-	                    TransactionsSearch(Found.TraceMessage, Found);
+			try
+			{
+				if (!Found.IsMatched)
+				{
+					if (IsTraceMatch(Found.TraceMessage, out var result, Found, true))
+					{
+						AddResult(result);
+					}
+					else
+					{
+						TransactionsSearch(Found.TraceMessage, Found);
 						AddResult(Found);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-	            if (!Found.IsMatched)
-	            {
-		            Found = new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, CurrentTransactionValue, ex);
-		            TransactionsSearch(Found.TraceMessage, Found);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				if (!Found.IsMatched)
+				{
+					Found = new DataTemplate(this, Found.FoundLineID, Found.TraceMessage, CurrentTransactionValue, ex);
+					TransactionsSearch(Found.TraceMessage, Found);
 					AddResult(Found);
-	            }
-	            throw;
-            }
-            finally
-            {
-                Found = null;
-            }
-        }
+				}
 
-        protected void AddResult(DataTemplate item)
+				throw;
+			}
+			finally
+			{
+				Found = null;
+			}
+		}
+
+		protected void AddResult(DataTemplate item)
 		{
 			if (Filter != null && !Filter.IsAllowed(item))
 				return;
@@ -326,21 +328,21 @@ namespace LogsReader.Reader
 				++CountErrors;
 
 			OnFound?.Invoke(item);
-        }
+		}
 
-        protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
-        {
-            // замена '\r' чинит баг с некорректным парсингом
-            var traceMessage = input.Replace("\r", string.Empty);
-            var length = traceMessage.Split('\n').Length;
+		protected bool IsTraceMatch(string input, out DataTemplate result, DataTemplate failed = null, bool throwException = false)
+		{
+			// замена '\r' чинит баг с некорректным парсингом
+			var traceMessage = input.Replace("\r", string.Empty);
+			var length = traceMessage.Split('\n').Length;
 			var foundLineId = Lines - length + 1;
 
-            switch (SearchType)
-            {
-	            case TraceReaderSearchType.ByRegexPatterns:
-		            if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
-			            return true;
-		            break;
+			switch (SearchType)
+			{
+				case TraceReaderSearchType.ByRegexPatterns:
+					if (IsTraceMatchByRegexPatterns(traceMessage, foundLineId, out result, throwException))
+						return true;
+					break;
 				case TraceReaderSearchType.ByCustomFunctions:
 					if (IsTraceMatchByCustomFunction(traceMessage, foundLineId, out result))
 						return true;
@@ -353,23 +355,22 @@ namespace LogsReader.Reader
 					break;
 				default:
 					throw new NotSupportedException();
-            }
+			}
 
-            result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue);
-            return false;
-        }
+			result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue);
+			return false;
+		}
 
-        bool IsTraceMatchByCustomFunction(string traceMessage, long foundLineId, out DataTemplate result)
-        {
+		bool IsTraceMatchByCustomFunction(string traceMessage, long foundLineId, out DataTemplate result)
+		{
 			var traceParceResult = TraceParseCustomFunction.Value.Item1.Invoke(traceMessage);
 			if (traceParceResult != null)
 			{
-				var current = new DataTemplate(
-					this,
-					foundLineId,
-					traceParceResult,
-					traceMessage,
-					CurrentTransactionValue);
+				var current = new DataTemplate(this,
+				                               foundLineId,
+				                               traceParceResult,
+				                               traceMessage,
+				                               CurrentTransactionValue);
 
 				TransactionsSearch(traceMessage, current);
 
@@ -378,68 +379,67 @@ namespace LogsReader.Reader
 			}
 
 			result = null;
-	        return false;
-        }
+			return false;
+		}
 
 		bool IsTraceMatchByRegexPatterns(string traceMessage, long foundLineId, out DataTemplate result, bool throwException)
-        {
-	        foreach (var traceParsePattern in TraceParsePatterns)
-	        {
-		        Match match;
-		        try
-		        {
-			        match = traceParsePattern.RegexItem.Match(traceMessage);
-		        }
-		        catch (Exception ex)
-		        {
-			        if (throwException)
-				        throw;
+		{
+			foreach (var traceParsePattern in TraceParsePatterns)
+			{
+				Match match;
+				try
+				{
+					match = traceParsePattern.RegexItem.Match(traceMessage);
+				}
+				catch (Exception ex)
+				{
+					if (throwException)
+						throw;
 
-			        result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue, ex);
-			        return false;
-		        }
+					result = new DataTemplate(this, foundLineId, traceMessage, CurrentTransactionValue, ex);
+					return false;
+				}
 
-		        if (!match.Success || match.Value.Length != traceMessage.Length)
-			        continue;
+				if (!match.Success || match.Value.Length != traceMessage.Length)
+					continue;
 
-		        var current = new DataTemplate(
-			        this,
-			        foundLineId,
-			        traceParsePattern.GetParsingResult(match),
-			        traceMessage,
-			        CurrentTransactionValue);
+				var current = new DataTemplate(this,
+				                               foundLineId,
+				                               traceParsePattern.GetParsingResult(match),
+				                               traceMessage,
+				                               CurrentTransactionValue);
 
-		        TransactionsSearch(traceMessage, current);
+				TransactionsSearch(traceMessage, current);
 
-		        result = current;
-		        return true;
-	        }
+				result = current;
+				return true;
+			}
 
-	        result = null;
-	        return false;
-        }
+			result = null;
+			return false;
+		}
 
-        /// <summary>
+		/// <summary>
 		/// поиск по транзакциям
 		/// </summary>
 		/// <param name="traceMessage">Успешно спарсенный трейс</param>
 		/// <param name="current">Успешно созданный темплейт</param>
 		void TransactionsSearch(string traceMessage, DataTemplate current)
-        {
-	        if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0)
-		        return;
+		{
+			if (!SearchByTransaction || TransactionPatterns == null || TransactionPatterns.Length <= 0)
+				return;
 
-	        try
-            {
-	            foreach (var transactionParsePattern in TransactionPatterns)
-	            {
-		            // пытаемся из результата найти транзакцию
-		            var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
-		            if (!trnMatch.Success)
-			            continue;
+			try
+			{
+				foreach (var transactionParsePattern in TransactionPatterns)
+				{
+					// пытаемся из результата найти транзакцию
+					var trnMatch = transactionParsePattern.RegexItem.Match(traceMessage);
+					if (!trnMatch.Success)
+						continue;
 
-		            // Текущая транзакция. Подставляется из группировок regex replace mode
-		            var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
+					// Текущая транзакция. Подставляется из группировок regex replace mode
+					var trnValue = transactionParsePattern.GetParsingResult(trnMatch).Trn;
 
 					// ищем дальше, если результатам replace mode значение пустое
 					if (trnValue.IsNullOrWhiteSpace())
@@ -450,61 +450,61 @@ namespace LogsReader.Reader
 
 					// добавляем новую транзакцию в общую коллекцию спарсенных транзакций
 					if (!AddTransactionValue(trnValue))
-			            break; // если транзакция найдена,, или транзакция уже была в списках, то завершаем поиск транзакций
+						break; // если транзакция найдена,, или транзакция уже была в списках, то завершаем поиск транзакций
 
 					// если сохранились предыдущие строки, то ищем текущую транзакцию в предыдущих строках
 					if (PastTraceLines.Count > 0)
-		            {
-			            // создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
-			            var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
-			            innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
-			            innerReader.CurrentTransactionValue = new TransactionValue(true, trnValue);
-			            innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines - 1; // возвращаемся обратно к первой сохраненной строке
-			            innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
+					{
+						// создаем внутренний ридер, для считывания предыдущих записей для поиска текущей транзакции
+						var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
+						innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
+						innerReader.CurrentTransactionValue = new TransactionValue(true, trnValue);
+						innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines - 1; // возвращаемся обратно к первой сохраненной строке
+						innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
-			            void OnPastFound(DataTemplate pastItem)
-			            {
-				            if (pastItem.IsMatched && !pastItem.Equals(current))
-				            {
-					            AddResult(pastItem);
-				            }
-			            }
+						void OnPastFound(DataTemplate pastItem)
+						{
+							if (pastItem.IsMatched && !pastItem.Equals(current))
+							{
+								AddResult(pastItem);
+							}
+						}
 
-			            innerReader.OnFound += OnPastFound;
-			            foreach (var pastLine in PastTraceLines)
-			            {
-				            innerReader.ReadLine(pastLine);
-			            }
+						innerReader.OnFound += OnPastFound;
+						foreach (var pastLine in PastTraceLines)
+						{
+							innerReader.ReadLine(pastLine);
+						}
 
-			            try
-			            {
-				            innerReader.Commit();
-			            }
-			            catch (Exception)
-			            {
-				            // ignored
-			            }
+						try
+						{
+							innerReader.Commit();
+						}
+						catch (Exception)
+						{
+							// ignored
+						}
 
-			            innerReader.OnFound -= OnPastFound;
+						innerReader.OnFound -= OnPastFound;
 
-			            // очищаем предыдущие данные, т.к. трейс успешно был спарсен в текущем контексте
-			            // и также в дочернем вызове был произведен поиск по транзакциям
-			            PastTraceLines.Clear();
-		            }
+						// очищаем предыдущие данные, т.к. трейс успешно был спарсен в текущем контексте
+						// и также в дочернем вызове был произведен поиск по транзакциям
+						PastTraceLines.Clear();
+					}
 
-		            break;
-	            }
-            }
-            catch (Exception)
-            {
-	            // ignored
-            }
-        }
+					break;
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		}
 
-        protected bool IsLineMatch(string input)
-        {
-	        // замена '\r' чинит баг с некорректным парсингом
-	        var traceMessage = input.Replace("\r", string.Empty);
+		protected bool IsLineMatch(string input)
+		{
+			// замена '\r' чинит баг с некорректным парсингом
+			var traceMessage = input.Replace("\r", string.Empty);
 
 			switch (SearchType)
 			{
@@ -523,69 +523,67 @@ namespace LogsReader.Reader
 			}
 
 			return false;
-        }
+		}
 
-        protected bool IsLineMatchByCustomFunction(string traceMessage) => TraceParseCustomFunction.Value.Item2.Invoke(traceMessage);
+		protected bool IsLineMatchByCustomFunction(string traceMessage) => TraceParseCustomFunction.Value.Item2.Invoke(traceMessage);
 
-        protected bool IsLineMatchByRegexPatterns(string traceMessage)
-        {
-	        foreach (var traceParsePattern in TraceParsePatterns.Select(x => x.RegexItem))
-	        {
-		        Match match;
-		        try
-		        {
-			        match = traceParsePattern.Match(traceMessage);
-		        }
-		        catch (Exception)
-		        {
-			        return false;
-		        }
+		protected bool IsLineMatchByRegexPatterns(string traceMessage)
+		{
+			foreach (var traceParsePattern in TraceParsePatterns.Select(x => x.RegexItem))
+			{
+				Match match;
+				try
+				{
+					match = traceParsePattern.Match(traceMessage);
+				}
+				catch (Exception)
+				{
+					return false;
+				}
 
-		        if (match.Success && match.Value.Length == traceMessage.Length)
-			        return true;
-	        }
+				if (match.Success && match.Value.Length == traceMessage.Length)
+					return true;
+			}
 
 			return false;
-        }
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Останавливаем и очищаем
 		/// </summary>
-        public override void Clear()
-        {
-	        Found = null;
+		public override void Clear()
+		{
+			Found = null;
 			Abort();
-	        PastTraceLines.Clear();
-        }
+			PastTraceLines.Clear();
+		}
 
 		public override bool Equals(object obj)
-        {
-	        var isEqual = false;
-	        if (obj is TraceReader input)
-		        isEqual = FilePath == input.FilePath && base.Equals(input);
-	        return isEqual;
-        }
+		{
+			var isEqual = false;
+			if (obj is TraceReader input)
+				isEqual = FilePath == input.FilePath && base.Equals(input);
+			return isEqual;
+		}
 
-        /// <summary>
-        /// хэш только полного пути к файлу и базовый хэш
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-	        unchecked
-	        {
-		        var hash = 30;
-		        hash = hash * 14 + FilePath.GetHashCode();
-		        hash = hash * 14 + base.GetHashCode();
+		/// <summary>
+		/// хэш только полного пути к файлу и базовый хэш
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hash = 30;
+				hash = hash * 14 + FilePath.GetHashCode();
+				hash = hash * 14 + base.GetHashCode();
 				return hash;
 			}
-        }
+		}
 
-        public override string ToString() => FilePath;
+		public override string ToString() => FilePath;
 
-        public override void Dispose()
-        {
-	        Clear();
-        }
-    }
+		public override void Dispose()
+			=> Clear();
+	}
 }

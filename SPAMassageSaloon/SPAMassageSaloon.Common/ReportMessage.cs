@@ -6,9 +6,7 @@ namespace SPAMassageSaloon.Common
     public static class ReportMessage
     {
         public static void Show(Exception exception)
-        {
-            Show(exception.ToString());
-        }
+	        => Show(exception.ToString());
 
         public static void Show(string message, MessageBoxIcon type = MessageBoxIcon.Error, string caption = null, bool isForm = true)
         {

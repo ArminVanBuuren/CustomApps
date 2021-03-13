@@ -10,9 +10,13 @@ namespace LogsReader.Config
 	[Serializable, XmlRoot("LogsFolderGroup")]
 	public class LRFolderGroup
 	{
-		private LRFolder[] _logsFolder = new LRFolder[] { new LRFolder() };
+		private LRFolder[] _logsFolder = new LRFolder[]
+		{
+			new LRFolder()
+		};
 
-		[XmlIgnore] public Dictionary<string, bool> Folders { get; private set; }
+		[XmlIgnore]
+		public Dictionary<string, bool> Folders { get; private set; }
 
 		[XmlElement("Folder")]
 		public LRFolder[] LogsFolder
@@ -28,7 +32,8 @@ namespace LogsReader.Config
 						if (folder.Value.IsNullOrWhiteSpace())
 							throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, folder.Value));
 
-					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching, StringComparer.InvariantCultureIgnoreCase);
+					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching,
+					                                              StringComparer.InvariantCultureIgnoreCase);
 
 					_logsFolder = prevLogFolders;
 					Folders = prevFolders;
@@ -40,7 +45,9 @@ namespace LogsReader.Config
 			}
 		}
 
-		public LRFolderGroup() { }
+		public LRFolderGroup()
+		{
+		}
 
 		internal LRFolderGroup(LRFolder[] folders) => LogsFolder = folders;
 	}

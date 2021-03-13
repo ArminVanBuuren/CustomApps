@@ -47,13 +47,9 @@ namespace SPAFilter.SPA.Collection
         }
 
         public void AddName(string name)
-        {
-            _allBusinessProcessNames.Add(name);
-        }
+	        => _allBusinessProcessNames.Add(name);
 
         public void FetchNames()
-        {
-            _allBusinessProcessNames = this.Select(x => x.Name).ToList();
-        }
+	        => _allBusinessProcessNames = this.Select(x => x.Name).ToList();
     }
 }

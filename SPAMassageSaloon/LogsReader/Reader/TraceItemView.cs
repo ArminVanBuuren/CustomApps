@@ -32,7 +32,7 @@ namespace LogsReader.Reader
 			set
 			{
 				currentTemplate = value;
-				if (!(this.Parent is TabPage page))
+				if (!(Parent is TabPage page))
 					return;
 
 				if (currentTemplate != null)
@@ -70,7 +70,11 @@ namespace LogsReader.Reader
 				descriptionText.AutoWordSelection = false;
 				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, FontStyle.Bold);
 
-				EditorMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderMessage, Language = Language.XML });
+				EditorMessage = notepad.AddDocument(new BlankDocument
+				{
+					HeaderName = DataTemplate.HeaderMessage,
+					Language = Language.XML
+				});
 				EditorMessage.AutoPrintToXml = true;
 				EditorMessage.BackBrush = null;
 				EditorMessage.BorderStyle = BorderStyle.FixedSingle;
@@ -80,7 +84,10 @@ namespace LogsReader.Reader
 				EditorMessage.IsReplaceMode = false;
 				EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
 
-				EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
+				EditorTraceMessage = notepad.AddDocument(new BlankDocument
+				{
+					HeaderName = DataTemplate.HeaderTraceMessage
+				});
 				EditorTraceMessage.BackBrush = null;
 				EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
 				EditorTraceMessage.Cursor = Cursors.IBeam;
@@ -234,7 +241,6 @@ namespace LogsReader.Reader
 
 					if (CurrentTemplate.ElapsedSecTotal >= 0)
 						descriptionText.AppendText($"\r\n{CurrentTemplate.ElapsedSecDescription}");
-
 				}
 
 				if (!CurrentTemplate.Description.IsNullOrWhiteSpace())
@@ -357,8 +363,6 @@ namespace LogsReader.Reader
 		}
 
 		private void splitContainer_SplitterMoved(object sender, SplitterEventArgs e)
-		{
-			SplitterMoved?.Invoke(this, EventArgs.Empty);
-		}
+			=> SplitterMoved?.Invoke(this, EventArgs.Empty);
 	}
 }

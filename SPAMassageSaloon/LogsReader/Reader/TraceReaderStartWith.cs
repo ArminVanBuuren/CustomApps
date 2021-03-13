@@ -3,43 +3,45 @@ using System.Linq;
 
 namespace LogsReader.Reader
 {
-    public class TraceReaderStartWith : TraceReader
-    {
-	    public TraceReaderStartWith(LogsReaderPerformerBase control, string server, string filePath, string originalFolder) 
-	        : base(control, server, filePath, originalFolder) { }
+	public class TraceReaderStartWith : TraceReader
+	{
+		public TraceReaderStartWith(LogsReaderPerformerBase control, string server, string filePath, string originalFolder)
+			: base(control, server, filePath, originalFolder)
+		{
+		}
 
-	    public override void ReadLine(string line)
-	    {
-		    if (Found != null)
-		    {
-			    // если стек лога превышает допустимый размер, то лог больше не дополняется
-			    if (Found.CountOfLines >= MaxTraceLines)
-			    {
-				    Commit();
-			    }
-			    else
-			    {
-				    if (!StartTraceLineWith.IsMatch(line))
-				    {
-					    Found.AppendNextLine(line);
+		public override void ReadLine(string line)
+		{
+			if (Found != null)
+			{
+				// если стек лога превышает допустимый размер, то лог больше не дополняется
+				if (Found.CountOfLines >= MaxTraceLines)
+				{
+					Commit();
+				}
+				else
+				{
+					if (!StartTraceLineWith.IsMatch(line))
+					{
+						Found.AppendNextLine(line);
 
-					    Lines++;
+						Lines++;
 						return;
-				    }
+					}
 
-				    Commit();
-			    }
-		    }
+					Commit();
+				}
+			}
 
-		    AddLine(line);
+			AddLine(line);
 
 			if (!IsMatched(line))
-			    return;
+				return;
 
-		    Commit();
+			Commit();
 
 
-		    Found = new DataTemplate(this, Lines, CurrentTransactionValue);
+			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
 			// Попытки спарсить предыдущие сохраненные строки как начало трассировки
 			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
@@ -55,5 +57,5 @@ namespace LogsReader.Reader
 			else
 				PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
 		}
-    }
+	}
 }

@@ -22,7 +22,6 @@ using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using Timer2 = System.Windows.Forms.Timer;
 
 namespace SPAMassageSaloon
 {
@@ -117,9 +116,7 @@ namespace SPAMassageSaloon
         }
 
         public MainForm()
-        {
-            InitializeComponent();
-        }
+	        => InitializeComponent();
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -193,18 +190,18 @@ namespace SPAMassageSaloon
                 toolToolStripCollection.Add(autor);
                 toolToolStripCollection.Add(new ToolStripSeparator());
 
-                toolToolStripCollection.Add(new ToolStripStatusLabel("CPU:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _cpuUsage = new ToolStripStatusLabel("    ") { Font = this.Font, Margin = new Padding(-7, 2, 1, 2) };
+                toolToolStripCollection.Add(new ToolStripStatusLabel("CPU:") { Font = Font, Margin = statusStripItemsPaddingStart });
+                _cpuUsage = new ToolStripStatusLabel("    ") { Font = Font, Margin = new Padding(-7, 2, 1, 2) };
                 toolToolStripCollection.Add(_cpuUsage);
                 toolToolStripCollection.Add(new ToolStripSeparator());
 
-                toolToolStripCollection.Add(new ToolStripStatusLabel("Threads:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _threadsUsage = new ToolStripStatusLabel("  ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                toolToolStripCollection.Add(new ToolStripStatusLabel("Threads:") { Font = Font, Margin = statusStripItemsPaddingStart });
+                _threadsUsage = new ToolStripStatusLabel("  ") { Font = Font, Margin = statusStripItemsPaddingEnd };
                 toolToolStripCollection.Add(_threadsUsage);
                 toolToolStripCollection.Add(new ToolStripSeparator());
 
-                toolToolStripCollection.Add(new ToolStripStatusLabel("RAM:") { Font = this.Font, Margin = statusStripItemsPaddingStart });
-                _ramUsage = new ToolStripStatusLabel("       ") { Font = this.Font, Margin = statusStripItemsPaddingEnd };
+                toolToolStripCollection.Add(new ToolStripStatusLabel("RAM:") { Font = Font, Margin = statusStripItemsPaddingStart });
+                _ramUsage = new ToolStripStatusLabel("       ") { Font = Font, Margin = statusStripItemsPaddingEnd };
                 toolToolStripCollection.Add(_ramUsage);
                 toolToolStripCollection.Add(new ToolStripSeparator());
                 CountOfDefaultStatusItems = toolToolStripCollection.Count;
@@ -440,41 +437,33 @@ namespace SPAMassageSaloon
         }
 
         private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
-        {
-            ShowMdiForm(() =>
-            {
-	            var form = new LogsReaderMainForm();
-	            form.Closed += (o, args) => form.Dispose();
-	            return form;
-            });
-        }
+	        => ShowMdiForm(() =>
+	        {
+		        var form = new LogsReaderMainForm();
+		        form.Closed += (o, args) => form.Dispose();
+		        return form;
+	        });
 
         private void toolStripSpaFilterButton_Click(object sender, EventArgs e)
-        {
-            ShowMdiForm(SPAFilterForm.GetControl);
-        }
+	        => ShowMdiForm(SPAFilterForm.GetControl);
 
         private void toolStripXPathButton_Click(object sender, EventArgs e)
-        {
-            ShowMdiForm(() =>
-            {
-                var tester = new XPathTesterForm();
-                tester.Load += (o, args) => _countOfXPathTester++;
-                tester.Closed += (o, args) => _countOfXPathTester--;
-                return tester;
-            }, _countOfXPathTester < 4);
-        }
+	        => ShowMdiForm(() =>
+	        {
+		        var tester = new XPathTesterForm();
+		        tester.Load += (o, args) => _countOfXPathTester++;
+		        tester.Closed += (o, args) => _countOfXPathTester--;
+		        return tester;
+	        }, _countOfXPathTester < 4);
 
         private void toolStripRegexTester_Click(object sender, EventArgs e)
-        {
-	        ShowMdiForm(() =>
+	        => ShowMdiForm(() =>
 	        {
 		        var tester = new RegExTester.frmMain();
 		        tester.Load += (o, args) => _countOfRegexTester++;
 		        tester.Closed += (o, args) => _countOfRegexTester--;
 		        return tester;
 	        }, _countOfRegexTester < 3);
-        }
 
         public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
         {
@@ -483,7 +472,7 @@ namespace SPAMassageSaloon
 
 	        try
 	        {
-		        this.SuspendHandle();
+		        SuspendHandle();
 
 		        form = formMaker.Invoke();
 		        if (form == null)
@@ -507,9 +496,9 @@ namespace SPAMassageSaloon
 	        }
 	        finally
 	        {
-		        this.ResumeHandle();
-		        this.Focus();
-                this.Activate();
+		        ResumeHandle();
+		        Focus();
+                Activate();
 	        }
         }
 
@@ -624,9 +613,7 @@ namespace SPAMassageSaloon
         }
 
         private void toolButtonAbout_ButtonClick(object sender, EventArgs e)
-        {
-            toolButtonAbout.ShowDropDown();
-        }
+	        => toolButtonAbout.ShowDropDown();
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {

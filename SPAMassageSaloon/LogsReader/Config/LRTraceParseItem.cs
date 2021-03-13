@@ -8,14 +8,18 @@ namespace LogsReader.Config
 	[Serializable]
 	public class LRTraceParseItem : TraceParse
 	{
-		private XmlNode[] _cdataItem = new XmlNode[] { new XmlDocument().CreateCDataSection("(.+)") };
+		private XmlNode[] _cdataItem = new XmlNode[]
+		{
+			new XmlDocument().CreateCDataSection("(.+)")
+		};
 
 		public LRTraceParseItem() => CDataItem = _cdataItem;
 
 		internal LRTraceParseItem(string regexPattern)
-		{
-			CDataItem = new XmlNode[] { new XmlDocument().CreateCDataSection(regexPattern) };
-		}
+			=> CDataItem = new XmlNode[]
+			{
+				new XmlDocument().CreateCDataSection(regexPattern)
+			};
 
 		[XmlText]
 		public XmlNode[] CDataItem
@@ -34,7 +38,10 @@ namespace LogsReader.Config
 			}
 		}
 
-		[XmlIgnore] internal override bool IsCorrect { get; set; }
-		[XmlIgnore] internal Regex RegexItem { get; private set; }
+		[XmlIgnore]
+		internal override bool IsCorrect { get; set; }
+
+		[XmlIgnore]
+		internal Regex RegexItem { get; private set; }
 	}
 }

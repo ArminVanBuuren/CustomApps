@@ -14,7 +14,9 @@ namespace LogsReader.Reader
 	public class LogsReaderPerformerScheme : LogsReaderPerformerFiles
 	{
 		private readonly object _syncRootResult = new object();
+
 		private SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+
 		private List<MTActionResult<TraceReader>> _multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 
 		private List<List<TraceReader>> TraceReadersOrdered { get; } = new List<List<TraceReader>>();
@@ -23,7 +25,7 @@ namespace LogsReader.Reader
 
 		public int ResultCount => _multiTaskingHandlerList.Sum(x => x.Result.Count);
 
-		public int PercentOfComplete => TotalCount > 0 ? (ResultCount * 100) / TotalCount : 0;
+		public int PercentOfComplete => TotalCount > 0 ? ResultCount * 100 / TotalCount : 0;
 
 		public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
 
@@ -31,15 +33,16 @@ namespace LogsReader.Reader
 
 		public bool IsCompleted { get; private set; } = false;
 
-		public LogsReaderPerformerScheme(
-			LRSettingsScheme settings,
-			string findMessage,
-			bool useRegex,
-			IReadOnlyDictionary<string, int> servers,
-			IReadOnlyDictionary<string, int> fileTypes,
-			IReadOnlyDictionary<string, bool> folders,
-			DataFilter filter)
-			: base(settings, findMessage, useRegex, servers, fileTypes, folders, filter) { }
+		public LogsReaderPerformerScheme(LRSettingsScheme settings,
+		                                 string findMessage,
+		                                 bool useRegex,
+		                                 IReadOnlyDictionary<string, int> servers,
+		                                 IReadOnlyDictionary<string, int> fileTypes,
+		                                 IReadOnlyDictionary<string, bool> folders,
+		                                 DataFilter filter)
+			: base(settings, findMessage, useRegex, servers, fileTypes, folders, filter)
+		{
+		}
 
 		public override async Task GetTargetFilesAsync()
 		{
@@ -56,11 +59,11 @@ namespace LogsReader.Reader
 			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
 				var readersOrders = traceReaders
-					.OrderByDescending(x => x.File.LastWriteTime.Date)
-					.ThenByDescending(x => x.File.LastWriteTime.Hour)
-					.ThenBy(x => x.File.LastWriteTime.Minute)
-					.ThenByDescending(x => x.File.Length)
-					.ToList();
+				                    .OrderByDescending(x => x.File.LastWriteTime.Date)
+				                    .ThenByDescending(x => x.File.LastWriteTime.Hour)
+				                    .ThenBy(x => x.File.LastWriteTime.Minute)
+				                    .ThenByDescending(x => x.File.Length)
+				                    .ToList();
 
 				foreach (var reader in readersOrders)
 					reader.ID = ++id;
@@ -73,7 +76,7 @@ namespace LogsReader.Reader
 		{
 			ClearPreviousProcess();
 
-			if(TraceReadersOrdered.Count == 0 || IsStopPending)
+			if (TraceReadersOrdered.Count == 0 || IsStopPending)
 				return;
 
 			try
@@ -85,23 +88,22 @@ namespace LogsReader.Reader
 
 					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
 					var maxThreads = MaxThreads <= 0 ? traceReaders.Count : MaxThreads;
-					var multiTaskingHandler = new MTActionResult<TraceReader>(
-						ReadData,
-						traceReaders,
-						maxThreads,
-						ThreadPriority.Lowest);
+					var multiTaskingHandler = new MTActionResult<TraceReader>(ReadData,
+					                                                          traceReaders,
+					                                                          maxThreads,
+					                                                          ThreadPriority.Lowest);
 
 					_multiTaskingHandlerList.Add(multiTaskingHandler);
 
 					await multiTaskingHandler.StartAsync();
 
 					var errors = multiTaskingHandler.Result.CallBackList
-						.Where(x => x.Error != null)
-						.Aggregate(new List<DataTemplate>(), (listErr, x) =>
-						{
-							listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
-							return listErr;
-						});
+					                                .Where(x => x.Error != null)
+					                                .Aggregate(new List<DataTemplate>(), (listErr, x) =>
+					                                {
+						                                listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
+						                                return listErr;
+					                                });
 
 					ResultsOfError.AddRange(errors);
 				}
