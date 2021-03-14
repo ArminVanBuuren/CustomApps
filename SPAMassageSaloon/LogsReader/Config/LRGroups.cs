@@ -45,11 +45,11 @@ namespace LogsReader.Config
 		internal LRGroups(LRGroupItem[] groupItems) => GroupItems = groupItems;
 
 		static Dictionary<string, (int, IEnumerable<string>)> GetGroups(IEnumerable<LRGroupItem> items)
-			=> items
-				.ToDictionary(k => k.GroupName, v =>
-					              (v.PriorityInternal, v.Item[0].Value?.Split(',')
-					                                    .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-					                                    .Select(x => x.Key))
-				            , StringComparer.InvariantCultureIgnoreCase);
+			=> items.ToDictionary(k => k.GroupName,
+			                      v => (v.PriorityInternal, v.Item[0]
+				                            .Value?.Split(',')
+				                            .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+				                            .Select(x => x.Key)),
+			                      StringComparer.InvariantCultureIgnoreCase);
 	}
 }

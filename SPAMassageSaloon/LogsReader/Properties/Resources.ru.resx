@@ -582,4 +582,7 @@
   <data name="TxtReader_CheckBoxes" xml:space="preserve">
     <value>Фильтр</value>
   </data>
+  <data name="TxtReader_DgvPriority" xml:space="preserve">
+    <value>Приоритет</value>
+  </data>
 </root>

@@ -1,16 +1,16 @@
 ﻿namespace SPAMassageSaloon.Common
 {
-    public interface ISaloonForm : IUserForm
-    {
-        int ActiveProcessesCount { get; }
+	public interface ISaloonForm : IUserForm
+	{
+		int ActiveProcessesCount { get; }
 
-        int ActiveTotalProgress { get; }
-    }
+		int ActiveTotalProgress { get; }
+	}
 
-    public interface IUserForm
-    {
-        void ApplySettings();
+	public interface IUserForm
+	{
+		void ApplySettings();
 
-        void SaveData();
-    }
+		void SaveData();
+	}
 }

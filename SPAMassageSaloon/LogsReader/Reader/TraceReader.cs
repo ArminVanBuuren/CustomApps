@@ -130,6 +130,7 @@ namespace LogsReader.Reader
 
 		public FileInfo File { get; }
 
+		[DGVColumn(ColumnPosition.After, "Priority", true)]
 		public int Priority { get; internal set; }
 
 		public long Lines { get; protected set; } = 0;

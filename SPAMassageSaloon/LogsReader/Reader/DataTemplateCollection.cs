@@ -11,17 +11,18 @@ namespace LogsReader.Reader
 	{
 		private static string[] orderByFields;
 
-		internal static string[] OrderByFields => orderByFields ?? (orderByFields = new[]
-			                                                           {
-				                                                           nameof(DataTemplate.Tmp.FoundLineID),
-				                                                           nameof(DataTemplate.Tmp.ID),
-				                                                           nameof(DataTemplate.Tmp.Server),
-				                                                           nameof(DataTemplate.Tmp.TraceName),
-				                                                           nameof(DataTemplate.Tmp.Date),
-				                                                           nameof(DataTemplate.Tmp.ElapsedSec),
-				                                                           nameof(DataTemplate.Tmp.File),
-				                                                           DataTemplate.ReaderPriority
-			                                                           });
+		internal static string[] OrderByFields => orderByFields
+		                                       ?? (orderByFields = new[]
+			                                          {
+				                                          nameof(DataTemplate.Tmp.FoundLineID),
+				                                          nameof(DataTemplate.Tmp.ID),
+				                                          nameof(DataTemplate.Tmp.Server),
+				                                          nameof(DataTemplate.Tmp.TraceName),
+				                                          nameof(DataTemplate.Tmp.Date),
+				                                          nameof(DataTemplate.Tmp.ElapsedSec),
+				                                          nameof(DataTemplate.Tmp.File),
+				                                          DataTemplate.ReaderPriority
+			                                          });
 
 		private readonly Dictionary<int, DataTemplate> _values;
 
@@ -35,11 +36,12 @@ namespace LogsReader.Reader
 
 			foreach (var trnTemplates in _values.Values
 				.Where(template => template.Date != null && template.Transactions.Any(x => !x.Value.Trn.IsNullOrWhiteSpace()))
-				.SelectMany(x => x.Transactions.Select(x2 => x2.Value.Trn), (parent, trnID) => new
-				{
-					parent,
-					trnID
-				})
+				.SelectMany(x => x.Transactions.Select(x2 => x2.Value.Trn),
+				            (parent, trnID) => new
+				            {
+					            parent,
+					            trnID
+				            })
 				.OrderBy(x => x.parent.Date)
 				.GroupBy(x => x.trnID))
 			{
@@ -103,7 +105,9 @@ namespace LogsReader.Reader
 					else
 					{
 						result = byDescending
-							         ? i == 0 ? result.OrderByDescending(param) : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)
+							         ? i == 0
+								           ? result.OrderByDescending(param)
+								           : ((IOrderedQueryable<DataTemplate>) result).ThenByDescending(param)
 							         : i == 0
 								         ? result.OrderBy(param)
 								         : ((IOrderedQueryable<DataTemplate>) result).ThenBy(param);

@@ -32,7 +32,8 @@ namespace LogsReader.Config
 						if (folder.Value.IsNullOrWhiteSpace())
 							throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, folder.Value));
 
-					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(), x => x.AllDirSearching,
+					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(),
+					                                              x => x.AllDirSearching,
 					                                              StringComparer.InvariantCultureIgnoreCase);
 
 					_logsFolder = prevLogFolders;

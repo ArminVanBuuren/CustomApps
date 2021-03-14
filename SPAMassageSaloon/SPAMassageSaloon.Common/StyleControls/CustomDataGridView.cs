@@ -2,48 +2,47 @@
 
 namespace SPAMassageSaloon.Common.StyleControls
 {
-    public sealed class CustomDataGridView : DataGridView
-    {
-        public bool IsSuspendLayout { get; private set; }
+	public sealed class CustomDataGridView : DataGridView
+	{
+		public bool IsSuspendLayout { get; private set; }
 
-        public bool DoubleBuffered2
-        {
-	        get => DoubleBuffered;
-	        set => DoubleBuffered = value;
-        }
+		public bool DoubleBuffered2
+		{
+			get => DoubleBuffered;
+			set => DoubleBuffered = value;
+		}
 
-        //if (!SystemInformation.TerminalServerSession)
-        public CustomDataGridView() => DoubleBuffered = true;
+		//if (!SystemInformation.TerminalServerSession)
+		public CustomDataGridView() => DoubleBuffered = true;
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Left:
+					base.OnKeyDown(new KeyEventArgs(Keys.PageUp));
+					break;
+				case Keys.Right:
+					base.OnKeyDown(new KeyEventArgs(Keys.PageDown));
+					break;
+				case Keys.Enter:
+					break;
+				default:
+					base.OnKeyDown(e);
+					break;
+			}
+		}
 
-            switch (e.KeyData)
-            {
-                case Keys.Left:
-                    base.OnKeyDown(new KeyEventArgs(Keys.PageUp));
-                    break;
-                case Keys.Right:
-                    base.OnKeyDown(new KeyEventArgs(Keys.PageDown));
-                    break;
-                case Keys.Enter:
-                    break;
-                default:
-                    base.OnKeyDown(e);
-                    break;
-            }
-        }
+		public new void SuspendLayout()
+		{
+			base.SuspendLayout();
+			IsSuspendLayout = true;
+		}
 
-        public new void SuspendLayout()
-        {
-            base.SuspendLayout();
-            IsSuspendLayout = true;
-        }
-
-        public new void ResumeLayout()
-        {
-            base.ResumeLayout();
-            IsSuspendLayout = false;
-        }
-    }
+		public new void ResumeLayout()
+		{
+			base.ResumeLayout();
+			IsSuspendLayout = false;
+		}
+	}
 }

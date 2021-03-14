@@ -219,7 +219,8 @@ namespace LogsReader
 					}
 					catch (Exception ex)
 					{
-						ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex), MessageBoxIcon.Error,
+						ReportMessage.Show(string.Format(Resources.Txt_Main_ErrLoadScheme, scheme.Name, ex),
+						                   MessageBoxIcon.Error,
 						                   Resources.Txt_Main_LoadScheme);
 					}
 					finally
@@ -386,7 +387,7 @@ namespace LogsReader
 			}
 			finally
 			{
-				await STREAM.GarbageCollectAsync();
+				await STREAM.GarbageCollectAsync().ConfigureAwait(false);
 				base.Dispose();
 			}
 		}

@@ -59,11 +59,11 @@ namespace LogsReader.Reader
 			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
 				var readersOrders = traceReaders
-				                    .OrderByDescending(x => x.File.LastWriteTime.Date)
-				                    .ThenByDescending(x => x.File.LastWriteTime.Hour)
-				                    .ThenBy(x => x.File.LastWriteTime.Minute)
-				                    .ThenByDescending(x => x.File.Length)
-				                    .ToList();
+					.OrderByDescending(x => x.File.LastWriteTime.Date)
+					.ThenByDescending(x => x.File.LastWriteTime.Hour)
+					.ThenBy(x => x.File.LastWriteTime.Minute)
+					.ThenByDescending(x => x.File.Length)
+					.ToList();
 
 				foreach (var reader in readersOrders)
 					reader.ID = ++id;
@@ -98,12 +98,13 @@ namespace LogsReader.Reader
 					await multiTaskingHandler.StartAsync();
 
 					var errors = multiTaskingHandler.Result.CallBackList
-					                                .Where(x => x.Error != null)
-					                                .Aggregate(new List<DataTemplate>(), (listErr, x) =>
-					                                {
-						                                listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
-						                                return listErr;
-					                                });
+						.Where(x => x.Error != null)
+						.Aggregate(new List<DataTemplate>(),
+						           (listErr, x) =>
+						           {
+							           listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
+							           return listErr;
+						           });
 
 					ResultsOfError.AddRange(errors);
 				}
@@ -193,7 +194,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// Останавливаем и очищаем. Но оставляем ошибку с памятью
 		/// </summary>
-		async void ClearInternal()
+		void ClearInternal()
 		{
 			if (_multiTaskingHandlerList != null)
 				foreach (var tasks in _multiTaskingHandlerList)
@@ -203,7 +204,7 @@ namespace LogsReader.Reader
 
 			ClearPreviousProcess();
 
-			await STREAM.GarbageCollectAsync();
+			STREAM.GarbageCollectAsync();
 		}
 
 		/// <summary>

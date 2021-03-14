@@ -117,8 +117,8 @@ namespace LogsReader.Config
 				if (value == null
 				 || value.Groups.Count == 0
 				 || value.Groups.Any(groupName => groupName.Key.IsNullOrWhiteSpace()
-				                               || !groupName.Value.Item2.Any() ||
-				                                  groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
+				                               || !groupName.Value.Item2.Any()
+				                               || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
 				_servers = value;
 			}
@@ -140,8 +140,8 @@ namespace LogsReader.Config
 				if (value == null
 				 || value.Groups.Count == 0
 				 || value.Groups.Any(groupName => groupName.Key.IsNullOrWhiteSpace()
-				                               || !groupName.Value.Item2.Any() ||
-				                                  groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
+				                               || !groupName.Value.Item2.Any()
+				                               || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
 				_fileTypes = value;
 			}
@@ -306,8 +306,7 @@ namespace LogsReader.Config
 					});
 					FileTypes = new LRGroups(new[]
 					{
-						new LRGroupItem("Connectors-Activity", 0,
-						                "SOAPCON*Activity, SMSCON*SMS*Activity, SMSCON*USSD*Activity, IVRCON*Activity, EMAILCON*Activity"),
+						new LRGroupItem("Connectors-Activity", 0, "SOAPCON*Activity, SMSCON*SMS*Activity, SMSCON*USSD*Activity, IVRCON*Activity, EMAILCON*Activity"),
 						new LRGroupItem("Connectors-Data", 0, "SOAPCON*Data, SMSCON*SMS*Data, SMSCON*USSD*Data, IVRCON*Data, EMAILCON*Data"),
 						new LRGroupItem("Connectors-Error", 0, "SOAPCON*Error, SMSCON*SMS*Error, SMSCON*USSD*Error, IVRCON*Error, EMAILCON*Error"),
 						new LRGroupItem("Handlers-Activity", 1, "CRMCON*Activity, WCF*Activity, DBCON*Activity"),

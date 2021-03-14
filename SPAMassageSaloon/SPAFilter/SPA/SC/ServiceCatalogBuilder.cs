@@ -9,61 +9,62 @@ using Utils;
 
 namespace SPAFilter.SPA.SC
 {
-    public struct ServiceCatalogBuilder
-    {
-        public string Configuration { get; }
+	public struct ServiceCatalogBuilder
+	{
+		public string Configuration { get; }
 
-        public ServiceCatalogBuilder(CollectionHostType robpHostTypes, DataTable servicesRD, CustomProgressCalculation progressCalc)
-        {
-            progressCalc.AddBootPercent(3);
+		public ServiceCatalogBuilder(CollectionHostType robpHostTypes, DataTable servicesRD, CustomProgressCalculation progressCalc)
+		{
+			progressCalc.AddBootPercent(3);
 
-            var cfsList = new CatalogComponents(servicesRD);
+			var cfsList = new CatalogComponents(servicesRD);
 
-            foreach (var hostType in robpHostTypes)
-            {
-                foreach (var neOP in hostType.Operations.OfType<ROBPOperation>())
-                {
-                    if (!File.Exists(neOP.FilePath))
-                        continue;
+			foreach (var hostType in robpHostTypes)
+			{
+				foreach (var neOP in hostType.Operations.OfType<ROBPOperation>())
+				{
+					if (!File.Exists(neOP.FilePath))
+						continue;
 
-                    var document = XML.LoadXml(neOP.FilePath);
-                    cfsList.Add(neOP.Name, document, neOP.HostTypeName);
+					var document = XML.LoadXml(neOP.FilePath);
+					cfsList.Add(neOP.Name, document, neOP.HostTypeName);
 
-                    progressCalc.Append();
-                }
-            }
+					progressCalc.Append();
+				}
+			}
 
-            cfsList.GenerateRFS();
+			cfsList.GenerateRFS();
 
-            var scConfig = new StringBuilder();
-            scConfig.Append("<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">");
-            scConfig.Append("<HostTypeList>");
-            foreach (var netElem in robpHostTypes.HostTypeNames)
-            {
-                scConfig.Append("<HostType name=\"");
-                scConfig.Append(netElem);
-                scConfig.Append("\" nriType=\"RI\" allowTerminalDeviceType=\"mobile\" description=\"-\" />");
-            }
-            scConfig.Append("</HostTypeList>");
-            scConfig.Append(cfsList.ToXml());
-            scConfig.Append("</Configuration>");
+			var scConfig = new StringBuilder();
+			scConfig.Append("<Configuration markers=\"*\" scenarioPrefix=\"SC.\" mainIdentities=\"MSISDN,PersonalAccountNumber,ContractNumber\" SICreation=\"\" formatVersion=\"1\">");
+			scConfig.Append("<HostTypeList>");
+			foreach (var netElem in robpHostTypes.HostTypeNames)
+			{
+				scConfig.Append("<HostType name=\"");
+				scConfig.Append(netElem);
+				scConfig.Append("\" nriType=\"RI\" allowTerminalDeviceType=\"mobile\" description=\"-\" />");
+			}
 
-            Configuration = XML.PrintXml(scConfig.ToString());
-        }
+			scConfig.Append("</HostTypeList>");
+			scConfig.Append(cfsList.ToXml());
+			scConfig.Append("</Configuration>");
 
-        public string Save(string exportDirectory)
-        {
-            if (!Directory.Exists(exportDirectory))
-                Directory.CreateDirectory(exportDirectory);
+			Configuration = XML.PrintXml(scConfig.ToString());
+		}
 
-            var destinationPath = Path.Combine(exportDirectory, $"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml");
-            using (var writer = new StreamWriter(destinationPath))
-            {
-                writer.Write(Configuration);
-                writer.Flush();
-            }
+		public string Save(string exportDirectory)
+		{
+			if (!Directory.Exists(exportDirectory))
+				Directory.CreateDirectory(exportDirectory);
 
-            return destinationPath;
-        }
-    }
+			var destinationPath = Path.Combine(exportDirectory, $"SC_{DateTime.Now:yyyyMMdd-HHmmss}.xml");
+			using (var writer = new StreamWriter(destinationPath))
+			{
+				writer.Write(Configuration);
+				writer.Flush();
+			}
+
+			return destinationPath;
+		}
+	}
 }

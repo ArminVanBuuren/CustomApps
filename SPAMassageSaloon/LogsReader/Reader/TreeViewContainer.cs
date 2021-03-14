@@ -528,8 +528,8 @@ namespace LogsReader.Reader
 				var nodes = new List<TreeNode>();
 				var groupItems = new List<LRGroupItem>(treeGroups.Count);
 				foreach (var (groupName, (priority, items)) in treeGroups
-				                                               .OrderBy(x => x.Value.Item1)
-				                                               .ThenBy(x => x.Key))
+					.OrderBy(x => x.Value.Item1)
+					.ThenBy(x => x.Key))
 				{
 					if (items.Count == 0 || items.All(x => x.IsNullOrWhiteSpace()))
 						continue;
@@ -599,14 +599,14 @@ namespace LogsReader.Reader
 		{
 			var result = new Dictionary<string, (int, List<string>)>(StringComparer.InvariantCultureIgnoreCase);
 			foreach (var group in treeNode.Nodes.OfType<TreeNode>()
-			                              .Select(x => new
-			                              {
-				                              name = GetGroupName(x),
-				                              priority = GetGroupPriority(x),
-				                              node = x
-			                              })
-			                              .OrderBy(x => x.priority)
-			                              .ThenBy(x => x.name))
+				.Select(x => new
+				{
+					name = GetGroupName(x),
+					priority = GetGroupPriority(x),
+					node = x
+				})
+				.OrderBy(x => x.priority)
+				.ThenBy(x => x.name))
 			{
 				result.Add(group.name, (group.priority, new List<string>(group.node.Nodes.OfType<TreeNode>().Select(p => p.Text))));
 			}
@@ -623,7 +623,8 @@ namespace LogsReader.Reader
 				{
 					AddFolder folderForm;
 					if (selectedNode != null)
-						folderForm = new AddFolder(selectedNode.Text.Substring(5, selectedNode.Text.Length - 5).Trim(), selectedNode.Text.StartsWith("[All]", StringComparison.InvariantCultureIgnoreCase));
+						folderForm = new AddFolder(selectedNode.Text.Substring(5, selectedNode.Text.Length - 5).Trim(),
+						                           selectedNode.Text.StartsWith("[All]", StringComparison.InvariantCultureIgnoreCase));
 					else
 						folderForm = new AddFolder(null, true);
 
@@ -713,9 +714,10 @@ namespace LogsReader.Reader
 		public static Dictionary<string, bool> GetFolders(CustomTreeView treeView, bool getOnlyChecked)
 		{
 			var folders = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
-			foreach (var folderWithType in treeView.Nodes[TRVFolders].Nodes.OfType<TreeNode>()
-			                                       .Where(x => !getOnlyChecked || x.Checked)
-			                                       .Select(x => x.Text))
+			foreach (var folderWithType in treeView.Nodes[TRVFolders]
+				.Nodes.OfType<TreeNode>()
+				.Where(x => !getOnlyChecked || x.Checked)
+				.Select(x => x.Text))
 			{
 				var folder = folderWithType.Substring(5, folderWithType.Length - 5).Trim();
 				if (folders.TryGetValue(folder, out var type))

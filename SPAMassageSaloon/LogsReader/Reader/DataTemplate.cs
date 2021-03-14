@@ -167,9 +167,11 @@ namespace LogsReader.Reader
 		[DGVColumn(ColumnPosition.After, nameof(Tmp.ElapsedSec))]
 		public string ElapsedSecString => ElapsedSec > 0 ? ElapsedSec.ToString("0.000") : ElapsedSec == 0 ? "0" : string.Empty;
 
-		public string ElapsedSecDescription => ElapsedSecTotal > 0 
-			                                       ? $"Elapsed current=[{ElapsedSec:0.###} sec], processing=[{ElapsedSecFromFirst:0.###} sec], total=[{ElapsedSecTotal:0.###} sec]" 
-			                                       : ElapsedSecTotal == 0 ? "Elapsed 0 sec" : string.Empty;
+		public string ElapsedSecDescription => ElapsedSecTotal > 0
+			                                       ? $"Elapsed current=[{ElapsedSec:0.###} sec], processing=[{ElapsedSecFromFirst:0.###} sec], total=[{ElapsedSecTotal:0.###} sec]"
+			                                       : ElapsedSecTotal == 0
+				                                       ? "Elapsed 0 sec"
+				                                       : string.Empty;
 
 		public double ElapsedSec { get; internal set; } = -1;
 

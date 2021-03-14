@@ -79,9 +79,9 @@ namespace LogsReader.Reader.Forms
 				_typesGroups[_currentGroup] =
 					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text),
 					 new List<string>(richTextBoxTypes.Text.Split(',')
-					                                  .Select(x => x.Trim())
-					                                  .Where(x => !x.IsNullOrWhiteSpace())
-					                                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
+						                  .Select(x => x.Trim())
+						                  .Where(x => !x.IsNullOrWhiteSpace())
+						                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
 			Close();

@@ -162,9 +162,9 @@ namespace LogsReader.Reader
 
 
 			foreach (var credential in LogsReaderMainForm.Credentials
-			                                             .OrderByDescending(x => x.Value)
-			                                             .Select(x => x.Key)
-			                                             .ToList())
+				.OrderByDescending(x => x.Value)
+				.Select(x => x.Key)
+				.ToList())
 			{
 				if (IsStopPending)
 					return false;

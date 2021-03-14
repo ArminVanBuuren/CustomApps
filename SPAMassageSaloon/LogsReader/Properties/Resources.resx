@@ -653,6 +653,9 @@ Colors schemes are adjustable.</value>
   <data name="TxtReader_DgvProcessMinWidth" xml:space="preserve">
     <value>55</value>
   </data>
+  <data name="TxtReader_DgvPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
   <data name="TxtReader_DgvSize" xml:space="preserve">
     <value>Size</value>
   </data>

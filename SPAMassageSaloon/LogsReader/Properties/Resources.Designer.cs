@@ -1742,6 +1742,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Priority.
+        /// </summary>
+        public static string TxtReader_DgvPriority {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvPriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Process.
         /// </summary>
         public static string TxtReader_DgvProcess {

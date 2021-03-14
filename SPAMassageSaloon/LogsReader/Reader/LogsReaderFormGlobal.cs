@@ -404,7 +404,7 @@ namespace LogsReader.Reader
 				{
 					MainViewer.Clear();
 					await UploadReadersAsync();
-					await STREAM.GarbageCollectAsync();
+					await STREAM.GarbageCollectAsync().ConfigureAwait(false);
 				}
 			};
 
@@ -549,8 +549,8 @@ namespace LogsReader.Reader
 			public void TryToStop()
 			{
 				foreach (var reader in _items
-				                       .Where(x => x.Value.Item1.IsWorking)
-				                       .Select(x => x.Value.Item1))
+					.Where(x => x.Value.Item1.IsWorking)
+					.Select(x => x.Value.Item1))
 					reader.BtnSearch_Click(this, EventArgs.Empty);
 			}
 
@@ -581,8 +581,8 @@ namespace LogsReader.Reader
 					TimeWatcher.Start();
 
 					InProcessing.Start(AllExpanders
-					                   .Where(x => x.Value.IsChecked)
-					                   .Select(x => x.Key));
+						                   .Where(x => x.Value.IsChecked)
+						                   .Select(x => x.Key));
 				}
 				catch (Exception ex)
 				{
@@ -609,9 +609,9 @@ namespace LogsReader.Reader
 			var result = new List<DataTemplate>();
 
 			foreach (var schemeForm in AllExpanders
-			                           .Where(x => x.Value.IsChecked)
-			                           .Select(x => x.Key)
-			                           .Intersect(InProcessing.Select(x => x.Item1)))
+				.Where(x => x.Value.IsChecked)
+				.Select(x => x.Key)
+				.Intersect(InProcessing.Select(x => x.Item1)))
 			{
 				if (!schemeForm.HasAnyResult || schemeForm.IsWorking)
 					continue;
@@ -619,16 +619,16 @@ namespace LogsReader.Reader
 			}
 
 			return result.OrderBy(x => x.Date)
-			             .ThenBy(x => x.ParentReader.Priority)
-			             .ThenBy(x => x.File)
-			             .ThenBy(x => x.FoundLineID)
-			             .ToList();
+				.ThenBy(x => x.ParentReader.Priority)
+				.ThenBy(x => x.File)
+				.ThenBy(x => x.FoundLineID)
+				.ToList();
 		}
 
 		internal override IEnumerable<TraceReader> GetResultReaders()
 			=> InProcessing
-			   .SelectMany(x => x.Item1.GetResultReaders())
-			   .ToList();
+				.SelectMany(x => x.Item1.GetResultReaders())
+				.ToList();
 
 		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{

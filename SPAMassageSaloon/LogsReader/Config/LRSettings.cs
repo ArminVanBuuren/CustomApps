@@ -127,11 +127,11 @@ namespace LogsReader.Config
 				try
 				{
 					_schemes = value ?? new[]
-					{
-						new LRSettingsScheme(DefaultSettings.MG),
-						new LRSettingsScheme(DefaultSettings.SPA),
-						new LRSettingsScheme(DefaultSettings.MGA)
-					};
+					           {
+						           new LRSettingsScheme(DefaultSettings.MG),
+						           new LRSettingsScheme(DefaultSettings.SPA),
+						           new LRSettingsScheme(DefaultSettings.MGA)
+					           };
 					Schemes = _schemes.Length > 0
 						          ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
 						          : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
@@ -157,8 +157,7 @@ namespace LogsReader.Config
 			set
 			{
 				_customFunc = value;
-				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 &&
-				    _customFunc.Functions?.Function?.Length > 0)
+				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 				{
 					// если существуют кастомные функции, то при успешном паринге лога, будет производится вызов внутренних функций по шаблону для дальнейшей обработки записи
 					// функция GetValueByReplacement используется в качестве поиска группировок и подставления значений по шаблону
@@ -189,8 +188,8 @@ namespace LogsReader.Config
 				             ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
 				             : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
 
-		public static async Task SerializeAsync(LRSettings settings)
-			=> await Task.Factory.StartNew(input => Serialize((LRSettings) input), settings);
+		public static Task SerializeAsync(LRSettings settings)
+			=> Task.Factory.StartNew(input => Serialize((LRSettings) input), settings);
 
 		public static void Serialize(LRSettings settings)
 		{
@@ -208,7 +207,8 @@ namespace LogsReader.Config
 			}
 			catch (Exception ex)
 			{
-				ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Serialize_Ex, SettingsPath, ex.Message), MessageBoxIcon.Error,
+				ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Serialize_Ex, SettingsPath, ex.Message),
+				                   MessageBoxIcon.Error,
 				                   Resources.Txt_LRSettings_ErrSerialize);
 			}
 		}
@@ -234,7 +234,9 @@ namespace LogsReader.Config
 					ReportMessage.Show(string.Format(Resources.Txt_LRSettings_Deserialize_Ex,
 					                                 Path.GetFileName(SettingsPath),
 					                                 Path.GetFileName(FailedSettingsPath),
-					                                 message), MessageBoxIcon.Error, Resources.Txt_LRSettings_ErrDeserialize);
+					                                 message),
+					                   MessageBoxIcon.Error,
+					                   Resources.Txt_LRSettings_ErrDeserialize);
 
 					try
 					{

@@ -101,8 +101,7 @@ namespace LogsReader.Reader.Forms
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (comboboxGroup.Text.IsNullOrWhiteSpace() ||
-			    _serverGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim())
+			if (comboboxGroup.Text.IsNullOrWhiteSpace() || _serverGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim())
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -186,9 +185,9 @@ namespace LogsReader.Reader.Forms
 				_serverGroups[_currentGroup] =
 					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text),
 					 new List<string>(_serverPanels
-					                  .Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
-					                  .Where(x => !x.IsNullOrWhiteSpace())
-					                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
+						                  .Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
+						                  .Where(x => !x.IsNullOrWhiteSpace())
+						                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
 			Close();

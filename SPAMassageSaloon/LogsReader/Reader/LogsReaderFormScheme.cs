@@ -286,11 +286,11 @@ namespace LogsReader.Reader
 						foreach (TreeNode groupNode in TreeMain.Nodes[parentNodeName].Nodes)
 						{
 							foreach (var item in groupNode.Nodes.OfType<TreeNode>()
-							                              .Where(x => x.Checked)
-							                              .Select(x => x.Text)
-							                              .GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
-							                              .Select(x => x.Key)
-							                              .ToList())
+								.Where(x => x.Checked)
+								.Select(x => x.Text)
+								.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
+								.Select(x => x.Key)
+								.ToList())
 							{
 								if (result.TryGetValue(item, out var existPiority))
 								{
@@ -515,10 +515,12 @@ namespace LogsReader.Reader
 					ClearErrorStatus();
 
 				BtnSearch.Enabled = settIsCorrect
-				                 && TreeMain.Nodes[TreeViewContainer.TRVServers].Nodes.OfType<TreeNode>()
-				                            .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
-				                 && TreeMain.Nodes[TreeViewContainer.TRVTypes].Nodes.OfType<TreeNode>()
-				                            .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+				                 && TreeMain.Nodes[TreeViewContainer.TRVServers]
+					                    .Nodes.OfType<TreeNode>()
+					                    .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+				                 && TreeMain.Nodes[TreeViewContainer.TRVTypes]
+					                    .Nodes.OfType<TreeNode>()
+					                    .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 				                 && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);
 
 				base.ValidationCheck(clearStatus);

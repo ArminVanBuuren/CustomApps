@@ -89,6 +89,7 @@ namespace LogsReader.Reader
 			this.DgvReaderCountMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderCountErrorMatchesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DgvReaderFilePriorityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileSizeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DgvReaderFileLastWriteTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -746,6 +747,7 @@ namespace LogsReader.Reader
             this.DgvReaderCountMatchesColumn,
             this.DgvReaderCountErrorMatchesColumn,
             this.DgvReaderFileColumn,
+            this.DgvReaderFilePriorityColumn,
             this.DgvReaderFileSizeColumn,
             this.DgvReaderFileCreationTimeColumn,
             this.DgvReaderFileLastWriteTimeColumn});
@@ -873,6 +875,15 @@ namespace LogsReader.Reader
 			this.DgvReaderFileColumn.Name = "DgvReaderFileColumn";
 			this.DgvReaderFileColumn.ReadOnly = true;
 			this.DgvReaderFileColumn.Width = 60;
+			// 
+			// DgvReaderFilePriorityColumn
+			// 
+			this.DgvReaderFilePriorityColumn.DataPropertyName = "Priority";
+			this.DgvReaderFilePriorityColumn.HeaderText = "Priority";
+			this.DgvReaderFilePriorityColumn.MinimumWidth = 55;
+			this.DgvReaderFilePriorityColumn.Name = "DgvReaderFilePriorityColumn";
+			this.DgvReaderFilePriorityColumn.ReadOnly = true;
+			this.DgvReaderFilePriorityColumn.Width = 55;
 			// 
 			// DgvReaderFileSizeColumn
 			// 
@@ -1033,6 +1044,7 @@ namespace LogsReader.Reader
 		private DataGridViewTextBoxColumn DgvReaderCountMatchesColumn;
 		private DataGridViewTextBoxColumn DgvReaderCountErrorMatchesColumn;
 		private DataGridViewTextBoxColumn DgvReaderFileColumn;
+		private DataGridViewTextBoxColumn DgvReaderFilePriorityColumn;
 		private DataGridViewTextBoxColumn DgvReaderFileSizeColumn;
 		private DataGridViewTextBoxColumn DgvReaderFileCreationTimeColumn;
 		private DataGridViewTextBoxColumn DgvReaderFileLastWriteTimeColumn;

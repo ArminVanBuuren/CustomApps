@@ -46,10 +46,11 @@ namespace SPAFilter.SPA.SC
 					}
 					else
 					{
-						RFSDeps.Add(getExistRFS.MainHostOperation, new HashSet<string>()
-						{
-							getExistRFS.Name
-						});
+						RFSDeps.Add(getExistRFS.MainHostOperation,
+						            new HashSet<string>()
+						            {
+							            getExistRFS.Name
+						            });
 					}
 				}
 
@@ -108,13 +109,16 @@ namespace SPAFilter.SPA.SC
 			if (_index > 0)
 			{
 				var currentRFS =
-					$"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{Description}\">" +
-					SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.Name) + "</RFS>";
+					$"<RFS name=\"{Name}\" base=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"{Description}\">"
+				  + SC_Resource.GetChildCFSResource(ParentCFS_RFS.ParentCFS.Name)
+				  + "</RFS>";
 
 				if (_index == 1)
 				{
-					return $"<RFS name=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"Базовая RFS\">" +
-					       SC_Resource.GetBaseCFSResource() + "</RFS>" + currentRFS;
+					return $"<RFS name=\"RFS_{MainHostOperation.HostOperationName}_BASE\" hostType=\"{HostType}\" description=\"Базовая RFS\">"
+					     + SC_Resource.GetBaseCFSResource()
+					     + "</RFS>"
+					     + currentRFS;
 				}
 
 				return currentRFS;

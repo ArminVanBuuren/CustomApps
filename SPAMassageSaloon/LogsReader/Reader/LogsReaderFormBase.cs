@@ -765,6 +765,7 @@ namespace LogsReader.Reader
 				DgvReaderFileColumn.HeaderText = Resources.TxtReader_DgvFile;
 				DgvReaderFileCreationTimeColumn.HeaderText = Resources.TxtReader_DgvCreationTime;
 				DgvReaderFileLastWriteTimeColumn.HeaderText = Resources.TxtReader_DgvLastWrite;
+				DgvReaderFilePriorityColumn.HeaderText = Resources.TxtReader_DgvPriority;
 				DgvReaderFileSizeColumn.HeaderText = Resources.TxtReader_DgvSize;
 
 				DgvReaderStatusColumn.MinimumWidth = int.Parse(Resources.TxtReader_DgvStatusMinWidth);
@@ -962,13 +963,19 @@ namespace LogsReader.Reader
 						countMatches = readers.Sum(x => x.CountMatches);
 						countErrorMatches = readers.Sum(x => x.CountErrors);
 						totalFiles = readers.Count();
-						filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting && x.Status != TraceReaderStatus.Processing && x.Status != TraceReaderStatus.OnPause && !x.ThreadId.IsNullOrWhiteSpace());
+						filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting
+						                                 && x.Status != TraceReaderStatus.Processing
+						                                 && x.Status != TraceReaderStatus.OnPause
+						                                 && !x.ThreadId.IsNullOrWhiteSpace());
 						progress = 0;
 						if (filesCompleted > 0 && TotalFiles > 0)
 							progress = filesCompleted * 100 / TotalFiles;
 
-						if (CountMatches == countMatches && CountErrorMatches == countErrorMatches
-						                                 && TotalFiles == totalFiles && FilesCompleted == filesCompleted && Progress == progress)
+						if (CountMatches == countMatches
+						 && CountErrorMatches == countErrorMatches
+						 && TotalFiles == totalFiles
+						 && FilesCompleted == filesCompleted
+						 && Progress == progress)
 							return;
 					}
 
@@ -1139,10 +1146,10 @@ namespace LogsReader.Reader
 
 		HashSet<string> GetCheckedFilePaths()
 			=> DgvReader.Rows.OfType<DataGridViewRow>()
-			            .Where(x => x.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell selectCell && selectCell.Checked)
-			            .Select(x => x.Cells[DgvReaderFileColumn.Name]?.Value?.ToString())
-			            .Where(x => !x.IsNullOrWhiteSpace())
-			            .ToHashSet(x => x, StringComparer.InvariantCultureIgnoreCase);
+				.Where(x => x.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell selectCell && selectCell.Checked)
+				.Select(x => x.Cells[DgvReaderFileColumn.Name]?.Value?.ToString())
+				.Where(x => !x.IsNullOrWhiteSpace())
+				.ToHashSet(x => x, StringComparer.InvariantCultureIgnoreCase);
 
 		protected DataFilter GetFilter() =>
 			new DataFilter(DateStartFilter.Checked ? DateStartFilter.Value : DateTime.MinValue,
@@ -1759,17 +1766,19 @@ namespace LogsReader.Reader
 				return;
 
 			var alreadyAddedTraceNames = TbxTraceNameFilter.Text.Split(',')
-			                                               .Select(x => x.Trim())
-			                                               .GroupBy(x => x)
-			                                               .ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
+				.Select(x => x.Trim())
+				.GroupBy(x => x)
+				.ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
 
 			var filtered = original
-			               .Where(x => x?.TraceName != null)
-			               .GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
-			               .Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key), x.Key, x.Count(m => m.Error == null),
-			                                                x.Count(m => !m.IsSuccess)))
-			               .OrderBy(x => x.TraceName)
-			               .ToDictionary(x => x.TraceName);
+				.Where(x => x?.TraceName != null)
+				.GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
+				.Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key),
+				                                 x.Key,
+				                                 x.Count(m => m.Error == null),
+				                                 x.Count(m => !m.IsSuccess)))
+				.OrderBy(x => x.TraceName)
+				.ToDictionary(x => x.TraceName);
 
 			var form = await TraceNameFilterForm.GetAsync(filtered);
 			var result = form.ShowDialog();
@@ -1891,9 +1900,9 @@ namespace LogsReader.Reader
 					return;
 
 				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-				                           .Where(x => x.Index < selected.Index)
-				                           .Where(condition)
-				                           .Reverse())
+					.Where(x => x.Index < selected.Index)
+					.Where(condition)
+					.Reverse())
 				{
 					DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
 						                                          ? firstVisible
@@ -1933,8 +1942,8 @@ namespace LogsReader.Reader
 					return;
 
 				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>()
-				                           .Where(x => x.Index > selected.Index)
-				                           .Where(condition))
+					.Where(x => x.Index > selected.Index)
+					.Where(condition))
 				{
 					DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible
 						                                          ? firstVisible
@@ -1970,8 +1979,8 @@ namespace LogsReader.Reader
 				var source = _currentDGVResult;
 
 				var orderByOption = byAscending
-					                    ? new Dictionary<string, bool> {{columnName, false}}
-					                    : new Dictionary<string, bool> {{columnName, true}};
+										? new Dictionary<string, bool> { { columnName, false } }
+										: new Dictionary<string, bool> { { columnName, true } };
 
 				if (!orderByOption.ContainsKey(nameof(DataTemplate.Tmp.File)))
 					orderByOption.Add(nameof(DataTemplate.Tmp.File), !byAscending);
@@ -2031,8 +2040,7 @@ namespace LogsReader.Reader
 					// если новые данные (нового поиска) то не возвращает
 					foreach (var row in DgvData.Rows.OfType<DataGridViewRow>())
 					{
-						if (!Equals(row.Cells[DgvDataPrivateIDColumn.Name].Value, selectedPrivateID) ||
-						    !Equals(row.Cells[DgvDataSchemeNameColumn.Name].Value, selectedSchemeName))
+						if (!Equals(row.Cells[DgvDataPrivateIDColumn.Name].Value, selectedPrivateID) || !Equals(row.Cells[DgvDataSchemeNameColumn.Name].Value, selectedSchemeName))
 							continue;
 
 						var firstVisible = row.Index - selectedRangeToFirstVisible;
@@ -2280,7 +2288,7 @@ namespace LogsReader.Reader
 			finally
 			{
 				if (collect)
-					await STREAM.GarbageCollectAsync();
+					await STREAM.GarbageCollectAsync().ConfigureAwait(false);
 				OnProcessStatusChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
@@ -2320,7 +2328,8 @@ namespace LogsReader.Reader
 		protected void ReportStatus(Exception ex)
 			=> ReportStatus(ex.GetType().Name != nameof(Exception) && ex.GetType().Name != nameof(ArgumentException)
 				                ? $"{ex.GetType().Name}: {ex.Message}"
-				                : ex.Message, ReportStatusType.Error);
+				                : ex.Message,
+			                ReportStatusType.Error);
 
 		protected void ReportStatus(string message, ReportStatusType type)
 			=> this.SafeInvoke(() =>

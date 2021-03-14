@@ -42,8 +42,11 @@ namespace LogsReader.Reader
 			// фильтр по полю TraceName
 			TraceNameFilterList = traceNameFilter.IsNullOrWhiteSpace()
 				                      ? new List<string>()
-				                      : traceNameFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-				                                       .Where(x => !x.Key.IsNullOrWhiteSpace()).Select(x => x.Key).ToList();
+				                      : traceNameFilter.Split(',')
+					                      .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+					                      .Where(x => !x.Key.IsNullOrWhiteSpace())
+					                      .Select(x => x.Key)
+					                      .ToList();
 
 			if (TraceNameFilterList.Any())
 				if (traceNameContains)
@@ -57,9 +60,11 @@ namespace LogsReader.Reader
 			// фильтр по полю TraceMessage
 			TraceMessageFilterList = traceMessageFilter.IsNullOrWhiteSpace()
 				                         ? new List<string>()
-				                         : traceMessageFilter.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-				                                             .Where(x => !x.Key.IsNullOrWhiteSpace()).Select(x => x.Key)
-				                                             .ToList();
+				                         : traceMessageFilter.Split(',')
+					                         .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+					                         .Where(x => !x.Key.IsNullOrWhiteSpace())
+					                         .Select(x => x.Key)
+					                         .ToList();
 			if (TraceMessageFilterList.Any())
 				if (traceMessageContains)
 					_checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrWhiteSpace() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));

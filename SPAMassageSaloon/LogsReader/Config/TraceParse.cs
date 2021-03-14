@@ -12,6 +12,9 @@ namespace LogsReader.Config
 	{
 		internal abstract bool IsCorrect { get; set; }
 
+		protected Regex GetCDataNode(XmlNode[] input, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None) 
+			=> GetCDataNode(input, false, out cdataResult, optional);
+
 		protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None)
 		{
 			cdataResult = null;

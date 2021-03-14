@@ -216,8 +216,7 @@ namespace LogsReader.Config
 			{
 				_customFunc = value;
 				// проверяем на валидность кастомной функции
-				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 &&
-				    _customFunc.Functions?.Function?.Length > 0)
+				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 				{
 					var res = GetCustomFunction();
 					if (res != null)
@@ -240,7 +239,7 @@ namespace LogsReader.Config
 		public XmlNode[] StartWith
 		{
 			get => _startTraceLineWith;
-			set => StartTraceLineWith = GetCDataNode(value, false, out _startTraceLineWith);
+			set => StartTraceLineWith = GetCDataNode(value,  out _startTraceLineWith);
 		}
 
 		[XmlIgnore]
@@ -250,7 +249,7 @@ namespace LogsReader.Config
 		public XmlNode[] EndWith
 		{
 			get => _endTraceLineWith;
-			set => EndTraceLineWith = GetCDataNode(value, false, out _endTraceLineWith);
+			set => EndTraceLineWith = GetCDataNode(value,  out _endTraceLineWith);
 		}
 
 		[XmlIgnore]
@@ -260,7 +259,7 @@ namespace LogsReader.Config
 		public XmlNode[] IsError
 		{
 			get => _isError;
-			set => IsTraceError = GetCDataNode(value, false, out _isError, RegexOptions.IgnoreCase);
+			set => IsTraceError = GetCDataNode(value,  out _isError, RegexOptions.IgnoreCase);
 		}
 
 		[XmlIgnore]
