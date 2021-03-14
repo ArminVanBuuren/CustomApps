@@ -117,7 +117,7 @@ namespace LogsReader.Reader
 							if (index > -1)
 							{
 								traceReader.PrivateID = ++readerIndex;
-								traceReader.Priority = int.Parse($"1{serverPriority}{filePriority}");
+								traceReader.Priority = int.Parse($"1{serverPriority:D2}{filePriority:D2}");
 								traceReaders.Add(traceReader.PrivateID, traceReader);
 								break;
 							}

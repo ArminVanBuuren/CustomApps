@@ -12,6 +12,8 @@ namespace LogsReader.Reader.Forms
 		private readonly GroupType _groupType;
 		private readonly Dictionary<string, (int, List<string>)> _groups;
 
+		private int _prevPriority = 0;
+
 		public AddGroupForm(Dictionary<string, (int, List<string>)> groups, GroupType groupType)
 		{
 			InitializeComponent();
@@ -49,7 +51,7 @@ namespace LogsReader.Reader.Forms
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			_groups.Add(textBoxGroupName.Text, (GetGroupPriority(textBoxPriority.Text), new List<string>()));
+			_groups.Add(textBoxGroupName.Text, (GetGroupPriority(textBoxPriority.Text, _prevPriority), new List<string>()));
 			DialogResult = ShowGroupItemsForm(textBoxGroupName.Text, _groups, _groupType);
 			Close();
 		}
@@ -86,7 +88,9 @@ namespace LogsReader.Reader.Forms
 			{
 				textBoxPriority.TextChanged -= textBoxPriority_TextChanged;
 				if (!textBoxPriority.Text.IsNullOrWhiteSpace())
-					textBoxPriority.Text = GetGroupPriority(textBoxPriority.Text).ToString();
+					textBoxPriority.Text = (_prevPriority = GetGroupPriority(textBoxPriority.Text, _prevPriority)).ToString();
+				else
+					_prevPriority = 0;
 			}
 			catch (Exception)
 			{
@@ -98,11 +102,11 @@ namespace LogsReader.Reader.Forms
 			}
 		}
 
-		internal static int GetGroupPriority(string value)
+		internal static int GetGroupPriority(string value, int prevPriority)
 		{
-			if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0)
+			if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0 && result <= 99)
 				return result;
-			return 0;
+			return prevPriority;
 		}
 	}
 }

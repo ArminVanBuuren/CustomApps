@@ -18,10 +18,10 @@ namespace LogsReader.Reader.Forms
 
 		private readonly Dictionary<string, (int, List<string>)> _serverGroups;
 		private readonly HashSet<Panel> _serverPanels = new HashSet<Panel>();
+		private readonly string selectedGroupPriority = @"0";
 
 		private string _currentGroup = null;
-
-		private readonly string selectedGroupPriority = @"0";
+		private int _prevPriority = 0;
 
 		public ServerGroupForm(string selectedGroup, Dictionary<string, (int, List<string>)> serverGroups)
 		{
@@ -183,7 +183,7 @@ namespace LogsReader.Reader.Forms
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
 				_serverGroups[_currentGroup] =
-					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text),
+					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text, _prevPriority),
 					 new List<string>(_serverPanels
 						                  .Select(x => x.Controls.OfType<TextBox>().FirstOrDefault()?.Text)
 						                  .Where(x => !x.IsNullOrWhiteSpace())
@@ -354,7 +354,9 @@ namespace LogsReader.Reader.Forms
 			{
 				textBoxGroupPriority.TextChanged -= textBoxGroupPriority_TextChanged;
 				if (!textBoxGroupPriority.Text.IsNullOrWhiteSpace())
-					textBoxGroupPriority.Text = AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text).ToString();
+					textBoxGroupPriority.Text = (_prevPriority = AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text, _prevPriority)).ToString();
+				else
+					_prevPriority = 0;
 			}
 			catch (Exception)
 			{
