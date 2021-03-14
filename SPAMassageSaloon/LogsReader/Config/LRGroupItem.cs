@@ -19,9 +19,14 @@ namespace LogsReader.Config
 			get => PriorityInternal.ToString();
 			set
 			{
-				if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0)
+				if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result))
 				{
-					PriorityInternal = result;
+					if (result >= 0 && result <= 99)
+						PriorityInternal = result;
+					else if (result > 99)
+						PriorityInternal = 99;
+					else
+						PriorityInternal = 0;
 					return;
 				}
 
