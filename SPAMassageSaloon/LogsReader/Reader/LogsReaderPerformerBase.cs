@@ -226,7 +226,17 @@ namespace LogsReader.Reader
 			}
 			else
 			{
-				IsMatch = input => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
+				// пытаемся перевести выражение в регулярку, т.к. поиск будет быстрее
+				var converToRegex = Regex.Escape(findMessage);
+				if (REGEX.Verify(converToRegex))
+				{
+					var simpleSearchByRegex = new Regex(converToRegex, RegexOptions.Compiled | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
+					IsMatch = input => simpleSearchByRegex.IsMatch(input);
+				}
+				else
+				{
+					IsMatch = input => input.IndexOf(findMessage, StringComparison.InvariantCultureIgnoreCase) != -1;
+				}
 			}
 		}
 
