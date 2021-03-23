@@ -13,7 +13,7 @@ using Utils;
 using Utils.Crypto;
 using Utils.Messaging.Telegram;
 
-namespace Tester.Console
+namespace Tester.ConsoleTest
 {
 	static class Old_tests
 	{

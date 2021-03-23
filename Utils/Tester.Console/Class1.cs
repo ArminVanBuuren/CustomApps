@@ -7,7 +7,7 @@ using System.Xml.Xsl;
 //using System.Collections.Generic;
 //using System.Linq;
 
-namespace Tester.Console
+namespace Tester.ConsoleTest
 {
     public class FormatFunction : IXsltContextFunction
     {

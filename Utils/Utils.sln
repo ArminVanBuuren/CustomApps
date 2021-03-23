@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.WinForm", "Utils.WinF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.WinForm", "Tester.WinForm\Tester.WinForm.csproj", "{28899798-ABD2-49A1-8F07-49C683663FBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.Console", "Tester.Console\Tester.Console.csproj", "{B1F751E9-9B06-439B-B0AF-4239050615E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.ConsoleTest", "Tester.Console\Tester.ConsoleTest.csproj", "{B1F751E9-9B06-439B-B0AF-4239050615E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.Updater", "Tester.Updater\Tester.Updater.csproj", "{C5F4B5A2-27BC-43EC-927A-E3612174E0F1}"
 EndProject
@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.UIControls", "Utils.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.UIControls", "Tester.UIControls\Tester.UIControls.csproj", "{B88AFB41-2619-4686-B0E6-63A58DDD3C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Media", "Utils.Media\Utils.Media.csproj", "{2556BACE-823C-4BDA-A118-D9E30F733CB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Media", "Utils.Media\Utils.Media.csproj", "{2556BACE-823C-4BDA-A118-D9E30F733CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Messaging", "Utils.Messaging\Utils.Messaging.csproj", "{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Messaging", "Utils.Messaging\Utils.Messaging.csproj", "{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

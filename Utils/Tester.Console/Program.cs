@@ -23,7 +23,8 @@ using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.Crypto;
 
-namespace Tester.Console
+
+namespace Tester.ConsoleTest
 {
 	public interface ICustomFunction
 	{
@@ -293,11 +294,11 @@ namespace Tester.Console
 			{
 				try
 				{
-					System.Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
+					Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
 				}
 				catch (Exception ex)
 				{
-					System.Console.WriteLine(ex);
+					Console.WriteLine(ex);
 				}
 			};
 			diff.Compare(control, test);
@@ -306,41 +307,76 @@ namespace Tester.Console
 
 
 
-		class Testbase
+		class TestBase
 		{
-			static int i = 0;
+			//static int i = 0;
 			private readonly int _curI = 0;
-			public Testbase() => _curI = i++;
-			public string Test { get; set; }
+			//public Testbase() => _curI = i++;
+
 
 			public override bool Equals(object obj)
 			{
-				System.Console.WriteLine("Equals");
+				Console.WriteLine($"({_curI}) - Equals");
 				return base.Equals(obj);
 			}
 
 			public override int GetHashCode()
 			{
-				System.Console.WriteLine("GetHashCode");
+				Console.WriteLine($"({_curI}) - GetHashCode");
 				return 1;
 			}
 
-			public static bool operator ==(Testbase left, Testbase right) => Equals(left, right);
+			public static bool operator ==(TestBase left, TestBase right)
+			{
+				Console.WriteLine($"==");
+				return Equals(left, right);
+			}
 
-			public static bool operator !=(Testbase left, Testbase right) => !Equals(left, right);
+			public static bool operator !=(TestBase left, TestBase right)
+			{
+				Console.WriteLine($"!=");
+				return !Equals(left, right);
+			}
 
-			public override string ToString() => GetHashCode().ToString();
+			public override string ToString() => "Testbase";
 		}
 
-		class Tesing : Testbase
+		struct Testing
 		{
+			public static bool operator ==(Testing c1, Testing c2)
+			{
+				return c1.Equals(c2);
+			}
 
+			public static bool operator !=(Testing c1, Testing c2)
+			{
+				return !c1.Equals(c2);
+			}
+
+			public override bool Equals(object obj)
+			{
+				var eq = base.Equals(obj);
+				Console.WriteLine($"Equals - {eq}");
+				return eq;
+			}
+
+			public override int GetHashCode()
+			{
+				var hash = base.GetHashCode();
+				Console.WriteLine($"Hash - {hash}");
+				return hash;
+			}
 		}
 
-		class Tesitng2 : Tesing
-		{
-			public List<string> Prop { get; set; }
-		}
+		//class Tesitng2 : Testing
+		//{
+		//	public List<string> Prop { get; set; }
+		//}
+
+		//class Tesitng3 : Tesitng2
+		//{
+		//	public List<string> Prop2 { get; set; }
+		//}
 
 		public class ChangeBillAttributesRequest
 		{
@@ -426,79 +462,253 @@ namespace Tester.Console
 			};
 		}
 
+
+		class TerminalDevicePricesRequest
+		{
+			public List<TarifficationContextBase> TarifficationRequests { get; set; }
+
+			public TarifficationContextService[] TarifficationContextServices { get; set; }
+		}
+
+		class TarifficationContextBase
+		{
+
+		}
+
+		class TarifficationContextService : TarifficationContextBase
+		{
+
+		}
+
+		class ActionOnPeriodicalProductTarifficationRequest : TarifficationContextBase
+		{
+
+		}
+
+		class PeriodicalProductActionTarifficationRequest : TarifficationContextBase
+		{
+
+		}
+
+		class PeriodicalProductTarifficationRequest : TarifficationContextBase
+		{
+			
+		}
+
+		private static List<object> GetNewContextServices
+		(
+			List<ActionOnPeriodicalProductTarifficationRequest> terminalDevicePricesRequests,
+			List<PeriodicalProductActionTarifficationRequest> periodicalProductActionTarifficationRequests,
+			TarifficationContextService[] tarifficationContextServices
+		)
+			=> tarifficationContextServices == null
+				   ? terminalDevicePricesRequests.Select(MapToOtspContextServiceWithActionType).Concat(periodicalProductActionTarifficationRequests.Select(MapToOtspContextServiceWithActionType)).ToList()
+				   : tarifficationContextServices.Select(MapToOtspContextServiceWithActionType).ToList();
+
+		private static object MapToOtspContextServiceWithActionType(ActionOnPeriodicalProductTarifficationRequest actionOnServicePriceRequest)
+		{
+			return new object();
+		}
+
+		private static object MapToOtspContextServiceWithActionType(PeriodicalProductActionTarifficationRequest periodicalProductActionTarifficationRequest)
+		{
+			return new object();
+		}
+
+		private static object MapToOtspContextServiceWithActionType(TarifficationContextService tarifficationContextService)
+		{
+			return new object();
+		}
+
+		static void ReturnTypeString(object arg)
+		{
+			Console.WriteLine($"{arg} is int?  - {arg is int}");
+			Console.WriteLine($"{arg} is long? - {arg is long}");
+			Console.WriteLine($"{arg} is decimal? - {arg is decimal}");
+			Console.WriteLine($"{arg} is double? - {arg is double}");
+			//Console.WriteLine($"Casting<int> - {(int)(double)arg}");
+			//Console.WriteLine($"Casting<long> - {(long)arg}");
+			//Console.WriteLine($"Casting<decimal> - {(decimal)arg}");
+			Console.WriteLine($"Casting<double> - {(decimal)arg}");
+		}
+
+		class Person
+		{
+			public int Age { get; set; }
+			public string Name { get; set; }
+
+			// A person is uniquely identified by name, so let's use it for equality.
+			public override bool Equals(object obj) => obj is Person person && person.Name == Name;
+
+			// For lazyness reasons we (incorrectly) use the age as the hash code.
+			//public override int GetHashCode() => Age;
+
+			public override string ToString() => $"Age = {Age}; Name = {Name}";
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
-			System.Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
+			Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
 
 			try
 			{
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = null,
-					MinFieldLength = null,
-					MaxFieldLength = null,
-				}));
-
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = 10,
-					MinFieldLength = null,
-					MaxFieldLength = null,
-				}));
-
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = 10,
-					MinFieldLength = null,
-					MaxFieldLength = 20,
-				}));
-
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = null,
-					MinFieldLength = 10,
-					MaxFieldLength = 20,
-				}));
-
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = null,
-					MinFieldLength = 10,
-					MaxFieldLength = null,
-				}));
-
-				System.Console.WriteLine(MapToFieldRules(new InputDataRestrictions
-				{
-					FieldLength = null,
-					MinFieldLength = null,
-					MaxFieldLength = 20,
-				}));
+				//ReturnTypeString(55);
+				//ReturnTypeString(67.555m);
 
 
-				//var test1 = new Testbase();
-				//var test2 = new Testbase();
-				//var dict = new Dictionary<Testbase, Testbase>
+				//var terminalDevicePricesRequest = new TerminalDevicePricesRequest
 				//{
-				//	{test1, test1}, 
+				//	TarifficationRequests = new List<TarifficationContextBase>
+				//	{
+				//		new PeriodicalProductTarifficationRequest(),
+				//		new PeriodicalProductActionTarifficationRequest(),
+				//		new ActionOnPeriodicalProductTarifficationRequest()
+				//	}
+				//};
+
+				//var actionsOnPeriodicalProductTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
+				//	.OfType<ActionOnPeriodicalProductTarifficationRequest>().ToList();
+
+				//var periodicalProductActionsTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
+				//	.OfType<PeriodicalProductActionTarifficationRequest>().ToList();
+
+				//var newServices = GetNewContextServices(actionsOnPeriodicalProductTarifficationRequests, periodicalProductActionsTarifficationRequests, terminalDevicePricesRequest.TarifficationContextServices);
+
+
+
+
+				//Console.WriteLine(string.IsNullOrWhiteSpace("  "));
+				//Console.WriteLine(string.IsNullOrWhiteSpace(""));
+				//Console.WriteLine(string.IsNullOrWhiteSpace(null));
+
+				//List<(InputDataRestrictions, InputDataRestrictions)> restrictions = new List<(InputDataRestrictions, InputDataRestrictions)>
+				//{
+				//	(new InputDataRestrictions
+				//		{
+				//			FieldLength = 111
+				//		}, new InputDataRestrictions
+				//		{
+				//			FieldLength = 222
+				//		})
+				//};
+
+				//var dict1 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
+				//{
+				//	{
+				//		new InputDataRestrictions
+				//		{
+				//			MinFieldLength = 111,
+				//		},
+				//		new InputDataRestrictions
+				//		{
+				//			MinFieldLength = 111,
+				//		}
+				//	}
+				//};
+
+				//var dict2 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
+				//{
+				//	{
+				//		new InputDataRestrictions
+				//		{
+				//			MinFieldLength = 111,
+				//		},
+				//		new InputDataRestrictions
+				//		{
+				//			MinFieldLength = 111,
+				//		}
+				//	}
+				//};
+
+				//if (dict1.TryGetValue(dict2.First().Key, out var res))
+				//{
+
+				//}
+
+				//var rs =  restrictions.FirstOrDefault(x => x.Item1.FieldLength == 112).Item2;
+
+				//var s1 = "Blue";
+				//var sb = new StringBuilder("Bl");
+				//sb.Append("ue");
+				//var s2 = sb.ToString();
+
+				//Console.WriteLine(s1 == s2); // True
+				//Console.WriteLine(object.ReferenceEquals(s1, s2)); // False
+
+				//object gg1 = 0;
+				//object gg2 = 0;
+
+				//Console.WriteLine(gg1.GetHashCode());
+				//Console.WriteLine(gg2.GetHashCode());
+
+				//Console.WriteLine((int)gg1 == (int)gg2);
+				//Console.WriteLine(((int)gg1).Equals(gg2));
+
+				//object test1 = new TestBase();
+				//object test2 = new TestBase();
+				//var dict = new Dictionary<object, object>
+				//{
+				//	{test1, test1},
 				//	{test2, test2}
 				//};
+				//Console.WriteLine("Start");
+				//Console.WriteLine(test1 == test2);
+				//Console.WriteLine("Pause");
+				//Console.WriteLine(test1.Equals(test2));
+
+
+				//Console.WriteLine("111" == "111");
+				//Console.WriteLine("111".Equals("111"));
+
+
+				var test1 = new Testing();
+				var test2 = new Testing();
+				Console.WriteLine(test1 == test2);
+				Console.WriteLine(test1.Equals(test2));
+
+
+				//var childRequest = (Testing)new Tesitng3();
+				//var test = "[MgSendingUseEmailOcatTempate] Child request: DocRequestId=" + childRequest.ToString() +
+				//	(childRequest is Tesitng2 bilReq ? $"; Bill={bilReq.Prop}" : string.Empty) +
+				//	(childRequest is Tesitng3 bilReq2 ? $"; Bill={bilReq2.Prop2}" : string.Empty);
+
+				//var ddd = true;
+				//var favColours = new Dictionary<Person, string>();
+
+				//var p = new Person
+				//{
+				//	Age = 1,
+				//	Name = "Alice"
+				//};
+
+				//favColours[p] = "Blue";
+
+				//// Happy birthday Alice!
+				//p.Age = 2;
+				//favColours[p] = "Green";
+
+				//Console.WriteLine(favColours.Count); // 2
+
+				//var keys = favColours.Keys.ToArray();
+				//Console.WriteLine(object.ReferenceEquals(keys[0], keys[1])); // True
+				//Console.WriteLine(favColours[p]);
 
 				//foreach (var test in dict)
 				//{
-				//	System.Console.WriteLine(test);
+				//	Console.WriteLine(test);
 				//}
 
-				//System.Console.WriteLine(nameof(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed));
+				//Console.WriteLine(nameof(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed));
 
 				//var dd = default(int).ToString(CultureInfo.InvariantCulture);
 				//var ddd = Convert.ToDateTime(default(DateTime).ToString(CultureInfo.InvariantCulture));
 
 				//var dddd = new List<PersonalAccount> { new PersonalAccount() { PersonalAccountNumber = "111" } }.SingleOrDefault(x => x == new PersonalAccount());
 
-				////System.Console.WriteLine(test1 == test2);
+				////Console.WriteLine(test1 == test2);
 				//var Request = new ChangeBillAttributesRequest
 				//{
 				//	OperationRules = ChangeBillAttributesOperationRules.UseDefaultValues
@@ -529,55 +739,55 @@ namespace Tester.Console
 				//}
 				//else
 				//{
-				//	System.Console.WriteLine("111");
+				//	Console.WriteLine("111");
 				//}
 
-				//pans.Select(x => x.PersonalAccountNumber).Except(pans2).ForEach(System.Console.WriteLine);
+				//pans.Select(x => x.PersonalAccountNumber).Except(pans2).ForEach(Console.WriteLine);
 
 
 
-				var buttons = new List<Button> { new Button(), new Button()};
-				for (var b = 0; b < buttons.Count; b++)
-				{
-					var elem = buttons[b];
-					var b1 = b;
-					elem.onclick += (s, arg) => { System.Console.WriteLine(b1); };
-					// все три обработчика берут b из одной области видимости!
-				}
+				//var buttons = new List<Button> { new Button(), new Button()};
+				//for (var b = 0; b < buttons.Count; b++)
+				//{
+				//	var elem = buttons[b];
+				//	var b1 = b;
+				//	elem.onclick += (s, arg) => { Console.WriteLine(b1); };
+				//	// все три обработчика берут b из одной области видимости!
+				//}
 
-				foreach (var VARIABLE in buttons)
-				{
-					VARIABLE.Send();
-				}
+				//foreach (var VARIABLE in buttons)
+				//{
+				//	VARIABLE.Send();
+				//}
 
 				//if (Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges())
 				//{
-				//	System.Console.WriteLine($"222");
+				//	Console.WriteLine($"222");
 				//}
 				//else
 				//{
-				//	System.Console.WriteLine($"111");
+				//	Console.WriteLine($"111");
 				//}
 
 				//var result1 = !Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) && !CheckNeedChanges();
 				//var result2 = !(Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges());
 
-				//System.Console.WriteLine($"result1: = {result1}");
-				//System.Console.WriteLine($"result2: = {result2}");
+				//Console.WriteLine($"result1: = {result1}");
+				//Console.WriteLine($"result2: = {result2}");
 
-				//System.Console.WriteLine(Testtest());
+				//Console.WriteLine(Testtest());
 			}
 			catch (Exception e)
 			{
-				System.Console.WriteLine(e);
+				Console.WriteLine(e);
 			}
 
 			stopWatch.Stop();
-			System.Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
-			System.Console.WriteLine("Press Enter for repeat");
-			if (System.Console.ReadKey().Key == ConsoleKey.Enter)
+			Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
+			Console.WriteLine("Press Enter for repeat");
+			if (Console.ReadKey().Key == ConsoleKey.Enter)
 				goto repeat;
-			System.Console.ReadLine();
+			Console.ReadLine();
 		}
 
 		class Button
@@ -592,14 +802,14 @@ namespace Tester.Console
 
 		static void DivMod()
 		{
-			var test = System.Console.ReadLine();
+			var test = Console.ReadLine();
 			var a1 = int.Parse(test.Split(' ')[0]);
 			var a2 = int.Parse(test.Split(' ')[1]);
 			var dd1 = a1 / a2;
 			var dd2 = a1 % a2;
 
-			System.Console.WriteLine(dd1);
-			System.Console.WriteLine(dd2);
+			Console.WriteLine(dd1);
+			Console.WriteLine(dd2);
 		}
 
 		public enum BalanceAdjustmentType
@@ -614,7 +824,7 @@ namespace Tester.Console
 
 		static string Testtest()
 		{
-			System.Console.WriteLine(nameof(BalanceAdjustmentType.PromisedPayment));
+			Console.WriteLine(nameof(BalanceAdjustmentType.PromisedPayment));
 
 			var documentTypeId = 415;
 			switch (documentTypeId)
@@ -644,10 +854,10 @@ namespace Tester.Console
 			//foreach (var time in test.Split('-'))
 			//{
 			//	if (DateTime.TryParse(time, CultureInfo.InvariantCulture, DateTimeStyles.None, out var res))
-			//		System.Console.WriteLine(res.ToString("G"));
+			//		Console.WriteLine(res.ToString("G"));
 
 			//	if (DateTime.TryParseExact(time, "dd.mm.yyyy hh24:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var res2))
-			//		System.Console.WriteLine("second: " + res2.ToString("G"));
+			//		Console.WriteLine("second: " + res2.ToString("G"));
 			//}
 
 
@@ -655,41 +865,36 @@ namespace Tester.Console
 
 			var periods = Regex.Matches(test, @"(\d+.)+");
 			if (periods.Count >= 1 && DateTime.TryParse(periods[0].Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var start))
-				System.Console.WriteLine(start.ToString("G"));
+				Console.WriteLine(start.ToString("G"));
 			if (periods.Count > 1 && DateTime.TryParse(periods[1].Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var end))
-				System.Console.WriteLine(end.ToString("G"));
+				Console.WriteLine(end.ToString("G"));
 
 			return;
 
-			
 
+			//var cells = new string[] { "1", "2", "3", "4" };
+			//Console.WriteLine($"\"{string.Join("\", \"", cells.Select(x => x))}\"");
+			//return;
 
+			//var sss = new List<Tesitng2> { new Tesitng2 { } };
+			//Console.WriteLine("1. - " + (sss.FirstOrDefault(x => !x.Prop.IsEmpty()) ?? sss.First()).Prop?.FirstOrDefault());
+			////Console.WriteLine("2. - " + (sss.FirstOrDefault(x => x.Prop == "1112") ?? sss.First()).Prop?.FirstOrDefault());
 
-			return;
+			//var asynnc = new Func<Task<bool>>(async () =>
+			//{
+			//	Console.Write("Working");
+			//	for (var i = 0; i < 10; i++)
+			//	{
+			//		Thread.Sleep(500);
+			//		Console.Write(".");
+			//	}
 
-			var cells = new string[] { "1", "2", "3", "4" };
-			System.Console.WriteLine($"\"{string.Join("\", \"", cells.Select(x => x))}\"");
-			return;
+			//	Console.WriteLine("\r\nFinished");
+			//	return false;
+			//});
 
-			var sss = new List<Tesitng2> { new Tesitng2 { } };
-			System.Console.WriteLine("1. - " + (sss.FirstOrDefault(x => !x.Prop.IsEmpty()) ?? sss.First()).Prop?.FirstOrDefault());
-			//System.Console.WriteLine("2. - " + (sss.FirstOrDefault(x => x.Prop == "1112") ?? sss.First()).Prop?.FirstOrDefault());
-
-			var asynnc = new Func<Task<bool>>(async () =>
-			{
-				System.Console.Write("Working");
-				for (var i = 0; i < 10; i++)
-				{
-					Thread.Sleep(500);
-					System.Console.Write(".");
-				}
-
-				System.Console.WriteLine("\r\nFinished");
-				return false;
-			});
-
-			//var func = Task.Factory.StartNew<bool>(asynnc);
-			asynnc.RunSync();
+			////var func = Task.Factory.StartNew<bool>(asynnc);
+			//asynnc.RunSync();
 			//asynnc.RunSync2();
 
 			//var subsOnMe = IO.SafeReadFile(@"C:\tmp\подписаныНаМеня.txt");
@@ -699,11 +904,11 @@ namespace Tester.Console
 			//var subsOnMe1 = subsOnMe.Split('\n').Select(x => x.Trim()).ToList();
 			//var mySubs1 = mySubs.Split('\n').Select(x => x.Trim()).ToList();
 
-			//System.Console.WriteLine($"На меня не подписаны:");
-			//mySubs1.Except(subsOnMe1).ForEach(x => System.Console.WriteLine(x));
+			//Console.WriteLine($"На меня не подписаны:");
+			//mySubs1.Except(subsOnMe1).ForEach(x => Console.WriteLine(x));
 
-			//System.Console.WriteLine($"\r\nЯ не подписан на:");
-			//subsOnMe1.Except(mySubs1).ForEach(x => System.Console.WriteLine(x));
+			//Console.WriteLine($"\r\nЯ не подписан на:");
+			//subsOnMe1.Except(mySubs1).ForEach(x => Console.WriteLine(x));
 
 			//CompareXml2(@"C:\tmp\expected.txt", @"C:\tmp\sent.txt");
 			//return;	
@@ -718,7 +923,7 @@ namespace Tester.Console
 			//OrderDocumentData datatest = null;
 			//if (datatest is OrderDocumentData datatest11)
 			//{
-			//	System.Console.WriteLine("true!!");
+			//	Console.WriteLine("true!!");
 			//}
 
 			//object test = "test";
@@ -726,11 +931,11 @@ namespace Tester.Console
 			//var list = new List<string>();
 			//var sss = list.SingleOrDefault(x => x == "");
 
-			//System.Console.WriteLine(test2.Equals(test));
+			//Console.WriteLine(test2.Equals(test));
 
 			//startString = DateTime.Now.ToString(System.Globalization.CultureInfo.InvariantCulture);
-			//System.Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
-			//System.Console.WriteLine($"Stop. - {DateTime.Parse("2020-11-11T17:00:00")}\r\n...........................");
+			//Console.WriteLine($"Stop. - {DateTime.Parse(startString, CultureInfo.InvariantCulture, DateTimeStyles.None)}\r\n...........................");
+			//Console.WriteLine($"Stop. - {DateTime.Parse("2020-11-11T17:00:00")}\r\n...........................");
 
 			//Thread.Sleep(5000);
 			//goto test;
@@ -776,17 +981,17 @@ namespace Tester.Console
 			//            {
 			//                foreach (var data in items)
 			//                {
-			//		System.Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
+			//		Console.WriteLine($"\r\n\r\nContractNumber={data.ContractNumber}");
 			//		foreach (var table in data.AdditionalParameters.Tables.OfType<DataTable>())
 			//                    {
-			//                        System.Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
+			//                        Console.WriteLine($"Table Name='{table.TableName}' Count={table.Rows.Count}");
 			//                        foreach (var row in table.Rows.OfType<DataRow>())
 			//                        {
-			//                            System.Console.WriteLine($"\tRow Count={table.Columns.Count}");
+			//                            Console.WriteLine($"\tRow Count={table.Columns.Count}");
 
 			//                            foreach (var column in table.Columns.OfType<DataColumn>())
 			//                            {
-			//                                System.Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
+			//                                Console.WriteLine($"\t\tName='{column.ColumnName}' Value='{row[column.ColumnName]}'");
 			//                            }
 			//                        }
 			//                    }
@@ -795,14 +1000,14 @@ namespace Tester.Console
 
 			//            void Tessst2(Dictionary<string, List<DocParameter>> items)
 			//            {
-			//                System.Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
+			//                Console.WriteLine(string.Join("\r\n", items.Select(x => $"ContractNumber={x.Key}\r\n{string.Join("\r\n", x.Value.Select(x2 => $"{x2.ToString2()}"))}\r\n")));
 			//}
 
 			//            tesss(psList);
-			//            System.Console.WriteLine(new string('-', 25));
+			//            Console.WriteLine(new string('-', 25));
 
 			//tesss(cList);
-			//            System.Console.WriteLine(new string('-', 25));
+			//            Console.WriteLine(new string('-', 25));
 
 			//var psParams = new Dictionary<string, List<DocParameter>>();
 			//            foreach (var fff in psList)
@@ -810,7 +1015,7 @@ namespace Tester.Console
 			//                psParams.Add(fff.ContractNumber, fff.AdditionalParameters.ConvertToListParameters());
 			//            }
 			//            Tessst2(psParams);
-			//            System.Console.WriteLine(new string('-', 25));
+			//            Console.WriteLine(new string('-', 25));
 
 			//var cParams = new Dictionary<string, List<DocParameter>>();
 			//foreach (var fff2 in cList)
@@ -818,7 +1023,7 @@ namespace Tester.Console
 			//                cParams.Add(fff2.ContractNumber, fff2.AdditionalParameters.ConvertToListParameters());
 			//}
 			//            Tessst2(cParams);
-			//System.Console.WriteLine(new string('-', 25));
+			//Console.WriteLine(new string('-', 25));
 
 
 			//            long? test1 = int.MaxValue;
@@ -851,7 +1056,7 @@ namespace Tester.Console
 			//            };
 
 
-			//System.Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
+			//Console.WriteLine($"Is Changed: {test.IsTableValueChanged("EdmDeliveryStatus", "EdmDeliveryStatusCode", "44")}");
 		}
 
 		[Serializable]
@@ -1163,7 +1368,7 @@ namespace Tester.Console
 			if (iter <= 2)
 				goto test;
 
-			System.Console.WriteLine(string.Join(",", array));
+			Console.WriteLine(string.Join(",", array));
 		}
 
 		static void Test_GetLastDigit()
@@ -1172,27 +1377,27 @@ namespace Tester.Console
 			{
 				var lastNumber = Math.Abs(i) % 10;
 				var time = new TimeSpan(0, 0, 0, i);
-				System.Console.WriteLine($"Number is {i} | Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
+				Console.WriteLine($"Number is {i} | Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
 			}
 
-			System.Console.WriteLine(@"Enter a number:");
+			Console.WriteLine(@"Enter a number:");
 			while (true)
 			{
-				var num = System.Console.ReadLine();
+				var num = Console.ReadLine();
 				if (!int.TryParse(num, out var num1))
 					break;
 				var lastNumber = Math.Abs(num1) % 10;
 				var time = new TimeSpan(0, 0, 0, num1);
 
-				System.Console.WriteLine($"Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
-				System.Console.WriteLine(@"For repeat test Enter a number:");
+				Console.WriteLine($"Last number is {lastNumber} | Время выполнения: {time.ToReadableString()}");
+				Console.WriteLine(@"For repeat test Enter a number:");
 			}
 		}
 
 		static void Test_DelegateAllEventsTo()
 		{
 			var test_1 = new TestingEvents();
-			test_1.DelegateTest += (arg) => { System.Console.WriteLine(arg); };
+			test_1.DelegateTest += (arg) => { Console.WriteLine(arg); };
 
 			var test_2 = new TestingEvents();
 			test_1.DelegateAllEventsTo(test_2);
@@ -1281,11 +1486,11 @@ namespace Tester.Console
 			var func = CODE.Calculate<Match>(template, funcs, REGEX.GetValueByReplacement);
 
 			//for (var i = 0; i < 10000; i++)
-			//	System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
+			//	Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
 
-			System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
+			Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
 			Thread.Sleep(1000);
-			System.Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
+			Console.WriteLine(func.Invoke(regex.Match(virtualArg)));
 		}
 
 		static void Test_Join()
@@ -1315,7 +1520,7 @@ namespace Tester.Console
 				{
 					command.CommandText = "SELECT sysdate - 100 FROM dual";
 					connection.Open();
-					System.Console.WriteLine(command.ExecuteScalar());
+					Console.WriteLine(command.ExecuteScalar());
 				}
 			}
 			finally
@@ -1340,7 +1545,7 @@ namespace Tester.Console
 				"20.05.2020 00:12:23.246 [ProcessingContent] SMSCON.MainThread[1]: Submit_sm ()  0870->375336923017 (smsc '172.24.224.6:900') messageId:RU:[1d646bc0-33e3-488b-83f8-9eb2e15876f6 / 0],message:,request:(submit: (pdu: 0 4 0 249243) (addr: 0 1 0870)  (addr: 1 1 375336923017)  (sm: enc: 8 len: 140 msg: ???Баланс Вашего лицевого счета на дату 20.05.2020 0:11:41 составляет:)  (regDelivery: 0) (validTime: ) (schedTime: 000000092436000R) (priority: 1) (opt: ) ) ";
 			var regex = new Regex(@"(.+?)\s*\[\s*(.+?)\s*\]\s*(.+?)\s+(.+)", RegexOptions.IgnoreCase);
 			var match = regex.Match(str1);
-			System.Console.WriteLine(match.GetValueByReplacement("[ $1:{dd.MM.yyyy HH:mm:ss.fff $1:{dd.MM.yyyy HH:mm:ss.fff} ]", (value, format) =>
+			Console.WriteLine(match.GetValueByReplacement("[ $1:{dd.MM.yyyy HH:mm:ss.fff $1:{dd.MM.yyyy HH:mm:ss.fff} ]", (value, format) =>
 			{
 				if (DateTime.TryParseExact(value, format, null, DateTimeStyles.None, out var result))
 				{
@@ -1354,7 +1559,7 @@ namespace Tester.Console
 			var str2 = "4903TelnetSocket.TX_MESSAGE[[9] [CRM.BL:10976600638] -> [FORIS.SPA.BPM.03:773:5190532542775] -> [HL:16]:self]20.05.2020 3:19:3312345215";
 			var regex2 = new Regex(@"(\d+?)\u0001(.+?)\u0001(.+?)\u0001(.+?)\u0001(.*?)\u0001(\d*)".ReplaceUTFCodeToSymbol(), RegexOptions.IgnoreCase);
 			var match2 = regex2.Match(str2);
-			System.Console.WriteLine(match2.GetValueByReplacement("$4.$6", (value, format) =>
+			Console.WriteLine(match2.GetValueByReplacement("$4.$6", (value, format) =>
 			{
 				if (DateTime.TryParseExact(value, format, null, DateTimeStyles.None, out var result))
 				{
@@ -1391,7 +1596,7 @@ namespace Tester.Console
 
 			var regex = new Regex(@"(.+?)(\s+|$)", RegexOptions.IgnoreCase);
 			var match = regex.Match("01.05.2020 15:30:05 word2 word3");
-			System.Console.WriteLine(match.GetValueByReplacement("[ $1 : {dd.MM.yyyy} ]", (value, format) =>
+			Console.WriteLine(match.GetValueByReplacement("[ $1 : {dd.MM.yyyy} ]", (value, format) =>
 			{
 				if (DateTime.TryParseExact(value, format, null, DateTimeStyles.None, out var result))
 				{
@@ -1411,12 +1616,12 @@ namespace Tester.Console
 
 			if (DateTime.TryParseExact(invariant, "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var result))
 			{
-				System.Console.WriteLine(result);
+				Console.WriteLine(result);
 			}
 
 			if (TIME.TryParseAnyDate(invariant, DateTimeStyles.AllowWhiteSpaces, out var result2))
 			{
-				System.Console.WriteLine(result2);
+				Console.WriteLine(result2);
 			}
 
 
@@ -1425,9 +1630,9 @@ namespace Tester.Console
 			//         var test2 = DateTime.TryParseExact("01.05.2020 15:30:05".Replace(",", "."), "dd.MM.yyyy HH:mm:ss.fff", null, DateTimeStyles.AllowWhiteSpaces, out var date2);
 			//         var date3 = Convert.ToDateTime("  01.05\\2020   15:30:05  ");
 
-			//System.Console.WriteLine(date1);
-			//System.Console.WriteLine(date2);
-			//System.Console.WriteLine(date3);
+			//Console.WriteLine(date1);
+			//Console.WriteLine(date2);
+			//Console.WriteLine(date3);
 		}
 
 		static void Test_1()
@@ -1457,14 +1662,14 @@ namespace Tester.Console
 			for (var i = 0; i < 10000; i++)
 				listForIgnore.Contains("USER_INFO");
 			stop.Stop();
-			System.Console.WriteLine(stop.Elapsed);
+			Console.WriteLine(stop.Elapsed);
 
 			stop.Reset();
 			stop.Start();
 			for (var i = 0; i < 10000; i++)
 				listForIgnore2.Contains("USER_INFO");
 			stop.Stop();
-			System.Console.WriteLine(stop.Elapsed);
+			Console.WriteLine(stop.Elapsed);
 		}
 
 		static void Authorization()
@@ -1489,14 +1694,14 @@ namespace Tester.Console
 
 			var listOfData2 = new List<KeyValuePair<string, string>>(listOfData);
 
-			System.Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Started");
+			Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Started");
 
 			var _multiTaskingHandler = new MTActionResult<KeyValuePair<string, string>>(
 				WriteData,
 				listOfData,
 				listOfData.Count,
 				ThreadPriority.Lowest);
-			_multiTaskingHandler.IsCompeted += (sender, eventArgs) => { System.Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Multitask completed"); };
+			_multiTaskingHandler.IsCompeted += (sender, eventArgs) => { Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Multitask completed"); };
 			_multiTaskingHandler.StartAsync();
 
 			Task.Factory.StartNew(() =>
@@ -1515,13 +1720,13 @@ namespace Tester.Console
 				}
 
 				Task.WaitAll(listOfTask.ToArray());
-				System.Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Raw completed");
+				Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Raw completed");
 			});
 		}
 
 		static void WriteData(KeyValuePair<string, string> data)
 		{
-			//System.Console.WriteLine(data.Key);
+			//Console.WriteLine(data.Key);
 			Thread.Sleep(10000);
 		}
 	}
