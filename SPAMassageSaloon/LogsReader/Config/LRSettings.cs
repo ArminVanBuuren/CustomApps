@@ -59,6 +59,8 @@ namespace LogsReader.Config
 
 		private static string FailedSettingsPath { get; }
 
+		private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(LRSettings));
+
 		public static bool DisableHintTooltip { get; private set; } = true;
 
 		/// <summary>
@@ -200,9 +202,8 @@ namespace LogsReader.Config
 					if (File.Exists(SettingsPath))
 						IO.SetAllAccessPermissions(SettingsPath);
 
-					var xml = new XmlSerializer(typeof(LRSettings));
 					using (var sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
-						xml.Serialize(sw, settings);
+						Serializer.Serialize(sw, settings);
 				}
 			}
 			catch (Exception ex)
@@ -225,7 +226,7 @@ namespace LogsReader.Config
 					{
 						using (var stream = new StreamReader(SettingsPath, new UTF8Encoding(false)))
 						using (TextReader sr = new StringReader(XML.RemoveUnallowable(stream.ReadToEnd(), true)))
-							sett = new XmlSerializer(typeof(LRSettings)).Deserialize(sr) as LRSettings;
+							sett = Serializer.Deserialize(sr) as LRSettings;
 					}
 				}
 				catch (Exception ex)
