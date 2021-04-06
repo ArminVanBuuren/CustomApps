@@ -268,9 +268,9 @@ namespace Utils.WinForm.Notepad
 
             try
             {
-                this.SuspendLayout();
-                FCTB.SuspendLayout();
-                _statusStrip.SuspendLayout();
+                //this.SuspendLayout();
+                //FCTB.SuspendLayout();
+                //_statusStrip.SuspendLayout();
 
                 BorderStyle = BorderStyle.None;
 
@@ -306,8 +306,9 @@ namespace Utils.WinForm.Notepad
                 _xmlLiteAttrRegex = new Regex(@"(?<range>\w+\=)", RegexOptions.Compiled);
                 _xmlLiteAttrValRegex = new Regex(@"\=\""(?<range>.*?)\""", RegexOptions.Compiled);
 
-                Controls.Add(FCTB);
-                Controls.Add(_statusStrip);
+                var worker1 = new System.ComponentModel.BackgroundWorker();
+                worker1.DoWork += (sender, e) => this.SafeInvoke(() => { Controls.AddRange(new[] { (Control)FCTB, _statusStrip }); });
+                worker1.RunWorkerAsync();
 
                 var toolStripItems = new List<ToolStripItem>();
 
@@ -376,7 +377,9 @@ namespace Utils.WinForm.Notepad
                 _selectedInfo = GetStripLabel("");
                 toolStripItems.Add(_selectedInfo);
 
-                _statusStrip.Items.AddRange(toolStripItems.ToArray());
+                var worker2 = new System.ComponentModel.BackgroundWorker();
+                worker2.DoWork += (sender, e) => _statusStrip.SafeInvoke(() => { _statusStrip.Items.AddRange(toolStripItems.ToArray()); });
+                worker2.RunWorkerAsync();
 
                 FCTB.ClearStylesBuffer();
                 FCTB.Range.ClearStyle(StyleIndex.All);
@@ -392,9 +395,9 @@ namespace Utils.WinForm.Notepad
             }
             finally
             {
-	            _statusStrip.ResumeLayout();
-	            FCTB.ResumeLayout();
-                this.ResumeLayout();
+	            //_statusStrip.ResumeLayout();
+	            //FCTB.ResumeLayout();
+                //this.ResumeLayout();
             }
         }
 

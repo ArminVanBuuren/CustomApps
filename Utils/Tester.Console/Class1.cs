@@ -57,7 +57,7 @@ namespace Tester.ConsoleTest
 
         public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
         {
-            if (args == null)
+	        if (args == null)
                 throw new ArgumentNullException("args");
             if (args.Length != 2)
                 throw new ArgumentException("Function StrFormat() takes only two parameters");

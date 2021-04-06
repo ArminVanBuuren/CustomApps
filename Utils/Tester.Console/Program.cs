@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Security;
 using System.Security.Policy;
@@ -19,6 +20,7 @@ using Oracle.ManagedDataAccess.Client;
 using Org.XmlUnit;
 using Org.XmlUnit.Builder;
 using Org.XmlUnit.Diff;
+using TeleSharp.TL;
 using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.Crypto;
@@ -520,8 +522,9 @@ namespace Tester.ConsoleTest
 			return new object();
 		}
 
-		static void ReturnTypeString(object arg)
+		static string ReturnTypeString(object arg)
 		{
+			Thread.Sleep(3000);
 			Console.WriteLine($"{arg} is int?  - {arg is int}");
 			Console.WriteLine($"{arg} is long? - {arg is long}");
 			Console.WriteLine($"{arg} is decimal? - {arg is decimal}");
@@ -529,7 +532,8 @@ namespace Tester.ConsoleTest
 			//Console.WriteLine($"Casting<int> - {(int)(double)arg}");
 			//Console.WriteLine($"Casting<long> - {(long)arg}");
 			//Console.WriteLine($"Casting<decimal> - {(decimal)arg}");
-			Console.WriteLine($"Casting<double> - {(decimal)arg}");
+			//Console.WriteLine($"Casting<double> - {(decimal)arg}");
+			return arg.ToString();
 		}
 
 		class Person
@@ -546,6 +550,58 @@ namespace Tester.ConsoleTest
 			public override string ToString() => $"Age = {Age}; Name = {Name}";
 		}
 
+		public abstract class Shape { }
+		public class Circle : Shape { }
+
+		public interface IContainer<out T>
+		{
+			T Figure { get; }
+		}
+		public class Container<T> : IContainer<T>
+		{
+			private T figure;
+			public Container(T figure)
+			{
+				this.figure = figure;
+			}
+			public T Figure // реализуем абстрактное свойсво из интерфейса
+			{
+				get { return figure; } // свойство должно быть только для чтения.
+			}
+		}
+
+		delegate string testDeleg(object arg);
+
+		[Flags]
+		public enum TerminalDeviceProductStateFlags
+		{
+			/// <summary>Никаких</summary>
+			[EnumMember] None = 0,
+			/// <summary>Активная ли услуга у абонента</summary>
+			[EnumMember] IsActivated = 1,
+			/// <summary>Было ли разовое списание</summary>
+			[EnumMember] IsOneTimeCharged = 2,
+			/// <summary>Было ли периодическое списание за пользование</summary>
+			[EnumMember] IsPeriodicalChargingStarted = 4,
+			/// <summary>Была ли заблокирована услуга</summary>
+			[EnumMember] IsBlocked = 8,
+		}
+
+		class MyClass
+		{
+			public List<Product> Products { get; set; }
+		}
+
+		class Product
+		{
+			public List<Service> Services { get; set; }
+		}
+
+		class Service
+		{
+			public string ServiceCode { get; set; }
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -555,6 +611,92 @@ namespace Tester.ConsoleTest
 
 			try
 			{
+				var instance = new { Name = "Alex", Age = 27 };
+
+				var product = new
+				{
+					IsActivated = true,
+					IsOneTimeCharged = true,
+					IsPeriodicalChargingStarted = true,
+					IsBlocked = true
+				};
+
+				TerminalDeviceProductStateFlags state = TerminalDeviceProductStateFlags.None;
+
+				if (product.IsActivated)
+					state |= TerminalDeviceProductStateFlags.IsActivated;
+				if (product.IsOneTimeCharged)
+					state |= TerminalDeviceProductStateFlags.IsOneTimeCharged;
+				if (product.IsPeriodicalChargingStarted)
+					state |= TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted;
+				if (product.IsBlocked)
+					state |= TerminalDeviceProductStateFlags.IsBlocked;
+
+
+				
+
+				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsActivated));
+				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsOneTimeCharged));
+				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted));
+				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsBlocked));
+
+
+				var fff1 = new Product
+				{
+					Services = new List<Service>
+					{
+						new Service
+						{
+							ServiceCode = "111"
+						}
+					}
+				};
+				var fff2 = new MyClass
+				{
+					Products = new List<Product>
+					{
+						new Product
+						{
+							Services = new List<Service>
+							{
+								new Service
+								{
+									ServiceCode = "222"
+								}
+							}
+						},
+						null,
+						new Product()
+					}
+				};
+
+				IEnumerable<Service> GetServiceListFromCmServicesFull(IEnumerable<Service> terminalDeviceServices)
+				{
+					return terminalDeviceServices == null
+						? new List<Service>()
+						: terminalDeviceServices;
+				}
+
+				var result = GetServiceListFromCmServicesFull(fff1?.Services)
+					.Concat(fff2?.Products?.SelectMany(p => GetServiceListFromCmServicesFull(p?.Services)))
+					.ToList();
+
+				int xx = 11;
+				//ref int xRef = ref xx;
+
+				//Console.WriteLine(xRef is int);
+
+
+
+				////Shape shape = new Circle(); // предварительный UpCast
+				////IContainer<Circle> container = new Container<Shape>(shape);
+
+				//Circle circle = new Circle();
+				//IContainer<Shape> container = new Container<Circle>(circle);
+
+
+
+
 				//ReturnTypeString(55);
 				//ReturnTypeString(67.555m);
 
@@ -638,14 +780,26 @@ namespace Tester.ConsoleTest
 				//Console.WriteLine(s1 == s2); // True
 				//Console.WriteLine(object.ReferenceEquals(s1, s2)); // False
 
-				//object gg1 = 0;
-				//object gg2 = 0;
+				//unsafe
+				//{
+				//	int* x; // определение указателя
+				//	int y = 10; // определяем переменную
+				//}
 
-				//Console.WriteLine(gg1.GetHashCode());
-				//Console.WriteLine(gg2.GetHashCode());
+				object gg1 = "0";
+				object gg2 = "0";
+				Console.WriteLine(gg1 == gg2);                          // true
+				Console.WriteLine(gg1.Equals(gg2));                     // true
+				Console.WriteLine(object.ReferenceEquals(gg1, gg2));    // true
 
-				//Console.WriteLine((int)gg1 == (int)gg2);
-				//Console.WriteLine(((int)gg1).Equals(gg2));
+				//var dict = new Dictionary<object, object>
+				//{
+				//	{gg1, gg1},
+				//	{gg2, gg2}
+				//};
+
+				//object fff = 11;
+
 
 				//object test1 = new TestBase();
 				//object test2 = new TestBase();
@@ -664,10 +818,10 @@ namespace Tester.ConsoleTest
 				//Console.WriteLine("111".Equals("111"));
 
 
-				var test1 = new Testing();
-				var test2 = new Testing();
-				Console.WriteLine(test1 == test2);
-				Console.WriteLine(test1.Equals(test2));
+				//var test1 = new Testing();
+				//var test2 = new Testing();
+				//Console.WriteLine(test1 == test2);
+				//Console.WriteLine(test1.Equals(test2));
 
 
 				//var childRequest = (Testing)new Tesitng3();

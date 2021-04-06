@@ -492,34 +492,22 @@ namespace Utils.WinForm.Notepad
         {
 	        try
 	        {
-		        _tabControl.SuspendHandle();
-
-                var index = _tabControl.TabPages.Count;
+		        //_tabControl.SuspendHandle();
 
                 var tabPage = new TabPage();
-                try
-                {
-                    tabPage.SuspendLayout();
+                tabPage.SuspendLayout();
+                tabPage.Text = editor.HeaderName + new string(' ', 2);
+                tabPage.UseVisualStyleBackColor = true;
+                tabPage.ForeColor = TabsForeColor;
+                tabPage.Margin = new Padding(0);
+                tabPage.Padding = new Padding(0);
+                tabPage.BorderStyle = BorderStyle.None;
+                tabPage.Controls.Add(editor);
+                tabPage.ResumeLayout();
 
-                    tabPage.Text = editor.HeaderName + new string(' ', 2);
-                    tabPage.UseVisualStyleBackColor = true;
-                    tabPage.ForeColor = TabsForeColor;
-                    tabPage.Margin = new Padding(0);
-                    tabPage.Padding = new Padding(0);
-                    tabPage.BorderStyle = BorderStyle.None;
-
-                    tabPage.Controls.Add(editor);
-
-                    _tabControl.TabPages.Add(tabPage);
-                    if (_tabControl.TabPages.Count == index)
-                        _tabControl.TabPages.Insert(index, editor.HeaderName);
-                }
-                finally
-                {
-                    tabPage.ResumeLayout();
-                }
-
-                _tabControl.SelectedIndex = index;
+                var worker = new System.ComponentModel.BackgroundWorker();
+                worker.DoWork += (sender, e) => _tabControl.SafeInvoke(() => { AddTabOfEditor(tabPage, editor); });
+                worker.RunWorkerAsync();
 
                 editor.BorderStyle = BorderStyle.None;
                 editor.Dock = DockStyle.Fill;
@@ -543,14 +531,25 @@ namespace Utils.WinForm.Notepad
                     fileEditor.FileChanged += EditorOnSomethingChanged;
 
                 ListOfEditors.Add(editor, tabPage);
-
-                if (_tabControl.TabCount == 1)
-                    RefreshForm(this, null);
-            }
+	        }
 	        finally
 	        {
-		        _tabControl.ResumeHandle();
+		        //_tabControl.ResumeHandle();
 	        }
+        }
+
+        void AddTabOfEditor(TabPage tabPage, Editor editor)
+        {
+	        var index = _tabControl.TabPages.Count;
+
+	        _tabControl.TabPages.Add(tabPage);
+	        if (_tabControl.TabPages.Count == index)
+		        _tabControl.TabPages.Insert(index, editor.HeaderName);
+
+	        _tabControl.SelectedIndex = index;
+
+	        if (_tabControl.TabCount == 1)
+		        RefreshForm(this, null);
         }
 
         int FinnalizePage(Editor removeEditor)
