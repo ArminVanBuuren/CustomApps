@@ -280,11 +280,11 @@ namespace LogsReader.Reader
 			treeView.Location = new Point(-1, 23);
 			treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
 
-			expanderPanel.Controls.Add(buttonBack);
-			expanderPanel.Controls.Add(buttonFore);
-			expanderPanel.Controls.Add(labelBack);
-			expanderPanel.Controls.Add(labelFore);
-			expanderPanel.Controls.Add(treeView);
+			var worker = new System.ComponentModel.BackgroundWorker();
+			worker.DoWork += (sender, e) => expanderPanel.SafeInvoke(() => {
+				expanderPanel.Controls.AddRange(new[] { (Control)buttonBack, buttonFore, labelBack, labelFore, treeView });
+			});
+			worker.RunWorkerAsync();
 
 			// если закрываются или открываются схемы для глобальной формы в глобальной форме
 			schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;

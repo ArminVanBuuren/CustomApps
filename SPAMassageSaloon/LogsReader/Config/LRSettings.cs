@@ -120,7 +120,7 @@ namespace LogsReader.Config
 			set => DisableHintTooltip = value;
 		}
 
-		[XmlElement("Scheme", IsNullable = false)]
+		[XmlElement("Scheme")]
 		public LRSettingsScheme[] SchemeList
 		{
 			get => _schemes;
@@ -128,13 +128,8 @@ namespace LogsReader.Config
 			{
 				try
 				{
-					_schemes = value ?? new[]
-					           {
-						           new LRSettingsScheme(DefaultSettings.MG),
-						           new LRSettingsScheme(DefaultSettings.SPA),
-						           new LRSettingsScheme(DefaultSettings.MGA)
-					           };
-					Schemes = _schemes.Length > 0
+					_schemes = value;
+					Schemes = _schemes != null && _schemes.Length > 0
 						          ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
 						          : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
 				}
@@ -262,7 +257,12 @@ namespace LogsReader.Config
 		}
 
 		internal void AssignDefaultSchemas()
-			=> SchemeList = null;
+			=> SchemeList = new[]
+			{
+				new LRSettingsScheme(DefaultSettings.MG),
+				new LRSettingsScheme(DefaultSettings.SPA),
+				new LRSettingsScheme(DefaultSettings.MGA)
+			};
 
 		public static XmlComment GetComment(string value)
 			=> _disableHintComments ? null : new XmlDocument().CreateComment(value);

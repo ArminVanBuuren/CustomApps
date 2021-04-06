@@ -398,8 +398,11 @@ namespace LogsReader.Reader
 
 			statusStrip.ShowItemToolTips = true;
 			statusStrip.ImageScalingSize = new Size(13, 15);
-			statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
-
+			var worker1 = new System.ComponentModel.BackgroundWorker();
+			worker1.DoWork += (sender, e) => statusStrip.SafeInvoke(() => {
+				statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
+			});
+			worker1.RunWorkerAsync();
 
 			buttonErrPrev = new ToolStripButton
 			{
@@ -468,7 +471,11 @@ namespace LogsReader.Reader
 
 			statusStripBtns.ShowItemToolTips = true;
 			statusStripBtns.ImageScalingSize = new Size(13, 15);
-			statusStripBtns.Items.AddRange(toolToolStripCollection2.ToArray());
+			var worker2 = new System.ComponentModel.BackgroundWorker();
+			worker2.DoWork += (sender, e) => statusStripBtns.SafeInvoke(() => {
+				statusStripBtns.Items.AddRange(toolToolStripCollection2.ToArray());
+			});
+			worker2.RunWorkerAsync();
 
 			#endregion
 
@@ -2123,7 +2130,12 @@ namespace LogsReader.Reader
 			traceViewer.Dock = DockStyle.Fill;
 			traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
 
-			tabControlViewer.TabPages.Add(tabPage);
+			var worker = new System.ComponentModel.BackgroundWorker();
+			worker.DoWork += (sender, e) => tabControlViewer.SafeInvoke(() =>
+			{
+				tabControlViewer.TabPages.Add(tabPage);
+			});
+			worker.RunWorkerAsync();
 		}
 
 		private void DgvData_MouseDown(object sender, MouseEventArgs e)
