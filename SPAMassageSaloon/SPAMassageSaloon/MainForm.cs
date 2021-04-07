@@ -22,6 +22,7 @@ using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using System.Threading.Tasks;
 
 namespace SPAMassageSaloon
 {
@@ -116,7 +117,21 @@ namespace SPAMassageSaloon
 		}
 
 		public MainForm()
-			=> InitializeComponent();
+		{
+			OpenReservedThreads();
+			InitializeComponent();
+		}
+
+		void OpenReservedThreads()
+		{
+			if (ThreadPool.SetMinThreads(60, 0))
+			{
+				//ThreadPool.GetMinThreads(out int MinWorkerThreads, out int MinCompletionPortThreads);
+				for (var i = 0; i < 40; i++)
+					Task.Factory.StartNew(() => { Thread.Sleep(1); });
+			}
+			//ThreadPool.SetMaxThreads(100, 0);
+		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
