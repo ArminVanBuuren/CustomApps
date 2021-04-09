@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
@@ -130,19 +131,29 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public void Initialize(LogsReaderMainForm main)
+		public async void Initialize(LogsReaderMainForm main)
 		{
 			MainForm = main;
 
-			foreach (var readerForm in MainForm.SchemeForms.Values)
+			try
 			{
-				var expander = CreateExpander(readerForm);
-				AllExpanders.Add(readerForm, expander);
-				flowPanelForExpanders.Controls.Add(expander);
-			}
+				Win32.SuspendHandle(this);
+				//var current = SynchronizationContext.Current;
 
-			// чекаем все валидные схемы
-			CheckBoxSelectAllOnCheckedChanged(checkBoxSelectAll, EventArgs.Empty);
+				foreach (var readerForm in MainForm.SchemeForms.Values)
+				{
+					var expander = CreateExpander(readerForm);
+					AllExpanders.Add(readerForm, expander);
+					flowPanelForExpanders.Controls.Add(expander);
+				}
+
+				//// чекаем все валидные схемы
+				await CheckBoxSelectAllOnCheckedChangedAsync(checkBoxSelectAll, EventArgs.Empty);
+			}
+			finally
+			{
+				Win32.ResumeHandle(this);
+			}
 		}
 
 		public override void ApplySettings()
@@ -167,32 +178,6 @@ namespace LogsReader.Reader
 					ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_FORE)
 				}
 			};
-
-			void ChangeColor(object sender, EventArgs e)
-			{
-				if (!(sender is Button button))
-					return;
-
-				colorDialog.Color = button.BackColor;
-
-				if (colorDialog.ShowDialog() != DialogResult.OK)
-					return;
-
-				button.BackColor = colorDialog.Color;
-
-				if (button == buttonBack)
-				{
-					readerForm.FormBackColor = colorDialog.Color;
-					schemeExpander.HeaderBackColor = colorDialog.Color;
-				}
-				else if (button == buttonFore)
-				{
-					readerForm.FormForeColor = colorDialog.Color;
-					schemeExpander.ForeColor = colorDialog.Color;
-				}
-
-				RefreshAllRows(DgvData, DgvDataRefreshRow);
-			}
 
 			var buttonSize = new Size(20, 17);
 
@@ -409,6 +394,32 @@ namespace LogsReader.Reader
 			};
 
 			return schemeExpander;
+
+			void ChangeColor(object sender, EventArgs e)
+			{
+				if (!(sender is Button button))
+					return;
+
+				colorDialog.Color = button.BackColor;
+
+				if (colorDialog.ShowDialog() != DialogResult.OK)
+					return;
+
+				button.BackColor = colorDialog.Color;
+
+				if (button == buttonBack)
+				{
+					readerForm.FormBackColor = colorDialog.Color;
+					schemeExpander.HeaderBackColor = colorDialog.Color;
+				}
+				else if (button == buttonFore)
+				{
+					readerForm.FormForeColor = colorDialog.Color;
+					schemeExpander.ForeColor = colorDialog.Color;
+				}
+
+				RefreshAllRows(DgvData, DgvDataRefreshRow);
+			}
 		}
 
 		internal override void RefreshButtonPauseState(TraceReader reader)
@@ -680,6 +691,9 @@ namespace LogsReader.Reader
 			=> UserSettings.ShowTransactions = newType != TransactionsMarkingType.None;
 
 		private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
+			=> await CheckBoxSelectAllOnCheckedChangedAsync(sender, e);
+
+		private async Task CheckBoxSelectAllOnCheckedChangedAsync(object sender, EventArgs e)
 		{
 			try
 			{
