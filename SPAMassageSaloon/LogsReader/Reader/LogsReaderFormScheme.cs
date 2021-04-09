@@ -22,6 +22,7 @@ namespace LogsReader.Reader
 		private readonly Label RowsLimitLabel;
 		private readonly TextBox maxThreadsText;
 		private readonly TextBox rowsLimitText;
+		private readonly Button configureButton;
 		private readonly CustomTreeView TreeMain;
 
 		protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Both;
@@ -68,15 +69,6 @@ namespace LogsReader.Reader
 
 				#region Initialize Controls
 
-				OrderByLabel = new Label
-				{
-					AutoSize = true,
-					Location = new Point(3, 88),
-					Name = "OrderByLabel",
-					Size = new Size(53, 15),
-					TabIndex = 17,
-					Text = Resources.Txt_LogsReaderForm_OrderBy
-				};
 				MaxLinesLabel = new Label
 				{
 					AutoSize = true,
@@ -85,24 +77,6 @@ namespace LogsReader.Reader
 					Size = new Size(59, 15),
 					TabIndex = 13,
 					Text = Resources.Txt_LogsReaderForm_MaxLines
-				};
-				orderByText = new TextBox
-				{
-					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-					Location = new Point(84, 85),
-					Name = "orderByText",
-					Size = new Size(50, 23),
-					TabIndex = 18
-				};
-				orderByText.Leave += OrderByText_Leave;
-				MaxThreadsLabel = new Label
-				{
-					AutoSize = true,
-					Location = new Point(3, 36),
-					Name = "MaxThreadsLabel",
-					Size = new Size(74, 15),
-					TabIndex = 9,
-					Text = Resources.Txt_LogsReaderForm_MaxThreads
 				};
 				maxLinesStackText = new TextBox
 				{
@@ -114,14 +88,15 @@ namespace LogsReader.Reader
 				};
 				maxLinesStackText.TextChanged += MaxLinesStackText_TextChanged;
 				maxLinesStackText.Leave += MaxLinesStackText_Leave;
-				RowsLimitLabel = new Label
+
+				MaxThreadsLabel = new Label
 				{
 					AutoSize = true,
-					Location = new Point(3, 62),
-					Name = "RowsLimitLabel",
-					Size = new Size(65, 15),
-					TabIndex = 15,
-					Text = Resources.Txt_LogsReaderForm_RowsLimit
+					Location = new Point(3, 36),
+					Name = "MaxThreadsLabel",
+					Size = new Size(74, 15),
+					TabIndex = 9,
+					Text = Resources.Txt_LogsReaderForm_MaxThreads
 				};
 				maxThreadsText = new TextBox
 				{
@@ -133,6 +108,16 @@ namespace LogsReader.Reader
 				};
 				maxThreadsText.TextChanged += MaxThreadsText_TextChanged;
 				maxThreadsText.Leave += MaxThreadsText_Leave;
+
+				RowsLimitLabel = new Label
+				{
+					AutoSize = true,
+					Location = new Point(3, 62),
+					Name = "RowsLimitLabel",
+					Size = new Size(65, 15),
+					TabIndex = 15,
+					Text = Resources.Txt_LogsReaderForm_RowsLimit
+				};
 				rowsLimitText = new TextBox
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -143,23 +128,61 @@ namespace LogsReader.Reader
 				};
 				rowsLimitText.TextChanged += RowsLimitText_TextChanged;
 				rowsLimitText.Leave += RowsLimitText_Leave;
+
+				OrderByLabel = new Label
+				{
+					AutoSize = true,
+					Location = new Point(3, 88),
+					Name = "OrderByLabel",
+					Size = new Size(53, 15),
+					TabIndex = 17,
+					Text = Resources.Txt_LogsReaderForm_OrderBy
+				};
+				orderByText = new TextBox
+				{
+					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+					Location = new Point(84, 85),
+					Name = "orderByText",
+					Size = new Size(50, 23),
+					TabIndex = 18
+				};
+				orderByText.Leave += OrderByText_Leave;
+
+				configureButton = new Button
+				{
+					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+					Location = new Point(3, 111),
+					Name = "configureButton",
+					Size = new Size(133, 25),
+					TabIndex = 19,
+					Text = @"Configure",
+					BackColor = Color.FromArgb(54, 187, 156),
+					ForeColor = Color.White,
+				};
+				configureButton.Click += ConfigureButton_Click;
+
 				TreeMain = new CustomTreeView
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-					Location = new Point(1, 114),
+					Location = new Point(1, 140),
 					Name = "TreeMain",
-					Size = new Size(137, 300),
-					TabIndex = 19
+					Size = new Size(137, 275),
+					TabIndex = 20,
 				};
-				CustomPanel.Controls.Add(OrderByLabel);
-				CustomPanel.Controls.Add(MaxLinesLabel);
-				CustomPanel.Controls.Add(orderByText);
-				CustomPanel.Controls.Add(MaxThreadsLabel);
-				CustomPanel.Controls.Add(maxLinesStackText);
-				CustomPanel.Controls.Add(RowsLimitLabel);
-				CustomPanel.Controls.Add(maxThreadsText);
-				CustomPanel.Controls.Add(rowsLimitText);
-				CustomPanel.Controls.Add(TreeMain);
+
+				CustomPanel.Controls.AddRange(new []
+				{
+					(Control)OrderByLabel,
+					MaxLinesLabel,
+					orderByText,
+					MaxThreadsLabel,
+					maxLinesStackText,
+					RowsLimitLabel,
+					maxThreadsText,
+					rowsLimitText,
+					configureButton,
+					TreeMain
+				});
 
 				#endregion
 
@@ -207,6 +230,11 @@ namespace LogsReader.Reader
 			}
 		}
 
+		private void ConfigureButton_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("Clicked!");
+		}
+
 		public void SynchronizeTreeView()
 		{
 			if (IsTreeViewSynchronized)
@@ -219,10 +247,11 @@ namespace LogsReader.Reader
 		public override void ApplySettings()
 		{
 			base.ApplySettings();
-			OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
-			RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
-			MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
 			MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
+			MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
+			RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
+			OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
+			configureButton.Text = Resources.Txt_Form_ConfigureButton;
 			TreeViewContainer.ApplySettings();
 		}
 

@@ -582,9 +582,10 @@ namespace LogsReader.Reader
 
 				DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
 				DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
-				
-				TbxPattern.AssignValue(UserSettings.PreviousSearch.First(), TxtPatternOnTextChanged);
-				TbxPattern.Items.AddRange(UserSettings.PreviousSearch.ToArray());
+
+				var prevSearch = UserSettings.PreviousSearch;
+				TbxPattern.AssignValue(prevSearch.First(), TxtPatternOnTextChanged);
+				TbxPattern.Items.AddRange(prevSearch.ToArray());
 
 				ChbxUseRegex.Checked = UserSettings.UseRegex;
 				DateStartFilter.Checked = UserSettings.DateStartChecked;
@@ -594,16 +595,26 @@ namespace LogsReader.Reader
 				if (DateEndFilter.Checked)
 					DateEndFilter.Value = _getEndDate.Invoke();
 
-				TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter.First(), TbxTraceNameFilterOnTextChanged);
-				TbxTraceNameFilter.Items.AddRange(UserSettings.TraceNameFilter.ToArray());
+				var traceNames = UserSettings.TraceNameFilter;
+				TbxTraceNameFilter.AssignValue(traceNames.First(), TbxTraceNameFilterOnTextChanged);
+				TbxTraceNameFilter.Items.AddRange(traceNames.ToArray());
 
-				TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter.First(), TbxTraceMessageFilterOnTextChanged);
-				TbxTraceMessageFilter.Items.AddRange(UserSettings.TraceMessageFilter.ToArray());
+				var traceMessage = UserSettings.TraceMessageFilter;
+				TbxTraceMessageFilter.AssignValue(traceMessage.First(), TbxTraceMessageFilterOnTextChanged);
+				TbxTraceMessageFilter.Items.AddRange(traceMessage.ToArray());
 
 				MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
 				tabControlViewer.DrawMode = TabDrawMode.Normal;
 				tabControlViewer.BackColor = Color.White;
 				AddViewer(MainViewer, null);
+
+				// чинит баг при изменении формы, текст самопроизвольно выделяется
+				SizeChanged += (sender, args) =>
+				{
+					TbxPattern.Select(0, 0);
+					TbxTraceNameFilter.Select(0, 0);
+					TbxTraceMessageFilter.Select(0, 0);
+				};
 
 				#endregion
 			}
@@ -975,9 +986,9 @@ namespace LogsReader.Reader
 			if (maxItems <= 0)
 				maxItems = 1;
 
-			var items = cb.Items.OfType<string>().Where(x => !x.IsNullOrEmpty() && x != cb.Text).ToList().Take(maxItems - 1);
+			var items = GetComboBoxValues(cb).Take(maxItems);
 			cb.Items.Clear();
-			cb.Items.AddRange(new List<string> { cb.Text }.Concat(items).ToArray());
+			cb.Items.AddRange(items.ToArray());
 		}
 
 		protected virtual void ReportProcessStatus(IEnumerable<TraceReader> readers)
@@ -1801,6 +1812,7 @@ namespace LogsReader.Reader
 			                                               .Select(x => x.Trim())
 			                                               .GroupBy(x => x)
 			                                               .ToDictionary(x => x.Key, StringComparer.InvariantCultureIgnoreCase);
+
 			var filtered = original.Where(x => x?.TraceName != null)
 			                       .GroupBy(x => x.TraceName, StringComparer.InvariantCultureIgnoreCase)
 			                       .Select(x => new TraceNameFilter(alreadyAddedTraceNames.ContainsKey(x.Key),
@@ -1809,6 +1821,7 @@ namespace LogsReader.Reader
 			                                                        x.Count(m => !m.IsSuccess)))
 			                       .OrderBy(x => x.TraceName)
 			                       .ToDictionary(x => x.TraceName);
+
 			var form = await TraceNameFilterForm.GetAsync(filtered);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
@@ -1906,9 +1919,11 @@ namespace LogsReader.Reader
 		private void buttonFilteredPrev_Click(object sender, EventArgs e)
 			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
 
-		private void buttonErrorPrev_Click(object sender, EventArgs e) => SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
+		private void buttonErrorPrev_Click(object sender, EventArgs e) 
+			=> SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
 
-		private void buttonTrnPrev_Click(object sender, EventArgs e) => SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected);
+		private void buttonTrnPrev_Click(object sender, EventArgs e)
+			=> SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected);
 
 		private void SearchPrev(Func<DataGridViewRow, bool> condition)
 		{
@@ -1939,9 +1954,11 @@ namespace LogsReader.Reader
 		private void buttonFilteredNext_Click(object sender, EventArgs e)
 			=> SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
 
-		private void buttonErrorNext_Click(object sender, EventArgs e) => SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
+		private void buttonErrorNext_Click(object sender, EventArgs e)
+			=> SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
 
-		private void buttonTrnNext_Click(object sender, EventArgs e) => SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected);
+		private void buttonTrnNext_Click(object sender, EventArgs e)
+			=> SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected);
 
 		private void SearchNext(Func<DataGridViewRow, bool> condition)
 		{
@@ -2163,7 +2180,7 @@ namespace LogsReader.Reader
 
 		internal virtual void TxtPatternOnTextChanged(object sender, EventArgs e)
 		{
-			UserSettings.PreviousSearch = ((ComboBox)sender).Items.OfType<string>().ToList();
+			UserSettings.PreviousSearch = GetComboBoxValues((ComboBox)sender);
 			ValidationCheck(true);
 		}
 
@@ -2229,13 +2246,16 @@ namespace LogsReader.Reader
 			=> UserSettings.TraceNameFilterContains = ((ComboBox) sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
 
 		internal virtual void TbxTraceNameFilterOnTextChanged(object sender, EventArgs e)
-			=> UserSettings.TraceNameFilter = ((ComboBox)sender).Items.OfType<string>().ToList();
+			=> UserSettings.TraceNameFilter = GetComboBoxValues((ComboBox) sender);
 
 		internal virtual void CobxTraceMessageFilter_SelectedIndexChanged(object sender, EventArgs e)
 			=> UserSettings.TraceMessageFilterContains = ((ComboBox) sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
 
-		internal virtual void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e) 
-			=> UserSettings.TraceMessageFilter = ((ComboBox)sender).Items.OfType<string>().ToList();
+		internal virtual void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e)
+			=> UserSettings.TraceMessageFilter = GetComboBoxValues((ComboBox) sender);
+
+		private static List<string> GetComboBoxValues(ComboBox cb) 
+			=> new List<string> { cb.Text }.Concat(cb.Items.OfType<string>().Where(x => !x.IsNullOrEmpty() && x != cb.Text)).ToList();
 
 		internal virtual void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)
 		{

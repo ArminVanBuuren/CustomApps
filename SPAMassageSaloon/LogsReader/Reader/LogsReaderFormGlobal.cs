@@ -232,7 +232,7 @@ namespace LogsReader.Reader
 				ButtonSize = ExpandButtonSize.Small,
 				ButtonStyle = ExpandButtonStyle.Circle,
 				CheckBoxShown = true,
-				ExpandedHeight = 300,
+				ExpandedHeight = 450,
 				CheckBoxEnabled = readerForm.BtnSearch.Enabled,
 				HeaderBorderBrush = Color.Azure,
 				HeaderBackColor = buttonBack.BackColor,
@@ -253,28 +253,25 @@ namespace LogsReader.Reader
 				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
 				BackColor = expanderPanelColor.Invoke(readerForm),
 				Location = new Point(2, 23),
-				Size = new Size(schemeExpander.Size.Width - 4, 275)
+				Size = new Size(schemeExpander.Size.Width - 4, 425)
 			};
 			schemeExpander.Controls.Add(expanderPanel);
-			
+
 			var treeView = readerForm.TreeViewContainer.CreateNewCopy();
 			treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 			treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 			treeView.Location = new Point(-1, 23);
-			treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
-			var worker = new BackgroundWorker();
-			worker.DoWork += (sender, e) => expanderPanel.SafeInvoke(() =>
-			{
-				expanderPanel.Controls.AddRange(new[]
-				{
-					(Control) buttonBack,
-					buttonFore,
-					labelBack,
-					labelFore,
-					treeView
-				});
-			});
-			worker.RunWorkerAsync();
+			treeView.Size = new Size(schemeExpander.Size.Width - 2, 403);
+			treeView.Scrollable = true;
+
+			treeView.SuspendLayout();
+			expanderPanel.SuspendLayout();
+			schemeExpander.SuspendLayout();
+			// Addrange супер долго работает, если создавать в асинхронке то скроллы не повялются (ебучий баг). Асинхроннка не нужна, т.к. контекст синхронизации для форм один
+			expanderPanel.Controls.AddRange(new[] { (Control)buttonBack, buttonFore, labelBack, labelFore, treeView });
+			treeView.ResumeLayout();
+			expanderPanel.ResumeLayout();
+			schemeExpander.ResumeLayout();
 
 			// если закрываются или открываются схемы для глобальной формы в глобальной форме
 			schemeExpander.ExpandCollapse += SchemeExpander_ExpandCollapse;

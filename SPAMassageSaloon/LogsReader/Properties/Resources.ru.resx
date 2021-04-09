@@ -585,4 +585,7 @@
   <data name="TxtReader_DgvPriority" xml:space="preserve">
     <value>Приоритет</value>
   </data>
+  <data name="Txt_Form_ConfigureButton" xml:space="preserve">
+    <value>Настроить</value>
+  </data>
 </root>

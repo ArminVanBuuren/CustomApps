@@ -25,16 +25,8 @@ namespace LogsReader.Config
 
 		public List<string> PreviousSearch
 		{
-			get
-			{
-				var val = GetValue(nameof(PreviousSearch));
-				return val.TryGetJson<List<string>>(out var res) ? res : new List<string>{val};
-			}
-			set
-			{
-				var newVal = JsonConvert.SerializeObject(value);
-				SetValue(nameof(PreviousSearch), newVal);
-			}
+			get => GetJsonSetting(nameof(PreviousSearch));
+			set => SetJsonSetting(nameof(PreviousSearch), value);
 		}
 
 		public bool UseRegex
@@ -64,16 +56,8 @@ namespace LogsReader.Config
 
 		public List<string> TraceNameFilter
 		{
-			get
-			{
-				var val = GetValue(nameof(TraceNameFilter));
-				return val.TryGetJson<List<string>>(out var res) ? res : new List<string> { val };
-			}
-			set
-			{
-				var newVal = JsonConvert.SerializeObject(value);
-				SetValue(nameof(TraceNameFilter), newVal);
-			}
+			get => GetJsonSetting(nameof(TraceNameFilter));
+			set => SetJsonSetting(nameof(TraceNameFilter), value);
 		}
 
 		public bool TraceNameFilterContains
@@ -84,16 +68,8 @@ namespace LogsReader.Config
 
 		public List<string> TraceMessageFilter
 		{
-			get
-			{
-				var val = GetValue(nameof(TraceMessageFilter));
-				return val.TryGetJson<List<string>>(out var res) ? res : new List<string> { val };
-			}
-			set
-			{
-				var newVal = JsonConvert.SerializeObject(value);
-				SetValue(nameof(TraceMessageFilter), newVal);
-			}
+			get => GetJsonSetting(nameof(TraceMessageFilter));
+			set => SetJsonSetting(nameof(TraceMessageFilter), value);
 		}
 
 		public bool TraceMessageFilterContains
@@ -303,6 +279,23 @@ namespace LogsReader.Config
 			{
 				// ignored
 			}
+		}
+
+		private List<string> GetJsonSetting(string name)
+		{
+			var val = GetValue(name);
+			return val.TryGetJson<List<string>>(out var res)
+				? res.ConvertAll(x => x.Replace("&qout;", "\""))
+				: val.IndexOf("\"") != -1 && val.IndexOf("[") != -1 && val.IndexOf("]") != -1
+					? new List<string> { val }
+					: new List<string> { string.Empty };
+		}
+
+		private void SetJsonSetting(string name, List<string> value)
+		{
+			var result = value.ConvertAll(x => x.Replace("\"", "&qout;"));
+			var newVal = JsonConvert.SerializeObject(result);
+			SetValue(name, newVal);
 		}
 
 		public void Dispose() => parentRegistry?.Dispose();

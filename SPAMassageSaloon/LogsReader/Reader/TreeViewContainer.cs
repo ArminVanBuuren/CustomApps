@@ -55,7 +55,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		///     Текущая схема настроек
 		/// </summary>
-		private LRSettingsScheme CurrentSettings { get; }
+		private LRSettingsScheme CurrentSettings { get; set; }
 
 		private CustomTreeView Current { get; set; }
 
@@ -121,23 +121,8 @@ namespace LogsReader.Reader
 		{
 			CurrentSettings = schemeSettings;
 			Current = Main = main;
-			var treeNodeServersGroup = GetGroupNodes(TRVServers, Resources.Txt_LogsReaderForm_Servers, servers, GroupType.Server);
-			Main.Nodes.Add(treeNodeServersGroup);
-			CheckTreeViewNode(treeNodeServersGroup, false);
-			var treeNodeTypesGroup = GetGroupNodes(TRVTypes, Resources.Txt_LogsReaderForm_Types, fileTypes, GroupType.FileType);
-			Main.Nodes.Add(treeNodeTypesGroup);
-			CheckTreeViewNode(treeNodeTypesGroup, false);
-			var treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
-			{
-				Name = TRVFolders,
-				Checked = true,
-				NodeFont = _defaultParentFont
-			};
-			Main.Nodes.Add(treeNodeFolders);
-			SetFolder(null, folders, false);
-			treeNodeFolders.Expand();
-			CheckTreeViewNode(treeNodeFolders, true);
-			_copyList = new List<CustomTreeView>();
+			Load(servers, fileTypes, folders);
+
 			_imageList = new ImageList { ImageSize = new Size(14, 14) };
 			_imageList.Images.Add("0", Resources._default);
 			_imageList.Images.Add("1", Resources.server_group);
@@ -145,7 +130,9 @@ namespace LogsReader.Reader
 			_imageList.Images.Add("3", Resources.server);
 			_imageList.Images.Add("4", Resources.type);
 			_imageList.Images.Add("5", Resources.folder);
-			_copyList.Add(Main);
+
+			_copyList = new List<CustomTreeView> { Main };
+
 			InitializeTreeView(Main);
 			Main.EnabledChanged += (sender, args) =>
 			{
@@ -158,6 +145,7 @@ namespace LogsReader.Reader
 		{
 			foreach (var treeView in _copyList)
 				AssignTreeViewText(treeView);
+
 			_contextTreeMainMenuStrip?.Dispose();
 			_contextTreeMainMenuStrip = new ContextMenuStrip { Tag = Main };
 			_contextTreeMainMenuStrip.Items.Add(Resources.Txt_LogsReaderForm_AddServerGroup, Resources.server_group, AddServerGroup);
@@ -179,6 +167,42 @@ namespace LogsReader.Reader
 			UpdateContainerByTreeView(Main);
 			InitializeTreeView(copy);
 			return copy;
+		}
+
+		public void Reload(LRSettingsScheme schemeSettings, 
+		                   Dictionary<string, (int, IEnumerable<string>)> servers,
+		                   Dictionary<string, (int, IEnumerable<string>)> fileTypes,
+		                   Dictionary<string, bool> folders)
+		{
+			CurrentSettings = schemeSettings;
+			Load(servers, fileTypes, folders);
+			UpdateContainerByTreeView(Main);
+		}
+
+		void Load(Dictionary<string, (int, IEnumerable<string>)> servers,
+		          Dictionary<string, (int, IEnumerable<string>)> fileTypes,
+		          Dictionary<string, bool> folders)
+		{
+			Main.Nodes.Clear();
+
+			var treeNodeServersGroup = GetGroupNodes(TRVServers, Resources.Txt_LogsReaderForm_Servers, servers, GroupType.Server);
+			Main.Nodes.Add(treeNodeServersGroup);
+			CheckTreeViewNode(treeNodeServersGroup, false);
+
+			var treeNodeTypesGroup = GetGroupNodes(TRVTypes, Resources.Txt_LogsReaderForm_Types, fileTypes, GroupType.FileType);
+			Main.Nodes.Add(treeNodeTypesGroup);
+			CheckTreeViewNode(treeNodeTypesGroup, false);
+
+			var treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
+			{
+				Name = TRVFolders,
+				Checked = true,
+				NodeFont = _defaultParentFont
+			};
+			Main.Nodes.Add(treeNodeFolders);
+			SetFolder(null, folders, false);
+			treeNodeFolders.Expand();
+			CheckTreeViewNode(treeNodeFolders, true);
 		}
 
 		private void InitializeTreeView(TreeView treeView)
@@ -574,13 +598,9 @@ namespace LogsReader.Reader
 					}
 
 					foreach (var item in group.Nodes.OfType<TreeNode>())
-					{
 						if (prevNodes.TryGetValue($"{group.Text}_{item.Text}", out var prevItem))
-						{
 							if (prevItem.Checked)
 								item.Checked = true;
-						}
-					}
 				}
 			}
 			catch (Exception ex)

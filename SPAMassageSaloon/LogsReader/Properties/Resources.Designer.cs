@@ -590,6 +590,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure.
+        /// </summary>
+        public static string Txt_Form_ConfigureButton {
+            get {
+                return ResourceManager.GetString("Txt_Form_ConfigureButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;Date&quot; filter.
         /// </summary>
         public static string Txt_Form_DateFilterComment {

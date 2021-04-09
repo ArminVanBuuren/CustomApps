@@ -728,4 +728,7 @@ Colors schemes are adjustable.</value>
   <data name="TxtReader_CheckBoxes" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="Txt_Form_ConfigureButton" xml:space="preserve">
+    <value>Configure</value>
+  </data>
 </root>
