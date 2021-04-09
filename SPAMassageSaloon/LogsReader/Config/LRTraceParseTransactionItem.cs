@@ -4,14 +4,16 @@ using System.Xml.Serialization;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("TransactionPattern")]
+	[Serializable]
+	[XmlRoot("TransactionPattern")]
 	public class LRTraceParseTransactionItem : LRTraceParseItem
 	{
 		public LRTraceParseTransactionItem()
 		{
 		}
 
-		internal LRTraceParseTransactionItem(string regexPattern) : base(regexPattern)
+		internal LRTraceParseTransactionItem(string regexPattern)
+			: base(regexPattern)
 		{
 		}
 
@@ -31,7 +33,6 @@ namespace LogsReader.Config
 			{
 				Parent = parent;
 				MatchCalculationFunc = LRSettings.MatchCalculationFunc;
-
 				Trn = MatchCalculationFunc.Invoke(Parent.Trn).Invoke(match);
 			}
 		}

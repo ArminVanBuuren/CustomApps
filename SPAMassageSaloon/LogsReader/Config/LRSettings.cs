@@ -21,7 +21,8 @@ namespace LogsReader.Config
 		MGA = 2
 	}
 
-	[Serializable, XmlRoot("Settings")]
+	[Serializable]
+	[XmlRoot("Settings")]
 	public class LRSettings
 	{
 		private static object _sync = new object();
@@ -29,17 +30,11 @@ namespace LogsReader.Config
 
 		private LRSettingsScheme[] _schemes;
 
-		CustomFunctions _customFunc = new CustomFunctions
+		private CustomFunctions _customFunc = new CustomFunctions
 		{
-			Assemblies = new CustomFunctionAssemblies
-			{
-				Childs = new[]
-				{
-					new XmlNodeValueText("System.dll")
-				}
-			},
+			Assemblies = new CustomFunctionAssemblies { Childs = new[] { new XmlNodeValueText("System.dll") } },
 			Namespaces = new XmlNodeValueText("using System;"),
-			Functions = new CustomFunctionCode()
+			Functions = new CustomFunctionCode
 			{
 				Function = new[]
 				{
@@ -64,7 +59,8 @@ namespace LogsReader.Config
 		public static bool DisableHintTooltip { get; private set; } = true;
 
 		/// <summary>
-		/// Функция используется для сичтывания стринговых аттрибутов, для установки результата парсинга включая кастомные функции. Дефолтное значение обязательно!
+		///     Функция используется для сичтывания стринговых аттрибутов, для установки результата парсинга включая кастомные
+		///     функции. Дефолтное значение обязательно!
 		/// </summary>
 		public static Func<string, Func<Match, string>> MatchCalculationFunc { get; private set; } = template => match => match.GetValueByReplacement(template);
 
@@ -130,8 +126,8 @@ namespace LogsReader.Config
 				{
 					_schemes = value;
 					Schemes = _schemes != null && _schemes.Length > 0
-						          ? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
-						          : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
+						? _schemes.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
+						: new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
 				}
 				catch (ArgumentException ex)
 				{
@@ -154,17 +150,18 @@ namespace LogsReader.Config
 			set
 			{
 				_customFunc = value;
+
 				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 				{
 					// если существуют кастомные функции, то при успешном паринге лога, будет производится вызов внутренних функций по шаблону для дальнейшей обработки записи
 					// функция GetValueByReplacement используется в качестве поиска группировок и подставления значений по шаблону
 					var compiler = new CustomFunctionsCompiler<ICustomFunction>(_customFunc);
+
 					if (compiler.Functions.Count > 0)
 					{
 						var functions = new Dictionary<string, Func<string[], string>>();
 						foreach (var (name, customFunction) in compiler.Functions)
 							functions.Add(name, customFunction.Invoke);
-
 						MatchCalculationFunc = template => CODE.Calculate<Match>(template, functions, REGEX.GetValueByReplacement);
 						return;
 					}
@@ -182,11 +179,10 @@ namespace LogsReader.Config
 
 		public LRSettings()
 			=> Schemes = SchemeList != null && SchemeList.Length > 0
-				             ? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
-				             : new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
+				? SchemeList.ToDictionary(k => k.Name, v => v, StringComparer.InvariantCultureIgnoreCase)
+				: new Dictionary<string, LRSettingsScheme>(StringComparer.InvariantCultureIgnoreCase);
 
-		public static Task SerializeAsync(LRSettings settings)
-			=> Task.Factory.StartNew(input => Serialize((LRSettings) input), settings);
+		public static Task SerializeAsync(LRSettings settings) => Task.Factory.StartNew(input => Serialize((LRSettings) input), settings);
 
 		public static void Serialize(LRSettings settings)
 		{
@@ -196,7 +192,6 @@ namespace LogsReader.Config
 				{
 					if (File.Exists(SettingsPath))
 						IO.SetAllAccessPermissions(SettingsPath);
-
 					using (var sw = new StreamWriter(SettingsPath, false, new UTF8Encoding(false)))
 						Serializer.Serialize(sw, settings);
 				}
@@ -259,12 +254,9 @@ namespace LogsReader.Config
 		internal void AssignDefaultSchemas()
 			=> SchemeList = new[]
 			{
-				new LRSettingsScheme(DefaultSettings.MG),
-				new LRSettingsScheme(DefaultSettings.SPA),
-				new LRSettingsScheme(DefaultSettings.MGA)
+				new LRSettingsScheme(DefaultSettings.MG), new LRSettingsScheme(DefaultSettings.SPA), new LRSettingsScheme(DefaultSettings.MGA)
 			};
 
-		public static XmlComment GetComment(string value)
-			=> _disableHintComments ? null : new XmlDocument().CreateComment(value);
+		public static XmlComment GetComment(string value) => _disableHintComments ? null : new XmlDocument().CreateComment(value);
 	}
 }

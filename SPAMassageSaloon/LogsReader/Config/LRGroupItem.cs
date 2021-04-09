@@ -4,14 +4,15 @@ using Utils;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("Group")]
+	[Serializable]
+	[XmlRoot("Group")]
 	public class LRGroupItem : LRItem
 	{
 		[XmlAttribute("name")]
 		public string GroupName { get; set; } = string.Empty;
 
 		[XmlIgnore]
-		internal int PriorityInternal { get; set; } = 0;
+		internal int PriorityInternal { get; set; }
 
 		[XmlAttribute("priority")]
 		public string Priority
@@ -34,11 +35,13 @@ namespace LogsReader.Config
 			}
 		}
 
-		public LRGroupItem() : base(string.Empty)
+		public LRGroupItem()
+			: base(string.Empty)
 		{
 		}
 
-		internal LRGroupItem(string groupName, int priority, string items) : base(items)
+		internal LRGroupItem(string groupName, int priority, string items)
+			: base(items)
 		{
 			GroupName = groupName;
 			Priority = priority.ToString();

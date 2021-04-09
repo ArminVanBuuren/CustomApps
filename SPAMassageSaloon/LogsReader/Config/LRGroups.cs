@@ -1,18 +1,15 @@
-﻿using LogsReader.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using LogsReader.Properties;
 
 namespace LogsReader.Config
 {
 	[Serializable]
 	public class LRGroups
 	{
-		private LRGroupItem[] _groupItems = new[]
-		{
-			new LRGroupItem(string.Empty, 0, string.Empty),
-		};
+		private LRGroupItem[] _groupItems = { new LRGroupItem(string.Empty, 0, string.Empty) };
 
 		[XmlIgnore]
 		public Dictionary<string, (int, IEnumerable<string>)> Groups { get; private set; }
@@ -27,7 +24,6 @@ namespace LogsReader.Config
 				{
 					var prevVal = (value ?? _groupItems).OrderBy(x => x.Priority).ThenBy(x => x.GroupName).ToArray();
 					var prevGroups = GetGroups(prevVal);
-
 					_groupItems = prevVal;
 					Groups = prevGroups;
 				}
@@ -44,12 +40,10 @@ namespace LogsReader.Config
 
 		internal LRGroups(LRGroupItem[] groupItems) => GroupItems = groupItems;
 
-		static Dictionary<string, (int, IEnumerable<string>)> GetGroups(IEnumerable<LRGroupItem> items)
+		private static Dictionary<string, (int, IEnumerable<string>)> GetGroups(IEnumerable<LRGroupItem> items)
 			=> items.ToDictionary(k => k.GroupName,
-			                      v => (v.PriorityInternal, v.Item[0]
-				                            .Value?.Split(',')
-				                            .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-				                            .Select(x => x.Key)),
+			                      v => (v.PriorityInternal,
+			                            v.Item[0].Value?.Split(',').GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase).Select(x => x.Key)),
 			                      StringComparer.InvariantCultureIgnoreCase);
 	}
 }

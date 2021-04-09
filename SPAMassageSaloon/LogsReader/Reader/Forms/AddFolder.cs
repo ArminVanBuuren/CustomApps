@@ -9,7 +9,7 @@ namespace LogsReader.Reader.Forms
 {
 	public partial class AddFolder : Form
 	{
-		private readonly bool _sourceAllDirSearching = false;
+		private readonly bool _sourceAllDirSearching;
 
 		private string _lastDir;
 
@@ -22,26 +22,20 @@ namespace LogsReader.Reader.Forms
 		public AddFolder(string folderPath, bool allDirSearching)
 		{
 			InitializeComponent();
-
 			Icon = Icon.FromHandle(Resources.folder.GetHicon());
 			base.Text = Resources.Txt_Forms_AddFolder;
 			new ToolTip().SetToolTip(checkBoxAllDirectories, Resources.Txt_Forms_AddFolderTooltip);
 			MinimizeBox = false;
 			MaximizeBox = false;
-
 			labelFolder.Text = Resources.Txt_Forms_Folder;
-
 			buttonOK.Enabled = !folderPath.IsNullOrWhiteSpace();
 			SourceFolder = folderPath;
 			_lastDir = folderPath;
 			textBoxFolder.Text = folderPath;
-
 			_sourceAllDirSearching = allDirSearching;
 			checkBoxAllDirectories.Checked = allDirSearching;
 			checkBoxAllDirectories.Text = Resources.Txt_Forms_AllDirectories;
-
 			CenterToScreen();
-
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
@@ -50,6 +44,7 @@ namespace LogsReader.Reader.Forms
 					case Keys.Enter when buttonOK.Enabled:
 						buttonOK_Click(this, EventArgs.Empty);
 						break;
+
 					case Keys.Escape:
 						Close();
 						break;
@@ -64,8 +59,7 @@ namespace LogsReader.Reader.Forms
 			Close();
 		}
 
-		private void buttonCancel_Click(object sender, EventArgs e)
-			=> Close();
+		private void buttonCancel_Click(object sender, EventArgs e) => Close();
 
 		private void textBoxFolder_TextChanged(object sender, EventArgs e)
 		{

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LogsReader.Config;
@@ -27,25 +27,23 @@ namespace LogsReader.Reader
 		private readonly Func<LogsReaderFormScheme, Color> expanderPanelColor = readerForm
 			=> readerForm.BtnSearch.Enabled ? Color.FromArgb(155, 255, 176) : Color.FromArgb(255, 150, 170);
 
-		Color GetExpanderBorderColor(LogsReaderFormScheme readerForm, ExpandCollapsePanel schemeExpander)
+		private Color GetExpanderBorderColor(LogsReaderFormScheme readerForm, ExpandCollapsePanel schemeExpander)
 		{
 			if (schemeExpander.IsChecked)
 				return Color.FromArgb(0, 193, 0);
-
 			if (schemeExpander.CheckBoxEnabled)
 				return InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _)
-					       ? Color.FromArgb(60, 60, 60)
-					       : Color.FromArgb(189, 189, 189);
+					? Color.FromArgb(60, 60, 60)
+					: Color.FromArgb(189, 189, 189);
 
 			return Color.Red;
 		}
 
-		private bool _onAllChekingExpanders = false;
+		private bool _onAllChekingExpanders;
 
 		private GlobalReaderItemsProcessing InProcessing { get; } = new GlobalReaderItemsProcessing();
 
-		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } =
-			new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
+		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
 
 		protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Prompt;
 
@@ -55,12 +53,13 @@ namespace LogsReader.Reader
 
 		public override RefreshDataType DgvDataAfterAssign => RefreshDataType.AllRows;
 
-		public LogsReaderFormGlobal(Encoding defaultEncoding) : base(defaultEncoding, new UserSettings())
+		public LogsReaderFormGlobal(Encoding defaultEncoding)
+			: base(defaultEncoding, new UserSettings())
 		{
 			try
 			{
 				CurrentTransactionsMarkingType = UserSettings.ShowTransactions ? DefaultTransactionsMarkingType : TransactionsMarkingType.None;
-
+				
 				DgvReaderSchemeNameColumn.Visible = true;
 
 				#region Initialize Controls
@@ -74,7 +73,7 @@ namespace LogsReader.Reader
 					Size = new Size(147, 5000),
 					TabIndex = 27
 				};
-
+				
 				panelFlowDoc = new Panel
 				{
 					AutoScroll = true,
@@ -86,7 +85,7 @@ namespace LogsReader.Reader
 					TabIndex = 29
 				};
 				panelFlowDoc.Controls.Add(flowPanelForExpanders);
-
+				
 				checkBoxSelectAll = new CheckBox
 				{
 					AutoSize = true,
@@ -102,7 +101,7 @@ namespace LogsReader.Reader
 					Checked = UserSettings.GlobalSelectAllSchemas
 				};
 				checkBoxSelectAll.CheckedChanged += CheckBoxSelectAllOnCheckedChanged;
-
+				
 				panelCollapseSelectAll = new Panel
 				{
 					BorderStyle = BorderStyle.FixedSingle,
@@ -115,7 +114,7 @@ namespace LogsReader.Reader
 					TabIndex = 28
 				};
 				panelCollapseSelectAll.Controls.Add(checkBoxSelectAll);
-
+				
 				CustomPanel.Controls.Add(panelFlowDoc);
 				CustomPanel.Controls.Add(panelCollapseSelectAll);
 
@@ -137,7 +136,7 @@ namespace LogsReader.Reader
 
 			try
 			{
-				Win32.SuspendHandle(this);
+				this.SuspendHandle();
 				//var current = SynchronizationContext.Current;
 
 				foreach (var readerForm in MainForm.SchemeForms.Values)
@@ -152,7 +151,7 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
-				Win32.ResumeHandle(this);
+				this.ResumeHandle();
 			}
 		}
 
@@ -162,25 +161,24 @@ namespace LogsReader.Reader
 			checkBoxSelectAll.Text = Resources.Txt_Global_SelectAll;
 		}
 
-		ExpandCollapsePanel CreateExpander(LogsReaderFormScheme readerForm)
+		private ExpandCollapsePanel CreateExpander(LogsReaderFormScheme readerForm)
 		{
 			Button buttonBack = null;
 			Button buttonFore = null;
 			ExpandCollapsePanel schemeExpander = null;
-
+			
 			var colorDialog = new ColorDialog
 			{
 				AllowFullOpen = true,
 				FullOpen = true,
 				CustomColors = new[]
-				{
-					ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_BACK),
-					ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_FORE)
-				}
+					{
+						ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_BACK), ColorTranslator.ToOle(LogsReaderMainForm.SCHEME_COLOR_FORE)
+					}
 			};
-
+			
 			var buttonSize = new Size(20, 17);
-
+			
 			var labelBack = new Label
 			{
 				AutoSize = true,
@@ -203,7 +201,7 @@ namespace LogsReader.Reader
 				}
 			};
 			buttonBack.Click += ChangeColor;
-
+			
 			var labelFore = new Label
 			{
 				AutoSize = true,
@@ -226,7 +224,7 @@ namespace LogsReader.Reader
 				}
 			};
 			buttonFore.Click += ChangeColor;
-
+			
 			schemeExpander = new ExpandCollapsePanel
 			{
 				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -249,7 +247,7 @@ namespace LogsReader.Reader
 				Margin = new Padding(3, 3, 3, 0)
 			};
 			schemeExpander.BackColor = GetExpanderBorderColor(readerForm, schemeExpander);
-
+			
 			var expanderPanel = new Panel
 			{
 				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -258,16 +256,23 @@ namespace LogsReader.Reader
 				Size = new Size(schemeExpander.Size.Width - 4, 275)
 			};
 			schemeExpander.Controls.Add(expanderPanel);
-
+			
 			var treeView = readerForm.TreeViewContainer.CreateNewCopy();
 			treeView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 			treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 			treeView.Location = new Point(-1, 23);
 			treeView.Size = new Size(schemeExpander.Size.Width - 2, 253);
-
-			var worker = new System.ComponentModel.BackgroundWorker();
-			worker.DoWork += (sender, e) => expanderPanel.SafeInvoke(() => {
-				expanderPanel.Controls.AddRange(new[] { (Control)buttonBack, buttonFore, labelBack, labelFore, treeView });
+			var worker = new BackgroundWorker();
+			worker.DoWork += (sender, e) => expanderPanel.SafeInvoke(() =>
+			{
+				expanderPanel.Controls.AddRange(new[]
+				{
+					(Control) buttonBack,
+					buttonFore,
+					labelBack,
+					labelFore,
+					treeView
+				});
 			});
 			worker.RunWorkerAsync();
 
@@ -296,9 +301,11 @@ namespace LogsReader.Reader
 					readerForm.ChbxAlreadyUseFilter.Checked = ChbxAlreadyUseFilter.Checked;
 				}
 
-				if (InProcessing.Count > 0 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _) && !_onAllChekingExpanders && !InProcessing.IsAnyWorking)
+				if (InProcessing.Count > 0
+				 && InProcessing.TryGetValue(readerForm.CurrentSettings.Name, out var _)
+				 && !_onAllChekingExpanders
+				 && !InProcessing.IsAnyWorking)
 					await AssignResultAsync(null, null, false);
-
 				ValidationCheck(true);
 			};
 			// горячие клавишы для добавления сервера, типов и директорий в глобальной форме так и в основной
@@ -329,6 +336,7 @@ namespace LogsReader.Reader
 				if (readerForm.BtnSearch.Enabled)
 				{
 					schemeExpander.CheckBoxEnabled = true;
+
 					// выбираем только в случае если открыта Global форма
 					if (MainForm.CurrentForm == this)
 					{
@@ -354,7 +362,6 @@ namespace LogsReader.Reader
 			readerForm.OnSearchChanged += async (sender, args) =>
 			{
 				schemeExpander.Enabled = !readerForm.IsWorking;
-
 				if (!InProcessing.ContainsKey(readerForm))
 					return;
 
@@ -372,13 +379,11 @@ namespace LogsReader.Reader
 				}
 
 				TimeWatcher.Stop();
-
 				MainViewer.Clear();
 
 				// заполняем DataGrid
 				if (await AssignResultAsync(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, null, true))
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
-
 				IsWorking = false;
 				ReportProcessStatus(GetResultReaders());
 				Progress = 100;
@@ -392,7 +397,6 @@ namespace LogsReader.Reader
 					await STREAM.GarbageCollectAsync().ConfigureAwait(false);
 				}
 			};
-
 			return schemeExpander;
 
 			void ChangeColor(object sender, EventArgs e)
@@ -401,7 +405,6 @@ namespace LogsReader.Reader
 					return;
 
 				colorDialog.Color = button.BackColor;
-
 				if (colorDialog.ShowDialog() != DialogResult.OK)
 					return;
 
@@ -435,7 +438,6 @@ namespace LogsReader.Reader
 				return;
 
 			base.ReportProcessStatus(readers);
-
 			if (InProcessing.Where(x => x.Item1.IsWorking).All(x => x.Item1.OnPause))
 				base.PauseAll(); // меняем иконку на пуск
 			else
@@ -462,8 +464,7 @@ namespace LogsReader.Reader
 			SchemeExpander_ExpandCollapse(this, null);
 		}
 
-		protected override void CustomPanel_Resize(object sender, EventArgs args)
-			=> SchemeExpander_ExpandCollapse(this, null);
+		protected override void CustomPanel_Resize(object sender, EventArgs args) => SchemeExpander_ExpandCollapse(this, null);
 
 		private void SchemeExpander_ExpandCollapse(object sender, ExpandCollapseEventArgs e)
 		{
@@ -473,6 +474,7 @@ namespace LogsReader.Reader
 			try
 			{
 				var height = 0;
+
 				foreach (var expander in flowPanelForExpanders.Controls.OfType<ExpandCollapsePanel>())
 				{
 					if (expander.IsExpanded)
@@ -507,7 +509,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
+		private class GlobalReaderItemsProcessing : IEnumerable<(LogsReaderFormScheme, Task)>
 		{
 			private readonly Dictionary<string, (LogsReaderFormScheme, Task)> _items = new Dictionary<string, (LogsReaderFormScheme, Task)>();
 
@@ -518,6 +520,7 @@ namespace LogsReader.Reader
 				get
 				{
 					var isAnyWorking = _items != null && _items.Any(x => x.Value.Item1.IsWorking);
+
 					if (!isAnyWorking)
 					{
 						IsCompleted = true;
@@ -527,13 +530,14 @@ namespace LogsReader.Reader
 				}
 			}
 
-			public bool IsCompleted { get; private set; } = false;
+			public bool IsCompleted { get; private set; }
 
 			public bool ContainsKey(LogsReaderFormScheme readerForm) => TryGetValue(readerForm.CurrentSettings.Name, out var _);
 
 			public bool TryGetValue(string schemeName, out LogsReaderFormScheme result)
 			{
 				result = null;
+
 				if (_items.TryGetValue(schemeName, out var result2))
 				{
 					result = result2.Item1;
@@ -559,9 +563,7 @@ namespace LogsReader.Reader
 
 			public void TryToStop()
 			{
-				foreach (var reader in _items
-					.Where(x => x.Value.Item1.IsWorking)
-					.Select(x => x.Value.Item1))
+				foreach (var reader in _items.Where(x => x.Value.Item1.IsWorking).Select(x => x.Value.Item1))
 					reader.BtnSearch_Click(this, EventArgs.Empty);
 			}
 
@@ -581,19 +583,17 @@ namespace LogsReader.Reader
 			if (!IsWorking)
 			{
 				TimeWatcher = new Stopwatch();
+
 				try
 				{
 					base.BtnSearch_Click(sender, e);
 					InProcessing.Clear(); // реализовывать ClearForm в форме Global нельзя!
-
+					
 					IsWorking = true;
 					ReportStatus(Resources.Txt_LogsReaderForm_Working, ReportStatusType.Success);
-
+					
 					TimeWatcher.Start();
-
-					InProcessing.Start(AllExpanders
-						                   .Where(x => x.Value.IsChecked)
-						                   .Select(x => x.Key));
+					InProcessing.Start(AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key));
 				}
 				catch (Exception ex)
 				{
@@ -610,7 +610,6 @@ namespace LogsReader.Reader
 		protected override void ChangeFormStatus()
 		{
 			base.ChangeFormStatus();
-
 			checkBoxSelectAll.Cursor = Cursors.Default;
 			panelFlowDoc.Cursor = Cursors.Default;
 		}
@@ -619,27 +618,18 @@ namespace LogsReader.Reader
 		{
 			var result = new List<DataTemplate>();
 
-			foreach (var schemeForm in AllExpanders
-				.Where(x => x.Value.IsChecked)
-				.Select(x => x.Key)
-				.Intersect(InProcessing.Select(x => x.Item1)))
+			foreach (var schemeForm in AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key).Intersect(InProcessing.Select(x => x.Item1)))
 			{
 				if (!schemeForm.HasAnyResult || schemeForm.IsWorking)
 					continue;
+
 				result.AddRange(schemeForm.OverallResultList);
 			}
 
-			return result.OrderBy(x => x.Date)
-				.ThenBy(x => x.ParentReader.Priority)
-				.ThenBy(x => x.File)
-				.ThenBy(x => x.FoundLineID)
-				.ToList();
+			return result.OrderBy(x => x.Date).ThenBy(x => x.ParentReader.Priority).ThenBy(x => x.File).ThenBy(x => x.FoundLineID).ToList();
 		}
 
-		internal override IEnumerable<TraceReader> GetResultReaders()
-			=> InProcessing
-				.SelectMany(x => x.Item1.GetResultReaders())
-				.ToList();
+		internal override IEnumerable<TraceReader> GetResultReaders() => InProcessing.SelectMany(x => x.Item1.GetResultReaders()).ToList();
 
 		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
@@ -682,7 +672,6 @@ namespace LogsReader.Reader
 
 			if (row.DefaultCellStyle.BackColor != result.FormBackColor)
 				row.DefaultCellStyle.BackColor = result.FormBackColor;
-
 			if (row.DefaultCellStyle.ForeColor != result.FormForeColor)
 				row.DefaultCellStyle.ForeColor = result.FormForeColor;
 		}
@@ -690,21 +679,17 @@ namespace LogsReader.Reader
 		protected override void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType)
 			=> UserSettings.ShowTransactions = newType != TransactionsMarkingType.None;
 
-		private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e)
-			=> await CheckBoxSelectAllOnCheckedChangedAsync(sender, e);
+		private async void CheckBoxSelectAllOnCheckedChanged(object sender, EventArgs e) => await CheckBoxSelectAllOnCheckedChangedAsync(sender, e);
 
 		private async Task CheckBoxSelectAllOnCheckedChangedAsync(object sender, EventArgs e)
 		{
 			try
 			{
 				_onAllChekingExpanders = true;
-
 				foreach (var expander in AllExpanders.Values.Where(expander => expander.CheckBoxEnabled))
 					expander.IsChecked = checkBoxSelectAll.Checked;
-
 				if (InProcessing.Count > 0)
 					await AssignResultAsync(null, null, false);
-
 				UserSettings.GlobalSelectAllSchemas = checkBoxSelectAll.Checked;
 			}
 			catch (Exception ex)
@@ -734,6 +719,7 @@ namespace LogsReader.Reader
 		internal override void DateStartFilterOnValueChanged(object sender, EventArgs e)
 		{
 			base.DateStartFilterOnValueChanged(sender, e);
+
 			foreach (var schemeForm in GetSelectedSchemas())
 			{
 				schemeForm.DateStartFilter.Value = DateStartFilter.Value;
@@ -745,6 +731,7 @@ namespace LogsReader.Reader
 		internal override void DateEndFilterOnValueChanged(object sender, EventArgs e)
 		{
 			base.DateEndFilterOnValueChanged(sender, e);
+
 			foreach (var schemeForm in GetSelectedSchemas())
 			{
 				schemeForm.DateEndFilter.Value = DateEndFilter.Value;
@@ -787,8 +774,7 @@ namespace LogsReader.Reader
 				schemeForm.ChbxAlreadyUseFilter.Checked = ((CheckBox) sender).Checked;
 		}
 
-		IEnumerable<LogsReaderFormScheme> GetSelectedSchemas()
-			=> AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key).ToList();
+		private IEnumerable<LogsReaderFormScheme> GetSelectedSchemas() => AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key).ToList();
 
 		protected override void ValidationCheck(bool clearStatus)
 		{

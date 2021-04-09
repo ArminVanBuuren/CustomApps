@@ -70,7 +70,7 @@ namespace LogsReader
 		}
 
 		/// <summary>
-		/// Настройки схем
+		///     Настройки схем
 		/// </summary>
 		public static LRSettings Settings { get; private set; }
 
@@ -96,7 +96,8 @@ namespace LogsReader
 
 		public int ActiveProcessesCount => SchemeForms.Values.Count(x => x.Progress > 0 && x.Progress < 100 || x.Progress == 0 && x.IsWorking);
 
-		public int ActiveTotalProgress => SchemeForms.Values.Where(x => x.Progress > 0 && x.Progress < 100 || x.Progress == 0 && x.IsWorking).Sum(x => x.Progress);
+		public int ActiveTotalProgress
+			=> SchemeForms.Values.Where(x => x.Progress > 0 && x.Progress < 100 || x.Progress == 0 && x.IsWorking).Sum(x => x.Progress);
 
 		static LogsReaderMainForm()
 		{
@@ -105,6 +106,7 @@ namespace LogsReader
 				using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
 				{
 					var obj = reg[nameof(Credentials)];
+
 					if (obj is byte[] array)
 					{
 						using (var stream = new MemoryStream(array))
@@ -140,7 +142,7 @@ namespace LogsReader
 			}
 		}
 
-		static void SerializeUserCreditails()
+		private static void SerializeUserCreditails()
 		{
 			try
 			{
@@ -157,20 +159,15 @@ namespace LogsReader
 		public LogsReaderMainForm()
 		{
 			InitializeComponent();
+
 			try
 			{
 				SuspendLayout();
-
 				MainTabControl.SuspendLayout();
 				MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-
 				base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
 				KeyPreview = true;
-
-				Global = new LogsReaderFormGlobal(Encoding.UTF8)
-				{
-					Dock = DockStyle.Fill
-				};
+				Global = new LogsReaderFormGlobal(Encoding.UTF8) { Dock = DockStyle.Fill };
 				Global.SuspendLayout();
 				var globalPage = new TabPage
 				{
@@ -183,21 +180,17 @@ namespace LogsReader
 				};
 				globalPage.Controls.Add(Global);
 				MainTabControl.TabPages.Add(globalPage);
-
 				Settings = LRSettings.Deserialize();
 				if (Settings.SchemeList == null)
 					Settings.AssignDefaultSchemas();
 
 				foreach (var scheme in Settings.SchemeList)
 				{
-					var schemeForm = new LogsReaderFormScheme(scheme)
-					{
-						Dock = DockStyle.Fill
-					};
+					var schemeForm = new LogsReaderFormScheme(scheme) { Dock = DockStyle.Fill };
+
 					try
 					{
 						schemeForm.SuspendLayout();
-
 						var page = new TabPage
 						{
 							Text = scheme.Name,
@@ -207,10 +200,8 @@ namespace LogsReader
 							Padding = new Padding(0)
 						};
 						page.Controls.Add(schemeForm);
-
 						MainTabControl.TabPages.Add(page);
 						SchemeForms.Add(page, schemeForm);
-
 						schemeForm.Load += (sender, args) =>
 						{
 							schemeForm.ApplyFormSettings();
@@ -231,7 +222,6 @@ namespace LogsReader
 
 				Global.Initialize(this);
 				Global.Load += (sender, args) => { Global.ApplyFormSettings(); };
-
 				MainTabControl.DrawItem += MainTabControl_DrawItem;
 				LogsReaderFormBase prevSelection = null;
 				MainTabControl.Selected += (sender, args) =>
@@ -263,11 +253,9 @@ namespace LogsReader
 						// ignored
 					}
 				};
-
 				Shown += (s, e) =>
 				{
 					ApplySettings();
-
 					foreach (var schemeForm in SchemeForms.Values)
 						schemeForm.SynchronizeTreeView();
 				};
@@ -284,14 +272,13 @@ namespace LogsReader
 			finally
 			{
 				CenterToScreen();
-
 				Global?.ResumeLayout();
 				MainTabControl.ResumeLayout();
 				ResumeLayout();
 			}
 		}
 
-		static async void SaveSchemas(object sender, EventArgs args)
+		private static async void SaveSchemas(object sender, EventArgs args)
 		{
 			if (Settings != null)
 				await LRSettings.SerializeAsync(Settings);
@@ -300,6 +287,7 @@ namespace LogsReader
 		private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			var page = MainTabControl.TabPages[e.Index];
+
 			if (page == MainTabControl.SelectedTab)
 			{
 				if (page.Name == GLOBAL_PAGE_NAME)
@@ -320,18 +308,16 @@ namespace LogsReader
 			}
 		}
 
-		void RenderTabPage(TabPage page, DrawItemEventArgs e, Color fore, Color text)
+		private void RenderTabPage(TabPage page, DrawItemEventArgs e, Color fore, Color text)
 		{
 			e.Graphics.FillRectangle(new SolidBrush(fore), e.Bounds);
-
 			var paddedBounds = e.Bounds;
 			var yOffset = e.State == DrawItemState.Selected ? -2 : 1;
 			paddedBounds.Offset(1, yOffset);
 			TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, text);
 		}
 
-		protected override void OnKeyDown(KeyEventArgs e)
-			=> CurrentForm?.LogsReaderKeyDown(this, e);
+		protected override void OnKeyDown(KeyEventArgs e) => CurrentForm?.LogsReaderKeyDown(this, e);
 
 		public void ApplySettings()
 		{
@@ -353,11 +339,9 @@ namespace LogsReader
 			{
 				if (Settings != null)
 					LRSettings.Serialize(Settings);
-
 				Global.SaveData();
 				foreach (var logsReader in SchemeForms.Values)
 					logsReader.SaveData();
-
 				Properties.Settings.Default.FormLocation = Location;
 				Properties.Settings.Default.FormSize = Size;
 				Properties.Settings.Default.FormState = WindowState;

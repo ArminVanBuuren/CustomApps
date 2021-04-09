@@ -6,23 +6,24 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using LogsReader;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using RegExTester;
+using SPAFilter;
+using SPAMassageSaloon.Common;
+using SPAMassageSaloon.Properties;
 using Utils;
 using Utils.AppUpdater;
 using Utils.Handles;
 using Utils.UIControls.Main;
 using Utils.WinForm;
-using SPAMassageSaloon.Common;
-using SPAMassageSaloon.Properties;
-using LogsReader;
-using SPAFilter;
 using XPathTester;
 using FontStyle = System.Drawing.FontStyle;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using System.Threading.Tasks;
 
 namespace SPAMassageSaloon
 {
@@ -32,7 +33,6 @@ namespace SPAMassageSaloon
 		Russian = 1
 	}
 
-
 	public partial class MainForm : Form
 	{
 		internal static readonly string AppName = "SPA Massage Saloon";
@@ -41,9 +41,9 @@ namespace SPAMassageSaloon
 
 		private AboutWindow _about;
 		private NationalLanguage _language;
-		private int _countOfLastProcess = 0;
-		private int _countOfXPathTester = 0;
-		private int _countOfRegexTester = 0;
+		private int _countOfLastProcess;
+		private int _countOfXPathTester;
+		private int _countOfRegexTester;
 
 		public ToolStripStatusLabel _cpuUsage;
 		public ToolStripStatusLabel _threadsUsage;
@@ -51,9 +51,9 @@ namespace SPAMassageSaloon
 
 		private ApplicationUpdater AppUpdater { get; set; }
 
-		internal int CountOfDefaultStatusItems { get; private set; } = 0;
+		internal int CountOfDefaultStatusItems { get; private set; }
 
-		public bool FormOnClosing { get; private set; } = false;
+		public bool FormOnClosing { get; private set; }
 
 		public bool IsActivated { get; private set; }
 
@@ -68,18 +68,16 @@ namespace SPAMassageSaloon
 				{
 					_language = value;
 					SetRegeditValue(nameof(Language), value);
-
 					var culture = value == NationalLanguage.Russian ? new CultureInfo("ru-RU") : new CultureInfo("en-US");
-
-
+					
 					CultureInfo.DefaultThreadCurrentCulture = culture;
 					CultureInfo.DefaultThreadCurrentUICulture = culture;
-
+					
 					Thread.CurrentThread.CurrentCulture = culture;
 					Thread.CurrentThread.CurrentUICulture = culture;
 					Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy HH:mm:ss.fff";
 					Thread.CurrentThread.CurrentCulture.DateTimeFormat.LongDatePattern = "dd.MM.yyyy HH:mm:ss.fff";
-
+					
 					CultureInfo.DefaultThreadCurrentCulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
 					CultureInfo.DefaultThreadCurrentUICulture.DateTimeFormat = CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat;
 
@@ -96,7 +94,6 @@ namespace SPAMassageSaloon
 					}
 
 					_about?.ApplySettings();
-
 					languageToolStripMenuItem.Text = Resources.Txt_Language;
 					aboutToolStripMenuItem.Text = Resources.Txt_About;
 				}
@@ -107,7 +104,7 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		protected bool IsSuspended { get; private set; } = false;
+		protected bool IsSuspended { get; private set; }
 
 		static MainForm()
 		{
@@ -122,7 +119,7 @@ namespace SPAMassageSaloon
 			InitializeComponent();
 		}
 
-		void OpenReservedThreads()
+		private void OpenReservedThreads()
 		{
 			if (ThreadPool.SetMinThreads(60, 0))
 			{
@@ -150,6 +147,7 @@ namespace SPAMassageSaloon
 					if (!IsMdiChild)
 					{
 						WindowState = Settings.Default.FormState;
+
 						if (WindowState != FormWindowState.Maximized
 						 && (Settings.Default.FormSize.Height < 100
 						  || Settings.Default.FormSize.Width < 100
@@ -169,11 +167,13 @@ namespace SPAMassageSaloon
 
 				if (!Enum.TryParse(GetRegeditValue(nameof(Language)), out NationalLanguage lang))
 					lang = NationalLanguage.English;
+
 				switch (lang)
 				{
 					case NationalLanguage.Russian:
 						russianToolStripMenuItem_Click(this, null);
 						break;
+
 					default:
 						englishToolStripMenuItem_Click(this, null);
 						break;
@@ -193,7 +193,7 @@ namespace SPAMassageSaloon
 
 				var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
 				var statusStripItemsPaddingEnd = new Padding(-3, 2, 1, 2);
-
+				
 				var autor = new ToolStripButton("?")
 				{
 					Font = new Font("Verdana", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0),
@@ -205,11 +205,11 @@ namespace SPAMassageSaloon
 					Presenter.ShowOwner();
 					STREAM.GarbageCollect();
 				};
-
+				
 				var toolToolStripCollection = new List<ToolStripItem>();
 				toolToolStripCollection.Add(autor);
 				toolToolStripCollection.Add(new ToolStripSeparator());
-
+				
 				toolToolStripCollection.Add(new ToolStripStatusLabel("CPU:")
 				{
 					Font = Font,
@@ -222,7 +222,7 @@ namespace SPAMassageSaloon
 				};
 				toolToolStripCollection.Add(_cpuUsage);
 				toolToolStripCollection.Add(new ToolStripSeparator());
-
+				
 				toolToolStripCollection.Add(new ToolStripStatusLabel("Threads:")
 				{
 					Font = Font,
@@ -235,7 +235,6 @@ namespace SPAMassageSaloon
 				};
 				toolToolStripCollection.Add(_threadsUsage);
 				toolToolStripCollection.Add(new ToolStripSeparator());
-
 				toolToolStripCollection.Add(new ToolStripStatusLabel("RAM:")
 				{
 					Font = Font,
@@ -255,7 +254,7 @@ namespace SPAMassageSaloon
 						base.Text = FormName;
 				};
 				statusStrip.Items.AddRange(toolToolStripCollection.ToArray());
-
+				
 				Closing += (o, args) =>
 				{
 					try
@@ -286,7 +285,6 @@ namespace SPAMassageSaloon
 			{
 				CenterToScreen();
 				Visible = true;
-
 				var monitoring = new Thread(CalculateLocalResources)
 				{
 					IsBackground = true,
@@ -305,12 +303,11 @@ namespace SPAMassageSaloon
 
 				var separator = $"\r\n{new string('-', 61)}\r\n";
 				var description = separator.TrimStart()
-				                  + string.Join(separator,
-				                                args.Control.Select(x
-					                                                    => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}"))
-				                          .Trim()
-				                  + separator.TrimEnd();
-
+				                + string.Join(separator,
+				                              args.Control.Select(x
+					                                                  => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}"))
+				                        .Trim()
+				                + separator.TrimEnd();
 				ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().Version, BuildTime, description).Trim(),
 				                   MessageBoxIcon.Information,
 				                   AppName);
@@ -357,14 +354,15 @@ namespace SPAMassageSaloon
 		}
 
 		/// <summary>
-		/// Мониторинг системных ресурсов
+		///     Мониторинг системных ресурсов
 		/// </summary>
-		void CalculateLocalResources()
+		private void CalculateLocalResources()
 		{
 			try
 			{
 				var curProcName = SERVER.ObtainCurrentProcessName();
 				PerformanceCounter appCPU = null;
+
 				if (curProcName != null)
 				{
 					appCPU = new PerformanceCounter("Process", "% Processor Time", curProcName, true);
@@ -399,6 +397,7 @@ namespace SPAMassageSaloon
 				var cpuUsage = "0";
 				var threadsUsage = "0";
 				var ramUsage = "0";
+
 				while (!FormOnClosing)
 				{
 					try
@@ -436,25 +435,25 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		void Monitoring(string cpuUsage, string threadsUsage, string ramUsage, Action<int, int> taskBarNotify)
+		private void Monitoring(string cpuUsage, string threadsUsage, string ramUsage, Action<int, int> taskBarNotify)
 		{
 			_cpuUsage.Text = cpuUsage;
 			_threadsUsage.Text = threadsUsage;
 			_ramUsage.Text = ramUsage;
-
 			var processCount = 0;
 			var totalProgress = 0;
+
 			foreach (var form in MdiChildren.OfType<ISaloonForm>())
 			{
 				if (form is Form child && child.IsDisposed)
 					continue;
+
 				processCount += form.ActiveProcessesCount;
 				totalProgress += form.ActiveTotalProgress;
 			}
 
 			if (_countOfLastProcess > 0 && processCount == 0)
 				FlashWindow.Flash(this);
-
 			taskBarNotify?.Invoke(processCount, totalProgress);
 			_countOfLastProcess = processCount;
 		}
@@ -462,10 +461,14 @@ namespace SPAMassageSaloon
 		private static void SetTaskBarOverlay(int countItem)
 		{
 			var bmp = new Bitmap(32, 32);
+
 			using (var g = Graphics.FromImage(bmp))
 			{
 				g.FillEllipse(Brushes.Red, new Rectangle(new Point(4, 4), new Size(27, 27)));
-				g.DrawString(countItem.ToString(), new Font("Sans serif", 16, GraphicsUnit.Point), Brushes.White, new Rectangle(new Point(countItem <= 9 ? 8 : 1, 5), bmp.Size));
+				g.DrawString(countItem.ToString(),
+				             new Font("Sans serif", 16, GraphicsUnit.Point),
+				             Brushes.White,
+				             new Rectangle(new Point(countItem <= 9 ? 8 : 1, 5), bmp.Size));
 			}
 
 			TaskbarManager.Instance.SetOverlayIcon(Icon.FromHandle(bmp.GetHicon()), "");
@@ -500,8 +503,7 @@ namespace SPAMassageSaloon
 				return form;
 			});
 
-		private void toolStripSpaFilterButton_Click(object sender, EventArgs e)
-			=> ShowMdiForm(SPAFilterForm.GetControl);
+		private void toolStripSpaFilterButton_Click(object sender, EventArgs e) => ShowMdiForm(SPAFilterForm.GetControl);
 
 		private void toolStripXPathButton_Click(object sender, EventArgs e)
 			=> ShowMdiForm(() =>
@@ -516,7 +518,7 @@ namespace SPAMassageSaloon
 		private void toolStripRegexTester_Click(object sender, EventArgs e)
 			=> ShowMdiForm(() =>
 			               {
-				               var tester = new RegExTester.frmMain();
+				               var tester = new frmMain();
 				               tester.Load += (o, args) => _countOfRegexTester++;
 				               tester.Closed += (o, args) => _countOfRegexTester--;
 				               return tester;
@@ -531,14 +533,12 @@ namespace SPAMassageSaloon
 			try
 			{
 				SuspendHandle();
-
 				form = formMaker.Invoke();
 				if (form == null)
 					return null;
 
 				form.MdiParent = this;
 				//  form.WindowState = FormWindowState.Maximized;
-
 				form.TopLevel = false;
 				form.ControlBox = false;
 				form.Dock = DockStyle.Fill;
@@ -565,6 +565,7 @@ namespace SPAMassageSaloon
 			foreach (var f in MdiChildren)
 			{
 				form = f as T;
+
 				if (form != null)
 				{
 					f.Activate();
@@ -581,7 +582,7 @@ namespace SPAMassageSaloon
 			try
 			{
 				var mdiForm = sender as Form;
-				var button = new MDIManagerButton(mdiForm) {BackColor = Color.White};
+				var button = new MDIManagerButton(mdiForm) { BackColor = Color.White };
 				var mainForm = mdiForm?.MdiParent as MainForm;
 				var status = mainForm?.statusStrip;
 				if (status == null)
@@ -641,6 +642,7 @@ namespace SPAMassageSaloon
 					case LogsReaderMainForm _:
 						status.Items.Insert(mainForm.CountOfDefaultStatusItems, button);
 						break;
+
 					case SPAFilterForm _:
 						status.Items.Insert(status.Items.Count > mainForm.CountOfDefaultStatusItems
 						                 && status.Items[mainForm.CountOfDefaultStatusItems] is MDIManagerButton mdiButton
@@ -649,6 +651,7 @@ namespace SPAMassageSaloon
 							                    : mainForm.CountOfDefaultStatusItems,
 						                    button);
 						break;
+
 					default:
 						status.Items.Add(button);
 						break;
@@ -660,20 +663,19 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		void SuspendHandle()
+		private void SuspendHandle()
 		{
 			IsSuspended = true;
 			Win32.SuspendHandle(this);
 		}
 
-		void ResumeHandle()
+		private void ResumeHandle()
 		{
 			IsSuspended = false;
 			Win32.ResumeHandle(this);
 		}
 
-		private void toolButtonAbout_ButtonClick(object sender, EventArgs e)
-			=> toolButtonAbout.ShowDropDown();
+		private void toolButtonAbout_ButtonClick(object sender, EventArgs e) => toolButtonAbout.ShowDropDown();
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -720,7 +722,7 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		string GetRegeditValue(string name)
+		private string GetRegeditValue(string name)
 		{
 			try
 			{
@@ -733,7 +735,7 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		void SetRegeditValue(string name, object value)
+		private void SetRegeditValue(string name, object value)
 		{
 			try
 			{

@@ -30,12 +30,9 @@ namespace LogsReader
 					securedPassword.AppendChar(ch);
 
 				// сначала приоритетнее без домена, должен быть первым в списке
-				var listCredential = new List<NetworkCredential>
-				{
-					new NetworkCredential(UserName, securedPassword)
-				};
-
+				var listCredential = new List<NetworkCredential> { new NetworkCredential(UserName, securedPassword) };
 				var domain_Username = UserName.Split('\\');
+
 				if (domain_Username.Length > 1)
 				{
 					listCredential.Add(new NetworkCredential(domain_Username[1], securedPassword, domain_Username[0]));

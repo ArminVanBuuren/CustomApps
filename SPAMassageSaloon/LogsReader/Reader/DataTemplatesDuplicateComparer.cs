@@ -12,6 +12,7 @@ namespace LogsReader.Reader
 				// равны
 				case null when y == null:
 					return 0;
+
 				// y - больше
 				case null:
 					return 1;
@@ -26,7 +27,6 @@ namespace LogsReader.Reader
 
 			var xDate = x.Date ?? DateTime.MinValue;
 			var yDate = y.Date ?? DateTime.MinValue;
-
 			var result = xDate.CompareTo(yDate);
 
 			if (result == 0)
@@ -37,8 +37,8 @@ namespace LogsReader.Reader
 				}
 
 				return x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial)
-					       ? DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime)
-					       : string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
+					? DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime)
+					: string.CompareOrdinal(x.ParentReader.FileNamePartial, y.ParentReader.FileNamePartial);
 			}
 
 			return result;

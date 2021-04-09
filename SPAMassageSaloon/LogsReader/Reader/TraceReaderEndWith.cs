@@ -24,31 +24,29 @@ namespace LogsReader.Reader
 					Lines++;
 
 					Found.AppendNextLine(line);
+
 					if (EndTraceLineWith.IsMatch(line))
-					{
 						Commit();
-					}
 
 					return;
 				}
 			}
 
 			AddLine(line);
-
 			if (!IsMatched(line))
 				return;
 
 			Commit();
-
-
 			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
 			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 			{
 				var pastLine = revercePastTraceLines.Peek();
 				// Попытки спарсить сохраненные предыдущие строки как конец трассировки
 				if (EndTraceLineWith.IsMatch(pastLine))
 					break;
+
 				Found.AppendPastLine(revercePastTraceLines.Dequeue());
 			}
 

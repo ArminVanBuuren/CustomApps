@@ -29,42 +29,42 @@ namespace LogsReader.Reader
 		public LogsReaderPerformerBase Base { get; set; }
 
 		/// <summary>
-		/// Основные настройки
+		///     Основные настройки
 		/// </summary>
 		public LRSettingsScheme Settings { get; set; }
 
 		/// <summary>
-		/// Запрос на ожидание остановки выполнения поиска
+		///     Запрос на ожидание остановки выполнения поиска
 		/// </summary>
 		public bool IsStopPending { get; set; }
 
 		/// <summary>
-		/// Если возникла ошибка переолнения памяти
+		///     Если возникла ошибка переолнения памяти
 		/// </summary>
-		public bool HasOutOfMemoryException { get; set; } = false;
+		public bool HasOutOfMemoryException { get; set; }
 	}
 
 	public abstract class LogsReaderPerformerBase : IReaderPerformer, IDisposable
 	{
-		private static long _seqBaseInstance = 0;
-		private readonly long _instanceId = 0;
+		private static long _seqBaseInstance;
+		private readonly long _instanceId;
 		private readonly object _syncTrn = new object();
 		private readonly Dictionary<string, Regex> _transactionValues;
 
 		private ReaderPerformer Parent { get; }
 
 		/// <summary>
-		/// Проверяет на совпадение по найденным транзакциям
+		///     Проверяет на совпадение по найденным транзакциям
 		/// </summary>
 		internal OutFuncDelegate<string, string, bool> IsMatchByTransactions { get; }
 
 		/// <summary>
-		/// Проверяет на совпадение по обычному поиску
+		///     Проверяет на совпадение по обычному поиску
 		/// </summary>
 		protected Func<string, bool> IsMatch { get; private set; }
 
 		/// <summary>
-		/// Функция для получение определенного <see cref="TraceReader"/> согласно настройкам
+		///     Функция для получение определенного <see cref="TraceReader" /> согласно настройкам
 		/// </summary>
 		protected Func<(string server, string filePath, string originalFolder), TraceReader> GetTraceReader { get; }
 
@@ -166,12 +166,11 @@ namespace LogsReader.Reader
 			IsMatchByTransactions = (string input, out string output) =>
 			{
 				output = null;
-
 				List<Regex> trnList;
 				lock (_syncTrn)
 					trnList = _transactionValues.Values.ToList();
-
 				var trnsLimit = trnList.Skip(Math.Max(0, RowsLimit == 0 ? trnList.Count : trnList.Count - RowsLimit / 2));
+
 				foreach (var regex in trnsLimit)
 				{
 					if (regex == null)
@@ -196,7 +195,7 @@ namespace LogsReader.Reader
 				GetTraceReader = data => new TraceReaderEndWith(this, data.server, data.filePath, data.originalFolder);
 			else
 				GetTraceReader = data => new TraceReaderSimple(this, data.server, data.filePath, data.originalFolder);
-
+			
 			if (Settings.TraceParse.IsCorrectCustomFunction)
 				TraceParseCustomFunction = Settings.TraceParse.GetCustomFunction();
 		}
@@ -221,16 +220,21 @@ namespace LogsReader.Reader
 				if (!REGEX.Verify(findMessage))
 					throw new ArgumentException(string.Format(Resources.Txt_LogsReaderPerformer_IncorrectSearchPattern, findMessage));
 
-				var searchPattern = new Regex(findMessage, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
+				var searchPattern = new Regex(findMessage,
+				                              RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
+				                              LRSettings.SEARCHING_MATCH_TIMEOUT);
 				IsMatch = input => searchPattern.IsMatch(input);
 			}
 			else
 			{
 				// пытаемся перевести выражение в регулярку, т.к. поиск будет быстрее
 				var converToRegex = Regex.Escape(findMessage);
+
 				if (REGEX.Verify(converToRegex))
 				{
-					var simpleSearchByRegex = new Regex(converToRegex, RegexOptions.Compiled | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
+					var simpleSearchByRegex = new Regex(converToRegex,
+					                                    RegexOptions.Compiled | RegexOptions.CultureInvariant,
+					                                    LRSettings.SEARCHING_MATCH_TIMEOUT);
 					IsMatch = input => simpleSearchByRegex.IsMatch(input);
 				}
 				else
@@ -241,7 +245,7 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// Добавить спарсенную транзакцию в общий список для всех лог файлов, текущей схемы
+		///     Добавить спарсенную транзакцию в общий список для всех лог файлов, текущей схемы
 		/// </summary>
 		/// <param name="trn"></param>
 		protected bool AddTransactionValue(string trn)
@@ -253,7 +257,7 @@ namespace LogsReader.Reader
 						return false;
 
 				var regex = new Regex(Regex.Escape(trn), RegexOptions.Compiled | RegexOptions.CultureInvariant, LRSettings.SEARCHING_MATCH_TIMEOUT);
-
+				
 				lock (_syncTrn)
 					_transactionValues.Add(trn, regex);
 
@@ -272,7 +276,7 @@ namespace LogsReader.Reader
 		public abstract void Abort();
 
 		/// <summary>
-		/// Сравниваются только базовые настройки и инстанс. Игнорируется изменения настроек поиска свойства IsMatch.
+		///     Сравниваются только базовые настройки и инстанс. Игнорируется изменения настроек поиска свойства IsMatch.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -285,7 +289,7 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// в качестве хэша должен быть только хэш базовых настроек
+		///     в качестве хэша должен быть только хэш базовых настроек
 		/// </summary>
 		/// <returns></returns>
 		public override int GetHashCode()

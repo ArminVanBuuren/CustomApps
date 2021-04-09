@@ -34,6 +34,7 @@ namespace LogsReader.Config
 				var resStr = GetValue(nameof(UseRegex));
 				if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 					return true;
+
 				return res;
 			}
 			set => SetValue(nameof(UseRegex), value);
@@ -88,6 +89,7 @@ namespace LogsReader.Config
 				var resStr = GetValue(nameof(MessageWordWrap));
 				if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 					return true;
+
 				return res;
 			}
 			set => SetValue(nameof(MessageWordWrap), value);
@@ -112,6 +114,7 @@ namespace LogsReader.Config
 				var resStr = GetValue(nameof(TraceWordWrap));
 				if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 					return true;
+
 				return res;
 			}
 			set => SetValue(nameof(TraceWordWrap), value);
@@ -144,6 +147,7 @@ namespace LogsReader.Config
 					using (var regControl = _getRegeditControl.Invoke())
 					{
 						var obj = regControl[nameof(Template)];
+
 						if (obj is byte[] array)
 						{
 							using (var stream = new MemoryStream(array))
@@ -180,6 +184,7 @@ namespace LogsReader.Config
 				var resStr = GetValue(nameof(GlobalSelectAllSchemas));
 				if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 					return false;
+
 				return res;
 			}
 			set => SetValue(nameof(GlobalSelectAllSchemas), value);
@@ -192,6 +197,7 @@ namespace LogsReader.Config
 				var resStr = GetValue(nameof(ShowTransactions));
 				if (resStr.IsNullOrWhiteSpace() || !bool.TryParse(resStr, out var res))
 					return true;
+
 				return res;
 			}
 			set => SetValue(nameof(ShowTransactions), value);
@@ -243,6 +249,7 @@ namespace LogsReader.Config
 			var vlueStr = GetValue(name);
 			if (int.TryParse(vlueStr, out var result) && result >= rangeFrom && result <= rangeTo)
 				return result;
+
 			return @default;
 		}
 
@@ -272,7 +279,6 @@ namespace LogsReader.Config
 			}
 		}
 
-		public void Dispose()
-			=> parentRegistry?.Dispose();
+		public void Dispose() => parentRegistry?.Dispose();
 	}
 }

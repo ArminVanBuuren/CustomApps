@@ -2,20 +2,21 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using SPAMassageSaloon.Properties;
 using Utils;
 
 namespace SPAMassageSaloon
 {
 	internal class MDIManagerButton : ToolStripStatusLabel
 	{
-		public Form mdiForm { get; private set; }
+		public Form mdiForm { get; }
 		public event EventHandler MClick;
 		public event EventHandler Activated;
 		public event EventHandler MClose;
 
 		private int btnTop, btnLeft;
 		private Rectangle btnRectangle;
-		private bool mouseOnCloseBtn = false;
+		private bool mouseOnCloseBtn;
 
 		public MDIManagerButton(Form form)
 		{
@@ -23,7 +24,6 @@ namespace SPAMassageSaloon
 			mdiForm.FormClosed += (s, e) => { Owner.Items.Remove(this); };
 			mdiForm.TextChanged += (s, e) => { Text = mdiForm.Text + @"     "; };
 			mdiForm.Activated += (s, e) => { MDIManagerButton_Click(this, null); };
-
 			base.Text = mdiForm.Text.RegexReplace(@"\-\s*([Vv])|([0-9.]+)", string.Empty).Trim() + @"     ";
 			base.Padding = new Padding(6, 0, 0, 0);
 			base.TextAlign = ContentAlignment.MiddleCenter;
@@ -35,7 +35,7 @@ namespace SPAMassageSaloon
 			BorderSides = ToolStripStatusLabelBorderSides.All;
 		}
 
-		void MDIManagerButton_Click(object sender, EventArgs e)
+		private void MDIManagerButton_Click(object sender, EventArgs e)
 		{
 			if (Parent == null)
 				return;
@@ -61,7 +61,7 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		void MDIManagerButton_MouseUp(object sender, MouseEventArgs e)
+		private void MDIManagerButton_MouseUp(object sender, MouseEventArgs e)
 		{
 			switch (e.Button)
 			{
@@ -74,22 +74,21 @@ namespace SPAMassageSaloon
 			}
 		}
 
-		void MDIManagerButton_MouseMove(object sender, MouseEventArgs e)
+		private void MDIManagerButton_MouseMove(object sender, MouseEventArgs e)
 		{
 			mouseOnCloseBtn = btnRectangle.Contains(e.Location);
 			Invalidate();
 		}
 
-		void MDIManagerButton_Paint(object sender, PaintEventArgs e)
+		private void MDIManagerButton_Paint(object sender, PaintEventArgs e)
 		{
-			btnLeft = Width - Properties.Resources.close.Size.Width - 6;
-			btnTop = (Height - Properties.Resources.close.Size.Height) / 2;
-			btnRectangle = new Rectangle(btnLeft, btnTop, Properties.Resources.close.Size.Width, Properties.Resources.close.Size.Height);
-
+			btnLeft = Width - Resources.close.Size.Width - 6;
+			btnTop = (Height - Resources.close.Size.Height) / 2;
+			btnRectangle = new Rectangle(btnLeft, btnTop, Resources.close.Size.Width, Resources.close.Size.Height);
 			if (mouseOnCloseBtn)
-				e.Graphics.DrawImage(Properties.Resources.close_active, new Point(btnLeft, btnTop));
+				e.Graphics.DrawImage(Resources.close_active, new Point(btnLeft, btnTop));
 			else
-				e.Graphics.DrawImage(Properties.Resources.close, new Point(btnLeft, btnTop));
+				e.Graphics.DrawImage(Resources.close, new Point(btnLeft, btnTop));
 		}
 	}
 }

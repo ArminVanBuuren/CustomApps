@@ -27,12 +27,12 @@ namespace LogsReader.Reader
 					if (Found.IsMatched)
 					{
 						var appendedToTraceMessage = Found.TraceMessage + Environment.NewLine + line;
+
 						// Eсли строка не совпадает с паттерном строки, то текущая строка лога относится к предыдущему успешно спарсеному.
 						// Иначе строка относится к другому логу и завершается дополнение
 						if (!IsLineMatch(line) && IsTraceMatch(appendedToTraceMessage, out var newResult))
 						{
 							Found.MergeDataTemplates(newResult);
-
 							Lines++;
 							return;
 						}
@@ -43,13 +43,13 @@ namespace LogsReader.Reader
 					{
 						// Если предыдущий фрагмент лога не спарсился удачно, то выполняются новые попытки спарсить лог
 						Found.AppendNextLine(line);
+
 						if (IsTraceMatch(Found.TraceMessage, out var afterSuccessResult, Found))
 						{
 							// Паттерн успешно сработал и тепмлейт заменяется. И дальше продолжается проврерка на дополнение строк
 							AddResult(afterSuccessResult);
 							Found = afterSuccessResult;
 							PastTraceLines.Clear();
-
 							Lines++;
 							return;
 						}
@@ -64,16 +64,13 @@ namespace LogsReader.Reader
 			}
 
 			Lines++;
-
 			Commit();
-
 			var isMatched = IsTraceMatch(line, out var found);
 			Found = found;
 
 			if (isMatched)
 			{
 				AddResult(Found);
-
 				if (!SearchByTransaction)
 					PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
 			}
@@ -81,9 +78,11 @@ namespace LogsReader.Reader
 			{
 				// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
 				var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+
 				while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 				{
 					Found.AppendPastLine(revercePastTraceLines.Dequeue());
+
 					if (IsTraceMatch(Found.TraceMessage, out var beforeResult))
 					{
 						Found = beforeResult;

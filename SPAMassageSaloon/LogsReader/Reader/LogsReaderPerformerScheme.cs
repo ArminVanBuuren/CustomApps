@@ -31,7 +31,7 @@ namespace LogsReader.Reader
 
 		public List<DataTemplate> ResultsOfError { get; private set; } = new List<DataTemplate>();
 
-		public bool IsCompleted { get; private set; } = false;
+		public bool IsCompleted { get; private set; }
 
 		public LogsReaderPerformerScheme(LRSettingsScheme settings,
 		                                 string findMessage,
@@ -47,27 +47,23 @@ namespace LogsReader.Reader
 		public override async Task GetTargetFilesAsync()
 		{
 			await base.GetTargetFilesAsync();
-
 			if (TraceReaders == null)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
-
 			if (TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 
 			TraceReadersOrdered.Clear();
 			var id = 0;
+
 			foreach (var traceReaders in TraceReaders.Values.GroupBy(x => x.Priority).OrderBy(x => x.Key).ToList())
 			{
-				var readersOrders = traceReaders
-					.OrderByDescending(x => x.File.LastWriteTime.Date)
-					.ThenByDescending(x => x.File.LastWriteTime.Hour)
-					.ThenBy(x => x.File.LastWriteTime.Minute)
-					.ThenByDescending(x => x.File.Length)
-					.ToList();
-
+				var readersOrders = traceReaders.OrderByDescending(x => x.File.LastWriteTime.Date)
+				                                .ThenByDescending(x => x.File.LastWriteTime.Hour)
+				                                .ThenBy(x => x.File.LastWriteTime.Minute)
+				                                .ThenByDescending(x => x.File.Length)
+				                                .ToList();
 				foreach (var reader in readersOrders)
 					reader.ID = ++id;
-
 				TraceReadersOrdered.Add(readersOrders);
 			}
 		}
@@ -75,7 +71,6 @@ namespace LogsReader.Reader
 		public async Task StartAsync()
 		{
 			ClearPreviousProcess();
-
 			if (TraceReadersOrdered.Count == 0 || IsStopPending)
 				return;
 
@@ -88,36 +83,29 @@ namespace LogsReader.Reader
 
 					// ThreadPriority.Lowest - необходим чтобы не залипал основной поток и не мешал другим процессам
 					var maxThreads = MaxThreads <= 0 ? traceReaders.Count : MaxThreads;
-					var multiTaskingHandler = new MTActionResult<TraceReader>(ReadData,
-					                                                          traceReaders,
-					                                                          maxThreads,
-					                                                          ThreadPriority.Lowest);
-
+					var multiTaskingHandler = new MTActionResult<TraceReader>(ReadData, traceReaders, maxThreads, ThreadPriority.Lowest);
 					_multiTaskingHandlerList.Add(multiTaskingHandler);
-
+					
 					await multiTaskingHandler.StartAsync();
-
-					var errors = multiTaskingHandler.Result.CallBackList
-						.Where(x => x.Error != null)
-						.Aggregate(new List<DataTemplate>(),
-						           (listErr, x) =>
-						           {
-							           listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
-							           return listErr;
-						           });
-
+					var errors = multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null)
+					                                .Aggregate(new List<DataTemplate>(),
+					                                           (listErr, x) =>
+					                                           {
+						                                           listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
+						                                           return listErr;
+					                                           });
 					ResultsOfError.AddRange(errors);
 				}
 			}
 			finally
 			{
 				TraceReadersOrdered.Clear();
-
+				
 				if (HasOutOfMemoryException)
 					ClearInternal();
-
+				
 				IsCompleted = true;
-
+				
 				if (HasOutOfMemoryException)
 					throw new OutOfMemoryException("Too large items found.");
 			}
@@ -137,7 +125,7 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// Добавляем найденный трейс
+		///     Добавляем найденный трейс
 		/// </summary>
 		/// <param name="item"></param>
 		protected void AddResult(DataTemplate item)
@@ -147,6 +135,7 @@ namespace LogsReader.Reader
 				if (!_result.TryGetValue(item, out var existingItem))
 				{
 					var dateCurrent = item.Date ?? DateTime.MinValue;
+
 					if (_result.Count >= RowsLimit)
 					{
 						var latest = _result.First().Key;
@@ -177,11 +166,9 @@ namespace LogsReader.Reader
 		public override void Abort()
 		{
 			IsStopPending = true;
-
 			if (_multiTaskingHandlerList != null)
 				foreach (var tasks in _multiTaskingHandlerList)
 					tasks.Stop();
-
 			base.Abort();
 		}
 
@@ -192,25 +179,22 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// Останавливаем и очищаем. Но оставляем ошибку с памятью
+		///     Останавливаем и очищаем. Но оставляем ошибку с памятью
 		/// </summary>
-		void ClearInternal()
+		private void ClearInternal()
 		{
 			if (_multiTaskingHandlerList != null)
 				foreach (var tasks in _multiTaskingHandlerList)
 					tasks.Stop();
-
 			base.Clear();
-
 			ClearPreviousProcess();
-
 			STREAM.GarbageCollectAsync();
 		}
 
 		/// <summary>
-		/// Очищаем все статусы процессинга
+		///     Очищаем все статусы процессинга
 		/// </summary>
-		void ClearPreviousProcess()
+		private void ClearPreviousProcess()
 		{
 			IsCompleted = false;
 			IsStopPending = false;

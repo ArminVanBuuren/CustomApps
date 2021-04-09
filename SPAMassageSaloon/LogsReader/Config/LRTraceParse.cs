@@ -18,7 +18,8 @@ namespace LogsReader.Config
 		Prompt = 4
 	}
 
-	[Serializable, XmlRoot("TraceParse")]
+	[Serializable]
+	[XmlRoot("TraceParse")]
 	public class LRTraceParse : TraceParse
 	{
 		private string _culture = string.Empty;
@@ -64,24 +65,13 @@ namespace LogsReader.Config
 					};
 					TransactionPatterns = new[]
 					{
-						new LRTraceParseTransactionItem(@"\s+id=\""(.+?)\""")
-						{
-							Trn = "$1"
-						},
-						new LRTraceParseTransactionItem(@"\(trn=(\d+)\)")
-						{
-							Trn = "$1"
-						}
+						new LRTraceParseTransactionItem(@"\s+id=\""(.+?)\""") { Trn = "$1" },
+						new LRTraceParseTransactionItem(@"\(trn=(\d+)\)") { Trn = "$1" }
 					};
-					StartWith = new XmlNode[]
-					{
-						new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[")
-					};
-					IsError = new XmlNode[]
-					{
-						new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception")
-					};
+					StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
+					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
+
 				case DefaultSettings.SPA:
 					SelectionTransactionsType = TransactionsMarkingType.Prompt;
 					Patterns = new[]
@@ -95,18 +85,10 @@ namespace LogsReader.Config
 							Message = "$5"
 						}
 					};
-					TransactionPatterns = new[]
-					{
-						new LRTraceParseTransactionItem(@"OriginalID\s*\>(.+?)\<")
-						{
-							Trn = "$1"
-						}
-					};
-					IsError = new XmlNode[]
-					{
-						new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout|Exception")
-					};
+					TransactionPatterns = new[] { new LRTraceParseTransactionItem(@"OriginalID\s*\>(.+?)\<") { Trn = "$1" } };
+					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"FAILURE|NoPrintout|Exception") };
 					break;
+
 				case DefaultSettings.MGA:
 					SelectionTransactionsType = TransactionsMarkingType.Both;
 					Patterns = new[]
@@ -124,14 +106,8 @@ namespace LogsReader.Config
 							Message = "$3"
 						}
 					};
-					StartWith = new XmlNode[]
-					{
-						new XmlDocument().CreateCDataSection(@"^\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+\s+\(\w+\)")
-					};
-					IsError = new XmlNode[]
-					{
-						new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception")
-					};
+					StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^\d+[-]\d+[-]\d+\s+\d+[:]\d+[:]\d+[,]\d+\s+\(\w+\)") };
+					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
 					break;
 			}
 		}
@@ -147,10 +123,10 @@ namespace LogsReader.Config
 		internal bool IsCorrectPatterns => _traceParsePatterns != null && _traceParsePatterns.Length > 0 && _traceParsePatterns.All(x => x.IsCorrect);
 
 		/// <summary>
-		/// Если кастомная функция валидно компилится
+		///     Если кастомная функция валидно компилится
 		/// </summary>
 		[XmlIgnore]
-		internal bool IsCorrectCustomFunction { get; private set; } = false;
+		internal bool IsCorrectCustomFunction { get; private set; }
 
 		[XmlAttribute("displayDateFormat")]
 		public string DisplayDateFormat { get; set; } = "dd.MM.yyyy HH:mm:ss.fff";
@@ -163,7 +139,6 @@ namespace LogsReader.Config
 			{
 				DisplayCulture = null;
 				_culture = string.Empty;
-
 				if (value.IsNullOrWhiteSpace())
 					return;
 
@@ -182,14 +157,13 @@ namespace LogsReader.Config
 		[XmlIgnore]
 		internal CultureInfo DisplayCulture { get; private set; }
 
-
 		[XmlAttribute("transactionsMarkingType")]
 		public string SelectionTransactionsTypeString
 		{
 			get => SelectionTransactionsType.ToString("G");
 			set => SelectionTransactionsType = !value.IsNullOrWhiteSpace() && Enum.TryParse(value, true, out TransactionsMarkingType type)
-				                                   ? type
-				                                   : TransactionsMarkingType.None;
+				? type
+				: TransactionsMarkingType.None;
 		}
 
 		[XmlIgnore]
@@ -203,6 +177,7 @@ namespace LogsReader.Config
 			{
 				if (value == null)
 					return;
+
 				if (value.Length > 0)
 					_traceParsePatterns = value;
 			}
@@ -215,6 +190,7 @@ namespace LogsReader.Config
 			set
 			{
 				_customFunc = value;
+
 				// проверяем на валидность кастомной функции
 				if (_customFunc?.Assemblies?.Childs?.Length > 0 && _customFunc?.Namespaces?.Item?.Length > 0 && _customFunc.Functions?.Function?.Length > 0)
 				{
@@ -239,7 +215,7 @@ namespace LogsReader.Config
 		public XmlNode[] StartWith
 		{
 			get => _startTraceLineWith;
-			set => StartTraceLineWith = GetCDataNode(value,  out _startTraceLineWith);
+			set => StartTraceLineWith = GetCDataNode(value, out _startTraceLineWith);
 		}
 
 		[XmlIgnore]
@@ -249,7 +225,7 @@ namespace LogsReader.Config
 		public XmlNode[] EndWith
 		{
 			get => _endTraceLineWith;
-			set => EndTraceLineWith = GetCDataNode(value,  out _endTraceLineWith);
+			set => EndTraceLineWith = GetCDataNode(value, out _endTraceLineWith);
 		}
 
 		[XmlIgnore]
@@ -259,7 +235,7 @@ namespace LogsReader.Config
 		public XmlNode[] IsError
 		{
 			get => _isError;
-			set => IsTraceError = GetCDataNode(value,  out _isError, RegexOptions.IgnoreCase);
+			set => IsTraceError = GetCDataNode(value, out _isError, RegexOptions.IgnoreCase);
 		}
 
 		[XmlIgnore]
@@ -292,6 +268,7 @@ namespace LogsReader.Config
 				foreach (var func in functions.Values)
 					if (func.Item2.Invoke(input))
 						return true;
+
 				return false;
 			}
 

@@ -12,28 +12,22 @@ namespace LogsReader.Reader.Forms
 		private readonly GroupType _groupType;
 		private readonly Dictionary<string, (int, List<string>)> _groups;
 
-		private int _prevPriority = 0;
+		private int _prevPriority;
 
 		public AddGroupForm(Dictionary<string, (int, List<string>)> groups, GroupType groupType)
 		{
 			InitializeComponent();
-
 			_groups = groups;
 			_groupType = groupType;
-
 			Icon = Icon.FromHandle(_groupType == GroupType.Server ? Resources.server_group.GetHicon() : Resources.types_group.GetHicon());
-
 			base.Text = Resources.Txt_Forms_AddGroup;
 			labelGroupName.Text = Resources.Txt_Forms_GroupName;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			labelPriority.Text = Resources.Txt_Forms_GroupPriority;
-
 			buttonOK.Enabled = false;
 			MinimizeBox = false;
 			MaximizeBox = false;
-
 			CenterToScreen();
-
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
@@ -42,6 +36,7 @@ namespace LogsReader.Reader.Forms
 					case Keys.Enter when buttonOK.Enabled:
 						buttonOK_Click(this, EventArgs.Empty);
 						break;
+
 					case Keys.Escape:
 						Close();
 						break;
@@ -56,8 +51,7 @@ namespace LogsReader.Reader.Forms
 			Close();
 		}
 
-		private void buttonCancel_Click(object sender, EventArgs e)
-			=> Close();
+		private void buttonCancel_Click(object sender, EventArgs e) => Close();
 
 		public static DialogResult ShowGroupItemsForm(string groupName, Dictionary<string, (int, List<string>)> groups, GroupType groupType)
 		{
@@ -106,6 +100,7 @@ namespace LogsReader.Reader.Forms
 		{
 			if (!value.IsNullOrWhiteSpace() && int.TryParse(value, out var result) && result >= 0 && result <= 99)
 				return result;
+
 			return prevPriority;
 		}
 	}

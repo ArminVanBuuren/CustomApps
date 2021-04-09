@@ -12,21 +12,21 @@ namespace LogsReader.Reader
 			CountErrors = countErrors;
 		}
 
-		public bool Checked { get; set; } = false;
+		public bool Checked { get; set; }
 
 		[DGVColumn(ColumnPosition.After, nameof(DataTemplate.Tmp.TraceName))]
 		public string TraceName { get; }
 
 		/// <summary>
-		/// Количество совпадений по имени трейса
+		///     Количество совпадений по имени трейса
 		/// </summary>
-		[DGVColumn(ColumnPosition.After, "Matches", true)]
+		[DGVColumn(ColumnPosition.After, "Matches")]
 		public int CountMatches { get; }
 
 		/// <summary>
-		/// Количество ошибок по имени трейса
+		///     Количество ошибок по имени трейса
 		/// </summary>
-		[DGVColumn(ColumnPosition.After, "Errors", true)]
+		[DGVColumn(ColumnPosition.After, "Errors")]
 		public int CountErrors { get; }
 	}
 }

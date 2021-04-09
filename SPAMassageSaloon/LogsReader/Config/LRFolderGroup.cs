@@ -7,13 +7,11 @@ using Utils;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("LogsFolderGroup")]
+	[Serializable]
+	[XmlRoot("LogsFolderGroup")]
 	public class LRFolderGroup
 	{
-		private LRFolder[] _logsFolder = new LRFolder[]
-		{
-			new LRFolder()
-		};
+		private LRFolder[] _logsFolder = { new LRFolder() };
 
 		[XmlIgnore]
 		public Dictionary<string, bool> Folders { get; private set; }
@@ -27,7 +25,6 @@ namespace LogsReader.Config
 				try
 				{
 					var prevLogFolders = (value ?? _logsFolder).OrderBy(x => x.Item[0].Value).ToArray();
-
 					foreach (var folder in prevLogFolders)
 						if (folder.Value.IsNullOrWhiteSpace())
 							throw new Exception(string.Format(Resources.Txt_Forms_FolderIsIncorrect, folder.Value));
@@ -35,7 +32,6 @@ namespace LogsReader.Config
 					var prevFolders = prevLogFolders.ToDictionary(x => x.Item[0].Value.Trim(),
 					                                              x => x.AllDirSearching,
 					                                              StringComparer.InvariantCultureIgnoreCase);
-
 					_logsFolder = prevLogFolders;
 					Folders = prevFolders;
 				}

@@ -12,26 +12,23 @@ namespace LogsReader.Reader.Forms
 {
 	public partial class TraceNameFilterForm : Form
 	{
-		public IDictionary<string, TraceNameFilter> TraceNames { get; private set; }
+		public IDictionary<string, TraceNameFilter> TraceNames { get; }
 
-		TraceNameFilterForm(IDictionary<string, TraceNameFilter> traceNames)
+		private TraceNameFilterForm(IDictionary<string, TraceNameFilter> traceNames)
 		{
 			InitializeComponent();
 			TraceNames = traceNames;
-
 			Icon = Icon.FromHandle(Resources.filter.GetHicon());
 			MinimizeBox = false;
 			MaximizeBox = false;
-
 			CountMatchesColumn.HeaderText = Resources.TxtReader_DgvMatches;
 			CountErrorsColumn.HeaderText = Resources.TxtReader_DgvErrors;
-
 			CenterToScreen();
-
 			DgvTraceNames.CellFormatting += (sender, args) =>
 			{
 				if (args.RowIndex < 0 || args.ColumnIndex < 0)
 					return;
+
 				ColorizationRow(((DataGridView) sender).Rows[args.RowIndex]);
 			};
 			DgvTraceNames.DataBindingComplete += (sender, args) =>
@@ -42,6 +39,7 @@ namespace LogsReader.Reader.Forms
 					var traceName = row.Cells[TraceNameColumn.Name]?.Value?.ToString();
 					if (checkedCell == null || traceName.IsNullOrWhiteSpace() || !traceNames.TryGetValue(traceName, out var traceNameFilter))
 						continue;
+
 					checkedCell.Checked = traceNameFilter.Checked;
 				}
 
@@ -52,7 +50,6 @@ namespace LogsReader.Reader.Forms
 				if (DgvTraceNames.RowCount > 0)
 					DgvTraceNames.SelectRow(DgvTraceNames.Rows[0]);
 			};
-
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
@@ -61,6 +58,7 @@ namespace LogsReader.Reader.Forms
 					case Keys.Enter when buttonOK.Enabled:
 						buttonOK_Click(this, EventArgs.Empty);
 						break;
+
 					case Keys.Escape:
 						Close();
 						break;
@@ -73,16 +71,13 @@ namespace LogsReader.Reader.Forms
 			var form = new TraceNameFilterForm(traceNames);
 			await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
 			form.DgvTraceNames.CheckStatusHeader(form.SelectColumn);
-
 			form.RefreshAllRows();
-
 			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(0, 19 * Math.Min(25, traceNames.Count())) + 92);
 			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
-
 			return form;
 		}
 
-		void RefreshAllRows()
+		private void RefreshAllRows()
 		{
 			if (DgvTraceNames == null || DgvTraceNames.RowCount == 0)
 				return;
@@ -96,12 +91,8 @@ namespace LogsReader.Reader.Forms
 			if (row == null)
 				return;
 
-			var color = row.Cells[SelectColumn.Name] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked
-				            ? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS
-				            : row.Index.IsParity()
-					            ? Color.White
-					            : Color.FromArgb(245, 245, 245);
-
+			var color = row.Cells[SelectColumn.Name] is DgvCheckBoxCell cellCheckBox && cellCheckBox.Checked ? LogsReaderMainForm.READER_COLOR_BACK_SUCCESS :
+				row.Index.IsParity()                                                                         ? Color.White : Color.FromArgb(245, 245, 245);
 			if (row.DefaultCellStyle.BackColor != color)
 				row.DefaultCellStyle.BackColor = color;
 		}

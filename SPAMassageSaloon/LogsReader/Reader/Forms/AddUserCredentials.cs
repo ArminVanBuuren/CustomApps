@@ -15,7 +15,6 @@ namespace LogsReader.Reader.Forms
 		public AddUserCredentials(string information, string userName = null)
 		{
 			InitializeComponent();
-
 			Icon = Icon.FromHandle(Resources.authorization.GetHicon());
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
@@ -23,20 +22,13 @@ namespace LogsReader.Reader.Forms
 			MaximizeBox = false;
 			TopLevel = true;
 			TopMost = true;
-
 			_sourceInformation = information;
 			SetInformation(information);
 			textBoxUser.Text = userName ?? string.Empty;
-
 			CenterToScreen();
-
-			_contextMenuStrip = new ContextMenuStrip
-			{
-				Tag = labelInformation
-			};
+			_contextMenuStrip = new ContextMenuStrip { Tag = labelInformation };
 			_contextMenuStrip.Items.Add("Copy text", null, (sender, args) => { Clipboard.SetText(labelInformation.Text); });
 			labelInformation.MouseClick += Information_MouseClick;
-
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
@@ -45,6 +37,7 @@ namespace LogsReader.Reader.Forms
 					case Keys.Enter when buttonOK.Enabled:
 						buttonOK_Click(this, EventArgs.Empty);
 						break;
+
 					case Keys.Escape:
 						Close();
 						break;
@@ -56,6 +49,7 @@ namespace LogsReader.Reader.Forms
 		{
 			if (e.Button != MouseButtons.Right)
 				return;
+
 			_contextMenuStrip?.Show(labelInformation, e.Location);
 		}
 
@@ -72,7 +66,7 @@ namespace LogsReader.Reader.Forms
 			ChangeFormSize();
 		}
 
-		void SetInformation(string info)
+		private void SetInformation(string info)
 		{
 			labelInformation.MaximumSize = new Size(groupBoxInfo.Size.Width - 20, 0);
 			labelInformation.AutoSize = true;
@@ -80,13 +74,11 @@ namespace LogsReader.Reader.Forms
 			ChangeFormSize();
 		}
 
-		void ChangeFormSize()
+		private void ChangeFormSize()
 		{
 			labelInformation.MaximumSize = new Size(groupBoxInfo.Size.Width - 20, 0);
 			labelInformation.AutoSize = true;
-
 			var formHeight = groupBoxInfo.Size.Height + panelAuthorization.Size.Height + 40;
-
 			Size = new Size(Size.Width, formHeight);
 			MinimumSize = new Size(MinimumSize.Width, formHeight);
 			MaximumSize = new Size(999, formHeight);
@@ -96,8 +88,7 @@ namespace LogsReader.Reader.Forms
 			MaximumSize = new Size(999, formHeight);
 		}
 
-		private void buttonCancel_Click(object sender, EventArgs e)
-			=> Close();
+		private void buttonCancel_Click(object sender, EventArgs e) => Close();
 
 		private void textBoxUser_TextChanged(object sender, EventArgs e)
 		{
@@ -117,10 +108,9 @@ namespace LogsReader.Reader.Forms
 			Check();
 		}
 
-		private void textBoxPassword_TextChanged(object sender, EventArgs e)
-			=> Check();
+		private void textBoxPassword_TextChanged(object sender, EventArgs e) => Check();
 
-		void Check()
+		private void Check()
 		{
 			if (textBoxUser.Text.Length > 0 && textBoxPassword.Text.Length > 0)
 			{

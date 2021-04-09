@@ -22,8 +22,8 @@ namespace LogsReader.Reader
 				else
 				{
 					Lines++;
-
 					Found.AppendNextLine(line);
+
 					if (EndTraceLineWith.IsMatch(line))
 					{
 						Commit();
@@ -34,16 +34,15 @@ namespace LogsReader.Reader
 			}
 
 			AddLine(line);
-
 			if (!IsMatched(line))
 				return;
 
 			Commit();
 
-
 			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
 			// Попытки спарсить предыдущие сохраненные строки как начало трассировки
 			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 			{
 				var pastLine = revercePastTraceLines.Dequeue();

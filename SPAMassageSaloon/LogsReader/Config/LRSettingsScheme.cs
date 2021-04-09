@@ -19,24 +19,18 @@ namespace LogsReader.Config
 	[XmlRoot("Scheme")]
 	public class LRSettingsScheme
 	{
-		private LRGroups _servers = new LRGroups(new[]
-		{
-			new LRGroupItem("local", 0, "localhost")
-		});
+		private LRGroups _servers = new LRGroups(new[] { new LRGroupItem("local", 0, "localhost") });
 
-		private LRGroups _fileTypes = new LRGroups(new[]
-		{
-			new LRGroupItem("type", 0, "log")
-		});
+		private LRGroups _fileTypes = new LRGroups(new[] { new LRGroupItem("type", 0, "log") });
 
-		private LRFolderGroup _logsFolder = new LRFolderGroup(new[]
-		{
-			new LRFolder(@"C:\", false)
-		});
+		private LRFolderGroup _logsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\", false) });
 
 		private string _cultureListString = string.Empty;
 		private string _schemeName = string.Empty;
-		private string _orderBy = $"{nameof(DataTemplate.Tmp.Date)}, {DataTemplate.ReaderPriority}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
+
+		private string _orderBy =
+			$"{nameof(DataTemplate.Tmp.Date)}, {DataTemplate.ReaderPriority}, {nameof(DataTemplate.Tmp.File)}, {nameof(DataTemplate.Tmp.FoundLineID)}";
+
 		private int _maxLines = 50;
 		private int _maxThreads = -1;
 		private int _rowsLimit = 9999;
@@ -50,8 +44,8 @@ namespace LogsReader.Config
 		{
 			get => _schemeName;
 			set => _schemeName = value.IsNullOrWhiteSpace()
-				                     ? throw new Exception(Resources.Txt_LRSettingsScheme_ErrSchemeName)
-				                     : Regex.Replace(value, @"\s+", "").ToUpperInvariant();
+				? throw new Exception(Resources.Txt_LRSettingsScheme_ErrSchemeName)
+				: Regex.Replace(value, @"\s+", "").ToUpperInvariant();
 		}
 
 		[XmlAttribute("encoding")]
@@ -64,6 +58,7 @@ namespace LogsReader.Config
 					return;
 
 				Encoding enc;
+
 				try
 				{
 					enc = Encoding.GetEncoding(value);
@@ -88,12 +83,10 @@ namespace LogsReader.Config
 			set
 			{
 				CultureList.Clear();
-
 				if (value.IsNullOrWhiteSpace())
 					return;
 
 				AddCultureList(value);
-
 				_cultureListString = string.Join(";", CultureList.Select(x => x.Name));
 			}
 		}
@@ -120,6 +113,7 @@ namespace LogsReader.Config
 				                               || !groupName.Value.Item2.Any()
 				                               || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "Servers"));
+
 				_servers = value;
 			}
 		}
@@ -143,6 +137,7 @@ namespace LogsReader.Config
 				                               || !groupName.Value.Item2.Any()
 				                               || groupName.Value.Item2.Any(groupValue => groupValue.IsNullOrWhiteSpace())))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "FileTypes"));
+
 				_fileTypes = value;
 			}
 		}
@@ -162,6 +157,7 @@ namespace LogsReader.Config
 			{
 				if (value == null || value.Folders.Count == 0 || value.Folders.Keys.Any(x => x.IsNullOrWhiteSpace()))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrNode, Name, "LogsFolderGroup"));
+
 				_logsFolder = value;
 			}
 		}
@@ -225,6 +221,7 @@ namespace LogsReader.Config
 					return;
 
 				Dictionary<string, bool> result;
+
 				try
 				{
 					result = CheckOrderByItem(value);
@@ -300,27 +297,28 @@ namespace LogsReader.Config
 			switch (set)
 			{
 				case DefaultSettings.MG:
-					Servers = new LRGroups(new[]
-					{
-						new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4")
-					});
+					Servers = new LRGroups(new[] { new LRGroupItem("UZ-MG", 0, "mg1, mg2, mg3, mg4") });
 					FileTypes = new LRGroups(new[]
 					{
-						new LRGroupItem("Connectors-Activity", 0, "SOAPCON*Activity, SMSCON*SMS*Activity, SMSCON*USSD*Activity, IVRCON*Activity, EMAILCON*Activity"),
-						new LRGroupItem("Connectors-Data", 0, "SOAPCON*Data, SMSCON*SMS*Data, SMSCON*USSD*Data, IVRCON*Data, EMAILCON*Data"),
-						new LRGroupItem("Connectors-Error", 0, "SOAPCON*Error, SMSCON*SMS*Error, SMSCON*USSD*Error, IVRCON*Error, EMAILCON*Error"),
+						new LRGroupItem("Connectors-Activity",
+						                0,
+						                "SOAPCON*Activity, SMSCON*SMS*Activity, SMSCON*USSD*Activity, IVRCON*Activity, EMAILCON*Activity"),
+						new LRGroupItem("Connectors-Data",
+						                0,
+						                "SOAPCON*Data, SMSCON*SMS*Data, SMSCON*USSD*Data, IVRCON*Data, EMAILCON*Data"),
+						new LRGroupItem("Connectors-Error",
+						                0,
+						                "SOAPCON*Error, SMSCON*SMS*Error, SMSCON*USSD*Error, IVRCON*Error, EMAILCON*Error"),
 						new LRGroupItem("Handlers-Activity", 1, "CRMCON*Activity, WCF*Activity, DBCON*Activity"),
 						new LRGroupItem("Handlers-Data", 1, "CRMCON*Data, DISPATCHER, WCF*Data, DBCON*Data"),
-						new LRGroupItem("Handlers-Error", 1, "CRMCON*Error, WCF*Error, DBCON*Error"),
+						new LRGroupItem("Handlers-Error", 1, "CRMCON*Error, WCF*Error, DBCON*Error")
 					});
-					LogsFolder = new LRFolderGroup(new[]
-					{
-						new LRFolder(@"C:\FORISLOG\MG", true)
-					});
+					LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MG", true) });
 					MaxLines = 100;
 					MaxThreads = -1;
 					OrderBy = _orderBy;
 					break;
+
 				case DefaultSettings.SPA:
 					Servers = new LRGroups(new[]
 					{
@@ -332,27 +330,16 @@ namespace LogsReader.Config
 						new LRGroupItem("SPA.SA", 0, "AM, BMS, HLR*Huawei, HLR*ZTE, MCA, RBT, SCP, SMSC"),
 						new LRGroupItem("SPA.BPM", 0, "SPA.BPM")
 					});
-					LogsFolder = new LRFolderGroup(new[]
-					{
-						new LRFolder(@"C:\FORISLOG\SPA", true)
-					});
+					LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\SPA", true) });
 					MaxLines = 1;
 					MaxThreads = -1;
 					OrderBy = $"{nameof(DataTemplate.Tmp.Date)} desc, {nameof(DataTemplate.Tmp.ID)} desc";
 					break;
+
 				case DefaultSettings.MGA:
-					Servers = new LRGroups(new[]
-					{
-						new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4")
-					});
-					FileTypes = new LRGroups(new[]
-					{
-						new LRGroupItem("Default", 0, "Debug-All, Debug-Only")
-					});
-					LogsFolder = new LRFolderGroup(new[]
-					{
-						new LRFolder(@"C:\FORISLOG\MGAdapter", true)
-					});
+					Servers = new LRGroups(new[] { new LRGroupItem("UZ-MGA", 0, "crm-mg1, crm-mg2, crm-mg3, crm-mg4") });
+					FileTypes = new LRGroups(new[] { new LRGroupItem("Default", 0, "Debug-All, Debug-Only") });
+					LogsFolder = new LRFolderGroup(new[] { new LRFolder(@"C:\FORISLOG\MGAdapter", true) });
 					MaxLines = 20000;
 					MaxThreads = -1;
 					OrderBy = _orderBy;
@@ -360,7 +347,7 @@ namespace LogsReader.Config
 			}
 		}
 
-		void AddCultureList(string list)
+		private void AddCultureList(string list)
 		{
 			foreach (var cultureStr in list.Split(';'))
 			{
@@ -378,11 +365,11 @@ namespace LogsReader.Config
 		internal static Dictionary<string, bool> CheckOrderByItem(string value)
 		{
 			var result = new Dictionary<string, bool>();
+
 			foreach (var orderItem in value.Split(',').Where(x => !x.IsNullOrWhiteSpace()).Select(x => x.Trim()))
 			{
 				var orderStatement = orderItem.Split(' ');
 				var isDescending = orderStatement.Length > 1 && orderStatement[1].Length > 0 && orderStatement[1].LikeAny("desc", "descending");
-
 				if (!orderStatement[0].LikeAny(out var orderItem2, DataTemplateCollection.OrderByFields))
 					throw new Exception(string.Format(Resources.Txt_LRSettingsScheme_ErrOrderBy, orderItem));
 

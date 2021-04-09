@@ -27,24 +27,24 @@ namespace LogsReader.Reader
 		protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Both;
 
 		/// <summary>
-		/// Сохранить изменения в конфиг
+		///     Сохранить изменения в конфиг
 		/// </summary>
 		public event EventHandler OnSchemeChanged;
 
 		/// <summary>
-		/// Поиск логов начался или завершился
+		///     Поиск логов начался или завершился
 		/// </summary>
 		public event EventHandler OnSearchChanged;
 
 		/// <summary>
-		/// Происходит при полной очистке
+		///     Происходит при полной очистке
 		/// </summary>
 		public event EventHandler OnClear;
 
 		/// <summary>
-		/// Текущая схема настроек
+		///     Текущая схема настроек
 		/// </summary>
-		public LRSettingsScheme CurrentSettings { get; private set; }
+		public LRSettingsScheme CurrentSettings { get; }
 
 		public LogsReaderPerformerScheme MainReader { get; private set; }
 
@@ -54,11 +54,12 @@ namespace LogsReader.Reader
 
 		public override bool HasAnyResult => OverallResultList != null && OverallResultList.Count > 0;
 
-		public bool IsTreeViewSynchronized { get; private set; } = false;
+		public bool IsTreeViewSynchronized { get; private set; }
 
 		public override RefreshDataType DgvDataAfterAssign => RefreshDataType.VisibleRows;
 
-		public LogsReaderFormScheme(LRSettingsScheme scheme) : base(scheme.Encoding, new UserSettings(scheme.Name))
+		public LogsReaderFormScheme(LRSettingsScheme scheme)
+			: base(scheme.Encoding, new UserSettings(scheme.Name))
 		{
 			try
 			{
@@ -76,7 +77,6 @@ namespace LogsReader.Reader
 					TabIndex = 17,
 					Text = Resources.Txt_LogsReaderForm_OrderBy
 				};
-
 				MaxLinesLabel = new Label
 				{
 					AutoSize = true,
@@ -86,7 +86,6 @@ namespace LogsReader.Reader
 					TabIndex = 13,
 					Text = Resources.Txt_LogsReaderForm_MaxLines
 				};
-
 				orderByText = new TextBox
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -96,7 +95,6 @@ namespace LogsReader.Reader
 					TabIndex = 18
 				};
 				orderByText.Leave += OrderByText_Leave;
-
 				MaxThreadsLabel = new Label
 				{
 					AutoSize = true,
@@ -106,7 +104,6 @@ namespace LogsReader.Reader
 					TabIndex = 9,
 					Text = Resources.Txt_LogsReaderForm_MaxThreads
 				};
-
 				maxLinesStackText = new TextBox
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -117,7 +114,6 @@ namespace LogsReader.Reader
 				};
 				maxLinesStackText.TextChanged += MaxLinesStackText_TextChanged;
 				maxLinesStackText.Leave += MaxLinesStackText_Leave;
-
 				RowsLimitLabel = new Label
 				{
 					AutoSize = true,
@@ -127,7 +123,6 @@ namespace LogsReader.Reader
 					TabIndex = 15,
 					Text = Resources.Txt_LogsReaderForm_RowsLimit
 				};
-
 				maxThreadsText = new TextBox
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -138,7 +133,6 @@ namespace LogsReader.Reader
 				};
 				maxThreadsText.TextChanged += MaxThreadsText_TextChanged;
 				maxThreadsText.Leave += MaxThreadsText_Leave;
-
 				rowsLimitText = new TextBox
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -149,7 +143,6 @@ namespace LogsReader.Reader
 				};
 				rowsLimitText.TextChanged += RowsLimitText_TextChanged;
 				rowsLimitText.Leave += RowsLimitText_Leave;
-
 				TreeMain = new CustomTreeView
 				{
 					Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
@@ -158,7 +151,6 @@ namespace LogsReader.Reader
 					Size = new Size(137, 300),
 					TabIndex = 19
 				};
-
 				CustomPanel.Controls.Add(OrderByLabel);
 				CustomPanel.Controls.Add(MaxLinesLabel);
 				CustomPanel.Controls.Add(orderByText);
@@ -189,7 +181,7 @@ namespace LogsReader.Reader
 				                                          CurrentSettings.Servers.Groups,
 				                                          CurrentSettings.FileTypes.Groups,
 				                                          CurrentSettings.LogsFolder.Folders);
-
+				
 				TreeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
 				{
 					ValidationCheck(clearStatus);
@@ -197,7 +189,7 @@ namespace LogsReader.Reader
 						OnSchemeChanged?.Invoke(this, EventArgs.Empty);
 				};
 				TreeViewContainer.OnError += ReportStatus;
-
+				
 				var template = UserSettings.Template;
 				if (template != null)
 					TreeViewContainer.UpdateContainerByTemplate(template);
@@ -219,6 +211,7 @@ namespace LogsReader.Reader
 		{
 			if (IsTreeViewSynchronized)
 				return;
+
 			TreeViewContainer.EnableSync();
 			IsTreeViewSynchronized = true;
 		}
@@ -226,12 +219,10 @@ namespace LogsReader.Reader
 		public override void ApplySettings()
 		{
 			base.ApplySettings();
-
 			OrderByLabel.Text = Resources.Txt_LogsReaderForm_OrderBy;
 			RowsLimitLabel.Text = Resources.Txt_LogsReaderForm_RowsLimit;
 			MaxThreadsLabel.Text = Resources.Txt_LogsReaderForm_MaxThreads;
 			MaxLinesLabel.Text = Resources.Txt_LogsReaderForm_MaxLines;
-
 			TreeViewContainer.ApplySettings();
 		}
 
@@ -273,6 +264,7 @@ namespace LogsReader.Reader
 			if (!IsWorking)
 			{
 				TimeWatcher = new Stopwatch();
+
 				try
 				{
 					base.BtnSearch_Click(sender, e);
@@ -283,14 +275,15 @@ namespace LogsReader.Reader
 					Dictionary<string, int> GetGroupItems(string parentNodeName)
 					{
 						var result = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+
 						foreach (TreeNode groupNode in TreeMain.Nodes[parentNodeName].Nodes)
 						{
 							foreach (var item in groupNode.Nodes.OfType<TreeNode>()
-								.Where(x => x.Checked)
-								.Select(x => x.Text)
-								.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
-								.Select(x => x.Key)
-								.ToList())
+							                              .Where(x => x.Checked)
+							                              .Select(x => x.Text)
+							                              .GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
+							                              .Select(x => x.Key)
+							                              .ToList())
 							{
 								if (result.TryGetValue(item, out var existPiority))
 								{
@@ -314,24 +307,12 @@ namespace LogsReader.Reader
 					var fileTypes = GetGroupItems(TreeViewContainer.TRVTypes);
 					// получение папок по чекбоксам
 					var folders = TreeViewContainer.GetFolders(TreeMain, true);
-
 					IsWorking = true;
-
-					MainReader = new LogsReaderPerformerScheme(CurrentSettings,
-					                                           TbxPattern.Text,
-					                                           ChbxUseRegex.Checked,
-					                                           servers,
-					                                           fileTypes,
-					                                           folders,
-					                                           filter);
-
+					MainReader = new LogsReaderPerformerScheme(CurrentSettings, TbxPattern.Text, ChbxUseRegex.Checked, servers, fileTypes, folders, filter);
 					TimeWatcher.Start();
-
 					ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 					await MainReader.GetTargetFilesAsync(); // получение файлов логов
-
 					await UploadReadersAsync(); // загружаем ридеры в таблицу прогресса
-
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 					await MainReader.StartAsync(); // вополнение поиска
 
@@ -342,26 +323,21 @@ namespace LogsReader.Reader
 
 					// заполняем DataGrid
 					if (await AssignResultAsync(null, null, true))
-						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()),
-						             ReportStatusType.Success);
-
+						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
 					TimeWatcher.Stop();
 				}
 				catch (Exception ex)
 				{
 					if (IsWorking)
 						IsWorking = false;
-
 					ReportStatus(ex);
 				}
 				finally
 				{
 					if (IsWorking)
 						IsWorking = false;
-
 					if (TimeWatcher.IsRunning)
 						TimeWatcher.Stop();
-
 					if (MainReader?.TraceReaders != null)
 						ReportProcessStatus(MainReader.TraceReaders.Values);
 					Progress = 100;
@@ -398,9 +374,11 @@ namespace LogsReader.Reader
 			template = null;
 			if (OverallResultList == null)
 				return false;
+
 			var privateID = (int) (row?.Cells[DgvDataPrivateIDColumn.Name]?.Value ?? -1);
 			if (privateID <= -1)
 				return false;
+
 			template = OverallResultList[privateID];
 			return template != null;
 		}
@@ -410,6 +388,7 @@ namespace LogsReader.Reader
 			reader = null;
 			if (MainReader?.TraceReaders == null)
 				return false;
+
 			var privateID = (int) (row?.Cells[DgvReaderPrivateIDColumn.Name]?.Value ?? -1);
 			return privateID > -1 && MainReader.TraceReaders.TryGetValue(privateID, out reader);
 		}
@@ -439,7 +418,7 @@ namespace LogsReader.Reader
 			MaxLinesStackTextSave(value);
 		}
 
-		void MaxLinesStackTextSave(int value)
+		private void MaxLinesStackTextSave(int value)
 		{
 			CurrentSettings.MaxLines = value;
 			maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
@@ -459,7 +438,7 @@ namespace LogsReader.Reader
 			MaxThreadsTextSave(value);
 		}
 
-		void MaxThreadsTextSave(int value)
+		private void MaxThreadsTextSave(int value)
 		{
 			CurrentSettings.MaxThreads = value;
 			maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
@@ -479,7 +458,7 @@ namespace LogsReader.Reader
 			RowsLimitTextSave(value);
 		}
 
-		void RowsLimitTextSave(int value)
+		private void RowsLimitTextSave(int value)
 		{
 			CurrentSettings.RowsLimit = value;
 			rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
@@ -516,13 +495,13 @@ namespace LogsReader.Reader
 
 				BtnSearch.Enabled = settIsCorrect
 				                 && TreeMain.Nodes[TreeViewContainer.TRVServers]
-					                    .Nodes.OfType<TreeNode>()
-					                    .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+				                            .Nodes.OfType<TreeNode>()
+				                            .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 				                 && TreeMain.Nodes[TreeViewContainer.TRVTypes]
-					                    .Nodes.OfType<TreeNode>()
-					                    .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
+				                            .Nodes.OfType<TreeNode>()
+				                            .Any(x => x.Nodes.OfType<TreeNode>().Any(x2 => x2.Checked))
 				                 && TreeMain.Nodes[TreeViewContainer.TRVFolders].Nodes.OfType<TreeNode>().Any(x => x.Checked);
-
+				
 				base.ValidationCheck(clearStatus);
 			}
 			catch (Exception ex)
@@ -549,9 +528,7 @@ namespace LogsReader.Reader
 		{
 			OverallResultList?.Clear();
 			OverallResultList = null;
-
 			MainReader?.Dispose();
-
 			base.ClearData();
 		}
 

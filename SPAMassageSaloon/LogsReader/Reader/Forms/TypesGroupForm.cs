@@ -11,39 +11,32 @@ namespace LogsReader.Reader.Forms
 	public partial class TypesGroupForm : Form
 	{
 		private readonly Dictionary<string, (int, List<string>)> _typesGroups;
-		private string _currentGroup = null;
+		private string _currentGroup;
 
 		private readonly string selectedGroupPriority = @"0";
 
-		private int _prevPriority = 0;
+		private int _prevPriority;
 
 		public TypesGroupForm(string selectedGroup, Dictionary<string, (int, List<string>)> typesGroups)
 		{
 			InitializeComponent();
-
 			Icon = Icon.FromHandle(Resources.types_group.GetHicon());
 			base.Text = Resources.Txt_Forms_FileTypesGroup;
 			labelGroupName.Text = Resources.Txt_Forms_GroupName;
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			labelPriority.Text = Resources.Txt_Forms_GroupPriority;
-
 			MinimizeBox = false;
 			MaximizeBox = false;
-
 			_typesGroups = typesGroups;
-
 			comboboxGroup.Items.AddRange(_typesGroups.Keys.ToArray());
 			comboboxGroup.Text = selectedGroup;
 			comboboxGroup.SelectedText = selectedGroup;
 			ComboboxGroup_SelectionChangeCommitted(this, EventArgs.Empty);
 			comboboxGroup.SelectionChangeCommitted += ComboboxGroup_SelectionChangeCommitted;
 			comboboxGroup.TextChanged += comboboxGroup_TextChanged;
-
 			if (typesGroups.TryGetValue(selectedGroup, out var res))
 				textBoxGroupPriority.Text = selectedGroupPriority = res.Item1.ToString();
-
 			CenterToScreen();
-
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{
@@ -78,23 +71,22 @@ namespace LogsReader.Reader.Forms
 
 			if (_currentGroup != null && buttonOK.Enabled)
 			{
-				_typesGroups[_currentGroup] =
-					(AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text, _prevPriority),
-					 new List<string>(richTextBoxTypes.Text.Split(',')
-						                  .Select(x => x.Trim())
-						                  .Where(x => !x.IsNullOrWhiteSpace())
-						                  .Distinct(StringComparer.InvariantCultureIgnoreCase)));
+				_typesGroups[_currentGroup] = (AddGroupForm.GetGroupPriority(textBoxGroupPriority.Text, _prevPriority),
+				                               new List<string>(richTextBoxTypes.Text.Split(',')
+				                                                                .Select(x => x.Trim())
+				                                                                .Where(x => !x.IsNullOrWhiteSpace())
+				                                                                .Distinct(StringComparer.InvariantCultureIgnoreCase)));
 			}
 
 			Close();
 		}
 
-		private void buttonCancel_Click(object sender, EventArgs e)
-			=> Close();
+		private void buttonCancel_Click(object sender, EventArgs e) => Close();
 
 		private void comboboxGroup_TextChanged(object sender, EventArgs e)
 		{
-			if (comboboxGroup.Text.IsNullOrWhiteSpace() || _typesGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim())
+			if (comboboxGroup.Text.IsNullOrWhiteSpace()
+			 || _typesGroups.TryGetValue(comboboxGroup.Text.Trim(), out var _) && _currentGroup != comboboxGroup.Text.Trim())
 			{
 				buttonOK.Enabled = false;
 				comboboxGroup.BackColor = Color.LightPink;
@@ -128,7 +120,6 @@ namespace LogsReader.Reader.Forms
 			}
 		}
 
-		private void TypesGroupForm_Resize(object sender, EventArgs e)
-			=> Refresh();
+		private void TypesGroupForm_Resize(object sender, EventArgs e) => Refresh();
 	}
 }

@@ -18,7 +18,12 @@ namespace LogsReader.Reader
 		public List<string> TraceNameFilterList { get; }
 		public List<string> TraceMessageFilterList { get; }
 
-		public DataFilter(DateTime startDate, DateTime endDate, string traceNameFilter, bool traceNameContains, string traceMessageFilter, bool traceMessageContains)
+		public DataFilter(DateTime startDate,
+		                  DateTime endDate,
+		                  string traceNameFilter,
+		                  bool traceNameContains,
+		                  string traceMessageFilter,
+		                  bool traceMessageContains)
 		{
 			if (startDate > endDate)
 				throw new Exception(Resources.Txt_DataFilter_ErrDate);
@@ -30,7 +35,6 @@ namespace LogsReader.Reader
 			else
 				_checkStartDate = input => true;
 
-
 			// фильтр по дате конца
 			EndDate = endDate;
 			if (EndDate < DateTime.MaxValue)
@@ -38,16 +42,14 @@ namespace LogsReader.Reader
 			else
 				_checkEndDate = input => true;
 
-
 			// фильтр по полю TraceName
 			TraceNameFilterList = traceNameFilter.IsNullOrWhiteSpace()
-				                      ? new List<string>()
-				                      : traceNameFilter.Split(',')
-					                      .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-					                      .Where(x => !x.Key.IsNullOrWhiteSpace())
-					                      .Select(x => x.Key)
-					                      .ToList();
-
+				? new List<string>()
+				: traceNameFilter.Split(',')
+				                 .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+				                 .Where(x => !x.Key.IsNullOrWhiteSpace())
+				                 .Select(x => x.Key)
+				                 .ToList();
 			if (TraceNameFilterList.Any())
 				if (traceNameContains)
 					_checkTraceNameFilter = input => !input.TraceName.IsNullOrWhiteSpace() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
@@ -56,20 +58,21 @@ namespace LogsReader.Reader
 			else
 				_checkTraceNameFilter = input => true;
 
-
 			// фильтр по полю TraceMessage
 			TraceMessageFilterList = traceMessageFilter.IsNullOrWhiteSpace()
-				                         ? new List<string>()
-				                         : traceMessageFilter.Split(',')
-					                         .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
-					                         .Where(x => !x.Key.IsNullOrWhiteSpace())
-					                         .Select(x => x.Key)
-					                         .ToList();
+				? new List<string>()
+				: traceMessageFilter.Split(',')
+				                    .GroupBy(p => p.Trim(), StringComparer.InvariantCultureIgnoreCase)
+				                    .Where(x => !x.Key.IsNullOrWhiteSpace())
+				                    .Select(x => x.Key)
+				                    .ToList();
 			if (TraceMessageFilterList.Any())
 				if (traceMessageContains)
-					_checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrWhiteSpace() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+					_checkTraceMessageFilter = input
+						=> !input.TraceMessage.IsNullOrWhiteSpace() && TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
 				else
-					_checkTraceMessageFilter = input => !input.TraceMessage.IsNullOrWhiteSpace() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
+					_checkTraceMessageFilter = input
+						=> !input.TraceMessage.IsNullOrWhiteSpace() && !TraceMessageFilterList.Any(p => input.TraceMessage.StringContains(p));
 			else
 				_checkTraceMessageFilter = input => true;
 		}
@@ -78,7 +81,7 @@ namespace LogsReader.Reader
 			=> input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameFilter(x) && _checkTraceMessageFilter(x));
 
 		/// <summary>
-		/// Проверям по фильтру. Если был задан дополнительный поиск по фильтру
+		///     Проверям по фильтру. Если был задан дополнительный поиск по фильтру
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>

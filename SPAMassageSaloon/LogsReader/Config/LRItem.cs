@@ -8,20 +8,13 @@ namespace LogsReader.Config
 	[Serializable]
 	public class LRItem
 	{
-		private XmlNode[] _item = new XmlNode[]
-		{
-			new XmlDocument().CreateTextNode(string.Empty)
-		};
+		private XmlNode[] _item = { new XmlDocument().CreateTextNode(string.Empty) };
 
 		public LRItem()
 		{
 		}
 
-		internal LRItem(string item)
-			=> Item = new XmlNode[]
-			{
-				new XmlDocument().CreateTextNode(item)
-			};
+		internal LRItem(string item) => Item = new XmlNode[] { new XmlDocument().CreateTextNode(item) };
 
 		[XmlText]
 		public XmlNode[] Item
@@ -31,11 +24,9 @@ namespace LogsReader.Config
 			{
 				if (value == null || value.Length == 0)
 					return;
+
 				Value = value[0].Value?.ReplaceUTFCodeToSymbol();
-				_item = new XmlNode[]
-				{
-					new XmlDocument().CreateTextNode(Value)
-				};
+				_item = new XmlNode[] { new XmlDocument().CreateTextNode(Value) };
 			}
 		}
 

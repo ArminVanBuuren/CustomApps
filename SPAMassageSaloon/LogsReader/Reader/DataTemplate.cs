@@ -32,7 +32,8 @@ namespace LogsReader.Reader
 		private static DataTemplate _tmp;
 
 		/// <summary>
-		/// Темповый темплейт, во избежание ошибок. Если будут изменяться названия полей в <see cref="DataTemplate"/> то, они будут изменяться везде.
+		///     Темповый темплейт, во избежание ошибок. Если будут изменяться названия полей в <see cref="DataTemplate" /> то, они
+		///     будут изменяться везде.
 		/// </summary>
 		internal static DataTemplate Tmp => _tmp ?? (_tmp = new DataTemplate());
 
@@ -41,15 +42,11 @@ namespace LogsReader.Reader
 		private string _traceName;
 		private string _message = string.Empty;
 
-		readonly HashSet<DataTemplate> _trnBindings = new HashSet<DataTemplate>();
+		private readonly HashSet<DataTemplate> _trnBindings = new HashSet<DataTemplate>();
 
-		DataTemplate() => IsSuccess = true;
+		private DataTemplate() => IsSuccess = true;
 
-		internal DataTemplate(TraceReader traceReader,
-		                      long foundLineID,
-		                      TraceParseResult parseResult,
-		                      string traceMessage,
-		                      TransactionValue trn)
+		internal DataTemplate(TraceReader traceReader, long foundLineID, TraceParseResult parseResult, string traceMessage, TransactionValue trn)
 		{
 			IsMatched = true;
 
@@ -58,10 +55,8 @@ namespace LogsReader.Reader
 				IsSuccess = !traceReader.IsTraceError.IsMatch(traceMessage);
 			else
 				IsSuccess = parseResult.IsSuccess;
-
 			FoundLineID = foundLineID;
 			ParentReader = traceReader;
-
 			ID = int.TryParse(parseResult.ID, out var id) ? id : -1;
 
 			if (!parseResult.Date.IsNullOrWhiteSpace()
@@ -79,24 +74,21 @@ namespace LogsReader.Reader
 			Description = parseResult.Description;
 			Message = parseResult.Message;
 			TraceMessage = traceMessage;
-
 			AddTransaction(trn);
 		}
 
-		internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn) :
-			this(traceReader, foundLineID, trn) => TraceMessage = traceMessage;
+		internal DataTemplate(TraceReader traceReader, long foundLineID, string traceMessage, TransactionValue trn)
+			: this(traceReader, foundLineID, trn)
+			=> TraceMessage = traceMessage;
 
 		internal DataTemplate(TraceReader traceReader, long foundLineID, TransactionValue trn)
 		{
 			IsMatched = false;
 			IsSuccess = false;
-
 			FoundLineID = foundLineID;
 			ParentReader = traceReader;
-
 			ID = -1;
 			CountOfLines = 0;
-
 			AddTransaction(trn);
 		}
 
@@ -115,9 +107,13 @@ namespace LogsReader.Reader
 			Error = error;
 			TraceName = error.GetType().ToString();
 			Description = error.Message;
+
 			if (error is RegexMatchTimeoutException errorRegex)
 			{
-				Message = string.Format(Resources.Txt_DataTemplate_ErrTimeout, errorRegex.Pattern, errorRegex.MatchTimeout.ToReadableString(), errorRegex.Input);
+				Message = string.Format(Resources.Txt_DataTemplate_ErrTimeout,
+				                        errorRegex.Pattern,
+				                        errorRegex.MatchTimeout.ToReadableString(),
+				                        errorRegex.Input);
 			}
 			else
 			{
@@ -125,7 +121,6 @@ namespace LogsReader.Reader
 			}
 
 			TraceMessage = traceMessage;
-
 			AddTransaction(trn);
 		}
 
@@ -167,11 +162,12 @@ namespace LogsReader.Reader
 		[DGVColumn(ColumnPosition.After, nameof(Tmp.ElapsedSec))]
 		public string ElapsedSecString => ElapsedSec > 0 ? ElapsedSec.ToString("0.000") : ElapsedSec == 0 ? "0" : string.Empty;
 
-		public string ElapsedSecDescription => ElapsedSecTotal > 0
-			                                       ? $"Elapsed current=[{ElapsedSec:0.###} sec], processing=[{ElapsedSecFromFirst:0.###} sec], total=[{ElapsedSecTotal:0.###} sec]"
-			                                       : ElapsedSecTotal == 0
-				                                       ? "Elapsed 0 sec"
-				                                       : string.Empty;
+		public string ElapsedSecDescription
+			=> ElapsedSecTotal > 0
+				? $"Elapsed current=[{ElapsedSec:0.###} sec], processing=[{ElapsedSecFromFirst:0.###} sec], total=[{ElapsedSecTotal:0.###} sec]"
+				: ElapsedSecTotal == 0
+					? "Elapsed 0 sec"
+					: string.Empty;
 
 		public double ElapsedSec { get; internal set; } = -1;
 
@@ -189,7 +185,7 @@ namespace LogsReader.Reader
 		public bool IsSuccess { get; }
 
 		/// <summary>
-		/// Свойство всегда false, он меняется только в DataGridView
+		///     Свойство всегда false, он меняется только в DataGridView
 		/// </summary>
 		[DGVColumn(ColumnPosition.Last, nameof(Tmp.IsFiltered), false)]
 		public bool IsFiltered => false;
@@ -264,8 +260,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		internal void AddTransactionBindingList(IList<DataTemplate> list)
-			=> _trnBindings.AddRange(list);
+		internal void AddTransactionBindingList(IList<DataTemplate> list) => _trnBindings.AddRange(list);
 
 		public override bool Equals(object obj)
 		{
@@ -276,7 +271,7 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// хэш найденной позиции в файле и хэш ридера
+		///     хэш найденной позиции в файле и хэш ридера
 		/// </summary>
 		/// <returns></returns>
 		public override int GetHashCode()

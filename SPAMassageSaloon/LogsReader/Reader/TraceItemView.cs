@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
-using Utils;
-using Utils.WinForm.Notepad;
 using LogsReader.Config;
+using Utils;
 using Utils.WinForm;
+using Utils.WinForm.Notepad;
 
 namespace LogsReader.Reader
 {
@@ -56,20 +56,18 @@ namespace LogsReader.Reader
 		{
 			UserSettings = userSettings;
 			IsMain = isMain;
-
 			InitializeComponent();
 
 			try
 			{
 				notepad.SuspendLayout();
-
 				notepad.TabsFont = LogsReaderMainForm.DgvDataFont;
 				notepad.TextFont = LogsReaderMainForm.TxtFont;
-
+				
 				descriptionText.AutoWordSelection = true;
 				descriptionText.AutoWordSelection = false;
 				descriptionText.Font = new Font(LogsReaderMainForm.MainFontFamily, 9F, FontStyle.Bold);
-
+				
 				EditorMessage = notepad.AddDocument(new BlankDocument
 				{
 					HeaderName = DataTemplate.HeaderMessage,
@@ -83,11 +81,7 @@ namespace LogsReader.Reader
 				EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
 				EditorMessage.IsReplaceMode = false;
 				EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-
-				EditorTraceMessage = notepad.AddDocument(new BlankDocument
-				{
-					HeaderName = DataTemplate.HeaderTraceMessage
-				});
+				EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
 				EditorTraceMessage.BackBrush = null;
 				EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
 				EditorTraceMessage.Cursor = Cursors.IBeam;
@@ -95,15 +89,15 @@ namespace LogsReader.Reader
 				EditorTraceMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
 				EditorTraceMessage.IsReplaceMode = false;
 				EditorTraceMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
-
+				
 				EditorMessage.WordWrap = UserSettings.MessageWordWrap;
 				EditorMessage.Highlights = UserSettings.MessageHighlights;
 				EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
 				EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
-
+				
 				notepad.SelectEditor(0);
 				notepad.DefaultEncoding = defaultEncoding;
-
+				
 				var langMessage = UserSettings.MessageLanguage;
 				var langTrace = UserSettings.TraceLanguage;
 				if (EditorMessage.Language != langMessage)
@@ -115,7 +109,7 @@ namespace LogsReader.Reader
 				{
 					EditorMessage.LanguageChanged += (sender, args) => { UserSettings.MessageLanguage = EditorMessage.Language; };
 					EditorTraceMessage.LanguageChanged += (sender, args) => { UserSettings.TraceLanguage = EditorTraceMessage.Language; };
-
+					
 					notepad.WordWrapStateChanged += (sender, args) =>
 					{
 						if (!(sender is Editor editor))
@@ -165,7 +159,8 @@ namespace LogsReader.Reader
 				if (showTransactionsInformation)
 				{
 					var minus = prevTemplate.TransactionBindings.Except(CurrentTemplate.TransactionBindings); // разность последовательностей. Вычитаем лишнее.
-					var plus = CurrentTemplate.TransactionBindings.Except(prevTemplate.TransactionBindings); // разность последовательностей. Добавляем недостоющее.
+					var plus = CurrentTemplate.TransactionBindings
+					                          .Except(prevTemplate.TransactionBindings); // разность последовательностей. Добавляем недостоющее.
 					var noChangedMinus = DeselectTransactions(minus);
 					var noChangedPlus = SelectTransactions(plus);
 					noChanged = noChangedMinus && noChangedPlus;
@@ -188,13 +183,13 @@ namespace LogsReader.Reader
 			}
 
 			RefreshDescription(showTransactionsInformation);
-
 			SetMessage();
 		}
 
 		public void RefreshDescription(bool showTransactionInformation, out bool noChanged)
 		{
 			noChanged = true;
+
 			if (CurrentTemplate == null)
 			{
 				Clear();
@@ -205,17 +200,15 @@ namespace LogsReader.Reader
 				noChanged = SelectTransactions(CurrentTemplate.TransactionBindings);
 			else
 				noChanged = DeselectTransactions(CurrentTemplate.TransactionBindings);
-
 			RefreshDescription(showTransactionInformation);
 		}
 
-		void RefreshDescription(bool showTrnsInformation)
+		private void RefreshDescription(bool showTrnsInformation)
 		{
 			try
 			{
 				descriptionText.SuspendLayout();
 				descriptionText.Clear();
-
 				descriptionText.AppendText($"{nameof(CurrentTemplate.FoundLineID)} = {CurrentTemplate.FoundLineID}");
 
 				if (showTrnsInformation)
@@ -224,13 +217,13 @@ namespace LogsReader.Reader
 					{
 						descriptionText.AppendText("\r\nTransactions = \"");
 						var i = 0;
+
 						foreach (var (_, value) in CurrentTemplate.Transactions)
 						{
 							if (value.FoundByTrn)
 								descriptionText.AppendText(value.Trn, Color.Green);
 							else
 								descriptionText.AppendText(value.Trn);
-
 							i++;
 							if (CurrentTemplate.Transactions.Count > i)
 								descriptionText.AppendText("\", \"");
@@ -270,7 +263,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		void SetMessage()
+		private void SetMessage()
 		{
 			if (CurrentTemplate == null)
 			{
@@ -285,7 +278,6 @@ namespace LogsReader.Reader
 
 				EditorMessage.Text = CurrentTemplate.Message.Trim();
 				EditorMessage.DelayedEventsInterval = 10;
-
 				prevTemplateMessage = CurrentTemplate;
 			}
 			else if (notepad.CurrentEditor == EditorTraceMessage)
@@ -295,7 +287,6 @@ namespace LogsReader.Reader
 
 				EditorTraceMessage.Text = CurrentTemplate.TraceMessage;
 				EditorTraceMessage.DelayedEventsInterval = 10;
-
 				prevTemplateTraceMessage = CurrentTemplate;
 			}
 		}
@@ -312,7 +303,7 @@ namespace LogsReader.Reader
 				DeselectTransactions(CurrentTemplate.TransactionBindings);
 		}
 
-		bool SelectTransactions(IEnumerable<DataTemplate> collection)
+		private bool SelectTransactions(IEnumerable<DataTemplate> collection)
 		{
 			if (!IsMain)
 				return true;
@@ -323,6 +314,7 @@ namespace LogsReader.Reader
 			{
 				if (bindTrnTemplate.IsSelected)
 					continue;
+
 				bindTrnTemplate.IsSelected = true;
 				noChanged = false;
 			}
@@ -330,7 +322,7 @@ namespace LogsReader.Reader
 			return noChanged;
 		}
 
-		bool DeselectTransactions(IEnumerable<DataTemplate> collection)
+		private bool DeselectTransactions(IEnumerable<DataTemplate> collection)
 		{
 			if (!IsMain)
 				return true;
@@ -341,6 +333,7 @@ namespace LogsReader.Reader
 			{
 				if (!bindTrnTemplate.IsSelected)
 					continue;
+
 				bindTrnTemplate.IsSelected = false;
 				noChanged = false;
 			}
@@ -351,18 +344,14 @@ namespace LogsReader.Reader
 		public void Clear()
 		{
 			descriptionText.Clear();
-
 			EditorMessage?.Clear();
 			EditorTraceMessage?.Clear();
-
 			DeselectTransactions();
-
 			CurrentTemplate = null;
 			prevTemplateMessage = null;
 			prevTemplateTraceMessage = null;
 		}
 
-		private void splitContainer_SplitterMoved(object sender, SplitterEventArgs e)
-			=> SplitterMoved?.Invoke(this, EventArgs.Empty);
+		private void splitContainer_SplitterMoved(object sender, SplitterEventArgs e) => SplitterMoved?.Invoke(this, EventArgs.Empty);
 	}
 }

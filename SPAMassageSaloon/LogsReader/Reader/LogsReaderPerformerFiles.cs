@@ -47,13 +47,12 @@ namespace LogsReader.Reader
 				return;
 
 			Reset();
-
 			TraceReaders = new ReadOnlyDictionary<int, TraceReader>(await Task<Dictionary<int, TraceReader>>.Factory.StartNew(GetFileLogs));
 			if (TraceReaders == null || TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 		}
 
-		Dictionary<int, TraceReader> GetFileLogs()
+		private Dictionary<int, TraceReader> GetFileLogs()
 		{
 			var readerIndex = -1;
 			var traceReaders = new Dictionary<int, TraceReader>();
@@ -70,11 +69,12 @@ namespace LogsReader.Reader
 
 					string serverFolder;
 					var folderMatch = IO.CHECK_PATH.Match(originalFolder);
+
 					if (folderMatch.Success)
 					{
 						var serverRoot = $"\\\\{serverName}\\{folderMatch.Groups["DISC"]}$";
 						serverFolder = $"{serverRoot}\\{folderMatch.Groups["FULL"]}"; // @"\\LOCALHOST\D$\TEST\MG2\CRMCON_CRMCON_01_data.log.2020-06-06.0"
-
+						
 						if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
 							continue;
 					}
@@ -82,12 +82,13 @@ namespace LogsReader.Reader
 					{
 						var serverRoot = $"\\\\{serverName}";
 						serverFolder = $"{serverRoot}\\{originalFolder}"; // @"\\MSK-DEV-FORIS\forislog\mg\CRMCON_CRMCON_MTS_activity.log.2020-08-04.0"
-
+						
 						if (!IsExistAndAvailable(serverFolder, serverName, serverRoot, originalFolder))
 							continue;
 					}
 
 					var files = Directory.GetFiles(serverFolder, "*", isAllDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
 					foreach (var traceReader in files.Select(filePath => GetTraceReader((serverName, filePath, originalFolder))))
 					{
 						if (IsStopPending)
@@ -100,9 +101,11 @@ namespace LogsReader.Reader
 						{
 							var index = -1;
 							var fileName = traceReader.File.Name;
+
 							foreach (var fileTypePart in fileType)
 							{
 								index = fileName.IndexOf(fileTypePart, StringComparison.InvariantCultureIgnoreCase);
+
 								if (index > -1)
 								{
 									var indexWithWord = index + fileTypePart.Length;
@@ -129,7 +132,7 @@ namespace LogsReader.Reader
 			return traceReaders;
 		}
 
-		bool IsExistAndAvailable(string serverFolder, string server, string serverRoot, string folderPath)
+		private bool IsExistAndAvailable(string serverFolder, string server, string serverRoot, string folderPath)
 		{
 			try
 			{
@@ -155,16 +158,12 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		bool IsExistAndAvailable(Exception ex, string serverFolder, string server, string serverRoot, string folderPath)
+		private bool IsExistAndAvailable(Exception ex, string serverFolder, string server, string serverRoot, string folderPath)
 		{
 			if (ex.HResult == -2147024843) // не найден сетевой путь
 				throw new Exception($"[{server}] {ex.Message.Trim()}", ex);
 
-
-			foreach (var credential in LogsReaderMainForm.Credentials
-				.OrderByDescending(x => x.Value)
-				.Select(x => x.Key)
-				.ToList())
+			foreach (var credential in LogsReaderMainForm.Credentials.OrderByDescending(x => x.Value).Select(x => x.Key).ToList())
 			{
 				if (IsStopPending)
 					return false;
@@ -179,18 +178,17 @@ namespace LogsReader.Reader
 				}
 			}
 
-
 			var tryCount = 0;
 			AddUserCredentials authorizationForm = null;
 			var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
 			var additionalTxt = string.Empty;
+
 			while (tryCount < 3)
 			{
 				if (IsStopPending)
 					return false;
 
-				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(),
-				                                           authorizationForm?.Credential?.UserName);
+				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(), authorizationForm?.Credential?.UserName);
 
 				if (authorizationForm.ShowDialog() == DialogResult.OK)
 				{
@@ -214,10 +212,11 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credentialList)
+		private bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credentialList)
 		{
 			// сначала проверяем доступ к рутовой папке. Если все ОК, то вероятно до основной папки тоже есть доступ
 			NetworkConnection connectionRoot = null;
+
 			foreach (var credential in credentialList.Value)
 			{
 				try
@@ -237,12 +236,13 @@ namespace LogsReader.Reader
 				}
 			}
 
-
 			Exception accessDenied = new Win32Exception(1326);
+
 			// если доступа к руту нет, то проверяем доступ к конкретной папке
 			foreach (var credential in credentialList.Value)
 			{
 				NetworkConnection connection = null;
+
 				try
 				{
 					connection = new NetworkConnection(serverFolder, credential);
@@ -265,7 +265,7 @@ namespace LogsReader.Reader
 			throw accessDenied;
 		}
 
-		static bool IsExist(string serverFolder, CryptoNetworkCredential credential)
+		private static bool IsExist(string serverFolder, CryptoNetworkCredential credential)
 		{
 			try
 			{
@@ -303,7 +303,7 @@ namespace LogsReader.Reader
 		}
 
 		/// <summary>
-		/// Останавливаем все процессы
+		///     Останавливаем все процессы
 		/// </summary>
 		public override void Clear()
 		{
@@ -323,11 +323,9 @@ namespace LogsReader.Reader
 
 			//	Connections.Clear();
 			//}
-
 			if (TraceReaders != null)
 				foreach (var reader in TraceReaders.Values)
 					reader.Clear();
-
 			base.Clear();
 		}
 
@@ -336,12 +334,11 @@ namespace LogsReader.Reader
 			if (TraceReaders != null)
 				foreach (var reader in TraceReaders.Values)
 					reader.Dispose();
-
 			TraceReaders = null;
 			base.Clear();
 		}
 
-		static bool IsAllowedExtension(string fileName)
+		private static bool IsAllowedExtension(string fileName)
 		{
 			switch (Path.GetExtension(fileName)?.ToLower())
 			{

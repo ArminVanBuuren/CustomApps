@@ -5,14 +5,16 @@ using LogsReader.Reader;
 
 namespace LogsReader.Config
 {
-	[Serializable, XmlRoot("Pattern")]
+	[Serializable]
+	[XmlRoot("Pattern")]
 	public class LRTraceParsePatternItem : LRTraceParseItem
 	{
 		public LRTraceParsePatternItem()
 		{
 		}
 
-		internal LRTraceParsePatternItem(string regexPattern) : base(regexPattern)
+		internal LRTraceParsePatternItem(string regexPattern)
+			: base(regexPattern)
 		{
 		}
 
@@ -42,7 +44,6 @@ namespace LogsReader.Config
 			{
 				Parent = parent;
 				MatchCalculationFunc = LRSettings.MatchCalculationFunc;
-
 				ID = MatchCalculationFunc.Invoke(Parent.ID).Invoke(match);
 				Date = MatchCalculationFunc.Invoke(Parent.Date).Invoke(match);
 				TraceName = MatchCalculationFunc.Invoke(Parent.TraceName).Invoke(match);
