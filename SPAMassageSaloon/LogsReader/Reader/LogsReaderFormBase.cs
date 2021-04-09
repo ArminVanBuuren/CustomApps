@@ -583,7 +583,9 @@ namespace LogsReader.Reader
 				DateStartFilter.ValueChanged += DateStartFilterOnValueChanged;
 				DateEndFilter.ValueChanged += DateEndFilterOnValueChanged;
 				
-				TbxPattern.AssignValue(UserSettings.PreviousSearch, TxtPatternOnTextChanged);
+				TbxPattern.AssignValue(UserSettings.PreviousSearch.First(), TxtPatternOnTextChanged);
+				TbxPattern.Items.AddRange(UserSettings.PreviousSearch.ToArray());
+
 				ChbxUseRegex.Checked = UserSettings.UseRegex;
 				DateStartFilter.Checked = UserSettings.DateStartChecked;
 				if (DateStartFilter.Checked)
@@ -591,9 +593,13 @@ namespace LogsReader.Reader
 				DateEndFilter.Checked = UserSettings.DateEndChecked;
 				if (DateEndFilter.Checked)
 					DateEndFilter.Value = _getEndDate.Invoke();
-				TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter, TbxTraceNameFilterOnTextChanged);
-				TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter, TbxTraceMessageFilterOnTextChanged);
-				
+
+				TbxTraceNameFilter.AssignValue(UserSettings.TraceNameFilter.First(), TbxTraceNameFilterOnTextChanged);
+				TbxTraceNameFilter.Items.AddRange(UserSettings.TraceNameFilter.ToArray());
+
+				TbxTraceMessageFilter.AssignValue(UserSettings.TraceMessageFilter.First(), TbxTraceMessageFilterOnTextChanged);
+				TbxTraceMessageFilter.Items.AddRange(UserSettings.TraceMessageFilter.ToArray());
+
 				MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
 				tabControlViewer.DrawMode = TabDrawMode.Normal;
 				tabControlViewer.BackColor = Color.White;
@@ -958,6 +964,20 @@ namespace LogsReader.Reader
 		{
 			if (TbxPattern.Text.IsNullOrEmpty())
 				throw new Exception(Resources.Txt_LogsReaderForm_SearchPatternIsNull);
+
+			AssignComboboxWithHistory(TbxPattern);
+			AssignComboboxWithHistory(TbxTraceNameFilter);
+			AssignComboboxWithHistory(TbxTraceMessageFilter);
+		}
+
+		private static void AssignComboboxWithHistory(ComboBox cb, int maxItems = 15)
+		{
+			if (maxItems <= 0)
+				maxItems = 1;
+
+			var items = cb.Items.OfType<string>().Where(x => !x.IsNullOrEmpty() && x != cb.Text).ToList().Take(maxItems - 1);
+			cb.Items.Clear();
+			cb.Items.AddRange(new List<string> { cb.Text }.Concat(items).ToArray());
 		}
 
 		protected virtual void ReportProcessStatus(IEnumerable<TraceReader> readers)
@@ -2143,7 +2163,7 @@ namespace LogsReader.Reader
 
 		internal virtual void TxtPatternOnTextChanged(object sender, EventArgs e)
 		{
-			UserSettings.PreviousSearch = ((TextBox) sender).Text;
+			UserSettings.PreviousSearch = ((ComboBox)sender).Items.OfType<string>().ToList();
 			ValidationCheck(true);
 		}
 
@@ -2208,12 +2228,14 @@ namespace LogsReader.Reader
 		internal virtual void CobxTraceNameFilter_SelectedIndexChanged(object sender, EventArgs e)
 			=> UserSettings.TraceNameFilterContains = ((ComboBox) sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
 
-		internal virtual void TbxTraceNameFilterOnTextChanged(object sender, EventArgs e) => UserSettings.TraceNameFilter = ((TextBox) sender).Text;
+		internal virtual void TbxTraceNameFilterOnTextChanged(object sender, EventArgs e)
+			=> UserSettings.TraceNameFilter = ((ComboBox)sender).Items.OfType<string>().ToList();
 
 		internal virtual void CobxTraceMessageFilter_SelectedIndexChanged(object sender, EventArgs e)
 			=> UserSettings.TraceMessageFilterContains = ((ComboBox) sender).Text.Like(Resources.Txt_LogsReaderForm_Contains);
 
-		internal virtual void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e) => UserSettings.TraceMessageFilter = ((TextBox) sender).Text;
+		internal virtual void TbxTraceMessageFilterOnTextChanged(object sender, EventArgs e) 
+			=> UserSettings.TraceMessageFilter = ((ComboBox)sender).Items.OfType<string>().ToList();
 
 		internal virtual void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)
 		{

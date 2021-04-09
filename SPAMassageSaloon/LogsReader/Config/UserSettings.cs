@@ -7,6 +7,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using FastColoredTextBoxNS;
 using LogsReader.Reader;
 using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Utils;
 using Utils.Handles;
 
@@ -21,10 +23,18 @@ namespace LogsReader.Config
 
 		public string Scheme { get; }
 
-		public string PreviousSearch
+		public List<string> PreviousSearch
 		{
-			get => GetValue(nameof(PreviousSearch));
-			set => SetValue(nameof(PreviousSearch), value);
+			get
+			{
+				var val = GetValue(nameof(PreviousSearch));
+				return val.TryGetJson<List<string>>(out var res) ? res : new List<string>{val};
+			}
+			set
+			{
+				var newVal = JsonConvert.SerializeObject(value);
+				SetValue(nameof(PreviousSearch), newVal);
+			}
 		}
 
 		public bool UseRegex
@@ -52,10 +62,18 @@ namespace LogsReader.Config
 			set => SetValue(nameof(DateEndChecked), value);
 		}
 
-		public string TraceNameFilter
+		public List<string> TraceNameFilter
 		{
-			get => GetValue(nameof(TraceNameFilter));
-			set => SetValue(nameof(TraceNameFilter), value);
+			get
+			{
+				var val = GetValue(nameof(TraceNameFilter));
+				return val.TryGetJson<List<string>>(out var res) ? res : new List<string> { val };
+			}
+			set
+			{
+				var newVal = JsonConvert.SerializeObject(value);
+				SetValue(nameof(TraceNameFilter), newVal);
+			}
 		}
 
 		public bool TraceNameFilterContains
@@ -64,10 +82,18 @@ namespace LogsReader.Config
 			set => SetValue(nameof(TraceNameFilterContains), value);
 		}
 
-		public string TraceMessageFilter
+		public List<string> TraceMessageFilter
 		{
-			get => GetValue(nameof(TraceMessageFilter));
-			set => SetValue(nameof(TraceMessageFilter), value);
+			get
+			{
+				var val = GetValue(nameof(TraceMessageFilter));
+				return val.TryGetJson<List<string>>(out var res) ? res : new List<string> { val };
+			}
+			set
+			{
+				var newVal = JsonConvert.SerializeObject(value);
+				SetValue(nameof(TraceMessageFilter), newVal);
+			}
 		}
 
 		public bool TraceMessageFilterContains

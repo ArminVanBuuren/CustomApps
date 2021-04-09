@@ -498,7 +498,7 @@ Input data:
     <value>Enumeration of custom functions. Used to adjust the displayed data, if this cannot be done by RegEx grouping. Applicable only in the attributes nodes - Pattern and TransactionPattern. Each class must implement the ICustomFunction interface which has only one function "Invoke". Format: "{custom_function_test('arg1', 'arg2', 'arg3', '$1 - test','$2')}"</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Regex search is being completed faster.</value>
+    <value />
   </data>
   <data name="Txt_Global_Back" xml:space="preserve">
     <value>Back</value>

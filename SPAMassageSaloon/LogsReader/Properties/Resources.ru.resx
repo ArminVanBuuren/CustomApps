@@ -430,7 +430,7 @@
     <value>Набор кастомных функций, позволяет регулировать отображение результатов поиска, если это невозможно сделать при помощи группировки регулярных выражений. Можно использовать только в атрибутах нод - "Pattern" и "TransactionPattern". Каждых класс должен реализовать интерфейс ICustomFunction который имеет всего одну функцию "Invoke". Количество входных аргументов - неограниченно. Формат: "{custom_function_test('arg1', 'arg2', 'arg3', '$1 - test','$2')}"</value>
   </data>
   <data name="Txt_LRSettings_UseRegexComment" xml:space="preserve">
-    <value>Поиск по регулярному выражению выполняется быстрее.</value>
+    <value />
   </data>
   <data name="Txt_Global_Back" xml:space="preserve">
     <value>Фон</value>

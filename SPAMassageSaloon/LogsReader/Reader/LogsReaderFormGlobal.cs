@@ -706,7 +706,7 @@ namespace LogsReader.Reader
 		{
 			base.TxtPatternOnTextChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.TbxPattern.Text = ((TextBox) sender).Text;
+				schemeForm.TbxPattern.Text = ((Control) sender).Text;
 		}
 
 		internal override void ChbxUseRegex_CheckedChanged(object sender, EventArgs e)
@@ -751,7 +751,7 @@ namespace LogsReader.Reader
 		{
 			base.TbxTraceNameFilterOnTextChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.TbxTraceNameFilter.Text = ((TextBox) sender).Text;
+				schemeForm.TbxTraceNameFilter.Text = ((Control) sender).Text;
 		}
 
 		internal override void CobxTraceMessageFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -765,7 +765,7 @@ namespace LogsReader.Reader
 		{
 			base.TbxTraceMessageFilterOnTextChanged(sender, e);
 			foreach (var schemeForm in GetSelectedSchemas())
-				schemeForm.TbxTraceMessageFilter.Text = ((TextBox) sender).Text;
+				schemeForm.TbxTraceMessageFilter.Text = ((Control) sender).Text;
 		}
 
 		internal override void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)

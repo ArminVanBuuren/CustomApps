@@ -1451,7 +1451,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Regex search is being completed faster..
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string Txt_LRSettings_UseRegexComment {
             get {
