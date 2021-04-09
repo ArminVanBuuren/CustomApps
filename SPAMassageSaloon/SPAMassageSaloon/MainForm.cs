@@ -130,6 +130,7 @@ namespace SPAMassageSaloon
 				for (var i = 0; i < 40; i++)
 					Task.Factory.StartNew(() => { Thread.Sleep(1); });
 			}
+
 			//ThreadPool.SetMaxThreads(100, 0);
 		}
 
@@ -304,8 +305,11 @@ namespace SPAMassageSaloon
 
 				var separator = $"\r\n{new string('-', 61)}\r\n";
 				var description = separator.TrimStart()
-				                + string.Join(separator, args.Control.Select(x => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}")).Trim()
-				                + separator.TrimEnd();
+				                  + string.Join(separator,
+				                                args.Control.Select(x
+					                                                    => $"{x.RemoteFile.Location} Version = {x.RemoteFile.VersionString}\r\nDescription = {x.RemoteFile.Description}"))
+				                          .Trim()
+				                  + separator.TrimEnd();
 
 				ReportMessage.Show(string.Format(Resources.Txt_Updated, AppName, this.GetAssemblyInfo().Version, BuildTime, description).Trim(),
 				                   MessageBoxIcon.Information,
@@ -367,33 +371,31 @@ namespace SPAMassageSaloon
 					appCPU.NextValue();
 				}
 
-				var taskBarNotify = TaskbarManager.IsPlatformSupported
-					                    ? (Action<int, int>)((processesCount, totalProgress) =>
-						                                        {
-							                                        if (IsSuspended)
-								                                        return;
+				void ChangeTaskbarState(int processesCount, int totalProgress)
+				{
+					if (IsSuspended)
+						return;
 
-							                                        try
-							                                        {
-								                                        if (processesCount == 0)
-								                                        {
-									                                        TaskbarManager.Instance.SetOverlayIcon(null, "");
-									                                        TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
-								                                        }
-								                                        else
-								                                        {
-									                                        SetTaskBarOverlay(processesCount);
-									                                        TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
-								                                        }
-							                                        }
-							                                        catch (Exception)
-							                                        {
-								                                        // ignored
-							                                        }
+					try
+					{
+						if (processesCount == 0)
+						{
+							TaskbarManager.Instance.SetOverlayIcon(null, "");
+							TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+						}
+						else
+						{
+							SetTaskBarOverlay(processesCount);
+							TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
+						}
+					}
+					catch (Exception)
+					{
+						// ignored
+					}
+				}
 
-						                                        })
-					                    : null;
-
+				var taskBarNotify = TaskbarManager.IsPlatformSupported ? (Action<int, int>) ChangeTaskbarState : null;
 				var cpuUsage = "0";
 				var threadsUsage = "0";
 				var ramUsage = "0";
@@ -508,7 +510,8 @@ namespace SPAMassageSaloon
 				               tester.Load += (o, args) => _countOfXPathTester++;
 				               tester.Closed += (o, args) => _countOfXPathTester--;
 				               return tester;
-			               }, _countOfXPathTester < 4);
+			               },
+			               _countOfXPathTester < 4);
 
 		private void toolStripRegexTester_Click(object sender, EventArgs e)
 			=> ShowMdiForm(() =>
@@ -517,7 +520,8 @@ namespace SPAMassageSaloon
 				               tester.Load += (o, args) => _countOfRegexTester++;
 				               tester.Closed += (o, args) => _countOfRegexTester--;
 				               return tester;
-			               }, _countOfRegexTester < 3);
+			               },
+			               _countOfRegexTester < 3);
 
 		public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
 		{
@@ -577,10 +581,7 @@ namespace SPAMassageSaloon
 			try
 			{
 				var mdiForm = sender as Form;
-				var button = new MDIManagerButton(mdiForm)
-				{
-					BackColor = Color.White
-				};
+				var button = new MDIManagerButton(mdiForm) {BackColor = Color.White};
 				var mainForm = mdiForm?.MdiParent as MainForm;
 				var status = mainForm?.statusStrip;
 				if (status == null)

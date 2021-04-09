@@ -208,9 +208,7 @@ namespace SPAFilter
 			try
 			{
 				foreach (var entry in propertyBag)
-				{
 					allSavedParams.Add(entry.Name, entry.Value);
-				}
 			}
 			catch (Exception ex)
 			{

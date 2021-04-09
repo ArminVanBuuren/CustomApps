@@ -12,19 +12,14 @@ namespace LogsReader.Config
 	{
 		internal abstract bool IsCorrect { get; set; }
 
-		protected Regex GetCDataNode(XmlNode[] input, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None) 
+		protected Regex GetCDataNode(XmlNode[] input, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None)
 			=> GetCDataNode(input, false, out cdataResult, optional);
 
 		protected Regex GetCDataNode(XmlNode[] input, bool isMandatory, out XmlNode[] cdataResult, RegexOptions optional = RegexOptions.None)
 		{
 			cdataResult = null;
 			if (input != null && input.Length > 0)
-				cdataResult = input[0].NodeType == XmlNodeType.CDATA
-					              ? input
-					              : new XmlNode[]
-					              {
-						              new XmlDocument().CreateCDataSection(input[0].Value)
-					              };
+				cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] {new XmlDocument().CreateCDataSection(input[0].Value)};
 
 			if (cdataResult == null || cdataResult.Length == 0)
 				return null;
@@ -40,9 +35,9 @@ namespace LogsReader.Config
 			}
 
 			return optional == RegexOptions.None
-				       ? new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline,
-				                   LRSettings.PARSING_MATCH_TIMEOUT)
-				       : new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional,
+				       ? new Regex(text, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline, LRSettings.PARSING_MATCH_TIMEOUT)
+				       : new Regex(text,
+				                   RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | optional,
 				                   LRSettings.PARSING_MATCH_TIMEOUT);
 		}
 	}
