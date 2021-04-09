@@ -284,17 +284,12 @@ namespace LogsReader.Config
 		private List<string> GetJsonSetting(string name)
 		{
 			var val = GetValue(name);
-			return val.TryGetJson<List<string>>(out var res)
-				? res.ConvertAll(x => x.Replace("&qout;", "\""))
-				: val.IndexOf("\"") != -1 && val.IndexOf("[") != -1 && val.IndexOf("]") != -1
-					? new List<string> { val }
-					: new List<string> { string.Empty };
+			return val.TryGetJson<List<string>>(out var res) ? res : new List<string> { val };
 		}
 
 		private void SetJsonSetting(string name, List<string> value)
 		{
-			var result = value.ConvertAll(x => x.Replace("\"", "&qout;"));
-			var newVal = JsonConvert.SerializeObject(result);
+			var newVal = JsonConvert.SerializeObject(value);
 			SetValue(name, newVal);
 		}
 
