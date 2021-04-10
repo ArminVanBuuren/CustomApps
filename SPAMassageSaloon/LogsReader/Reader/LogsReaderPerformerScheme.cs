@@ -39,8 +39,9 @@ namespace LogsReader.Reader
 		                                 IReadOnlyDictionary<string, int> servers,
 		                                 IReadOnlyDictionary<string, int> fileTypes,
 		                                 IReadOnlyDictionary<string, bool> folders,
-		                                 DataFilter filter)
-			: base(settings, findMessage, useRegex, servers, fileTypes, folders, filter)
+		                                 DataFilter filter,
+		                                 GetUserCredential getUserCredential)
+			: base(settings, findMessage, useRegex, servers, fileTypes, folders, filter, getUserCredential)
 		{
 		}
 

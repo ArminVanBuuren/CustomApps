@@ -18,17 +18,21 @@ namespace LogsReader.Reader.Forms
 			Icon = Icon.FromHandle(Resources.authorization.GetHicon());
 			buttonCancel.Text = Resources.Txt_Forms_Cancel;
 			buttonOK.Enabled = false;
-			MinimizeBox = false;
-			MaximizeBox = false;
-			TopLevel = true;
-			TopMost = true;
+
+			//MinimizeBox = false;
+			//MaximizeBox = false;
+			//TopLevel = true;
+			//TopMost = true;
+			//CenterToScreen();
+
 			_sourceInformation = information;
 			SetInformation(information);
 			textBoxUser.Text = userName ?? string.Empty;
-			CenterToScreen();
+
 			_contextMenuStrip = new ContextMenuStrip { Tag = labelInformation };
 			_contextMenuStrip.Items.Add("Copy text", null, (sender, args) => { Clipboard.SetText(labelInformation.Text); });
 			labelInformation.MouseClick += Information_MouseClick;
+
 			KeyPreview = true;
 			KeyDown += (sender, args) =>
 			{

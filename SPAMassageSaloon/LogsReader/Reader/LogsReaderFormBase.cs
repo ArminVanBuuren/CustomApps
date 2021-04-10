@@ -1823,8 +1823,8 @@ namespace LogsReader.Reader
 			                       .ToDictionary(x => x.TraceName);
 
 			var form = await TraceNameFilterForm.GetAsync(filtered);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
+			form.StartPosition = FormStartPosition.CenterParent;
+			if (form.ShowDialog() == DialogResult.OK)
 				TbxTraceNameFilter.Text = string.Join(", ", filtered.Values.Where(x => x.Checked).Select(x => x.TraceName)).Trim();
 		}
 

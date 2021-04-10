@@ -14,6 +14,8 @@ using Utils;
 
 namespace LogsReader.Reader
 {
+	public delegate CryptoNetworkCredential GetUserCredential(string information, string userName);
+
 	public abstract class LogsReaderPerformerFiles : LogsReaderPerformerBase
 	{
 		private readonly IReadOnlyDictionary<string, int> _servers;
@@ -22,13 +24,16 @@ namespace LogsReader.Reader
 
 		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; protected set; }
 
+		private readonly GetUserCredential GetCredential;
+
 		protected LogsReaderPerformerFiles(LRSettingsScheme settings,
 		                                   string findMessage,
 		                                   bool useRegex,
 		                                   IReadOnlyDictionary<string, int> servers,
 		                                   IReadOnlyDictionary<string, int> fileTypes,
 		                                   IReadOnlyDictionary<string, bool> folders,
-		                                   DataFilter filter)
+		                                   DataFilter filter,
+		                                   GetUserCredential getUserCredential)
 			: base(settings, findMessage, useRegex, filter)
 		{
 			_servers = servers;
@@ -37,6 +42,7 @@ namespace LogsReader.Reader
 				fileTypesNew.Add(fileType.Split('*'), priority);
 			_fileTypes = new ReadOnlyDictionary<string[], int>(fileTypesNew);
 			_folders = folders;
+			GetCredential = getUserCredential;
 		}
 
 		public virtual async Task GetTargetFilesAsync()
@@ -173,34 +179,35 @@ namespace LogsReader.Reader
 				}
 			}
 
-			var tryCount = 0;
-			AddUserCredentials authorizationForm = null;
-			var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
-			var additionalTxt = string.Empty;
-
-			while (tryCount < 3)
+			if (GetCredential != null)
 			{
-				if (IsStopPending)
-					return false;
+				var tryCount = 0;
+				CryptoNetworkCredential credential = null;
+				var accessDeniedTxt = string.Format(Resources.Txt_LogsReaderForm_AccessDenied, server, folderPath);
+				var additionalInfo = string.Empty;
 
-				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(), authorizationForm?.Credential?.GetUserName());
-
-				if (authorizationForm.ShowDialog() == DialogResult.OK)
+				while (tryCount < 3)
 				{
-					tryCount++;
+					if (IsStopPending)
+						return false;
 
-					try
+					credential = GetCredential($"{accessDeniedTxt}\r\n\r\n{additionalInfo}".Trim(), credential?.GetUserName());
+					if (credential != null)
 					{
-						return IsExist(serverRoot, serverFolder, authorizationForm.Credential);
+						try
+						{
+							tryCount++;
+							return IsExist(serverRoot, serverFolder, credential);
+						}
+						catch (Exception ex2)
+						{
+							additionalInfo = ex2.Message;
+						}
 					}
-					catch (Exception ex2)
+					else
 					{
-						additionalTxt = ex2.Message;
+						break;
 					}
-				}
-				else
-				{
-					break;
 				}
 			}
 

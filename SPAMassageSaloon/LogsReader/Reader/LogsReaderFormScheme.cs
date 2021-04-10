@@ -350,7 +350,14 @@ namespace LogsReader.Reader
 					// получение папок по чекбоксам
 					var folders = TreeViewContainer.GetFolders(TreeMain, true);
 					IsWorking = true;
-					MainReader = new LogsReaderPerformerScheme(CurrentSettings, TbxPattern.Text, ChbxUseRegex.Checked, servers, fileTypes, folders, filter);
+					MainReader = new LogsReaderPerformerScheme(CurrentSettings,
+					                                           TbxPattern.Text,
+					                                           ChbxUseRegex.Checked,
+					                                           servers,
+					                                           fileTypes,
+					                                           folders,
+					                                           filter,
+					                                           GetUserCredential);
 					TimeWatcher.Start();
 					ReportStatus(Resources.Txt_LogsReaderForm_LogFilesSearching, ReportStatusType.Success);
 					await MainReader.GetTargetFilesAsync(); // получение файлов логов
@@ -391,6 +398,13 @@ namespace LogsReader.Reader
 				ReportStatus(Resources.Txt_LogsReaderForm_Stopping, ReportStatusType.Success);
 			}
 		}
+
+		private CryptoNetworkCredential GetUserCredential(string information, string userName)
+			=> this.SafeInvoke(() =>
+			{
+				var authorizationForm = new AddUserCredentials(information, userName) { StartPosition = FormStartPosition.CenterParent };
+				return authorizationForm.ShowDialog(this) == DialogResult.OK ? authorizationForm.Credential : null;
+			});
 
 		protected override IEnumerable<DataTemplate> GetResultTemplates()
 			=> OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
