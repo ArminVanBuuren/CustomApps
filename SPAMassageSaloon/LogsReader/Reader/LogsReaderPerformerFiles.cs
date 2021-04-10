@@ -22,8 +22,6 @@ namespace LogsReader.Reader
 
 		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; protected set; }
 
-		protected List<NetworkConnection> Connections { get; } = new List<NetworkConnection>();
-
 		protected LogsReaderPerformerFiles(LRSettingsScheme settings,
 		                                   string findMessage,
 		                                   bool useRegex,
@@ -163,14 +161,11 @@ namespace LogsReader.Reader
 			if (ex.HResult == -2147024843) // не найден сетевой путь
 				throw new Exception($"[{server}] {ex.Message.Trim()}", ex);
 
-			foreach (var credential in LogsReaderMainForm.Credentials.OrderByDescending(x => x.Value).Select(x => x.Key).ToList())
+			if (LogsReaderMainForm.Credentials.TryGetValue(SchemeName, out var existingCred) && existingCred != null)
 			{
-				if (IsStopPending)
-					return false;
-
 				try
 				{
-					return IsExist(serverRoot, serverFolder, credential);
+					return IsExist(serverRoot, serverFolder, existingCred);
 				}
 				catch (Exception)
 				{
@@ -188,7 +183,7 @@ namespace LogsReader.Reader
 				if (IsStopPending)
 					return false;
 
-				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(), authorizationForm?.Credential?.UserName);
+				authorizationForm = new AddUserCredentials($"{accessDeniedTxt}\r\n\r\n{additionalTxt}".Trim(), authorizationForm?.Credential?.GetUserName());
 
 				if (authorizationForm.ShowDialog() == DialogResult.OK)
 				{
@@ -212,70 +207,59 @@ namespace LogsReader.Reader
 			return Directory.Exists(serverFolder);
 		}
 
-		private bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credentialList)
+		private bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
 		{
+			Exception accessDenied = null;
+
 			// сначала проверяем доступ к рутовой папке. Если все ОК, то вероятно до основной папки тоже есть доступ
-			NetworkConnection connectionRoot = null;
-
-			foreach (var credential in credentialList.Value)
-			{
-				try
-				{
-					connectionRoot = new NetworkConnection(serverRoot, credential);
-					Connections.Add(connectionRoot);
-					return IsExist(serverFolder, credentialList);
-				}
-				catch (Exception)
-				{
-					// ошибочные коннекты логофим
-					if (connectionRoot != null)
-					{
-						Connections.Remove(connectionRoot);
-						connectionRoot.Dispose();
-					}
-				}
-			}
-
-			Exception accessDenied = new Win32Exception(1326);
-
+			var result = CheckingAccessToServerOrFolder(serverRoot, serverFolder, credential, false, ref accessDenied);
+			if (result.HasValue)
+				return result.Value;
+			
 			// если доступа к руту нет, то проверяем доступ к конкретной папке
+			result = CheckingAccessToServerOrFolder(serverRoot, serverFolder, credential, true, ref accessDenied);
+			if (result.HasValue)
+				return result.Value;
+
+			throw accessDenied ?? new Win32Exception(1326);
+		}
+
+		private bool? CheckingAccessToServerOrFolder(string serverRoot,
+		                                            string serverFolder,
+		                                            CryptoNetworkCredential credentialList,
+		                                            bool checkFolder,
+		                                            ref Exception accessDenied)
+		{
 			foreach (var credential in credentialList.Value)
 			{
 				NetworkConnection connection = null;
-
 				try
 				{
-					connection = new NetworkConnection(serverFolder, credential);
-					Connections.Add(connection);
-					return IsExist(serverFolder, credentialList);
+					connection = new NetworkConnection(checkFolder ? serverFolder : serverRoot, credential);
+					return IsExistAndRefreshCredentials(serverRoot, serverFolder, credentialList);
 				}
 				catch (Exception ex)
 				{
 					// ошибочные коннекты логофим
-					if (connection != null)
-					{
-						Connections.Remove(connection);
-						connection.Dispose();
-					}
-
+					connection?.Dispose();
 					accessDenied = ex;
 				}
 			}
 
-			throw accessDenied;
+			return null;
 		}
 
-		private static bool IsExist(string serverFolder, CryptoNetworkCredential credential)
+		private bool IsExistAndRefreshCredentials(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
 		{
 			try
 			{
 				Directory.GetDirectories(serverFolder);
-				LogsReaderMainForm.Credentials[credential] = DateTime.Now;
+				LogsReaderMainForm.Credentials[serverRoot] = credential;
 				return Directory.Exists(serverFolder);
 			}
 			catch (DirectoryNotFoundException)
 			{
-				LogsReaderMainForm.Credentials[credential] = DateTime.Now;
+				LogsReaderMainForm.Credentials[serverRoot] = credential;
 				return false;
 			}
 		}
@@ -307,22 +291,6 @@ namespace LogsReader.Reader
 		/// </summary>
 		public override void Clear()
 		{
-			//if (Connections != null)
-			//{
-			//	foreach (var connection in Connections)
-			//	{
-			//		try
-			//		{
-			//			connection.Dispose();
-			//		}
-			//		catch (Exception ex)
-			//		{
-			//			// ignored
-			//		}
-			//	}
-
-			//	Connections.Clear();
-			//}
 			if (TraceReaders != null)
 				foreach (var reader in TraceReaders.Values)
 					reader.Clear();

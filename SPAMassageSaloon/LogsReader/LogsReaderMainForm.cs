@@ -31,7 +31,7 @@ namespace LogsReader
 		private const string GLOBAL_PAGE_NAME = "Global";
 
 		private static readonly object credentialSync = new object();
-		private static readonly Dictionary<CryptoNetworkCredential, DateTime> _userCredentials;
+		private static readonly Dictionary<string, CryptoNetworkCredential> _userCredentials;
 
 		public static readonly Color GLOBAL_COLOR_BACK = Color.FromArgb(255, 0, 206);
 		public static readonly Color GLOBAL_COLOR_FORE = Color.White;
@@ -60,7 +60,7 @@ namespace LogsReader
 		public static readonly Color READER_COLOR_BACK_SUCCESS = Color.FromArgb(62, 255, 176);
 		public static readonly Color READER_COLOR_BACK_ONPAUSE = Color.FromArgb(228, 255, 88);
 
-		public static Dictionary<CryptoNetworkCredential, DateTime> Credentials
+		public static Dictionary<string, CryptoNetworkCredential> Credentials
 		{
 			get
 			{
@@ -110,7 +110,7 @@ namespace LogsReader
 					if (obj is byte[] array)
 					{
 						using (var stream = new MemoryStream(array))
-							_userCredentials = new BinaryFormatter().Deserialize(stream) as Dictionary<CryptoNetworkCredential, DateTime>;
+							_userCredentials = new BinaryFormatter().Deserialize(stream) as Dictionary<string, CryptoNetworkCredential>;
 					}
 				}
 			}
@@ -121,24 +121,7 @@ namespace LogsReader
 			finally
 			{
 				if (_userCredentials == null)
-					_userCredentials = new Dictionary<CryptoNetworkCredential, DateTime>();
-
-				//var privateFonts = new PrivateFontCollection();
-				//foreach (var font in new [] { Resources.SegoeUI, Resources.BebasNeue_Bold, Resources.ARIALN })
-				//{
-				// //Select your font from the resources.
-				// var fontLength = font.Length;
-				// // create an unsafe memory block for the font data
-				// var data = Marshal.AllocCoTaskMem(fontLength);
-				// // copy the bytes to the unsafe memory block
-				// Marshal.Copy(font, 0, data, fontLength);
-				// // pass the font to the font collection
-				// privateFonts.AddMemoryFont(data, fontLength);
-				//}
-
-				//MainFontFamily = privateFonts.Families[0];
-				//DgvFontFamily = privateFonts.Families[1];
-				//FailedFontFamily = privateFonts.Families[2];
+					_userCredentials = new Dictionary<string, CryptoNetworkCredential>();
 			}
 		}
 

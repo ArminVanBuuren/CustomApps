@@ -1654,7 +1654,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to checking scheme &quot;{0}&quot;. Please check configuration..
+        ///   Looks up a localized string similar to Failed to validate schema &quot;{0}&quot;. Please check your configuration..
         /// </summary>
         public static string TxtConfigureFailed {
             get {
@@ -1690,7 +1690,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting of scheme is correct. Click &quot;Apply&quot; for the settings to take effect..
+        ///   Looks up a localized string similar to The scheme is correct. Click &quot;Apply&quot; for the settings to take effect..
         /// </summary>
         public static string TxtConfigureSuccessful {
             get {

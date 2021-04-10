@@ -607,6 +607,6 @@
     <value>     Проверить</value>
   </data>
   <data name="TxtConfigureSuccessful" xml:space="preserve">
-    <value>Настройки корректны. Для применения нажмите "Применть".</value>
+    <value>Настройки корректны. Нажмите "Применить", чтобы настройки вступили в силу.</value>
   </data>
 </root>
