@@ -68,9 +68,9 @@ namespace LogsReader.Config
 					{
 						Assemblies = new CustomFunctionAssemblies { Childs = new[] { new XmlNodeValueText("System.dll") } },
 						Namespaces = new XmlNodeValueText(@"
-		using System.Text.RegularExpressions; 
-		using LogsReader.Config;
-        "),
+        using System.Text.RegularExpressions;
+        using LogsReader.Config;
+      "),
 						Functions = new CustomFunctionCode
 						{
 							Function = new[] { new XmlNodeCDATAText(Properties.Resources.ClassExample) }

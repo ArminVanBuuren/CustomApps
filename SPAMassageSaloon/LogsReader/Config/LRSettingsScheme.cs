@@ -382,8 +382,9 @@ namespace LogsReader.Config
 			return result;
 		}
 
-		public static bool TryDeserialize(string xmlSchemeBody, out LRSettingsScheme result)
+		public static bool TryDeserialize(string xmlSchemeBody, out LRSettingsScheme result, out Exception exception)
 		{
+			exception = null;
 			result = null;
 			try
 			{
@@ -393,6 +394,7 @@ namespace LogsReader.Config
 			}
 			catch (Exception ex)
 			{
+				exception = ex;
 				return false;
 			}
 		}

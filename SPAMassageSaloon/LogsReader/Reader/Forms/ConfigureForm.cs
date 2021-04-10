@@ -77,7 +77,7 @@ namespace LogsReader.Reader.Forms
 			try
 			{
 				// Если пользователь нажал на проверить
-				if (LRSettingsScheme.TryDeserialize(editor.Text, out var result))
+				if (LRSettingsScheme.TryDeserialize(editor.Text, out var result, out var exception))
 				{
 					if (result.Name != SchemeName)
 					{
@@ -93,12 +93,16 @@ namespace LogsReader.Reader.Forms
 				}
 				else
 				{
-					MessageBox.Show(string.Format(Resources.TxtConfigureFailed, SchemeName), @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					var detail = string.Empty;
+					if (exception != null)
+						detail = $"\r\n\r\n{exception}";
+
+					MessageBox.Show(string.Format(Resources.TxtConfigureFailed, SchemeName, detail), @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format(Resources.TxtConfigureFailed, SchemeName), @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(string.Format(Resources.TxtConfigureFailed, SchemeName, string.Empty), @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

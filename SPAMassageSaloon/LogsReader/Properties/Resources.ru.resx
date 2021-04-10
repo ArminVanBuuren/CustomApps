@@ -589,7 +589,7 @@
     <value>Настроить</value>
   </data>
   <data name="TxtConfigureFailed" xml:space="preserve">
-    <value>Ошибка проверки схемы "{0}". Пожалуйста проверьте конфигурацию.</value>
+    <value>Ошибка проверки схемы "{0}". Пожалуйста проверьте конфигурацию.{1}</value>
   </data>
   <data name="TxtConfigureSchemeNameFailed" xml:space="preserve">
     <value>Вы не можете изменить имя схемы на "{0}"</value>

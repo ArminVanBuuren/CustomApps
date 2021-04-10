@@ -201,26 +201,27 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to class ClassExample : ICustomTraceParse
-        ///{
-        ///	private readonly Regex rgx = new Regex(@&quot;^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$&quot;, RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        ///
-        ///	public bool IsLineMatch(string input)
-        ///	{
-        ///		return rgx.IsMatch(input);
-        ///	}
-        ///
-        ///	public TraceParseResult IsTraceMatch(string input)
-        ///	{
-        ///		var match = rgx.Match(input);
-        ///
-        ///		if (match.Success)
+        ///   Looks up a localized string similar to 
+        ///		// LogsReader.Config is important
+        ///		public class ClassExample : ICustomTraceParse
         ///		{
-        ///			return new TraceParseResult
+        ///			private readonly Regex rgx = new Regex(@&quot;^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$&quot;, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        ///
+        ///			public bool IsLineMatch(string input)
         ///			{
-        ///				IsSuccess = true,
-        ///				Date = match.GetValueByReplacement(&quot;$1&quot;),
-        ///				TraceName = match.GetV [rest of string was truncated]&quot;;.
+        ///				return rgx.IsMatch(input);
+        ///			}
+        ///
+        ///			public TraceParseResult IsTraceMatch(string input)
+        ///			{
+        ///				var match = rgx.Match(input);
+        ///
+        ///				if (match.Success)
+        ///				{
+        ///				
+        ///					return new TraceParseResult
+        ///					{
+        ///						IsSuccess  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ClassExample {
             get {
@@ -1682,7 +1683,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to validate schema &quot;{0}&quot;. Please check your configuration..
+        ///   Looks up a localized string similar to Failed to validate schema &quot;{0}&quot;. Please check your configuration.{1}.
         /// </summary>
         public static string TxtConfigureFailed {
             get {
