@@ -113,15 +113,10 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public TreeViewContainer(LRSettingsScheme schemeSettings,
-		                         CustomTreeView main,
-		                         Dictionary<string, (int, IEnumerable<string>)> servers,
-		                         Dictionary<string, (int, IEnumerable<string>)> fileTypes,
-		                         Dictionary<string, bool> folders)
+		public TreeViewContainer(LRSettingsScheme schemeSettings, CustomTreeView main)
 		{
-			CurrentSettings = schemeSettings;
 			Current = Main = main;
-			Load(servers, fileTypes, folders);
+			Load(schemeSettings);
 
 			_imageList = new ImageList { ImageSize = new Size(14, 14) };
 			_imageList.Images.Add("0", Resources._default);
@@ -169,27 +164,22 @@ namespace LogsReader.Reader
 			return copy;
 		}
 
-		public void Reload(LRSettingsScheme schemeSettings, 
-		                   Dictionary<string, (int, IEnumerable<string>)> servers,
-		                   Dictionary<string, (int, IEnumerable<string>)> fileTypes,
-		                   Dictionary<string, bool> folders)
+		public void Reload(LRSettingsScheme schemeSettings)
 		{
-			CurrentSettings = schemeSettings;
-			Load(servers, fileTypes, folders);
+			Main.Nodes.Clear();
+			Load(schemeSettings);
 			UpdateContainerByTreeView(Main);
 		}
 
-		void Load(Dictionary<string, (int, IEnumerable<string>)> servers,
-		          Dictionary<string, (int, IEnumerable<string>)> fileTypes,
-		          Dictionary<string, bool> folders)
+		private void Load(LRSettingsScheme schemeSettings)
 		{
-			Main.Nodes.Clear();
+			CurrentSettings = schemeSettings;
 
-			var treeNodeServersGroup = GetGroupNodes(TRVServers, Resources.Txt_LogsReaderForm_Servers, servers, GroupType.Server);
+			var treeNodeServersGroup = GetGroupNodes(TRVServers, Resources.Txt_LogsReaderForm_Servers, CurrentSettings.Servers.Groups, GroupType.Server);
 			Main.Nodes.Add(treeNodeServersGroup);
 			CheckTreeViewNode(treeNodeServersGroup, false);
 
-			var treeNodeTypesGroup = GetGroupNodes(TRVTypes, Resources.Txt_LogsReaderForm_Types, fileTypes, GroupType.FileType);
+			var treeNodeTypesGroup = GetGroupNodes(TRVTypes, Resources.Txt_LogsReaderForm_Types, CurrentSettings.FileTypes.Groups, GroupType.FileType);
 			Main.Nodes.Add(treeNodeTypesGroup);
 			CheckTreeViewNode(treeNodeTypesGroup, false);
 
@@ -200,7 +190,7 @@ namespace LogsReader.Reader
 				NodeFont = _defaultParentFont
 			};
 			Main.Nodes.Add(treeNodeFolders);
-			SetFolder(null, folders, false);
+			SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
 			treeNodeFolders.Expand();
 			CheckTreeViewNode(treeNodeFolders, true);
 		}

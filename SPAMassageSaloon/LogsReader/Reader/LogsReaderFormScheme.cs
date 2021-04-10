@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using LogsReader.Config;
 using LogsReader.Properties;
+using LogsReader.Reader.Forms;
 using SPAMassageSaloon.Common;
 using Utils;
 using Utils.WinForm;
@@ -45,7 +46,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		///     Текущая схема настроек
 		/// </summary>
-		public LRSettingsScheme CurrentSettings { get; }
+		public LRSettingsScheme CurrentSettings { get; private set; }
 
 		public LogsReaderPerformerScheme MainReader { get; private set; }
 
@@ -156,7 +157,7 @@ namespace LogsReader.Reader
 					Size = new Size(133, 25),
 					TabIndex = 19,
 					Text = @"Configure",
-					BackColor = Color.FromArgb(54, 187, 156),
+					BackColor = Color.FromArgb(71, 203, 172),
 					ForeColor = Color.White,
 				};
 				configureButton.Click += ConfigureButton_Click;
@@ -188,23 +189,13 @@ namespace LogsReader.Reader
 
 				#region Options
 
-				CurrentTransactionsMarkingType = CurrentSettings.TraceParse.SelectionTransactionsType;
-				maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
-				maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-				rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-				orderByText.Text = CurrentSettings.OrderBy;
 				orderByText.GotFocus += OrderByText_GotFocus;
 
 				#endregion
 
 				#region TreeView Container
 
-				TreeViewContainer = new TreeViewContainer(CurrentSettings,
-				                                          TreeMain,
-				                                          CurrentSettings.Servers.Groups,
-				                                          CurrentSettings.FileTypes.Groups,
-				                                          CurrentSettings.LogsFolder.Folders);
-				
+				TreeViewContainer = new TreeViewContainer(CurrentSettings, TreeMain);
 				TreeViewContainer.OnChanged += (clearStatus, onSchemeChanged) =>
 				{
 					ValidationCheck(clearStatus);
@@ -225,6 +216,7 @@ namespace LogsReader.Reader
 			}
 			finally
 			{
+				InitSettings();
 				Clear();
 				ValidationCheck(false);
 			}
@@ -232,7 +224,28 @@ namespace LogsReader.Reader
 
 		private void ConfigureButton_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("Clicked!");
+			var configureForm = new ConfigureForm(CurrentSettings)
+			{
+				StartPosition = FormStartPosition.CenterParent
+			};
+			var result = configureForm.ShowDialog();
+
+			if (result == DialogResult.OK && configureForm.SettingsOfScheme != null)
+			{
+				CurrentSettings = configureForm.SettingsOfScheme;
+				InitSettings();
+				TreeViewContainer.Reload(CurrentSettings);
+				OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
+		void InitSettings()
+		{
+			CurrentTransactionsMarkingType = CurrentSettings.TraceParse.SelectionTransactionsType;
+			maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
+			maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
+			rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+			orderByText.Text = CurrentSettings.OrderBy;
 		}
 
 		public void SynchronizeTreeView()
@@ -389,11 +402,12 @@ namespace LogsReader.Reader
 		{
 			base.ChangeFormStatus();
 
-			TreeMain.Enabled = !IsWorking;
+			maxLinesStackText.Enabled = !IsWorking;
 			maxThreadsText.Enabled = !IsWorking;
 			rowsLimitText.Enabled = !IsWorking;
-			maxLinesStackText.Enabled = !IsWorking;
 			orderByText.Enabled = !IsWorking;
+			configureButton.Enabled = !IsWorking;
+			TreeMain.Enabled = !IsWorking;
 
 			OnSearchChanged?.Invoke(this, EventArgs.Empty);
 		}

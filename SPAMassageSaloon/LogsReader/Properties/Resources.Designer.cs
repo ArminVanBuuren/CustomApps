@@ -193,6 +193,16 @@ namespace LogsReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap check {
+            get {
+                object obj = ResourceManager.GetObject("check", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap clear1 {
             get {
                 object obj = ResourceManager.GetObject("clear1", resourceCulture);
@@ -491,6 +501,16 @@ namespace LogsReader.Properties {
         public static System.Drawing.Bitmap server_group {
             get {
                 object obj = ResourceManager.GetObject("server_group", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap settings {
+            get {
+                object obj = ResourceManager.GetObject("settings", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1621,6 +1641,69 @@ namespace LogsReader.Properties {
         public static string Txt_ServerGroups_ErrUnique {
             get {
                 return ResourceManager.GetString("Txt_ServerGroups_ErrUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     Cancel.
+        /// </summary>
+        public static string TxtConfigureCancel {
+            get {
+                return ResourceManager.GetString("TxtConfigureCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to checking scheme &quot;{0}&quot;. Please check configuration..
+        /// </summary>
+        public static string TxtConfigureFailed {
+            get {
+                return ResourceManager.GetString("TxtConfigureFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     Reload.
+        /// </summary>
+        public static string TxtConfigureReload {
+            get {
+                return ResourceManager.GetString("TxtConfigureReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t change the scheme name  to &quot;{0}&quot;.
+        /// </summary>
+        public static string TxtConfigureSchemeNameFailed {
+            get {
+                return ResourceManager.GetString("TxtConfigureSchemeNameFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Apply.
+        /// </summary>
+        public static string TxtConfigureSuccess {
+            get {
+                return ResourceManager.GetString("TxtConfigureSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting of scheme is correct. Click &quot;Apply&quot; for the settings to take effect..
+        /// </summary>
+        public static string TxtConfigureSuccessful {
+            get {
+                return ResourceManager.GetString("TxtConfigureSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to      Validate.
+        /// </summary>
+        public static string TxtConfigureValidate {
+            get {
+                return ResourceManager.GetString("TxtConfigureValidate", resourceCulture);
             }
         }
         

@@ -278,10 +278,13 @@ namespace LogsReader
 			}
 		}
 
-		private static async void SaveSchemas(object sender, EventArgs args)
+		private async void SaveSchemas(object sender, EventArgs args)
 		{
 			if (Settings != null)
+			{
+				Settings.SchemeList = SchemeForms.Values.Select(x => x.CurrentSettings).ToArray();
 				await LRSettings.SerializeAsync(Settings);
+			}
 		}
 
 		private void MainTabControl_DrawItem(object sender, DrawItemEventArgs e)

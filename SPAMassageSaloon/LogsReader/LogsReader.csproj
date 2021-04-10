@@ -75,6 +75,12 @@
     <Compile Include="Reader\CustomTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reader\Forms\ConfigureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reader\Forms\ConfigureForm.Designer.cs">
+      <DependentUpon>ConfigureForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reader\Forms\TraceNameFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reader\Forms\ConfigureForm.resx">
+      <DependentUpon>ConfigureForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reader\Forms\TraceNameFilterForm.resx">
       <DependentUpon>TraceNameFilterForm.cs</DependentUpon>
@@ -252,6 +261,7 @@
     <Content Include="Resources\backTrn.png" />
     <Content Include="Resources\bt_play.png" />
     <Content Include="Resources\cancel.png" />
+    <Content Include="Resources\check.png" />
     <Content Include="Resources\default.png" />
     <Content Include="Resources\Error1.png" />
     <Content Include="Resources\failed.png" />
@@ -269,6 +279,7 @@
     <Content Include="Resources\processing.png" />
     <Content Include="Resources\remove.png" />
     <Content Include="Resources\select.png" />
+    <Content Include="Resources\settings.png" />
     <Content Include="Resources\trn.png" />
     <Content Include="Resources\waiting.png" />
   </ItemGroup>

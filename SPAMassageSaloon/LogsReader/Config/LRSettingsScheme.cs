@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,6 +39,8 @@ namespace LogsReader.Config
 		private LRTraceParse _traceParce = new LRTraceParse();
 
 		public event ReportStatusHandler ReportStatus;
+
+		private static XmlSerializer Serializer { get; } = new XmlSerializer(typeof(LRSettingsScheme));
 
 		[XmlAttribute("name")]
 		public string Name
@@ -377,6 +380,30 @@ namespace LogsReader.Config
 			}
 
 			return result;
+		}
+
+		public static bool TryDeserialize(string xmlSchemeBody, out LRSettingsScheme result)
+		{
+			result = null;
+			try
+			{
+				using (TextReader reader = new StringReader(xmlSchemeBody))
+					result = (LRSettingsScheme)Serializer.Deserialize(reader);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+		public string Serialize()
+		{
+			using (var textWriter = new StringWriter())
+			{
+				Serializer.Serialize(textWriter, this);
+				return textWriter.ToString();
+			}
 		}
 
 		public override string ToString() => Name;
