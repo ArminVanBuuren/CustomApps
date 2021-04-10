@@ -104,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Armin.Utils">
-      <Version>2021.3.13.152358</Version>
+      <Version>2021.4.10.222609</Version>
     </PackageReference>
     <PackageReference Include="Armin.Utils.UIControls">
       <Version>2021.3.13.155215</Version>

@@ -140,6 +140,8 @@ namespace LogsReader.Reader
 			}
 		}
 
+		public void SelectEditor(int tabIndex) => notepad.SelectEditor(tabIndex);
+
 		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
 		{
 			noChanged = true;

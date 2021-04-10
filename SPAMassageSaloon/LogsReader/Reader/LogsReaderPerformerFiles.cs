@@ -167,16 +167,24 @@ namespace LogsReader.Reader
 			if (ex.HResult == -2147024843) // не найден сетевой путь
 				throw new Exception($"[{server}] {ex.Message.Trim()}", ex);
 
-			if (LogsReaderMainForm.Credentials.TryGetValue(SchemeName, out var existingCred) && existingCred != null)
+			if (LogsReaderMainForm.TryGetCredential(serverRoot, out var existingCredential) && existingCredential != null)
 			{
 				try
 				{
-					return IsExist(serverRoot, serverFolder, existingCred);
+					return IsExist(serverRoot, serverFolder, existingCredential);
 				}
 				catch (Exception)
 				{
-					// ignore and continue
+					var result = TryToCheckWithLastCredential(serverRoot, serverFolder, existingCredential);
+					if (result.HasValue)
+						return result.Value;
 				}
+			}
+			else
+			{
+				var result = TryToCheckWithLastCredential(serverRoot, serverFolder, null);
+				if (result.HasValue)
+					return result.Value;
 			}
 
 			if (GetCredential != null)
@@ -212,6 +220,32 @@ namespace LogsReader.Reader
 			}
 
 			return Directory.Exists(serverFolder);
+		}
+
+		/// <summary>
+		/// Пытаемся подключиться по последним учетным данным
+		/// </summary>
+		/// <param name="serverFolder"></param>
+		/// <param name="existingCredential"></param>
+		/// <param name="serverRoot"></param>
+		bool? TryToCheckWithLastCredential(string serverRoot, string serverFolder, CryptoNetworkCredential existingCredential)
+		{
+			// пытаемся подключиться по последним учетным данным
+			var lastCredential = LogsReaderMainForm.GetLastCredentialItem();
+
+			if (lastCredential != null && existingCredential != lastCredential)
+			{
+				try
+				{
+					return IsExist(serverRoot, serverFolder, lastCredential);
+				}
+				catch (Exception)
+				{
+					// ignore and continue
+				}
+			}
+
+			return null;
 		}
 
 		private bool IsExist(string serverRoot, string serverFolder, CryptoNetworkCredential credential)
@@ -261,12 +295,12 @@ namespace LogsReader.Reader
 			try
 			{
 				Directory.GetDirectories(serverFolder);
-				LogsReaderMainForm.Credentials[serverRoot] = credential;
+				LogsReaderMainForm.AddOrReplaceToNewCredential(serverRoot, credential);
 				return Directory.Exists(serverFolder);
 			}
 			catch (DirectoryNotFoundException)
 			{
-				LogsReaderMainForm.Credentials[serverRoot] = credential;
+				LogsReaderMainForm.AddOrReplaceToNewCredential(serverRoot, credential);
 				return false;
 			}
 		}

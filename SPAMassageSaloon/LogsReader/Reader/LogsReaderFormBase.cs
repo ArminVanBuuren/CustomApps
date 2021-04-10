@@ -2154,7 +2154,11 @@ namespace LogsReader.Reader
 			traceViewer.Dock = DockStyle.Fill;
 			traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
 			var worker = new BackgroundWorker();
-			worker.DoWork += (sender, e) => tabControlViewer.SafeInvoke(() => { tabControlViewer.TabPages.Add(tabPage); });
+			worker.DoWork += (sender, e) => tabControlViewer.SafeInvoke(() =>
+			{
+				tabControlViewer.TabPages.Add(tabPage);
+				traceViewer.SelectEditor(0);
+			});
 			worker.RunWorkerAsync();
 		}
 

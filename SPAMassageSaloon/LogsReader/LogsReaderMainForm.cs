@@ -60,13 +60,27 @@ namespace LogsReader
 		public static readonly Color READER_COLOR_BACK_SUCCESS = Color.FromArgb(62, 255, 176);
 		public static readonly Color READER_COLOR_BACK_ONPAUSE = Color.FromArgb(228, 255, 88);
 
-		public static Dictionary<string, CryptoNetworkCredential> Credentials
+		private static readonly string CredentialsRegName = "Credentials";
+
+		internal static CryptoNetworkCredential GetLastCredentialItem()
 		{
-			get
-			{
-				lock (credentialSync)
-					return _userCredentials;
-			}
+			lock (credentialSync)
+				if (_userCredentials.Count > 0)
+					return _userCredentials.Values.Last();
+
+			return null;
+		}
+
+		internal static bool TryGetCredential(string serverRoot, out CryptoNetworkCredential result)
+		{
+			lock (credentialSync)
+				return _userCredentials.TryGetValue(serverRoot, out result);
+		}
+
+		internal static void AddOrReplaceToNewCredential(string serverRoot, CryptoNetworkCredential credential)
+		{
+			lock (credentialSync)
+				_userCredentials[serverRoot] = credential;
 		}
 
 		/// <summary>
@@ -105,7 +119,7 @@ namespace LogsReader
 			{
 				using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
 				{
-					var obj = reg[nameof(Credentials)];
+					var obj = reg[CredentialsRegName];
 
 					if (obj is byte[] array)
 					{
@@ -130,8 +144,14 @@ namespace LogsReader
 			try
 			{
 				using (var reg = new RegeditControl(typeof(LogsReaderMainForm).GetAssemblyInfo().ApplicationName))
-				using (var stream = Credentials.SerializeToStream())
-					reg[nameof(Credentials), RegistryValueKind.Binary] = stream.ToArray();
+				{
+					MemoryStream stream;
+					lock (credentialSync)
+						stream = _userCredentials.SerializeToStream();
+
+					using (stream)
+						reg[CredentialsRegName, RegistryValueKind.Binary] = stream.ToArray();
+				}
 			}
 			catch (Exception)
 			{
