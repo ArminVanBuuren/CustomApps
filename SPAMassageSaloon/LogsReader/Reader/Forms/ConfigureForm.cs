@@ -40,6 +40,21 @@ namespace LogsReader.Reader.Forms
 			editor.WordWrap = false;
 			editor.SetLanguages(new[] { Language.XML }, Language.XML);
 			editor.TextChanged += Editor_TextChanged;
+
+			KeyPreview = true;
+			KeyDown += (sender, args) =>
+			{
+				switch (args.KeyCode)
+				{
+					case Keys.S when args.Control:
+						ValidateOrOk_Click(ValidateOrOk, EventArgs.Empty);
+						break;
+
+					case Keys.Escape:
+						Cancel_Click(CancelButton, EventArgs.Empty);
+						break;
+				}
+			};
 		}
 
 		private void Editor_TextChanged(object sender, EventArgs e)

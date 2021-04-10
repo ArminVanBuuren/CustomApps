@@ -55,12 +55,6 @@ namespace LogsReader.Config
 							TraceName = "$2",
 							Description = "$3",
 							Message = "$4"
-						},
-						new LRTraceParsePatternItem(@"^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$")
-						{
-							Date = "$1",
-							TraceName = "$2",
-							Message = "$3"
 						}
 					};
 					TransactionPatterns = new[]
@@ -70,6 +64,18 @@ namespace LogsReader.Config
 					};
 					StartWith = new XmlNode[] { new XmlDocument().CreateCDataSection(@"^\d+[.]\d+[.]\d+\s+\d+[:]\d+[:]\d+\.\d+\s+\[") };
 					IsError = new XmlNode[] { new XmlDocument().CreateCDataSection(@"dbresult=\""(\-|\d{2,})|Exception") };
+					Custom = new CustomFunctions
+					{
+						Assemblies = new CustomFunctionAssemblies { Childs = new[] { new XmlNodeValueText("System.dll") } },
+						Namespaces = new XmlNodeValueText(@"
+		using System.Text.RegularExpressions; 
+		using LogsReader.Config;
+        "),
+						Functions = new CustomFunctionCode
+						{
+							Function = new[] { new XmlNodeCDATAText(Properties.Resources.ClassExample) }
+						}
+					};
 					break;
 
 				case DefaultSettings.SPA:

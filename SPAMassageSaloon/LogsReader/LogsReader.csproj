@@ -262,6 +262,7 @@
     <Content Include="Resources\bt_play.png" />
     <Content Include="Resources\cancel.png" />
     <Content Include="Resources\check.png" />
+    <Content Include="Resources\ClassExample.txt" />
     <Content Include="Resources\default.png" />
     <Content Include="Resources\Error1.png" />
     <Content Include="Resources\failed.png" />

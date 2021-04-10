@@ -758,4 +758,7 @@ Colors schemes are adjustable.</value>
   <data name="TxtConfigureSuccessful" xml:space="preserve">
     <value>The scheme is correct. Click "Apply" for the settings to take effect.</value>
   </data>
+  <data name="ClassExample" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\classexample.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>
