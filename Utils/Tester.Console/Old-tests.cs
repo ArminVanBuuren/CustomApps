@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 using Utils.Crypto;
-using Utils.Messaging.Telegram;
+//using Utils.Messaging.Telegram;
 
 namespace Tester.ConsoleTest
 {
@@ -137,7 +137,7 @@ namespace Tester.ConsoleTest
 
 			//}
 
-			var code = AES.EncryptStringAES("18739", nameof(TLControl));
+			//var code = AES.EncryptStringAES("18739", nameof(TLControl));
 
 			//CMD.OverwriteAndStartApplication(@"C:\test\CMD\NEW\versions.xml", @"C:\test\CMD\OLD\versions.xml", 0, 10);
 			//return;

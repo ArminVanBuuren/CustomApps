@@ -16,12 +16,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.XmlDiffPatch;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Oracle.ManagedDataAccess.Client;
 using Org.XmlUnit;
 using Org.XmlUnit.Builder;
 using Org.XmlUnit.Diff;
-using TeleSharp.TL;
-using TLSharp.Core.MTProto.Crypto;
+//using TeleSharp.TL;
+//using TLSharp.Core.MTProto.Crypto;
 using Utils;
 using Utils.Crypto;
 
@@ -264,47 +266,47 @@ namespace Tester.ConsoleTest
 			}
 		}
 
-		private static void CompareXml(string file1, string file2)
-		{
-			XmlReader reader1 = XmlReader.Create(new StringReader(file1));
-			XmlReader reader2 = XmlReader.Create(new StringReader(file2));
+		//private static void CompareXml(string file1, string file2)
+		//{
+		//	XmlReader reader1 = XmlReader.Create(new StringReader(file1));
+		//	XmlReader reader2 = XmlReader.Create(new StringReader(file2));
 
-			string diffFile = @"C:\tmp\1.txt";
-			StringBuilder differenceStringBuilder = new StringBuilder();
+		//	string diffFile = @"C:\tmp\1.txt";
+		//	StringBuilder differenceStringBuilder = new StringBuilder();
 
-			FileStream fs = new FileStream(diffFile, FileMode.Create);
-			XmlWriter diffGramWriter = XmlWriter.Create(fs);
+		//	FileStream fs = new FileStream(diffFile, FileMode.Create);
+		//	XmlWriter diffGramWriter = XmlWriter.Create(fs);
 
-			XmlDiff xmldiff = new XmlDiff(
-				XmlDiffOptions.IgnoreChildOrder
-				| XmlDiffOptions.IgnoreNamespaces
-				| XmlDiffOptions.IgnorePrefixes
-				| XmlDiffOptions.IgnoreWhitespace
-				| XmlDiffOptions.IgnoreComments
-				| XmlDiffOptions.IgnoreDtd);
-			bool bIdentical = xmldiff.Compare(file1, file2, false, diffGramWriter);
+		//	XmlDiff xmldiff = new XmlDiff(
+		//		XmlDiffOptions.IgnoreChildOrder
+		//		| XmlDiffOptions.IgnoreNamespaces
+		//		| XmlDiffOptions.IgnorePrefixes
+		//		| XmlDiffOptions.IgnoreWhitespace
+		//		| XmlDiffOptions.IgnoreComments
+		//		| XmlDiffOptions.IgnoreDtd);
+		//	bool bIdentical = xmldiff.Compare(file1, file2, false, diffGramWriter);
 
-			diffGramWriter.Close();
-		}
+		//	diffGramWriter.Close();
+		//}
 
-		public static void CompareXml2(string file1, string file2)
-		{
-			ISource control = Input.FromFile(file1).Build();
-			ISource test = Input.FromFile(file2).Build();
-			IDifferenceEngine diff = new DOMDifferenceEngine();
-			diff.DifferenceListener += (comparison, outcome) =>
-			{
-				try
-				{
-					Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex);
-				}
-			};
-			diff.Compare(control, test);
-		}
+		//public static void CompareXml2(string file1, string file2)
+		//{
+		//	ISource control = Input.FromFile(file1).Build();
+		//	ISource test = Input.FromFile(file2).Build();
+		//	IDifferenceEngine diff = new DOMDifferenceEngine();
+		//	diff.DifferenceListener += (comparison, outcome) =>
+		//	{
+		//		try
+		//		{
+		//			Console.WriteLine("found a difference: \"{0}\" \"{1}\"", comparison, outcome);
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex);
+		//		}
+		//	};
+		//	diff.Compare(control, test);
+		//}
 
 
 
@@ -602,6 +604,36 @@ namespace Tester.ConsoleTest
 			public string ServiceCode { get; set; }
 		}
 
+		private static bool IsValidJson(string strInput)
+		{
+			if (string.IsNullOrWhiteSpace(strInput)) { return false; }
+			strInput = strInput.Trim();
+			if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || //For object
+				(strInput.StartsWith("[") && strInput.EndsWith("]"))) //For array
+			{
+				try
+				{
+					var obj = JToken.Parse(strInput);
+					return true;
+				}
+				catch (JsonReaderException jex)
+				{
+					//Exception in parsing json
+					Console.WriteLine(jex.Message);
+					return false;
+				}
+				catch (Exception ex) //some other exception
+				{
+					Console.WriteLine(ex.ToString());
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -611,49 +643,66 @@ namespace Tester.ConsoleTest
 
 			try
 			{
-				var instance = new { Name = "Alex", Age = 27 };
+				Test_GetLastDigit();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
 
-				var product = new
-				{
-					IsActivated = true,
-					IsOneTimeCharged = true,
-					IsPeriodicalChargingStarted = true,
-					IsBlocked = true
-				};
+			stopWatch.Stop();
+			Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
+			Console.WriteLine("Press Enter for repeat");
+			if (Console.ReadKey().Key == ConsoleKey.Enter)
+				goto repeat;
+			Console.ReadLine();
+		}
 
-				TerminalDeviceProductStateFlags state = TerminalDeviceProductStateFlags.None;
+		static void Old_2021_04_09()
+		{
+			var instance = new { Name = "Alex", Age = 27 };
 
-				if (product.IsActivated)
-					state |= TerminalDeviceProductStateFlags.IsActivated;
-				if (product.IsOneTimeCharged)
-					state |= TerminalDeviceProductStateFlags.IsOneTimeCharged;
-				if (product.IsPeriodicalChargingStarted)
-					state |= TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted;
-				if (product.IsBlocked)
-					state |= TerminalDeviceProductStateFlags.IsBlocked;
+			var product = new
+			{
+				IsActivated = true,
+				IsOneTimeCharged = true,
+				IsPeriodicalChargingStarted = true,
+				IsBlocked = true
+			};
+
+			TerminalDeviceProductStateFlags state = TerminalDeviceProductStateFlags.None;
+
+			if (product.IsActivated)
+				state |= TerminalDeviceProductStateFlags.IsActivated;
+			if (product.IsOneTimeCharged)
+				state |= TerminalDeviceProductStateFlags.IsOneTimeCharged;
+			if (product.IsPeriodicalChargingStarted)
+				state |= TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted;
+			if (product.IsBlocked)
+				state |= TerminalDeviceProductStateFlags.IsBlocked;
 
 
-				
-
-				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsActivated));
-				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsOneTimeCharged));
-				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted));
-				Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsBlocked));
 
 
-				var fff1 = new Product
-				{
-					Services = new List<Service>
+			Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsActivated));
+			Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsOneTimeCharged));
+			Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsPeriodicalChargingStarted));
+			Console.WriteLine(state.HasFlag(TerminalDeviceProductStateFlags.IsBlocked));
+
+
+			var fff1 = new Product
+			{
+				Services = new List<Service>
 					{
 						new Service
 						{
 							ServiceCode = "111"
 						}
 					}
-				};
-				var fff2 = new MyClass
-				{
-					Products = new List<Product>
+			};
+			var fff2 = new MyClass
+			{
+				Products = new List<Product>
 					{
 						new Product
 						{
@@ -668,280 +717,268 @@ namespace Tester.ConsoleTest
 						null,
 						new Product()
 					}
-				};
+			};
 
-				IEnumerable<Service> GetServiceListFromCmServicesFull(IEnumerable<Service> terminalDeviceServices)
-				{
-					return terminalDeviceServices == null
-						? new List<Service>()
-						: terminalDeviceServices;
-				}
-
-				var result = GetServiceListFromCmServicesFull(fff1?.Services)
-					.Concat(fff2?.Products?.SelectMany(p => GetServiceListFromCmServicesFull(p?.Services)))
-					.ToList();
-
-				int xx = 11;
-				//ref int xRef = ref xx;
-
-				//Console.WriteLine(xRef is int);
-
-
-
-				////Shape shape = new Circle(); // предварительный UpCast
-				////IContainer<Circle> container = new Container<Shape>(shape);
-
-				//Circle circle = new Circle();
-				//IContainer<Shape> container = new Container<Circle>(circle);
-
-
-
-
-				//ReturnTypeString(55);
-				//ReturnTypeString(67.555m);
-
-
-				//var terminalDevicePricesRequest = new TerminalDevicePricesRequest
-				//{
-				//	TarifficationRequests = new List<TarifficationContextBase>
-				//	{
-				//		new PeriodicalProductTarifficationRequest(),
-				//		new PeriodicalProductActionTarifficationRequest(),
-				//		new ActionOnPeriodicalProductTarifficationRequest()
-				//	}
-				//};
-
-				//var actionsOnPeriodicalProductTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
-				//	.OfType<ActionOnPeriodicalProductTarifficationRequest>().ToList();
-
-				//var periodicalProductActionsTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
-				//	.OfType<PeriodicalProductActionTarifficationRequest>().ToList();
-
-				//var newServices = GetNewContextServices(actionsOnPeriodicalProductTarifficationRequests, periodicalProductActionsTarifficationRequests, terminalDevicePricesRequest.TarifficationContextServices);
-
-
-
-
-				//Console.WriteLine(string.IsNullOrWhiteSpace("  "));
-				//Console.WriteLine(string.IsNullOrWhiteSpace(""));
-				//Console.WriteLine(string.IsNullOrWhiteSpace(null));
-
-				//List<(InputDataRestrictions, InputDataRestrictions)> restrictions = new List<(InputDataRestrictions, InputDataRestrictions)>
-				//{
-				//	(new InputDataRestrictions
-				//		{
-				//			FieldLength = 111
-				//		}, new InputDataRestrictions
-				//		{
-				//			FieldLength = 222
-				//		})
-				//};
-
-				//var dict1 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
-				//{
-				//	{
-				//		new InputDataRestrictions
-				//		{
-				//			MinFieldLength = 111,
-				//		},
-				//		new InputDataRestrictions
-				//		{
-				//			MinFieldLength = 111,
-				//		}
-				//	}
-				//};
-
-				//var dict2 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
-				//{
-				//	{
-				//		new InputDataRestrictions
-				//		{
-				//			MinFieldLength = 111,
-				//		},
-				//		new InputDataRestrictions
-				//		{
-				//			MinFieldLength = 111,
-				//		}
-				//	}
-				//};
-
-				//if (dict1.TryGetValue(dict2.First().Key, out var res))
-				//{
-
-				//}
-
-				//var rs =  restrictions.FirstOrDefault(x => x.Item1.FieldLength == 112).Item2;
-
-				//var s1 = "Blue";
-				//var sb = new StringBuilder("Bl");
-				//sb.Append("ue");
-				//var s2 = sb.ToString();
-
-				//Console.WriteLine(s1 == s2); // True
-				//Console.WriteLine(object.ReferenceEquals(s1, s2)); // False
-
-				//unsafe
-				//{
-				//	int* x; // определение указателя
-				//	int y = 10; // определяем переменную
-				//}
-
-				object gg1 = "0";
-				object gg2 = "0";
-				Console.WriteLine(gg1 == gg2);                          // true
-				Console.WriteLine(gg1.Equals(gg2));                     // true
-				Console.WriteLine(object.ReferenceEquals(gg1, gg2));    // true
-
-				//var dict = new Dictionary<object, object>
-				//{
-				//	{gg1, gg1},
-				//	{gg2, gg2}
-				//};
-
-				//object fff = 11;
-
-
-				//object test1 = new TestBase();
-				//object test2 = new TestBase();
-				//var dict = new Dictionary<object, object>
-				//{
-				//	{test1, test1},
-				//	{test2, test2}
-				//};
-				//Console.WriteLine("Start");
-				//Console.WriteLine(test1 == test2);
-				//Console.WriteLine("Pause");
-				//Console.WriteLine(test1.Equals(test2));
-
-
-				//Console.WriteLine("111" == "111");
-				//Console.WriteLine("111".Equals("111"));
-
-
-				//var test1 = new Testing();
-				//var test2 = new Testing();
-				//Console.WriteLine(test1 == test2);
-				//Console.WriteLine(test1.Equals(test2));
-
-
-				//var childRequest = (Testing)new Tesitng3();
-				//var test = "[MgSendingUseEmailOcatTempate] Child request: DocRequestId=" + childRequest.ToString() +
-				//	(childRequest is Tesitng2 bilReq ? $"; Bill={bilReq.Prop}" : string.Empty) +
-				//	(childRequest is Tesitng3 bilReq2 ? $"; Bill={bilReq2.Prop2}" : string.Empty);
-
-				//var ddd = true;
-				//var favColours = new Dictionary<Person, string>();
-
-				//var p = new Person
-				//{
-				//	Age = 1,
-				//	Name = "Alice"
-				//};
-
-				//favColours[p] = "Blue";
-
-				//// Happy birthday Alice!
-				//p.Age = 2;
-				//favColours[p] = "Green";
-
-				//Console.WriteLine(favColours.Count); // 2
-
-				//var keys = favColours.Keys.ToArray();
-				//Console.WriteLine(object.ReferenceEquals(keys[0], keys[1])); // True
-				//Console.WriteLine(favColours[p]);
-
-				//foreach (var test in dict)
-				//{
-				//	Console.WriteLine(test);
-				//}
-
-				//Console.WriteLine(nameof(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed));
-
-				//var dd = default(int).ToString(CultureInfo.InvariantCulture);
-				//var ddd = Convert.ToDateTime(default(DateTime).ToString(CultureInfo.InvariantCulture));
-
-				//var dddd = new List<PersonalAccount> { new PersonalAccount() { PersonalAccountNumber = "111" } }.SingleOrDefault(x => x == new PersonalAccount());
-
-				////Console.WriteLine(test1 == test2);
-				//var Request = new ChangeBillAttributesRequest
-				//{
-				//	OperationRules = ChangeBillAttributesOperationRules.UseDefaultValues
-				//};
-
-				//var CheckNeedChanges = new Func<bool>(() => true);
-
-				//var pans = new List<PersonalAccount>
-				//{
-				//	new PersonalAccount {PersonalAccountNumber = "11111"},
-				//	new PersonalAccount {PersonalAccountNumber = "22222"},
-				//	new PersonalAccount {PersonalAccountNumber = "33333"},
-				//	new PersonalAccount {PersonalAccountNumber = "44444"},
-				//	new PersonalAccount {PersonalAccountNumber = "55555"},
-				//};
-
-				//var pans2 = new List<string>
-				//{
-				//	"33333",
-				//	"55555",
-				//};
-
-				//var dd1 = pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222");
-
-				//if (pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222"))
-				//{
-
-				//}
-				//else
-				//{
-				//	Console.WriteLine("111");
-				//}
-
-				//pans.Select(x => x.PersonalAccountNumber).Except(pans2).ForEach(Console.WriteLine);
-
-
-
-				//var buttons = new List<Button> { new Button(), new Button()};
-				//for (var b = 0; b < buttons.Count; b++)
-				//{
-				//	var elem = buttons[b];
-				//	var b1 = b;
-				//	elem.onclick += (s, arg) => { Console.WriteLine(b1); };
-				//	// все три обработчика берут b из одной области видимости!
-				//}
-
-				//foreach (var VARIABLE in buttons)
-				//{
-				//	VARIABLE.Send();
-				//}
-
-				//if (Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges())
-				//{
-				//	Console.WriteLine($"222");
-				//}
-				//else
-				//{
-				//	Console.WriteLine($"111");
-				//}
-
-				//var result1 = !Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) && !CheckNeedChanges();
-				//var result2 = !(Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges());
-
-				//Console.WriteLine($"result1: = {result1}");
-				//Console.WriteLine($"result2: = {result2}");
-
-				//Console.WriteLine(Testtest());
-			}
-			catch (Exception e)
+			IEnumerable<Service> GetServiceListFromCmServicesFull(IEnumerable<Service> terminalDeviceServices)
 			{
-				Console.WriteLine(e);
+				return terminalDeviceServices == null
+					? new List<Service>()
+					: terminalDeviceServices;
 			}
 
-			stopWatch.Stop();
-			Console.WriteLine($"Complete = {DateTime.Now:HH:mm:ss.fff} Elapsed = {stopWatch.Elapsed}");
-			Console.WriteLine("Press Enter for repeat");
-			if (Console.ReadKey().Key == ConsoleKey.Enter)
-				goto repeat;
-			Console.ReadLine();
+			var result = GetServiceListFromCmServicesFull(fff1?.Services)
+				.Concat(fff2?.Products?.SelectMany(p => GetServiceListFromCmServicesFull(p?.Services)))
+				.ToList();
+
+			int xx = 11;
+			//ref int xRef = ref xx;
+
+			//Console.WriteLine(xRef is int);
+
+
+
+			////Shape shape = new Circle(); // предварительный UpCast
+			////IContainer<Circle> container = new Container<Shape>(shape);
+
+			//Circle circle = new Circle();
+			//IContainer<Shape> container = new Container<Circle>(circle);
+
+
+
+
+			//ReturnTypeString(55);
+			//ReturnTypeString(67.555m);
+
+
+			//var terminalDevicePricesRequest = new TerminalDevicePricesRequest
+			//{
+			//	TarifficationRequests = new List<TarifficationContextBase>
+			//	{
+			//		new PeriodicalProductTarifficationRequest(),
+			//		new PeriodicalProductActionTarifficationRequest(),
+			//		new ActionOnPeriodicalProductTarifficationRequest()
+			//	}
+			//};
+
+			//var actionsOnPeriodicalProductTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
+			//	.OfType<ActionOnPeriodicalProductTarifficationRequest>().ToList();
+
+			//var periodicalProductActionsTarifficationRequests = terminalDevicePricesRequest.TarifficationRequests
+			//	.OfType<PeriodicalProductActionTarifficationRequest>().ToList();
+
+			//var newServices = GetNewContextServices(actionsOnPeriodicalProductTarifficationRequests, periodicalProductActionsTarifficationRequests, terminalDevicePricesRequest.TarifficationContextServices);
+
+
+
+
+			//Console.WriteLine(string.IsNullOrWhiteSpace("  "));
+			//Console.WriteLine(string.IsNullOrWhiteSpace(""));
+			//Console.WriteLine(string.IsNullOrWhiteSpace(null));
+
+			//List<(InputDataRestrictions, InputDataRestrictions)> restrictions = new List<(InputDataRestrictions, InputDataRestrictions)>
+			//{
+			//	(new InputDataRestrictions
+			//		{
+			//			FieldLength = 111
+			//		}, new InputDataRestrictions
+			//		{
+			//			FieldLength = 222
+			//		})
+			//};
+
+			//var dict1 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
+			//{
+			//	{
+			//		new InputDataRestrictions
+			//		{
+			//			MinFieldLength = 111,
+			//		},
+			//		new InputDataRestrictions
+			//		{
+			//			MinFieldLength = 111,
+			//		}
+			//	}
+			//};
+
+			//var dict2 = new Dictionary<InputDataRestrictions, InputDataRestrictions>
+			//{
+			//	{
+			//		new InputDataRestrictions
+			//		{
+			//			MinFieldLength = 111,
+			//		},
+			//		new InputDataRestrictions
+			//		{
+			//			MinFieldLength = 111,
+			//		}
+			//	}
+			//};
+
+			//if (dict1.TryGetValue(dict2.First().Key, out var res))
+			//{
+
+			//}
+
+			//var rs =  restrictions.FirstOrDefault(x => x.Item1.FieldLength == 112).Item2;
+
+			//var s1 = "Blue";
+			//var sb = new StringBuilder("Bl");
+			//sb.Append("ue");
+			//var s2 = sb.ToString();
+
+			//Console.WriteLine(s1 == s2); // True
+			//Console.WriteLine(object.ReferenceEquals(s1, s2)); // False
+
+			//unsafe
+			//{
+			//	int* x; // определение указателя
+			//	int y = 10; // определяем переменную
+			//}
+
+			object gg1 = "0";
+			object gg2 = "0";
+			Console.WriteLine(gg1 == gg2);                          // true
+			Console.WriteLine(gg1.Equals(gg2));                     // true
+			Console.WriteLine(object.ReferenceEquals(gg1, gg2));    // true
+
+			//var dict = new Dictionary<object, object>
+			//{
+			//	{gg1, gg1},
+			//	{gg2, gg2}
+			//};
+
+			//object fff = 11;
+
+
+			//object test1 = new TestBase();
+			//object test2 = new TestBase();
+			//var dict = new Dictionary<object, object>
+			//{
+			//	{test1, test1},
+			//	{test2, test2}
+			//};
+			//Console.WriteLine("Start");
+			//Console.WriteLine(test1 == test2);
+			//Console.WriteLine("Pause");
+			//Console.WriteLine(test1.Equals(test2));
+
+
+			//Console.WriteLine("111" == "111");
+			//Console.WriteLine("111".Equals("111"));
+
+
+			//var test1 = new Testing();
+			//var test2 = new Testing();
+			//Console.WriteLine(test1 == test2);
+			//Console.WriteLine(test1.Equals(test2));
+
+
+			//var childRequest = (Testing)new Tesitng3();
+			//var test = "[MgSendingUseEmailOcatTempate] Child request: DocRequestId=" + childRequest.ToString() +
+			//	(childRequest is Tesitng2 bilReq ? $"; Bill={bilReq.Prop}" : string.Empty) +
+			//	(childRequest is Tesitng3 bilReq2 ? $"; Bill={bilReq2.Prop2}" : string.Empty);
+
+			//var ddd = true;
+			//var favColours = new Dictionary<Person, string>();
+
+			//var p = new Person
+			//{
+			//	Age = 1,
+			//	Name = "Alice"
+			//};
+
+			//favColours[p] = "Blue";
+
+			//// Happy birthday Alice!
+			//p.Age = 2;
+			//favColours[p] = "Green";
+
+			//Console.WriteLine(favColours.Count); // 2
+
+			//var keys = favColours.Keys.ToArray();
+			//Console.WriteLine(object.ReferenceEquals(keys[0], keys[1])); // True
+			//Console.WriteLine(favColours[p]);
+
+			//foreach (var test in dict)
+			//{
+			//	Console.WriteLine(test);
+			//}
+
+			//Console.WriteLine(nameof(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed));
+
+			//var dd = default(int).ToString(CultureInfo.InvariantCulture);
+			//var ddd = Convert.ToDateTime(default(DateTime).ToString(CultureInfo.InvariantCulture));
+
+			//var dddd = new List<PersonalAccount> { new PersonalAccount() { PersonalAccountNumber = "111" } }.SingleOrDefault(x => x == new PersonalAccount());
+
+			////Console.WriteLine(test1 == test2);
+			//var Request = new ChangeBillAttributesRequest
+			//{
+			//	OperationRules = ChangeBillAttributesOperationRules.UseDefaultValues
+			//};
+
+			//var CheckNeedChanges = new Func<bool>(() => true);
+
+			//var pans = new List<PersonalAccount>
+			//{
+			//	new PersonalAccount {PersonalAccountNumber = "11111"},
+			//	new PersonalAccount {PersonalAccountNumber = "22222"},
+			//	new PersonalAccount {PersonalAccountNumber = "33333"},
+			//	new PersonalAccount {PersonalAccountNumber = "44444"},
+			//	new PersonalAccount {PersonalAccountNumber = "55555"},
+			//};
+
+			//var pans2 = new List<string>
+			//{
+			//	"33333",
+			//	"55555",
+			//};
+
+			//var dd1 = pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222");
+
+			//if (pans.Any(x => x.PersonalAccountNumber == "11111" || x.PersonalAccountNumber == "22222"))
+			//{
+
+			//}
+			//else
+			//{
+			//	Console.WriteLine("111");
+			//}
+
+			//pans.Select(x => x.PersonalAccountNumber).Except(pans2).ForEach(Console.WriteLine);
+
+
+
+			//var buttons = new List<Button> { new Button(), new Button()};
+			//for (var b = 0; b < buttons.Count; b++)
+			//{
+			//	var elem = buttons[b];
+			//	var b1 = b;
+			//	elem.onclick += (s, arg) => { Console.WriteLine(b1); };
+			//	// все три обработчика берут b из одной области видимости!
+			//}
+
+			//foreach (var VARIABLE in buttons)
+			//{
+			//	VARIABLE.Send();
+			//}
+
+			//if (Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges())
+			//{
+			//	Console.WriteLine($"222");
+			//}
+			//else
+			//{
+			//	Console.WriteLine($"111");
+			//}
+
+			//var result1 = !Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) && !CheckNeedChanges();
+			//var result2 = !(Request.OperationRules.HasFlag(ChangeBillAttributesOperationRules.IgnoreErrorChangesNotNeed) || CheckNeedChanges());
+
+			//Console.WriteLine($"result1: = {result1}");
+			//Console.WriteLine($"result2: = {result2}");
+
+			//Console.WriteLine(Testtest());
 		}
 
 		class Button
@@ -1527,7 +1564,7 @@ namespace Tester.ConsoleTest
 
 		static void Test_GetLastDigit()
 		{
-			for (int i = 0; i < 51; i++)
+			for (int i = 0; i < 251; i++)
 			{
 				var lastNumber = Math.Abs(i) % 10;
 				var time = new TimeSpan(0, 0, 0, i);

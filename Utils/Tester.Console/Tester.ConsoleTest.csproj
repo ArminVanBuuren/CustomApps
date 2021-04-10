@@ -104,10 +104,14 @@
       <Project>{e9f4d50e-59e1-4d23-8f6c-0160cd6f75af}</Project>
       <Name>Utils.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{a734b4e4-a5bf-4566-ac89-fc58d02b2d5f}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Armin.Utils">
-      <Version>2021.3.13.32401</Version>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Oracle.ManagedDataAccess">
       <Version>19.7.0</Version>

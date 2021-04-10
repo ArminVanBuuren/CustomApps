@@ -27,10 +27,10 @@ namespace Utils
 			var duration = span.Duration();
 			var formatted = string.Format("{0}{1}{2}{3}",
 				duration.Days > 0 ? $"{duration.Days} {duration.Days.GetWordInCorrectCase(Resources.day, Resources.days2, Resources.days5)}" : string.Empty,
-				duration.Hours > 0 ? $"{duration.Hours} {duration.Hours.GetWordInCorrectCase(Resources.hour, Resources.hours2, Resources.hours5)}" : string.Empty,
-				duration.Minutes > 0 ? $"{duration.Minutes} {duration.Minutes.GetWordInCorrectCase(Resources.minute, Resources.minutes2, Resources.minutes5)}" : string.Empty,
-				duration.Seconds > 0 ? $"{duration.Seconds} {duration.Seconds.GetWordInCorrectCase(Resources.second, Resources.seconds2, Resources.seconds5)}" : string.Empty
-			);
+				duration.Hours > 0 ? $" {duration.Hours} {duration.Hours.GetWordInCorrectCase(Resources.hour, Resources.hours2, Resources.hours5)}" : string.Empty,
+				duration.Minutes > 0 ? $" {duration.Minutes} {duration.Minutes.GetWordInCorrectCase(Resources.minute, Resources.minutes2, Resources.minutes5)}" : string.Empty,
+				duration.Seconds > 0 ? $" {duration.Seconds} {duration.Seconds.GetWordInCorrectCase(Resources.second, Resources.seconds2, Resources.seconds5)}" : string.Empty
+			).Trim();
 
 			if (formatted.EndsWith(", "))
 				formatted = formatted.Substring(0, formatted.Length - 2);
