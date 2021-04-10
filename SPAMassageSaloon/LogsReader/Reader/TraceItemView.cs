@@ -18,6 +18,8 @@ namespace LogsReader.Reader
 		private DataTemplate prevTemplateMessage;
 		private DataTemplate prevTemplateTraceMessage;
 
+		private bool _isInited;
+
 		protected UserSettings UserSettings { get; }
 
 		public event EventHandler SplitterMoved;
@@ -139,8 +141,6 @@ namespace LogsReader.Reader
 				notepad.ResumeLayout();
 			}
 		}
-
-		public void SelectEditor(int tabIndex) => notepad.SelectEditor(tabIndex);
 
 		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
 		{
@@ -271,6 +271,13 @@ namespace LogsReader.Reader
 			{
 				Clear();
 				return;
+			}
+
+			// чинит баг когда текст не обновляется
+			if (!_isInited)
+			{
+				notepad.SelectEditor(0);
+				_isInited = true;
 			}
 
 			if (notepad.CurrentEditor == EditorMessage)
