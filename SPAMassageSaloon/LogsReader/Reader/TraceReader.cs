@@ -122,7 +122,7 @@ namespace LogsReader.Reader
 		public DateTime LastWriteTime => File.LastWriteTime;
 
 		[DGVColumn(ColumnPosition.After, "Size")]
-		public string Size => $"{File.Length.ToMegabytes()} Mb";
+		public double Size => Math.Round(((double)File.Length) / 1048576, 3, MidpointRounding.AwayFromZero);
 
 		/// <summary>
 		///     Содержит в себе исходную настройку пути к директории "C:\TEST"

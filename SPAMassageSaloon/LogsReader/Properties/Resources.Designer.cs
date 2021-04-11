@@ -202,26 +202,20 @@ namespace LogsReader.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///		// LogsReader.Config is important
-        ///		public class ClassExample : ICustomTraceParse
-        ///		{
-        ///			private readonly Regex rgx = new Regex(@&quot;^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$&quot;, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        ///        // LogsReader.Config is important
+        ///        public class ClassExample : ICustomTraceParse
+        ///        {
+        ///            private readonly Regex rgx = new Regex(@&quot;^(.+?)\s*\[\s*(.+?)\s*\]\s*(.+)$&quot;, RegexOptions.Compiled | RegexOptions.CultureInvariant);
         ///
-        ///			public bool IsLineMatch(string input)
-        ///			{
-        ///				return rgx.IsMatch(input);
-        ///			}
+        ///            public bool IsLineMatch(string input)
+        ///            {
+        ///                return rgx.IsMatch(input);
+        ///            }
         ///
-        ///			public TraceParseResult IsTraceMatch(string input)
-        ///			{
-        ///				var match = rgx.Match(input);
-        ///
-        ///				if (match.Success)
-        ///				{
-        ///				
-        ///					return new TraceParseResult
-        ///					{
-        ///						IsSuccess  [rest of string was truncated]&quot;;.
+        ///            public TraceParseResult IsTraceMatch(string input)
+        ///            {
+        ///                var match = rgx.Match(input);
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ClassExample {
             get {
@@ -1899,7 +1893,7 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Size[Mb].
         /// </summary>
         public static string TxtReader_DgvSize {
             get {

@@ -538,7 +538,7 @@
     <value>78</value>
   </data>
   <data name="TxtReader_DgvSize" xml:space="preserve">
-    <value>Размер</value>
+    <value>Размер[Мб]</value>
   </data>
   <data name="TxtReader_DgvStatus" xml:space="preserve">
     <value>Статус</value>

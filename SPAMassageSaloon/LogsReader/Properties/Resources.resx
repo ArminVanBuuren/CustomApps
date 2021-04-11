@@ -657,7 +657,7 @@ Colors schemes are adjustable.</value>
     <value>Priority</value>
   </data>
   <data name="TxtReader_DgvSize" xml:space="preserve">
-    <value>Size</value>
+    <value>Size[Mb]</value>
   </data>
   <data name="TxtReader_DgvStatus" xml:space="preserve">
     <value>Status</value>
