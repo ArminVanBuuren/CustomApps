@@ -121,10 +121,10 @@ namespace SPAMassageSaloon
 
 		private void OpenReservedThreads()
 		{
-			if (ThreadPool.SetMinThreads(60, 0))
+			if (ThreadPool.SetMinThreads(40, 0))
 			{
 				//ThreadPool.GetMinThreads(out int MinWorkerThreads, out int MinCompletionPortThreads);
-				for (var i = 0; i < 40; i++)
+				for (var i = 0; i < 20; i++)
 					Task.Factory.StartNew(() => { Thread.Sleep(1); });
 			}
 
