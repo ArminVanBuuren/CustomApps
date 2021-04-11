@@ -56,7 +56,7 @@ namespace LogsReader.Reader.Forms
 			"<TraceParse displayDateFormat=\"\" culture=\"\" transactionsMarkingType=\"\">\n</TraceParse>",
 			"<TraceParse displayDateFormat=\"dd.MM.yyyy HH:mm:ss.fff\" culture=\"\" transactionsMarkingType=\"Color\">\n</TraceParse>",
 			"<Pattern ID=\"\" Date=\"\" TraceName=\"\" Description=\"\" Message=\"\"><![CDATA[]]></Pattern>",
-			"<Custom>\n<Assemblies>\n<Assembly>System.dll</Assembly>\n</Assemblies>\n<Namespaces>using LogsReader.Config;</Namespaces>\n<Code>\n<Function><![CDATA[\npublic class UserClass : ICustomTraceParse\n{\n\npublic bool IsLineMatch(string input)\n{\nthrow new NotImplementedException();\n}\n\npublic TraceParseResult IsTraceMatch(string input)\n{\nthrow new NotImplementedException();\n}\n}\n]]></Function>\n</Code>\n</Custom>",
+			"<Custom>\n<Assemblies>\n<Assembly>System.dll</Assembly>\n</Assemblies>\n<Namespaces>using System;\nusing LogsReader.Config;</Namespaces>\n<Code>\n<Function><![CDATA[\npublic class UserClass : ICustomTraceParse\n{\n\npublic bool IsLineMatch(string input)\n{\nthrow new NotImplementedException();\n}\n\npublic TraceParseResult IsTraceMatch(string input)\n{\nthrow new NotImplementedException();\n}\n\n}\n]]></Function>\n</Code>\n</Custom>",
 			"<TransactionPattern Trn=\"\"><![CDATA[]]></TransactionPattern>",
 			"<StartTraceLineWith><![CDATA[]]></StartTraceLineWith>",
 			"<EndTraceLineWith><![CDATA[]]></EndTraceLineWith>",
@@ -85,7 +85,7 @@ namespace LogsReader.Reader.Forms
 			Text = Resources.Txt_Form_ConfigureButton;
 			Icon = Icon.FromHandle(Resources.settings.GetHicon());
 
-			editor.Text = Serialize();
+			editor.Text = Serialize(SettingsOfScheme);
 			editor.SizingGrip = false;
 			editor.WordWrap = false;
 			editor.SetLanguages(new[] { Language.XML, Language.CSharp }, Language.XML);
@@ -178,7 +178,7 @@ namespace LogsReader.Reader.Forms
 						return;
 					}
 
-					editor.Text = Serialize();
+					editor.Text = Serialize(result);
 					_lastSuccessResult = result;
 					ValidateOrOk.Text = Resources.TxtConfigureSuccess;
 					ValidateOrOk.Image = Resources.finished;
@@ -207,13 +207,13 @@ namespace LogsReader.Reader.Forms
 
 		private void Reload_Click(object sender, EventArgs e)
 		{
-			editor.Text = Serialize();
+			editor.Text = Serialize(SettingsOfScheme);
 			_lastSuccessResult = null;
 			ValidateOrOk.Text = Resources.TxtConfigureSuccess;
 			ValidateOrOk.Image = Resources.finished;
 		}
 
 		//whiteSpaces - чинит косяк, когда после вставки удаляется последний символ
-		private string Serialize() => SettingsOfScheme.Serialize() + whiteSpaces;
+		private string Serialize(LRSettingsScheme scheme) => scheme.Serialize() + whiteSpaces;
 	}
 }
