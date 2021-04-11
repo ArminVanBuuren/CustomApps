@@ -5,6 +5,7 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
+using Utils.WinForm.Notepad;
 
 namespace FastColoredTextBoxNS
 {
@@ -75,6 +76,8 @@ namespace FastColoredTextBoxNS
             set { listView.HoveredColor = value; }
         }
 
+        public AutocompleteMenu(Editor editor) : this(editor.FCTB) { }
+
         public AutocompleteMenu(FastColoredTextBox tb)
         {
             // create a new popup and add the list view to it 
@@ -94,7 +97,6 @@ namespace FastColoredTextBoxNS
             listView.Parent = this;
             SearchPattern = @"[\w\.]";
             MinFragmentLength = 2;
-
         }
 
         public new Font Font

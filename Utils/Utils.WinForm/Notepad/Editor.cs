@@ -19,7 +19,6 @@ namespace Utils.WinForm.Notepad
         private Encoding _default = Encoding.Default;
         private Language _editorLanguage;
 
-        private readonly FastColoredTextBox FCTB;
         private readonly StatusStrip _statusStrip;
 
         //private readonly Style XmlLiteAttributeStyle;
@@ -51,6 +50,8 @@ namespace Utils.WinForm.Notepad
         public event EventHandler WordHighlightsStateChanged;
         public event EventHandler SelectionChanged;
         public event EventHandler SelectionChangedDelayed;
+
+        internal FastColoredTextBox FCTB { get; }
 
         public string HeaderName { get; set; }
 
