@@ -66,7 +66,7 @@ namespace LogsReader.Config
 
 		public static TimeSpan SEARCHING_MATCH_TIMEOUT { get; private set; } = new TimeSpan(0, 0, 0, 0, 1000);
 
-		public static TimeSpan PARSING_MATCH_TIMEOUT { get; private set; } = new TimeSpan(0, 0, 0, 0, 10000);
+		public static TimeSpan PARSING_MATCH_TIMEOUT { get; private set; } = new TimeSpan(0, 0, 0, 0, 15000);
 
 		[XmlIgnore]
 		public Dictionary<string, LRSettingsScheme> Schemes { get; private set; }
