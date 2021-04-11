@@ -56,8 +56,8 @@
     <Reference Include="Utils, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Armin.Utils.2021.4.10.222609\lib\net452\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="Utils.WinForm, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Armin.Utils.WinForm.2021.4.7.13049\lib\net452\Utils.WinForm.dll</HintPath>
+    <Reference Include="Utils.WinForm, Version=1.1.0.11, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Armin.Utils.WinForm.2021.4.11.32844\lib\net452\Utils.WinForm.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@ namespace LogsReader.Config
 		{
 			cdataResult = null;
 			if (input != null && input.Length > 0)
-				cdataResult = input[0].NodeType == XmlNodeType.CDATA ? input : new XmlNode[] { new XmlDocument().CreateCDataSection(input[0].Value) };
+				cdataResult = new[] { input[0].NodeType == XmlNodeType.CDATA ? input[0] : new XmlDocument().CreateCDataSection(input[0].Value) };
 			if (cdataResult == null || cdataResult.Length == 0)
 				return null;
 
