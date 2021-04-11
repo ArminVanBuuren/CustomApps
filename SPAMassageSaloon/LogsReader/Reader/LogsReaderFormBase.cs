@@ -42,6 +42,7 @@ namespace LogsReader.Reader
 		private bool _onPause;
 
 		private int _countMatches;
+		private int _countOfShown;
 		private int _countErrorMatches;
 		private int _filesCompleted;
 		private int _totalFiles;
@@ -58,12 +59,14 @@ namespace LogsReader.Reader
 
 		private readonly ToolStripButton _openProcessingReadersBtn;
 		private readonly ToolStripStatusLabel _statusInfo;
-		private readonly ToolStripStatusLabel _findedInfo;
 		private readonly ToolStripStatusLabel _completedFilesStatus;
 		private readonly ToolStripStatusLabel _totalFilesStatus;
 		private readonly ToolStripStatusLabel _filtersCompleted1;
 		private readonly ToolStripStatusLabel _filtersCompleted2;
 		private readonly ToolStripStatusLabel _overallFound;
+		private readonly ToolStripStatusLabel _overallFoundValue;
+		private readonly ToolStripStatusLabel _shownInDgv;
+		private readonly ToolStripStatusLabel _shownInDgvValue;
 		private readonly ToolStripStatusLabel _errorFound;
 		private readonly ToolStripStatusLabel _errorFoundValue;
 
@@ -198,7 +201,17 @@ namespace LogsReader.Reader
 			private set
 			{
 				_countMatches = value;
-				_findedInfo.Text = _countMatches.ToString();
+				_overallFoundValue.Text = _countMatches.ToString();
+			}
+		}
+
+		public int CountOfShown
+		{
+			get => _countOfShown;
+			private set
+			{
+				_countOfShown = value;
+				_shownInDgvValue.Text = _countOfShown.ToString();
 			}
 		}
 
@@ -366,7 +379,17 @@ namespace LogsReader.Reader
 				Font = base.Font,
 				Margin = statusStripItemsPaddingStart
 			};
-			_findedInfo = new ToolStripStatusLabel("0")
+			_overallFoundValue = new ToolStripStatusLabel("0")
+			{
+				Font = base.Font,
+				Margin = statusStripItemsPaddingMiddle
+			};
+			_shownInDgv = new ToolStripStatusLabel
+			{
+				Font = base.Font,
+				Margin = statusStripItemsPaddingStart
+			};
+			_shownInDgvValue = new ToolStripStatusLabel("0")
 			{
 				Font = base.Font,
 				Margin = statusStripItemsPaddingMiddle
@@ -383,12 +406,15 @@ namespace LogsReader.Reader
 			};
 			toolToolStripCollection.Add(new ToolStripSeparator());
 			toolToolStripCollection.Add(_overallFound);
-			toolToolStripCollection.Add(_findedInfo);
+			toolToolStripCollection.Add(_overallFoundValue);
 			toolToolStripCollection.Add(new ToolStripSeparator());
 			toolToolStripCollection.Add(_errorFound);
 			toolToolStripCollection.Add(_errorFoundValue);
 			toolToolStripCollection.Add(new ToolStripSeparator());
-			
+			toolToolStripCollection.Add(_shownInDgv);
+			toolToolStripCollection.Add(_shownInDgvValue);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+
 			_statusInfo = new ToolStripStatusLabel("")
 			{
 				Font = new Font(LogsReaderMainForm.MainFontFamily, 8.5F, FontStyle.Bold),
@@ -743,6 +769,7 @@ namespace LogsReader.Reader
 				_filtersCompleted1.Text = Resources.Txt_LogsReaderForm_FilesCompleted_1;
 				_filtersCompleted2.Text = Resources.Txt_LogsReaderForm_FilesCompleted_2;
 				_overallFound.Text = $"{Resources.TxtReader_DgvMatches}:";
+				_shownInDgv.Text = $"{Resources.TxtReader_DgvShown}:";
 				_errorFound.Text = $"{Resources.TxtReader_DgvErrors}:";
 				CobxTraceNameFilter.Items.Clear();
 				CobxTraceNameFilter.Items.Add(Resources.Txt_LogsReaderForm_Contains);
@@ -1297,6 +1324,8 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				CountOfShown = 0;
+
 				if (DgvData.DataSource != null || DgvData.RowCount > 0)
 				{
 					DgvData.DataSource = null;
@@ -1832,92 +1861,92 @@ namespace LogsReader.Reader
 		}
 
 		//DgvData.RowPostPaint += DgvData_RowPostPaint;
-		//private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-		//{
-		// if (e.RowIndex < 0)
-		//  return;
+		private void DgvData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+		{
+			if (e.RowIndex < 0)
+				return;
 
-		// try
-		// {
-		//  var row = ((DataGridView)sender).Rows[e.RowIndex];
-		//  if (!TryGetTemplate(row, out var template))
-		//   return;
-		//        //Color.Red
+			try
+			{
+				var row = ((DataGridView)sender).Rows[e.RowIndex];
+				if (!TryGetTemplate(row, out var template))
+					return;
+				//Color.Red
 
-		//        //((DataGridView)sender).GridColor 
-		//        using (Pen pen = new Pen(Color.Red))
-		//        {
-		//         int penWidth = 1;
+				//((DataGridView)sender).GridColor 
+				using (Pen pen = new Pen(Color.Red))
+				{
+					int penWidth = 1;
 
-		//         pen.Width = penWidth;
+					pen.Width = penWidth;
 
-		//         int x = e.RowBounds.Left + (penWidth / 2);
-		//         int y = e.RowBounds.Top + (penWidth / 2);
-		//         int width = e.RowBounds.Width - penWidth;
-		//         int height = e.RowBounds.Height - penWidth;
+					int x = e.RowBounds.Left + (penWidth / 2);
+					int y = e.RowBounds.Top + (penWidth / 2);
+					int width = e.RowBounds.Width - penWidth;
+					int height = e.RowBounds.Height - penWidth;
 
-		//         e.Graphics.DrawRectangle(pen, x, y, width, height);
-		//        }
-		//    }
-		// catch (Exception ex)
-		// {
-		//  ReportStatus(ex);
-		// }
-		//}
+					e.Graphics.DrawRectangle(pen, x, y, width, height);
+				}
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex);
+			}
+		}
 
-		//void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
-		//{
-		//    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
-		//    using (var p = new Pen(color, 2))
-		//    {
-		//        var rect = e.CellBounds;
-		//        rect.Y = rect.Top + 1;
-		//        rect.Height -= 2;
-		//        e.Graphics.DrawRectangle(p, rect);
-		//    }
+		void SetBorderRowColor(Color color, DataGridViewCellPaintingEventArgs e)
+		{
+			e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
+			using (var p = new Pen(color, 2))
+			{
+				var rect = e.CellBounds;
+				rect.Y = rect.Top + 1;
+				rect.Height -= 2;
+				e.Graphics.DrawRectangle(p, rect);
+			}
 
-		//    e.Handled = true;
-		//}
+			e.Handled = true;
+		}
 
-		//private DataGridViewColumn _dgvReaderPrevSortColumn;
-		//private bool _dgvReaderByAscending = true;
+		private DataGridViewColumn _dgvReaderPrevSortColumn;
+		private bool _dgvReaderByAscending = true;
 
-		//private async void DgvReader_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-		//{
-		//	if(e.ColumnIndex < 0 || IsWorking)
-		//		return;
+		private async void DgvReader_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex < 0 || IsWorking)
+				return;
 
-		//	var column = DgvReader.Columns[e.ColumnIndex];
-		//	if (column == DgvReaderSelectColumn || column.DataPropertyName.IsNullOrWhiteSpace())
-		//		return;
+			var column = DgvReader.Columns[e.ColumnIndex];
+			if (column == DgvReaderSelectColumn || column.DataPropertyName.IsNullOrWhiteSpace())
+				return;
 
-		//	var readers = GetResultReaders();
-		//	if(!readers.Any())
-		//		return;
+			var readers = GetResultReaders();
+			if (!readers.Any())
+				return;
 
-		//	try
-		//	{
-		//		var byAscending = _dgvReaderPrevSortColumn?.Index != e.ColumnIndex || (_dgvReaderPrevSortColumn?.Index == e.ColumnIndex && !_dgvReaderByAscending);
-		//		var sortOrder = byAscending ? SortOrder.Ascending : SortOrder.Descending;
-		//		var result = readers.AsQueryable();
+			try
+			{
+				var byAscending = _dgvReaderPrevSortColumn?.Index != e.ColumnIndex || (_dgvReaderPrevSortColumn?.Index == e.ColumnIndex && !_dgvReaderByAscending);
+				var sortOrder = byAscending ? SortOrder.Ascending : SortOrder.Descending;
+				var result = readers.AsQueryable();
 
-		//		result = byAscending ? result.OrderBy(column.DataPropertyName) : result.OrderByDescending(column.DataPropertyName);
+				result = byAscending ? result.OrderBy(column.DataPropertyName) : result.OrderByDescending(column.DataPropertyName);
 
-		//		await DgvReader.AssignCollectionAsync(result, null, true);
-		//		RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				await DgvReader.AssignCollectionAsync(result, null, true);
+				RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 
-		//		if (_dgvReaderPrevSortColumn != null)
-		//			_dgvReaderPrevSortColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
-		//		column.HeaderCell.SortGlyphDirection = sortOrder;
+				if (_dgvReaderPrevSortColumn != null)
+					_dgvReaderPrevSortColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
+				column.HeaderCell.SortGlyphDirection = sortOrder;
 
-		//		_dgvReaderPrevSortColumn = column;
-		//		_dgvReaderByAscending = byAscending;
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		ReportStatus(ex);
-		//	}
-		//}
+				_dgvReaderPrevSortColumn = column;
+				_dgvReaderByAscending = byAscending;
+			}
+			catch (Exception ex)
+			{
+				ReportStatus(ex);
+			}
+		}
 
 		private void buttonFilteredPrev_Click(object sender, EventArgs e)
 			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
@@ -2065,6 +2094,8 @@ namespace LogsReader.Reader
 				ClearErrorStatus();
 				
 				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
+				CountOfShown = _currentDGVResult.Count();
+
 				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both
 				                           || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
 				buttonSelectTraceNames.Enabled = btnExport.Enabled = DgvData.RowCount > 0;
@@ -2303,6 +2334,7 @@ namespace LogsReader.Reader
 				}
 
 				CountMatches = 0;
+				CountOfShown = 0;
 				CountErrorMatches = 0;
 				Progress = 0;
 				FilesCompleted = 0;

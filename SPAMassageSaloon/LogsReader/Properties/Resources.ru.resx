@@ -609,4 +609,7 @@
   <data name="TxtConfigureSuccessful" xml:space="preserve">
     <value>Настройки корректны. Нажмите "Применить", чтобы настройки вступили в силу.</value>
   </data>
+  <data name="TxtReader_DgvShown" xml:space="preserve">
+    <value>Загружено</value>
+  </data>
 </root>

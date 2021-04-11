@@ -1893,6 +1893,15 @@ namespace LogsReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loaded.
+        /// </summary>
+        public static string TxtReader_DgvShown {
+            get {
+                return ResourceManager.GetString("TxtReader_DgvShown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size[Mb].
         /// </summary>
         public static string TxtReader_DgvSize {
