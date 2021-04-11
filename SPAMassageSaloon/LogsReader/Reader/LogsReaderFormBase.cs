@@ -1170,6 +1170,9 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				AssignComboboxWithHistory(TbxTraceNameFilter);
+				AssignComboboxWithHistory(TbxTraceMessageFilter);
+
 				if (DgvReader.RowCount > 0)
 				{
 					var checkedFilePaths = GetCheckedFilePaths();
