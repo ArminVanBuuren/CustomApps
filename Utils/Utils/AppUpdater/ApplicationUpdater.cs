@@ -36,6 +36,9 @@ namespace Utils.AppUpdater
         private readonly object syncUpdating = new object();
         private readonly Timer _watcher;
         private readonly AssemblyInfo _assemblyInfo;
+        private ILogger _logger;
+
+        protected ILogger Logger => _logger ?? GetLogger();
 
         private int _httpRequestTimeoutSeconds = 100;
 
@@ -106,13 +109,14 @@ namespace Utils.AppUpdater
                         var obj = reg[nameof(LastUpdateInfo)];
                         if (obj is byte[] array)
                             return BuildPackUpdater.Deserialize(array);
-                        else
-                            return null;
+
+                        return null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    return null;
+	                Logger.LogWriteError(ex);
+	                return null;
                 }
             }
             set
@@ -124,7 +128,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
-                    // ignored
+	                Logger.LogWriteError(ex);
                 }
             }
         }
@@ -194,6 +198,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
+	                Logger.LogWriteError(ex);
                     SendError(new ApplicationUpdaterArgs(null, ex));
                 }
                 finally
@@ -205,7 +210,7 @@ namespace Utils.AppUpdater
 
         protected virtual BuildPackUpdaterBase GetBuildPackUpdater(BuildPackInfo buildPack)
         {
-            return new BuildPackUpdaterSimple(RunningApp, buildPack, _updaterProject);
+	        return new BuildPackUpdaterSimple(RunningApp, buildPack, _updaterProject, Logger);
         }
 
         ApplicationFetchingArgs GetResponseFromControlObject(AppFetchingHandler eventReference, ApplicationFetchingArgs args)
@@ -224,7 +229,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
-                    // ignored
+	                Logger.LogWriteError(ex);
                 }
             }
 
@@ -256,6 +261,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
+	            Logger.LogWriteError(ex);
                 SendError(new ApplicationUpdaterArgs(control, ex, Resources.ApplicationUpdater_ErrInstall));
                 control?.Dispose();
                 ReturnBackStatus();
@@ -384,6 +390,7 @@ namespace Utils.AppUpdater
                 }
                 catch (Exception ex)
                 {
+	                Logger.LogWriteError(ex);
                     SendError(new ApplicationUpdaterArgs(updater, ex, Resources.ApplicationUpdater_ErrInstall));
                     updater.Dispose();
                 }
@@ -426,7 +433,7 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                // ignored
+	            Logger.LogWriteError(ex);
             }
         }
 
@@ -438,13 +445,12 @@ namespace Utils.AppUpdater
             }
             catch (Exception ex)
             {
-                // ignored
+	            Logger.LogWriteError(ex);
             }
         }
 
-        public override string ToString()
-        {
-            return $"[{nameof(ApplicationUpdater)}] Project = \"{ProjectName}\" Status = \"{Status:G}\"";
-        }
+        protected virtual ILogger GetLogger() => new Logger(nameof(ApplicationUpdater));
+
+        public override string ToString() => $"[{nameof(ApplicationUpdater)}] Project = \"{ProjectName}\" Status = \"{Status:G}\"";
     }
 }

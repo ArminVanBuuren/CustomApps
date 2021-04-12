@@ -19,7 +19,9 @@ namespace Utils.AppUpdater.Updater
         [field: NonSerialized]
         public abstract event UpdaterFetchHandler OnFetchComplete;
 
-        protected BuildPackUpdaterBase(Assembly runningApp, BuildPackInfo buildPack) :base(runningApp, buildPack) { }
+        protected BuildPackUpdaterBase(Assembly runningApp, 
+                                       BuildPackInfo buildPack,
+                                       ILogger logger) :base(runningApp, buildPack, logger) { }
 
         public abstract void Fetch();
 

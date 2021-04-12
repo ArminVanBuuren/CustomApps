@@ -30,7 +30,10 @@ namespace Utils.AppUpdater.Updater
         [field: NonSerialized]
         public override event UpdaterFetchHandler OnFetchComplete;
 
-        public BuildPackUpdaterSimple(Assembly runningApp, BuildPackInfo projectBuildPack, IUpdaterProject updaterProject) : base(runningApp, projectBuildPack)
+        public BuildPackUpdaterSimple(Assembly runningApp, 
+                                      BuildPackInfo projectBuildPack, 
+                                      IUpdaterProject updaterProject,
+                                      ILogger logger) : base(runningApp, projectBuildPack, logger)
         {
             if (!NeedToFetchPack)
                 return;
@@ -68,6 +71,7 @@ namespace Utils.AppUpdater.Updater
             }
             catch (Exception ex)
             {
+	            Logger.LogWriteError(ex);
                 _fetchArgs.Error = ex;
                 OnFetchComplete?.BeginInvoke(this, _fetchArgs, null, null);
             }
@@ -105,6 +109,7 @@ namespace Utils.AppUpdater.Updater
                 }
                 catch (Exception ex)
                 {
+	                Logger.LogWriteError(ex);
                     _fetchArgs.Error = ex;
                 }
             }
@@ -119,9 +124,9 @@ namespace Utils.AppUpdater.Updater
                 base.Dispose();
                 _webClient?.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+	            Logger.LogWriteError(ex);
             }
         }
     }

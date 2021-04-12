@@ -28,6 +28,8 @@ namespace Utils.AppUpdater.Updater
     {
         private readonly List<BuildUpdater> _collection;
 
+        protected ILogger Logger { get; }
+
         [field: NonSerialized]
         public abstract event UpdaterDownloadProgressChangedHandler DownloadProgressChanged;
 
@@ -110,7 +112,9 @@ namespace Utils.AppUpdater.Updater
 
         public string DiretoryTempPath { get; }
 
-        protected internal BuildPackUpdater(Assembly runningApp, BuildPackInfo buildPack)
+        protected internal BuildPackUpdater(Assembly runningApp, 
+                                            BuildPackInfo buildPack,
+                                            ILogger logger)
         {
             if (runningApp == null)
                 throw new ArgumentNullException(nameof(runningApp));
@@ -118,6 +122,7 @@ namespace Utils.AppUpdater.Updater
             _collection = new List<BuildUpdater>();
             LocationApp = runningApp.Location;
             BuildPack = buildPack ?? throw new ArgumentNullException(nameof(buildPack));
+            Logger = logger;
 
             var localVersions = BuildPackInfo.GetLocalVersions(runningApp, BuildPack);
             var filesToChange = 0;
@@ -198,9 +203,9 @@ namespace Utils.AppUpdater.Updater
                 if (!DiretoryTempPath.IsNullOrWhiteSpace() && Directory.Exists(DiretoryTempPath))
                     IO.DeleteReadOnlyDirectory(DiretoryTempPath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+	            Logger.LogWriteError(ex);
             }
             finally
             {
@@ -218,9 +223,9 @@ namespace Utils.AppUpdater.Updater
                     File.Delete(FileTempPath);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+	            Logger.LogWriteError(ex);
             }
         }
 
@@ -230,9 +235,6 @@ namespace Utils.AppUpdater.Updater
             RemoveTempObjects();
         }
 
-        public override string ToString()
-        {
-            return $"Status = \"{Status:G}\" BuildsCount = {Count}";
-        }
+        public override string ToString() => $"Status = \"{Status:G}\" BuildsCount = {Count}";
     }
 }

@@ -643,7 +643,10 @@ namespace Tester.ConsoleTest
 
 			try
 			{
-				Test_GetLastDigit();
+				//var logger = new Logger("TestTestTest");
+				//logger.LogWriteInfo("11111111111111");
+				//logger.LogWriteError(new Exception("22222222222222222"));
+				//logger.LogWriteError("3333333333");
 			}
 			catch (Exception e)
 			{
