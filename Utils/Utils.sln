@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Media", "Utils.Media\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Messaging", "Utils.Messaging\Utils.Messaging.csproj", "{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAMassageSaloon", "SPAMassageSaloon\SPAMassageSaloon.csproj", "{2ACFB784-A485-47D7-A823-0DEEBC9C5433}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,18 @@ Global
 		{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}.Release|x64.Build.0 = Release|Any CPU
 		{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{E9F4D50E-59E1-4D23-8F6C-0160CD6F75AF}.Release|x86.Build.0 = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|x64.Build.0 = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Debug|x86.Build.0 = Debug|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|x64.ActiveCfg = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|x64.Build.0 = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|x86.ActiveCfg = Release|Any CPU
+		{2ACFB784-A485-47D7-A823-0DEEBC9C5433}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

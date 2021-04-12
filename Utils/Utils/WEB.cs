@@ -138,8 +138,12 @@ namespace Utils
         {
             SetDefaultPolicy(true, cashLevel);
             var request = WebRequest.Create(uri);
+            request.UseDefaultCredentials = true;
+            request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
             if (timeoutMilliseconds != null && timeoutMilliseconds > 0)
                 request.Timeout = timeoutMilliseconds.Value;
+
             return GetWebResponse(request, cashLevel);
         }
 

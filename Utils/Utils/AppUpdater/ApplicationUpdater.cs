@@ -38,7 +38,7 @@ namespace Utils.AppUpdater
         private readonly AssemblyInfo _assemblyInfo;
         private ILogger _logger;
 
-        protected ILogger Logger => _logger ?? GetLogger();
+        protected ILogger Logger => _logger ?? (_logger = GetLogger());
 
         private int _httpRequestTimeoutSeconds = 100;
 
@@ -141,6 +141,8 @@ namespace Utils.AppUpdater
         /// <param name="updaterProject">Проект к удаленному серверу для скачивания обновления</param>
         public ApplicationUpdater(Assembly runningApp, int checkUpdatesIntervalMinutes = 10, IUpdaterProject updaterProject = null)
         {
+	        Logger.LogWriteInfo("Startup");
+
             if (runningApp == null)
                 throw new ArgumentNullException(nameof(runningApp));
             if (checkUpdatesIntervalMinutes <= 0)
