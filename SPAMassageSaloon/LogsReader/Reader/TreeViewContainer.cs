@@ -192,7 +192,7 @@ namespace LogsReader.Reader
 			Main.Nodes.Add(treeNodeFolders);
 			SetFolder(null, CurrentSettings.LogsFolder.Folders, false);
 			treeNodeFolders.Expand();
-			CheckTreeViewNode(treeNodeFolders, true);
+			CheckTreeViewNode(treeNodeFolders, false);
 		}
 
 		private void InitializeTreeView(TreeView treeView)

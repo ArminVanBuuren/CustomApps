@@ -256,6 +256,8 @@ namespace LogsReader.Reader
 			{
 				CurrentSettings = configureForm.SettingsOfScheme;
 				InitSettings();
+				SelectedPage = 1;
+				ResetPages();
 				TreeViewContainer.Reload(CurrentSettings);
 				OnSchemeChanged?.Invoke(this, EventArgs.Empty);
 			}
