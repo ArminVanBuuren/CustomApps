@@ -91,8 +91,6 @@ namespace LogsReader.Reader
 
 		public int MaxThreads => Settings.MaxThreads;
 
-		public int RowsLimit => Settings.RowsLimit;
-
 		public (Func<string, TraceParseResult>, Func<string, bool>)? TraceParseCustomFunction { get; }
 
 		public LRTraceParsePatternItem[] TraceParsePatterns => Settings.TraceParse.Patterns;
@@ -169,9 +167,8 @@ namespace LogsReader.Reader
 				List<Regex> trnList;
 				lock (_syncTrn)
 					trnList = _transactionValues.Values.ToList();
-				var trnsLimit = trnList.Skip(Math.Max(0, RowsLimit == 0 ? trnList.Count : trnList.Count - RowsLimit / 2));
-
-				foreach (var regex in trnsLimit)
+				
+				foreach (var regex in trnList)
 				{
 					if (regex == null)
 						continue;

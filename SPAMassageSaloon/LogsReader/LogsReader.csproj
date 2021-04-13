@@ -286,7 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Armin.Utils">
-      <Version>2021.4.10.222609</Version>
+      <Version>2021.4.12.185209</Version>
     </PackageReference>
     <PackageReference Include="Armin.Utils.WinForm">
       <Version>2021.4.11.32844</Version>

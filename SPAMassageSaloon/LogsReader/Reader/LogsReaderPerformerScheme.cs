@@ -15,7 +15,7 @@ namespace LogsReader.Reader
 	{
 		private readonly object _syncRootResult = new object();
 
-		private SortedDictionary<DataTemplate, DataTemplate> _result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+		private Dictionary<DataTemplate, DataTemplate> _result = new Dictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 
 		private List<MTActionResult<TraceReader>> _multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 
@@ -135,21 +135,7 @@ namespace LogsReader.Reader
 			{
 				if (!_result.TryGetValue(item, out var existingItem))
 				{
-					var dateCurrent = item.Date ?? DateTime.MinValue;
-
-					if (_result.Count >= RowsLimit)
-					{
-						var latest = _result.First().Key;
-						if (latest.Date == null || latest.Date > dateCurrent)
-							return;
-
-						_result.Remove(latest);
-						_result.Add(item, item);
-					}
-					else
-					{
-						_result.Add(item, item);
-					}
+					_result.Add(item, item);
 				}
 				else
 				{
@@ -202,7 +188,7 @@ namespace LogsReader.Reader
 			_multiTaskingHandlerList?.Clear();
 			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
 			_result?.Clear();
-			_result = new SortedDictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+			_result = new Dictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
 			ResultsOfError?.Clear();
 			ResultsOfError = new List<DataTemplate>();
 		}

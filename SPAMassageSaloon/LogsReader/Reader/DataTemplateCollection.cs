@@ -55,6 +55,7 @@ namespace LogsReader.Reader
 				                          .ThenBy(x => x.File)
 				                          .ThenBy(x => x.FoundLineID)
 				                          .ToList();
+
 				var firstTemplate = trnList.First();
 				var totalElapsed = trnList.Last().Date.Value.Subtract(firstTemplate.Date.Value);
 				DataTemplate pastTemplate = null;

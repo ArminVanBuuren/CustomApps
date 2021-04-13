@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LogsReader.Reader
 {
-	public class DataTemplatesDuplicateComparer : IComparer<DataTemplate>
+	public class DataTemplatesDuplicateComparer : IEqualityComparer<DataTemplate>
 	{
 		public int Compare(DataTemplate x, DataTemplate y)
 		{
@@ -43,5 +43,9 @@ namespace LogsReader.Reader
 
 			return result;
 		}
+
+		public bool Equals(DataTemplate x, DataTemplate y) => Compare(x, y) == 0;
+
+		public int GetHashCode(DataTemplate obj) => obj.GetHashCode();
 	}
 }
