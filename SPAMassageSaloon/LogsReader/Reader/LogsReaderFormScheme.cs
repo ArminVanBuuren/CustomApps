@@ -15,6 +15,8 @@ namespace LogsReader.Reader
 {
 	public sealed class LogsReaderFormScheme : LogsReaderFormBase
 	{
+		private int _rowsLimit;
+
 		private readonly Label OrderByLabel;
 		private readonly Label MaxLinesLabel;
 		private readonly TextBox orderByText;
@@ -57,6 +59,26 @@ namespace LogsReader.Reader
 		public override bool HasAnyResult => OverallResultList != null && OverallResultList.Count > 0;
 
 		public bool IsTreeViewSynchronized { get; private set; }
+
+		protected override int OverallCount => IsFiltered ? base.OverallCount : OverallResultList?.Count ?? 0;
+
+		protected override int RowsLimit
+		{
+			get => _rowsLimit;
+			set
+			{
+				var prev = CurrentSettings.RowsLimit;
+				CurrentSettings.RowsLimit = _rowsLimit = value;
+				rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+
+				if (prev != CurrentSettings.RowsLimit)
+				{
+					SelectedPage = 1;
+					ResetPages();
+					OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+				}
+			}
+		}
 
 		public override RefreshDataType DgvDataAfterAssign => RefreshDataType.VisibleRows;
 
@@ -244,7 +266,7 @@ namespace LogsReader.Reader
 			CurrentTransactionsMarkingType = CurrentSettings.TraceParse.SelectionTransactionsType;
 			maxLinesStackText.AssignValue(CurrentSettings.MaxLines, MaxLinesStackText_TextChanged);
 			maxThreadsText.AssignValue(CurrentSettings.MaxThreads, MaxThreadsText_TextChanged);
-			rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
+			RowsLimit = CurrentSettings.RowsLimit;
 			orderByText.Text = CurrentSettings.OrderBy;
 		}
 
@@ -365,10 +387,12 @@ namespace LogsReader.Reader
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_Working, string.Empty), ReportStatusType.Success);
 					await MainReader.StartAsync(); // вополнение поиска
 
-					// результат выполнения
-					OverallResultList = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
+					var resultDataTemplates = new DataTemplateCollection(CurrentSettings, MainReader.ResultsOfSuccess);
 					if (MainReader.ResultsOfError != null)
-						OverallResultList.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
+						resultDataTemplates.AddRange(MainReader.ResultsOfError.OrderBy(x => x.Date));
+
+					// результат выполнения
+					OverallResultList = resultDataTemplates;
 
 					// заполняем DataGrid
 					if (await AssignResultAsync(null, null, true))
@@ -505,21 +529,14 @@ namespace LogsReader.Reader
 		private void RowsLimitText_TextChanged(object sender, EventArgs e)
 		{
 			if (int.TryParse(rowsLimitText.Text, out var value))
-				RowsLimitTextSave(value);
+				RowsLimit = value;
 		}
 
 		private void RowsLimitText_Leave(object sender, EventArgs e)
 		{
 			if (!int.TryParse(rowsLimitText.Text, out var value))
 				value = -1;
-			RowsLimitTextSave(value);
-		}
-
-		private void RowsLimitTextSave(int value)
-		{
-			CurrentSettings.RowsLimit = value;
-			rowsLimitText.AssignValue(CurrentSettings.RowsLimit, RowsLimitText_TextChanged);
-			OnSchemeChanged?.Invoke(this, EventArgs.Empty);
+			RowsLimit = value;
 		}
 
 		private void OrderByText_Leave(object sender, EventArgs e)

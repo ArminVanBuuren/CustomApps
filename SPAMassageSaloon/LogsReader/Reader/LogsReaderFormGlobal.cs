@@ -45,6 +45,8 @@ namespace LogsReader.Reader
 
 		private Dictionary<LogsReaderFormScheme, ExpandCollapsePanel> AllExpanders { get; } = new Dictionary<LogsReaderFormScheme, ExpandCollapsePanel>();
 
+		protected override int RowsLimit { get; set; } = 30000;
+
 		protected override TransactionsMarkingType DefaultTransactionsMarkingType => TransactionsMarkingType.Prompt;
 
 		public LogsReaderMainForm MainForm { get; private set; }

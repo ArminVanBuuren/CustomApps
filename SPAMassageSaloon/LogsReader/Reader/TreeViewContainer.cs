@@ -186,7 +186,7 @@ namespace LogsReader.Reader
 			var treeNodeFolders = new TreeNode(Resources.Txt_LogsReaderForm_LogsFolder)
 			{
 				Name = TRVFolders,
-				Checked = true,
+				Checked = false,
 				NodeFont = _defaultParentFont
 			};
 			Main.Nodes.Add(treeNodeFolders);
@@ -692,7 +692,7 @@ namespace LogsReader.Reader
 					if (prevNodes.TryGetValue(node.Text, out var prevNode))
 					{
 						node.Checked = prevNode.Checked;
-						CheckTreeViewNode(node, true);
+						CheckTreeViewNode(node, false);
 					}
 				}
 			}

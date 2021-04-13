@@ -50,9 +50,15 @@ namespace LogsReader.Reader
 		private int _prevReadersDistance = -1;
 		private bool _shownProcessReadesPanel = true;
 
+		private int _selectedPage = 1;
+		private int _pages = 1;
+
 		private IEnumerable<DataTemplate> _currentDGVResult;
 		private DataGridViewColumn _oldSortedColumn;
 		private bool _byAscending = true;
+
+		private Func<DataTemplate, bool> _prevCondition;
+		private DataFilter _prevDataFilter;
 
 		private Color _formBackColor;
 		private Color _formForeColor;
@@ -102,6 +108,38 @@ namespace LogsReader.Reader
 
 		private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
 		private TransactionsMarkingType _prevTransactionsMarkingType = TransactionsMarkingType.None;
+
+		protected virtual int OverallCount => _currentDGVResult?.Count() ?? 0;
+
+		protected abstract int RowsLimit { get; set; }
+
+		protected int SelectedPage
+		{
+			get => _selectedPage;
+			set
+			{
+				_selectedPage = value <= 0 ? 1 : value > _pages ? _pages : value;
+				pagingLbl.SafeInvoke(() =>
+				{
+					pagingLbl.Text = $"{_selectedPage, 6} / {_pages, -6}"; ;
+				});
+			}
+		}
+
+		protected int Pages
+		{
+			get => _pages;
+			set
+			{
+				_pages = value <= 0 ? 1 : value;
+				pagingLbl.SafeInvoke(() =>
+				{
+					pagingLbl.Text = $"{_selectedPage, 6} / {_pages, -6}"; ;
+				});
+			}
+		}
+
+		public bool IsFiltered => _prevDataFilter != null;
 
 		protected static Image Img_Failed { get; }
 
@@ -1197,6 +1235,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				SelectedPage = 1;
 				AssignComboboxWithHistory(TbxTraceNameFilter);
 				AssignComboboxWithHistory(TbxTraceMessageFilter);
 
@@ -1235,6 +1274,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
+				SelectedPage = 1;
 				ChangeStateDgvReaderBoxes(true, true);
 				await AssignResultAsync(null, null, false);
 			}
@@ -1335,24 +1375,37 @@ namespace LogsReader.Reader
 
 				MainViewer?.Clear();
 
+				_prevDataFilter = filter;
+				_prevCondition = condition;
+
 				_currentDGVResult = condition != null ? GetResultTemplates().Where(condition) : GetResultTemplates();
 
-				if (_currentDGVResult == null || !_currentDGVResult.Any())
+				try
 				{
-					ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
-					return false;
-				}
-
-				if (filter != null)
-				{
-					_currentDGVResult = filter.FilterCollection(_currentDGVResult);
-
-					if (!_currentDGVResult.Any())
+					if (_currentDGVResult == null || !_currentDGVResult.Any())
 					{
-						ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+						ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 						return false;
 					}
+
+					if (filter != null)
+					{
+						_currentDGVResult = filter.FilterCollection(_currentDGVResult);
+
+						if (!_currentDGVResult.Any())
+						{
+							ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+							return false;
+						}
+					}
 				}
+				finally
+				{
+					ResetPages();
+				}
+
+				if (RowsLimit > 0 && _currentDGVResult.Count() > RowsLimit)
+					_currentDGVResult = _currentDGVResult.Skip((SelectedPage - 1) * RowsLimit).Take(RowsLimit);
 
 				await AssignCurrentDgvResultAsync(isNewData);
 				return true;
@@ -2293,6 +2346,38 @@ namespace LogsReader.Reader
 
 		internal virtual void ChbxAlreadyUseFilter_CheckedChanged(object sender, EventArgs e)
 		{
+
+		}
+
+		private async void buttonPagePrev_Click(object sender, EventArgs e)
+		{
+			SelectedPage--;
+			await AssignResultAsync(_prevDataFilter, _prevCondition, false);
+		}
+
+		private async void buttonPageNext_Click(object sender, EventArgs e)
+		{
+			SelectedPage++;
+			await AssignResultAsync(_prevDataFilter, _prevCondition, false);
+		}
+
+		protected void ResetPages()
+		{
+			var countOfRows = OverallCount;
+
+			if (countOfRows <= 0)
+			{
+				Pages = 1;
+				SelectedPage = 1;
+			}
+			else
+			{
+				var limit = Convert.ToDouble(countOfRows) / RowsLimit;
+				//var min = Math.Floor(limit);
+				var max = Math.Ceiling(limit);
+
+				Pages = countOfRows > RowsLimit ? (int)max : 1;
+			}
 		}
 
 		protected virtual void ValidationCheck(bool clearStatus)
@@ -2314,6 +2399,8 @@ namespace LogsReader.Reader
 				_oldSortedColumn = null;
 				_currentDGVResult = null;
 				_byAscending = true;
+				_prevDataFilter = null;
+				_prevCondition = null;
 
 				if (DgvData.DataSource != null || DgvData.RowCount > 0)
 				{
@@ -2333,6 +2420,8 @@ namespace LogsReader.Reader
 					tabControlViewer.TabPages.Remove(page);
 				}
 
+				SelectedPage = 1;
+				Pages = 1;
 				CountMatches = 0;
 				CountOfShown = 0;
 				CountErrorMatches = 0;
@@ -2366,6 +2455,7 @@ namespace LogsReader.Reader
 
 		protected virtual void CustomPanel_Resize(object sender, EventArgs e)
 		{
+
 		}
 
 		internal void SelectTransactions()

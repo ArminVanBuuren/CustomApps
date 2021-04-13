@@ -32,9 +32,7 @@ namespace LogsReader.Reader
 			if (result == 0)
 			{
 				if (x.ParentReader.FilePath.Equals(y.ParentReader.FilePath, StringComparison.InvariantCultureIgnoreCase))
-				{
 					return x.FoundLineID.CompareTo(y.FoundLineID);
-				}
 
 				return x.ParentReader.FileNamePartial.Equals(y.ParentReader.FileNamePartial)
 					? DateTime.Compare(x.ParentReader.File.CreationTime, y.ParentReader.File.CreationTime)

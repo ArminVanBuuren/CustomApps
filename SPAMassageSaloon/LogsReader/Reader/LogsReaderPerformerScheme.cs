@@ -48,6 +48,7 @@ namespace LogsReader.Reader
 		public override async Task GetTargetFilesAsync()
 		{
 			await base.GetTargetFilesAsync();
+
 			if (TraceReaders == null)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_FilesNotInitialized);
 			if (TraceReaders.Count <= 0)
@@ -63,8 +64,10 @@ namespace LogsReader.Reader
 				                                .ThenBy(x => x.File.LastWriteTime.Minute)
 				                                .ThenByDescending(x => x.File.Length)
 				                                .ToList();
+
 				foreach (var reader in readersOrders)
 					reader.ID = ++id;
+
 				TraceReadersOrdered.Add(readersOrders);
 			}
 		}
