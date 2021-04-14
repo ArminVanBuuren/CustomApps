@@ -41,18 +41,18 @@ namespace LogsReader.Reader
 
 			Found = new DataTemplate(this, Lines, CurrentTransactionValue);
 			// Попытки спарсить предыдущие сохраненные строки как начало трассировки
-			var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+			var revercePastTraceLines = new Queue<(long line, string input)>(PastTraceLines.Reverse());
 
 			while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 			{
 				var pastLine = revercePastTraceLines.Dequeue();
-				Found.AppendPastLine(pastLine);
-				if (StartTraceLineWith.IsMatch(pastLine))
+				Found.AppendPastLine(pastLine.input);
+				if (StartTraceLineWith.IsMatch(pastLine.input))
 					break;
 			}
 
 			if (SearchByTransaction)
-				PastTraceLines = new Queue<string>(revercePastTraceLines.Reverse());
+				PastTraceLines = new Queue<(long line, string input)>(revercePastTraceLines.Reverse());
 			else
 				PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
 		}

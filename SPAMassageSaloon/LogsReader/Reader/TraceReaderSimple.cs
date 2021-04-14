@@ -77,11 +77,11 @@ namespace LogsReader.Reader
 			else if (PastTraceLines.Count > 0)
 			{
 				// Попытки спарсить текущую строку вместе с сохраненными предыдущими строками лога
-				var revercePastTraceLines = new Queue<string>(PastTraceLines.Reverse());
+				var revercePastTraceLines = new Queue<(long line, string input)>(PastTraceLines.Reverse());
 
 				while (Found.CountOfLines < MaxTraceLines && revercePastTraceLines.Count > 0)
 				{
-					Found.AppendPastLine(revercePastTraceLines.Dequeue());
+					Found.AppendPastLine(revercePastTraceLines.Dequeue().input);
 
 					if (IsTraceMatch(Found.TraceMessage, out var beforeResult))
 					{
@@ -92,7 +92,7 @@ namespace LogsReader.Reader
 				}
 
 				if (SearchByTransaction)
-					PastTraceLines = new Queue<string>(revercePastTraceLines.Reverse());
+					PastTraceLines = new Queue<(long line, string input)>(revercePastTraceLines.Reverse());
 				else
 					PastTraceLines.Clear(); // сразу очищаем прошлые данные, т.к. дальнейший поиск по транзакциям не будет выполняеться
 			}

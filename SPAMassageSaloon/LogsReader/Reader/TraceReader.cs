@@ -27,7 +27,7 @@ namespace LogsReader.Reader
 		/// <summary>
 		///     Сохраненные данный которые не спарсились по основному поиску и по транзакциям
 		/// </summary>
-		protected Queue<string> PastTraceLines { get; set; }
+		protected Queue<(long line, string input)> PastTraceLines { get; set; }
 
 		/// <summary>
 		///     Прошлый успешный результат, который возможно будет дополняться
@@ -138,7 +138,7 @@ namespace LogsReader.Reader
 
 		protected void AddLine(string input)
 		{
-			PastTraceLines.Enqueue(input);
+			PastTraceLines.Enqueue((Lines, input));
 			if (PastTraceLines.Count > MaxTraceLines)
 				PastTraceLines.Dequeue();
 			Lines++;
@@ -149,7 +149,7 @@ namespace LogsReader.Reader
 		protected TraceReader(LogsReaderPerformerBase control, string server, string filePath, string originalFolder)
 			: base(control)
 		{
-			PastTraceLines = new Queue<string>(MaxTraceLines);
+			PastTraceLines = new Queue<(long, string)>(MaxTraceLines);
 			Server = server;
 			FilePath = filePath;
 			File = new FileInfo(filePath);
@@ -332,7 +332,7 @@ namespace LogsReader.Reader
 			// замена '\r' чинит баг с некорректным парсингом
 			var traceMessage = input.Replace("\r", string.Empty);
 			var length = traceMessage.Split('\n').Length;
-			var foundLineId = Lines - length + 1;
+			var foundLineId = failed?.FoundLineID ?? Lines - length + 1;
 
 			switch (SearchType)
 			{
@@ -449,7 +449,7 @@ namespace LogsReader.Reader
 						var innerReader = GetTraceReader((Server, FilePath, OriginalFolder));
 						innerReader.SearchByTransaction = false; // отменить повторную внутреннюю проверку по транзакциям предыдущих записей
 						innerReader.CurrentTransactionValue = new TransactionValue(true, trnValue);
-						innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines - 1; // возвращаемся обратно к первой сохраненной строке
+						innerReader.Lines = Lines - PastTraceLines.Count - current.CountOfLines; // возвращаемся обратно к первой сохраненной строке
 						innerReader.ResetMatchFunc(Regex.Escape(trnValue), true);
 
 						void OnPastFound(DataTemplate pastItem)
@@ -464,7 +464,8 @@ namespace LogsReader.Reader
 
 						foreach (var pastLine in PastTraceLines)
 						{
-							innerReader.ReadLine(pastLine);
+							innerReader.Lines = pastLine.line;
+							innerReader.ReadLine(pastLine.input);
 						}
 
 						try

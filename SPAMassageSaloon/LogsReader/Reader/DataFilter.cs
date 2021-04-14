@@ -50,6 +50,7 @@ namespace LogsReader.Reader
 				                 .Where(x => !x.Key.IsNullOrWhiteSpace())
 				                 .Select(x => x.Key)
 				                 .ToList();
+
 			if (TraceNameFilterList.Any())
 				if (traceNameContains)
 					_checkTraceNameFilter = input => !input.TraceName.IsNullOrWhiteSpace() && TraceNameFilterList.Any(p => input.TraceName.StringContains(p));
@@ -66,6 +67,7 @@ namespace LogsReader.Reader
 				                    .Where(x => !x.Key.IsNullOrWhiteSpace())
 				                    .Select(x => x.Key)
 				                    .ToList();
+
 			if (TraceMessageFilterList.Any())
 				if (traceMessageContains)
 					_checkTraceMessageFilter = input

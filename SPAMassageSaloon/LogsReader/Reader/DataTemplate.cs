@@ -266,7 +266,7 @@ namespace LogsReader.Reader
 		{
 			var isEqual = false;
 			if (obj is DataTemplate input)
-				isEqual = FoundLineID == input.FoundLineID && ParentReader.Equals(input.ParentReader);
+				isEqual = FoundLineID == input.FoundLineID && Date == input.Date && ParentReader.Equals(input.ParentReader);
 			return isEqual;
 		}
 

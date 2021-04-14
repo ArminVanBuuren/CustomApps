@@ -22,7 +22,7 @@ namespace LogsReader.Reader
 			if (y == null)
 				return -1;
 
-			if (x.Equals(y) && x.FoundLineID != -1)
+			if (x.FoundLineID != -1 && x.Equals(y))
 				return 0; // означает та же строка и тот же файл
 
 			var xDate = x.Date ?? DateTime.MinValue;

@@ -383,6 +383,7 @@ namespace LogsReader.Reader
 				// заполняем DataGrid
 				if (await AssignResultAsync(ChbxAlreadyUseFilter.Checked ? GetFilter() : null, null, true))
 					ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
+
 				IsWorking = false;
 				ReportProcessStatus(GetResultReaders());
 				Progress = 100;

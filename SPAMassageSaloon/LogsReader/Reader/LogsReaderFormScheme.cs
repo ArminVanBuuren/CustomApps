@@ -399,6 +399,7 @@ namespace LogsReader.Reader
 					// заполняем DataGrid
 					if (await AssignResultAsync(null, null, true))
 						ReportStatus(string.Format(Resources.Txt_LogsReaderForm_FinishedIn, TimeWatcher.Elapsed.ToReadableString()), ReportStatusType.Success);
+
 					TimeWatcher.Stop();
 				}
 				catch (Exception ex)
@@ -436,7 +437,7 @@ namespace LogsReader.Reader
 			=> OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
 
 		internal override IEnumerable<TraceReader> GetResultReaders()
-			=> MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : new List<TraceReader>(MainReader.TraceReaders.Values);
+			=> MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : MainReader.TraceReaders.Values;
 
 		protected override void ChangeFormStatus()
 		{

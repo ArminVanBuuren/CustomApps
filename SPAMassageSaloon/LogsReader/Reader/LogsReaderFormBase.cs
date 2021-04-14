@@ -54,11 +54,9 @@ namespace LogsReader.Reader
 		private int _pages = 1;
 
 		private IEnumerable<DataTemplate> _currentDGVResult;
+		private IEnumerable<DataTemplate> _currentDGVFilteredResult;
 		private DataGridViewColumn _oldSortedColumn;
 		private bool _byAscending = true;
-
-		private Func<DataTemplate, bool> _prevCondition;
-		private DataFilter _prevDataFilter;
 
 		private Color _formBackColor;
 		private Color _formForeColor;
@@ -140,7 +138,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public bool IsFiltered => _prevDataFilter != null;
+		public bool IsFiltered => _currentDGVFilteredResult != null;
 
 		protected static Image Img_Failed { get; }
 
@@ -1267,6 +1265,7 @@ namespace LogsReader.Reader
 			try
 			{
 				SelectedPage = 1;
+				_currentDGVFilteredResult = null; // обязательно очищать
 				AssignComboboxWithHistory(TbxTraceNameFilter);
 				AssignComboboxWithHistory(TbxTraceMessageFilter);
 
@@ -1306,6 +1305,7 @@ namespace LogsReader.Reader
 			try
 			{
 				SelectedPage = 1;
+				_currentDGVFilteredResult = null; // обязательно очищать
 				ChangeStateDgvReaderBoxes(true, true);
 				await AssignResultAsync(null, null, false);
 			}
@@ -1404,41 +1404,53 @@ namespace LogsReader.Reader
 
 				MainViewer?.Clear();
 
-				_prevDataFilter = filter;
-				_prevCondition = condition;
+				// если новый фильтр то очещаем предыдущие результаты
+				if (filter != null && _currentDGVFilteredResult != null)
+					_currentDGVFilteredResult = null;
 
-				_currentDGVResult = condition != null ? GetResultTemplates().Where(condition) : GetResultTemplates();
-
-				try
+				// Если изменилась страница, и до этого был использован фильтр, то вытаскиваем уже готовые результаты
+				if (_currentDGVFilteredResult != null)
 				{
-					if (_currentDGVResult == null || !_currentDGVResult.Any())
+					_currentDGVResult = _currentDGVFilteredResult;
+				}
+				else
+				{
+					try
 					{
-						CountOfShown = 0;
-						ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
-						return false;
-					}
+						_currentDGVResult = condition != null ? GetResultTemplates().Where(condition) : GetResultTemplates();
 
-					if (filter != null)
-					{
-						_currentDGVResult = filter.FilterCollection(_currentDGVResult);
-
-						if (!_currentDGVResult.Any())
+						if (_currentDGVResult == null || !_currentDGVResult.Any())
 						{
 							CountOfShown = 0;
-							ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+							_currentDGVResult = null;
+							ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 							return false;
 						}
+
+						if (filter != null)
+						{
+							_currentDGVResult = filter.FilterCollection(_currentDGVResult);
+
+							if (!_currentDGVResult.Any())
+							{
+								CountOfShown = 0;
+								_currentDGVResult = null;
+								ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
+								return false;
+							}
+						}
+					}
+					finally
+					{
+						ResetPages();
 					}
 				}
-				finally
-				{
-					ResetPages();
-				}
 
-				if (RowsLimit > 0 && _currentDGVResult.Count() > RowsLimit)
+				if (RowsLimit > 0 && _currentDGVResult != null && _currentDGVResult.Count() > RowsLimit)
 					_currentDGVResult = _currentDGVResult.Skip((SelectedPage - 1) * RowsLimit).Take(RowsLimit);
 
 				await AssignCurrentDgvResultAsync(isNewData);
+
 				return true;
 			}
 			catch (Exception ex)
@@ -2093,8 +2105,7 @@ namespace LogsReader.Reader
 				{
 					DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible ? firstVisible :
 						row.Index - countVisible >= 0
-							?
-							row.Index - countVisible
+							? row.Index - countVisible
 							: row.Index;
 					DgvData.SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
 					return;
@@ -2382,14 +2393,18 @@ namespace LogsReader.Reader
 
 		private async void buttonPagePrev_Click(object sender, EventArgs e)
 		{
+			var prev = SelectedPage;
 			SelectedPage--;
-			await AssignResultAsync(_prevDataFilter, _prevCondition, false);
+			if (prev != SelectedPage)
+				await AssignResultAsync(null, null, false);
 		}
 
 		private async void buttonPageNext_Click(object sender, EventArgs e)
 		{
+			var prev = SelectedPage;
 			SelectedPage++;
-			await AssignResultAsync(_prevDataFilter, _prevCondition, false);
+			if (prev != SelectedPage)
+				await AssignResultAsync(null, null, false);
 		}
 
 		protected void ResetPages()
@@ -2429,9 +2444,8 @@ namespace LogsReader.Reader
 					SaveData();
 				_oldSortedColumn = null;
 				_currentDGVResult = null;
+				_currentDGVFilteredResult = null;
 				_byAscending = true;
-				_prevDataFilter = null;
-				_prevCondition = null;
 
 				if (DgvData.DataSource != null || DgvData.RowCount > 0)
 				{

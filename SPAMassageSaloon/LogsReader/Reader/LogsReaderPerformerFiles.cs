@@ -24,6 +24,10 @@ namespace LogsReader.Reader
 
 		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; protected set; }
 
+		public int CountMatches => TraceReaders?.Values.Sum(x => x.CountMatches) ?? 0;
+
+		public int CountErrorMatches => TraceReaders?.Values.Sum(x => x.CountErrors) ?? 0;
+
 		private readonly GetUserCredential GetCredential;
 
 		protected LogsReaderPerformerFiles(LRSettingsScheme settings,
