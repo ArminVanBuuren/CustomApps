@@ -179,7 +179,7 @@ namespace LogsReader.Reader
 					Size = new Size(133, 25),
 					TabIndex = 19,
 					Text = @"Configure",
-					BackColor = Color.FromArgb(71, 203, 172),
+					BackColor = Color.FromArgb(54, 187, 156),
 					ForeColor = Color.White,
 				};
 				configureButton.Click += ConfigureButton_Click;

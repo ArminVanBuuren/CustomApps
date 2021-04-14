@@ -75,6 +75,7 @@ namespace LogsReader.Reader
 		private readonly ToolStripStatusLabel _shownInDgvValue;
 		private readonly ToolStripStatusLabel _errorFound;
 		private readonly ToolStripStatusLabel _errorFoundValue;
+		private readonly ToolStripStatusLabel _pagingLbl;
 
 		private readonly ToolStripButton buttonFilteredPrev;
 		private readonly ToolStripButton buttonFilteredNext;
@@ -119,9 +120,9 @@ namespace LogsReader.Reader
 			set
 			{
 				_selectedPage = value <= 0 ? 1 : value > _pages ? _pages : value;
-				pagingLbl.SafeInvoke(() =>
+				this.SafeInvoke(() =>
 				{
-					pagingLbl.Text = $"{_selectedPage, 6} / {_pages, -6}"; ;
+					_pagingLbl.Text = $"{_selectedPage, 2} / {_pages}"; ;
 				});
 			}
 		}
@@ -132,9 +133,9 @@ namespace LogsReader.Reader
 			set
 			{
 				_pages = value <= 0 ? 1 : value;
-				pagingLbl.SafeInvoke(() =>
+				this.SafeInvoke(() =>
 				{
-					pagingLbl.Text = $"{_selectedPage, 6} / {_pages, -6}"; ;
+					_pagingLbl.Text = $"{_selectedPage, 2} / {_pages}"; ;
 				});
 			}
 		}
@@ -368,6 +369,7 @@ namespace LogsReader.Reader
 				ReshowDelay = 500
 			};
 
+			// инициализируем нижнуюю полосу со статусами
 			var toolToolStripCollection = new List<ToolStripItem>();
 			var toolToolStripCollection2 = new List<ToolStripItem>();
 			var statusStripItemsPaddingStart = new Padding(0, 2, 0, 2);
@@ -422,16 +424,6 @@ namespace LogsReader.Reader
 				Font = base.Font,
 				Margin = statusStripItemsPaddingMiddle
 			};
-			_shownInDgv = new ToolStripStatusLabel
-			{
-				Font = base.Font,
-				Margin = statusStripItemsPaddingStart
-			};
-			_shownInDgvValue = new ToolStripStatusLabel("0")
-			{
-				Font = base.Font,
-				Margin = statusStripItemsPaddingMiddle
-			};
 			_errorFound = new ToolStripStatusLabel
 			{
 				Font = base.Font,
@@ -449,6 +441,43 @@ namespace LogsReader.Reader
 			toolToolStripCollection.Add(_errorFound);
 			toolToolStripCollection.Add(_errorFoundValue);
 			toolToolStripCollection.Add(new ToolStripSeparator());
+
+			var buttonPagePrev = new ToolStripButton
+			{
+				Image = Resources.backTrn,
+				Margin = new Padding(0, 2, 2, 2),
+				Padding = new Padding(0, 0, 0, 0)
+			};
+			buttonPagePrev.Click += buttonPagePrev_Click;
+			toolToolStripCollection.Add(buttonPagePrev);
+
+			_pagingLbl = new ToolStripStatusLabel("  1 / 1")
+			{
+				Font = base.Font,
+				Margin = statusStripItemsPaddingMiddle
+			};
+			toolToolStripCollection.Add(_pagingLbl);
+
+			var buttonPageNext = new ToolStripButton
+			{
+				Image = Resources.arrowTrn,
+				Margin = new Padding(2, 2, 0, 2),
+				Padding = new Padding(0, 0, 0, 0)
+			};
+			buttonPageNext.Click += buttonPageNext_Click;
+			toolToolStripCollection.Add(buttonPageNext);
+			toolToolStripCollection.Add(new ToolStripSeparator());
+
+			_shownInDgv = new ToolStripStatusLabel
+			{
+				Font = base.Font,
+				Margin = statusStripItemsPaddingStart
+			};
+			_shownInDgvValue = new ToolStripStatusLabel("0")
+			{
+				Font = base.Font,
+				Margin = statusStripItemsPaddingMiddle
+			};
 			toolToolStripCollection.Add(_shownInDgv);
 			toolToolStripCollection.Add(_shownInDgvValue);
 			toolToolStripCollection.Add(new ToolStripSeparator());
@@ -466,6 +495,8 @@ namespace LogsReader.Reader
 			worker1.DoWork += (sender, e) => statusStrip.SafeInvoke(() => { statusStrip.Items.AddRange(toolToolStripCollection.ToArray()); });
 			worker1.RunWorkerAsync();
 			
+
+			// инициализируем кнопки по транзакциям, ошибкам и по поиску
 			buttonErrPrev = new ToolStripButton
 			{
 				Image = Resources.backError,
@@ -486,26 +517,6 @@ namespace LogsReader.Reader
 			toolToolStripCollection2.Add(buttonErrNext);
 			toolToolStripCollection2.Add(new ToolStripSeparator());
 			
-			buttonFilteredPrev = new ToolStripButton
-			{
-				Image = Resources.backFiltered,
-				Margin = new Padding(0, 2, 2, 2),
-				Padding = new Padding(0, 0, 0, 0)
-			};
-			buttonFilteredPrev.Click += buttonFilteredPrev_Click;
-			toolToolStripCollection2.Add(buttonFilteredPrev);
-			toolToolStripCollection2.Add(new ToolStripStatusLabel { Image = Resources.filtered });
-			
-			buttonFilteredNext = new ToolStripButton
-			{
-				Image = Resources.arrowFiltered,
-				Margin = new Padding(2, 2, 0, 2),
-				Padding = new Padding(0, 0, 0, 0)
-			};
-			buttonFilteredNext.Click += buttonFilteredNext_Click;
-			toolToolStripCollection2.Add(buttonFilteredNext);
-			toolToolStripCollection2.Add(new ToolStripSeparator());
-			
 			buttonTrnPrev = new ToolStripButton
 			{
 				Image = Resources.backTrn,
@@ -524,6 +535,26 @@ namespace LogsReader.Reader
 			};
 			buttonTrnNext.Click += buttonTrnNext_Click;
 			toolToolStripCollection2.Add(buttonTrnNext);
+			toolToolStripCollection2.Add(new ToolStripSeparator());
+
+			buttonFilteredPrev = new ToolStripButton
+			{
+				Image = Resources.backFiltered,
+				Margin = new Padding(0, 2, 2, 2),
+				Padding = new Padding(0, 0, 0, 0)
+			};
+			buttonFilteredPrev.Click += buttonFilteredPrev_Click;
+			toolToolStripCollection2.Add(buttonFilteredPrev);
+			toolToolStripCollection2.Add(new ToolStripStatusLabel { Image = Resources.filtered });
+
+			buttonFilteredNext = new ToolStripButton
+			{
+				Image = Resources.arrowFiltered,
+				Margin = new Padding(2, 2, 0, 2),
+				Padding = new Padding(0, 0, 0, 0)
+			};
+			buttonFilteredNext.Click += buttonFilteredNext_Click;
+			toolToolStripCollection2.Add(buttonFilteredNext);
 			
 			statusStripBtns.ShowItemToolTips = true;
 			statusStripBtns.ImageScalingSize = new Size(13, 15);
@@ -1364,8 +1395,6 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				CountOfShown = 0;
-
 				if (DgvData.DataSource != null || DgvData.RowCount > 0)
 				{
 					DgvData.DataSource = null;
@@ -1384,6 +1413,7 @@ namespace LogsReader.Reader
 				{
 					if (_currentDGVResult == null || !_currentDGVResult.Any())
 					{
+						CountOfShown = 0;
 						ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 						return false;
 					}
@@ -1394,6 +1424,7 @@ namespace LogsReader.Reader
 
 						if (!_currentDGVResult.Any())
 						{
+							CountOfShown = 0;
 							ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
 							return false;
 						}
