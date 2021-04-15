@@ -643,7 +643,11 @@ namespace LogsReader.Reader
 				foreach (DataGridViewColumn c in DgvReader.Columns)
 					c.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
 				DgvReader.Scroll += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
-				DgvReader.ColumnHeaderMouseClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+				DgvReader.ColumnHeaderMouseClick += (sender, args) =>
+				{
+					RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+					ReloadDgvData();
+				};
 				DgvReader.ColumnHeaderMouseDoubleClick += (sender, args) => RefreshAllRows(DgvReader, DgvReaderRefreshRow);
 				DgvReader.Sorted += (sender, args) => DgvReader.CheckStatusHeader(DgvReaderSelectColumn);
 				DgvReader.CellContentClick += (sender, args) =>
@@ -670,6 +674,14 @@ namespace LogsReader.Reader
 					{
 						RefreshButtonPauseState(reader2);
 						RefreshAllRows(DgvReader, DgvReaderRefreshRow);
+					}
+
+					if (args.ColumnIndex == DgvReaderSelectColumn.Index
+					 && row.Cells[DgvReaderSelectColumn.Name] is DgvCheckBoxCell selectCell
+					 && selectCell.Enabled
+					 && TryGetReader(DgvReader.Rows[args.RowIndex], out var reader3))
+					{
+						ReloadDgvData();
 					}
 				};
 
@@ -1324,9 +1336,7 @@ namespace LogsReader.Reader
 			if (DgvData.RowCount == 0)
 				return;
 
-			DataGridViewRow selected = null;
-			if (DgvData.SelectedRows.Count > 0)
-				selected = DgvData.SelectedRows[0];
+			DataGridViewRow selected = GetSelectedRow(DgvData);
 			var selectedCellIndex = DgvData.CurrentCell?.ColumnIndex ?? -1;
 
 			try
@@ -1371,9 +1381,7 @@ namespace LogsReader.Reader
 			if (DgvData.RowCount == 0)
 				return;
 
-			DataGridViewRow selected = null;
-			if (DgvData.SelectedRows.Count > 0)
-				selected = DgvData.SelectedRows[0];
+			DataGridViewRow selected = GetSelectedRow(DgvData);
 			var selectedCellIndex = DgvData.CurrentCell?.ColumnIndex ?? -1;
 
 			try
@@ -1663,6 +1671,54 @@ namespace LogsReader.Reader
 			}
 		}
 
+		protected async void ReloadDgvData()
+		{
+			var prevSelectedRow = GetSelectedRow(DgvData);
+			var privateId = -1;
+			if (prevSelectedRow != null)
+				int.TryParse(prevSelectedRow.Cells[DgvDataPrivateIDColumn.Name]?.Value?.ToString(), out privateId);
+
+			SelectedPage = 1;
+			_overallFilteredResult = null; // обязательно очищать
+
+			var checkedFilePaths = GetCheckedFilePaths();
+			await AssignResultAsync(null, x => checkedFilePaths.Contains(x.ParentReader.FilePath), false);
+
+			if (prevSelectedRow != null && privateId != -1)
+				SelectRow(DgvData, DgvDataPrivateIDColumn.Name, privateId);
+		}
+
+		protected static DataGridViewRow GetSelectedRow(DataGridView dgv)
+		{
+			if (dgv == null)
+				return null;
+
+			DataGridViewRow selected = null;
+			if (dgv.SelectedRows.Count > 0)
+				selected = dgv.SelectedRows[0];
+			if (selected == null)
+				selected = dgv.CurrentRow;
+
+			return selected;
+		}
+
+		protected static bool SelectRow(DataGridView dgv, string columnName, int privateId)
+		{
+			if (dgv == null)
+				return false;
+			
+			foreach (var row in dgv.Rows.OfType<DataGridViewRow>())
+			{
+				if (Equals(row.Cells[columnName].Value, privateId))
+				{
+					dgv.SelectRow(row);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		protected void DgvDataRefreshRow(DataGridViewRow row, bool refreshHeavy)
 		{
 			if (!TryGetTemplate(row, out var template))
@@ -1758,11 +1814,7 @@ namespace LogsReader.Reader
 			if (!TryGetReader(row, out var reader))
 				return;
 
-			DataGridViewRow selected = null;
-			if (DgvReader.SelectedRows.Count > 0)
-				selected = DgvReader.SelectedRows[0];
-			if (selected == null)
-				selected = DgvReader.CurrentRow;
+			DataGridViewRow selected = GetSelectedRow(DgvReader);
 
 			try
 			{
