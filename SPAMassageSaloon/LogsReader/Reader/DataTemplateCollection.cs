@@ -30,9 +30,9 @@ namespace LogsReader.Reader
 		private int _seqPrivateID;
 		private int _seqID;
 
-		public DataTemplateCollection(LRSettingsScheme settings, IEnumerable<DataTemplate> list)
+		public DataTemplateCollection(LRSettingsScheme settings, List<DataTemplate> list)
 		{
-			_values = new Dictionary<int, DataTemplate>(list.Count());
+			_values = new Dictionary<int, DataTemplate>(list.Count);
 			AddRange(DoOrdering(list, settings.OrderByItems));
 
 			foreach (var trnTemplates in _values
@@ -82,7 +82,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public static IEnumerable<DataTemplate> DoOrdering(IEnumerable<DataTemplate> input, Dictionary<string, bool> orderBy)
+		public static List<DataTemplate> DoOrdering(List<DataTemplate> input, Dictionary<string, bool> orderBy)
 		{
 			var result = input.AsQueryable();
 			var i = 0;
@@ -117,7 +117,7 @@ namespace LogsReader.Reader
 				}
 			}
 
-			return result;
+			return result.ToList();
 		}
 
 		public void AddRange(IEnumerable<DataTemplate> list)

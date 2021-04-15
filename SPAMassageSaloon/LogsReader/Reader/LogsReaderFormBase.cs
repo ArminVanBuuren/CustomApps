@@ -53,8 +53,10 @@ namespace LogsReader.Reader
 		private int _selectedPage = 1;
 		private int _pages = 1;
 
-		private IEnumerable<DataTemplate> _currentDGVResult;
-		private IEnumerable<DataTemplate> _currentDGVFilteredResult;
+		private List<DataTemplate> _dgvResult;
+		private List<DataTemplate> _overallResult;
+		private List<DataTemplate> _overallFilteredResult;
+
 		private DataGridViewColumn _oldSortedColumn;
 		private bool _byAscending = true;
 
@@ -108,7 +110,9 @@ namespace LogsReader.Reader
 		private TransactionsMarkingType _currentTransactionsMarkingType = TransactionsMarkingType.None;
 		private TransactionsMarkingType _prevTransactionsMarkingType = TransactionsMarkingType.None;
 
-		protected virtual int OverallCount => _currentDGVResult?.Count() ?? 0;
+		public bool IsFiltered => _overallFilteredResult != null;
+
+		protected virtual int OverallCount => _overallResult?.Count ?? 0;
 
 		protected abstract int RowsLimit { get; set; }
 
@@ -137,8 +141,6 @@ namespace LogsReader.Reader
 				});
 			}
 		}
-
-		public bool IsFiltered => _currentDGVFilteredResult != null;
 
 		protected static Image Img_Failed { get; }
 
@@ -717,9 +719,9 @@ namespace LogsReader.Reader
 			}
 		}
 
-		protected abstract IEnumerable<DataTemplate> GetResultTemplates();
+		protected abstract List<DataTemplate> GetResultTemplates();
 
-		internal abstract IEnumerable<TraceReader> GetResultReaders();
+		internal abstract ICollection<TraceReader> GetResultReaders();
 
 		protected abstract void CheckBoxTransactionsMarkingTypeChanged(TransactionsMarkingType newType);
 
@@ -1085,7 +1087,7 @@ namespace LogsReader.Reader
 			cb.Items.AddRange(items.ToArray());
 		}
 
-		protected virtual void ReportProcessStatus(IEnumerable<TraceReader> readers)
+		protected virtual void ReportProcessStatus(ICollection<TraceReader> readers)
 			=> this.SafeInvoke(() =>
 			{
 				try
@@ -1103,7 +1105,7 @@ namespace LogsReader.Reader
 						
 						countMatches = readers.Sum(x => x.CountMatches);
 						countErrorMatches = readers.Sum(x => x.CountErrors);
-						totalFiles = readers.Count();
+						totalFiles = readers.Count;
 						filesCompleted = readers.Count(x => x.Status != TraceReaderStatus.Waiting
 						                                 && x.Status != TraceReaderStatus.Processing
 						                                 && x.Status != TraceReaderStatus.OnPause
@@ -1265,7 +1267,7 @@ namespace LogsReader.Reader
 			try
 			{
 				SelectedPage = 1;
-				_currentDGVFilteredResult = null; // обязательно очищать
+				_overallFilteredResult = null; // обязательно очищать
 				AssignComboboxWithHistory(TbxTraceNameFilter);
 				AssignComboboxWithHistory(TbxTraceMessageFilter);
 
@@ -1305,7 +1307,7 @@ namespace LogsReader.Reader
 			try
 			{
 				SelectedPage = 1;
-				_currentDGVFilteredResult = null; // обязательно очищать
+				_overallFilteredResult = null; // обязательно очищать
 				ChangeStateDgvReaderBoxes(true, true);
 				await AssignResultAsync(null, null, false);
 			}
@@ -1404,37 +1406,41 @@ namespace LogsReader.Reader
 
 				MainViewer?.Clear();
 
-				// если новый фильтр то очещаем предыдущие результаты
-				if (filter != null && _currentDGVFilteredResult != null)
-					_currentDGVFilteredResult = null;
+				// если новый фильтр то очищаем предыдущие результаты
+				if (filter != null && _overallFilteredResult != null)
+					_overallFilteredResult = null;
 
 				// Если изменилась страница, и до этого был использован фильтр, то вытаскиваем уже готовые результаты
-				if (_currentDGVFilteredResult != null)
+				if (_overallFilteredResult != null && _overallFilteredResult.Count > 0)
 				{
-					_currentDGVResult = _currentDGVFilteredResult;
+					_overallResult = _overallFilteredResult;
 				}
 				else
 				{
 					try
 					{
-						_currentDGVResult = condition != null ? GetResultTemplates().Where(condition) : GetResultTemplates();
+						_overallResult = condition != null ? GetResultTemplates().Where(condition).ToList() : GetResultTemplates();
 
-						if (_currentDGVResult == null || !_currentDGVResult.Any())
+						if (_overallResult == null || !_overallResult.Any())
 						{
 							CountOfShown = 0;
-							_currentDGVResult = null;
+							_dgvResult = null;
+							_overallResult = null;
+							_overallFilteredResult = null;
 							ReportStatus(Resources.Txt_LogsReaderForm_NoLogsFound, ReportStatusType.Warning);
 							return false;
 						}
 
 						if (filter != null)
 						{
-							_currentDGVResult = filter.FilterCollection(_currentDGVResult);
+							_overallResult = _overallFilteredResult = filter.FilterCollection(_overallResult);
 
-							if (!_currentDGVResult.Any())
+							if (!_overallResult.Any())
 							{
 								CountOfShown = 0;
-								_currentDGVResult = null;
+								_dgvResult = null;
+								_overallResult = null;
+								_overallFilteredResult = null;
 								ReportStatus(Resources.Txt_LogsReaderForm_NoFilterResultsFound, ReportStatusType.Warning);
 								return false;
 							}
@@ -1446,8 +1452,11 @@ namespace LogsReader.Reader
 					}
 				}
 
-				if (RowsLimit > 0 && _currentDGVResult != null && _currentDGVResult.Count() > RowsLimit)
-					_currentDGVResult = _currentDGVResult.Skip((SelectedPage - 1) * RowsLimit).Take(RowsLimit);
+
+				if (RowsLimit > 0 && _overallResult != null && _overallResult.Count > RowsLimit)
+					_dgvResult = _overallResult.Skip((SelectedPage - 1) * RowsLimit).Take(RowsLimit).ToList();
+				else
+					_dgvResult = _overallResult;
 
 				await AssignCurrentDgvResultAsync(isNewData);
 
@@ -1570,7 +1579,7 @@ namespace LogsReader.Reader
 				while (IsWorking)
 				{
 					var readers = GetResultReaders();
-					var count = readers.Count();
+					var count = readers.Count;
 					var delay = count <= 20 ? 50 : count > 100 ? count > 300 ? 400 : 200 : 100;
 					ReportProcessStatus(readers);
 					Thread.Sleep(delay);
@@ -2045,75 +2054,167 @@ namespace LogsReader.Reader
 		}
 
 		private void buttonFilteredPrev_Click(object sender, EventArgs e)
-			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
+			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null);
 
 		private void buttonErrorPrev_Click(object sender, EventArgs e) 
-			=> SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
+			=> SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess);
 
 		private void buttonTrnPrev_Click(object sender, EventArgs e)
-			=> SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected);
+			=> SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected, null);
 
-		private void SearchPrev(Func<DataGridViewRow, bool> condition)
+		private async void SearchPrev(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore)
+		{
+			if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
+				return;
+
+			var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
+			if (selected == null)
+				return;
+
+			if (!SearchPrevInDgv(conditionInDgv, selected) && conditionInStore != null && SelectedPage > 1 && TryGetTemplate(selected, out var template))
+			{
+				var store = IsFiltered ? _overallFilteredResult : _overallResult;
+				var getLessSelected = store.Where(x => template.PrivateID > x.PrivateID) // выбираем те что больше выбранного
+				                           .OrderBy(x => x.PrivateID)
+										   .Reverse()
+				                           .ToList();
+
+				var i = getLessSelected.Count;
+				var found = false;
+				foreach (var tmp in getLessSelected)
+				{
+					if (conditionInStore.Invoke(tmp))
+					{
+						found = true;
+						break;
+					}
+
+					i--;
+				}
+
+				if (!found)
+					return;
+
+				var maxitemInPrevPage = (SelectedPage - 1) * RowsLimit;
+				var findedPage = (int)Math.Ceiling(Convert.ToDouble(i) / RowsLimit);
+
+				if (i <= maxitemInPrevPage && findedPage < SelectedPage)
+				{
+					SelectedPage = findedPage;
+					await AssignResultAsync(null, null, false);
+					SearchPrevInDgv(conditionInDgv, null);
+
+					// todo: DeselectTransactions - портит всю малину для поиска транзакций по пейджам
+				}
+			}
+		}
+
+		private bool SearchPrevInDgv(Func<DataGridViewRow, bool> condition, DataGridViewRow selected)
 		{
 			try
 			{
-				if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
-					return;
-
 				var countVisible = DgvData.DisplayedRowCount(false);
 				var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
-				var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
-				if (selected == null)
-					return;
+				Func<DataGridViewRow, bool> checkLessThan = selected != null 
+					? new Func<DataGridViewRow, bool>(x => x.Index < selected.Index)
+					: x => true;
 
-				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().Where(x => x.Index < selected.Index).Where(condition).Reverse())
+				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().Reverse().Where(x => checkLessThan.Invoke(x) && condition.Invoke(x)))
 				{
 					DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible ? firstVisible : row.Index;
 					DgvData.SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
-					return;
+					return true;
 				}
+
+				return false;
 			}
 			catch (Exception ex)
 			{
 				ReportStatus(ex);
+				return false;
 			}
 		}
 
 		private void buttonFilteredNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()));
+			=> SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null);
 
 		private void buttonErrorNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()));
+			=> SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess);
 
 		private void buttonTrnNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected);
+			=> SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected, null);
 
-		private void SearchNext(Func<DataGridViewRow, bool> condition)
+		private async void SearchNext(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore)
+		{
+			if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
+				return;
+
+			var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
+			if (selected == null)
+				return;
+
+			if (!SearchNextInDgv(conditionInDgv, selected) && conditionInStore != null && SelectedPage < Pages && TryGetTemplate(selected, out var template))
+			{
+				var store = IsFiltered ? _overallFilteredResult : _overallResult;
+
+				var i = 0;
+				var found = false;
+				foreach (var tmp in store.OrderBy(x => x.PrivateID))
+				{
+					i++;
+					// пропускаем все записи которые меньше выбранного
+					if (template.PrivateID >= tmp.PrivateID)
+						continue;
+
+					if (conditionInStore.Invoke(tmp))
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+					return;
+
+
+				var maxitemInCurrentPage = SelectedPage * RowsLimit;
+				var findedPage = (int)Math.Ceiling(Convert.ToDouble(i) / RowsLimit);
+
+				if (i > maxitemInCurrentPage && findedPage > SelectedPage)
+				{
+					SelectedPage = findedPage;
+					await AssignResultAsync(null, null, false);
+					SearchNextInDgv(conditionInDgv, null);
+
+					// todo: DeselectTransactions - портит всю малину для поиска транзакций по пейджам
+				}
+			}
+		}
+
+		private bool SearchNextInDgv(Func<DataGridViewRow, bool> condition, DataGridViewRow selected)
 		{
 			try
 			{
-				if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
-					return;
-
 				var countVisible = DgvData.DisplayedRowCount(false);
 				var firstVisible = DgvData.FirstDisplayedScrollingRowIndex;
-				var selected = DgvData.SelectedRows.Count > 0 ? DgvData.SelectedRows[0] : DgvData.CurrentRow;
-				if (selected == null)
-					return;
+				var moreThan = selected?.Index ?? -1;
 
-				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().Where(x => x.Index > selected.Index).Where(condition))
+				foreach (var row in DgvData.Rows.OfType<DataGridViewRow>().Where(x => x.Index > moreThan && condition.Invoke(x)))
 				{
 					DgvData.FirstDisplayedScrollingRowIndex = row.Index >= firstVisible && row.Index < firstVisible + countVisible ? firstVisible :
 						row.Index - countVisible >= 0
 							? row.Index - countVisible
 							: row.Index;
 					DgvData.SelectRow(row, DgvData.CurrentCell?.ColumnIndex ?? -1);
-					return;
+					return true;
 				}
+
+				return false;
 			}
 			catch (Exception ex)
 			{
 				ReportStatus(ex);
+				return false;
 			}
 		}
 
@@ -2121,7 +2222,7 @@ namespace LogsReader.Reader
 		{
 			try
 			{
-				if (!HasAnyResult || _currentDGVResult == null || e.ColumnIndex < 0)
+				if (!HasAnyResult || _dgvResult == null || e.ColumnIndex < 0)
 					return;
 
 				var oldSortedColumn = _oldSortedColumn; // поле очищается в методе ClearDGV
@@ -2132,7 +2233,7 @@ namespace LogsReader.Reader
 					return;
 
 				var byAscending = _oldSortedColumn?.Index != e.ColumnIndex || _oldSortedColumn?.Index == e.ColumnIndex && !_byAscending;
-				var source = _currentDGVResult;
+				var source = _dgvResult;
 				
 				var orderByOption = byAscending
 					? new Dictionary<string, bool> { { columnName, false } }
@@ -2143,7 +2244,7 @@ namespace LogsReader.Reader
 				if (!orderByOption.ContainsKey(nameof(DataTemplate.Tmp.FoundLineID)))
 					orderByOption.Add(nameof(DataTemplate.Tmp.FoundLineID), !byAscending);
 				
-				_currentDGVResult = DataTemplateCollection.DoOrdering(source, orderByOption);
+				_dgvResult = DataTemplateCollection.DoOrdering(source, orderByOption);
 				
 				await AssignCurrentDgvResultAsync(false);
 				
@@ -2187,9 +2288,9 @@ namespace LogsReader.Reader
 				}
 
 				ClearErrorStatus();
-				
-				await DgvData.AssignCollectionAsync(_currentDGVResult, null);
-				CountOfShown = _currentDGVResult.Count();
+
+				CountOfShown = _dgvResult.Count;
+				await DgvData.AssignCollectionAsync(_dgvResult, null);
 
 				DgvDataPromptColumn.Visible = CurrentTransactionsMarkingType == TransactionsMarkingType.Both
 				                           || CurrentTransactionsMarkingType == TransactionsMarkingType.Prompt;
@@ -2342,7 +2443,7 @@ namespace LogsReader.Reader
 			try
 			{
 				if (tabControlViewer.TabCount > 0)
-					foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+					foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>())
 						page.View.RefreshDescription(checkBoxShowTrns.Checked, out var _);
 
 				if (checkBoxShowTrns.Checked)
@@ -2443,8 +2544,9 @@ namespace LogsReader.Reader
 				if (saveData)
 					SaveData();
 				_oldSortedColumn = null;
-				_currentDGVResult = null;
-				_currentDGVFilteredResult = null;
+				_dgvResult = null;
+				_overallResult = null;
+				_overallFilteredResult = null;
 				_byAscending = true;
 
 				if (DgvData.DataSource != null || DgvData.RowCount > 0)
@@ -2456,7 +2558,7 @@ namespace LogsReader.Reader
 
 				MainViewer.Clear();
 
-				foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+				foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>())
 				{
 					if (page == MainViewer.Parent)
 						continue;
@@ -2513,7 +2615,7 @@ namespace LogsReader.Reader
 
 		internal void DeselectTransactions()
 		{
-			foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>().ToList())
+			foreach (var page in tabControlViewer.TabPages.OfType<CustomTabPage>())
 				page.View.DeselectTransactions();
 			RefreshVisibleRows(DgvData, DgvDataRefreshRow); // не менять на RefreshAllRows. Производительность катастрофически падает
 			DgvData.Focus();

@@ -21,8 +21,19 @@ namespace LogsReader.Reader
 		private readonly IReadOnlyDictionary<string, int> _servers;
 		private readonly IReadOnlyDictionary<string[], int> _fileTypes;
 		private readonly IReadOnlyDictionary<string, bool> _folders;
+		private IReadOnlyDictionary<int, TraceReader> _readers;
 
-		public IReadOnlyDictionary<int, TraceReader> TraceReaders { get; protected set; }
+		protected IReadOnlyDictionary<int, TraceReader> TraceReaders
+		{
+			get => _readers;
+			set
+			{
+				_readers = value;
+				Readers = _readers != null ? new ReadOnlyCollection<TraceReader>(_readers.Values.ToList()) : null;
+			}
+		}
+
+		public ReadOnlyCollection<TraceReader> Readers { get; private set; }
 
 		public int CountMatches => TraceReaders?.Values.Sum(x => x.CountMatches) ?? 0;
 
@@ -59,6 +70,9 @@ namespace LogsReader.Reader
 			if (TraceReaders == null || TraceReaders.Count <= 0)
 				throw new Exception(Resources.Txt_LogsReaderPerformer_NoFilesLogsFound);
 		}
+
+		public bool TryGetTraceReader(int privateID, out TraceReader reader) 
+			=> TraceReaders.TryGetValue(privateID, out reader);
 
 		private Dictionary<int, TraceReader> GetFileLogs()
 		{

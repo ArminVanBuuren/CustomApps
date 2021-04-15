@@ -348,8 +348,7 @@ namespace LogsReader.Reader
 							                              .Where(x => x.Checked)
 							                              .Select(x => x.Text)
 							                              .GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
-							                              .Select(x => x.Key)
-							                              .ToList())
+							                              .Select(x => x.Key))
 							{
 								if (result.TryGetValue(item, out var existPiority))
 								{
@@ -414,8 +413,8 @@ namespace LogsReader.Reader
 						IsWorking = false;
 					if (TimeWatcher.IsRunning)
 						TimeWatcher.Stop();
-					if (MainReader?.TraceReaders != null)
-						ReportProcessStatus(MainReader.TraceReaders.Values);
+					if (MainReader?.Readers != null)
+						ReportProcessStatus(MainReader.Readers);
 					Progress = 100;
 				}
 			}
@@ -433,11 +432,11 @@ namespace LogsReader.Reader
 				return authorizationForm.ShowDialog(this) == DialogResult.OK ? authorizationForm.Credential : null;
 			});
 
-		protected override IEnumerable<DataTemplate> GetResultTemplates()
+		protected override List<DataTemplate> GetResultTemplates()
 			=> OverallResultList == null ? new List<DataTemplate>() : new List<DataTemplate>(OverallResultList);
 
-		internal override IEnumerable<TraceReader> GetResultReaders()
-			=> MainReader?.TraceReaders?.Values == null ? new List<TraceReader>() : MainReader.TraceReaders.Values;
+		internal override ICollection<TraceReader> GetResultReaders()
+			=> MainReader?.Readers ?? (ICollection<TraceReader>) new List<TraceReader>();
 
 		protected override void ChangeFormStatus()
 		{
@@ -470,11 +469,11 @@ namespace LogsReader.Reader
 		internal override bool TryGetReader(DataGridViewRow row, out TraceReader reader)
 		{
 			reader = null;
-			if (MainReader?.TraceReaders == null)
+			if (MainReader?.Readers == null)
 				return false;
 
 			var privateID = (int) (row?.Cells[DgvReaderPrivateIDColumn.Name]?.Value ?? -1);
-			return privateID > -1 && MainReader.TraceReaders.TryGetValue(privateID, out reader);
+			return privateID > -1 && MainReader.TryGetTraceReader(privateID, out reader);
 		}
 
 		internal override void PauseAll()

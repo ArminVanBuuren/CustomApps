@@ -260,7 +260,7 @@ namespace LogsReader.Reader
 			}
 		}
 
-		internal void AddTransactionBindingList(IList<DataTemplate> list) => _trnBindings.AddRange(list);
+		internal void AddTransactionBindingList(IList<DataTemplate> list) => _trnBindings.UnionWith(list);
 
 		public override bool Equals(object obj)
 		{

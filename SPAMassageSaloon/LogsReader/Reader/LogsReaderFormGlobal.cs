@@ -432,7 +432,7 @@ namespace LogsReader.Reader
 				schemeForm.RefreshButtonPauseState(reader);
 		}
 
-		protected override void ReportProcessStatus(IEnumerable<TraceReader> readers)
+		protected override void ReportProcessStatus(ICollection<TraceReader> readers)
 		{
 			if (InProcessing.Count == 0)
 				return;
@@ -614,7 +614,7 @@ namespace LogsReader.Reader
 			panelFlowDoc.Cursor = Cursors.Default;
 		}
 
-		protected override IEnumerable<DataTemplate> GetResultTemplates()
+		protected override List<DataTemplate> GetResultTemplates()
 		{
 			var result = new List<DataTemplate>();
 
@@ -626,10 +626,15 @@ namespace LogsReader.Reader
 				result.AddRange(schemeForm.OverallResultList);
 			}
 
-			return result.OrderBy(x => x.Date).ThenBy(x => x.ParentReader.Priority).ThenBy(x => x.File).ThenBy(x => x.FoundLineID).ToList();
+			return result.OrderBy(x => x.Date)
+			             .ThenBy(x => x.ParentReader.Priority)
+			             .ThenBy(x => x.File)
+			             .ThenBy(x => x.FoundLineID)
+			             .ToList();
 		}
 
-		internal override IEnumerable<TraceReader> GetResultReaders() => InProcessing.SelectMany(x => x.Item1.GetResultReaders()).ToList();
+		internal override ICollection<TraceReader> GetResultReaders() 
+			=> InProcessing.SelectMany(x => x.Item1.GetResultReaders()).ToList();
 
 		internal override bool TryGetTemplate(DataGridViewRow row, out DataTemplate template)
 		{
@@ -774,7 +779,8 @@ namespace LogsReader.Reader
 				schemeForm.ChbxAlreadyUseFilter.Checked = ((CheckBox) sender).Checked;
 		}
 
-		private IEnumerable<LogsReaderFormScheme> GetSelectedSchemas() => AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key).ToList();
+		private IEnumerable<LogsReaderFormScheme> GetSelectedSchemas() 
+			=> AllExpanders.Where(x => x.Value.IsChecked).Select(x => x.Key);
 
 		protected override void ValidationCheck(bool clearStatus)
 		{

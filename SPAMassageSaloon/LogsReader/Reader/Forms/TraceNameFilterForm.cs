@@ -72,7 +72,7 @@ namespace LogsReader.Reader.Forms
 			await form.DgvTraceNames.AssignCollectionAsync(traceNames.Values, null, true);
 			form.DgvTraceNames.CheckStatusHeader(form.SelectColumn);
 			form.RefreshAllRows();
-			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(0, 19 * Math.Min(25, traceNames.Count())) + 92);
+			form.MaximumSize = new Size(form.MaximumSize.Width, Math.Max(0, 19 * Math.Min(25, traceNames.Count)) + 92);
 			form.Size = new Size(form.Size.Width, form.MaximumSize.Height);
 			return form;
 		}

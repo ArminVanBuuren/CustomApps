@@ -27,7 +27,7 @@ namespace LogsReader.Reader
 
 		public int PercentOfComplete => TotalCount > 0 ? ResultCount * 100 / TotalCount : 0;
 
-		public IEnumerable<DataTemplate> ResultsOfSuccess => _result.Values;
+		public List<DataTemplate> ResultsOfSuccess { get; private set; } = new List<DataTemplate>();
 
 		public List<DataTemplate> ResultsOfError { get; private set; } = new List<DataTemplate>();
 
@@ -91,14 +91,17 @@ namespace LogsReader.Reader
 					_multiTaskingHandlerList.Add(multiTaskingHandler);
 					
 					await multiTaskingHandler.StartAsync();
-					var errors = multiTaskingHandler.Result.CallBackList.Where(x => x.Error != null)
+					var errors = multiTaskingHandler.Result.CallBackList
+					                                .Where(x => x.Error != null)
 					                                .Aggregate(new List<DataTemplate>(),
 					                                           (listErr, x) =>
 					                                           {
 						                                           listErr.Add(new DataTemplate(x.Source, -1, string.Empty, null, x.Error));
 						                                           return listErr;
 					                                           });
-					ResultsOfError.AddRange(errors);
+
+					ResultsOfSuccess = _result.Values.ToList();
+					ResultsOfError = errors;
 				}
 			}
 			finally
@@ -188,10 +191,15 @@ namespace LogsReader.Reader
 		{
 			IsCompleted = false;
 			IsStopPending = false;
+
 			_multiTaskingHandlerList?.Clear();
 			_multiTaskingHandlerList = new List<MTActionResult<TraceReader>>();
+
 			_result?.Clear();
 			_result = new Dictionary<DataTemplate, DataTemplate>(new DataTemplatesDuplicateComparer());
+
+			ResultsOfSuccess?.Clear();
+			ResultsOfSuccess = new List<DataTemplate>();
 			ResultsOfError?.Clear();
 			ResultsOfError = new List<DataTemplate>();
 		}

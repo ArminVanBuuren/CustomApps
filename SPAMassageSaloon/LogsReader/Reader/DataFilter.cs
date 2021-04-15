@@ -79,8 +79,8 @@ namespace LogsReader.Reader
 				_checkTraceMessageFilter = input => true;
 		}
 
-		public IEnumerable<DataTemplate> FilterCollection(IEnumerable<DataTemplate> input)
-			=> input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameFilter(x) && _checkTraceMessageFilter(x));
+		public List<DataTemplate> FilterCollection(List<DataTemplate> input)
+			=> input.Where(x => _checkStartDate(x) && _checkEndDate(x) && _checkTraceNameFilter(x) && _checkTraceMessageFilter(x)).ToList();
 
 		/// <summary>
 		///     Проверям по фильтру. Если был задан дополнительный поиск по фильтру
