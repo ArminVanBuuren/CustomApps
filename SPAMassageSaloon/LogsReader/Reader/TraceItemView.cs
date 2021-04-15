@@ -350,12 +350,15 @@ namespace LogsReader.Reader
 			return noChanged;
 		}
 
-		public void Clear()
+		public void Clear(bool deselectTransactions = true)
 		{
 			descriptionText.Clear();
 			EditorMessage?.Clear();
 			EditorTraceMessage?.Clear();
-			DeselectTransactions();
+
+			if(deselectTransactions)
+				DeselectTransactions();
+
 			CurrentTemplate = null;
 			prevTemplateMessage = null;
 			prevTemplateTraceMessage = null;

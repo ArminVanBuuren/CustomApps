@@ -63,6 +63,8 @@ namespace LogsReader.Reader
 		private Color _formBackColor;
 		private Color _formForeColor;
 
+		private bool _deselectTransactions = true;
+
 		private readonly ToolStripButton _openProcessingReadersBtn;
 		private readonly ToolStripStatusLabel _statusInfo;
 		private readonly ToolStripStatusLabel _completedFilesStatus;
@@ -1404,7 +1406,7 @@ namespace LogsReader.Reader
 					DgvData.Refresh();
 				}
 
-				MainViewer?.Clear();
+				MainViewer?.Clear(_deselectTransactions);
 
 				// если новый фильтр то очищаем предыдущие результаты
 				if (filter != null && _overallFilteredResult != null)
@@ -2054,15 +2056,22 @@ namespace LogsReader.Reader
 		}
 
 		private void buttonFilteredPrev_Click(object sender, EventArgs e)
-			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null);
+			=> SearchPrev(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null, SearchingType.ByFilter);
 
 		private void buttonErrorPrev_Click(object sender, EventArgs e) 
-			=> SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess);
+			=> SearchPrev(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess, SearchingType.ByError);
 
 		private void buttonTrnPrev_Click(object sender, EventArgs e)
-			=> SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected, null);
+			=> SearchPrev(x => TryGetTemplate(x, out var template) && template.IsSelected, x => x.IsSelected, SearchingType.ByTransactions);
 
-		private async void SearchPrev(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore)
+		enum SearchingType
+		{
+			ByError = 0,
+			ByTransactions = 1,
+			ByFilter = 2
+		}
+
+		private async void SearchPrev(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore, SearchingType type)
 		{
 			if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
 				return;
@@ -2101,10 +2110,21 @@ namespace LogsReader.Reader
 				if (i <= maxitemInPrevPage && findedPage < SelectedPage)
 				{
 					SelectedPage = findedPage;
-					await AssignResultAsync(null, null, false);
-					SearchPrevInDgv(conditionInDgv, null);
 
-					// todo: DeselectTransactions - портит всю малину для поиска транзакций по пейджам
+					try
+					{
+						// отменить очистку выбранных транзакций, т.к. поиск не сработает
+						if (type == SearchingType.ByTransactions)
+							_deselectTransactions = false;
+						await AssignResultAsync(null, null, false);
+					}
+					finally
+					{
+						if (type == SearchingType.ByTransactions)
+							_deselectTransactions = true;
+					}
+
+					SearchPrevInDgv(conditionInDgv, null);
 				}
 			}
 		}
@@ -2136,15 +2156,15 @@ namespace LogsReader.Reader
 		}
 
 		private void buttonFilteredNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null);
+			=> SearchNext(x => bool.Parse(x.Cells[DgvDataIsFilteredColumn.Name].Value?.ToString()), null, SearchingType.ByFilter);
 
 		private void buttonErrorNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess);
+			=> SearchNext(x => !bool.Parse(x.Cells[DgvDataIsSuccessColumn.Name].Value?.ToString()), x => !x.IsSuccess, SearchingType.ByError);
 
 		private void buttonTrnNext_Click(object sender, EventArgs e)
-			=> SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected, null);
+			=> SearchNext(x => TryGetTemplate(x, out var template) && template.IsSelected, x => x.IsSelected, SearchingType.ByTransactions);
 
-		private async void SearchNext(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore)
+		private async void SearchNext(Func<DataGridViewRow, bool> conditionInDgv, Func<DataTemplate, bool> conditionInStore, SearchingType type)
 		{
 			if (DgvData.SelectedRows.Count == 0 && DgvData.CurrentRow == null)
 				return;
@@ -2183,10 +2203,21 @@ namespace LogsReader.Reader
 				if (i > maxitemInCurrentPage && findedPage > SelectedPage)
 				{
 					SelectedPage = findedPage;
-					await AssignResultAsync(null, null, false);
-					SearchNextInDgv(conditionInDgv, null);
 
-					// todo: DeselectTransactions - портит всю малину для поиска транзакций по пейджам
+					try
+					{
+						// отменить очистку выбранных транзакций, т.к. поиск не сработает
+						if (type == SearchingType.ByTransactions)
+							_deselectTransactions = false;
+						await AssignResultAsync(null, null, false);
+					}
+					finally
+					{
+						if (type == SearchingType.ByTransactions)
+							_deselectTransactions = true;
+					}
+
+					SearchNextInDgv(conditionInDgv, null);
 				}
 			}
 		}
