@@ -160,9 +160,10 @@ namespace LogsReader.Reader
 			{
 				if (showTransactionsInformation)
 				{
-					var minus = prevTemplate.TransactionBindings.Except(CurrentTemplate.TransactionBindings); // разность последовательностей. Вычитаем лишнее.
-					var plus = CurrentTemplate.TransactionBindings
-					                          .Except(prevTemplate.TransactionBindings); // разность последовательностей. Добавляем недостоющее.
+					// разность последовательностей. Вычитаем лишнее.
+					var minus = prevTemplate.TransactionBindings.Except(CurrentTemplate.TransactionBindings);
+					// разность последовательностей. Добавляем недостоющее.
+					var plus = CurrentTemplate.TransactionBindings.Except(prevTemplate.TransactionBindings);
 					var noChangedMinus = DeselectTransactions(minus);
 					var noChangedPlus = SelectTransactions(plus);
 					noChanged = noChangedMinus && noChangedPlus;
@@ -174,14 +175,9 @@ namespace LogsReader.Reader
 			}
 			else
 			{
-				if (showTransactionsInformation)
-				{
-					noChanged = SelectTransactions(CurrentTemplate.TransactionBindings);
-				}
-				else
-				{
-					noChanged = DeselectTransactions(CurrentTemplate.TransactionBindings);
-				}
+				noChanged = showTransactionsInformation 
+					? SelectTransactions(CurrentTemplate.TransactionBindings)
+					: DeselectTransactions(CurrentTemplate.TransactionBindings);
 			}
 
 			RefreshDescription(showTransactionsInformation);
@@ -198,10 +194,10 @@ namespace LogsReader.Reader
 				return;
 			}
 
-			if (showTransactionInformation)
-				noChanged = SelectTransactions(CurrentTemplate.TransactionBindings);
-			else
-				noChanged = DeselectTransactions(CurrentTemplate.TransactionBindings);
+			noChanged = showTransactionInformation 
+				? SelectTransactions(CurrentTemplate.TransactionBindings) 
+				: DeselectTransactions(CurrentTemplate.TransactionBindings);
+
 			RefreshDescription(showTransactionInformation);
 		}
 
@@ -273,12 +269,7 @@ namespace LogsReader.Reader
 				return;
 			}
 
-			// чинит баг когда текст не обновляется
-			if (!_isInited)
-			{
-				notepad.SelectEditor(0);
-				_isInited = true;
-			}
+			RefreshView();
 
 			if (notepad.CurrentEditor == EditorMessage)
 			{
@@ -298,6 +289,18 @@ namespace LogsReader.Reader
 				EditorTraceMessage.DelayedEventsInterval = 10;
 				prevTemplateTraceMessage = CurrentTemplate;
 			}
+		}
+
+		/// <summary>
+		/// чинит баг когда текст не обновляется
+		/// </summary>
+		private void RefreshView()
+		{
+			if (_isInited)
+				return;
+
+			notepad.SelectEditor(0);
+			_isInited = true;
 		}
 
 		public void SelectTransactions()
