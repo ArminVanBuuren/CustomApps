@@ -719,6 +719,7 @@ namespace LogsReader.Reader
 			this.tabControlViewer.SelectedIndex = 0;
 			this.tabControlViewer.Size = new System.Drawing.Size(464, 492);
 			this.tabControlViewer.TabIndex = 0;
+			this.tabControlViewer.Selected += TabControlViewerOnSelected;
 			// 
 			// DgvReader
 			// 

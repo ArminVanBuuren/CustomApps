@@ -715,7 +715,7 @@ namespace LogsReader.Reader
 				MainViewer = new TraceItemView(defaultEncoding, userSettings, true);
 				tabControlViewer.DrawMode = TabDrawMode.Normal;
 				tabControlViewer.BackColor = Color.White;
-				AddViewer(MainViewer, null);
+				AddViewer(MainViewer);
 
 				// чинит баг при изменении формы, текст самопроизвольно выделяется
 				SizeChanged += (sender, args) =>
@@ -2414,7 +2414,7 @@ namespace LogsReader.Reader
 				if (DgvData.IsSuspendLayout || DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 					return;
 
-				MainViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
+				MainViewer.SetTemplate(template, checkBoxShowTrns.Checked, out var noChanged);
 				
 				if (checkBoxShowTrns.Checked && !noChanged)
 					RefreshVisibleRows(DgvData, DgvDataRefreshRow);
@@ -2439,7 +2439,9 @@ namespace LogsReader.Reader
 				if (DgvData.SelectedRows.Count == 0 || !TryGetTemplate(DgvData.SelectedRows[0], out var template))
 					return;
 
-				AddViewer(new TraceItemView(DefaultEncoding, UserSettings, false), template);
+				var traceViewer = new TraceItemView(DefaultEncoding, UserSettings, false);
+				AddViewer(traceViewer);
+				traceViewer.SetTemplate(template, checkBoxShowTrns.Checked);
 			}
 			catch (Exception ex)
 			{
@@ -2451,7 +2453,21 @@ namespace LogsReader.Reader
 			}
 		}
 
-		private void AddViewer(TraceItemView traceViewer, DataTemplate template)
+		private void TabControlViewerOnSelected(object sender, TabControlEventArgs e)
+		{
+			try
+			{
+				// чинит баг когда текст не обновляется
+				if (tabControlViewer?.SelectedTab?.Controls != null && tabControlViewer.SelectedTab.HasChildren)
+					tabControlViewer.SelectedTab.Controls.OfType<TraceItemView>().FirstOrDefault()?.RefreshView();
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		}
+
+		private void AddViewer(TraceItemView traceViewer)
 		{
 			var tabPage = new CustomTabPage(traceViewer)
 			{
@@ -2465,7 +2481,6 @@ namespace LogsReader.Reader
 			if (!traceViewer.IsMain && MainViewer != null)
 				traceViewer.SplitterDistance = MainViewer.SplitterDistance;
 			traceViewer.Dock = DockStyle.Fill;
-			traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
 			tabControlViewer.TabPages.Add(tabPage);
 		}
 

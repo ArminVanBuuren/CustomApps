@@ -142,7 +142,10 @@ namespace LogsReader.Reader
 			}
 		}
 
-		public void ChangeTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
+		public void SetTemplate(DataTemplate template, bool showTransactionsInformation) 
+			=> SetTemplate(template, showTransactionsInformation, out var _);
+
+		public void SetTemplate(DataTemplate template, bool showTransactionsInformation, out bool noChanged)
 		{
 			noChanged = true;
 			var prevTemplate = CurrentTemplate;
@@ -152,6 +155,7 @@ namespace LogsReader.Reader
 			{
 				if (prevTemplate != null)
 					noChanged = DeselectTransactions(prevTemplate.TransactionBindings);
+
 				Clear();
 				return;
 			}
@@ -273,6 +277,7 @@ namespace LogsReader.Reader
 
 			if (notepad.CurrentEditor == EditorMessage)
 			{
+				// так сделано для лучшей производительности
 				if (prevTemplateMessage != null && prevTemplateMessage.Equals(CurrentTemplate))
 					return;
 
@@ -282,6 +287,7 @@ namespace LogsReader.Reader
 			}
 			else if (notepad.CurrentEditor == EditorTraceMessage)
 			{
+				// так сделано для лучшей производительности
 				if (prevTemplateTraceMessage != null && prevTemplateTraceMessage.Equals(CurrentTemplate))
 					return;
 
@@ -294,13 +300,13 @@ namespace LogsReader.Reader
 		/// <summary>
 		/// чинит баг когда текст не обновляется
 		/// </summary>
-		private void RefreshView()
+		public void RefreshView()
 		{
 			if (_isInited)
 				return;
 
-			notepad.SelectEditor(0);
 			_isInited = true;
+			notepad.SelectEditor(0);
 		}
 
 		public void SelectTransactions()
