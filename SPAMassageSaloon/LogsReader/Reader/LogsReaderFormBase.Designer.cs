@@ -53,6 +53,7 @@ namespace LogsReader.Reader
 			this.DateEndFilter = new System.Windows.Forms.DateTimePicker();
 			this.DateStartFilter = new System.Windows.Forms.DateTimePicker();
 			this.label8 = new System.Windows.Forms.Label();
+			this.btnFilterPanel = new System.Windows.Forms.Panel();
 			this.btnFilter = new System.Windows.Forms.Button();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.label11 = new System.Windows.Forms.Label();
@@ -392,6 +393,15 @@ namespace LogsReader.Reader
 			this.label8.Size = new System.Drawing.Size(55, 13);
 			this.label8.TabIndex = 22;
 			this.label8.Text = "Date Start";
+			//
+			// btnFilterPanel
+			//
+			this.btnFilterPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFilterPanel.Location = new System.Drawing.Point(878, 1);
+			this.btnFilterPanel.Name = "btnFilter";
+			this.btnFilterPanel.Size = new System.Drawing.Size(104, 27);
+			this.btnFilterPanel.TabIndex = 110;
+			this.btnFilterPanel.BackColor = SystemColors.Control;
 			// 
 			// btnFilter
 			// 
@@ -456,6 +466,7 @@ namespace LogsReader.Reader
 			this.filterPanel.Controls.Add(this.label11);
 			this.filterPanel.Controls.Add(this.btnReset);
 			this.filterPanel.Controls.Add(this.btnFilter);
+			this.filterPanel.Controls.Add(this.btnFilterPanel);
 			this.filterPanel.Controls.Add(this.label8);
 			this.filterPanel.Controls.Add(this.DateStartFilter);
 			this.filterPanel.Controls.Add(this.DateEndFilter);
@@ -485,9 +496,9 @@ namespace LogsReader.Reader
 			// 
 			this.verticalSeparator1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.verticalSeparator1.LineColor = System.Drawing.Color.LightGray;
-			this.verticalSeparator1.Location = new System.Drawing.Point(869, 3);
+			this.verticalSeparator1.Location = new System.Drawing.Point(872, 3);
 			this.verticalSeparator1.Name = "verticalSeparator1";
-			this.verticalSeparator1.Size = new System.Drawing.Size(10, 49);
+			this.verticalSeparator1.Size = new System.Drawing.Size(4, 49);
 			this.verticalSeparator1.TabIndex = 35;
 			this.verticalSeparator1.Text = "verticalSeparator1";
 			// 
@@ -992,6 +1003,7 @@ namespace LogsReader.Reader
 		private Label label7;
 		private Label label9;
 		private Label label8;
+		private Panel btnFilterPanel;
 		private Button btnFilter;
 		private Button btnReset;
 		private Label label11;

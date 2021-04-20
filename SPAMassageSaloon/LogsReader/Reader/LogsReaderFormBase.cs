@@ -1171,6 +1171,7 @@ namespace LogsReader.Reader
 
 				BtnSearch.Enabled = btnClear.Enabled = buttonSelectTraceNames.Enabled =
 					btnExport.Enabled = btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = false;
+
 				ReportStatus(Resources.Txt_LogsReaderForm_Exporting, ReportStatusType.Success);
 				fileName = Path.GetFileName(desctination);
 				var i = 0;
@@ -1294,10 +1295,13 @@ namespace LogsReader.Reader
 				{
 					await AssignResultAsync(GetFilter(), null, false);
 				}
+
+				btnFilterPanel.BackColor = Color.FromArgb(54, 187, 156);
 			}
 			catch (Exception ex)
 			{
 				ReportStatus(ex);
+				btnFilterPanel.BackColor = SystemColors.Control;
 			}
 		}
 
@@ -1328,6 +1332,10 @@ namespace LogsReader.Reader
 			catch (Exception ex)
 			{
 				ReportStatus(ex);
+			}
+			finally
+			{
+				btnFilterPanel.BackColor = SystemColors.Control;
 			}
 		}
 
@@ -1673,19 +1681,30 @@ namespace LogsReader.Reader
 
 		protected async void ReloadDgvData()
 		{
-			var prevSelectedRow = GetSelectedRow(DgvData);
-			var privateId = -1;
-			if (prevSelectedRow != null)
-				int.TryParse(prevSelectedRow.Cells[DgvDataPrivateIDColumn.Name]?.Value?.ToString(), out privateId);
+			try
+			{
+				var prevSelectedRow = GetSelectedRow(DgvData);
+				var privateId = -1;
+				if (prevSelectedRow != null)
+					int.TryParse(prevSelectedRow.Cells[DgvDataPrivateIDColumn.Name]?.Value?.ToString(), out privateId);
 
-			SelectedPage = 1;
-			_overallFilteredResult = null; // обязательно очищать
+				SelectedPage = 1;
+				_overallFilteredResult = null; // обязательно очищать
 
-			var checkedFilePaths = GetCheckedFilePaths();
-			await AssignResultAsync(null, x => checkedFilePaths.Contains(x.ParentReader.FilePath), false);
+				var checkedFilePaths = GetCheckedFilePaths();
+				await AssignResultAsync(null, x => checkedFilePaths.Contains(x.ParentReader.FilePath), false);
 
-			if (prevSelectedRow != null && privateId != -1)
-				SelectRow(DgvData, DgvDataPrivateIDColumn.Name, privateId);
+				if (prevSelectedRow != null && privateId != -1)
+					SelectRow(DgvData, DgvDataPrivateIDColumn.Name, privateId);
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+			finally
+			{
+				btnFilterPanel.BackColor = SystemColors.Control;
+			}
 		}
 
 		protected static DataGridViewRow GetSelectedRow(DataGridView dgv)
@@ -2675,6 +2694,7 @@ namespace LogsReader.Reader
 				ClearData();
 				buttonSelectTraceNames.Enabled = btnExport.Enabled = false;
 				btnFilter.Enabled = ButtonHighlightEnabled = btnReset.Enabled = HasAnyResult;
+				btnFilterPanel.BackColor = SystemColors.Control;
 			}
 			catch (Exception ex)
 			{
