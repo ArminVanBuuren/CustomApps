@@ -643,10 +643,12 @@ namespace Tester.ConsoleTest
 
 			try
 			{
-				var logger = new Logger("TestTestTest1");
-				logger.LogWriteInfo("11111111111111");
-				logger.LogWriteError(new Exception("22222222222222222"));
-				logger.LogWriteError("3333333333");
+				//double a = double.Parse(Console.ReadLine());
+				//Console.WriteLine(Math.Round(a, MidpointRounding.AwayFromZero));
+
+				string res = Console.ReadLine();
+				var spl = res.Split(',');
+				Console.WriteLine($"\"{spl[0], 3} \\ {spl[1], -3}\"");
 			}
 			catch (Exception e)
 			{
