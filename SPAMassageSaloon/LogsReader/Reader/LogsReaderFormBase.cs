@@ -2466,9 +2466,7 @@ namespace LogsReader.Reader
 				traceViewer.SplitterDistance = MainViewer.SplitterDistance;
 			traceViewer.Dock = DockStyle.Fill;
 			traceViewer.ChangeTemplate(template, checkBoxShowTrns.Checked, out var _);
-			var worker = new BackgroundWorker();
-			worker.DoWork += (sender, e) => tabControlViewer.SafeInvoke(() => tabControlViewer.TabPages.Add(tabPage));
-			worker.RunWorkerAsync();
+			tabControlViewer.TabPages.Add(tabPage);
 		}
 
 		private void DgvData_MouseDown(object sender, MouseEventArgs e)
