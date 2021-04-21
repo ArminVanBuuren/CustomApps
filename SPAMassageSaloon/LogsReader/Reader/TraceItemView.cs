@@ -83,6 +83,7 @@ namespace LogsReader.Reader
 				EditorMessage.DisabledColor = Color.FromArgb(100, 171, 171, 171);
 				EditorMessage.IsReplaceMode = false;
 				EditorMessage.SelectionColor = Color.FromArgb(50, 0, 0, 255);
+
 				EditorTraceMessage = notepad.AddDocument(new BlankDocument { HeaderName = DataTemplate.HeaderTraceMessage });
 				EditorTraceMessage.BackBrush = null;
 				EditorTraceMessage.BorderStyle = BorderStyle.FixedSingle;
@@ -97,7 +98,6 @@ namespace LogsReader.Reader
 				EditorTraceMessage.WordWrap = UserSettings.TraceWordWrap;
 				EditorTraceMessage.Highlights = UserSettings.TraceHighlights;
 				
-				notepad.SelectEditor(0);
 				notepad.DefaultEncoding = defaultEncoding;
 				
 				var langMessage = UserSettings.MessageLanguage;
@@ -107,7 +107,7 @@ namespace LogsReader.Reader
 				if (EditorTraceMessage.Language != langTrace)
 					EditorTraceMessage.ChangeLanguage(langTrace);
 
-				if (isMain)
+				if (IsMain)
 				{
 					EditorMessage.LanguageChanged += (sender, args) => { UserSettings.MessageLanguage = EditorMessage.Language; };
 					EditorTraceMessage.LanguageChanged += (sender, args) => { UserSettings.TraceLanguage = EditorTraceMessage.Language; };
@@ -139,6 +139,7 @@ namespace LogsReader.Reader
 			finally
 			{
 				notepad.ResumeLayout();
+				notepad.SelectEditor(0);
 			}
 		}
 

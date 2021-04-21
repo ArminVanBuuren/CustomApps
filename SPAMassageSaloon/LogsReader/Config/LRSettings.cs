@@ -50,6 +50,8 @@ namespace LogsReader.Config
 			}
 		};
 
+		public static long SettingsSize => File.Exists(SettingsPath) ? new FileInfo(SettingsPath).Length : 4000;
+
 		private static string SettingsPath { get; }
 
 		private static string FailedSettingsPath { get; }

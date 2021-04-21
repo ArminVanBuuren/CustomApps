@@ -1,5 +1,8 @@
 ﻿namespace SPAMassageSaloon.Common
 {
+
+	public delegate void ChangeChildLoadingHandler(ISaloonForm child, int percent, bool isCompleted);
+
 	public interface ISaloonForm : IUserForm
 	{
 		int ActiveProcessesCount { get; }

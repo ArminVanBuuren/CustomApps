@@ -159,13 +159,40 @@ namespace LogsReader
 			}
 		}
 
-		public LogsReaderMainForm()
+		public LogsReaderMainForm(ChangeChildLoadingHandler changeChildLoading = null)
 		{
-			InitializeComponent();
+			var loadingIteratorCurrent = 0;
+			var loadingIteratorMax = 1;
+			var currentPercent = 0;
+
+			void IncrementProgress(int percent = -1)
+			{
+				if (percent > -1)
+				{
+					if (percent > 100)
+						return;
+
+					currentPercent = percent;
+					changeChildLoading?.Invoke(this, currentPercent, percent == 100);
+				}
+				else
+				{
+					loadingIteratorCurrent++;
+					var loadingProgressPercent = loadingIteratorMax > 0 ? (loadingIteratorCurrent * 100) / loadingIteratorMax : 100;
+					changeChildLoading?.Invoke(this, loadingProgressPercent, false);
+				}
+			}
 
 			try
 			{
+				IncrementProgress(1);
+
 				SuspendLayout();
+				InitializeComponent();
+
+				var stockOfProgress = (LRSettings.SettingsSize / 1024) / 3;
+				IncrementProgress((int)(70 / stockOfProgress));
+
 				MainTabControl.SuspendLayout();
 				MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
 				base.Text = $"Logs Reader {this.GetAssemblyInfo().Version}";
@@ -187,23 +214,30 @@ namespace LogsReader
 				if (Settings.SchemeList == null)
 					Settings.AssignDefaultSchemas();
 
+				var serializePercent = 100 - currentPercent;
+				loadingIteratorMax = serializePercent > 0 ? (100 * Settings.SchemeList.Length) / serializePercent : 1;
+				loadingIteratorCurrent = (currentPercent * loadingIteratorMax) / 100;
+
 				foreach (var scheme in Settings.SchemeList)
 				{
+					IncrementProgress();
+
 					var schemeForm = new LogsReaderFormScheme(scheme) { Dock = DockStyle.Fill };
+					var page = new TabPage
+					{
+						Text = scheme.Name,
+						UseVisualStyleBackColor = false,
+						Font = new Font(MainFontFamily, 8.5F),
+						Margin = new Padding(0),
+						Padding = new Padding(0)
+					};
 
 					try
 					{
+						page.SuspendLayout();
 						schemeForm.SuspendLayout();
-						var page = new TabPage
-						{
-							Text = scheme.Name,
-							UseVisualStyleBackColor = false,
-							Font = new Font(MainFontFamily, 8.5F),
-							Margin = new Padding(0),
-							Padding = new Padding(0)
-						};
+
 						page.Controls.Add(schemeForm);
-						MainTabControl.TabPages.Add(page);
 						SchemeForms.Add(page, schemeForm);
 						schemeForm.Load += (sender, args) =>
 						{
@@ -220,10 +254,14 @@ namespace LogsReader
 					finally
 					{
 						schemeForm.ResumeLayout();
+						page.ResumeLayout();
 					}
 				}
 
+				MainTabControl.TabPages.AddRange(SchemeForms.Keys.ToArray());
+
 				Global.Initialize(this);
+
 				Global.Load += (sender, args) => { Global.ApplyFormSettings(); };
 				MainTabControl.DrawItem += MainTabControl_DrawItem;
 				LogsReaderFormBase prevSelection = null;
@@ -274,9 +312,10 @@ namespace LogsReader
 			}
 			finally
 			{
+				IncrementProgress(100);
 				CenterToScreen();
 				Global?.ResumeLayout();
-				MainTabControl.ResumeLayout();
+				MainTabControl?.ResumeLayout();
 				ResumeLayout();
 			}
 		}

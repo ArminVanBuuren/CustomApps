@@ -131,6 +131,8 @@ namespace SPAMassageSaloon
 			//ThreadPool.SetMaxThreads(100, 0);
 		}
 
+		private ProgressForm ChildLoadingProgress { get; set; }
+
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			try
@@ -141,6 +143,7 @@ namespace SPAMassageSaloon
 
 				try
 				{
+					ChildLoadingProgress = new ProgressForm();
 					ToolStripManager.LoadSettings(this);
 					InitializeToolbarsMenu();
 
@@ -275,7 +278,17 @@ namespace SPAMassageSaloon
 				};
 				Activated += (o, args) => IsActivated = true;
 				Deactivate += (o, args) => IsActivated = false;
-				Resize += (o, args) => { IsMinimized = WindowState == FormWindowState.Minimized; };
+				Resize += (o, args) =>
+				{
+					IsMinimized = WindowState == FormWindowState.Minimized;
+					if (ChildLoadingProgress != null && ChildLoadingProgress.Visible)
+						ChildLoadingProgress.ResetLocation();
+				};
+				LocationChanged += (o, args) =>
+				{
+					if (ChildLoadingProgress != null && ChildLoadingProgress.Visible)
+						ChildLoadingProgress.ResetLocation();
+				};
 			}
 			catch (Exception ex)
 			{
@@ -369,30 +382,6 @@ namespace SPAMassageSaloon
 					appCPU.NextValue();
 				}
 
-				void ChangeTaskbarState(int processesCount, int totalProgress)
-				{
-					if (IsSuspended)
-						return;
-
-					try
-					{
-						if (processesCount == 0)
-						{
-							TaskbarManager.Instance.SetOverlayIcon(null, "");
-							TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
-						}
-						else
-						{
-							SetTaskBarOverlay(processesCount);
-							TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
-						}
-					}
-					catch (Exception)
-					{
-						// ignored
-					}
-				}
-
 				var taskBarNotify = TaskbarManager.IsPlatformSupported ? (Action<int, int>) ChangeTaskbarState : null;
 				var cpuUsage = "0";
 				var threadsUsage = "0";
@@ -435,6 +424,30 @@ namespace SPAMassageSaloon
 			}
 		}
 
+		private void ChangeTaskbarState(int processesCount, int totalProgress)
+		{
+			if (IsSuspended)
+				return;
+
+			try
+			{
+				if (processesCount == 0)
+				{
+					TaskbarManager.Instance.SetOverlayIcon(null, "");
+					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress); // TaskbarProgressBarState.Normal
+				}
+				else
+				{
+					SetTaskBarOverlay(processesCount);
+					TaskbarManager.Instance.SetProgressValue(totalProgress, processesCount * 100);
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		}
+
 		private void Monitoring(string cpuUsage, string threadsUsage, string ramUsage, Action<int, int> taskBarNotify)
 		{
 			_cpuUsage.Text = cpuUsage;
@@ -454,6 +467,7 @@ namespace SPAMassageSaloon
 
 			if (_countOfLastProcess > 0 && processCount == 0)
 				FlashWindow.Flash(this);
+
 			taskBarNotify?.Invoke(processCount, totalProgress);
 			_countOfLastProcess = processCount;
 		}
@@ -472,6 +486,32 @@ namespace SPAMassageSaloon
 			}
 
 			TaskbarManager.Instance.SetOverlayIcon(Icon.FromHandle(bmp.GetHicon()), "");
+		}
+
+		public void ChangeChildLoadingProgress(ISaloonForm child, int percent, bool isCompleted)
+		{
+			try
+			{
+				if (!isCompleted)
+				{
+					if (!ChildLoadingProgress.Visible)
+						ChildLoadingProgress.Show(this);
+
+					ChildLoadingProgress.SetProgress(percent);
+				}
+				else
+				{
+					if (ChildLoadingProgress == null || !ChildLoadingProgress.Visible)
+						return;
+
+					ChildLoadingProgress.Close();
+					ChildLoadingProgress = new ProgressForm();
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
 		}
 
 		private void InitializeToolbarsMenu()
@@ -496,43 +536,71 @@ namespace SPAMassageSaloon
 		}
 
 		private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
-			=> ShowMdiForm(() =>
+			=> ShowMdiSaloonForm(() =>
 			{
-				var form = new LogsReaderMainForm();
+				var form = new LogsReaderMainForm(ChangeChildLoadingProgress);
 				form.Closed += (o, args) => form.Dispose();
 				return form;
 			});
 
-		private void toolStripSpaFilterButton_Click(object sender, EventArgs e) => ShowMdiForm(SPAFilterForm.GetControl);
+		private void toolStripSpaFilterButton_Click(object sender, EventArgs e) 
+			=> ShowMdiSaloonForm(() => SPAFilterForm.GetControl());
 
 		private void toolStripXPathButton_Click(object sender, EventArgs e)
-			=> ShowMdiForm(() =>
-			               {
-				               var tester = new XPathTesterForm();
-				               tester.Load += (o, args) => _countOfXPathTester++;
-				               tester.Closed += (o, args) => _countOfXPathTester--;
-				               return tester;
-			               },
-			               _countOfXPathTester < 4);
+			=> ShowMdiSaloonForm(() =>
+			                     {
+				                     var tester = new XPathTesterForm();
+				                     tester.Load += (o, args) => _countOfXPathTester++;
+				                     tester.Closed += (o, args) => _countOfXPathTester--;
+				                     return tester;
+			                     },
+			                     _countOfXPathTester < 4);
 
 		private void toolStripRegexTester_Click(object sender, EventArgs e)
-			=> ShowMdiForm(() =>
-			               {
-				               var tester = new frmMain();
-				               tester.Load += (o, args) => _countOfRegexTester++;
-				               tester.Closed += (o, args) => _countOfRegexTester--;
-				               return tester;
-			               },
-			               _countOfRegexTester < 3);
+			=> ShowMdiNotSaloonForm(() =>
+			                        {
+				                        var tester = new frmMain();
+				                        tester.Load += (o, args) => _countOfRegexTester++;
+				                        tester.Closed += (o, args) => _countOfRegexTester--;
+				                        return tester;
+			                        },
+			                        _countOfRegexTester < 3);
 
-		public T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
+		public T ShowMdiNotSaloonForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
+		{
+			try
+			{
+				SuspendHandle();
+				return ShowMdiForm(formMaker, newInstance);
+			}
+			finally
+			{
+				ResumeHandle();
+				Focus();
+				Activate();
+			}
+		}
+
+		public T ShowMdiSaloonForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISaloonForm
+		{
+			try
+			{
+				return ShowMdiForm(formMaker, newInstance);
+			}
+			finally
+			{
+				Focus();
+				Activate();
+			}
+		}
+
+		private T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
 		{
 			if (!newInstance && ActivateMdiForm(out T form))
 				return form;
 
 			try
 			{
-				SuspendHandle();
 				form = formMaker.Invoke();
 				if (form == null)
 					return null;
@@ -551,12 +619,6 @@ namespace SPAMassageSaloon
 			{
 				ReportMessage.Show(ex);
 				return null;
-			}
-			finally
-			{
-				ResumeHandle();
-				Focus();
-				Activate();
 			}
 		}
 
