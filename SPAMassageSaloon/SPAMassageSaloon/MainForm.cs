@@ -566,16 +566,18 @@ namespace SPAMassageSaloon
 			               },
 			               _countOfRegexTester < 5);
 
-		private T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
+		private void ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
 		{
 			if (!newInstance && ActivateMdiForm(out T form))
-				return form;
+				return;
 
 			try
 			{
 				form = formMaker.Invoke();
 				if (form == null)
-					return null;
+					return;
+
+				SuspendHandle();
 
 				form.MdiParent = this;
 				//  form.WindowState = FormWindowState.Maximized;
@@ -584,23 +586,39 @@ namespace SPAMassageSaloon
 				form.Dock = DockStyle.Fill;
 				form.FormBorderStyle = FormBorderStyle.None;
 				form.Load += MDIManagerButton_Load;
+				form.Shown += MDIManagerButton_Shown;
 
-				SuspendHandle();
 				form.Show();
-
-				return form;
 			}
 			catch (Exception ex)
 			{
 				ReportMessage.Show(ex);
-				return null;
 			}
 			finally
 			{
-				ResumeHandle();
-				Focus();
-				Activate();
+				ActivateMainForm();
 			}
+		}
+
+		/// <summary>
+		/// Повторная активация формы, т.к. форма не активируется
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MDIManagerButton_Shown(object sender, EventArgs e)
+		{
+			if (sender is Form form)
+				form.Shown -= MDIManagerButton_Shown;
+
+			ActivateMainForm();
+		}
+
+		private void ActivateMainForm()
+		{
+			ResumeHandle();
+			Focus();
+			TopLevel = true;
+			Activate();
 		}
 
 		private bool ActivateMdiForm<T>(out T form) where T : Form
@@ -675,8 +693,7 @@ namespace SPAMassageSaloon
 					}
 					finally
 					{
-						mainForm.ResumeHandle();
-						mainForm.Activate();
+						mainForm.ActivateMainForm();
 					}
 				};
 
