@@ -596,7 +596,7 @@ namespace SPAMassageSaloon
 			}
 			finally
 			{
-				ActivateMainForm();
+				ResumeHandle();
 			}
 		}
 
@@ -610,15 +610,7 @@ namespace SPAMassageSaloon
 			if (sender is Form form)
 				form.Shown -= MDIManagerButton_Shown;
 
-			ActivateMainForm();
-		}
-
-		private void ActivateMainForm()
-		{
 			ResumeHandle();
-			Focus();
-			TopLevel = true;
-			Activate();
 		}
 
 		private bool ActivateMdiForm<T>(out T form) where T : Form
@@ -693,7 +685,7 @@ namespace SPAMassageSaloon
 					}
 					finally
 					{
-						mainForm.ActivateMainForm();
+						mainForm.ResumeHandle();
 					}
 				};
 
@@ -725,14 +717,37 @@ namespace SPAMassageSaloon
 
 		private void SuspendHandle()
 		{
-			IsSuspended = true;
-			Win32.SuspendHandle(this);
+			try
+			{
+				IsSuspended = true;
+				TopMost = true;
+				Win32.SuspendHandle(this);
+			}
+			catch (Exception)
+			{
+				// ignroed
+			}
 		}
 
 		private void ResumeHandle()
 		{
-			IsSuspended = false;
-			Win32.ResumeHandle(this);
+			try
+			{
+				Win32.ResumeHandle(this);
+
+				Focus();
+				TopLevel = true;
+				Activate();
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+			finally
+			{
+				IsSuspended = false;
+				TopMost = false;
+			}
 		}
 
 		private void toolButtonAbout_ButtonClick(object sender, EventArgs e) => toolButtonAbout.ShowDropDown();
