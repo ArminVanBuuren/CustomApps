@@ -214,7 +214,7 @@ namespace SPAFilter.SPA.Components.SRI
 			}
 			catch (Exception ex)
 			{
-				throw;
+				// ignored
 			}
 		}
 

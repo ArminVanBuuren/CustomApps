@@ -1101,9 +1101,9 @@ namespace SPAFilter
 				await getInstances;
 				await AssignServiceInstances();
 			}
-			catch (Exception)
+			catch (ObjectDisposedException)
 			{
-				throw;
+				// ignored
 			}
 			finally
 			{
@@ -1131,10 +1131,6 @@ namespace SPAFilter
 				reloadServiceInstancesButton.Enabled = false;
 
 				await longExecutionTask;
-			}
-			catch (Exception)
-			{
-				throw;
 			}
 			finally
 			{

@@ -536,7 +536,7 @@ namespace SPAMassageSaloon
 		}
 
 		private void toolStripLogsReaderButton_Click(object sender, EventArgs e)
-			=> ShowMdiSaloonForm(() =>
+			=> ShowMdiForm(() =>
 			{
 				var form = new LogsReaderMainForm(ChangeChildLoadingProgress);
 				form.Closed += (o, args) => form.Dispose();
@@ -544,55 +544,27 @@ namespace SPAMassageSaloon
 			});
 
 		private void toolStripSpaFilterButton_Click(object sender, EventArgs e) 
-			=> ShowMdiSaloonForm(() => SPAFilterForm.GetControl());
+			=> ShowMdiForm(() => SPAFilterForm.GetControl());
 
 		private void toolStripXPathButton_Click(object sender, EventArgs e)
-			=> ShowMdiSaloonForm(() =>
-			                     {
-				                     var tester = new XPathTesterForm();
-				                     tester.Load += (o, args) => _countOfXPathTester++;
-				                     tester.Closed += (o, args) => _countOfXPathTester--;
-				                     return tester;
-			                     },
-			                     _countOfXPathTester < 4);
+			=> ShowMdiForm(() =>
+			               {
+				               var tester = new XPathTesterForm();
+				               tester.Load += (o, args) => _countOfXPathTester++;
+				               tester.Closed += (o, args) => _countOfXPathTester--;
+				               return tester;
+			               },
+			               _countOfXPathTester < 5);
 
 		private void toolStripRegexTester_Click(object sender, EventArgs e)
-			=> ShowMdiNotSaloonForm(() =>
-			                        {
-				                        var tester = new frmMain();
-				                        tester.Load += (o, args) => _countOfRegexTester++;
-				                        tester.Closed += (o, args) => _countOfRegexTester--;
-				                        return tester;
-			                        },
-			                        _countOfRegexTester < 3);
-
-		public T ShowMdiNotSaloonForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
-		{
-			try
-			{
-				SuspendHandle();
-				return ShowMdiForm(formMaker, newInstance);
-			}
-			finally
-			{
-				ResumeHandle();
-				Focus();
-				Activate();
-			}
-		}
-
-		public T ShowMdiSaloonForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form, ISaloonForm
-		{
-			try
-			{
-				return ShowMdiForm(formMaker, newInstance);
-			}
-			finally
-			{
-				Focus();
-				Activate();
-			}
-		}
+			=> ShowMdiForm(() =>
+			               {
+				               var tester = new frmMain();
+				               tester.Load += (o, args) => _countOfRegexTester++;
+				               tester.Closed += (o, args) => _countOfRegexTester--;
+				               return tester;
+			               },
+			               _countOfRegexTester < 5);
 
 		private T ShowMdiForm<T>(Func<T> formMaker, bool newInstance = false) where T : Form
 		{
@@ -612,13 +584,22 @@ namespace SPAMassageSaloon
 				form.Dock = DockStyle.Fill;
 				form.FormBorderStyle = FormBorderStyle.None;
 				form.Load += MDIManagerButton_Load;
+
+				SuspendHandle();
 				form.Show();
+
 				return form;
 			}
 			catch (Exception ex)
 			{
 				ReportMessage.Show(ex);
 				return null;
+			}
+			finally
+			{
+				ResumeHandle();
+				Focus();
+				Activate();
 			}
 		}
 
