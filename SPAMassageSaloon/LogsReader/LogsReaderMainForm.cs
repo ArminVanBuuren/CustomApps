@@ -191,7 +191,7 @@ namespace LogsReader
 				InitializeComponent();
 
 				var stockOfProgress = (LRSettings.SettingsSize / 1024) / 3;
-				IncrementProgress((int)(70 / stockOfProgress));
+				IncrementProgress((int)(60 / stockOfProgress));
 
 				MainTabControl.SuspendLayout();
 				MainTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
