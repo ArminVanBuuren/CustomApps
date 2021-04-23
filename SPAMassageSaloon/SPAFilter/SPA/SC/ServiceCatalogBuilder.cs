@@ -49,7 +49,8 @@ namespace SPAFilter.SPA.SC
 			scConfig.Append(cfsList.ToXml());
 			scConfig.Append("</Configuration>");
 
-			Configuration = XML.PrintXml(scConfig.ToString());
+			var xmlString = scConfig.ToString();
+			Configuration = XML.PrintXml(xmlString);
 		}
 
 		public string Save(string exportDirectory)

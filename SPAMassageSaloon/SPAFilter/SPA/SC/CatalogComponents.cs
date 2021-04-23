@@ -17,14 +17,15 @@ namespace SPAFilter.SPA.SC
 		public Dictionary<string, RFSGroup> CollectionRFSGroup { get; } = new Dictionary<string, RFSGroup>();
 		public CFSGroups CollectionMutexCFSGroup { get; } = new CFSGroups();
 
-		private readonly DataTable _serviceTable;
-		private readonly Func<string, string> _getDescription;
+		private Func<string, string> GetDescriptionFunc { get; }
+
+		private DataTable ServiceTable { get; }
 
 		public CatalogComponents(DataTable serviceTable)
 		{
-			_serviceTable = serviceTable;
-			if (_serviceTable != null)
-				_getDescription = GetDescription;
+			ServiceTable = serviceTable;
+			if (ServiceTable != null)
+				GetDescriptionFunc = GetDescription;
 		}
 
 		public void Add(string fileName, XmlDocument document, string hostType)
@@ -159,7 +160,7 @@ namespace SPAFilter.SPA.SC
 		{
 			if (!CollectionCFS.TryGetValue(srvCode.NodeName, out var getExistCFS))
 			{
-				var description = _getDescription?.Invoke(srvCode.NodeName);
+				var description = GetDescriptionFunc?.Invoke(srvCode.NodeName);
 				description = string.IsNullOrEmpty(description) ? "-" : description;
 
 				var createNewCFS = new CFS(srvCode.NodeName, description, hostOp, link);
@@ -173,11 +174,54 @@ namespace SPAFilter.SPA.SC
 
 		string GetDescription(string serviceCode)
 		{
-			var results = from myRow in _serviceTable.AsEnumerable()
+			var results = from myRow in ServiceTable.AsEnumerable()
 			              where myRow.Field<string>("SERVICE_CODE") == serviceCode
 			              select myRow["SERVICE_NAME"];
 
-			return !results.Any() ? null : results.First().ToString();
+			return results.Any() ? NormalizeString(results.First().ToString()) : null;
+		}
+
+		private string NormalizeString(string input)
+		{
+			var source = XML.RemoveUnallowable(input);
+			var builder = new StringBuilder(source.Length + 10);
+
+			foreach (var ch in source)
+			{
+				if (GetNameByCharLight(ch, out var res))
+				{
+					builder.Append(res);
+					continue;
+				}
+
+				builder.Append(ch);
+			}
+
+			return builder.ToString();
+		}
+
+		public static bool GetNameByCharLight(char symbol, out string result)
+		{
+			result = null;
+			switch (symbol)
+			{
+				case '&': result = "&amp;"; break;
+				case '\"': result = "&quot;"; break;
+				case '<': result = "&lt;"; break;
+				case '>': result = "&gt;"; break;
+				case 'ˆ': result = ""; break;
+				case '˜': result = ""; break;
+				case '–': result = "-"; break;
+				case '—': result = "-"; break;
+				case '‘': result = "'"; break;
+				case '’': result = "'"; break;
+				case '‹': result = "'"; break;
+				case '›': result = "'"; break;
+				case '\r': result = ""; break;
+				case '\n': result = " "; break;
+				default: return false;
+			}
+			return true;
 		}
 
 		public void GenerateRFS()

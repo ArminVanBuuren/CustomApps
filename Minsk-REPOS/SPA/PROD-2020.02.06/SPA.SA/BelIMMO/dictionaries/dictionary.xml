@@ -36,7 +36,7 @@
 			<DynamicObject Name="db_get_username" /> 
 		</DynamicParameter>
 	</DynamicParametersList>
-	<CommandsList Root=".\BelIMMO\Dictionaries\Commands\">
+	<CommandsList Root="Commands">
 		<Command Path="AddPogoda.xml"/>
 		<Command Path="AddPogodaNewMSISDN.xml"/>
 		<Command Path="AddAnecdotes.xml"/>
