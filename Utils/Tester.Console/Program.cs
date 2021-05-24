@@ -634,6 +634,17 @@ namespace Tester.ConsoleTest
 			}
 		}
 
+		class MyClass11
+		{
+			public string Description { get; set; }
+			public DateTime DateOfOperation  { get; set; }
+			public decimal OperationAmount  { get; set; }
+			public string OperationCurrencyName  { get; set; }
+			public string PersonalAccount  { get; set; }
+			public string Commentary  { get; set; }
+			public override string ToString() => $"{Description} {DateOfOperation} {OperationAmount} {PersonalAccount}";
+		}
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -643,12 +654,27 @@ namespace Tester.ConsoleTest
 
 			try
 			{
-				//double a = double.Parse(Console.ReadLine());
-				//Console.WriteLine(Math.Round(a, MidpointRounding.AwayFromZero));
+				//var res = Console.ReadLine();
+				//var spl = res.Split(',');
+				//Console.WriteLine($"\"{spl[0], 3} \\ {spl[1], -3}\"");
 
-				string res = Console.ReadLine();
-				var spl = res.Split(',');
-				Console.WriteLine($"\"{spl[0], 3} \\ {spl[1], -3}\"");
+				var test = new List<MyClass11>
+				{
+					new MyClass11 { Description = "Регистрация платежа", DateOfOperation = DateTime.Parse("05.03.2021 10:51:13"), OperationAmount = 450, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = -150, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = 150, OperationCurrencyName = "RUR", PersonalAccount = "2433032833" },
+					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -100, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 100, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
+					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -20, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 20, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
+				};
+				var res = test
+				    .OrderBy(o => o.DateOfOperation)
+				    .ThenBy(o => o.PersonalAccount)
+					.ThenBy(o => o.Description)
+				    .ThenBy(o => o.OperationAmount)
+				    .ToArray();
+
 			}
 			catch (Exception e)
 			{

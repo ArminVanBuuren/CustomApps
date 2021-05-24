@@ -89,6 +89,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SpaCalculator.cs" />
+    <Compile Include="TestClass_1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
