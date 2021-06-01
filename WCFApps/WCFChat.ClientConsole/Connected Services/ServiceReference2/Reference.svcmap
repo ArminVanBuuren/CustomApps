@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="86071a0e-8871-4e86-a1fc-7c18d86415de" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://msk-dev-foris:9245/EquipmentOperations" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EquipmentOperations.xsd" MetadataType="Schema" ID="264da236-b728-4609-9c38-4b440c649533" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd12" />
+    <MetadataFile FileName="EquipmentOperations1.xsd" MetadataType="Schema" ID="ee2e2cad-4bbc-46a6-a482-b6d831611136" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd13" />
+    <MetadataFile FileName="EquipmentOperations2.xsd" MetadataType="Schema" ID="8a443db1-dd34-4ce0-af87-46e3500a462b" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd2" />
+    <MetadataFile FileName="EquipmentOperations.wsdl" MetadataType="Wsdl" ID="5fe737ab-2a46-4fc7-a23b-8e9878e272ff" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?wsdl=wsdl0" />
+    <MetadataFile FileName="EquipmentOperations3.xsd" MetadataType="Schema" ID="e8e2682b-1367-4331-916a-272eeffd108e" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd6" />
+    <MetadataFile FileName="EquipmentOperations4.xsd" MetadataType="Schema" ID="e4a8f973-b5e4-4eef-b0d3-8d6cee29fd50" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd7" />
+    <MetadataFile FileName="EquipmentOperations5.xsd" MetadataType="Schema" ID="a7ee9d1c-5074-4518-ac78-9c4d54c2a7fe" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd18" />
+    <MetadataFile FileName="EquipmentOperations6.xsd" MetadataType="Schema" ID="faded889-9321-4060-a444-f3ba8c69032b" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd4" />
+    <MetadataFile FileName="EquipmentOperations1.wsdl" MetadataType="Wsdl" ID="54da1b00-8a0f-4cd4-804d-51e8b6686001" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?wsdl" />
+    <MetadataFile FileName="EquipmentOperations7.xsd" MetadataType="Schema" ID="5811e1c7-93f3-42f2-98ef-ee8f432f92c2" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd1" />
+    <MetadataFile FileName="EquipmentOperations8.xsd" MetadataType="Schema" ID="b89fd6d2-dcf8-4545-add3-10f784be694a" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd24" />
+    <MetadataFile FileName="EquipmentOperations9.xsd" MetadataType="Schema" ID="832d98a3-ced8-4b96-9972-b458df46e254" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd25" />
+    <MetadataFile FileName="EquipmentOperations10.xsd" MetadataType="Schema" ID="51b3950f-b8eb-4df7-a396-7195a81c7fd0" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd26" />
+    <MetadataFile FileName="EquipmentOperations.disco" MetadataType="Disco" ID="da2b4ec1-012d-4d68-9234-c770fe213336" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?disco" />
+    <MetadataFile FileName="EquipmentOperations11.xsd" MetadataType="Schema" ID="e37c878b-f38d-4eb9-8a85-c54b0a89486b" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd23" />
+    <MetadataFile FileName="EquipmentOperations12.xsd" MetadataType="Schema" ID="8b56e45b-e233-41f9-b4dd-fa6801833a03" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd9" />
+    <MetadataFile FileName="EquipmentOperations13.xsd" MetadataType="Schema" ID="95c0876b-b70a-4b32-b9a7-7411fb127229" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd16" />
+    <MetadataFile FileName="EquipmentOperations14.xsd" MetadataType="Schema" ID="8f5b2c90-181e-41db-b0e1-b34417972b46" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd20" />
+    <MetadataFile FileName="EquipmentOperations15.xsd" MetadataType="Schema" ID="5947b15d-80db-4581-aec9-319164ffe968" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd21" />
+    <MetadataFile FileName="EquipmentOperations16.xsd" MetadataType="Schema" ID="839dc6d3-081c-45fb-b1f2-f3776743d657" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd22" />
+    <MetadataFile FileName="EquipmentOperations17.xsd" MetadataType="Schema" ID="b0feef87-2eb8-48eb-96c0-f39d88768d45" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd19" />
+    <MetadataFile FileName="EquipmentOperations18.xsd" MetadataType="Schema" ID="fcaeefc2-d287-44fd-af86-94aefd458bdf" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd3" />
+    <MetadataFile FileName="EquipmentOperations19.xsd" MetadataType="Schema" ID="4dbab2d5-f0e1-422c-b74a-fc71ec101f26" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd0" />
+    <MetadataFile FileName="EquipmentOperations20.xsd" MetadataType="Schema" ID="627754f8-d847-4573-a4b8-a9c2a75b476b" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd14" />
+    <MetadataFile FileName="EquipmentOperations21.xsd" MetadataType="Schema" ID="0b99e5a6-442c-4981-a3f7-2f64174c0c1a" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd15" />
+    <MetadataFile FileName="EquipmentOperations22.xsd" MetadataType="Schema" ID="0f25a463-92b5-4418-ae3e-921548ddbb8a" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd5" />
+    <MetadataFile FileName="EquipmentOperations23.xsd" MetadataType="Schema" ID="a6d7052f-4b34-48ca-9d5d-9385d738285d" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd17" />
+    <MetadataFile FileName="EquipmentOperations24.xsd" MetadataType="Schema" ID="7e7a2860-dc21-4a92-b294-9ec1bad6fe28" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd8" />
+    <MetadataFile FileName="EquipmentOperations25.xsd" MetadataType="Schema" ID="94696187-2a20-49db-862c-04606fb06287" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd10" />
+    <MetadataFile FileName="EquipmentOperations26.xsd" MetadataType="Schema" ID="d4d43393-44b2-4551-8ed8-d814199f7651" SourceId="1" SourceUrl="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd11" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

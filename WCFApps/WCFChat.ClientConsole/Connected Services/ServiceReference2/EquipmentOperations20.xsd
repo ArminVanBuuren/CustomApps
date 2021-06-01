@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v002" elementFormDefault="qualified" targetNamespace="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v002" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd15" namespace="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd8" namespace="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" />
+  <xs:complexType name="ActionOnCustomerEntity">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q1:ActionBase">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v001" minOccurs="0" name="Entity" nillable="true" type="q2:CustomerEntityBase" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ActionOnCustomerEntity" nillable="true" type="tns:ActionOnCustomerEntity" />
+</xs:schema>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v002" elementFormDefault="qualified" targetNamespace="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v002" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd11" namespace="http://schemas.sitels.ru/marti/cdm/common/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd16" namespace="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd8" namespace="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" />
+  <xs:complexType name="ActionOnResource">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q1:ActionBase">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.sitels.ru/marti/cdm/common/v001" minOccurs="0" name="Parameters" nillable="true" type="q2:ArrayOfParameter">
+            <xs:annotation>
+              <xs:appinfo>
+                <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+          <xs:element xmlns:q3="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v001" minOccurs="0" name="Resource" nillable="true" type="q3:ResourceBase" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ActionOnResource" nillable="true" type="tns:ActionOnResource" />
+</xs:schema>

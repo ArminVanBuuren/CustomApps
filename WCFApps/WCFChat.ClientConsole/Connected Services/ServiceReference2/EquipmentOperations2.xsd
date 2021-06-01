@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.mts.ru/Foris/OrderManagement/ServiceActivation/Fix/Entities/v001" elementFormDefault="qualified" targetNamespace="http://schemas.mts.ru/Foris/OrderManagement/ServiceActivation/Fix/Entities/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd13" namespace="http://schemas.sitels.ru/marti/cdm/businessmodel/product/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd26" namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Messages/v001" />
+  <xs:complexType name="GetParameterDescriptionRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Initiator" nillable="true" type="tns:Initiator" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ParameterCodes" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="ServiceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetParameterDescriptionRequest" nillable="true" type="tns:GetParameterDescriptionRequest" />
+  <xs:complexType name="Initiator">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Login" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Msisdn" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SourceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Initiator" nillable="true" type="tns:Initiator" />
+  <xs:complexType name="GetParameterDescriptionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Parameters" nillable="true" type="tns:ArrayOfParameterDescription" />
+      <xs:element minOccurs="0" name="ResultCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetParameterDescriptionResponse" nillable="true" type="tns:GetParameterDescriptionResponse" />
+  <xs:complexType name="ArrayOfParameterDescription">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ParameterDescription" nillable="true" type="tns:ParameterDescription" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfParameterDescription" nillable="true" type="tns:ArrayOfParameterDescription" />
+  <xs:complexType name="ParameterDescription">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsMandatoryParameter" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRecipientCpeInventory" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PossibleValues" nillable="true" type="tns:ArrayOfParameterValue" />
+      <xs:element minOccurs="0" name="ServiceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ParameterDescription" nillable="true" type="tns:ParameterDescription" />
+  <xs:complexType name="ArrayOfParameterValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ParameterValue" nillable="true" type="tns:ParameterValue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfParameterValue" nillable="true" type="tns:ArrayOfParameterValue" />
+  <xs:complexType name="ParameterValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ParameterValue" nillable="true" type="tns:ParameterValue" />
+  <xs:complexType name="GetServiceEquipmentRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FilterParameters" nillable="true" type="tns:ArrayOfParameter" />
+      <xs:element minOccurs="0" name="Initiator" nillable="true" type="tns:Initiator" />
+      <xs:element minOccurs="0" name="PersonalAccountNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetServiceEquipmentRequest" nillable="true" type="tns:GetServiceEquipmentRequest" />
+  <xs:complexType name="ArrayOfParameter">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Parameter" nillable="true" type="tns:Parameter" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfParameter" nillable="true" type="tns:ArrayOfParameter" />
+  <xs:complexType name="Parameter">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="tns:ParameterValue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Parameter" nillable="true" type="tns:Parameter" />
+  <xs:complexType name="GetServiceEquipmentResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResultCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceEquipments" nillable="true" type="tns:ArrayOfServiceEquipment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetServiceEquipmentResponse" nillable="true" type="tns:GetServiceEquipmentResponse" />
+  <xs:complexType name="ArrayOfServiceEquipment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ServiceEquipment" nillable="true" type="tns:ServiceEquipment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfServiceEquipment" nillable="true" type="tns:ArrayOfServiceEquipment" />
+  <xs:complexType name="ServiceEquipment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Credentials" nillable="true" type="tns:ArrayOfParameter" />
+      <xs:element minOccurs="0" name="EquipmentConnected" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EquipmentParameters" nillable="true" type="tns:ArrayOfParameter" />
+      <xs:element minOccurs="0" name="ServiceActivated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ServiceDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceEquipment" nillable="true" type="tns:ServiceEquipment" />
+  <xs:complexType name="FixEquipmentActivationRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActivateService" type="xs:boolean" />
+      <xs:element minOccurs="0" name="CallbackUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EquipmentAction" type="tns:EquipmentAction" />
+      <xs:element minOccurs="0" name="ExternalRequestId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Initiator" nillable="true" type="tns:Initiator" />
+      <xs:element minOccurs="0" name="Parameters" nillable="true" type="tns:ArrayOfParameter" />
+      <xs:element minOccurs="0" name="PersonalAccountNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FixEquipmentActivationRequest" nillable="true" type="tns:FixEquipmentActivationRequest" />
+  <xs:simpleType name="EquipmentAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Add" />
+      <xs:enumeration value="Update" />
+      <xs:enumeration value="Delete" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="EquipmentAction" nillable="true" type="tns:EquipmentAction" />
+  <xs:complexType name="FixEquipmentActivationResponse">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RequiredParameters" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element minOccurs="0" name="ResultCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FixEquipmentActivationResponse" nillable="true" type="tns:FixEquipmentActivationResponse" />
+  <xs:complexType name="ChangeEquipmentStatusRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Messages/v001" base="q3:RequestBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Msisdn" nillable="true" type="xs:string" />
+          <xs:element xmlns:q4="http://schemas.sitels.ru/marti/cdm/businessmodel/product/v001" minOccurs="0" name="ProductActions" nillable="true" type="q4:ArrayOfActionOnProduct" />
+          <xs:element minOccurs="0" name="UserNtName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ChangeEquipmentStatusRequest" nillable="true" type="tns:ChangeEquipmentStatusRequest" />
+</xs:schema>

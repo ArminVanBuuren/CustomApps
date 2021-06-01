@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001" elementFormDefault="qualified" targetNamespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Contracts/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd5" namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Faults/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd26" namespace="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Messages/v001" />
+  <xs:complexType name="CheckTariffPlanTransitionsMessage">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Faults/v001" base="q1:BusinessProcessMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Msisdn" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TariffPlanNewCode" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CheckTariffPlanTransitionsMessage" nillable="true" type="tns:CheckTariffPlanTransitionsMessage" />
+  <xs:complexType name="ArrayOfExceededQuota">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExceededQuota" nillable="true" type="tns:ExceededQuota" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExceededQuota" nillable="true" type="tns:ArrayOfExceededQuota" />
+  <xs:complexType name="ExceededQuota">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CounterCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CounterValue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MinUdtpValue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ServiceCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ServiceName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExceededQuota" nillable="true" type="tns:ExceededQuota" />
+  <xs:complexType name="ProcessInitiatorData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EngineType" type="tns:RequestInitiatorType" />
+      <xs:element minOccurs="0" name="ExternalRequestId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ParentRequestTypeCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProcessId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestId" nillable="true" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProcessInitiatorData" nillable="true" type="tns:ProcessInitiatorData" />
+  <xs:simpleType name="RequestInitiatorType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Workflow" />
+      <xs:enumeration value="RequestEngine" />
+      <xs:enumeration value="Production" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RequestInitiatorType" nillable="true" type="tns:RequestInitiatorType" />
+  <xs:complexType name="CheckTariffPlanTransitionsRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.sitels.ru/Foris.OrderManagement.Workflow2.Messages/v001" base="q2:RequestBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BusinessProcessCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Transitions" nillable="true" type="tns:ArrayOfCheckTariffPlanTransitionsRequestItem" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CheckTariffPlanTransitionsRequest" nillable="true" type="tns:CheckTariffPlanTransitionsRequest" />
+  <xs:complexType name="ArrayOfCheckTariffPlanTransitionsRequestItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CheckTariffPlanTransitionsRequestItem" nillable="true" type="tns:CheckTariffPlanTransitionsRequestItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCheckTariffPlanTransitionsRequestItem" nillable="true" type="tns:ArrayOfCheckTariffPlanTransitionsRequestItem" />
+  <xs:complexType name="CheckTariffPlanTransitionsRequestItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Msisdn" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MsisdnPortation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TariffPlanNewCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CheckTariffPlanTransitionsRequestItem" nillable="true" type="tns:CheckTariffPlanTransitionsRequestItem" />
+</xs:schema>

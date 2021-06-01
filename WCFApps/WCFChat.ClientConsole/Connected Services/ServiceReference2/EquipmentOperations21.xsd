@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v001" elementFormDefault="qualified" targetNamespace="http://schemas.sitels.ru/marti/cdm/datamodel/customer/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd8" namespace="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" />
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd16" namespace="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v001" />
+  <xs:complexType name="CustomerEntityBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateTo" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerEntityBase" nillable="true" type="tns:CustomerEntityBase" />
+  <xs:complexType name="TerminalDevice">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CustomerEntityBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ContractId" type="xs:long" />
+          <xs:element minOccurs="0" name="CustomerId" type="xs:long" />
+          <xs:element minOccurs="0" name="Iccid" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Imsi" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LanguageCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Msisdn" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PersonalAccountId" type="xs:long" />
+          <xs:element xmlns:q1="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" minOccurs="0" name="Products" nillable="true" type="q1:TerminalDeviceProducts" />
+          <xs:element xmlns:q2="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v001" minOccurs="0" name="SharingGroups" nillable="true" type="q2:ArrayOfSharingGroup" />
+          <xs:element minOccurs="0" name="TariffPlanCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TerminalDeviceClassCode" nillable="true" type="xs:string" />
+          <xs:element xmlns:q3="http://schemas.sitels.ru/marti/cdm/datamodel/resource/v001" minOccurs="0" name="TerminalDeviceIdentities" nillable="true" type="q3:ArrayOfTerminalDeviceIdentity" />
+          <xs:element minOccurs="0" name="TerminalDeviceStatusCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ActivationDate" nillable="true" type="xs:dateTime">
+            <xs:annotation>
+              <xs:appinfo>
+                <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TerminalDevice" nillable="true" type="tns:TerminalDevice" />
+  <xs:complexType name="PersonalAccount">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CustomerEntityBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BillingGroupCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CalculationMethodCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ContractId" type="xs:long" />
+          <xs:element minOccurs="0" name="CorporateBudget" nillable="true" type="tns:CorporateBudget" />
+          <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CustomerId" type="xs:long" />
+          <xs:element minOccurs="0" name="HostCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="HostTypeCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IndividualBillingPeriod" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="IsCorpBudget" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LanguageCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PersonalAccountNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PersonalAccountStatusCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PersonalAccountTypeCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ServiceProviderCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TrustCategoryCode" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PersonalAccount" nillable="true" type="tns:PersonalAccount" />
+  <xs:complexType name="CorporateBudget">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsCorporateBudget" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RulesDateFrom" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RulesDateTo" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CorporateBudget" nillable="true" type="tns:CorporateBudget" />
+  <xs:complexType name="Contract">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CustomerEntityBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ContractNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ContractStatusCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ContractTypeCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CustomerId" type="xs:long" />
+          <xs:element minOccurs="0" name="LanguageCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LegalCategoryCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MarketingCategoryCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PayPerDayDeny" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ServiceCategoryCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ServiceProviderCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TaxGroupCode" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Contract" nillable="true" type="tns:Contract" />
+  <xs:complexType name="Customer">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CustomerEntityBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CustomerTypeCode" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Customer" nillable="true" type="tns:Customer" />
+</xs:schema>

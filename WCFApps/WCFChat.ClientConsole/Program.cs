@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading;
 using WCFChat.ClientConsole.ServiceReference1;
+using WCFChat.ClientConsole.ServiceReference2;
 
 namespace WCFChat.ClientConsole
 {
@@ -88,13 +89,35 @@ namespace WCFChat.ClientConsole
 		static void OpenOrReopenConnection()
 		{
 			Console.WriteLine("Try to connect..");
-			mainProxy?.Abort();
-			var context = new InstanceContext(mainCallBack);
-			mainProxy = new MainServiceClient(context);
-			mainProxy.Open();
-			mainProxy.InnerDuplexChannel.Faulted += InnerDuplexChannel_Faulted;
-			mainProxy.InnerDuplexChannel.Opened += InnerDuplexChannel_Opened;
-			mainProxy.InnerDuplexChannel.Closed += InnerDuplexChannel_Closed;
+			//mainProxy?.Abort();
+			//var context = new InstanceContext(mainCallBack);
+			//mainProxy = new MainServiceClient(context);
+			//mainProxy.Open();
+			//mainProxy.InnerDuplexChannel.Faulted += InnerDuplexChannel_Faulted;
+			//mainProxy.InnerDuplexChannel.Opened += InnerDuplexChannel_Opened;
+			//mainProxy.InnerDuplexChannel.Closed += InnerDuplexChannel_Closed;
+
+			//var dd = new EquipmentOperationsClient();
+			//dd.Open();
+
+			NetTcpBinding binding = new NetTcpBinding();
+			EndpointAddress address = new EndpointAddress("net.tcp://msk-dev-foris:9612/EquipmentOperations");
+
+			ChannelFactory<IEquipmentOperations> channelFactory = new ChannelFactory<IEquipmentOperations>(binding, address);
+			channelFactory.Credentials.Windows.ClientCredential.Domain = "admsk";
+			channelFactory.Credentials.Windows.ClientCredential.UserName = "vdkhova1";
+			channelFactory.Credentials.Windows.ClientCredential.Password = "AveArmin#3";
+			IEquipmentOperations _clientProxy = channelFactory.CreateChannel();
+
+			try
+			{
+				_clientProxy.GetServiceEquipment(new GetServiceEquipmentRequest { PersonalAccountNumber = "277300207431"  });
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+			
 		}
 
 		public static void ConnectionCompleted()

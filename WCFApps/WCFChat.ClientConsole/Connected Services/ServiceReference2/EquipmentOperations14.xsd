@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/provisionoperations/v001" elementFormDefault="qualified" targetNamespace="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/provisionoperations/v001" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://msk-dev-foris:9245/EquipmentOperations?xsd=xsd8" namespace="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" />
+  <xs:complexType name="ChargeForPrevStatusOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q1:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ChargeForPrevStatusOperation" nillable="true" type="tns:ChargeForPrevStatusOperation" />
+  <xs:complexType name="CrmOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q2:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CrmOperation" nillable="true" type="tns:CrmOperation" />
+  <xs:complexType name="FinancialOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q3:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FinancialOperation" nillable="true" type="tns:FinancialOperation" />
+  <xs:complexType name="HlrOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q4:ProductProvisionOperationBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="OperationType" type="tns:HlrOperationType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HlrOperation" nillable="true" type="tns:HlrOperation" />
+  <xs:simpleType name="HlrOperationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Add" />
+      <xs:enumeration value="Remove" />
+      <xs:enumeration value="AsProductAction" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="HlrOperationType" nillable="true" type="tns:HlrOperationType" />
+  <xs:complexType name="NotificationOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q5:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NotificationOperation" nillable="true" type="tns:NotificationOperation" />
+  <xs:complexType name="OneTimeChargeOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q6:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="OneTimeChargeOperation" nillable="true" type="tns:OneTimeChargeOperation" />
+  <xs:complexType name="PeriodicalChargeOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q7:ProductProvisionOperationBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IsPeriodicalChargingStarted" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PeriodicalChargeOperation" nillable="true" type="tns:PeriodicalChargeOperation" />
+  <xs:complexType name="PlannedFreePriceOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q8="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q8:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PlannedFreePriceOperation" nillable="true" type="tns:PlannedFreePriceOperation" />
+  <xs:complexType name="PlannedMakeInvoiceOperation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="http://schemas.sitels.ru/marti/cdm/terminaldevice/products/v001" base="q9:ProductProvisionOperationBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PlannedMakeInvoiceOperation" nillable="true" type="tns:PlannedMakeInvoiceOperation" />
+</xs:schema>
