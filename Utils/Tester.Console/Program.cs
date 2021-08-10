@@ -6,15 +6,21 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Security;
+using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
+using System.Web;
+using System.Web.UI.WebControls;
 using System.Xml;
+using System.Xml.Linq;
 using Microsoft.XmlDiffPatch;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -77,6 +83,7 @@ namespace Tester.ConsoleTest
 	class DocumentItem
 	{
 		public List<DeliveryMethod> DeliveryMethods { get; set; }
+		public DocumentFormat Test { get; set; }
 	}
 
 	class DeliveryMethod
@@ -88,6 +95,8 @@ namespace Tester.ConsoleTest
 	class DocumentFormat
 	{
 		public int FormatId { get; set; }
+
+		public string Test { get; set; }
 	}
 
 	static class Program
@@ -645,6 +654,499 @@ namespace Tester.ConsoleTest
 			public override string ToString() => $"{Description} {DateOfOperation} {OperationAmount} {PersonalAccount}";
 		}
 
+		[AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+		public class AllowStateTransAttribute : Attribute
+		{
+			public PortInMnpUzStateRequest State { get; }
+
+			public AllowStateTransAttribute(PortInMnpUzStateRequest state) => State = state;
+		}
+
+		/// <summary>
+		/// Cтатусы портации
+		/// </summary>
+		[DataContract(Namespace = "")]
+		public enum PortInMnpUzStateRequest
+		{
+			Unknown = 1,
+			/// <summary>
+			/// Новая
+			/// </summary>
+			[DataMember]
+			New = 2,
+
+			/// <summary>
+			/// Переоткрыта
+			/// </summary>
+			[DataMember]
+			Reopen = 4,
+
+			/// <summary>
+			/// На проверке
+			/// </summary>
+			[DataMember]
+			Checking = 8,
+
+			/// <summary>
+			/// Согласована
+			/// </summary>
+			[DataMember]
+			Approved = 16,
+
+			/// <summary>
+			/// Портация
+			/// </summary>
+			[DataMember]
+			Portation = 32,
+
+			/// <summary>
+			/// Активирована
+			/// </summary>
+			[DataMember]
+			Acivated = 64,
+
+			/// <summary>
+			/// Уведомление
+			/// </summary>
+			[DataMember]
+			Notification = 128,
+
+			/// <summary>
+			/// Отклонена
+			/// </summary>
+			[DataMember]
+			Rejected = 256,
+
+			/// <summary>
+			/// Закрыта
+			/// </summary>
+			[DataMember]
+			Completed = 512,
+		}
+
+
+		public static List<T> GetAttributeOfType<T>(this Enum enumVal) where T : Attribute
+		{
+			Type type = enumVal.GetType();
+			MemberInfo[] memInfo = type.GetMember(enumVal.ToString());
+			object[] attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
+			return (attributes.Length > 0 ? attributes.Cast<T>() : Enumerable.Empty<T>()).ToList();
+		}
+
+		private static List<string> TryGetOrderStorageAttribute(this Dictionary<string, List<object>> tableValue, string attributeName)
+			=> tableValue.TryGetValue(attributeName, out List<object> value)
+				? value.ConvertAll(x => x?.ToString().Trim())
+				: new List<string>(0);
+
+
+
+		private static readonly Dictionary<string, int> _esiaTriggerSettings = new Dictionary<string, int>
+		{
+			{"No", 1},
+			{"SkipActivated", 2},
+			{"RunNonBlocking", 3},
+			{"Always", 4},
+		};
+
+		private static readonly string[] _settingsPriorities = { "No", "SkipActivated", "RunNonBlocking", "Always" };
+		public static string GetMergedInitEsiaNumbersConfirmationSetting(string setting1, string setting2) 
+			=> _settingsPriorities[Math.Min(0, Math.Max(Array.IndexOf(_settingsPriorities, setting1), Array.IndexOf(_settingsPriorities, setting2)))];
+
+		/// <summary>
+		/// Получить более строгую настройку
+		/// </summary>
+		/// <param name="setting1"></param>
+		/// <param name="setting2"></param>
+		/// <returns></returns>
+		public static string GetStrictestEsiaSetting(string setting1, string setting2)
+		{
+			if (setting1.IsEmpty() || !_esiaTriggerSettings.TryGetValue(setting1, out int value1))
+				value1 = 0;
+
+			if (setting2.IsEmpty() || !_esiaTriggerSettings.TryGetValue(setting2, out int value2))
+				value2 = 0;
+
+			return value1 > value2
+				? setting1
+				: value2 > 0 ? setting2 : string.Empty;
+		}
+
+		public abstract class Customer
+		{
+
+		}
+
+		public class Individual : Customer
+		{
+			
+		}
+
+		public class Organization : Customer
+		{
+
+		}
+
+		class TaskTemp
+		{
+			public string Tid { get; set; }
+			public string Name { get; set; }
+			public DateTime CreatedOn { get; set; }
+		}
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public class HTask
+		{
+			/// <summary>Extended task identifier, which includes dot-separated type and instance identifiers.</summary>
+			[DataMember]
+			public string Tid { get; set; }
+
+			/// <summary>Идентификатор процесса, который обрабатывает заявку.</summary>
+			[DataMember]
+			public string ParentProcessId { get; set; }
+
+			/// <summary>Task type code.</summary>
+			[DataMember]
+			public string Type { get; set; }
+
+			/// <summary>Task title.</summary>
+			[DataMember]
+			public string Title { get; set; }
+
+			/// <summary>Task description.</summary>
+			[DataMember]
+			public string Description { get; set; }
+
+			/// <summary>The date of task creation.</summary>
+			[DataMember]
+			public DateTime CreatedOn { get; set; }
+
+			/// <summary>The code of the unit which created the task.</summary>
+			[DataMember]
+			public string CreatedBy { get; set; }
+
+			/// <summary>The code of the unit to which the task is currently assigned.</summary>
+			[DataMember]
+			public string AssignedTo { get; set; }
+
+			/// <summary>The date of last modification.</summary>
+			[DataMember]
+			public DateTime ChangedOn { get; set; }
+
+			/// <summary>The code of the unit which last updated the task.</summary>
+			[DataMember]
+			public string ChangedBy { get; set; }
+
+			/// <summary>
+			/// Task revision (change ordinal number). It is verified when the task is updated, to prevent collisions
+			/// (optimistic locking is used). For an update to succeed, revision must match database information.
+			/// </summary>
+			[DataMember]
+			public string Revision { get; set; }
+
+			/// <summary>The code of current task state.</summary>
+			[DataMember]
+			public string State { get; set; }
+
+			/// <summary>Reason code of the last task modification.</summary>
+			[DataMember]
+			public string Reason { get; set; }
+
+			public Dictionary<string, object> Attributes { get; set; }
+		}
+
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public class HumanTask
+		{
+			/// <summary>Extended task identifier, which includes dot-separated type and instance identifiers.</summary>
+			[DataMember]
+			public string Tid { get; set; }
+
+			/// <summary>Идентификатор процесса, который обрабатывает заявку.</summary>
+			[DataMember]
+			public string ParentProcessId { get; set; }
+
+			/// <summary>Task type code.</summary>
+			[DataMember]
+			public string Type { get; set; }
+
+			/// <summary>Task title.</summary>
+			[DataMember]
+			public string Title { get; set; }
+
+			/// <summary>Task description.</summary>
+			[DataMember]
+			public string Description { get; set; }
+
+			/// <summary>The date of task creation.</summary>
+			[DataMember]
+			public DateTime CreatedOn { get; set; }
+
+			/// <summary>The code of the unit which created the task.</summary>
+			[DataMember]
+			public string CreatedBy { get; set; }
+
+			/// <summary>The code of the unit to which the task is currently assigned.</summary>
+			[DataMember]
+			public string AssignedTo { get; set; }
+
+			/// <summary>The date of last modification.</summary>
+			[DataMember]
+			public DateTime ChangedOn { get; set; }
+
+			/// <summary>The code of the unit which last updated the task.</summary>
+			[DataMember]
+			public string ChangedBy { get; set; }
+
+			/// <summary>
+			/// Task revision (change ordinal number). It is verified when the task is updated, to prevent collisions
+			/// (optimistic locking is used). For an update to succeed, revision must match database information.
+			/// </summary>
+			[DataMember]
+			public string Revision { get; set; }
+
+			/// <summary>The code of current task state.</summary>
+			[DataMember]
+			public HumanTaskStates State { get; set; }
+
+			/// <summary>Reason code of the last task modification.</summary>
+			[DataMember]
+			public HumanTaskStateReasons Reason { get; set; }
+		}
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public enum HumanTaskStates
+		{
+			/// <summary> The state is not specified,</summary>
+			[EnumMember]
+			Unknown = 0,
+
+			/// <summary> The task awaiting processing. This state is automatically assigned to the task
+			/// during its creation. Also it can be awards with different person assignment.</summary>
+			[EnumMember]
+			Proposed = 1,
+
+			/// <summary> The task is being processed.</summary>
+			[EnumMember]
+			Active = 2,
+
+			/// <summary> The task is finished. Finish code is specified in Reason property</summary>
+			[EnumMember]
+			Closed = 3,
+		}
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public enum HumanTaskStateReasons
+		{
+			/// <summary> Unknown state reason.</summary>
+			[EnumMember]
+			Unknown = 0,
+
+			/// <summary> Task Created.</summary>
+			[EnumMember]
+			Created = 1,
+
+			/// <summary> Executor agrees to the task and is able to execute it.</summary>
+			[EnumMember]
+			Approved = 2,
+
+			/// <summary> Task is assigned to a subordinate executor.</summary>
+			[EnumMember]
+			Delegated = 3,
+
+			/// <summary> Executor does not agrees to the task or does not have abilities to execute it.</summary>
+			[EnumMember]
+			Rejected = 4,
+
+			/// <summary> The task was successfully complete.</summary>
+			[EnumMember]
+			Complete = 5,
+
+			/// <summary> The task can not be performed by objective reasons.</summary>
+			[EnumMember]
+			Failed = 6,
+
+			/// <summary> The task was cancelled.</summary>
+			[EnumMember]
+			Cancelled = 7,
+
+			/// <summary> Executor has not enough information to perform a task.</summary>
+			[EnumMember]
+			NeedInfo = 8,
+
+			/// <summary> Necessary information provided.</summary>
+			[EnumMember]
+			Info = 9
+		}
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public enum MnpRequestState
+		{
+			/// <summary>
+			/// Unknown
+			/// </summary>
+			[EnumMember]
+			Unknown = 0,
+
+			/// <summary>
+			/// Новая
+			/// </summary>
+			[EnumMember]
+			New = 1,
+
+			/// <summary>
+			/// Переоткрыта
+			/// </summary>
+			[EnumMember]
+			Reopen = 2,
+
+			/// <summary>
+			/// На проверке
+			/// </summary>
+			[EnumMember]
+			Checking = 3,
+
+			/// <summary>
+			/// Согласована
+			/// </summary>
+			[EnumMember]
+			Approved = 4,
+
+			/// <summary>
+			/// Портация
+			/// </summary>
+			[EnumMember]
+			Portation = 5,
+
+			/// <summary>
+			/// Активирована
+			/// </summary>
+			[EnumMember]
+			Activated = 6,
+
+			/// <summary>
+			/// Уведомление
+			/// </summary>
+			[EnumMember]
+			Notification = 7,
+
+			/// <summary>
+			/// Отклонена
+			/// </summary>
+			[EnumMember]
+			Rejected = 8,
+
+			/// <summary>
+			/// Закрыта
+			/// </summary>
+			[EnumMember]
+			Completed = 9,
+
+			/// <summary>
+			/// Деактивация завершена
+			/// </summary>
+			[EnumMember]
+			Deactivated = 10,
+		}
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public class MnpHumanTask : HumanTask
+		{
+			/// <summary></summary>
+			[DataMember]
+			public MnpRequestState RequestState { get; set; }
+
+			/// <summary></summary>
+			[DataMember]
+			public int CountOfAttempts { get; set; }
+		}
+
+		public static MnpHumanTask MapToMnpHumanTask(this HTask task)
+		{
+			MnpHumanTask result = task.MapToHumanTask<MnpHumanTask>();
+			result.RequestState = task.Attributes != null && task.Attributes.TryGetValue("StateRequestMNP", out object state) && state != null
+				? GetMnpRequestState(state.ToString())
+				: MnpRequestState.Unknown;
+			result.CountOfAttempts = 1;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Получить статус портации заявки
+		/// </summary>
+		/// <param name="state"></param>
+		/// <returns></returns>
+		public static MnpRequestState GetMnpRequestState(string state)
+			=> state?.Trim() switch
+			{
+				nameof(MnpRequestState.New) => MnpRequestState.New,
+				nameof(MnpRequestState.Reopen) => MnpRequestState.Reopen,
+				nameof(MnpRequestState.Checking) => MnpRequestState.Checking,
+				nameof(MnpRequestState.Approved) => MnpRequestState.Approved,
+				nameof(MnpRequestState.Portation) => MnpRequestState.Portation,
+				nameof(MnpRequestState.Activated) => MnpRequestState.Activated,
+				nameof(MnpRequestState.Notification) => MnpRequestState.Notification,
+				nameof(MnpRequestState.Rejected) => MnpRequestState.Rejected,
+				nameof(MnpRequestState.Completed) => MnpRequestState.Completed,
+				nameof(MnpRequestState.Deactivated) => MnpRequestState.Deactivated,
+				_ => MnpRequestState.Unknown
+			};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="THumanTask"></typeparam>
+		/// <param name="task"></param>
+		/// <returns></returns>
+		public static THumanTask MapToHumanTask<THumanTask>(this HTask task) where THumanTask : HumanTask, new()
+			=> new THumanTask
+			{
+				Tid = task.Tid?.Trim(),
+				ParentProcessId = task.ParentProcessId?.Trim(),
+				Type = task.Type?.Trim(),
+				Title = task.Title?.Trim(),
+				Description = task.Description?.Trim(),
+				AssignedTo = task.AssignedTo?.Trim(),
+				CreatedOn = task.CreatedOn,
+				CreatedBy = task.CreatedBy?.Trim(),
+				ChangedOn = task.ChangedOn,
+				ChangedBy = task.ChangedBy?.Trim(),
+				Revision = task.Revision,
+				State = GetHumanTaskState(task.State),
+				Reason = GetHumanTaskStateReason(task.Reason),
+			};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="state"></param>
+		/// <returns></returns>
+		public static HumanTaskStates GetHumanTaskState(string state)
+			=> state?.Trim() switch
+			{
+				nameof(HumanTaskStates.Proposed) => HumanTaskStates.Proposed,
+				nameof(HumanTaskStates.Active) => HumanTaskStates.Active,
+				nameof(HumanTaskStates.Closed) => HumanTaskStates.Closed,
+				_ => HumanTaskStates.Unknown
+			};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="stateReason"></param>
+		/// <returns></returns>
+		public static HumanTaskStateReasons GetHumanTaskStateReason(string stateReason)
+			=> stateReason?.Trim() switch
+			{
+				nameof(HumanTaskStateReasons.Created) => HumanTaskStateReasons.Created,
+				nameof(HumanTaskStateReasons.Approved) => HumanTaskStateReasons.Approved,
+				nameof(HumanTaskStateReasons.Delegated) => HumanTaskStateReasons.Delegated,
+				nameof(HumanTaskStateReasons.Rejected) => HumanTaskStateReasons.Rejected,
+				nameof(HumanTaskStateReasons.Complete) => HumanTaskStateReasons.Complete,
+				nameof(HumanTaskStateReasons.Failed) => HumanTaskStateReasons.Failed,
+				nameof(HumanTaskStateReasons.Cancelled) => HumanTaskStateReasons.Cancelled,
+				nameof(HumanTaskStateReasons.NeedInfo) => HumanTaskStateReasons.NeedInfo,
+				nameof(HumanTaskStateReasons.Info) => HumanTaskStateReasons.Info,
+				_ => HumanTaskStateReasons.Unknown
+			};
+
+
+
 		static void Main(string[] args)
 		{
 			repeat:
@@ -652,32 +1154,268 @@ namespace Tester.ConsoleTest
 			stopWatch.Start();
 			Console.WriteLine($"Start = {DateTime.Now:HH:mm:ss.fff}");
 
+			//var ss = DateTime.Now.AddYears(1);
+
+			//var ggggg = new DocumentItem().Test?.Test ?? "0";
+
+			//decimal.TryParse("1200.00", NumberStyles.Any, CultureInfo.InvariantCulture, out var ddd1);
+			//var ddd2 = Convert.ToDecimal("1200.00", CultureInfo.InvariantCulture);
+			//decimal.TryParse("1200", NumberStyles.Any, CultureInfo.InvariantCulture, out var ddd3);
+			//var ddd4 = Convert.ToDecimal("1200.00", CultureInfo.InvariantCulture);
+			//decimal.TryParse("1200.00", NumberStyles.Any, CultureInfo.InvariantCulture, out var ddd5);
+			//var ddd6 = Convert.ToDecimal("1200", CultureInfo.InvariantCulture);
+			//Console.WriteLine($"{ddd1}={ddd2} ({ddd1 == ddd2})");
+			//Console.WriteLine($"{ddd3}={ddd4} ({ddd4 == ddd4})");
+			//Console.WriteLine($"{ddd5}={ddd6} ({ddd5 == ddd6})");
+
+
+			var ss = string.IsNullOrWhiteSpace("");
+
+			//var re111s = GetMergedInitEsiaNumbersConfirmationSetting("null", null);
 			try
 			{
-				//var res = Console.ReadLine();
-				//var spl = res.Split(',');
-				//Console.WriteLine($"\"{spl[0], 3} \\ {spl[1], -3}\"");
 
-				var test = new List<MyClass11>
+				//var successItems = new Dictionary<PortInItem, string>();
+				//var declinedItems = new List<PortInItem>();
+				//declinedItems.Where(x => successItems.ContainsKey(x)).ToDictionary(x => successItems[x], x => x);
+				//successItems.Where(x => declinedItems.Contains(x.Value)).ToDictionary(x => x.Key, x.)
+
+
+				var listTasks = new List<HumanTask>
 				{
-					new MyClass11 { Description = "Регистрация платежа", DateOfOperation = DateTime.Parse("05.03.2021 10:51:13"), OperationAmount = 450, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
-					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = -150, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
-					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = 150, OperationCurrencyName = "RUR", PersonalAccount = "2433032833" },
-					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -100, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
-					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 100, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
-					new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -20, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
-					new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 20, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
+					new HumanTask
+					{
+						Tid = "1",
+						Type = "Creation",
+						CreatedOn = DateTime.Now.AddHours(-9),
+					},
+					new HumanTask
+					{
+						Tid = "2",
+						Type = "Validation",
+						CreatedOn = DateTime.Now.AddHours(-8),
+					},
+					new HumanTask
+					{
+						Tid = "3",
+						Type = "Validation",
+						CreatedOn = DateTime.Now.AddHours(-7),
+					},
+					new HumanTask
+					{
+						Tid = "4",
+						Type = "Validation",
+						CreatedOn = DateTime.Now.AddHours(-6),
+					},
+					new HumanTask
+					{
+						Tid = "5",
+						Type = "Validation",
+						CreatedOn = DateTime.Now.AddHours(-5),
+					},
+					new HumanTask
+					{
+						Tid = "6",
+						Type = "Portation",
+						CreatedOn = DateTime.Now.AddHours(-4),
+					},
+					new HumanTask
+					{
+						Tid = "7",
+						Type = "Validation",
+						CreatedOn = DateTime.Now.AddHours(-3),
+					},
+					new HumanTask
+					{
+						Tid = "8",
+						Type = "Portation",
+						CreatedOn = DateTime.Now.AddHours(-2),
+					},
+					new HumanTask
+					{
+						Tid = "9",
+						Type = "Notification",
+						CreatedOn = DateTime.Now.AddHours(-1),
+					},
+					new HumanTask
+					{
+						Tid = "10",
+						Type = "Completed",
+						CreatedOn = DateTime.Now,
+					},
 				};
-				var res = test
-				    .OrderBy(o => o.DateOfOperation)
-				    .ThenBy(o => o.PersonalAccount)
-					.ThenBy(o => o.Description)
-				    .ThenBy(o => o.OperationAmount)
-				    .ToArray();
+
+				//var processHistory = new List<MyHumanTask>(); // хронология выполнения процесса
+				//MyHumanTask lastTask = null;
+				//foreach (var task in listTasks.OrderByDescending(x => x.CreateOn))
+				//{
+				//	if (lastTask != null && lastTask.Code == task.Code)
+				//	{
+				//		lastTask.Count++;
+				//		continue;
+				//	}
+
+				//	lastTask = task.MapToMyHumanTask();
+				//	processHistory.Add(lastTask);
+				//}
+
+				//var tableAttributes = new Dictionary<string, Dictionary<string, List<object>>>();
+				//tableAttributes.Add("StateRequestMNP", new Dictionary<string, List<object>>
+				//{
+				//	{"Terminal_device_id", new List<object>{1,2,3,4,5}},
+				//	{"PortMsisdn", new List<object>{1,2,3,4,5}},
+				//	{"TempMsisdn", new List<object>{1,2,3,4,5}},
+				//	{"PortCheckStatus", new List<object>{1,2,3,4,5}},
+				//	{"PortRejectReason", new List<object>{1,2,3,4,5}},
+				//});
+
+				//processHistory.Reverse();
+				//var gg = string.Join("\r\n", processHistory);
+
+				var htask = new HTask().MapToMnpHumanTask();
+				var type = htask.GetType();
+
+
+				var ddd = new Dictionary<string, Dictionary<string, object>>
+				{
+					["MNPPortOutElement"] = new Dictionary<string, object>()
+					{
+						{"Terminal_device_id", (object)(long)1},
+						{"MSISDN", (object)99897955555},
+						{"PortCheckStatus", (object)"Checked"},
+						{"PortRejectReason", (object)""},
+					}
+				};
+
+				var s112s = ddd["MNPPortOutElement"]["Terminal_device_id"].GetType();
+
+				var tess = PortInMnpUzStateRequest.Completed | PortInMnpUzStateRequest.New | PortInMnpUzStateRequest.Checking | PortInMnpUzStateRequest.Unknown | PortInMnpUzStateRequest.Checking | PortInMnpUzStateRequest.Checking | PortInMnpUzStateRequest.Checking;
+
+				var dd1 = tess.ToString("D");
+				var dd2 = tess.ToString("G");
+				var dd3 = tess.ToString("F");
+				
+				var dddd1 = Enum.TryParse(dd1, true, out PortInMnpUzStateRequest en1);
+				var dddd2 = Enum.TryParse(dd2, out PortInMnpUzStateRequest en2);
+				var dddd3 = Enum.TryParse(dd3, out PortInMnpUzStateRequest en3);
+
+				var ddd0 = tess.HasFlag(PortInMnpUzStateRequest.Unknown);
+				var ddd1 = tess.HasFlag(PortInMnpUzStateRequest.Acivated);
+				var ddd2 = tess.HasFlag(PortInMnpUzStateRequest.Checking);
+				var ddd3 = tess.HasFlag(PortInMnpUzStateRequest.Portation);
+
+				var vals = Enum.GetValues(typeof(PortInMnpUzStateRequest)).Cast<Enum>().Where(tess.HasFlag).Cast<PortInMnpUzStateRequest>();
+				var minVal = vals.Min();
+				var maxVal = vals.Max();
+				
+
+				var gggg = new List<string>
+				{
+					"1111",
+					"2222",
+					"2222",
+					"2222",
+					"3333",
+					"4444",
+					"55555",
+				};
+				var res = gggg.ToHashSet();
+
+
+				
+
+				var tasks = new List<TaskTemp>
+				{
+					new TaskTemp{ Tid = "1", CreatedOn = DateTime.Now.AddDays(-5),},
+					new TaskTemp{ Tid = "2", CreatedOn = DateTime.Now.AddDays(-1),},
+					new TaskTemp{ Tid = "3", CreatedOn = DateTime.Now.AddDays(-8),},
+					new TaskTemp{ Tid = "4", Name = "Test", CreatedOn = DateTime.Now,},
+					new TaskTemp{ Tid = "5", CreatedOn = DateTime.Now.AddDays(5),},
+				};
+				var excludeTidsHashSet = new HashSet<string> { "11" };
+
+				var ttt = tasks.MayBeNull()
+				               .Where(t => !excludeTidsHashSet.Contains(t.Tid))
+				               .OrderByDescending(x => x.CreatedOn)
+				               .FirstOrDefault();
+
+
+				//var dd = ff.Where(x => x.Name == "testt").OrderByDescending(x => x.CreationDate).FirstOrDefault()?.Tid;
+
+				
+				var testdict = new Dictionary<string, string>
+				{
+					{ "", "" },
+				};
+
+
+				var res1 = GetStrictestEsiaSetting("No", "fewfwe");
+				var res2 = GetStrictestEsiaSetting(null, null);
+				var res3 = GetStrictestEsiaSetting(null, "fewfew");
+				var res4 = GetStrictestEsiaSetting("fewfew", null);
+				var res5 = GetStrictestEsiaSetting("No", null);
+				var res6 = GetStrictestEsiaSetting(null, "No");
+				var res7 = GetStrictestEsiaSetting("RunNonBlocking", "Always");
+
+				string[] _settingsPriorities = new[] { "No", "SkipActivated", "RunNonBlocking", "Always" };
+
+				var resss = _settingsPriorities[Math.Min(0, Math.Max(Array.IndexOf(_settingsPriorities, null), Array.IndexOf(_settingsPriorities, null)))]; ;
+
+
+				//long dddddd = 1111111111111111111;
+				//float tetes = dddddd + 1;
+
+				//var state = PortInMnpUzStateRequest.Completed;
+				//var newState = PortInMnpUzStateRequest.Completed;
+				//var sdd = cur != PortInMnpUzStateRequest.Rejected && cur != PortInMnpUzStateRequest.Completed;
+
+
+
+				////var result = sdd.GetAttributeOfType<AllowStateTransAttribute>();
+
+				//var ddd  = testttt(cur);
+
+				//	var enumType = typeof(PortInMnpUzStateRequest);
+				//var memberInfos = enumType.GetMember(sdd.ToString());
+
+
+
+				//var enumValueMemberInfo = memberInfos.FirstOrDefault(m => m.DeclaringType == enumType);
+				//var valueAttributes = enumValueMemberInfo.GetCustomAttributes(typeof(AllowStateTransAttribute), false);
+				//var description = valueAttributes.Cast<AllowStateTransAttribute>();
+
+
+
+				//var dd1 = HttpUtility.HtmlDecode("&lt;table align=\"center\"&gt;&lt;td align=\"center\" style=\"border - right: 0\"&gt;&lt;span style=\"\"&gt;Базовое значение: 0 / День &lt;/span&gt;&lt;/td&gt;&lt;/table&gt;");
+				//var dd2 = HttpUtility.HtmlDecode("");
+				//var dd3 = HttpUtility.HtmlDecode("&nbsp;");
+				//var test2 = new XElement("table").ToString();
+
+				////var res = Console.ReadLine();
+				////var spl = res.Split(',');
+				////Console.WriteLine($"\"{spl[0], 3} \\ {spl[1], -3}\"");
+
+				//var test = new List<MyClass11>
+				//{
+				//	new MyClass11 { Description = "Регистрация платежа", DateOfOperation = DateTime.Parse("05.03.2021 10:51:13"), OperationAmount = 450, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+				//	new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = -150, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+				//	new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("17.03.2021 10:51:13"), OperationAmount = 150, OperationCurrencyName = "RUR", PersonalAccount = "2433032833" },
+				//	new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -100, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+				//	new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 100, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
+				//	new MyClass11 { Description = "Перенос по инициативе с", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = -20, OperationCurrencyName = "RUR", PersonalAccount = "2433032857" },
+				//	new MyClass11 { Description = "Перенос по инициативе на", DateOfOperation = DateTime.Parse("29.03.2021 10:51:02"), OperationAmount = 20, OperationCurrencyName = "RUR", PersonalAccount = "2433032834" },
+				//};
+				//var res = test
+				//    .OrderBy(o => o.DateOfOperation)
+				//    .ThenBy(o => o.PersonalAccount)
+				//	.ThenBy(o => o.Description)
+				//    .ThenBy(o => o.OperationAmount)
+				//    .ToArray();
 
 			}
 			catch (Exception e)
 			{
+				var ddd = e.GetType();
 				Console.WriteLine(e);
 			}
 
@@ -687,6 +1425,194 @@ namespace Tester.ConsoleTest
 			if (Console.ReadKey().Key == ConsoleKey.Enter)
 				goto repeat;
 			Console.ReadLine();
+		}
+
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		[KnownType(typeof(PortInItem))]
+		public abstract class PortItemBase
+		{
+			/// <summary>
+			/// Портируемый номер
+			/// </summary>
+			[DataMember]
+			public string PortMsisdn { get; set; }
+		}
+
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public enum MnpValidationState
+		{
+			/// <summary>
+			/// Unknown
+			/// </summary>
+			[EnumMember]
+			Unknown = 0,
+
+			/// <summary>
+			/// Подтвержден
+			/// </summary>
+			[EnumMember]
+			Accepted = 1,
+
+			/// <summary>
+			/// Отклонен
+			/// </summary>
+			[EnumMember]
+			Declined = 2,
+
+			/// <summary>
+			/// Исключен
+			/// </summary>
+			[EnumMember]
+			Excluded = 4,
+		}
+
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public class PortItemResult
+		{
+			/// <summary>
+			/// Портируемый номер
+			/// </summary>
+			[DataMember]
+			public string Msisdn { get; set; }
+
+			/// <summary>
+			/// Статус портации
+			/// </summary>
+			[DataMember]
+			public MnpValidationState Status { get; set; }
+
+			/// <summary>
+			/// Причина отказа
+			/// </summary>
+			[DataMember]
+			public string Reason { get; set; }
+		}
+
+
+		[DataContract(Namespace = Namespaces.EntitiesV001)]
+		public class PortInItem : PortItemBase
+		{
+			/// <summary>
+			/// Временный номер
+			/// </summary>
+			[DataMember]
+			public string TempMsisdn { get; set; }
+
+			/// <summary>
+			/// Идентификатор ПО
+			/// </summary>
+			[DataMember]
+			public long TerminalDeviceId { get; set; }
+		}
+
+		internal static class Namespaces
+		{
+			/// <summary>
+			/// Базовое пространство имен.
+			/// </summary>
+			private const string _businessProcess = "http://schemas.mts.ru/Foris/OrderManagement/MNP/BusinessProcess/";
+
+			internal const string ServicesV001 = _businessProcess + "Services/v001";
+
+			internal const string EntitiesV001 = _businessProcess + "Entities/v001";
+
+			internal const string ConstantsV001 = _businessProcess + "Constants/v001";
+		}
+
+		public static void test11111444()
+		{
+			var portInItems = new List<PortInItem>
+			{
+				new PortInItem
+				{
+					PortMsisdn = "9989710000001",
+					TempMsisdn = "9989710000001",
+					TerminalDeviceId = 1,
+				},
+				new PortInItem
+				{
+					PortMsisdn = "9989710000002",
+					TempMsisdn = "9989710000002",
+					TerminalDeviceId = 1,
+				},
+				new PortInItem
+				{
+					PortMsisdn = "9989710000003",
+					TempMsisdn = "9989710000003",
+					TerminalDeviceId = 1,
+				},
+				new PortInItem
+				{
+					PortMsisdn = "9989710000004",
+					TempMsisdn = "9989710000004",
+					TerminalDeviceId = 1,
+				},
+				new PortInItem
+				{
+					PortMsisdn = "9989710000005",
+					TempMsisdn = "9989710000005",
+					TerminalDeviceId = 1,
+				},
+				new PortInItem
+				{
+					PortMsisdn = "9989710000006",
+					TempMsisdn = "9989710000006",
+					TerminalDeviceId = 1,
+				},
+			};
+
+			
+
+			List<object> tempMsisdn = new List<object>
+			{
+				"9989710000001",
+				"9989710000002",
+				"9989710000003",
+				"9989710000004",
+				"9989710000005",
+				"9989710000006",
+			};
+
+			var portMsisdnStates = new List<object>
+			{
+				"Accepted",
+				"Accepted",
+				"Declined",
+				"Declined",
+				"Excluded",
+				"Excluded",
+			};
+
+			
+			var result = portInItems.ConvertAll(x => x.GetPortItemResult());
+			var resJson = JsonConvert.SerializeObject(result);
+			List<PortItemResult> validationResults = JsonConvert.DeserializeObject<List<PortItemResult>>(resJson);
+
+			var resJson1 = "[{\"Reason\":\"\"},{}]";
+			List<PortItemResult> validationResults2 = JsonConvert.DeserializeObject<List<PortItemResult>>(resJson1);
+		}
+
+		private static PortItemResult GetPortItemResult(this PortItemBase item, MnpValidationState state = MnpValidationState.Accepted, string reason = null)
+			=> new PortItemResult
+			{
+				Msisdn = item.PortMsisdn,
+				Status = state,
+				Reason = state == MnpValidationState.Accepted
+					? string.Empty
+					: reason.IsNullOrEmpty() ? $"Msisdn was {state}" : reason
+			};
+
+		static int testttt(PortInMnpUzStateRequest cur)
+			=> !(cur == PortInMnpUzStateRequest.Rejected || cur == PortInMnpUzStateRequest.Completed) ? 1 : 0;
+
+		static int Tessfff(PortInMnpUzStateRequest state, PortInMnpUzStateRequest newState)
+		{
+			if (!(state == PortInMnpUzStateRequest.New && newState == PortInMnpUzStateRequest.Rejected || newState == PortInMnpUzStateRequest.Completed))
+			{
+				return 1;
+			}
+
+			return 0;
 		}
 
 		static void Old_2021_04_09()
