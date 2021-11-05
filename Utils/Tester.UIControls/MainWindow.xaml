@@ -1,0 +1,18 @@
+﻿<main:UIWindow x:Class="Tester.UIControls.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:main="clr-namespace:Utils.UIControls.Main;assembly=Utils.UIControls"
+                      Style="{DynamicResource VSUIWindowStyleLocal}" Title="Test"
+                      Height="200" Width="400" Icon="Images/overwolf.ico" >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Utils.UIControls;component/Main/UIWindowStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <!--<ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom"></ProgressBar>-->
+    </Grid>
+</main:UIWindow>

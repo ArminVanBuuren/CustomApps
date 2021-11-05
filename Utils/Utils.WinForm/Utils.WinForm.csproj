@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Deterministic>False</Deterministic>
+    <RootNamespace>Utils</RootNamespace>
+    <AssemblyName>Utils.WinForm</AssemblyName>
+    <TargetFramework>net452</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0.11</Version>
+    <AssemblyVersion>1.1.0.11</AssemblyVersion>
+    <FileVersion>1.1.0.11</FileVersion>
+    <Authors>Vladimir Khovanskiy (vkhovanskiy@gmail.com)</Authors>
+    <Company>Khovanskiy</Company>
+    <Description>Utils.WinForm</Description>
+    <Copyright>© Khovanskiy. All rights reserved.</Copyright>
+    <RepositoryUrl>https://github.com/ArminVanBuuren/Builds</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>Khovanskiy;Utils.WinForm;Forms;Controls;Win32;Notepad</PackageTags>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>Armin.Utils.WinForm</PackageId>
+  </PropertyGroup>
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Armin.Utils" Version="2021.3.13.152358" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
