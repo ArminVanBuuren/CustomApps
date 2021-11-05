@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddBlockUSSD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Блокировка USSD запросов </Description>
-	<Author Name="YAI" Date="2012-05-24+12:18"/>
-	<Request Template="MOD PLMNSS: IMSI=&quot;{0}&quot;, PROV=TRUE, PLMNSPECSS=PLMN-SS-D;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

@@ -1,8 +1,0 @@
-<Command Name="UnBlockServiceMusicplaylist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>UnBlock Service</Description>
-  <Author Name="NNM" Date="2019-11-28+15:30" />
-  <Request Template="unblock?frcode=FR16755&amp;msisdn={0}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ascii" />
-</Command>

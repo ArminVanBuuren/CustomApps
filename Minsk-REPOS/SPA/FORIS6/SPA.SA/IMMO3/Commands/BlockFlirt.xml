@@ -1,8 +1,0 @@
-<Command Name="BlockFlirt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Добавление блокировки</Description>
-  <Author Name="YAI" Date="2015-12-21+10:30" />
-  <Request Template="flirtContract/?msisdn={0}&amp;status=1">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ascii" />
-</Command>

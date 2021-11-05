@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddCFNRC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>>Добавление услуги Переадресация вызова (по недоступности)</Description>
-	<Author Name="YAI" Date="2011-10-04+12:18"/>
-	<Request Template="MOD CFNRC: ISDN=&quot;{0}&quot;, PROV=TRUE, NCS=FALSE, COU=SUBSCRIBER;">
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

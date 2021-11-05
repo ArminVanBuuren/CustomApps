@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Decoder Name="FMCDescriptionError" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.IdentifiersDecoder, FORIS.SPA.MmlProcessing" >
-	<Attribute Key="Description" RegexpPattern='.+description.+u\&gt;(?&lt;parameter&gt;.+?)\&lt;\/u.+' RegexpOptions="IgnoreCase, Compiled, CultureInvariant"/>
-	<!--Attribute Key="Description" RegexpPattern='.+code.+msg\&quot;\:\&quot;(?&lt;parameter&gt;.+?)\&quot;' RegexpOptions="IgnoreCase, Compiled, CultureInvariant"/-->
-</Decoder>

@@ -1,9 +1,0 @@
-﻿<Command Name="DeleteCorporateAPN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-   <Description>Удаление услуги 'Корпоративный APN'</Description>
-   <Author Name="Timur Khamzin" Date="2016-04-29+15:00" />
-   <Request Template="Del PDP:MSISDN={0},OAPN={1},OPDPTYPE=0,OADDROPTION=1;^M">
-      <Item Name="msisdn" Type="Wellknown" />
-      <Item Name="apn" Type="Parameter" />
-   </Request>
-   <ErrorsList CodePage="windows-1251" />
-</Command>

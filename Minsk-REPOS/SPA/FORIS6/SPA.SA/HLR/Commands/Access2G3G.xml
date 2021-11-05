@@ -1,8 +1,0 @@
-<Command Name="Access2G3G" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Доступ в 2g 3g сети</Description>
-  <Author Name="YAI" Date="2014-05-08+09:18" />
-  <Request Template="MOD ARD: ISDN=&quot;{0}&quot;, PROV=TRUE, UTRANNOTALLOWED=FALSE, GERANNOTALLOWED=FALSE;">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

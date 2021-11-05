@@ -1,8 +1,0 @@
-<Command Name="UnBlockFitness" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>UnBlock</Description>
-  <Author Name="YAI" Date="2018-10-22+15:00" />
-  <Request Template="mtsby/unblock?productId=1020&amp;password=Fd32M_dl11l80OQ&amp;msisdn={0}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

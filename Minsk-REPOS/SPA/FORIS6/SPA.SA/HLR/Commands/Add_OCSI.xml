@@ -1,9 +1,0 @@
-<Command Name="Add_OCSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Добавление InPlatform</Description>
-  <Author Name="LifefaN" Date="2011-09-20+12:18" />
-  <Request Template="MOD OCSI: ISDN=&quot;{0}&quot;, PROV=TRUE, TPLID={1};">
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="OCSI" Type="Parameter" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

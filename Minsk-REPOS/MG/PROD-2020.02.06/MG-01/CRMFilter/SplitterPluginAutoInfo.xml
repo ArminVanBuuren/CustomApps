@@ -1,6 +1,0 @@
-<plugin name="SplitterPlugin" ifFound="deliveryrequest">
-      <condition expression="/Message/Package/@template_id">
-            <match value="AutoInformationOfBalance" />
-            <match value="SMSAutoInformation" />
-      </condition>
-</plugin>

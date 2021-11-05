@@ -1,9 +1,0 @@
-<TraceSchema Name="MSMQGateway">
-	<TraceSchemaItem Name="MSMQGateway">
-		<Message Name="MSMQGateway.ERROR"/>
-		<!--Message Name="MSMQGateway.REPORT"/-->
-		<!--Message Name="MSMQGateway.START"/>
-		<Message Name="MSMQGateway.STOP"/>
-    		<Message Name="MSMQGateway.RUN"/-->
-  </TraceSchemaItem>
-</TraceSchema>

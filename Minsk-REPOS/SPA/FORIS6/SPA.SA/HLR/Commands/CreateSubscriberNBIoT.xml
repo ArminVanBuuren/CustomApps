@@ -1,9 +1,0 @@
-<Command Name="CreateSubscriberNBIoT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Создание абонента на HLR HUAWEI. NBIoT</Description>
-  <Author Name="NNM" Date="2019-07-30+15:30" />
-  <Request Template="ADD SUB: HLRSN=1, IMSI=&quot;{0}&quot;, ISDN=&quot;{1}&quot;, CARDTYPE=USIM, TS=TS11, RROPTION=ALL_PLMNS, ODBOC=BOIC, ODBROAM=BROHPLMNC, NAM=BOTH, CATEGORY=COMMON, CCBS=FALSE, CCBSTARGET=FALSE;">
-    <Item Name="imsi" Type="Wellknown" />
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

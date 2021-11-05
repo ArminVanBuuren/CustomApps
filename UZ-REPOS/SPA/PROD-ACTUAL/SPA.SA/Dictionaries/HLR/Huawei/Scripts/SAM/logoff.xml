@@ -1,4 +1,0 @@
-<Script Name="Logoff">
-	<write data="LGO;"/>
-	<wait data="SUCCESS0001" timeout="30000"/>
-</Script>

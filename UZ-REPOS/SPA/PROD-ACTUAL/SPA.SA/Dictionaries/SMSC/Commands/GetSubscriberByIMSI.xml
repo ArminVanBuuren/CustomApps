@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="GetSubscriberByIMSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Get Subscriber Data</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
-	<Request Template="OPERATION=SUBSCRIBER-PROV-GET&amp;IMSI={0}">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

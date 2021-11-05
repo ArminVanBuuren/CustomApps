@@ -1,3 +1,0 @@
-<plugin name="LMSplitterPlugin">
-	<LargeQueue name=".\crmfilter_output" />
-</plugin>

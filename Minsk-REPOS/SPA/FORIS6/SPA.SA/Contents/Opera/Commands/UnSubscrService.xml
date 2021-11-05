@@ -1,8 +1,0 @@
-<Command Name="UnSubscrService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Удаление сервиса</Description>
-  <Author Name="YAI" Date="2016-03-22+10:52" />
-  <Request Template="Unsubscribe?productID=1070&amp;carrierID=9635&amp;password=Fd32M_dl11l80OQ&amp;MSISDN={0}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

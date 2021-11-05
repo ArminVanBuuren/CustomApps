@@ -1,8 +1,0 @@
-﻿<Command Name="DeleteBPOS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-   <Description>Удаление барринга GPRS</Description>
-   <Author Name="Ruslan Djumabaev" Date="2017-08-17" />
-   <Request Template="Mod BscEx:MSISDN={0},BPOS=0;^M">
-      <Item Name="msisdn" Type="Wellknown" />
-   </Request>
-   <ErrorsList CodePage="windows-1251" />
-</Command>

@@ -1,3 +1,0 @@
-<plugin name="LMSplitterPlugin">
-  <LargeQueue name=".\lmq_output" />
-</plugin>

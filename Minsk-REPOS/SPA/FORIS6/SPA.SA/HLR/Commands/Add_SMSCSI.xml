@@ -1,9 +1,0 @@
-<Command Name="Add_SMSCSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Добавление InPlatform</Description>
-  <Author Name="LifefaN" Date="2011-09-20+12:18" />
-  <Request Template="MOD SMSCSI: ISDN=&quot;{0}&quot;, PROV=TRUE, MOMTSWITCH=MOSMSCSI, TPLID={1};">
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="SMSCSI" Type="Parameter" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

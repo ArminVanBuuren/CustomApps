@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="DeleteCategory5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Удаление 5 Категории WLL</Description>
-	<Author Name="YAI" Date="2017-02-28+12:18"/>
-	<Request Template="MOD CATEGORY: IMSI=&quot;{0}&quot;,CATEGORY=COMMON;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

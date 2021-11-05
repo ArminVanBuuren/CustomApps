@@ -1,8 +1,0 @@
-<Command Name="AddLBSEmp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Добавление метки LBS</Description>
-  <Author Name="NNM" Date="2019-09-27+15:18" />
-  <Request Template="MOD LCS: ISDN=&quot;{0}&quot;, PROV=TRUE, TPLID=1;">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

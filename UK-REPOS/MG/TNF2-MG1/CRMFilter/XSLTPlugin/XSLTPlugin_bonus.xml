@@ -1,5 +1,0 @@
-<plugin name="XSLTPlugin">
-     <transform condition="/Message/@type='retrievebonusresult'"
-            validation="1=1"  
-            successTemplate="XSLTPlugin\Scripts\XSLTPlugin_bonus.xsl"  errorTemplate="" />
-</plugin>

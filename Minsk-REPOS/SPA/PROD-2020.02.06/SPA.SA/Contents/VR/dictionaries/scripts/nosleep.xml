@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Script Name="NoSleep">
-	<write data="^A^J " addToLog="true"/>
-	<read data="unexpected char" timeout="1000" addToLog="true"/>
-</Script>

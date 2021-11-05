@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TraceSchema Name="Errors">
-	<TraceSchemaItem Name="Errors">
-		<Message Name="Managing.ERROR"/>
-		<Message Name="WCFGateway.ERROR"/>
-		<Message Name="TRACE0"/>
-	</TraceSchemaItem>
-</TraceSchema>

@@ -1,1 +1,0 @@
-<templates connector="SOAP">  #include "..\..\config\CallCenter\CallCenter.xml"</templates>

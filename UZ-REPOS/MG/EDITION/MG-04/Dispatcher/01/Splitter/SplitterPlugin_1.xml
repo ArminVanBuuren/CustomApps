@@ -1,5 +1,0 @@
-<plugin name="SplitterPlugin_1">
-  <condition expression="/Message/@process">
-    <match value="dispatcher" />
-  </condition>
-</plugin>

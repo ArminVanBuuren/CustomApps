@@ -1,8 +1,0 @@
-<Command Name="AddOSBT3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Добавление запрета по OSBT1 и OSBT2</Description>
-  <Author Name="YAI" Date="2011-09-29+12:18" />
-  <Request Template="MOD ODB: ISDN=&quot;{0}&quot;, ODBPB1=TRUE, ODBPB2=TRUE;">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

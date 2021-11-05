@@ -1,8 +1,0 @@
-<Command Name="CreateAddStartRu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>CreateAddStartRu</Description>
-  <Author Name="NNM" Date="2019-07-04+10:50" />
-  <Request Template="{{&quot;phone&quot;:&quot;{0}&quot;,&quot;email&quot;:&quot;{0}@email.tv.mts.by&quot;,&quot;purchases&quot;:[&quot;FR16638&quot;]}}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

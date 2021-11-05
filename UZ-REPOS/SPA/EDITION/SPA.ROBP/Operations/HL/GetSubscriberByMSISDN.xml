@@ -1,4 +1,0 @@
-<OperationData Name="GetSubscriberByMSISDN" NEType="HL" NEAlias="HLR">
-  <Request Name="RequestMessage" />
-  <Response Name="ResponseMessage" />
-</OperationData>

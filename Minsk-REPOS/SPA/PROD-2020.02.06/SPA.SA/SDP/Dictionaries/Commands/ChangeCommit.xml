@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="ChangeCommit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Изменение атрибутов абонента</Description>
-	<Author Name="Alec Sergeyev" Date="2008-07-31+10:04"/>
-	<Request Template="save^M"></Request>
-	<ErrorsList CodePage="ascii" />
-</Command>

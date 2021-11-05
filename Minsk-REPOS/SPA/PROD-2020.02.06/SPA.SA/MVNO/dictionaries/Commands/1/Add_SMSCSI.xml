@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="Add_SMSCSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>>Добавление InPlatform</Description>
-	<Author Name="YAI" Date="2011-09-20+12:18"/>
-	<Request Template="MOD SMSCSI: IMSI=&quot;{0}&quot;, PROV=TRUE, MOMTSWITCH=MOSMSCSI, TPLID=150;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

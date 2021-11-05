@@ -1,8 +1,0 @@
-<Command Name="Remove_SMSCSI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Удаление InPlatform</Description>
-  <Author Name="YAI" Date="2011-09-20+12:18" />
-  <Request Template="MOD SMSCSI: ISDN=&quot;{0}&quot;, PROV=FALSE;">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

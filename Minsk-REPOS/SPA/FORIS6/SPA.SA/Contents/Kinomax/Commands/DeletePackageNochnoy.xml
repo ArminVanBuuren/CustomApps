@@ -1,8 +1,0 @@
-<Command Name="DeletePackageNochnoy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Удаление</Description>
-  <Author Name="NNM" Date="2019-02-26+10:21" />
-  <Request Template="{{&quot;action&quot;: &quot;remove&quot;,&quot;external_name&quot;: &quot;FR16503&quot;}}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

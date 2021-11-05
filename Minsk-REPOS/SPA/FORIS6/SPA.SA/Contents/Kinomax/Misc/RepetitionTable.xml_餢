@@ -1,5 +1,0 @@
-<RepetitionTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RepetitionTable.xsd">
-  <param name="RepeatForResult" value="HardwareConnectionError;cnt=5;timeout=0" />
-  <param name="RepeatForResult" value="NoPrintout;cnt=5;timeout=0" />
-  <param name="RepeatForResult" value="CommandTimedOut;cnt=5;timeout=0" />
-</RepetitionTable>

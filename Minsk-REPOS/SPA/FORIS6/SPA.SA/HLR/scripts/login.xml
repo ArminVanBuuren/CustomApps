@@ -1,4 +1,0 @@
-<Script Name="Login">
-  <write data="LGI: HLRSN=1, OPNAME=&quot;bill&quot;, PWD=&quot;@billing@&quot;;" addToLog="true" />
-  <wait data="RETCODE = 0 Operation is successful" timeout="3000" addToLog="true" />
-</Script>

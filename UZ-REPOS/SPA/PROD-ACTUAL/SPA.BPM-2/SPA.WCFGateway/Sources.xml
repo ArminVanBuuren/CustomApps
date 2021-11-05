@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Sources>
-  <Source name="LOCAL" IPRanges="127.0.0.1, 192.168.0.1-192.168.0.10" />
-  <Source name="CRM" IPRanges="192.168.10.1-192.168.10.255, 10.160.18.65-10.160.18.188" />
-</Sources>

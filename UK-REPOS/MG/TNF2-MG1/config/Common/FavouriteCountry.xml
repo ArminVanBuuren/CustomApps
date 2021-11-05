@@ -1,5 +1,0 @@
-<favcountries>
-	<favcountry smscode="SP1"	ussdcode="123"	ivrcode="IC1"	soapcode="WS1" crmcode="SOMECODE1" name="Любимая страна 1" />
-	<favcountry smscode="SP2"	ussdcode="456"	ivrcode="IC2"	soapcode="WS2" crmcode="SOMECODE2" name="Любимая страна 2" />
-	<favcountry smscode="SP3"	ussdcode="789"	ivrcode="IC3"	soapcode="WS3" crmcode="SOMECODE3" name="Любимая страна 3" />
-</favcountries>

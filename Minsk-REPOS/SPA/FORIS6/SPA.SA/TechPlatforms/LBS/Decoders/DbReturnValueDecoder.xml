@@ -1,8 +1,0 @@
-<Decoder Name="dbReturnValue" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.NestedIdentifiersDecoder, FORIS.SPA.MmlProcessing">
-  <Attribute Key="activationStatus" RegexpPattern="dbReturnValue:#(?&lt;parameter&gt;[^#]*)#" RegexpOptions="11">
-    <PossibleValues StringToKeyTable="true">
-      <Item Key="deactivated" StringValue="0" />
-      <Item Key="activated" StringValue="1" />
-    </PossibleValues>
-  </Attribute>
-</Decoder>

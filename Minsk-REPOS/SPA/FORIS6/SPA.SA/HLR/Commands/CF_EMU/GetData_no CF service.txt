@@ -1,6 +1,0 @@
-RETCODE = 3015 ERR3015:Service not provisioned
-
-There is together 1 report
-
----    END
-_*_*_*-*-*

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<plugin name="RouterPlugin">
-	<queues>
-		<queue refName="MG3" name="tnf2-mg2\crmfilter_output" />
-	</queues>
-	<condition expression="/Message/Package//Content" match="MG3">
-		<route-to ref="MG3" />		
-	</condition>
-</plugin>

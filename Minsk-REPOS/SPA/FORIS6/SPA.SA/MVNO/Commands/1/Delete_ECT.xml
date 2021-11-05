@@ -1,8 +1,0 @@
-<Command Name="Delete_ECT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Удаление Конференц-связь/перевод вызова</Description>
-  <Author Name="YAI" Date="2011-09-14+12:18" />
-  <Request Template="MOD ECT: IMSI=&quot;{0}&quot;, PROV=FALSE;">
-    <Item Name="imsi" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

@@ -1,8 +1,0 @@
-<Command Name="AddMobileTV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>AddMobileTV</Description>
-  <Author Name="YAI" Date="2016-04-13+10:50" />
-  <Request Template="{{&quot;id&quot;:&quot;FR11873&quot;,&quot;valid&quot;:true}}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

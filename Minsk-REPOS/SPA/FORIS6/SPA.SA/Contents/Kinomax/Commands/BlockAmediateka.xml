@@ -1,8 +1,0 @@
-<Command Name="BlockAmediateka" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Блокирование</Description>
-  <Author Name="NNM" Date="2019-02-25+14:21" />
-  <Request Template="{{&quot;action&quot;: &quot;block&quot;,&quot;external_name&quot;: &quot;FR16501&quot;}}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

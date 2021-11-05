@@ -1,8 +1,0 @@
-<Command Name="DelServiceMuzContract" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Удаление знакомства</Description>
-  <Author Name="YAI" Date="2015-10-28+10:30" />
-  <Request Template="muzcontract/?msisdn={0}&amp;status=2">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ascii" />
-</Command>

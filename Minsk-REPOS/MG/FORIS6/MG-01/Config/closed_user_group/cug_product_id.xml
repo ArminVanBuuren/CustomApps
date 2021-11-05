@@ -1,9 +1,0 @@
-<groups>
-  <group product_id="2246">
-    <sms text="MTSGROUP" />
-    <sms text="CUGMT" />
-  </group>
-  <group product_id="43612">
-    <sms text="CUG" />
-  </group>
-</groups>

@@ -1,4 +1,0 @@
-<Script Name="Command">
-  <write data="{0}^M" />
-  <wait data="--&gt;" timeout="5000" />
-</Script>

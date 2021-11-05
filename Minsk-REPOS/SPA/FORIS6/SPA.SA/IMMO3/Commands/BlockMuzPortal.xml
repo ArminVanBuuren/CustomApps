@@ -1,8 +1,0 @@
-<Command Name="BlockMuzPortal" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Добавление блокировки</Description>
-  <Author Name="YAI" Date="2013-10-09+10:30" />
-  <Request Template="muzportalContact/?msisdn={0}&amp;status=1&amp;src=484">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ascii" />
-</Command>

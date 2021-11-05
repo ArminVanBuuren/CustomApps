@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Decoder Name="BGSCollection" RegexpPattern="\{&quot;bgid&quot;.+?\}" ItemName="BG" RegexpOptions="IgnoreCase, Singleline" Type="FORIS.ServiceProvisioning.MmlProcessing.Dictionary.SequencesDecoder, FORIS.SPA.MmlProcessing">
-	<Attribute Key="bgid"                RegexpPattern='"bgid"\:(?&lt;parameter&gt;\d{1,})'                  RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-	<Attribute Key="name"                RegexpPattern='"name"\:"(?&lt;parameter&gt;.+?)"'                   RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-	<Attribute Key="softphoneLicDesktop" RegexpPattern='"softphoneLicDesktop"\:(?&lt;parameter&gt;\d{1,})' RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-	<Attribute Key="ctxLength"           RegexpPattern='"ctxLength"\:(?&lt;parameter&gt;\d{1,})'             RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-	<Attribute Key="softphoneLicMobile"  RegexpPattern='"softphoneLicMobile"\:(?&lt;parameter&gt;\d{1,})'    RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-	<Attribute Key="extId"               RegexpPattern='"extId"\:"(?&lt;parameter&gt;.+?)"'                  RegexpOptions="IgnoreCase, Compiled, Singleline, CultureInvariant"/>
-</Decoder>

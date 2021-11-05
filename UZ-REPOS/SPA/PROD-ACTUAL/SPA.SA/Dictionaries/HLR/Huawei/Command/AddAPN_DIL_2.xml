@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddAPN_DIL_2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление услуги 'GPRS'III</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
-	<Request Template='MOD GPRS:ISDN="{0}",PROV=TRUE,CNTXID=4,PDPTYPE=IPV4,ADDIND=DYNAMIC,RELCLS=ACKRLCPRODT,DELAYCLS=DELAY2,PRECLS=NORMAL,PEAKTHR=256000 OCT,MEANTHR=BEST_EFFORT,ARPRIORITY=NORMAL,ERRSDU=NODETECT,DELIVERY=NO,TRAFFICCLS=CONVER,MAXSDUSIZE=150 OCT,MAXBRUPL=64K,MAXBRDWL=384K,RESBER=0.0001,SDUERR=0.0001,TRANSFERDEL=10MS,TRAFFICPRI=PRIORITY2,APN="DEALER2.MTS.UZ",VPLMN=FALSE,CHARGE=NORMAL;'>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251"/>
-</Command>

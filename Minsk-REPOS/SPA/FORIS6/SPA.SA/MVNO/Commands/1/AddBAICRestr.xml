@@ -1,8 +1,0 @@
-<Command Name="AddBAICRestr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>&gt;Добавление ограничения входящей связи</Description>
-  <Author Name="YAI" Date="2011-09-21+12:18" />
-  <Request Template="MOD CB: IMSI=&quot;{0}&quot;, BAIC=TRUE;^JACT BAIC: IMSI=&quot;{0}&quot;, BSG=TS1X;^JMOD CBCOU: IMSI=&quot;{0}&quot;, COU=OPERATOR;">
-    <Item Name="imsi" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

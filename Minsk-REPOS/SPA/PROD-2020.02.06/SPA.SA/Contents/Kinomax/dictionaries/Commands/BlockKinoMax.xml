@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="BlockKinoMax" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Блокирование ТВ от KinoMax</Description>
-	<Author Name="YAI" Date="2018-11-15+14:21"/>
-	<Request Template="{{&quot;action&quot;: &quot;block&quot;,&quot;external_name&quot;: &quot;FR16500&quot;}}">
-	<Item Name="msisdn" Type="Wellknown" />
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<plugin name="ReplacePlugin">
-  <replace>
-    <condition path="/Message/@type" isEqual="serviceorder" />
-    <set path="/Message/Item/Service/@id">
-      <value original="11111" new="changetariffplan" />
-    </set>
-  </replace>
-</plugin>

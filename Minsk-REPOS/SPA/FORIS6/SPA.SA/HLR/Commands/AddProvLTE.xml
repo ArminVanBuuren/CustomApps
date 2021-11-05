@@ -1,8 +1,0 @@
-<Command Name="AddProvLTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Пров в LTE</Description>
-  <Author Name="NNM" Date="2019-10-09+09:47" />
-  <Request Template="MOD EPS: ISDN=&quot;{0}&quot;, PROV=TRUE, AMBRMAXUL=4294967295, AMBRMAXDL=4294967295, LTEAUTOPROV=AUTOUSER_NN;">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

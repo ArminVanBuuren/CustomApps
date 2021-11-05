@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="ChangeCreateAddFreeTV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>ChangeCreateAddFreeTV</Description>
-	<Author Name="YAI" Date="2018-10-19+10:50"/>
-	<Request Template="{{&quot;phone&quot;:&quot;{0}&quot;,&quot;email&quot;:&quot;{0}@email.tv.mts.by&quot;,&quot;purchases&quot;:[&quot;FR16493&quot;]}}">
-	<Item Name="NewMSISDN" Type="Parameter" /> 
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

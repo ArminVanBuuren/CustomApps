@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddAPN_SDP10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Добавление услуги 'AddAPN_SDP10'</Description>
-	<Author Name="Vladimir Khovanskiy" Date="2010-03-16+15:00"/>
-	<Request Template='MOD GPRS: IMSI="{0}", CHARGE_GLOBAL=PREPAID,PROV=TRUE,CNTXID=1,PDPTYPE=IPV4,PDPADD="10.64.12.11",ADDIND=STATIC,RELCLS=ACKALLPRODT,DELAYCLS=DELAY1,PRECLS=HIGH,PEAKTHR=1,MEANTHR=1,APN="APN",VPLMN=TRUE,CHARGE=PREPAID;^M'>
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="windows-1251" />
-</Command>

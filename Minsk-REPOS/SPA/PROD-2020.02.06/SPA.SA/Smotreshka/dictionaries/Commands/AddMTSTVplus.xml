@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="AddMTSTVplus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>AddMTSTVplus</Description>
-	<Author Name="YAI" Date="2019-06-26+16:50"/>
-	<Request Template="{{&quot;id&quot;:&quot;FR16996&quot;,&quot;valid&quot;:true}}">
-	<Item Name="msisdn" Type="Wellknown" />
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

@@ -1,9 +1,0 @@
-<Command Name="AddSyncBlockingTDB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Del blocking in TDB </Description>
-  <Author Name="YAI" Date="2013-08-22+14:50" />
-  <Properties GenerationType="Database" />
-  <Request Template="function Del_TDB({0}) return number">
-    <Item Name="MSISDN" Type="DatabaseParameter" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

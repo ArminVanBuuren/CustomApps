@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="ChangeMSISDNAddNewMSBanCF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>Изменение номера MSISDN. Добавление нового номера запрета переадресации</Description>
-	<Author Name="yai" Date="2018-01-16+11:30"/>
-	<Request Template="ADD FRFWDNO: HLRSN=1, FWDNO=&quot;substr({0},3,9)&quot;;">
-		<Item Name="NewMSISDN" Type="Parameter"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

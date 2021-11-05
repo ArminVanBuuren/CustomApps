@@ -1,9 +1,0 @@
-<Command Name="ChangeMSISDNEro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Change MSISDN</Description>
-  <Author Name="YAI" Date="2013-10-10+10:30" />
-  <Request Template="eroportal/?msisdn={0}&amp;status=3&amp;new_msisdn={1}">
-    <Item Name="msisdn" Type="Wellknown" />
-    <Item Name="NewMSISDN" Type="Parameter" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

@@ -1,8 +1,0 @@
-<Command Name="SubscrServiceKids" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Добавление сервиса</Description>
-  <Author Name="YAI" Date="2017-03-20+10:52" />
-  <Request Template="Subscribe?productID=1090&amp;carrierID=9635&amp;password=Fd32M_dl11l80OQ&amp;MSISDN={0}">
-    <Item Name="msisdn" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

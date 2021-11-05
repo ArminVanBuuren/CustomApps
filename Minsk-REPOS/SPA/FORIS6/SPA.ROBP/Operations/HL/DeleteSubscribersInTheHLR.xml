@@ -1,4 +1,0 @@
-<OperationData Name="DeleteSubscribersInTheHLR" NEType="HL" NEAlias="HL">
-  <Request Name="RequestMessage" />
-  <Response Name="ResponseMessage" />
-</OperationData>

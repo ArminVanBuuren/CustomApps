@@ -1,1 +1,0 @@
-<%@ WebService Language="C#" CodeBehind="ChangeSIM.asmx.cs" Class="ChangeSIM.ChangeSIM" %>

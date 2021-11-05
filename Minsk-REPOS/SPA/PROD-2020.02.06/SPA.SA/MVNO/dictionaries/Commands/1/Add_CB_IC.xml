@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="Add_CB_IC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description>>Добавление ограничения входящей связи. Добавление</Description>
-	<Author Name="YAI" Date="2011-09-21+12:18"/>
-	<Request Template="MOD CB: IMSI=&quot;{0}&quot;, BAIC=TRUE;">
-		<Item Name="imsi" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

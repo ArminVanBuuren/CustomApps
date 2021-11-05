@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<Command Name="Denied2G3G" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-	<Description> Запрет доступа в 2g 3g сети</Description>
-	<Author Name="NNM" Date="2019-07-30+15:30"/>
-	<Request Template="MOD ARD: ISDN=&quot;{0}&quot;, PROV=TRUE, UTRANNOTALLOWED=TRUE, GERANNOTALLOWED=TRUE;">
-		<Item Name="msisdn" Type="Wellknown"/>
-	</Request>
-	<ErrorsList CodePage="ASCII"/>
-</Command>

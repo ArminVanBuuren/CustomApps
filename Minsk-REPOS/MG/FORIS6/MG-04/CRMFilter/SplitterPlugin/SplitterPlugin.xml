@@ -1,5 +1,0 @@
-<plugin name="SplitterPlugin" ifFound="vmaspayment">
-  <condition expression="/Message/@type">
-    <match value="vmaspayment" />
-  </condition>
-</plugin>

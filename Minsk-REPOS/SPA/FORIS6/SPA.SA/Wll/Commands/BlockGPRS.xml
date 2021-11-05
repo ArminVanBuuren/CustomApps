@@ -1,8 +1,0 @@
-<Command Name="BlockGPRS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Command.xsd">
-  <Description>Блокировка GPRS </Description>
-  <Author Name="YAI" Date="2011-10-06+12:18" />
-  <Request Template="MOD LCK: IMSI=&quot;{0}&quot;, GPRSLOCK=TRUE;">
-    <Item Name="imsi" Type="Wellknown" />
-  </Request>
-  <ErrorsList CodePage="ASCII" />
-</Command>

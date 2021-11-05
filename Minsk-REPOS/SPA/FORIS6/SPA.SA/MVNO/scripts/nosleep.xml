@@ -1,4 +1,0 @@
-<Script Name="NoSleep">
-  <write data="LST INTROFF:;" />
-  <wait data="RETCODE = 0" timeout="10000" />
-</Script>
